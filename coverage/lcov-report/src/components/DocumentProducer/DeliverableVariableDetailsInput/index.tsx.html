@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/136</span>
+                <span class='fraction'>0/138</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/170</span>
+                <span class='fraction'>0/150</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/129</span>
+                <span class='fraction'>0/131</span>
             </div>
         
             
@@ -494,7 +494,10 @@
 <a name='L429'></a><a href='#L429'>429</a>
 <a name='L430'></a><a href='#L430'>430</a>
 <a name='L431'></a><a href='#L431'>431</a>
-<a name='L432'></a><a href='#L432'>432</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L432'></a><a href='#L432'>432</a>
+<a name='L433'></a><a href='#L433'>433</a>
+<a name='L434'></a><a href='#L434'>434</a>
+<a name='L435'></a><a href='#L435'>435</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -729,12 +732,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -829,7 +836,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1159,6 +1165,10 @@ const DeliverableVariableDetailsInput = <span class="cstat-no" title="statement 
 <span class="cstat-no" title="statement not covered" >      return '';</span>
     }
 &nbsp;
+<span class="cstat-no" title="statement not covered" >    if (validateFields &amp;&amp; variable.isRequired &amp;&amp; !value) {</span>
+<span class="cstat-no" title="statement not covered" >      strings.REQUIRED_FIELD;</span>
+    }
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    switch (variable.type) {</span>
       case 'Number':
 <span class="cstat-no" title="statement not covered" >        if (value !== undefined) {</span>
@@ -1189,7 +1199,7 @@ const DeliverableVariableDetailsInput = <span class="cstat-no" title="statement 
       case 'Text':
 <span class="cstat-no" title="statement not covered" >        return '';</span>
     }
-  }, [activeLocale, variable, value]);
+  }, [activeLocale, validateFields, variable, value]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
@@ -1227,7 +1237,7 @@ const DeliverableVariableDetailsInput = <span class="cstat-no" title="statement 
           value={value?.toString()}
           aria-label='select date'
           sx={formElementStyles}
-          errorText={validateFields &amp;&amp; !value &amp;&amp; variable.isRequired ? strings.REQUIRED_FIELD : ''}
+          errorText={errorMessage}
         /&gt;
       )}
 &nbsp;
@@ -1280,14 +1290,13 @@ const DeliverableVariableDetailsInput = <span class="cstat-no" title="statement 
       {(variable.type === 'Number' || variable.type === 'Link') &amp;&amp; (
         &lt;Textfield
           id='value'
-          errorText={errorMessage}
           label=''
           type={variable.type === 'Number' ? 'number' : 'text'}
           onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue: any) =&gt; <span class="cstat-no" title="statement not covered" >onChangeValueHandler(newValue, 'value')}</span>
           value={value?.toString()}
           sx={[formElementStyles, textFieldLabelStyles]}
           required={variable.isRequired}
-          errorText={validateFields &amp;&amp; !value &amp;&amp; variable.isRequired ? strings.REQUIRED_FIELD : ''}
+          errorText={errorMessage}
         /&gt;
       )}
 &nbsp;
@@ -1299,7 +1308,7 @@ const DeliverableVariableDetailsInput = <span class="cstat-no" title="statement 
           selectedValue={(value as number[])?.[0]}
           sx={[formElementStyles, { paddingBottom: theme.spacing(1) }]}
           required={variable.isRequired}
-          errorText={validateFields &amp;&amp; !value &amp;&amp; variable.isRequired ? strings.REQUIRED_FIELD : ''}
+          errorText={errorMessage}
         /&gt;
       )}
 &nbsp;
@@ -1318,7 +1327,7 @@ const DeliverableVariableDetailsInput = <span class="cstat-no" title="statement 
           selectedOptions={(value || []) as number[]}
           sx={[formElementStyles, { paddingBottom: theme.spacing(1) }]}
           valueRenderer={<span class="fstat-no" title="function not covered" >(v</span>al: string) =&gt; <span class="cstat-no" title="statement not covered" >val}</span>
-          errorText={validateFields &amp;&amp; !value &amp;&amp; variable.isRequired ? strings.REQUIRED_FIELD : ''}
+          errorText={errorMessage}
         /&gt;
       )}
 &nbsp;
@@ -1331,7 +1340,7 @@ const DeliverableVariableDetailsInput = <span class="cstat-no" title="statement 
           sx={formElementStyles}
           value={title}
           required={variable.isRequired}
-          errorText={validateFields &amp;&amp; !value &amp;&amp; variable.isRequired ? strings.REQUIRED_FIELD : ''}
+          errorText={errorMessage}
         /&gt;
       )}
 &nbsp;
@@ -1363,7 +1372,7 @@ export default DeliverableVariableDetailsInput;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-09-04T20:58:56.397Z
+                at 2024-09-05T02:43:45.404Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1725483537160" clover="3.2.0">
-  <project timestamp="1725483537160" name="All files">
-    <metrics statements="24807" coveredstatements="1031" conditionals="16234" coveredconditionals="279" methods="7631" coveredmethods="176" elements="48672" coveredelements="1486" complexity="0" loc="24807" ncloc="24807" packages="234" files="1083" classes="1083"/>
+<coverage generated="1725504226150" clover="3.2.0">
+  <project timestamp="1725504226150" name="All files">
+    <metrics statements="24809" coveredstatements="1031" conditionals="16214" coveredconditionals="279" methods="7631" coveredmethods="176" elements="48654" coveredelements="1486" complexity="0" loc="24809" ncloc="24809" packages="234" files="1083" classes="1083"/>
     <package name="src">
       <metrics statements="177" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -2182,9 +2182,9 @@
       </file>
     </package>
     <package name="src.components.DocumentProducer.DeliverableVariableDetailsInput">
-      <metrics statements="129" coveredstatements="0" conditionals="170" coveredconditionals="0" methods="28" coveredmethods="0"/>
+      <metrics statements="131" coveredstatements="0" conditionals="150" coveredconditionals="0" methods="28" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DocumentProducer/DeliverableVariableDetailsInput/index.tsx">
-        <metrics statements="129" coveredstatements="0" conditionals="170" coveredconditionals="0" methods="28" coveredmethods="0"/>
+        <metrics statements="131" coveredstatements="0" conditionals="150" coveredconditionals="0" methods="28" coveredmethods="0"/>
         <line num="44" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
@@ -2284,36 +2284,38 @@
         <line num="230" count="0" type="stmt"/>
         <line num="231" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="232" count="0" type="stmt"/>
-        <line num="235" count="0" type="cond" truecount="0" falsecount="8"/>
-        <line num="237" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="238" count="0" type="stmt"/>
-        <line num="239" count="0" type="stmt"/>
-        <line num="240" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="241" count="0" type="stmt"/>
-        <line num="243" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="244" count="0" type="stmt"/>
-        <line num="246" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="247" count="0" type="stmt"/>
-        <line num="249" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="250" count="0" type="stmt"/>
-        <line num="255" count="0" type="stmt"/>
-        <line num="263" count="0" type="stmt"/>
+        <line num="235" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="236" count="0" type="stmt"/>
+        <line num="239" count="0" type="cond" truecount="0" falsecount="8"/>
+        <line num="241" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="242" count="0" type="stmt"/>
+        <line num="243" count="0" type="stmt"/>
+        <line num="244" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="245" count="0" type="stmt"/>
+        <line num="247" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="248" count="0" type="stmt"/>
+        <line num="250" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="251" count="0" type="stmt"/>
+        <line num="253" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="254" count="0" type="stmt"/>
+        <line num="259" count="0" type="stmt"/>
         <line num="267" count="0" type="stmt"/>
-        <line num="299" count="0" type="stmt"/>
-        <line num="310" count="0" type="stmt"/>
-        <line num="312" count="0" type="stmt"/>
-        <line num="317" count="0" type="stmt"/>
-        <line num="335" count="0" type="stmt"/>
-        <line num="359" count="0" type="stmt"/>
-        <line num="370" count="0" type="stmt"/>
-        <line num="383" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="384" count="0" type="stmt"/>
-        <line num="387" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="388" count="0" type="stmt"/>
-        <line num="390" count="0" type="stmt"/>
+        <line num="271" count="0" type="stmt"/>
+        <line num="303" count="0" type="stmt"/>
+        <line num="314" count="0" type="stmt"/>
+        <line num="316" count="0" type="stmt"/>
+        <line num="321" count="0" type="stmt"/>
+        <line num="339" count="0" type="stmt"/>
+        <line num="362" count="0" type="stmt"/>
+        <line num="373" count="0" type="stmt"/>
+        <line num="386" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="387" count="0" type="stmt"/>
+        <line num="390" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="391" count="0" type="stmt"/>
         <line num="393" count="0" type="stmt"/>
-        <line num="403" count="0" type="stmt"/>
-        <line num="413" count="0" type="stmt"/>
+        <line num="396" count="0" type="stmt"/>
+        <line num="406" count="0" type="stmt"/>
+        <line num="416" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.DocumentProducer.DocumentMetadataEdit">
