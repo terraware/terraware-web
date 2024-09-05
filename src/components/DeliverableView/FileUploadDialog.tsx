@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, CircularProgress, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 
+import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import {
   requestGetDeliverable,
   requestUploadDeliverableDocument,
@@ -20,6 +21,7 @@ export type FileUploadDialogProps = {
 };
 
 export default function FileUploadDialog({ deliverable, files, onClose }: FileUploadDialogProps): JSX.Element {
+  const { isApplicationPortal } = useApplicationPortal();
   const [validate, setValidate] = useState<boolean>(false);
   const [requestId, setRequestId] = useState<string>('');
   const [description, setDescription] = useState<string[]>(files.map(() => ''));
@@ -41,8 +43,10 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
     }
     // close the modal and refresh deliverable even in case of error, there may have been partial successes
     onClose();
-    dispatch(requestGetDeliverable({ deliverableId: deliverable.id, projectId: deliverable.projectId }));
-  }, [deliverable.id, deliverable.projectId, dispatch, onClose, snackbar, uploadResult?.status]);
+    if (!isApplicationPortal) {
+      dispatch(requestGetDeliverable({ deliverableId: deliverable.id, projectId: deliverable.projectId }));
+    }
+  }, [deliverable.id, deliverable.projectId, dispatch, isApplicationPortal, onClose, snackbar, uploadResult?.status]);
 
   const submit = useCallback(() => {
     setValidate(true);
