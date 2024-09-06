@@ -1,3 +1,4 @@
+db7ff52ee07 Updated incorrect HTTP method for applications/export (#3143)
 d608a62c0e1 SW-5967 Hide application restart button if Application is not in Passed/Failed Prescreen (#3144)
 fd61eb9ca66 SW-5966 Check variable dependency for required fields (#3142)
 795bc83f3a3 SW-5964 Added export maps button (#3138)
