@@ -22,6 +22,7 @@ export const PRESCREEN_BOUNDARY_DELIVERABLE_ID = 68;
 export const PRESCREEN_MODULE_ID = 2;
 
 const PrescreenView = () => {
+  const { activeLocale } = useLocalization();
   const { selectedApplication, applicationDeliverables, applicationSections, reload } = useApplicationData();
   const { goToApplication, goToApplicationPrescreenResult } = useNavigateTo();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -78,6 +79,20 @@ const PrescreenView = () => {
     }
   }, [dispatch, selectedApplication, setIsLoading, setRestartRequestId]);
 
+  const handleConfirm = useCallback(() => {
+    if (!selectedApplication) {
+      return;
+    }
+    if (selectedApplication.status === 'Not Submitted') {
+      handleSubmit();
+    } else if (
+      selectedApplication.status === 'Failed Pre-screen' ||
+      selectedApplication.status === 'Passed Pre-screen'
+    ) {
+      handleRestart();
+    }
+  }, [selectedApplication, handleRestart, handleSubmit]);
+
   const onReload = useCallback(
     (submit: boolean) => {
       if (!selectedApplication) {
@@ -102,6 +117,29 @@ const PrescreenView = () => {
     }
   }, [restartResult, submitResult, onReload]);
 
+  const { modalTitle, modalBody } = useMemo(() => {
+    if (!activeLocale || !selectedApplication) {
+      return { modalTitle: '', modalBody: '' };
+    }
+
+    if (selectedApplication.status === 'Not Submitted') {
+      return {
+        modalTitle: strings.SUBMIT_PRESCREEN,
+        modalBody: `${strings.SUBMIT_PRESCREEN_CONFIRMATION}\n${strings.ARE_YOU_SURE}`,
+      };
+    } else if (
+      selectedApplication.status === 'Failed Pre-screen' ||
+      selectedApplication.status === 'Passed Pre-screen'
+    ) {
+      return {
+        modalTitle: strings.RESTART_PRESCREEN,
+        modalBody: `${strings.RESTART_PRESCREEN_CONFIRMATION}\n${strings.ARE_YOU_SURE}`,
+      };
+    } else {
+      return { modalTitle: '', modalBody: '' };
+    }
+  }, [activeLocale, selectedApplication]);
+
   if (!selectedApplication || !prescreenSection) {
     return null;
   }
@@ -111,9 +149,9 @@ const PrescreenView = () => {
       <ConfirmModal
         open={isConfirmModalOpen}
         onClose={() => setIsConfirmModalOpen(false)}
-        title={selectedApplication.status === 'Not Submitted' ? strings.SUBMIT_PRESCREEN : strings.RESTART_PRESCREEN}
-        body={`${selectedApplication.status === 'Not Submitted' ? strings.SUBMIT_PRESCREEN_CONFIRMATION : strings.RESTART_PRESCREEN_CONFIRMATION}\n${strings.ARE_YOU_SURE}`}
-        onConfirm={selectedApplication.status === 'Not Submitted' ? handleSubmit : handleRestart}
+        title={modalTitle}
+        body={modalBody}
+        onConfirm={handleConfirm}
       />
       <SectionView section={prescreenSection} sectionDeliverables={prescreenDeliverables}>
         {selectedApplication.status === 'Not Submitted' && (
@@ -125,7 +163,7 @@ const PrescreenView = () => {
           />
         )}
 
-        {selectedApplication.status !== 'Not Submitted' && (
+        {(selectedApplication.status === 'Failed Pre-screen' || selectedApplication.status === 'Passed Pre-screen') && (
           <Button
             disabled={isLoading}
             label={strings.RESTART_PRESCREEN}
