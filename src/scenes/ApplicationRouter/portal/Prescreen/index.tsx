@@ -18,6 +18,9 @@ import strings from 'src/strings';
 
 import ApplicationPage from '../ApplicationPage';
 
+export const PRESCREEN_BOUNDARY_DELIVERABLE_ID = 68;
+export const PRESCREEN_MODULE_ID = 2;
+
 const PrescreenView = () => {
   const { selectedApplication, applicationDeliverables, applicationSections, reload } = useApplicationData();
   const { goToApplication, goToApplicationPrescreenResult } = useNavigateTo();
@@ -36,13 +39,25 @@ const PrescreenView = () => {
   );
 
   const prescreenDeliverables = useMemo(
-    () => applicationDeliverables.filter((deliverable) => deliverable.moduleId === prescreenSection?.moduleId),
+    () =>
+      applicationDeliverables
+        .filter((deliverable) => deliverable.moduleId === prescreenSection?.moduleId)
+        .map((deliverable) =>
+          deliverable.id === PRESCREEN_BOUNDARY_DELIVERABLE_ID
+            ? { ...deliverable, isBoundary: true }
+            : { ...deliverable, isBoundary: false }
+        ),
     [applicationDeliverables, prescreenSection]
   );
 
   const allDeliverablesCompleted = useMemo(
-    () => prescreenDeliverables.every((deliverable) => deliverable.status !== 'Not Submitted'),
-    [prescreenDeliverables]
+    () =>
+      prescreenDeliverables.every((deliverable) =>
+        deliverable.isBoundary
+          ? deliverable.status !== 'Not Submitted' || selectedApplication?.boundary
+          : deliverable.status !== 'Not Submitted'
+      ),
+    [prescreenDeliverables, selectedApplication]
   );
 
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
@@ -103,7 +118,7 @@ const PrescreenView = () => {
       <SectionView section={prescreenSection} sectionDeliverables={prescreenDeliverables}>
         {selectedApplication.status === 'Not Submitted' && (
           <Button
-            disabled={!allDeliverablesCompleted || !selectedApplication.boundary || isLoading}
+            disabled={!allDeliverablesCompleted || isLoading}
             label={strings.SUBMIT_PRESCREEN}
             onClick={() => setIsConfirmModalOpen(true)}
             priority='primary'

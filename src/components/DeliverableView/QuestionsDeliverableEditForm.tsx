@@ -9,6 +9,7 @@ import { VariableTableCell } from 'src/components/DocumentProducer/EditableTable
 import VariableStatusBadge from 'src/components/Variables/VariableStatusBadge';
 import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
+import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import { useProjectVariablesUpdate } from 'src/hooks/useProjectVariablesUpdate';
 import { requestListDeliverableVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { selectDeliverableVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
@@ -109,15 +110,15 @@ const QuestionBox = ({
 
 type QuestionsDeliverableEditViewProps = EditProps & {
   exit: () => void;
-  isPrescreen?: boolean;
 };
 
 const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const query = useQuery();
+  const { isApplicationPortal } = useApplicationPortal();
 
-  const { deliverable, exit, hideStatusBadge, isPrescreen } = props;
+  const { deliverable, exit, hideStatusBadge } = props;
   const [validateFields, setValidateFields] = useState<boolean>(false);
 
   const scrollToVariable = useCallback((variableId: string) => {
@@ -190,7 +191,9 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   }, [exit, updateSuccess, uploadSuccess]);
 
   const missingRequiredFields = useCallback(() => {
-    const allRequiredVariables = stagedVariableWithValues.filter((v) => v.isRequired);
+    const allRequiredVariables = stagedVariableWithValues.filter(
+      (v) => v.isRequired && variableDependencyMet(v, stagedVariableWithValues)
+    );
 
     const missingRequiredFields = allRequiredVariables.some((variable) => {
       let hasEmptyValue = false;
@@ -207,8 +210,8 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   const handleOnSave = useCallback(() => {
     const missingFields = missingRequiredFields();
 
-    // If Questionnaire Deliverable is part of the Application/Pre-screen and all fields are completed, mark deliverable as “Completed”
-    if (isPrescreen) {
+    // If Questionnaire Deliverable is part of the Application and all fields are completed, mark deliverable as “Completed”
+    if (isApplicationPortal) {
       if (!missingFields) {
         complete(deliverable);
       }
@@ -218,7 +221,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     }
 
     update();
-  }, [isPrescreen, complete, deliverable, setValidateFields, update, missingRequiredFields]);
+  }, [isApplicationPortal, complete, deliverable, setValidateFields, update, missingRequiredFields]);
 
   if (!deliverable) {
     return null;

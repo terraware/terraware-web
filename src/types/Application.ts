@@ -8,6 +8,8 @@ export type ApplicationDeliverable = components['schemas']['ApplicationDeliverab
 export type ApplicationReview = components['schemas']['ReviewApplicationRequestPayload'];
 export type ApplicationReviewStatus = ApplicationReview['status'];
 
+export type ApplicationDeliverableWithBoundaryFlag = ApplicationDeliverable & { isBoundary?: boolean };
+
 export const ApplicationReviewStatuses: ApplicationReviewStatus[] = [
   'Accepted',
   'Carbon Eligible',

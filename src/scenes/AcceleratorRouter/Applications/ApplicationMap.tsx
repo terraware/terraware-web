@@ -8,15 +8,14 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
-import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
+import ApplicationService from 'src/services/ApplicationService';
 import strings from 'src/strings';
 
 const ApplicationMap = () => {
   const { activeLocale } = useLocalization();
   const { selectedApplication, setSelectedApplication } = useApplicationData();
-  const { goToAcceleratorApplicationMapUpload } = useNavigateTo();
 
   const pathParams = useParams<{ applicationId: string }>();
 
@@ -51,23 +50,24 @@ const ApplicationMap = () => {
     [activeLocale, selectedApplication?.id]
   );
 
+  const exportButton = useMemo(() => {
+    if (!activeLocale || !selectedApplication) {
+      return undefined;
+    }
+    return (
+      <Button
+        label={strings.EXPORT_PROJECT_BOUNDARY}
+        onClick={() => ApplicationService.exportBoundary(selectedApplication.id)}
+      />
+    );
+  }, []);
+
   if (!selectedApplication) {
     return <Page isLoading={true} />;
   }
 
   return (
-    <Page
-      crumbs={crumbs}
-      title={titleComponent}
-      contentStyle={{ display: 'block' }}
-      rightComponent={
-        <Button
-          label={strings.REPLACE_BOUNDARY}
-          onClick={() => goToAcceleratorApplicationMapUpload(selectedApplication.id)}
-          priority={'secondary'}
-        />
-      }
-    >
+    <Page crumbs={crumbs} title={titleComponent} contentStyle={{ display: 'block' }} rightComponent={exportButton}>
       <ApplicationMapCard application={selectedApplication} />
     </Page>
   );
