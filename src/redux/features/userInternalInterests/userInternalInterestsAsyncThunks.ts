@@ -10,7 +10,7 @@ export const requestGetUserInternalInterests = createAsyncThunk(
   async (userId: number, { rejectWithValue }) => {
     const response = await UserInternalInterestsService.get(userId);
     if (response && response.requestSucceeded) {
-      return response;
+      return response.data;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

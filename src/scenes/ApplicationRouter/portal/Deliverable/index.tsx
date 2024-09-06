@@ -24,7 +24,7 @@ const SectionDeliverableView = () => {
     return null;
   }
 
-  return <DeliverableViewCard deliverable={{ ...deliverable, documents: [] }} hideStatusBadge />;
+  return <DeliverableViewCard deliverable={{ ...deliverable }} hideStatusBadge />;
 };
 
 const SectionDeliverableWrapper = () => {
