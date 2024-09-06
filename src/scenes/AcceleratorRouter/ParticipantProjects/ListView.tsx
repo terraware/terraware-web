@@ -42,6 +42,11 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
+          key: 'acceleratorDetails_fileNaming',
+          name: strings.FILE_NAMING,
+          type: 'string',
+        },
+        {
           key: 'country_name',
           name: strings.COUNTRY,
           type: 'string',
@@ -64,7 +69,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
       ]
     : [];
 
-const fuzzySearchColumns = ['name'];
+const fuzzySearchColumns = ['name', 'acceleratorDetails_fileNaming'];
 const defaultSearchOrder: SearchSortOrder = {
   field: 'name',
   direction: 'Ascending',

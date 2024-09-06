@@ -3,6 +3,7 @@ import React from 'react';
 import EditImagesModal from 'src/components/DocumentProducer/EditImagesModal';
 import EditVariable from 'src/components/DocumentProducer/EditVariable';
 import EditableTableEdit from 'src/components/DocumentProducer/EditableTableModal';
+import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
 import {
   ImageVariableWithValues,
   TableVariableWithValues,
@@ -10,24 +11,27 @@ import {
 } from 'src/types/documentProducer/Variable';
 
 type EditVariableModalProps = {
+  display?: boolean;
   variable: VariableWithValues;
-  onFinish: () => void;
+  onFinish: (edited: boolean) => void;
   onCancel: () => void;
   projectId: number;
-  manifestId: number;
 };
 
 export default function EditVariableModal({
-  variable,
-  onFinish,
+  display,
   onCancel,
+  onFinish,
   projectId,
-  manifestId,
+  variable,
 }: EditVariableModalProps) {
+  const { getUsedSections } = useDocumentProducerData();
+
   switch (variable.type) {
     case 'Image':
       return (
         <EditImagesModal
+          display={display}
           variable={variable as ImageVariableWithValues}
           projectId={projectId}
           onFinish={onFinish}
@@ -37,6 +41,7 @@ export default function EditVariableModal({
     case 'Table':
       return (
         <EditableTableEdit
+          display={display}
           variable={variable as TableVariableWithValues}
           projectId={projectId}
           onFinish={onFinish}
@@ -49,7 +54,13 @@ export default function EditVariableModal({
     case 'Number':
     case 'Text':
       return (
-        <EditVariable variableId={variable.id} projectId={projectId} onFinish={onFinish} manifestId={manifestId} />
+        <EditVariable
+          display={display}
+          onFinish={onFinish}
+          projectId={projectId}
+          sectionsUsed={getUsedSections(variable.id)}
+          variable={variable}
+        />
       );
     default:
       return null;

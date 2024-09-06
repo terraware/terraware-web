@@ -55,6 +55,7 @@ const DocumentMetadataEdit = ({
   const { availableProjects } = useProjects();
 
   const [participant, setParticipant] = useState<{ id?: number }>({ id: undefined });
+  const [documentNameFieldHasBeenFocused, setDocumentNameFieldHasBeenFocused] = useState(false);
 
   const participantProjects = useMemo(
     () =>
@@ -120,6 +121,32 @@ const DocumentMetadataEdit = ({
   );
 
   const projectRecord = useMemo(() => ({ projectId: projectId ? parseInt(projectId, 10) : -1 }), [projectId]);
+  const projectName = useMemo(
+    () => participantProjects.find((project) => project.id === projectRecord.projectId)?.name,
+    [participantProjects, projectRecord.projectId]
+  );
+
+  const documentTemplateName = useMemo(
+    () => getDocumentTemplateName(documentTemplates ?? [], documentTemplateId),
+    [documentTemplateId, documentTemplates]
+  );
+
+  useEffect(() => {
+    if (documentNameFieldHasBeenFocused) {
+      return;
+    }
+
+    // if project name is set and document name is empty, set document name to project name
+    if (projectName && !documentName) {
+      setDocumentName(projectName);
+    }
+
+    // if project name and document template name are set AND document name is the same as project name
+    // append document template name to project name
+    if (projectName && documentTemplateName && documentName === projectName) {
+      setDocumentName(`${projectName} - ${documentTemplateName}`);
+    }
+  }, [documentName, documentTemplateName, documentNameFieldHasBeenFocused, projectName]);
 
   return (
     <>
@@ -180,6 +207,7 @@ const DocumentMetadataEdit = ({
           value={documentName}
           errorText={getErrorText(documentName)}
           onChange={(value: unknown) => handleTextFieldChange(value, setDocumentName)}
+          onFocus={() => setDocumentNameFieldHasBeenFocused(true)}
           required
         />
       </FormField>

@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon';
+
 /**
  * Checks if a date (dateString1) occurs after another date (dateString2).
  * Returns true if dateString1 occurs after dateString2.
@@ -22,3 +24,5 @@ export const isAfter = (dateString1: string | undefined, dateString2: string | u
 
   return undefined;
 };
+
+export const today = DateTime.now().toUTC().startOf('day');

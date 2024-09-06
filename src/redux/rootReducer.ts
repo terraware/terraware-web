@@ -1,7 +1,5 @@
 import { Action, combineReducers } from '@reduxjs/toolkit';
 
-import userDeliverableCategoriesReducers from 'src/redux/features/userDeliverableCategories/userDeliverableCategoriesSlice';
-
 import acceleratorReducers from './features/accelerator/acceleratorSlice';
 import accessionsReducers from './features/accessions/accessionsSlice';
 import appVersionReducers from './features/appVersion/appVersionSlice';
@@ -11,15 +9,18 @@ import cohortsReducers from './features/cohorts/cohortsSlice';
 import deliverablesReducers from './features/deliverables/deliverablesSlice';
 import documentProducerReducers from './features/documentProducer';
 import draftPlantingSiteReducers from './features/draftPlantingSite/draftPlantingSiteSlice';
+import eventReducers from './features/events/eventsSlice';
 import globalRolesReducers from './features/globalRoles/globalRolesSlice';
 import messageReducers from './features/message/messageSlice';
 import moduleReducers from './features/modules/modulesSlice';
 import observationsReducers from './features/observations/observationsSlice';
+import organizationsReducers from './features/organizations/organizationsSlice';
 import participantProjectSpeciesReducers from './features/participantProjectSpecies/participantProjectSpeciesSlice';
 import participantProjectsReducers from './features/participantProjects/participantProjectsSlice';
 import participantsReducers from './features/participants/participantsSlice';
 import plantingSiteReducers from './features/plantingSite/plantingSiteSlice';
 import plantingsReducers from './features/plantings/plantingsSlice';
+import projectSpeciesReducers from './features/projectSpecies/projectSpeciesSlice';
 import projectToDoReducers from './features/projectToDo/projectToDoSlice';
 import projectsReducers from './features/projects/projectsSlice';
 import reportsSettingsReducers from './features/reportsSettings/reportsSettingsSlice';
@@ -32,6 +33,7 @@ import supportReducers from './features/support/supportSlice';
 import trackingReducers from './features/tracking/trackingSlice';
 import userAnalyticsReducers from './features/user/userAnalyticsSlice';
 import usersReducers from './features/user/usersSlice';
+import userInternalInterestsReducers from './features/userInternalInterests/userInternalInterestsSlice';
 import votesReducers from './features/votes/votesSlice';
 
 // assembly of app reducers
@@ -45,16 +47,19 @@ export const reducers = {
   ...deliverablesReducers,
   ...documentProducerReducers,
   ...draftPlantingSiteReducers,
+  ...eventReducers,
   ...globalRolesReducers,
   ...messageReducers,
   ...moduleReducers,
   ...observationsReducers,
+  ...organizationsReducers,
   ...participantsReducers,
   ...participantProjectsReducers,
   ...participantProjectSpeciesReducers,
   ...plantingsReducers,
   ...plantingSiteReducers,
   ...projectsReducers,
+  ...projectSpeciesReducers,
   ...projectToDoReducers,
   ...reportsSettingsReducers,
   ...scoresReducers,
@@ -65,7 +70,7 @@ export const reducers = {
   ...supportReducers,
   ...trackingReducers,
   ...userAnalyticsReducers,
-  ...userDeliverableCategoriesReducers,
+  ...userInternalInterestsReducers,
   ...usersReducers,
   ...votesReducers,
 };

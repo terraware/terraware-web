@@ -72,9 +72,9 @@ export default function CohortNewView(): JSX.Element {
     <Page title={strings.ADD_COHORT} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
       <CohortForm<CreateCohortRequestPayload>
         busy={isBusy}
-        cohort={record}
         onCancel={goToCohortsList}
         onSave={onCohortSaved}
+        record={record}
       />
     </Page>
   );

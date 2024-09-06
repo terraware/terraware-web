@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, IconButton, SxProps, useTheme } from '@mui/material';
-import { Button, DatePicker, Dropdown, DropdownItem, Icon, Textfield } from '@terraware/web-components';
+import { Button, DatePicker, Dropdown, DropdownItem, Icon, MultiSelect, Textfield } from '@terraware/web-components';
 
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import {
   ImageVariableWithValues,
@@ -37,6 +38,7 @@ export type DeliverableVariableDetailsInputProps = {
   variable: Variable;
   addRemovedValue: (value: VariableValueValue) => void;
   projectId: number;
+  validateFields: boolean;
 };
 
 const DeliverableVariableDetailsInput = ({
@@ -50,10 +52,12 @@ const DeliverableVariableDetailsInput = ({
   variable,
   addRemovedValue,
   projectId,
+  validateFields,
 }: DeliverableVariableDetailsInputProps): JSX.Element => {
-  const [value, setValue] = useState<string | number>();
+  const { activeLocale } = useLocalization();
+
+  const [value, setValue] = useState<string | number | number[]>();
   const [title, setTitle] = useState<string>();
-  const [textValuesList, setTextValuesList] = useState<string[]>();
   const theme = useTheme();
 
   const textFieldLabelStyles: SxProps = {
@@ -69,21 +73,6 @@ const DeliverableVariableDetailsInput = ({
 
   useEffect(() => {
     if (values?.length) {
-      const allTextValues = values.reduce((acc: string[], current: VariableValueValue) => {
-        if (current.type === 'Text') {
-          const currentTextValue = current;
-          acc.push(currentTextValue.textValue);
-        }
-        return acc;
-      }, []);
-      setTextValuesList(allTextValues);
-    } else {
-      setTextValuesList(['']);
-    }
-  }, [values]);
-
-  useEffect(() => {
-    if (values?.length) {
       if (variable.type === 'Text') {
         const textValues = values as VariableValueTextValue[];
         setValue(textValues[0].textValue);
@@ -94,7 +83,7 @@ const DeliverableVariableDetailsInput = ({
       }
       if (variable.type === 'Select') {
         const selectValues = values as VariableValueSelectValue[];
-        setValue(selectValues[0].optionValues[0]);
+        setValue(selectValues[0].optionValues);
       }
       if (variable.type === 'Date') {
         const selectValues = values as VariableValueDateValue[];
@@ -149,11 +138,13 @@ const DeliverableVariableDetailsInput = ({
           const selectValues = values as VariableValueSelectValue[];
           const newValues = selectValues.map((sv) => ({ ...sv }));
 
-          newValues[0].optionValues = [newValue];
+          newValues[0].optionValues = variable.isMultiple ? newValue : [newValue];
 
           setValues(newValues);
         } else {
-          setValues([{ id: -1, listPosition: 0, optionValues: [newValue], type: 'Select' }]);
+          setValues([
+            { id: -1, listPosition: 0, optionValues: variable.isMultiple ? newValue : [newValue], type: 'Select' },
+          ]);
         }
       }
 
@@ -218,30 +209,64 @@ const DeliverableVariableDetailsInput = ({
   };
 
   const addInput = () => {
-    setTextValuesList((prev) => {
-      if (prev) {
-        return [...prev, ''];
-      }
-      return [''];
-    });
+    setValues([...(values || []), { id: -1, listPosition: values?.length || 0, textValue: '', type: 'Text' }]);
   };
 
   const onDeleteInput = (index: number) => {
-    setTextValuesList((prev) => {
-      if (prev) {
-        const removed = values ? values[index] : undefined;
-        // if removed value exists in backend, add it to be deleted when saving
-        if (removed && removed.id !== -1) {
-          addRemovedValue(removed);
-        }
-
-        const updatedInputs = [...prev];
-        updatedInputs.splice(index, 1);
-        onChangeValueHandler(undefined, 'value', index);
-        return updatedInputs;
+    if (values.length) {
+      const removed = values[index];
+      // if removed value exists in backend, add it to be deleted when saving
+      if (removed && removed.id !== -1) {
+        addRemovedValue(removed);
       }
-    });
+
+      const updatedInputs = [...values];
+      updatedInputs.splice(index, 1);
+      onChangeValueHandler(undefined, 'value', index);
+      setValues(updatedInputs);
+    }
   };
+
+  const errorMessage = useMemo(() => {
+    if (!activeLocale) {
+      return '';
+    }
+
+    if (validateFields && variable.isRequired && !value) {
+      return strings.REQUIRED_FIELD;
+    }
+
+    switch (variable.type) {
+      case 'Number':
+        if (value !== undefined) {
+          const numValue = Number(value);
+          const decimals: string | undefined = String(numValue).split('.')[1];
+          if (Number.isNaN(numValue)) {
+            return strings.VARIABLE_ERROR_NUMBER_NAN;
+          }
+          if (variable.minValue !== undefined && numValue < variable.minValue) {
+            return strings.formatString(strings.VARIABLE_ERROR_NUMBER_MIN_LIMIT, variable.minValue).toString();
+          }
+          if (variable.maxValue !== undefined && numValue > variable.maxValue) {
+            return strings.formatString(strings.VARIABLE_ERROR_NUMBER_MAX_LIMIT, variable.maxValue).toString();
+          }
+          if (variable.decimalPlaces !== undefined && decimals && decimals.length > variable.decimalPlaces) {
+            return strings
+              .formatString(strings.VARIABLE_ERROR_NUMBER_DECIMAL_PLACES, variable.decimalPlaces)
+              .toString();
+          }
+        }
+        return '';
+      case 'Date':
+      case 'Image':
+      case 'Link':
+      case 'Section':
+      case 'Select':
+      case 'Table':
+      case 'Text':
+        return '';
+    }
+  }, [activeLocale, validateFields, variable, value]);
 
   return (
     <>
@@ -267,6 +292,7 @@ const DeliverableVariableDetailsInput = ({
             },
             textFieldLabelStyles,
           ]}
+          required={variable.isRequired}
         />
       )}
 
@@ -278,41 +304,52 @@ const DeliverableVariableDetailsInput = ({
           value={value?.toString()}
           aria-label='select date'
           sx={formElementStyles}
+          errorText={errorMessage}
         />
       )}
 
       {variable.type === 'Text' && (
         <>
-          {textValuesList?.map((iValue, index) => (
-            <Box key={index} display='flex' alignItems='center' sx={{ position: 'relative' }}>
-              <Textfield
-                key={`input-${index}`}
-                id='value'
-                label=''
-                type={'text'}
-                onChange={(newValue: any) => onChangeValueHandler(newValue, 'value', index)}
-                value={iValue?.toString()}
-                sx={[formElementStyles, { flex: 1 }]}
-              />
-              {variable.isList && (
-                <IconButton
-                  id={`delete-input-${index}`}
-                  aria-label='delete'
-                  size='small'
-                  onClick={() => onDeleteInput(index)}
-                  disabled={index === 0}
-                  sx={index === 0 ? { 'margin-top': '20px' } : {}}
-                >
-                  <Icon
-                    name='cancel'
-                    size='medium'
-                    fillColor={theme.palette.TwClrIcn}
-                    style={index === 0 ? { opacity: 0.5 } : {}}
-                  />
-                </IconButton>
-              )}
-            </Box>
-          ))}
+          {(values.length ? (values as VariableValueTextValue[]) : [{ textValue: '' }])
+            ?.map((tv) => tv.textValue)
+            .map((iValue, index) => (
+              <Box key={index} display='flex' alignItems='center' sx={{ position: 'relative' }}>
+                <Textfield
+                  id='value'
+                  key={`input-${index}`}
+                  label=''
+                  onChange={(newValue: any) => onChangeValueHandler(newValue, 'value', index)}
+                  sx={[
+                    formElementStyles,
+                    {
+                      flex: 1,
+                      maxWidth: variable.textType === 'MultiLine' ? '100%' : (formElementStyles.maxWidth as string),
+                    },
+                  ]}
+                  type={variable.textType === 'SingleLine' ? 'text' : 'textarea'}
+                  value={iValue?.toString()}
+                  required={variable.isRequired}
+                  errorText={validateFields && !iValue && variable.isRequired ? strings.REQUIRED_FIELD : ''}
+                />
+                {variable.isList && (
+                  <IconButton
+                    id={`delete-input-${index}`}
+                    aria-label='delete'
+                    size='small'
+                    onClick={() => onDeleteInput(index)}
+                    disabled={index === 0}
+                    sx={index === 0 ? { 'margin-top': '20px' } : {}}
+                  >
+                    <Icon
+                      name='cancel'
+                      size='medium'
+                      fillColor={theme.palette.TwClrIcn}
+                      style={index === 0 ? { opacity: 0.5 } : {}}
+                    />
+                  </IconButton>
+                )}
+              </Box>
+            ))}
           {variable.isList && <Button priority='ghost' label={strings.ADD} icon='iconAdd' onClick={addInput} />}
         </>
       )}
@@ -325,17 +362,39 @@ const DeliverableVariableDetailsInput = ({
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
           value={value?.toString()}
           sx={[formElementStyles, textFieldLabelStyles]}
+          required={variable.isRequired}
+          errorText={errorMessage}
         />
       )}
 
-      {variable.type === 'Select' && (
+      {variable.type === 'Select' && !variable.isMultiple && (
         <Dropdown
+          fullWidth
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
-          label=''
           options={getOptions()}
-          selectedValue={value}
-          fullWidth={true}
+          selectedValue={(value as number[])?.[0]}
           sx={[formElementStyles, { paddingBottom: theme.spacing(1) }]}
+          required={variable.isRequired}
+          errorText={errorMessage}
+        />
+      )}
+
+      {variable.type === 'Select' && variable.isMultiple && (
+        <MultiSelect
+          fullWidth
+          onAdd={(item: number) => {
+            const nextValues = [...((value as number[]) || []), item];
+            onChangeValueHandler(nextValues, 'value');
+          }}
+          onRemove={(item: number) => {
+            const nextValues = value ? (value as number[]).filter((v) => v !== item) : [];
+            onChangeValueHandler(nextValues, 'value');
+          }}
+          options={new Map(variable.options?.map((option) => [option.id, option.name]))}
+          selectedOptions={(value || []) as number[]}
+          sx={[formElementStyles, { paddingBottom: theme.spacing(1) }]}
+          valueRenderer={(val: string) => val}
+          errorText={errorMessage}
         />
       )}
 
@@ -347,6 +406,8 @@ const DeliverableVariableDetailsInput = ({
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'title')}
           sx={formElementStyles}
           value={title}
+          required={variable.isRequired}
+          errorText={errorMessage}
         />
       )}
 

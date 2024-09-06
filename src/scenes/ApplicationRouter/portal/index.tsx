@@ -15,7 +15,6 @@ import SectionDeliverable from './Deliverable';
 import SectionDeliverableEditView from './DeliverableEdit';
 import MapView from './Map';
 import MapUpdateView from './MapUpdate';
-import MapUploadView from './MapUpload';
 import NavBar from './NavBar';
 import Overview from './Overview';
 import PrescreenView from './Prescreen';
@@ -85,7 +84,6 @@ const ApplicationPortalRouter = ({ showNavBar, setShowNavBar }: ApplicationPorta
           <Routes>
             <Route path={`${APP_PATHS.APPLICATION_MAP}`} element={<MapView />} />
             <Route path={`${APP_PATHS.APPLICATION_MAP_UPDATE}`} element={<MapUpdateView />} />
-            <Route path={`${APP_PATHS.APPLICATION_MAP_UPLOAD}`} element={<MapUploadView />} />
             <Route path={`${APP_PATHS.APPLICATION_OVERVIEW}`} element={<Overview />} />
             <Route path={`${APP_PATHS.APPLICATION_PRESCREEN}`} element={<PrescreenView />} />
             <Route path={`${APP_PATHS.APPLICATION_PRESCREEN_RESULT}`} element={<PrescreenResultView />} />

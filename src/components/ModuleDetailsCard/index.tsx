@@ -6,11 +6,10 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';
 
 import Link from 'src/components/common/Link';
-import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { DeliverableStatusType } from 'src/types/Deliverables';
+import { DeliverableStatusTypeWithOverdue } from 'src/types/Deliverables';
 import { ModuleContentType, ModuleEventType } from 'src/types/Module';
 import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 
@@ -62,7 +61,7 @@ export type DeliverableDetails = {
   dueDate?: DateTime;
   name: string;
   onClick: () => void;
-  status: DeliverableStatusType;
+  status: DeliverableStatusTypeWithOverdue;
   useButton?: boolean;
 };
 
@@ -88,7 +87,6 @@ type ModuleDetailsCardProp = {
   events?: EventDetails[];
   module: ModuleDetails;
   projectId: number;
-  showSeeAllModules?: boolean;
   showSimplifiedStatus?: boolean;
   children?: ReactNode;
 };
@@ -98,7 +96,6 @@ const ModuleDetailsCard = ({
   events,
   module,
   projectId,
-  showSeeAllModules = false,
   showSimplifiedStatus = false,
   children,
 }: ModuleDetailsCardProp) => {
@@ -169,24 +166,9 @@ const ModuleDetailsCard = ({
           <ModuleContentSection>
             <Grid container>
               <Grid item xs={12}>
-                <Grid container justifyContent={'space-between'}>
-                  <Grid item>
-                    <Typography fontSize={'16px'} fontWeight={500} lineHeight={'24px'}>
-                      {module.title}
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    {showSeeAllModules && (
-                      <Link
-                        to={APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`)}
-                        fontSize={16}
-                        fontWeight={500}
-                      >
-                        {strings.SEE_ALL_MODULES}
-                      </Link>
-                    )}
-                  </Grid>
-                </Grid>
+                <Typography fontSize={'16px'} fontWeight={500} lineHeight={'24px'}>
+                  {module.title}
+                </Typography>
               </Grid>
               <Grid item xs={12}>
                 <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>

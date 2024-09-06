@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 
-import Page from 'src/components/Page';
 import ApplicationStatusCard from 'src/components/ProjectField/ApplicationStatusCard';
 import CountrySelect from 'src/components/ProjectField/CountrySelect';
 import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
@@ -15,6 +14,8 @@ import ProjectFieldTextfield from 'src/components/ProjectField/Textfield';
 import VotingDecisionCard from 'src/components/ProjectField/VotingDecisionCard';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
+import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
+import useListModules from 'src/hooks/useListModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
@@ -43,6 +44,13 @@ const EditView = () => {
   const { goToParticipantProject } = useNavigateTo();
   const { isAllowed } = useUser();
   const { getApplicationByProjectId } = useApplicationData();
+  const { modules, listModules } = useListModules();
+
+  useEffect(() => {
+    if (project) {
+      void listModules({ projectId: project.id });
+    }
+  }, [project, listModules]);
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
   const isAllowedEditScoreAndVoting = isAllowed('UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING');
@@ -148,7 +156,13 @@ const EditView = () => {
   }, [goToParticipantProject, isAllowedEdit, projectId]);
 
   return (
-    <Page title={`${participant?.name || ''} / ${project?.name || ''}`} crumbs={crumbs} hierarchicalCrumbs={false}>
+    <PageWithModuleTimeline
+      title={`${participant?.name || ''} / ${project?.name || ''}`}
+      crumbs={crumbs}
+      hierarchicalCrumbs={false}
+      cohortPhase={project?.cohortPhase}
+      modules={modules ?? []}
+    >
       <PageForm
         busy={participantProjectUpdateRequest?.status === 'pending'}
         cancelID='cancelNewParticipantProject'
@@ -247,13 +261,6 @@ const EditView = () => {
               onChange={onChangeParticipantProject}
               type={'number'}
               value={participantProjectRecord?.perHectareBudget}
-            />
-            <ProjectFieldTextfield
-              id={'numCommunities'}
-              label={strings.NUMBER_OF_COMMUNITIES_WITHIN_PROJECT_AREA}
-              onChange={onChangeParticipantProject}
-              type={'number'}
-              value={participantProjectRecord?.numCommunities}
             />
             <ProjectFieldTextfield
               id={'hubSpotUrl'}
@@ -355,7 +362,7 @@ const EditView = () => {
           organizationName={organization?.name || ''}
         />
       )}
-    </Page>
+    </PageWithModuleTimeline>
   );
 };
 export default EditView;

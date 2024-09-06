@@ -17,6 +17,7 @@ import {
   ApplicationReviewStatus,
   ApplicationReviewStatuses,
   ApplicationStatus,
+  getApplicationStatusLabel,
 } from 'src/types/Application';
 import useForm from 'src/utils/useForm';
 
@@ -42,7 +43,7 @@ const ApplicationReviewModal = ({
   const result = useAppSelector(selectApplicationReview(requestId));
 
   const dropdownOptions: DropdownItem[] = ApplicationReviewStatuses.map((status) => ({
-    label: status,
+    label: getApplicationStatusLabel(status),
     value: status,
   }));
 
@@ -59,15 +60,13 @@ const ApplicationReviewModal = ({
 
   const [applicationReview, , onChange] = useForm<ApplicationReview>({
     status: getApplicationReviewStatus(application.status),
-    feedback: application.feedback,
     internalComment: application.internalComment,
   });
 
   const canUpdateStatus = useMemo(
     () =>
       isAllowed('UPDATE_APPLICATION_STATUS') &&
-      ApplicationReviewStatuses.find((status) => status === application.status) !== undefined &&
-      application.status !== 'Not Submitted',
+      ApplicationReviewStatuses.find((status) => status === application.status) !== undefined,
     [application.status, isAllowed]
   );
 
@@ -79,7 +78,6 @@ const ApplicationReviewModal = ({
 
   const hasChange = useCallback(() => {
     const originalReview: ApplicationReview = {
-      feedback: application.feedback,
       internalComment: application.internalComment,
       status: getApplicationReviewStatus(application.status),
     };
@@ -143,18 +141,6 @@ const ApplicationReviewModal = ({
                 options={dropdownOptions}
                 required
                 selectedValue={applicationReview.status}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                type='textarea'
-                label={strings.FEEDBACK}
-                id='feedback'
-                onChange={(value) => {
-                  onChange('feedback', value);
-                }}
-                sx={{ marginTop: theme.spacing(1) }}
-                value={applicationReview.feedback}
               />
             </Grid>
           </>

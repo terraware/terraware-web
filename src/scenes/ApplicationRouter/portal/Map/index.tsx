@@ -11,11 +11,13 @@ import { useApplicationData } from 'src/providers/Application/Context';
 import ApplicationPage from 'src/scenes/ApplicationRouter/portal/ApplicationPage';
 import strings from 'src/strings';
 
+import { PRESCREEN_BOUNDARY_DELIVERABLE_ID, PRESCREEN_MODULE_ID } from '../Prescreen';
+
 const MapViewWrapper = () => {
   const { activeLocale } = useLocalization();
   const { selectedApplication } = useApplicationData();
 
-  const { goToApplicationMapUpdate, goToApplicationMapUpload, goToApplicationPrescreen } = useNavigateTo();
+  const { goToApplicationMapUpdate, goToApplicationPrescreen, goToApplicationSectionDeliverable } = useNavigateTo();
 
   useEffect(() => {
     if (!selectedApplication) {
@@ -35,11 +37,15 @@ const MapViewWrapper = () => {
         if (type === 'Update') {
           goToApplicationMapUpdate(selectedApplication.id);
         } else {
-          goToApplicationMapUpload(selectedApplication.id);
+          goToApplicationSectionDeliverable(
+            selectedApplication.id,
+            PRESCREEN_MODULE_ID,
+            PRESCREEN_BOUNDARY_DELIVERABLE_ID
+          );
         }
       }
     },
-    [selectedApplication, goToApplicationMapUpdate, goToApplicationMapUpload]
+    [selectedApplication, goToApplicationMapUpdate, goToApplicationSectionDeliverable]
   );
 
   const crumbs: Crumb[] = useMemo(

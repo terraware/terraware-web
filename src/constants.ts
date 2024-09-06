@@ -5,13 +5,13 @@ export const FIFTEEN_MINUTE_INTERVAL_MS = 15 * 60 * 1000;
 export const SEED_COLLECTOR_APP_STORE_LINK = 'https://apps.apple.com/us/app/terraware/id1568369900';
 export const SEED_COLLECTOR_GOOGLE_PLAY_LINK =
   'https://play.google.com/store/apps/details?id=com.terraformation.seedcollector';
+export const ACCELERATOR_LINK = 'https://www.terraformation.com/accelerator';
 
 export enum APP_PATHS {
   ACCELERATOR = '/accelerator',
   ACCELERATOR_APPLICATION = '/accelerator/applications/:applicationId',
   ACCELERATOR_APPLICATION_DELIVERABLE = '/accelerator/applications/:applicationId/deliverable/:deliverableId',
   ACCELERATOR_APPLICATION_MAP = '/accelerator/applications/:applicationId/map',
-  ACCELERATOR_APPLICATION_MAP_UPLOAD = '/accelerator/applications/:applicationId/map/upload',
   ACCELERATOR_APPLICATIONS = '/accelerator/applications',
   ACCELERATOR_COHORTS = '/accelerator/cohorts',
   ACCELERATOR_COHORTS_EDIT = '/accelerator/cohorts/:cohortId/edit',
@@ -24,6 +24,7 @@ export enum APP_PATHS {
   ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_VIEW = '/accelerator/documents/:documentId',
   ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS = '/accelerator/documents',
   ACCELERATOR_MODULE_CONTENT = '/accelerator/modules',
+  ACCELERATOR_ORGANIZATIONS = 'accelerator/organizations',
   ACCELERATOR_OVERVIEW = '/accelerator/overview',
   ACCELERATOR_PARTICIPANTS = '/accelerator/participants',
   ACCELERATOR_PARTICIPANTS_EDIT = '/accelerator/participants/:participantId/edit',
@@ -49,7 +50,6 @@ export enum APP_PATHS {
   APPLICATION_OVERVIEW = '/applications/:applicationId',
   APPLICATION_MAP = '/applications/:applicationId/map',
   APPLICATION_MAP_UPDATE = '/applications/:applicationId/map/update',
-  APPLICATION_MAP_UPLOAD = '/applications/:applicationId/map/upload',
   APPLICATION_PRESCREEN = '/applications/:applicationId/prescreen',
   APPLICATION_PRESCREEN_RESULT = '/applications/:applicationId/prescreen/result',
   APPLICATION_REVIEW = '/applications/:applicationId/review',

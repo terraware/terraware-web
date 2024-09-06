@@ -13,7 +13,7 @@ import { requestListParticipantProjectSpecies } from 'src/redux/features/partici
 import { selectParticipantProjectSpeciesListRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Deliverable } from 'src/types/Deliverables';
+import { DeliverableWithOverdue } from 'src/types/Deliverables';
 
 import AddSpeciesModal from './AddSpeciesModal';
 import RemoveSpeciesDialog from './RemoveSpeciesDialog';
@@ -34,7 +34,7 @@ const consoleColumns = (): TableColumnType[] => [
 ];
 
 type SpeciesDeliverableTableProps = {
-  deliverable: Deliverable;
+  deliverable: DeliverableWithOverdue;
 };
 
 const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps): JSX.Element => {

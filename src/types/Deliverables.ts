@@ -27,6 +27,28 @@ export const DeliverableStatuses: DeliverableStatusType[] = [
   'Not Needed',
 ];
 
+export const DeliverableStatusOrder: { [key in DeliverableStatusTypeWithOverdue]: number } = {
+  Overdue: 0,
+  Rejected: 1,
+  'Not Submitted': 2,
+  'In Review': 3,
+  'Needs Translation': 3,
+  Approved: 4,
+  'Not Needed': 5,
+  Completed: 5,
+};
+
+export type DeliverableStatusTypeWithOverdue = DeliverableStatusType | 'Overdue';
+export const DeliverableStatusesWithOverdue: DeliverableStatusTypeWithOverdue[] = [
+  'Not Submitted',
+  'In Review',
+  'Rejected',
+  'Approved',
+  'Needs Translation',
+  'Not Needed',
+  'Overdue',
+];
+
 export type DeliverableDocument = components['schemas']['SubmissionDocumentPayload'];
 
 export type UploadDeliverableDocumentRequest = {
@@ -35,15 +57,14 @@ export type UploadDeliverableDocumentRequest = {
   projectId: number;
 };
 
-export type DeliverableData = {
-  deliverable: Deliverable | undefined;
+export type DeliverableWithOverdue = Omit<Deliverable, 'status'> & {
+  status: DeliverableStatusTypeWithOverdue;
 };
 
 export type ListDeliverablesResponsePayload = components['schemas']['ListDeliverablesResponsePayload'];
 export type ListDeliverablesElement = components['schemas']['ListDeliverablesElement'];
-
-export type DeliverablesData = {
-  deliverables: ListDeliverablesElement[];
+export type ListDeliverablesElementWithOverdue = Omit<ListDeliverablesElement, 'status'> & {
+  status: DeliverableStatusTypeWithOverdue;
 };
 
 export const categoryLabel = (category: DeliverableCategoryType): string => {

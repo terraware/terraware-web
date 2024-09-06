@@ -17,6 +17,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
+import useListModules from 'src/hooks/useListModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
@@ -37,9 +38,17 @@ const SingleView = () => {
   const { isMobile } = useDeviceInfo();
   const { crumbs, participant, participantProject, project, projectId, projectMeta, organization, status } =
     useParticipantProjectData();
-  const { phase1Scores } = useScoringData();
+  const { phase0Scores, phase1Scores } = useScoringData();
   const { phaseVotes } = useVotingData();
   const { goToParticipantProjectEdit } = useNavigateTo();
+
+  const { modules, listModules } = useListModules();
+
+  useEffect(() => {
+    if (project) {
+      void listModules({ projectId: project.id });
+    }
+  }, [project, listModules]);
 
   const [countries, setCountries] = useState<Country[]>();
   const [exportModalOpen, setExportModalOpen] = useState(false);
@@ -106,6 +115,22 @@ const SingleView = () => {
     }
   }, [activeLocale]);
 
+  const activeScores = useMemo(() => {
+    switch (project?.cohortPhase) {
+      case 'Pre-Screen':
+      case 'Application':
+      case 'Phase 0 - Due Diligence':
+        return phase0Scores;
+      case 'Phase 1 - Feasibility Study':
+      case 'Phase 2 - Plan and Scale':
+      case 'Phase 3 - Implement and Monitor':
+        return phase1Scores;
+    }
+
+    // Default to phase 1 when data is missing
+    return phase1Scores;
+  }, [project?.cohortPhase, phase0Scores, phase1Scores]);
+
   const projectViewTitle = (
     <Box paddingLeft={1}>
       <Typography fontSize={'24px'} fontWeight={600}>
@@ -121,6 +146,8 @@ const SingleView = () => {
       hierarchicalCrumbs={false}
       rightComponent={rightComponent}
       titleContainerStyle={{ marginBottom: 0 }}
+      cohortPhase={project?.cohortPhase}
+      modules={modules ?? []}
     >
       {status === 'pending' && <BusySpinner />}
 
@@ -155,7 +182,7 @@ const SingleView = () => {
                   <PhaseScoreCard
                     linkTo={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
                     md={!projectApplication?.id ? 6 : undefined}
-                    phaseScores={phase1Scores}
+                    phaseScores={activeScores}
                   />
                   <VotingDecisionCard
                     linkTo={APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`)}
@@ -186,7 +213,13 @@ const SingleView = () => {
               <ProjectFieldDisplay label={strings.REGION} value={participantProject?.region} />
               <ProjectFieldDisplay
                 label={strings.LAND_USE_MODEL_TYPE}
-                value={<TextTruncated fontSize={24} stringList={participantProject?.landUseModelTypes || []} />}
+                value={
+                  <TextTruncated
+                    fontSize={24}
+                    fontWeight={600}
+                    stringList={participantProject?.landUseModelTypes || []}
+                  />
+                }
                 rightBorder={!isMobile}
               />
               <ProjectFieldDisplay
@@ -213,14 +246,13 @@ const SingleView = () => {
                 value={participantProject?.perHectareBudget}
               />
               <ProjectFieldDisplay
-                label={strings.NUMBER_OF_COMMUNITIES_WITHIN_PROJECT_AREA}
-                value={participantProject?.numCommunities}
-                rightBorder={!isMobile}
-              />
-              <ProjectFieldDisplay
                 label={strings.HUBSPOT_LINK}
                 value={
-                  participantProject?.hubSpotUrl ? <a href={participantProject.hubSpotUrl}>{strings.LINK}</a> : null
+                  participantProject?.hubSpotUrl ? (
+                    <a href={participantProject.hubSpotUrl} rel='noopener noreferrer' target='_blank'>
+                      {strings.LINK}
+                    </a>
+                  ) : null
                 }
               />
               <ProjectFieldMeta

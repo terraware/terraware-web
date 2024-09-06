@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
@@ -6,8 +6,10 @@ import Metadata from 'src/components/DeliverableView/Metadata';
 import DeliverableVariableDetailsInput from 'src/components/DocumentProducer/DeliverableVariableDetailsInput';
 import { PhotoWithAttributes } from 'src/components/DocumentProducer/EditImagesModal/PhotoSelector';
 import { VariableTableCell } from 'src/components/DocumentProducer/EditableTableModal/helpers';
+import VariableStatusBadge from 'src/components/Variables/VariableStatusBadge';
 import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
+import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import { useProjectVariablesUpdate } from 'src/hooks/useProjectVariablesUpdate';
 import { requestListDeliverableVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { selectDeliverableVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
@@ -15,11 +17,11 @@ import { requestListDeliverableVariables } from 'src/redux/features/documentProd
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
-import { variableDependencyMet } from 'src/utils/documentProducer/variables';
+import { getRawValue, variableDependencyMet } from 'src/utils/documentProducer/variables';
 import useQuery from 'src/utils/useQuery';
 
-import VariableStatusBadge from '../Variables/VariableStatusBadge';
 import { EditProps } from './types';
+import useCompleteDeliverable from './useCompleteDeliverable';
 
 type QuestionBoxProps = {
   addRemovedValue: (value: VariableValueValue) => void;
@@ -33,6 +35,7 @@ type QuestionBoxProps = {
   setNewImages: (values: PhotoWithAttributes[]) => void;
   setValues: (values: VariableValueValue[]) => void;
   variable: VariableWithValues;
+  validateFields: boolean;
 };
 
 const QuestionBox = ({
@@ -47,6 +50,7 @@ const QuestionBox = ({
   setNewImages,
   setValues,
   variable,
+  validateFields,
 }: QuestionBoxProps): JSX.Element => {
   const pendingValues: VariableValueValue[] | undefined = useMemo(
     () => pendingVariableValues.get(variable.id),
@@ -68,7 +72,9 @@ const QuestionBox = ({
               width: '100%',
             }}
           >
-            <Typography sx={{ fontWeight: '600' }}>{variable.deliverableQuestion ?? variable.name}</Typography>
+            <Typography
+              sx={{ fontWeight: '600' }}
+            >{`${variable.deliverableQuestion ?? variable.name} ${variable.isRequired ? '*' : ''}`}</Typography>
 
             <Box
               sx={{
@@ -96,6 +102,7 @@ const QuestionBox = ({
             variable={variable}
             addRemovedValue={addRemovedValue}
             projectId={projectId}
+            validateFields={validateFields}
           />
         </Grid>
       </Grid>
@@ -111,8 +118,10 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const query = useQuery();
+  const { isApplicationPortal } = useApplicationPortal();
 
   const { deliverable, exit, hideStatusBadge } = props;
+  const [validateFields, setValidateFields] = useState<boolean>(false);
 
   const scrollToVariable = useCallback((variableId: string) => {
     const element = document.querySelector(`[data-variable-id="${variableId}"]`);
@@ -153,6 +162,19 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     uploadSuccess,
   } = useProjectVariablesUpdate(deliverable.projectId, variablesWithValues);
 
+  const { complete } = useCompleteDeliverable();
+
+  const stagedVariableWithValues: VariableWithValues[] = useMemo(() => {
+    return variablesWithValues.map((variableWithValues) => {
+      const pendingValues = pendingVariableValues.get(variableWithValues.id);
+      if (pendingValues !== undefined) {
+        return { ...variableWithValues, values: pendingValues };
+      } else {
+        return variableWithValues;
+      }
+    });
+  }, [pendingVariableValues, variablesWithValues]);
+
   useEffect(() => {
     if (!deliverable) {
       return;
@@ -170,14 +192,38 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     }
   }, [exit, updateSuccess, uploadSuccess]);
 
-  const handleOnSave = () => {
-    if (pendingVariableValues.size === 0) {
-      // If the user clicks save but there are no changes, just navigate them back to the deliverable
-      exit();
+  const missingRequiredFields = useCallback(() => {
+    const allRequiredVariables = stagedVariableWithValues.filter(
+      (v) => v.isRequired && variableDependencyMet(v, stagedVariableWithValues)
+    );
+
+    const missingRequiredFields = allRequiredVariables.some((variable) => {
+      let hasEmptyValue = false;
+      const values = variable.values;
+      if (!values || values.length === 0 || getRawValue(variable) === undefined || getRawValue(variable) === '') {
+        hasEmptyValue = true;
+      }
+      return hasEmptyValue;
+    });
+
+    return missingRequiredFields;
+  }, [stagedVariableWithValues]);
+
+  const handleOnSave = useCallback(() => {
+    const missingFields = missingRequiredFields();
+
+    // If Questionnaire Deliverable is part of the Application and all fields are completed, mark deliverable as “Completed”
+    if (isApplicationPortal) {
+      if (!missingFields) {
+        complete(deliverable);
+      }
+    } else {
+      setValidateFields(true);
+      return;
     }
 
     update();
-  };
+  }, [isApplicationPortal, complete, deliverable, setValidateFields, update, missingRequiredFields]);
 
   if (!deliverable) {
     return null;
@@ -201,7 +247,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
             }}
           >
             {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) =>
-              variableDependencyMet(variableWithValues, variablesWithValues) ? (
+              variableDependencyMet(variableWithValues, stagedVariableWithValues) ? (
                 <QuestionBox
                   addRemovedValue={(removedValue: VariableValueValue) =>
                     setRemovedValue(variableWithValues.id, removedValue)
@@ -219,6 +265,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
                   setNewImages={(newValues: PhotoWithAttributes[]) => setNewImages(variableWithValues.id, newValues)}
                   setValues={(newValues: VariableValueValue[]) => setValues(variableWithValues.id, newValues)}
                   variable={variableWithValues}
+                  validateFields={validateFields}
                 />
               ) : null
             )}

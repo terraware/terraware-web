@@ -60,7 +60,7 @@ const ApplicationDeliverable = () => {
 
   return (
     <Page crumbs={crumbs} title={titleComponent} contentStyle={{ display: 'block' }}>
-      <AcceleratorDeliverableCard deliverable={{ ...deliverable, documents: [] }} hideStatusBadge />
+      <AcceleratorDeliverableCard deliverable={{ ...deliverable }} hideStatusBadge />
     </Page>
   );
 };

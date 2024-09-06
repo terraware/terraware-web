@@ -17,6 +17,7 @@ import Deliverables from './Deliverables';
 import DocumentsRouter from './Documents';
 import ModuleContent from './Modules';
 import NavBar from './NavBar';
+import Organizations from './Organizations';
 import Overview from './Overview';
 import ParticipantProjects from './ParticipantProjects';
 import Participants from './Participants';
@@ -87,6 +88,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
             <Route path={`${APP_PATHS.ACCELERATOR_PEOPLE}/*`} element={<People />} />
             <Route path={`${APP_PATHS.ACCELERATOR_PARTICIPANTS}/*`} element={<Participants />} />
             <Route path={`${APP_PATHS.ACCELERATOR_PROJECT_VIEW}/*`} element={<ParticipantProjects />} />
+            <Route path={`${APP_PATHS.ACCELERATOR_ORGANIZATIONS}/*`} element={<Organizations />} />
 
             {documentProducerEnabled && (
               <Route path={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}/*`} element={<DocumentsRouter />} />

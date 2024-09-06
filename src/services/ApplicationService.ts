@@ -1,6 +1,7 @@
 import { paths } from 'src/api/types/generated-schema';
+import { Application } from 'src/types/Application';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
+import { SearchAndSortFn, SearchOrderConfig, searchAndSort as genericSearchAndSort } from 'src/utils/searchAndSort';
 
 import HttpService, { Params, Response, Response2 } from './HttpService';
 import ProjectsService from './ProjectsService';
@@ -19,6 +20,7 @@ const APPLICATION_MODULE_DELIVERABLES_ENDPOINT =
 const APPLICATION_RESTART_ENDPOINT = '/api/v1/accelerator/applications/{applicationId}/restart';
 const APPLICATION_REVIEW_ENDPOINT = '/api/v1/accelerator/applications/{applicationId}/review';
 const APPLICATION_SUBMIT_ENDPOINT = '/api/v1/accelerator/applications/{applicationId}/submit';
+const APPLICATION_EXPORT_ENDPOINT = '/api/v1/accelerator/applications/{applicationId}/export';
 
 type ListApplicationsResponsePayload =
   paths[typeof APPLICATIONS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -47,7 +49,9 @@ const listApplications = async (request: {
   locale?: string;
   search?: SearchNodePayload;
   searchSortOrder?: SearchSortOrder;
+  searchAndSort?: SearchAndSortFn<Application>;
 }): Promise<Response2<ListApplicationsResponsePayload>> => {
+  const searchAndSort = request.searchAndSort ?? genericSearchAndSort;
   const searchOrderConfig: SearchOrderConfig | undefined = request.searchSortOrder
     ? {
         locale: request.locale ?? null,
@@ -89,6 +93,16 @@ const createProjectApplication = async (
   } else {
     return { ...projectRequest, data: undefined };
   }
+};
+
+const exportBoundary = async (applicationId: number): Promise<Response2<any>> => {
+  const headers = {
+    accept: 'application/geo+json',
+  };
+  return HttpService.root(APPLICATION_EXPORT_ENDPOINT).get2({
+    headers,
+    urlReplacements: { '{applicationId}': `${applicationId}` },
+  });
 };
 
 const getApplication = async (applicationId: number): Promise<Response2<GetApplicationResponsePayload>> => {
@@ -172,6 +186,7 @@ const uploadBoundary = async (applicationId: number, file: File): Promise<Respon
 const ApplicationService = {
   createApplication,
   createProjectApplication,
+  exportBoundary,
   getApplication,
   listApplications,
   listApplicationDeliverables,

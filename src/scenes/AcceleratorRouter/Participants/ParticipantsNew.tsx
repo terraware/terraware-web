@@ -2,11 +2,13 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import Page from 'src/components/Page';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { requestUpdateParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { requestCreateParticipant } from 'src/redux/features/participants/participantsAsyncThunks';
 import { selectParticipantCreateRequest } from 'src/redux/features/participants/participantsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { ParticipantCreateRequest } from 'src/types/Participant';
+import { ParticipantProject } from 'src/types/ParticipantProject';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ParticipantForm from './ParticipantForm';
@@ -21,9 +23,12 @@ export default function ParticipantsNew(): JSX.Element {
   const { goToParticipant, goToParticipantsList } = useNavigateTo();
 
   const onSave = useCallback(
-    (createRequest: ParticipantCreateRequest) => {
+    (createRequest: ParticipantCreateRequest, projectsDetails: ParticipantProject[]) => {
       const request = dispatch(requestCreateParticipant(createRequest));
       setRequestId(request.requestId);
+      projectsDetails.forEach((pd) => {
+        dispatch(requestUpdateParticipantProject(pd));
+      });
     },
     [dispatch]
   );

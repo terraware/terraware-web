@@ -18,9 +18,9 @@ const getDeliverableVariables = (deliverableId: number): Promise<Response2<Varia
     params: { deliverableId: `${deliverableId}` },
   });
 
-const getVariables = (manifestId: number): Promise<Response2<VariableListResponse>> =>
+const getDocumentVariables = (documentId: number): Promise<Response2<VariableListResponse>> =>
   HttpService.root(VARIABLES_ENDPOINT).get2({
-    params: { manifestId: manifestId.toString() },
+    params: { documentId: `${documentId}` },
   });
 
 const updateVariableWorkflowDetails = (
@@ -59,7 +59,7 @@ const getVariablesOwners = (projectId: number): Promise<Response2<VariableOwners
 const VariableService = {
   getAllVariables,
   getDeliverableVariables,
-  getVariables,
+  getDocumentVariables,
   updateVariableWorkflowDetails,
   updateVariableOwner,
   getVariablesOwners,

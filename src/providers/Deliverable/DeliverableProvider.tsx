@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
-import { Deliverable } from 'src/types/Deliverables';
+import { DeliverableWithOverdue } from 'src/types/Deliverables';
 
 import { DeliverableContext, DeliverableData } from './DeliverableContext';
 
@@ -20,7 +20,7 @@ const DeliverableProvider = ({ children }: Props) => {
 
   const { deliverable } = useFetchDeliverable({ deliverableId, projectId });
 
-  const [currentDeliverable, setCurrentDeliverable] = useState<Deliverable>();
+  const [currentDeliverable, setCurrentDeliverable] = useState<DeliverableWithOverdue>();
 
   const [deliverableData, setDeliverableData] = useState<DeliverableData>({ deliverableId, projectId });
 

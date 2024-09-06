@@ -6,11 +6,11 @@ import { MultiSelect, Textfield } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import { useLocalization, useUser } from 'src/providers/hooks';
-import { UserWithDeliverableCategories } from 'src/scenes/AcceleratorRouter/People/UserWithDeliverableCategories';
+import { UserWithInternalnterests } from 'src/scenes/AcceleratorRouter/People/UserWithInternalInterests';
 import strings from 'src/strings';
-import { DeliverableCategories, DeliverableCategoryType, categoryLabel } from 'src/types/Deliverables';
 import { USER_GLOBAL_ROLES, UserWithGlobalRoles, getGlobalRole } from 'src/types/GlobalRoles';
 import { UserGlobalRole } from 'src/types/User';
+import { InternalInterest, InternalInterests, internalInterestLabel } from 'src/types/UserInternalInterests';
 import { isAllowed } from 'src/utils/acl';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -19,10 +19,10 @@ type PersonFormProps = {
   emailEnabled?: boolean;
   emailError?: string;
   roleError?: string;
-  user?: UserWithDeliverableCategories;
+  user?: UserWithInternalnterests;
   onCancel: () => void;
-  onChange?: (person: UserWithDeliverableCategories) => void;
-  onSave: (person: UserWithDeliverableCategories) => void;
+  onChange?: (person: UserWithInternalnterests) => void;
+  onSave: (person: UserWithInternalnterests) => void;
 };
 
 export default function PersonForm(props: PersonFormProps): JSX.Element {
@@ -33,17 +33,17 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
   const { user: activeUser } = useUser();
   const theme = useTheme();
 
-  const [localRecord, setLocalRecord] = useState<Partial<UserWithDeliverableCategories>>({});
+  const [localRecord, setLocalRecord] = useState<Partial<UserWithInternalnterests>>({});
 
-  const deliverableCategoryDropdownOptions = useMemo(() => {
+  const InternalInterestDropdownOptions = useMemo(() => {
     const options = new Map<string, string>([]);
 
     if (!activeLocale || !activeUser) {
       return options;
     }
 
-    for (const deliverableCategory of DeliverableCategories) {
-      options.set(deliverableCategory, categoryLabel(deliverableCategory));
+    for (const internalInterest of InternalInterests) {
+      options.set(internalInterest, internalInterestLabel(internalInterest));
     }
 
     return options;
@@ -72,18 +72,18 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
     }));
   }, []);
 
-  const onAddDeliverableCategory = useCallback((deliverableCategory: string) => {
+  const onAddInternalInterest = useCallback((internalInterest: string) => {
     setLocalRecord((prev) => ({
       ...prev,
-      deliverableCategories: [...(prev.deliverableCategories || []), deliverableCategory as DeliverableCategoryType],
+      internalInterests: [...(prev.internalInterests || []), internalInterest as InternalInterest],
     }));
   }, []);
 
-  const onRemoveDeliverableCategory = useCallback((deliverableCategory: string) => {
+  const onRemoveInternalInterest = useCallback((internalInterest: string) => {
     setLocalRecord((prev) => ({
       ...prev,
-      deliverableCategories: (prev.deliverableCategories || []).filter(
-        (_deliverableCategory) => _deliverableCategory !== deliverableCategory
+      internalInterests: (prev.internalInterests || []).filter(
+        (_internalInterest) => _internalInterest !== internalInterest
       ),
     }));
   }, []);
@@ -108,7 +108,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
     }
 
     onSave({
-      ...(localRecord as UserWithDeliverableCategories),
+      ...(localRecord as UserWithInternalnterests),
     });
   };
 
@@ -120,7 +120,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
 
   useEffect(() => {
     if (onChange) {
-      onChange(localRecord as UserWithDeliverableCategories);
+      onChange(localRecord as UserWithInternalnterests);
     }
   }, [localRecord, onChange]);
 
@@ -186,13 +186,13 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
             <MultiSelect<string, string>
               fullWidth
-              onAdd={onAddDeliverableCategory}
-              onRemove={onRemoveDeliverableCategory}
-              options={deliverableCategoryDropdownOptions}
+              onAdd={onAddInternalInterest}
+              onRemove={onRemoveInternalInterest}
+              options={InternalInterestDropdownOptions}
               placeHolder={strings.SELECT}
               valueRenderer={(v) => v}
-              selectedOptions={localRecord.deliverableCategories?.toSorted() || []}
-              label={strings.CATEGORIES}
+              selectedOptions={localRecord.internalInterests?.toSorted() || []}
+              label={strings.INTERNAL_INTERESTS}
             />
           </Grid>
         </Card>

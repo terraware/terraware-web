@@ -5,8 +5,7 @@ import { Response } from 'src/services/HttpService';
 import strings from 'src/strings';
 import {
   Deliverable,
-  DeliverableData,
-  ListDeliverablesElement,
+  ListDeliverablesElementWithOverdue,
   UploadDeliverableDocumentRequest,
 } from 'src/types/Deliverables';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
@@ -20,15 +19,15 @@ export const requestListDeliverables = createAsyncThunk(
       listRequest?: ListDeliverablesRequestParams;
       search?: SearchNodePayload;
       searchSortOrder?: SearchSortOrder;
-      searchAndSort?: SearchAndSortFn<ListDeliverablesElement>;
+      searchAndSort?: SearchAndSortFn<ListDeliverablesElementWithOverdue>;
     },
     { rejectWithValue }
   ) => {
     const { listRequest, locale, search, searchSortOrder, searchAndSort } = request;
 
     const response = await DeliverablesService.list(locale, listRequest, search, searchSortOrder, searchAndSort);
-    if (response) {
-      return response;
+    if (response && response.requestSucceeded) {
+      return response.data ?? [];
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
@@ -39,9 +38,9 @@ export const requestGetDeliverable = createAsyncThunk(
   'deliverables/get-one',
   async (request: { deliverableId: number; projectId: number }, { rejectWithValue }) => {
     const { projectId, deliverableId } = request;
-    const response: Response & DeliverableData = await DeliverablesService.get(deliverableId, projectId);
+    const response = await DeliverablesService.get(deliverableId, projectId);
     if (response && response.requestSucceeded) {
-      return response.deliverable;
+      return response.data;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
@@ -74,6 +73,34 @@ export const requestUploadDeliverableDocument = createAsyncThunk(
 
     if (responses.find((response) => response?.statusCode === 507)) {
       return rejectWithValue(strings.ERROR_SUPPORT_NOTIFIED);
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestSubmitDeliverable = createAsyncThunk(
+  'deliverables/submit',
+  async (request: { deliverableId: number; projectId: number }, { rejectWithValue }) => {
+    const { deliverableId, projectId } = request;
+
+    const response = await DeliverablesService.submit(deliverableId, projectId);
+    if (response && response.requestSucceeded) {
+      return deliverableId;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestCompleteDeliverable = createAsyncThunk(
+  'deliverables/complete',
+  async (request: { deliverableId: number; projectId: number }, { rejectWithValue }) => {
+    const { deliverableId, projectId } = request;
+
+    const response = await DeliverablesService.complete(deliverableId, projectId);
+    if (response && response.requestSucceeded) {
+      return deliverableId;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

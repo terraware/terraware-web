@@ -7,7 +7,7 @@ import { Button } from '@terraware/web-components';
 import { Crumb } from 'src/components/BreadCrumbs';
 import DeliverableViewCard from 'src/components/DeliverableView/DeliverableCard';
 import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
-import useUpdateDeliverable from 'src/components/DeliverableView/useUpdateDeliverable';
+import useSubmitDeliverable from 'src/components/DeliverableView/useSubmitDeliverable';
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -23,13 +23,14 @@ const DeliverableView = (): JSX.Element => {
   const { goToDeliverableEdit } = useNavigateTo();
 
   const { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId), projectId: Number(projectId) });
-  const { status: requestStatus, update } = useUpdateDeliverable();
+  const { status: requestStatus, submit } = useSubmitDeliverable();
 
   const [submitButtonDisabled, setSubmitButtonDisalbed] = useState<boolean>(false);
   const [showSubmitDialog, setShowSubmitDialog] = useState<boolean>(false);
+
   const submitDeliverable = useCallback(() => {
     if (deliverable?.id !== undefined) {
-      update({ ...deliverable, status: 'In Review' });
+      submit(deliverable);
     }
     setShowSubmitDialog(false);
   }, [deliverable]);
@@ -88,6 +89,21 @@ const DeliverableView = (): JSX.Element => {
     return requestStatus === 'pending';
   }, [requestStatus]);
 
+  const submitMessage = useMemo(() => {
+    if (!activeLocale || !deliverable) {
+      return '';
+    }
+
+    switch (deliverable.type) {
+      case 'Species':
+        return strings.SUBMIT_SPECIES_CONFIRMATION;
+      case 'Questions':
+        return strings.SUBMIT_QUESTIONNAIRE_CONFIRMATION;
+      default:
+        return '';
+    }
+  }, [activeLocale, deliverable]);
+
   if (!deliverable) {
     return <Page isLoading crumbs={crumbs} />;
   }
@@ -98,7 +114,7 @@ const DeliverableView = (): JSX.Element => {
         <SubmitDeliverableDialog
           onClose={() => setShowSubmitDialog(false)}
           onSubmit={submitDeliverable}
-          submitMessage={strings.SUBMIT_QUESTIONNAIRE_CONFIRMATION}
+          submitMessage={submitMessage}
         />
       )}
       <DeliverablePage deliverable={deliverable} crumbs={crumbs} rightComponent={actionMenu} isLoading={isLoading}>

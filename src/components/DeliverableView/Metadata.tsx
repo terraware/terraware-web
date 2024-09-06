@@ -1,18 +1,21 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
-import { Box, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
+import { DateTime } from 'luxon';
 
 import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import useUpdateDeliverable from '../AcceleratorDeliverableView/useUpdateDeliverable';
 import InternalComment from './InternalComment';
 import { ViewProps } from './types';
-import useUpdateDeliverable from './useUpdateDeliverable';
 
 const Metadata = (props: ViewProps): JSX.Element => {
   const { deliverable, hideStatusBadge } = props;
+  const { activeLocale } = useLocalization();
 
   const snackbar = useSnackbar();
   const theme = useTheme();
@@ -21,7 +24,11 @@ const Metadata = (props: ViewProps): JSX.Element => {
 
   const onUpdateInternalComment = useCallback(
     (internalComment: string) => {
-      update({ ...deliverable, internalComment });
+      update({
+        ...deliverable,
+        status: deliverable.status === 'Overdue' ? 'Not Submitted' : deliverable.status,
+        internalComment,
+      });
     },
     [deliverable]
   );
@@ -33,6 +40,16 @@ const Metadata = (props: ViewProps): JSX.Element => {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
   }, [status, snackbar]);
+
+  const dueDateText = useMemo(() => {
+    if (!activeLocale || !deliverable.dueDate) {
+      return '';
+    }
+
+    const dueDate = DateTime.fromISO(deliverable.dueDate).toFormat('yyyy-MM-dd');
+
+    return strings.formatString(strings.DUE_DATE_PREFIX, dueDate).toString();
+  }, [activeLocale, deliverable]);
 
   return (
     <Box display='flex' flexDirection='column'>
@@ -54,12 +71,16 @@ const Metadata = (props: ViewProps): JSX.Element => {
 
       <Box marginBottom='16px'>
         {deliverable.status !== 'Rejected' && !isAcceleratorRoute && hideStatusBadge !== true && (
-          <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
+          <div style={{ float: 'right', marginBottom: '8px', marginLeft: '16px' }}>
             <DeliverableStatusBadge status={deliverable.status} />
           </div>
         )}
 
-        <div dangerouslySetInnerHTML={{ __html: deliverable.descriptionHtml || '' }} />
+        <Typography fontWeight={400} fontSize={'16px'} lineHeight={'24px'} fontStyle={'italic'}>
+          {dueDateText}
+        </Typography>
+
+        <div dangerouslySetInnerHTML={{ __html: deliverable.descriptionHtml || '' }} style={{ clear: 'both' }} />
       </Box>
     </Box>
   );

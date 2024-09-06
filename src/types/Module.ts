@@ -1,20 +1,14 @@
-import { DateTime } from 'luxon';
-
 import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
 
-import { DeliverableCategoryType, DeliverableStatusType, DeliverableTypeType } from './Deliverables';
+export type Module = components['schemas']['ModulePayload'];
 
-export type Module = components['schemas']['ProjectModule'];
+export type ModuleEvent = components['schemas']['ModuleEvent'];
 
-export type ModuleEvent = components['schemas']['ProjectModuleEvent'];
-
-export type ModuleEventSession = components['schemas']['ProjectModuleEventSession'];
-
-export type ModuleEventSessionStatus = components['schemas']['ProjectModuleEventSession']['status'];
-
-export type ModuleEventType = ModuleEventSession['type'];
+export type ModuleEventStatus = components['schemas']['ModuleEvent']['status'];
+export type ModuleEventType = ModuleEvent['type'];
 export const MODULE_EVENTS: ModuleEventType[] = ['Live Session', 'One-on-One Session', 'Recorded Session', 'Workshop'];
+
 export const getEventType = (input: ModuleEventType): string => {
   switch (input) {
     case 'Live Session':
@@ -41,7 +35,7 @@ export type ModuleProjectSearchResult = {
   };
 };
 
-export const getEventStatus = (status: ModuleEventSessionStatus) => {
+export const getEventStatus = (status: ModuleEventStatus) => {
   switch (status) {
     case 'Not Started': {
       return strings.SESSION_HAS_NOT_STARTED;
@@ -58,19 +52,6 @@ export const getEventStatus = (status: ModuleEventSessionStatus) => {
     default:
       return `${status}`;
   }
-};
-
-export type ModuleDeliverable = {
-  category: DeliverableCategoryType;
-  dueDate: DateTime;
-  id: number;
-  moduleEndDate: DateTime;
-  moduleId: number;
-  moduleStartDate: DateTime;
-  name: string;
-  projectId: number;
-  status: DeliverableStatusType;
-  type: DeliverableTypeType;
 };
 
 export type ModuleContentType = keyof Pick<Module, 'additionalResources' | 'preparationMaterials'>;

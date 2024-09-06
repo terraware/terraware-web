@@ -2,17 +2,19 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import {
+  requestCompleteDeliverable,
   requestGetDeliverable,
   requestListDeliverables,
+  requestSubmitDeliverable,
   requestUpdateDeliverable,
   requestUploadDeliverableDocument,
 } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
-import { Deliverable, DeliverablesData } from 'src/types/Deliverables';
+import { DeliverableWithOverdue, ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
 
 /**
  * Deliverable list
  */
-const initialStateDeliverablesList: { [key: string]: StatusT<DeliverablesData> } = {};
+const initialStateDeliverablesList: { [key: string]: StatusT<ListDeliverablesElementWithOverdue[]> } = {};
 
 export const deliverablesListSlice = createSlice({
   name: 'deliverablesListSlice',
@@ -27,7 +29,7 @@ export const deliverablesListSlice = createSlice({
  * Individual Deliverable
  * Can be accessed by a request ID or by a deliverable/project ID string
  */
-const initialStateDeliverables: { [key: number | string]: StatusT<Deliverable> } = {};
+const initialStateDeliverable: { [key: number | string]: StatusT<DeliverableWithOverdue> } = {};
 
 type DeliverableProjectIdArg = { deliverableId: number; projectId: number };
 export const deliverableCompositeKeyFn = (arg: unknown): string => {
@@ -41,7 +43,7 @@ export const deliverableCompositeKeyFn = (arg: unknown): string => {
 
 export const deliverablesSlice = createSlice({
   name: 'deliverablesSlice',
-  initialState: initialStateDeliverables,
+  initialState: initialStateDeliverable,
   reducers: {},
   extraReducers: (builder) => {
     buildReducers(requestGetDeliverable, true, deliverableCompositeKeyFn)(builder);
@@ -61,6 +63,8 @@ export const deliverablesEditSlice = createSlice({
   extraReducers: (builder) => {
     buildReducers(requestUpdateDeliverable)(builder);
     buildReducers(requestUploadDeliverableDocument)(builder);
+    buildReducers(requestSubmitDeliverable)(builder);
+    buildReducers(requestCompleteDeliverable)(builder);
   },
 });
 

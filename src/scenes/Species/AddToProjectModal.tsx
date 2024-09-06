@@ -2,19 +2,18 @@ import React, { useEffect, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { BusySpinner, Dropdown, SelectT } from '@terraware/web-components';
-import { DateTime } from 'luxon';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { useLocalization } from 'src/providers';
-import { requestListModuleDeliverables } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectModuleDeliverables } from 'src/redux/features/modules/modulesSelectors';
+import { requestSpeciesDeliverables } from 'src/redux/features/projectSpecies/projectSpeciesAsyncThunks';
+import { selectSpeciesDeliverables } from 'src/redux/features/projectSpecies/projectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { DeliverableTypeType } from 'src/types/Deliverables';
-import { ModuleDeliverable } from 'src/types/Module';
 import { getSpeciesNativeCategoryOptions } from 'src/types/ParticipantProjectSpecies';
 import { Project } from 'src/types/Project';
+import { SpeciesDeliverable } from 'src/types/ProjectSpecies';
+import { today } from 'src/utils/dateUtils';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -43,9 +42,10 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
 
   const [error, setError] = useState('');
   const [isOpenConfirmAddToProjectModal, setIsOpenConfirmAddToProjectModal] = useState(false);
+  const [projectsWithDeliverables, setProjectsWithDeliverables] = useState<Project[]>([]);
 
   const [deliverableSearchRequestId, setDeliverableSearchRequestId] = useState('');
-  const deliverableSearchRequest = useAppSelector(selectModuleDeliverables(deliverableSearchRequestId));
+  const deliverableSearchRequest = useAppSelector(selectSpeciesDeliverables(deliverableSearchRequestId));
 
   const isBusy = deliverableSearchRequest?.status === 'pending';
 
@@ -58,18 +58,7 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
 
       // We need to determine if these have an active or recent deliverable before we actually save them
       const deliverableRequest = dispatch(
-        requestListModuleDeliverables({
-          projectIds: projectsSpeciesAdded.map((value) => value.project.id),
-          moduleIds: [],
-          searchChildren: [
-            {
-              operation: 'field',
-              field: 'type(raw)',
-              type: 'Exact',
-              values: ['Species' as DeliverableTypeType],
-            },
-          ],
-        })
+        requestSpeciesDeliverables({ projectIds: projectsSpeciesAdded.map((value) => value.project.id) })
       );
       setDeliverableSearchRequestId(deliverableRequest.requestId);
     }
@@ -82,15 +71,18 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
 
   useEffect(() => {
     if (deliverableSearchRequest?.status === 'success') {
-      const today = DateTime.now().toUTC().startOf('day');
-      const activeOrPastDeliverable = (deliverableSearchRequest?.data || []).find(
-        (deliverable: ModuleDeliverable) => deliverable.moduleStartDate.toUTC().startOf('day') <= today
+      const activeOrPastDeliverables = (deliverableSearchRequest?.data || []).filter(
+        (deliverable: SpeciesDeliverable) => deliverable.moduleStartDate.toUTC().startOf('day') <= today
       );
 
-      if (activeOrPastDeliverable) {
+      if (activeOrPastDeliverables.length > 0) {
         // If there are active or recent deliverables, we need to show the confirm modal
         // The confirm modal will submit the original list if the user confirms
         setIsOpenConfirmAddToProjectModal(true);
+        const activeProjects = projects.filter(
+          (project) => activeOrPastDeliverables.findIndex((deliverable) => deliverable.projectId === project.id) >= 0
+        );
+        setProjectsWithDeliverables(activeProjects);
       } else {
         // If there are not, no need to show the confirm modal, submit the original list
         handleOnSubmit();
@@ -98,7 +90,7 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
     } else if (deliverableSearchRequest?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [deliverableSearchRequest, projectsSpeciesAdded]);
+  }, [deliverableSearchRequest, projects]);
 
   const onAddProjectSpecies = () => {
     const updatedProjects = [...projectsSpeciesAdded];
@@ -121,11 +113,7 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
   return (
     <>
       {isOpenConfirmAddToProjectModal && (
-        <AddToProjectConfirmModal
-          onClose={onClose}
-          onConfirm={handleOnSubmit}
-          projectsSpeciesAdded={projectsSpeciesAdded}
-        />
+        <AddToProjectConfirmModal onClose={onClose} onConfirm={handleOnSubmit} projects={projectsWithDeliverables} />
       )}
 
       {isBusy && <BusySpinner withSkrim={true} />}

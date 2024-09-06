@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
@@ -6,15 +6,16 @@ import { Button } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Link from 'src/components/common/Link';
-import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
+import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
 import { APP_PATHS } from 'src/constants';
+import useGetEvent from 'src/hooks/useGetEvent';
+import useGetModule from 'src/hooks/useGetModule';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { getEventStatus, getEventType } from 'src/types/Module';
 import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 
 import ModuleViewTitle from './ModuleViewTitle';
-import { useModuleData } from './Provider/Context';
 
 const openExternalURL = (url: string | undefined, target = '_blank', features = 'noopener noreferrer') => {
   if (url) {
@@ -27,11 +28,27 @@ const ModuleEventSessionView = () => {
   const theme = useTheme();
   const pathParams = useParams<{ sessionId: string; moduleId: string; projectId: string }>();
   const projectId = Number(pathParams.projectId);
-  const { event, module, moduleId, session } = useModuleData();
+  const moduleId = Number(pathParams.moduleId);
+  const sessionId = Number(pathParams.sessionId);
 
-  const eventType = session?.type ? getEventType(session.type) : '';
+  const { event, getEvent } = useGetEvent();
+  const { module, getModule } = useGetModule();
+
+  useEffect(() => {
+    if (sessionId) {
+      void getEvent(sessionId);
+    }
+  }, [getEvent, sessionId]);
+
+  useEffect(() => {
+    if (moduleId && projectId) {
+      void getModule({ moduleId, projectId });
+    }
+  }, [getEvent, moduleId, projectId]);
+
+  const eventType = event?.type ? getEventType(event.type) : '';
   const isRecordedSession = eventType === 'Recorded Session';
-  const buttonUrl = isRecordedSession ? session?.recordingUrl : session?.meetingUrl;
+  const buttonUrl = isRecordedSession ? event?.recordingUrl : event?.meetingUrl;
   const buttonLabel = isRecordedSession
     ? strings.VIEW_SESSION
     : eventType
@@ -59,7 +76,7 @@ const ModuleEventSessionView = () => {
   );
 
   return (
-    <PageWithModuleTimeline
+    <ParticipantPage
       crumbs={crumbs}
       hierarchicalCrumbs={false}
       title={<ModuleViewTitle module={module} projectId={projectId} />}
@@ -75,7 +92,7 @@ const ModuleEventSessionView = () => {
           padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
         }}
       >
-        {session && (
+        {event && (
           <Grid container spacing={theme.spacing(1)}>
             <Grid item xs={6} style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
               <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
@@ -83,7 +100,7 @@ const ModuleEventSessionView = () => {
               </Typography>
 
               <Typography marginBottom={theme.spacing(1)}>
-                {session.startTime ? startTimeRenderer(session.startTime, activeLocale) : ''}
+                {event.startTime ? startTimeRenderer(event.startTime, activeLocale) : ''}
               </Typography>
 
               <Box marginBottom={theme.spacing(2)}>
@@ -94,7 +111,7 @@ const ModuleEventSessionView = () => {
                     lineHeight={'32px'}
                     sx={{ color: theme.palette.TwClrTxtWarning }}
                   >
-                    {getEventStatus(session.status)}
+                    {getEventStatus(event.status)}
                   </Typography>
                 )}
 
@@ -108,12 +125,12 @@ const ModuleEventSessionView = () => {
                 />
               </Box>
 
-              {session?.slidesUrl && (
+              {event?.slidesUrl && (
                 <Box marginBottom={theme.spacing(2)}>
                   <Link
                     fontSize='16px'
                     onClick={() => {
-                      openExternalURL(session.slidesUrl);
+                      openExternalURL(event.slidesUrl);
                     }}
                   >
                     {slidesLabel}
@@ -121,12 +138,12 @@ const ModuleEventSessionView = () => {
                 </Box>
               )}
 
-              {session?.recordingUrl && !isRecordedSession && (
+              {event?.recordingUrl && !isRecordedSession && (
                 <Box marginBottom={theme.spacing(2)}>
                   <Link
                     fontSize='16px'
                     onClick={() => {
-                      openExternalURL(session.recordingUrl);
+                      openExternalURL(event.recordingUrl);
                     }}
                   >
                     {eventType ? strings.formatString(strings.EVENT_NAME_RECORDING, eventType) : ''}
@@ -198,7 +215,7 @@ const ModuleEventSessionView = () => {
           </Grid>
         )}
       </Card>
-    </PageWithModuleTimeline>
+    </ParticipantPage>
   );
 };
 

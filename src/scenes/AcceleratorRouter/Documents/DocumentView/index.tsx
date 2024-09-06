@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
 
 import { Box } from '@mui/material';
 import { BusySpinner, Button, Tab, Tabs } from '@terraware/web-components';
@@ -9,19 +8,11 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import PageDialog from 'src/components/DocumentProducer/PageDialog';
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
-import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
-import { selectDocumentTemplate } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
-import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
-import { selectGetDocument } from 'src/redux/features/documentProducer/documents/documentsSelector';
-import {
-  requestGetDocument,
-  requestUpgradeManifest,
-} from 'src/redux/features/documentProducer/documents/documentsThunks';
-import { useSelectorProcessor } from 'src/redux/hooks/useSelectorProcessor';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
+import { requestUpgradeManifest } from 'src/redux/features/documentProducer/documents/documentsThunks';
+import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
-import { Document } from 'src/types/documentProducer/Document';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import DocumentActions from './DocumentActions';
@@ -34,38 +25,13 @@ import DocumentVariablesTab from './DocumentVariablesTab';
 export default function DocumentView(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const dispatch = useAppDispatch();
-  const { goToDocuments } = useNavigateTo();
   const { activeLocale } = useLocalization();
-  const { documentId: documentIdParam } = useParams<{ documentId: string }>();
-  const documentId = Number(documentIdParam);
-
-  const [document, setDocument] = useState<Document>();
-  const documentTemplate = useAppSelector((state) => selectDocumentTemplate(state, document?.documentTemplateId ?? -1));
+  const { document, documentId, documentTemplate, reload } = useDocumentProducerData();
 
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-
-  const latestManifestId = useMemo(() => documentTemplate?.variableManifestId ?? -1, [documentTemplate]);
-
-  const documentSelect = useAppSelector(selectGetDocument(documentId));
-
   const [outlinePanelOpen, setOutlinePanelOpen] = useState(true);
 
-  useSelectorProcessor(documentSelect, setDocument, {
-    handleError: true,
-    onError: goToDocuments,
-  });
-
-  useEffect(() => {
-    dispatch(requestListDocumentTemplates);
-  }, [dispatch]);
-
-  const fetchDocument = useCallback(() => {
-    dispatch(requestGetDocument(documentId));
-  }, [dispatch, documentId]);
-
-  useEffect(() => {
-    fetchDocument();
-  }, [fetchDocument]);
+  const latestManifestId = useMemo(() => documentTemplate?.variableManifestId ?? -1, [documentTemplate]);
 
   useEffect(() => {
     if (document?.variableManifestId && document.variableManifestId < latestManifestId) {
@@ -78,10 +44,10 @@ export default function DocumentView(): JSX.Element {
       await dispatch(
         requestUpgradeManifest({ id: `${documentId}`, payload: { variableManifestId: latestManifestId } })
       );
-      fetchDocument();
+      reload();
     }
     setShowUpgradeModal(false);
-  }, [dispatch, documentId, latestManifestId, fetchDocument]);
+  }, [dispatch, documentId, latestManifestId, reload]);
 
   const onDismissUpgradeManifest = useCallback(() => {
     setShowUpgradeModal(false);
@@ -97,6 +63,10 @@ export default function DocumentView(): JSX.Element {
     [activeLocale]
   );
 
+  const setSelectedTab = useCallback((tab: string) => {
+    onTabChange(tab);
+  }, []);
+
   const tabs: Tab[] = useMemo(
     () =>
       activeLocale && document
@@ -105,19 +75,19 @@ export default function DocumentView(): JSX.Element {
               id: 'document',
               label: strings.DOCUMENT,
               icon: 'iconParchment',
-              children: <DocumentTab document={document} />,
+              children: <DocumentTab />,
             },
             {
               id: 'variables',
               label: strings.VARIABLES,
               icon: 'iconModule',
-              children: <DocumentVariablesTab document={document} />,
+              children: <DocumentVariablesTab setSelectedTab={setSelectedTab} />,
             },
             {
               id: 'history',
               label: strings.HISTORY,
               icon: 'iconHistory',
-              children: <DocumentHistoryTab document={document} />,
+              children: <DocumentHistoryTab />,
             },
           ]
         : [],
@@ -130,7 +100,7 @@ export default function DocumentView(): JSX.Element {
     viewIdentifier: 'accelerator-documents',
   });
 
-  if (!document) {
+  if (!(document && documentTemplate)) {
     return <BusySpinner />;
   }
 
@@ -158,17 +128,15 @@ export default function DocumentView(): JSX.Element {
         justifyContent='space-between'
         alignItems='flex-start'
       >
-        <DocumentMetadata document={document} />
-        <DocumentActions document={document} onDocumentUpdate={fetchDocument} />
+        <DocumentMetadata document={document} documentTemplate={documentTemplate} />
+        <DocumentActions document={document} onDocumentUpdate={reload} />
       </Box>
       <Box marginTop={3} display='flex' flexDirection='row' flexGrow={1}>
         <Box display='flex' flexGrow={1}>
           <Tabs tabs={tabs} activeTab={activeTab} onTabChange={onTabChange} />
         </Box>
         <Box>
-          {activeTab === 'document' && (
-            <DocumentOutlinePanel document={document} open={outlinePanelOpen} setOpen={setOutlinePanelOpen} />
-          )}
+          {activeTab === 'document' && <DocumentOutlinePanel open={outlinePanelOpen} setOpen={setOutlinePanelOpen} />}
         </Box>
       </Box>
     </Page>

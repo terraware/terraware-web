@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { Separator } from '@terraware/web-components';
 
 import DeliverablesTable from 'src/components/DeliverablesTable';
@@ -13,7 +13,7 @@ import { useLocalization, useOrganization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 import theme from 'src/theme';
-import { ListDeliverablesElement } from 'src/types/Deliverables';
+import { DeliverableStatusOrder, ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
 import { SearchNodePayload } from 'src/types/Search';
 import {
   SearchAndSortFn,
@@ -26,8 +26,11 @@ import {
 const DeliverablesList = (): JSX.Element => {
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const { participantProjects, currentParticipantProject, moduleProjects, setCurrentParticipantProject } =
-    useParticipantData();
+  const {
+    currentParticipantProject,
+    projectsWithModules: moduleProjects,
+    setCurrentParticipantProject,
+  } = useParticipantData();
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({
     projectId: currentParticipantProject?.id || '',
   });
@@ -69,18 +72,12 @@ const DeliverablesList = (): JSX.Element => {
     []
   );
 
-  const statusOrder = {
-    Rejected: 1,
-    'Not Submitted': 2,
-    'In Review': 3,
-    'Needs Translation': 3,
-    Approved: 4,
-    'Not Needed': 5,
-    Completed: 5,
-  };
-
-  const searchAndSort: SearchAndSortFn<ListDeliverablesElement> = useCallback(
-    (results: ListDeliverablesElement[], search?: SearchNodePayload, sortOrderConfig?: SearchOrderConfig) => {
+  const searchAndSort: SearchAndSortFn<ListDeliverablesElementWithOverdue> = useCallback(
+    (
+      results: ListDeliverablesElementWithOverdue[],
+      search?: SearchNodePayload,
+      sortOrderConfig?: SearchOrderConfig
+    ) => {
       // In the participant view, "needs translation" needs to be "in review", so we will coerce results with "needs translation"
       // into the filter rules for "in review"
       // We need to find the search node payload that contains the "status" filter and add "needs translation" as a search value
@@ -98,9 +95,9 @@ const DeliverablesList = (): JSX.Element => {
         return firstSort.sort((a, b) => {
           if (a.status !== b.status) {
             if (direction === 'Descending') {
-              return statusOrder[b.status] - statusOrder[a.status];
+              return DeliverableStatusOrder[b.status] - DeliverableStatusOrder[a.status];
             } else {
-              return statusOrder[a.status] - statusOrder[b.status];
+              return DeliverableStatusOrder[a.status] - DeliverableStatusOrder[b.status];
             }
           } else {
             // if the have same status sort by due date
@@ -127,22 +124,22 @@ const DeliverablesList = (): JSX.Element => {
             <Grid item>
               <Separator height={'40px'} />
             </Grid>
-            <Grid item>
-              <Typography sx={{ lineHeight: '40px' }} component={'span'}>
-                {strings.PROJECT}
-              </Typography>
-            </Grid>
             {moduleProjects?.length > 0 && (
-              <Grid item sx={{ marginLeft: theme.spacing(1.5) }}>
+              <Grid item>
                 {moduleProjects?.length > 1 ? (
-                  <ProjectsDropdown
-                    allowUnselect
-                    availableProjects={moduleProjects}
-                    label={''}
-                    record={projectFilter}
-                    setRecord={setProjectFilter}
-                    unselectLabel={strings.ALL}
-                  />
+                  <Box display='flex'>
+                    <Typography sx={{ lineHeight: '40px', marginRight: theme.spacing(1.5) }} component={'span'}>
+                      {strings.PROJECT}
+                    </Typography>
+                    <ProjectsDropdown
+                      allowUnselect
+                      availableProjects={moduleProjects}
+                      label={''}
+                      record={projectFilter}
+                      setRecord={setProjectFilter}
+                      unselectLabel={strings.ALL}
+                    />
+                  </Box>
                 ) : (
                   <Typography>{moduleProjects[0].name}</Typography>
                 )}
@@ -151,7 +148,7 @@ const DeliverablesList = (): JSX.Element => {
           </Grid>
         </>
       ) : null,
-    [activeLocale, participantProjects, currentParticipantProject, projectFilter]
+    [activeLocale, currentParticipantProject, projectFilter]
   );
 
   return (

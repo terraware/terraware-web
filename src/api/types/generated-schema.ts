@@ -31,6 +31,10 @@ export interface paths {
     /** Get deliverables for an application */
     get: operations["getApplicationDeliverables"];
   };
+  "/api/v1/accelerator/applications/{applicationId}/export": {
+    /** Get GeoJSON for an application */
+    get: operations["getApplicationGeoJson"];
+  };
   "/api/v1/accelerator/applications/{applicationId}/history": {
     /** Get the history of changes to the metadata of an application */
     get: operations["getApplicationHistory"];
@@ -105,6 +109,26 @@ export interface paths {
   "/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}/complete": {
     /** Marks a submission from a project as completed. */
     post: operations["completeSubmission"];
+  };
+  "/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}/submit": {
+    /** Submits a submission from a project. */
+    post: operations["submitSubmission"];
+  };
+  "/api/v1/accelerator/events": {
+    /** List events */
+    get: operations["listEvents"];
+  };
+  "/api/v1/accelerator/events/{eventId}": {
+    /** Gets one event for a project. */
+    get: operations["getEvent"];
+  };
+  "/api/v1/accelerator/modules": {
+    /** List modules. */
+    get: operations["listModules"];
+  };
+  "/api/v1/accelerator/modules/{moduleId}": {
+    /** Gets one module. */
+    get: operations["getModule"];
   };
   "/api/v1/accelerator/organizations": {
     /**
@@ -299,7 +323,7 @@ export interface paths {
     get: operations["listDocumentTemplates"];
   };
   "/api/v1/document-producer/variables": {
-    /** List the variables, optionally filtered by a given manifest or deliverable. */
+    /** List the variables, optionally filtered by a given manifest or deliverable. Variables returned for a manifest include all section hierarchies and variables injected into section text. */
     get: operations["listVariables"];
   };
   "/api/v1/facilities": {
@@ -359,6 +383,23 @@ export interface paths {
   "/api/v1/i18n/timeZones": {
     /** Gets a list of supported time zones and their names. */
     get: operations["listTimeZoneNames"];
+  };
+  "/api/v1/internalTags": {
+    /** List all the available internal tags */
+    get: operations["listAllInternalTags"];
+  };
+  "/api/v1/internalTags/organizations": {
+    /**
+     * List the internal tags assigned to all organizations
+     * @description This includes organizations with no internal tags, whose list of tags will be empty.
+     */
+    get: operations["listAllOrganizationInternalTags"];
+  };
+  "/api/v1/internalTags/organizations/{organizationId}": {
+    /** List the internal tags assigned to an organization */
+    get: operations["listOrganizationInternalTags"];
+    /** Replace the list of internal tags assigned to an organization */
+    put: operations["updateOrganizationInternalTags"];
   };
   "/api/v1/login": {
     /**
@@ -552,14 +593,6 @@ export interface paths {
      * @description Overwrites any existing project assignments.
      */
     post: operations["assignProject"];
-  };
-  "/api/v1/projects/{projectId}/modules": {
-    /** Gets modules for a project. */
-    get: operations["listModules"];
-  };
-  "/api/v1/projects/{projectId}/modules/{moduleId}": {
-    /** Gets one module for a project. */
-    get: operations["getModule"];
   };
   "/api/v1/reports": {
     /** Lists an organization's reports. */
@@ -954,15 +987,15 @@ export interface paths {
     /** Get a user by ID, if they exist, only ordinary users are supported. */
     get: operations["getUser"];
   };
-  "/api/v1/users/{userId}/deliverableCategories": {
-    /** Get the list of deliverable categories assigned to a user. */
-    get: operations["getUserDeliverableCategories"];
-    /** Update which deliverable categories are assigned to a user. */
-    put: operations["updateUserDeliverableCategories"];
-  };
   "/api/v1/users/{userId}/globalRoles": {
     /** Apply the supplied global roles to the user. */
     post: operations["updateGlobalRoles"];
+  };
+  "/api/v1/users/{userId}/internalInterests": {
+    /** Get the list of internal interests assigned to a user. */
+    get: operations["getUserDeliverableCategories"];
+    /** Update which internal interests are assigned to a user. */
+    put: operations["updateUserDeliverableCategories"];
   };
   "/api/v1/versions": {
     /** Gets the minimum and recommended versions for Terraware's client applications. */
@@ -1241,6 +1274,7 @@ export interface components {
       category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
       /** @description Optional description of the deliverable in HTML form. */
       descriptionHtml?: string;
+      documents: components["schemas"]["SubmissionDocumentPayload"][];
       /** Format: int64 */
       id: number;
       internalComment?: string;
@@ -1284,6 +1318,7 @@ export interface components {
     };
     ApplicationPayload: {
       boundary?: components["schemas"]["MultiPolygon"];
+      countryCode?: string;
       /** Format: date-time */
       createdTime: string;
       feedback?: string;
@@ -1581,20 +1616,17 @@ export interface components {
       cohorts: components["schemas"]["CohortPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
-    CohortModule: {
-      /** Format: date */
-      endDate: string;
-      /** Format: int64 */
-      id: number;
-      isActive: boolean;
-      /** Format: date */
-      startDate: string;
-      title: string;
-    };
     CohortPayload: {
       /** Format: int64 */
+      createdBy: number;
+      /** Format: date-time */
+      createdTime: string;
+      /** Format: int64 */
       id: number;
-      modules: components["schemas"]["CohortModule"][];
+      /** Format: int64 */
+      modifiedBy: number;
+      /** Format: date-time */
+      modifiedTime: string;
       name: string;
       participantIds?: number[];
       /** @enum {string} */
@@ -2132,7 +2164,11 @@ export interface components {
       /** @description Optional description of the deliverable in HTML form. */
       descriptionHtml?: string;
       documents: components["schemas"]["SubmissionDocumentPayload"][];
-      /** @description If the deliverable has been reviewed, the user-visible feedback from the review. */
+      /**
+       * Format: date
+       * @description If the deliverable has been reviewed, the user-visible feedback from the review.
+       */
+      dueDate?: string;
       feedback?: string;
       /** Format: int64 */
       id: number;
@@ -2274,6 +2310,7 @@ export interface components {
       documentTemplateId: number;
       /** Format: int64 */
       id: number;
+      internalComment?: string;
       /** Format: int64 */
       lastSavedVersionId?: number;
       /** Format: int64 */
@@ -2579,6 +2616,10 @@ export interface components {
       site: components["schemas"]["DraftPlantingSitePayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetEventResponsePayload: {
+      event: components["schemas"]["ModuleEvent"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetFacilityResponse: {
       facility: components["schemas"]["FacilityPayload"];
       status: components["schemas"]["SuccessOrError"];
@@ -2586,6 +2627,10 @@ export interface components {
     GetMapboxTokenResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
       token: string;
+    };
+    GetModuleResponsePayload: {
+      module: components["schemas"]["ModulePayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetNotificationResponsePayload: {
       notification: components["schemas"]["NotificationPayload"];
@@ -2700,14 +2745,6 @@ export interface components {
     };
     GetProjectAcceleratorDetailsResponsePayload: {
       details: components["schemas"]["ProjectAcceleratorDetailsPayload"];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    GetProjectModuleResponsePayload: {
-      module: components["schemas"]["ProjectModule"];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    GetProjectModulesResponsePayload: {
-      modules: components["schemas"]["ProjectModule"][];
       status: components["schemas"]["SuccessOrError"];
     };
     GetProjectResponsePayload: {
@@ -2841,8 +2878,8 @@ export interface components {
       details: components["schemas"]["GetUploadStatusDetailsPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
-    GetUserDeliverableCategoriesResponsePayload: {
-      deliverableCategories: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files")[];
+    GetUserInternalInterestsResponsePayload: {
+      internalInterests: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files" | "Sourcing")[];
       status: components["schemas"]["SuccessOrError"];
     };
     GetUserPreferencesResponsePayload: {
@@ -2955,6 +2992,13 @@ export interface components {
     ImageVariablePayload: {
       type: "Image";
     } & Omit<components["schemas"]["VariablePayload"], "type">;
+    InternalTagPayload: {
+      /** Format: int64 */
+      id: number;
+      /** @description If true, this internal tag is system-defined and may affect the behavior of the application. If falso, the tag is admin-defined and is only used for reporting. */
+      isSystem: boolean;
+      name: string;
+    };
     LineString: WithRequired<{
       type: "LineString";
     } & Omit<components["schemas"]["Geometry"], "type"> & {
@@ -2967,6 +3011,14 @@ export interface components {
     } & Omit<components["schemas"]["VariablePayload"], "type">;
     ListAcceleratorOrganizationsResponsePayload: {
       organizations: components["schemas"]["AcceleratorOrganizationPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListAllInternalTagsResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      tags: components["schemas"]["InternalTagPayload"][];
+    };
+    ListAllOrganizationInternalTagsResponsePayload: {
+      organizations: components["schemas"]["OrganizationInternalTagsPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListApplicationsResponsePayload: {
@@ -3034,6 +3086,10 @@ export interface components {
       documents: components["schemas"]["DocumentPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    ListEventsResponsePayload: {
+      events: components["schemas"]["ModuleEvent"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     ListFacilitiesResponse: {
       facilities: components["schemas"]["FacilityPayload"][];
       status: components["schemas"]["SuccessOrError"];
@@ -3050,6 +3106,10 @@ export interface components {
       results: {
         [key: string]: components["schemas"]["FieldValuesPayload"];
       };
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListModulesResponsePayload: {
+      modules: components["schemas"]["ModulePayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListObservationResultsResponsePayload: {
@@ -3069,6 +3129,10 @@ export interface components {
        * @description Total number of monitoring plots that haven't been claimed yet across all current observations.
        */
       totalUnclaimedPlots: number;
+    };
+    ListOrganizationInternalTagsResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      tagIds: number[];
     };
     ListOrganizationRolesResponsePayload: {
       roles: components["schemas"]["OrganizationRolePayload"][];
@@ -3199,6 +3263,42 @@ export interface components {
     ListWithdrawalPhotosResponsePayload: {
       photos: components["schemas"]["NurseryWithdrawalPhotoPayload"][];
       status: components["schemas"]["SuccessOrError"];
+    };
+    ModuleEvent: {
+      description?: string;
+      /** Format: date-time */
+      endTime?: string;
+      /** Format: int64 */
+      id: number;
+      /** Format: uri */
+      meetingUrl?: string;
+      /** Format: uri */
+      recordingUrl?: string;
+      /** Format: uri */
+      slidesUrl?: string;
+      /** Format: date-time */
+      startTime?: string;
+      /** @enum {string} */
+      status: "Not Started" | "Starting Soon" | "In Progress" | "Ended";
+      /** @enum {string} */
+      type: "One-on-One Session" | "Workshop" | "Live Session" | "Recorded Session";
+    };
+    ModulePayload: {
+      additionalResources?: string;
+      /** Format: date */
+      endDate: string;
+      eventDescriptions: {
+        [key: string]: string;
+      };
+      /** Format: int64 */
+      id: number;
+      isActive: boolean;
+      name: string;
+      overview?: string;
+      preparationMaterials?: string;
+      /** Format: date */
+      startDate: string;
+      title: string;
     };
     MultiLineString: WithRequired<{
       type: "MultiLineString";
@@ -3334,14 +3434,14 @@ export interface components {
       organizationId?: number;
       title: string;
     };
-    NumberVariablePayload: WithRequired<{
+    NumberVariablePayload: {
       type: "Number";
     } & Omit<components["schemas"]["VariablePayload"], "type"> & {
       /** Format: int32 */
       decimalPlaces?: number;
       maxValue?: number;
       minValue?: number;
-    }, "decimalPlaces">;
+    };
     NurserySummaryPayload: {
       /** Format: int64 */
       germinatingQuantity: number;
@@ -3608,6 +3708,12 @@ export interface components {
       /** @description List of criteria at least one of which must be satisfied */
       children?: components["schemas"]["SearchNodePayload"][];
     }, "children">;
+    OrganizationInternalTagsPayload: {
+      internalTagIds: number[];
+      /** Format: int64 */
+      organizationId: number;
+      organizationName: string;
+    };
     OrganizationPayload: {
       /** @description Whether this organization can submit reports to Terraformation. */
       canSubmitReports: boolean;
@@ -3910,43 +4016,6 @@ export interface components {
       totalCarbon?: number;
       totalExpansionPotential?: number;
       whatNeedsToBeTrue?: string;
-    };
-    ProjectModule: {
-      additionalResources?: string;
-      /** Format: date */
-      endDate: string;
-      events: components["schemas"]["ProjectModuleEvent"][];
-      /** Format: int64 */
-      id: number;
-      isActive: boolean;
-      name: string;
-      overview?: string;
-      preparationMaterials?: string;
-      /** Format: date */
-      startDate: string;
-      title: string;
-    };
-    ProjectModuleEvent: {
-      description: string;
-      sessions: components["schemas"]["ProjectModuleEventSession"][];
-    };
-    ProjectModuleEventSession: {
-      /** Format: date-time */
-      endTime?: string;
-      /** Format: int64 */
-      id: number;
-      /** Format: uri */
-      meetingUrl?: string;
-      /** Format: uri */
-      recordingUrl?: string;
-      /** Format: uri */
-      slidesUrl?: string;
-      /** Format: date-time */
-      startTime?: string;
-      /** @enum {string} */
-      status: "Not Started" | "Starting Soon" | "In Progress" | "Ended";
-      /** @enum {string} */
-      type: "One-on-One Session" | "Workshop" | "Live Session" | "Recorded Session";
     };
     ProjectPayload: {
       /** Format: int64 */
@@ -4460,7 +4529,7 @@ export interface components {
       createdTime: string;
       description?: string;
       /** @enum {string} */
-      documentStore: "Dropbox" | "Google";
+      documentStore: "Dropbox" | "Google" | "External";
       /** Format: int64 */
       id: number;
       name: string;
@@ -4754,6 +4823,7 @@ export interface components {
       verbosity?: number;
     };
     UpdateDocumentRequestPayload: {
+      internalComment?: string;
       name: string;
       /** Format: int64 */
       ownedBy: number;
@@ -4816,6 +4886,9 @@ export interface components {
       /** Format: int64 */
       organizationId?: number;
       read: boolean;
+    };
+    UpdateOrganizationInternalTagsRequestPayload: {
+      tagIds: number[];
     };
     UpdateOrganizationRequestPayload: {
       /**
@@ -4952,9 +5025,9 @@ export interface components {
       /** @description If true, the user consents to the use of analytics cookies. If false, they decline. */
       cookiesConsented: boolean;
     };
-    UpdateUserDeliverableCategoriesRequestPayload: {
+    UpdateUserInternalInterestsRequestPayload: {
       /** @description New set of category assignments. Existing assignments that aren't included here will be removed from the user. */
-      deliverableCategories: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files")[];
+      internalInterests: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files" | "Sourcing")[];
     };
     UpdateUserPreferencesRequestPayload: {
       /**
@@ -5198,12 +5271,12 @@ export interface components {
     UserWithGlobalRolesPayload: {
       /** Format: date-time */
       createdTime: string;
-      deliverableCategories: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files")[];
       email: string;
       firstName?: string;
       globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
       /** Format: int64 */
       id: number;
+      internalInterests: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files" | "Sourcing")[];
       lastName?: string;
     };
     ValidatePlantingSiteResponsePayload: {
@@ -5413,6 +5486,22 @@ export interface operations {
       };
     };
   };
+  /** Get GeoJSON for an application */
+  getApplicationGeoJson: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/geo+json": string;
+        };
+      };
+    };
+  };
   /** Get the history of changes to the metadata of an application */
   getApplicationHistory: {
     parameters: {
@@ -5530,7 +5619,6 @@ export interface operations {
       query: {
         /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
         cohortDepth: "Cohort" | "Participant";
-        cohortModuleDepth: "Cohort" | "Module";
       };
     };
     responses: {
@@ -5564,7 +5652,6 @@ export interface operations {
       query: {
         /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
         cohortDepth: "Cohort" | "Participant";
-        cohortModuleDepth: "Cohort" | "Module";
       };
       path: {
         cohortId: number;
@@ -5780,6 +5867,119 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Submits a submission from a project. */
+  submitSubmission: {
+    parameters: {
+      path: {
+        deliverableId: number;
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** List events */
+  listEvents: {
+    parameters: {
+      query?: {
+        projectId?: number;
+        moduleId?: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListEventsResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets one event for a project. */
+  getEvent: {
+    parameters: {
+      path: {
+        eventId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetEventResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** List modules. */
+  listModules: {
+    parameters: {
+      query?: {
+        projectId?: number;
+        participantId?: number;
+        cohortId?: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListModulesResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets one module. */
+  getModule: {
+    parameters: {
+      query?: {
+        projectId?: number;
+        participantId?: number;
+        cohortId?: number;
+      };
+      path: {
+        moduleId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetModuleResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -6873,12 +7073,12 @@ export interface operations {
       };
     };
   };
-  /** List the variables, optionally filtered by a given manifest or deliverable. */
+  /** List the variables, optionally filtered by a given manifest or deliverable. Variables returned for a manifest include all section hierarchies and variables injected into section text. */
   listVariables: {
     parameters: {
       query?: {
         deliverableId?: number;
-        manifestId?: number;
+        documentId?: number;
       };
     };
     responses: {
@@ -7213,6 +7413,68 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["ListTimeZoneNamesResponsePayload"];
+        };
+      };
+    };
+  };
+  /** List all the available internal tags */
+  listAllInternalTags: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListAllInternalTagsResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * List the internal tags assigned to all organizations
+   * @description This includes organizations with no internal tags, whose list of tags will be empty.
+   */
+  listAllOrganizationInternalTags: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListAllOrganizationInternalTagsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** List the internal tags assigned to an organization */
+  listOrganizationInternalTags: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListOrganizationInternalTagsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Replace the list of internal tags assigned to an organization */
+  updateOrganizationInternalTags: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateOrganizationInternalTagsRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -8196,51 +8458,6 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Gets modules for a project. */
-  listModules: {
-    parameters: {
-      path: {
-        projectId: number;
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetProjectModulesResponsePayload"];
-        };
-      };
-      /** @description The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Gets one module for a project. */
-  getModule: {
-    parameters: {
-      path: {
-        projectId: number;
-        moduleId: number;
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetProjectModuleResponsePayload"];
-        };
-      };
-      /** @description The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -10167,43 +10384,6 @@ export interface operations {
       };
     };
   };
-  /** Get the list of deliverable categories assigned to a user. */
-  getUserDeliverableCategories: {
-    parameters: {
-      path: {
-        userId: number;
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetUserDeliverableCategoriesResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Update which deliverable categories are assigned to a user. */
-  updateUserDeliverableCategories: {
-    parameters: {
-      path: {
-        userId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateUserDeliverableCategoriesRequestPayload"];
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-  };
   /** Apply the supplied global roles to the user. */
   updateGlobalRoles: {
     parameters: {
@@ -10227,6 +10407,43 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Get the list of internal interests assigned to a user. */
+  getUserDeliverableCategories: {
+    parameters: {
+      path: {
+        userId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetUserInternalInterestsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Update which internal interests are assigned to a user. */
+  updateUserDeliverableCategories: {
+    parameters: {
+      path: {
+        userId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateUserInternalInterestsRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };

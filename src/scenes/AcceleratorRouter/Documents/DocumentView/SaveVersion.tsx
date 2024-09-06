@@ -15,11 +15,12 @@ export type SaveVersionProps = {
 };
 
 const SaveVersion = ({ docId, onFinish }: SaveVersionProps): JSX.Element => {
+  const dispatch = useAppDispatch();
+  const theme = useTheme();
+
   const [versionName, setVersionName] = useState<string>('');
   const [requestId, setRequestId] = useState<string>('');
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const dispatch = useAppDispatch();
-  const theme = useTheme();
 
   const selector = useAppSelector(selectDocumentRequest(requestId));
 

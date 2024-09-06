@@ -90,7 +90,7 @@ export const makeVariableValueOperations = ({
     initialCellValues.forEach((row) => {
       const rowId = row[0].rowId;
       if (rowId !== undefined) {
-        const foundRow = cellValues.find((r) => r[0].rowId === rowId);
+        const foundRow = pendingCellValues.find((r) => r[0].rowId === rowId);
         if (foundRow === undefined) {
           // delete operations
           operations.push({

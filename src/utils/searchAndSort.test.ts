@@ -329,7 +329,7 @@ describe('searchAndSort', () => {
       },
     ];
 
-    const searchValue = 'corpot';
+    const searchValue = 'corpotrees';
 
     const search: SearchNodePayload = {
       operation: 'or',

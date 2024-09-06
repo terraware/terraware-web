@@ -26,14 +26,15 @@ import { getImagePath } from 'src/utils/images';
 import PhotoSelector, { PhotoWithAttributes } from './PhotoSelector';
 
 export type EditImagesModalProps = {
+  display?: boolean;
   variable: ImageVariableWithValues;
-  onFinish: () => void;
+  onFinish: (edited: boolean) => void;
   onCancel: () => void;
   projectId: number;
 };
 
 const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
-  const { variable, onFinish, onCancel, projectId } = props;
+  const { display: displayProp = false, variable, onFinish, onCancel, projectId } = props;
   const theme = useTheme();
   const [imagesCopy, setImagesCopy] = useState(variable.values);
   const [deletedImages, setDeletedImages] = useState<VariableValueImageValue[]>();
@@ -41,6 +42,7 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
   const [uploadRequestId, setUploadRequestId] = useState<string>('');
+  const [display, setDisplay] = useState<boolean>(displayProp);
 
   const selector = useAppSelector(selectUpdateVariableValues(requestId));
   const uploadSelector = useAppSelector(selectUploadImageValue(uploadRequestId));
@@ -140,20 +142,37 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
       title={strings.VARIABLE_DETAILS}
       size='large'
       scrolled={true}
-      middleButtons={[
-        <Button
-          id='edit-images-cancel'
-          label={strings.CANCEL}
-          priority='secondary'
-          type='passive'
-          onClick={onCancel}
-          key='button-1'
-        />,
-        <Button id='edit-images-save' label={strings.SAVE} onClick={handleSave} key='button-2' />,
-      ]}
+      middleButtons={
+        display
+          ? undefined
+          : [
+              <Button
+                id='edit-images-cancel'
+                label={strings.CANCEL}
+                priority='secondary'
+                type='passive'
+                onClick={onCancel}
+                key='button-1'
+              />,
+              <Button id='edit-images-save' label={strings.SAVE} onClick={handleSave} key='button-2' />,
+            ]
+      }
     >
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{ position: 'relative' }}>
+          {display && (
+            <Button
+              icon='iconEdit'
+              id='edit-variable'
+              label={strings.EDIT}
+              onClick={() => {
+                setDisplay(false);
+              }}
+              priority='secondary'
+              sx={{ float: 'right' }}
+              type='passive'
+            />
+          )}
           <Textfield label={strings.NAME} type='text' id='name' value={variable.name} display={true} />
         </Grid>
         <Grid item xs={12}>
@@ -176,17 +195,20 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
                 marginTop={theme.spacing(1)}
                 border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
               >
-                <Button
-                  icon='iconTrashCan'
-                  onClick={() => removeFileAtIndex(index)}
-                  size='small'
-                  style={{
-                    position: 'absolute',
-                    top: -10,
-                    right: -10,
-                    backgroundColor: theme.palette.TwClrBgDanger,
-                  }}
-                />
+                {!display && (
+                  <Button
+                    icon='iconTrashCan'
+                    onClick={() => removeFileAtIndex(index)}
+                    size='small'
+                    style={{
+                      position: 'absolute',
+                      top: -10,
+                      right: -10,
+                      backgroundColor: theme.palette.TwClrBgDanger,
+                    }}
+                  />
+                )}
+
                 <img
                   height='120px'
                   src={getImagePath(projectId, image.id, 120, 120)}
@@ -203,28 +225,36 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
               <Box paddingLeft={theme.spacing(3)} width='100%'>
                 <Grid>
                   <Textfield
+                    display={display}
                     type='text'
                     label={strings.CAPTION}
                     id='citation'
                     value={image.caption}
-                    onChange={(newValue) => onUpdateImage({ ...image, caption: newValue as string })}
+                    onChange={
+                      display ? undefined : (newValue) => onUpdateImage({ ...image, caption: newValue as string })
+                    }
                   />
                 </Grid>
                 <Grid paddingTop={theme.spacing(2)}>
                   <Textfield
+                    display={display}
                     type='text'
                     label={strings.CITATION}
                     id='citation'
                     value={image.citation}
-                    onChange={(newValue) => onUpdateImage({ ...image, citation: newValue as string })}
+                    onChange={
+                      display ? undefined : (newValue) => onUpdateImage({ ...image, citation: newValue as string })
+                    }
                   />
                 </Grid>
               </Box>
             </Box>
           ))}
-        <Grid item xs={12}>
-          <PhotoSelector onPhotosChanged={onFilesChanged} multipleSelection={variable.isList} />
-        </Grid>
+        {!display && (
+          <Grid item xs={12}>
+            <PhotoSelector onPhotosChanged={onFilesChanged} multipleSelection={variable.isList} />
+          </Grid>
+        )}
       </Grid>
     </PageDialog>
   );

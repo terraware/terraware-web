@@ -1,16 +1,17 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { DateTime } from 'luxon';
 
 import { SearchService } from 'src/services';
-import ModuleService from 'src/services/ModuleService';
+import DeliverablesService from 'src/services/DeliverablesService';
+import ModuleService, { GetModuleRequestParam, ListModulesRequestParam } from 'src/services/ModuleService';
 import strings from 'src/strings';
-import { ModuleDeliverable, ModuleProjectSearchResult } from 'src/types/Module';
+import { ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
+import { ModuleProjectSearchResult } from 'src/types/Module';
 import { SearchNodePayload, SearchRequestPayload } from 'src/types/Search';
 
 export const requestGetModule = createAsyncThunk(
   'modules/get',
-  async ({ moduleId, projectId }: { moduleId: number; projectId: number }, { rejectWithValue }) => {
-    const response = await ModuleService.get(projectId, moduleId);
+  async (request: GetModuleRequestParam, { rejectWithValue }) => {
+    const response = await ModuleService.get(request);
 
     if (response !== null && response.requestSucceeded && response?.data?.module !== undefined) {
       return response.data.module;
@@ -20,15 +21,18 @@ export const requestGetModule = createAsyncThunk(
   }
 );
 
-export const requestListModules = createAsyncThunk('modules/list', async (projectId: number, { rejectWithValue }) => {
-  const response = await ModuleService.list(projectId);
+export const requestListModules = createAsyncThunk(
+  'modules/list',
+  async (request: ListModulesRequestParam, { rejectWithValue }) => {
+    const response = await ModuleService.list(request);
 
-  if (response !== null && response.requestSucceeded && response?.data?.modules !== undefined) {
-    return response.data.modules;
+    if (response !== null && response.requestSucceeded && response?.data?.modules !== undefined) {
+      return response.data.modules;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
   }
-
-  return rejectWithValue(strings.GENERIC_ERROR);
-});
+);
 
 export const requestListModuleProjects = createAsyncThunk(
   'modules/listProjects',
@@ -65,31 +69,20 @@ export const requestListModuleProjects = createAsyncThunk(
 export const requestListModuleDeliverables = createAsyncThunk(
   'modules/deliverables',
   async (request: {
-    moduleIds: number[];
-    projectIds: number[];
-    searchChildren?: SearchNodePayload[];
-  }): Promise<ModuleDeliverable[]> => {
-    const searchChildren = request.searchChildren || [];
-
-    const deliverableSearchResults = await ModuleService.searchDeliverables(
-      request.projectIds,
-      request.moduleIds,
-      searchChildren
+    locale: string | null;
+    moduleId: number;
+    projectId: number;
+    search?: SearchNodePayload;
+  }): Promise<ListDeliverablesElementWithOverdue[]> => {
+    const result = await DeliverablesService.list(
+      request.locale,
+      {
+        projectId: request.projectId,
+        moduleId: request.moduleId,
+      },
+      request.search
     );
 
-    return deliverableSearchResults
-      ? deliverableSearchResults.map((result) => ({
-          category: result.category,
-          id: result.id,
-          dueDate: DateTime.fromISO(result.dueDate),
-          moduleEndDate: DateTime.fromISO(result.moduleEndDate),
-          moduleId: result.moduleId,
-          moduleStartDate: DateTime.fromISO(result.moduleStartDate),
-          name: result.name,
-          projectId: result.projectId,
-          status: result.status,
-          type: result.type,
-        }))
-      : [];
+    return result.data ?? [];
   }
 );

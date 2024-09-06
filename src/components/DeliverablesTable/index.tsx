@@ -14,9 +14,9 @@ import strings from 'src/strings';
 import { AcceleratorOrgProject } from 'src/types/Accelerator';
 import {
   DeliverableCategories,
-  DeliverableStatuses,
+  DeliverableStatusesWithOverdue,
   DeliverableTypes,
-  ListDeliverablesElement,
+  ListDeliverablesElementWithOverdue,
 } from 'src/types/Deliverables';
 import { ParticipantProjectSearchResult } from 'src/types/Participant';
 import { Project } from 'src/types/Project';
@@ -29,13 +29,12 @@ import TableWithSearchFilters from '../TableWithSearchFilters';
 import DeliverableCellRenderer from './DeliverableCellRenderer';
 
 interface DeliverablesTableProps {
-  acceleratorProjects?: AcceleratorOrgProject[];
   extraTableFilters?: SearchNodePayload[];
   filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
   isAcceleratorRoute?: boolean;
   organizationId: number;
   participantId?: number;
-  searchAndSort?: SearchAndSortFn<ListDeliverablesElement>;
+  searchAndSort?: SearchAndSortFn<ListDeliverablesElementWithOverdue>;
   tableId: string;
 }
 
@@ -87,7 +86,6 @@ const defaultSearchOrder: SearchSortOrder = {
 };
 
 const DeliverablesTable = ({
-  acceleratorProjects,
   extraTableFilters,
   filterModifiers,
   isAcceleratorRoute,
@@ -102,7 +100,7 @@ const DeliverablesTable = ({
   const { selectedOrganization } = useOrganization();
   const { selectedParticipant } = useParticipants(participantId);
 
-  const [deliverables, setDeliverables] = useState<ListDeliverablesElement[]>([]);
+  const [deliverables, setDeliverables] = useState<ListDeliverablesElementWithOverdue[]>([]);
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');
   const deliverablesSearchRequest = useAppSelector(selectDeliverablesSearchRequest(deliverablesSearchRequestId));
   const query = useQuery();
@@ -112,10 +110,11 @@ const DeliverablesTable = ({
 
   const projectsFilterOptions = useMemo(
     () =>
-      (acceleratorProjects || []).filter((project) =>
-        deliverables.find((deliverable) => deliverable.projectId === project.id)
-      ),
-    [acceleratorProjects, deliverables]
+      deliverables.map((deliverable) => ({
+        id: deliverable.projectId,
+        name: deliverable.projectName,
+      })),
+    [deliverables]
   );
 
   const isAllowedReadDeliverable = isAllowed('READ_DELIVERABLE', { organization: selectedOrganization });
@@ -145,7 +144,7 @@ const DeliverablesTable = ({
         // These options are strings for now, but may end up as enums when the BE types come through, if that is
         // the case we will need to implement the renderOption and pillValueRenderer to render the desired
         // human readable values
-        options: DeliverableStatuses,
+        options: DeliverableStatusesWithOverdue,
         label: strings.STATUS,
       },
       {
@@ -158,6 +157,10 @@ const DeliverablesTable = ({
         field: 'type',
         options: DeliverableTypes,
         label: strings.TYPE,
+        pillValueRenderer: (values: (string | number | null)[]) =>
+          values.map((value) => (value === 'Questions' ? 'Questionnaire' : value)).join(', '),
+        renderOption: (value: string | number) =>
+          value.toString() === 'Questions' ? 'Questionnaire' : value.toString(),
       },
     ];
 
@@ -213,6 +216,7 @@ const DeliverablesTable = ({
     () =>
       deliverables.map((deliverable) => ({
         ...deliverable,
+        type: deliverable.type === 'Questions' ? 'Questionnaire' : deliverable.type,
         isAllowedRead: isAllowedReadDeliverable,
       })),
     [deliverables, isAllowedReadDeliverable]
@@ -220,8 +224,8 @@ const DeliverablesTable = ({
 
   useEffect(() => {
     // TODO do something if the request has an error
-    if (deliverablesSearchRequest && deliverablesSearchRequest.data?.deliverables) {
-      setDeliverables(deliverablesSearchRequest.data.deliverables);
+    if (deliverablesSearchRequest && deliverablesSearchRequest.status === 'success') {
+      setDeliverables(deliverablesSearchRequest.data ?? []);
     }
   }, [deliverablesSearchRequest]);
 

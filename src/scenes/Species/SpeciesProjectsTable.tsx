@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography } from '@mui/material';
-import { Button, TableRowType } from '@terraware/web-components';
+import { TableRowType } from '@terraware/web-components';
 import { TableColumnType } from '@terraware/web-components/components/table/types';
 
+import TooltipButton from 'src/components/common/button/TooltipButton';
 import Table from 'src/components/common/table';
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { requestGetProjectsForSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectProjectsForSpeciesRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
@@ -54,6 +55,7 @@ export default function SpeciesProjectsTable({
   addedProjectsSpecies,
   removedProjectsIds,
 }: SpeciesProjectsTableProps): JSX.Element {
+  const { activeLocale } = useLocalization();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const { selectedOrganization } = useOrganization();
@@ -90,7 +92,7 @@ export default function SpeciesProjectsTable({
   useEffect(() => {
     const assignedProjectsIds = filteredResults?.map((fr) => Number(fr.projectId));
     const pendingProjects = allProjects?.filter((project) => {
-      return !assignedProjectsIds?.includes(project.id);
+      return project.participantId && !assignedProjectsIds?.includes(project.id);
     });
     setSelectableProjects(pendingProjects || []);
   }, [filteredResults, allProjects]);
@@ -131,6 +133,14 @@ export default function SpeciesProjectsTable({
       onAdd(netNewProj);
     }
   };
+
+  const buttonTooltip = useMemo(() => {
+    if (!activeLocale || selectableProjects.length > 0) {
+      return undefined;
+    }
+
+    return strings.NO_AVAILABLE_PROJECTS_FOR_SPECIES;
+  }, [activeLocale, selectableProjects]);
 
   const onRemoveHandler = (removedIds: number[]) => {
     const existingIdsToRemove: number[] = [];
@@ -199,13 +209,15 @@ export default function SpeciesProjectsTable({
               {strings.PROJECTS}
             </Typography>
             {editMode && (
-              <Button
+              <TooltipButton
                 icon='plus'
                 id='add-species-to-project'
                 label={strings.ADD_TO_PROJECT}
                 onClick={() => setOpenedAddToProjectModal(true)}
                 priority='secondary'
                 size='medium'
+                disabled={selectableProjects.length === 0}
+                tooltip={buttonTooltip}
               />
             )}
           </Box>

@@ -31,7 +31,8 @@ export const variableDependencyMet = (variable: VariableWithValues, allVariables
     case 'eq':
       if (isSelectVariable(dependsOnVariable) && isArrayOfT(rawDependsOnValue, isNumber)) {
         const optionIdOfDependencyValue = dependsOnVariable.options.find(
-          (option) => option.name === variable.dependencyValue
+          // Remove double-quoutes here. But we likely want to update that in the spreadsheet instead.
+          (option) => option.name === variable.dependencyValue?.replace(/"/g, '')
         )?.id;
         if (!optionIdOfDependencyValue) {
           // This means the value listed as the dependency value doesn't exist within the depended on variable
@@ -63,7 +64,7 @@ export const variableDependencyMet = (variable: VariableWithValues, allVariables
   }
 };
 
-const getRawValue = (variable: VariableWithValues): number | number[] | string | undefined => {
+export const getRawValue = (variable: VariableWithValues): number | number[] | string | undefined => {
   const firstValue = variable.values[0];
 
   if (!firstValue) {

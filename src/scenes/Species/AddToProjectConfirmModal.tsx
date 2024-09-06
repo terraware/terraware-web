@@ -5,17 +5,16 @@ import { Grid, Typography, useTheme } from '@mui/material';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
-
-import { ProjectSpecies } from './AddToProjectModal';
+import { Project } from 'src/types/Project';
 
 export interface AddToProjectConfirmModalProps {
   onClose: (reload?: boolean) => void;
   onConfirm: () => void;
-  projectsSpeciesAdded: ProjectSpecies[];
+  projects: Project[];
 }
 
 export default function AddToProjectConfirmModal(props: AddToProjectConfirmModalProps): JSX.Element {
-  const { onClose, onConfirm, projectsSpeciesAdded } = props;
+  const { onClose, onConfirm, projects } = props;
 
   const theme = useTheme();
 
@@ -24,7 +23,7 @@ export default function AddToProjectConfirmModal(props: AddToProjectConfirmModal
     onClose();
   };
 
-  const projectNames = projectsSpeciesAdded.map((value) => value.project.name).join(', ');
+  const projectNames = projects.map((project) => project.name).join(', ');
 
   return (
     <>

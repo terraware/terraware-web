@@ -11,18 +11,19 @@ import { useLocalization } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import ApplicationPage from 'src/scenes/ApplicationRouter/portal/ApplicationPage';
 import strings from 'src/strings';
+import { Application } from 'src/types/Application';
 
 import ReviewCard from './ReviewCard';
 
 type ApplicationStatusProps = {
+  body: string;
   buttonLabel: string;
-  feedback?: string;
-  isFailure: boolean;
+  isFailure?: boolean;
   onClickButton: () => void;
   title: string;
 };
 
-const ApplicationStatus = ({ buttonLabel, feedback, isFailure, onClickButton, title }: ApplicationStatusProps) => {
+const ApplicationStatus = ({ body, buttonLabel, onClickButton, title }: ApplicationStatusProps) => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
 
@@ -37,30 +38,25 @@ const ApplicationStatus = ({ buttonLabel, feedback, isFailure, onClickButton, ti
       }}
     >
       <Box alignItems={'center'}>
-        <img src={isFailure ? '/assets/application-failure-splash.svg' : '/assets/application-success-splash.svg'} />
+        <img src={'/assets/application-success-splash.svg'} />
       </Box>
       <h3>{title}</h3>
-      {feedback && (
-        <Typography sx={{ margin: 0 }} whiteSpace={'pre-line'}>
-          {feedback}
-        </Typography>
-      )}
+      <Typography sx={{ marginBottom: theme.spacing(2), textAlign: 'center' }} whiteSpace={'pre-line'}>
+        {body}
+      </Typography>
       <Button label={buttonLabel} onClick={onClickButton} priority='secondary' />
     </Card>
   );
 };
 
-const ApplicationStatusSubmitted = () => {
+const ApplicationStatusInReview = () => {
   const { goToHome } = useNavigateTo();
 
   return (
     <ApplicationStatus
+      body={strings.APPLICATION_SUBMIT_SUCCESS_BODY}
       buttonLabel={strings.EXIT_APPLICATION}
-      feedback='<p>Your Application has been submitted to the Accelerator team. We will review and score your answers.</p><p>Check back to see updates? Look for an email? [need copy]</p>'
-      isFailure={false}
-      onClickButton={() => {
-        goToHome();
-      }}
+      onClickButton={() => goToHome()}
       title={strings.APPLICATION_SUBMIT_SUCCESS}
     />
   );
@@ -88,10 +84,30 @@ const ReviewView = () => {
     [applicationSections]
   );
 
+  const renderContent = (application: Application | undefined) => {
+    switch (application?.status) {
+      case 'Accepted':
+      case 'Carbon Eligible':
+      case 'In Review':
+      case 'Needs Follow-up':
+      case 'PL Review':
+      case 'Pre-check':
+      case 'Ready for Review':
+      case 'Submitted':
+      case 'Issue Active':
+      case 'Issue Pending':
+      case 'Issue Resolved':
+      case 'Waitlist':
+      case 'Not Accepted':
+        return <ApplicationStatusInReview />;
+      default:
+        return <ReviewCard sections={nonPrescreenSections} />;
+    }
+  };
+
   return (
-    <ApplicationPage crumbs={crumbs}>
-      {selectedApplication?.status === 'In Review' && <ApplicationStatusSubmitted />}
-      {selectedApplication?.status !== 'Submitted' && <ReviewCard sections={nonPrescreenSections} />}
+    <ApplicationPage crumbs={crumbs} hideFeedback>
+      {renderContent(selectedApplication)}
     </ApplicationPage>
   );
 };

@@ -22,18 +22,21 @@ const VotingView = () => {
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const { phaseVotes, projectId } = useVotingData();
+  const { phaseVotes, project } = useVotingData();
 
   const goToEditVotes = useCallback(() => {
+    if (!project) {
+      return;
+    }
     // keep query state for edit view
     navigate(
       getLocation(
-        APP_PATHS.ACCELERATOR_PROJECT_VOTES_EDIT.replace(':projectId', `${projectId}`),
+        APP_PATHS.ACCELERATOR_PROJECT_VOTES_EDIT.replace(':projectId', `${project.id}`),
         location,
         query.toString()
       )
     );
-  }, [navigate, location, projectId, query]);
+  }, [navigate, location, project, query]);
 
   // Edit Votes button
   const editVotes = useMemo(

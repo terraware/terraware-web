@@ -2,14 +2,14 @@ import React, { Box, Theme, Typography, useTheme } from '@mui/material';
 import { Property } from 'csstype';
 
 import strings from 'src/strings';
-import { DeliverableStatusType } from 'src/types/Deliverables';
+import { DeliverableStatusTypeWithOverdue } from 'src/types/Deliverables';
 
 interface DeliverableStatusBadgeProp {
-  status: DeliverableStatusType;
+  status: DeliverableStatusTypeWithOverdue;
   showSimplifiedStatus?: boolean;
 }
 
-const getStatusText = (status: DeliverableStatusType, showSimplifiedStatus: boolean): string => {
+const getStatusText = (status: DeliverableStatusTypeWithOverdue, showSimplifiedStatus: boolean): string => {
   if (showSimplifiedStatus) {
     return status === 'Completed' ? strings.COMPLETED : strings.INCOMPLETE;
   }
@@ -25,6 +25,8 @@ const getStatusText = (status: DeliverableStatusType, showSimplifiedStatus: bool
       return strings.COMPLETED;
     case 'Rejected':
       return strings.NOT_ACCEPTED;
+    case 'Overdue':
+      return strings.OVERDUE;
     default:
       return '';
   }
@@ -36,7 +38,11 @@ type StatusColors = {
   text: Property.Color | undefined;
 };
 
-const getStatusColors = (status: DeliverableStatusType, theme: Theme, showSimplifiedStatus: boolean): StatusColors => {
+const getStatusColors = (
+  status: DeliverableStatusTypeWithOverdue,
+  theme: Theme,
+  showSimplifiedStatus: boolean
+): StatusColors => {
   if (showSimplifiedStatus) {
     return status === 'Completed'
       ? {
@@ -59,6 +65,7 @@ const getStatusColors = (status: DeliverableStatusType, theme: Theme, showSimpli
         text: theme.palette.TwClrTxtWarning,
       };
     case 'Rejected':
+    case 'Overdue':
       return {
         background: theme.palette.TwClrBgDangerTertiary,
         border: theme.palette.TwClrBrdrDanger,

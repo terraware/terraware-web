@@ -1,16 +1,18 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+
+import { DateTime } from 'luxon';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import ModuleDetailsCard from 'src/components/ModuleDetailsCard';
-import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
+import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
 import { APP_PATHS } from 'src/constants';
+import useGetModule from 'src/hooks/useGetModule';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
 import ModuleViewTitle from './ModuleViewTitle';
-import { useModuleData } from './Provider/Context';
 
 const ModuleView = () => {
   const { activeLocale } = useLocalization();
@@ -18,8 +20,43 @@ const ModuleView = () => {
 
   const pathParams = useParams<{ sessionId: string; moduleId: string; projectId: string }>();
   const projectId = Number(pathParams.projectId);
+  const moduleId = Number(pathParams.moduleId);
 
-  const { deliverables, module } = useModuleData();
+  const { getModule, module, deliverables, events } = useGetModule();
+
+  useEffect(() => {
+    void getModule({ moduleId, projectId });
+  }, [projectId, moduleId, getModule]);
+
+  const deliverableDetails = useMemo(
+    () =>
+      deliverables?.map((deliverable) => ({
+        ...deliverable,
+        dueDate: deliverable.dueDate ? DateTime.fromISO(deliverable.dueDate) : undefined,
+        onClick: () => goToDeliverable(deliverable.id, projectId),
+      })),
+    [deliverables, goToDeliverable, projectId]
+  );
+
+  const eventDetails = useMemo(
+    () =>
+      events?.map((event) => ({
+        ...event,
+        onClick: () => goToModuleEventSession(projectId, moduleId, event.id),
+      })),
+    [events, goToModuleEventSession, projectId, module]
+  );
+
+  const moduleDetails = useMemo(
+    () =>
+      module
+        ? {
+            ...module,
+            title: activeLocale ? strings.formatString(strings.TITLE_OVERVIEW, module.title).toString() : '',
+          }
+        : undefined,
+    [activeLocale, module]
+  );
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -31,38 +68,8 @@ const ModuleView = () => {
     [activeLocale, projectId]
   );
 
-  const deliverableDetails = useMemo(
-    () =>
-      deliverables.map((deliverable) => ({
-        ...deliverable,
-        onClick: () => goToDeliverable(deliverable.id, projectId),
-      })),
-    [deliverables, goToDeliverable, projectId]
-  );
-
-  const eventDetails = useMemo(
-    () =>
-      module
-        ? module.events
-            .flatMap((event) => event.sessions)
-            .map((event) => ({ ...event, onClick: () => goToModuleEventSession(projectId, module.id, event.id) }))
-        : [],
-    [module, goToModuleEventSession, projectId]
-  );
-
-  const moduleDetails = useMemo(
-    () =>
-      module
-        ? {
-            ...module,
-            title: activeLocale && module ? strings.formatString(strings.TITLE_OVERVIEW, module.title).toString() : '',
-          }
-        : null,
-    [activeLocale, module]
-  );
-
   return (
-    <PageWithModuleTimeline
+    <ParticipantPage
       crumbs={crumbs}
       hierarchicalCrumbs={false}
       title={<ModuleViewTitle module={module} projectId={projectId} />}
@@ -75,7 +82,7 @@ const ModuleView = () => {
           projectId={projectId}
         />
       )}
-    </PageWithModuleTimeline>
+    </ParticipantPage>
   );
 };
 
