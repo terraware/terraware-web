@@ -75,7 +75,7 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
 
     setProjectOptions(nextProjectOptions);
 
-    if (newApplication.projectType === 'New' && nextProjectOptions.length) {
+    if (!newApplication.projectId && newApplication.projectType === 'New' && nextProjectOptions.length) {
       setNewApplication({
         projectType: 'Existing',
         projectId: nextProjectOptions[0]?.value,
