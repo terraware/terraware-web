@@ -72,7 +72,9 @@ const QuestionBox = ({
               width: '100%',
             }}
           >
-            <Typography sx={{ fontWeight: '600' }}>{variable.deliverableQuestion ?? variable.name}</Typography>
+            <Typography
+              sx={{ fontWeight: '600' }}
+            >{`${variable.deliverableQuestion ?? variable.name} ${variable.isRequired ? '*' : ''}`}</Typography>
 
             <Box
               sx={{
