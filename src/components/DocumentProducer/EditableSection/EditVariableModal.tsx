@@ -7,6 +7,7 @@ import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context'
 import {
   ImageVariableWithValues,
   TableVariableWithValues,
+  UpdateVariableWorkflowDetailsPayload,
   VariableWithValues,
 } from 'src/types/documentProducer/Variable';
 
@@ -16,6 +17,7 @@ type EditVariableModalProps = {
   onFinish: (edited: boolean) => void;
   onCancel: () => void;
   projectId: number;
+  updateVariableWorkflowDetails: (payload: UpdateVariableWorkflowDetailsPayload, variableId: number) => void;
 };
 
 export default function EditVariableModal({
@@ -23,6 +25,7 @@ export default function EditVariableModal({
   onCancel,
   onFinish,
   projectId,
+  updateVariableWorkflowDetails,
   variable,
 }: EditVariableModalProps) {
   const { getUsedSections } = useDocumentProducerData();
@@ -59,6 +62,7 @@ export default function EditVariableModal({
           onFinish={onFinish}
           projectId={projectId}
           sectionsUsed={getUsedSections(variable.id)}
+          updateVariableWorkflowDetails={updateVariableWorkflowDetails}
           variable={variable}
         />
       );

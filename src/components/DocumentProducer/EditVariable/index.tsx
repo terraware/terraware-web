@@ -9,7 +9,7 @@ import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/
 import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { VariableWithValues } from 'src/types/documentProducer/Variable';
+import { UpdateVariableWorkflowDetailsPayload, VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
   NewDateValuePayload,
   NewLinkValuePayload,
@@ -17,6 +17,7 @@ import {
   NewSelectValuePayload,
   NewTextValuePayload,
   Operation,
+  VariableValue,
   VariableValueDateValue,
   VariableValueLinkValue,
   VariableValueNumberValue,
@@ -32,12 +33,37 @@ export type EditVariableProps = {
   variable: VariableWithValues;
   sectionsUsed?: string[];
   onSectionClicked?: (sectionNumber: string) => void;
+  updateVariableWorkflowDetails?: (payload: UpdateVariableWorkflowDetailsPayload, variableId: number) => void;
 };
 
 const EditVariable = (props: EditVariableProps): JSX.Element => {
-  const { display: displayProp = false, onFinish, projectId, variable, sectionsUsed, onSectionClicked } = props;
+  const {
+    display: displayProp = false,
+    onFinish,
+    onSectionClicked,
+    projectId,
+    sectionsUsed,
+    updateVariableWorkflowDetails,
+    variable,
+  } = props;
 
   const dispatch = useAppDispatch();
+
+  const variableValues = variable?.variableValues || [];
+
+  // For section variables, multiple variableValues are returned, so we need to find the one with the current ID
+  let variableValue: VariableValue | undefined;
+  if (variable.type === 'Section') {
+    variableValue = (variable?.variableValues || []).find((value) => value.variableId === variable.id);
+  } else {
+    variableValue = variableValues[0];
+  }
+
+  const [variableWorkflowDetails, setVariableWorkflowDetails] = useState<UpdateVariableWorkflowDetailsPayload>({
+    feedback: variableValue?.feedback,
+    internalComment: variableValue?.internalComment,
+    status: variableValue?.status || 'Not Submitted',
+  });
 
   const [display, setDisplay] = useState<boolean>(displayProp);
   const [validate, setValidate] = useState<boolean>(false);
@@ -150,6 +176,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
         setRequestId(request.requestId);
       }
     }
+    updateVariableWorkflowDetails?.(variableWorkflowDetails, variable.id);
   };
 
   const onCancel = useCallback(() => {
@@ -222,6 +249,8 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
             addRemovedValue={onAddRemovedValue}
             sectionsUsed={sectionsUsed}
             onSectionClicked={onSectionClicked}
+            setVariableWorkflowDetails={setVariableWorkflowDetails}
+            variableWorkflowDetails={variableWorkflowDetails}
           />
         </Grid>
       </Grid>

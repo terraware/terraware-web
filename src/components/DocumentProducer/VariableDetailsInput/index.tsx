@@ -9,11 +9,12 @@ import strings from 'src/strings';
 import {
   SelectOptionPayload,
   SelectVariable,
+  UpdateVariableWorkflowDetailsPayload,
   VariableStatusType,
+  VariableStatuses,
   VariableWithValues,
 } from 'src/types/documentProducer/Variable';
 import {
-  VariableValue,
   VariableValueDateValue,
   VariableValueLinkValue,
   VariableValueNumberValue,
@@ -32,6 +33,8 @@ export type VariableDetailsInputProps = {
   addRemovedValue: (value: VariableValueValue) => void;
   sectionsUsed?: string[];
   onSectionClicked?: (sectionNumber: string) => void;
+  variableWorkflowDetails: UpdateVariableWorkflowDetailsPayload;
+  setVariableWorkflowDetails: (details: UpdateVariableWorkflowDetailsPayload) => void;
 };
 
 const VariableDetailsInput = ({
@@ -44,6 +47,8 @@ const VariableDetailsInput = ({
   addRemovedValue,
   sectionsUsed,
   onSectionClicked,
+  variableWorkflowDetails,
+  setVariableWorkflowDetails,
 }: VariableDetailsInputProps): JSX.Element => {
   const [value, setValue] = useState<string | number | number[]>();
   const [citation, setCitation] = useState<string>();
@@ -53,11 +58,12 @@ const VariableDetailsInput = ({
   const formElementStyles = { margin: theme.spacing(1, 0) };
 
   const valueError = useCallback(() => (value ? '' : strings.REQUIRED_FIELD), [value]);
-
-  const firstVariableValue: VariableValue | undefined = (variable?.variableValues || [])[0];
-  const firstVariableValueStatus: VariableStatusType | undefined = firstVariableValue?.status;
-  const firstVariableValueFeedback: string | undefined = firstVariableValue?.feedback;
-  const firstVariableValueInternalComment: string | undefined = firstVariableValue?.internalComment;
+  console.log('***************************');
+  console.log('VariableDetailsInput');
+  console.log('variable:', variable);
+  console.log('values:', values);
+  console.log('sectionsUsed:', sectionsUsed);
+  console.log('variableWorkflowDetails:', variableWorkflowDetails);
 
   useEffect(() => {
     if (values?.length) {
@@ -488,7 +494,25 @@ const VariableDetailsInput = ({
             {strings.VARIABLE_STATUS}
           </Typography>
           <Box sx={{ marginBottom: '12px' }}>
-            <VariableStatusBadge status={firstVariableValueStatus} />
+            {display ? (
+              <VariableStatusBadge status={variableWorkflowDetails.status} />
+            ) : (
+              <Dropdown
+                fullWidth
+                label={strings.STATUS}
+                onChange={(newValue: string) => {
+                  setVariableWorkflowDetails({
+                    ...variableWorkflowDetails,
+                    status: newValue as VariableStatusType,
+                  });
+                }}
+                options={VariableStatuses.map((status) => ({
+                  label: status,
+                  value: status,
+                }))}
+                selectedValue={variableWorkflowDetails?.status}
+              />
+            )}
           </Box>
         </Grid>
 
@@ -497,21 +521,33 @@ const VariableDetailsInput = ({
             display={display}
             id='internal-comments'
             label={strings.INTERNAL_COMMENTS}
+            onChange={(newValue: any) => {
+              setVariableWorkflowDetails({
+                ...variableWorkflowDetails,
+                internalComment: newValue,
+              });
+            }}
             sx={formElementStyles}
-            type='text'
-            value={firstVariableValueInternalComment}
+            type='textarea'
+            value={variableWorkflowDetails?.internalComment}
           />
         </Grid>
 
-        {firstVariableValueStatus && ['Not Accepted', 'In Review'].includes(firstVariableValueStatus) && (
+        {variableWorkflowDetails?.status && ['Rejected', 'In Review'].includes(variableWorkflowDetails.status) && (
           <Grid item xs={12}>
             <Textfield
               display={display}
               id='feedback'
               label={strings.FEEDBACK}
+              onChange={(newValue: any) => {
+                setVariableWorkflowDetails({
+                  ...variableWorkflowDetails,
+                  feedback: newValue,
+                });
+              }}
               sx={formElementStyles}
-              type='text'
-              value={firstVariableValueFeedback}
+              type='textarea'
+              value={variableWorkflowDetails?.feedback}
             />
           </Grid>
         )}
