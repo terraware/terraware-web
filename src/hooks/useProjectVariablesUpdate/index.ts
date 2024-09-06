@@ -55,6 +55,8 @@ export const useProjectVariablesUpdate = (
   const updateResult = useAppSelector(selectUpdateVariableValues(updateVariableRequestId));
   const uploadResult = useAppSelector(selectUploadImageValue(uploadRequestId));
 
+  const [noOp, setNoOp] = useState(false);
+
   const setValues = (variableId: number, values: VariableValueValue[]) => {
     setPendingVariableValues(new Map(pendingVariableValues).set(variableId, values));
   };
@@ -80,6 +82,20 @@ export const useProjectVariablesUpdate = (
   };
 
   const update = useCallback(() => {
+    const hasPendingChanges =
+      pendingCellValues.size > 0 ||
+      pendingImages.size > 0 ||
+      pendingDeletedImages.size > 0 ||
+      pendingNewImages.size > 0 ||
+      pendingVariableValues.size > 0 ||
+      removedVariableValues.size > 0;
+
+    // if there are no pending changes, set flag to true to fake success & exit
+    if (!hasPendingChanges) {
+      setNoOp(true);
+      return;
+    }
+
     let operations: Operation[] = [];
 
     pendingVariableValues.forEach((pendingValues, variableId) => {
@@ -209,7 +225,7 @@ export const useProjectVariablesUpdate = (
     setNewImages,
     setRemovedValue,
     setValues,
-    updateSuccess: updateResult?.status === 'success',
+    updateSuccess: noOp || updateResult?.status === 'success',
     uploadSuccess: Object.keys(pendingNewImages).length === 0 ? true : uploadResult?.status === 'success',
     update,
   };
