@@ -31,6 +31,10 @@ export interface paths {
     /** Get deliverables for an application */
     get: operations["getApplicationDeliverables"];
   };
+  "/api/v1/accelerator/applications/{applicationId}/export": {
+    /** Get GeoJSON for an application */
+    get: operations["getApplicationGeoJson"];
+  };
   "/api/v1/accelerator/applications/{applicationId}/history": {
     /** Get the history of changes to the metadata of an application */
     get: operations["getApplicationHistory"];
@@ -1270,6 +1274,7 @@ export interface components {
       category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
       /** @description Optional description of the deliverable in HTML form. */
       descriptionHtml?: string;
+      documents: components["schemas"]["SubmissionDocumentPayload"][];
       /** Format: int64 */
       id: number;
       internalComment?: string;
@@ -3429,14 +3434,14 @@ export interface components {
       organizationId?: number;
       title: string;
     };
-    NumberVariablePayload: WithRequired<{
+    NumberVariablePayload: {
       type: "Number";
     } & Omit<components["schemas"]["VariablePayload"], "type"> & {
       /** Format: int32 */
       decimalPlaces?: number;
       maxValue?: number;
       minValue?: number;
-    }, "decimalPlaces">;
+    };
     NurserySummaryPayload: {
       /** Format: int64 */
       germinatingQuantity: number;
@@ -4822,6 +4827,8 @@ export interface components {
       name: string;
       /** Format: int64 */
       ownedBy: number;
+      /** @enum {string} */
+      status: "Draft" | "Locked" | "Published" | "Ready" | "Submitted";
     };
     UpdateDraftPlantingSiteRequestPayload: {
       /** @description In-progress state of the draft. This includes map data and other information needed by the client. It is treated as opaque data by the server. */
@@ -5477,6 +5484,22 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["GetApplicationDeliverablesResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Get GeoJSON for an application */
+  getApplicationGeoJson: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/geo+json": string;
         };
       };
     };
