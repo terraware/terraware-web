@@ -1,3 +1,4 @@
+fd61eb9ca66 SW-5966 Check variable dependency for required fields (#3142)
 795bc83f3a3 SW-5964 Added export maps button (#3138)
 ace6d726aca SW-5965 Replaced upload boundary screen with document deliverable (#3137)
 a6d9a50c546 SW-5907 Fixed issue where internal interest data is nested (#3139)
