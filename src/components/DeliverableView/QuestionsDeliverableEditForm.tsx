@@ -218,7 +218,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     }
 
     update();
-  }, [isPrescreen, complete, deliverable, setValidateFields, update, validateForm]);
+  }, [isPrescreen, complete, deliverable, setValidateFields, update, missingRequiredFields]);
 
   if (!deliverable) {
     return null;
