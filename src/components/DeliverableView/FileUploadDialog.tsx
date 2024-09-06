@@ -4,6 +4,7 @@ import { Box, CircularProgress, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 
 import useApplicationPortal from 'src/hooks/useApplicationPortal';
+import { useApplicationData } from 'src/providers/Application/Context';
 import {
   requestGetDeliverable,
   requestUploadDeliverableDocument,
@@ -22,6 +23,7 @@ export type FileUploadDialogProps = {
 
 export default function FileUploadDialog({ deliverable, files, onClose }: FileUploadDialogProps): JSX.Element {
   const { isApplicationPortal } = useApplicationPortal();
+  const { reload } = useApplicationData();
   const [validate, setValidate] = useState<boolean>(false);
   const [requestId, setRequestId] = useState<string>('');
   const [description, setDescription] = useState<string[]>(files.map(() => ''));
@@ -45,6 +47,8 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
     onClose();
     if (!isApplicationPortal) {
       dispatch(requestGetDeliverable({ deliverableId: deliverable.id, projectId: deliverable.projectId }));
+    } else {
+      reload();
     }
   }, [deliverable.id, deliverable.projectId, dispatch, isApplicationPortal, onClose, snackbar, uploadResult?.status]);
 
