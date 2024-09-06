@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Button } from '@terraware/web-components';
@@ -50,17 +50,26 @@ const ApplicationMap = () => {
     [activeLocale, selectedApplication?.id]
   );
 
+  const onExport = useCallback(async () => {
+    if (!selectedApplication) {
+      return;
+    }
+    const response = await ApplicationService.exportBoundary(selectedApplication.id);
+    if (response !== null) {
+      const encodedUri = 'data:application/geo+json;charset=utf-8,' + encodeURIComponent(response.data);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', `${selectedApplication.internalName}.geojson`);
+      link.click();
+    }
+  }, [selectedApplication]);
+
   const exportButton = useMemo(() => {
     if (!activeLocale || !selectedApplication) {
       return undefined;
     }
-    return (
-      <Button
-        label={strings.EXPORT_PROJECT_BOUNDARY}
-        onClick={() => ApplicationService.exportBoundary(selectedApplication.id)}
-      />
-    );
-  }, []);
+    return <Button label={strings.EXPORT_PROJECT_BOUNDARY} onClick={() => onExport()} />;
+  }, [activeLocale, selectedApplication]);
 
   if (!selectedApplication) {
     return <Page isLoading={true} />;
