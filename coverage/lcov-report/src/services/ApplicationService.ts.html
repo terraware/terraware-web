@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/49</span>
+                <span class='fraction'>0/53</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/49</span>
+                <span class='fraction'>0/53</span>
             </div>
         
             
@@ -254,7 +254,19 @@
 <a name='L189'></a><a href='#L189'>189</a>
 <a name='L190'></a><a href='#L190'>190</a>
 <a name='L191'></a><a href='#L191'>191</a>
-<a name='L192'></a><a href='#L192'>192</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -276,6 +288,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -354,6 +367,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -429,6 +452,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -467,6 +491,7 @@ const APPLICATION_MODULE_DELIVERABLES_ENDPOINT =
 const APPLICATION_RESTART_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v1/accelerator/applications/{applicationId}/restart';</span>
 const APPLICATION_REVIEW_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v1/accelerator/applications/{applicationId}/review';</span>
 const APPLICATION_SUBMIT_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v1/accelerator/applications/{applicationId}/submit';</span>
+const APPLICATION_EXPORT_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v1/accelerator/applications/{applicationId}/export';</span>
 &nbsp;
 type ListApplicationsResponsePayload =
   paths[typeof APPLICATIONS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -539,6 +564,16 @@ const createProjectApplication = <span class="cstat-no" title="statement not cov
   } else {
 <span class="cstat-no" title="statement not covered" >    return { ...projectRequest, data: undefined };</span>
   }
+};
+&nbsp;
+const exportBoundary = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (applicationId: number): Promise&lt;Response&gt; =&gt; {</span>
+  const headers = <span class="cstat-no" title="statement not covered" >{</span>
+    accept: 'application/geo+json',
+  };
+<span class="cstat-no" title="statement not covered" >  return HttpService.root(APPLICATION_EXPORT_ENDPOINT).post({</span>
+    headers,
+    urlReplacements: { '{applicationId}': `${applicationId}` },
+  });
 };
 &nbsp;
 const getApplication = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (applicationId: number): Promise&lt;Response2&lt;GetApplicationResponsePayload&gt;&gt; =&gt; {</span>
@@ -622,6 +657,7 @@ const uploadBoundary = <span class="cstat-no" title="statement not covered" ><sp
 const ApplicationService = <span class="cstat-no" title="statement not covered" >{</span>
   createApplication,
   createProjectApplication,
+  exportBoundary,
   getApplication,
   listApplications,
   listApplicationDeliverables,
@@ -643,7 +679,7 @@ export default ApplicationService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-09-06T17:15:25.182Z
+                at 2024-09-06T17:26:07.389Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
