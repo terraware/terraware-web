@@ -206,6 +206,7 @@ export const useProjectVariablesUpdate = (
     pendingNewImages,
     pendingVariableValues,
     projectId,
+    removedVariableValues,
     variablesWithValues,
   ]);
 
