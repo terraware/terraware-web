@@ -1,3 +1,5 @@
+21032361b3d Hide boundary screen in application console if application has no boundary (#3145)
+be7e56803ed SW-5968 Added reload trigger for application document upload (#3146)
 412618eeecf SW-5697 For pre-screen, allow saving with missing fields (#3141)
 db7ff52ee07 Updated incorrect HTTP method for applications/export (#3143)
 d608a62c0e1 SW-5967 Hide application restart button if Application is not in Passed/Failed Prescreen (#3144)
