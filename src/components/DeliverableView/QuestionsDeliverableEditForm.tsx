@@ -189,7 +189,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     }
   }, [exit, updateSuccess, uploadSuccess]);
 
-  const validateForm = useCallback(() => {
+  const missingRequiredFields = useCallback(() => {
     const allRequiredVariables = stagedVariableWithValues.filter((v) => v.isRequired);
 
     const missingRequiredFields = allRequiredVariables.some((variable) => {
@@ -201,22 +201,20 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
       return hasEmptyValue;
     });
 
-    if (missingRequiredFields) {
-      return false;
-    }
-
-    return true;
+    return missingRequiredFields;
   }, [stagedVariableWithValues]);
 
   const handleOnSave = useCallback(() => {
-    if (!validateForm()) {
+    const missingFields = missingRequiredFields();
+
+    // If Questionnaire Deliverable is part of the Application/Pre-screen and all fields are completed, mark deliverable as “Completed”
+    if (isPrescreen) {
+      if (!missingFields) {
+        complete(deliverable);
+      }
+    } else {
       setValidateFields(true);
       return;
-    }
-
-    // If Questionnaire Deliverable is part of the Application/Pre-screen mark deliverable as “Completed”
-    if (isPrescreen) {
-      complete(deliverable);
     }
 
     update();
