@@ -8,7 +8,6 @@ import ApplicationProvider from 'src/providers/Application';
 
 import ApplicationDeliverable from './ApplicationDeliverable';
 import ApplicationMap from './ApplicationMap';
-import ApplicationMapUpload from './ApplicationMapUpload';
 import ApplicationView from './ApplicationView';
 import ApplicationsListView from './ApplicationsList';
 
@@ -29,7 +28,6 @@ const ApplicationsRouter = () => {
         <Route path={':applicationId'} element={<ApplicationView />} />
         <Route path={':applicationId/deliverable/:deliverableId'} element={<ApplicationDeliverable />} />
         <Route path={':applicationId/map'} element={<ApplicationMap />} />
-        <Route path={':applicationId/map/upload'} element={<ApplicationMapUpload />} />
         <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_APPLICATIONS} />} />
       </Routes>
     </ApplicationProvider>
