@@ -4,6 +4,7 @@ import { Box, CircularProgress, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 
 import useApplicationPortal from 'src/hooks/useApplicationPortal';
+import { useApplicationData } from 'src/providers/Application/Context';
 import {
   requestGetDeliverable,
   requestUploadDeliverableDocument,
@@ -13,7 +14,6 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { DeliverableWithOverdue, UploadDeliverableDocumentRequest } from 'src/types/Deliverables';
 import useSnackbar from 'src/utils/useSnackbar';
-import { useApplicationData } from 'src/providers/Application/Context';
 
 export type FileUploadDialogProps = {
   deliverable: DeliverableWithOverdue;
@@ -48,7 +48,7 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
     if (!isApplicationPortal) {
       dispatch(requestGetDeliverable({ deliverableId: deliverable.id, projectId: deliverable.projectId }));
     } else {
-      reload()
+      reload();
     }
   }, [deliverable.id, deliverable.projectId, dispatch, isApplicationPortal, onClose, snackbar, uploadResult?.status]);
 

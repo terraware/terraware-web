@@ -9,7 +9,7 @@ export type ApplicationData = {
   getApplicationByProjectId: (projectId: number) => Application | undefined;
   selectedApplication?: Application;
   setSelectedApplication: (applicationId: number) => void;
-  reload: (onReload: () => void) => void;
+  reload: (onReload?: () => void) => void;
 };
 
 // default values pointing to nothing
