@@ -190,7 +190,9 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   }, [exit, updateSuccess, uploadSuccess]);
 
   const validateForm = useCallback(() => {
-    const allRequiredVariables = stagedVariableWithValues.filter((v) => v.isRequired);
+    const allRequiredVariables = stagedVariableWithValues.filter(
+      (v) => v.isRequired && variableDependencyMet(v, stagedVariableWithValues)
+    );
 
     const missingRequiredFields = allRequiredVariables.some((variable) => {
       let hasEmptyValue = false;
