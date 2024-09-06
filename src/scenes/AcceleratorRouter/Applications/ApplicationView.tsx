@@ -92,16 +92,16 @@ const ApplicationView = () => {
             {strings.PRESCREEN}
           </Typography>
 
-          {/* Add link to view boundary once exists */}
-          <ApplicationDeliverableRow
-            title={strings.PROPOSED_PROJECT_BOUNDARY}
-            goToDeliverable={() => {
-              goToAcceleratorApplicationMap(selectedApplication.id);
-            }}
-          />
+          {selectedApplication.boundary && (
+            <ApplicationDeliverableRow
+              title={strings.PROPOSED_PROJECT_BOUNDARY}
+              goToDeliverable={() => {
+                goToAcceleratorApplicationMap(selectedApplication.id);
+              }}
+            />
+          )}
 
           {sectionDeliverables(prescreenSection.moduleId).map((deliverable, index) => (
-            // Add link to deliverable
             <ApplicationDeliverableRow
               title={deliverable.name}
               modifiedDate={
