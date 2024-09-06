@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { DeliverableWithOverdue, UploadDeliverableDocumentRequest } from 'src/types/Deliverables';
 import useSnackbar from 'src/utils/useSnackbar';
+import { useApplicationData } from 'src/providers/Application/Context';
 
 export type FileUploadDialogProps = {
   deliverable: DeliverableWithOverdue;
@@ -22,6 +23,7 @@ export type FileUploadDialogProps = {
 
 export default function FileUploadDialog({ deliverable, files, onClose }: FileUploadDialogProps): JSX.Element {
   const { isApplicationPortal } = useApplicationPortal();
+  const { reload } = useApplicationData();
   const [validate, setValidate] = useState<boolean>(false);
   const [requestId, setRequestId] = useState<string>('');
   const [description, setDescription] = useState<string[]>(files.map(() => ''));
@@ -45,6 +47,8 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
     onClose();
     if (!isApplicationPortal) {
       dispatch(requestGetDeliverable({ deliverableId: deliverable.id, projectId: deliverable.projectId }));
+    } else {
+      reload()
     }
   }, [deliverable.id, deliverable.projectId, dispatch, isApplicationPortal, onClose, snackbar, uploadResult?.status]);
 

@@ -73,7 +73,7 @@ const ApplicationProvider = ({ children }: Props) => {
   }, [dispatch, isAcceleratorRoute, isAllowedAllApplications, selectedOrganization, setListApplicationRequest]);
 
   const _reload = useCallback(
-    (onReload: () => void) => {
+    (onReload?: () => void) => {
       setReloadCallback(onReload);
       loadApplications();
     },
