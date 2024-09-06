@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/55</span>
+                <span class='fraction'>0/58</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/38</span>
+                <span class='fraction'>0/43</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/51</span>
+                <span class='fraction'>0/56</span>
             </div>
         
             
@@ -213,7 +213,22 @@
 <a name='L148'></a><a href='#L148'>148</a>
 <a name='L149'></a><a href='#L149'>149</a>
 <a name='L150'></a><a href='#L150'>150</a>
-<a name='L151'></a><a href='#L151'>151</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -235,6 +250,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -251,12 +269,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -383,6 +413,9 @@ import strings from 'src/strings';
 &nbsp;
 import ApplicationPage from '../ApplicationPage';
 &nbsp;
+export const PRESCREEN_BOUNDARY_DELIVERABLE_ID = <span class="cstat-no" title="statement not covered" >68;</span>
+export const PRESCREEN_MODULE_ID = <span class="cstat-no" title="statement not covered" >2;</span>
+&nbsp;
 const PrescreenView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const { selectedApplication, applicationDeliverables, applicationSections, reload } = <span class="cstat-no" title="statement not covered" >useApplicationData();</span>
   const { goToApplication, goToApplicationPrescreenResult } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
@@ -401,13 +434,25 @@ const PrescreenView = <span class="cstat-no" title="statement not covered" ><spa
   );
 &nbsp;
   const prescreenDeliverables = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >applicationDeliverables.filter(<span class="fstat-no" title="function not covered" >(d</span>eliverable) =&gt; <span class="cstat-no" title="statement not covered" >deliverable.moduleId === prescreenSection?.moduleId)</span>,</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
+<span class="cstat-no" title="statement not covered" >      applicationDeliverables</span>
+        .filter(<span class="fstat-no" title="function not covered" >(d</span>eliverable) =&gt; <span class="cstat-no" title="statement not covered" >deliverable.moduleId === prescreenSection?.moduleId)</span>
+        .map(<span class="fstat-no" title="function not covered" >(d</span>eliverable) =&gt;
+<span class="cstat-no" title="statement not covered" >          deliverable.id === PRESCREEN_BOUNDARY_DELIVERABLE_ID</span>
+            ? { ...deliverable, isBoundary: true }
+            : { ...deliverable, isBoundary: false }
+        ),
     [applicationDeliverables, prescreenSection]
   );
 &nbsp;
   const allDeliverablesCompleted = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >prescreenDeliverables.every(<span class="fstat-no" title="function not covered" >(d</span>eliverable) =&gt; <span class="cstat-no" title="statement not covered" >deliverable.status !== 'Not Submitted')</span>,</span>
-    [prescreenDeliverables]
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
+<span class="cstat-no" title="statement not covered" >      prescreenDeliverables.every(<span class="fstat-no" title="function not covered" >(d</span>eliverable) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >        deliverable.isBoundary</span>
+          ? deliverable.status !== 'Not Submitted' || selectedApplication?.boundary
+          : deliverable.status !== 'Not Submitted'
+      ),
+    [prescreenDeliverables, selectedApplication]
   );
 &nbsp;
   const [isConfirmModalOpen, setIsConfirmModalOpen] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
@@ -468,7 +513,7 @@ const PrescreenView = <span class="cstat-no" title="statement not covered" ><spa
       &lt;SectionView section={prescreenSection} sectionDeliverables={prescreenDeliverables}&gt;
         {selectedApplication.status === 'Not Submitted' &amp;&amp; (
           &lt;Button
-            disabled={!allDeliverablesCompleted || !selectedApplication.boundary || isLoading}
+            disabled={!allDeliverablesCompleted || isLoading}
             label={strings.SUBMIT_PRESCREEN}
             onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setIsConfirmModalOpen(true)}</span>
             priority='primary'
@@ -520,7 +565,7 @@ export default PrescreenViewWrapper;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-09-06T00:55:11.508Z
+                at 2024-09-06T17:15:25.182Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

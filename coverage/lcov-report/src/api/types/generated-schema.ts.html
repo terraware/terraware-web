@@ -10916,7 +10916,49 @@
 <a name='L10851'></a><a href='#L10851'>10851</a>
 <a name='L10852'></a><a href='#L10852'>10852</a>
 <a name='L10853'></a><a href='#L10853'>10853</a>
-<a name='L10854'></a><a href='#L10854'>10854</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L10854'></a><a href='#L10854'>10854</a>
+<a name='L10855'></a><a href='#L10855'>10855</a>
+<a name='L10856'></a><a href='#L10856'>10856</a>
+<a name='L10857'></a><a href='#L10857'>10857</a>
+<a name='L10858'></a><a href='#L10858'>10858</a>
+<a name='L10859'></a><a href='#L10859'>10859</a>
+<a name='L10860'></a><a href='#L10860'>10860</a>
+<a name='L10861'></a><a href='#L10861'>10861</a>
+<a name='L10862'></a><a href='#L10862'>10862</a>
+<a name='L10863'></a><a href='#L10863'>10863</a>
+<a name='L10864'></a><a href='#L10864'>10864</a>
+<a name='L10865'></a><a href='#L10865'>10865</a>
+<a name='L10866'></a><a href='#L10866'>10866</a>
+<a name='L10867'></a><a href='#L10867'>10867</a>
+<a name='L10868'></a><a href='#L10868'>10868</a>
+<a name='L10869'></a><a href='#L10869'>10869</a>
+<a name='L10870'></a><a href='#L10870'>10870</a>
+<a name='L10871'></a><a href='#L10871'>10871</a>
+<a name='L10872'></a><a href='#L10872'>10872</a>
+<a name='L10873'></a><a href='#L10873'>10873</a>
+<a name='L10874'></a><a href='#L10874'>10874</a>
+<a name='L10875'></a><a href='#L10875'>10875</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -21802,6 +21844,10 @@ export interface paths {
     /** Get deliverables for an application */
     get: operations["getApplicationDeliverables"];
   };
+  "/api/v1/accelerator/applications/{applicationId}/export": {
+    /** Get GeoJSON for an application */
+    get: operations["getApplicationGeoJson"];
+  };
   "/api/v1/accelerator/applications/{applicationId}/history": {
     /** Get the history of changes to the metadata of an application */
     get: operations["getApplicationHistory"];
@@ -23041,6 +23087,7 @@ export interface components {
       category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
       /** @description Optional description of the deliverable in HTML form. */
       descriptionHtml?: string;
+      documents: components["schemas"]["SubmissionDocumentPayload"][];
       /** Format: int64 */
       id: number;
       internalComment?: string;
@@ -25200,14 +25247,14 @@ export interface components {
       organizationId?: number;
       title: string;
     };
-    NumberVariablePayload: WithRequired&lt;{
+    NumberVariablePayload: {
       type: "Number";
     } &amp; Omit&lt;components["schemas"]["VariablePayload"], "type"&gt; &amp; {
       /** Format: int32 */
       decimalPlaces?: number;
       maxValue?: number;
       minValue?: number;
-    }, "decimalPlaces"&gt;;
+    };
     NurserySummaryPayload: {
       /** Format: int64 */
       germinatingQuantity: number;
@@ -27248,6 +27295,22 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["GetApplicationDeliverablesResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Get GeoJSON for an application */
+  getApplicationGeoJson: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/geo+json": string;
         };
       };
     };
@@ -32629,7 +32692,7 @@ export interface operations {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-09-06T00:55:11.508Z
+                at 2024-09-06T17:15:25.182Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
