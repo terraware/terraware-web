@@ -99,7 +99,7 @@ const exportBoundary = async (applicationId: number): Promise<Response> => {
   const headers = {
     accept: 'application/geo+json',
   };
-  return HttpService.root(APPLICATION_EXPORT_ENDPOINT).post({
+  return HttpService.root(APPLICATION_EXPORT_ENDPOINT).get2({
     headers,
     urlReplacements: { '{applicationId}': `${applicationId}` },
   });
