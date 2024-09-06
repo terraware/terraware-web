@@ -162,6 +162,7 @@ const MapUpdateView = () => {
         </Grid>
         <Grid item xs={8}>
           <EditableMap
+            editableBoundary={siteBoundaryData?.siteBoundary}
             errorAnnotations={siteBoundaryData?.errorAnnotations}
             onEditableBoundaryChanged={onEditableBoundaryChanged}
             onRedo={redo}
