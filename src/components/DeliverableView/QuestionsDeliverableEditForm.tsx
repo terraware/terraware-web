@@ -219,7 +219,6 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
       }
     } else {
       setValidateFields(true);
-      return;
     }
 
     update();
