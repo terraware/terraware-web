@@ -95,7 +95,7 @@ const createProjectApplication = async (
   }
 };
 
-const exportBoundary = async (applicationId: number): Promise<Response> => {
+const exportBoundary = async (applicationId: number): Promise<Response2<any>> => {
   const headers = {
     accept: 'application/geo+json',
   };
