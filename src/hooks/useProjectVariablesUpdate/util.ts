@@ -184,7 +184,7 @@ export const makeVariableValueOperations = ({
           value: nV,
           existingValueId: pendingValues[index].id,
         });
-      } else {
+      } else if (nV.textValue) {
         operations.push({ operation: 'Append', variableId: variable.id, value: nV });
       }
     });
