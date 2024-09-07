@@ -82,20 +82,6 @@ export const useProjectVariablesUpdate = (
   };
 
   const update = useCallback(() => {
-    const hasPendingChanges =
-      pendingCellValues.size > 0 ||
-      pendingImages.size > 0 ||
-      pendingDeletedImages.size > 0 ||
-      pendingNewImages.size > 0 ||
-      pendingVariableValues.size > 0 ||
-      removedVariableValues.size > 0;
-
-    // if there are no pending changes, set flag to true to fake success & exit
-    if (!hasPendingChanges) {
-      setNoOp(true);
-      return;
-    }
-
     let operations: Operation[] = [];
 
     pendingVariableValues.forEach((pendingValues, variableId) => {
@@ -198,6 +184,9 @@ export const useProjectVariablesUpdate = (
       );
 
       setUpdateVariableRequestId(request.requestId);
+    } else {
+      // if there are no pending changes, set flag to true to fake success & exit
+      setNoOp(true);
     }
   }, [
     pendingCellValues,
