@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1725916057135" clover="3.2.0">
-  <project timestamp="1725916057136" name="All files">
-    <metrics statements="24825" coveredstatements="1031" conditionals="16262" coveredconditionals="279" methods="7629" coveredmethods="176" elements="48716" coveredelements="1486" complexity="0" loc="24825" ncloc="24825" packages="233" files="1080" classes="1080"/>
+<coverage generated="1725916318092" clover="3.2.0">
+  <project timestamp="1725916318092" name="All files">
+    <metrics statements="24844" coveredstatements="1031" conditionals="16270" coveredconditionals="279" methods="7639" coveredmethods="176" elements="48753" coveredelements="1486" complexity="0" loc="24844" ncloc="24844" packages="233" files="1082" classes="1082"/>
     <package name="src">
       <metrics statements="177" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -12976,7 +12976,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Documents.DocumentView">
-      <metrics statements="305" coveredstatements="0" conditionals="176" coveredconditionals="0" methods="90" coveredmethods="0"/>
+      <metrics statements="323" coveredstatements="0" conditionals="184" coveredconditionals="0" methods="100" coveredmethods="0"/>
       <file name="DocumentActions.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Documents/DocumentView/DocumentActions.tsx">
         <metrics statements="20" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="20" count="0" type="stmt"/>
@@ -13215,27 +13215,48 @@
         <line num="176" count="0" type="stmt"/>
         <line num="177" count="0" type="stmt"/>
       </file>
+      <file name="InternalComment.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Documents/DocumentView/InternalComment.tsx">
+        <metrics statements="18" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="23" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="106" count="0" type="stmt"/>
+      </file>
       <file name="Metadata.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Documents/DocumentView/Metadata.tsx">
         <metrics statements="19" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
-        <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="39" count="0" type="stmt"/>
-        <line num="40" count="0" type="stmt"/>
-        <line num="41" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="42" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="46" count="0" type="stmt"/>
-        <line num="48" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
       </file>
       <file name="SaveVersion.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Documents/DocumentView/SaveVersion.tsx">
         <metrics statements="21" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="6" coveredmethods="0"/>
@@ -27408,7 +27429,7 @@
       </file>
     </package>
     <package name="src.types">
-      <metrics statements="463" coveredstatements="30" conditionals="327" coveredconditionals="2" methods="106" coveredmethods="8"/>
+      <metrics statements="464" coveredstatements="30" conditionals="327" coveredconditionals="2" methods="106" coveredmethods="8"/>
       <file name="Accelerator.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/Accelerator.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
@@ -27547,6 +27568,10 @@
       </file>
       <file name="DeviceManager.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/DeviceManager.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="Document.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/Document.ts">
+        <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="4" count="0" type="stmt"/>
       </file>
       <file name="Facility.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/Facility.ts">
         <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
