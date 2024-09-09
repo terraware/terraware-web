@@ -57,6 +57,8 @@ export const useProjectVariablesUpdate = (
   const updateResult = useAppSelector(selectUpdateVariableValues(updateVariableRequestId));
   const uploadResult = useAppSelector(selectUploadImageValue(uploadRequestId));
 
+  const [noOp, setNoOp] = useState(false);
+
   const setValues = (variableId: number, values: VariableValueValue[]) => {
     setPendingVariableValues(new Map(pendingVariableValues).set(variableId, values));
   };
@@ -190,6 +192,9 @@ export const useProjectVariablesUpdate = (
       );
 
       setUpdateVariableRequestId(request.requestId);
+    } else {
+      // if there are no pending changes, set flag to true to fake success & exit
+      setNoOp(true);
     }
 
     if (someUpdate) {
@@ -202,6 +207,7 @@ export const useProjectVariablesUpdate = (
     pendingNewImages,
     pendingVariableValues,
     projectId,
+    removedVariableValues,
     variablesWithValues,
   ]);
 
@@ -221,7 +227,7 @@ export const useProjectVariablesUpdate = (
     setNewImages,
     setRemovedValue,
     setValues,
-    updateSuccess: updateResult?.status === 'success',
+    updateSuccess: noOp || updateResult?.status === 'success',
     uploadSuccess: Object.keys(pendingNewImages).length === 0 ? true : uploadResult?.status === 'success',
     update,
     noChanges,

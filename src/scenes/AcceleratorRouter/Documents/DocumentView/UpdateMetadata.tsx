@@ -38,7 +38,7 @@ const UpdateMetadata = ({ doc, onFinish }: UpdateMetadataProps): JSX.Element => 
     const request = dispatch(
       requestUpdateDocument({
         id: doc.id,
-        payload: { name: documentName, ownedBy: parseInt(documentOwner, 10) },
+        payload: { name: documentName, ownedBy: parseInt(documentOwner, 10), status: doc.status },
       })
     );
     setRequestId(request.requestId);

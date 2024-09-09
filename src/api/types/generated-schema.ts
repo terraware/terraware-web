@@ -4827,6 +4827,8 @@ export interface components {
       name: string;
       /** Format: int64 */
       ownedBy: number;
+      /** @enum {string} */
+      status: "Draft" | "Locked" | "Published" | "Ready" | "Submitted";
     };
     UpdateDraftPlantingSiteRequestPayload: {
       /** @description In-progress state of the draft. This includes map data and other information needed by the client. It is treated as opaque data by the server. */
