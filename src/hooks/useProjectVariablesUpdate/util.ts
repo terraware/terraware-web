@@ -177,12 +177,18 @@ export const makeVariableValueOperations = ({
 
   if (newTextValues) {
     newTextValues.forEach((nV, index) => {
-      if (pendingValues[index].id !== -1) {
+      if (pendingValues[index].id !== -1 && nV.textValue) {
         operations.push({
+          existingValueId: pendingValues[index].id,
           operation: 'Update',
           valueId: pendingValues[index].id,
           value: nV,
+        });
+      } else if (pendingValues[index].id !== -1 && !nV.textValue) {
+        operations.push({
           existingValueId: pendingValues[index].id,
+          operation: 'Delete',
+          valueId: pendingValues[index].id,
         });
       } else if (nV.textValue) {
         operations.push({ operation: 'Append', variableId: variable.id, value: nV });
@@ -192,9 +198,9 @@ export const makeVariableValueOperations = ({
     // Delete list of values removed
     if (removedValue) {
       operations.push({
+        existingValueId: removedValue.id,
         operation: 'Delete',
         valueId: removedValue.id,
-        existingValueId: removedValue.id,
       });
     }
   }
