@@ -80,3 +80,20 @@ export const getRawValue = (variable: VariableWithValues): number | number[] | s
       return firstValue.optionValues;
   }
 };
+
+export const missingRequiredFields = (variablesWithValues: VariableWithValues[]) => {
+  const allRequiredVariables = variablesWithValues.filter(
+    (v) => v.isRequired && variableDependencyMet(v, variablesWithValues)
+  );
+
+  const missingRequiredFields = allRequiredVariables.some((variable) => {
+    let hasEmptyValue = false;
+    const values = variable.values;
+    if (!values || values.length === 0 || getRawValue(variable) === undefined || getRawValue(variable) === '') {
+      hasEmptyValue = true;
+    }
+    return hasEmptyValue;
+  });
+
+  return missingRequiredFields;
+};
