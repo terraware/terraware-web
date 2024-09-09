@@ -254,10 +254,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
               <Route path={APP_PATHS.REPORTS + '/*'} element={<ReportsRouter />} />
               <Route path={APP_PATHS.OBSERVATIONS + '/*'} element={<ObservationsRouter />} />
               <Route path={APP_PATHS.DELIVERABLES + '/*'} element={<DeliverablesRouter />} />
-
-              {isEnabled('Accelerator Application') && (
-                <Route path={APP_PATHS.APPLICATIONS + '/*'} element={<ApplicationRouter />} />
-              )}
+              <Route path={APP_PATHS.APPLICATIONS + '/*'} element={<ApplicationRouter />} />
 
               {!isProduction && (
                 <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />

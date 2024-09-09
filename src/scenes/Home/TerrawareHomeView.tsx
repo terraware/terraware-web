@@ -8,7 +8,6 @@ import Link from 'src/components/common/Link';
 import PageCard from 'src/components/common/PageCard';
 import TfMain from 'src/components/common/TfMain';
 import { ACCELERATOR_LINK, APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useOrganization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
@@ -106,26 +105,24 @@ const TerrawareHomeView = () => {
                   linkStyle={'plain'}
                 />
               </Grid>
-              {isEnabled('Accelerator Application') && (
-                <Grid item xs={secondaryGridSize()}>
-                  <PageCard
-                    cardIsClickable={false}
-                    id='applicationHomeCard'
-                    name={strings.APPLY_TO_ACCELERATOR}
-                    icon='iconFile'
-                    description={strings.formatString(
-                      strings.APPLY_TO_ACCELERATOR_DESCRIPTION,
-                      <Link fontSize='16px' to={ACCELERATOR_LINK} target='_blank'>
-                        {strings.HERE}
-                      </Link>
-                    )}
-                    link={APP_PATHS.APPLICATIONS}
-                    linkText={strings.START_NEW_APPLICATION}
-                    linkStyle={'button-primary'}
-                    onClick={() => setIsNewApplicationModalOpen(true)}
-                  />
-                </Grid>
-              )}
+              <Grid item xs={secondaryGridSize()}>
+                <PageCard
+                  cardIsClickable={false}
+                  id='applicationHomeCard'
+                  name={strings.APPLY_TO_ACCELERATOR}
+                  icon='iconFile'
+                  description={strings.formatString(
+                    strings.APPLY_TO_ACCELERATOR_DESCRIPTION,
+                    <Link fontSize='16px' to={ACCELERATOR_LINK} target='_blank'>
+                      {strings.HERE}
+                    </Link>
+                  )}
+                  link={APP_PATHS.APPLICATIONS}
+                  linkText={strings.START_NEW_APPLICATION}
+                  linkStyle={'button-primary'}
+                  onClick={() => setIsNewApplicationModalOpen(true)}
+                />
+              </Grid>
             </Grid>
           </Container>
         </Box>
