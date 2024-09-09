@@ -177,12 +177,18 @@ export const makeVariableValueOperations = ({
 
   if (newTextValues) {
     newTextValues.forEach((nV, index) => {
-      if (pendingValues[index].id !== -1) {
+      if (pendingValues[index].id !== -1 && nV.textValue) {
         operations.push({
           operation: 'Update',
           valueId: pendingValues[index].id,
           value: nV,
           existingValueId: pendingValues[index].id,
+        });
+      } else if (pendingValues[index].id !== -1 && !nV.textValue) {
+        operations.push({
+          existingValueId: pendingValues[index].id,
+          operation: 'Delete',
+          valueId: pendingValues[index].id,
         });
       } else if (nV.textValue) {
         operations.push({ operation: 'Append', variableId: variable.id, value: nV });
