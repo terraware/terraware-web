@@ -50,14 +50,14 @@ const DeliverableView = (): JSX.Element => {
 
   const submitDeliverable = useCallback(() => {
     if (deliverable?.id !== undefined) {
-      if (missingRequiredFields(variablesWithValues)) {
+      if (deliverable.type === 'Questions' && missingRequiredFields(variablesWithValues)) {
         snackbar.toastError(strings.CHECK_THAT_ALL_REQUIRED_QUESTIONS_ARE_FILLED_OUT_BEFORE_SUBMITTING);
       } else {
         submit(deliverable);
       }
     }
     setShowSubmitDialog(false);
-  }, [deliverable]);
+  }, [deliverable, variablesWithValues]);
 
   const crumbs: Crumb[] = useMemo(
     () => [
