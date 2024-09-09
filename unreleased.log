@@ -1,3 +1,5 @@
+1a1ee969b91 SW-5976: Optional question preventing questionnaire saving (#3151)
+9cfb9de8353 SW-5978: Saving an unchanged questionnaire deliverable should return the user to the view display mode (#3150)
 b939dca6597 SW-5980 Reload in application deliverable console (#3155)
 d0d8b3fdf78 Updated translations from Phrase (#3098)
 137fb2e7b67 SW-5931: Existing Project not recognized when Starting New Application (#3140)

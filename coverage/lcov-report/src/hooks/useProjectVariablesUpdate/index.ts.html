@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/71</span>
+                <span class='fraction'>0/73</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/68</span>
+                <span class='fraction'>0/70</span>
             </div>
         
             
@@ -279,7 +279,13 @@
 <a name='L214'></a><a href='#L214'>214</a>
 <a name='L215'></a><a href='#L215'>215</a>
 <a name='L216'></a><a href='#L216'>216</a>
-<a name='L217'></a><a href='#L217'>217</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -337,8 +343,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -363,6 +367,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -463,6 +471,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -551,6 +563,8 @@ export const useProjectVariablesUpdate = <span class="cstat-no" title="statement
   const [uploadRequestId, setUploadRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const updateResult = <span class="cstat-no" title="statement not covered" >useAppSelector(selectUpdateVariableValues(updateVariableRequestId));</span>
   const uploadResult = <span class="cstat-no" title="statement not covered" >useAppSelector(selectUploadImageValue(uploadRequestId));</span>
+&nbsp;
+  const [noOp, setNoOp] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
 &nbsp;
   const setValues = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(v</span>ariableId: number, values: VariableValueValue[]) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setPendingVariableValues(new Map(pendingVariableValues).set(variableId, values));</span>
@@ -679,6 +693,9 @@ export const useProjectVariablesUpdate = <span class="cstat-no" title="statement
       );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      setUpdateVariableRequestId(request.requestId);</span>
+    } else {
+      // if there are no pending changes, set flag to true to fake success &amp; exit
+<span class="cstat-no" title="statement not covered" >      setNoOp(true);</span>
     }
   }, [
     pendingCellValues,
@@ -687,6 +704,7 @@ export const useProjectVariablesUpdate = <span class="cstat-no" title="statement
     pendingNewImages,
     pendingVariableValues,
     projectId,
+    removedVariableValues,
     variablesWithValues,
   ]);
 &nbsp;
@@ -706,7 +724,7 @@ export const useProjectVariablesUpdate = <span class="cstat-no" title="statement
     setNewImages,
     setRemovedValue,
     setValues,
-    updateSuccess: updateResult?.status === 'success',
+    updateSuccess: noOp || updateResult?.status === 'success',
     uploadSuccess: Object.keys(pendingNewImages).length === 0 ? true : uploadResult?.status === 'success',
     update,
   };
@@ -718,7 +736,7 @@ export const useProjectVariablesUpdate = <span class="cstat-no" title="statement
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-09-09T17:52:45.392Z
+                at 2024-09-09T19:29:38.382Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
