@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1725910179146" clover="3.2.0">
-  <project timestamp="1725910179146" name="All files">
-    <metrics statements="24821" coveredstatements="1031" conditionals="16258" coveredconditionals="279" methods="7629" coveredmethods="176" elements="48708" coveredelements="1486" complexity="0" loc="24821" ncloc="24821" packages="233" files="1080" classes="1080"/>
+<coverage generated="1725916057135" clover="3.2.0">
+  <project timestamp="1725916057136" name="All files">
+    <metrics statements="24825" coveredstatements="1031" conditionals="16262" coveredconditionals="279" methods="7629" coveredmethods="176" elements="48716" coveredelements="1486" complexity="0" loc="24825" ncloc="24825" packages="233" files="1080" classes="1080"/>
     <package name="src">
       <metrics statements="177" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1578,7 +1578,7 @@
       </file>
     </package>
     <package name="src.components.DeliverableView">
-      <metrics statements="346" coveredstatements="0" conditionals="217" coveredconditionals="0" methods="97" coveredmethods="0"/>
+      <metrics statements="350" coveredstatements="0" conditionals="221" coveredconditionals="0" methods="97" coveredmethods="0"/>
       <file name="DeliverableCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/DeliverableCard.tsx">
         <metrics statements="9" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
@@ -1921,26 +1921,30 @@
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
       <file name="useCompleteDeliverable.ts" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/useCompleteDeliverable.ts">
-        <metrics statements="19" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="4" coveredmethods="0"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
+        <metrics statements="23" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
-        <line num="42" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="48" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="51" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="55" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
       </file>
       <file name="useFetchDeliverable.ts" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/useFetchDeliverable.ts">
         <metrics statements="26" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="6" coveredmethods="0"/>
