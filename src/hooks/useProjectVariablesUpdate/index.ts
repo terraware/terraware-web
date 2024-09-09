@@ -34,6 +34,7 @@ type ProjectVariablesUpdate = {
   updateSuccess: boolean;
   uploadSuccess: boolean;
   update: () => void;
+  noChanges: boolean;
 };
 
 export const useProjectVariablesUpdate = (
@@ -49,6 +50,7 @@ export const useProjectVariablesUpdate = (
   const [pendingNewImages, setPendingNewImages] = useState<Map<number, PhotoWithAttributes[]>>(new Map());
   const [pendingVariableValues, setPendingVariableValues] = useState<Map<number, VariableValueValue[]>>(new Map());
   const [removedVariableValues, setRemovedVariableValues] = useState<Map<number, VariableValueValue>>(new Map());
+  const [noChanges, setNoChanges] = useState<boolean>(true);
 
   const [updateVariableRequestId, setUpdateVariableRequestId] = useState<string>('');
   const [uploadRequestId, setUploadRequestId] = useState<string>('');
@@ -82,9 +84,11 @@ export const useProjectVariablesUpdate = (
   };
 
   const update = useCallback(() => {
+    let someUpdate = false;
     let operations: Operation[] = [];
 
     pendingVariableValues.forEach((pendingValues, variableId) => {
+      someUpdate = true;
       const variable = variablesWithValues.find((variableWithValues) => variableWithValues.id === variableId);
       if (!variable) {
         // This is impossible if the form is only displaying variables that were initialized within the hook
@@ -103,6 +107,7 @@ export const useProjectVariablesUpdate = (
     });
 
     pendingCellValues.forEach((pendingValues, variableId) => {
+      someUpdate = true;
       const variable = variablesWithValues.find((variableWithValues) => variableWithValues.id === variableId);
       if (!variable) {
         // This is impossible if the form is only displaying variables that were initialized within the hook
@@ -122,6 +127,7 @@ export const useProjectVariablesUpdate = (
 
     // handle image updates
     pendingImages.forEach((pendingValues) => {
+      someUpdate = true;
       pendingValues.forEach((image) => {
         const newValue = { type: image.type, citation: image.citation, caption: image.caption };
         operations.push({
@@ -135,6 +141,7 @@ export const useProjectVariablesUpdate = (
 
     // handle image deletions
     pendingDeletedImages.forEach((pendingValues) => {
+      someUpdate = true;
       pendingValues.forEach((deletedImage) => {
         operations.push({
           operation: 'Delete',
@@ -147,6 +154,7 @@ export const useProjectVariablesUpdate = (
     // handle image uploads
     const imageValuesToUpload: UploadImageValueRequestPayloadWithProjectId[] = [];
     pendingNewImages.forEach((pendingValues, variableId) => {
+      someUpdate = true;
       const variable = variablesWithValues.find((variableWithValues) => variableWithValues.id === variableId);
       if (!variable) {
         // This is impossible if the form is only displaying variables that were initialized within the hook
@@ -188,6 +196,10 @@ export const useProjectVariablesUpdate = (
       // if there are no pending changes, set flag to true to fake success & exit
       setNoOp(true);
     }
+
+    if (someUpdate) {
+      setNoChanges(false);
+    }
   }, [
     pendingCellValues,
     pendingDeletedImages,
@@ -218,5 +230,6 @@ export const useProjectVariablesUpdate = (
     updateSuccess: noOp || updateResult?.status === 'success',
     uploadSuccess: Object.keys(pendingNewImages).length === 0 ? true : uploadResult?.status === 'success',
     update,
+    noChanges,
   };
 };

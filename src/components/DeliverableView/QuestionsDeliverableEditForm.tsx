@@ -17,7 +17,7 @@ import { requestListDeliverableVariables } from 'src/redux/features/documentProd
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
-import { getRawValue, variableDependencyMet } from 'src/utils/documentProducer/variables';
+import { missingRequiredFields, variableDependencyMet } from 'src/utils/documentProducer/variables';
 import useQuery from 'src/utils/useQuery';
 
 import { EditProps } from './types';
@@ -160,6 +160,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     update,
     updateSuccess,
     uploadSuccess,
+    noChanges,
   } = useProjectVariablesUpdate(deliverable.projectId, variablesWithValues);
 
   const { complete } = useCompleteDeliverable();
@@ -192,36 +193,22 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     }
   }, [exit, updateSuccess, uploadSuccess]);
 
-  const missingRequiredFields = useCallback(() => {
-    const allRequiredVariables = stagedVariableWithValues.filter(
-      (v) => v.isRequired && variableDependencyMet(v, stagedVariableWithValues)
-    );
-
-    const missingRequiredFields = allRequiredVariables.some((variable) => {
-      let hasEmptyValue = false;
-      const values = variable.values;
-      if (!values || values.length === 0 || getRawValue(variable) === undefined || getRawValue(variable) === '') {
-        hasEmptyValue = true;
-      }
-      return hasEmptyValue;
-    });
-
-    return missingRequiredFields;
-  }, [stagedVariableWithValues]);
-
   const handleOnSave = useCallback(() => {
-    const missingFields = missingRequiredFields();
+    const missingFields = missingRequiredFields(stagedVariableWithValues);
 
     // If Questionnaire Deliverable is part of the Application and all fields are completed, mark deliverable as “Completed”
     if (isApplicationPortal) {
       if (!missingFields) {
         complete(deliverable);
       }
-    } else {
-      setValidateFields(true);
     }
 
     update();
+
+    if (noChanges) {
+      // If the user clicks save but there are no changes, just navigate them back to the deliverable
+      exit();
+    }
   }, [isApplicationPortal, complete, deliverable, setValidateFields, update, missingRequiredFields]);
 
   if (!deliverable) {
