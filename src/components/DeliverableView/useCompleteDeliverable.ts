@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import useApplicationPortal from 'src/hooks/useApplicationPortal';
+import { useApplicationData } from 'src/providers/Application/Context';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import {
   requestCompleteDeliverable,
@@ -26,6 +28,9 @@ export default function useCompleteDeliverable(): Response {
   const dispatch = useAppDispatch();
   const result = useAppSelector(selectDeliverablesEditRequest(requestId));
 
+  const { isApplicationConsole, isApplicationPortal } = useApplicationPortal();
+  const { reload } = useApplicationData();
+
   const complete = useCallback(
     (deliverable: DeliverableWithOverdue) => {
       setLastRequest(undefined);
@@ -47,9 +52,13 @@ export default function useCompleteDeliverable(): Response {
       snackbar.toastError(strings.GENERIC_ERROR);
     } else if (result?.status === 'success') {
       // refresh deliverable data in store
-      dispatch(requestGetDeliverable({ deliverableId: lastRequest.id, projectId: lastRequest.projectId }));
+      if (isApplicationConsole || isApplicationPortal) {
+        reload();
+      } else {
+        dispatch(requestGetDeliverable({ deliverableId: lastRequest.id, projectId: lastRequest.projectId }));
+      }
     }
-  }, [dispatch, lastRequest, result, snackbar]);
+  }, [dispatch, isApplicationConsole, isApplicationPortal, lastRequest, reload, result, snackbar]);
 
   return useMemo<Response>(
     () => ({
