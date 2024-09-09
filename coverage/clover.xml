@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1725917452697" clover="3.2.0">
-  <project timestamp="1725917452697" name="All files">
-    <metrics statements="24863" coveredstatements="1032" conditionals="16282" coveredconditionals="279" methods="7641" coveredmethods="176" elements="48786" coveredelements="1487" complexity="0" loc="24863" ncloc="24863" packages="233" files="1082" classes="1082"/>
+<coverage generated="1725923338348" clover="3.2.0">
+  <project timestamp="1725923338348" name="All files">
+    <metrics statements="24865" coveredstatements="1032" conditionals="16288" coveredconditionals="279" methods="7641" coveredmethods="176" elements="48794" coveredelements="1487" complexity="0" loc="24865" ncloc="24865" packages="233" files="1082" classes="1082"/>
     <package name="src">
       <metrics statements="177" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -8939,7 +8939,7 @@
       </file>
     </package>
     <package name="src.hooks.useProjectVariablesUpdate">
-      <metrics statements="144" coveredstatements="0" conditionals="69" coveredconditionals="0" methods="30" coveredmethods="0"/>
+      <metrics statements="146" coveredstatements="0" conditionals="75" coveredconditionals="0" methods="30" coveredmethods="0"/>
       <file name="index.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useProjectVariablesUpdate/index.ts">
         <metrics statements="79" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="20" coveredmethods="0"/>
         <line num="40" count="0" type="stmt"/>
@@ -9023,7 +9023,7 @@
         <line num="222" count="0" type="stmt"/>
       </file>
       <file name="util.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useProjectVariablesUpdate/util.ts">
-        <metrics statements="65" coveredstatements="0" conditionals="47" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <metrics statements="67" coveredstatements="0" conditionals="53" coveredconditionals="0" methods="10" coveredmethods="0"/>
         <line num="20" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
@@ -9082,13 +9082,15 @@
         <line num="174" count="0" type="stmt"/>
         <line num="178" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="179" count="0" type="stmt"/>
-        <line num="180" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="180" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="181" count="0" type="stmt"/>
-        <line num="187" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="187" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="188" count="0" type="stmt"/>
         <line num="193" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="194" count="0" type="stmt"/>
-        <line num="202" count="0" type="stmt"/>
+        <line num="199" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="200" count="0" type="stmt"/>
+        <line num="208" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.providers">
