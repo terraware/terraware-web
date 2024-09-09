@@ -91,7 +91,7 @@ function InternalComment<T extends { internalComment?: string; status: string }>
         <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
           <Grid item xs={12}>
             <TextField
-              label={''}
+              label={strings.INTERNAL_COMMENTS}
               type='textarea'
               id='internalComment'
               onChange={(value) => setInternalComment(value as string)}
