@@ -173,7 +173,9 @@ export const makeVariableValueOperations = ({
           existingValueId: valueIdToUpdate,
         });
       }
-    } else {
+    } else if (newValue.toString() !== '') {
+      // This condition check prevents saving of an empty value,
+      // which is usually caused by user typing in something before backspacing
       operations.push({ operation: 'Append', variableId: variable.id, value: newValue });
     }
   }
