@@ -191,7 +191,6 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
         return;
       } else {
         complete(deliverable);
-        return;
       }
     }
 
