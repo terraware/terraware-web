@@ -56,7 +56,8 @@ const ApplicationMap = () => {
     }
     const response = await ApplicationService.exportBoundary(selectedApplication.id);
     if (response !== null) {
-      const encodedUri = 'data:application/geo+json;charset=utf-8,' + JSON.stringify(response.data);
+      const dataString = JSON.stringify(response.data);
+      const encodedUri = 'data:application/geo+json;charset=utf-8,' + encodeURIComponent(dataString);
       const link = document.createElement('a');
       link.setAttribute('href', encodedUri);
       link.setAttribute('download', `${selectedApplication.internalName}.geojson`);
