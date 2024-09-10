@@ -116,10 +116,6 @@ export const useProjectVariablesUpdate = (
     [missingRequiredFields, stagedVariableWithValues, stagedCellValues]
   );
 
-  useEffect(() => {
-    console.log(missingFields);
-  }, [missingFields]);
-
   const update = useCallback(() => {
     let operations: Operation[] = [];
 
