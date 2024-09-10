@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { PhotoWithAttributes } from 'src/components/DocumentProducer/EditImagesModal/PhotoSelector';
 import { VariableTableCell } from 'src/components/DocumentProducer/EditableTableModal/helpers';
@@ -19,6 +19,7 @@ import {
   VariableValueImageValue,
   VariableValueValue,
 } from 'src/types/documentProducer/VariableValue';
+import { missingRequiredFields } from 'src/utils/documentProducer/variables';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { makeVariableValueOperations } from './util';
@@ -31,9 +32,11 @@ type ProjectVariablesUpdate = {
   setNewImages: (variableId: number, values: PhotoWithAttributes[]) => void;
   setRemovedValue: (variableId: number, value: VariableValueValue) => void;
   setValues: (variableId: number, values: VariableValueValue[]) => void;
+  stagedVariableWithValues: VariableWithValues[];
   updateSuccess: boolean;
   uploadSuccess: boolean;
   update: () => void;
+  missingFields: boolean;
   noChanges: boolean;
 };
 
@@ -82,6 +85,22 @@ export const useProjectVariablesUpdate = (
   const setNewImages = (variableId: number, values: PhotoWithAttributes[]) => {
     setPendingNewImages(new Map(pendingNewImages).set(variableId, values));
   };
+
+  const stagedVariableWithValues: VariableWithValues[] = useMemo(() => {
+    return variablesWithValues.map((variableWithValues) => {
+      const pendingValues = pendingVariableValues.get(variableWithValues.id);
+      if (pendingValues !== undefined) {
+        return { ...variableWithValues, values: pendingValues };
+      } else {
+        return variableWithValues;
+      }
+    });
+  }, [pendingVariableValues, variablesWithValues]);
+
+  const missingFields = useMemo(
+    () => missingRequiredFields(stagedVariableWithValues),
+    [missingRequiredFields, stagedVariableWithValues]
+  );
 
   const update = useCallback(() => {
     let someUpdate = false;
@@ -219,17 +238,43 @@ export const useProjectVariablesUpdate = (
     }
   }, [projectId, updateResult]);
 
-  return {
-    pendingVariableValues,
-    setCellValues,
-    setDeletedImages,
-    setImages,
-    setNewImages,
-    setRemovedValue,
-    setValues,
-    updateSuccess: noOp || updateResult?.status === 'success',
-    uploadSuccess: Object.keys(pendingNewImages).length === 0 ? true : uploadResult?.status === 'success',
-    update,
-    noChanges,
-  };
+  const updateSuccess = useMemo(() => noOp || updateResult?.status === 'success', [noOp, updateResult]);
+
+  const uploadSuccess = useMemo(
+    () => (Object.keys(pendingNewImages).length === 0 ? true : uploadResult?.status === 'success'),
+    [pendingNewImages, uploadResult]
+  );
+
+  return useMemo(
+    () => ({
+      pendingVariableValues,
+      setCellValues,
+      setDeletedImages,
+      setImages,
+      setNewImages,
+      setRemovedValue,
+      setValues,
+      stagedVariableWithValues,
+      updateSuccess,
+      uploadSuccess,
+      update,
+      missingFields,
+      noChanges,
+    }),
+    [
+      pendingVariableValues,
+      setCellValues,
+      setDeletedImages,
+      setImages,
+      setNewImages,
+      setRemovedValue,
+      setValues,
+      stagedVariableWithValues,
+      updateSuccess,
+      uploadSuccess,
+      update,
+      missingFields,
+      noChanges,
+    ]
+  );
 };

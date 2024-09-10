@@ -17,7 +17,7 @@ import { requestListDeliverableVariables } from 'src/redux/features/documentProd
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
-import { missingRequiredFields, variableDependencyMet } from 'src/utils/documentProducer/variables';
+import { variableDependencyMet } from 'src/utils/documentProducer/variables';
 import useQuery from 'src/utils/useQuery';
 
 import { EditProps } from './types';
@@ -157,24 +157,15 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     setNewImages,
     setRemovedValue,
     setValues,
+    stagedVariableWithValues,
     update,
     updateSuccess,
     uploadSuccess,
+    missingFields,
     noChanges,
   } = useProjectVariablesUpdate(deliverable.projectId, variablesWithValues);
 
   const { complete } = useCompleteDeliverable();
-
-  const stagedVariableWithValues: VariableWithValues[] = useMemo(() => {
-    return variablesWithValues.map((variableWithValues) => {
-      const pendingValues = pendingVariableValues.get(variableWithValues.id);
-      if (pendingValues !== undefined) {
-        return { ...variableWithValues, values: pendingValues };
-      } else {
-        return variableWithValues;
-      }
-    });
-  }, [pendingVariableValues, variablesWithValues]);
 
   useEffect(() => {
     if (!deliverable) {
@@ -185,7 +176,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     void dispatch(
       requestListDeliverableVariablesValues({ deliverableId: deliverable.id, projectId: deliverable.projectId })
     );
-  }, [deliverable]);
+  }, [deliverable, dispatch]);
 
   useEffect(() => {
     if (updateSuccess && uploadSuccess) {
@@ -200,32 +191,19 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
       return;
     }
 
-    const missingFields = missingRequiredFields(stagedVariableWithValues);
-
-    if (missingFields) {
-      setValidateFields(true);
-      return;
+    // If Questionnaire Deliverable is part of the Application and all fields are completed, mark deliverable as “Completed”
+    if (isApplicationPortal) {
+      if (missingFields) {
+        setValidateFields(true);
+        return;
+      } else {
+        complete(deliverable);
+        return;
+      }
     }
 
     update();
-
-    // If Questionnaire Deliverable is part of the Application and all fields are completed, mark deliverable as “Completed”
-    if (isApplicationPortal) {
-      complete(deliverable);
-    }
-  }, [
-    isApplicationPortal,
-    complete,
-    deliverable,
-    setValidateFields,
-    stagedVariableWithValues,
-    update,
-    missingRequiredFields,
-  ]);
-
-  if (!deliverable) {
-    return null;
-  }
+  }, [complete, deliverable, exit, isApplicationPortal, missingFields, noChanges, setValidateFields, update]);
 
   return (
     <WrappedPageForm
