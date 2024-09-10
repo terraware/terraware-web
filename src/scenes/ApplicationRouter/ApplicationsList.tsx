@@ -7,12 +7,15 @@ import { DateTime } from 'luxon';
 import ApplicationCard from 'src/components/Application/ApplicationCard';
 import PageHeader from 'src/components/PageHeader';
 import Button from 'src/components/common/button/Button';
+import { useOrganization } from 'src/providers';
 import strings from 'src/strings';
+import { isAdmin } from 'src/utils/organization';
 
 import { useApplicationData } from '../../providers/Application/Context';
 import NewApplicationModal from './NewApplicationModal';
 
 const ApplicationListView = () => {
+  const { selectedOrganization } = useOrganization();
   const { isTablet, isMobile } = useDeviceInfo();
   const { allApplications } = useApplicationData();
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
@@ -53,7 +56,11 @@ const ApplicationListView = () => {
         <PageHeader
           title={strings.YOUR_APPLICATIONS}
           rightComponent={
-            <Button onClick={() => setIsNewApplicationModalOpen(true)} label={strings.START_NEW_APPLICATION} />
+            <Button
+              disabled={!isAdmin(selectedOrganization)}
+              label={strings.START_NEW_APPLICATION}
+              onClick={() => setIsNewApplicationModalOpen(true)}
+            />
           }
         />
         <Container maxWidth={false} sx={{ padding: 0 }}>
