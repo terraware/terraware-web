@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1725996701778" clover="3.2.0">
-  <project timestamp="1725996701778" name="All files">
-    <metrics statements="24863" coveredstatements="1033" conditionals="16292" coveredconditionals="279" methods="7645" coveredmethods="176" elements="48800" coveredelements="1488" complexity="0" loc="24863" ncloc="24863" packages="233" files="1082" classes="1082"/>
+<coverage generated="1725997134899" clover="3.2.0">
+  <project timestamp="1725997134899" name="All files">
+    <metrics statements="24864" coveredstatements="1033" conditionals="16292" coveredconditionals="279" methods="7645" coveredmethods="176" elements="48801" coveredelements="1488" complexity="0" loc="24864" ncloc="24864" packages="233" files="1082" classes="1082"/>
     <package name="src">
       <metrics statements="177" coveredstatements="0" conditionals="130" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -12420,7 +12420,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Applications">
-      <metrics statements="213" coveredstatements="0" conditionals="151" coveredconditionals="0" methods="71" coveredmethods="0"/>
+      <metrics statements="214" coveredstatements="0" conditionals="151" coveredconditionals="0" methods="71" coveredmethods="0"/>
       <file name="ApplicationCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Applications/ApplicationCellRenderer.tsx">
         <metrics statements="10" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="11" count="0" type="stmt"/>
@@ -12461,7 +12461,7 @@
         <line num="17" count="0" type="stmt"/>
       </file>
       <file name="ApplicationMap.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Applications/ApplicationMap.tsx">
-        <metrics statements="29" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <metrics statements="30" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
@@ -12484,13 +12484,14 @@
         <line num="61" count="0" type="stmt"/>
         <line num="62" count="0" type="stmt"/>
         <line num="63" count="0" type="stmt"/>
-        <line num="67" count="0" type="stmt"/>
-        <line num="68" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="71" count="0" type="stmt"/>
-        <line num="74" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="69" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="75" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
       </file>
       <file name="ApplicationReview.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Applications/ApplicationReview.tsx">
         <metrics statements="22" coveredstatements="0" conditionals="19" coveredconditionals="0" methods="7" coveredmethods="0"/>

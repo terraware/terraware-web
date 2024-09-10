@@ -1,3 +1,4 @@
+246bcfad83d SW-5987 Encode data to be URI safe (#3162)
 c551ec8a4d1 SW-5990 Some questionnaire deliverables need to be saved 2x to be marked as complete (#3164)
 c47a267b204 SW-5995 Updated variable callback process and safeguarded empty variable values  (#3165)
 78479b583f9 SW-5982 Removed application feature flag (#3161)
