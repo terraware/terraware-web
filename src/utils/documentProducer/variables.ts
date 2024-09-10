@@ -100,20 +100,15 @@ export const isValueEmpty = (
 ): boolean => {
   switch (value.type) {
     case 'Date':
-      const dateValue = value as NewDateValuePayload;
-      return dateValue.dateValue === '';
+      return value.dateValue === '';
     case 'Link':
-      const linkValue = value as NewLinkValuePayload;
-      return linkValue.url === '';
+      return value.url === '';
     case 'Text':
-      const textValue = value as NewTextValuePayload;
-      return textValue.textValue === '';
+      return value.textValue === '';
     case 'Number':
-      const numberValue = value as NewNumberValuePayload;
-      return numberValue.numberValue.toString() === '';
+      return value.numberValue.toString() === '';
     case 'Select':
-      const selectValue = value as NewSelectValuePayload;
-      return selectValue.optionIds.length === 0;
+      return value.optionIds.length === 0;
   }
 };
 
