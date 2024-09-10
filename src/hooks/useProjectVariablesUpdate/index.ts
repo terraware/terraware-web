@@ -35,9 +35,8 @@ type ProjectVariablesUpdate = {
   stagedVariableWithValues: VariableWithValues[];
   updateSuccess: boolean;
   uploadSuccess: boolean;
-  update: () => void;
+  update: () => boolean;
   missingFields: boolean;
-  noChanges: boolean;
 };
 
 export const useProjectVariablesUpdate = (
@@ -53,7 +52,6 @@ export const useProjectVariablesUpdate = (
   const [pendingNewImages, setPendingNewImages] = useState<Map<number, PhotoWithAttributes[]>>(new Map());
   const [pendingVariableValues, setPendingVariableValues] = useState<Map<number, VariableValueValue[]>>(new Map());
   const [removedVariableValues, setRemovedVariableValues] = useState<Map<number, VariableValueValue>>(new Map());
-  const [noChanges, setNoChanges] = useState<boolean>(true);
 
   const [updateVariableRequestId, setUpdateVariableRequestId] = useState<string>('');
   const [uploadRequestId, setUploadRequestId] = useState<string>('');
@@ -103,11 +101,16 @@ export const useProjectVariablesUpdate = (
   );
 
   const update = useCallback(() => {
-    let someUpdate = false;
     let operations: Operation[] = [];
 
+    if (projectId === -1) {
+      // This means the project ID, most likely being populated by a provider looking at
+      // the router path, isn't initialized before the update is called
+      snackbar.toastError(strings.GENERIC_ERROR);
+      return false;
+    }
+
     pendingVariableValues.forEach((pendingValues, variableId) => {
-      someUpdate = true;
       const variable = variablesWithValues.find((variableWithValues) => variableWithValues.id === variableId);
       if (!variable) {
         // This is impossible if the form is only displaying variables that were initialized within the hook
@@ -126,7 +129,6 @@ export const useProjectVariablesUpdate = (
     });
 
     pendingCellValues.forEach((pendingValues, variableId) => {
-      someUpdate = true;
       const variable = variablesWithValues.find((variableWithValues) => variableWithValues.id === variableId);
       if (!variable) {
         // This is impossible if the form is only displaying variables that were initialized within the hook
@@ -146,7 +148,6 @@ export const useProjectVariablesUpdate = (
 
     // handle image updates
     pendingImages.forEach((pendingValues) => {
-      someUpdate = true;
       pendingValues.forEach((image) => {
         const newValue = { type: image.type, citation: image.citation, caption: image.caption };
         operations.push({
@@ -160,7 +161,6 @@ export const useProjectVariablesUpdate = (
 
     // handle image deletions
     pendingDeletedImages.forEach((pendingValues) => {
-      someUpdate = true;
       pendingValues.forEach((deletedImage) => {
         operations.push({
           operation: 'Delete',
@@ -173,7 +173,6 @@ export const useProjectVariablesUpdate = (
     // handle image uploads
     const imageValuesToUpload: UploadImageValueRequestPayloadWithProjectId[] = [];
     pendingNewImages.forEach((pendingValues, variableId) => {
-      someUpdate = true;
       const variable = variablesWithValues.find((variableWithValues) => variableWithValues.id === variableId);
       if (!variable) {
         // This is impossible if the form is only displaying variables that were initialized within the hook
@@ -196,12 +195,6 @@ export const useProjectVariablesUpdate = (
       setUploadRequestId(request.requestId);
     }
 
-    if (projectId === -1) {
-      // This means the project ID, most likely being populated by a provider looking at
-      // the router path, isn't initialized before the update is called
-      snackbar.toastError(strings.GENERIC_ERROR);
-    }
-
     if (operations.length > 0) {
       const request = dispatch(
         requestUpdateVariableValues({
@@ -216,9 +209,7 @@ export const useProjectVariablesUpdate = (
       setNoOp(true);
     }
 
-    if (someUpdate) {
-      setNoChanges(false);
-    }
+    return operations.length > 0 || imageValuesToUpload.length > 0;
   }, [
     pendingCellValues,
     pendingDeletedImages,
@@ -259,7 +250,6 @@ export const useProjectVariablesUpdate = (
       uploadSuccess,
       update,
       missingFields,
-      noChanges,
     }),
     [
       pendingVariableValues,
@@ -274,7 +264,6 @@ export const useProjectVariablesUpdate = (
       uploadSuccess,
       update,
       missingFields,
-      noChanges,
     ]
   );
 };

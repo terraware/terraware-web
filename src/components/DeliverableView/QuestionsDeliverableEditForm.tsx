@@ -162,7 +162,6 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     updateSuccess,
     uploadSuccess,
     missingFields,
-    noChanges,
   } = useProjectVariablesUpdate(deliverable.projectId, variablesWithValues);
 
   const { complete } = useCompleteDeliverable();
@@ -185,12 +184,6 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   }, [exit, updateSuccess, uploadSuccess]);
 
   const handleOnSave = useCallback(() => {
-    if (noChanges) {
-      // If the user clicks save but there are no changes, just navigate them back to the deliverable
-      exit();
-      return;
-    }
-
     // If Questionnaire Deliverable is part of the Application and all fields are completed, mark deliverable as “Completed”
     if (isApplicationPortal) {
       if (missingFields) {
@@ -202,8 +195,14 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
       }
     }
 
-    update();
-  }, [complete, deliverable, exit, isApplicationPortal, missingFields, noChanges, setValidateFields, update]);
+    const hasChanges = update();
+
+    if (!hasChanges) {
+      // If the user clicks save but there are no changes, just navigate them back to the deliverable
+      exit();
+      return;
+    }
+  }, [complete, deliverable, exit, isApplicationPortal, missingFields, setValidateFields, update]);
 
   return (
     <WrappedPageForm
