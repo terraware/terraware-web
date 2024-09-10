@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1725992573092" clover="3.2.0">
-  <project timestamp="1725992573092" name="All files">
-    <metrics statements="24859" coveredstatements="1033" conditionals="16288" coveredconditionals="279" methods="7644" coveredmethods="176" elements="48791" coveredelements="1488" complexity="0" loc="24859" ncloc="24859" packages="233" files="1082" classes="1082"/>
+<coverage generated="1725996701778" clover="3.2.0">
+  <project timestamp="1725996701778" name="All files">
+    <metrics statements="24863" coveredstatements="1033" conditionals="16292" coveredconditionals="279" methods="7645" coveredmethods="176" elements="48800" coveredelements="1488" complexity="0" loc="24863" ncloc="24863" packages="233" files="1082" classes="1082"/>
     <package name="src">
       <metrics statements="177" coveredstatements="0" conditionals="130" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -28647,64 +28647,68 @@
       </file>
     </package>
     <package name="src.utils.documentProducer">
-      <metrics statements="55" coveredstatements="34" conditionals="53" coveredconditionals="27" methods="8" coveredmethods="4"/>
+      <metrics statements="59" coveredstatements="34" conditionals="57" coveredconditionals="27" methods="9" coveredmethods="4"/>
       <file name="variables.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/documentProducer/variables.ts">
-        <metrics statements="55" coveredstatements="34" conditionals="53" coveredconditionals="27" methods="8" coveredmethods="4"/>
-        <line num="16" count="1" type="stmt"/>
-        <line num="17" count="25" type="cond" truecount="1" falsecount="1"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="23" count="25" type="stmt"/>
+        <metrics statements="59" coveredstatements="34" conditionals="57" coveredconditionals="27" methods="9" coveredmethods="4"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="25" type="cond" truecount="1" falsecount="1"/>
+        <line num="21" count="0" type="stmt"/>
         <line num="24" count="25" type="stmt"/>
-        <line num="27" count="25" type="cond" truecount="1" falsecount="1"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="31" count="25" type="stmt"/>
-        <line num="33" count="25" type="cond" truecount="2" falsecount="0"/>
-        <line num="34" count="7" type="stmt"/>
-        <line num="37" count="18" type="cond" truecount="6" falsecount="0"/>
-        <line num="39" count="6" type="cond" truecount="4" falsecount="0"/>
-        <line num="40" count="2" type="stmt"/>
-        <line num="42" count="2" type="stmt"/>
-        <line num="44" count="2" type="cond" truecount="1" falsecount="1"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="49" count="2" type="stmt"/>
-        <line num="52" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="53" count="2" type="stmt"/>
-        <line num="56" count="2" type="stmt"/>
-        <line num="58" count="2" type="stmt"/>
-        <line num="60" count="2" type="stmt"/>
-        <line num="62" count="2" type="stmt"/>
-        <line num="64" count="2" type="stmt"/>
-        <line num="66" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="67" count="2" type="stmt"/>
-        <line num="70" count="2" type="stmt"/>
-        <line num="74" count="1" type="stmt"/>
-        <line num="75" count="25" type="stmt"/>
-        <line num="77" count="25" type="cond" truecount="2" falsecount="0"/>
-        <line num="78" count="7" type="stmt"/>
-        <line num="81" count="18" type="cond" truecount="3" falsecount="2"/>
-        <line num="83" count="12" type="stmt"/>
-        <line num="85" count="4" type="stmt"/>
-        <line num="87" count="2" type="stmt"/>
-        <line num="89" count="0" type="stmt"/>
-        <line num="91" count="0" type="stmt"/>
-        <line num="98" count="1" type="stmt"/>
-        <line num="101" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="103" count="0" type="stmt"/>
-        <line num="105" count="0" type="stmt"/>
-        <line num="107" count="0" type="stmt"/>
-        <line num="109" count="0" type="stmt"/>
-        <line num="111" count="0" type="stmt"/>
-        <line num="115" count="1" type="stmt"/>
-        <line num="116" count="0" type="stmt"/>
-        <line num="117" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="25" count="25" type="stmt"/>
+        <line num="28" count="25" type="cond" truecount="1" falsecount="1"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="32" count="25" type="stmt"/>
+        <line num="34" count="25" type="cond" truecount="2" falsecount="0"/>
+        <line num="35" count="7" type="stmt"/>
+        <line num="38" count="18" type="cond" truecount="6" falsecount="0"/>
+        <line num="40" count="6" type="cond" truecount="4" falsecount="0"/>
+        <line num="41" count="2" type="stmt"/>
+        <line num="43" count="2" type="stmt"/>
+        <line num="45" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="50" count="2" type="stmt"/>
+        <line num="53" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="54" count="2" type="stmt"/>
+        <line num="57" count="2" type="stmt"/>
+        <line num="59" count="2" type="stmt"/>
+        <line num="61" count="2" type="stmt"/>
+        <line num="63" count="2" type="stmt"/>
+        <line num="65" count="2" type="stmt"/>
+        <line num="67" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="68" count="2" type="stmt"/>
+        <line num="71" count="2" type="stmt"/>
+        <line num="75" count="1" type="stmt"/>
+        <line num="76" count="25" type="stmt"/>
+        <line num="78" count="25" type="cond" truecount="2" falsecount="0"/>
+        <line num="79" count="7" type="stmt"/>
+        <line num="82" count="18" type="cond" truecount="3" falsecount="2"/>
+        <line num="84" count="12" type="stmt"/>
+        <line num="86" count="4" type="stmt"/>
+        <line num="88" count="2" type="stmt"/>
+        <line num="90" count="0" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
+        <line num="99" count="1" type="stmt"/>
+        <line num="102" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="104" count="0" type="stmt"/>
+        <line num="106" count="0" type="stmt"/>
+        <line num="108" count="0" type="stmt"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="112" count="0" type="stmt"/>
+        <line num="116" count="1" type="stmt"/>
         <line num="120" count="0" type="stmt"/>
-        <line num="121" count="0" type="stmt"/>
-        <line num="122" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="121" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="123" count="0" type="stmt"/>
-        <line num="125" count="0" type="cond" truecount="0" falsecount="8"/>
-        <line num="131" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="138" count="0" type="stmt"/>
-        <line num="141" count="0" type="stmt"/>
+        <line num="124" count="0" type="stmt"/>
+        <line num="125" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="126" count="0" type="stmt"/>
+        <line num="127" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="129" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="130" count="0" type="stmt"/>
+        <line num="133" count="0" type="stmt"/>
+        <line num="135" count="0" type="cond" truecount="0" falsecount="8"/>
+        <line num="141" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="148" count="0" type="stmt"/>
+        <line num="151" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.utils.filterHooks">
