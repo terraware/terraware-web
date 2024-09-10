@@ -58,12 +58,6 @@ const VariableDetailsInput = ({
   const formElementStyles = { margin: theme.spacing(1, 0) };
 
   const valueError = useCallback(() => (value ? '' : strings.REQUIRED_FIELD), [value]);
-  console.log('***************************');
-  console.log('VariableDetailsInput');
-  console.log('variable:', variable);
-  console.log('values:', values);
-  console.log('sectionsUsed:', sectionsUsed);
-  console.log('variableWorkflowDetails:', variableWorkflowDetails);
 
   useEffect(() => {
     if (values?.length) {
