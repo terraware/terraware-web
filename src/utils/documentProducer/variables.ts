@@ -39,8 +39,7 @@ export const variableDependencyMet = (variable: VariableWithValues, allVariables
     case 'eq':
       if (isSelectVariable(dependsOnVariable) && isArrayOfT(rawDependsOnValue, isNumber)) {
         const optionIdOfDependencyValue = dependsOnVariable.options.find(
-          // Remove double-quoutes here. But we likely want to update that in the spreadsheet instead.
-          (option) => option.name === variable.dependencyValue?.replace(/"/g, '')
+          (option) => option.name === variable.dependencyValue
         )?.id;
         if (!optionIdOfDependencyValue) {
           // This means the value listed as the dependency value doesn't exist within the depended on variable
