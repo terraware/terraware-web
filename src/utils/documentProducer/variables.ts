@@ -1,3 +1,4 @@
+import { VariableTableCell } from 'src/components/DocumentProducer/EditableTableModal/helpers';
 import { VariableWithValues, isSelectVariable, isTextVariable } from 'src/types/documentProducer/Variable';
 import {
   isNumberVariableValue,
@@ -81,16 +82,22 @@ export const getRawValue = (variable: VariableWithValues): number | number[] | s
   }
 };
 
-export const missingRequiredFields = (variablesWithValues: VariableWithValues[]) => {
+export const missingRequiredFields = (
+  variablesWithValues: VariableWithValues[],
+  pendingTableValues?: Map<number, VariableTableCell[][]>
+) => {
   const allRequiredVariables = variablesWithValues.filter(
     (v) => v.isRequired && variableDependencyMet(v, variablesWithValues)
   );
-
   const missingRequiredFields = allRequiredVariables.some((variable) => {
     let hasEmptyValue = false;
     const values = variable.values;
     if (!values || values.length === 0 || getRawValue(variable) === undefined || getRawValue(variable) === '') {
       hasEmptyValue = true;
+      if (pendingTableValues?.get(variable.id)?.length) {
+        // if the value was empty but it has pending values
+        hasEmptyValue = false;
+      }
     }
     return hasEmptyValue;
   });

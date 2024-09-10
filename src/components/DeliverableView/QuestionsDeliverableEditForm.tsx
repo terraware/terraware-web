@@ -151,6 +151,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
 
   const {
     pendingVariableValues,
+    pendingCellValues,
     setCellValues,
     setDeletedImages,
     setImages,
@@ -194,7 +195,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   }, [exit, updateSuccess, uploadSuccess]);
 
   const handleOnSave = useCallback(() => {
-    const missingFields = missingRequiredFields(stagedVariableWithValues);
+    const missingFields = missingRequiredFields(stagedVariableWithValues, pendingCellValues);
 
     // If Questionnaire Deliverable is part of the Application and all fields are completed, mark deliverable as “Completed”
     if (isApplicationPortal) {
