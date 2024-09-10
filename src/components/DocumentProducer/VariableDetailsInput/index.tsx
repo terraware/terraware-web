@@ -484,16 +484,18 @@ const VariableDetailsInput = ({
         </Grid>
 
         <Grid item xs={12}>
-          <Typography sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px', marginBottom: '12px' }}>
-            {strings.VARIABLE_STATUS}
-          </Typography>
           <Box sx={{ marginBottom: '12px' }}>
             {display ? (
-              <VariableStatusBadge status={variableWorkflowDetails.status} />
+              <>
+                <Typography sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px', marginBottom: '12px' }}>
+                  {strings.VARIABLE_STATUS}
+                </Typography>
+                <VariableStatusBadge status={variableWorkflowDetails.status} />
+              </>
             ) : (
               <Dropdown
                 fullWidth
-                label={strings.STATUS}
+                label={strings.VARIABLE_STATUS}
                 onChange={(newValue: string) => {
                   setVariableWorkflowDetails({
                     ...variableWorkflowDetails,
