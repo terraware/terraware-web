@@ -89,7 +89,13 @@ export const missingRequiredFields = (variablesWithValues: VariableWithValues[])
   const missingRequiredFields = allRequiredVariables.some((variable) => {
     let hasEmptyValue = false;
     const values = variable.values;
-    if (!values || values.length === 0 || getRawValue(variable) === undefined || getRawValue(variable) === '') {
+    console.log('varible', variable);
+    if (
+      !values ||
+      values.length === 0 ||
+      ((variable.type === 'Text' || variable.type === 'Number' || variable.type === 'Select') &&
+        (getRawValue(variable) === undefined || getRawValue(variable) === ''))
+    ) {
       hasEmptyValue = true;
     }
     return hasEmptyValue;
