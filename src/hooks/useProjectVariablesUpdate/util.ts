@@ -30,13 +30,7 @@ export const makeVariableValueOperations = ({
 }) => {
   const operations: Operation[] = [];
 
-  let newValue:
-    | NewDateValuePayload
-    | NewTextValuePayload
-    | NewNumberValuePayload
-    | NewSelectValuePayload
-    | NewLinkValuePayload
-    | undefined;
+  let newValue: NewDateValuePayload | NewNumberValuePayload | NewSelectValuePayload | NewLinkValuePayload | undefined;
 
   let newTextValues: NewTextValuePayload[] = [];
   let valueIdToUpdate = -1;
@@ -164,12 +158,21 @@ export const makeVariableValueOperations = ({
 
   if (newValue) {
     if (pendingValues[0].id !== -1) {
-      operations.push({
-        operation: 'Update',
-        valueId: valueIdToUpdate,
-        value: newValue,
-        existingValueId: valueIdToUpdate,
-      });
+      if (newValue.toString() === '') {
+        // Empty string means that user erased the value.
+        operations.push({
+          existingValueId: pendingValues[0].id,
+          operation: 'Delete',
+          valueId: pendingValues[0].id,
+        });
+      } else {
+        operations.push({
+          operation: 'Update',
+          valueId: valueIdToUpdate,
+          value: newValue,
+          existingValueId: valueIdToUpdate,
+        });
+      }
     } else {
       operations.push({ operation: 'Append', variableId: variable.id, value: newValue });
     }

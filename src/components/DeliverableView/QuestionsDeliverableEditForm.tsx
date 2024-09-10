@@ -121,7 +121,6 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   const { isApplicationPortal } = useApplicationPortal();
 
   const { deliverable, exit, hideStatusBadge } = props;
-  const [validateFields, setValidateFields] = useState<boolean>(false);
 
   const scrollToVariable = useCallback((variableId: string) => {
     const element = document.querySelector(`[data-variable-id="${variableId}"]`);
@@ -186,10 +185,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   const handleOnSave = useCallback(() => {
     // If Questionnaire Deliverable is part of the Application and all fields are completed, mark deliverable as “Completed”
     if (isApplicationPortal) {
-      if (missingFields) {
-        setValidateFields(true);
-        return;
-      } else {
+      if (!missingFields) {
         complete(deliverable);
       }
     }
@@ -201,7 +197,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
       exit();
       return;
     }
-  }, [complete, deliverable, exit, isApplicationPortal, missingFields, setValidateFields, update]);
+  }, [complete, deliverable, exit, isApplicationPortal, missingFields, update]);
 
   return (
     <WrappedPageForm
@@ -239,7 +235,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
                   setNewImages={(newValues: PhotoWithAttributes[]) => setNewImages(variableWithValues.id, newValues)}
                   setValues={(newValues: VariableValueValue[]) => setValues(variableWithValues.id, newValues)}
                   variable={variableWithValues}
-                  validateFields={validateFields}
+                  validateFields={false}
                 />
               ) : null
             )}
