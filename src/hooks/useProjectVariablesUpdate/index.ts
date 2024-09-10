@@ -96,8 +96,8 @@ export const useProjectVariablesUpdate = (
   }, [pendingVariableValues, variablesWithValues]);
 
   const missingFields = useMemo(
-    () => missingRequiredFields(stagedVariableWithValues),
-    [missingRequiredFields, stagedVariableWithValues]
+    () => missingRequiredFields(stagedVariableWithValues, pendingCellValues),
+    [missingRequiredFields, stagedVariableWithValues, pendingCellValues]
   );
 
   const update = useCallback(() => {
