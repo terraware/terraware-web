@@ -194,22 +194,34 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   }, [exit, updateSuccess, uploadSuccess]);
 
   const handleOnSave = useCallback(() => {
+    if (noChanges) {
+      // If the user clicks save but there are no changes, just navigate them back to the deliverable
+      exit();
+      return;
+    }
+
     const missingFields = missingRequiredFields(stagedVariableWithValues);
 
-    // If Questionnaire Deliverable is part of the Application and all fields are completed, mark deliverable as “Completed”
-    if (isApplicationPortal) {
-      if (!missingFields) {
-        complete(deliverable);
-      }
+    if (missingFields) {
+      setValidateFields(true);
+      return;
     }
 
     update();
 
-    if (noChanges) {
-      // If the user clicks save but there are no changes, just navigate them back to the deliverable
-      exit();
+    // If Questionnaire Deliverable is part of the Application and all fields are completed, mark deliverable as “Completed”
+    if (isApplicationPortal) {
+      complete(deliverable);
     }
-  }, [isApplicationPortal, complete, deliverable, setValidateFields, update, missingRequiredFields]);
+  }, [
+    isApplicationPortal,
+    complete,
+    deliverable,
+    setValidateFields,
+    stagedVariableWithValues,
+    update,
+    missingRequiredFields,
+  ]);
 
   if (!deliverable) {
     return null;
