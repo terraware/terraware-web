@@ -74,7 +74,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
   const [values, setValues] = useState<VariableValueValue[]>(variable.values);
   const [removedValues, setRemovedValues] = useState<VariableValueValue[]>();
 
-  const updateVariableValueRequest = useAppSelector(selectUpdateVariableValues(updateVariableValuesRequestId));
+  const updateVariableValuesRequest = useAppSelector(selectUpdateVariableValues(updateVariableValuesRequestId));
 
   const [updateVariableWorkflowDetailsRequestId, setUpdateVariableWorkflowDetailsRequestId] = useState<string>('');
   const updateVariableWorkflowDetailsRequest = useAppSelector(
@@ -82,7 +82,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
   );
 
   useEffect(() => {
-    if (updateVariableValueRequest?.status === 'success' && !updateVariableWorkflowDetailsRequestId) {
+    if (updateVariableValuesRequest?.status === 'success' && !updateVariableWorkflowDetailsRequestId) {
       const request = dispatch(
         requestUpdateVariableWorkflowDetails({
           status: variableWorkflowDetails.status,
@@ -95,7 +95,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
       setUpdateVariableWorkflowDetailsRequestId(request.requestId);
       setUpdateWorkflowRequestId?.(request.requestId);
     }
-  }, [updateVariableValueRequest, updateVariableWorkflowDetailsRequestId, variableWorkflowDetails]);
+  }, [updateVariableValuesRequest, updateVariableWorkflowDetailsRequestId, variableWorkflowDetails]);
 
   const save = () => {
     setValidate(true);
@@ -224,9 +224,9 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
   return (
     <PageDialog
       workflowState={
-        updateVariableValueRequest?.status === 'success'
+        updateVariableValuesRequest?.status === 'success'
           ? updateVariableWorkflowDetailsRequest
-          : updateVariableValueRequest
+          : updateVariableValuesRequest
       }
       onSuccess={onSuccess}
       onClose={onCancel}
