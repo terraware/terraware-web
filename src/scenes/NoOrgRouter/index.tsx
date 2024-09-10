@@ -4,7 +4,6 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import NoOrgApplicationLandingPage from 'src/components/emptyStatePages/NoOrgApplicationLandingPage';
 import NoOrgLandingPage from 'src/components/emptyStatePages/NoOrgLandingPage';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useUser } from 'src/providers';
 import HelpSupportRouter from 'src/scenes/HelpSupportRouter';
 import MyAccountRouter from 'src/scenes/MyAccountRouter';

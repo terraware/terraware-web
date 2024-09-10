@@ -12,7 +12,6 @@ import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useApplicationData } from 'src/providers/Application/Context';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
