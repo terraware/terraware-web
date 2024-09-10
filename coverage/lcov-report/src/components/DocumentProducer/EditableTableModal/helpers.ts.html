@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">18.18% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>4/22</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">20% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>4/20</span>
             </div>
         
             
@@ -159,22 +159,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -201,7 +194,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -212,13 +216,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -242,14 +242,14 @@ export type VariableTableCell = {
   changed: boolean;
 };
 &nbsp;
-export const getCellValues = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>
+export const getCellValues = <span class="fstat-no" title="function not covered" >(</span>
   row: VariableValueTableValue,
   col: TableColumnWithValues
 ): VariableValueValue[] | undefined =&gt; {
 <span class="cstat-no" title="statement not covered" >  return col.variable.variableValues.find(<span class="fstat-no" title="function not covered" >(v</span>al) =&gt; <span class="cstat-no" title="statement not covered" >val.rowValueId === row.id)</span>?.values;</span>
 };
 &nbsp;
-export const newValueFromEntry = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(v</span>alue: string | number, type: CellVariableType): VariableValueValue | undefined =&gt; {</span>
+export const newValueFromEntry = <span class="fstat-no" title="function not covered" >(v</span>alue: string | number, type: CellVariableType): VariableValueValue | undefined =&gt; {
 <span class="cstat-no" title="statement not covered" >  switch (type) {</span>
     case 'Text':
 <span class="cstat-no" title="statement not covered" >      return {</span>
@@ -284,7 +284,7 @@ export const newValueFromEntry = <span class="cstat-no" title="statement not cov
   }
 };
 &nbsp;
-export const cellValue = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(v</span>alue: VariableValueValue, placeholder?: string): string | number =&gt; {</span>
+export const cellValue = <span class="fstat-no" title="function not covered" >(v</span>alue: VariableValueValue, placeholder?: string): string | number =&gt; {
 <span class="cstat-no" title="statement not covered" >  switch (value.type) {</span>
     case 'Text':
 <span class="cstat-no" title="statement not covered" >      return value.textValue;</span>
@@ -301,7 +301,7 @@ export const cellValue = <span class="cstat-no" title="statement not covered" ><
   }
 };
 &nbsp;
-export const getInitialCellValues = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(v</span>ariable: TableVariableWithValues): VariableTableCell[][] =&gt; {</span>
+export const getInitialCellValues = <span class="fstat-no" title="function not covered" >(v</span>ariable: TableVariableWithValues): VariableTableCell[][] =&gt; {
 <span class="cstat-no" title="statement not covered" >  return variable.values.map(<span class="fstat-no" title="function not covered" >(r</span>ow) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >    variable.columns.map(<span class="fstat-no" title="function not covered" >(c</span>ol) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
       type: col.variable.type,
@@ -319,7 +319,7 @@ export const getInitialCellValues = <span class="cstat-no" title="statement not 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-09-10T19:38:54.130Z
+                at 2024-09-10T20:37:24.989Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

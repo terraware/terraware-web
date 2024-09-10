@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/88</span>
+                <span class='fraction'>0/98</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/24</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
-                <span class="quiet">Functions</span>
                 <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/29</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/84</span>
+                <span class='fraction'>0/94</span>
             </div>
         
             
@@ -332,7 +332,23 @@
 <a name='L267'></a><a href='#L267'>267</a>
 <a name='L268'></a><a href='#L268'>268</a>
 <a name='L269'></a><a href='#L269'>269</a>
-<a name='L270'></a><a href='#L270'>270</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a>
+<a name='L272'></a><a href='#L272'>272</a>
+<a name='L273'></a><a href='#L273'>273</a>
+<a name='L274'></a><a href='#L274'>274</a>
+<a name='L275'></a><a href='#L275'>275</a>
+<a name='L276'></a><a href='#L276'>276</a>
+<a name='L277'></a><a href='#L277'>277</a>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a>
+<a name='L281'></a><a href='#L281'>281</a>
+<a name='L282'></a><a href='#L282'>282</a>
+<a name='L283'></a><a href='#L283'>283</a>
+<a name='L284'></a><a href='#L284'>284</a>
+<a name='L285'></a><a href='#L285'>285</a>
+<a name='L286'></a><a href='#L286'>286</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -427,6 +443,22 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -604,7 +636,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useEffect, useMemo, useState } from 'react';
 &nbsp;
 import { PhotoWithAttributes } from 'src/components/DocumentProducer/EditImagesModal/PhotoSelector';
-import { VariableTableCell } from 'src/components/DocumentProducer/EditableTableModal/helpers';
+import { VariableTableCell, getInitialCellValues } from 'src/components/DocumentProducer/EditableTableModal/helpers';
 import {
   selectUpdateVariableValues,
   selectUploadImageValue,
@@ -615,7 +647,7 @@ import {
 } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { VariableWithValues } from 'src/types/documentProducer/Variable';
+import { TableVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
   Operation,
   UploadImageValueRequestPayloadWithProjectId,
@@ -698,9 +730,25 @@ export const useProjectVariablesUpdate = <span class="cstat-no" title="statement
     });
   }, [pendingVariableValues, variablesWithValues]);
 &nbsp;
+  const stagedCellValues = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const map = <span class="cstat-no" title="statement not covered" >new Map&lt;number, VariableTableCell[][]&gt;();</span>
+<span class="cstat-no" title="statement not covered" >    variablesWithValues</span>
+      .filter(<span class="fstat-no" title="function not covered" >(v</span>ariable): variable is TableVariableWithValues =&gt; <span class="cstat-no" title="statement not covered" >variable.type === 'Table')</span>
+      .forEach(<span class="fstat-no" title="function not covered" >(v</span>ariable) =&gt; {
+        const initialValues = <span class="cstat-no" title="statement not covered" >getInitialCellValues(variable);</span>
+        const pendingValues = <span class="cstat-no" title="statement not covered" >pendingCellValues.get(variable.id);</span>
+<span class="cstat-no" title="statement not covered" >        if (pendingValues !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >          map.set(variable.id, pendingValues);</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >          map.set(variable.id, initialValues);</span>
+        }
+      });
+<span class="cstat-no" title="statement not covered" >    return map;</span>
+  }, [variablesWithValues, pendingCellValues]);
+&nbsp;
   const missingFields = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >missingRequiredFields(stagedVariableWithValues, pendingCellValues),</span>
-    [missingRequiredFields, stagedVariableWithValues, pendingCellValues]
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >missingRequiredFields(stagedVariableWithValues, stagedCellValues),</span>
+    [missingRequiredFields, stagedVariableWithValues, stagedCellValues]
   );
 &nbsp;
   const update = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -877,7 +925,7 @@ export const useProjectVariablesUpdate = <span class="cstat-no" title="statement
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-09-10T19:38:54.130Z
+                at 2024-09-10T20:37:24.989Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
