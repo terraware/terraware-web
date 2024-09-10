@@ -1,7 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'Document Producer' | 'Accelerator Application';
+export type FeatureName = 'Show Production View' | 'Document Producer';
 
 export type Feature = {
   name: FeatureName;
@@ -42,15 +42,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Terraware Accelerator Console access to the document producer tool'],
-    disclosure: ['This is WIP'],
-  },
-  {
-    name: 'Accelerator Application',
-    preferenceName: 'enableAcceleratorApplication',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Access to the accelerator application'],
     disclosure: ['This is WIP'],
   },
 ];

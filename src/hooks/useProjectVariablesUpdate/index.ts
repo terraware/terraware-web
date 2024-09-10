@@ -34,6 +34,7 @@ type ProjectVariablesUpdate = {
   updateSuccess: boolean;
   uploadSuccess: boolean;
   update: () => void;
+  noChanges: boolean;
 };
 
 export const useProjectVariablesUpdate = (
@@ -49,11 +50,14 @@ export const useProjectVariablesUpdate = (
   const [pendingNewImages, setPendingNewImages] = useState<Map<number, PhotoWithAttributes[]>>(new Map());
   const [pendingVariableValues, setPendingVariableValues] = useState<Map<number, VariableValueValue[]>>(new Map());
   const [removedVariableValues, setRemovedVariableValues] = useState<Map<number, VariableValueValue>>(new Map());
+  const [noChanges, setNoChanges] = useState<boolean>(true);
 
   const [updateVariableRequestId, setUpdateVariableRequestId] = useState<string>('');
   const [uploadRequestId, setUploadRequestId] = useState<string>('');
   const updateResult = useAppSelector(selectUpdateVariableValues(updateVariableRequestId));
   const uploadResult = useAppSelector(selectUploadImageValue(uploadRequestId));
+
+  const [noOp, setNoOp] = useState(false);
 
   const setValues = (variableId: number, values: VariableValueValue[]) => {
     setPendingVariableValues(new Map(pendingVariableValues).set(variableId, values));
@@ -80,9 +84,11 @@ export const useProjectVariablesUpdate = (
   };
 
   const update = useCallback(() => {
+    let someUpdate = false;
     let operations: Operation[] = [];
 
     pendingVariableValues.forEach((pendingValues, variableId) => {
+      someUpdate = true;
       const variable = variablesWithValues.find((variableWithValues) => variableWithValues.id === variableId);
       if (!variable) {
         // This is impossible if the form is only displaying variables that were initialized within the hook
@@ -101,6 +107,7 @@ export const useProjectVariablesUpdate = (
     });
 
     pendingCellValues.forEach((pendingValues, variableId) => {
+      someUpdate = true;
       const variable = variablesWithValues.find((variableWithValues) => variableWithValues.id === variableId);
       if (!variable) {
         // This is impossible if the form is only displaying variables that were initialized within the hook
@@ -120,6 +127,7 @@ export const useProjectVariablesUpdate = (
 
     // handle image updates
     pendingImages.forEach((pendingValues) => {
+      someUpdate = true;
       pendingValues.forEach((image) => {
         const newValue = { type: image.type, citation: image.citation, caption: image.caption };
         operations.push({
@@ -133,6 +141,7 @@ export const useProjectVariablesUpdate = (
 
     // handle image deletions
     pendingDeletedImages.forEach((pendingValues) => {
+      someUpdate = true;
       pendingValues.forEach((deletedImage) => {
         operations.push({
           operation: 'Delete',
@@ -145,6 +154,7 @@ export const useProjectVariablesUpdate = (
     // handle image uploads
     const imageValuesToUpload: UploadImageValueRequestPayloadWithProjectId[] = [];
     pendingNewImages.forEach((pendingValues, variableId) => {
+      someUpdate = true;
       const variable = variablesWithValues.find((variableWithValues) => variableWithValues.id === variableId);
       if (!variable) {
         // This is impossible if the form is only displaying variables that were initialized within the hook
@@ -182,6 +192,13 @@ export const useProjectVariablesUpdate = (
       );
 
       setUpdateVariableRequestId(request.requestId);
+    } else {
+      // if there are no pending changes, set flag to true to fake success & exit
+      setNoOp(true);
+    }
+
+    if (someUpdate) {
+      setNoChanges(false);
     }
   }, [
     pendingCellValues,
@@ -190,6 +207,7 @@ export const useProjectVariablesUpdate = (
     pendingNewImages,
     pendingVariableValues,
     projectId,
+    removedVariableValues,
     variablesWithValues,
   ]);
 
@@ -209,8 +227,9 @@ export const useProjectVariablesUpdate = (
     setNewImages,
     setRemovedValue,
     setValues,
-    updateSuccess: updateResult?.status === 'success',
+    updateSuccess: noOp || updateResult?.status === 'success',
     uploadSuccess: Object.keys(pendingNewImages).length === 0 ? true : uploadResult?.status === 'success',
     update,
+    noChanges,
   };
 };

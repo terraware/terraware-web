@@ -5,7 +5,9 @@ import { DateTime } from 'luxon';
 
 import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import { useLocalization } from 'src/providers';
+import { useApplicationData } from 'src/providers/Application/Context';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -16,11 +18,13 @@ import { ViewProps } from './types';
 const Metadata = (props: ViewProps): JSX.Element => {
   const { deliverable, hideStatusBadge } = props;
   const { activeLocale } = useLocalization();
+  const { isApplicationConsole } = useApplicationPortal();
 
   const snackbar = useSnackbar();
   const theme = useTheme();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { status, update } = useUpdateDeliverable();
+  const { reload } = useApplicationData();
 
   const onUpdateInternalComment = useCallback(
     (internalComment: string) => {
@@ -29,8 +33,12 @@ const Metadata = (props: ViewProps): JSX.Element => {
         status: deliverable.status === 'Overdue' ? 'Not Submitted' : deliverable.status,
         internalComment,
       });
+
+      if (isApplicationConsole) {
+        reload();
+      }
     },
-    [deliverable]
+    [deliverable, reload, isApplicationConsole]
   );
 
   useEffect(() => {

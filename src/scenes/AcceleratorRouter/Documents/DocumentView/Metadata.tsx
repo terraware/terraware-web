@@ -2,14 +2,16 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 
-import InternalComment from 'src/components/DeliverableView/InternalComment';
 import StatusBadge from 'src/components/DocumentProducer/StatusBadge';
 import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
 import { selectDocumentRequest } from 'src/redux/features/documentProducer/documents/documentsSelector';
 import { requestUpdateDocument } from 'src/redux/features/documentProducer/documents/documentsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { DocumentStatus } from 'src/types/documentProducer/Document';
 import useSnackbar from 'src/utils/useSnackbar';
+
+import InternalComment from './InternalComment';
 
 const Metadata = (): JSX.Element => {
   const snackbar = useSnackbar();
@@ -20,12 +22,17 @@ const Metadata = (): JSX.Element => {
   const { document, reloadDocument } = useDocumentProducerData();
 
   const onUpdateInternalComment = useCallback(
-    (internalComment: string) => {
+    (internalComment: string, status: string) => {
       if (document) {
         const request = dispatch(
           requestUpdateDocument({
             id: document.id,
-            payload: { internalComment, name: document.name, ownedBy: document.ownedBy },
+            payload: {
+              internalComment,
+              name: document.name,
+              ownedBy: document.ownedBy,
+              status: status as DocumentStatus,
+            },
           })
         );
         setRequestId(request.requestId);
