@@ -15,6 +15,7 @@ import {
   VariableValueTextValue,
   VariableValueValue,
 } from 'src/types/documentProducer/VariableValue';
+import { isValueEmpty } from 'src/utils/documentProducer/variables';
 
 // TODO this was taken from the pdd-web code, but there is no test, it definitely seems test-worthy
 export const makeVariableValueOperations = ({
@@ -158,44 +159,43 @@ export const makeVariableValueOperations = ({
 
   if (newValue) {
     if (pendingValues[0].id !== -1) {
-      if (newValue.toString() === '') {
-        // Empty string means that user erased the value.
-        operations.push({
-          existingValueId: pendingValues[0].id,
-          operation: 'Delete',
-          valueId: pendingValues[0].id,
-        });
-      } else {
+      if (!isValueEmpty(newValue)) {
         operations.push({
           operation: 'Update',
           valueId: valueIdToUpdate,
           value: newValue,
           existingValueId: valueIdToUpdate,
         });
+      } else {
+        operations.push({
+          existingValueId: pendingValues[0].id,
+          operation: 'Delete',
+          valueId: pendingValues[0].id,
+        });
       }
-    } else if (newValue.toString() !== '') {
-      // This condition check prevents saving of an empty value,
-      // which is usually caused by user typing in something before backspacing
+    } else if (!isValueEmpty(newValue)) {
       operations.push({ operation: 'Append', variableId: variable.id, value: newValue });
     }
   }
 
   if (newTextValues) {
     newTextValues.forEach((nV, index) => {
-      if (pendingValues[index].id !== -1 && nV.textValue) {
-        operations.push({
-          existingValueId: pendingValues[index].id,
-          operation: 'Update',
-          valueId: pendingValues[index].id,
-          value: nV,
-        });
-      } else if (pendingValues[index].id !== -1 && !nV.textValue) {
-        operations.push({
-          existingValueId: pendingValues[index].id,
-          operation: 'Delete',
-          valueId: pendingValues[index].id,
-        });
-      } else if (nV.textValue) {
+      if (pendingValues[index].id !== -1) {
+        if (!isValueEmpty(nV)) {
+          operations.push({
+            existingValueId: pendingValues[index].id,
+            operation: 'Update',
+            valueId: pendingValues[index].id,
+            value: nV,
+          });
+        } else {
+          operations.push({
+            existingValueId: pendingValues[index].id,
+            operation: 'Delete',
+            valueId: pendingValues[index].id,
+          });
+        }
+      } else if (!isValueEmpty(nV)) {
         operations.push({ operation: 'Append', variableId: variable.id, value: nV });
       }
     });

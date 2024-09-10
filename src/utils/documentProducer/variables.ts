@@ -1,5 +1,10 @@
 import { VariableWithValues, isSelectVariable, isTextVariable } from 'src/types/documentProducer/Variable';
 import {
+  NewDateValuePayload,
+  NewLinkValuePayload,
+  NewNumberValuePayload,
+  NewSelectValuePayload,
+  NewTextValuePayload,
   isDateVariableValue,
   isLinkVariableValue,
   isNumberVariableValue,
@@ -84,6 +89,31 @@ export const getRawValue = (variable: VariableWithValues): number | number[] | s
       return firstValue.dateValue;
     case isLinkVariableValue(firstValue):
       return firstValue.url;
+  }
+};
+
+/*
+ * Check if a new varaible value is empty. This is useful for determining between append/update/delete operations
+ */
+export const isValueEmpty = (
+  value: NewDateValuePayload | NewNumberValuePayload | NewSelectValuePayload | NewLinkValuePayload | NewTextValuePayload
+): boolean => {
+  switch (value.type) {
+    case 'Date':
+      const dateValue = value as NewDateValuePayload;
+      return dateValue.dateValue === '';
+    case 'Link':
+      const linkValue = value as NewLinkValuePayload;
+      return linkValue.url === '';
+    case 'Text':
+      const textValue = value as NewTextValuePayload;
+      return textValue.textValue === '';
+    case 'Number':
+      const numberValue = value as NewNumberValuePayload;
+      return numberValue.numberValue.toString() === '';
+    case 'Select':
+      const selectValue = value as NewSelectValuePayload;
+      return selectValue.optionIds.length === 0;
   }
 };
 
