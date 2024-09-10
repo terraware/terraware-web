@@ -18,7 +18,6 @@ import { store } from 'src/redux/store';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-import isEnabled from './features';
 import useApplicationPortal from './hooks/useApplicationPortal';
 import ApplicationPortalRouter from './scenes/ApplicationRouter/portal';
 
@@ -121,7 +120,7 @@ function AppContent() {
           {/* TODO: Add application console router for applciations/{id} case */}
           {isAcceleratorRoute && isAllowed('VIEW_CONSOLE') ? (
             <AcceleratorRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
-          ) : isApplicationPortal && isEnabled('Accelerator Application') ? (
+          ) : isApplicationPortal ? (
             <ApplicationPortalRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
           ) : (
             <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />

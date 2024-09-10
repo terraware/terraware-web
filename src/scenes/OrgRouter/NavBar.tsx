@@ -12,7 +12,6 @@ import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useApplicationData } from 'src/providers/Application/Context';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
@@ -49,7 +48,6 @@ export default function NavBar({
   const { orgHasModules, currentParticipantProject, setCurrentParticipantProject, projectsWithModules } =
     useParticipantData();
 
-  const applicatioinEnabled = isEnabled('Accelerator Application');
   const { allApplications } = useApplicationData();
 
   const isAccessionDashboardRoute = useMatch({ path: APP_PATHS.SEEDS_DASHBOARD + '/', end: false });
@@ -225,7 +223,7 @@ export default function NavBar({
 
   const applicationMenu = useMemo<JSX.Element | null>(
     () =>
-      applicatioinEnabled && allApplications && allApplications.length > 0 ? (
+      allApplications && allApplications.length > 0 ? (
         <NavItem
           label={
             <Box
@@ -252,7 +250,7 @@ export default function NavBar({
           id='applications-list'
         />
       ) : null,
-    [closeAndNavigateTo, allApplications, applicatioinEnabled, isApplicationRoute]
+    [closeAndNavigateTo, allApplications, isApplicationRoute]
   );
 
   const acceleratorSectionTitle = useMemo<string>(
