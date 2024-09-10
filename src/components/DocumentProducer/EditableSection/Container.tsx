@@ -11,11 +11,7 @@ import { requestUpdateVariableWorkflowDetails } from 'src/redux/features/documen
 import useWorkflowSuccess from 'src/redux/hooks/useWorkflowSuccess';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import {
-  SectionVariableWithValues,
-  UpdateVariableWorkflowDetailsPayload,
-  VariableWithValues,
-} from 'src/types/documentProducer/Variable';
+import { SectionVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
   NewSectionTextValuePayload,
   NewSectionVariableValuePayload,
@@ -122,24 +118,6 @@ export default function EditableSectionContainer({
     [section]
   );
 
-  const updateVariableWorkflowDetails = useCallback(
-    ({ feedback, internalComment, status }: UpdateVariableWorkflowDetailsPayload, variableId: number): string => {
-      const request = dispatch(
-        requestUpdateVariableWorkflowDetails({
-          status,
-          feedback,
-          internalComment,
-          projectId,
-          variableId,
-        })
-      );
-      setUpdateVariableWorkflowDetailsRequestId(request.requestId);
-
-      return request.requestId;
-    },
-    [dispatch, projectId, section.id]
-  );
-
   const onEditVariableValue = (variable?: VariableWithValues) => {
     if (variable === undefined) {
       return;
@@ -204,7 +182,7 @@ export default function EditableSectionContainer({
           onCancel={() => setOpenEditVariableModal(false)}
           onFinish={variableUpdated}
           projectId={projectId}
-          updateVariableWorkflowDetails={updateVariableWorkflowDetails}
+          setUpdateWorkflowRequestId={setUpdateVariableWorkflowDetailsRequestId}
           variable={clickedVariable}
         />
       )}

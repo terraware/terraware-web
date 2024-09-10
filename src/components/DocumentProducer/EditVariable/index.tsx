@@ -8,6 +8,7 @@ import VariableDetailsInput from 'src/components/DocumentProducer/VariableDetail
 import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
 import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { selectUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesSelector';
+import { requestUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { UpdateVariableWorkflowDetailsPayload, VariableWithValues } from 'src/types/documentProducer/Variable';
@@ -34,7 +35,7 @@ export type EditVariableProps = {
   variable: VariableWithValues;
   sectionsUsed?: string[];
   onSectionClicked?: (sectionNumber: string) => void;
-  updateVariableWorkflowDetails?: (payload: UpdateVariableWorkflowDetailsPayload, variableId: number) => void;
+  setUpdateWorkflowRequestId?: (requestId: string) => void;
 };
 
 const EditVariable = (props: EditVariableProps): JSX.Element => {
@@ -44,7 +45,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
     onSectionClicked,
     projectId,
     sectionsUsed,
-    updateVariableWorkflowDetails,
+    setUpdateWorkflowRequestId,
     variable,
   } = props;
 
@@ -82,10 +83,17 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
 
   useEffect(() => {
     if (updateVariableValueRequest?.status === 'success' && !updateVariableWorkflowDetailsRequestId) {
-      const requestId = updateVariableWorkflowDetails?.(variableWorkflowDetails, variable.id);
-      if (requestId) {
-        setUpdateVariableWorkflowDetailsRequestId(requestId);
-      }
+      const request = dispatch(
+        requestUpdateVariableWorkflowDetails({
+          status: variableWorkflowDetails.status,
+          feedback: variableWorkflowDetails?.feedback,
+          internalComment: variableWorkflowDetails?.internalComment,
+          projectId,
+          variableId: variable.id,
+        })
+      );
+      setUpdateVariableWorkflowDetailsRequestId(request.requestId);
+      setUpdateWorkflowRequestId?.(request.requestId);
     }
   }, [updateVariableValueRequest, updateVariableWorkflowDetailsRequestId, variableWorkflowDetails]);
 
