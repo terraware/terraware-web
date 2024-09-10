@@ -125,8 +125,10 @@ export const missingRequiredFields = (
     if (!values || values.length === 0) {
       let hasEmptyValue = true;
       if (pendingTableValues?.get(variable.id)?.length) {
-        // if the value was empty but it has pending values
-        hasEmptyValue = false;
+        // if the value was empty but it has NO empty pending values, then it is filled
+        if (pendingTableValues?.get(variable.id)?.some((value) => !!value)) {
+          hasEmptyValue = false;
+        }
       }
       return hasEmptyValue;
     }
