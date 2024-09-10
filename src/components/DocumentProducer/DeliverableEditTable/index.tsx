@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -66,6 +66,12 @@ const DeliverableEditableTableEdit = ({ variable, onChange }: DeliverableEditabl
     newCellValues.splice(rowNum, 1);
     onChangeCellValues(newCellValues);
   };
+
+  useEffect(() => {
+    if (initialCellValues.length === 0 && cellValues.length === 0) {
+      addRow();
+    }
+  }, [cellValues, initialCellValues]);
 
   return (
     <>
