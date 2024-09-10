@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
@@ -17,7 +17,7 @@ import { requestListDeliverableVariables } from 'src/redux/features/documentProd
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
-import { missingRequiredFields, variableDependencyMet } from 'src/utils/documentProducer/variables';
+import { variableDependencyMet } from 'src/utils/documentProducer/variables';
 import useQuery from 'src/utils/useQuery';
 
 import { EditProps } from './types';
@@ -121,7 +121,6 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   const { isApplicationPortal } = useApplicationPortal();
 
   const { deliverable, exit, hideStatusBadge } = props;
-  const [validateFields, setValidateFields] = useState<boolean>(false);
 
   const scrollToVariable = useCallback((variableId: string) => {
     const element = document.querySelector(`[data-variable-id="${variableId}"]`);
@@ -157,24 +156,14 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     setNewImages,
     setRemovedValue,
     setValues,
+    stagedVariableWithValues,
     update,
     updateSuccess,
     uploadSuccess,
-    noChanges,
+    missingFields,
   } = useProjectVariablesUpdate(deliverable.projectId, variablesWithValues);
 
   const { complete } = useCompleteDeliverable();
-
-  const stagedVariableWithValues: VariableWithValues[] = useMemo(() => {
-    return variablesWithValues.map((variableWithValues) => {
-      const pendingValues = pendingVariableValues.get(variableWithValues.id);
-      if (pendingValues !== undefined) {
-        return { ...variableWithValues, values: pendingValues };
-      } else {
-        return variableWithValues;
-      }
-    });
-  }, [pendingVariableValues, variablesWithValues]);
 
   useEffect(() => {
     if (!deliverable) {
@@ -185,7 +174,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     void dispatch(
       requestListDeliverableVariablesValues({ deliverableId: deliverable.id, projectId: deliverable.projectId })
     );
-  }, [deliverable]);
+  }, [deliverable, dispatch]);
 
   useEffect(() => {
     if (updateSuccess && uploadSuccess) {
@@ -194,8 +183,6 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   }, [exit, updateSuccess, uploadSuccess]);
 
   const handleOnSave = useCallback(() => {
-    const missingFields = missingRequiredFields(stagedVariableWithValues);
-
     // If Questionnaire Deliverable is part of the Application and all fields are completed, mark deliverable as “Completed”
     if (isApplicationPortal) {
       if (!missingFields) {
@@ -203,17 +190,14 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
       }
     }
 
-    update();
+    const hasChanges = update();
 
-    if (noChanges) {
+    if (!hasChanges) {
       // If the user clicks save but there are no changes, just navigate them back to the deliverable
       exit();
+      return;
     }
-  }, [isApplicationPortal, complete, deliverable, setValidateFields, update, missingRequiredFields]);
-
-  if (!deliverable) {
-    return null;
-  }
+  }, [complete, deliverable, exit, isApplicationPortal, missingFields, update]);
 
   return (
     <WrappedPageForm
@@ -251,7 +235,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
                   setNewImages={(newValues: PhotoWithAttributes[]) => setNewImages(variableWithValues.id, newValues)}
                   setValues={(newValues: VariableValueValue[]) => setValues(variableWithValues.id, newValues)}
                   variable={variableWithValues}
-                  validateFields={validateFields}
+                  validateFields={false}
                 />
               ) : null
             )}

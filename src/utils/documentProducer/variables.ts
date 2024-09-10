@@ -1,5 +1,12 @@
 import { VariableWithValues, isSelectVariable, isTextVariable } from 'src/types/documentProducer/Variable';
 import {
+  NewDateValuePayload,
+  NewLinkValuePayload,
+  NewNumberValuePayload,
+  NewSelectValuePayload,
+  NewTextValuePayload,
+  isDateVariableValue,
+  isLinkVariableValue,
   isNumberVariableValue,
   isSelectVariableValue,
   isTextVariableValue,
@@ -78,6 +85,30 @@ export const getRawValue = (variable: VariableWithValues): number | number[] | s
       return firstValue.textValue;
     case isSelectVariableValue(firstValue):
       return firstValue.optionValues;
+    case isDateVariableValue(firstValue):
+      return firstValue.dateValue;
+    case isLinkVariableValue(firstValue):
+      return firstValue.url;
+  }
+};
+
+/*
+ * Check if a new varaible value is empty. This is useful for determining between append/update/delete operations
+ */
+export const isValueEmpty = (
+  value: NewDateValuePayload | NewNumberValuePayload | NewSelectValuePayload | NewLinkValuePayload | NewTextValuePayload
+): boolean => {
+  switch (value.type) {
+    case 'Date':
+      return value.dateValue === '';
+    case 'Link':
+      return value.url === '';
+    case 'Text':
+      return value.textValue === '';
+    case 'Number':
+      return value.numberValue.toString() === '';
+    case 'Select':
+      return value.optionIds.length === 0;
   }
 };
 
@@ -87,12 +118,24 @@ export const missingRequiredFields = (variablesWithValues: VariableWithValues[])
   );
 
   const missingRequiredFields = allRequiredVariables.some((variable) => {
-    let hasEmptyValue = false;
     const values = variable.values;
-    if (!values || values.length === 0 || getRawValue(variable) === undefined || getRawValue(variable) === '') {
-      hasEmptyValue = true;
+    if (!values || values.length === 0) {
+      return true;
     }
-    return hasEmptyValue;
+    switch (variable.type) {
+      case 'Select':
+      case 'Text':
+      case 'Number':
+      case 'Date':
+      case 'Link':
+        return getRawValue(variable) === undefined || getRawValue(variable) === '';
+      case 'Image':
+      case 'Section':
+      case 'Table':
+      // Do nothing
+    }
+
+    return false;
   });
 
   return missingRequiredFields;
