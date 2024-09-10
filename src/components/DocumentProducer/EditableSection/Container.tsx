@@ -57,8 +57,8 @@ export default function EditableSectionContainer({
   const [clickedVariable, setClickedVariable] = useState<VariableWithValues>();
 
   const [editing, setEditing] = useState(false);
-  const [requestId, setRequestId] = useState<string>('');
-  const selector = useAppSelector(selectUpdateVariableValues(requestId));
+  const [updateVariableValuesRequestId, setUpdateVariableValuesRequestId] = useState<string>('');
+  const updateVariableValuesRequest = useAppSelector(selectUpdateVariableValues(updateVariableValuesRequestId));
 
   const [updateInternalCommentRequestId, setUpdateInternalCommentRequestId] = useState<string>('');
   const updateInternalCommentRequest = useAppSelector(
@@ -71,11 +71,12 @@ export default function EditableSectionContainer({
   );
 
   useWorkflowSuccess({
-    workflowState: selector,
+    workflowState: updateVariableValuesRequest,
     onSuccess: () => {
       setEditing(false);
       setSectionValues(editSectionValues);
-      setRequestId('');
+      setUpdateVariableValuesRequestId('');
+      setUpdateVariableWorkflowDetailsRequestId('');
     },
   });
 
@@ -97,7 +98,7 @@ export default function EditableSectionContainer({
         projectId,
       })
     );
-    setRequestId(request.requestId);
+    setUpdateVariableValuesRequestId(request.requestId);
   }, [dispatch, projectId, section.id, editSectionValues]);
 
   const onCancelHandler = () => {
@@ -122,7 +123,7 @@ export default function EditableSectionContainer({
   );
 
   const updateVariableWorkflowDetails = useCallback(
-    ({ feedback, internalComment, status }: UpdateVariableWorkflowDetailsPayload, variableId: number) => {
+    ({ feedback, internalComment, status }: UpdateVariableWorkflowDetailsPayload, variableId: number): string => {
       const request = dispatch(
         requestUpdateVariableWorkflowDetails({
           status,
@@ -133,6 +134,8 @@ export default function EditableSectionContainer({
         })
       );
       setUpdateVariableWorkflowDetailsRequestId(request.requestId);
+
+      return request.requestId;
     },
     [dispatch, projectId, section.id]
   );

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Grid } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -7,6 +7,7 @@ import PageDialog from 'src/components/DocumentProducer/PageDialog';
 import VariableDetailsInput from 'src/components/DocumentProducer/VariableDetailsInput';
 import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
 import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
+import { selectUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesSelector';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { UpdateVariableWorkflowDetailsPayload, VariableWithValues } from 'src/types/documentProducer/Variable';
@@ -68,11 +69,25 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
   const [display, setDisplay] = useState<boolean>(displayProp);
   const [validate, setValidate] = useState<boolean>(false);
   const [hasErrors, setHasErrors] = useState<boolean>(false);
-  const [requestId, setRequestId] = useState<string>('');
+  const [updateVariableValuesRequestId, setUpdateVariableValuesRequestId] = useState<string>('');
   const [values, setValues] = useState<VariableValueValue[]>(variable.values);
   const [removedValues, setRemovedValues] = useState<VariableValueValue[]>();
 
-  const results = useAppSelector(selectUpdateVariableValues(requestId));
+  const updateVariableValueRequest = useAppSelector(selectUpdateVariableValues(updateVariableValuesRequestId));
+
+  const [updateVariableWorkflowDetailsRequestId, setUpdateVariableWorkflowDetailsRequestId] = useState<string>('');
+  const updateVariableWorkflowDetailsRequest = useAppSelector(
+    selectUpdateVariableWorkflowDetails(updateVariableWorkflowDetailsRequestId)
+  );
+
+  useEffect(() => {
+    if (updateVariableValueRequest?.status === 'success' && !updateVariableWorkflowDetailsRequestId) {
+      const requestId = updateVariableWorkflowDetails?.(variableWorkflowDetails, variable.id);
+      if (requestId) {
+        setUpdateVariableWorkflowDetailsRequestId(requestId);
+      }
+    }
+  }, [updateVariableValueRequest, updateVariableWorkflowDetailsRequestId, variableWorkflowDetails]);
 
   const save = () => {
     setValidate(true);
@@ -131,7 +146,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
               projectId: projectId,
             })
           );
-          setRequestId(request.requestId);
+          setUpdateVariableValuesRequestId(request.requestId);
         } else {
           const request = dispatch(
             requestUpdateVariableValues({
@@ -139,7 +154,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
               projectId: projectId,
             })
           );
-          setRequestId(request.requestId);
+          setUpdateVariableValuesRequestId(request.requestId);
         }
       }
       if (newValues) {
@@ -173,14 +188,14 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
             projectId,
           })
         );
-        setRequestId(request.requestId);
+        setUpdateVariableValuesRequestId(request.requestId);
       }
     }
-    updateVariableWorkflowDetails?.(variableWorkflowDetails, variable.id);
   };
 
   const onCancel = useCallback(() => {
-    setRequestId('');
+    setUpdateVariableValuesRequestId('');
+    setUpdateVariableWorkflowDetailsRequestId('');
     onFinish(false);
   }, []);
 
@@ -200,7 +215,13 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
 
   return (
     <PageDialog
-      workflowState={requestId ? results : undefined}
+      workflowState={
+        updateVariableWorkflowDetailsRequestId
+          ? updateVariableWorkflowDetailsRequest
+          : updateVariableValuesRequestId
+            ? updateVariableValueRequest
+            : undefined
+      }
       onSuccess={onSuccess}
       onClose={onCancel}
       open={true}
