@@ -1,4 +1,4 @@
-import { VariableTableCell } from 'src/components/DocumentProducer/EditableTableModal/helpers';
+import { VariableTableCell, cellValue } from 'src/components/DocumentProducer/EditableTableModal/helpers';
 import { VariableWithValues, isSelectVariable, isTextVariable } from 'src/types/documentProducer/Variable';
 import {
   NewDateValuePayload,
@@ -115,22 +115,34 @@ export const isValueEmpty = (
 
 export const missingRequiredFields = (
   variablesWithValues: VariableWithValues[],
-  pendingTableValues?: Map<number, VariableTableCell[][]>
+  stagedCellValues?: Map<number, VariableTableCell[][]>
 ) => {
   const allRequiredVariables = variablesWithValues.filter(
     (v) => v.isRequired && variableDependencyMet(v, variablesWithValues)
   );
-  const missingRequiredFields = allRequiredVariables.some((variable) => {
+
+  return allRequiredVariables.some((variable) => {
+    if (variable.type === 'Table') {
+      const cells = stagedCellValues?.get(variable.id);
+
+      // Return false if no table row exists
+      if (!cells || cells.length === 0) {
+        return false;
+      }
+
+      return cells.every((row) =>
+        row.every((cell) => {
+          if (cell.values === undefined || cell.values.length === 0) {
+            return true;
+          }
+          return cellValue(cell.values[0]).toString() === '';
+        })
+      );
+    }
+
     const values = variable.values;
     if (!values || values.length === 0) {
-      let hasEmptyValue = true;
-      if (pendingTableValues?.get(variable.id)?.length) {
-        // if the value was empty but it has NO empty pending values, then it is filled
-        if (pendingTableValues?.get(variable.id)?.some((value) => !!value)) {
-          hasEmptyValue = false;
-        }
-      }
-      return hasEmptyValue;
+      return true;
     }
     switch (variable.type) {
       case 'Select':
@@ -141,12 +153,9 @@ export const missingRequiredFields = (
         return getRawValue(variable) === undefined || getRawValue(variable) === '';
       case 'Image':
       case 'Section':
-      case 'Table':
       // Do nothing
     }
 
     return false;
   });
-
-  return missingRequiredFields;
 };

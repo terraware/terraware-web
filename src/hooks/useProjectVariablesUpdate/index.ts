@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { PhotoWithAttributes } from 'src/components/DocumentProducer/EditImagesModal/PhotoSelector';
-import { VariableTableCell } from 'src/components/DocumentProducer/EditableTableModal/helpers';
+import { VariableTableCell, getInitialCellValues } from 'src/components/DocumentProducer/EditableTableModal/helpers';
 import {
   selectUpdateVariableValues,
   selectUploadImageValue,
@@ -12,7 +12,7 @@ import {
 } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { VariableWithValues } from 'src/types/documentProducer/Variable';
+import { TableVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
   Operation,
   UploadImageValueRequestPayloadWithProjectId,
@@ -95,10 +95,30 @@ export const useProjectVariablesUpdate = (
     });
   }, [pendingVariableValues, variablesWithValues]);
 
+  const stagedCellValues = useMemo(() => {
+    const map = new Map<number, VariableTableCell[][]>();
+    variablesWithValues
+      .filter((variable): variable is TableVariableWithValues => variable.type === 'Table')
+      .forEach((variable) => {
+        const initialValues = getInitialCellValues(variable);
+        const pendingValues = pendingCellValues.get(variable.id);
+        if (pendingValues !== undefined) {
+          map.set(variable.id, pendingValues);
+        } else {
+          map.set(variable.id, initialValues);
+        }
+      });
+    return map;
+  }, [variablesWithValues, pendingCellValues]);
+
   const missingFields = useMemo(
-    () => missingRequiredFields(stagedVariableWithValues, pendingCellValues),
-    [missingRequiredFields, stagedVariableWithValues, pendingCellValues]
+    () => missingRequiredFields(stagedVariableWithValues, stagedCellValues),
+    [missingRequiredFields, stagedVariableWithValues, stagedCellValues]
   );
+
+  useEffect(() => {
+    console.log(missingFields);
+  }, [missingFields]);
 
   const update = useCallback(() => {
     let operations: Operation[] = [];
