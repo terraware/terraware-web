@@ -216,11 +216,9 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
   return (
     <PageDialog
       workflowState={
-        updateVariableWorkflowDetailsRequestId
+        updateVariableValueRequest?.status === 'success'
           ? updateVariableWorkflowDetailsRequest
-          : updateVariableValuesRequestId
-            ? updateVariableValueRequest
-            : undefined
+          : updateVariableValueRequest
       }
       onSuccess={onSuccess}
       onClose={onCancel}
