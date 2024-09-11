@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { Button, Textfield } from '@terraware/web-components';
 
 import PageDialog from 'src/components/DocumentProducer/PageDialog';
+import VariableWorkflowDetails from 'src/components/DocumentProducer/VariableWorkflowDetails';
 import {
   selectUpdateVariableValues,
   selectUploadImageValue,
@@ -12,13 +13,16 @@ import {
   requestUpdateVariableValues,
   requestUploadImageValue,
 } from 'src/redux/features/documentProducer/values/valuesThunks';
+import { selectUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesSelector';
+import { requestUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ImageVariableWithValues } from 'src/types/documentProducer/Variable';
+import { ImageVariableWithValues, UpdateVariableWorkflowDetailsPayload } from 'src/types/documentProducer/Variable';
 import {
   DeleteVariableValueOperation,
   Operation,
   UpdateVariableValueOperation,
+  VariableValue,
   VariableValueImageValue,
 } from 'src/types/documentProducer/VariableValue';
 import { getImagePath } from 'src/utils/images';
@@ -31,21 +35,53 @@ export type EditImagesModalProps = {
   onFinish: (edited: boolean) => void;
   onCancel: () => void;
   projectId: number;
+  setUpdateWorkflowRequestId?: (requestId: string) => void;
 };
 
 const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
-  const { display: displayProp = false, variable, onFinish, onCancel, projectId } = props;
+  const { display: displayProp = false, variable, onFinish, onCancel, projectId, setUpdateWorkflowRequestId } = props;
   const theme = useTheme();
   const [imagesCopy, setImagesCopy] = useState(variable.values);
   const [deletedImages, setDeletedImages] = useState<VariableValueImageValue[]>();
   const [newImages, setNewImages] = useState<PhotoWithAttributes[]>();
   const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState<string>('');
-  const [uploadRequestId, setUploadRequestId] = useState<string>('');
+  const [updateVariableValueRequestId, setUpdateVariableValueRequestId] = useState<string>('');
+  const [uploadImageRequestId, setUploadImageRequestId] = useState<string>('');
   const [display, setDisplay] = useState<boolean>(displayProp);
 
-  const selector = useAppSelector(selectUpdateVariableValues(requestId));
-  const uploadSelector = useAppSelector(selectUploadImageValue(uploadRequestId));
+  const updateVariableValuesRequest = useAppSelector(selectUpdateVariableValues(updateVariableValueRequestId));
+  const uploadImageRequest = useAppSelector(selectUploadImageValue(uploadImageRequestId));
+
+  const [updateVariableWorkflowDetailsRequestId, setUpdateVariableWorkflowDetailsRequestId] = useState<string>('');
+  const updateVariableWorkflowDetailsRequest = useAppSelector(
+    selectUpdateVariableWorkflowDetails(updateVariableWorkflowDetailsRequestId)
+  );
+
+  const variableValue: VariableValue | undefined = (variable?.variableValues || []).find(
+    (value) => value.variableId === variable.id
+  );
+
+  const [variableWorkflowDetails, setVariableWorkflowDetails] = useState<UpdateVariableWorkflowDetailsPayload>({
+    feedback: variableValue?.feedback,
+    internalComment: variableValue?.internalComment,
+    status: variableValue?.status || 'Not Submitted',
+  });
+
+  useEffect(() => {
+    if (updateVariableValuesRequest?.status === 'success' && !updateVariableWorkflowDetailsRequestId) {
+      const request = dispatch(
+        requestUpdateVariableWorkflowDetails({
+          feedback: variableWorkflowDetails?.feedback,
+          internalComment: variableWorkflowDetails?.internalComment,
+          projectId,
+          status: variableWorkflowDetails.status,
+          variableId: variable.id,
+        })
+      );
+      setUpdateVariableWorkflowDetailsRequestId(request.requestId);
+      setUpdateWorkflowRequestId?.(request.requestId);
+    }
+  }, [updateVariableValuesRequest, updateVariableWorkflowDetailsRequestId, variableWorkflowDetails]);
 
   const handleSave = () => {
     // update old images
@@ -60,7 +96,7 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
       return operation;
     });
 
-    // upload new imagess
+    // upload new images
     if (newImages) {
       newImages.forEach((newImage, index) => {
         const upRequest = dispatch(
@@ -75,7 +111,7 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
 
         // set request id with last image request
         if (newImages.length - 1 === index) {
-          setUploadRequestId(upRequest.requestId);
+          setUploadImageRequestId(upRequest.requestId);
         }
       });
     }
@@ -99,7 +135,7 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
         projectId,
       })
     );
-    setRequestId(request.requestId);
+    setUpdateVariableValueRequestId(request.requestId);
   };
 
   const onUpdateImage = (newImage: VariableValueImageValue) => {
@@ -128,14 +164,22 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
   };
 
   const onCloseHandler = () => {
-    setUploadRequestId('');
-    setRequestId('');
+    setUploadImageRequestId('');
+    setUpdateVariableValueRequestId('');
     onCancel();
   };
 
   return (
     <PageDialog
-      workflowState={uploadRequestId ? uploadSelector : requestId ? selector : undefined}
+      workflowState={
+        uploadImageRequestId
+          ? uploadImageRequest
+          : updateVariableValueRequestId
+            ? updateVariableValuesRequest?.status === 'success'
+              ? updateVariableWorkflowDetailsRequest
+              : updateVariableValuesRequest
+            : undefined
+      }
       onSuccess={onFinish}
       onClose={onCloseHandler}
       open={true}
@@ -255,6 +299,12 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
             <PhotoSelector onPhotosChanged={onFilesChanged} multipleSelection={variable.isList} />
           </Grid>
         )}
+
+        <VariableWorkflowDetails
+          display={display}
+          setVariableWorkflowDetails={setVariableWorkflowDetails}
+          variableWorkflowDetails={variableWorkflowDetails}
+        />
       </Grid>
     </PageDialog>
   );
