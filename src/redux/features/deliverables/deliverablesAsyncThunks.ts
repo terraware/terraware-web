@@ -106,3 +106,17 @@ export const requestCompleteDeliverable = createAsyncThunk(
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
+
+export const requestIncompleteDeliverable = createAsyncThunk(
+  'deliverables/incomplete',
+  async (request: { deliverableId: number; projectId: number }, { rejectWithValue }) => {
+    const { deliverableId, projectId } = request;
+
+    const response = await DeliverablesService.incomplete(deliverableId, projectId);
+    if (response && response.requestSucceeded) {
+      return deliverableId;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
