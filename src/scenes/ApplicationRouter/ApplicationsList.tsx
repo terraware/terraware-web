@@ -8,10 +8,10 @@ import ApplicationCard from 'src/components/Application/ApplicationCard';
 import PageHeader from 'src/components/PageHeader';
 import Button from 'src/components/common/button/Button';
 import { useOrganization } from 'src/providers';
+import { useApplicationData } from 'src/providers/Application/Context';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
 
-import { useApplicationData } from '../../providers/Application/Context';
 import NewApplicationModal from './NewApplicationModal';
 
 const ApplicationListView = () => {
@@ -21,10 +21,10 @@ const ApplicationListView = () => {
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    if (allApplications && allApplications.length === 0) {
+    if (isAdmin(selectedOrganization) && allApplications && allApplications.length === 0) {
       setIsNewApplicationModalOpen(true);
     }
-  }, [allApplications, setIsNewApplicationModalOpen]);
+  }, [allApplications, selectedOrganization, setIsNewApplicationModalOpen]);
 
   const primaryGridSize = () => {
     if (isMobile) {
