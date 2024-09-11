@@ -70,7 +70,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
 
         newValues = values.reduce((acc: NewTextValuePayload[], nV: VariableValueValue) => {
           if (nV.type === 'Text') {
-            acc.push({ type: 'Text', textValue: nV.textValue });
+            acc.push({ type: 'Text', textValue: nV.textValue, citation: nV.citation });
           }
           return acc;
         }, []);
