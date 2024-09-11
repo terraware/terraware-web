@@ -1,3 +1,4 @@
+e16ee7ea4ed Removed unused Regex (#3168)
 7d0dfeefd3a SW-5969 Hide internal only variables in question view (#3167)
 33b5a5ad989 SW-5999 Implemented method to delete cell value and row if all columns are empty (#3170)
 0601076e197 SW-6001: Limit "start application" to Admins and above (#3169)
