@@ -133,6 +133,7 @@ const DeliverablesList = (): JSX.Element => {
                     </Typography>
                     <ProjectsDropdown
                       allowUnselect
+                      autoComplete
                       availableProjects={moduleProjects}
                       label={''}
                       record={projectFilter}

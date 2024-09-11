@@ -8,6 +8,7 @@ import { Project } from 'src/types/Project';
 
 type ProjectsDropdownProps<T extends { projectId?: number | string } | undefined> = {
   allowUnselect?: boolean;
+  autoComplete?: boolean;
   availableProjects: Project[] | undefined;
   label?: string | undefined;
   record: T;
@@ -18,6 +19,7 @@ type ProjectsDropdownProps<T extends { projectId?: number | string } | undefined
 
 function ProjectsDropdown<T extends { projectId?: number | string } | undefined>({
   allowUnselect,
+  autoComplete,
   availableProjects,
   label,
   record,
@@ -52,6 +54,7 @@ function ProjectsDropdown<T extends { projectId?: number | string } | undefined>
 
   return (
     <Dropdown
+      autocomplete={autoComplete}
       id='projectId'
       label={label === '' ? label : strings.PROJECT}
       selectedValue={record?.projectId}
@@ -66,6 +69,7 @@ function ProjectsDropdown<T extends { projectId?: number | string } | undefined>
       }}
       fullWidth
       required={required}
+      sx={{ backgroundColor: '#fff', minWidth: '240px' }}
     />
   );
 }
