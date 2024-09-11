@@ -47,7 +47,7 @@ const QuestionBox = ({
       </Box>
       <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>
         {/* Defaults to deliverable question, then variable name */}
-        {variable.deliverableQuestion ?? variable.name}
+        {`${variable.deliverableQuestion ?? variable.name} ${variable.isRequired ? '*' : ''}`}
       </Typography>
       {!!variable.description && (
         <Typography
