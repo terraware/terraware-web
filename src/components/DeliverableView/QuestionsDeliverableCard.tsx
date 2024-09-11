@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Message } from '@terraware/web-components';
 
 import DeliverableDisplayVariableValue from 'src/components/DocumentProducer/DeliverableDisplayVariableValue';
+import VariableStatusBadge from 'src/components/Variables/VariableStatusBadge';
 import Card from 'src/components/common/Card';
 import { useIsVisible } from 'src/hooks/useIsVisible';
 import { requestListDeliverableVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
@@ -14,7 +15,6 @@ import { VariableStatusType, VariableWithValues } from 'src/types/documentProduc
 import { VariableValue } from 'src/types/documentProducer/VariableValue';
 import { variableDependencyMet } from 'src/utils/documentProducer/variables';
 
-import VariableStatusBadge from '../Variables/VariableStatusBadge';
 import Metadata from './Metadata';
 import QuestionsDeliverableStatusMessage from './QuestionsDeliverableStatusMessage';
 import { EditProps } from './types';
@@ -82,6 +82,11 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element | null => {
     selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
   );
 
+  const filteredVariablesWithValues = useMemo(
+    () => variablesWithValues.filter((variable) => !variable.internalOnly),
+    [variablesWithValues]
+  );
+
   useEffect(() => {
     void dispatch(requestListDeliverableVariables(deliverable.id));
     void dispatch(
@@ -95,7 +100,7 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element | null => {
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
-      <QuestionsDeliverableStatusMessage deliverable={deliverable} variables={variablesWithValues} />
+      <QuestionsDeliverableStatusMessage deliverable={deliverable} variables={filteredVariablesWithValues} />
       <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         <Metadata {...props} />
         <Box
@@ -105,8 +110,8 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element | null => {
             paddingTop: theme.spacing(3),
           }}
         >
-          {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) =>
-            variableDependencyMet(variableWithValues, variablesWithValues) ? (
+          {filteredVariablesWithValues.map((variableWithValues: VariableWithValues, index: number) =>
+            variableDependencyMet(variableWithValues, filteredVariablesWithValues) ? (
               <QuestionBox
                 key={index}
                 projectId={deliverable.projectId}

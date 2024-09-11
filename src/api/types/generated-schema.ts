@@ -1102,6 +1102,7 @@ export interface components {
       id: number;
       name: string;
       projects: components["schemas"]["AcceleratorProjectPayload"][];
+      tfContactUser?: components["schemas"]["TerraformationContactUserPayload"];
     };
     AcceleratorProjectPayload: {
       /** Format: int64 */
@@ -4601,6 +4602,13 @@ export interface components {
       filename: string;
       temporaryAttachmentId: string;
     };
+    TerraformationContactUserPayload: {
+      email: string;
+      firstName?: string;
+      lastName?: string;
+      /** Format: int64 */
+      userId: number;
+    };
     TextVariablePayload: WithRequired<{
       type: "Text";
     } & Omit<components["schemas"]["VariablePayload"], "type"> & ({
@@ -5311,6 +5319,7 @@ export interface components {
       description?: string;
       /** Format: int64 */
       id: number;
+      internalOnly: boolean;
       isList: boolean;
       isRequired: boolean;
       name: string;
