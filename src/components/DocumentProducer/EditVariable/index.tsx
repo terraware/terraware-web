@@ -85,10 +85,10 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
     if (updateVariableValuesRequest?.status === 'success' && !updateVariableWorkflowDetailsRequestId) {
       const request = dispatch(
         requestUpdateVariableWorkflowDetails({
-          status: variableWorkflowDetails.status,
           feedback: variableWorkflowDetails?.feedback,
           internalComment: variableWorkflowDetails?.internalComment,
           projectId,
+          status: variableWorkflowDetails.status,
           variableId: variable.id,
         })
       );
