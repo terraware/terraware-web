@@ -153,7 +153,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
       <NavItem
         id='review'
         disabled={!isApplicationEnabled}
-        label={strings.REVIEW}
+        label={strings.REVIEW_AND_SUBMIT}
         onClick={() => closeAndNavigateTo(APP_PATHS.APPLICATION_REVIEW)}
         selected={!!isReviewRoute}
       />
