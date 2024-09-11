@@ -110,7 +110,8 @@ const ParticipantProvider = ({ children }: Props) => {
     if (moduleProjectsListRequest && moduleProjectsListRequest.status === 'success' && moduleProjectsListRequest.data) {
       const nextModuleProjects = moduleProjectsListRequest.data
         .map((id) => participantProjects.find((project) => project.id === id))
-        .filter((project): project is Project => !!project);
+        .filter((project): project is Project => !!project)
+        .sort((a, b) => a.name.localeCompare(b.name));
 
       setModuleProjects(nextModuleProjects);
       setOrgHasModules(nextModuleProjects.length > 0);
