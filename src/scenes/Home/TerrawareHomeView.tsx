@@ -105,24 +105,26 @@ const TerrawareHomeView = () => {
                   linkStyle={'plain'}
                 />
               </Grid>
-              <Grid item xs={secondaryGridSize()}>
-                <PageCard
-                  cardIsClickable={false}
-                  id='applicationHomeCard'
-                  name={strings.APPLY_TO_ACCELERATOR}
-                  icon='iconFile'
-                  description={strings.formatString(
-                    strings.APPLY_TO_ACCELERATOR_DESCRIPTION,
-                    <Link fontSize='16px' to={ACCELERATOR_LINK} target='_blank'>
-                      {strings.HERE}
-                    </Link>
-                  )}
-                  link={APP_PATHS.APPLICATIONS}
-                  linkText={strings.START_NEW_APPLICATION}
-                  linkStyle={'button-primary'}
-                  onClick={() => setIsNewApplicationModalOpen(true)}
-                />
-              </Grid>
+              {isAdmin(selectedOrganization) && (
+                <Grid item xs={secondaryGridSize()}>
+                  <PageCard
+                    cardIsClickable={false}
+                    id='applicationHomeCard'
+                    name={strings.APPLY_TO_ACCELERATOR}
+                    icon='iconFile'
+                    description={strings.formatString(
+                      strings.APPLY_TO_ACCELERATOR_DESCRIPTION,
+                      <Link fontSize='16px' to={ACCELERATOR_LINK} target='_blank'>
+                        {strings.HERE}
+                      </Link>
+                    )}
+                    link={APP_PATHS.APPLICATIONS}
+                    linkText={strings.START_NEW_APPLICATION}
+                    linkStyle={'button-primary'}
+                    onClick={() => setIsNewApplicationModalOpen(true)}
+                  />
+                </Grid>
+              )}
             </Grid>
           </Container>
         </Box>

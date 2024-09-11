@@ -7,21 +7,24 @@ import { DateTime } from 'luxon';
 import ApplicationCard from 'src/components/Application/ApplicationCard';
 import PageHeader from 'src/components/PageHeader';
 import Button from 'src/components/common/button/Button';
+import { useOrganization } from 'src/providers';
+import { useApplicationData } from 'src/providers/Application/Context';
 import strings from 'src/strings';
+import { isAdmin } from 'src/utils/organization';
 
-import { useApplicationData } from '../../providers/Application/Context';
 import NewApplicationModal from './NewApplicationModal';
 
 const ApplicationListView = () => {
+  const { selectedOrganization } = useOrganization();
   const { isTablet, isMobile } = useDeviceInfo();
   const { allApplications } = useApplicationData();
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    if (allApplications && allApplications.length === 0) {
+    if (isAdmin(selectedOrganization) && allApplications && allApplications.length === 0) {
       setIsNewApplicationModalOpen(true);
     }
-  }, [allApplications, setIsNewApplicationModalOpen]);
+  }, [allApplications, selectedOrganization, setIsNewApplicationModalOpen]);
 
   const primaryGridSize = () => {
     if (isMobile) {
@@ -53,7 +56,11 @@ const ApplicationListView = () => {
         <PageHeader
           title={strings.YOUR_APPLICATIONS}
           rightComponent={
-            <Button onClick={() => setIsNewApplicationModalOpen(true)} label={strings.START_NEW_APPLICATION} />
+            <Button
+              disabled={!isAdmin(selectedOrganization)}
+              label={strings.START_NEW_APPLICATION}
+              onClick={() => setIsNewApplicationModalOpen(true)}
+            />
           }
         />
         <Container maxWidth={false} sx={{ padding: 0 }}>
