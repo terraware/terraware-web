@@ -97,6 +97,28 @@ export const makeVariableValueOperations = ({
             valueId: rowId,
             existingValueId: rowId,
           });
+        } else if (
+          foundRow.every((cell) => {
+            const foundCell = foundRow.find((c) => c.colId === cell.colId);
+            if (foundCell !== undefined && foundCell.changed) {
+              return (
+                foundCell.values === undefined ||
+                foundCell.values.length === 0 ||
+                cellValue(foundCell.values[0]).toString() === ''
+              );
+            } else {
+              return (
+                cell.values === undefined || cell.values.length === 0 || cellValue(cell.values[0]).toString() === ''
+              );
+            }
+          })
+        ) {
+          // delete entirely empty row
+          operations.push({
+            operation: 'Delete',
+            valueId: rowId,
+            existingValueId: rowId,
+          });
         } else {
           // replace operations
           row.forEach((cell) => {
