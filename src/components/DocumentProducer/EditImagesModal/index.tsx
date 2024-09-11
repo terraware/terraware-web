@@ -174,11 +174,9 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
       workflowState={
         uploadImageRequestId
           ? uploadImageRequest
-          : updateVariableValueRequestId
-            ? updateVariableValuesRequest?.status === 'success'
-              ? updateVariableWorkflowDetailsRequest
-              : updateVariableValuesRequest
-            : undefined
+          : updateVariableValuesRequest?.status === 'success'
+            ? updateVariableWorkflowDetailsRequest
+            : updateVariableValuesRequest
       }
       onSuccess={onFinish}
       onClose={onCloseHandler}
