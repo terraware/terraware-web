@@ -26,6 +26,8 @@ const ENDPOINT_DELIVERABLE_SUBMISSION_SUBMIT =
   '/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}/submit';
 const ENDPOINT_DELIVERABLE_SUBMISSION_COMPLETE =
   '/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}/complete';
+const ENDPOINT_DELIVERABLE_SUBMISSION_INCOMPLETE =
+  '/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}/incomplete';
 const ENDPOINT_DELIVERABLE_DOCUMENT_UPLOAD = '/api/v1/accelerator/deliverables/{deliverableId}/documents';
 export const ENDPOINT_DELIVERABLE_DOCUMENT = '/api/v1/accelerator/deliverables/{deliverableId}/documents/{documentId}';
 
@@ -45,6 +47,7 @@ const httpDeliverableSubmission = HttpService.root(ENDPOINT_DELIVERABLE_SUBMISSI
 const httpDocumentUpload = HttpService.root(ENDPOINT_DELIVERABLE_DOCUMENT_UPLOAD);
 const httpDeliverableSubmit = HttpService.root(ENDPOINT_DELIVERABLE_SUBMISSION_SUBMIT);
 const httpDeliverableComplete = HttpService.root(ENDPOINT_DELIVERABLE_SUBMISSION_COMPLETE);
+const httpDeliverableIncomplete = HttpService.root(ENDPOINT_DELIVERABLE_SUBMISSION_INCOMPLETE);
 
 const isOverdue = (deliverable: Deliverable | ListDeliverablesElement): boolean => {
   return !!(
@@ -185,6 +188,18 @@ const complete = async (deliverableiId: number, projectId: number): Promise<Resp
   });
 };
 
+/**
+ * Marks a submission from a project deliverable as incomplete
+ */
+const incomplete = async (deliverableiId: number, projectId: number): Promise<Response> => {
+  return httpDeliverableIncomplete.post2<UpdateSubmissionResponsePayload>({
+    urlReplacements: {
+      '{deliverableId}': `${deliverableiId}`,
+      '{projectId}': `${projectId}`,
+    },
+  });
+};
+
 const DeliverablesService = {
   get,
   list,
@@ -192,6 +207,7 @@ const DeliverablesService = {
   upload,
   submit,
   complete,
+  incomplete,
 };
 
 export default DeliverablesService;

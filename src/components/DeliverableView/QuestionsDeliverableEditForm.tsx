@@ -163,7 +163,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     missingFields,
   } = useProjectVariablesUpdate(deliverable.projectId, variablesWithValues);
 
-  const { complete } = useCompleteDeliverable();
+  const { complete, incomplete } = useCompleteDeliverable();
 
   useEffect(() => {
     if (!deliverable) {
@@ -187,6 +187,8 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     if (isApplicationPortal) {
       if (!missingFields) {
         complete(deliverable);
+      } else {
+        incomplete(deliverable);
       }
     }
 

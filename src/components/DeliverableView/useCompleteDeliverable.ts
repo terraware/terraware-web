@@ -6,6 +6,7 @@ import { Statuses } from 'src/redux/features/asyncUtils';
 import {
   requestCompleteDeliverable,
   requestGetDeliverable,
+  requestIncompleteDeliverable,
 } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import { selectDeliverablesEditRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -16,6 +17,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 export type Response = {
   status?: Statuses;
   complete: (deliverable: DeliverableWithOverdue) => void;
+  incomplete: (deliverable: DeliverableWithOverdue) => void;
 };
 
 /**
@@ -36,6 +38,18 @@ export default function useCompleteDeliverable(): Response {
       setLastRequest(undefined);
       const dispatched = dispatch(
         requestCompleteDeliverable({ deliverableId: deliverable.id, projectId: deliverable.projectId })
+      );
+      setRequestId(dispatched.requestId);
+      setLastRequest(deliverable);
+    },
+    [dispatch]
+  );
+
+  const incomplete = useCallback(
+    (deliverable: DeliverableWithOverdue) => {
+      setLastRequest(undefined);
+      const dispatched = dispatch(
+        requestIncompleteDeliverable({ deliverableId: deliverable.id, projectId: deliverable.projectId })
       );
       setRequestId(dispatched.requestId);
       setLastRequest(deliverable);
@@ -64,7 +78,8 @@ export default function useCompleteDeliverable(): Response {
     () => ({
       status: result?.status,
       complete,
+      incomplete,
     }),
-    [result?.status, complete]
+    [result?.status, complete, incomplete]
   );
 }
