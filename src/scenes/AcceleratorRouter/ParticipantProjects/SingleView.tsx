@@ -21,6 +21,9 @@ import useListModules from 'src/hooks/useListModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
+import { requestListGlobalRolesUsers } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
+import { selectGlobalRolesUsersSearchRequest } from 'src/redux/features/globalRoles/globalRolesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { LocationService } from 'src/services';
 import ParticipantProjectService from 'src/services/ParticipantProjectService';
 import strings from 'src/strings';
@@ -198,7 +201,11 @@ const SingleView = () => {
               />
               <ProjectFieldDisplay
                 label={strings.PROJECT_LEAD}
-                value={participantProject?.projectLead}
+                value={
+                  organization?.tfContactUser
+                    ? `${organization.tfContactUser.firstName} ${organization.tfContactUser.lastName}`
+                    : ''
+                }
                 rightBorder={!isMobile}
               />
               <ProjectFieldDisplay

@@ -18,7 +18,7 @@ import PageForm from 'src/components/common/PageForm';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import useListModules from 'src/hooks/useListModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useLocalization, useUser } from 'src/providers';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import { requestListGlobalRolesUsers } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
 import { selectGlobalRolesUsersSearchRequest } from 'src/redux/features/globalRoles/globalRolesSelectors';
@@ -79,36 +79,14 @@ const EditView = () => {
   const listUsersRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(listUsersRequestId));
   const { activeLocale } = useLocalization();
   const [globalUsersOptions, setGlobalUsersOptions] = useState<DropdownItem[]>();
-  const [organizationUsers, setOrganizationUsers] = useState<OrganizationUser[]>();
   const [tfContact, setTfContact] = useState<DropdownItem>();
 
   useEffect(() => {
-    console.log('cambio tf contact', tfContact);
-  }, [tfContact]);
-
-  useEffect(() => {
-    console.log('organization id', organization?.id);
-    const getOrgUsers = async () => {
-      if (organization?.id) {
-        const response = await OrganizationUserService.getOrganizationUsers(organization?.id);
-        if (response.requestSucceeded) {
-          console.log('succeded!!');
-          setOrganizationUsers(response.users);
-        }
-      }
-    };
-
-    getOrgUsers();
-  }, [organization?.id]);
-
-  useEffect(() => {
-    const TFContact = organizationUsers?.find((orgUser) => isTfContact(orgUser.role));
-
-    console.log('all users', organizationUsers);
-    if (TFContact) {
-      setTfContact({ label: `${TFContact.firstName} ${TFContact.firstName}`, value: TFContact.id });
-    }
-  }, [organizationUsers]);
+    const tfContactSelected = globalUsersOptions?.find(
+      (userOpt) => userOpt.value === organization?.tfContactUser?.userId
+    );
+    setTfContact(tfContactSelected);
+  }, [organization?.tfContactUser, globalUsersOptions]);
 
   useEffect(() => {
     const request = dispatch(requestListGlobalRolesUsers({ locale: activeLocale }));
