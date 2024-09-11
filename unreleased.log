@@ -1,3 +1,4 @@
+7d0dfeefd3a SW-5969 Hide internal only variables in question view (#3167)
 33b5a5ad989 SW-5999 Implemented method to delete cell value and row if all columns are empty (#3170)
 0601076e197 SW-6001: Limit "start application" to Admins and above (#3169)
 757161b8023 Do not mark deliverable as complete when table is empty (#3166)

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
@@ -187,7 +187,12 @@
 <a name='L122'></a><a href='#L122'>122</a>
 <a name='L123'></a><a href='#L123'>123</a>
 <a name='L124'></a><a href='#L124'>124</a>
-<a name='L125'></a><a href='#L125'>125</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -273,6 +278,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -311,12 +321,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useRef } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useMemo, useRef } from 'react';
 &nbsp;
 import { Box, Typography, useTheme } from '@mui/material';
 import { Message } from '@terraware/web-components';
 &nbsp;
 import DeliverableDisplayVariableValue from 'src/components/DocumentProducer/DeliverableDisplayVariableValue';
+import VariableStatusBadge from 'src/components/Variables/VariableStatusBadge';
 import Card from 'src/components/common/Card';
 import { useIsVisible } from 'src/hooks/useIsVisible';
 import { requestListDeliverableVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
@@ -327,7 +338,6 @@ import { VariableStatusType, VariableWithValues } from 'src/types/documentProduc
 import { VariableValue } from 'src/types/documentProducer/VariableValue';
 import { variableDependencyMet } from 'src/utils/documentProducer/variables';
 &nbsp;
-import VariableStatusBadge from '../Variables/VariableStatusBadge';
 import Metadata from './Metadata';
 import QuestionsDeliverableStatusMessage from './QuestionsDeliverableStatusMessage';
 import { EditProps } from './types';
@@ -395,6 +405,11 @@ const QuestionsDeliverableCard = <span class="cstat-no" title="statement not cov
 <span class="cstat-no" title="statement not covered" >    selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)</span>
   );
 &nbsp;
+  const filteredVariablesWithValues = <span class="cstat-no" title="statement not covered" >useMemo(</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >variablesWithValues.filter(<span class="fstat-no" title="function not covered" >(v</span>ariable) =&gt; <span class="cstat-no" title="statement not covered" >!variable.internalOnly)</span>,</span>
+    [variablesWithValues]
+  );
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    void dispatch(requestListDeliverableVariables(deliverable.id));</span>
 <span class="cstat-no" title="statement not covered" >    void dispatch(</span>
@@ -408,7 +423,7 @@ const QuestionsDeliverableCard = <span class="cstat-no" title="statement not cov
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Box display='flex' flexDirection='column' flexGrow={1}&gt;
-      &lt;QuestionsDeliverableStatusMessage deliverable={deliverable} variables={variablesWithValues} /&gt;
+      &lt;QuestionsDeliverableStatusMessage deliverable={deliverable} variables={filteredVariablesWithValues} /&gt;
       &lt;Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}&gt;
         &lt;Metadata {...props} /&gt;
         &lt;Box
@@ -418,8 +433,8 @@ const QuestionsDeliverableCard = <span class="cstat-no" title="statement not cov
             paddingTop: theme.spacing(3),
           }}
         &gt;
-          {variablesWithValues.map(<span class="fstat-no" title="function not covered" >(v</span>ariableWithValues: VariableWithValues, index: number) =&gt;
-<span class="cstat-no" title="statement not covered" >            variableDependencyMet(variableWithValues, variablesWithValues) ? (</span>
+          {filteredVariablesWithValues.map(<span class="fstat-no" title="function not covered" >(v</span>ariableWithValues: VariableWithValues, index: number) =&gt;
+<span class="cstat-no" title="statement not covered" >            variableDependencyMet(variableWithValues, filteredVariablesWithValues) ? (</span>
               &lt;QuestionBox
                 key={index}
                 projectId={deliverable.projectId}
@@ -442,7 +457,7 @@ export default QuestionsDeliverableCard;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-09-11T04:25:26.785Z
+                at 2024-09-11T19:05:41.621Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
