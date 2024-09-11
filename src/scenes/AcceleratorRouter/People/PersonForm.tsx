@@ -192,7 +192,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
               placeHolder={strings.SELECT}
               valueRenderer={(v) => v}
               selectedOptions={localRecord.internalInterests?.toSorted() || []}
-              label={strings.CATEGORIES}
+              label={strings.INTERNAL_INTERESTS}
             />
           </Grid>
         </Card>

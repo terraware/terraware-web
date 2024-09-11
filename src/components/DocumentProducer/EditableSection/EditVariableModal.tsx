@@ -11,19 +11,27 @@ import {
 } from 'src/types/documentProducer/Variable';
 
 type EditVariableModalProps = {
+  display?: boolean;
   variable: VariableWithValues;
-  onFinish: () => void;
+  onFinish: (edited: boolean) => void;
   onCancel: () => void;
   projectId: number;
 };
 
-export default function EditVariableModal({ variable, onFinish, onCancel, projectId }: EditVariableModalProps) {
+export default function EditVariableModal({
+  display,
+  onCancel,
+  onFinish,
+  projectId,
+  variable,
+}: EditVariableModalProps) {
   const { getUsedSections } = useDocumentProducerData();
 
   switch (variable.type) {
     case 'Image':
       return (
         <EditImagesModal
+          display={display}
           variable={variable as ImageVariableWithValues}
           projectId={projectId}
           onFinish={onFinish}
@@ -33,6 +41,7 @@ export default function EditVariableModal({ variable, onFinish, onCancel, projec
     case 'Table':
       return (
         <EditableTableEdit
+          display={display}
           variable={variable as TableVariableWithValues}
           projectId={projectId}
           onFinish={onFinish}
@@ -46,6 +55,7 @@ export default function EditVariableModal({ variable, onFinish, onCancel, projec
     case 'Text':
       return (
         <EditVariable
+          display={display}
           onFinish={onFinish}
           projectId={projectId}
           sectionsUsed={getUsedSections(variable.id)}

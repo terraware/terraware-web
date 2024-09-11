@@ -1,4 +1,8 @@
-import { VariableTableCell, getInitialCellValues } from 'src/components/DocumentProducer/EditableTableModal/helpers';
+import {
+  VariableTableCell,
+  cellValue,
+  getInitialCellValues,
+} from 'src/components/DocumentProducer/EditableTableModal/helpers';
 import { TableVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
   AppendVariableValueOperation,
@@ -15,6 +19,7 @@ import {
   VariableValueTextValue,
   VariableValueValue,
 } from 'src/types/documentProducer/VariableValue';
+import { isValueEmpty } from 'src/utils/documentProducer/variables';
 
 // TODO this was taken from the pdd-web code, but there is no test, it definitely seems test-worthy
 export const makeVariableValueOperations = ({
@@ -30,13 +35,7 @@ export const makeVariableValueOperations = ({
 }) => {
   const operations: Operation[] = [];
 
-  let newValue:
-    | NewDateValuePayload
-    | NewTextValuePayload
-    | NewNumberValuePayload
-    | NewSelectValuePayload
-    | NewLinkValuePayload
-    | undefined;
+  let newValue: NewDateValuePayload | NewNumberValuePayload | NewSelectValuePayload | NewLinkValuePayload | undefined;
 
   let newTextValues: NewTextValuePayload[] = [];
   let valueIdToUpdate = -1;
@@ -98,6 +97,28 @@ export const makeVariableValueOperations = ({
             valueId: rowId,
             existingValueId: rowId,
           });
+        } else if (
+          foundRow.every((cell) => {
+            const foundCell = foundRow.find((c) => c.colId === cell.colId);
+            if (foundCell !== undefined && foundCell.changed) {
+              return (
+                foundCell.values === undefined ||
+                foundCell.values.length === 0 ||
+                cellValue(foundCell.values[0]).toString() === ''
+              );
+            } else {
+              return (
+                cell.values === undefined || cell.values.length === 0 || cellValue(cell.values[0]).toString() === ''
+              );
+            }
+          })
+        ) {
+          // delete entirely empty row
+          operations.push({
+            operation: 'Delete',
+            valueId: rowId,
+            existingValueId: rowId,
+          });
         } else {
           // replace operations
           row.forEach((cell) => {
@@ -112,12 +133,21 @@ export const makeVariableValueOperations = ({
                       } as NewSelectValuePayload,
                     ]
                   : foundCell.values;
-              operations.push({
-                operation: 'Replace',
-                rowValueId: rowId,
-                variableId: cell.colId,
-                values: newValues ?? [],
-              });
+
+              if (foundCell.values && foundCell.values.length > 0 && cellValue(foundCell.values[0]).toString() !== '') {
+                operations.push({
+                  operation: 'Replace',
+                  rowValueId: rowId,
+                  variableId: cell.colId,
+                  values: newValues ?? [],
+                });
+              } else if (cell.values && cell.values.length > 0) {
+                operations.push({
+                  existingValueId: cell.values[0].id,
+                  operation: 'Delete',
+                  valueId: cell.values[0].id,
+                });
+              }
             }
           });
         }
@@ -164,13 +194,21 @@ export const makeVariableValueOperations = ({
 
   if (newValue) {
     if (pendingValues[0].id !== -1) {
-      operations.push({
-        operation: 'Update',
-        valueId: valueIdToUpdate,
-        value: newValue,
-        existingValueId: valueIdToUpdate,
-      });
-    } else {
+      if (!isValueEmpty(newValue)) {
+        operations.push({
+          operation: 'Update',
+          valueId: valueIdToUpdate,
+          value: newValue,
+          existingValueId: valueIdToUpdate,
+        });
+      } else {
+        operations.push({
+          existingValueId: pendingValues[0].id,
+          operation: 'Delete',
+          valueId: pendingValues[0].id,
+        });
+      }
+    } else if (!isValueEmpty(newValue)) {
       operations.push({ operation: 'Append', variableId: variable.id, value: newValue });
     }
   }
@@ -178,13 +216,21 @@ export const makeVariableValueOperations = ({
   if (newTextValues) {
     newTextValues.forEach((nV, index) => {
       if (pendingValues[index].id !== -1) {
-        operations.push({
-          operation: 'Update',
-          valueId: pendingValues[index].id,
-          value: nV,
-          existingValueId: pendingValues[index].id,
-        });
-      } else {
+        if (!isValueEmpty(nV)) {
+          operations.push({
+            existingValueId: pendingValues[index].id,
+            operation: 'Update',
+            valueId: pendingValues[index].id,
+            value: nV,
+          });
+        } else {
+          operations.push({
+            existingValueId: pendingValues[index].id,
+            operation: 'Delete',
+            valueId: pendingValues[index].id,
+          });
+        }
+      } else if (!isValueEmpty(nV)) {
         operations.push({ operation: 'Append', variableId: variable.id, value: nV });
       }
     });
@@ -192,9 +238,9 @@ export const makeVariableValueOperations = ({
     // Delete list of values removed
     if (removedValue) {
       operations.push({
+        existingValueId: removedValue.id,
         operation: 'Delete',
         valueId: removedValue.id,
-        existingValueId: removedValue.id,
       });
     }
   }

@@ -1,12 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Box, Slide, useTheme } from '@mui/material';
 
 import ErrorBoundary from 'src/ErrorBoundary';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
-import useNavigateTo from 'src/hooks/useNavigateTo';
 import ApplicationProvider from 'src/providers/Application';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -15,7 +13,6 @@ import SectionDeliverable from './Deliverable';
 import SectionDeliverableEditView from './DeliverableEdit';
 import MapView from './Map';
 import MapUpdateView from './MapUpdate';
-import MapUploadView from './MapUpload';
 import NavBar from './NavBar';
 import Overview from './Overview';
 import PrescreenView from './Prescreen';
@@ -31,15 +28,6 @@ interface ApplicationPortalRouterProp {
 const ApplicationPortalRouter = ({ showNavBar, setShowNavBar }: ApplicationPortalRouterProp) => {
   const { type } = useDeviceInfo();
   const theme = useTheme();
-
-  const applicationEnabled = isEnabled('Accelerator Application');
-  const { goToHome } = useNavigateTo();
-
-  useEffect(() => {
-    if (!applicationEnabled) {
-      goToHome();
-    }
-  }, [applicationEnabled, goToHome]);
 
   const navBarOpened = {
     backdropFilter: 'blur(8px)',
@@ -85,7 +73,6 @@ const ApplicationPortalRouter = ({ showNavBar, setShowNavBar }: ApplicationPorta
           <Routes>
             <Route path={`${APP_PATHS.APPLICATION_MAP}`} element={<MapView />} />
             <Route path={`${APP_PATHS.APPLICATION_MAP_UPDATE}`} element={<MapUpdateView />} />
-            <Route path={`${APP_PATHS.APPLICATION_MAP_UPLOAD}`} element={<MapUploadView />} />
             <Route path={`${APP_PATHS.APPLICATION_OVERVIEW}`} element={<Overview />} />
             <Route path={`${APP_PATHS.APPLICATION_PRESCREEN}`} element={<PrescreenView />} />
             <Route path={`${APP_PATHS.APPLICATION_PRESCREEN_RESULT}`} element={<PrescreenResultView />} />

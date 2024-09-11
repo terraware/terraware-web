@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, IconButton, SxProps, useTheme } from '@mui/material';
 import { Button, DatePicker, Dropdown, DropdownItem, Icon, MultiSelect, Textfield } from '@terraware/web-components';
 
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import {
   ImageVariableWithValues,
@@ -37,6 +38,7 @@ export type DeliverableVariableDetailsInputProps = {
   variable: Variable;
   addRemovedValue: (value: VariableValueValue) => void;
   projectId: number;
+  validateFields: boolean;
 };
 
 const DeliverableVariableDetailsInput = ({
@@ -50,7 +52,10 @@ const DeliverableVariableDetailsInput = ({
   variable,
   addRemovedValue,
   projectId,
+  validateFields,
 }: DeliverableVariableDetailsInputProps): JSX.Element => {
+  const { activeLocale } = useLocalization();
+
   const [value, setValue] = useState<string | number | number[]>();
   const [title, setTitle] = useState<string>();
   const theme = useTheme();
@@ -222,6 +227,47 @@ const DeliverableVariableDetailsInput = ({
     }
   };
 
+  const errorMessage = useMemo(() => {
+    if (!activeLocale) {
+      return '';
+    }
+
+    if (validateFields && variable.isRequired && !value) {
+      return strings.REQUIRED_FIELD;
+    }
+
+    switch (variable.type) {
+      case 'Number':
+        if (value !== undefined) {
+          const numValue = Number(value);
+          const decimals: string | undefined = String(numValue).split('.')[1];
+          if (Number.isNaN(numValue)) {
+            return strings.VARIABLE_ERROR_NUMBER_NAN;
+          }
+          if (variable.minValue !== undefined && numValue < variable.minValue) {
+            return strings.formatString(strings.VARIABLE_ERROR_NUMBER_MIN_LIMIT, variable.minValue).toString();
+          }
+          if (variable.maxValue !== undefined && numValue > variable.maxValue) {
+            return strings.formatString(strings.VARIABLE_ERROR_NUMBER_MAX_LIMIT, variable.maxValue).toString();
+          }
+          if (variable.decimalPlaces !== undefined && decimals && decimals.length > variable.decimalPlaces) {
+            return strings
+              .formatString(strings.VARIABLE_ERROR_NUMBER_DECIMAL_PLACES, variable.decimalPlaces)
+              .toString();
+          }
+        }
+        return '';
+      case 'Date':
+      case 'Image':
+      case 'Link':
+      case 'Section':
+      case 'Select':
+      case 'Table':
+      case 'Text':
+        return '';
+    }
+  }, [activeLocale, validateFields, variable, value]);
+
   return (
     <>
       {variable.description && hideDescription !== true && (
@@ -246,6 +292,7 @@ const DeliverableVariableDetailsInput = ({
             },
             textFieldLabelStyles,
           ]}
+          required={variable.isRequired}
         />
       )}
 
@@ -257,6 +304,7 @@ const DeliverableVariableDetailsInput = ({
           value={value?.toString()}
           aria-label='select date'
           sx={formElementStyles}
+          errorText={errorMessage}
         />
       )}
 
@@ -280,6 +328,8 @@ const DeliverableVariableDetailsInput = ({
                   ]}
                   type={variable.textType === 'SingleLine' ? 'text' : 'textarea'}
                   value={iValue?.toString()}
+                  required={variable.isRequired}
+                  errorText={validateFields && !iValue && variable.isRequired ? strings.REQUIRED_FIELD : ''}
                 />
                 {variable.isList && (
                   <IconButton
@@ -312,6 +362,8 @@ const DeliverableVariableDetailsInput = ({
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
           value={value?.toString()}
           sx={[formElementStyles, textFieldLabelStyles]}
+          required={variable.isRequired}
+          errorText={errorMessage}
         />
       )}
 
@@ -322,6 +374,8 @@ const DeliverableVariableDetailsInput = ({
           options={getOptions()}
           selectedValue={(value as number[])?.[0]}
           sx={[formElementStyles, { paddingBottom: theme.spacing(1) }]}
+          required={variable.isRequired}
+          errorText={errorMessage}
         />
       )}
 
@@ -340,6 +394,7 @@ const DeliverableVariableDetailsInput = ({
           selectedOptions={(value || []) as number[]}
           sx={[formElementStyles, { paddingBottom: theme.spacing(1) }]}
           valueRenderer={(val: string) => val}
+          errorText={errorMessage}
         />
       )}
 
@@ -351,6 +406,8 @@ const DeliverableVariableDetailsInput = ({
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'title')}
           sx={formElementStyles}
           value={title}
+          required={variable.isRequired}
+          errorText={errorMessage}
         />
       )}
 

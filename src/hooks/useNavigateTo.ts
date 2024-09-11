@@ -31,12 +31,6 @@ export default function useNavigateTo() {
         navigate({ pathname: APP_PATHS.ACCELERATOR_APPLICATION_MAP.replace(':applicationId', `${applicationId}`) });
       },
 
-      goToAcceleratorApplicationMapUpload: (applicationId: number) => {
-        navigate({
-          pathname: APP_PATHS.ACCELERATOR_APPLICATION_MAP_UPLOAD.replace(':applicationId', `${applicationId}`),
-        });
-      },
-
       goToApplication: (applicationId: number) => {
         navigate({ pathname: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${applicationId}`) });
       },
@@ -54,12 +48,6 @@ export default function useNavigateTo() {
       goToApplicationMapUpdate: (applicationId: number) => {
         navigate({
           pathname: APP_PATHS.APPLICATION_MAP_UPDATE.replace(':applicationId', `${applicationId}`),
-        });
-      },
-
-      goToApplicationMapUpload: (applicationId: number) => {
-        navigate({
-          pathname: APP_PATHS.APPLICATION_MAP_UPLOAD.replace(':applicationId', `${applicationId}`),
         });
       },
 

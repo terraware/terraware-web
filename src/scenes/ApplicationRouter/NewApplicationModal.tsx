@@ -65,7 +65,7 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
 
   // Init the options and auto select the first project option if there is a project without an application
   useEffect(() => {
-    if (!allApplications || allApplications.length === 0) {
+    if (!allApplications) {
       return;
     }
 
@@ -75,7 +75,7 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
 
     setProjectOptions(nextProjectOptions);
 
-    if (newApplication.projectType === 'New' && nextProjectOptions.length) {
+    if (!newApplication.projectId && newApplication.projectType === 'New' && nextProjectOptions.length) {
       setNewApplication({
         projectType: 'Existing',
         projectId: nextProjectOptions[0]?.value,

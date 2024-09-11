@@ -1,5 +1,13 @@
+import { VariableTableCell, cellValue } from 'src/components/DocumentProducer/EditableTableModal/helpers';
 import { VariableWithValues, isSelectVariable, isTextVariable } from 'src/types/documentProducer/Variable';
 import {
+  NewDateValuePayload,
+  NewLinkValuePayload,
+  NewNumberValuePayload,
+  NewSelectValuePayload,
+  NewTextValuePayload,
+  isDateVariableValue,
+  isLinkVariableValue,
   isNumberVariableValue,
   isSelectVariableValue,
   isTextVariableValue,
@@ -64,7 +72,7 @@ export const variableDependencyMet = (variable: VariableWithValues, allVariables
   }
 };
 
-const getRawValue = (variable: VariableWithValues): number | number[] | string | undefined => {
+export const getRawValue = (variable: VariableWithValues): number | number[] | string | undefined => {
   const firstValue = variable.values[0];
 
   if (!firstValue) {
@@ -78,5 +86,76 @@ const getRawValue = (variable: VariableWithValues): number | number[] | string |
       return firstValue.textValue;
     case isSelectVariableValue(firstValue):
       return firstValue.optionValues;
+    case isDateVariableValue(firstValue):
+      return firstValue.dateValue;
+    case isLinkVariableValue(firstValue):
+      return firstValue.url;
   }
+};
+
+/*
+ * Check if a new varaible value is empty. This is useful for determining between append/update/delete operations
+ */
+export const isValueEmpty = (
+  value: NewDateValuePayload | NewNumberValuePayload | NewSelectValuePayload | NewLinkValuePayload | NewTextValuePayload
+): boolean => {
+  switch (value.type) {
+    case 'Date':
+      return value.dateValue === '';
+    case 'Link':
+      return value.url === '';
+    case 'Text':
+      return value.textValue === '';
+    case 'Number':
+      return value.numberValue.toString() === '';
+    case 'Select':
+      return value.optionIds.length === 0;
+  }
+};
+
+export const missingRequiredFields = (
+  variablesWithValues: VariableWithValues[],
+  stagedCellValues?: Map<number, VariableTableCell[][]>
+) => {
+  const allRequiredVariables = variablesWithValues.filter(
+    (v) => v.isRequired && variableDependencyMet(v, variablesWithValues)
+  );
+
+  return allRequiredVariables.some((variable) => {
+    if (variable.type === 'Table') {
+      const cells = stagedCellValues?.get(variable.id);
+
+      // Return false if no table row exists
+      if (!cells || cells.length === 0) {
+        return false;
+      }
+
+      return cells.every((row) =>
+        row.every((cell) => {
+          if (cell.values === undefined || cell.values.length === 0) {
+            return true;
+          }
+          return cellValue(cell.values[0]).toString() === '';
+        })
+      );
+    }
+
+    const values = variable.values;
+    if (!values || values.length === 0) {
+      return true;
+    }
+    switch (variable.type) {
+      case 'Select':
+      case 'Text':
+      case 'Number':
+      case 'Date':
+      case 'Link':
+        return getRawValue(variable) === undefined || getRawValue(variable) === '';
+      case 'Image':
+      case 'Section':
+      // Do nothing
+    }
+
+    return false;
+  });
 };

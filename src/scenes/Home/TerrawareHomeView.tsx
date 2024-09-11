@@ -8,7 +8,6 @@ import Link from 'src/components/common/Link';
 import PageCard from 'src/components/common/PageCard';
 import TfMain from 'src/components/common/TfMain';
 import { ACCELERATOR_LINK, APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useOrganization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
@@ -106,7 +105,7 @@ const TerrawareHomeView = () => {
                   linkStyle={'plain'}
                 />
               </Grid>
-              {isEnabled('Accelerator Application') && (
+              {isAdmin(selectedOrganization) && (
                 <Grid item xs={secondaryGridSize()}>
                   <PageCard
                     cardIsClickable={false}

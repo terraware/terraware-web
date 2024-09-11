@@ -3,10 +3,17 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
 import { Button, DatePicker, Dropdown, DropdownItem, Icon, MultiSelect, Textfield } from '@terraware/web-components';
 
+import VariableStatusBadge from 'src/components/Variables/VariableStatusBadge';
 import Link from 'src/components/common/Link';
 import strings from 'src/strings';
-import { SelectOptionPayload, SelectVariable, Variable } from 'src/types/documentProducer/Variable';
 import {
+  SelectOptionPayload,
+  SelectVariable,
+  VariableStatusType,
+  VariableWithValues,
+} from 'src/types/documentProducer/Variable';
+import {
+  VariableValue,
   VariableValueDateValue,
   VariableValueLinkValue,
   VariableValueNumberValue,
@@ -16,17 +23,19 @@ import {
 } from 'src/types/documentProducer/VariableValue';
 
 export type VariableDetailsInputProps = {
+  display?: boolean;
   values: VariableValueValue[];
   setValues: (values: VariableValueValue[]) => void;
   validate: boolean;
   setHasErrors: (has: boolean) => void;
-  variable: Variable;
+  variable: VariableWithValues;
   addRemovedValue: (value: VariableValueValue) => void;
   sectionsUsed?: string[];
   onSectionClicked?: (sectionNumber: string) => void;
 };
 
 const VariableDetailsInput = ({
+  display,
   values,
   setValues,
   validate,
@@ -44,6 +53,11 @@ const VariableDetailsInput = ({
   const formElementStyles = { margin: theme.spacing(1, 0) };
 
   const valueError = useCallback(() => (value ? '' : strings.REQUIRED_FIELD), [value]);
+
+  const firstVariableValue: VariableValue | undefined = (variable?.variableValues || [])[0];
+  const firstVariableValueStatus: VariableStatusType | undefined = firstVariableValue?.status;
+  const firstVariableValueFeedback: string | undefined = firstVariableValue?.feedback;
+  const firstVariableValueInternalComment: string | undefined = firstVariableValue?.internalComment;
 
   useEffect(() => {
     if (values?.length) {
@@ -263,17 +277,22 @@ const VariableDetailsInput = ({
         display={true}
         sx={formElementStyles}
       />
-      {variable.type === 'Date' && (
-        <DatePicker
-          id='value'
-          label={strings.VALUE}
-          onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
-          value={value?.toString()}
-          errorText={validate ? valueError() : ''}
-          aria-label='select date'
-          sx={formElementStyles}
-        />
-      )}
+
+      {variable.type === 'Date' &&
+        (display ? (
+          <Typography sx={{ fontWeight: 500, paddingY: '8px' }}>{value?.toString()}</Typography>
+        ) : (
+          <DatePicker
+            id='value'
+            label={strings.VALUE}
+            onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
+            value={value?.toString()}
+            errorText={validate ? valueError() : ''}
+            aria-label='select date'
+            sx={formElementStyles}
+          />
+        ))}
+
       {variable.type === 'Text' && (
         <>
           {(values.length ? (values as VariableValueTextValue[]) : [{ textValue: '' }])
@@ -295,6 +314,7 @@ const VariableDetailsInput = ({
                 }}
               >
                 <Textfield
+                  display={display}
                   errorText={validate ? valueError() : ''}
                   id='value'
                   key={`input-${index}`}
@@ -304,7 +324,7 @@ const VariableDetailsInput = ({
                   type={variable.textType === 'SingleLine' ? 'text' : 'textarea'}
                   value={iValue?.toString()}
                 />
-                {variable.isList && (
+                {variable.isList && !display && (
                   <IconButton
                     id={`delete-input-${index}`}
                     aria-label='delete'
@@ -323,12 +343,15 @@ const VariableDetailsInput = ({
                 )}
               </Box>
             ))}
-          {variable.isList && <Button priority='ghost' label={strings.ADD} icon='iconAdd' onClick={addInput} />}
+          {variable.isList && !display && (
+            <Button priority='ghost' label={strings.ADD} icon='iconAdd' onClick={addInput} />
+          )}
         </>
       )}
 
       {(variable.type === 'Number' || variable.type === 'Link') && (
         <Textfield
+          display={display}
           id='value'
           label={strings.VALUE}
           type={variable.type === 'Number' ? 'number' : 'text'}
@@ -339,36 +362,52 @@ const VariableDetailsInput = ({
         />
       )}
 
-      {variable.type === 'Select' && !variable.isMultiple && (
-        <Dropdown
-          fullWidth
-          label={strings.VALUE}
-          onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
-          options={getOptions()}
-          selectedValue={(value as number[])?.[0]}
-        />
-      )}
+      {variable.type === 'Select' &&
+        !variable.isMultiple &&
+        (display ? (
+          <Typography sx={{ fontWeight: 500, paddingY: '8px' }}>
+            {getOptions()?.find((option) => option.value === (value as number[])?.[0])?.label}
+          </Typography>
+        ) : (
+          <Dropdown
+            fullWidth
+            label={strings.VALUE}
+            onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
+            options={getOptions()}
+            selectedValue={(value as number[])?.[0]}
+          />
+        ))}
 
-      {variable.type === 'Select' && variable.isMultiple && (
-        <MultiSelect
-          fullWidth
-          onAdd={(item: number) => {
-            const nextValues = [...((value as number[]) || []), item];
-            onChangeValueHandler(nextValues, 'value');
-          }}
-          onRemove={(item: number) => {
-            const nextValues = value ? (value as number[]).filter((v) => v !== item) : [];
-            onChangeValueHandler(nextValues, 'value');
-          }}
-          options={new Map(variable.options?.map((option) => [option.id, option.name]))}
-          selectedOptions={(value || []) as number[]}
-          sx={[formElementStyles, { paddingBottom: theme.spacing(1) }]}
-          valueRenderer={(val: string) => val}
-        />
-      )}
+      {variable.type === 'Select' &&
+        variable.isMultiple &&
+        (display ? (
+          <Typography sx={{ fontWeight: 500, paddingY: '8px' }}>
+            {variable.options
+              ?.filter((option) => (value as number[])?.includes(option.id))
+              .map((option) => option.name)
+              .join(', ')}
+          </Typography>
+        ) : (
+          <MultiSelect
+            fullWidth
+            onAdd={(item: number) => {
+              const nextValues = [...((value as number[]) || []), item];
+              onChangeValueHandler(nextValues, 'value');
+            }}
+            onRemove={(item: number) => {
+              const nextValues = value ? (value as number[]).filter((v) => v !== item) : [];
+              onChangeValueHandler(nextValues, 'value');
+            }}
+            options={new Map(variable.options?.map((option) => [option.id, option.name]))}
+            selectedOptions={(value || []) as number[]}
+            sx={[formElementStyles, { paddingBottom: theme.spacing(1) }]}
+            valueRenderer={(val: string) => val}
+          />
+        ))}
 
       {variable.type === 'Link' && (
         <Textfield
+          display={display}
           id='title'
           label={strings.TITLE}
           type='text'
@@ -382,7 +421,7 @@ const VariableDetailsInput = ({
         <Grid item xs={6}>
           <Textfield
             id='type'
-            label={strings.TYPE_ELLIPSIS}
+            label={strings.TYPE}
             type='text'
             value={variable.type}
             display={true}
@@ -421,15 +460,64 @@ const VariableDetailsInput = ({
             </Box>
           </Grid>
         )}
+        <Grid item xs={12}>
+          <Textfield
+            display={display}
+            id='citation'
+            label={strings.CITATION}
+            type='text'
+            onChange={(newValue: any) => onChangeValueHandler(newValue, 'citation')}
+            sx={formElementStyles}
+            value={citation}
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <Box
+            sx={{
+              border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+              height: '1px',
+              marginY: '16px',
+              width: '100%',
+            }}
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <Typography sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px', marginBottom: '12px' }}>
+            {strings.VARIABLE_STATUS}
+          </Typography>
+          <Box sx={{ marginBottom: '12px' }}>
+            <VariableStatusBadge status={firstVariableValueStatus} />
+          </Box>
+        </Grid>
+
+        {firstVariableValueInternalComment && (
+          <Grid item xs={12}>
+            <Textfield
+              display
+              id='internal-comments'
+              label={strings.INTERNAL_COMMENTS}
+              sx={formElementStyles}
+              type='text'
+              value={firstVariableValueInternalComment}
+            />
+          </Grid>
+        )}
+
+        {firstVariableValueFeedback && (
+          <Grid item xs={12}>
+            <Textfield
+              display
+              id='feedback'
+              label={strings.FEEDBACK}
+              sx={formElementStyles}
+              type='text'
+              value={firstVariableValueFeedback}
+            />
+          </Grid>
+        )}
       </Grid>
-      <Textfield
-        id='citation'
-        label={strings.CITATION}
-        type='text'
-        onChange={(newValue: any) => onChangeValueHandler(newValue, 'citation')}
-        sx={formElementStyles}
-        value={citation}
-      />
     </>
   );
 };
