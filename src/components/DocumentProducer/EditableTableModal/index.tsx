@@ -87,8 +87,8 @@ const EditableTableEdit = ({
 
   useEffect(() => {
     if (initialCellValues.length === 0 && cellValues.length === 0) {
-      // TODO: uncomment line below
-      // addRow();
+      // if there are no initial values, add a row
+      addRow();
     }
   }, [cellValues, initialCellValues]);
 
