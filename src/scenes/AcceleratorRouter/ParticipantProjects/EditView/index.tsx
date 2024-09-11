@@ -18,7 +18,7 @@ import PageForm from 'src/components/common/PageForm';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import useListModules from 'src/hooks/useListModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useLocalization, useOrganization, useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import { requestListGlobalRolesUsers } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
 import { selectGlobalRolesUsersSearchRequest } from 'src/redux/features/globalRoles/globalRolesSelectors';
@@ -29,8 +29,6 @@ import { selectProjectRequest } from 'src/redux/features/projects/projectsSelect
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
-import { OrganizationUser } from 'src/types/User';
-import { isTfContact } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -144,7 +142,7 @@ const EditView = () => {
 
     saveParticipantProject();
     saveTFContact();
-  }, [project, projectRecord, saveParticipantProject]);
+  }, [project, projectRecord, saveParticipantProject, tfContact]);
 
   const handleOnCancel = useCallback(() => goToParticipantProject(projectId), [goToParticipantProject, projectId]);
   const handleOnCloseModal = useCallback(() => setConfirmProjectNameModalOpen(false), []);
@@ -252,9 +250,11 @@ const EditView = () => {
               placeholder={strings.SELECT}
               selectedValue={tfContact?.value}
               options={globalUsersOptions}
-              onChange={(value: string) =>
-                setTfContact(globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString()))
-              }
+              onChange={(value: string) => {
+                setTfContact(
+                  globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString())
+                );
+              }}
               hideClearIcon={true}
               label={strings.PROJECT_LEAD}
               fullWidth
