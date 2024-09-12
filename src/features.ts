@@ -1,7 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'Document Producer';
+export type FeatureName = 'Show Production View';
 
 export type Feature = {
   name: FeatureName;
@@ -34,15 +34,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     ],
     get: env().isForcedProductionView,
     set: env().forceProductionView,
-  },
-  {
-    name: 'Document Producer',
-    preferenceName: 'enableDocumentProducer',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Terraware Accelerator Console access to the document producer tool'],
-    disclosure: ['This is WIP'],
   },
 ];
 

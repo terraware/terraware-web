@@ -21,7 +21,6 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const { isDesktop } = useDeviceInfo();
   const navigate = useNavigate();
   const { isAllowed } = useUser();
-  const documentProducerEnabled = isEnabled('Document Producer');
 
   const isApplicationRoute = useMatch({ path: APP_PATHS.ACCELERATOR_APPLICATIONS, end: false });
   const isDocumentsRoute = useMatch({ path: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS, end: false });
@@ -95,21 +94,17 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
         />
       }
 
-      {documentProducerEnabled && (
-        <>
-          <NavSection title={strings.DOC_PRODUCER} />
+      <NavSection title={strings.DOC_PRODUCER} />
 
-          <NavItem
-            icon='iconFolder'
-            id='document-producer'
-            label={strings.DOCUMENTS}
-            onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS)}
-            selected={!!isDocumentsRoute}
-          />
-        </>
-      )}
+      <NavItem
+        icon='iconFolder'
+        id='document-producer'
+        label={strings.DOCUMENTS}
+        onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS)}
+        selected={!!isDocumentsRoute}
+      />
 
-      <NavSection title={documentProducerEnabled ? strings.SETTINGS : ''} />
+      <NavSection title={strings.SETTINGS} />
 
       <NavItem
         icon='organizationNav'
