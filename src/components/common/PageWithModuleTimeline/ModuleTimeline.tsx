@@ -46,6 +46,21 @@ export type ModuleTimelineProps = {
 };
 
 const ModuleTimeline = ({ cohortPhase, modules }: ModuleTimelineProps) => {
+  const theme = useTheme();
+  const now = new Date();
+  const futureModules = modules?.filter((module) => new Date(module.endDate) > now);
+
+  const soonestEndingModuleId = futureModules?.reduce((soonest, current) => {
+    const soonestEndDate = new Date(soonest.endDate);
+    const currentEndDate = new Date(current.endDate);
+    return currentEndDate < soonestEndDate ? current : soonest;
+  }, modules[0])?.id;
+
+  const warningLabelStyles = {
+    '.MuiStepLabel-label.Mui-active': { color: theme.palette.TwClrTxtWarning },
+    '.MuiStepLabel-label.Mui-disabled': { color: theme.palette.TwClrTxtWarning, fontWeight: 600 },
+  };
+
   return (
     <Box maxWidth={'206px'}>
       <Box sx={{ marginBottom: '24px', paddingRight: '16px' }}>{cohortPhase && <Badge label={cohortPhase} />}</Box>
@@ -56,7 +71,11 @@ const ModuleTimeline = ({ cohortPhase, modules }: ModuleTimelineProps) => {
             <Step key={module.id} active={module.isActive}>
               <StepLabel
                 icon={<AltStepIcon isActive={module.isActive} index={index} />}
-                sx={{ fontWeight: 600, '.MuiStepLabel-label.Mui-disabled': { fontWeight: 600 } }}
+                sx={
+                  soonestEndingModuleId === module.id
+                    ? warningLabelStyles
+                    : { fontWeight: 600, '.MuiStepLabel-label.Mui-disabled': { fontWeight: 600 } }
+                }
               >
                 {module.title}
                 <br />
