@@ -142,11 +142,12 @@ export default function useNavigateTo() {
           pathname: APP_PATHS.HOME,
         }),
 
-      goToModule: (projectId: number, moduleId: number) =>
+      goToModule: (projectId: number, moduleId: number) => {
         navigate({
           pathname: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
-        }),
-
+        });
+        window.scrollTo(0, 0);
+      },
       goToModuleContent: (projectId: number, moduleId: number, type: ModuleContentType) => {
         let pathname = '';
         switch (type) {

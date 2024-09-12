@@ -25,6 +25,7 @@ EmptyVariable.args = {
     id: 60,
     decimalPlaces: 0,
     stableId: '1111',
+    internalOnly: false,
     isList: false,
     isRequired: false,
     values: [],
@@ -43,6 +44,7 @@ NumberVariable.args = {
     id: 60,
     decimalPlaces: 0,
     stableId: '1111',
+    internalOnly: false,
     isList: false,
     isRequired: false,
     values: [
@@ -82,6 +84,7 @@ DeliverableVariable.args = {
     id: 60,
     decimalPlaces: 0,
     stableId: '1111',
+    internalOnly: false,
     isList: false,
     isRequired: false,
     values: [
@@ -121,6 +124,7 @@ RejectedDeliverableVariable.args = {
     id: 60,
     decimalPlaces: 0,
     stableId: '1111',
+    internalOnly: false,
     isList: false,
     isRequired: false,
     values: [

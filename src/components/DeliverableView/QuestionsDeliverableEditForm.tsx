@@ -133,8 +133,13 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
   );
 
+  const filteredVariablesWithValues = useMemo(
+    () => variablesWithValues.filter((variable) => !variable.internalOnly),
+    [variablesWithValues]
+  );
+
   useEffect(() => {
-    if (!variablesWithValues.length) {
+    if (!filteredVariablesWithValues.length) {
       return;
     }
 
@@ -146,7 +151,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     }, 500);
 
     return () => clearTimeout(timeoutId);
-  }, [variablesWithValues]);
+  }, [filteredVariablesWithValues]);
 
   const {
     pendingVariableValues,
@@ -161,9 +166,9 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     updateSuccess,
     uploadSuccess,
     missingFields,
-  } = useProjectVariablesUpdate(deliverable.projectId, variablesWithValues);
+  } = useProjectVariablesUpdate(deliverable.projectId, filteredVariablesWithValues);
 
-  const { complete } = useCompleteDeliverable();
+  const { complete, incomplete } = useCompleteDeliverable();
 
   useEffect(() => {
     if (!deliverable) {
@@ -187,6 +192,8 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     if (isApplicationPortal) {
       if (!missingFields) {
         complete(deliverable);
+      } else {
+        incomplete(deliverable);
       }
     }
 
@@ -216,7 +223,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
               paddingTop: theme.spacing(3),
             }}
           >
-            {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) =>
+            {filteredVariablesWithValues.map((variableWithValues: VariableWithValues, index: number) =>
               variableDependencyMet(variableWithValues, stagedVariableWithValues) ? (
                 <QuestionBox
                   addRemovedValue={(removedValue: VariableValueValue) =>
