@@ -19,6 +19,7 @@ import OrganizationsDropdown from '../OrganizationsDropdown';
 import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
 import UserMenu from '../UserMenu';
 import Icon from '../common/icon/Icon';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 
 type TopBarProps = {
   setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
@@ -65,7 +66,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   };
 
   const handleTopBarClick = () => {
-    mixpanel?.track('TopBarHome');
+    mixpanel?.track(MIXPANEL_EVENTS.TOP_BAR_HOME);
     navigate(APP_PATHS.HOME);
   };
 
