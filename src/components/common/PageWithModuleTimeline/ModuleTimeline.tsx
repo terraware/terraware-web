@@ -12,11 +12,11 @@ import { CohortPhaseType } from 'src/types/Cohort';
 import { Module } from 'src/types/Module';
 
 type AltStepIconProps = {
-  isActive: boolean;
   index: number;
+  bgColor?: string;
 };
 
-const AltStepIcon = ({ isActive, index }: AltStepIconProps) => {
+const AltStepIcon = ({ index, bgColor }: AltStepIconProps) => {
   const theme = useTheme();
   const stepNumber = index + 1;
 
@@ -24,7 +24,7 @@ const AltStepIcon = ({ isActive, index }: AltStepIconProps) => {
     <Box
       sx={{
         alignItems: 'center',
-        bgcolor: isActive ? theme.palette.TwClrBaseGreen500 : theme.palette.TwClrBaseGray300,
+        bgcolor: bgColor,
         borderRadius: '50%',
         color: theme.palette.TwClrBaseWhite,
         display: 'flex',
@@ -70,7 +70,18 @@ const ModuleTimeline = ({ cohortPhase, modules }: ModuleTimelineProps) => {
           {(modules ?? []).map((module, index) => (
             <Step key={module.id} active={module.isActive}>
               <StepLabel
-                icon={<AltStepIcon isActive={module.isActive} index={index} />}
+                icon={
+                  <AltStepIcon
+                    index={index}
+                    bgColor={
+                      soonestEndingModuleId === module.id
+                        ? theme.palette.TwClrBgWarning
+                        : module.isActive
+                          ? theme.palette.TwClrBaseGreen500
+                          : theme.palette.TwClrBaseGray300
+                    }
+                  />
+                }
                 sx={
                   soonestEndingModuleId === module.id
                     ? warningLabelStyles
