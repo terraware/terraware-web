@@ -5,6 +5,7 @@ import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 
 const ACCELERATOR_ORGS_ENDPOINT = '/api/v1/accelerator/organizations';
+const ASSIGN_TERRAFORMATION_CONTACT_ENDPOINT = '/api/v1/accelerator/organizations/{organizationId}/tfContact';
 
 export type AcceleratorOrgData = {
   organizations?: AcceleratorOrg[];
@@ -43,8 +44,19 @@ const listAcceleratorOrgs = async (
   );
 };
 
+const assignTerraformationContact = async (
+  organizationId: number,
+  terraformationContactId: number
+): Promise<Response> => {
+  return HttpService.root(ASSIGN_TERRAFORMATION_CONTACT_ENDPOINT).put({
+    entity: { userId: organizationId },
+    urlReplacements: { '{organizationId}': `${organizationId}` },
+  });
+};
+
 const AcceleratorService = {
   listAcceleratorOrgs,
+  assignTerraformationContact,
 };
 
 export default AcceleratorService;

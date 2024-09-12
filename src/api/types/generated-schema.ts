@@ -107,8 +107,12 @@ export interface paths {
     put: operations["updateSubmission"];
   };
   "/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}/complete": {
-    /** Marks a submission from a project as completed. */
+    /** Marks a submission from a project as complete. */
     post: operations["completeSubmission"];
+  };
+  "/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}/incomplete": {
+    /** Marks a submission from a project as incomplete. */
+    post: operations["incompleteSubmission"];
   };
   "/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}/submit": {
     /** Submits a submission from a project. */
@@ -136,6 +140,13 @@ export interface paths {
      * @description By default, only lists tagged organizations that have projects that have not been assigned to participants yet.
      */
     get: operations["listAcceleratorOrganizations"];
+  };
+  "/api/v1/accelerator/organizations/{organizationId}/tfContact": {
+    /**
+     * Assign a user as the Terraformation contact for an organization.
+     * @description The user will be added to the organization if they are not already a member.
+     */
+    put: operations["assignTerraformationContact"];
   };
   "/api/v1/accelerator/participants": {
     /** Creates a new participant. */
@@ -1348,6 +1359,10 @@ export interface components {
       accessionIds?: number[];
       batchIds?: number[];
       plantingSiteIds?: number[];
+    };
+    AssignTerraformationContactRequestPayload: {
+      /** Format: int64 */
+      userId: number;
     };
     AssignedPlotPayload: {
       boundary: components["schemas"]["Geometry"];
@@ -5319,6 +5334,7 @@ export interface components {
       description?: string;
       /** Format: int64 */
       id: number;
+      internalOnly: boolean;
       isList: boolean;
       isRequired: boolean;
       name: string;
@@ -5864,8 +5880,25 @@ export interface operations {
       };
     };
   };
-  /** Marks a submission from a project as completed. */
+  /** Marks a submission from a project as complete. */
   completeSubmission: {
+    parameters: {
+      path: {
+        deliverableId: number;
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Marks a submission from a project as incomplete. */
+  incompleteSubmission: {
     parameters: {
       path: {
         deliverableId: number;
@@ -6010,6 +6043,30 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["ListAcceleratorOrganizationsResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Assign a user as the Terraformation contact for an organization.
+   * @description The user will be added to the organization if they are not already a member.
+   */
+  assignTerraformationContact: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AssignTerraformationContactRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };

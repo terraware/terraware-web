@@ -20,6 +20,7 @@ import useListModules from 'src/hooks/useListModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
+import { requestAssignTerraformationContact } from 'src/redux/features/accelerator/acceleratorAsyncThunks';
 import { requestListGlobalRolesUsers } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
 import { selectGlobalRolesUsersSearchRequest } from 'src/redux/features/globalRoles/globalRolesSelectors';
 import { requestUpdateParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
@@ -27,7 +28,6 @@ import { selectParticipantProjectUpdateRequest } from 'src/redux/features/partic
 import { requestProjectUpdate } from 'src/redux/features/projects/projectsAsyncThunks';
 import { selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -128,9 +128,14 @@ const EditView = () => {
     }
   }, [projectId, projectRecord, dispatch]);
 
-  const saveTFContact = async () => {
+  const saveTFContact = () => {
     if (organization && tfContact) {
-      await OrganizationUserService.updateOrganizationUser(organization.id, tfContact?.value, 'Terraformation Contact');
+      dispatch(
+        requestAssignTerraformationContact({
+          organizationId: organization.id,
+          terraformationContactId: tfContact?.value,
+        })
+      );
     }
   };
 
