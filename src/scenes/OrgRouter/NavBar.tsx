@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useMixpanel } from 'react-mixpanel-browser';
 import { useMatch, useNavigate } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -13,6 +14,7 @@ import Navbar from 'src/components/common/Navbar/Navbar';
 import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useApplicationData } from 'src/providers/Application/Context';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
@@ -42,6 +44,7 @@ export default function NavBar({
   const [hasDeliverables, setHasDeliverables] = useState<boolean>(false);
   const { isDesktop, isMobile } = useDeviceInfo();
   const navigate = useNavigate();
+  const mixpanel = useMixpanel();
 
   const { isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
@@ -179,6 +182,7 @@ export default function NavBar({
           icon='iconSubmit'
           selected={!!isDeliverablesRoute}
           onClick={() => {
+            mixpanel?.track(MIXPANEL_EVENTS.PART_EX_LEFT_NAV_DELIVERABLES);
             closeAndNavigateTo(isDeliverablesRoute && !isDeliverableViewRoute ? '' : APP_PATHS.DELIVERABLES);
           }}
           id='deliverables'
@@ -211,6 +215,7 @@ export default function NavBar({
           label={strings.MODULES}
           selected={!!isProjectModulesRoute}
           onClick={() => {
+            mixpanel?.track(MIXPANEL_EVENTS.PART_EX_LEFT_NAV_MODULES);
             closeAndNavigateTo(
               APP_PATHS.PROJECT_MODULES.replace(':projectId', currentParticipantProject.id.toString())
             );
