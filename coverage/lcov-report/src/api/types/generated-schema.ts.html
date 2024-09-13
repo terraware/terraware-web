@@ -10969,7 +10969,77 @@
 <a name='L10904'></a><a href='#L10904'>10904</a>
 <a name='L10905'></a><a href='#L10905'>10905</a>
 <a name='L10906'></a><a href='#L10906'>10906</a>
-<a name='L10907'></a><a href='#L10907'>10907</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L10907'></a><a href='#L10907'>10907</a>
+<a name='L10908'></a><a href='#L10908'>10908</a>
+<a name='L10909'></a><a href='#L10909'>10909</a>
+<a name='L10910'></a><a href='#L10910'>10910</a>
+<a name='L10911'></a><a href='#L10911'>10911</a>
+<a name='L10912'></a><a href='#L10912'>10912</a>
+<a name='L10913'></a><a href='#L10913'>10913</a>
+<a name='L10914'></a><a href='#L10914'>10914</a>
+<a name='L10915'></a><a href='#L10915'>10915</a>
+<a name='L10916'></a><a href='#L10916'>10916</a>
+<a name='L10917'></a><a href='#L10917'>10917</a>
+<a name='L10918'></a><a href='#L10918'>10918</a>
+<a name='L10919'></a><a href='#L10919'>10919</a>
+<a name='L10920'></a><a href='#L10920'>10920</a>
+<a name='L10921'></a><a href='#L10921'>10921</a>
+<a name='L10922'></a><a href='#L10922'>10922</a>
+<a name='L10923'></a><a href='#L10923'>10923</a>
+<a name='L10924'></a><a href='#L10924'>10924</a>
+<a name='L10925'></a><a href='#L10925'>10925</a>
+<a name='L10926'></a><a href='#L10926'>10926</a>
+<a name='L10927'></a><a href='#L10927'>10927</a>
+<a name='L10928'></a><a href='#L10928'>10928</a>
+<a name='L10929'></a><a href='#L10929'>10929</a>
+<a name='L10930'></a><a href='#L10930'>10930</a>
+<a name='L10931'></a><a href='#L10931'>10931</a>
+<a name='L10932'></a><a href='#L10932'>10932</a>
+<a name='L10933'></a><a href='#L10933'>10933</a>
+<a name='L10934'></a><a href='#L10934'>10934</a>
+<a name='L10935'></a><a href='#L10935'>10935</a>
+<a name='L10936'></a><a href='#L10936'>10936</a>
+<a name='L10937'></a><a href='#L10937'>10937</a>
+<a name='L10938'></a><a href='#L10938'>10938</a>
+<a name='L10939'></a><a href='#L10939'>10939</a>
+<a name='L10940'></a><a href='#L10940'>10940</a>
+<a name='L10941'></a><a href='#L10941'>10941</a>
+<a name='L10942'></a><a href='#L10942'>10942</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -22018,6 +22088,13 @@ export interface paths {
      */
     get: operations["listAcceleratorOrganizations"];
   };
+  "/api/v1/accelerator/organizations/{organizationId}/tfContact": {
+    /**
+     * Assign a user as the Terraformation contact for an organization.
+     * @description The user will be added to the organization if they are not already a member.
+     */
+    put: operations["assignTerraformationContact"];
+  };
   "/api/v1/accelerator/participants": {
     /** Creates a new participant. */
     post: operations["createParticipant"];
@@ -23229,6 +23306,10 @@ export interface components {
       accessionIds?: number[];
       batchIds?: number[];
       plantingSiteIds?: number[];
+    };
+    AssignTerraformationContactRequestPayload: {
+      /** Format: int64 */
+      userId: number;
     };
     AssignedPlotPayload: {
       boundary: components["schemas"]["Geometry"];
@@ -27909,6 +27990,30 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["ListAcceleratorOrganizationsResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Assign a user as the Terraformation contact for an organization.
+   * @description The user will be added to the organization if they are not already a member.
+   */
+  assignTerraformationContact: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AssignTerraformationContactRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -32788,7 +32893,7 @@ export interface operations {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-09-12T18:35:20.815Z
+                at 2024-09-13T18:13:01.400Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
