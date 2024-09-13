@@ -198,7 +198,11 @@ const SingleView = () => {
               />
               <ProjectFieldDisplay
                 label={strings.PROJECT_LEAD}
-                value={participantProject?.projectLead}
+                value={
+                  organization?.tfContactUser
+                    ? `${organization.tfContactUser.firstName} ${organization.tfContactUser.lastName}`
+                    : ''
+                }
                 rightBorder={!isMobile}
               />
               <ProjectFieldDisplay

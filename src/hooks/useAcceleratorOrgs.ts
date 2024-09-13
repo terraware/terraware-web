@@ -10,6 +10,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 export type Response = {
   acceleratorOrgs?: AcceleratorOrg[];
   isBusy: boolean;
+  reload: () => void;
 };
 
 export const useAcceleratorOrgs = (includeParticipants?: boolean): Response => {
@@ -31,10 +32,16 @@ export const useAcceleratorOrgs = (includeParticipants?: boolean): Response => {
     }
   }, [result?.status, snackbar]);
 
+  const reload = () => {
+    const request = dispatch(requestAcceleratorOrgs({ locale: activeLocale, includeParticipants }));
+    setRequestId(request.requestId);
+  };
+
   return useMemo<Response>(
     () => ({
       acceleratorOrgs: result?.status === 'success' ? result?.data : [],
       isBusy: result?.status === 'pending',
+      reload: reload,
     }),
     [result]
   );

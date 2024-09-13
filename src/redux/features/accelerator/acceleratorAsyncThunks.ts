@@ -32,3 +32,18 @@ export const requestAcceleratorOrgs = createAsyncThunk(
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
+
+export const requestAssignTerraformationContact = createAsyncThunk(
+  'terraformationContact/assign',
+  async (request: { organizationId: number; terraformationContactId: number }, { rejectWithValue }) => {
+    const { organizationId, terraformationContactId } = request;
+
+    const response = await AcceleratorService.assignTerraformationContact(organizationId, terraformationContactId);
+
+    if (response && response.requestSucceeded) {
+      return response;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);

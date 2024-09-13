@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { AcceleratorOrg } from 'src/types/Accelerator';
 
-import { requestAcceleratorOrgs } from './acceleratorAsyncThunks';
+import { requestAcceleratorOrgs, requestAssignTerraformationContact } from './acceleratorAsyncThunks';
 
 /**
  * Accelerator orgs list
@@ -19,8 +19,23 @@ export const acceleratorOrgsSlice = createSlice({
   },
 });
 
+/**
+ * Assign terraformation contact
+ */
+const initialStateAssignTerraformationContact: Record<string, StatusT<Response>> = {};
+
+export const assignTerraformationContactSlice = createSlice({
+  name: 'assignTerraformationContactSlice',
+  initialState: initialStateAssignTerraformationContact,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestAssignTerraformationContact)(builder);
+  },
+});
+
 const acceleratorReducers = {
   acceleratorOrgs: acceleratorOrgsSlice.reducer,
+  assignTerraformationContact: assignTerraformationContactSlice.reducer,
 };
 
 export default acceleratorReducers;

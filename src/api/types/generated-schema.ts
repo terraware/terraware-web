@@ -141,6 +141,13 @@ export interface paths {
      */
     get: operations["listAcceleratorOrganizations"];
   };
+  "/api/v1/accelerator/organizations/{organizationId}/tfContact": {
+    /**
+     * Assign a user as the Terraformation contact for an organization.
+     * @description The user will be added to the organization if they are not already a member.
+     */
+    put: operations["assignTerraformationContact"];
+  };
   "/api/v1/accelerator/participants": {
     /** Creates a new participant. */
     post: operations["createParticipant"];
@@ -1352,6 +1359,10 @@ export interface components {
       accessionIds?: number[];
       batchIds?: number[];
       plantingSiteIds?: number[];
+    };
+    AssignTerraformationContactRequestPayload: {
+      /** Format: int64 */
+      userId: number;
     };
     AssignedPlotPayload: {
       boundary: components["schemas"]["Geometry"];
@@ -6032,6 +6043,30 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["ListAcceleratorOrganizationsResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Assign a user as the Terraformation contact for an organization.
+   * @description The user will be added to the organization if they are not already a member.
+   */
+  assignTerraformationContact: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AssignTerraformationContactRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
