@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
 
 import ApplicationStatusCard from 'src/components/ProjectField/ApplicationStatusCard';
 import CountrySelect from 'src/components/ProjectField/CountrySelect';
+import GridEntryWrapper from 'src/components/ProjectField/GridEntryWrapper';
 import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
 import ProjectFieldMeta from 'src/components/ProjectField/Meta';
 import MinMaxCarbonTextfield from 'src/components/ProjectField/MinMaxCarbonTextfield';
@@ -21,6 +22,7 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import { requestAssignTerraformationContact } from 'src/redux/features/accelerator/acceleratorAsyncThunks';
+import { selectAssignTerraformationContact } from 'src/redux/features/accelerator/acceleratorSelectors';
 import { requestListGlobalRolesUsers } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
 import { selectGlobalRolesUsersSearchRequest } from 'src/redux/features/globalRoles/globalRolesSelectors';
 import { requestUpdateParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
@@ -75,9 +77,25 @@ const EditView = () => {
   const [confirmProjectNameModalOpen, setConfirmProjectNameModalOpen] = useState(false);
   const [listUsersRequestId, setListUsersRequestId] = useState('');
   const listUsersRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(listUsersRequestId));
+  const [assignTfContactRequestId, setAssignTfContactRequestId] = useState('');
+  const assignResponse = useAppSelector(selectAssignTerraformationContact(assignTfContactRequestId));
   const { activeLocale } = useLocalization();
   const [globalUsersOptions, setGlobalUsersOptions] = useState<DropdownItem[]>();
   const [tfContact, setTfContact] = useState<DropdownItem>();
+
+  const redirectToProjectView = () => {
+    reload();
+    snackbar.toastSuccess(strings.CHANGES_SAVED, strings.SAVED);
+    goToParticipantProject(projectId);
+  };
+
+  useEffect(() => {
+    if (assignResponse?.status === 'success') {
+      redirectToProjectView();
+    } else if (assignResponse?.status === 'error') {
+      snackbar.toastError();
+    }
+  }, [assignResponse, redirectToProjectView, snackbar]);
 
   useEffect(() => {
     const tfContactSelected = globalUsersOptions?.find(
@@ -130,12 +148,13 @@ const EditView = () => {
 
   const saveTFContact = () => {
     if (organization && tfContact) {
-      dispatch(
+      const assignRequest = dispatch(
         requestAssignTerraformationContact({
           organizationId: organization.id,
           terraformationContactId: tfContact?.value,
         })
       );
+      setAssignTfContactRequestId(assignRequest.requestId);
     }
   };
 
@@ -144,10 +163,8 @@ const EditView = () => {
       setConfirmProjectNameModalOpen(true);
       return;
     }
-
     saveParticipantProject();
-    saveTFContact();
-  }, [project, projectRecord, saveParticipantProject, tfContact]);
+  }, [project, projectRecord, saveParticipantProject]);
 
   const handleOnCancel = useCallback(() => goToParticipantProject(projectId), [goToParticipantProject, projectId]);
   const handleOnCloseModal = useCallback(() => setConfirmProjectNameModalOpen(false), []);
@@ -160,11 +177,13 @@ const EditView = () => {
     if (participantProjectUpdateRequest.status === 'error') {
       snackbar.toastError();
     } else if (participantProjectUpdateRequest.status === 'success') {
-      snackbar.toastSuccess(strings.CHANGES_SAVED, strings.SAVED);
-      reload();
-      goToParticipantProject(projectId);
+      if (tfContact) {
+        saveTFContact();
+      } else {
+        redirectToProjectView();
+      }
     }
-  }, [goToParticipantProject, participantProjectUpdateRequest, projectId, snackbar, reload]);
+  }, [participantProjectUpdateRequest, snackbar]);
 
   useEffect(() => {
     if (!projectUpdateRequest) {
@@ -250,20 +269,24 @@ const EditView = () => {
               onChange={onChangeParticipantProject}
               value={participantProjectRecord?.fileNaming}
             />
-            <Dropdown
-              id='projectLead'
-              placeholder={strings.SELECT}
-              selectedValue={tfContact?.value}
-              options={globalUsersOptions}
-              onChange={(value: string) => {
-                setTfContact(
-                  globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString())
-                );
-              }}
-              hideClearIcon={true}
-              label={strings.PROJECT_LEAD}
-              fullWidth
-            />
+            <GridEntryWrapper>
+              <Box paddingX={theme.spacing(2)}>
+                <Dropdown
+                  id='projectLead'
+                  placeholder={strings.SELECT}
+                  selectedValue={tfContact?.value}
+                  options={globalUsersOptions}
+                  onChange={(value: string) => {
+                    setTfContact(
+                      globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString())
+                    );
+                  }}
+                  hideClearIcon={true}
+                  label={strings.PROJECT_LEAD}
+                  fullWidth
+                />
+              </Box>
+            </GridEntryWrapper>
             <CountrySelect
               id={'countryCode'}
               label={strings.COUNTRY}

@@ -49,7 +49,7 @@ const assignTerraformationContact = async (
   terraformationContactId: number
 ): Promise<Response> => {
   return HttpService.root(ASSIGN_TERRAFORMATION_CONTACT_ENDPOINT).put({
-    entity: { userId: organizationId },
+    entity: { userId: terraformationContactId },
     urlReplacements: { '{organizationId}': `${organizationId}` },
   });
 };
