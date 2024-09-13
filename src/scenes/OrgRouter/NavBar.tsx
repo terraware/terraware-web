@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useMixpanel } from 'react-mixpanel-browser';
 import { useMatch, useNavigate } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -13,6 +14,7 @@ import Navbar from 'src/components/common/Navbar/Navbar';
 import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useApplicationData } from 'src/providers/Application/Context';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
@@ -22,8 +24,6 @@ import ReportService, { Reports } from 'src/services/ReportService';
 import strings from 'src/strings';
 import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useMixpanel } from 'react-mixpanel-browser';
-import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 
 type NavBarProps = {
   backgroundTransparent?: boolean;

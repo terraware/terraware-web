@@ -10,6 +10,7 @@ import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useApplicationPortal from 'src/hooks/useApplicationPortal';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser } from 'src/providers/hooks';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -19,7 +20,6 @@ import OrganizationsDropdown from '../OrganizationsDropdown';
 import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
 import UserMenu from '../UserMenu';
 import Icon from '../common/icon/Icon';
-import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 
 type TopBarProps = {
   setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
