@@ -4,4 +4,5 @@ export enum MIXPANEL_EVENTS {
   TOP_BAR_HOME = 'Top Bar Home',
   PART_EX_LEFT_NAV_DELIVERABLES = 'Participant Deliverables Nav Click',
   PART_EX_LEFT_NAV_MODULES = 'Participant Modules Nav Click',
+  CONSOLE_LEFT_NAV_DELIVERABLES = 'Console Deliverables Nav Click',
 }
