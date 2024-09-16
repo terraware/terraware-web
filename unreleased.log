@@ -1,3 +1,4 @@
+0ddf333e551 SW-6020 Console: Add Mixpanel Event for clicking Deliverables tab in the left nav (#3192)
 a8c48785068 SW-5816 Updated map text style and showed hectacres (#3193)
 8e81492dbf5 SW-5854: User should be able to view/edit variable status, internal comment, feedback in Doc Producer (Follow-up #1) (#3171)
 88395c866e8 SW-6019 Add Mixpanel Events for clicking Participants and Cohorts tab (#3191)
