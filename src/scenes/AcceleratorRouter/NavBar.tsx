@@ -1,4 +1,5 @@
 import React from 'react';
+import { useMixpanel } from 'react-mixpanel-browser';
 import { useMatch, useNavigate } from 'react-router-dom';
 
 import { NavSection } from '@terraware/web-components';
@@ -8,6 +9,7 @@ import NavFooter from 'src/components/common/Navbar/NavFooter';
 import NavItem from 'src/components/common/Navbar/NavItem';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useUser } from 'src/providers';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -20,6 +22,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const { isDesktop } = useDeviceInfo();
   const navigate = useNavigate();
   const { isAllowed } = useUser();
+  const mixpanel = useMixpanel();
 
   const isApplicationRoute = useMatch({ path: APP_PATHS.ACCELERATOR_APPLICATIONS, end: false });
   const isDocumentsRoute = useMatch({ path: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS, end: false });
@@ -79,7 +82,10 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
         icon='iconSubmit'
         id='deliverables'
         label={strings.DELIVERABLES}
-        onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_DELIVERABLES)}
+        onClick={() => {
+          mixpanel?.track(MIXPANEL_EVENTS.CONSOLE_LEFT_NAV_DELIVERABLES);
+          closeAndNavigateTo(APP_PATHS.ACCELERATOR_DELIVERABLES);
+        }}
         selected={!!isDeliverablesRoute}
       />
 
