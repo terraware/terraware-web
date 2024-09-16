@@ -1,4 +1,5 @@
 import React, { ReactNode, useMemo } from 'react';
+import { useMixpanel } from 'react-mixpanel-browser';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -7,6 +8,7 @@ import { DateTime } from 'luxon';
 
 import Link from 'src/components/common/Link';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { DeliverableStatusTypeWithOverdue } from 'src/types/Deliverables';
@@ -36,13 +38,20 @@ type ModuleContent = {
 };
 
 const MODULE_CONTENTS = (module: ModuleDetails, navigate: (type: ModuleContentType) => void): ModuleContent[] => {
+  const mixpanel = useMixpanel();
   const content: ModuleContent[] = [];
 
   if (module.additionalResources) {
     content.push({
       type: 'additionalResources',
       label: strings.ADDITIONAL_RESOURCES,
-      onClick: (type) => navigate(type),
+      onClick: (type) => {
+        mixpanel?.track(MIXPANEL_EVENTS.ACCELERATOR_MDDULE_ADDITIONAL_LINK, {
+          type,
+          moduleId: module.id,
+        });
+        navigate(type);
+      },
     });
   }
 
@@ -50,7 +59,13 @@ const MODULE_CONTENTS = (module: ModuleDetails, navigate: (type: ModuleContentTy
     content.push({
       type: 'preparationMaterials',
       label: strings.PREPARATION_MATERIALS,
-      onClick: (type) => navigate(type),
+      onClick: (type) => {
+        mixpanel?.track(MIXPANEL_EVENTS.ACCELERATOR_MDDULE_ADDITIONAL_LINK, {
+          type,
+          moduleId: module.id,
+        });
+        navigate(type);
+      },
     });
   }
 
