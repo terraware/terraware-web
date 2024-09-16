@@ -21,9 +21,16 @@ import ApplicationPage from '../ApplicationPage';
 type ResultViewProp = {
   isFailure: boolean;
   feedback?: string;
+  requestId: string;
+  setRequestId: (requestId: string) => void;
 };
 
-const PrescreenResultView = ({ isFailure, feedback }: ResultViewProp) => {
+const PrescreenResultView = ({
+  isFailure,
+  feedback,
+  requestId: restartRequestId,
+  setRequestId: setRestartRequestId,
+}: ResultViewProp) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
@@ -42,7 +49,6 @@ const PrescreenResultView = ({ isFailure, feedback }: ResultViewProp) => {
     }
   }, [selectedApplication, setIsConfirmModalOpen, goToApplication, isFailure]);
 
-  const [restartRequestId, setRestartRequestId] = useState<string>('');
   const restartResult = useAppSelector(selectApplicationRestart(restartRequestId));
 
   const handleRestart = useCallback(() => {
@@ -141,6 +147,10 @@ const PrescreenResultViewWrapper = () => {
   const { activeLocale } = useLocalization();
   const { selectedApplication } = useApplicationData();
 
+  const [requestId, setRequestId] = useState<string>('');
+  const request = useAppSelector(selectApplicationRestart(requestId));
+  const isLoading = useMemo(() => request?.status === 'pending', [request]);
+
   const crumbs: Crumb[] = useMemo(
     () =>
       activeLocale && selectedApplication?.id
@@ -155,10 +165,12 @@ const PrescreenResultViewWrapper = () => {
   );
 
   return (
-    <ApplicationPage crumbs={crumbs} hideFeedback>
+    <ApplicationPage crumbs={crumbs} hideFeedback isLoading={isLoading}>
       <PrescreenResultView
         feedback={selectedApplication?.feedback}
         isFailure={!!selectedApplication && selectedApplication.status === 'Failed Pre-screen'}
+        requestId={requestId}
+        setRequestId={setRequestId}
       />
     </ApplicationPage>
   );

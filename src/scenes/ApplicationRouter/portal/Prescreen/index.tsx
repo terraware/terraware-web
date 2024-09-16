@@ -140,46 +140,6 @@ const PrescreenView = () => {
     }
   }, [activeLocale, selectedApplication]);
 
-  if (!selectedApplication || !prescreenSection) {
-    return null;
-  }
-
-  return (
-    <>
-      <ConfirmModal
-        open={isConfirmModalOpen}
-        onClose={() => setIsConfirmModalOpen(false)}
-        title={modalTitle}
-        body={modalBody}
-        onConfirm={handleConfirm}
-      />
-      <SectionView section={prescreenSection} sectionDeliverables={prescreenDeliverables}>
-        {selectedApplication.status === 'Not Submitted' && (
-          <Button
-            disabled={!allDeliverablesCompleted || isLoading}
-            label={strings.SUBMIT_PRESCREEN}
-            onClick={() => setIsConfirmModalOpen(true)}
-            priority='primary'
-          />
-        )}
-
-        {(selectedApplication.status === 'Failed Pre-screen' || selectedApplication.status === 'Passed Pre-screen') && (
-          <Button
-            disabled={isLoading}
-            label={strings.RESTART_PRESCREEN}
-            onClick={() => setIsConfirmModalOpen(true)}
-            priority='secondary'
-          />
-        )}
-      </SectionView>
-    </>
-  );
-};
-
-const PrescreenViewWrapper = () => {
-  const { activeLocale } = useLocalization();
-  const { selectedApplication } = useApplicationData();
-
   const crumbs: Crumb[] = useMemo(
     () =>
       activeLocale && selectedApplication?.id
@@ -194,10 +154,43 @@ const PrescreenViewWrapper = () => {
   );
 
   return (
-    <ApplicationPage crumbs={crumbs}>
-      <PrescreenView />
+    <ApplicationPage
+      crumbs={crumbs}
+      isLoading={submitResult?.status === 'pending' || restartResult?.status === 'pending'}
+    >
+      {!selectedApplication || !prescreenSection ? null : (
+        <>
+          <ConfirmModal
+            open={isConfirmModalOpen}
+            onClose={() => setIsConfirmModalOpen(false)}
+            title={modalTitle}
+            body={modalBody}
+            onConfirm={handleConfirm}
+          />
+          <SectionView section={prescreenSection} sectionDeliverables={prescreenDeliverables}>
+            {selectedApplication.status === 'Not Submitted' && (
+              <Button
+                disabled={!allDeliverablesCompleted || isLoading}
+                label={strings.SUBMIT_PRESCREEN}
+                onClick={() => setIsConfirmModalOpen(true)}
+                priority='primary'
+              />
+            )}
+
+            {(selectedApplication.status === 'Failed Pre-screen' ||
+              selectedApplication.status === 'Passed Pre-screen') && (
+              <Button
+                disabled={isLoading}
+                label={strings.RESTART_PRESCREEN}
+                onClick={() => setIsConfirmModalOpen(true)}
+                priority='secondary'
+              />
+            )}
+          </SectionView>
+        </>
+      )}
     </ApplicationPage>
   );
 };
 
-export default PrescreenViewWrapper;
+export default PrescreenView;

@@ -1,26 +1,27 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
 import Card from 'src/components/common/Card';
 import Button from 'src/components/common/button/Button';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useApplicationData } from 'src/providers/Application/Context';
 import { requestSubmitApplication } from 'src/redux/features/application/applicationAsyncThunks';
 import { selectApplicationSubmit } from 'src/redux/features/application/applicationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import { useApplicationData } from '../../../../providers/Application/Context';
-
 type ReviewCardProps = {
+  requestId: string;
   sections: {
     name: string;
     status?: 'Incomplete' | 'Complete';
   }[];
+  setRequestId: (requestId: string) => void;
 };
 
-const ReviewCard = ({ sections }: ReviewCardProps): JSX.Element => {
+const ReviewCard = ({ requestId, sections, setRequestId }: ReviewCardProps): JSX.Element => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
@@ -28,8 +29,7 @@ const ReviewCard = ({ sections }: ReviewCardProps): JSX.Element => {
   const { goToApplicationReview } = useNavigateTo();
   const { toastSuccess, toastWarning } = useSnackbar();
 
-  const [requestId, setRequestId] = useState<string>('');
-  const result = useAppSelector(selectApplicationSubmit(requestId));
+  const request = useAppSelector(selectApplicationSubmit(requestId));
 
   const statusText = (status: 'Incomplete' | 'Complete') => (
     <Typography
@@ -57,17 +57,17 @@ const ReviewCard = ({ sections }: ReviewCardProps): JSX.Element => {
   }, [dispatch, selectedApplication, setRequestId]);
 
   useEffect(() => {
-    if (result && result.status === 'success' && result.data) {
-      if (result.data.length === 0) {
+    if (request && request.status === 'success' && request.data) {
+      if (request.data.length === 0) {
         toastSuccess(strings.SUCCESS);
         reload(refreshPage);
       } else {
-        toastWarning(`${strings.GENERIC_ERROR}: ${result.data.toString()}`);
+        toastWarning(`${strings.GENERIC_ERROR}: ${request.data.toString()}`);
       }
     }
-  }, [result, reload, toastSuccess]);
+  }, [request, reload, toastSuccess]);
 
-  const isLoading = useMemo(() => result?.status === 'pending', [result]);
+  const isLoading = useMemo(() => request?.status === 'pending', [request]);
 
   return (
     <Card
