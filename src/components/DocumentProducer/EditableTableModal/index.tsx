@@ -1,11 +1,14 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { Button, DatePicker, Dropdown, Textfield } from '@terraware/web-components';
 
 import PageDialog from 'src/components/DocumentProducer/PageDialog';
+import VariableWorkflowDetails from 'src/components/DocumentProducer/VariableWorkflowDetails';
 import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
 import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
+import { selectUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesSelector';
+import { requestUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import {
@@ -13,11 +16,13 @@ import {
   SelectVariable,
   TableColumn,
   TableVariableWithValues,
+  UpdateVariableWorkflowDetailsPayload,
 } from 'src/types/documentProducer/Variable';
 import {
   AppendVariableValueOperation,
   NewSelectValuePayload,
   UpdateVariableValuesRequestWithProjectId,
+  VariableValue,
   VariableValueSelectValue,
 } from 'src/types/documentProducer/VariableValue';
 
@@ -29,6 +34,7 @@ type EditableTableEditProps = {
   projectId: number;
   onFinish: (edited: boolean) => void;
   onCancel: () => void;
+  setUpdateWorkflowRequestId?: (requestId: string) => void;
 };
 
 const EditableTableEdit = ({
@@ -37,6 +43,7 @@ const EditableTableEdit = ({
   projectId,
   onCancel,
   onFinish,
+  setUpdateWorkflowRequestId,
 }: EditableTableEditProps) => {
   const columns = useMemo<TableColumn[]>(() => variable.columns, [variable]);
   const initialCellValues = useMemo<VariableTableCell[][]>(() => getInitialCellValues(variable), [variable]);
@@ -44,8 +51,47 @@ const EditableTableEdit = ({
   const [display, setDisplay] = useState<boolean>(displayProp);
 
   const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState<string>('');
-  const selector = useAppSelector(selectUpdateVariableValues(requestId));
+  const [updateVariableValuesRequestId, setUpdateVariableValuesRequestId] = useState<string>('');
+  const updateVariableValuesRequest = useAppSelector(selectUpdateVariableValues(updateVariableValuesRequestId));
+
+  const [updateVariableWorkflowDetailsRequestId, setUpdateVariableWorkflowDetailsRequestId] = useState<string>('');
+  const updateVariableWorkflowDetailsRequest = useAppSelector(
+    selectUpdateVariableWorkflowDetails(updateVariableWorkflowDetailsRequestId)
+  );
+
+  const variableValue: VariableValue | undefined = (variable?.variableValues || []).find(
+    (value) => value.variableId === variable.id
+  );
+
+  const [variableWorkflowDetails, setVariableWorkflowDetails] = useState<UpdateVariableWorkflowDetailsPayload>({
+    feedback: variableValue?.feedback,
+    internalComment: variableValue?.internalComment,
+    status: variableValue?.status || 'Not Submitted',
+  });
+
+  useEffect(() => {
+    if (updateVariableValuesRequest?.status === 'success' && !updateVariableWorkflowDetailsRequestId) {
+      const request = dispatch(
+        requestUpdateVariableWorkflowDetails({
+          feedback: variableWorkflowDetails?.feedback,
+          internalComment: variableWorkflowDetails?.internalComment,
+          projectId,
+          status: variableWorkflowDetails.status,
+          variableId: variable.id,
+        })
+      );
+      setUpdateVariableWorkflowDetailsRequestId(request.requestId);
+      setUpdateWorkflowRequestId?.(request.requestId);
+    }
+  }, [updateVariableValuesRequest, updateVariableWorkflowDetailsRequestId, variableWorkflowDetails]);
+
+  useEffect(() => {
+    if (initialCellValues.length === 0 && cellValues.length === 0) {
+      // if there are no initial values, add a row
+      addRow();
+    }
+  }, [cellValues, initialCellValues]);
+
   const handleSave = useCallback(() => {
     if (columns.length === 0) {
       return;
@@ -129,7 +175,7 @@ const EditableTableEdit = ({
 
     // dispatch
     const request = dispatch(requestUpdateVariableValues(update));
-    setRequestId(request.requestId);
+    setUpdateVariableValuesRequestId(request.requestId);
   }, [initialCellValues, cellValues, columns.length, dispatch, projectId, variable.id]);
 
   const setCellValue = (rowNum: number, colNum: number, newValue: string | number) => {
@@ -177,7 +223,11 @@ const EditableTableEdit = ({
 
   return (
     <PageDialog
-      workflowState={requestId ? selector : undefined}
+      workflowState={
+        updateVariableValuesRequest?.status === 'success'
+          ? updateVariableWorkflowDetailsRequest
+          : updateVariableValuesRequest
+      }
       onSuccess={onFinish}
       onClose={onCancel}
       open={true}
@@ -328,6 +378,12 @@ const EditableTableEdit = ({
           }
         />
       )}
+
+      <VariableWorkflowDetails
+        display={display}
+        setVariableWorkflowDetails={setVariableWorkflowDetails}
+        variableWorkflowDetails={variableWorkflowDetails}
+      />
     </PageDialog>
   );
 };
