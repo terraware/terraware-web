@@ -74,7 +74,9 @@ export const getMapErrorLayer = (theme: Theme, id: string): MapErrorLayer => ({
     id: `error-text-${id}`,
     type: 'symbol',
     paint: {
-      'text-color': theme.palette.TwClrTxtDanger,
+      'text-color': theme.palette.TwClrTxtInverse,
+      'text-halo-color': theme.palette.TwClrBaseBlack,
+      'text-halo-blur': 2,
     },
     layout: {
       'text-field': '{errorText}',
