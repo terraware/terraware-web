@@ -1,3 +1,4 @@
+88395c866e8 SW-6019 Add Mixpanel Events for clicking Participants and Cohorts tab (#3191)
 74772b85e7d SW-6018 Console: Add Mixpanel Event for Project Export (#3190)
 77a3d90f84a SW-6012 Add Mixpanel Events for clicks on session/event "More Info" links (#3189)
 e05c0349b13 SW-6011 Accelerator Home: Add Mixpanel Events for clicks on the links under "This Module Contains" (#3188)

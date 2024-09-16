@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1726518411824" clover="3.2.0">
-  <project timestamp="1726518411824" name="All files">
-    <metrics statements="24984" coveredstatements="1039" conditionals="16349" coveredconditionals="279" methods="7678" coveredmethods="176" elements="49011" coveredelements="1494" complexity="0" loc="24984" ncloc="24984" packages="233" files="1083" classes="1083"/>
+<coverage generated="1726519713341" clover="3.2.0">
+  <project timestamp="1726519713342" name="All files">
+    <metrics statements="24989" coveredstatements="1039" conditionals="16351" coveredconditionals="279" methods="7679" coveredmethods="176" elements="49019" coveredelements="1494" complexity="0" loc="24989" ncloc="24989" packages="233" files="1083" classes="1083"/>
     <package name="src">
       <metrics statements="177" coveredstatements="0" conditionals="130" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -13803,19 +13803,24 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Overview">
-      <metrics statements="10" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
+      <metrics statements="15" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Overview/index.tsx">
-        <metrics statements="10" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
+        <metrics statements="15" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
-        <line num="19" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="23" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.ParticipantProjects">
