@@ -5,6 +5,7 @@ import { Autocomplete, DropdownItem } from '@terraware/web-components';
 import '@terraware/web-components/components/Autocomplete/styles.scss';
 import '@terraware/web-components/components/Select/styles.scss';
 
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
 import useMapboxSearch from 'src/utils/useMapboxSearch';
@@ -15,20 +16,28 @@ export type MapSearchBoxProp = {
 };
 
 const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
+  const { activeLocale } = useLocalization();
   const { clear, retrieve, suggest, suggestResult, suggestText } = useMapboxSearch();
   const [value, setValue] = useState<string>('');
   const [debouncedValue, setDebouncedValue] = useState<string>('');
 
-  const options = useMemo(
-    () =>
-      suggestResult.map(
-        (result): DropdownItem => ({
-          label: `${result.feature_name}, ${result.full_address}`,
-          value: result,
-        })
-      ),
-    [suggestResult]
-  );
+  const [open, setOpen] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [options, setOptions] = React.useState<DropdownItem[]>([]);
+
+  useEffect(() => {
+    if (suggestResult) {
+      setLoading(false);
+      setOptions(
+        suggestResult.map(
+          (result): DropdownItem => ({
+            label: `${result.feature_name}, ${result.full_address}`,
+            value: result,
+          })
+        )
+      );
+    }
+  }, [suggestResult]);
 
   const updateDebouncedValue = useCallback(
     (nextValue: string) => {
@@ -54,10 +63,12 @@ const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
   const fetchSuggestions = useCallback(
     async (searchText: string) => {
       if (searchText !== suggestText) {
+        setLoading(true);
+        setOptions([]);
         await suggest(searchText);
       }
     },
-    [suggest, suggestText]
+    [setLoading, setOptions, suggest, suggestText]
   );
 
   useEffect(() => {
@@ -87,14 +98,27 @@ const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
     [setValue, onSelectSuggestion]
   );
 
+  const errorText = useMemo(() => {
+    if (activeLocale && open && !loading && suggestText && options.length === 0) {
+      return strings.NO_LOCATION_FOUND;
+    }
+  }, [activeLocale, open, loading, suggestText, options]);
+
   return (
     <Autocomplete
       id='mapbox-suggestions'
       sx={{ width: '100%', ...style }}
+      errorText={errorText}
+      open={open}
+      onOpen={() => setOpen(true)}
+      onClose={() => setOpen(false)}
+      loading={loading}
+      loadingText={strings.LOADING}
       options={options}
       selected={value}
       onChange={onChange}
       placeholder={strings.ENTER_LOCATION}
+      filterOptions={(options) => options} // Do not filter any options
       freeSolo
     />
   );
