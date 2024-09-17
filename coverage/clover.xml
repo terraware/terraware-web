@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1726603252575" clover="3.2.0">
-  <project timestamp="1726603252575" name="All files">
-    <metrics statements="25047" coveredstatements="1040" conditionals="16400" coveredconditionals="279" methods="7696" coveredmethods="176" elements="49143" coveredelements="1495" complexity="0" loc="25047" ncloc="25047" packages="234" files="1084" classes="1084"/>
+<coverage generated="1726608071058" clover="3.2.0">
+  <project timestamp="1726608071058" name="All files">
+    <metrics statements="25048" coveredstatements="1040" conditionals="16404" coveredconditionals="279" methods="7696" coveredmethods="176" elements="49148" coveredelements="1495" complexity="0" loc="25048" ncloc="25048" packages="234" files="1084" classes="1084"/>
     <package name="src">
       <metrics statements="177" coveredstatements="0" conditionals="130" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -14184,9 +14184,9 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.ParticipantProjects.Scoring">
-      <metrics statements="131" coveredstatements="0" conditionals="85" coveredconditionals="0" methods="40" coveredmethods="0"/>
+      <metrics statements="132" coveredstatements="0" conditionals="89" coveredconditionals="0" methods="40" coveredmethods="0"/>
       <file name="EditView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/Scoring/EditView.tsx">
-        <metrics statements="45" coveredstatements="0" conditionals="28" coveredconditionals="0" methods="15" coveredmethods="0"/>
+        <metrics statements="46" coveredstatements="0" conditionals="32" coveredconditionals="0" methods="15" coveredmethods="0"/>
         <line num="20" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
@@ -14224,14 +14224,15 @@
         <line num="80" count="0" type="stmt"/>
         <line num="81" count="0" type="stmt"/>
         <line num="83" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="84" count="0" type="stmt"/>
+        <line num="85" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="88" count="0" type="stmt"/>
-        <line num="89" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="90" count="0" type="stmt"/>
-        <line num="93" count="0" type="stmt"/>
-        <line num="94" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="95" count="0" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
+        <line num="93" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="94" count="0" type="stmt"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="98" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="99" count="0" type="stmt"/>
+        <line num="103" count="0" type="stmt"/>
       </file>
       <file name="ScoresView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/Scoring/ScoresView.tsx">
         <metrics statements="21" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="6" coveredmethods="0"/>
