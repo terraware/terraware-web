@@ -56,6 +56,7 @@ const DeliverablesList = () => {
                 record={participantFilter}
                 setRecord={setParticipantFilter}
                 label={''}
+                unselectLabel={strings.ALL}
               />
             </Grid>
           </Grid>
