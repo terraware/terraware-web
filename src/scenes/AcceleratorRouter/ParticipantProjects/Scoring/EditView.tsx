@@ -80,9 +80,10 @@ const ScorecardEditView = () => {
       goToScorecardView();
       return;
     }
-    // For now we can only save Phase 1 scores
-    update('Phase 1 - Feasibility Study', updatedScores);
-  }, [goToScorecardView, update, updatedScores]);
+    if (project?.cohortPhase) {
+      update(project.cohortPhase, updatedScores);
+    }
+  }, [goToScorecardView, update, updatedScores, project]);
 
   useEffect(() => {
     const localPhase1Scores = [...(phase1Scores?.scores || [])];
