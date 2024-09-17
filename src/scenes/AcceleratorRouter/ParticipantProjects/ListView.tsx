@@ -1,4 +1,5 @@
 import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { useMixpanel } from 'react-mixpanel-browser';
 
 import { DropdownItem, TableColumnType } from '@terraware/web-components';
 
@@ -6,6 +7,7 @@ import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
 import ExportCsvModal from 'src/components/common/ExportCsvModal';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useUser } from 'src/providers';
 import { requestListParticipantProjects } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectsListRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
@@ -80,6 +82,7 @@ export default function ListView(): JSX.Element {
   const { isAllowed } = useUser();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
+  const mixpanel = useMixpanel();
 
   const [openDownload, setOpenDownload] = useState<boolean>(false);
   const [lastSearch, setLastSearch] = useState<SearchNodePayload>();
@@ -161,6 +164,7 @@ export default function ListView(): JSX.Element {
         size='small'
         onOptionItemClick={(item: DropdownItem) => {
           if (item.value === 'export') {
+            mixpanel?.track(MIXPANEL_EVENTS.CONSOLE_PROJECTS_EXPORT);
             setOpenDownload(true);
           }
         }}

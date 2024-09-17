@@ -99,6 +99,17 @@ export type UpdateVariableOwnerPayload = components['schemas']['UpdateVariableOw
 
 export type VariableStatusType = components['schemas']['UpdateVariableWorkflowDetailsRequestPayload']['status'];
 
+export const VariableStatuses: VariableStatusType[] = [
+  'Approved',
+  'Complete',
+  'In Review',
+  'Incomplete',
+  'Needs Translation',
+  'Not Needed',
+  'Not Submitted',
+  'Rejected',
+];
+
 export type VariableOwnersListResponse = components['schemas']['ListVariableOwnersResponsePayload'];
 
 export type VariableOwners = components['schemas']['ListVariableOwnersResponsePayload']['variables'][0];

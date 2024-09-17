@@ -3,17 +3,16 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
 import { Button, DatePicker, Dropdown, DropdownItem, Icon, MultiSelect, Textfield } from '@terraware/web-components';
 
-import VariableStatusBadge from 'src/components/Variables/VariableStatusBadge';
+import VariableWorkflowDetails from 'src/components/DocumentProducer/VariableWorkflowDetails';
 import Link from 'src/components/common/Link';
 import strings from 'src/strings';
 import {
   SelectOptionPayload,
   SelectVariable,
-  VariableStatusType,
+  UpdateVariableWorkflowDetailsPayload,
   VariableWithValues,
 } from 'src/types/documentProducer/Variable';
 import {
-  VariableValue,
   VariableValueDateValue,
   VariableValueLinkValue,
   VariableValueNumberValue,
@@ -32,6 +31,8 @@ export type VariableDetailsInputProps = {
   addRemovedValue: (value: VariableValueValue) => void;
   sectionsUsed?: string[];
   onSectionClicked?: (sectionNumber: string) => void;
+  variableWorkflowDetails: UpdateVariableWorkflowDetailsPayload;
+  setVariableWorkflowDetails: (details: UpdateVariableWorkflowDetailsPayload) => void;
 };
 
 const VariableDetailsInput = ({
@@ -44,6 +45,8 @@ const VariableDetailsInput = ({
   addRemovedValue,
   sectionsUsed,
   onSectionClicked,
+  variableWorkflowDetails,
+  setVariableWorkflowDetails,
 }: VariableDetailsInputProps): JSX.Element => {
   const [value, setValue] = useState<string | number | number[]>();
   const [citation, setCitation] = useState<string>();
@@ -53,11 +56,6 @@ const VariableDetailsInput = ({
   const formElementStyles = { margin: theme.spacing(1, 0) };
 
   const valueError = useCallback(() => (value ? '' : strings.REQUIRED_FIELD), [value]);
-
-  const firstVariableValue: VariableValue | undefined = (variable?.variableValues || [])[0];
-  const firstVariableValueStatus: VariableStatusType | undefined = firstVariableValue?.status;
-  const firstVariableValueFeedback: string | undefined = firstVariableValue?.feedback;
-  const firstVariableValueInternalComment: string | undefined = firstVariableValue?.internalComment;
 
   useEffect(() => {
     if (values?.length) {
@@ -472,51 +470,11 @@ const VariableDetailsInput = ({
           />
         </Grid>
 
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-              height: '1px',
-              marginY: '16px',
-              width: '100%',
-            }}
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <Typography sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px', marginBottom: '12px' }}>
-            {strings.VARIABLE_STATUS}
-          </Typography>
-          <Box sx={{ marginBottom: '12px' }}>
-            <VariableStatusBadge status={firstVariableValueStatus} />
-          </Box>
-        </Grid>
-
-        {firstVariableValueInternalComment && (
-          <Grid item xs={12}>
-            <Textfield
-              display
-              id='internal-comments'
-              label={strings.INTERNAL_COMMENTS}
-              sx={formElementStyles}
-              type='text'
-              value={firstVariableValueInternalComment}
-            />
-          </Grid>
-        )}
-
-        {firstVariableValueFeedback && (
-          <Grid item xs={12}>
-            <Textfield
-              display
-              id='feedback'
-              label={strings.FEEDBACK}
-              sx={formElementStyles}
-              type='text'
-              value={firstVariableValueFeedback}
-            />
-          </Grid>
-        )}
+        <VariableWorkflowDetails
+          display={display}
+          setVariableWorkflowDetails={setVariableWorkflowDetails}
+          variableWorkflowDetails={variableWorkflowDetails}
+        />
       </Grid>
     </>
   );

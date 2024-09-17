@@ -73,8 +73,8 @@ export default function TextVariable(props: TextVariableProps): React.ReactEleme
         backgroundColor: '#e9e2ba',
         margin: '0 1px',
         height: '24px',
-        padding: '0 4px',
-        display: 'inline-block',
+        padding: '2px 4px 2.5px',
+        display: 'inline',
         fontFamily: 'Inter',
         borderRadius: '4px',
         '& .icon-container': {

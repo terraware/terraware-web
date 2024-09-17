@@ -10,6 +10,7 @@ import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useApplicationPortal from 'src/hooks/useApplicationPortal';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser } from 'src/providers/hooks';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -65,7 +66,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   };
 
   const handleTopBarClick = () => {
-    mixpanel?.track('TopBarHome');
+    mixpanel?.track(MIXPANEL_EVENTS.TOP_BAR_HOME);
     navigate(APP_PATHS.HOME);
   };
 

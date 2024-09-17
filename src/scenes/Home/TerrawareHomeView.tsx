@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useMixpanel } from 'react-mixpanel-browser';
 
 import { Box, Container, Grid } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -8,6 +9,7 @@ import Link from 'src/components/common/Link';
 import PageCard from 'src/components/common/PageCard';
 import TfMain from 'src/components/common/TfMain';
 import { ACCELERATOR_LINK, APP_PATHS } from 'src/constants';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
@@ -18,6 +20,7 @@ const TerrawareHomeView = () => {
   const { user } = useUser();
   const { selectedOrganization } = useOrganization();
   const { isTablet, isMobile } = useDeviceInfo();
+  const mixpanel = useMixpanel();
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 
@@ -114,14 +117,24 @@ const TerrawareHomeView = () => {
                     icon='iconFile'
                     description={strings.formatString(
                       strings.APPLY_TO_ACCELERATOR_DESCRIPTION,
-                      <Link fontSize='16px' to={ACCELERATOR_LINK} target='_blank'>
+                      <Link
+                        fontSize='16px'
+                        to={ACCELERATOR_LINK}
+                        target='_blank'
+                        onClick={() => {
+                          mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_TF_LINK);
+                        }}
+                      >
                         {strings.HERE}
                       </Link>
                     )}
                     link={APP_PATHS.APPLICATIONS}
                     linkText={strings.START_NEW_APPLICATION}
                     linkStyle={'button-primary'}
-                    onClick={() => setIsNewApplicationModalOpen(true)}
+                    onClick={() => {
+                      mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_APPLY_BUTTON);
+                      setIsNewApplicationModalOpen(true);
+                    }}
                   />
                 </Grid>
               )}

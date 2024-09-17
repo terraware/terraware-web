@@ -31,8 +31,6 @@ type Stack = {
   siteBoundary?: FeatureCollection;
 };
 
-const MAX_APPLICATION_BOUNDARY_AREA_HA = 100000;
-
 const MapUpdateView = () => {
   const theme = useTheme();
 
@@ -40,7 +38,7 @@ const MapUpdateView = () => {
   const dispatch = useAppDispatch();
   const { selectedApplication, reload } = useApplicationData();
   const { goToApplicationPrescreen } = useNavigateTo();
-  const { toastSuccess } = useSnackbar();
+  const { toastSuccess, toastError } = useSnackbar();
   const [siteBoundaryData, setSiteBoundaryData, undo, redo] = useUndoRedoState<Stack>();
 
   const [requestId, setRequestId] = useState<string>('');
@@ -49,16 +47,8 @@ const MapUpdateView = () => {
   const findErrors = (boundary: MultiPolygon) => {
     const boundaryAreaHa = parseFloat((area(boundary) * SQ_M_TO_HECTARES).toFixed(2));
 
-    if (boundaryAreaHa > MAX_APPLICATION_BOUNDARY_AREA_HA) {
-      const errorText = strings.formatString(
-        strings.SITE_BOUNDARY_POLYGON_TOO_LARGE,
-        boundaryAreaHa,
-        MAX_APPLICATION_BOUNDARY_AREA_HA
-      );
-      return [{ type: 'Feature', geometry: boundary, properties: { errorText, fill: true }, id: -1 } as Feature];
-    } else {
-      return undefined;
-    }
+    const errorText = `${boundaryAreaHa} ${strings.HECTARES}`;
+    return [{ type: 'Feature', geometry: boundary, properties: { errorText, fill: false }, id: -1 } as Feature];
   };
 
   /**
@@ -83,11 +73,15 @@ const MapUpdateView = () => {
   );
 
   const onSave = useCallback(() => {
-    if (selectedApplication && boundary) {
-      const dispatched = dispatch(
-        requestUpdateApplicationBoundary({ applicationId: selectedApplication.id, boundary })
-      );
-      setRequestId(dispatched.requestId);
+    if (selectedApplication) {
+      if (boundary) {
+        const dispatched = dispatch(
+          requestUpdateApplicationBoundary({ applicationId: selectedApplication.id, boundary })
+        );
+        setRequestId(dispatched.requestId);
+      } else {
+        toastError(strings.APPLICATION_ERROR_NO_PROJECT_BOUNDARY);
+      }
     }
   }, [selectedApplication, boundary]);
 
@@ -162,6 +156,7 @@ const MapUpdateView = () => {
         </Grid>
         <Grid item xs={8}>
           <EditableMap
+            editableBoundary={siteBoundaryData?.siteBoundary}
             errorAnnotations={siteBoundaryData?.errorAnnotations}
             onEditableBoundaryChanged={onEditableBoundaryChanged}
             onRedo={redo}

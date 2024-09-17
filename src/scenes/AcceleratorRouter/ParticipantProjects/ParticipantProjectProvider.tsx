@@ -30,7 +30,7 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   const { activeLocale } = useLocalization();
   const { project, projectId } = useProjectData();
   const { participant } = useParticipant(project?.participantId ?? -1);
-  const { acceleratorOrgs } = useAcceleratorOrgs(true);
+  const { acceleratorOrgs, reload: reloadAll } = useAcceleratorOrgs(true);
 
   const [participantProject, setParticipantProject] = useState<ParticipantProject>();
   const [participantProjectData, setParticipantProjectData] = useState<ParticipantProjectData>({
@@ -62,6 +62,7 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   );
 
   const reload = useCallback(() => {
+    reloadAll();
     if (projectId !== -1) {
       void dispatch(requestGetParticipantProject(projectId));
     }

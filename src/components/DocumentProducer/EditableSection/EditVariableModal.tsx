@@ -16,6 +16,7 @@ type EditVariableModalProps = {
   onFinish: (edited: boolean) => void;
   onCancel: () => void;
   projectId: number;
+  setUpdateWorkflowRequestId?: (requestId: string) => void;
 };
 
 export default function EditVariableModal({
@@ -23,6 +24,7 @@ export default function EditVariableModal({
   onCancel,
   onFinish,
   projectId,
+  setUpdateWorkflowRequestId,
   variable,
 }: EditVariableModalProps) {
   const { getUsedSections } = useDocumentProducerData();
@@ -59,6 +61,7 @@ export default function EditVariableModal({
           onFinish={onFinish}
           projectId={projectId}
           sectionsUsed={getUsedSections(variable.id)}
+          setUpdateWorkflowRequestId={setUpdateWorkflowRequestId}
           variable={variable}
         />
       );

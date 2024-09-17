@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
+import { useMixpanel } from 'react-mixpanel-browser';
 import { useParams } from 'react-router-dom';
 
 import { DateTime } from 'luxon';
@@ -9,6 +10,7 @@ import ParticipantPage from 'src/components/common/PageWithModuleTimeline/Partic
 import { APP_PATHS } from 'src/constants';
 import useGetModule from 'src/hooks/useGetModule';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
@@ -21,6 +23,7 @@ const ModuleView = () => {
   const pathParams = useParams<{ sessionId: string; moduleId: string; projectId: string }>();
   const projectId = Number(pathParams.projectId);
   const moduleId = Number(pathParams.moduleId);
+  const mixpanel = useMixpanel();
 
   const { getModule, module, deliverables, events } = useGetModule();
 
@@ -42,7 +45,13 @@ const ModuleView = () => {
     () =>
       events?.map((event) => ({
         ...event,
-        onClick: () => goToModuleEventSession(projectId, moduleId, event.id),
+        onClick: () => {
+          mixpanel?.track(MIXPANEL_EVENTS.ACCELERATOR_MDDULE_SESSION_EVENT_LINK, {
+            eventId: event.id,
+            type: event.type,
+          });
+          goToModuleEventSession(projectId, moduleId, event.id);
+        },
       })),
     [events, goToModuleEventSession, projectId, module]
   );

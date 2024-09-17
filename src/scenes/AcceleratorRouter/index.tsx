@@ -5,7 +5,6 @@ import { Box, Slide, useTheme } from '@mui/material';
 
 import ErrorBoundary from 'src/ErrorBoundary';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import ApplicationProvider from 'src/providers/Application';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -31,7 +30,6 @@ interface AcceleratorRouterProps {
 const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps) => {
   const { type } = useDeviceInfo();
   const location = useStateLocation();
-  const documentProducerEnabled = isEnabled('Document Producer');
   const theme = useTheme();
 
   const viewHasBackgroundImage = useCallback((): boolean => {
@@ -89,10 +87,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
             <Route path={`${APP_PATHS.ACCELERATOR_PARTICIPANTS}/*`} element={<Participants />} />
             <Route path={`${APP_PATHS.ACCELERATOR_PROJECT_VIEW}/*`} element={<ParticipantProjects />} />
             <Route path={`${APP_PATHS.ACCELERATOR_ORGANIZATIONS}/*`} element={<Organizations />} />
-
-            {documentProducerEnabled && (
-              <Route path={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}/*`} element={<DocumentsRouter />} />
-            )}
+            <Route path={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}/*`} element={<DocumentsRouter />} />
             <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_OVERVIEW} />} />
           </Routes>
         </ErrorBoundary>

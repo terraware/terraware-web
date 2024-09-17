@@ -19,7 +19,10 @@ export type TerrawarePath =
   | 'batch/withdraw'
   | 'observations'
   | 'planting-sites'
-  | 'contactus';
+  | 'contactus'
+  | 'modules'
+  | 'deliverables'
+  | 'applications';
 
 type KnowledgeBaseLink = Record<TerrawarePath, string>;
 
@@ -43,6 +46,9 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     observations: 'https://knowledge.terraformation.com/hc/en-us/articles/28388716231956-Observations',
     'planting-sites': 'https://knowledge.terraformation.com/hc/en-us/articles/19718249140372-Tracking-Plants-With-Maps',
     contactus: 'https://knowledge.terraformation.com/hc/en-us/articles/19718438661140-Get-Help-Or-Provide-Feedback',
+    modules: 'https://knowledge.terraformation.com/hc/en-us/articles/29551087572500-Modules',
+    deliverables: 'https://knowledge.terraformation.com/hc/en-us/articles/29426531812116-Deliverables',
+    applications: 'https://knowledge.terraformation.com/hc/en-us/articles/29426659306516-Application',
   },
   es: {
     home: 'https://knowledge.terraformation.com/hc/en-us/categories/19696828903700-Terraware',
@@ -63,6 +69,9 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     observations: 'https://knowledge.terraformation.com/hc/en-us/articles/28388716231956-Observations',
     'planting-sites': 'https://knowledge.terraformation.com/hc/en-us/articles/19718249140372-Tracking-Plants-With-Maps',
     contactus: 'https://knowledge.terraformation.com/hc/en-us/articles/19718438661140-Get-Help-Or-Provide-Feedback',
+    modules: 'https://knowledge.terraformation.com/hc/en-us/articles/29551087572500-Modules',
+    deliverables: 'https://knowledge.terraformation.com/hc/en-us/articles/29426531812116-Deliverables',
+    applications: 'https://knowledge.terraformation.com/hc/en-us/articles/29426659306516-Application',
   },
 };
 

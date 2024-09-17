@@ -53,20 +53,26 @@ export default function EditableSectionContainer({
   const [clickedVariable, setClickedVariable] = useState<VariableWithValues>();
 
   const [editing, setEditing] = useState(false);
-  const [requestId, setRequestId] = useState<string>('');
-  const selector = useAppSelector(selectUpdateVariableValues(requestId));
+  const [updateVariableValuesRequestId, setUpdateVariableValuesRequestId] = useState<string>('');
+  const updateVariableValuesRequest = useAppSelector(selectUpdateVariableValues(updateVariableValuesRequestId));
 
   const [updateInternalCommentRequestId, setUpdateInternalCommentRequestId] = useState<string>('');
   const updateInternalCommentRequest = useAppSelector(
     selectUpdateVariableWorkflowDetails(updateInternalCommentRequestId)
   );
 
+  const [updateVariableWorkflowDetailsRequestId, setUpdateVariableWorkflowDetailsRequestId] = useState<string>('');
+  const updateVariableWorkflowDetailsRequest = useAppSelector(
+    selectUpdateVariableWorkflowDetails(updateVariableWorkflowDetailsRequestId)
+  );
+
   useWorkflowSuccess({
-    workflowState: selector,
+    workflowState: updateVariableValuesRequest,
     onSuccess: () => {
       setEditing(false);
       setSectionValues(editSectionValues);
-      setRequestId('');
+      setUpdateVariableValuesRequestId('');
+      setUpdateVariableWorkflowDetailsRequestId('');
     },
   });
 
@@ -88,7 +94,7 @@ export default function EditableSectionContainer({
         projectId,
       })
     );
-    setRequestId(request.requestId);
+    setUpdateVariableValuesRequestId(request.requestId);
   }, [dispatch, projectId, section.id, editSectionValues]);
 
   const onCancelHandler = () => {
@@ -138,6 +144,14 @@ export default function EditableSectionContainer({
     }
   }, [snackbar, updateInternalCommentRequest]);
 
+  useEffect(() => {
+    if (updateVariableWorkflowDetailsRequest?.status === 'success') {
+      snackbar.toastSuccess(strings.CHANGES_SAVED);
+    } else if (updateVariableWorkflowDetailsRequest?.status === 'error') {
+      snackbar.toastError(strings.GENERIC_ERROR);
+    }
+  }, [snackbar, updateVariableWorkflowDetailsRequest]);
+
   const nameAndDescription = useMemo(() => {
     return (
       <>
@@ -168,6 +182,7 @@ export default function EditableSectionContainer({
           onCancel={() => setOpenEditVariableModal(false)}
           onFinish={variableUpdated}
           projectId={projectId}
+          setUpdateWorkflowRequestId={setUpdateVariableWorkflowDetailsRequestId}
           variable={clickedVariable}
         />
       )}

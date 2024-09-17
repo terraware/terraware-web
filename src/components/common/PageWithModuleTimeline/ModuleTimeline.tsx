@@ -12,11 +12,11 @@ import { CohortPhaseType } from 'src/types/Cohort';
 import { Module } from 'src/types/Module';
 
 type AltStepIconProps = {
-  isActive: boolean;
   index: number;
+  bgColor?: string;
 };
 
-const AltStepIcon = ({ isActive, index }: AltStepIconProps) => {
+const AltStepIcon = ({ index, bgColor }: AltStepIconProps) => {
   const theme = useTheme();
   const stepNumber = index + 1;
 
@@ -24,7 +24,7 @@ const AltStepIcon = ({ isActive, index }: AltStepIconProps) => {
     <Box
       sx={{
         alignItems: 'center',
-        bgcolor: isActive ? theme.palette.TwClrBaseGreen500 : theme.palette.TwClrBaseGray300,
+        bgcolor: bgColor,
         borderRadius: '50%',
         color: theme.palette.TwClrBaseWhite,
         display: 'flex',
@@ -46,6 +46,21 @@ export type ModuleTimelineProps = {
 };
 
 const ModuleTimeline = ({ cohortPhase, modules }: ModuleTimelineProps) => {
+  const theme = useTheme();
+  const now = new Date();
+  const futureModules = modules?.filter((module) => new Date(module.endDate) > now);
+
+  const soonestEndingModuleId = futureModules?.reduce((soonest, current) => {
+    const soonestEndDate = new Date(soonest.endDate);
+    const currentEndDate = new Date(current.endDate);
+    return currentEndDate < soonestEndDate ? current : soonest;
+  }, modules[0])?.id;
+
+  const warningLabelStyles = {
+    '.MuiStepLabel-label.Mui-active': { color: theme.palette.TwClrTxtWarning },
+    '.MuiStepLabel-label.Mui-disabled': { color: theme.palette.TwClrTxtWarning, fontWeight: 600 },
+  };
+
   return (
     <Box maxWidth={'206px'}>
       <Box sx={{ marginBottom: '24px', paddingRight: '16px' }}>{cohortPhase && <Badge label={cohortPhase} />}</Box>
@@ -55,8 +70,23 @@ const ModuleTimeline = ({ cohortPhase, modules }: ModuleTimelineProps) => {
           {(modules ?? []).map((module, index) => (
             <Step key={module.id} active={module.isActive}>
               <StepLabel
-                icon={<AltStepIcon isActive={module.isActive} index={index} />}
-                sx={{ fontWeight: 600, '.MuiStepLabel-label.Mui-disabled': { fontWeight: 600 } }}
+                icon={
+                  <AltStepIcon
+                    index={index}
+                    bgColor={
+                      soonestEndingModuleId === module.id
+                        ? theme.palette.TwClrBgWarning
+                        : module.isActive
+                          ? theme.palette.TwClrBaseGreen500
+                          : theme.palette.TwClrBaseGray300
+                    }
+                  />
+                }
+                sx={
+                  soonestEndingModuleId === module.id
+                    ? warningLabelStyles
+                    : { fontWeight: 600, '.MuiStepLabel-label.Mui-disabled': { fontWeight: 600 } }
+                }
               >
                 {module.title}
                 <br />
