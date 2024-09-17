@@ -38,7 +38,7 @@ const MapUpdateView = () => {
   const dispatch = useAppDispatch();
   const { selectedApplication, reload } = useApplicationData();
   const { goToApplicationPrescreen } = useNavigateTo();
-  const { toastSuccess } = useSnackbar();
+  const { toastSuccess, toastError } = useSnackbar();
   const [siteBoundaryData, setSiteBoundaryData, undo, redo] = useUndoRedoState<Stack>();
 
   const [requestId, setRequestId] = useState<string>('');
@@ -73,11 +73,15 @@ const MapUpdateView = () => {
   );
 
   const onSave = useCallback(() => {
-    if (selectedApplication && boundary) {
-      const dispatched = dispatch(
-        requestUpdateApplicationBoundary({ applicationId: selectedApplication.id, boundary })
-      );
-      setRequestId(dispatched.requestId);
+    if (selectedApplication) {
+      if (boundary) {
+        const dispatched = dispatch(
+          requestUpdateApplicationBoundary({ applicationId: selectedApplication.id, boundary })
+        );
+        setRequestId(dispatched.requestId);
+      } else {
+        toastError(strings.APPLICATION_ERROR_NO_PROJECT_BOUNDARY);
+      }
     }
   }, [selectedApplication, boundary]);
 
