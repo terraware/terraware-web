@@ -1,3 +1,4 @@
+d24432b1c9a SW-6029 Allow saving scores for other phases than phase 1 (#3201)
 d2398bf08c4 SW-6006 Add accelerator route KB links (#3200)
 0891c8a9704 SW-6013: Display spinner while Success! page is loading after Application submit button is clicked (#3194)
 11a6701e1cd SW-5994 Do not show "View All Deliverables" link in Project Detail for Application Projects with no Deliverables (#3198)
