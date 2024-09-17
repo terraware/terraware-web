@@ -12,11 +12,12 @@ type Props = {
   children?: ReactNode;
   crumbs?: Crumb[];
   hierarchicalCrumbs?: boolean;
+  isLoading?: boolean;
   rightComponent?: ReactNode;
   hideFeedback?: boolean;
 };
 
-const ApplicationPage = ({ children, crumbs, hierarchicalCrumbs, rightComponent, hideFeedback }: Props) => {
+const ApplicationPage = ({ children, crumbs, hierarchicalCrumbs, isLoading, rightComponent, hideFeedback }: Props) => {
   const { allApplications, selectedApplication, setSelectedApplication } = useApplicationData();
 
   const pathParams = useParams<{ applicationId: string }>();
@@ -33,6 +34,7 @@ const ApplicationPage = ({ children, crumbs, hierarchicalCrumbs, rightComponent,
       crumbs={crumbs}
       rightComponent={rightComponent}
       hierarchicalCrumbs={hierarchicalCrumbs ?? true}
+      isLoading={isLoading}
       // TODO: replace "Project Name" placeholder with actual project name once available in application data
       title={strings.formatString(strings.APPLICATION_FOR_PROJECT, selectedApplication?.projectName ?? '')}
       titleStyle={{ marginTop: '24px' }}
