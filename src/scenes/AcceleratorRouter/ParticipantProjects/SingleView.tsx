@@ -21,6 +21,9 @@ import useListModules from 'src/hooks/useListModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
+import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
+import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { LocationService } from 'src/services';
 import ParticipantProjectService from 'src/services/ParticipantProjectService';
 import strings from 'src/strings';
@@ -41,14 +44,28 @@ const SingleView = () => {
   const { phase0Scores, phase1Scores } = useScoringData();
   const { phaseVotes } = useVotingData();
   const { goToParticipantProjectEdit } = useNavigateTo();
-
+  const dispatch = useAppDispatch();
   const { modules, listModules } = useListModules();
+  const [searchDeliverablesRequestId, setSearchDeliverablesRequestId] = useState('');
+  const deliverablesResponse = useAppSelector(selectDeliverablesSearchRequest(searchDeliverablesRequestId));
+  const [hasDeliverables, setHasDeliverables] = useState(false);
 
   useEffect(() => {
     if (project) {
       void listModules({ projectId: project.id });
     }
   }, [project, listModules]);
+
+  useEffect(() => {
+    const request = dispatch(requestListDeliverables({ locale: activeLocale, listRequest: { projectId } }));
+    setSearchDeliverablesRequestId(request.requestId);
+  }, [activeLocale, projectId]);
+
+  useEffect(() => {
+    if (deliverablesResponse?.status === 'success' && (deliverablesResponse?.data?.length || 0) > 0) {
+      setHasDeliverables(true);
+    }
+  }, [deliverablesResponse]);
 
   const [countries, setCountries] = useState<Country[]>();
   const [exportModalOpen, setExportModalOpen] = useState(false);
@@ -153,11 +170,13 @@ const SingleView = () => {
 
       {project && (
         <>
-          <Box paddingLeft={3} marginBottom={4}>
-            <Link to={`${APP_PATHS.ACCELERATOR_DELIVERABLES}?projectId=${project.id}`} style={{ fontWeight: 400 }}>
-              {strings.VIEW_ALL_DELIVERABLES}
-            </Link>
-          </Box>
+          {hasDeliverables && (
+            <Box paddingLeft={3} marginBottom={4}>
+              <Link to={`${APP_PATHS.ACCELERATOR_DELIVERABLES}?projectId=${project.id}`} style={{ fontWeight: 400 }}>
+                {strings.VIEW_ALL_DELIVERABLES}
+              </Link>
+            </Box>
+          )}
           <Card
             style={{
               display: 'flex',
