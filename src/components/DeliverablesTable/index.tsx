@@ -174,7 +174,9 @@ const DeliverablesTable = ({
       }
       filters.unshift({
         field: 'projectName',
-        options: availableProjects?.map((project: Project | AcceleratorOrgProject) => `${project.name}`),
+        options: availableProjects
+          ?.sort((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
+          .map((project: Project | AcceleratorOrgProject) => `${project.name}`),
         label: strings.PROJECTS,
         values: projectFromParam ? [projectFromParam.name] : [],
       });
