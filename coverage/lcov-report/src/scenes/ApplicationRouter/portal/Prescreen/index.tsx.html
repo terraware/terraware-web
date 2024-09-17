@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/74</span>
+                <span class='fraction'>0/68</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/56</span>
+                <span class='fraction'>0/58</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/72</span>
+                <span class='fraction'>0/66</span>
             </div>
         
             
@@ -259,14 +259,7 @@
 <a name='L194'></a><a href='#L194'>194</a>
 <a name='L195'></a><a href='#L195'>195</a>
 <a name='L196'></a><a href='#L196'>196</a>
-<a name='L197'></a><a href='#L197'>197</a>
-<a name='L198'></a><a href='#L198'>198</a>
-<a name='L199'></a><a href='#L199'>199</a>
-<a name='L200'></a><a href='#L200'>200</a>
-<a name='L201'></a><a href='#L201'>201</a>
-<a name='L202'></a><a href='#L202'>202</a>
-<a name='L203'></a><a href='#L203'>203</a>
-<a name='L204'></a><a href='#L204'>204</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L197'></a><a href='#L197'>197</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -409,14 +402,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -425,7 +414,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -444,13 +432,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -459,9 +443,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -611,46 +597,6 @@ const PrescreenView = <span class="cstat-no" title="statement not covered" ><spa
     }
   }, [activeLocale, selectedApplication]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (!selectedApplication || !prescreenSection) {</span>
-<span class="cstat-no" title="statement not covered" >    return null;</span>
-  }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;&gt;
-      &lt;ConfirmModal
-        open={isConfirmModalOpen}
-        onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setIsConfirmModalOpen(false)}</span>
-        title={modalTitle}
-        body={modalBody}
-        onConfirm={handleConfirm}
-      /&gt;
-      &lt;SectionView section={prescreenSection} sectionDeliverables={prescreenDeliverables}&gt;
-        {selectedApplication.status === 'Not Submitted' &amp;&amp; (
-          &lt;Button
-            disabled={!allDeliverablesCompleted || isLoading}
-            label={strings.SUBMIT_PRESCREEN}
-            onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setIsConfirmModalOpen(true)}</span>
-            priority='primary'
-          /&gt;
-        )}
-&nbsp;
-        {(selectedApplication.status === 'Failed Pre-screen' || selectedApplication.status === 'Passed Pre-screen') &amp;&amp; (
-          &lt;Button
-            disabled={isLoading}
-            label={strings.RESTART_PRESCREEN}
-            onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setIsConfirmModalOpen(true)}</span>
-            priority='secondary'
-          /&gt;
-        )}
-      &lt;/SectionView&gt;
-    &lt;/&gt;
-  );
-};
-&nbsp;
-const PrescreenViewWrapper = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-  const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const { selectedApplication } = <span class="cstat-no" title="statement not covered" >useApplicationData();</span>
-&nbsp;
   const crumbs: Crumb[] = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
 <span class="cstat-no" title="statement not covered" >      activeLocale &amp;&amp; selectedApplication?.id</span>
@@ -665,13 +611,46 @@ const PrescreenViewWrapper = <span class="cstat-no" title="statement not covered
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;ApplicationPage crumbs={crumbs}&gt;
-      &lt;PrescreenView /&gt;
+    &lt;ApplicationPage
+      crumbs={crumbs}
+      isLoading={submitResult?.status === 'pending' || restartResult?.status === 'pending'}
+    &gt;
+      {!selectedApplication || !prescreenSection ? null : (
+        &lt;&gt;
+          &lt;ConfirmModal
+            open={isConfirmModalOpen}
+            onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setIsConfirmModalOpen(false)}</span>
+            title={modalTitle}
+            body={modalBody}
+            onConfirm={handleConfirm}
+          /&gt;
+          &lt;SectionView section={prescreenSection} sectionDeliverables={prescreenDeliverables}&gt;
+            {selectedApplication.status === 'Not Submitted' &amp;&amp; (
+              &lt;Button
+                disabled={!allDeliverablesCompleted || isLoading}
+                label={strings.SUBMIT_PRESCREEN}
+                onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setIsConfirmModalOpen(true)}</span>
+                priority='primary'
+              /&gt;
+            )}
+&nbsp;
+            {(selectedApplication.status === 'Failed Pre-screen' ||
+              selectedApplication.status === 'Passed Pre-screen') &amp;&amp; (
+              &lt;Button
+                disabled={isLoading}
+                label={strings.RESTART_PRESCREEN}
+                onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setIsConfirmModalOpen(true)}</span>
+                priority='secondary'
+              /&gt;
+            )}
+          &lt;/SectionView&gt;
+        &lt;/&gt;
+      )}
     &lt;/ApplicationPage&gt;
   );
 };
 &nbsp;
-export default PrescreenViewWrapper;
+export default PrescreenView;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -679,7 +658,7 @@ export default PrescreenViewWrapper;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-09-17T18:55:38.406Z
+                at 2024-09-17T19:16:42.837Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
