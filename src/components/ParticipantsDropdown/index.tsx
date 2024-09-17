@@ -13,6 +13,7 @@ type ParticipantsDropdownProps<T extends { id?: number } | undefined> = {
   record: T;
   required?: boolean;
   setRecord: (setFn: (previousValue: T) => T) => void;
+  unselectLabel?: string;
 };
 
 function ParticipantsDropdown<T extends { id?: number } | undefined>({
@@ -22,6 +23,7 @@ function ParticipantsDropdown<T extends { id?: number } | undefined>({
   record,
   required,
   setRecord,
+  unselectLabel,
 }: ParticipantsDropdownProps<T>) {
   const { activeLocale } = useLocalization();
 
@@ -34,8 +36,8 @@ function ParticipantsDropdown<T extends { id?: number } | undefined>({
 
     if (allowUnselect) {
       options.push({
-        label: strings.NO_PARTICIPANT,
-        value: '',
+        label: unselectLabel ?? strings.NO_PARTICIPANT,
+        value: undefined,
       });
     }
 
@@ -46,7 +48,7 @@ function ParticipantsDropdown<T extends { id?: number } | undefined>({
         value: participant.id,
       })),
     ];
-  }, [activeLocale, allowUnselect, availableParticipants]);
+  }, [activeLocale, allowUnselect, availableParticipants, unselectLabel]);
 
   return (
     <Dropdown
@@ -56,15 +58,11 @@ function ParticipantsDropdown<T extends { id?: number } | undefined>({
       options={participantOptions}
       onChange={(participantId: string) => {
         setRecord((previousValue: T): T => {
-          if (participantId === '') {
-            if (previousValue) {
-              return {
-                ...previousValue,
-                id: undefined,
-              };
-            } else {
-              return previousValue;
-            }
+          if (!participantId) {
+            return {
+              ...previousValue,
+              id: undefined,
+            };
           }
 
           return {

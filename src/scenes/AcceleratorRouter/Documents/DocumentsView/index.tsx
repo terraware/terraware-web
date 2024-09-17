@@ -51,7 +51,7 @@ export default function DocumentsView(): JSX.Element | null {
   const [tableRows, setTableRows] = useState<DocumentsSearchResponseElement[]>([]);
   const [tableSelectedRows, tableSetSelectedRows] = useState<TableRowType[]>([]);
   const [requestId, setRequestId] = useState('');
-  const [projectFilter, setProjectFilter] = useState<{ projectId?: number }>({ projectId: undefined });
+  const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({ projectId: '' });
 
   const documentsResponse = useAppSelector(selectDocumentSearch(requestId));
 
@@ -109,6 +109,7 @@ export default function DocumentsView(): JSX.Element | null {
                 record={projectFilter}
                 setRecord={setProjectFilter}
                 label={''}
+                unselectLabel={strings.ALL}
               />
             </Grid>
           </Grid>
