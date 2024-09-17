@@ -64,12 +64,14 @@ const ApplicationReview = ({ application }: ApplicationReviewProps) => {
 
   return (
     <>
-      <ApplicationReviewModal
-        application={application}
-        open={isReviewModalOpen}
-        onClose={() => setIsReviewModalOpen(false)}
-        onSuccess={onReviewSubmitted}
-      />
+      {isReviewModalOpen && (
+        <ApplicationReviewModal
+          application={application}
+          open={isReviewModalOpen}
+          onClose={() => setIsReviewModalOpen(false)}
+          onSuccess={onReviewSubmitted}
+        />
+      )}
       <Box
         borderRadius={theme.spacing(1)}
         display={'flex'}
