@@ -81,7 +81,11 @@ const ScorecardEditView = () => {
       return;
     }
     if (project?.cohortPhase) {
-      update(project.cohortPhase, updatedScores);
+      const phaseToSend =
+        project.cohortPhase === 'Application' || project.cohortPhase === 'Pre-Screen'
+          ? 'Phase 0 - Due Diligence'
+          : project.cohortPhase;
+      update(phaseToSend, updatedScores);
     }
   }, [goToScorecardView, update, updatedScores, project]);
 
