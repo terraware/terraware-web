@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1726601408121" clover="3.2.0">
-  <project timestamp="1726601408121" name="All files">
-    <metrics statements="25046" coveredstatements="1040" conditionals="16398" coveredconditionals="279" methods="7695" coveredmethods="176" elements="49139" coveredelements="1495" complexity="0" loc="25046" ncloc="25046" packages="234" files="1084" classes="1084"/>
+<coverage generated="1726603252575" clover="3.2.0">
+  <project timestamp="1726603252575" name="All files">
+    <metrics statements="25047" coveredstatements="1040" conditionals="16400" coveredconditionals="279" methods="7696" coveredmethods="176" elements="49143" coveredelements="1495" complexity="0" loc="25047" ncloc="25047" packages="234" files="1084" classes="1084"/>
     <package name="src">
       <metrics statements="177" coveredstatements="0" conditionals="130" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1995,7 +1995,7 @@
       </file>
     </package>
     <package name="src.components.DeliverablesTable">
-      <metrics statements="67" coveredstatements="0" conditionals="50" coveredconditionals="0" methods="20" coveredmethods="0"/>
+      <metrics statements="68" coveredstatements="0" conditionals="52" coveredconditionals="0" methods="21" coveredmethods="0"/>
       <file name="DeliverableCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverablesTable/DeliverableCellRenderer.tsx">
         <metrics statements="15" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="13" count="0" type="stmt"/>
@@ -2015,7 +2015,7 @@
         <line num="65" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverablesTable/index.tsx">
-        <metrics statements="52" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="18" coveredmethods="0"/>
+        <metrics statements="53" coveredstatements="0" conditionals="38" coveredconditionals="0" methods="19" coveredmethods="0"/>
         <line num="41" count="0" type="stmt"/>
         <line num="42" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="82" count="0" type="stmt"/>
@@ -2053,21 +2053,22 @@
         <line num="172" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="173" count="0" type="stmt"/>
         <line num="175" count="0" type="stmt"/>
-        <line num="177" count="0" type="stmt"/>
-        <line num="181" count="0" type="stmt"/>
-        <line num="184" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="194" count="0" type="stmt"/>
+        <line num="178" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="179" count="0" type="stmt"/>
+        <line num="183" count="0" type="stmt"/>
+        <line num="186" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="196" count="0" type="stmt"/>
-        <line num="197" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="198" count="0" type="stmt"/>
-        <line num="201" count="0" type="stmt"/>
-        <line num="210" count="0" type="stmt"/>
-        <line num="215" count="0" type="stmt"/>
+        <line num="199" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="200" count="0" type="stmt"/>
+        <line num="203" count="0" type="stmt"/>
+        <line num="212" count="0" type="stmt"/>
         <line num="217" count="0" type="stmt"/>
-        <line num="225" count="0" type="stmt"/>
-        <line num="227" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="228" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="232" count="0" type="stmt"/>
+        <line num="219" count="0" type="stmt"/>
+        <line num="227" count="0" type="stmt"/>
+        <line num="229" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="230" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="234" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.DocumentProducer.DeliverableDisplayVariableValue">
@@ -17726,7 +17727,7 @@
         <line num="113" count="0" type="stmt"/>
         <line num="119" count="0" type="stmt"/>
         <line num="121" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="155" count="0" type="stmt"/>
+        <line num="154" count="0" type="stmt"/>
       </file>
       <file name="QuestionsDeliverableEditView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/DeliverablesRouter/QuestionsDeliverableEditView.tsx">
         <metrics statements="10" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
