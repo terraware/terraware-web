@@ -67,6 +67,10 @@ export type ListDeliverablesElementWithOverdue = Omit<ListDeliverablesElement, '
   status: DeliverableStatusTypeWithOverdue;
 };
 
+export type ListDeliverablesElementWithOverdueAndDueDate = Omit<ListDeliverablesElementWithOverdue, 'dueDate'> & {
+  dueDate: string;
+};
+
 export const categoryLabel = (category: DeliverableCategoryType): string => {
   switch (category) {
     case 'Verra Non-Permanence Risk Tool (NPRT)':

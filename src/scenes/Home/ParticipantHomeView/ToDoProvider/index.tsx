@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
+import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import {
   requestProjectToDoDeliverables,
@@ -21,6 +22,7 @@ export type Props = {
 
 const ToDoProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
+  const { activeLocale } = useLocalization();
   const { currentParticipantProject } = useParticipantData();
 
   const [toDoItems, setToDoItems] = useState<ToDoItem[]>([]);
@@ -42,7 +44,9 @@ const ToDoProvider = ({ children }: Props) => {
   useEffect(() => {
     if (currentParticipantProject && !isNaN(currentParticipantProject.id) && currentParticipantProject.id > 0) {
       setProjectId(currentParticipantProject.id);
-      const deliverablesRequest = dispatch(requestProjectToDoDeliverables({ projectId: currentParticipantProject.id }));
+      const deliverablesRequest = dispatch(
+        requestProjectToDoDeliverables({ locale: activeLocale, projectId: currentParticipantProject.id })
+      );
       const eventsRequest = dispatch(requestProjectToDoEvents({ projectId: currentParticipantProject.id }));
       setDeliverablesRequestId(deliverablesRequest.requestId);
       setEventsRequestId(eventsRequest.requestId);

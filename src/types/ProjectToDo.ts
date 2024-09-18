@@ -1,10 +1,13 @@
 import { isInTheFuture } from '@terraware/web-components/utils/date';
 import { DateTime } from 'luxon';
 
-import { DeliverableSearchResultType, EventSearchResultType } from 'src/services/ToDoService';
-
-import { DeliverableCategoryType, DeliverableStatusType, DeliverableTypeType } from './Deliverables';
-import { ModuleEventStatus, ModuleEventType } from './Module';
+import {
+  DeliverableCategoryType,
+  DeliverableStatusTypeWithOverdue,
+  DeliverableTypeType,
+  ListDeliverablesElementWithOverdueAndDueDate,
+} from './Deliverables';
+import { ModuleEventStatus, ModuleEventType, ModuleEventWithStartTime } from './Module';
 
 const ONE_DAY_IN_MILLIS = 1000 * 3600 * 24;
 
@@ -57,21 +60,19 @@ export class DeliverableToDoItem implements ToDoItem {
   category: DeliverableCategoryType;
   dueDate: DateTime;
   name: string;
-  position: number;
-  status: DeliverableStatusType;
+  status: DeliverableStatusTypeWithOverdue;
   type: DeliverableTypeType;
 
-  constructor(searchResult: DeliverableSearchResultType) {
-    this.id = searchResult.id;
-    this.category = searchResult.category;
-    this.dueDate = DateTime.fromISO(searchResult.dueDate);
-    this.name = searchResult.name;
-    this.moduleId = searchResult.moduleId;
-    this.moduleName = searchResult.moduleName;
-    this.position = searchResult.position;
-    this.projectId = searchResult.projectId;
-    this.status = searchResult.status ?? 'Not Submitted';
-    this.type = searchResult.type;
+  constructor(item: ListDeliverablesElementWithOverdueAndDueDate) {
+    this.id = item.id;
+    this.category = item.category;
+    this.dueDate = DateTime.fromISO(item.dueDate);
+    this.name = item.name;
+    this.moduleId = item.moduleId;
+    this.moduleName = item.moduleName;
+    this.projectId = item.projectId;
+    this.status = item.status ?? 'Not Submitted';
+    this.type = item.type;
   }
 
   isCompleted = (): boolean => this.status == 'Approved' || this.status == 'Not Needed';
@@ -101,6 +102,8 @@ export class DeliverableToDoItem implements ToDoItem {
         } else {
           return 'Not Accepted';
         }
+      case 'Overdue':
+        return 'Overdue';
     }
   };
 
@@ -125,19 +128,17 @@ export class EventToDoItem implements ToDoItem {
   id: number;
   moduleId: number;
   moduleName: string;
-  projectId: number;
   startTime: DateTime;
   status: ModuleEventStatus;
   type: ModuleEventType;
 
-  constructor(searchResult: EventSearchResultType) {
-    this.id = searchResult.id;
-    this.moduleId = searchResult.moduleId;
-    this.moduleName = searchResult.moduleName;
-    this.projectId = searchResult.projectId;
-    this.startTime = DateTime.fromISO(searchResult.startTime);
-    this.status = searchResult.status;
-    this.type = searchResult.type;
+  constructor(event: ModuleEventWithStartTime) {
+    this.id = event.id;
+    this.moduleId = event.moduleId;
+    this.moduleName = event.moduleName;
+    this.startTime = DateTime.fromISO(event.startTime);
+    this.status = event.status;
+    this.type = event.type;
   }
 
   isCompleted = (): boolean => this.status == 'Ended';
