@@ -38,7 +38,6 @@ type ModuleContent = {
 };
 
 const MODULE_CONTENTS = (module: ModuleDetails, navigate: (type: ModuleContentType) => void): ModuleContent[] => {
-  const mixpanel = useMixpanel();
   const content: ModuleContent[] = [];
 
   if (module.additionalResources) {
@@ -46,10 +45,6 @@ const MODULE_CONTENTS = (module: ModuleDetails, navigate: (type: ModuleContentTy
       type: 'additionalResources',
       label: strings.ADDITIONAL_RESOURCES,
       onClick: (type) => {
-        mixpanel?.track(MIXPANEL_EVENTS.ACCELERATOR_MDDULE_ADDITIONAL_LINK, {
-          type,
-          moduleId: module.id,
-        });
         navigate(type);
       },
     });
@@ -60,10 +55,6 @@ const MODULE_CONTENTS = (module: ModuleDetails, navigate: (type: ModuleContentTy
       type: 'preparationMaterials',
       label: strings.PREPARATION_MATERIALS,
       onClick: (type) => {
-        mixpanel?.track(MIXPANEL_EVENTS.ACCELERATOR_MDDULE_ADDITIONAL_LINK, {
-          type,
-          moduleId: module.id,
-        });
         navigate(type);
       },
     });
@@ -116,6 +107,7 @@ const ModuleDetailsCard = ({
 }: ModuleDetailsCardProp) => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
+  const mixpanel = useMixpanel();
 
   const { goToModuleContent } = useNavigateTo();
 
@@ -272,7 +264,16 @@ const ModuleDetailsCard = ({
 
           {contents.map((content, index) => (
             <ModuleContentSection key={index}>
-              <Link fontSize='16px' onClick={() => goToModuleContent(projectId, module.id, content.type)}>
+              <Link
+                fontSize='16px'
+                onClick={() => {
+                  mixpanel?.track(MIXPANEL_EVENTS.ACCELERATOR_MDDULE_ADDITIONAL_LINK, {
+                    type: content.type,
+                    moduleId: module.id,
+                  });
+                  goToModuleContent(projectId, module.id, content.type);
+                }}
+              >
                 {content.label}
               </Link>
             </ModuleContentSection>
