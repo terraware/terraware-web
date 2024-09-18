@@ -3288,6 +3288,9 @@ export interface components {
       id: number;
       /** Format: uri */
       meetingUrl?: string;
+      /** Format: int64 */
+      moduleId: number;
+      moduleName: string;
       /** Format: uri */
       recordingUrl?: string;
       /** Format: uri */

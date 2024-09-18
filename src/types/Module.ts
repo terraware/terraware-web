@@ -4,6 +4,7 @@ import strings from 'src/strings';
 export type Module = components['schemas']['ModulePayload'];
 
 export type ModuleEvent = components['schemas']['ModuleEvent'];
+export type ModuleEventWithStartTime = Omit<ModuleEvent, 'startTime'> & { startTime: string };
 
 export type ModuleEventStatus = components['schemas']['ModuleEvent']['status'];
 export type ModuleEventType = ModuleEvent['type'];

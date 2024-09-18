@@ -10,20 +10,27 @@ import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import strings from 'src/strings';
 import { DeliverableToDoItem, EventToDoItem, ToDoItem } from 'src/types/ProjectToDo';
 
+import { useToDoData } from './ToDoProvider/Context';
+
 interface ToDoCtaProps {
   toDo: ToDoItem;
 }
 
 const ToDoCta = ({ toDo }: ToDoCtaProps) => {
+  const { projectId } = useToDoData();
   const { goToDeliverable, goToModuleEventSession } = useNavigateTo();
   const { isMobile } = useDeviceInfo();
   const mixpanel = useMixpanel();
 
   const handleOnClick = useCallback(() => {
+    if (projectId === -1) {
+      return;
+    }
     switch (toDo.getType()) {
       case 'Workshop':
       case 'One-on-One Session':
       case 'Live Session':
+      case 'Recorded Session':
         const event = toDo as EventToDoItem;
 
         mixpanel?.track(MIXPANEL_EVENTS.PART_EX_TO_DO_UPCOMING_VIEW_EVENT, {
@@ -32,7 +39,7 @@ const ToDoCta = ({ toDo }: ToDoCtaProps) => {
           status: event.status,
           moduleId: event.moduleId,
         });
-        return goToModuleEventSession(event.projectId, event.moduleId, event.id);
+        return goToModuleEventSession(projectId, event.moduleId, event.id);
       case 'Deliverable':
         const deliverable = toDo as DeliverableToDoItem;
         mixpanel?.track(MIXPANEL_EVENTS.PART_EX_TO_DO_UPCOMING_VIEW_DELIVERABLE, {
@@ -44,7 +51,7 @@ const ToDoCta = ({ toDo }: ToDoCtaProps) => {
         });
         return goToDeliverable(deliverable.id, deliverable.projectId);
     }
-  }, [goToDeliverable, goToModuleEventSession, toDo]);
+  }, [goToDeliverable, goToModuleEventSession, projectId, toDo]);
 
   return (
     <Button
