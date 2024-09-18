@@ -77,6 +77,7 @@ export default function TextVariable(props: TextVariableProps): React.ReactEleme
         display: 'inline',
         fontFamily: 'Inter',
         borderRadius: '4px',
+        fontSize: '16px',
         '& .icon-container': {
           position: 'relative',
           top: '2px',
