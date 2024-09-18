@@ -39,7 +39,7 @@ function ProjectsDropdown<T extends { projectId?: number | string } | undefined>
     if (allowUnselect) {
       options.push({
         label: unselectLabel ?? strings.NO_PROJECT,
-        value: '',
+        value: undefined,
       });
     }
 
@@ -63,7 +63,7 @@ function ProjectsDropdown<T extends { projectId?: number | string } | undefined>
         setRecord((previousValue) => {
           return {
             ...previousValue,
-            projectId: projectId ? Number(projectId) : '',
+            projectId: projectId ? Number(projectId) : undefined,
           };
         });
       }}
