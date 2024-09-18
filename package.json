@@ -16,7 +16,7 @@
     "generate-strings": "node scripts/generate-strings.js && node scripts/unused-strings.js",
     "generate-types": "node scripts/openapi-typescript-formatter.mjs",
     "license-report": "license-report --only=prod --department.value=terraware --relatedTo.value=terraware-web --output=html > docs/license-report.html",
-    "lint": "ESLINT_USE_FLAT_CONFIG=true eslint -c eslint.config.js src/**/*.ts ",
+    "lint": "ESLINT_USE_FLAT_CONFIG=true eslint -c eslint.config.mjs src/**/*.ts src/**/*.tsx ",
     "ts": "tsc --project ./tsconfig.json",
     "format": "prettier --write .",
     "docker:start": "./scripts/launch_server.sh",
@@ -134,6 +134,7 @@
   },
   "devDependencies": {
     "@craco/craco": "^7.0.0",
+    "@eslint/compat": "^1.1.1",
     "@eslint/js": "^9.0.0",
     "@playwright/test": "^1.40.1",
     "@storybook/addon-essentials": "^7.0.12",
