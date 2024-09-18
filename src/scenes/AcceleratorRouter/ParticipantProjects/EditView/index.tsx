@@ -94,6 +94,7 @@ const EditView = () => {
       redirectToProjectView();
     } else if (assignResponse?.status === 'error') {
       snackbar.toastError();
+      setAssignTfContactRequestId('');
     }
   }, [assignResponse, redirectToProjectView, snackbar]);
 
