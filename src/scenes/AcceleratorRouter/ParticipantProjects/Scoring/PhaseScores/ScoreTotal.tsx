@@ -1,9 +1,9 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { Typography, useTheme } from '@mui/material';
 
 import strings from 'src/strings';
-import { PhaseScores, Score } from 'src/types/Score';
+import { PhaseScores } from 'src/types/Score';
 
 interface ScoreTotalProps {
   isEditing: boolean;
