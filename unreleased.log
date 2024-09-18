@@ -1,3 +1,4 @@
+79aa4de2ab7 SW-5870 Reset assign request after error (#3214)
 235b4c6ccb5 SW-6038 Updated ToDo list to use deliverables and events endpoints (#3210)
 03478721f1e SW-5734 Control autocomplete states for address directly  (#3204)
 257146bf386 SW-6012 Fix mixpanel event for session/event "More Info" links (#3209)
