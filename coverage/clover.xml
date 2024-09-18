@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1726672542624" clover="3.2.0">
-  <project timestamp="1726672542625" name="All files">
-    <metrics statements="25047" coveredstatements="1040" conditionals="16404" coveredconditionals="279" methods="7696" coveredmethods="176" elements="49147" coveredelements="1495" complexity="0" loc="25047" ncloc="25047" packages="234" files="1084" classes="1084"/>
+<coverage generated="1726682429573" clover="3.2.0">
+  <project timestamp="1726682429573" name="All files">
+    <metrics statements="25061" coveredstatements="1040" conditionals="16413" coveredconditionals="279" methods="7700" coveredmethods="176" elements="49174" coveredelements="1495" complexity="0" loc="25061" ncloc="25061" packages="234" files="1084" classes="1084"/>
     <package name="src">
       <metrics statements="177" coveredstatements="0" conditionals="130" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -3511,7 +3511,7 @@
       </file>
     </package>
     <package name="src.components.Map">
-      <metrics statements="706" coveredstatements="52" conditionals="496" coveredconditionals="24" methods="190" coveredmethods="11"/>
+      <metrics statements="720" coveredstatements="52" conditionals="505" coveredconditionals="24" methods="194" coveredmethods="11"/>
       <file name="EditableMap.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Map/EditableMap.tsx">
         <metrics statements="33" coveredstatements="0" conditionals="24" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="22" count="0" type="stmt"/>
@@ -4049,38 +4049,52 @@
         <line num="114" count="0" type="stmt"/>
       </file>
       <file name="MapSearchBox.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Map/MapSearchBox.tsx">
-        <metrics statements="31" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="8" coveredmethods="0"/>
-        <line num="17" count="0" type="stmt"/>
+        <metrics statements="45" coveredstatements="0" conditionals="25" coveredconditionals="0" methods="12" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
-        <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="36" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="47" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="48" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
+        <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="57" count="0" type="stmt"/>
         <line num="63" count="0" type="stmt"/>
-        <line num="64" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="65" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="66" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
         <line num="75" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="76" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="77" count="0" type="stmt"/>
-        <line num="78" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="80" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
         <line num="84" count="0" type="stmt"/>
-        <line num="90" count="0" type="stmt"/>
+        <line num="86" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="88" count="0" type="stmt"/>
+        <line num="89" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="94" count="0" type="stmt"/>
+        <line num="95" count="0" type="stmt"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="102" count="0" type="cond" truecount="0" falsecount="7"/>
+        <line num="103" count="0" type="stmt"/>
+        <line num="107" count="0" type="stmt"/>
+        <line num="113" count="0" type="stmt"/>
+        <line num="114" count="0" type="stmt"/>
+        <line num="121" count="0" type="stmt"/>
       </file>
       <file name="MapViewStyleControl.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Map/MapViewStyleControl.tsx">
         <metrics statements="21" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="6" coveredmethods="0"/>
