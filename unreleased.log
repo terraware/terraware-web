@@ -1,3 +1,6 @@
+257146bf386 SW-6012 Fix mixpanel event for session/event "More Info" links (#3209)
+059663736ac SW-6011 Fix mixpanel event for module links (#3208)
+c11118b0f99 SW-5930 Fix font-size for variables in document producer (#3207)
 e9d88989ed1 SW-6029 Send 'Phase 0 - Due Diligence' for Application and Pre-screen phases (#3206)
 cbfd041ac35 SW-5948: Deliverables list view - Projects filter should be an Autocomplete (Follow up #1) (#3202)
 d24432b1c9a SW-6029 Allow saving scores for other phases than phase 1 (#3201)

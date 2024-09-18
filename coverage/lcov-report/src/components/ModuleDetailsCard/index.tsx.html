@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/48</span>
+                <span class='fraction'>0/47</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/47</span>
+                <span class='fraction'>0/46</span>
             </div>
         
             
@@ -364,7 +364,8 @@
 <a name='L299'></a><a href='#L299'>299</a>
 <a name='L300'></a><a href='#L300'>300</a>
 <a name='L301'></a><a href='#L301'>301</a>
-<a name='L302'></a><a href='#L302'>302</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L302'></a><a href='#L302'>302</a>
+<a name='L303'></a><a href='#L303'>303</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -405,7 +406,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -416,16 +416,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -480,6 +472,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -638,7 +631,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -705,7 +707,6 @@ type ModuleContent = {
 };
 &nbsp;
 const MODULE_CONTENTS = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(m</span>odule: ModuleDetails, navigate: (type: ModuleContentType) =&gt; void): ModuleContent[] =&gt; {</span>
-  const mixpanel = <span class="cstat-no" title="statement not covered" >useMixpanel();</span>
   const content: ModuleContent[] = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (module.additionalResources) {</span>
@@ -713,10 +714,6 @@ const MODULE_CONTENTS = <span class="cstat-no" title="statement not covered" ><s
       type: 'additionalResources',
       label: strings.ADDITIONAL_RESOURCES,
       onClick: <span class="fstat-no" title="function not covered" >(t</span>ype) =&gt; {
-<span class="cstat-no" title="statement not covered" >        mixpanel?.track(MIXPANEL_EVENTS.ACCELERATOR_MDDULE_ADDITIONAL_LINK, {</span>
-          type,
-          moduleId: module.id,
-        });
 <span class="cstat-no" title="statement not covered" >        navigate(type);</span>
       },
     });
@@ -727,10 +724,6 @@ const MODULE_CONTENTS = <span class="cstat-no" title="statement not covered" ><s
       type: 'preparationMaterials',
       label: strings.PREPARATION_MATERIALS,
       onClick: <span class="fstat-no" title="function not covered" >(t</span>ype) =&gt; {
-<span class="cstat-no" title="statement not covered" >        mixpanel?.track(MIXPANEL_EVENTS.ACCELERATOR_MDDULE_ADDITIONAL_LINK, {</span>
-          type,
-          moduleId: module.id,
-        });
 <span class="cstat-no" title="statement not covered" >        navigate(type);</span>
       },
     });
@@ -783,6 +776,7 @@ const ModuleDetailsCard = <span class="cstat-no" title="statement not covered" >
 }: ModuleDetailsCardProp) =&gt; {
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+  const mixpanel = <span class="cstat-no" title="statement not covered" >useMixpanel();</span>
 &nbsp;
   const { goToModuleContent } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
 &nbsp;
@@ -939,7 +933,16 @@ const ModuleDetailsCard = <span class="cstat-no" title="statement not covered" >
 &nbsp;
           {contents.map(<span class="fstat-no" title="function not covered" >(c</span>ontent, index) =&gt; (
 <span class="cstat-no" title="statement not covered" >            &lt;ModuleContentSection key={index}&gt;</span>
-              &lt;Link fontSize='16px' onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >goToModuleContent(projectId, module.id, content.type)}</span>&gt;
+              &lt;Link
+                fontSize='16px'
+                onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >                  mixpanel?.track(MIXPANEL_EVENTS.ACCELERATOR_MDDULE_ADDITIONAL_LINK, {</span>
+                    type: content.type,
+                    moduleId: module.id,
+                  });
+<span class="cstat-no" title="statement not covered" >                  goToModuleContent(projectId, module.id, content.type);</span>
+                }}
+              &gt;
                 {content.label}
               &lt;/Link&gt;
             &lt;/ModuleContentSection&gt;
@@ -973,7 +976,7 @@ export default ModuleDetailsCard;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-09-17T21:21:10.265Z
+                at 2024-09-18T15:15:41.996Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
