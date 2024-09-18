@@ -24,9 +24,14 @@ const ScoreTotal = ({ isEditing, phaseScores }: ScoreTotalProps) => {
   return (
     <>
       <Typography fontSize='20px' fontWeight='600' lineHeight='28px'>{`${strings.TOTAL_AVERAGE_SCORE}: ${
-        phaseScores.totalScore || ''
+        phaseScores.totalScore ?? '-'
       }`}</Typography>
-      <Typography fontSize='14px' fontWeight='500' lineHeight='20px' color={theme.palette.TwClrTxtSuccess}>
+      <Typography
+        fontSize='14px'
+        fontWeight='500'
+        lineHeight='20px'
+        color={phaseScores.totalScore !== undefined ? theme.palette.TwClrTxtSuccess : theme.palette.TwClrTxtDanger}
+      >
         {phaseScores.totalScore !== undefined ? strings.SCORING_COMPLETED : strings.SCORING_NOT_COMPLETED}
       </Typography>
     </>
