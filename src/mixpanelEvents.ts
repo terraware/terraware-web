@@ -11,4 +11,5 @@ export enum MIXPANEL_EVENTS {
   ACCELERATOR_MDDULE_ADDITIONAL_LINK = 'Accelerator Modules Additional Link Click',
   HOME_ACCELERATOR_APPLY_BUTTON = 'Apply to Accelerator Click',
   HOME_ACCELERATOR_TF_LINK = 'Accelerator TF Link Click',
+  PART_EX_DELIVERABLES_LIST_FILTER = 'Participant Deliverables List Filter Applied',
 }

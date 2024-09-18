@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useMixpanel } from 'react-mixpanel-browser';
 import { useNavigate } from 'react-router-dom';
 
 import { TableColumnType } from '@terraware/web-components';
 
 import { FilterConfig, FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
 import { useParticipants } from 'src/hooks/useParticipants';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
@@ -107,6 +109,7 @@ const DeliverablesTable = ({
   const projectParam = query.get('projectId');
   const navigate = useNavigate();
   const location = useStateLocation();
+  const mixpanel = useMixpanel();
 
   const projectsFilterOptions = useMemo(
     () =>
@@ -231,6 +234,15 @@ const DeliverablesTable = ({
     }
   }, [deliverablesSearchRequest]);
 
+  const ofFilterAppliedHandler = (filter?: string, values?: (string | number | null)[]) => {
+    if (values && values.length) {
+      mixpanel?.track(MIXPANEL_EVENTS.PART_EX_DELIVERABLES_LIST_FILTER, {
+        filter,
+        values,
+      });
+    }
+  };
+
   return (
     <TableWithSearchFilters
       columns={columns}
@@ -243,6 +255,7 @@ const DeliverablesTable = ({
       id={tableId}
       Renderer={DeliverableCellRenderer}
       rows={_deliverables}
+      onFilterApplied={ofFilterAppliedHandler}
     />
   );
 };
