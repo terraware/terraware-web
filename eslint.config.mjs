@@ -1,11 +1,13 @@
 import { fixupConfigRules } from '@eslint/compat';
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
+import stylisticJs from '@stylistic/eslint-plugin-js';
 import typescriptEslintTslint from '@typescript-eslint/eslint-plugin-tslint';
 import tsParser from '@typescript-eslint/parser';
 import jsdoc from 'eslint-plugin-jsdoc';
+import nodePlugin from 'eslint-plugin-n';
 import preferArrow from 'eslint-plugin-prefer-arrow';
-import react from 'eslint-plugin-react';
+import reactPlugin from 'eslint-plugin-react';
 import globals from 'globals';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -37,9 +39,11 @@ export default fixupConfigRules([
     ignores: ['**/*.test.ts'],
 
     plugins: {
-      react,
       jsdoc,
+      n: nodePlugin,
+      react: reactPlugin,
       'prefer-arrow': preferArrow,
+      '@stylistic/js': stylisticJs,
       '@typescript-eslint/tslint': typescriptEslintTslint,
     },
 
@@ -58,6 +62,14 @@ export default fixupConfigRules([
     },
 
     rules: {
+      '@stylistic/js/array-bracket-spacing': ['error', 'never'],
+
+      '@stylistic/js/arrow-spacing': 'error',
+
+      '@stylistic/js/brace-style': ['error', '1tbs', { allowSingleLine: true }],
+
+      '@stylistic/js/no-mixed-spaces-and-tabs': 'error',
+
       '@typescript-eslint/adjacent-overload-signatures': 'error',
 
       '@typescript-eslint/array-type': [
@@ -213,6 +225,9 @@ export default fixupConfigRules([
       'jsdoc/check-indentation': 'error',
       'linebreak-style': ['error', 'unix'],
       'max-classes-per-file': ['error', 1],
+
+      'n/handle-callback-err': ['error', '^(e|err|error)$'],
+
       'new-parens': 'error',
       'no-array-constructor': 'off',
       'no-async-promise-executor': 'error',
@@ -367,22 +382,36 @@ export default fixupConfigRules([
         'error',
         {
           rules: {
-            'array-bracket-spacing': [true, 'never'],
+            // Deprecated: replaced by @stylistic/js/array-bracket-spacing
+            //'array-bracket-spacing': [true, 'never'],
 
-            'brace-style': [
-              true,
-              '1tbs',
-              {
-                allowSingleLine: true,
-              },
-            ],
+            // Deprecated: replaced by @stylistic/js/brace-style
+            // 'brace-style': [
+            //   true,
+            //   '1tbs',
+            //   {
+            //     allowSingleLine: true,
+            //   },
+            // ],
 
-            'handle-callback-err': [true, '^(e|err|error)$'],
-            'jsx-no-string-ref': true,
-            'no-ex-assign': true,
-            'ter-arrow-spacing': true,
-            'ter-no-mixed-spaces-and-tabs': true,
-            'ter-prefer-arrow-callback': true,
+            // Depreacted: replaced by n/handle-callback-err
+            // 'handle-callback-err': [true, '^(e|err|error)$'],
+
+            // Replaced by react/jsx-no-string-ref
+            // 'jsx-no-string-ref': true,
+
+            // Duplicated
+            // 'no-ex-assign': true,
+
+            // Replaced by @stylistic/js/arrow-spacing
+            // 'ter-arrow-spacing': true,
+
+            // Replaced by @stylistic/js/no-mixed-spaces-and-tabs
+            // 'ter-no-mixed-spaces-and-tabs': true,
+
+            // Duplicated
+            // 'ter-prefer-arrow-callback': true,
+
             whitespace: true,
           },
         },
