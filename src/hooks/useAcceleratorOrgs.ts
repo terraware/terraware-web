@@ -41,7 +41,7 @@ export const useAcceleratorOrgs = (includeParticipants?: boolean): Response => {
     () => ({
       acceleratorOrgs: result?.status === 'success' ? result?.data : [],
       isBusy: result?.status === 'pending',
-      reload: reload,
+      reload,
     }),
     [result]
   );

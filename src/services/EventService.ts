@@ -30,11 +30,11 @@ export type ListEventsRequestParam = {
 const list = ({ projectId, moduleId }: ListEventsRequestParam): Promise<Response2<EventsData | null>> => {
   const params: Record<string, string> = {};
   if (projectId) {
-    params['projectId'] = `${projectId}`;
+    params.projectId = `${projectId}`;
   }
 
   if (moduleId) {
-    params['moduleId'] = `${moduleId}`;
+    params.moduleId = `${moduleId}`;
   }
 
   return HttpService.root(EVENTS_ENDPOINT).get<ListEventsResponsePayload, { data: EventsData | undefined }>(

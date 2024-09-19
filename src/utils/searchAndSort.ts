@@ -122,7 +122,7 @@ export const sortResults = <T extends Record<string, unknown>>(
   const isNumberField = (numberFields || []).includes(field);
 
   if (isNumberField) {
-    // eslint-disable-next-line  @typescript-eslint/no-base-to-string
+     
     results = results.sort((a, b) => Number(getRawField(a, field)) - Number(getRawField(b, field)));
   } else {
     // eslint-disable-next-line  @typescript-eslint/no-base-to-string
