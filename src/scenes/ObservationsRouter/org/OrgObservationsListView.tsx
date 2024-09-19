@@ -3,12 +3,14 @@ import { useNavigate } from 'react-router-dom';
 
 import { Box, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
+import sanitize from 'sanitize-filename';
 
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectPlantingSiteObservations } from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
+import { SearchService } from 'src/services';
 import strings from 'src/strings';
 import { Observation, ObservationPlantingZoneResults, ObservationResults } from 'src/types/Observations';
 import { isAdmin } from 'src/utils/organization';
@@ -99,6 +101,53 @@ export default function OrgObservationsListView({
     return [...defaultColumns(), ...(scheduleObservationsEnabled ? scheduleObservationsColumn() : [])];
   }, [activeLocale, scheduleObservationsEnabled]);
 
+  const exportObservation = useCallback(
+    async (observationId: number) => {
+      const observation = (observations ?? []).find((item) => item.id === observationId);
+
+      if (observation !== undefined) {
+        const csvContent = await SearchService.searchCsv({
+          prefix: 'plantingSites.observations',
+          fields: [
+            'startDate',
+            'plantingSite_name',
+            'observationPlots_monitoringPlot_plantingSubzone_plantingZone_name',
+            'observationPlots_monitoringPlot_plantingSubzone_name',
+            'observationPlots_monitoringPlot_fullName',
+            'observationPlots_monitoringPlot_southwestLatitude',
+            'observationPlots_monitoringPlot_southwestLongitude',
+            'observationPlots_monitoringPlot_northwestLatitude',
+            'observationPlots_monitoringPlot_northwestLongitude',
+            'observationPlots_monitoringPlot_southeastLatitude',
+            'observationPlots_monitoringPlot_southeastLongitude',
+            'observationPlots_monitoringPlot_northeastLatitude',
+            'observationPlots_monitoringPlot_northeastLongitude',
+          ],
+          sortOrder: [{ field: 'observationPlots_monitoringPlot_id' }],
+          search: {
+            operation: 'field',
+            type: 'Exact',
+            field: 'id',
+            values: [`${observationId}`],
+          },
+        });
+
+        if (csvContent !== null) {
+          const sanitizedSiteName = sanitize(observation.plantingSiteName);
+          const fileName = `${sanitizedSiteName}-${observation.startDate}.csv`;
+
+          const encodedUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent);
+
+          const link = document.createElement('a');
+          link.setAttribute('href', encodedUri);
+          link.setAttribute('download', fileName);
+          link.click();
+        }
+      }
+    },
+    [observations]
+  );
+
   const goToRescheduleObservation = useCallback(
     (observationId: number) => {
       navigate(APP_PATHS.RESCHEDULE_OBSERVATION.replace(':observationId', observationId.toString()));
@@ -139,7 +188,7 @@ export default function OrgObservationsListView({
         columns={columns}
         rows={results}
         orderBy='completedDate'
-        Renderer={OrgObservationsRenderer(theme, activeLocale, goToRescheduleObservation)}
+        Renderer={OrgObservationsRenderer(theme, activeLocale, goToRescheduleObservation, exportObservation)}
       />
     </Box>
   );

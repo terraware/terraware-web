@@ -15,7 +15,12 @@ import { getShortDate } from 'src/utils/dateFormatter';
 const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'mortalityRate'];
 
 const OrgObservationsRenderer =
-  (theme: Theme, locale: string | undefined | null, goToRescheduleObservation: (observationId: number) => void) =>
+  (
+    theme: Theme,
+    locale: string | undefined | null,
+    goToRescheduleObservation: (observationId: number) => void,
+    exportObservation: (observationId: number) => void
+  ) =>
   // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
@@ -71,9 +76,18 @@ const OrgObservationsRenderer =
     }
 
     if (column.key === 'actionsMenu') {
+      const exportDisabled = row.state !== 'InProgress';
       const tableMenuItem = (
         <TableRowPopupMenu
           menuItems={[
+            {
+              disabled: exportDisabled,
+              label: strings.EXPORT_LOCATIONS,
+              onClick: () => {
+                exportObservation(row.observationId);
+              },
+              tooltip: exportDisabled ? strings.EXPORT_LOCATIONS_DISABLED_TOOLTIP : undefined,
+            },
             {
               disabled: row.state === 'Completed' || row.hasObservedPermanentPlots || row.hasObservedTemporaryPlots,
               label: strings.RESCHEDULE,
