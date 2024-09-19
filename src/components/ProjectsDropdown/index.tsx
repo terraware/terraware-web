@@ -15,6 +15,7 @@ type ProjectsDropdownProps<T extends { projectId?: number | string } | undefined
   required?: boolean;
   setRecord: (setFn: (previousValue: T) => T) => void;
   unselectLabel?: string;
+  unselectValue?: string;
 };
 
 function ProjectsDropdown<T extends { projectId?: number | string } | undefined>({
@@ -26,6 +27,7 @@ function ProjectsDropdown<T extends { projectId?: number | string } | undefined>
   required,
   setRecord,
   unselectLabel,
+  unselectValue,
 }: ProjectsDropdownProps<T>) {
   const { activeLocale } = useLocalization();
 
@@ -39,7 +41,7 @@ function ProjectsDropdown<T extends { projectId?: number | string } | undefined>
     if (allowUnselect) {
       options.push({
         label: unselectLabel ?? strings.NO_PROJECT,
-        value: undefined,
+        value: unselectValue,
       });
     }
 

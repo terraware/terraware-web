@@ -110,6 +110,7 @@ export default function DocumentsView(): JSX.Element | null {
                 setRecord={setProjectFilter}
                 label={''}
                 unselectLabel={strings.ALL}
+                unselectValue={''}
               />
             </Grid>
           </Grid>
