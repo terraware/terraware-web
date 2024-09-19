@@ -1,2 +1,3 @@
+f423cc13835 SW-6047 [Accelerator Console] Selecting certain Participants from filter in Deliverables list results in error (#3220)
 6671ad8ed51 SW-6041 Use BE computed score directly for total average score (#3216)
 9f519abb194 SW-6017 Participant Deliverables List: Add Mixpanel Events for filter application (#3213)
