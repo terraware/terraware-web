@@ -22,10 +22,7 @@ module.exports = {
     'plugin:react/recommended',
     'prettier',
   ],
-  files: [
-    '**/*.ts',
-    '**/*.tsx',
-  ],
+  files: ['**/*.ts', '**/*.tsx'],
   languageOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
