@@ -290,7 +290,8 @@ export default fixupConfigRules([
         },
       ],
 
-      'no-undef': 'warn',
+      'no-undef': 'off', // Not needed for Typescript
+
       'no-undef-init': 'error',
       'no-underscore-dangle': 'off',
       'no-unexpected-multiline': 'error',
@@ -337,7 +338,8 @@ export default fixupConfigRules([
       'react/jsx-no-comment-textnodes': 'error',
       'react/jsx-no-duplicate-props': 'error',
       'react/jsx-no-target-blank': 'error',
-      'react/jsx-no-undef': 'error',
+
+      'react/jsx-no-undef': 'off', // Not needed for TSX
 
       'react/jsx-tag-spacing': [
         'off',
