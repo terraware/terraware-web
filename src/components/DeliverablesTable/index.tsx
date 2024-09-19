@@ -178,8 +178,8 @@ const DeliverablesTable = ({
       filters.unshift({
         field: 'projectName',
         options: availableProjects
-          ?.sort((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
-          .map((project: Project | AcceleratorOrgProject) => `${project.name}`),
+          .map((project: Project | AcceleratorOrgProject) => `${project.name}`)
+          .sort((a, b) => a.localeCompare(b, activeLocale || undefined)),
         label: strings.PROJECTS,
         values: projectFromParam ? [projectFromParam.name] : [],
       });
