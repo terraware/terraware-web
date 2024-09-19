@@ -7,7 +7,6 @@ import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { SpeciesProblemElement } from 'src/types/Species';
-import { getRgbaFromHex } from 'src/utils/color';
 
 import Icon from '../../components/common/icon/Icon';
 import CellRenderer, { TableRowType } from '../../components/common/table/TableCellRenderer';
@@ -17,7 +16,6 @@ import ProblemTooltip from './ProblemTooltip';
 export default function SpeciesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const theme = useTheme();
   const { column, row, value, index, onRowClick, reloadData } = props;
-  const [openedTooltip, setOpenedTooltip] = useState(false);
 
   const createLinkToSpeciesDetail = (iValue: ReactNode | unknown[]) => {
     return (
@@ -28,7 +26,7 @@ export default function SpeciesCellRenderer(props: RendererProps<TableRowType>):
   };
 
   const handleClickAway = () => {
-    setOpenedTooltip(false);
+    handleClose();
   };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
