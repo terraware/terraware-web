@@ -30,6 +30,7 @@ export interface TableWithSearchFiltersProps
   rightComponent?: React.ReactNode;
   title?: string;
   clientSortedFields?: string[];
+  onFilterApplied?: (filter: string, values: (string | number | null)[]) => void;
 }
 
 const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
@@ -45,6 +46,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
     rightComponent,
     title,
     clientSortedFields,
+    onFilterApplied,
     ...tableProps
   } = props;
 
@@ -180,6 +182,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
             setCurrentFilters={setFilters}
             featuredFilters={_featuredFilters}
             rightComponent={<TableSettingsButton />}
+            onFilterApplied={onFilterApplied}
           />
         </Grid>
 

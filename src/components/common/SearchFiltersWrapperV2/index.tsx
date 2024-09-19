@@ -40,6 +40,7 @@ export type SearchProps = SearchInputProps & {
   currentFilters: Record<string, SearchNodePayload>;
   setCurrentFilters: (filters: Record<string, SearchNodePayload>) => void;
   rightComponent?: ReactNode;
+  onFilterApplied?: (filter: string, values: (string | number | null)[]) => void;
 };
 
 const defaultPillValueRenderer = (values: (string | number | null)[]): string | undefined => values.join(', ');
@@ -53,6 +54,7 @@ export default function SearchFiltersWrapperV2({
   currentFilters,
   setCurrentFilters,
   rightComponent,
+  onFilterApplied,
 }: SearchProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
 
@@ -125,7 +127,12 @@ export default function SearchFiltersWrapperV2({
         </Box>
 
         {featuredFilters && (
-          <FeaturedFilters filters={featuredFilters} setCurrentFilters={setFilters} currentFilters={currentFilters} />
+          <FeaturedFilters
+            filters={featuredFilters}
+            setCurrentFilters={setFilters}
+            currentFilters={currentFilters}
+            onFilterApplied={onFilterApplied}
+          />
         )}
 
         {iconFilters && (

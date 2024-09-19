@@ -16,6 +16,7 @@ type FilterMultiSelectContainerProps<T> = {
   options: (string | number)[];
   renderOption: (id: number | string) => string;
   setFilters: (f: T) => void;
+  onFilterApplied?: (filter: string, values: (string | number | null)[]) => void;
 };
 
 export default function FilterMultiSelectContainer<T extends Record<string, (string | number | null)[]>>(
@@ -31,6 +32,7 @@ export default function FilterMultiSelectContainer<T extends Record<string, (str
     renderOption,
     notPresentFilterLabel,
     notPresentFilterShown,
+    onFilterApplied,
   } = props;
 
   const { isMobile } = useDeviceInfo();
@@ -91,6 +93,9 @@ export default function FilterMultiSelectContainer<T extends Record<string, (str
         label={label}
         onCancel={handleClose}
         onConfirm={(selectedValues: (string | number | null)[]) => {
+          if (onFilterApplied) {
+            onFilterApplied(String(filterKey), selectedValues);
+          }
           handleClose();
           setFilters({ ...filters, [filterKey]: selectedValues });
         }}
