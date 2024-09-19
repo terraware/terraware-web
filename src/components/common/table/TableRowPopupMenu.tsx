@@ -56,7 +56,7 @@ const TableRowPopupMenu = ({ menuItems }: TableRowPopupMenuProps): JSX.Element =
               </MenuItem>
             );
 
-            if (menuItem.tooltip) {
+            if (menuItem.tooltip !== undefined) {
               return (
                 <Tooltip key={index} title={menuItem.tooltip}>
                   {menuItemComponent}
