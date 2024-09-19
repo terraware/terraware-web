@@ -1,3 +1,4 @@
+24a3af025c4 Updated translations from Phrase (#3205)
 a302498f5e0 Fix blank selected on console documents list project dropdown (#3218)
 f423cc13835 SW-6047 [Accelerator Console] Selecting certain Participants from filter in Deliverables list results in error (#3220)
 6671ad8ed51 SW-6041 Use BE computed score directly for total average score (#3216)
