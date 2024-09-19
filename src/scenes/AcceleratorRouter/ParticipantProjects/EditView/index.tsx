@@ -30,7 +30,9 @@ import { selectParticipantProjectUpdateRequest } from 'src/redux/features/partic
 import { requestProjectUpdate } from 'src/redux/features/projects/projectsAsyncThunks';
 import { selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
+import { OrganizationUser } from 'src/types/User';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -82,6 +84,7 @@ const EditView = () => {
   const { activeLocale } = useLocalization();
   const [globalUsersOptions, setGlobalUsersOptions] = useState<DropdownItem[]>();
   const [tfContact, setTfContact] = useState<DropdownItem>();
+  const [organizationUsers, setOrganizationUsers] = useState<OrganizationUser[]>();
 
   const redirectToProjectView = () => {
     reload();
@@ -218,6 +221,23 @@ const EditView = () => {
     }
   }, [goToParticipantProject, isAllowedEdit, projectId]);
 
+  useEffect(() => {
+    const populateOrganizationUsers = async () => {
+      if (organization) {
+        const response = await OrganizationUserService.getOrganizationUsers(organization.id);
+        if (response.requestSucceeded) {
+          setOrganizationUsers(response.users);
+        }
+      }
+    };
+    populateOrganizationUsers();
+  }, [organization]);
+
+  const globalUsersWithNoOwner = () => {
+    const ownerId = organizationUsers?.find((orgUsr) => orgUsr.role === 'Owner')?.id;
+    return globalUsersOptions?.filter((opt) => opt.value.toString() !== ownerId?.toString()) || [];
+  };
+
   return (
     <PageWithModuleTimeline
       title={`${participant?.name || ''} / ${project?.name || ''}`}
@@ -276,7 +296,7 @@ const EditView = () => {
                   id='projectLead'
                   placeholder={strings.SELECT}
                   selectedValue={tfContact?.value}
-                  options={globalUsersOptions}
+                  options={globalUsersWithNoOwner()}
                   onChange={(value: string) => {
                     setTfContact(
                       globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString())
