@@ -116,7 +116,8 @@ export default fixupConfigRules([
       '@typescript-eslint/dot-notation': 'error',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/indent': ['error', 2],
+      
+      '@typescript-eslint/indent': 'off', // Conflict with prettier
 
       '@typescript-eslint/member-delimiter-style': [
         'error',
