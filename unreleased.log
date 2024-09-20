@@ -1,2 +1,6 @@
+ae2502e44eb SW-5915 Fix accelerator tf link click event not working (#3225)
+55779ad685d SW-6012 Add Mixpanel Events for clicks on session/event more info link on home (#3226)
+1ac39d42fb7 SW-6021 Console Deliverables Table: Add Mixpanel Events for filter application (#3227)
+6b42a4056b3 SW-5994 Fix spacing in project view (#3228)
 662568483b3 SW-6048 Used react-error-boundary for error state management and updated error content to reset state (#3224)
 a26fda054e8 SW-5938 Replace data check tooltip with a popover (#3219)
