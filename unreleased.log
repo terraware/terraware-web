@@ -1,3 +1,4 @@
+dc82340b29c SW-5816 Added text halo width to mapbox text (#3229)
 03a09cd2a11 SW-5884 Export observation plot information (#3223)
 ae2502e44eb SW-5915 Fix accelerator tf link click event not working (#3225)
 55779ad685d SW-6012 Add Mixpanel Events for clicks on session/event more info link on home (#3226)
