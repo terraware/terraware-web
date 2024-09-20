@@ -236,10 +236,19 @@ const DeliverablesTable = ({
 
   const ofFilterAppliedHandler = (filter?: string, values?: (string | number | null)[]) => {
     if (values && values.length) {
-      mixpanel?.track(MIXPANEL_EVENTS.PART_EX_DELIVERABLES_LIST_FILTER, {
-        filter,
-        values,
-      });
+      if ((filter === 'status' || filter === 'category') && isAcceleratorRoute) {
+        mixpanel?.track(MIXPANEL_EVENTS.CONSOLE_DELIVERABLES_LIST_FILTER, {
+          filter,
+          values,
+        });
+        return;
+      }
+      if (!isAcceleratorRoute) {
+        mixpanel?.track(MIXPANEL_EVENTS.PART_EX_DELIVERABLES_LIST_FILTER, {
+          filter,
+          values,
+        });
+      }
     }
   };
 

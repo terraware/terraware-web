@@ -12,4 +12,5 @@ export enum MIXPANEL_EVENTS {
   HOME_ACCELERATOR_APPLY_BUTTON = 'Apply to Accelerator Click',
   HOME_ACCELERATOR_TF_LINK = 'Accelerator TF Link Click',
   PART_EX_DELIVERABLES_LIST_FILTER = 'Participant Deliverables List Filter Applied',
+  CONSOLE_DELIVERABLES_LIST_FILTER = 'Console Deliverables List Filter Applied',
 }
