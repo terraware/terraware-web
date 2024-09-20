@@ -247,6 +247,7 @@ const EditView = () => {
               <ProjectFieldTextfield
                 height='auto'
                 id={'name'}
+                md={12}
                 label={strings.PROJECT_NAME}
                 onChange={onChangeProject}
                 value={projectRecord?.name}

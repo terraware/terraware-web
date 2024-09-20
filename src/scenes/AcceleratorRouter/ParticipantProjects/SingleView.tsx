@@ -187,7 +187,7 @@ const SingleView = () => {
               marginTop: 4,
             }}
           >
-            <ProjectFieldDisplay label={strings.PROJECT_NAME} value={project?.name} />
+            <ProjectFieldDisplay label={strings.PROJECT_NAME} value={project?.name} md={12} />
 
             <Grid container>
               {!!projectApplication?.id && (

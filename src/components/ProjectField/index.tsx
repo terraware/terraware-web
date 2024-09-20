@@ -26,6 +26,7 @@ export interface ProjectFieldEditProps {
   id: string;
   label: string;
   onChange: (id: string, value: string) => void;
+  md?: number;
   // Defaults to 'text'
   type?: Props['type'];
   value?: EditFieldValue;
