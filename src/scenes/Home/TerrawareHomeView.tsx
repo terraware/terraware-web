@@ -119,10 +119,10 @@ const TerrawareHomeView = () => {
                       strings.APPLY_TO_ACCELERATOR_DESCRIPTION,
                       <Link
                         fontSize='16px'
-                        to={ACCELERATOR_LINK}
                         target='_blank'
                         onClick={() => {
                           mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_TF_LINK);
+                          window.open(ACCELERATOR_LINK, '_blank');
                         }}
                       >
                         {strings.HERE}
