@@ -171,7 +171,7 @@ const SingleView = () => {
       {project && (
         <>
           {hasDeliverables && (
-            <Box paddingLeft={3} marginBottom={4}>
+            <Box paddingLeft={3}>
               <Link to={`${APP_PATHS.ACCELERATOR_DELIVERABLES}?projectId=${project.id}`} style={{ fontWeight: 400 }}>
                 {strings.VIEW_ALL_DELIVERABLES}
               </Link>
@@ -184,6 +184,7 @@ const SingleView = () => {
               flexGrow: 1,
               marginBottom: theme.spacing(3),
               padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
+              marginTop: 4,
             }}
           >
             <ProjectFieldDisplay label={strings.PROJECT_NAME} value={project?.name} />
