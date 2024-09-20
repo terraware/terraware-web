@@ -1,4 +1,5 @@
 import React from 'react';
+import { useErrorBoundary } from 'react-error-boundary';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -16,6 +17,7 @@ interface ErrorContentProps {
 export default function ErrorContent({ text, inApp }: ErrorContentProps) {
   const theme = useTheme();
   const navigate = useNavigate();
+  const { resetBoundary } = useErrorBoundary();
 
   return (
     <Box
@@ -38,7 +40,7 @@ export default function ErrorContent({ text, inApp }: ErrorContentProps) {
           <Button
             label={strings.BACK_TO_TERRAWARE}
             size='medium'
-            onClick={() => navigate(APP_PATHS.WELCOME)}
+            onClick={() => resetBoundary()}
             type='passive'
             style={{ marginRight: '16px' }}
           />
