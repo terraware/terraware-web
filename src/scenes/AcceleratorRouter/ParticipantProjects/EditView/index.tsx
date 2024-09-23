@@ -25,12 +25,13 @@ import { requestAssignTerraformationContact } from 'src/redux/features/accelerat
 import { selectAssignTerraformationContact } from 'src/redux/features/accelerator/acceleratorSelectors';
 import { requestListGlobalRolesUsers } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
 import { selectGlobalRolesUsersSearchRequest } from 'src/redux/features/globalRoles/globalRolesSelectors';
+import { requestListOrganizationUsers } from 'src/redux/features/organizationUser/organizationUsersAsyncThunks';
+import { selectOrganizationUsers } from 'src/redux/features/organizationUser/organizationUsersSelectors';
 import { requestUpdateParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectUpdateRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { requestProjectUpdate } from 'src/redux/features/projects/projectsAsyncThunks';
 import { selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
 import { OrganizationUser } from 'src/types/User';
 import useForm from 'src/utils/useForm';
@@ -73,6 +74,7 @@ const EditView = () => {
 
   // Project (terraware data) form record and update request
   const [projectRequestId, setProjectRequestId] = useState<string>('');
+  const [organizationUsersRequestId, setOrganizationUsersRequestId] = useState<string>('');
   const projectUpdateRequest = useAppSelector((state) => selectProjectRequest(state, projectRequestId));
   const [projectRecord, setProjectRecord, onChangeProject] = useForm(project);
 
@@ -81,6 +83,7 @@ const EditView = () => {
   const listUsersRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(listUsersRequestId));
   const [assignTfContactRequestId, setAssignTfContactRequestId] = useState('');
   const assignResponse = useAppSelector(selectAssignTerraformationContact(assignTfContactRequestId));
+  const response = useAppSelector(selectOrganizationUsers(organizationUsersRequestId));
   const { activeLocale } = useLocalization();
   const [globalUsersOptions, setGlobalUsersOptions] = useState<DropdownItem[]>();
   const [tfContact, setTfContact] = useState<DropdownItem>();
@@ -174,6 +177,12 @@ const EditView = () => {
   const handleOnCloseModal = useCallback(() => setConfirmProjectNameModalOpen(false), []);
 
   useEffect(() => {
+    if (response?.status === 'success') {
+      setOrganizationUsers(response.data?.users);
+    }
+  }, [response]);
+
+  useEffect(() => {
     if (!participantProjectUpdateRequest) {
       return;
     }
@@ -222,21 +231,16 @@ const EditView = () => {
   }, [goToParticipantProject, isAllowedEdit, projectId]);
 
   useEffect(() => {
-    const populateOrganizationUsers = async () => {
-      if (organization) {
-        const response = await OrganizationUserService.getOrganizationUsers(organization.id);
-        if (response.requestSucceeded) {
-          setOrganizationUsers(response.users);
-        }
-      }
-    };
-    populateOrganizationUsers();
+    if (organization?.id) {
+      const request = dispatch(requestListOrganizationUsers({ organizationId: organization.id }));
+      setOrganizationUsersRequestId(request.requestId);
+    }
   }, [organization]);
 
-  const globalUsersWithNoOwner = () => {
+  const globalUsersWithNoOwner = useMemo(() => {
     const ownerId = organizationUsers?.find((orgUsr) => orgUsr.role === 'Owner')?.id;
     return globalUsersOptions?.filter((opt) => opt.value.toString() !== ownerId?.toString()) || [];
-  };
+  }, [organizationUsers, globalUsersOptions]);
 
   return (
     <PageWithModuleTimeline
@@ -296,7 +300,7 @@ const EditView = () => {
                   id='projectLead'
                   placeholder={strings.SELECT}
                   selectedValue={tfContact?.value}
-                  options={globalUsersWithNoOwner()}
+                  options={globalUsersWithNoOwner}
                   onChange={(value: string) => {
                     setTfContact(
                       globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString())
