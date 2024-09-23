@@ -163,9 +163,9 @@ const DocumentMetadataEdit = ({
 
       <FormField>
         <ProjectsDropdown
-          availableProjects={participantProjects?.map((partProj) => ({
-            name: partProj.projectName,
-            id: partProj.projectId,
+          availableProjects={participantProjects?.map((project) => ({
+            name: project.projectName,
+            id: project.projectId,
           }))}
           record={projectRecord}
           required
