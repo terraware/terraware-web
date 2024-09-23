@@ -272,11 +272,11 @@ export const selectDeliverableVariablesWithValues = createCachedSelector(
 );
 
 export const selectSpecificVariablesWithValues = createCachedSelector(
-  (state: RootState, projectId: number, variablesId: number[]) => {
-    return state.documentProducerSpecificVariables[variablesId.toString()];
+  (state: RootState, variablesIds: number[], projectId: number) => {
+    return state.documentProducerSpecificVariables[variablesIds.toString()];
   },
-  (state: RootState, projectId: number, variablesId: number[]) => {
-    return state.documentProducerSpecificVariableValues[specificVariablesCompositeKeyFn({ variablesId, projectId })];
+  (state: RootState, variablesIds: number[], projectId: number) => {
+    return state.documentProducerSpecificVariableValues[specificVariablesCompositeKeyFn({ variablesIds, projectId })];
   },
   (variableList, valueList) => {
     const variables = variableList?.data;
@@ -288,8 +288,8 @@ export const selectSpecificVariablesWithValues = createCachedSelector(
       return [];
     }
   }
-)((state: RootState, projectId: number, variablesId: number[]) =>
-  specificVariablesCompositeKeyFn({ variablesId, projectId })
+)((state: RootState, variablesIds: number[], projectId: number) =>
+  specificVariablesCompositeKeyFn({ variablesIds, projectId })
 );
 
 export const selectUpdateVariableWorkflowDetails = (requestId: string) => (state: RootState) =>

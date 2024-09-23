@@ -144,22 +144,13 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   );
 
   const specificVariablesWithValues = useAppSelector((state) =>
-    selectSpecificVariablesWithValues(state, deliverable.projectId, specificVariables)
+    selectSpecificVariablesWithValues(state, specificVariables, deliverable.projectId)
   );
 
   const filteredVariablesWithValues = useMemo(
     () => variablesWithValues.filter((variable) => !variable.internalOnly),
     [variablesWithValues]
   );
-
-  useEffect(() => {
-    if (deliverable && specificVariables) {
-      void dispatch(requestListSpecificVariables(specificVariables));
-      void dispatch(
-        requestListSpecificVariablesValues({ projectId: deliverable.projectId, variablesIds: specificVariables })
-      );
-    }
-  }, [deliverable, specificVariables]);
 
   useEffect(() => {
     if (!filteredVariablesWithValues.length) {
@@ -205,8 +196,23 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   }, [deliverable, dispatch]);
 
   useEffect(() => {
+    if (!(deliverable && specificVariables && specificVariables.length > 0)) {
+      return;
+    }
+
+    void dispatch(requestListSpecificVariables(specificVariables));
+    void dispatch(
+      requestListSpecificVariablesValues({ projectId: deliverable.projectId, variablesIds: specificVariables })
+    );
+  }, [deliverable, specificVariables]);
+
+  useEffect(() => {
     variablesAndDependingVariables();
   }, [variablesWithValues]);
+
+  useEffect(() => {
+    console.log('specificVariablesWithValues', specificVariablesWithValues);
+  }, [specificVariablesWithValues]);
 
   useEffect(() => {
     if (updateSuccess && uploadSuccess) {

@@ -17,7 +17,7 @@ type SpecificVariablesProjectIdArg = { variablesIds: number[]; projectId: number
 
 export const specificVariablesCompositeKeyFn = (arg: unknown): string => {
   const castArg = arg as SpecificVariablesProjectIdArg;
-  if (!(castArg.variablesIds && castArg.projectId && castArg.variablesIds.length)) {
+  if (!(castArg.variablesIds && castArg.projectId && castArg.variablesIds.length > 0)) {
     return '';
   }
 
