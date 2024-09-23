@@ -158,3 +158,25 @@ export const missingRequiredFields = (
     return false;
   });
 };
+
+export const getDependingVariablesStableIdsFromOtherDeliverable = (variablesWithValues: VariableWithValues[]) => {
+  const dependingStableVariablesId = variablesWithValues.reduce((acc: number[], v: VariableWithValues) => {
+    if (v.dependencyVariableStableId) {
+      acc.push(Number(v.dependencyVariableStableId));
+    }
+    return acc;
+  }, []);
+  const variablesIdsToRequest = dependingStableVariablesId.reduce((acc: number[], vId: number) => {
+    const found1 = variablesWithValues?.find((varWithVal) => {
+      return varWithVal.stableId.toString() === vId.toString();
+    });
+
+    const found2 = acc.find((id) => id === vId);
+    if (!found1 && !found2) {
+      acc.push(vId);
+    }
+    return acc;
+  }, []);
+
+  return variablesIdsToRequest;
+};

@@ -26,7 +26,10 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
-import { variableDependencyMet } from 'src/utils/documentProducer/variables';
+import {
+  getDependingVariablesStableIdsFromOtherDeliverable,
+  variableDependencyMet,
+} from 'src/utils/documentProducer/variables';
 import useQuery from 'src/utils/useQuery';
 
 import { EditProps } from './types';
@@ -207,7 +210,8 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   }, [deliverable, specificVariables]);
 
   useEffect(() => {
-    variablesAndDependingVariables();
+    const ids = getDependingVariablesStableIdsFromOtherDeliverable(variablesWithValues);
+    setSpecificVariables(ids);
   }, [variablesWithValues]);
 
   useEffect(() => {
@@ -234,28 +238,6 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
       return;
     }
   }, [complete, deliverable, exit, isApplicationPortal, missingFields, update]);
-
-  const variablesAndDependingVariables = () => {
-    const dependingStableVariablesId = variablesWithValues.reduce((acc: number[], v: VariableWithValues) => {
-      if (v.dependencyVariableStableId) {
-        acc.push(Number(v.dependencyVariableStableId));
-      }
-      return acc;
-    }, []);
-    const variablesIdsToRequest = dependingStableVariablesId.reduce((acc: number[], vId: number) => {
-      const found1 = variablesWithValues?.find((varWithVal) => {
-        return varWithVal.stableId.toString() === vId.toString();
-      });
-
-      const found2 = acc.find((id) => id === vId);
-      if (!found1 && !found2) {
-        acc.push(vId);
-      }
-      return acc;
-    }, []);
-
-    setSpecificVariables(variablesIdsToRequest);
-  };
 
   return (
     <WrappedPageForm
