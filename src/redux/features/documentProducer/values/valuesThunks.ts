@@ -34,6 +34,19 @@ export const requestListVariablesValues = createAsyncThunk(
   }
 );
 
+export const requestListSpecificVariablesValues = createAsyncThunk(
+  'listSpecificVariablesValues',
+  async (params: { projectId: number; variablesIds: number[] }, { rejectWithValue }) => {
+    const response: Response2<VariableValuesListResponse> = await ValueService.getSpecificValues(params);
+
+    if (response.requestSucceeded && response.data?.values) {
+      return response.data.values;
+    }
+
+    return rejectWithValue(response.error || strings.GENERIC_ERROR);
+  }
+);
+
 export const requestUpdateVariableValues = createAsyncThunk(
   'updateVariableValues',
   async ({ operations, projectId }: UpdateVariableValuesRequestWithProjectId, { rejectWithValue }) => {

@@ -44,6 +44,15 @@ const getValues = (projectId: number, maxValueId?: number): Promise<Response2<Va
     params: maxValueId ? { maxValueId: maxValueId.toString() } : {},
   });
 
+const getSpecificValues = (params: {
+  projectId: number;
+  variablesIds: number[];
+}): Promise<Response2<VariableValuesListResponse>> => {
+  return HttpService.root(VALUES_ENDPOINT.replace('{projectId}', params.projectId.toString())).get2({
+    params: { variableId: params.variablesIds.toString() },
+  });
+};
+
 const updateValue = (projectId: number, operations: Operation[]): Promise<Response2<VariableValuesListResponse>> => {
   const entity: UpdateVariableValuesRequestPayload = {
     operations,
@@ -70,6 +79,7 @@ const uploadImageValue = (
 const VariableService = {
   getDeliverableValues,
   getValues,
+  getSpecificValues,
   updateValue,
   uploadImageValue,
 };

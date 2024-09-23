@@ -7,10 +7,22 @@ import {
   requestListAllVariables,
   requestListDeliverableVariables,
   requestListDocumentVariables,
+  requestListSpecificVariables,
   requestListVariablesOwners,
   requestUpdateVariableOwner,
   requestUpdateVariableWorkflowDetails,
 } from './variablesThunks';
+
+type SpecificVariablesProjectIdArg = { variablesIds: number[]; projectId: number };
+
+export const specificVariablesCompositeKeyFn = (arg: unknown): string => {
+  const castArg = arg as SpecificVariablesProjectIdArg;
+  if (!(castArg.variablesIds && castArg.projectId && castArg.variablesIds.length)) {
+    return '';
+  }
+
+  return `v${castArg.variablesIds.toString()}-p${castArg.projectId}`;
+};
 
 type VariablesState = Record<string, StatusT<Variable[]>>;
 
@@ -31,6 +43,15 @@ const deliverableVariablesSlice = createSlice({
   reducers: {},
   extraReducers: (builder: ActionReducerMapBuilder<VariablesState>) => {
     buildReducers(requestListDeliverableVariables, true)(builder);
+  },
+});
+
+const specificVariablesSlice = createSlice({
+  name: 'specificVariablesSlice',
+  initialState: initialVariablesState,
+  reducers: {},
+  extraReducers: (builder: ActionReducerMapBuilder<VariablesState>) => {
+    buildReducers(requestListSpecificVariables, true)(builder);
   },
 });
 
@@ -95,4 +116,5 @@ export const documentProducerVariablesReducers = {
   variableWorkflowDetailsUpdate: variableWorkflowDetailsUpdateSlice.reducer,
   variableOwnerUpdate: variableOwnerUpdateSlice.reducer,
   variablesOwners: variablesOwnersSlice.reducer,
+  documentProducerSpecificVariables: specificVariablesSlice.reducer,
 };

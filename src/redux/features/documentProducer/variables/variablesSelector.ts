@@ -15,6 +15,7 @@ import { VariableValue } from 'src/types/documentProducer/VariableValue';
 import { AsyncRequest, AsyncRequestT, Statuses } from '../../asyncUtils';
 import { deliverableCompositeKeyFn } from '../../deliverables/deliverablesSlice';
 import { variableListCompositeKeyFn } from '../values/valuesSlice';
+import { specificVariablesCompositeKeyFn } from './variablesSlice';
 
 export const selectDocumentVariables = (state: RootState, documentId: number | undefined) =>
   documentId ? state.documentProducerDocumentVariables[documentId] : undefined;
@@ -268,6 +269,27 @@ export const selectDeliverableVariablesWithValues = createCachedSelector(
   }
 )((state: RootState, deliverableId: number, projectId: number) =>
   deliverableCompositeKeyFn({ deliverableId, projectId })
+);
+
+export const selectSpecificVariablesWithValues = createCachedSelector(
+  (state: RootState, projectId: number, variablesId: number[]) => {
+    return state.documentProducerSpecificVariables[variablesId.toString()];
+  },
+  (state: RootState, projectId: number, variablesId: number[]) => {
+    return state.documentProducerSpecificVariableValues[specificVariablesCompositeKeyFn({ variablesId, projectId })];
+  },
+  (variableList, valueList) => {
+    const variables = variableList?.data;
+    const values = valueList?.data;
+
+    if (variables && values) {
+      return variables.map((v: Variable) => associateNonSectionVariableValues(v, values, variables));
+    } else {
+      return [];
+    }
+  }
+)((state: RootState, projectId: number, variablesId: number[]) =>
+  specificVariablesCompositeKeyFn({ variablesId, projectId })
 );
 
 export const selectUpdateVariableWorkflowDetails = (requestId: string) => (state: RootState) =>

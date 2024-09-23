@@ -334,7 +334,10 @@ export interface paths {
     get: operations["listDocumentTemplates"];
   };
   "/api/v1/document-producer/variables": {
-    /** List the variables, optionally filtered by a given manifest or deliverable. Variables returned for a manifest include all section hierarchies and variables injected into section text. */
+    /**
+     * List the available variables, optionally filtered by a document or deliverable.
+     * @description Variables returned for a document include all section hierarchies and variables injected into section text.
+     */
     get: operations["listVariables"];
   };
   "/api/v1/facilities": {
@@ -7072,6 +7075,8 @@ export interface operations {
         minValueId?: number;
         /** @description If specified, only return values with this ID or lower. Use this to retrieve saved document versions. */
         maxValueId?: number;
+        /** @description If specified, return the value of this variable. May be specified more than once to return values for multiple variables. */
+        variableId?: number[];
       };
       path: {
         projectId: number;
@@ -7143,12 +7148,17 @@ export interface operations {
       };
     };
   };
-  /** List the variables, optionally filtered by a given manifest or deliverable. Variables returned for a manifest include all section hierarchies and variables injected into section text. */
+  /**
+   * List the available variables, optionally filtered by a document or deliverable.
+   * @description Variables returned for a document include all section hierarchies and variables injected into section text.
+   */
   listVariables: {
     parameters: {
       query?: {
         deliverableId?: number;
         documentId?: number;
+        /** @description If specified, return the definition of a specific variable. May be specified more than once to return multiple variables. deliverableId and documentId are ignored if this is specified. */
+        variableId?: number[];
       };
     };
     responses: {

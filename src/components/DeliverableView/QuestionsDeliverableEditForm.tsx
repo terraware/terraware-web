@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
@@ -11,9 +11,18 @@ import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
 import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import { useProjectVariablesUpdate } from 'src/hooks/useProjectVariablesUpdate';
-import { requestListDeliverableVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
-import { selectDeliverableVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
-import { requestListDeliverableVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
+import {
+  requestListDeliverableVariablesValues,
+  requestListSpecificVariablesValues,
+} from 'src/redux/features/documentProducer/values/valuesThunks';
+import {
+  selectDeliverableVariablesWithValues,
+  selectSpecificVariablesWithValues,
+} from 'src/redux/features/documentProducer/variables/variablesSelector';
+import {
+  requestListDeliverableVariables,
+  requestListSpecificVariables,
+} from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
@@ -119,6 +128,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   const theme = useTheme();
   const query = useQuery();
   const { isApplicationPortal } = useApplicationPortal();
+  const [specificVariables, setSpecificVariables] = useState<number[]>([]);
 
   const { deliverable, exit, hideStatusBadge } = props;
 
@@ -133,10 +143,23 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
   );
 
+  const specificVariablesWithValues = useAppSelector((state) =>
+    selectSpecificVariablesWithValues(state, deliverable.projectId, specificVariables)
+  );
+
   const filteredVariablesWithValues = useMemo(
     () => variablesWithValues.filter((variable) => !variable.internalOnly),
     [variablesWithValues]
   );
+
+  useEffect(() => {
+    if (deliverable && specificVariables) {
+      void dispatch(requestListSpecificVariables(specificVariables));
+      void dispatch(
+        requestListSpecificVariablesValues({ projectId: deliverable.projectId, variablesIds: specificVariables })
+      );
+    }
+  }, [deliverable, specificVariables]);
 
   useEffect(() => {
     if (!filteredVariablesWithValues.length) {
@@ -182,6 +205,10 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   }, [deliverable, dispatch]);
 
   useEffect(() => {
+    variablesAndDependingVariables();
+  }, [variablesWithValues]);
+
+  useEffect(() => {
     if (updateSuccess && uploadSuccess) {
       exit();
     }
@@ -206,6 +233,28 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     }
   }, [complete, deliverable, exit, isApplicationPortal, missingFields, update]);
 
+  const variablesAndDependingVariables = () => {
+    const dependingVariablesId = variablesWithValues.reduce((acc: number[], v: VariableWithValues) => {
+      if (v.dependencyVariableStableId) {
+        acc.push(Number(v.dependencyVariableStableId));
+      }
+      return acc;
+    }, []);
+    const variablesIdsToRequest = dependingVariablesId.reduce((acc: number[], vId: number) => {
+      const found1 = variablesWithValues?.find((varWithVal) => {
+        return varWithVal.stableId.toString() === vId.toString();
+      });
+
+      const found2 = acc.find((id) => id === vId);
+      if (!found1 && !found2) {
+        acc.push(vId);
+      }
+      return acc;
+    }, []);
+
+    setSpecificVariables(variablesIdsToRequest);
+  };
+
   return (
     <WrappedPageForm
       cancelID={'cancelEditQuestionsDeliverable'}
@@ -224,7 +273,12 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
             }}
           >
             {filteredVariablesWithValues.map((variableWithValues: VariableWithValues, index: number) =>
-              variableDependencyMet(variableWithValues, stagedVariableWithValues) ? (
+              variableDependencyMet(
+                variableWithValues,
+                specificVariablesWithValues
+                  ? [...stagedVariableWithValues, ...specificVariablesWithValues]
+                  : stagedVariableWithValues
+              ) ? (
                 <QuestionBox
                   addRemovedValue={(removedValue: VariableValueValue) =>
                     setRemovedValue(variableWithValues.id, removedValue)

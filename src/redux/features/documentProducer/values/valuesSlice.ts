@@ -4,8 +4,10 @@ import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { VariableValue } from 'src/types/documentProducer/VariableValue';
 
 import { deliverableCompositeKeyFn } from '../../deliverables/deliverablesSlice';
+import { specificVariablesCompositeKeyFn } from '../variables/variablesSlice';
 import {
   requestListDeliverableVariablesValues,
+  requestListSpecificVariablesValues,
   requestListVariablesValues,
   requestUpdateVariableValues,
   requestUploadImageValue,
@@ -46,6 +48,15 @@ const variableValuesListSlice = createSlice({
   },
 });
 
+const specificVariableValuesListSlice = createSlice({
+  name: 'specificVariableValuesListSlice',
+  initialState: initialVariableValuesListState,
+  reducers: {},
+  extraReducers: (builder: ActionReducerMapBuilder<VariableValuesListState>) => {
+    buildReducers(requestListSpecificVariablesValues, true, specificVariablesCompositeKeyFn)(builder);
+  },
+});
+
 /**
  * Variable Values Update
  */
@@ -82,5 +93,6 @@ export const documentProducerVariableValuesReducers = {
   documentProducerDeliverableVariableValues: deliverableVariableValuesListSlice.reducer,
   documentProducerVariableValuesImageUpload: variableValuesImageUploadSlice.reducer,
   documentProducerVariableValuesList: variableValuesListSlice.reducer,
+  documentProducerSpecificVariableValues: specificVariableValuesListSlice.reducer,
   documentProducerVariableValuesUpdate: variableValuesUpdateSlice.reducer,
 };
