@@ -7075,6 +7075,8 @@ export interface operations {
         minValueId?: number;
         /** @description If specified, only return values with this ID or lower. Use this to retrieve saved document versions. */
         maxValueId?: number;
+        /** @description If specified, return the value of the variable with this stable ID. May be specified more than once to return values for multiple variables. Ignored if variableId is specified. */
+        stableId?: string[];
         /** @description If specified, return the value of this variable. May be specified more than once to return values for multiple variables. */
         variableId?: number[];
       };
@@ -7157,7 +7159,9 @@ export interface operations {
       query?: {
         deliverableId?: number;
         documentId?: number;
-        /** @description If specified, return the definition of a specific variable. May be specified more than once to return multiple variables. deliverableId and documentId are ignored if this is specified. */
+        /** @description If specified, return the definition of a specific variable given its stable ID. May be specified more than once to return multiple variables. deliverableId and documentId are ignored if this is specified. */
+        stableId?: string[];
+        /** @description If specified, return the definition of a specific variable. May be specified more than once to return multiple variables. deliverableId, documentId, and stableId are ignored if this is specified. */
         variableId?: number[];
       };
     };

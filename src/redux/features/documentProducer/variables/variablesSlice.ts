@@ -13,15 +13,15 @@ import {
   requestUpdateVariableWorkflowDetails,
 } from './variablesThunks';
 
-type SpecificVariablesProjectIdArg = { variablesIds: number[]; projectId: number };
+type SpecificVariablesProjectIdArg = { variablesStableIds: number[]; projectId: number };
 
 export const specificVariablesCompositeKeyFn = (arg: unknown): string => {
   const castArg = arg as SpecificVariablesProjectIdArg;
-  if (!(castArg.variablesIds && castArg.projectId && castArg.variablesIds.length > 0)) {
+  if (!(castArg.variablesStableIds && castArg.projectId && castArg.variablesStableIds.length > 0)) {
     return '';
   }
 
-  return `v${castArg.variablesIds.toString()}-p${castArg.projectId}`;
+  return `v${castArg.variablesStableIds.toString()}-p${castArg.projectId}`;
 };
 
 type VariablesState = Record<string, StatusT<Variable[]>>;

@@ -202,17 +202,13 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
 
     void dispatch(requestListSpecificVariables(specificVariables));
     void dispatch(
-      requestListSpecificVariablesValues({ projectId: deliverable.projectId, variablesIds: specificVariables })
+      requestListSpecificVariablesValues({ projectId: deliverable.projectId, variablesStableIds: specificVariables })
     );
   }, [deliverable, specificVariables]);
 
   useEffect(() => {
     variablesAndDependingVariables();
   }, [variablesWithValues]);
-
-  useEffect(() => {
-    console.log('specificVariablesWithValues', specificVariablesWithValues);
-  }, [specificVariablesWithValues]);
 
   useEffect(() => {
     if (updateSuccess && uploadSuccess) {
@@ -240,13 +236,13 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   }, [complete, deliverable, exit, isApplicationPortal, missingFields, update]);
 
   const variablesAndDependingVariables = () => {
-    const dependingVariablesId = variablesWithValues.reduce((acc: number[], v: VariableWithValues) => {
+    const dependingStableVariablesId = variablesWithValues.reduce((acc: number[], v: VariableWithValues) => {
       if (v.dependencyVariableStableId) {
         acc.push(Number(v.dependencyVariableStableId));
       }
       return acc;
     }, []);
-    const variablesIdsToRequest = dependingVariablesId.reduce((acc: number[], vId: number) => {
+    const variablesIdsToRequest = dependingStableVariablesId.reduce((acc: number[], vId: number) => {
       const found1 = variablesWithValues?.find((varWithVal) => {
         return varWithVal.stableId.toString() === vId.toString();
       });

@@ -18,9 +18,9 @@ const getDeliverableVariables = (deliverableId: number): Promise<Response2<Varia
     params: { deliverableId: `${deliverableId}` },
   });
 
-const getSpecificVariables = (variablesIds: number[]): Promise<Response2<VariableListResponse>> => {
+const getSpecificVariables = (variablesStableIds: number[]): Promise<Response2<VariableListResponse>> => {
   return HttpService.root(VARIABLES_ENDPOINT).get2({
-    params: { variableId: variablesIds.toString() },
+    params: { stableId: variablesStableIds.toString() },
   });
 };
 
