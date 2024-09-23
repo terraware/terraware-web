@@ -8,15 +8,16 @@ import isString from 'lodash/isString';
 import ParticipantsDropdown from 'src/components/ParticipantsDropdown';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import { useParticipants } from 'src/hooks/useParticipants';
-import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization } from 'src/providers';
 import { selectDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
 import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
 import { requestListGlobalRolesUsers } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
 import { selectGlobalRolesUsersSearchRequest } from 'src/redux/features/globalRoles/globalRolesSelectors';
+import { requestGetParticipant } from 'src/redux/features/participants/participantsAsyncThunks';
+import { selectParticipant } from 'src/redux/features/participants/participantsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Project } from 'src/types/Project';
+import { ParticipantProject } from 'src/types/Participant';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { getDocumentOwnerOptions, getDocumentTemplateName, getDocumentTemplateOptions } from './helpers';
@@ -52,22 +53,20 @@ const DocumentMetadataEdit = ({
   const { activeLocale } = useLocalization();
   const { documentTemplates, error: getDocumentTemplatesError } = useAppSelector(selectDocumentTemplates);
   const { availableParticipants } = useParticipants();
-  const { availableProjects } = useProjects();
 
   const [participant, setParticipant] = useState<{ id?: number }>({ id: undefined });
   const [documentNameFieldHasBeenFocused, setDocumentNameFieldHasBeenFocused] = useState(false);
-
-  const participantProjects = useMemo(
-    () =>
-      availableProjects?.length && participant?.id
-        ? availableProjects.filter((project: Project) => project?.participantId === participant.id)
-        : [],
-    [availableProjects, participant]
-  );
-
   const [documentOwnerOptions, setDocumentOwnerOptions] = useState<DropdownItem[]>([]);
   const [listUsersRequestId, setListUsersRequestId] = useState('');
   const listUsersRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(listUsersRequestId));
+  const participantResponse = useAppSelector(selectParticipant(participant.id ? participant.id : -1));
+  const [participantProjects, setParticipantProjects] = useState<ParticipantProject[]>();
+
+  useEffect(() => {
+    if (participantResponse?.projects) {
+      setParticipantProjects(participantResponse.projects);
+    }
+  }, [participantResponse]);
 
   useEffect(() => {
     if (listUsersRequest?.status === 'success') {
@@ -85,6 +84,9 @@ const DocumentMetadataEdit = ({
   useEffect(() => {
     // reset projectId when participant changes
     setProjectId?.('');
+    if (participant.id) {
+      dispatch(requestGetParticipant(participant.id));
+    }
   }, [participant]);
 
   useEffect(() => {
@@ -122,7 +124,7 @@ const DocumentMetadataEdit = ({
 
   const projectRecord = useMemo(() => ({ projectId: projectId ? parseInt(projectId, 10) : -1 }), [projectId]);
   const projectName = useMemo(
-    () => participantProjects.find((project) => project.id === projectRecord.projectId)?.name,
+    () => participantProjects?.find((project) => project.projectId === projectRecord.projectId)?.projectName,
     [participantProjects, projectRecord.projectId]
   );
 
@@ -161,7 +163,10 @@ const DocumentMetadataEdit = ({
 
       <FormField>
         <ProjectsDropdown
-          availableProjects={participantProjects}
+          availableProjects={participantProjects?.map((project) => ({
+            name: project.projectName,
+            id: project.projectId,
+          }))}
           record={projectRecord}
           required
           setRecord={(setFn) => {

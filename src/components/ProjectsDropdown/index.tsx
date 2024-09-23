@@ -4,12 +4,16 @@ import { Dropdown, DropdownItem } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { Project } from 'src/types/Project';
+
+type ProjectDropdownOption = {
+  name: string;
+  id: number;
+};
 
 type ProjectsDropdownProps<T extends { projectId?: number | string } | undefined> = {
   allowUnselect?: boolean;
   autoComplete?: boolean;
-  availableProjects: Project[] | undefined;
+  availableProjects: ProjectDropdownOption[] | undefined;
   label?: string | undefined;
   record: T;
   required?: boolean;
