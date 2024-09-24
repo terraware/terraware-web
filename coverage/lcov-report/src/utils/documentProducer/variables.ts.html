@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">53.96% </span>
+                <span class="strong">47.94% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>34/63</span>
+                <span class='fraction'>35/73</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">43.54% </span>
+                <span class="strong">42.18% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>27/62</span>
+                <span class='fraction'>27/64</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">30.76% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/10</span>
+                <span class='fraction'>4/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">53.96% </span>
+                <span class="strong">48.61% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>34/63</span>
+                <span class='fraction'>35/72</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -223,7 +223,22 @@
 <a name='L158'></a><a href='#L158'>158</a>
 <a name='L159'></a><a href='#L159'>159</a>
 <a name='L160'></a><a href='#L160'>160</a>
-<a name='L161'></a><a href='#L161'>161</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -382,6 +397,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { VariableTableCell, cellValue } from 'src/components/DocumentProducer/EditableTableModal/helpers';
 import { VariableWithValues, isSelectVariable, isTextVariable } from 'src/types/documentProducer/Variable';
@@ -543,6 +573,21 @@ export const missingRequiredFields = <span class="fstat-no" title="function not 
 <span class="cstat-no" title="statement not covered" >    return false;</span>
   });
 };
+&nbsp;
+export const getDependingVariablesStableIdsFromOtherDeliverable = <span class="fstat-no" title="function not covered" >(v</span>ariablesWithValues: VariableWithValues[]) =&gt; {
+  const existingStableIds = <span class="cstat-no" title="statement not covered" >new Set&lt;string&gt;();</span>
+  const dependentStableIds = <span class="cstat-no" title="statement not covered" >new Set&lt;string&gt;();</span>
+<span class="cstat-no" title="statement not covered" >  variablesWithValues.forEach(<span class="fstat-no" title="function not covered" >(v</span>ariable) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    existingStableIds.add(variable.stableId);</span>
+<span class="cstat-no" title="statement not covered" >    if (variable.dependencyVariableStableId) {</span>
+<span class="cstat-no" title="statement not covered" >      dependentStableIds.add(variable.dependencyVariableStableId);</span>
+    }
+  });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  existingStableIds.forEach(<span class="fstat-no" title="function not covered" >(s</span>tableId) =&gt; <span class="cstat-no" title="statement not covered" >dependentStableIds.delete(stableId))</span>;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return Array.from(dependentStableIds);</span>
+};
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -550,7 +595,7 @@ export const missingRequiredFields = <span class="fstat-no" title="function not 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-09-24T16:01:37.622Z
+                at 2024-09-24T16:24:48.083Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

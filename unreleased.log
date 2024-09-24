@@ -1,3 +1,4 @@
+338c86266d2 SW-6052 Dependencies do not work across different questionnaire deliverables (#3234)
 542ddb8f128 SW-5845 Sorting observations table doesn't sort by date (#3235)
 02cf5a9f16f SW-5870 Remove organization owner from TF contact options (#3222)
 902f8ce6fb2 SW-5981 Project not showing up under Participant when creating a new document (#3221)
