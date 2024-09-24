@@ -1,4 +1,5 @@
 import React from 'react';
+import { Country } from 'src/types/Country';
 
 import { Organization } from 'src/types/Organization';
 import { TimeZoneDescription } from 'src/types/TimeZones';
@@ -36,6 +37,7 @@ export type ProvidedLocalizationData = {
    * you'll want to use if you need to reference the user's current locale.
    */
   activeLocale: string | null;
+  countries: Country[];
   /**
    * Which locale has been selected in the locale selector. Strings for this locale may not be
    * available yet if the user has just changed locales or if the page is still loading; only use

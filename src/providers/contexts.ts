@@ -60,6 +60,7 @@ export const OrganizationContext = createContext<ProvidedOrganizationData>({
 
 export const LocalizationContext = createContext<ProvidedLocalizationData>({
   activeLocale: null,
+  countries: [],
   selectedLocale: 'en',
   setSelectedLocale: () => undefined,
   supportedTimeZones: [],
