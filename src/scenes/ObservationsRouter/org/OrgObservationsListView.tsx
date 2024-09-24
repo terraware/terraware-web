@@ -19,7 +19,7 @@ import OrgObservationsRenderer from './OrgObservationsRenderer';
 
 const defaultColumns = (): TableColumnType[] => [
   {
-    key: 'completedDate',
+    key: 'observationDate',
     name: strings.DATE,
     type: 'string',
   },
@@ -176,6 +176,7 @@ export default function OrgObservationsListView({
             .map((zone: ObservationPlantingZoneResults) => zone.plantingZoneName)
             .join('\r'),
           endDate: endDates[observation.observationId] ?? '',
+          observationDate: observation.completedDate || observation.startDate,
         };
       })
     );
