@@ -1,6 +1,6 @@
 import React from 'react';
-import { Country } from 'src/types/Country';
 
+import { Country } from 'src/types/Country';
 import { Organization } from 'src/types/Organization';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { User } from 'src/types/User';
