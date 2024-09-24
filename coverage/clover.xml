@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1727182509824" clover="3.2.0">
-  <project timestamp="1727182509824" name="All files">
-    <metrics statements="25115" coveredstatements="1040" conditionals="16450" coveredconditionals="279" methods="7712" coveredmethods="176" elements="49277" coveredelements="1495" complexity="0" loc="25115" ncloc="25115" packages="235" files="1087" classes="1087"/>
+<coverage generated="1727193698254" clover="3.2.0">
+  <project timestamp="1727193698254" name="All files">
+    <metrics statements="25114" coveredstatements="1040" conditionals="16450" coveredconditionals="279" methods="7712" coveredmethods="176" elements="49276" coveredelements="1495" complexity="0" loc="25114" ncloc="25114" packages="235" files="1087" classes="1087"/>
     <package name="src">
       <metrics statements="172" coveredstatements="0" conditionals="122" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -21469,9 +21469,9 @@
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter.org">
-      <metrics statements="65" coveredstatements="0" conditionals="44" coveredconditionals="0" methods="19" coveredmethods="0"/>
+      <metrics statements="64" coveredstatements="0" conditionals="44" coveredconditionals="0" methods="19" coveredmethods="0"/>
       <file name="OrgObservationsListView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/org/OrgObservationsListView.tsx">
-        <metrics statements="37" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="13" coveredmethods="0"/>
+        <metrics statements="37" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="13" coveredmethods="0"/>
         <line num="20" count="0" type="stmt"/>
         <line num="68" count="0" type="stmt"/>
         <line num="85" count="0" type="stmt"/>
@@ -21508,10 +21508,10 @@
         <line num="171" count="0" type="stmt"/>
         <line num="173" count="0" type="stmt"/>
         <line num="176" count="0" type="stmt"/>
-        <line num="184" count="0" type="stmt"/>
+        <line num="185" count="0" type="stmt"/>
       </file>
       <file name="OrgObservationsRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/org/OrgObservationsRenderer.tsx">
-        <metrics statements="28" coveredstatements="0" conditionals="28" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <metrics statements="27" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
@@ -21527,19 +21527,18 @@
         <line num="50" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="51" count="0" type="stmt"/>
         <line num="65" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="66" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="67" count="0" type="stmt"/>
-        <line num="70" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="71" count="0" type="stmt"/>
-        <line num="74" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="75" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="78" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="79" count="0" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
-        <line num="87" count="0" type="stmt"/>
-        <line num="95" count="0" type="stmt"/>
-        <line num="102" count="0" type="stmt"/>
-        <line num="105" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="69" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="73" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="74" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="77" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="94" count="0" type="stmt"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="104" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter.plot">
