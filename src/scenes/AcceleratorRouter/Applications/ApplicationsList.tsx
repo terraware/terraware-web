@@ -9,7 +9,6 @@ import { useLocalization } from 'src/providers';
 import { requestListApplications } from 'src/redux/features/application/applicationAsyncThunks';
 import { selectApplicationList } from 'src/redux/features/application/applicationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { LocationService } from 'src/services';
 import strings from 'src/strings';
 import {
   Application,
@@ -17,7 +16,6 @@ import {
   ApplicationStatus,
   ApplicationStatusOrder,
 } from 'src/types/Application';
-import { Country } from 'src/types/Country';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { getCountryByCode } from 'src/utils/country';
 import { SearchAndSortFn, SearchOrderConfig, searchAndSort as genericSearchAndSort } from 'src/utils/searchAndSort';
@@ -73,13 +71,12 @@ const defaultSearchOrder: SearchSortOrder = {
 
 const ApplicationList = () => {
   const dispatch = useAppDispatch();
-  const { activeLocale } = useLocalization();
+  const { activeLocale, countries } = useLocalization();
   const snackbar = useSnackbar();
 
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectApplicationList(requestId));
   const [applications, setApplications] = useState<ApplicationRow[]>([]);
-  const [countries, setCountries] = useState<Country[]>();
 
   const featuredFilters: FilterConfig[] = useMemo(() => {
     if (!activeLocale || !countries) {
@@ -106,19 +103,6 @@ const ApplicationList = () => {
 
     return filters;
   }, [activeLocale, countries]);
-
-  useEffect(() => {
-    if (activeLocale) {
-      const populateCountries = async () => {
-        const response = await LocationService.getCountries();
-        if (response) {
-          setCountries(response);
-        }
-      };
-
-      populateCountries();
-    }
-  }, [activeLocale]);
 
   useEffect(() => {
     if (result?.status === 'error') {

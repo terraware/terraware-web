@@ -11,6 +11,7 @@ import documentProducerReducers from './features/documentProducer';
 import draftPlantingSiteReducers from './features/draftPlantingSite/draftPlantingSiteSlice';
 import eventReducers from './features/events/eventsSlice';
 import globalRolesReducers from './features/globalRoles/globalRolesSlice';
+import locationReducers from './features/location/locationSlice';
 import messageReducers from './features/message/messageSlice';
 import moduleReducers from './features/modules/modulesSlice';
 import observationsReducers from './features/observations/observationsSlice';
@@ -50,6 +51,7 @@ export const reducers = {
   ...draftPlantingSiteReducers,
   ...eventReducers,
   ...globalRolesReducers,
+  ...locationReducers,
   ...messageReducers,
   ...moduleReducers,
   ...observationsReducers,

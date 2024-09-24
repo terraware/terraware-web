@@ -1,18 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 
 import AddLink from 'src/components/common/AddLink';
 import Autocomplete from 'src/components/common/Autocomplete';
 import Textfield from 'src/components/common/Textfield/Textfield';
-import { LocationService } from 'src/services';
+import { useLocalization } from 'src/providers';
 import { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import strings from 'src/strings';
-import { Country } from 'src/types/Country';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-
-import { useLocalization } from '../../../providers';
 
 type Accession2AddressProps = {
   record: AccessionPostRequestBody;
@@ -23,24 +20,11 @@ type Accession2AddressProps = {
 export default function Accession2Address(props: Accession2AddressProps): JSX.Element {
   const { record, onChange, opened } = props;
   const [isOpen, setIsOpen] = useState<boolean>(opened || false);
-  const [countries, setCountries] = useState<Country[]>();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const { activeLocale } = useLocalization();
+  const { countries } = useLocalization();
   const [temporalCountryValue, setTemporalCountryValue] = useState('');
   const [temporalSubValue, setTemporalSubValue] = useState('');
-
-  useEffect(() => {
-    if (activeLocale) {
-      const populateCountries = async () => {
-        const response = await LocationService.getCountries();
-        if (response) {
-          setCountries(response);
-        }
-      };
-      populateCountries();
-    }
-  }, [activeLocale]);
 
   const gridSize = () => (isMobile ? 12 : 6);
 

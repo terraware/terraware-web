@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { Grid, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 
-import { LocationService } from 'src/services';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { Country, Subdivision } from 'src/types/Country';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-
-import { useLocalization } from '../../providers';
 
 type RegionSelectorProps = {
   selectedCountryCode?: string;
@@ -38,20 +36,7 @@ export default function RegionSelector({
 }: RegionSelectorProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const { activeLocale } = useLocalization();
-  const [countries, setCountries] = useState<Country[]>();
-
-  useEffect(() => {
-    if (activeLocale) {
-      const populateCountries = async () => {
-        const response = await LocationService.getCountries();
-        if (response) {
-          setCountries(response);
-        }
-      };
-      populateCountries();
-    }
-  }, [activeLocale]);
+  const { countries } = useLocalization();
 
   const onChangeCountry = (newValue: string) => {
     const found = countries?.find((country) => country.code.toString() === newValue);

@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
+import { requestListCountries, requestListTimezones } from 'src/redux/features/location/locationAsyncThunks';
+import { selectCountries, selectTimezones } from 'src/redux/features/location/locationSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { HttpService, LocationService } from 'src/services';
 import strings, { ILocalizedStringsMap } from 'src/strings';
+import { Country } from 'src/types/Country';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 
 import { ProvidedLocalizationData, useUser } from '.';
@@ -23,9 +27,19 @@ export default function LocalizationProvider({
   activeLocale,
   setActiveLocale,
 }: LocalizationProviderProps): JSX.Element | null {
+  const dispatch = useAppDispatch();
+
+  const [countries, setCountries] = useState<Country[]>([]);
   const [timeZones, setTimeZones] = useState<TimeZoneDescription[]>([]);
+
   const { user } = useUser();
   const supportedLocales = useSupportedLocales();
+
+  const [countriesRequestId, setCountriesRequestId] = useState<string>('');
+  const countriesResponse = useAppSelector(selectCountries(countriesRequestId));
+
+  const [timeZonesRequestId, setTimeZonesRequestId] = useState<string>('');
+  const timeZoneResponse = useAppSelector(selectTimezones(timeZonesRequestId));
 
   useEffect(() => {
     if (user?.locale) {
@@ -35,19 +49,23 @@ export default function LocalizationProvider({
 
   useEffect(() => {
     HttpService.setDefaultHeaders({ 'Accept-Language': selectedLocale });
-  }, [selectedLocale]);
+    const countriesDispatched = dispatch(requestListCountries());
+    const timezoneDispatched = dispatch(requestListTimezones());
+    setCountriesRequestId(countriesDispatched.requestId);
+    setTimeZonesRequestId(timezoneDispatched.requestId);
+  }, [dispatch, selectedLocale]);
 
-  // This must come after the effect that configures the Accept-Language header.
   useEffect(() => {
-    const fetchTimeZones = async () => {
-      const timeZoneResponse = await LocationService.getTimeZones();
-      if (!timeZoneResponse.error && timeZoneResponse.timeZones) {
-        setTimeZones(timeZoneResponse.timeZones.sort((a, b) => a.longName.localeCompare(b.longName, selectedLocale)));
-      }
-    };
+    if (countriesResponse && countriesResponse.status === 'success' && countriesResponse.data) {
+      setCountries(countriesResponse.data.sort((a, b) => a.name.localeCompare(b.name, selectedLocale)));
+    }
+  }, [selectedLocale, countriesResponse]);
 
-    fetchTimeZones();
-  }, [selectedLocale]);
+  useEffect(() => {
+    if (timeZoneResponse && timeZoneResponse.status === 'success' && timeZoneResponse.data) {
+      setTimeZones(timeZoneResponse.data.sort((a, b) => a.longName.localeCompare(b.longName, selectedLocale)));
+    }
+  }, [selectedLocale, timeZoneResponse]);
 
   useEffect(() => {
     const fetchStrings = async () => {
@@ -70,6 +88,7 @@ export default function LocalizationProvider({
 
   const context: ProvidedLocalizationData = {
     activeLocale,
+    countries,
     bootstrapped: !!activeLocale,
     selectedLocale,
     setSelectedLocale,
