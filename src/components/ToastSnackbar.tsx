@@ -37,7 +37,7 @@ export default function ToastSnackbar(): JSX.Element {
   return (
     <SnackbarUI
       anchorOrigin={{ vertical: isMobile ? 'bottom' : 'top', horizontal: 'center' }}
-      open={Boolean(!!snackbar)}
+      open={Boolean(snackbar)}
       onClose={handleClose}
       autoHideDuration={5000}
       id='snackbar'

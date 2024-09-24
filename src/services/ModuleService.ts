@@ -42,15 +42,15 @@ const list = ({
 }: ListModulesRequestParam): Promise<Response2<ModulesData | null>> => {
   const params: Record<string, string> = {};
   if (projectId) {
-    params['projectId'] = `${projectId}`;
+    params.projectId = `${projectId}`;
   }
 
   if (participantId) {
-    params['participantId'] = `${participantId}`;
+    params.participantId = `${participantId}`;
   }
 
   if (cohortId) {
-    params['cohortId'] = `${cohortId}`;
+    params.cohortId = `${cohortId}`;
   }
 
   return HttpService.root(MODULES_ENDOINT).get<ListModulesResponsePayload, { data: ModulesData | undefined }>(
@@ -76,15 +76,15 @@ const get = async ({
 }: GetModuleRequestParam): Promise<Response2<ModuleData | null>> => {
   const params: Record<string, string> = {};
   if (projectId) {
-    params['projectId'] = `${projectId}`;
+    params.projectId = `${projectId}`;
   }
 
   if (participantId) {
-    params['participantId'] = `${participantId}`;
+    params.participantId = `${participantId}`;
   }
 
   if (cohortId) {
-    params['cohortId'] = `${cohortId}`;
+    params.cohortId = `${cohortId}`;
   }
 
   return HttpService.root(MODULE_ENDOINT).get<GetModuleResponsePayload, { data: ModuleData | undefined }>(

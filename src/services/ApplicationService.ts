@@ -174,7 +174,7 @@ const updateBoundary = async (applicationId: number, entity: UpdateBoundaryReque
 const uploadBoundary = async (applicationId: number, file: File): Promise<Response> => {
   const headers = { 'content-type': 'multipart/form-data' };
   return HttpService.root(APPLICATION_BOUNDARY_ENDPOINT).post({
-    entity: { file: file },
+    entity: { file },
     headers,
     urlReplacements: { '{applicationId}': `${applicationId}` },
   });

@@ -26,7 +26,7 @@ export default function UserMenu({}: UserMenuProps): JSX.Element {
 
   const onHandleLogout = () => {
     mixpanel?.reset();
-    window.location.href = `/sso/logout`;
+    window.location.href = '/sso/logout';
   };
 
   const onItemClick = (selectedItem: DropdownItem) => {
