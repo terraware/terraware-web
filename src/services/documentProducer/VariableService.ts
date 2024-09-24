@@ -18,6 +18,12 @@ const getDeliverableVariables = (deliverableId: number): Promise<Response2<Varia
     params: { deliverableId: `${deliverableId}` },
   });
 
+const getSpecificVariables = (variablesStableIds: string[]): Promise<Response2<VariableListResponse>> => {
+  return HttpService.root(VARIABLES_ENDPOINT).get2({
+    params: { stableId: variablesStableIds.toString() },
+  });
+};
+
 const getDocumentVariables = (documentId: number): Promise<Response2<VariableListResponse>> =>
   HttpService.root(VARIABLES_ENDPOINT).get2({
     params: { documentId: `${documentId}` },
@@ -63,6 +69,7 @@ const VariableService = {
   updateVariableWorkflowDetails,
   updateVariableOwner,
   getVariablesOwners,
+  getSpecificVariables,
 };
 
 export default VariableService;

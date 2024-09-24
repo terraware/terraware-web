@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
@@ -11,13 +11,25 @@ import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
 import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import { useProjectVariablesUpdate } from 'src/hooks/useProjectVariablesUpdate';
-import { requestListDeliverableVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
-import { selectDeliverableVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
-import { requestListDeliverableVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
+import {
+  requestListDeliverableVariablesValues,
+  requestListSpecificVariablesValues,
+} from 'src/redux/features/documentProducer/values/valuesThunks';
+import {
+  selectDeliverableVariablesWithValues,
+  selectSpecificVariablesWithValues,
+} from 'src/redux/features/documentProducer/variables/variablesSelector';
+import {
+  requestListDeliverableVariables,
+  requestListSpecificVariables,
+} from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
-import { variableDependencyMet } from 'src/utils/documentProducer/variables';
+import {
+  getDependingVariablesStableIdsFromOtherDeliverable,
+  variableDependencyMet,
+} from 'src/utils/documentProducer/variables';
 import useQuery from 'src/utils/useQuery';
 
 import { EditProps } from './types';
@@ -119,6 +131,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   const theme = useTheme();
   const query = useQuery();
   const { isApplicationPortal } = useApplicationPortal();
+  const [dependentVariableStableIds, setDependentVariableStableIds] = useState<string[]>([]);
 
   const { deliverable, exit, hideStatusBadge } = props;
 
@@ -131,6 +144,10 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
 
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
     selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
+  );
+
+  const dependentVariablesWithValues = useAppSelector((state) =>
+    selectSpecificVariablesWithValues(state, dependentVariableStableIds, deliverable.projectId)
   );
 
   const filteredVariablesWithValues = useMemo(
@@ -170,6 +187,14 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
 
   const { complete, incomplete } = useCompleteDeliverable();
 
+  const allDependentVariablesWithValues = useMemo(
+    () =>
+      dependentVariablesWithValues
+        ? [...dependentVariablesWithValues, ...stagedVariableWithValues]
+        : stagedVariableWithValues,
+    [stagedVariableWithValues, dependentVariablesWithValues]
+  );
+
   useEffect(() => {
     if (!deliverable) {
       return;
@@ -180,6 +205,25 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
       requestListDeliverableVariablesValues({ deliverableId: deliverable.id, projectId: deliverable.projectId })
     );
   }, [deliverable, dispatch]);
+
+  useEffect(() => {
+    if (!(deliverable && dependentVariableStableIds && dependentVariableStableIds.length > 0)) {
+      return;
+    }
+
+    void dispatch(requestListSpecificVariables(dependentVariableStableIds));
+    void dispatch(
+      requestListSpecificVariablesValues({
+        projectId: deliverable.projectId,
+        variablesStableIds: dependentVariableStableIds,
+      })
+    );
+  }, [deliverable, dependentVariableStableIds]);
+
+  useEffect(() => {
+    const ids = getDependingVariablesStableIdsFromOtherDeliverable(variablesWithValues);
+    setDependentVariableStableIds(ids);
+  }, [variablesWithValues]);
 
   useEffect(() => {
     if (updateSuccess && uploadSuccess) {
@@ -224,7 +268,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
             }}
           >
             {filteredVariablesWithValues.map((variableWithValues: VariableWithValues, index: number) =>
-              variableDependencyMet(variableWithValues, stagedVariableWithValues) ? (
+              variableDependencyMet(variableWithValues, allDependentVariablesWithValues) ? (
                 <QuestionBox
                   addRemovedValue={(removedValue: VariableValueValue) =>
                     setRemovedValue(variableWithValues.id, removedValue)

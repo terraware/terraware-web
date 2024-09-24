@@ -15,20 +15,28 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useProjectVariablesUpdate } from 'src/hooks/useProjectVariablesUpdate';
 import { useLocalization } from 'src/providers';
-import { requestListDeliverableVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
+import {
+  requestListDeliverableVariablesValues,
+  requestListSpecificVariablesValues,
+} from 'src/redux/features/documentProducer/values/valuesThunks';
 import {
   selectDeliverableVariablesWithValues,
+  selectSpecificVariablesWithValues,
   selectUpdateVariableWorkflowDetails,
 } from 'src/redux/features/documentProducer/variables/variablesSelector';
 import {
   requestListDeliverableVariables,
+  requestListSpecificVariables,
   requestUpdateVariableWorkflowDetails,
 } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
-import { variableDependencyMet } from 'src/utils/documentProducer/variables';
+import {
+  getDependingVariablesStableIdsFromOtherDeliverable,
+  variableDependencyMet,
+} from 'src/utils/documentProducer/variables';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import VariableInternalComment from '../Variables/VariableInternalComment';
@@ -424,6 +432,7 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
 
   const [editingId, setEditingId] = useState<number | undefined>();
   const [updatePendingId, setUpdatePendingId] = useState<number | undefined>();
+  const [dependentVariableStableIds, setDependentVariableStableIds] = useState<string[]>([]);
 
   const reload = () => {
     void dispatch(requestListDeliverableVariables(deliverable.id));
@@ -443,6 +452,20 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
     );
   }, [deliverable]);
 
+  useEffect(() => {
+    if (!(deliverable && dependentVariableStableIds && dependentVariableStableIds.length > 0)) {
+      return;
+    }
+
+    void dispatch(requestListSpecificVariables(dependentVariableStableIds));
+    void dispatch(
+      requestListSpecificVariablesValues({
+        projectId: deliverable.projectId,
+        variablesStableIds: dependentVariableStableIds,
+      })
+    );
+  }, [deliverable, dependentVariableStableIds]);
+
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
     selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
   );
@@ -457,6 +480,21 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
     }
   }, [variablesWithValues]);
 
+  const dependentVariablesWithValues = useAppSelector((state) =>
+    selectSpecificVariablesWithValues(state, dependentVariableStableIds, deliverable.projectId)
+  );
+
+  const allDependentVariablesWithValues = useMemo(
+    () =>
+      dependentVariablesWithValues ? [...dependentVariablesWithValues, ...variablesWithValues] : variablesWithValues,
+    [variablesWithValues, dependentVariablesWithValues]
+  );
+
+  useEffect(() => {
+    const ids = getDependingVariablesStableIdsFromOtherDeliverable(variablesWithValues);
+    setDependentVariableStableIds(ids);
+  }, [variablesWithValues]);
+
   return (
     <Card
       style={{
@@ -467,7 +505,7 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
     >
       <Metadata {...props} />
       {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) =>
-        variableDependencyMet(variableWithValues, variablesWithValues) ? (
+        variableDependencyMet(variableWithValues, allDependentVariablesWithValues) ? (
           <QuestionBox
             editingId={editingId}
             hideStatusBadge={hideStatusBadge}

@@ -31,6 +31,18 @@ export const requestListDeliverableVariables = createAsyncThunk(
   }
 );
 
+export const requestListSpecificVariables = createAsyncThunk(
+  'listSpecificVariables',
+  async (variablesIds: string[], { rejectWithValue }) => {
+    const response: Response2<VariableListResponse> = await VariableService.getSpecificVariables(variablesIds);
+    if (response && response.requestSucceeded && response.data) {
+      return response.data.variables;
+    }
+
+    return rejectWithValue(response.error || strings.GENERIC_ERROR);
+  }
+);
+
 export const requestListDocumentVariables = createAsyncThunk(
   'listDocumentVariables',
   async (documentId: number, { rejectWithValue }) => {

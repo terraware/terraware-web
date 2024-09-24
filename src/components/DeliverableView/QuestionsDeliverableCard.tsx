@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Message } from '@terraware/web-components';
@@ -7,13 +7,25 @@ import DeliverableDisplayVariableValue from 'src/components/DocumentProducer/Del
 import VariableStatusBadge from 'src/components/Variables/VariableStatusBadge';
 import Card from 'src/components/common/Card';
 import { useIsVisible } from 'src/hooks/useIsVisible';
-import { requestListDeliverableVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
-import { selectDeliverableVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
-import { requestListDeliverableVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
+import {
+  requestListDeliverableVariablesValues,
+  requestListSpecificVariablesValues,
+} from 'src/redux/features/documentProducer/values/valuesThunks';
+import {
+  selectDeliverableVariablesWithValues,
+  selectSpecificVariablesWithValues,
+} from 'src/redux/features/documentProducer/variables/variablesSelector';
+import {
+  requestListDeliverableVariables,
+  requestListSpecificVariables,
+} from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue } from 'src/types/documentProducer/VariableValue';
-import { variableDependencyMet } from 'src/utils/documentProducer/variables';
+import {
+  getDependingVariablesStableIdsFromOtherDeliverable,
+  variableDependencyMet,
+} from 'src/utils/documentProducer/variables';
 
 import Metadata from './Metadata';
 import QuestionsDeliverableStatusMessage from './QuestionsDeliverableStatusMessage';
@@ -77,9 +89,14 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const { deliverable, hideStatusBadge } = props;
+  const [dependentVariableStableIds, setDependentVariableStableIds] = useState<string[]>([]);
 
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
     selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
+  );
+
+  const dependentVariablesWithValues = useAppSelector((state) =>
+    selectSpecificVariablesWithValues(state, dependentVariableStableIds, deliverable.projectId)
   );
 
   const filteredVariablesWithValues = useMemo(
@@ -87,12 +104,39 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element | null => {
     [variablesWithValues]
   );
 
+  const allDependentVariablesWithValues = useMemo(
+    () =>
+      dependentVariablesWithValues
+        ? [...dependentVariablesWithValues, ...filteredVariablesWithValues]
+        : filteredVariablesWithValues,
+    [filteredVariablesWithValues, dependentVariablesWithValues]
+  );
+
+  useEffect(() => {
+    const ids = getDependingVariablesStableIdsFromOtherDeliverable(variablesWithValues);
+    setDependentVariableStableIds(ids);
+  }, [variablesWithValues]);
+
   useEffect(() => {
     void dispatch(requestListDeliverableVariables(deliverable.id));
     void dispatch(
       requestListDeliverableVariablesValues({ deliverableId: deliverable.id, projectId: deliverable.projectId })
     );
   }, [deliverable]);
+
+  useEffect(() => {
+    if (!(deliverable && dependentVariableStableIds && dependentVariableStableIds.length > 0)) {
+      return;
+    }
+
+    void dispatch(requestListSpecificVariables(dependentVariableStableIds));
+    void dispatch(
+      requestListSpecificVariablesValues({
+        projectId: deliverable.projectId,
+        variablesStableIds: dependentVariableStableIds,
+      })
+    );
+  }, [deliverable, dependentVariableStableIds]);
 
   if (!deliverable) {
     return null;
@@ -111,7 +155,7 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element | null => {
           }}
         >
           {filteredVariablesWithValues.map((variableWithValues: VariableWithValues, index: number) =>
-            variableDependencyMet(variableWithValues, filteredVariablesWithValues) ? (
+            variableDependencyMet(variableWithValues, allDependentVariablesWithValues) ? (
               <QuestionBox
                 key={index}
                 projectId={deliverable.projectId}

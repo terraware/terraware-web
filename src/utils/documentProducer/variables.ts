@@ -158,3 +158,18 @@ export const missingRequiredFields = (
     return false;
   });
 };
+
+export const getDependingVariablesStableIdsFromOtherDeliverable = (variablesWithValues: VariableWithValues[]) => {
+  const existingStableIds = new Set<string>();
+  const dependentStableIds = new Set<string>();
+  variablesWithValues.forEach((variable) => {
+    existingStableIds.add(variable.stableId);
+    if (variable.dependencyVariableStableId) {
+      dependentStableIds.add(variable.dependencyVariableStableId);
+    }
+  });
+
+  existingStableIds.forEach((stableId) => dependentStableIds.delete(stableId));
+
+  return Array.from(dependentStableIds);
+};
