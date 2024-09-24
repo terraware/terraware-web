@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { requestListCountries, requestListTimezones } from 'src/redux/features/location/locationAsyncThunks';
 import { selectCountries, selectTimezones } from 'src/redux/features/location/locationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { HttpService, LocationService } from 'src/services';
+import { HttpService } from 'src/services';
 import strings, { ILocalizedStringsMap } from 'src/strings';
 import { Country } from 'src/types/Country';
 import { TimeZoneDescription } from 'src/types/TimeZones';
