@@ -432,7 +432,7 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
 
   const [editingId, setEditingId] = useState<number | undefined>();
   const [updatePendingId, setUpdatePendingId] = useState<number | undefined>();
-  const [specificVariables, setSpecificVariables] = useState<number[]>([]);
+  const [dependentVariableStableIds, setDependentVariableStableIds] = useState<number[]>([]);
 
   const reload = () => {
     void dispatch(requestListDeliverableVariables(deliverable.id));
@@ -453,15 +453,18 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
   }, [deliverable]);
 
   useEffect(() => {
-    if (!(deliverable && specificVariables && specificVariables.length > 0)) {
+    if (!(deliverable && dependentVariableStableIds && dependentVariableStableIds.length > 0)) {
       return;
     }
 
-    void dispatch(requestListSpecificVariables(specificVariables));
+    void dispatch(requestListSpecificVariables(dependentVariableStableIds));
     void dispatch(
-      requestListSpecificVariablesValues({ projectId: deliverable.projectId, variablesStableIds: specificVariables })
+      requestListSpecificVariablesValues({
+        projectId: deliverable.projectId,
+        variablesStableIds: dependentVariableStableIds,
+      })
     );
-  }, [deliverable, specificVariables]);
+  }, [deliverable, dependentVariableStableIds]);
 
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
     selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
@@ -477,13 +480,19 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
     }
   }, [variablesWithValues]);
 
-  const specificVariablesWithValues = useAppSelector((state) =>
-    selectSpecificVariablesWithValues(state, specificVariables, deliverable.projectId)
+  const dependentVariablesWithValues = useAppSelector((state) =>
+    selectSpecificVariablesWithValues(state, dependentVariableStableIds, deliverable.projectId)
+  );
+
+  const allDependentVariablesWithValues = useMemo(
+    () =>
+      dependentVariablesWithValues ? [...dependentVariablesWithValues, ...variablesWithValues] : variablesWithValues,
+    [variablesWithValues, dependentVariablesWithValues]
   );
 
   useEffect(() => {
     const ids = getDependingVariablesStableIdsFromOtherDeliverable(variablesWithValues);
-    setSpecificVariables(ids);
+    setDependentVariableStableIds(ids);
   }, [variablesWithValues]);
 
   return (
@@ -496,10 +505,7 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
     >
       <Metadata {...props} />
       {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) =>
-        variableDependencyMet(
-          variableWithValues,
-          specificVariablesWithValues ? [...specificVariablesWithValues, ...variablesWithValues] : variablesWithValues
-        ) ? (
+        variableDependencyMet(variableWithValues, allDependentVariablesWithValues) ? (
           <QuestionBox
             editingId={editingId}
             hideStatusBadge={hideStatusBadge}

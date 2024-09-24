@@ -89,10 +89,14 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const { deliverable, hideStatusBadge } = props;
-  const [specificVariables, setSpecificVariables] = useState<number[]>([]);
+  const [dependentVariableStableIds, setDependentVariableStableIds] = useState<number[]>([]);
 
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
     selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
+  );
+
+  const dependentVariablesWithValues = useAppSelector((state) =>
+    selectSpecificVariablesWithValues(state, dependentVariableStableIds, deliverable.projectId)
   );
 
   const filteredVariablesWithValues = useMemo(
@@ -100,14 +104,18 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element | null => {
     [variablesWithValues]
   );
 
+  const allDependentVariablesWithValues = useMemo(
+    () =>
+      dependentVariablesWithValues
+        ? [...dependentVariablesWithValues, ...filteredVariablesWithValues]
+        : filteredVariablesWithValues,
+    [filteredVariablesWithValues, dependentVariablesWithValues]
+  );
+
   useEffect(() => {
     const ids = getDependingVariablesStableIdsFromOtherDeliverable(variablesWithValues);
-    setSpecificVariables(ids);
+    setDependentVariableStableIds(ids);
   }, [variablesWithValues]);
-
-  const specificVariablesWithValues = useAppSelector((state) =>
-    selectSpecificVariablesWithValues(state, specificVariables, deliverable.projectId)
-  );
 
   useEffect(() => {
     void dispatch(requestListDeliverableVariables(deliverable.id));
@@ -117,15 +125,18 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element | null => {
   }, [deliverable]);
 
   useEffect(() => {
-    if (!(deliverable && specificVariables && specificVariables.length > 0)) {
+    if (!(deliverable && dependentVariableStableIds && dependentVariableStableIds.length > 0)) {
       return;
     }
 
-    void dispatch(requestListSpecificVariables(specificVariables));
+    void dispatch(requestListSpecificVariables(dependentVariableStableIds));
     void dispatch(
-      requestListSpecificVariablesValues({ projectId: deliverable.projectId, variablesStableIds: specificVariables })
+      requestListSpecificVariablesValues({
+        projectId: deliverable.projectId,
+        variablesStableIds: dependentVariableStableIds,
+      })
     );
-  }, [deliverable, specificVariables]);
+  }, [deliverable, dependentVariableStableIds]);
 
   if (!deliverable) {
     return null;
@@ -144,12 +155,7 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element | null => {
           }}
         >
           {filteredVariablesWithValues.map((variableWithValues: VariableWithValues, index: number) =>
-            variableDependencyMet(
-              variableWithValues,
-              specificVariablesWithValues
-                ? [...specificVariablesWithValues, ...filteredVariablesWithValues]
-                : filteredVariablesWithValues
-            ) ? (
+            variableDependencyMet(variableWithValues, allDependentVariablesWithValues) ? (
               <QuestionBox
                 key={index}
                 projectId={deliverable.projectId}

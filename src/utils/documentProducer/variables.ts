@@ -160,23 +160,16 @@ export const missingRequiredFields = (
 };
 
 export const getDependingVariablesStableIdsFromOtherDeliverable = (variablesWithValues: VariableWithValues[]) => {
-  const dependingStableVariablesId = variablesWithValues.reduce((acc: number[], v: VariableWithValues) => {
-    if (v.dependencyVariableStableId) {
-      acc.push(Number(v.dependencyVariableStableId));
+  const existingStableIds = new Set<number>();
+  const dependentStableIds = new Set<number>();
+  variablesWithValues.forEach((variable) => {
+    existingStableIds.add(Number(variable.stableId));
+    if (variable.dependencyVariableStableId) {
+      dependentStableIds.add(Number(variable.dependencyVariableStableId));
     }
-    return acc;
-  }, []);
-  const variablesIdsToRequest = dependingStableVariablesId.reduce((acc: number[], vId: number) => {
-    const found1 = variablesWithValues?.find((varWithVal) => {
-      return varWithVal.stableId.toString() === vId.toString();
-    });
+  });
 
-    const found2 = acc.find((id) => id === vId);
-    if (!found1 && !found2) {
-      acc.push(vId);
-    }
-    return acc;
-  }, []);
+  existingStableIds.forEach((stableId) => dependentStableIds.delete(stableId));
 
-  return variablesIdsToRequest;
+  return Array.from(dependentStableIds);
 };

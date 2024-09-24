@@ -131,7 +131,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   const theme = useTheme();
   const query = useQuery();
   const { isApplicationPortal } = useApplicationPortal();
-  const [specificVariables, setSpecificVariables] = useState<number[]>([]);
+  const [dependentVariableStableIds, setDependentVariableStableIds] = useState<number[]>([]);
 
   const { deliverable, exit, hideStatusBadge } = props;
 
@@ -146,8 +146,8 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
   );
 
-  const specificVariablesWithValues = useAppSelector((state) =>
-    selectSpecificVariablesWithValues(state, specificVariables, deliverable.projectId)
+  const dependentVariablesWithValues = useAppSelector((state) =>
+    selectSpecificVariablesWithValues(state, dependentVariableStableIds, deliverable.projectId)
   );
 
   const filteredVariablesWithValues = useMemo(
@@ -187,6 +187,14 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
 
   const { complete, incomplete } = useCompleteDeliverable();
 
+  const allDependentVariablesWithValues = useMemo(
+    () =>
+      dependentVariablesWithValues
+        ? [...dependentVariablesWithValues, ...stagedVariableWithValues]
+        : stagedVariableWithValues,
+    [stagedVariableWithValues, dependentVariablesWithValues]
+  );
+
   useEffect(() => {
     if (!deliverable) {
       return;
@@ -199,19 +207,22 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   }, [deliverable, dispatch]);
 
   useEffect(() => {
-    if (!(deliverable && specificVariables && specificVariables.length > 0)) {
+    if (!(deliverable && dependentVariableStableIds && dependentVariableStableIds.length > 0)) {
       return;
     }
 
-    void dispatch(requestListSpecificVariables(specificVariables));
+    void dispatch(requestListSpecificVariables(dependentVariableStableIds));
     void dispatch(
-      requestListSpecificVariablesValues({ projectId: deliverable.projectId, variablesStableIds: specificVariables })
+      requestListSpecificVariablesValues({
+        projectId: deliverable.projectId,
+        variablesStableIds: dependentVariableStableIds,
+      })
     );
-  }, [deliverable, specificVariables]);
+  }, [deliverable, dependentVariableStableIds]);
 
   useEffect(() => {
     const ids = getDependingVariablesStableIdsFromOtherDeliverable(variablesWithValues);
-    setSpecificVariables(ids);
+    setDependentVariableStableIds(ids);
   }, [variablesWithValues]);
 
   useEffect(() => {
@@ -257,12 +268,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
             }}
           >
             {filteredVariablesWithValues.map((variableWithValues: VariableWithValues, index: number) =>
-              variableDependencyMet(
-                variableWithValues,
-                specificVariablesWithValues
-                  ? [...stagedVariableWithValues, ...specificVariablesWithValues]
-                  : stagedVariableWithValues
-              ) ? (
+              variableDependencyMet(variableWithValues, allDependentVariablesWithValues) ? (
                 <QuestionBox
                   addRemovedValue={(removedValue: VariableValueValue) =>
                     setRemovedValue(variableWithValues.id, removedValue)
