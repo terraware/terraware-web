@@ -9,7 +9,7 @@ export const requestGetCountryBoundary = createAsyncThunk(
     const response = await LocationService.getCountryBoundary(countryCode);
 
     if (response && response.requestSucceeded && response.data) {
-      return response.data;
+      return response.data.border;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

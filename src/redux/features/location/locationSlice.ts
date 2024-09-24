@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { TimeZone } from 'src/services/LocationService';
+import { TimeZones } from 'src/services/LocationService';
 import { Country } from 'src/types/Country';
 import { MultiPolygon } from 'src/types/Tracking';
 
@@ -38,7 +38,7 @@ export const countriesListSlice = createSlice({
 /**
  * List timezones
  */
-const initialStateTimezonesList: { [key: string]: StatusT<TimeZone[]> } = {};
+const initialStateTimezonesList: { [key: string]: StatusT<TimeZones> } = {};
 
 export const timezonesListSlice = createSlice({
   name: 'timezonesListSlice',

@@ -75,7 +75,7 @@ export default function useRenderAttributes(): (type: RenderableObject) => MapSo
           hoverFillColor: getRgbaFromHex(theme.palette.TwClrBaseWhite as string, 0),
           selectFillColor: getRgbaFromHex(theme.palette.TwClrBaseWhite as string, 0),
           highlightFillColor: getRgbaFromHex(theme.palette.TwClrBaseWhite as string, 0),
-          lineColor: theme.palette.TwClrBaseWhite as string,
+          lineColor: theme.palette.TwClrBaseGreen300 as string,
           lineWidth: 2,
         };
       } else {

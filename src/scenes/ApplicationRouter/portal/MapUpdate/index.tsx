@@ -65,8 +65,8 @@ const MapUpdateView = () => {
     return [
       {
         data: { type: 'FeatureCollection', features: [toFeature(countryBoundaryResult.data, {}, 'countryBoundary')] },
-        id: 'site',
-        renderProperties: getRenderAttributes('site'),
+        id: 'countryBoundary',
+        renderProperties: getRenderAttributes('boundary'),
       },
     ];
   }, [getRenderAttributes, countryBoundaryResult]);

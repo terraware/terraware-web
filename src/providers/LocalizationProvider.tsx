@@ -57,13 +57,15 @@ export default function LocalizationProvider({
 
   useEffect(() => {
     if (countriesResponse && countriesResponse.status === 'success' && countriesResponse.data) {
-      setCountries(countriesResponse.data.sort((a, b) => a.name.localeCompare(b.name, selectedLocale)));
+      const countriesCopy = [...countriesResponse.data];
+      setCountries(countriesCopy.sort((a, b) => a.name.localeCompare(b.name, selectedLocale)));
     }
   }, [selectedLocale, countriesResponse]);
 
   useEffect(() => {
     if (timeZoneResponse && timeZoneResponse.status === 'success' && timeZoneResponse.data) {
-      setTimeZones(timeZoneResponse.data.sort((a, b) => a.longName.localeCompare(b.longName, selectedLocale)));
+      const timezonesCopy = [...timeZoneResponse.data];
+      setTimeZones(timezonesCopy.sort((a, b) => a.longName.localeCompare(b.longName, selectedLocale)));
     }
   }, [selectedLocale, timeZoneResponse]);
 
