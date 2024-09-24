@@ -36,7 +36,7 @@ export const requestListVariablesValues = createAsyncThunk(
 
 export const requestListSpecificVariablesValues = createAsyncThunk(
   'listSpecificVariablesValues',
-  async (params: { projectId: number; variablesStableIds: number[] }, { rejectWithValue }) => {
+  async (params: { projectId: number; variablesStableIds: string[] }, { rejectWithValue }) => {
     const response: Response2<VariableValuesListResponse> = await ValueService.getSpecificValues(params);
 
     if (response.requestSucceeded && response.data?.values) {

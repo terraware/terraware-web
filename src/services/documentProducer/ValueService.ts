@@ -46,7 +46,7 @@ const getValues = (projectId: number, maxValueId?: number): Promise<Response2<Va
 
 const getSpecificValues = (params: {
   projectId: number;
-  variablesStableIds: number[];
+  variablesStableIds: string[];
 }): Promise<Response2<VariableValuesListResponse>> => {
   return HttpService.root(VALUES_ENDPOINT.replace('{projectId}', params.projectId.toString())).get2({
     params: { stableId: params.variablesStableIds.toString() },

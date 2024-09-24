@@ -272,10 +272,10 @@ export const selectDeliverableVariablesWithValues = createCachedSelector(
 );
 
 export const selectSpecificVariablesWithValues = createCachedSelector(
-  (state: RootState, variablesStableIds: number[], projectId: number) => {
+  (state: RootState, variablesStableIds: string[], projectId: number) => {
     return state.documentProducerSpecificVariables[variablesStableIds.toString()];
   },
-  (state: RootState, variablesStableIds: number[], projectId: number) => {
+  (state: RootState, variablesStableIds: string[], projectId: number) => {
     return state.documentProducerSpecificVariableValues[
       specificVariablesCompositeKeyFn({ variablesStableIds, projectId })
     ];
@@ -290,7 +290,7 @@ export const selectSpecificVariablesWithValues = createCachedSelector(
       return [];
     }
   }
-)((state: RootState, variablesStableIds: number[], projectId: number) =>
+)((state: RootState, variablesStableIds: string[], projectId: number) =>
   specificVariablesCompositeKeyFn({ variablesStableIds, projectId })
 );
 

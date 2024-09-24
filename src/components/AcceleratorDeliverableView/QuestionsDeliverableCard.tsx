@@ -432,7 +432,7 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
 
   const [editingId, setEditingId] = useState<number | undefined>();
   const [updatePendingId, setUpdatePendingId] = useState<number | undefined>();
-  const [dependentVariableStableIds, setDependentVariableStableIds] = useState<number[]>([]);
+  const [dependentVariableStableIds, setDependentVariableStableIds] = useState<string[]>([]);
 
   const reload = () => {
     void dispatch(requestListDeliverableVariables(deliverable.id));

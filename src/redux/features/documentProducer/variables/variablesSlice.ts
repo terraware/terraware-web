@@ -13,7 +13,7 @@ import {
   requestUpdateVariableWorkflowDetails,
 } from './variablesThunks';
 
-type SpecificVariablesProjectIdArg = { variablesStableIds: number[]; projectId: number };
+type SpecificVariablesProjectIdArg = { variablesStableIds: string[]; projectId: number };
 
 export const specificVariablesCompositeKeyFn = (arg: unknown): string => {
   const castArg = arg as SpecificVariablesProjectIdArg;

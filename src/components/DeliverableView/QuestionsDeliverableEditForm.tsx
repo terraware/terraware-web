@@ -131,7 +131,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   const theme = useTheme();
   const query = useQuery();
   const { isApplicationPortal } = useApplicationPortal();
-  const [dependentVariableStableIds, setDependentVariableStableIds] = useState<number[]>([]);
+  const [dependentVariableStableIds, setDependentVariableStableIds] = useState<string[]>([]);
 
   const { deliverable, exit, hideStatusBadge } = props;
 

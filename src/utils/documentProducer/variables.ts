@@ -160,12 +160,12 @@ export const missingRequiredFields = (
 };
 
 export const getDependingVariablesStableIdsFromOtherDeliverable = (variablesWithValues: VariableWithValues[]) => {
-  const existingStableIds = new Set<number>();
-  const dependentStableIds = new Set<number>();
+  const existingStableIds = new Set<string>();
+  const dependentStableIds = new Set<string>();
   variablesWithValues.forEach((variable) => {
-    existingStableIds.add(Number(variable.stableId));
+    existingStableIds.add(variable.stableId);
     if (variable.dependencyVariableStableId) {
-      dependentStableIds.add(Number(variable.dependencyVariableStableId));
+      dependentStableIds.add(variable.dependencyVariableStableId);
     }
   });
 
