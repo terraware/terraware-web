@@ -1,8 +1,8 @@
 import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { BusySpinner, Button, DropdownItem, Textfield } from '@terraware/web-components';
+import { BusySpinner, DropdownItem, Textfield } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
@@ -34,11 +34,9 @@ type ProjectsByOrg = {
 };
 
 export default function ParticipantsView(): JSX.Element {
-  const navigate = useNavigate();
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
-  const { isMobile } = useDeviceInfo();
   const pathParams = useParams<{ participantId: string }>();
   const participantId = Number(pathParams.participantId);
   const { isBusy, isError, participant } = useParticipant(participantId);
@@ -53,10 +51,6 @@ export default function ParticipantsView(): JSX.Element {
       void listModules({ participantId });
     }
   }, [participantId, listModules]);
-
-  const goToEdit = useCallback(() => {
-    navigate(APP_PATHS.ACCELERATOR_PARTICIPANTS_EDIT.replace(':participantId', `${participantId}`));
-  }, [navigate, participantId]);
 
   const onOptionItemClick = useCallback((optionItem: DropdownItem) => {
     if (optionItem.value === 'remove-participant') {
@@ -106,16 +100,6 @@ export default function ParticipantsView(): JSX.Element {
 
     return (
       <Box display='flex' justifyContent='right'>
-        {canUpdateParticipants && (
-          <Button
-            id='edit-participant'
-            icon='iconEdit'
-            label={isMobile ? '' : strings.EDIT_PARTICIPANT}
-            onClick={goToEdit}
-            size='medium'
-            priority='primary'
-          />
-        )}
         {canDeleteParticipants && (
           <OptionsMenu
             onOptionItemClick={onOptionItemClick}
@@ -131,7 +115,7 @@ export default function ParticipantsView(): JSX.Element {
         )}
       </Box>
     );
-  }, [goToEdit, isAllowed, isMobile, onOptionItemClick, participant]);
+  }, [isAllowed, onOptionItemClick, participant]);
 
   const crumbs = useMemo<Crumb[]>(
     () =>
