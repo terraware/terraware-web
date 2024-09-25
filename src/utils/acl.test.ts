@@ -79,7 +79,7 @@ describe('isAllowed', () => {
     expect(isAllowed(user, 'VIEW_CONSOLE')).toBeTruthy();
     expect(isAllowed(user, 'READ_COHORTS')).toBeTruthy();
     expect(isAllowed(user, 'READ_PARTICIPANTS')).toBeTruthy();
-    expect(isAllowed(user, 'UPDATE_PARTICIPANTS')).toBeFalsy();
+    expect(isAllowed(user, 'UPDATE_PARTICIPANTS')).toBeTruthy();
     expect(isAllowed(user, 'ASSIGN_PARTICIPANT_TO_COHORT')).toBeTruthy();
     expect(isAllowed(user, 'READ_PARTICIPANT_PROJECT')).toBeTruthy();
     expect(isAllowed(user, 'UPDATE_PARTICIPANT_PROJECT')).toBeTruthy();
