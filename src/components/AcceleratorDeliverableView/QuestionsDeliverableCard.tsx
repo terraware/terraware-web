@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Button, DialogBox, DropdownItem, Message } from '@terraware/web-components';
+import { Button, DropdownItem, Message } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import Metadata from 'src/components/DeliverableView/Metadata';
@@ -10,9 +10,11 @@ import DeliverableDisplayVariableValue from 'src/components/DocumentProducer/Del
 import DeliverableVariableDetailsInput from 'src/components/DocumentProducer/DeliverableVariableDetailsInput';
 import { PhotoWithAttributes } from 'src/components/DocumentProducer/EditImagesModal/PhotoSelector';
 import { VariableTableCell } from 'src/components/DocumentProducer/EditableTableModal/helpers';
+import VariableStatusBadge from 'src/components/Variables/VariableStatusBadge';
 import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useProjectVariableWorklow } from 'src/hooks/useProjectVariableWorkflow';
 import { useProjectVariablesUpdate } from 'src/hooks/useProjectVariablesUpdate';
 import { useLocalization } from 'src/providers';
 import {
@@ -22,25 +24,21 @@ import {
 import {
   selectDeliverableVariablesWithValues,
   selectSpecificVariablesWithValues,
-  selectUpdateVariableWorkflowDetails,
 } from 'src/redux/features/documentProducer/variables/variablesSelector';
 import {
   requestListDeliverableVariables,
   requestListSpecificVariables,
-  requestUpdateVariableWorkflowDetails,
 } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
-import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
+import { VariableWithValues } from 'src/types/documentProducer/Variable';
+import { VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
 import {
   getDependingVariablesStableIdsFromOtherDeliverable,
   variableDependencyMet,
 } from 'src/utils/documentProducer/variables';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import VariableInternalComment from '../Variables/VariableInternalComment';
-import VariableStatusBadge from '../Variables/VariableStatusBadge';
 import VariableRejectDialog from './RejectDialog';
 
 const QuestionBox = ({
@@ -62,7 +60,6 @@ const QuestionBox = ({
   setUpdatePendingId: (variableId: number | undefined) => void;
   variable: VariableWithValues;
 }): JSX.Element => {
-  const dispatch = useAppDispatch();
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const {
@@ -74,27 +71,21 @@ const QuestionBox = ({
     setRemovedValue,
     setValues,
     update,
-    updateSuccess: updateVariableValueSuccess,
   } = useProjectVariablesUpdate(projectId, [variable]);
   const { isAcceleratorApplicationRoute } = useAcceleratorConsole();
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const [displayActions, setDisplayActions] = useState(false);
-  const [showEditFeedbackModal, setShowEditFeedbackModal] = useState(false);
   const snackbar = useSnackbar();
 
-  const [requestId, setRequestId] = useState('');
-  const [approvedRequestId, setApprovedRequestId] = useState('');
-  const [rejectedRequestId, setRejectedRequestId] = useState('');
-  const approveWorkflowDetailsResponse = useAppSelector(selectUpdateVariableWorkflowDetails(approvedRequestId));
-  const rejectWorkflowDetailsResponse = useAppSelector(selectUpdateVariableWorkflowDetails(rejectedRequestId));
-  const updateWorkflowDetailsResponse = useAppSelector(selectUpdateVariableWorkflowDetails(requestId));
-
-  const firstVariableValue: VariableValue | undefined = (variable?.variableValues || [])[0];
-  const firstVariableValueStatus: VariableStatusType | undefined = firstVariableValue?.status;
-  const firstVariableValueFeedback: string | undefined = firstVariableValue?.feedback;
-  const firstVariableValueInternalComment: string | undefined = firstVariableValue?.internalComment;
-
-  const [modalFeedback, setModalFeedback] = useState(firstVariableValue?.feedback || '');
+  const {
+    update: updateWorkflow,
+    status,
+    feedback,
+    internalComment,
+    setStatus,
+    setFeedback,
+    setInternalComment,
+  } = useProjectVariableWorklow(projectId, variable);
 
   const pendingValues: VariableValueValue[] | undefined = useMemo(
     () => pendingVariableValues.get(variable.id),
@@ -103,88 +94,64 @@ const QuestionBox = ({
 
   const editing = useMemo(() => editingId === variable.id, [editingId, variable.id]);
 
-  useEffect(() => {
-    if (updateVariableValueSuccess) {
-      reload();
-    }
-  }, [updateVariableValueSuccess]);
-
-  useEffect(() => {
-    if (approveWorkflowDetailsResponse?.status === 'success') {
-      reload();
-      snackbar.toastSuccess(strings.ANSWER_APPROVED);
-    }
-  }, [approveWorkflowDetailsResponse]);
-
-  useEffect(() => {
-    if (rejectWorkflowDetailsResponse?.status === 'success') {
-      reload();
-      snackbar.toastSuccess(strings.ANSWER_REJECTED);
-    }
-  }, [rejectWorkflowDetailsResponse]);
-
-  useEffect(() => {
-    if (updateWorkflowDetailsResponse?.status === 'success') {
-      reload();
-    }
-  }, [updateWorkflowDetailsResponse]);
-
-  const setStatus = (status: VariableStatusType, feedback?: string, internalComment?: string) => {
-    const request = dispatch(
-      requestUpdateVariableWorkflowDetails({ status, feedback, internalComment, projectId, variableId: variable.id })
-    );
-    setUpdatePendingId(variable.id);
-
-    if (!internalComment) {
-      if (status === 'Approved') {
-        setApprovedRequestId(request.requestId);
-      } else if (status === 'Rejected') {
-        setRejectedRequestId(request.requestId);
-      } else {
-        setRequestId(request.requestId);
-      }
-    } else {
-      setRequestId(request.requestId);
-    }
-  };
-
-  const rejectItem = (feedback: string) => {
-    setStatus('Rejected', feedback, firstVariableValueInternalComment);
-  };
-
-  const approveItem = () => {
-    setStatus('Approved', undefined, firstVariableValueInternalComment);
-  };
-
-  const onEditItem = () => {
+  const onEditItem = useCallback(() => {
     setEditingId(variable.id);
-  };
+  }, [setEditingId, variable]);
 
-  const onUpdateInternalComment = (internalComment: string) => {
-    const currentStatus: VariableStatusType = firstVariableValueStatus || 'Not Submitted';
-    setStatus(currentStatus, firstVariableValueFeedback, internalComment);
-  };
+  const approveCallback = useCallback(() => {
+    setUpdatePendingId(variable.id);
+    reload();
+    snackbar.toastSuccess(strings.ANSWER_APPROVED);
+  }, [reload, snackbar]);
 
-  const onSave = () => {
+  const rejectCallback = useCallback(() => {
+    setUpdatePendingId(variable.id);
+    reload();
+    snackbar.toastSuccess(strings.ANSWER_REJECTED);
+  }, [reload, snackbar]);
+
+  const updateCallback = useCallback(() => {
+    setUpdatePendingId(variable.id);
+    reload();
+  }, [reload]);
+
+  const approveItem = useCallback(() => {
+    setFeedback(undefined);
+    setStatus('Approved');
+    updateWorkflow(approveCallback);
+  }, [setFeedback, setStatus, updateWorkflow, approveCallback]);
+
+  const rejectItem = useCallback(
+    (feedback: string) => {
+      setFeedback(feedback);
+      setStatus('Rejected');
+      updateWorkflow(rejectCallback);
+    },
+    [setFeedback, setStatus, updateWorkflow]
+  );
+
+  const onSave = useCallback(() => {
     setEditingId(undefined);
-
     update();
-  };
+    updateWorkflow(updateCallback);
+  }, [update, updateCallback, updateWorkflow]);
 
   const onOptionItemClick = useCallback(
     (optionItem: DropdownItem) => {
       switch (optionItem.value) {
         case 'needs_translation': {
-          setStatus('Needs Translation', undefined, firstVariableValueInternalComment);
+          setStatus('Needs Translation');
+          updateWorkflow(updateCallback);
           break;
         }
         case 'not_needed': {
-          setStatus('Not Needed', undefined, firstVariableValueInternalComment);
+          setStatus('Not Needed');
+          updateWorkflow(updateCallback);
           break;
         }
       }
     },
-    [firstVariableValueInternalComment, setStatus]
+    [setStatus, updateWorkflow]
   );
 
   const optionItems = useMemo(
@@ -194,59 +161,28 @@ const QuestionBox = ({
             {
               label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NEEDS_TRANSLATION) as string,
               value: 'needs_translation',
-              disabled: firstVariableValueStatus === 'Needs Translation',
+              disabled: status === 'Needs Translation',
             },
             {
               label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NOT_NEEDED) as string,
               value: 'not_needed',
-              disabled: firstVariableValueStatus === 'Not Needed',
+              disabled: status === 'Not Needed',
             },
           ]
         : [],
-    [activeLocale, firstVariableValueStatus]
+    [activeLocale, status]
   );
 
   return (
     <>
-      {showEditFeedbackModal && (
-        <DialogBox
-          onClose={() => setShowEditFeedbackModal(false)}
-          open={showEditFeedbackModal}
-          title={strings.REJECT}
-          size='large'
-          middleButtons={[
-            <Button
-              id='cancelEditFeedback'
-              label={strings.CANCEL}
-              priority='secondary'
-              type='passive'
-              onClick={() => setShowEditFeedbackModal(false)}
-              key='button-1'
-            />,
-            <Button
-              id='updateFeedback'
-              label={strings.SAVE}
-              onClick={() => setStatus('Rejected', modalFeedback, firstVariableValueInternalComment)}
-              key='button-2'
-            />,
-          ]}
-        >
-          <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-            <Grid item xs={12}>
-              <TextField
-                label={''}
-                type='textarea'
-                id='feedback'
-                onChange={(value) => setModalFeedback(value as string)}
-                value={modalFeedback}
-                preserveNewlines
-              />
-            </Grid>
-          </Grid>
-        </DialogBox>
-      )}
       <Box data-variable-id={variable.id} key={`question-${index}`} sx={{ scrollMarginTop: '50vh' }}>
-        {showRejectDialog && <VariableRejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectItem} />}
+        {showRejectDialog && (
+          <VariableRejectDialog
+            onClose={() => setShowRejectDialog(false)}
+            onSubmit={rejectItem}
+            initialFeedback={feedback}
+          />
+        )}
         <Box
           sx={{
             borderRadius: 2,
@@ -287,7 +223,7 @@ const QuestionBox = ({
               }}
             >
               <Box sx={{ margin: '4px', visibility: hideStatusBadge ? 'hidden' : 'visible' }}>
-                <VariableStatusBadge status={firstVariableValueStatus} />
+                <VariableStatusBadge status={status} />
               </Box>
               {!editingId && (
                 <Box className='actions'>
@@ -310,13 +246,13 @@ const QuestionBox = ({
                         priority='secondary'
                         sx={{ '&.button': { margin: '4px' } }}
                         type='destructive'
-                        disabled={firstVariableValueStatus === 'Rejected'}
+                        disabled={status === 'Rejected'}
                       />
                       <Button
                         label={strings.APPROVE}
                         onClick={approveItem}
                         priority='secondary'
-                        disabled={firstVariableValueStatus === 'Approved'}
+                        disabled={status === 'Approved'}
                         sx={{ '&.button': { margin: '4px' } }}
                       />
                       <OptionsMenu
@@ -348,13 +284,6 @@ const QuestionBox = ({
             </Typography>
           )}
 
-          <VariableInternalComment
-            editing={editing}
-            sx={{ marginY: theme.spacing(2) }}
-            update={onUpdateInternalComment}
-            variable={variable}
-          />
-
           {editing && (
             <Grid container spacing={3} sx={{ marginBottom: '24px', padding: 0 }} textAlign='left'>
               <Grid item xs={12}>
@@ -372,29 +301,56 @@ const QuestionBox = ({
                   validateFields={false}
                 />
               </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  type='textarea'
+                  label={strings.INTERNAL_COMMENTS}
+                  id='internalComment'
+                  onChange={(value) => {
+                    setInternalComment(value as string);
+                  }}
+                  sx={{ marginTop: theme.spacing(1) }}
+                  value={internalComment}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  type='textarea'
+                  label={strings.FEEDBACK}
+                  id='feedback'
+                  onChange={(value) => {
+                    setFeedback(value as string);
+                  }}
+                  sx={{ marginTop: theme.spacing(1) }}
+                  value={feedback}
+                />
+              </Grid>
             </Grid>
           )}
 
-          {firstVariableValue?.feedback && (
+          <Typography>
+            {!editing && <DeliverableDisplayVariableValue projectId={projectId} variable={variable} />}
+          </Typography>
+
+          {internalComment && !editing && (
             <Box marginY={theme.spacing(2)} display='flex' alignItems='center'>
               <Message
                 body={
                   <Typography>
-                    <span style={{ fontWeight: 600 }}>{strings.ANSWER_NOT_ACCEPETED}</span>{' '}
-                    {firstVariableValue.feedback}
-                    {editing && (
-                      <Button
-                        icon='iconEdit'
-                        onClick={() => setShowEditFeedbackModal(true)}
-                        priority='ghost'
-                        size='small'
-                        type='passive'
-                        style={{
-                          marginLeft: '-1px',
-                          marginTop: '-1px',
-                        }}
-                      />
-                    )}
+                    <span style={{ fontWeight: 600 }}>{strings.INTERNAL_COMMENTS}</span> {internalComment}
+                  </Typography>
+                }
+                priority='info'
+                type='page'
+              />
+            </Box>
+          )}
+          {feedback && !editing && (
+            <Box marginY={theme.spacing(2)} display='flex' alignItems='center'>
+              <Message
+                body={
+                  <Typography>
+                    <span style={{ fontWeight: 600 }}>{strings.FEEDBACK}</span> {feedback}
                   </Typography>
                 }
                 priority='critical'
@@ -402,10 +358,6 @@ const QuestionBox = ({
               />
             </Box>
           )}
-
-          <Typography>
-            {!editing && <DeliverableDisplayVariableValue projectId={projectId} variable={variable} />}
-          </Typography>
 
           {editing && (
             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>

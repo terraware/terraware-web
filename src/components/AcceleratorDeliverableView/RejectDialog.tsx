@@ -8,10 +8,11 @@ import strings from 'src/strings';
 export type RejectDialogProps = {
   onClose: () => void;
   onSubmit: (feedback: string) => void;
+  initialFeedback?: string;
 };
 
-export default function RejectDialog({ onClose, onSubmit }: RejectDialogProps): JSX.Element {
-  const [feedback, setFeedback] = useState<string>('');
+export default function RejectDialog({ onClose, onSubmit, initialFeedback }: RejectDialogProps): JSX.Element {
+  const [feedback, setFeedback] = useState<string>(initialFeedback ?? '');
   const [validate, setValidate] = useState<boolean>(false);
   const theme = useTheme();
 
