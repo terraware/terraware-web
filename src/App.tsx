@@ -104,7 +104,7 @@ function AppContent() {
         },
       },
     };
-  }, []);
+  }, [isDesktop]);
 
   return (
     <StyledEngineProvider injectFirst>
