@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Grid, useTheme } from '@mui/material';
-import { Dropdown, Message, Textfield } from '@terraware/web-components';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Dropdown, Icon, Message, Textfield } from '@terraware/web-components';
 import _ from 'lodash';
 
 import AddLink from 'src/components/common/AddLink';
 import Card from 'src/components/common/Card';
+import Link from 'src/components/common/Link';
 import PageForm from 'src/components/common/PageForm';
 import { useAcceleratorOrgs } from 'src/hooks/useAcceleratorOrgs';
 import { useCohorts } from 'src/hooks/useCohorts';
@@ -172,6 +173,14 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
     });
   }, []);
 
+  const removeOrgProjectsSection = useCallback((index: number) => {
+    setOrgProjectsSections((prev) => {
+      const newProjects = [...prev];
+      newProjects.splice(index, 1);
+      return newProjects;
+    });
+  }, []);
+
   const addOrgProjectsSection = useCallback(() => {
     setOrgProjectsSections((prev) => [
       ...prev,
@@ -296,16 +305,45 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
             <Message body={strings.ACCELERATOR_ORGS_EMPTY_WARNING} priority='warning' type='page' />
           </Grid>
         )}
-        {orgProjectsSections.map((section) => (
-          <OrgProjectsSectionEdit
-            availableOrgs={availableOrgs}
-            key={section.id}
-            onOrgSelect={onOrgSelect}
-            onProjectSelect={onProjectSelect}
-            section={section}
-            updateProjectDetails={updateProjectDetails}
-            validateFields={validateFields}
-          />
+        {orgProjectsSections.map((section, index) => (
+          <Box
+            key={`section-${section.id}`}
+            sx={{
+              borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+              paddingBottom: theme.spacing(3),
+            }}
+          >
+            <OrgProjectsSectionEdit
+              availableOrgs={availableOrgs}
+              key={section.id}
+              onOrgSelect={onOrgSelect}
+              onProjectSelect={onProjectSelect}
+              section={section}
+              updateProjectDetails={updateProjectDetails}
+              validateFields={validateFields}
+            />
+            <Box display='flex' marginTop={theme.spacing(2)}>
+              <Link
+                onClick={() => removeOrgProjectsSection(index)}
+                fontSize='16px'
+                disabled={orgProjectsSections.length === 1}
+              >
+                <Box display='flex' alignItems='center'>
+                  <Icon
+                    name='iconSubtract'
+                    style={{
+                      fill: theme.palette.TwClrIcnSecondary,
+                      height: '20px',
+                      width: '20px',
+                    }}
+                  />
+                  <Typography fontWeight={500} color={theme.palette.TwClrIcnSecondary}>
+                    &nbsp;{strings.REMOVE_PROJECT}
+                  </Typography>
+                </Box>
+              </Link>
+            </Box>
+          </Box>
         ))}
         {acceleratorOrgs.length > 0 && (
           <Box display='flex' marginTop={theme.spacing(2)}>
