@@ -241,6 +241,10 @@ export interface paths {
     /** Reports that an automation has been triggered. */
     post: operations["postAutomationTrigger"];
   };
+  "/api/v1/countries/{countryCode}/boundary": {
+    /** Gets boundary of one country given the 2-letter country code. */
+    get: operations["getBorder"];
+  };
   "/api/v1/devices": {
     /** Registers a new device a facility's device manager. */
     post: operations["createDevice"];
@@ -2603,6 +2607,10 @@ export interface components {
     };
     GetBatchHistoryResponsePayload: {
       history: components["schemas"]["BatchHistoryPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetCountryBorderResponsePayload: {
+      border: components["schemas"]["MultiPolygon"];
       status: components["schemas"]["SuccessOrError"];
     };
     GetCurrentTimeResponsePayload: {
@@ -6662,6 +6670,22 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets boundary of one country given the 2-letter country code. */
+  getBorder: {
+    parameters: {
+      path: {
+        countryCode: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetCountryBorderResponsePayload"];
         };
       };
     };

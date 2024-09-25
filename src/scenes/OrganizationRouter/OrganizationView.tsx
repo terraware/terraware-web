@@ -5,45 +5,29 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import PageSnackbar from 'src/components/PageSnackbar';
+import TextField from 'src/components/common/Textfield/Textfield';
+import TfMain from 'src/components/common/TfMain';
+import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization, useTimeZones } from 'src/providers/hooks';
-import { LocationService, OrganizationUserService } from 'src/services';
+import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
-import { Country } from 'src/types/Country';
 import { organizationTypeLabel } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-
-import TextField from '../../components/common/Textfield/Textfield';
-import TfMain from '../../components/common/TfMain';
-import Button from '../../components/common/button/Button';
-import { getUTC } from '../../utils/useTimeZoneUtils';
+import { getUTC } from 'src/utils/useTimeZoneUtils';
 
 export default function OrganizationView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const navigate = useNavigate();
-  const [countries, setCountries] = useState<Country[]>();
   const [people, setPeople] = useState<OrganizationUser[]>();
   const { isMobile } = useDeviceInfo();
-  const { activeLocale } = useLocalization();
+  const { countries } = useLocalization();
   const timeZones = useTimeZones();
   const utcTimeZone = getUTC(timeZones);
   const currentTimeZone = timeZones.find((tz) => tz.id === selectedOrganization.timeZone)?.longName;
-
-  useEffect(() => {
-    if (activeLocale) {
-      const populateCountries = async () => {
-        const response = await LocationService.getCountries();
-        if (response) {
-          setCountries(response);
-        }
-      };
-
-      populateCountries();
-    }
-  }, [activeLocale]);
 
   useEffect(() => {
     const populatePeople = async () => {

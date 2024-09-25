@@ -24,10 +24,8 @@ import { useApplicationData } from 'src/providers/Application/Context';
 import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { LocationService } from 'src/services';
 import ParticipantProjectService from 'src/services/ParticipantProjectService';
 import strings from 'src/strings';
-import { Country } from 'src/types/Country';
 import { getCountryByCode } from 'src/utils/country';
 
 import { useParticipantProjectData } from './ParticipantProjectContext';
@@ -35,7 +33,7 @@ import { useScoringData } from './Scoring/ScoringContext';
 import { useVotingData } from './Voting/VotingContext';
 
 const SingleView = () => {
-  const { activeLocale } = useLocalization();
+  const { activeLocale, countries } = useLocalization();
   const theme = useTheme();
   const { isAllowed } = useUser();
   const { isMobile } = useDeviceInfo();
@@ -67,7 +65,6 @@ const SingleView = () => {
     }
   }, [deliverablesResponse]);
 
-  const [countries, setCountries] = useState<Country[]>();
   const [exportModalOpen, setExportModalOpen] = useState(false);
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
@@ -118,19 +115,6 @@ const SingleView = () => {
     ),
     [goToParticipantProjectEdit, isAllowedEdit, isAllowedExport, projectId, onOptionItemClick, theme]
   );
-
-  useEffect(() => {
-    if (activeLocale) {
-      const populateCountries = async () => {
-        const response = await LocationService.getCountries();
-        if (response) {
-          setCountries(response);
-        }
-      };
-
-      populateCountries();
-    }
-  }, [activeLocale]);
 
   const activeScores = useMemo(() => {
     switch (project?.cohortPhase) {

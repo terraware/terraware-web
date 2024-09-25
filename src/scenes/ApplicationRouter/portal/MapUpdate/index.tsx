@@ -8,7 +8,8 @@ import { Feature, FeatureCollection } from 'geojson';
 import { Crumb } from 'src/components/BreadCrumbs';
 import EditableMap from 'src/components/Map/EditableMapV2';
 import MapIcon from 'src/components/Map/MapIcon';
-import { unionMultiPolygons } from 'src/components/Map/utils';
+import useRenderAttributes from 'src/components/Map/useRenderAttributes';
+import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
@@ -16,10 +17,13 @@ import { useLocalization } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import { requestUpdateApplicationBoundary } from 'src/redux/features/application/applicationAsyncThunks';
 import { selectApplicationUpdateBoundary } from 'src/redux/features/application/applicationSelectors';
+import { requestGetCountryBoundary } from 'src/redux/features/location/locationAsyncThunks';
+import { selectCountryBoundary } from 'src/redux/features/location/locationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import StepTitleDescription, { Description } from 'src/scenes/PlantingSitesRouter/edit/editor/StepTitleDescription';
 import { SQ_M_TO_HECTARES } from 'src/scenes/PlantingSitesRouter/edit/editor/utils';
 import strings from 'src/strings';
+import { RenderableReadOnlyBoundary } from 'src/types/Map';
 import { MultiPolygon } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -39,10 +43,33 @@ const MapUpdateView = () => {
   const { selectedApplication, reload } = useApplicationData();
   const { goToApplicationPrescreen } = useNavigateTo();
   const { toastSuccess, toastError } = useSnackbar();
+  const getRenderAttributes = useRenderAttributes();
+
   const [siteBoundaryData, setSiteBoundaryData, undo, redo] = useUndoRedoState<Stack>();
 
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectApplicationUpdateBoundary(requestId));
+  const countryBoundaryResult = useAppSelector(selectCountryBoundary(selectedApplication?.countryCode ?? ''));
+
+  useEffect(() => {
+    if (selectedApplication && selectedApplication.countryCode) {
+      void dispatch(requestGetCountryBoundary(selectedApplication.countryCode));
+    }
+  }, [dispatch, selectedApplication]);
+
+  const countryBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
+    if (!countryBoundaryResult || !countryBoundaryResult.data) {
+      return undefined;
+    }
+
+    return [
+      {
+        data: { type: 'FeatureCollection', features: [toFeature(countryBoundaryResult.data, {}, 'countryBoundary')] },
+        id: 'countryBoundary',
+        renderProperties: getRenderAttributes('boundary'),
+      },
+    ];
+  }, [getRenderAttributes, countryBoundaryResult]);
 
   const findErrors = (boundary: MultiPolygon) => {
     const boundaryAreaHa = parseFloat((area(boundary) * SQ_M_TO_HECTARES).toFixed(2));
@@ -161,6 +188,7 @@ const MapUpdateView = () => {
             onEditableBoundaryChanged={onEditableBoundaryChanged}
             onRedo={redo}
             onUndo={undo}
+            readOnlyBoundary={countryBoundary}
             showSearchBox
           />
         </Grid>

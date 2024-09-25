@@ -96,24 +96,36 @@ export default function EditableMap({
     [refreshToken]
   );
 
-  const initialViewState = {
-    bounds: readOnlyBoundary?.length
-      ? (bbox({
+  const initialViewState = useMemo<{ bounds: LngLatBoundsLike } | undefined>(() => {
+    if (readOnlyBoundary?.length) {
+      const coordinates = readOnlyBoundary
+        .flatMap((b) => b.data.features)
+        .flatMap((feature) => toMultiPolygon(feature.geometry))
+        .filter((poly: MultiPolygon | null): poly is MultiPolygon => poly !== null)
+        .flatMap((poly: MultiPolygon) => poly.coordinates);
+
+      return {
+        bounds: bbox({
           type: 'MultiPolygon',
-          coordinates: readOnlyBoundary
-            .flatMap((b) => b.data.features)
-            .flatMap((feature) => toMultiPolygon(feature.geometry))
-            .filter((poly: MultiPolygon | null) => poly !== null)
-            .flatMap((poly: MultiPolygon | null) => poly!.coordinates),
-        }) as LngLatBoundsLike)
-      : editableBoundary
-        ? (bbox(editableBoundary) as LngLatBoundsLike)
-        : undefined,
-    fitBoundsOptions: {
-      animate: false,
-      padding: 25,
-    },
-  };
+          coordinates,
+        }) as LngLatBoundsLike,
+        fitBoundsOptions: {
+          animate: false,
+          padding: 25,
+        },
+      };
+    } else if (editableBoundary) {
+      return {
+        bounds: bbox(editableBoundary) as LngLatBoundsLike,
+        fitBoundsOptions: {
+          animate: false,
+          padding: 25,
+        },
+      };
+    } else {
+      return undefined;
+    }
+  }, [editableBoundary, readOnlyBoundary]);
 
   const mapLayers = useMemo(() => {
     if (!readOnlyBoundary?.length) {

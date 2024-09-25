@@ -177,7 +177,7 @@ export type RenderableReadOnlyBoundary = ReadOnlyBoundary & {
 };
 
 // TODO: integrate exclusions as a first class MapObject (not there yet)
-export type RenderableObject = MapObject | 'exclusions' | 'draft-zone' | 'draft-subzone';
+export type RenderableObject = MapObject | 'exclusions' | 'draft-zone' | 'draft-subzone' | 'boundary';
 
 export type MapDrawingLayer = {
   id: string;

@@ -16,16 +16,9 @@ import { APP_PATHS } from 'src/constants';
 import { useDocLinks } from 'src/docLinks';
 import { useLocalization, useUser } from 'src/providers';
 import { useTimeZones } from 'src/providers';
-import {
-  LocationService,
-  OrganizationService,
-  OrganizationUserService,
-  PreferencesService,
-  UserService,
-} from 'src/services';
+import { OrganizationService, OrganizationUserService, PreferencesService, UserService } from 'src/services';
 import strings from 'src/strings';
 import { findLocaleDetails, useSupportedLocales } from 'src/strings/locales';
-import { Country } from 'src/types/Country';
 import { Organization, roleName } from 'src/types/Organization';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { OrganizationUser, User } from 'src/types/User';
@@ -125,8 +118,7 @@ const MyAccountContent = ({
   const snackbar = useSnackbar();
   const docLinks = useDocLinks();
   const contentRef = useRef(null);
-  const { activeLocale, selectedLocale, setSelectedLocale } = useLocalization();
-  const [countries, setCountries] = useState<Country[]>();
+  const { countries, selectedLocale, setSelectedLocale } = useLocalization();
   const timeZones = useTimeZones();
   const tz = timeZones.find((timeZone) => timeZone.id === record.timeZone) || getUTC(timeZones);
   const [preferredWeightSystemSelected, setPreferredWeightSystemSelected] = useState(
@@ -159,19 +151,6 @@ const MyAccountContent = ({
       setCountryCodeSelected(user.countryCode);
     }
   }, [user, setRecord, countryCodeSelected, setCountryCodeSelected]);
-
-  useEffect(() => {
-    if (activeLocale) {
-      const populateCountries = async () => {
-        const response = await LocationService.getCountries();
-        if (response) {
-          setCountries(response);
-        }
-      };
-
-      populateCountries();
-    }
-  }, [activeLocale]);
 
   useEffect(() => {
     const populatePeople = async () => {
