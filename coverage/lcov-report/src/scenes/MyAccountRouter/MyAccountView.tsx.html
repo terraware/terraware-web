@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/164</span>
+                <span class='fraction'>0/156</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/133</span>
+                <span class='fraction'>0/129</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/158</span>
+                <span class='fraction'>0/150</span>
             </div>
         
             
@@ -655,35 +655,7 @@
 <a name='L590'></a><a href='#L590'>590</a>
 <a name='L591'></a><a href='#L591'>591</a>
 <a name='L592'></a><a href='#L592'>592</a>
-<a name='L593'></a><a href='#L593'>593</a>
-<a name='L594'></a><a href='#L594'>594</a>
-<a name='L595'></a><a href='#L595'>595</a>
-<a name='L596'></a><a href='#L596'>596</a>
-<a name='L597'></a><a href='#L597'>597</a>
-<a name='L598'></a><a href='#L598'>598</a>
-<a name='L599'></a><a href='#L599'>599</a>
-<a name='L600'></a><a href='#L600'>600</a>
-<a name='L601'></a><a href='#L601'>601</a>
-<a name='L602'></a><a href='#L602'>602</a>
-<a name='L603'></a><a href='#L603'>603</a>
-<a name='L604'></a><a href='#L604'>604</a>
-<a name='L605'></a><a href='#L605'>605</a>
-<a name='L606'></a><a href='#L606'>606</a>
-<a name='L607'></a><a href='#L607'>607</a>
-<a name='L608'></a><a href='#L608'>608</a>
-<a name='L609'></a><a href='#L609'>609</a>
-<a name='L610'></a><a href='#L610'>610</a>
-<a name='L611'></a><a href='#L611'>611</a>
-<a name='L612'></a><a href='#L612'>612</a>
-<a name='L613'></a><a href='#L613'>613</a>
-<a name='L614'></a><a href='#L614'>614</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L593'></a><a href='#L593'>593</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -807,7 +779,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -834,19 +805,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1307,16 +1265,9 @@ import { APP_PATHS } from 'src/constants';
 import { useDocLinks } from 'src/docLinks';
 import { useLocalization, useUser } from 'src/providers';
 import { useTimeZones } from 'src/providers';
-import {
-  LocationService,
-  OrganizationService,
-  OrganizationUserService,
-  PreferencesService,
-  UserService,
-} from 'src/services';
+import { OrganizationService, OrganizationUserService, PreferencesService, UserService } from 'src/services';
 import strings from 'src/strings';
 import { findLocaleDetails, useSupportedLocales } from 'src/strings/locales';
-import { Country } from 'src/types/Country';
 import { Organization, roleName } from 'src/types/Organization';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { OrganizationUser, User } from 'src/types/User';
@@ -1416,8 +1367,7 @@ const MyAccountContent = <span class="cstat-no" title="statement not covered" ><
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const docLinks = <span class="cstat-no" title="statement not covered" >useDocLinks();</span>
   const contentRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
-  const { activeLocale, selectedLocale, setSelectedLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const [countries, setCountries] = <span class="cstat-no" title="statement not covered" >useState&lt;Country[]&gt;();</span>
+  const { countries, selectedLocale, setSelectedLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const timeZones = <span class="cstat-no" title="statement not covered" >useTimeZones();</span>
   const tz = <span class="cstat-no" title="statement not covered" >timeZones.find(<span class="fstat-no" title="function not covered" >(t</span>imeZone) =&gt; <span class="cstat-no" title="statement not covered" >timeZone.id === record.timeZone)</span> || getUTC(timeZones);</span>
   const [preferredWeightSystemSelected, setPreferredWeightSystemSelected] = <span class="cstat-no" title="statement not covered" >useState(</span>
@@ -1450,19 +1400,6 @@ const MyAccountContent = <span class="cstat-no" title="statement not covered" ><
 <span class="cstat-no" title="statement not covered" >      setCountryCodeSelected(user.countryCode);</span>
     }
   }, [user, setRecord, countryCodeSelected, setCountryCodeSelected]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (activeLocale) {</span>
-      const populateCountries = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-        const response = <span class="cstat-no" title="statement not covered" >await LocationService.getCountries();</span>
-<span class="cstat-no" title="statement not covered" >        if (response) {</span>
-<span class="cstat-no" title="statement not covered" >          setCountries(response);</span>
-        }
-      };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      populateCountries();</span>
-    }
-  }, [activeLocale]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const populatePeople = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
@@ -1909,7 +1846,7 @@ const MyAccountContent = <span class="cstat-no" title="statement not covered" ><
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-09-25T16:03:21.861Z
+                at 2024-09-25T16:17:50.669Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

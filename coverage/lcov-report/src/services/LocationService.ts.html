@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">35.29% </span>
+                <span class="strong">46.66% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/17</span>
+                <span class='fraction'>7/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">37.5% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/16</span>
+                <span class='fraction'>7/14</span>
             </div>
         
             
@@ -142,15 +142,7 @@
 <a name='L77'></a><a href='#L77'>77</a>
 <a name='L78'></a><a href='#L78'>78</a>
 <a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L80'></a><a href='#L80'>80</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -158,6 +150,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -207,20 +202,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -241,12 +225,15 @@
 import { Country } from 'src/types/Country';
 import { SearchResponseElement } from 'src/types/Search';
 &nbsp;
-import HttpService, { Response } from './HttpService';
+import HttpService, { Response, Response2 } from './HttpService';
 import SearchService, { RawSearchRequestPayload } from './SearchService';
 &nbsp;
 const TIMEZONES_ENDPOINT = '/api/v1/i18n/timeZones';
+const COUNTRY_BOUNDARY_ENDPOINT = '/api/v1/countries/{countryCode}/boundary';
 &nbsp;
 type TimeZonesServerResponse = paths[typeof TIMEZONES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+type CountryBoundaryServerResponse =
+  paths[typeof COUNTRY_BOUNDARY_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 &nbsp;
 export type TimeZone = TimeZonesServerResponse['timeZones'][0];
 export type TimeZones = TimeZone[];
@@ -277,7 +264,7 @@ export const getTimeZones = <span class="fstat-no" title="function not covered" 
 const getCountries = <span class="fstat-no" title="function not covered" >as</span>ync (): Promise&lt;Country[] | null&gt; =&gt; {
   const params: RawSearchRequestPayload = <span class="cstat-no" title="statement not covered" >{</span>
     prefix: 'country',
-    fields: ['code', 'name', 'subdivisions.code', 'subdivisions.name'],
+    fields: ['code', 'name', 'region', 'subdivisions.code', 'subdivisions.name'],
     sortOrder: [{ field: 'name' }, { field: 'subdivisions.name' }],
     count: 1000,
   };
@@ -288,30 +275,19 @@ const getCountries = <span class="fstat-no" title="function not covered" >as</sp
 <span class="cstat-no" title="statement not covered" >      return {</span>
         code: result.code,
         name: result.name,
+        region: result.region,
         subdivisions: result.subdivisions,
       } as Country;
     }) ?? null
   );
 };
 &nbsp;
-const getCountriesWithRegion = <span class="fstat-no" title="function not covered" >as</span>ync (): Promise&lt;Country[] | null&gt; =&gt; {
-  const params: RawSearchRequestPayload = <span class="cstat-no" title="statement not covered" >{</span>
-    prefix: 'country',
-    fields: ['code', 'name', 'region'],
-    sortOrder: [{ field: 'name' }],
-    count: 1000,
-  };
-  const response: SearchResponseElement[] | null = <span class="cstat-no" title="statement not covered" >await SearchService.search(params);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    response?.map(<span class="fstat-no" title="function not covered" >(r</span>esult: SearchResponseElement) =&gt; {
-<span class="cstat-no" title="statement not covered" >      return {</span>
-        code: result.code,
-        name: result.name,
-        region: result.region,
-      } as Country;
-    }) ?? null
-  );
+const getCountryBoundary = <span class="fstat-no" title="function not covered" >as</span>ync (countryCode: string): Promise&lt;Response2&lt;CountryBoundaryServerResponse&gt;&gt; =&gt; {
+<span class="cstat-no" title="statement not covered" >  return HttpService.root(COUNTRY_BOUNDARY_ENDPOINT).get2&lt;CountryBoundaryServerResponse&gt;({</span>
+    urlReplacements: {
+      '{countryCode}': countryCode,
+    },
+  });
 };
 &nbsp;
 /**
@@ -320,7 +296,7 @@ const getCountriesWithRegion = <span class="fstat-no" title="function not covere
 const LocationService = {
   getTimeZones,
   getCountries,
-  getCountriesWithRegion,
+  getCountryBoundary,
 };
 &nbsp;
 export default LocationService;
@@ -331,7 +307,7 @@ export default LocationService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-09-25T16:03:21.861Z
+                at 2024-09-25T16:17:50.669Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
