@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1727281071297" clover="3.2.0">
-  <project timestamp="1727281071297" name="All files">
+<coverage generated="1727290251999" clover="3.2.0">
+  <project timestamp="1727290251999" name="All files">
     <metrics statements="25183" coveredstatements="1042" conditionals="16490" coveredconditionals="279" methods="7737" coveredmethods="176" elements="49410" coveredelements="1497" complexity="0" loc="25183" ncloc="25183" packages="236" files="1089" classes="1089"/>
     <package name="src">
       <metrics statements="172" coveredstatements="0" conditionals="122" coveredconditionals="0" methods="39" coveredmethods="0"/>
@@ -27920,7 +27920,7 @@
         <line num="11" count="1" type="stmt"/>
         <line num="14" count="1" type="stmt"/>
         <line num="21" count="1" type="stmt"/>
-        <line num="22" count="152" type="stmt"/>
+        <line num="22" count="148" type="stmt"/>
         <line num="24" count="1" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="cond" truecount="0" falsecount="4"/>
@@ -28420,7 +28420,7 @@
         <line num="176" count="76" type="cond" truecount="1" falsecount="1"/>
         <line num="177" count="0" type="stmt"/>
         <line num="181" count="76" type="cond" truecount="2" falsecount="0"/>
-        <line num="182" count="116" type="stmt"/>
+        <line num="182" count="114" type="stmt"/>
         <line num="185" count="20" type="stmt"/>
       </file>
       <file name="batch.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/batch.ts">
