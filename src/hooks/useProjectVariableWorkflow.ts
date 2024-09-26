@@ -7,13 +7,10 @@ import { VariableStatusType, VariableWithValues } from 'src/types/documentProduc
 import { VariableValue } from 'src/types/documentProducer/VariableValue';
 
 type ProjectVariableWorkflow = {
-  update: (onSuccess?: () => void) => void;
-  status?: VariableStatusType;
-  feedback?: string;
-  internalComment?: string;
-  setStatus: (status: VariableStatusType) => void;
-  setFeedback: (feedback?: string) => void;
-  setInternalComment: (internalComment?: string) => void;
+  initialStatus: VariableStatusType;
+  initialFeedback?: string;
+  initialInternalCommnet?: string;
+  update: (status: VariableStatusType, feedback?: string, internalComment?: string, onSuccess?: () => void) => void;
 };
 
 export const useProjectVariableWorklow = (
@@ -23,21 +20,17 @@ export const useProjectVariableWorklow = (
   const dispatch = useAppDispatch();
   const firstVariableValue: VariableValue | undefined = (variableWithValues.variableValues || [])[0];
 
-  const existingStatus: VariableStatusType | undefined = firstVariableValue?.status;
-  const existingFeedback: string | undefined = firstVariableValue?.feedback;
-  const existingInternalCommnet: string | undefined = firstVariableValue?.internalComment;
-
-  const [status, setStatus] = useState(existingStatus);
-  const [feedback, setFeedback] = useState(existingFeedback);
-  const [internalComment, setInternalComment] = useState(existingInternalCommnet);
+  const initialStatus: VariableStatusType = firstVariableValue?.status ?? 'Not Submitted';
+  const initialFeedback: string | undefined = firstVariableValue?.feedback;
+  const initialInternalCommnet: string | undefined = firstVariableValue?.internalComment;
 
   const [callback, setCallback] = useState<() => void>();
   const [requestId, setRequestId] = useState('');
   const updateResult = useAppSelector(selectUpdateVariableWorkflowDetails(requestId));
 
   const update = useCallback(
-    (onSuccess?: () => void) => {
-      if (existingStatus === status && existingFeedback === feedback && existingInternalCommnet === internalComment) {
+    (status: VariableStatusType, feedback?: string, internalComment?: string, onSuccess?: () => void) => {
+      if (initialStatus === status && initialFeedback === feedback && initialInternalCommnet === internalComment) {
         onSuccess?.();
         return;
       }
@@ -55,7 +48,7 @@ export const useProjectVariableWorklow = (
         setCallback(onSuccess);
       }
     },
-    [dispatch, feedback, internalComment, status]
+    [dispatch, initialFeedback, initialInternalCommnet, initialStatus]
   );
 
   useEffect(() => {
@@ -66,14 +59,11 @@ export const useProjectVariableWorklow = (
 
   return useMemo<ProjectVariableWorkflow>(
     () => ({
+      initialStatus,
+      initialFeedback,
+      initialInternalCommnet,
       update,
-      status,
-      feedback,
-      internalComment,
-      setStatus,
-      setFeedback,
-      setInternalComment,
     }),
-    [update, status, feedback, internalComment, setStatus, setFeedback, setInternalComment]
+    [initialStatus, initialFeedback, initialInternalCommnet, update]
   );
 };
