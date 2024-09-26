@@ -31,12 +31,13 @@ import {
 } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { VariableWithValues } from 'src/types/documentProducer/Variable';
+import { UpdateVariableWorkflowDetailsPayload, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
 import {
   getDependingVariablesStableIdsFromOtherDeliverable,
   variableDependencyMet,
 } from 'src/utils/documentProducer/variables';
+import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import VariableRejectDialog from './RejectDialog';
@@ -79,13 +80,16 @@ const QuestionBox = ({
 
   const {
     update: updateWorkflow,
-    status,
-    feedback,
-    internalComment,
-    setStatus,
-    setFeedback,
-    setInternalComment,
+    initialStatus,
+    initialFeedback,
+    initialInternalCommnet,
   } = useProjectVariableWorklow(projectId, variable);
+
+  const [workflowDetails, , onChange] = useForm<UpdateVariableWorkflowDetailsPayload>({
+    feedback: initialFeedback,
+    internalComment: initialInternalCommnet,
+    status: initialStatus,
+  });
 
   const pendingValues: VariableValueValue[] | undefined = useMemo(
     () => pendingVariableValues.get(variable.id),
@@ -98,60 +102,63 @@ const QuestionBox = ({
     setEditingId(variable.id);
   }, [setEditingId, variable]);
 
+  const waitAndReload = useCallback(() => {
+    setTimeout(() => reload(), 500);
+  }, [reload]);
+
   const approveCallback = useCallback(() => {
     setUpdatePendingId(variable.id);
-    reload();
+    waitAndReload();
     snackbar.toastSuccess(strings.ANSWER_APPROVED);
-  }, [reload, snackbar]);
+  }, [waitAndReload, snackbar]);
 
   const rejectCallback = useCallback(() => {
     setUpdatePendingId(variable.id);
-    reload();
+    waitAndReload();
     snackbar.toastSuccess(strings.ANSWER_REJECTED);
-  }, [reload, snackbar]);
+  }, [waitAndReload, snackbar]);
 
   const updateCallback = useCallback(() => {
     setUpdatePendingId(variable.id);
-    reload();
-  }, [reload]);
+    waitAndReload();
+  }, [waitAndReload]);
 
   const approveItem = useCallback(() => {
-    setFeedback(undefined);
-    setStatus('Approved');
-    updateWorkflow(approveCallback);
-  }, [setFeedback, setStatus, updateWorkflow, approveCallback]);
+    updateWorkflow('Approved', undefined, workflowDetails.internalComment, approveCallback);
+  }, [workflowDetails, updateWorkflow, approveCallback]);
 
   const rejectItem = useCallback(
     (feedback: string) => {
-      setFeedback(feedback);
-      setStatus('Rejected');
-      updateWorkflow(rejectCallback);
+      updateWorkflow('Rejected', feedback, workflowDetails.internalComment, rejectCallback);
     },
-    [setFeedback, setStatus, updateWorkflow]
+    [workflowDetails, updateWorkflow, rejectCallback]
   );
 
   const onSave = useCallback(() => {
+    update(false);
+    updateWorkflow(workflowDetails.status, workflowDetails.feedback, workflowDetails.internalComment, updateCallback);
     setEditingId(undefined);
-    update();
-    updateWorkflow(updateCallback);
-  }, [update, updateCallback, updateWorkflow]);
+  }, [update, updateCallback, updateWorkflow, workflowDetails]);
 
   const onOptionItemClick = useCallback(
     (optionItem: DropdownItem) => {
       switch (optionItem.value) {
         case 'needs_translation': {
-          setStatus('Needs Translation');
-          updateWorkflow(updateCallback);
+          updateWorkflow(
+            'Needs Translation',
+            workflowDetails.feedback,
+            workflowDetails.internalComment,
+            updateCallback
+          );
           break;
         }
         case 'not_needed': {
-          setStatus('Not Needed');
-          updateWorkflow(updateCallback);
+          updateWorkflow('Not Needed', workflowDetails.feedback, workflowDetails.internalComment, updateCallback);
           break;
         }
       }
     },
-    [setStatus, updateWorkflow]
+    [workflowDetails, updateCallback, updateWorkflow]
   );
 
   const optionItems = useMemo(
@@ -180,7 +187,7 @@ const QuestionBox = ({
           <VariableRejectDialog
             onClose={() => setShowRejectDialog(false)}
             onSubmit={rejectItem}
-            initialFeedback={feedback}
+            initialFeedback={initialFeedback}
           />
         )}
         <Box
@@ -223,7 +230,7 @@ const QuestionBox = ({
               }}
             >
               <Box sx={{ margin: '4px', visibility: hideStatusBadge ? 'hidden' : 'visible' }}>
-                <VariableStatusBadge status={status} />
+                <VariableStatusBadge status={initialStatus} />
               </Box>
               {!editingId && (
                 <Box className='actions'>
@@ -307,10 +314,10 @@ const QuestionBox = ({
                   label={strings.INTERNAL_COMMENTS}
                   id='internalComment'
                   onChange={(value) => {
-                    setInternalComment(value as string);
+                    onChange('internalComment', value as string);
                   }}
                   sx={{ marginTop: theme.spacing(1) }}
-                  value={internalComment}
+                  value={workflowDetails.internalComment}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -319,10 +326,10 @@ const QuestionBox = ({
                   label={strings.FEEDBACK}
                   id='feedback'
                   onChange={(value) => {
-                    setFeedback(value as string);
+                    onChange('feedback', value as string);
                   }}
                   sx={{ marginTop: theme.spacing(1) }}
-                  value={feedback}
+                  value={workflowDetails.feedback}
                 />
               </Grid>
             </Grid>
@@ -332,12 +339,13 @@ const QuestionBox = ({
             {!editing && <DeliverableDisplayVariableValue projectId={projectId} variable={variable} />}
           </Typography>
 
-          {internalComment && !editing && (
+          {workflowDetails.internalComment && !editing && (
             <Box marginY={theme.spacing(2)} display='flex' alignItems='center'>
               <Message
                 body={
                   <Typography>
-                    <span style={{ fontWeight: 600 }}>{strings.INTERNAL_COMMENTS}</span> {internalComment}
+                    <span style={{ fontWeight: 600 }}>{strings.INTERNAL_COMMENTS}</span>{' '}
+                    {workflowDetails.internalComment}
                   </Typography>
                 }
                 priority='info'
@@ -345,12 +353,12 @@ const QuestionBox = ({
               />
             </Box>
           )}
-          {feedback && !editing && (
+          {workflowDetails.feedback && !editing && (
             <Box marginY={theme.spacing(2)} display='flex' alignItems='center'>
               <Message
                 body={
                   <Typography>
-                    <span style={{ fontWeight: 600 }}>{strings.FEEDBACK}</span> {feedback}
+                    <span style={{ fontWeight: 600 }}>{strings.FEEDBACK}</span> {workflowDetails.feedback}
                   </Typography>
                 }
                 priority='critical'
