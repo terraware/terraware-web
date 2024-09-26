@@ -102,22 +102,26 @@ const QuestionBox = ({
     setEditingId(variable.id);
   }, [setEditingId, variable]);
 
+  const waitAndReload = useCallback(() => {
+    setTimeout(() => reload(), 500);
+  }, [reload]);
+
   const approveCallback = useCallback(() => {
     setUpdatePendingId(variable.id);
-    reload();
+    waitAndReload();
     snackbar.toastSuccess(strings.ANSWER_APPROVED);
-  }, [reload, snackbar]);
+  }, [waitAndReload, snackbar]);
 
   const rejectCallback = useCallback(() => {
     setUpdatePendingId(variable.id);
-    reload();
+    waitAndReload();
     snackbar.toastSuccess(strings.ANSWER_REJECTED);
-  }, [reload, snackbar]);
+  }, [waitAndReload, snackbar]);
 
   const updateCallback = useCallback(() => {
     setUpdatePendingId(variable.id);
-    reload();
-  }, [reload]);
+    waitAndReload();
+  }, [waitAndReload]);
 
   const approveItem = useCallback(() => {
     updateWorkflow('Approved', undefined, workflowDetails.internalComment, approveCallback);
@@ -133,6 +137,7 @@ const QuestionBox = ({
   const onSave = useCallback(() => {
     update(false);
     updateWorkflow(workflowDetails.status, workflowDetails.feedback, workflowDetails.internalComment, updateCallback);
+    setEditingId(undefined);
   }, [update, updateCallback, updateWorkflow, workflowDetails]);
 
   const onOptionItemClick = useCallback(
