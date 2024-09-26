@@ -132,7 +132,7 @@ const QuestionBox = ({
 
   const onSave = useCallback(() => {
     setEditingId(undefined);
-    update();
+    update(false);
     updateWorkflow(updateCallback);
   }, [update, updateCallback, updateWorkflow]);
 
