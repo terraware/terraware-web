@@ -320,18 +320,20 @@ const QuestionBox = ({
                   value={workflowDetails.internalComment}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  type='textarea'
-                  label={strings.FEEDBACK_SHARED_WITH_PROJECT}
-                  id='feedback'
-                  onChange={(value) => {
-                    onChange('feedback', value as string);
-                  }}
-                  sx={{ marginTop: theme.spacing(1) }}
-                  value={workflowDetails.feedback}
-                />
-              </Grid>
+              {workflowDetails.status === 'Rejected' && (
+                <Grid item xs={12}>
+                  <TextField
+                    type='textarea'
+                    label={strings.FEEDBACK_SHARED_WITH_PROJECT}
+                    id='feedback'
+                    onChange={(value) => {
+                      onChange('feedback', value as string);
+                    }}
+                    sx={{ marginTop: theme.spacing(1) }}
+                    value={workflowDetails.feedback}
+                  />
+                </Grid>
+              )}
             </Grid>
           )}
 
@@ -353,7 +355,7 @@ const QuestionBox = ({
               />
             </Box>
           )}
-          {workflowDetails.feedback && !editing && (
+          {workflowDetails.status === 'Rejected' && workflowDetails.feedback && !editing && (
             <Box marginY={theme.spacing(2)} display='flex' alignItems='center'>
               <Message
                 body={
