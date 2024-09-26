@@ -35,7 +35,7 @@ type ProjectVariablesUpdate = {
   stagedVariableWithValues: VariableWithValues[];
   updateSuccess: boolean;
   uploadSuccess: boolean;
-  update: () => boolean;
+  update: (updateStatuses?: boolean) => boolean;
   missingFields: boolean;
 };
 
@@ -116,126 +116,130 @@ export const useProjectVariablesUpdate = (
     [missingRequiredFields, stagedVariableWithValues, stagedCellValues]
   );
 
-  const update = useCallback(() => {
-    let operations: Operation[] = [];
+  const update = useCallback(
+    (updateStatuses?: boolean) => {
+      let operations: Operation[] = [];
 
-    if (projectId === -1) {
-      // This means the project ID, most likely being populated by a provider looking at
-      // the router path, isn't initialized before the update is called
-      snackbar.toastError(strings.GENERIC_ERROR);
-      return false;
-    }
-
-    pendingVariableValues.forEach((pendingValues, variableId) => {
-      const variable = variablesWithValues.find((variableWithValues) => variableWithValues.id === variableId);
-      if (!variable) {
-        // This is impossible if the form is only displaying variables that were initialized within the hook
+      if (projectId === -1) {
+        // This means the project ID, most likely being populated by a provider looking at
+        // the router path, isn't initialized before the update is called
         snackbar.toastError(strings.GENERIC_ERROR);
-        return;
+        return false;
       }
 
-      operations = [
-        ...operations,
-        ...makeVariableValueOperations({
-          pendingValues,
-          removedValue: removedVariableValues.get(variable.id),
-          variable,
-        }),
-      ];
-    });
+      pendingVariableValues.forEach((pendingValues, variableId) => {
+        const variable = variablesWithValues.find((variableWithValues) => variableWithValues.id === variableId);
+        if (!variable) {
+          // This is impossible if the form is only displaying variables that were initialized within the hook
+          snackbar.toastError(strings.GENERIC_ERROR);
+          return;
+        }
 
-    pendingCellValues.forEach((pendingValues, variableId) => {
-      const variable = variablesWithValues.find((variableWithValues) => variableWithValues.id === variableId);
-      if (!variable) {
-        // This is impossible if the form is only displaying variables that were initialized within the hook
-        snackbar.toastError(strings.GENERIC_ERROR);
-        return;
+        operations = [
+          ...operations,
+          ...makeVariableValueOperations({
+            pendingValues,
+            removedValue: removedVariableValues.get(variable.id),
+            variable,
+          }),
+        ];
+      });
+
+      pendingCellValues.forEach((pendingValues, variableId) => {
+        const variable = variablesWithValues.find((variableWithValues) => variableWithValues.id === variableId);
+        if (!variable) {
+          // This is impossible if the form is only displaying variables that were initialized within the hook
+          snackbar.toastError(strings.GENERIC_ERROR);
+          return;
+        }
+
+        operations = [
+          ...operations,
+          ...makeVariableValueOperations({
+            pendingCellValues: pendingValues,
+            pendingValues: [],
+            variable,
+          }),
+        ];
+      });
+
+      // handle image updates
+      pendingImages.forEach((pendingValues) => {
+        pendingValues.forEach((image) => {
+          const newValue = { type: image.type, citation: image.citation, caption: image.caption };
+          operations.push({
+            operation: 'Update',
+            valueId: image.id,
+            value: newValue,
+            existingValueId: image.id,
+          });
+        });
+      });
+
+      // handle image deletions
+      pendingDeletedImages.forEach((pendingValues) => {
+        pendingValues.forEach((deletedImage) => {
+          operations.push({
+            operation: 'Delete',
+            valueId: deletedImage.id,
+            existingValueId: deletedImage.id,
+          });
+        });
+      });
+
+      // handle image uploads
+      const imageValuesToUpload: UploadImageValueRequestPayloadWithProjectId[] = [];
+      pendingNewImages.forEach((pendingValues, variableId) => {
+        const variable = variablesWithValues.find((variableWithValues) => variableWithValues.id === variableId);
+        if (!variable) {
+          // This is impossible if the form is only displaying variables that were initialized within the hook
+          snackbar.toastError(strings.GENERIC_ERROR);
+          return;
+        }
+
+        pendingValues.forEach((newImage) => {
+          imageValuesToUpload.push({
+            variableId: variable.id,
+            file: newImage.file,
+            caption: newImage.caption,
+            citation: newImage.citation,
+            projectId,
+          });
+        });
+      });
+      if (imageValuesToUpload.length > 0) {
+        const request = dispatch(requestUploadManyImageValues(imageValuesToUpload));
+        setUploadRequestId(request.requestId);
       }
 
-      operations = [
-        ...operations,
-        ...makeVariableValueOperations({
-          pendingCellValues: pendingValues,
-          pendingValues: [],
-          variable,
-        }),
-      ];
-    });
+      if (operations.length > 0) {
+        const request = dispatch(
+          requestUpdateVariableValues({
+            operations,
+            projectId,
+            updateStatuses,
+          })
+        );
 
-    // handle image updates
-    pendingImages.forEach((pendingValues) => {
-      pendingValues.forEach((image) => {
-        const newValue = { type: image.type, citation: image.citation, caption: image.caption };
-        operations.push({
-          operation: 'Update',
-          valueId: image.id,
-          value: newValue,
-          existingValueId: image.id,
-        });
-      });
-    });
-
-    // handle image deletions
-    pendingDeletedImages.forEach((pendingValues) => {
-      pendingValues.forEach((deletedImage) => {
-        operations.push({
-          operation: 'Delete',
-          valueId: deletedImage.id,
-          existingValueId: deletedImage.id,
-        });
-      });
-    });
-
-    // handle image uploads
-    const imageValuesToUpload: UploadImageValueRequestPayloadWithProjectId[] = [];
-    pendingNewImages.forEach((pendingValues, variableId) => {
-      const variable = variablesWithValues.find((variableWithValues) => variableWithValues.id === variableId);
-      if (!variable) {
-        // This is impossible if the form is only displaying variables that were initialized within the hook
-        snackbar.toastError(strings.GENERIC_ERROR);
-        return;
+        setUpdateVariableRequestId(request.requestId);
+      } else {
+        // if there are no pending changes, set flag to true to fake success & exit
+        setNoOp(true);
       }
 
-      pendingValues.forEach((newImage) => {
-        imageValuesToUpload.push({
-          variableId: variable.id,
-          file: newImage.file,
-          caption: newImage.caption,
-          citation: newImage.citation,
-          projectId,
-        });
-      });
-    });
-    if (imageValuesToUpload.length > 0) {
-      const request = dispatch(requestUploadManyImageValues(imageValuesToUpload));
-      setUploadRequestId(request.requestId);
-    }
-
-    if (operations.length > 0) {
-      const request = dispatch(
-        requestUpdateVariableValues({
-          operations,
-          projectId,
-        })
-      );
-
-      setUpdateVariableRequestId(request.requestId);
-    } else {
-      // if there are no pending changes, set flag to true to fake success & exit
-      setNoOp(true);
-    }
-
-    return operations.length > 0 || imageValuesToUpload.length > 0;
-  }, [
-    pendingCellValues,
-    pendingDeletedImages,
-    pendingImages,
-    pendingNewImages,
-    pendingVariableValues,
-    projectId,
-    removedVariableValues,
-    variablesWithValues,
-  ]);
+      return operations.length > 0 || imageValuesToUpload.length > 0;
+    },
+    [
+      pendingCellValues,
+      pendingDeletedImages,
+      pendingImages,
+      pendingNewImages,
+      pendingVariableValues,
+      projectId,
+      removedVariableValues,
+      variablesWithValues,
+    ]
+  );
 
   useEffect(() => {
     if (updateResult?.status === 'success') {

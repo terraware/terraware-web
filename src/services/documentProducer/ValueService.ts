@@ -53,9 +53,14 @@ const getSpecificValues = (params: {
   });
 };
 
-const updateValue = (projectId: number, operations: Operation[]): Promise<Response2<VariableValuesListResponse>> => {
+const updateValue = (
+  projectId: number,
+  operations: Operation[],
+  updateStatuses: boolean = true
+): Promise<Response2<VariableValuesListResponse>> => {
   const entity: UpdateVariableValuesRequestPayload = {
     operations,
+    updateStatuses,
   };
   return HttpService.root(VALUES_ENDPOINT.replace('{projectId}', projectId.toString())).post({
     entity,
