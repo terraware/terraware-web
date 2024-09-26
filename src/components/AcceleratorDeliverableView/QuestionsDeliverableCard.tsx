@@ -40,6 +40,7 @@ import {
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import VariableInternalComment from '../Variables/VariableInternalComment';
 import VariableRejectDialog from './RejectDialog';
 
 const QuestionBox = ({
@@ -132,6 +133,13 @@ const QuestionBox = ({
       updateWorkflow('Rejected', feedback, workflowDetails.internalComment, rejectCallback);
     },
     [workflowDetails, updateWorkflow, rejectCallback]
+  );
+
+  const onUpdateInternalComment = useCallback(
+    (internalComment: string) => {
+      updateWorkflow(workflowDetails.status, workflowDetails.feedback, internalComment, updateCallback);
+    },
+    [workflowDetails, updateWorkflow, updateCallback]
   );
 
   const onSave = useCallback(() => {
@@ -342,18 +350,12 @@ const QuestionBox = ({
           </Typography>
 
           {workflowDetails.internalComment && !editing && (
-            <Box marginY={theme.spacing(2)} display='flex' alignItems='center'>
-              <Message
-                body={
-                  <Typography>
-                    <span style={{ fontWeight: 600 }}>{strings.INTERNAL_COMMENTS}</span>{' '}
-                    {workflowDetails.internalComment}
-                  </Typography>
-                }
-                priority='info'
-                type='page'
-              />
-            </Box>
+            <VariableInternalComment
+              editing={editing}
+              sx={{ marginY: theme.spacing(2) }}
+              update={onUpdateInternalComment}
+              variable={variable}
+            />
           )}
           {workflowDetails.status === 'Rejected' && workflowDetails.feedback && !editing && (
             <Box marginY={theme.spacing(2)} display='flex' alignItems='center'>
