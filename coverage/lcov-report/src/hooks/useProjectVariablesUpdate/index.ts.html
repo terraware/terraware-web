@@ -348,7 +348,11 @@
 <a name='L283'></a><a href='#L283'>283</a>
 <a name='L284'></a><a href='#L284'>284</a>
 <a name='L285'></a><a href='#L285'>285</a>
-<a name='L286'></a><a href='#L286'>286</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L286'></a><a href='#L286'>286</a>
+<a name='L287'></a><a href='#L287'>287</a>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a>
+<a name='L290'></a><a href='#L290'>290</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -467,6 +471,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -563,6 +568,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -576,6 +582,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -670,7 +678,7 @@ type ProjectVariablesUpdate = {
   stagedVariableWithValues: VariableWithValues[];
   updateSuccess: boolean;
   uploadSuccess: boolean;
-  update: () =&gt; boolean;
+  update: (updateStatuses?: boolean) =&gt; boolean;
   missingFields: boolean;
 };
 &nbsp;
@@ -751,126 +759,130 @@ export const useProjectVariablesUpdate = <span class="cstat-no" title="statement
     [missingRequiredFields, stagedVariableWithValues, stagedCellValues]
   );
 &nbsp;
-  const update = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    let operations: Operation[] = <span class="cstat-no" title="statement not covered" >[];</span>
+  const update = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (u</span>pdateStatuses?: boolean) =&gt; {
+      let operations: Operation[] = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (projectId === -1) {</span>
-      // This means the project ID, most likely being populated by a provider looking at
-      // the router path, isn't initialized before the update is called
-<span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR);</span>
-<span class="cstat-no" title="statement not covered" >      return false;</span>
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    pendingVariableValues.forEach(<span class="fstat-no" title="function not covered" >(p</span>endingValues, variableId) =&gt; {</span>
-      const variable = <span class="cstat-no" title="statement not covered" >variablesWithValues.find(<span class="fstat-no" title="function not covered" >(v</span>ariableWithValues) =&gt; <span class="cstat-no" title="statement not covered" >variableWithValues.id === variableId)</span>;</span>
-<span class="cstat-no" title="statement not covered" >      if (!variable) {</span>
-        // This is impossible if the form is only displaying variables that were initialized within the hook
+<span class="cstat-no" title="statement not covered" >      if (projectId === -1) {</span>
+        // This means the project ID, most likely being populated by a provider looking at
+        // the router path, isn't initialized before the update is called
 <span class="cstat-no" title="statement not covered" >        snackbar.toastError(strings.GENERIC_ERROR);</span>
-<span class="cstat-no" title="statement not covered" >        return;</span>
+<span class="cstat-no" title="statement not covered" >        return false;</span>
       }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      operations = [</span>
-        ...operations,
-        ...makeVariableValueOperations({
-          pendingValues,
-          removedValue: removedVariableValues.get(variable.id),
-          variable,
-        }),
-      ];
-    });
+<span class="cstat-no" title="statement not covered" >      pendingVariableValues.forEach(<span class="fstat-no" title="function not covered" >(p</span>endingValues, variableId) =&gt; {</span>
+        const variable = <span class="cstat-no" title="statement not covered" >variablesWithValues.find(<span class="fstat-no" title="function not covered" >(v</span>ariableWithValues) =&gt; <span class="cstat-no" title="statement not covered" >variableWithValues.id === variableId)</span>;</span>
+<span class="cstat-no" title="statement not covered" >        if (!variable) {</span>
+          // This is impossible if the form is only displaying variables that were initialized within the hook
+<span class="cstat-no" title="statement not covered" >          snackbar.toastError(strings.GENERIC_ERROR);</span>
+<span class="cstat-no" title="statement not covered" >          return;</span>
+        }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    pendingCellValues.forEach(<span class="fstat-no" title="function not covered" >(p</span>endingValues, variableId) =&gt; {</span>
-      const variable = <span class="cstat-no" title="statement not covered" >variablesWithValues.find(<span class="fstat-no" title="function not covered" >(v</span>ariableWithValues) =&gt; <span class="cstat-no" title="statement not covered" >variableWithValues.id === variableId)</span>;</span>
-<span class="cstat-no" title="statement not covered" >      if (!variable) {</span>
-        // This is impossible if the form is only displaying variables that were initialized within the hook
-<span class="cstat-no" title="statement not covered" >        snackbar.toastError(strings.GENERIC_ERROR);</span>
-<span class="cstat-no" title="statement not covered" >        return;</span>
+<span class="cstat-no" title="statement not covered" >        operations = [</span>
+          ...operations,
+          ...makeVariableValueOperations({
+            pendingValues,
+            removedValue: removedVariableValues.get(variable.id),
+            variable,
+          }),
+        ];
+      });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      pendingCellValues.forEach(<span class="fstat-no" title="function not covered" >(p</span>endingValues, variableId) =&gt; {</span>
+        const variable = <span class="cstat-no" title="statement not covered" >variablesWithValues.find(<span class="fstat-no" title="function not covered" >(v</span>ariableWithValues) =&gt; <span class="cstat-no" title="statement not covered" >variableWithValues.id === variableId)</span>;</span>
+<span class="cstat-no" title="statement not covered" >        if (!variable) {</span>
+          // This is impossible if the form is only displaying variables that were initialized within the hook
+<span class="cstat-no" title="statement not covered" >          snackbar.toastError(strings.GENERIC_ERROR);</span>
+<span class="cstat-no" title="statement not covered" >          return;</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        operations = [</span>
+          ...operations,
+          ...makeVariableValueOperations({
+            pendingCellValues: pendingValues,
+            pendingValues: [],
+            variable,
+          }),
+        ];
+      });
+&nbsp;
+      // handle image updates
+<span class="cstat-no" title="statement not covered" >      pendingImages.forEach(<span class="fstat-no" title="function not covered" >(p</span>endingValues) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        pendingValues.forEach(<span class="fstat-no" title="function not covered" >(i</span>mage) =&gt; {</span>
+          const newValue = <span class="cstat-no" title="statement not covered" >{ type: image.type, citation: image.citation, caption: image.caption };</span>
+<span class="cstat-no" title="statement not covered" >          operations.push({</span>
+            operation: 'Update',
+            valueId: image.id,
+            value: newValue,
+            existingValueId: image.id,
+          });
+        });
+      });
+&nbsp;
+      // handle image deletions
+<span class="cstat-no" title="statement not covered" >      pendingDeletedImages.forEach(<span class="fstat-no" title="function not covered" >(p</span>endingValues) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        pendingValues.forEach(<span class="fstat-no" title="function not covered" >(d</span>eletedImage) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          operations.push({</span>
+            operation: 'Delete',
+            valueId: deletedImage.id,
+            existingValueId: deletedImage.id,
+          });
+        });
+      });
+&nbsp;
+      // handle image uploads
+      const imageValuesToUpload: UploadImageValueRequestPayloadWithProjectId[] = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >      pendingNewImages.forEach(<span class="fstat-no" title="function not covered" >(p</span>endingValues, variableId) =&gt; {</span>
+        const variable = <span class="cstat-no" title="statement not covered" >variablesWithValues.find(<span class="fstat-no" title="function not covered" >(v</span>ariableWithValues) =&gt; <span class="cstat-no" title="statement not covered" >variableWithValues.id === variableId)</span>;</span>
+<span class="cstat-no" title="statement not covered" >        if (!variable) {</span>
+          // This is impossible if the form is only displaying variables that were initialized within the hook
+<span class="cstat-no" title="statement not covered" >          snackbar.toastError(strings.GENERIC_ERROR);</span>
+<span class="cstat-no" title="statement not covered" >          return;</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        pendingValues.forEach(<span class="fstat-no" title="function not covered" >(n</span>ewImage) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          imageValuesToUpload.push({</span>
+            variableId: variable.id,
+            file: newImage.file,
+            caption: newImage.caption,
+            citation: newImage.citation,
+            projectId,
+          });
+        });
+      });
+<span class="cstat-no" title="statement not covered" >      if (imageValuesToUpload.length &gt; 0) {</span>
+        const request = <span class="cstat-no" title="statement not covered" >dispatch(requestUploadManyImageValues(imageValuesToUpload));</span>
+<span class="cstat-no" title="statement not covered" >        setUploadRequestId(request.requestId);</span>
       }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      operations = [</span>
-        ...operations,
-        ...makeVariableValueOperations({
-          pendingCellValues: pendingValues,
-          pendingValues: [],
-          variable,
-        }),
-      ];
-    });
+<span class="cstat-no" title="statement not covered" >      if (operations.length &gt; 0) {</span>
+        const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
+          requestUpdateVariableValues({
+            operations,
+            projectId,
+            updateStatuses,
+          })
+        );
 &nbsp;
-    // handle image updates
-<span class="cstat-no" title="statement not covered" >    pendingImages.forEach(<span class="fstat-no" title="function not covered" >(p</span>endingValues) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      pendingValues.forEach(<span class="fstat-no" title="function not covered" >(i</span>mage) =&gt; {</span>
-        const newValue = <span class="cstat-no" title="statement not covered" >{ type: image.type, citation: image.citation, caption: image.caption };</span>
-<span class="cstat-no" title="statement not covered" >        operations.push({</span>
-          operation: 'Update',
-          valueId: image.id,
-          value: newValue,
-          existingValueId: image.id,
-        });
-      });
-    });
-&nbsp;
-    // handle image deletions
-<span class="cstat-no" title="statement not covered" >    pendingDeletedImages.forEach(<span class="fstat-no" title="function not covered" >(p</span>endingValues) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      pendingValues.forEach(<span class="fstat-no" title="function not covered" >(d</span>eletedImage) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        operations.push({</span>
-          operation: 'Delete',
-          valueId: deletedImage.id,
-          existingValueId: deletedImage.id,
-        });
-      });
-    });
-&nbsp;
-    // handle image uploads
-    const imageValuesToUpload: UploadImageValueRequestPayloadWithProjectId[] = <span class="cstat-no" title="statement not covered" >[];</span>
-<span class="cstat-no" title="statement not covered" >    pendingNewImages.forEach(<span class="fstat-no" title="function not covered" >(p</span>endingValues, variableId) =&gt; {</span>
-      const variable = <span class="cstat-no" title="statement not covered" >variablesWithValues.find(<span class="fstat-no" title="function not covered" >(v</span>ariableWithValues) =&gt; <span class="cstat-no" title="statement not covered" >variableWithValues.id === variableId)</span>;</span>
-<span class="cstat-no" title="statement not covered" >      if (!variable) {</span>
-        // This is impossible if the form is only displaying variables that were initialized within the hook
-<span class="cstat-no" title="statement not covered" >        snackbar.toastError(strings.GENERIC_ERROR);</span>
-<span class="cstat-no" title="statement not covered" >        return;</span>
+<span class="cstat-no" title="statement not covered" >        setUpdateVariableRequestId(request.requestId);</span>
+      } else {
+        // if there are no pending changes, set flag to true to fake success &amp; exit
+<span class="cstat-no" title="statement not covered" >        setNoOp(true);</span>
       }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      pendingValues.forEach(<span class="fstat-no" title="function not covered" >(n</span>ewImage) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        imageValuesToUpload.push({</span>
-          variableId: variable.id,
-          file: newImage.file,
-          caption: newImage.caption,
-          citation: newImage.citation,
-          projectId,
-        });
-      });
-    });
-<span class="cstat-no" title="statement not covered" >    if (imageValuesToUpload.length &gt; 0) {</span>
-      const request = <span class="cstat-no" title="statement not covered" >dispatch(requestUploadManyImageValues(imageValuesToUpload));</span>
-<span class="cstat-no" title="statement not covered" >      setUploadRequestId(request.requestId);</span>
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (operations.length &gt; 0) {</span>
-      const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
-        requestUpdateVariableValues({
-          operations,
-          projectId,
-        })
-      );
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      setUpdateVariableRequestId(request.requestId);</span>
-    } else {
-      // if there are no pending changes, set flag to true to fake success &amp; exit
-<span class="cstat-no" title="statement not covered" >      setNoOp(true);</span>
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return operations.length &gt; 0 || imageValuesToUpload.length &gt; 0;</span>
-  }, [
-    pendingCellValues,
-    pendingDeletedImages,
-    pendingImages,
-    pendingNewImages,
-    pendingVariableValues,
-    projectId,
-    removedVariableValues,
-    variablesWithValues,
-  ]);
+<span class="cstat-no" title="statement not covered" >      return operations.length &gt; 0 || imageValuesToUpload.length &gt; 0;</span>
+    },
+    [
+      pendingCellValues,
+      pendingDeletedImages,
+      pendingImages,
+      pendingNewImages,
+      pendingVariableValues,
+      projectId,
+      removedVariableValues,
+      variablesWithValues,
+    ]
+  );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (updateResult?.status === 'success') {</span>
@@ -925,7 +937,7 @@ export const useProjectVariablesUpdate = <span class="cstat-no" title="statement
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-09-26T17:12:29.005Z
+                at 2024-09-26T17:24:43.505Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
