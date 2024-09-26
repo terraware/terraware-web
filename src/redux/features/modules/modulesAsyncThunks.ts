@@ -1,11 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { SearchService } from 'src/services';
+import CohortModuleService from 'src/services/CohortModuleService';
 import DeliverablesService from 'src/services/DeliverablesService';
+import { Response, Response2 } from 'src/services/HttpService';
 import ModuleService, { GetModuleRequestParam, ListModulesRequestParam } from 'src/services/ModuleService';
 import strings from 'src/strings';
 import { ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
-import { ModuleProjectSearchResult } from 'src/types/Module';
+import { ModuleProjectSearchResult, UpdateCohortModuleRequest } from 'src/types/Module';
 import { SearchNodePayload, SearchRequestPayload } from 'src/types/Search';
 
 export const requestGetModule = createAsyncThunk(
@@ -84,5 +86,114 @@ export const requestListModuleDeliverables = createAsyncThunk(
     );
 
     return result.data ?? [];
+  }
+);
+
+export const requestDeleteCohortModule = createAsyncThunk(
+  'cohort-modules/delete',
+  async (
+    request: {
+      moduleId: number;
+      cohortId: number;
+    },
+    { rejectWithValue }
+  ) => {
+    const { moduleId, cohortId } = request;
+    const response: Response2<number> = await CohortModuleService.deleteOne(moduleId, cohortId);
+
+    if (response && response.requestSucceeded) {
+      return true;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestDeleteManyCohortModule = createAsyncThunk(
+  'cohort-modules/delete-many',
+  async (
+    request: {
+      modulesId: number[];
+      cohortId: number;
+    },
+    { rejectWithValue }
+  ) => {
+    const { modulesId, cohortId } = request;
+    let allSucceeded = true;
+
+    const promises = modulesId.map((moduleId) => CohortModuleService.deleteOne(moduleId, cohortId));
+
+    const results = await Promise.all(promises);
+
+    results.forEach((res) => {
+      if (!res.requestSucceeded) {
+        allSucceeded = false;
+      }
+    });
+
+    if (allSucceeded) {
+      return true;
+    }
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestUpdateCohortModule = createAsyncThunk(
+  'cohort-modules/update',
+  async (
+    {
+      moduleId,
+      cohortId,
+      request,
+    }: {
+      moduleId: number;
+      cohortId: number;
+      request: UpdateCohortModuleRequest;
+    },
+    { rejectWithValue }
+  ) => {
+    const response: Response = await CohortModuleService.update({ moduleId, cohortId, entity: request });
+
+    if (response && response.requestSucceeded) {
+      return true;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestUpdateManyCohortModule = createAsyncThunk(
+  'cohort-modules/update',
+  async (
+    {
+      cohortId,
+      requests,
+    }: {
+      cohortId: number;
+      requests: (UpdateCohortModuleRequest & {
+        moduleId: number;
+      })[];
+    },
+    { rejectWithValue }
+  ) => {
+    let allSucceeded = true;
+
+    const promises = requests.map((request) => {
+      const { moduleId, ...entity } = request;
+      return CohortModuleService.update({ moduleId: moduleId, cohortId, entity });
+    });
+
+    const results = await Promise.all(promises);
+
+    results.forEach((res) => {
+      if (!res.requestSucceeded) {
+        allSucceeded = false;
+      }
+    });
+
+    if (allSucceeded) {
+      return true;
+    }
+    return rejectWithValue(strings.GENERIC_ERROR);
   }
 );

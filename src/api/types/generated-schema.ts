@@ -82,6 +82,15 @@ export interface paths {
     /** Deletes a single cohort. */
     delete: operations["deleteCohort"];
   };
+  "/api/v1/accelerator/cohorts/{cohortId}/modules/{moduleId}": {
+    /**
+     * Updates the information about a module's use by a cohort.
+     * @description Adds the module to the cohort if it is not already associated.
+     */
+    put: operations["updateCohortModule"];
+    /** Deletes a module from a cohort if it is currently associated. */
+    delete: operations["deleteCohortModule"];
+  };
   "/api/v1/accelerator/deliverables": {
     /**
      * Lists the deliverables for accelerator projects
@@ -121,10 +130,32 @@ export interface paths {
   "/api/v1/accelerator/events": {
     /** List events */
     get: operations["listEvents"];
+    /**
+     * Create a new event on a module.
+     * @description Only accessible by accelerator administrators.
+     */
+    post: operations["createEvent"];
   };
   "/api/v1/accelerator/events/{eventId}": {
     /** Gets one event for a project. */
     get: operations["getEvent"];
+    /**
+     * Update an event on a module.
+     * @description Only accessible by accelerator administrators.
+     */
+    put: operations["updateEvent"];
+    /**
+     * Delete an event from a module.
+     * @description Only accessible by accelerator administrators.
+     */
+    delete: operations["deleteEvent"];
+  };
+  "/api/v1/accelerator/events/{eventId}/projects": {
+    /**
+     * Update the list of projects for a module event.
+     * @description Only accessible by accelerator administrators.
+     */
+    post: operations["updateEventProjects"];
   };
   "/api/v1/accelerator/modules": {
     /** List modules. */
@@ -1911,6 +1942,27 @@ export interface components {
       type: "Seed Bank" | "Desalination" | "Reverse Osmosis" | "Nursery";
     };
     CreateFacilityResponsePayload: {
+      /** Format: int64 */
+      id: number;
+      status: components["schemas"]["SuccessOrError"];
+    };
+    CreateModuleEventRequestPayload: {
+      /** Format: date-time */
+      endTime?: string;
+      /** @enum {string} */
+      eventType: "One-on-One Session" | "Workshop" | "Live Session" | "Recorded Session";
+      /** Format: uri */
+      meetingUrl?: string;
+      /** Format: int64 */
+      moduleId: number;
+      /** Format: uri */
+      recordingUrl?: string;
+      /** Format: uri */
+      slidesUrl?: string;
+      /** Format: date-time */
+      startTime: string;
+    };
+    CreateModuleEventResponsePayload: {
       /** Format: int64 */
       id: number;
       status: components["schemas"]["SuccessOrError"];
@@ -4802,6 +4854,13 @@ export interface components {
       /** Format: int32 */
       version: number;
     };
+    UpdateCohortModuleRequestPayload: {
+      /** Format: date */
+      endDate: string;
+      /** Format: date */
+      startDate: string;
+      title: string;
+    };
     UpdateCohortRequestPayload: {
       name: string;
       /** @enum {string} */
@@ -4917,6 +4976,22 @@ export interface components {
     };
     UpdateGlobalRolesRequestPayload: {
       globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
+    };
+    UpdateModuleEventProjectsRequestPayload: {
+      addProjects?: number[];
+      removeProjects?: number[];
+    };
+    UpdateModuleEventRequestPayload: {
+      /** Format: date-time */
+      endTime?: string;
+      /** Format: uri */
+      meetingUrl?: string;
+      /** Format: uri */
+      recordingUrl?: string;
+      /** Format: uri */
+      slidesUrl?: string;
+      /** Format: date-time */
+      startTime: string;
     };
     UpdateNotificationRequestPayload: {
       read: boolean;
@@ -5762,6 +5837,60 @@ export interface operations {
     };
   };
   /**
+   * Updates the information about a module's use by a cohort.
+   * @description Adds the module to the cohort if it is not already associated.
+   */
+  updateCohortModule: {
+    parameters: {
+      path: {
+        cohortId: number;
+        moduleId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateCohortModuleRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Deletes a module from a cohort if it is currently associated. */
+  deleteCohortModule: {
+    parameters: {
+      path: {
+        cohortId: number;
+        moduleId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
    * Lists the deliverables for accelerator projects
    * @description The list may optionally be filtered based on certain criteria as specified in the query string. If no filter parameters are supplied, lists all the deliverables in all the participants and projects that are visible to the user. For users with accelerator admin privileges, this will be the full list of all deliverables for all accelerator projects.
    */
@@ -5968,6 +6097,31 @@ export interface operations {
       };
     };
   };
+  /**
+   * Create a new event on a module.
+   * @description Only accessible by accelerator administrators.
+   */
+  createEvent: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateModuleEventRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateModuleEventResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   /** Gets one event for a project. */
   getEvent: {
     parameters: {
@@ -5980,6 +6134,91 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["GetEventResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Update an event on a module.
+   * @description Only accessible by accelerator administrators.
+   */
+  updateEvent: {
+    parameters: {
+      path: {
+        eventId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateModuleEventRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Delete an event from a module.
+   * @description Only accessible by accelerator administrators.
+   */
+  deleteEvent: {
+    parameters: {
+      path: {
+        eventId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Update the list of projects for a module event.
+   * @description Only accessible by accelerator administrators.
+   */
+  updateEventProjects: {
+    parameters: {
+      path: {
+        eventId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateModuleEventProjectsRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */

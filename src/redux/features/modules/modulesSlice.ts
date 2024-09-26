@@ -5,10 +5,14 @@ import { Module } from 'src/types/Module';
 
 import { StatusT, buildReducers } from '../asyncUtils';
 import {
+  requestDeleteCohortModule,
+  requestDeleteManyCohortModule,
   requestGetModule,
   requestListModuleDeliverables,
   requestListModuleProjects,
   requestListModules,
+  requestUpdateCohortModule,
+  requestUpdateManyCohortModule,
 } from './modulesAsyncThunks';
 
 /**
@@ -67,11 +71,71 @@ export const ModuleDeliverablesSlice = createSlice({
   },
 });
 
+/**
+ * Deletes a cohort module
+ */
+const initialStateCohortModuleDelete: { [key: string]: StatusT<boolean> } = {};
+
+export const cohortModuleDeleteSlice = createSlice({
+  name: 'cohortModuleDeleteSlice',
+  initialState: initialStateCohortModuleDelete,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestDeleteCohortModule)(builder);
+  },
+});
+
+/**
+ * Updates a cohort module
+ */
+const initialStateCohortModuleUpdate: { [key: string]: StatusT<boolean> } = {};
+
+export const cohortModuleUpdateSlice = createSlice({
+  name: 'cohortModuleUpdateSlice',
+  initialState: initialStateCohortModuleUpdate,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestUpdateCohortModule)(builder);
+  },
+});
+
+/**
+ * Deletes many cohort modules
+ */
+const initialStateCohortModuleDeleteMany: { [key: string]: StatusT<boolean> } = {};
+
+export const cohortModuleDeleteManySlice = createSlice({
+  name: 'cohortModuleDeleteManySlice',
+  initialState: initialStateCohortModuleDeleteMany,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestDeleteManyCohortModule)(builder);
+  },
+});
+
+/**
+ * Updates a cohort module
+ */
+const initialStateCohortModuleUpdateMany: { [key: string]: StatusT<boolean> } = {};
+
+export const cohortModuleUpdateManySlice = createSlice({
+  name: 'cohortModuleUpdateManySlice',
+  initialState: initialStateCohortModuleUpdateMany,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestUpdateManyCohortModule)(builder);
+  },
+});
+
 const moduleReducers = {
   module: moduleSlice.reducer,
   moduleDeliverables: ModuleDeliverablesSlice.reducer,
   moduleList: moduleListSlice.reducer,
   moduleProjects: moduleProjectsSlice.reducer,
+  cohortModuleDelete: cohortModuleDeleteSlice.reducer,
+  cohortModuleUpdate: cohortModuleUpdateSlice.reducer,
+  cohortModuleDeleteMany: cohortModuleDeleteManySlice.reducer,
+  cohortModuleUpdateMany: cohortModuleUpdateManySlice.reducer,
 };
 
 export default moduleReducers;

@@ -56,3 +56,7 @@ export const getEventStatus = (status: ModuleEventStatus) => {
 };
 
 export type ModuleContentType = keyof Pick<Module, 'additionalResources' | 'preparationMaterials'>;
+
+export type UpdateCohortModuleRequest = components['schemas']['UpdateCohortModuleRequestPayload'];
+
+export type CohortModule = Partial<Module>;
