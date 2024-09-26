@@ -323,7 +323,7 @@ const QuestionBox = ({
               <Grid item xs={12}>
                 <TextField
                   type='textarea'
-                  label={strings.FEEDBACK}
+                  label={strings.FEEDBACK_SHARED_WITH_PROJECT}
                   id='feedback'
                   onChange={(value) => {
                     onChange('feedback', value as string);
@@ -344,7 +344,7 @@ const QuestionBox = ({
               <Message
                 body={
                   <Typography>
-                    <span style={{ fontWeight: 600 }}>{strings.INTERNAL_COMMENTS}</span>
+                    <span style={{ fontWeight: 600 }}>{strings.INTERNAL_COMMENTS}</span>{' '}
                     {workflowDetails.internalComment}
                   </Typography>
                 }
@@ -358,8 +358,7 @@ const QuestionBox = ({
               <Message
                 body={
                   <Typography>
-                    <span style={{ fontWeight: 600 }}>{strings.FEEDBACK_SHARED_WITH_PROJECT}</span>
-                    {workflowDetails.feedback}
+                    <span style={{ fontWeight: 600 }}>{strings.FEEDBACK}</span> {workflowDetails.feedback}
                   </Typography>
                 }
                 priority='critical'
