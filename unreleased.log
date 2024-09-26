@@ -1,3 +1,4 @@
+dceffff16b0 SW-6061 Added flag in Accelerator Question Deliverable Card (#3242)
 db31130d6c8 SW-6015 Participants: Ability for Acc Admins+ to remove Projects in Console (#3239)
 76e4f6ab4d3 SW-6061 Bypass variable status update if updating from console (#3241)
 22177dd8136 SW-6061 Moved update workflow to hook, simplify update flow in conole question deliverables (#3240)
