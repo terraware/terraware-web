@@ -168,16 +168,16 @@ const QuestionBox = ({
             {
               label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NEEDS_TRANSLATION) as string,
               value: 'needs_translation',
-              disabled: status === 'Needs Translation',
+              disabled: workflowDetails.status === 'Needs Translation',
             },
             {
               label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NOT_NEEDED) as string,
               value: 'not_needed',
-              disabled: status === 'Not Needed',
+              disabled: workflowDetails.status === 'Not Needed',
             },
           ]
         : [],
-    [activeLocale, status]
+    [activeLocale, workflowDetails.status]
   );
 
   return (
@@ -358,7 +358,8 @@ const QuestionBox = ({
               <Message
                 body={
                   <Typography>
-                    <span style={{ fontWeight: 600 }}>{strings.FEEDBACK}</span> {workflowDetails.feedback}
+                    <span style={{ fontWeight: 600 }}>{strings.FEEDBACK_SHARED_WITH_PROJECT}</span>{' '}
+                    {workflowDetails.feedback}
                   </Typography>
                 }
                 priority='critical'
