@@ -45,7 +45,9 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
 
   const moduleOptions = useMemo(() => {
     const existingModulesId = existingModules?.map((eMod) => eMod.id);
-    return modules?.filter((mod) => !existingModulesId?.includes(mod.id));
+    const moduleIds = new Set();
+    const uniqueModulesList = modules?.filter(({ id }) => !moduleIds.has(id) && moduleIds.add(id));
+    return uniqueModulesList?.filter((mod) => !existingModulesId?.includes(mod.id));
   }, [modules, existingModules]);
 
   return (
