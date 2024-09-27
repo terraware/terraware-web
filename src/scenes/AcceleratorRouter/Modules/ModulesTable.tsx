@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, TableColumnType } from '@terraware/web-components';
@@ -8,6 +8,7 @@ import strings from 'src/strings';
 import { CohortModule, Module } from 'src/types/Module';
 
 import AddModuleModal from './AddModuleModal';
+import ModulesCellRenderer from './ModulesCellRenderer';
 
 interface ModulesTableProps {
   modules?: Module[];
@@ -43,8 +44,16 @@ export default function ModulesTable(props: ModulesTableProps): JSX.Element {
   const { modules, editing, modulesToAdd, setModulesToAdd, modulesToDelete, setModulesToDelete } = props;
   const theme = useTheme();
   const [addModuleModalOpened, setAddModuleModalOpened] = useState(false);
-  const [allModules, setAllModules] = useState<CohortModule[]>(modules || []);
+  const [prevModules, setPrevModules] = useState<CohortModule[]>(modules || []);
   const [selectedRows, setSelectedRows] = useState<CohortModule[]>([]);
+  const [moduleToEdit, setModuleToEdit] = useState<CohortModule>();
+
+  const areModulesEqual = (a: CohortModule, b: CohortModule) => {
+    if (a.title === b.title && a.name === b.name && a.startDate === b.startDate && a.endDate === b.endDate) {
+      return true;
+    }
+    return false;
+  };
 
   const onAddCohortModule = (cohortModule: CohortModule) => {
     if (setModulesToAdd) {
@@ -55,6 +64,35 @@ export default function ModulesTable(props: ModulesTableProps): JSX.Element {
           return [cohortModule];
         }
       });
+    }
+  };
+
+  const onEditedCohortModule = (cohortModule: CohortModule) => {
+    if (setModulesToDelete && setModulesToAdd) {
+      // When editing a module, first we remove the old entrance and then we add it again
+      const modulesToAddIds = modulesToAdd?.map((mta) => mta.id);
+      if (modulesToAddIds?.includes(cohortModule.id)) {
+        const found = modulesToAdd?.find((moduleToAdd) => moduleToAdd.id === cohortModule.id);
+        if (!(found && areModulesEqual(found, cohortModule))) {
+          const newModulesToAdd = modulesToAdd?.filter((mtAdd) => mtAdd.id !== cohortModule.id);
+          newModulesToAdd?.push(cohortModule);
+          setModulesToAdd(newModulesToAdd);
+        }
+      } else {
+        const found = prevModules?.find((moduleToAdd) => moduleToAdd.id === cohortModule.id);
+        if (!(found && areModulesEqual(found, cohortModule))) {
+          setModulesToDelete((prev) => {
+            return prev && found ? [...prev, found] : [found || {}];
+          });
+          setModulesToAdd((prev) => {
+            if (prev) {
+              return [...prev, cohortModule];
+            } else {
+              return [cohortModule];
+            }
+          });
+        }
+      }
     }
   };
 
@@ -76,27 +114,51 @@ export default function ModulesTable(props: ModulesTableProps): JSX.Element {
   };
 
   useEffect(() => {
-    setAllModules(() => {
-      let _allModules: CohortModule[] = modules ? modules : [];
+    if (modules) {
+      setPrevModules(modules);
+    }
+  }, [modules]);
 
-      if (modulesToAdd) {
-        _allModules = _allModules.concat(...modulesToAdd);
+  const onEditHandler = (clickedModule: CohortModule, fromColumn?: string) => {
+    if (fromColumn === 'title') {
+      setModuleToEdit(clickedModule);
+      setAddModuleModalOpened(true);
+    }
+  };
+
+  const onCloseModalHandler = () => {
+    setModuleToEdit(undefined);
+    setAddModuleModalOpened(false);
+  };
+
+  const onModalSaveHandler = (cohortModule: CohortModule) => {
+    if (moduleToEdit) {
+      setModuleToEdit(undefined);
+      onEditedCohortModule(cohortModule);
+    } else {
+      onAddCohortModule(cohortModule);
+    }
+    setAddModuleModalOpened(false);
+  };
+
+  const allModules = useMemo(() => {
+    const modulesToDeleteIds = modulesToDelete?.map((mtd) => mtd.id);
+    return prevModules.concat(modulesToAdd || []).filter((mod) => {
+      if (modulesToDeleteIds?.includes(mod.id)) {
+        const found = modulesToDelete?.find((m) => m.id === mod.id);
+        if (found) {
+          return !areModulesEqual(mod, found);
+        }
+      } else {
+        return true;
       }
-      if (modulesToDelete) {
-        const modulesToDeleteIds = modulesToDelete.map((mtd) => mtd.id);
-        _allModules = _allModules.filter((module) => !modulesToDeleteIds.includes(module.id));
-      }
-      return _allModules;
     });
-  }, [modules, modulesToAdd, modulesToDelete]);
+  }, [prevModules, modulesToAdd, modulesToDelete]);
 
   return (
     <>
       {addModuleModalOpened && (
-        <AddModuleModal
-          onClose={() => setAddModuleModalOpened(false)}
-          onSave={(cohortModule: CohortModule) => onAddCohortModule(cohortModule)}
-        />
+        <AddModuleModal onClose={onCloseModalHandler} onSave={onModalSaveHandler} moduleToEdit={moduleToEdit} />
       )}
       <Grid container spacing={3}>
         <Grid item xs={12}>
@@ -128,7 +190,7 @@ export default function ModulesTable(props: ModulesTableProps): JSX.Element {
             <Table
               id='modules-table'
               columns={columns}
-              rows={allModules || []}
+              rows={allModules}
               orderBy='name'
               showCheckbox={editing}
               showTopBar={editing}
@@ -142,6 +204,10 @@ export default function ModulesTable(props: ModulesTableProps): JSX.Element {
                   icon: 'iconTrashCan',
                 },
               ]}
+              Renderer={ModulesCellRenderer}
+              controlledOnSelect={true}
+              onSelect={editing ? onEditHandler : undefined}
+              isClickable={() => false}
             />
           )}
         </Grid>

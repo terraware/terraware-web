@@ -16,16 +16,17 @@ import useForm from 'src/utils/useForm';
 export interface AddModuleModalProps {
   onClose: () => void;
   onSave: (cohortModule: CohortModule) => void;
+  moduleToEdit?: CohortModule;
 }
 
 export default function AddModuleModal(props: AddModuleModalProps): JSX.Element {
-  const { onClose, onSave } = props;
+  const { onClose, onSave, moduleToEdit } = props;
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
 
   const { modules, listModules } = useListModules();
-  const [record, setRecord, onChange] = useForm<CohortModule>({});
+  const [record, setRecord, onChange] = useForm<CohortModule>(moduleToEdit || {});
 
   useEffect(() => {
     void listModules({});
@@ -39,7 +40,6 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
 
   const save = () => {
     onSave(record);
-    onClose();
   };
 
   return (

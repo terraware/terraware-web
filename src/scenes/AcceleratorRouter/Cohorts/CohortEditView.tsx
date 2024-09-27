@@ -9,10 +9,6 @@ import {
   requestDeleteManyCohortModule,
   requestUpdateManyCohortModule,
 } from 'src/redux/features/modules/modulesAsyncThunks';
-import {
-  selectDeleteManyCohortModule,
-  selectUpdateManyCohortModule,
-} from 'src/redux/features/modules/modulesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { UpdateCohortRequestPayload } from 'src/types/Cohort';
@@ -32,10 +28,6 @@ export default function CohortEditView(): JSX.Element {
   const cohort = useAppSelector(selectCohort(cohortId));
   const [requestId, setRequestId] = useState<string>('');
   const cohortUpdateRequest = useAppSelector((state) => selectCohortRequest(state, requestId));
-  const [updateRequestId, setUpdateRequestId] = useState<string>('');
-  const [deleteRequestId, setDeleteRequestId] = useState<string>('');
-  const modulesAddedRequest = useAppSelector(selectUpdateManyCohortModule(updateRequestId));
-  const modulesDeletedRequest = useAppSelector(selectDeleteManyCohortModule(deleteRequestId));
 
   useEffect(() => {
     if (!cohort) {
@@ -54,13 +46,11 @@ export default function CohortEditView(): JSX.Element {
           startDate: mta.startDate || '',
           endDate: mta.endDate || '',
         }));
-        const dispatched2 = dispatch(requestUpdateManyCohortModule({ cohortId, requests }));
-        setUpdateRequestId(dispatched2.requestId);
+        dispatch(requestUpdateManyCohortModule({ cohortId, requests }));
       }
       if (modulesToDelete) {
         const idsToDelete = modulesToDelete.map((mtd) => mtd.id || -1);
-        const dispatched3 = dispatch(requestDeleteManyCohortModule({ cohortId, modulesId: idsToDelete }));
-        setDeleteRequestId(dispatched3.requestId);
+        dispatch(requestDeleteManyCohortModule({ cohortId, modulesId: idsToDelete }));
       }
     },
     [cohortId, dispatch]
