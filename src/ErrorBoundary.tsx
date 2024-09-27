@@ -2,9 +2,10 @@ import React, { ReactNode } from 'react';
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
 import { useNavigate } from 'react-router-dom';
 
+import { useDeviceInfo } from '@terraware/web-components/utils';
+
 import ErrorContent from './ErrorContent';
 import { APP_PATHS } from './constants';
-import { useDeviceInfo } from '@terraware/web-components/utils';
 
 interface Props {
   children: ReactNode;
