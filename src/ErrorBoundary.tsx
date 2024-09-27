@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import ErrorContent from './ErrorContent';
 import { APP_PATHS } from './constants';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 interface Props {
   children: ReactNode;
@@ -12,13 +13,16 @@ interface Props {
 
 const ErrorBoundary = (props: Props) => {
   const navigate = useNavigate();
+  const { isDesktop } = useDeviceInfo();
 
   return (
     <ReactErrorBoundary
       fallback={<ErrorContent inApp />}
       onError={() => props.setShowNavBar?.(false)}
       onReset={() => {
-        props.setShowNavBar?.(true);
+        if (isDesktop) {
+          props.setShowNavBar?.(true);
+        }
         navigate(APP_PATHS.HOME);
       }}
     >
