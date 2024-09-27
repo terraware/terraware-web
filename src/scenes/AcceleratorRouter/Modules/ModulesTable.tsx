@@ -194,7 +194,12 @@ export default function ModulesTable(props: ModulesTableProps): JSX.Element {
         />
       )}
       {addModuleModalOpened && (
-        <AddModuleModal onClose={onCloseModalHandler} onSave={onModalSaveHandler} moduleToEdit={moduleToEdit} />
+        <AddModuleModal
+          onClose={onCloseModalHandler}
+          onSave={onModalSaveHandler}
+          moduleToEdit={moduleToEdit}
+          existingModules={allModules}
+        />
       )}
       <Grid container spacing={3}>
         <Grid item xs={12}>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
 import { DatePicker, SelectT } from '@terraware/web-components';
@@ -17,10 +17,11 @@ export interface AddModuleModalProps {
   onClose: () => void;
   onSave: (cohortModule: CohortModule) => void;
   moduleToEdit?: CohortModule;
+  existingModules?: CohortModule[];
 }
 
 export default function AddModuleModal(props: AddModuleModalProps): JSX.Element {
-  const { onClose, onSave, moduleToEdit } = props;
+  const { onClose, onSave, moduleToEdit, existingModules } = props;
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -41,6 +42,11 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
   const save = () => {
     onSave(record);
   };
+
+  const moduleOptions = useMemo(() => {
+    const existingModulesId = existingModules?.map((eMod) => eMod.id);
+    return modules?.filter((mod) => !existingModulesId?.includes(mod.id));
+  }, [modules, existingModules]);
 
   return (
     <DialogBox
@@ -75,11 +81,11 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
             id='module'
             label={strings.MODULE}
             placeholder={strings.SELECT}
-            options={modules}
+            options={moduleOptions}
             onChange={(_module: Module) => {
               onChangeModule(_module);
             }}
-            selectedValue={modules?.find((iModule) => iModule.id === record.id)}
+            selectedValue={moduleOptions?.find((iModule) => iModule.id === record.id)}
             fullWidth={true}
             isEqual={(a: Module, b: Module) => a.id === b.id}
             renderOption={(_module: Module) => _module?.name || ''}
