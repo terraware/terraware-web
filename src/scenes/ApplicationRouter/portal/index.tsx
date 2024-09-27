@@ -66,7 +66,7 @@ const ApplicationPortalRouter = ({ showNavBar, setShowNavBar }: ApplicationPorta
         <NavBar setShowNavBar={setShowNavBar} />
       )}
       <Box
-        sx={type === 'desktop' && showNavBar ? { ...contentStyles, ...contentWithNavBar } : contentStyles}
+        sx={type === 'desktop' || showNavBar ? { ...contentStyles, ...contentWithNavBar } : contentStyles}
         className='scrollable-content'
       >
         <ErrorBoundary setShowNavBar={setShowNavBar}>

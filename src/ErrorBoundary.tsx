@@ -17,7 +17,10 @@ const ErrorBoundary = (props: Props) => {
     <ReactErrorBoundary
       fallback={<ErrorContent inApp />}
       onError={() => props.setShowNavBar?.(false)}
-      onReset={() => navigate(APP_PATHS.HOME)}
+      onReset={() => {
+        props.setShowNavBar?.(true);
+        navigate(APP_PATHS.HOME);
+      }}
     >
       {props.children}
     </ReactErrorBoundary>

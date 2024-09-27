@@ -73,7 +73,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
         <NavBar setShowNavBar={setShowNavBar} backgroundTransparent={viewHasBackgroundImage()} />
       )}
       <Box
-        sx={type === 'desktop' && showNavBar ? { ...contentStyles, ...contentWithNavBar } : contentStyles}
+        sx={type === 'desktop' || showNavBar ? { ...contentStyles, ...contentWithNavBar } : contentStyles}
         className='scrollable-content'
       >
         <ErrorBoundary setShowNavBar={setShowNavBar}>
