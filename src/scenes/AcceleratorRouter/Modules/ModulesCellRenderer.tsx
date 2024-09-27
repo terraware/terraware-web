@@ -16,7 +16,7 @@ export default function ModulesCellRenderer(props: RendererProps<TableRowType>):
           index={index}
           column={column}
           value={
-            <Link fontSize='16px' target='_blank' to={APP_PATHS.ADMIN_MODULE.replace(':deliverableId', row.id)}>
+            <Link fontSize='16px' target='_blank' to={APP_PATHS.ADMIN_MODULE.replace(':moduleId', row.id)}>
               {value as React.ReactNode}
             </Link>
           }
