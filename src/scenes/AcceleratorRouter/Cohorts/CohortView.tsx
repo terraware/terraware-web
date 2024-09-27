@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Grid, useTheme } from '@mui/material';
@@ -15,6 +15,7 @@ import { requestCohort } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { CohortModule } from 'src/types/Module';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import ModulesTable from '../Modules/ModulesTable';
@@ -30,14 +31,26 @@ const CohortView = () => {
   const pathParams = useParams<{ cohortId: string }>();
   const cohortId = Number(pathParams.cohortId);
   const cohort = useAppSelector(selectCohort(cohortId));
-  const { modules, listModules } = useListModules();
+  const { modules, listModules, listDeliverables, deliverablesByModuleId } = useListModules();
+  const [modulesWithDeliverablesQuantity, setModulesWithDeliverablesQuantity] = useState<CohortModule[]>();
 
   useEffect(() => {
     if (cohortId) {
+      void listDeliverables();
       void dispatch(requestCohort({ cohortId }));
       void listModules({ cohortId });
     }
   }, [cohortId, dispatch]);
+
+  useEffect(() => {
+    if (deliverablesByModuleId) {
+      const newModules = modules?.map((md) => {
+        return { ...md, deliverablesQuantity: deliverablesByModuleId[md.id]?.length || 0 };
+      });
+
+      setModulesWithDeliverablesQuantity(newModules);
+    }
+  }, [modules, deliverablesByModuleId]);
 
   const goToEditCohort = useCallback(() => {
     if (pathParams.cohortId) {
@@ -84,7 +97,11 @@ const CohortView = () => {
           <ProjectFieldDisplay label={strings.PHASE} value={cohort.phase} rightBorder={true} />
         </Grid>
         <Box paddingLeft={2} paddingRight={2}>
-          <ModulesTable modules={modules} />
+          <ModulesTable
+            modules={modulesWithDeliverablesQuantity}
+            deliverablesByModuleId={deliverablesByModuleId}
+            cohortId={cohortId}
+          />
         </Box>
       </Card>
     </Page>

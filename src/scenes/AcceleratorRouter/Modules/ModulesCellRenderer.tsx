@@ -6,16 +6,17 @@ import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 
 export default function ModulesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
-  const { column, row, index, value, onRowClick } = props;
+  const { column, row, index, value, onRowClick, reloadData } = props;
 
   if (column.key === 'name') {
-    if (!onRowClick) {
+    // if it is not edit mode
+    if (!reloadData) {
       return (
         <CellRenderer
           index={index}
           column={column}
           value={
-            <Link fontSize='16px' target='_blank' to={APP_PATHS.ADMIN_MODULE.replace(':moduleId', row.id)}>
+            <Link fontSize='16px' target='_blank' to={APP_PATHS.ADMIN_MODULE.replace(':deliverableId', row.id)}>
               {value as React.ReactNode}
             </Link>
           }
@@ -27,7 +28,25 @@ export default function ModulesCellRenderer(props: RendererProps<TableRowType>):
   }
 
   if (column.key === 'title') {
-    if (onRowClick) {
+    if (reloadData && onRowClick) {
+      return (
+        <CellRenderer
+          index={index}
+          column={column}
+          value={
+            <Link fontSize='16px' target='_blank' onClick={() => onRowClick()}>
+              {value as React.ReactNode}
+            </Link>
+          }
+          row={row}
+        />
+      );
+    }
+    return <CellRenderer index={index} column={column} value={value} row={row} />;
+  }
+
+  if (column.key === 'deliverablesQuantity') {
+    if (onRowClick && value) {
       return (
         <CellRenderer
           index={index}

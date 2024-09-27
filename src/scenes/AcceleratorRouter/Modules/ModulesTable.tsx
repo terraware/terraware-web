@@ -5,18 +5,22 @@ import { Button, TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
 import strings from 'src/strings';
-import { CohortModule, Module } from 'src/types/Module';
+import { ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
+import { CohortModule } from 'src/types/Module';
 
 import AddModuleModal from './AddModuleModal';
+import ModuleDeliverablesModal from './ModuleDeliverablesModal';
 import ModulesCellRenderer from './ModulesCellRenderer';
 
 interface ModulesTableProps {
-  modules?: Module[];
+  modules?: CohortModule[];
   editing?: boolean;
   modulesToAdd?: CohortModule[];
   setModulesToAdd?: React.Dispatch<React.SetStateAction<CohortModule[] | undefined>>;
   modulesToDelete?: CohortModule[];
   setModulesToDelete?: React.Dispatch<React.SetStateAction<CohortModule[] | undefined>>;
+  deliverablesByModuleId?: Record<number, ListDeliverablesElementWithOverdue[]>;
+  cohortId?: number;
 }
 
 const columns = (): TableColumnType[] => [
@@ -37,13 +41,27 @@ const columns = (): TableColumnType[] => [
   },
   { key: 'startDate', name: strings.START_DATE, type: 'date' },
   { key: 'endDate', name: strings.END_DATE, type: 'date' },
-  { key: 'deliverables', name: strings.DELIVERABLES, type: 'string' },
+];
+
+const viewColumns = (): TableColumnType[] => [
+  ...columns(),
+  { key: 'deliverablesQuantity', name: strings.DELIVERABLES, type: 'string' },
 ];
 
 export default function ModulesTable(props: ModulesTableProps): JSX.Element {
-  const { modules, editing, modulesToAdd, setModulesToAdd, modulesToDelete, setModulesToDelete } = props;
+  const {
+    modules,
+    editing,
+    modulesToAdd,
+    setModulesToAdd,
+    modulesToDelete,
+    setModulesToDelete,
+    deliverablesByModuleId,
+    cohortId,
+  } = props;
   const theme = useTheme();
   const [addModuleModalOpened, setAddModuleModalOpened] = useState(false);
+  const [deliverablesModalOpened, setDeliverablesModalOpened] = useState(false);
   const [prevModules, setPrevModules] = useState<CohortModule[]>(modules || []);
   const [selectedRows, setSelectedRows] = useState<CohortModule[]>([]);
   const [moduleToEdit, setModuleToEdit] = useState<CohortModule>();
@@ -126,9 +144,17 @@ export default function ModulesTable(props: ModulesTableProps): JSX.Element {
     }
   };
 
+  const onViewClick = (clickedModule: CohortModule, fromColumn?: string) => {
+    if (fromColumn === 'deliverablesQuantity') {
+      setModuleToEdit(clickedModule);
+      setDeliverablesModalOpened(true);
+    }
+  };
+
   const onCloseModalHandler = () => {
     setModuleToEdit(undefined);
     setAddModuleModalOpened(false);
+    setDeliverablesModalOpened(false);
   };
 
   const onModalSaveHandler = (cohortModule: CohortModule) => {
@@ -157,6 +183,16 @@ export default function ModulesTable(props: ModulesTableProps): JSX.Element {
 
   return (
     <>
+      {deliverablesModalOpened && (
+        <ModuleDeliverablesModal
+          onClose={onCloseModalHandler}
+          deliverables={
+            deliverablesByModuleId && moduleToEdit && moduleToEdit.id ? deliverablesByModuleId[moduleToEdit.id] : []
+          }
+          moduleToEdit={moduleToEdit}
+          cohortId={cohortId}
+        />
+      )}
       {addModuleModalOpened && (
         <AddModuleModal onClose={onCloseModalHandler} onSave={onModalSaveHandler} moduleToEdit={moduleToEdit} />
       )}
@@ -189,7 +225,7 @@ export default function ModulesTable(props: ModulesTableProps): JSX.Element {
           ) : (
             <Table
               id='modules-table'
-              columns={columns}
+              columns={editing ? columns : viewColumns}
               rows={allModules}
               orderBy='name'
               showCheckbox={editing}
@@ -206,8 +242,10 @@ export default function ModulesTable(props: ModulesTableProps): JSX.Element {
               ]}
               Renderer={ModulesCellRenderer}
               controlledOnSelect={true}
-              onSelect={editing ? onEditHandler : undefined}
+              onSelect={editing ? onEditHandler : onViewClick}
               isClickable={() => false}
+              // this function is sent to differentiate if editing or not in the Renderer
+              reloadData={editing ? () => true : undefined}
             />
           )}
         </Grid>

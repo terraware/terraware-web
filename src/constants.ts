@@ -135,4 +135,5 @@ export enum APP_PATHS {
   NURSERY_WITHDRAWALS_DETAILS = '/nursery/withdrawals/:withdrawalId',
   NURSERY_REASSIGNMENT = '/nursery/reassignment/:deliveryId',
   ADMIN_MODULE = '/admin/modules/:moduleId',
+  ADMIN_COHORT_DELIVERABLE = '/admin/cohorts/:cohortId/deliverables/:deliverableId',
 }
