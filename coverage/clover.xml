@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1727450614044" clover="3.2.0">
-  <project timestamp="1727450614044" name="All files">
-    <metrics statements="25186" coveredstatements="1042" conditionals="16491" coveredconditionals="279" methods="7741" coveredmethods="176" elements="49418" coveredelements="1497" complexity="0" loc="25186" ncloc="25186" packages="236" files="1090" classes="1090"/>
+<coverage generated="1727503908113" clover="3.2.0">
+  <project timestamp="1727503908114" name="All files">
+    <metrics statements="25189" coveredstatements="1042" conditionals="16493" coveredconditionals="279" methods="7741" coveredmethods="176" elements="49423" coveredelements="1497" complexity="0" loc="25189" ncloc="25189" packages="236" files="1090" classes="1090"/>
     <package name="src">
-      <metrics statements="172" coveredstatements="0" conditionals="122" coveredconditionals="0" methods="39" coveredmethods="0"/>
+      <metrics statements="175" coveredstatements="0" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
         <metrics statements="28" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="24" count="0" type="stmt"/>
@@ -58,12 +58,15 @@
         <line num="28" count="0" type="stmt"/>
       </file>
       <file name="ErrorBoundary.tsx" path="/home/runner/work/terraware-web/terraware-web/src/ErrorBoundary.tsx">
-        <metrics statements="5" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="13" count="0" type="stmt"/>
-        <line num="14" count="0" type="stmt"/>
+        <metrics statements="8" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="15" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
       </file>
       <file name="ErrorContent.tsx" path="/home/runner/work/terraware-web/terraware-web/src/ErrorContent.tsx">
         <metrics statements="6" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
