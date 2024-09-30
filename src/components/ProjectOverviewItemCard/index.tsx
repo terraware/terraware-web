@@ -37,7 +37,7 @@ const ProjectOverviewItemCard = <T extends { id: number; projectId?: number }>({
 
   return (
     <OverviewItemCard
-      isEditable={userCanEdit && entityProject !== undefined}
+      isEditable={userCanEdit}
       handleEdit={() => setIsProjectAssignModalOpen(true)}
       title={strings.PROJECT}
       contents={
