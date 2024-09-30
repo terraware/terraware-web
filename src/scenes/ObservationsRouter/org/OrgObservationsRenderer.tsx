@@ -75,7 +75,7 @@ const OrgObservationsRenderer =
     }
 
     if (column.key === 'actionsMenu') {
-      const exportDisabled = row.state !== 'InProgress';
+      const exportDisabled = row.state === 'Upcoming';
       const tableMenuItem = (
         <TableRowPopupMenu
           menuItems={[
