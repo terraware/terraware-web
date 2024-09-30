@@ -111,6 +111,7 @@ export default function OrgObservationsListView({
           fields: [
             'startDate',
             'plantingSite_name',
+            'observationPlots_isPermanent',
             'observationPlots_monitoringPlot_plantingSubzone_plantingZone_name',
             'observationPlots_monitoringPlot_plantingSubzone_name',
             'observationPlots_monitoringPlot_fullName',
