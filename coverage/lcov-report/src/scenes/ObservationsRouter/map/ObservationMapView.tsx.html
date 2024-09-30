@@ -253,7 +253,10 @@
 <a name='L188'></a><a href='#L188'>188</a>
 <a name='L189'></a><a href='#L189'>189</a>
 <a name='L190'></a><a href='#L190'>190</a>
-<a name='L191'></a><a href='#L191'>191</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -362,11 +365,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -376,17 +374,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -401,6 +394,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -443,7 +449,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useMemo, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useState } from 'react';
 &nbsp;
 import { Box } from '@mui/material';
 &nbsp;
@@ -550,34 +556,37 @@ export default function <span class="fstat-no" title="function not covered" >Obs
 &nbsp;
   const hasSearchCriteria = <span class="cstat-no" title="statement not covered" >search.trim() || filterZoneNames.length;</span>
 &nbsp;
-  const contextRenderer = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>roperties: MapSourceProperties): JSX.Element | null =&gt; {</span>
-    let entity: any;
-<span class="cstat-no" title="statement not covered" >    if (properties.type === 'site') {</span>
-<span class="cstat-no" title="statement not covered" >      entity = selectedObservation;</span>
-    } else <span class="cstat-no" title="statement not covered" >if (properties.type === 'zone') {</span>
-<span class="cstat-no" title="statement not covered" >      entity = selectedObservation?.plantingZones?.find(<span class="fstat-no" title="function not covered" >(z</span>) =&gt; <span class="cstat-no" title="statement not covered" >z.plantingZoneId === properties.id)</span>;</span>
-    } else {
-      // monitoring plot
-<span class="cstat-no" title="statement not covered" >      entity = selectedObservation?.plantingZones</span>
-        ?.flatMap(<span class="fstat-no" title="function not covered" >(z</span>) =&gt; <span class="cstat-no" title="statement not covered" >z.plantingSubzones)</span>
-        ?.flatMap(<span class="fstat-no" title="function not covered" >(s</span>z) =&gt; <span class="cstat-no" title="statement not covered" >sz.monitoringPlots)</span>
-        ?.find(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; <span class="cstat-no" title="statement not covered" >p.monitoringPlotId === properties.id)</span>;
-    }
+  const contextRenderer = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (p</span>roperties: MapSourceProperties): JSX.Element | null =&gt; {
+      let entity: any;
+<span class="cstat-no" title="statement not covered" >      if (properties.type === 'site') {</span>
+<span class="cstat-no" title="statement not covered" >        entity = selectedObservation;</span>
+      } else <span class="cstat-no" title="statement not covered" >if (properties.type === 'zone') {</span>
+<span class="cstat-no" title="statement not covered" >        entity = selectedObservation?.plantingZones?.find(<span class="fstat-no" title="function not covered" >(z</span>) =&gt; <span class="cstat-no" title="statement not covered" >z.plantingZoneId === properties.id)</span>;</span>
+      } else {
+        // monitoring plot
+<span class="cstat-no" title="statement not covered" >        entity = selectedObservation?.plantingZones</span>
+          ?.flatMap(<span class="fstat-no" title="function not covered" >(z</span>) =&gt; <span class="cstat-no" title="statement not covered" >z.plantingSubzones)</span>
+          ?.flatMap(<span class="fstat-no" title="function not covered" >(s</span>z) =&gt; <span class="cstat-no" title="statement not covered" >sz.monitoringPlots)</span>
+          ?.find(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; <span class="cstat-no" title="statement not covered" >p.monitoringPlotId === properties.id)</span>;
+      }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (!entity) {</span>
-<span class="cstat-no" title="statement not covered" >      return null;</span>
-    }
+<span class="cstat-no" title="statement not covered" >      if (!entity) {</span>
+<span class="cstat-no" title="statement not covered" >        return null;</span>
+      }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return (</span>
-      &lt;TooltipContents
-        monitoringPlot={entity}
-        observationId={selectedObservation?.observationId}
-        observationState={selectedObservation?.state}
-        plantingSiteId={selectedPlantingSite.id}
-        title={`${properties.name}${properties.type === 'temporaryPlot' ? ` (${strings.TEMPORARY})` : ''}`}
-      /&gt;
-    );
-  };
+<span class="cstat-no" title="statement not covered" >      return (</span>
+        &lt;TooltipContents
+          monitoringPlot={entity}
+          observationId={selectedObservation?.observationId}
+          observationState={selectedObservation?.state}
+          plantingSiteId={selectedPlantingSite.id}
+          title={`${properties.name}${properties.type === 'temporaryPlot' ? ` (${strings.TEMPORARY})` : ''}`}
+        /&gt;
+      );
+    },
+    [selectedObservation, selectedPlantingSite]
+  );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Box display='flex' flexDirection='column' flexGrow={1}&gt;
@@ -640,7 +649,7 @@ export default function <span class="fstat-no" title="function not covered" >Obs
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-09-30T12:34:17.305Z
+                at 2024-09-30T19:04:30.541Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
