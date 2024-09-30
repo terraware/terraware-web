@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Message } from '@terraware/web-components';
 
 import Metadata from 'src/components/DeliverableView/Metadata';
 import DeliverableVariableDetailsInput from 'src/components/DocumentProducer/DeliverableVariableDetailsInput';
@@ -104,6 +105,11 @@ const QuestionBox = ({
         </Grid>
 
         <Grid item xs={12}>
+          {!!firstVariableValue?.feedback && firstVariableValue?.status === 'Rejected' && (
+            <Box marginBottom={2}>
+              <Message body={firstVariableValue.feedback} priority='critical' type='page' />
+            </Box>
+          )}
           <DeliverableVariableDetailsInput
             values={pendingValues || variable.values}
             setCellValues={setCellValues}
