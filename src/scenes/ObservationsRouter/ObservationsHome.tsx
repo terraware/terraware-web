@@ -11,7 +11,7 @@ import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
-import { selectPlantingSiteObservationsResults } from 'src/redux/features/observations/observationsSelectors';
+import { selectObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import {
   selectObservationSchedulableSites,
   selectUpcomingObservations,
@@ -40,9 +40,19 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   const [plantsSitePreferences, setPlantsSitePreferences] = useState<Record<string, unknown>>();
   const [view, setView] = useState<View>();
   const plantingSites = useAppSelector(selectPlantingSites);
-  const observationsResults = useAppSelector((state) =>
-    selectPlantingSiteObservationsResults(state, selectedPlantingSite?.id ?? -1, ['Completed', 'InProgress', 'Overdue'])
-  );
+
+  const allObservationsResults = useAppSelector(selectObservationsResults);
+  const observationsResults = useMemo(() => {
+    if (!allObservationsResults || !selectedPlantingSite?.id) {
+      return [];
+    }
+
+    return allObservationsResults?.filter((observationResult) => {
+      const matchesSite = observationResult.plantingSiteId === selectedPlantingSite.id;
+      const matchesState = ['Completed', 'Overdue', 'InProgress'].indexOf(observationResult.state) !== -1;
+      return matchesSite && matchesState;
+    });
+  }, [allObservationsResults, selectedPlantingSite]);
 
   // get upcoming observations for notifications
   const upcomingObservations = useAppSelector(selectUpcomingObservations);
