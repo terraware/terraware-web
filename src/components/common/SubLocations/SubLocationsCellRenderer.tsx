@@ -49,8 +49,11 @@ export default function SubLocationsCellRenderer({
     };
 
     if (column.key === 'activeAccessions' || column.key === 'activeBatches') {
-      const activeDataStr = numericFormatter.format(value as number);
-      const data = editMode ? activeDataStr : createLinkToData(row.name, activeDataStr);
+      const activeDataStr = value ? numericFormatter.format(value as number) : undefined;
+      let data: string | JSX.Element = '0';
+      if (activeDataStr) {
+        data = editMode ? activeDataStr : createLinkToData(row.name, activeDataStr);
+      }
 
       return <CellRenderer {...props} value={data} />;
     }
