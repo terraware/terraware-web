@@ -225,14 +225,14 @@ export default function ModulesTable(props: ModulesTableProps): JSX.Element {
           </Box>
         </Grid>
         <Grid item xs={12}>
-          {!modules && !editing ? (
+          {(!modules || modules.length === 0) && !editing ? (
             <Typography>{strings.EDIT_COHORT_TO_ADD_MODULES}</Typography>
           ) : (
             <Table
               id='modules-table'
               columns={editing ? columns : viewColumns}
               rows={allModules}
-              orderBy='name'
+              orderBy='startDate'
               showCheckbox={editing}
               showTopBar={editing}
               selectedRows={selectedRows}

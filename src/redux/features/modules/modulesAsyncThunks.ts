@@ -119,19 +119,12 @@ export const requestDeleteManyCohortModule = createAsyncThunk(
     { rejectWithValue }
   ) => {
     const { modulesId, cohortId } = request;
-    let allSucceeded = true;
 
     const promises = modulesId.map((moduleId) => CohortModuleService.deleteOne(moduleId, cohortId));
 
     const results = await Promise.all(promises);
 
-    results.forEach((res) => {
-      if (!res.requestSucceeded) {
-        allSucceeded = false;
-      }
-    });
-
-    if (allSucceeded) {
+    if (results.every((result) => result && result.requestSucceeded)) {
       return true;
     }
     return rejectWithValue(strings.GENERIC_ERROR);
@@ -176,22 +169,14 @@ export const requestUpdateManyCohortModule = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-    let allSucceeded = true;
+    const results = await Promise.all(
+      requests.map((request) => {
+        const { moduleId, ...entity } = request;
+        return CohortModuleService.update({ moduleId: moduleId, cohortId, entity });
+      })
+    );
 
-    const promises = requests.map((request) => {
-      const { moduleId, ...entity } = request;
-      return CohortModuleService.update({ moduleId: moduleId, cohortId, entity });
-    });
-
-    const results = await Promise.all(promises);
-
-    results.forEach((res) => {
-      if (!res.requestSucceeded) {
-        allSucceeded = false;
-      }
-    });
-
-    if (allSucceeded) {
+    if (results.every((result) => result && result.requestSucceeded)) {
       return true;
     }
     return rejectWithValue(strings.GENERIC_ERROR);

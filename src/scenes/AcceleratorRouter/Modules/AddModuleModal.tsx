@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
 import { DatePicker, SelectT } from '@terraware/web-components';
@@ -8,7 +8,6 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import useListModules from 'src/hooks/useListModules';
-import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
 import { CohortModule, Module } from 'src/types/Module';
 import useForm from 'src/utils/useForm';
@@ -23,15 +22,10 @@ export interface AddModuleModalProps {
 export default function AddModuleModal(props: AddModuleModalProps): JSX.Element {
   const { onClose, onSave, moduleToEdit, existingModules } = props;
 
-  const dispatch = useAppDispatch();
   const theme = useTheme();
 
-  const { modules, listModules } = useListModules();
+  const { modules } = useListModules();
   const [record, setRecord, onChange] = useForm<CohortModule>(moduleToEdit || {});
-
-  useEffect(() => {
-    void listModules({});
-  }, [dispatch]);
 
   const onChangeModule = (moduleSelected: CohortModule) => {
     setRecord((prev) => {
