@@ -11,7 +11,7 @@ import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import { AssignProjectRequestPayload } from 'src/services/ProjectsService';
 import strings from 'src/strings';
-import { isContributor } from 'src/utils/organization';
+import { isMember } from 'src/utils/organization';
 
 interface OverviewItemCardProjectProps<T extends { id: number; projectId?: number }> {
   entity: T;
@@ -27,7 +27,7 @@ const ProjectOverviewItemCard = <T extends { id: number; projectId?: number }>({
   onUnAssign,
 }: OverviewItemCardProjectProps<T>) => {
   const { selectedOrganization } = useOrganization();
-  const userCanEdit = !isContributor(selectedOrganization);
+  const userCanEdit = isMember(selectedOrganization);
   const theme = useTheme();
 
   const projects = useAppSelector(selectProjects);
