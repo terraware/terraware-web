@@ -49,7 +49,7 @@ const useListModules = () => {
           if (
             _deliverablesByModuleId[moduleId].every((existingDeliverable) => existingDeliverable.id !== _deliverable.id)
           ) {
-            [..._deliverablesByModuleId[moduleId], _deliverable];
+            _deliverablesByModuleId[moduleId] = [..._deliverablesByModuleId[moduleId], _deliverable];
           }
         } else {
           _deliverablesByModuleId[moduleId] = [_deliverable];
