@@ -40,7 +40,7 @@ const useListModules = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (listModulesResponse && allDeliverablesResponse.status === 'success') {
+    if (allDeliverablesResponse && allDeliverablesResponse.status === 'success') {
       const deliverables = allDeliverablesResponse.data;
       const _deliverablesByModuleId: Record<number, ListDeliverablesElementWithOverdue[]> = {};
       deliverables?.forEach((_deliverable) => {

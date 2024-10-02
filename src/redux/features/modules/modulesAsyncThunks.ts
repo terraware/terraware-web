@@ -90,7 +90,7 @@ export const requestListModuleDeliverables = createAsyncThunk(
 );
 
 export const requestDeleteCohortModule = createAsyncThunk(
-  'cohort-modules/delete',
+  'cohortModules/delete',
   async (
     request: {
       moduleId: number;
@@ -110,7 +110,7 @@ export const requestDeleteCohortModule = createAsyncThunk(
 );
 
 export const requestDeleteManyCohortModule = createAsyncThunk(
-  'cohort-modules/delete-many',
+  'cohortModules/deleteMany',
   async (
     request: {
       modulesId: number[];
@@ -132,7 +132,7 @@ export const requestDeleteManyCohortModule = createAsyncThunk(
 );
 
 export const requestUpdateCohortModule = createAsyncThunk(
-  'cohort-modules/update',
+  'cohortModules/update',
   async (
     {
       moduleId,
@@ -156,7 +156,7 @@ export const requestUpdateCohortModule = createAsyncThunk(
 );
 
 export const requestUpdateManyCohortModule = createAsyncThunk(
-  'cohort-modules/update',
+  'cohortModules/updateMany',
   async (
     {
       cohortId,
