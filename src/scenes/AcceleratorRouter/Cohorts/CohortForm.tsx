@@ -1,27 +1,26 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { Container, Grid, Typography, useTheme } from '@mui/material';
+import { Container, Grid, useTheme } from '@mui/material';
 import { Dropdown, Textfield } from '@terraware/web-components';
 
-import Link from 'src/components/common/Link';
 import PageForm from 'src/components/common/PageForm';
-import { APP_PATHS } from 'src/constants';
+import useListModules from 'src/hooks/useListModules';
 import { useLocalization } from 'src/providers/hooks';
 import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
-import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
-import { getLongDate } from 'src/utils/dateFormatter';
+import { CohortModule } from 'src/types/Module';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { getUserDisplayName } from 'src/utils/user';
+
+import ModulesTable from '../Modules/ModulesTable';
 
 type CohortFormProps<T extends CreateCohortRequestPayload | UpdateCohortRequestPayload> = {
   busy?: boolean;
   cohortId?: number;
   onCancel: () => void;
-  onSave: (cohort: T) => void;
+  onSave: (cohort: T, modulesToAdd?: CohortModule[], modulesToDelete?: CohortModule[]) => void;
   record: T;
 };
 
@@ -39,8 +38,17 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
   const [validateFields, setValidateFields] = useState<boolean>(false);
 
   const cohort = useAppSelector(selectCohort(cohortId));
-  const createdByUser = useAppSelector(selectUser(cohort?.createdBy));
-  const modifiedByUser = useAppSelector(selectUser(cohort?.modifiedBy));
+
+  const { modules, listModules } = useListModules();
+
+  const [modulesToAdd, setModulesToAdd] = useState<CohortModule[]>();
+  const [modulesToDelete, setModulesToDelete] = useState<CohortModule[]>();
+
+  useEffect(() => {
+    if (cohortId) {
+      void listModules({ cohortId });
+    }
+  }, [cohortId, dispatch]);
 
   const currentPhaseDropdownOptions = useMemo(() => {
     if (!activeLocale) {
@@ -80,9 +88,13 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
       return;
     }
 
-    onSave({
-      ...localRecord,
-    });
+    onSave(
+      {
+        ...localRecord,
+      },
+      modulesToAdd,
+      modulesToDelete
+    );
   };
 
   useEffect(() => {
@@ -150,51 +162,16 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
               />
             </Grid>
           </Grid>
-
-          {cohort && createdByUser && modifiedByUser && (
-            <Grid container marginTop={0} spacing={theme.spacing(3)} width={'100%'}>
-              <Grid item xs={isMobile ? 12 : 4} sx={{ marginTop: theme.spacing(2) }}>
-                <Typography>
-                  {strings.CREATED_ON}{' '}
-                  <Typography component='span' fontWeight={500}>
-                    {getLongDate(cohort.createdTime, activeLocale)}
-                  </Typography>
-                </Typography>
-                <Typography>
-                  {strings.CREATED_BY}
-                  {` `}
-                  <Link
-                    fontSize={'16px'}
-                    fontWeight={400}
-                    lineHeight={'24px'}
-                    to={APP_PATHS.PEOPLE_VIEW.replace(':personId', `${cohort.createdBy}`)}
-                  >
-                    {getUserDisplayName(createdByUser)}
-                  </Link>
-                </Typography>
-              </Grid>
-              <Grid item xs={isMobile ? 12 : 4} sx={{ marginTop: theme.spacing(2) }}>
-                <Typography>
-                  {strings.LAST_MODIFIED_ON}{' '}
-                  <Typography component='span' fontWeight={500}>
-                    {getLongDate(cohort.modifiedTime, activeLocale)}
-                  </Typography>
-                </Typography>
-                <Typography>
-                  {strings.LAST_MODIFIED_BY}
-                  {` `}
-                  <Link
-                    fontSize={'16px'}
-                    fontWeight={400}
-                    lineHeight={'24px'}
-                    to={APP_PATHS.PEOPLE_VIEW.replace(':personId', `${cohort.modifiedBy}`)}
-                  >
-                    {getUserDisplayName(modifiedByUser)}
-                  </Link>
-                </Typography>
-              </Grid>
-            </Grid>
-          )}
+          <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+            <ModulesTable
+              modules={modules}
+              editing={true}
+              modulesToAdd={modulesToAdd}
+              setModulesToAdd={setModulesToAdd}
+              modulesToDelete={modulesToDelete}
+              setModulesToDelete={setModulesToDelete}
+            />
+          </Grid>
         </Grid>
       </Container>
     </PageForm>

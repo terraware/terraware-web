@@ -2,14 +2,17 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import Page from 'src/components/Page';
-import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
-import useListModules from 'src/hooks/useListModules';
 import { requestCohort, requestCohortUpdate } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohort, selectCohortRequest } from 'src/redux/features/cohorts/cohortsSelectors';
+import {
+  requestDeleteManyCohortModule,
+  requestUpdateManyCohortModule,
+} from 'src/redux/features/modules/modulesAsyncThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { UpdateCohortRequestPayload } from 'src/types/Cohort';
+import { CohortModule } from 'src/types/Module';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import CohortForm from './CohortForm';
@@ -26,15 +29,6 @@ export default function CohortEditView(): JSX.Element {
   const [requestId, setRequestId] = useState<string>('');
   const cohortUpdateRequest = useAppSelector((state) => selectCohortRequest(state, requestId));
 
-  const { modules, listModules } = useListModules();
-
-  useEffect(() => {
-    if (cohortId) {
-      void dispatch(requestCohort({ cohortId }));
-      void listModules({ cohortId });
-    }
-  }, [cohortId, dispatch]);
-
   useEffect(() => {
     if (!cohort) {
       dispatch(requestCohort({ cohortId }));
@@ -42,9 +36,22 @@ export default function CohortEditView(): JSX.Element {
   }, [cohortId, cohort, dispatch]);
 
   const saveCohort = useCallback(
-    (_cohort: UpdateCohortRequestPayload) => {
+    (_cohort: UpdateCohortRequestPayload, modulesToAdd?: CohortModule[], modulesToDelete?: CohortModule[]) => {
       const dispatched = dispatch(requestCohortUpdate({ cohortId, cohort: _cohort }));
       setRequestId(dispatched.requestId);
+      if (modulesToAdd) {
+        const requests = modulesToAdd.map((mta) => ({
+          moduleId: mta.id || -1,
+          title: mta.title || '',
+          startDate: mta.startDate || '',
+          endDate: mta.endDate || '',
+        }));
+        dispatch(requestUpdateManyCohortModule({ cohortId, requests }));
+      }
+      if (modulesToDelete) {
+        const idsToDelete = modulesToDelete.map((mtd) => mtd.id || -1);
+        dispatch(requestDeleteManyCohortModule({ cohortId, modulesId: idsToDelete }));
+      }
     },
     [cohortId, dispatch]
   );
@@ -72,12 +79,7 @@ export default function CohortEditView(): JSX.Element {
   }
 
   return (
-    <PageWithModuleTimeline
-      title={strings.EDIT_COHORT}
-      contentStyle={{ display: 'flex', flexDirection: 'column' }}
-      modules={modules ?? []}
-      cohortPhase={cohort.phase}
-    >
+    <Page title={strings.EDIT_COHORT} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
       <CohortForm<UpdateCohortRequestPayload>
         busy={cohortUpdateRequest?.status === 'pending'}
         cohortId={cohortId}
@@ -85,6 +87,6 @@ export default function CohortEditView(): JSX.Element {
         onSave={saveCohort}
         record={cohort}
       />
-    </PageWithModuleTimeline>
+    </Page>
   );
 }

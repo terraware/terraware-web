@@ -1,12 +1,12 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 
 import { Crumb } from 'src/components/BreadCrumbs';
+import Page from 'src/components/Page';
 import ProjectFieldDisplay from 'src/components/ProjectField/Display';
 import Card from 'src/components/common/Card';
-import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import useListModules from 'src/hooks/useListModules';
@@ -15,7 +15,10 @@ import { requestCohort } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { CohortModule } from 'src/types/Module';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+
+import ModulesTable from '../Modules/ModulesTable';
 
 const CohortView = () => {
   const dispatch = useAppDispatch();
@@ -28,14 +31,26 @@ const CohortView = () => {
   const pathParams = useParams<{ cohortId: string }>();
   const cohortId = Number(pathParams.cohortId);
   const cohort = useAppSelector(selectCohort(cohortId));
-  const { modules, listModules } = useListModules();
+  const { modules, listModules, listDeliverables, deliverablesByModuleId } = useListModules();
+  const [modulesWithDeliverablesQuantity, setModulesWithDeliverablesQuantity] = useState<CohortModule[]>();
 
   useEffect(() => {
     if (cohortId) {
+      void listDeliverables();
       void dispatch(requestCohort({ cohortId }));
       void listModules({ cohortId });
     }
   }, [cohortId, dispatch]);
+
+  useEffect(() => {
+    if (deliverablesByModuleId) {
+      const newModules = modules?.map((md) => {
+        return { ...md, deliverablesQuantity: deliverablesByModuleId[md.id]?.length || 0 };
+      });
+
+      setModulesWithDeliverablesQuantity(newModules);
+    }
+  }, [modules, deliverablesByModuleId]);
 
   const goToEditCohort = useCallback(() => {
     if (pathParams.cohortId) {
@@ -67,14 +82,7 @@ const CohortView = () => {
   }
 
   return (
-    <PageWithModuleTimeline
-      crumbs={crumbs}
-      hierarchicalCrumbs={false}
-      rightComponent={rightComponent}
-      title={cohort.name || ''}
-      modules={modules ?? []}
-      cohortPhase={cohort.phase}
-    >
+    <Page crumbs={crumbs} title={cohort?.name || ''} rightComponent={rightComponent}>
       <Card
         style={{
           display: 'flex',
@@ -88,8 +96,15 @@ const CohortView = () => {
           <ProjectFieldDisplay label={strings.COHORT_NAME} value={cohort.name} rightBorder={true} />
           <ProjectFieldDisplay label={strings.PHASE} value={cohort.phase} rightBorder={true} />
         </Grid>
+        <Box paddingLeft={2} paddingRight={2}>
+          <ModulesTable
+            modules={modulesWithDeliverablesQuantity}
+            deliverablesByModuleId={deliverablesByModuleId}
+            cohortId={cohortId}
+          />
+        </Box>
       </Card>
-    </PageWithModuleTimeline>
+    </Page>
   );
 };
 
