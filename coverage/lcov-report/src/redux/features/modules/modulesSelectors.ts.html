@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -73,7 +73,19 @@
 <a name='L8'></a><a href='#L8'>8</a>
 <a name='L9'></a><a href='#L9'>9</a>
 <a name='L10'></a><a href='#L10'>10</a>
-<a name='L11'></a><a href='#L11'>11</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -82,6 +94,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { RootState } from 'src/redux/rootReducer';
 &nbsp;
@@ -93,6 +117,18 @@ export const selectModuleDeliverables = <span class="cstat-no" title="statement 
 export const selectModuleList = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.moduleList[requestId];</span></span></span>
 &nbsp;
 export const selectModuleProjects = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.moduleProjects[requestId];</span></span></span>
+&nbsp;
+export const selectDeleteCohortModule = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
+<span class="cstat-no" title="statement not covered" >  state.cohortModuleDelete[requestId];</span>
+&nbsp;
+export const selectUpdateCohortModule = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
+<span class="cstat-no" title="statement not covered" >  state.cohortModuleUpdate[requestId];</span>
+&nbsp;
+export const selectDeleteManyCohortModule = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
+<span class="cstat-no" title="statement not covered" >  state.cohortModuleDeleteMany[requestId];</span>
+&nbsp;
+export const selectUpdateManyCohortModule = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
+<span class="cstat-no" title="statement not covered" >  state.cohortModuleUpdateMany[requestId];</span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -100,7 +136,7 @@ export const selectModuleProjects = <span class="cstat-no" title="statement not 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-01T18:58:49.826Z
+                at 2024-10-02T17:39:20.998Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/33</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
@@ -153,7 +153,12 @@
 <a name='L88'></a><a href='#L88'>88</a>
 <a name='L89'></a><a href='#L89'>89</a>
 <a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -180,15 +185,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -200,6 +196,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -227,11 +236,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -247,14 +251,17 @@
 import { useNavigate, useParams } from 'react-router-dom';
 &nbsp;
 import Page from 'src/components/Page';
-import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
-import useListModules from 'src/hooks/useListModules';
 import { requestCohort, requestCohortUpdate } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohort, selectCohortRequest } from 'src/redux/features/cohorts/cohortsSelectors';
+import {
+  requestDeleteManyCohortModule,
+  requestUpdateManyCohortModule,
+} from 'src/redux/features/modules/modulesAsyncThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { UpdateCohortRequestPayload } from 'src/types/Cohort';
+import { CohortModule } from 'src/types/Module';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
 import CohortForm from './CohortForm';
@@ -271,15 +278,6 @@ export default function <span class="fstat-no" title="function not covered" >Coh
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const cohortUpdateRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectCohortRequest(state, requestId))</span>;</span>
 &nbsp;
-  const { modules, listModules } = <span class="cstat-no" title="statement not covered" >useListModules();</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (cohortId) {</span>
-<span class="cstat-no" title="statement not covered" >      void dispatch(requestCohort({ cohortId }));</span>
-<span class="cstat-no" title="statement not covered" >      void listModules({ cohortId });</span>
-    }
-  }, [cohortId, dispatch]);
-&nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!cohort) {</span>
 <span class="cstat-no" title="statement not covered" >      dispatch(requestCohort({ cohortId }));</span>
@@ -287,9 +285,22 @@ export default function <span class="fstat-no" title="function not covered" >Coh
   }, [cohortId, cohort, dispatch]);
 &nbsp;
   const saveCohort = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (_</span>cohort: UpdateCohortRequestPayload) =&gt; {
+<span class="fstat-no" title="function not covered" >    (_</span>cohort: UpdateCohortRequestPayload, modulesToAdd?: CohortModule[], modulesToDelete?: CohortModule[]) =&gt; {
       const dispatched = <span class="cstat-no" title="statement not covered" >dispatch(requestCohortUpdate({ cohortId, cohort: _cohort }));</span>
 <span class="cstat-no" title="statement not covered" >      setRequestId(dispatched.requestId);</span>
+<span class="cstat-no" title="statement not covered" >      if (modulesToAdd) {</span>
+        const requests = <span class="cstat-no" title="statement not covered" >modulesToAdd.map(<span class="fstat-no" title="function not covered" >(m</span>ta) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+          moduleId: mta.id || -1,
+          title: mta.title || '',
+          startDate: mta.startDate || '',
+          endDate: mta.endDate || '',
+        }));
+<span class="cstat-no" title="statement not covered" >        dispatch(requestUpdateManyCohortModule({ cohortId, requests }));</span>
+      }
+<span class="cstat-no" title="statement not covered" >      if (modulesToDelete) {</span>
+        const idsToDelete = <span class="cstat-no" title="statement not covered" >modulesToDelete.map(<span class="fstat-no" title="function not covered" >(m</span>td) =&gt; <span class="cstat-no" title="statement not covered" >mtd.id || -1)</span>;</span>
+<span class="cstat-no" title="statement not covered" >        dispatch(requestDeleteManyCohortModule({ cohortId, modulesId: idsToDelete }));</span>
+      }
     },
     [cohortId, dispatch]
   );
@@ -317,12 +328,7 @@ export default function <span class="fstat-no" title="function not covered" >Coh
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;PageWithModuleTimeline
-      title={strings.EDIT_COHORT}
-      contentStyle={{ display: 'flex', flexDirection: 'column' }}
-      modules={modules ?? []}
-      cohortPhase={cohort.phase}
-    &gt;
+    &lt;Page title={strings.EDIT_COHORT} contentStyle={{ display: 'flex', flexDirection: 'column' }}&gt;
       &lt;CohortForm&lt;UpdateCohortRequestPayload&gt;
         busy={cohortUpdateRequest?.status === 'pending'}
         cohortId={cohortId}
@@ -330,7 +336,7 @@ export default function <span class="fstat-no" title="function not covered" >Coh
         onSave={saveCohort}
         record={cohort}
       /&gt;
-    &lt;/PageWithModuleTimeline&gt;
+    &lt;/Page&gt;
   );
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -340,7 +346,7 @@ export default function <span class="fstat-no" title="function not covered" >Coh
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-01T18:58:49.826Z
+                at 2024-10-02T17:39:20.998Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
