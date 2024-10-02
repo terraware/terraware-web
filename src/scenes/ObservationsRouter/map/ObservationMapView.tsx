@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
 
@@ -105,34 +105,37 @@ export default function ObservationMapView({
 
   const hasSearchCriteria = search.trim() || filterZoneNames.length;
 
-  const contextRenderer = (properties: MapSourceProperties): JSX.Element | null => {
-    let entity: any;
-    if (properties.type === 'site') {
-      entity = selectedObservation;
-    } else if (properties.type === 'zone') {
-      entity = selectedObservation?.plantingZones?.find((z) => z.plantingZoneId === properties.id);
-    } else {
-      // monitoring plot
-      entity = selectedObservation?.plantingZones
-        ?.flatMap((z) => z.plantingSubzones)
-        ?.flatMap((sz) => sz.monitoringPlots)
-        ?.find((p) => p.monitoringPlotId === properties.id);
-    }
+  const contextRenderer = useCallback(
+    (properties: MapSourceProperties): JSX.Element | null => {
+      let entity: any;
+      if (properties.type === 'site') {
+        entity = selectedObservation;
+      } else if (properties.type === 'zone') {
+        entity = selectedObservation?.plantingZones?.find((z) => z.plantingZoneId === properties.id);
+      } else {
+        // monitoring plot
+        entity = selectedObservation?.plantingZones
+          ?.flatMap((z) => z.plantingSubzones)
+          ?.flatMap((sz) => sz.monitoringPlots)
+          ?.find((p) => p.monitoringPlotId === properties.id);
+      }
 
-    if (!entity) {
-      return null;
-    }
+      if (!entity) {
+        return null;
+      }
 
-    return (
-      <TooltipContents
-        monitoringPlot={entity}
-        observationId={selectedObservation?.observationId}
-        observationState={selectedObservation?.state}
-        plantingSiteId={selectedPlantingSite.id}
-        title={`${properties.name}${properties.type === 'temporaryPlot' ? ` (${strings.TEMPORARY})` : ''}`}
-      />
-    );
-  };
+      return (
+        <TooltipContents
+          monitoringPlot={entity}
+          observationId={selectedObservation?.observationId}
+          observationState={selectedObservation?.state}
+          plantingSiteId={selectedPlantingSite.id}
+          title={`${properties.name}${properties.type === 'temporaryPlot' ? ` (${strings.TEMPORARY})` : ''}`}
+        />
+      );
+    },
+    [selectedObservation, selectedPlantingSite]
+  );
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>

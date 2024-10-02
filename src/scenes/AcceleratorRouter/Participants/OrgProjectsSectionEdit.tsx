@@ -82,14 +82,7 @@ const OrgProjectsSectionEdit = ({
   }, [section.projectId, projectOptions]);
 
   return (
-    <Grid
-      container
-      sx={{
-        borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-        paddingBottom: theme.spacing(3),
-      }}
-      spacing={2}
-    >
+    <Grid container spacing={2}>
       <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
         <Dropdown
           fullWidth={true}

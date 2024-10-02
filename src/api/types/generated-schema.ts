@@ -5198,6 +5198,8 @@ export interface components {
     UpdateVariableValuesRequestPayload: {
       /** @description List of operations to perform on the document's values. The operations are applied in order, and atomically: if any of them fail, none of them will be applied. */
       operations: (components["schemas"]["AppendValueOperationPayload"] | components["schemas"]["DeleteValueOperationPayload"] | components["schemas"]["ReplaceValuesOperationPayload"] | components["schemas"]["UpdateValueOperationPayload"])[];
+      /** @description Whether to update variable statuses. Defaults to true. Accelerator admins can bypass the status updates by setting the flag to false. */
+      updateStatuses?: boolean;
     };
     UpdateVariableWorkflowDetailsRequestPayload: {
       feedback?: string;

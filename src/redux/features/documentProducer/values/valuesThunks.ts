@@ -49,8 +49,8 @@ export const requestListSpecificVariablesValues = createAsyncThunk(
 
 export const requestUpdateVariableValues = createAsyncThunk(
   'updateVariableValues',
-  async ({ operations, projectId }: UpdateVariableValuesRequestWithProjectId, { rejectWithValue }) => {
-    const response = await ValueService.updateValue(projectId, operations);
+  async ({ operations, projectId, updateStatuses }: UpdateVariableValuesRequestWithProjectId, { rejectWithValue }) => {
+    const response = await ValueService.updateValue(projectId, operations, updateStatuses);
     if (response.requestSucceeded) {
       return Boolean(true);
     }

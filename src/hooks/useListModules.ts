@@ -23,8 +23,8 @@ const useListModules = () => {
     useState<Record<number, ListDeliverablesElementWithOverdue[]>>();
 
   const listModules = useCallback(
-    (request: ListModulesRequestParam) => {
-      const dispatched = dispatch(requestListModules(request));
+    (request?: ListModulesRequestParam) => {
+      const dispatched = dispatch(requestListModules(request || {}));
       setRequestId(dispatched.requestId);
     },
     [dispatch, setRequestId]
@@ -36,11 +36,11 @@ const useListModules = () => {
   }, [dispatch, setDeliverablesRequestId]);
 
   useEffect(() => {
-    listModules({});
+    listModules();
   }, [dispatch]);
 
   useEffect(() => {
-    if (listModulesResponse && allDeliverablesResponse.status === 'success') {
+    if (allDeliverablesResponse && allDeliverablesResponse.status === 'success') {
       const deliverables = allDeliverablesResponse.data;
       const _deliverablesByModuleId: Record<number, ListDeliverablesElementWithOverdue[]> = {};
       deliverables?.forEach((_deliverable) => {
@@ -49,7 +49,7 @@ const useListModules = () => {
           if (
             _deliverablesByModuleId[moduleId].every((existingDeliverable) => existingDeliverable.id !== _deliverable.id)
           ) {
-            [..._deliverablesByModuleId[moduleId], _deliverable];
+            _deliverablesByModuleId[moduleId] = [..._deliverablesByModuleId[moduleId], _deliverable];
           }
         } else {
           _deliverablesByModuleId[moduleId] = [_deliverable];

@@ -56,7 +56,7 @@ export default function ModuleDeliverablesModal(props: ModuleDeliverablesModalPr
         id='module-deliverables-table'
         columns={columns}
         rows={deliverables?.map((del) => ({ ...del, cohortId: cohortId })) || []}
-        orderBy='name'
+        orderBy='position'
         Renderer={ModuleDeliverablesCellRenderer}
       />
     </DialogBox>
