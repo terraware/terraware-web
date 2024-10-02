@@ -23,8 +23,8 @@ const useListModules = () => {
     useState<Record<number, ListDeliverablesElementWithOverdue[]>>();
 
   const listModules = useCallback(
-    (request: ListModulesRequestParam) => {
-      const dispatched = dispatch(requestListModules(request));
+    (request?: ListModulesRequestParam) => {
+      const dispatched = dispatch(requestListModules(request || {}));
       setRequestId(dispatched.requestId);
     },
     [dispatch, setRequestId]
@@ -36,7 +36,7 @@ const useListModules = () => {
   }, [dispatch, setDeliverablesRequestId]);
 
   useEffect(() => {
-    listModules({});
+    listModules();
   }, [dispatch]);
 
   useEffect(() => {
