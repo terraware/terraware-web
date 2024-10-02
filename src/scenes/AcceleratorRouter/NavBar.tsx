@@ -134,7 +134,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
       <NavItem
         icon='iconFolder'
         id='module-content'
-        label={strings.MODULE_CONTENT}
+        label={strings.MODULES}
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_MODULE_CONTENT)}
         selected={!!isModuleContentRoute}
       />
