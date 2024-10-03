@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import EditableSectionContainer from 'src/components/DocumentProducer/EditableSection/Container';
 import MultiLineComponentNonEditable from 'src/components/DocumentProducer/MultiLineComponentNonEditable';
@@ -12,6 +12,7 @@ import Metadata from './Metadata';
 const DocumentTab = (): JSX.Element => {
   const { allVariables, document, documentId, documentVariables, projectId, reload, variablesOwners, reloadVariables } =
     useDocumentProducerData();
+  const [metadataDisabled, setMetadataDisabled] = useState(false);
 
   const getVariableOwner = (variableId: number) => {
     const variableOwner = variablesOwners?.find((vo) => vo.variableId.toString() === variableId.toString());
@@ -50,6 +51,7 @@ const DocumentTab = (): JSX.Element => {
             section={section}
             allVariables={allVariables ?? []}
             onUpdate={reload}
+            onEdit={(editing) => setMetadataDisabled(editing)}
           />
         );
       }
@@ -77,7 +79,7 @@ const DocumentTab = (): JSX.Element => {
 
   return (
     <PageContent styles={{ marginTop: 0 }}>
-      <Metadata />
+      <Metadata disabled={metadataDisabled} />
       {documentVariables?.map((documentVariable) => {
         return renderVariable(documentVariable);
       })}

@@ -12,11 +12,13 @@ import { DocumentStatuses } from 'src/types/Document';
 interface InternalCommentProps<T> {
   entity: T;
   update: (internalComment: string, status: string) => void;
+  disabled?: boolean;
 }
 
 function InternalComment<T extends { internalComment?: string; status: string }>({
   entity,
   update,
+  disabled,
 }: InternalCommentProps<T>) {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [internalComment, setInternalComment] = useState(entity.internalComment || '');
@@ -51,6 +53,7 @@ function InternalComment<T extends { internalComment?: string; status: string }>
       <Box display='flex' alignItems='center'>
         <strong>{strings.INTERNAL_COMMENTS}</strong>
         <Button
+          disabled={disabled}
           icon='iconEdit'
           onClick={toggleDialog}
           priority='ghost'

@@ -32,6 +32,7 @@ type EditableSectionProps = {
   section: SectionVariableWithValues;
   allVariables: VariableWithValues[];
   onUpdate: () => void;
+  onEdit: (editing: boolean) => void;
 };
 
 export default function EditableSectionContainer({
@@ -41,6 +42,7 @@ export default function EditableSectionContainer({
   section,
   allVariables,
   onUpdate,
+  onEdit,
 }: EditableSectionProps): JSX.Element {
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
@@ -70,6 +72,7 @@ export default function EditableSectionContainer({
     workflowState: updateVariableValuesRequest,
     onSuccess: () => {
       setEditing(false);
+      onEdit(false);
       setSectionValues(editSectionValues);
       setUpdateVariableValuesRequestId('');
       setUpdateVariableWorkflowDetailsRequestId('');
@@ -83,6 +86,7 @@ export default function EditableSectionContainer({
   const onEditHandler = () => {
     setEditSectionValues(sectionValues);
     setEditing(true);
+    onEdit(true);
   };
 
   const onSaveHandler = useCallback(() => {
@@ -99,6 +103,7 @@ export default function EditableSectionContainer({
 
   const onCancelHandler = () => {
     setEditing(false);
+    onEdit(false);
 
     // reset sectionValues
     setEditSectionValues(sectionValues);
