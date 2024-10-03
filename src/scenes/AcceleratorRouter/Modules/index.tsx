@@ -38,7 +38,6 @@ export default function ModuleContentView() {
   };
 
   const showUploadModal = () => {
-    console.log('entra');
     setOpenUploadModal(true);
   };
 

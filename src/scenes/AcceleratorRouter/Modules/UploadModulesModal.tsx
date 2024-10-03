@@ -4,6 +4,8 @@ import { Box, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/mater
 
 import ImportModal from 'src/components/common/ImportModal';
 import { SpeciesService } from 'src/services';
+import DeliverablesService from 'src/services/DeliverablesService';
+import ModuleService from 'src/services/ModuleService';
 import strings from 'src/strings';
 
 export type UploadModulesModalProps = {
@@ -43,12 +45,12 @@ export default function UploadModulesModal(props: UploadModulesModalProps): JSX.
       resolveApi={SpeciesService.resolveSpeciesUpload}
       uploaderTitle={strings.UPLOAD_CSV_FILE}
       uploaderDescription={strings.UPLOAD_MODULES_DESCRIPTION}
-      uploadApi={SpeciesService.uploadSpecies}
-      templateApi={SpeciesService.downloadSpeciesTemplate}
-      statusApi={SpeciesService.getSpeciesUploadStatus}
-      importCompleteLabel={strings.SPECIES_IMPORT_COMPLETE}
-      importingLabel={strings.IMPORTING_SPECIES}
+      importCompleteLabel={
+        uploadingDeliverables ? strings.DELIVERABLES_IMPORT_COMPLETE : strings.MODULES_IMPORT_COMPLETE
+      }
+      importingLabel={uploadingDeliverables ? strings.IMPORTING_DELIVERABLES : strings.IMPORTING_MODULES}
       duplicatedLabel={strings.DUPLICATED_SPECIES}
+      simpleUploadApi={uploadingDeliverables ? DeliverablesService.importDeliverables : ModuleService.importModules}
     >
       <Box textAlign='center'>
         <RadioGroup
