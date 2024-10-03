@@ -13,7 +13,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import InternalComment from './InternalComment';
 
-const Metadata = (): JSX.Element => {
+const Metadata = ({ disabled }: { disabled: boolean }): JSX.Element => {
   const snackbar = useSnackbar();
   const theme = useTheme();
   const dispatch = useAppDispatch();
@@ -64,7 +64,7 @@ const Metadata = (): JSX.Element => {
           <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
             <StatusBadge status={document.status} />
           </div>
-          <InternalComment entity={document} update={onUpdateInternalComment} />
+          <InternalComment entity={document} update={onUpdateInternalComment} disabled={disabled} />
         </Box>
       )}
     </Box>
