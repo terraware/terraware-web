@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1727976704581" clover="3.2.0">
-  <project timestamp="1727976704581" name="All files">
-    <metrics statements="25417" coveredstatements="1042" conditionals="16640" coveredconditionals="279" methods="7830" coveredmethods="176" elements="49887" coveredelements="1497" complexity="0" loc="25417" ncloc="25417" packages="236" files="1096" classes="1096"/>
+<coverage generated="1727988813122" clover="3.2.0">
+  <project timestamp="1727988813122" name="All files">
+    <metrics statements="25417" coveredstatements="1042" conditionals="16642" coveredconditionals="279" methods="7830" coveredmethods="176" elements="49889" coveredelements="1497" complexity="0" loc="25417" ncloc="25417" packages="236" files="1096" classes="1096"/>
     <package name="src">
       <metrics statements="175" coveredstatements="0" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -875,43 +875,43 @@
         <line num="314" count="0" type="stmt"/>
         <line num="325" count="0" type="stmt"/>
         <line num="338" count="0" type="stmt"/>
-        <line num="381" count="0" type="stmt"/>
+        <line num="380" count="0" type="stmt"/>
+        <line num="393" count="0" type="stmt"/>
         <line num="394" count="0" type="stmt"/>
         <line num="395" count="0" type="stmt"/>
-        <line num="396" count="0" type="stmt"/>
+        <line num="397" count="0" type="stmt"/>
         <line num="398" count="0" type="stmt"/>
         <line num="399" count="0" type="stmt"/>
-        <line num="400" count="0" type="stmt"/>
+        <line num="401" count="0" type="stmt"/>
         <line num="402" count="0" type="stmt"/>
         <line num="403" count="0" type="stmt"/>
-        <line num="404" count="0" type="stmt"/>
-        <line num="409" count="0" type="stmt"/>
-        <line num="410" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="411" count="0" type="stmt"/>
+        <line num="408" count="0" type="stmt"/>
+        <line num="409" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="410" count="0" type="stmt"/>
+        <line num="413" count="0" type="stmt"/>
         <line num="414" count="0" type="stmt"/>
-        <line num="415" count="0" type="stmt"/>
-        <line num="420" count="0" type="stmt"/>
-        <line num="421" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="422" count="0" type="stmt"/>
+        <line num="419" count="0" type="stmt"/>
+        <line num="420" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="421" count="0" type="stmt"/>
+        <line num="424" count="0" type="stmt"/>
         <line num="425" count="0" type="stmt"/>
-        <line num="426" count="0" type="stmt"/>
+        <line num="433" count="0" type="stmt"/>
         <line num="434" count="0" type="stmt"/>
-        <line num="435" count="0" type="stmt"/>
-        <line num="438" count="0" type="stmt"/>
-        <line num="439" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="440" count="0" type="stmt"/>
-        <line num="441" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="442" count="0" type="stmt"/>
-        <line num="444" count="0" type="stmt"/>
+        <line num="437" count="0" type="stmt"/>
+        <line num="438" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="439" count="0" type="stmt"/>
+        <line num="440" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="441" count="0" type="stmt"/>
+        <line num="443" count="0" type="stmt"/>
+        <line num="447" count="0" type="stmt"/>
         <line num="448" count="0" type="stmt"/>
-        <line num="449" count="0" type="stmt"/>
-        <line num="452" count="0" type="stmt"/>
-        <line num="454" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="451" count="0" type="stmt"/>
+        <line num="453" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="457" count="0" type="stmt"/>
         <line num="458" count="0" type="stmt"/>
         <line num="459" count="0" type="stmt"/>
-        <line num="460" count="0" type="stmt"/>
-        <line num="463" count="0" type="stmt"/>
-        <line num="473" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="462" count="0" type="stmt"/>
+        <line num="472" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
       <file name="RejectDialog.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/AcceleratorDeliverableView/RejectDialog.tsx">
         <metrics statements="9" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="3" coveredmethods="0"/>
@@ -6573,9 +6573,9 @@
       </file>
     </package>
     <package name="src.components.Variables">
-      <metrics statements="33" coveredstatements="0" conditionals="31" coveredconditionals="0" methods="9" coveredmethods="0"/>
+      <metrics statements="33" coveredstatements="0" conditionals="33" coveredconditionals="0" methods="9" coveredmethods="0"/>
       <file name="VariableInternalComment.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Variables/VariableInternalComment.tsx">
-        <metrics statements="16" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <metrics statements="16" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="20" count="0" type="stmt"/>
         <line num="22" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -6591,7 +6591,7 @@
         <line num="42" count="0" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
-        <line num="101" count="0" type="stmt"/>
+        <line num="103" count="0" type="stmt"/>
       </file>
       <file name="VariableStatusBadge.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Variables/VariableStatusBadge.tsx">
         <metrics statements="17" coveredstatements="0" conditionals="13" coveredconditionals="0" methods="2" coveredmethods="0"/>
