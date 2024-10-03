@@ -63,17 +63,19 @@ function VariableInternalComment({ variable, update, editing, sx }: VariableInte
             value={variableValue?.internalComment || strings.NO_COMMENTS_ADDED}
             sx={{ padding: '0 8px' }}
           />
-          <Button
-            icon='iconEdit'
-            onClick={toggleDialog}
-            priority='ghost'
-            size='small'
-            type='passive'
-            style={{
-              marginLeft: '-1px',
-              marginTop: '-1px',
-            }}
-          />
+          {editing && (
+            <Button
+              icon='iconEdit'
+              onClick={toggleDialog}
+              priority='ghost'
+              size='small'
+              type='passive'
+              style={{
+                marginLeft: '-1px',
+                marginTop: '-1px',
+              }}
+            />
+          )}
         </Box>
         <DialogBox
           onClose={toggleDialog}
