@@ -55,7 +55,7 @@ export default function UploadModulesModal(props: UploadModulesModalProps): JSX.
       <Box textAlign='center'>
         <RadioGroup
           row
-          defaultValue={null}
+          defaultValue='modules'
           name='radio-buttons-group'
           onChange={handleTypeChange}
           sx={{ justifyContent: 'center' }}
