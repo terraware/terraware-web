@@ -139,10 +139,11 @@ export default function EditableSectionContainer({
   useEffect(() => {
     if (updateInternalCommentRequest?.status === 'success') {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
+      onUpdate();
     } else if (updateInternalCommentRequest?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [snackbar, updateInternalCommentRequest]);
+  }, [snackbar, updateInternalCommentRequest, onUpdate]);
 
   useEffect(() => {
     if (updateVariableWorkflowDetailsRequest?.status === 'success') {
