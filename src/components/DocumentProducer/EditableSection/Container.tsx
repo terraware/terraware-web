@@ -280,6 +280,13 @@ export default function EditableSectionContainer({
               />
             </Box>
           </Box>
+          <Box
+            sx={{
+              marginBottom: theme.spacing(2),
+            }}
+          >
+            <VariableInternalComment editing update={onUpdateInternalComment} variable={section} />
+          </Box>
           <Box sx={{ paddingTop: theme.spacing(1) }}>
             <Display
               allVariables={allVariables}
