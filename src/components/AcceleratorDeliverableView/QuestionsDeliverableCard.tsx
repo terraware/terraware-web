@@ -345,10 +345,6 @@ const QuestionBox = ({
             </Grid>
           )}
 
-          <Typography>
-            {!editing && <DeliverableDisplayVariableValue projectId={projectId} variable={variable} />}
-          </Typography>
-
           {workflowDetails.internalComment && !editing && (
             <VariableInternalComment
               editing={editing}
@@ -371,6 +367,9 @@ const QuestionBox = ({
               />
             </Box>
           )}
+          <Typography>
+            {!editing && <DeliverableDisplayVariableValue projectId={projectId} variable={variable} />}
+          </Typography>
 
           {editing && (
             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
