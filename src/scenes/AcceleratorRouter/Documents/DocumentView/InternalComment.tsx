@@ -52,18 +52,19 @@ function InternalComment<T extends { internalComment?: string; status: string }>
     <>
       <Box display='flex' alignItems='center'>
         <strong>{strings.INTERNAL_COMMENTS}</strong>
-        <Button
-          disabled={disabled}
-          icon='iconEdit'
-          onClick={toggleDialog}
-          priority='ghost'
-          size='small'
-          type='passive'
-          style={{
-            marginLeft: '-1px',
-            marginTop: '-1px',
-          }}
-        />
+        {!disabled && (
+          <Button
+            icon='iconEdit'
+            onClick={toggleDialog}
+            priority='ghost'
+            size='small'
+            type='passive'
+            style={{
+              marginLeft: '-1px',
+              marginTop: '-1px',
+            }}
+          />
+        )}
       </Box>
       <TextField
         display
