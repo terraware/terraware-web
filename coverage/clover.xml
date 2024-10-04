@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1727989356061" clover="3.2.0">
-  <project timestamp="1727989356062" name="All files">
-    <metrics statements="25417" coveredstatements="1042" conditionals="16642" coveredconditionals="279" methods="7830" coveredmethods="176" elements="49889" coveredelements="1497" complexity="0" loc="25417" ncloc="25417" packages="236" files="1096" classes="1096"/>
+<coverage generated="1728061418152" clover="3.2.0">
+  <project timestamp="1728061418153" name="All files">
+    <metrics statements="25417" coveredstatements="1042" conditionals="16644" coveredconditionals="279" methods="7830" coveredmethods="176" elements="49891" coveredelements="1497" complexity="0" loc="25417" ncloc="25417" packages="236" files="1096" classes="1096"/>
     <package name="src">
       <metrics statements="175" coveredstatements="0" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -13328,7 +13328,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Documents.DocumentView">
-      <metrics statements="325" coveredstatements="0" conditionals="184" coveredconditionals="0" methods="101" coveredmethods="0"/>
+      <metrics statements="325" coveredstatements="0" conditionals="186" coveredconditionals="0" methods="101" coveredmethods="0"/>
       <file name="DocumentActions.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Documents/DocumentView/DocumentActions.tsx">
         <metrics statements="20" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="20" count="0" type="stmt"/>
@@ -13570,7 +13570,7 @@
         <line num="177" count="0" type="stmt"/>
       </file>
       <file name="InternalComment.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Documents/DocumentView/InternalComment.tsx">
-        <metrics statements="18" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <metrics statements="18" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="10" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -13586,9 +13586,9 @@
         <line num="43" count="0" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
-        <line num="72" count="0" type="stmt"/>
-        <line num="100" count="0" type="stmt"/>
-        <line num="109" count="0" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="110" count="0" type="stmt"/>
       </file>
       <file name="Metadata.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Documents/DocumentView/Metadata.tsx">
         <metrics statements="19" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="3" coveredmethods="0"/>
