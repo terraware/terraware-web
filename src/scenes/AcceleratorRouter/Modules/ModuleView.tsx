@@ -12,6 +12,7 @@ import useGetModule from 'src/hooks/useGetModule';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
+import ContentAndMaterials from './ContentAndMaterials';
 import ModuleDetails from './ModuleDetails';
 
 export const InventoryListTypes: Record<string, string> = {
@@ -100,7 +101,7 @@ export default function ModuleView(): JSX.Element {
             {
               id: 'contentAndMaterials',
               label: strings.CONTENT_AND_MATERIALS,
-              children: <p>content and materiales</p>,
+              children: <ContentAndMaterials module={module} />,
             },
             {
               id: 'events',
