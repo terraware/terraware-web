@@ -6,10 +6,13 @@ import { Tabs } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
+import CommonTitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
 import useGetModule from 'src/hooks/useGetModule';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
+
+import ModuleDetails from './ModuleDetails';
 
 export const InventoryListTypes: Record<string, string> = {
   BATCHES_BY_SPECIES: 'batches_by_species',
@@ -56,14 +59,14 @@ export default function ModuleView(): JSX.Element {
     () => [
       {
         name: activeLocale ? strings.MODULES : '',
-        to: APP_PATHS.ACCELERATOR_MODULE_CONTENT,
+        to: APP_PATHS.ACCELERATOR_MODULES,
       },
     ],
     [activeLocale]
   );
 
   return (
-    <Page crumbs={crumbs} title={module?.name}>
+    <Page crumbs={crumbs} title={<CommonTitleBar title={module?.name} subtitle={`${strings.PHASE_ID}:`} />}>
       <Box
         ref={contentRef}
         display='flex'
@@ -92,7 +95,7 @@ export default function ModuleView(): JSX.Element {
             {
               id: 'details',
               label: strings.DETAILS,
-              children: <p>details</p>,
+              children: <ModuleDetails module={module} />,
             },
             {
               id: 'contentAndMaterials',
