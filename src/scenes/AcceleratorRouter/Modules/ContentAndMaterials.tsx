@@ -1,16 +1,63 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { TableColumnType } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
+import Table from 'src/components/common/table';
 import strings from 'src/strings';
+import { ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
 import { Module } from 'src/types/Module';
 
 interface contentAndMaterialsProps {
   module?: Module;
+  deliverables?: ListDeliverablesElementWithOverdue[];
 }
 
-export default function contentAndMaterials({ module }: contentAndMaterialsProps): JSX.Element {
+const columns = (): TableColumnType[] => [
+  {
+    key: 'name',
+    name: strings.NAME,
+    type: 'string',
+  },
+  {
+    key: 'description',
+    name: strings.DESCRIPTION,
+    type: 'string',
+  },
+  {
+    key: 'id',
+    name: strings.ID,
+    type: 'string',
+  },
+  {
+    key: 'category',
+    name: strings.CATEGORY,
+    type: 'string',
+  },
+  {
+    key: 'type',
+    name: strings.TYPE,
+    type: 'string',
+  },
+  {
+    key: 'position',
+    name: strings.POSITION,
+    type: 'string',
+  },
+  {
+    key: 'required',
+    name: strings.REQUIRED_QUESTION_MARK,
+    type: 'string',
+  },
+  {
+    key: 'sensitive',
+    name: strings.SENSITIVE_QUESTION_MARK,
+    type: 'string',
+  },
+];
+
+export default function contentAndMaterials({ module, deliverables }: contentAndMaterialsProps): JSX.Element {
   const theme = useTheme();
 
   return (
@@ -29,6 +76,7 @@ export default function contentAndMaterials({ module }: contentAndMaterialsProps
           <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
             {strings.DELIVERABLES}
           </Typography>
+          <Table rows={deliverables || []} columns={columns} id={'module-deliverables'} orderBy={'name'} />
         </Grid>
         <Grid item>
           <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>

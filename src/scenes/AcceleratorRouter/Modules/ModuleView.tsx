@@ -44,7 +44,7 @@ export default function ModuleView(): JSX.Element {
   const contentRef = useRef(null);
   const [activeTab, setActiveTab] = useState<string>('details');
   const { moduleId } = useParams<{ moduleId: string }>();
-  const { getModule, module } = useGetModule();
+  const { getModule, module, deliverables } = useGetModule();
 
   useEffect(() => {
     if (moduleId) {
@@ -101,7 +101,7 @@ export default function ModuleView(): JSX.Element {
             {
               id: 'contentAndMaterials',
               label: strings.CONTENT_AND_MATERIALS,
-              children: <ContentAndMaterials module={module} />,
+              children: <ContentAndMaterials module={module} deliverables={deliverables} />,
             },
             {
               id: 'events',
