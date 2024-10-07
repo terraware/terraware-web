@@ -9,10 +9,10 @@ import { ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
 import { CohortModule } from 'src/types/Module';
 
 import AddModuleModal from './AddModuleModal';
+import CohortModulesCellRenderer from './CohortModulesCellRenderer';
 import ModuleDeliverablesModal from './ModuleDeliverablesModal';
-import ModulesCellRenderer from './ModulesCellRenderer';
 
-interface ModulesTableProps {
+interface CohortModulesTableProps {
   modules?: CohortModule[];
   editing?: boolean;
   modulesToAdd?: CohortModule[];
@@ -48,7 +48,7 @@ const viewColumns = (): TableColumnType[] => [
   { key: 'deliverablesQuantity', name: strings.DELIVERABLES, type: 'string' },
 ];
 
-export default function ModulesTable(props: ModulesTableProps): JSX.Element {
+export default function CohortModulesTable(props: CohortModulesTableProps): JSX.Element {
   const {
     modules,
     editing,
@@ -245,7 +245,7 @@ export default function ModulesTable(props: ModulesTableProps): JSX.Element {
                   icon: 'iconTrashCan',
                 },
               ]}
-              Renderer={ModulesCellRenderer}
+              Renderer={CohortModulesCellRenderer}
               controlledOnSelect={true}
               onSelect={editing ? onEditHandler : onViewClick}
               isClickable={() => false}

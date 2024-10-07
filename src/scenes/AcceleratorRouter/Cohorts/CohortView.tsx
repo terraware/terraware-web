@@ -18,7 +18,7 @@ import strings from 'src/strings';
 import { CohortModule } from 'src/types/Module';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
-import ModulesTable from '../Modules/ModulesTable';
+import CohortModulesTable from '../Modules/CohortModulesTable';
 
 const CohortView = () => {
   const dispatch = useAppDispatch();
@@ -97,7 +97,7 @@ const CohortView = () => {
           <ProjectFieldDisplay label={strings.PHASE} value={cohort.phase} rightBorder={true} />
         </Grid>
         <Box paddingLeft={2} paddingRight={2}>
-          <ModulesTable
+          <CohortModulesTable
             modules={modulesWithDeliverablesQuantity}
             deliverablesByModuleId={deliverablesByModuleId}
             cohortId={cohortId}

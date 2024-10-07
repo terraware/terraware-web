@@ -14,7 +14,7 @@ import { CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/type
 import { CohortModule } from 'src/types/Module';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-import ModulesTable from '../Modules/ModulesTable';
+import CohortModulesTable from '../Modules/CohortModulesTable';
 
 type CohortFormProps<T extends CreateCohortRequestPayload | UpdateCohortRequestPayload> = {
   busy?: boolean;
@@ -163,7 +163,7 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
             </Grid>
           </Grid>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
-            <ModulesTable
+            <CohortModulesTable
               modules={modules}
               editing={true}
               modulesToAdd={modulesToAdd}
