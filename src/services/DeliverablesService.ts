@@ -30,6 +30,7 @@ const ENDPOINT_DELIVERABLE_SUBMISSION_INCOMPLETE =
   '/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}/incomplete';
 const ENDPOINT_DELIVERABLE_DOCUMENT_UPLOAD = '/api/v1/accelerator/deliverables/{deliverableId}/documents';
 export const ENDPOINT_DELIVERABLE_DOCUMENT = '/api/v1/accelerator/deliverables/{deliverableId}/documents/{documentId}';
+const DELIVERABLES_IMPORT_ENDPOINT = '/api/v1/accelerator/deliverables/import';
 
 export type ListDeliverablesRequestParams = paths[typeof ENDPOINT_DELIVERABLES]['get']['parameters']['query'];
 export type GetDeliverableResponsePayload =
@@ -200,6 +201,22 @@ const incomplete = async (deliverableiId: number, projectId: number): Promise<Re
   });
 };
 
+/**
+ * import deliverables
+ */
+const importDeliverables = async (file: File): Promise<Response> => {
+  const entity = new FormData();
+  entity.append('file', file);
+  const headers = { 'content-type': 'multipart/form-data' };
+
+  const serverResponse = await HttpService.root(DELIVERABLES_IMPORT_ENDPOINT).post({
+    entity,
+    headers,
+  });
+
+  return serverResponse;
+};
+
 const DeliverablesService = {
   get,
   list,
@@ -208,6 +225,7 @@ const DeliverablesService = {
   submit,
   complete,
   incomplete,
+  importDeliverables,
 };
 
 export default DeliverablesService;

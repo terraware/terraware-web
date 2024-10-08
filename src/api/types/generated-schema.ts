@@ -98,6 +98,10 @@ export interface paths {
      */
     get: operations["listDeliverables"];
   };
+  "/api/v1/accelerator/deliverables/import": {
+    /** Import a list of deliverables metadata. */
+    post: operations["importDeliverables"];
+  };
   "/api/v1/accelerator/deliverables/{deliverableId}/documents": {
     /** Uploads a new document to satisfy a deliverable. */
     post: operations["uploadDeliverableDocument"];
@@ -161,9 +165,17 @@ export interface paths {
     /** List modules. */
     get: operations["listModules"];
   };
+  "/api/v1/accelerator/modules/import": {
+    /** Import a list of modules. */
+    post: operations["importModules"];
+  };
   "/api/v1/accelerator/modules/{moduleId}": {
     /** Gets one module. */
     get: operations["getModule"];
+  };
+  "/api/v1/accelerator/modules/{moduleId}/deliverables": {
+    /** List module deliverables. */
+    get: operations["listModuleDeliverables"];
   };
   "/api/v1/accelerator/organizations": {
     /**
@@ -3187,6 +3199,9 @@ export interface components {
       };
       status: components["schemas"]["SuccessOrError"];
     };
+    ListModuleDeliverablesResponsePayload: {
+      deliverables: components["schemas"]["ModuleDeliverablePayload"][];
+    };
     ListModulesResponsePayload: {
       modules: components["schemas"]["ModulePayload"][];
       status: components["schemas"]["SuccessOrError"];
@@ -3342,6 +3357,21 @@ export interface components {
     ListWithdrawalPhotosResponsePayload: {
       photos: components["schemas"]["NurseryWithdrawalPhotoPayload"][];
       status: components["schemas"]["SuccessOrError"];
+    };
+    ModuleDeliverablePayload: {
+      /** @enum {string} */
+      category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
+      /** @description Optional description of the deliverable in HTML form. */
+      descriptionHtml?: string;
+      /** Format: int64 */
+      id: number;
+      name: string;
+      /** Format: int32 */
+      position: number;
+      required: boolean;
+      sensitive: boolean;
+      /** @enum {string} */
+      type: "Document" | "Species" | "Questions";
     };
     ModuleEvent: {
       description?: string;
@@ -5918,6 +5948,25 @@ export interface operations {
       };
     };
   };
+  /** Import a list of deliverables metadata. */
+  importDeliverables: {
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          /** Format: binary */
+          file: string;
+        };
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
   /** Uploads a new document to satisfy a deliverable. */
   uploadDeliverableDocument: {
     parameters: {
@@ -6255,6 +6304,25 @@ export interface operations {
       };
     };
   };
+  /** Import a list of modules. */
+  importModules: {
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          /** Format: binary */
+          file: string;
+        };
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
   /** Gets one module. */
   getModule: {
     parameters: {
@@ -6272,6 +6340,28 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["GetModuleResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** List module deliverables. */
+  listModuleDeliverables: {
+    parameters: {
+      path: {
+        moduleId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListModuleDeliverablesResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */

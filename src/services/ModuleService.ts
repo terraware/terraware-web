@@ -1,7 +1,7 @@
 import { paths } from 'src/api/types/generated-schema';
 import { Module } from 'src/types/Module';
 
-import HttpService, { Response2 } from './HttpService';
+import HttpService, { Response, Response2 } from './HttpService';
 
 export type ModulesData = {
   modules: Module[] | undefined;
@@ -13,11 +13,14 @@ export type ModuleData = {
 
 const MODULES_ENDOINT = '/api/v1/accelerator/modules';
 const MODULE_ENDOINT = '/api/v1/accelerator/modules/{moduleId}';
+const MODULES_IMPORT_ENDPOINT = '/api/v1/accelerator/modules/import';
 
 export type ListModulesResponsePayload =
   paths[typeof MODULES_ENDOINT]['get']['responses'][200]['content']['application/json'];
 export type GetModuleResponsePayload =
   paths[typeof MODULE_ENDOINT]['get']['responses'][200]['content']['application/json'];
+export type ImportModuleResponsePayload =
+  paths[typeof MODULES_IMPORT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 export type ListModulesRequestParam = {
   projectId?: number;
@@ -100,9 +103,26 @@ const get = async ({
   );
 };
 
+/**
+ * import modules
+ */
+const importModules = async (file: File): Promise<Response> => {
+  const entity = new FormData();
+  entity.append('file', file);
+  const headers = { 'content-type': 'multipart/form-data' };
+
+  const serverResponse = await HttpService.root(MODULES_IMPORT_ENDPOINT).post({
+    entity,
+    headers,
+  });
+
+  return serverResponse;
+};
+
 const ModuleService = {
   get,
   list,
+  importModules,
 };
 
 export default ModuleService;
