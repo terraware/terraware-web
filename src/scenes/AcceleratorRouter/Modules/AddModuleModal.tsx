@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
 import { DatePicker, SelectT } from '@terraware/web-components';
@@ -26,6 +26,7 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
 
   const { modules } = useListModules();
   const [record, setRecord, onChange] = useForm<CohortModule>(moduleToEdit || {});
+  const [validate, setValidate] = useState(false);
 
   const onChangeModule = (moduleSelected: CohortModule) => {
     setRecord((prev) => {
@@ -34,6 +35,14 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
   };
 
   const save = () => {
+    if (record.endDate && record.startDate) {
+      const endDateDate = new Date(record.endDate);
+      const startDateDate = new Date(record.startDate);
+      if (endDateDate < startDateDate) {
+        setValidate(true);
+        return;
+      }
+    }
     onSave(record);
   };
 
@@ -110,6 +119,7 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
               onChange('endDate', value?.toFormat('yyyy-MM-dd'));
             }}
             aria-label='date-picker'
+            errorText={validate ? strings.INVALID_DATE : undefined}
           />
         </Grid>
       </Grid>
