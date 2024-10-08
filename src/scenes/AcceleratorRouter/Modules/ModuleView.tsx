@@ -13,6 +13,7 @@ import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
 import ContentAndMaterials from './ContentAndMaterials';
+import Events from './Events';
 import ModuleDetails from './ModuleDetails';
 
 export const InventoryListTypes: Record<string, string> = {
@@ -44,7 +45,7 @@ export default function ModuleView(): JSX.Element {
   const contentRef = useRef(null);
   const [activeTab, setActiveTab] = useState<string>('details');
   const { moduleId } = useParams<{ moduleId: string }>();
-  const { getModule, module, deliverables } = useGetModule();
+  const { getModule, module, deliverables, events } = useGetModule();
 
   useEffect(() => {
     if (moduleId) {
@@ -106,7 +107,7 @@ export default function ModuleView(): JSX.Element {
             {
               id: 'events',
               label: strings.EVENTS,
-              children: <p>events</p>,
+              children: <Events module={module} events={events} />,
             },
           ]}
         />
