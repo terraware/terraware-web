@@ -7,7 +7,11 @@ import { Response, Response2 } from 'src/services/HttpService';
 import ModuleService, { GetModuleRequestParam, ListModulesRequestParam } from 'src/services/ModuleService';
 import strings from 'src/strings';
 import { ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
-import { ModuleProjectSearchResult, UpdateCohortModuleRequest } from 'src/types/Module';
+import {
+  ModuleCohortsAndProjectsSearchResult,
+  ModuleProjectSearchResult,
+  UpdateCohortModuleRequest,
+} from 'src/types/Module';
 import { SearchNodePayload, SearchRequestPayload } from 'src/types/Search';
 
 export const requestGetModule = createAsyncThunk(
@@ -179,6 +183,41 @@ export const requestUpdateManyCohortModule = createAsyncThunk(
     if (results.every((result) => result && result.requestSucceeded)) {
       return true;
     }
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestListModuleCohortsAndProjects = createAsyncThunk(
+  'module/cohortsAndProjects',
+  async (moduleId: string, { rejectWithValue }) => {
+    const searchParams: SearchRequestPayload = {
+      prefix: 'projects.participant.cohort.cohortModules.module',
+      fields: [
+        'cohortModules.title',
+        'cohortModules.startDate',
+        'cohortModules.endDate',
+        'cohortModules.cohort.id',
+        'cohortModules.cohort.name',
+        'cohortModules.cohort.participants.id',
+        'cohortModules.cohort.participants.name',
+        'cohortModules.cohort.participants.projects.id',
+        'cohortModules.cohort.participants.projects.name',
+      ],
+      search: {
+        operation: 'field',
+        field: 'id',
+        type: 'Exact',
+        values: [moduleId.toString()],
+      },
+      count: 20,
+    };
+
+    const response: ModuleCohortsAndProjectsSearchResult[] | null = await SearchService.search(searchParams);
+
+    if (response) {
+      return response[0];
+    }
+
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );

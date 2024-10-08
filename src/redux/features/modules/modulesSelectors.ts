@@ -20,3 +20,6 @@ export const selectDeleteManyCohortModule = (requestId: string) => (state: RootS
 
 export const selectUpdateManyCohortModule = (requestId: string) => (state: RootState) =>
   state.cohortModuleUpdateMany[requestId];
+
+export const selectModuleCohortsAndProjects = (moduleId: string) => (state: RootState) =>
+  state.moduleCohortsAndProjects[moduleId];
