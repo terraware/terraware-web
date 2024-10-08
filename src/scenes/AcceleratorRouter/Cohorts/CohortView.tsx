@@ -14,11 +14,10 @@ import { useLocalization, useUser } from 'src/providers';
 import { requestCohort } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import CohortModulesTable from 'src/scenes/AcceleratorRouter/Modules/CohortModulesTable';
 import strings from 'src/strings';
 import { CohortModule } from 'src/types/Module';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-
-import CohortModulesTable from '../Modules/CohortModulesTable';
 
 const CohortView = () => {
   const dispatch = useAppDispatch();
