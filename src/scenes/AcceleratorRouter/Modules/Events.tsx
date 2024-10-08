@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { TableColumnType } from '@terraware/web-components';
+import { Button, TableColumnType } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
@@ -76,33 +76,76 @@ export default function ModuleEvents({ events }: ModuleEventsProps): JSX.Element
         </Typography>
       </Box>
       <Grid container>
-        <Grid
-          item
-          sx={{ borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
-          marginBottom={theme.spacing(3)}
-          paddingBottom={theme.spacing(3)}
-        >
-          <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
-            {strings.LIVE_SESSIONS}
-          </Typography>
+        <Grid item xs={12}>
+          <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={3}>
+            <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
+              {strings.LIVE_SESSIONS}
+            </Typography>
+            <Button
+              id='edit'
+              label={strings.EDIT}
+              onClick={() => true}
+              icon='iconEdit'
+              priority='secondary'
+              className='edit-button'
+              size='small'
+              type='productive'
+            />
+          </Box>
           <Table rows={liveSessions || []} columns={columns} id={'module-liveSessions'} orderBy={'name'} />
         </Grid>
-        <Grid item>
-          <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} paddingBottom={1}>
-            {strings.ONE_ON_ONE_SESSIONS}
-          </Typography>
+        <Grid item xs={12}>
+          <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={3}>
+            <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
+              {strings.ONE_ON_ONE_SESSIONS}
+            </Typography>
+            <Button
+              id='edit'
+              label={strings.EDIT}
+              onClick={() => true}
+              icon='iconEdit'
+              priority='secondary'
+              className='edit-button'
+              size='small'
+              type='productive'
+            />
+          </Box>
           <Table rows={oneOnOneSessions || []} columns={columns} id={'module-oneOnOneSessions'} orderBy={'name'} />
         </Grid>
-        <Grid item>
-          <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} paddingBottom={1}>
-            {strings.RECORDED_SESSIONS}
-          </Typography>
+        <Grid item xs={12}>
+          <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={3}>
+            <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
+              {strings.RECORDED_SESSIONS}
+            </Typography>
+            <Button
+              id='edit'
+              label={strings.EDIT}
+              onClick={() => true}
+              icon='iconEdit'
+              priority='secondary'
+              className='edit-button'
+              size='small'
+              type='productive'
+            />
+          </Box>
           <Table rows={recordedSessions || []} columns={columns} id={'module-recordedSessions'} orderBy={'name'} />
         </Grid>
-        <Grid item>
-          <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} paddingBottom={1}>
-            {strings.WORKSHOPS}
-          </Typography>
+        <Grid item xs={12}>
+          <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={3}>
+            <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
+              {strings.WORKSHOPS}
+            </Typography>
+            <Button
+              id='edit'
+              label={strings.EDIT}
+              onClick={() => true}
+              icon='iconEdit'
+              priority='secondary'
+              className='edit-button'
+              size='small'
+              type='productive'
+            />
+          </Box>
           <Table rows={workshops || []} columns={columns} id={'module-workshops'} orderBy={'name'} />
         </Grid>
       </Grid>
