@@ -1349,9 +1349,13 @@ export interface components {
       /** Format: int64 */
       organizationId: number;
       organizationName: string;
+      /** Format: int32 */
+      position: number;
       /** Format: int64 */
       projectId: number;
       projectName: string;
+      required: boolean;
+      sensitive: boolean;
       /** @enum {string} */
       status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
       /** @enum {string} */
@@ -2268,9 +2272,13 @@ export interface components {
       /** Format: int64 */
       participantId?: number;
       participantName?: string;
+      /** Format: int32 */
+      position: number;
       /** Format: int64 */
       projectId: number;
       projectName: string;
+      required: boolean;
+      sensitive: boolean;
       /** @enum {string} */
       status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
       /** Format: uri */
@@ -3153,9 +3161,13 @@ export interface components {
       /** Format: int64 */
       participantId?: number;
       participantName?: string;
+      /** Format: int32 */
+      position: number;
       /** Format: int64 */
       projectId: number;
       projectName: string;
+      required: boolean;
+      sensitive: boolean;
       /** @enum {string} */
       status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
       /** @enum {string} */

@@ -5,6 +5,7 @@ import { TableColumnType } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
+import DeliverablesRenderer from 'src/scenes/AcceleratorRouter/Modules/DeliverablesRenderer';
 import strings from 'src/strings';
 import { ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
 import { Module } from 'src/types/Module';
@@ -21,7 +22,7 @@ const columns = (): TableColumnType[] => [
     type: 'string',
   },
   {
-    key: 'description',
+    key: 'descriptionHtml',
     name: strings.DESCRIPTION,
     type: 'string',
   },
@@ -76,7 +77,13 @@ export default function contentAndMaterials({ module, deliverables }: contentAnd
           <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
             {strings.DELIVERABLES}
           </Typography>
-          <Table rows={deliverables || []} columns={columns} id={'module-deliverables'} orderBy={'name'} />
+          <Table
+            rows={deliverables || []}
+            columns={columns}
+            id={'module-deliverables'}
+            orderBy={'name'}
+            Renderer={DeliverablesRenderer}
+          />
         </Grid>
         <Grid item>
           <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
