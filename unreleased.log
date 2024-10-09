@@ -1,3 +1,4 @@
+74d991f955e SW-5941 Module detail view  (#3266)
 dc96f66e36e SW-5291 Validate end date is after start date when adding a module to a cohort (#3265)
 5752ab90ae8 SW-5291 Upload Modules & Deliverables (#3259)
 79459426961 Hide edit internal comment/status icon instead of disable it, when editing a section (#3264)
