@@ -333,8 +333,7 @@ export default function EditableSectionContainer({
               <Button
                 id='edit'
                 onClick={onEditCommentHandler}
-                // TODO replace with iconComment
-                icon='iconColumns'
+                icon='iconComment'
                 priority='secondary'
                 className='edit-buttons'
                 size='small'
