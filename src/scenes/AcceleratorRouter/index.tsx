@@ -15,6 +15,7 @@ import Cohorts from './Cohorts';
 import Deliverables from './Deliverables';
 import DocumentsRouter from './Documents';
 import ModuleContent from './Modules';
+import ModuleView from './Modules/ModuleView';
 import NavBar from './NavBar';
 import Organizations from './Organizations';
 import Overview from './Overview';
@@ -82,7 +83,8 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
             <Route path={`${APP_PATHS.ACCELERATOR_APPLICATIONS}/*`} element={<Applications />} />
             <Route path={`${APP_PATHS.ACCELERATOR_COHORTS}/*`} element={<Cohorts />} />
             <Route path={`${APP_PATHS.ACCELERATOR_DELIVERABLES}/*`} element={<Deliverables />} />
-            <Route path={APP_PATHS.ACCELERATOR_MODULE_CONTENT} element={<ModuleContent />} />
+            <Route path={`${APP_PATHS.ACCELERATOR_MODULES}/*`} element={<ModuleContent />} />
+            <Route path={`${APP_PATHS.ACCELERATOR_MODULE_CONTENT}/*`} element={<ModuleView />} />
             <Route path={`${APP_PATHS.ACCELERATOR_PEOPLE}/*`} element={<People />} />
             <Route path={`${APP_PATHS.ACCELERATOR_PARTICIPANTS}/*`} element={<Participants />} />
             <Route path={`${APP_PATHS.ACCELERATOR_PROJECT_VIEW}/*`} element={<ParticipantProjects />} />

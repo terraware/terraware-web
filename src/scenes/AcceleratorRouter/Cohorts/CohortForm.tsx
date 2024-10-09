@@ -9,12 +9,11 @@ import { useLocalization } from 'src/providers/hooks';
 import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import CohortModulesTable from 'src/scenes/AcceleratorRouter/Modules/CohortModulesTable';
 import strings from 'src/strings';
 import { CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
 import { CohortModule } from 'src/types/Module';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-
-import ModulesTable from '../Modules/ModulesTable';
 
 type CohortFormProps<T extends CreateCohortRequestPayload | UpdateCohortRequestPayload> = {
   busy?: boolean;
@@ -163,7 +162,7 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
             </Grid>
           </Grid>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
-            <ModulesTable
+            <CohortModulesTable
               modules={modules}
               editing={true}
               modulesToAdd={modulesToAdd}

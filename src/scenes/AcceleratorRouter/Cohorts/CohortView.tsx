@@ -14,11 +14,10 @@ import { useLocalization, useUser } from 'src/providers';
 import { requestCohort } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import CohortModulesTable from 'src/scenes/AcceleratorRouter/Modules/CohortModulesTable';
 import strings from 'src/strings';
 import { CohortModule } from 'src/types/Module';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-
-import ModulesTable from '../Modules/ModulesTable';
 
 const CohortView = () => {
   const dispatch = useAppDispatch();
@@ -97,7 +96,7 @@ const CohortView = () => {
           <ProjectFieldDisplay label={strings.PHASE} value={cohort.phase} rightBorder={true} />
         </Grid>
         <Box paddingLeft={2} paddingRight={2}>
-          <ModulesTable
+          <CohortModulesTable
             modules={modulesWithDeliverablesQuantity}
             deliverablesByModuleId={deliverablesByModuleId}
             cohortId={cohortId}

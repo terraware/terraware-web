@@ -9,6 +9,7 @@ import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { SearchSortOrder } from 'src/types/Search';
 
+import ModulesCellRenderer from './ModulesCellRenderer';
 import UploadModulesModal from './UploadModulesModal';
 
 export default function ModuleContentView() {
@@ -54,6 +55,7 @@ export default function ModuleContentView() {
       dispatchSearchRequest,
       id: 'modules-list',
       rows: modules || [],
+      Renderer: ModulesCellRenderer,
     },
   };
 
