@@ -35,23 +35,30 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
   };
 
   const save = () => {
+    let someError = false;
+    if (!record.title || !record.id) {
+      someError = true;
+    }
     if (record.endDate && record.startDate) {
       const endDateDate = new Date(record.endDate);
       const startDateDate = new Date(record.startDate);
       if (endDateDate < startDateDate) {
-        setValidate(true);
-        return;
+        someError = true;
       }
+    }
+    if (someError) {
+      setValidate(true);
+      return;
     }
     onSave(record);
   };
 
   const moduleOptions = useMemo(() => {
-    const existingModulesId = existingModules?.map((eMod) => eMod.id);
+    const existingModulesId = existingModules?.filter((exM) => exM.id !== record.id).map((eMod) => eMod.id);
     const moduleIds = new Set();
     const uniqueModulesList = modules?.filter(({ id }) => !moduleIds.has(id) && moduleIds.add(id));
     return uniqueModulesList?.filter((mod) => !existingModulesId?.includes(mod.id));
-  }, [modules, existingModules]);
+  }, [modules, existingModules, record.id]);
 
   return (
     <DialogBox
@@ -79,6 +86,7 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
             type='text'
             value={record.title}
             onChange={(value: unknown) => onChange('title', value)}
+            errorText={validate && !record.title ? strings.REQUIRED_FIELD : undefined}
           />
         </Grid>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
@@ -97,6 +105,7 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
             displayLabel={(_module: Module) => _module?.name || ''}
             toT={(name: string) => ({ name }) as Module}
             required
+            errorText={validate && !record.id ? strings.REQUIRED_FIELD : undefined}
           />
         </Grid>
         <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingRight: 1 }}>
