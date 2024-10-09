@@ -112,9 +112,7 @@ export default function Exclusions({ onValidate, site }: ExclusionsProps): JSX.E
       {
         ...site,
         exclusion: (editableBoundary && unionMultiPolygons(editableBoundary)) || undefined,
-      },
-      'exclusion',
-      []
+      }
     );
 
     setExclusionsData({

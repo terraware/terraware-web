@@ -1,13 +1,16 @@
 import area from '@turf/area';
 import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
-import { Feature, FeatureCollection, MultiPolygon, Polygon, Position } from 'geojson';
+import { Feature, FeatureCollection, MultiPolygon, Polygon } from 'geojson';
 
-import { overlayAndSubtract, toFeature } from 'src/components/Map/utils';
+import { overlayAndSubtract, toFeature, toMultiPolygon } from 'src/components/Map/utils';
 import strings from 'src/strings';
 import { GeometryFeature } from 'src/types/Map';
-import { DraftPlantingSite } from 'src/types/PlantingSite';
+import { DraftPlantingSite, PlantingSiteProblem } from 'src/types/PlantingSite';
 import { MinimalPlantingSubzone, MinimalPlantingZone } from 'src/types/Tracking';
+import { TrackingService } from 'src/services';
+import { fromDraftToCreate } from 'src/utils/draftPlantingSiteUtils';
+import union from '@turf/union';
 
 export const SQ_M_TO_HECTARES = 1 / 10000;
 
@@ -207,7 +210,7 @@ export const cutOverlappingBoundaries = async (
   onSuccess: (cutBoundaries: GeometryFeature[]) => void,
   onError: (errorAnnotations: Feature[]) => void
 ) => {
-  const { cutWithFeature, errorCheckLevel, createDraftSiteWith, source } = data;
+  const { cutWithFeature, createDraftSiteWith, source } = data;
   if (!source || !cutWithFeature) {
     onError([]);
     return;
@@ -221,7 +224,8 @@ export const cutOverlappingBoundaries = async (
     return;
   }
 
-  const errors = await findErrors(createDraftSiteWith(cutBoundaries), errorCheckLevel, cutBoundaries);
+  const errors = await findErrors(createDraftSiteWith(cutBoundaries));
+  console.log(errors)
 
   if (!errors.length) {
     onSuccess(cutBoundaries);
@@ -233,61 +237,139 @@ export const cutOverlappingBoundaries = async (
 /**
  * Find errors in the draft site with a dry-run planting site creation.
  * The response contains error annotation information, if any.
- * TODO: replace error checking code with actual BE API request when it is ready
  */
-export const findErrors = async (
-  draft: DraftPlantingSite,
-  errorCheckLevel: ErrorCheckLevel,
-  cutBoundaries: GeometryFeature[] // TODO: remove this when switching to BE API, use the draft payload instead
-  // eslint-disable-next-line @typescript-eslint/require-await
-): Promise<Feature[]> => {
+export const findErrors = async (draft: DraftPlantingSite): Promise<Feature[]> => {
   // TODO: use BE API
   // 1. do a dry-run of planting site create with the input 'draft'
   // 2. check problems returned
   // 3. map problems to error annotation with boundary of
   //    site or exclusion or zone or subzone mentioned in the problem
   // 4. map problem type to a string.<mapped_string_for_problem> as errorText
-
   if (!draft) {
     return [];
   }
 
-  // This is a temporary implementation until we use BE API.
-  if (errorCheckLevel === 'exclusion') {
-    return [];
-  } else if (errorCheckLevel === 'site_boundary') {
-    // check if individual polygons are of a minimum size
-    const individualPolygons: Polygon[] =
-      draft.boundary?.coordinates.flatMap((coordinates: Position[][]) => ({
-        type: 'Polygon',
-        coordinates,
-      })) ?? [];
-    let index = 0;
-    const polygonsTooSmall = individualPolygons
-      .flatMap((poly: Polygon) => {
-        const siteArea = boundingAreaHectares(poly);
-        if (siteArea < 1) {
-          // stopgap to check for 100m x 100m until we have BE API
-          const errorText = strings.formatString(strings.SITE_BOUNDARY_POLYGON_TOO_SMALL, siteArea);
-          return [{ type: 'Feature', geometry: poly, properties: { errorText, fill: true }, id: index++ } as Feature];
-        } else {
-          return [];
-        }
-      })
-      .filter((feature) => !!feature);
-    return polygonsTooSmall;
+  const payload = fromDraftToCreate(draft);
+
+  const result = await TrackingService.validatePlantingSite(payload)
+  if (result.requestSucceeded && result.data) {
+    if (result.data.isValid) {
+      return []
+    } else {
+      return result.data.problems.map((value, index) => problemToFeature(draft, value, index)).filter((item) : item is Feature => item !== null);
+    }
   } else {
-    const errorText =
-      errorCheckLevel === 'subzone' ? strings.SITE_SUBZONE_BOUNDARY_TOO_SMALL : strings.SITE_ZONE_BOUNDARY_TOO_SMALL;
-    const minimumSideDimension = errorCheckLevel === 'subzone' ? 25 : 100;
-    const minArea = minimumSideDimension * minimumSideDimension * SQ_M_TO_HECTARES;
-
-    // check if the new polygons are too small to be boundaries (in which case, we won't create new fixed boundaries using the new polygons)
-    // mark them as error annotations instead
-    const errors = cutBoundaries
-      .filter((boundary) => boundingAreaHectares(boundary.geometry) < minArea)
-      .map((boundary) => ({ ...boundary, properties: { errorText: errorText ?? '--', fill: true } }));
-
-    return errors;
+    return Promise.reject('Server error on validation.')
   }
 };
+
+/**
+ * @returns the geometry feature to draw for the problem, or null if it is not a drawable problem
+ */
+const problemToFeature = (draft: DraftPlantingSite, problem: PlantingSiteProblem, index: number) : Feature | null => {
+  if (!draft.boundary) {
+    return null;
+  }
+  // TODO: consider showing a list of problems, and toggle to show feature per problem? 
+  const problemZone = problem.plantingZone ? draft.plantingZones?.find((zone) => zone.name === problem.plantingZone) : null;
+  if (problemZone && !problemZone.boundary) {
+    return null;
+  }
+
+  const problemSubzone = problem.plantingSubzone ? problemZone?.plantingSubzones?.find((subzone) => subzone.name === problem.plantingSubzone) : null;
+  if (problemSubzone && !problemSubzone.boundary) {
+    return null;
+  }
+  
+  const errorText = problemToText(draft, problem);
+  console.log(problem)
+
+  switch (problem.problemType) {
+    case 'SiteTooLarge':
+      // Site errors
+      return { type: 'Feature', geometry: draft.boundary, properties: { errorText, fill: true }, id: index }
+    case 'CannotRemovePlantedSubzone':
+    case 'CannotSplitSubzone':
+    case 'SubzoneBoundaryChanged':
+    case 'SubzoneInExclusionArea':
+    case 'SubzoneNotInZone':
+      // Single subzone errors
+      return problemSubzone ? { type: 'Feature', geometry: problemSubzone.boundary, properties: { errorText, fill: true }, id: index } : null
+    case 'CannotSplitZone':
+    case 'ZoneBoundaryChanged':
+    case 'ZoneHasNoSubzones':
+    case 'ZoneNotInSite':
+    case 'ZoneTooSmall':
+      // Single zone errors
+      return problemZone ? { type: 'Feature', geometry: problemZone.boundary, properties: { errorText, fill: true }, id: index } : null
+    case 'SubzoneBoundaryOverlaps':
+      // Multiple subzones errors
+      const otherSubzoneBoundaries = problem.conflictsWith
+        ?.map((subzoneName) => problemZone?.plantingSubzones?.find((subzone) => subzone.name === subzoneName)?.boundary)
+        ?.filter((boundary) : boundary is MultiPolygon => boundary !== undefined) ?? [];
+      if (problemSubzone?.boundary) {
+        otherSubzoneBoundaries.push(problemSubzone.boundary);
+      }
+      const subzonePoly = otherSubzoneBoundaries.reduce((acc: MultiPolygon, curr: MultiPolygon): MultiPolygon => {
+          const unionResult = union(acc, curr);
+          const multiPolygon = unionResult ? toMultiPolygon(unionResult.geometry) : null;
+          return multiPolygon || curr;
+        });
+      return { type: 'Feature', geometry: subzonePoly, properties: { errorText, fill: true }, id: index }
+    case 'ZoneBoundaryOverlaps':
+      // Multiple zones erros
+      const otherZoneBoundaries = problem.conflictsWith
+        ?.map((zoneName) => draft.plantingZones?.find((zone) => zone.name === zoneName)?.boundary)
+        ?.filter((boundary) : boundary is MultiPolygon => boundary !== undefined) ?? [];
+      if (problemZone?.boundary) {
+        otherZoneBoundaries.push(problemZone.boundary);
+      }
+      const zonePoly = otherZoneBoundaries.reduce((acc: MultiPolygon, curr: MultiPolygon): MultiPolygon => {
+          const unionResult = union(acc, curr);
+          const multiPolygon = unionResult ? toMultiPolygon(unionResult.geometry) : null;
+          return multiPolygon || curr;
+        });
+      return { type: 'Feature', geometry: zonePoly, properties: { errorText, fill: true }, id: index }
+    case 'DuplicateSubzoneName':
+    case 'DuplicateZoneName':
+    case 'ExclusionWithoutBoundary':
+    case 'ZonesWithoutSiteBoundary':
+      // Text only errors:
+      // TODO: add non-feature error types
+      return null
+  }
+
+  return null;
+}
+
+/**
+ * 
+ * @returns the text to show for the problem
+ */
+const problemToText = (draft: DraftPlantingSite, problem: PlantingSiteProblem) : string => {
+  // const problemZone = problem.plantingZone ? draft.plantingZones?.find((zone) => zone.id === Number(problem.plantingZone)) : null;
+  // const problemSubzone = problem.plantingSubzone ? problemZone?.plantingSubzones?.find((subzone) => subzone.id === Number(problem.plantingSubzone)) : null;
+  
+  // TODO Add translatable strings for each user visible problem
+  switch (problem.problemType) {
+    case 'CannotRemovePlantedSubzone':
+    case 'CannotSplitSubzone':
+    case 'CannotSplitZone':
+    case 'DuplicateSubzoneName':
+    case 'DuplicateZoneName':
+    case 'ExclusionWithoutBoundary':
+    case 'SiteTooLarge':
+    case 'SubzoneBoundaryChanged':
+    case 'SubzoneBoundaryOverlaps':
+    case 'SubzoneInExclusionArea':
+    case 'SubzoneNotInZone':
+    case 'ZoneBoundaryChanged':
+    case 'ZoneBoundaryOverlaps':
+    case 'ZoneHasNoSubzones':
+    case 'ZoneNotInSite':
+    case 'ZoneTooSmall':
+    case 'ZonesWithoutSiteBoundary':
+  }
+
+  return problem.problemType;
+}

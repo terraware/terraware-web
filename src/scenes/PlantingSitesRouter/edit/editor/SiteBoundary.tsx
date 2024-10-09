@@ -85,7 +85,7 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
         const bboxPoly = bboxPolygon(bbox(_.cloneDeep(boundary)));
         const c = centroid(bboxPoly);
         const errorText = strings.formatString(strings.SITE_BOUNDING_AREA_TOO_LARGE, boundingArea);
-        return [
+        [
           { ...c, properties: { errorText }, id: 0 },
           { ...bboxPoly, id: 1 },
         ];
@@ -168,9 +168,7 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
         ...site,
         boundary: newBoundary,
         plantingZones: plantingZones,
-      },
-      'site_boundary',
-      []
+      }
     );
 
     setSiteBoundaryData({
