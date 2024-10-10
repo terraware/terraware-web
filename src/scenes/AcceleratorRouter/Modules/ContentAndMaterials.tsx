@@ -22,7 +22,6 @@ const columns = (): TableColumnType[] => [
     type: 'string',
   },
   {
-    key: 'description',
     key: 'descriptionHtml',
     name: strings.DESCRIPTION,
     type: 'string',
