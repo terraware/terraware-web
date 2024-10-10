@@ -116,21 +116,109 @@ const TerrawareHomeView = () => {
           flexDirection: 'column',
         }}
       >
-        <Box paddingRight={'24px'} paddingLeft={isMobile ? '24px' : 0}>
-          <PageHeader
-            title={user?.firstName ? strings.formatString(strings.WELCOME_PERSON, user.firstName) : strings.WELCOME}
-            subtitle=''
-          />
-          <Container maxWidth={false} sx={{ padding: 0 }}>
-            <Grid container spacing={3} sx={{ padding: 0 }}>
-              {homePageOnboardingImprovementsEnabled ? (
-                <>
-                  <Grid item xs={12}>
-                    <PageCardNext
-                      buttonLabel={strings.APPLY}
+        {homePageOnboardingImprovementsEnabled ? (
+          <Box paddingRight={'24px'} paddingLeft={isMobile ? '24px' : 0}>
+            <PageHeader
+              title={
+                user?.firstName
+                  ? strings.formatString(strings.WELCOME_TO_TERRAWARE_PERSON, user.firstName)
+                  : strings.WELCOME
+              }
+              subtitle=''
+            />
+            <Container maxWidth={false} sx={{ padding: 0 }}>
+              <Grid container spacing={3} sx={{ padding: 0 }}>
+                <Grid item xs={12}>
+                  <PageCardNext
+                    buttonLabel={strings.APPLY}
+                    id='applicationHomeCard'
+                    description={strings.formatString(
+                      strings.FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,
+                      <Link
+                        fontSize='16px'
+                        target='_blank'
+                        onClick={() => {
+                          mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_TF_LINK);
+                          window.open(ACCELERATOR_LINK, '_blank');
+                        }}
+                      >
+                        {strings.HERE}
+                      </Link>
+                    )}
+                    onClickButton={() => {
+                      mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_APPLY_BUTTON);
+                      setIsNewApplicationModalOpen(true);
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            </Container>
+          </Box>
+        ) : (
+          <Box paddingRight={'24px'} paddingLeft={isMobile ? '24px' : 0}>
+            <PageHeader
+              title={user?.firstName ? strings.formatString(strings.WELCOME_PERSON, user.firstName) : strings.WELCOME}
+              subtitle=''
+            />
+            <Container maxWidth={false} sx={{ padding: 0 }}>
+              <Grid container spacing={3} sx={{ padding: 0 }}>
+                {isAdmin(selectedOrganization) && (
+                  <>
+                    <Grid item xs={primaryGridSize()}>
+                      <PageCard
+                        id='peopleHomeCard'
+                        name={strings.PEOPLE}
+                        icon='person'
+                        description={strings.PEOPLE_CARD_DESCRIPTION}
+                        link={APP_PATHS.PEOPLE}
+                        linkText={strings.formatString(strings.GO_TO, strings.PEOPLE) as string}
+                        linkStyle={'plain'}
+                      />
+                    </Grid>
+                    <Grid item xs={primaryGridSize()}>
+                      <PageCard
+                        id='seedbankHomeCard'
+                        name={strings.SEED_BANKS}
+                        icon='seedbankNav'
+                        description={strings.SEED_BANKS_CARD_DESCRIPTION}
+                        link={APP_PATHS.SEED_BANKS}
+                        linkText={strings.formatString(strings.GO_TO, strings.SEED_BANKS) as string}
+                        linkStyle={'plain'}
+                      />
+                    </Grid>
+                  </>
+                )}
+                <Grid item xs={secondaryGridSize()}>
+                  <PageCard
+                    id='speciesHomeCard'
+                    name={strings.SPECIES}
+                    icon='species'
+                    description={strings.SPECIES_CARD_DESCRIPTION}
+                    link={APP_PATHS.SPECIES}
+                    linkText={strings.formatString(strings.GO_TO, strings.SPECIES) as string}
+                    linkStyle={'plain'}
+                  />
+                </Grid>
+                <Grid item xs={secondaryGridSize()}>
+                  <PageCard
+                    id='accessionsHomeCard'
+                    name={strings.ACCESSIONS}
+                    icon='seeds'
+                    description={strings.ACCESSIONS_CARD_DESCRIPTION}
+                    link={APP_PATHS.ACCESSIONS}
+                    linkText={strings.formatString(strings.GO_TO, strings.ACCESSIONS) as string}
+                    linkStyle={'plain'}
+                  />
+                </Grid>
+                {isAdmin(selectedOrganization) && (
+                  <Grid item xs={secondaryGridSize()}>
+                    <PageCard
+                      cardIsClickable={false}
                       id='applicationHomeCard'
+                      name={strings.APPLY_TO_ACCELERATOR}
+                      icon='iconFile'
                       description={strings.formatString(
-                        strings.FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,
+                        strings.APPLY_TO_ACCELERATOR_DESCRIPTION,
                         <Link
                           fontSize='16px'
                           target='_blank'
@@ -142,98 +230,20 @@ const TerrawareHomeView = () => {
                           {strings.HERE}
                         </Link>
                       )}
-                      onClickButton={() => {
+                      link={APP_PATHS.APPLICATIONS}
+                      linkText={strings.START_NEW_APPLICATION}
+                      linkStyle={'button-primary'}
+                      onClick={() => {
                         mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_APPLY_BUTTON);
                         setIsNewApplicationModalOpen(true);
                       }}
                     />
                   </Grid>
-                </>
-              ) : (
-                <>
-                  {isAdmin(selectedOrganization) && (
-                    <>
-                      <Grid item xs={primaryGridSize()}>
-                        <PageCard
-                          id='peopleHomeCard'
-                          name={strings.PEOPLE}
-                          icon='person'
-                          description={strings.PEOPLE_CARD_DESCRIPTION}
-                          link={APP_PATHS.PEOPLE}
-                          linkText={strings.formatString(strings.GO_TO, strings.PEOPLE) as string}
-                          linkStyle={'plain'}
-                        />
-                      </Grid>
-                      <Grid item xs={primaryGridSize()}>
-                        <PageCard
-                          id='seedbankHomeCard'
-                          name={strings.SEED_BANKS}
-                          icon='seedbankNav'
-                          description={strings.SEED_BANKS_CARD_DESCRIPTION}
-                          link={APP_PATHS.SEED_BANKS}
-                          linkText={strings.formatString(strings.GO_TO, strings.SEED_BANKS) as string}
-                          linkStyle={'plain'}
-                        />
-                      </Grid>
-                    </>
-                  )}
-                  <Grid item xs={secondaryGridSize()}>
-                    <PageCard
-                      id='speciesHomeCard'
-                      name={strings.SPECIES}
-                      icon='species'
-                      description={strings.SPECIES_CARD_DESCRIPTION}
-                      link={APP_PATHS.SPECIES}
-                      linkText={strings.formatString(strings.GO_TO, strings.SPECIES) as string}
-                      linkStyle={'plain'}
-                    />
-                  </Grid>
-                  <Grid item xs={secondaryGridSize()}>
-                    <PageCard
-                      id='accessionsHomeCard'
-                      name={strings.ACCESSIONS}
-                      icon='seeds'
-                      description={strings.ACCESSIONS_CARD_DESCRIPTION}
-                      link={APP_PATHS.ACCESSIONS}
-                      linkText={strings.formatString(strings.GO_TO, strings.ACCESSIONS) as string}
-                      linkStyle={'plain'}
-                    />
-                  </Grid>
-                  {isAdmin(selectedOrganization) && (
-                    <Grid item xs={secondaryGridSize()}>
-                      <PageCard
-                        cardIsClickable={false}
-                        id='applicationHomeCard'
-                        name={strings.APPLY_TO_ACCELERATOR}
-                        icon='iconFile'
-                        description={strings.formatString(
-                          strings.APPLY_TO_ACCELERATOR_DESCRIPTION,
-                          <Link
-                            fontSize='16px'
-                            target='_blank'
-                            onClick={() => {
-                              mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_TF_LINK);
-                              window.open(ACCELERATOR_LINK, '_blank');
-                            }}
-                          >
-                            {strings.HERE}
-                          </Link>
-                        )}
-                        link={APP_PATHS.APPLICATIONS}
-                        linkText={strings.START_NEW_APPLICATION}
-                        linkStyle={'button-primary'}
-                        onClick={() => {
-                          mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_APPLY_BUTTON);
-                          setIsNewApplicationModalOpen(true);
-                        }}
-                      />
-                    </Grid>
-                  )}
-                </>
-              )}
-            </Grid>
-          </Container>
-        </Box>
+                )}
+              </Grid>
+            </Container>
+          </Box>
+        )}
       </Box>
     </TfMain>
   );
