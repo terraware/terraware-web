@@ -75,7 +75,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
       <Box sx={leftStyles}>
         <Box sx={logoStyles}>
           <Link onClick={() => handleTopBarClick()}>
-            <Svg.Logo style={logoStyles} />
+            <Svg.TerrawareLogoDesktop style={logoStyles} />
           </Link>
         </Box>
 
