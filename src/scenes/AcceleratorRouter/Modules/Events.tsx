@@ -1,10 +1,12 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, TableColumnType } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { Module, ModuleEvent } from 'src/types/Module';
 
@@ -56,8 +58,9 @@ const columns = (): TableColumnType[] => [
   },
 ];
 
-export default function ModuleEvents({ events }: ModuleEventsProps): JSX.Element {
+export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX.Element {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const liveSessions = events?.filter((ev) => ev.type === 'Live Session');
   const oneOnOneSessions = events?.filter((ev) => ev.type === 'One-on-One Session');
@@ -77,76 +80,116 @@ export default function ModuleEvents({ events }: ModuleEventsProps): JSX.Element
       </Box>
       <Grid container>
         <Grid item xs={12}>
-          <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={3}>
+          <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={1}>
             <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
               {strings.LIVE_SESSIONS}
             </Typography>
-            <Button
-              id='edit'
-              label={strings.EDIT}
-              onClick={() => true}
-              icon='iconEdit'
-              priority='secondary'
-              className='edit-button'
-              size='small'
-              type='productive'
-            />
+            {module && (
+              <Button
+                id='edit'
+                label={strings.EDIT}
+                onClick={() =>
+                  navigate({
+                    pathname: APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT.replace(':moduleId', `${module.id}`),
+                    search: '?type=live',
+                  })
+                }
+                icon='iconEdit'
+                priority='secondary'
+                className='edit-button'
+                size='small'
+                type='productive'
+              />
+            )}
           </Box>
-          <Table rows={liveSessions || []} columns={columns} id={'module-liveSessions'} orderBy={'name'} />
+          <Box dangerouslySetInnerHTML={{ __html: liveSessions?.[0]?.description || '' }} />
+          <Box marginTop={2}>
+            <Table rows={liveSessions || []} columns={columns} id={'module-liveSessions'} orderBy={'name'} />
+          </Box>
         </Grid>
         <Grid item xs={12}>
-          <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={3}>
+          <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={1}>
             <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
               {strings.ONE_ON_ONE_SESSIONS}
             </Typography>
-            <Button
-              id='edit'
-              label={strings.EDIT}
-              onClick={() => true}
-              icon='iconEdit'
-              priority='secondary'
-              className='edit-button'
-              size='small'
-              type='productive'
-            />
+            {module && (
+              <Button
+                id='edit'
+                label={strings.EDIT}
+                onClick={() =>
+                  navigate({
+                    pathname: APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT.replace(':moduleId', `${module.id}`),
+                    search: '?type=one-on-one',
+                  })
+                }
+                icon='iconEdit'
+                priority='secondary'
+                className='edit-button'
+                size='small'
+                type='productive'
+              />
+            )}
           </Box>
-          <Table rows={oneOnOneSessions || []} columns={columns} id={'module-oneOnOneSessions'} orderBy={'name'} />
+          <Box dangerouslySetInnerHTML={{ __html: oneOnOneSessions?.[0]?.description || '' }} />
+          <Box marginTop={2}>
+            <Table rows={oneOnOneSessions || []} columns={columns} id={'module-oneOnOneSessions'} orderBy={'name'} />
+          </Box>
         </Grid>
         <Grid item xs={12}>
-          <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={3}>
+          <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={1}>
             <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
               {strings.RECORDED_SESSIONS}
             </Typography>
-            <Button
-              id='edit'
-              label={strings.EDIT}
-              onClick={() => true}
-              icon='iconEdit'
-              priority='secondary'
-              className='edit-button'
-              size='small'
-              type='productive'
-            />
+            {module && (
+              <Button
+                id='edit'
+                label={strings.EDIT}
+                onClick={() =>
+                  navigate({
+                    pathname: APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT.replace(':moduleId', `${module.id}`),
+                    search: '?type=recorded',
+                  })
+                }
+                icon='iconEdit'
+                priority='secondary'
+                className='edit-button'
+                size='small'
+                type='productive'
+              />
+            )}
           </Box>
-          <Table rows={recordedSessions || []} columns={columns} id={'module-recordedSessions'} orderBy={'name'} />
+          <Box dangerouslySetInnerHTML={{ __html: recordedSessions?.[0]?.description || '' }} />
+          <Box marginTop={2}>
+            <Table rows={recordedSessions || []} columns={columns} id={'module-recordedSessions'} orderBy={'name'} />
+          </Box>
         </Grid>
         <Grid item xs={12}>
-          <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={3}>
+          <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={1}>
             <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
               {strings.WORKSHOPS}
             </Typography>
-            <Button
-              id='edit'
-              label={strings.EDIT}
-              onClick={() => true}
-              icon='iconEdit'
-              priority='secondary'
-              className='edit-button'
-              size='small'
-              type='productive'
-            />
+            {module && (
+              <Button
+                id='edit'
+                label={strings.EDIT}
+                onClick={() =>
+                  navigate({
+                    pathname: APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT.replace(':moduleId', `${module.id}`),
+                    search: '?type=workshop',
+                  })
+                }
+                icon='iconEdit'
+                priority='secondary'
+                className='edit-button'
+                size='small'
+                type='productive'
+              />
+            )}
           </Box>
-          <Table rows={workshops || []} columns={columns} id={'module-workshops'} orderBy={'name'} />
+          <Box dangerouslySetInnerHTML={{ __html: workshops?.[0]?.description || '' }} />
+          <Box marginTop={2}>
+            <Table rows={workshops || []} columns={columns} id={'module-workshops'} orderBy={'name'} />
+          </Box>
         </Grid>
       </Grid>
     </Card>
