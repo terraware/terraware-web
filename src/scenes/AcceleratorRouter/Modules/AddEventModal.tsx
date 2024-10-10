@@ -38,7 +38,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
       onClose={onClose}
       open={true}
       title={strings.EVENT_DETAILS}
-      size='medium'
+      size='large'
       middleButtons={[
         <Button
           id='cancel'
@@ -51,11 +51,11 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
         <Button id='save' onClick={save} label={strings.ADD} key='button-2' />,
       ]}
     >
-      <Grid container textAlign={'left'}>
+      <Grid container textAlign={'left'} spacing={2}>
         <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingRight: 1 }}>
           <DatePicker
             id='startTime'
-            label={strings.START_TIME}
+            label={strings.START_DATE}
             value={record.startTime}
             onDateChange={(value?: DateTime) => {
               onChange('startTime', value?.toFormat('yyyy-MM-dd'));
@@ -66,7 +66,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
         <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingLeft: 1 }}>
           <DatePicker
             id='endTime'
-            label={strings.END_TIME}
+            label={strings.END_DATE}
             value={record.endTime}
             onDateChange={(value) => {
               onChange('endTime', value?.toFormat('yyyy-MM-dd'));
@@ -95,7 +95,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
         <Grid item xs={12}>
           <TextField
             id='slidesUrl'
-            label={strings.RECORDING_URL}
+            label={strings.SLIDES_URL}
             type='text'
             value={record.slidesUrl}
             onChange={(value: unknown) => onChange('slidesUrl', value)}
