@@ -90,27 +90,29 @@ export default function ModuleView(): JSX.Element {
           },
         }}
       >
-        <Tabs
-          activeTab={activeTab}
-          onTabChange={onTabChange}
-          tabs={[
-            {
-              id: 'details',
-              label: strings.DETAILS,
-              children: <ModuleDetails module={module} />,
-            },
-            {
-              id: 'contentAndMaterials',
-              label: strings.CONTENT_AND_MATERIALS,
-              children: <ContentAndMaterials module={module} deliverables={deliverables} />,
-            },
-            {
-              id: 'events',
-              label: strings.EVENTS,
-              children: <Events module={module} events={events} />,
-            },
-          ]}
-        />
+        {moduleId && (
+          <Tabs
+            activeTab={activeTab}
+            onTabChange={onTabChange}
+            tabs={[
+              {
+                id: 'details',
+                label: strings.DETAILS,
+                children: <ModuleDetails module={module} moduleId={moduleId} />,
+              },
+              {
+                id: 'contentAndMaterials',
+                label: strings.CONTENT_AND_MATERIALS,
+                children: <ContentAndMaterials module={module} deliverables={deliverables} />,
+              },
+              {
+                id: 'events',
+                label: strings.EVENTS,
+                children: <Events module={module} events={events} />,
+              },
+            ]}
+          />
+        )}
       </Box>
     </Page>
   );

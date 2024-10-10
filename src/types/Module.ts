@@ -36,6 +36,26 @@ export type ModuleProjectSearchResult = {
   };
 };
 
+export type ModuleCohortsAndProjectsSearchResult = {
+  cohortModules?: {
+    title: string;
+    startDate: string;
+    endDate: string;
+    cohort: {
+      id: number;
+      name: string;
+      participants: {
+        id: number;
+        name: string;
+        projects: {
+          id: number;
+          name: string;
+        }[];
+      }[];
+    };
+  }[];
+};
+
 export const getEventStatus = (status: ModuleEventStatus) => {
   switch (status) {
     case 'Not Started': {

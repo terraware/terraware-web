@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography } from '@mui/material';
-import { Button, Textfield, theme } from '@terraware/web-components';
+import { Button, DialogBox, Textfield, theme } from '@terraware/web-components';
+import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import VariableInternalComment from 'src/components/Variables/VariableInternalComment';
 import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
@@ -52,7 +53,19 @@ export default function EditableSectionContainer({
   const [variableCitation, setVariableCitation] = useState<string>('');
 
   const [openEditVariableModal, setOpenEditVariableModal] = useState<boolean>(false);
+  const [openEditCommentModal, setOpenEditCommenteModal] = useState<boolean>(false);
   const [clickedVariable, setClickedVariable] = useState<VariableWithValues>();
+
+  const variableValues = section?.variableValues || [];
+  // For section variables, multiple variableValues are returned, so we need to find the one with the current ID
+  let variableValue: VariableValue | undefined;
+  if (section.type === 'Section') {
+    variableValue = (section?.variableValues || []).find((value) => value.variableId === section.id);
+  } else {
+    variableValue = variableValues[0];
+  }
+
+  const [internalComment, setInternalComment] = useState(variableValue?.internalComment || '');
 
   const [editing, setEditing] = useState(false);
   const [updateVariableValuesRequestId, setUpdateVariableValuesRequestId] = useState<string>('');
@@ -89,6 +102,10 @@ export default function EditableSectionContainer({
     onEdit(true);
   };
 
+  const onEditCommentHandler = () => {
+    setOpenEditCommenteModal(true);
+  };
+
   const onSaveHandler = useCallback(() => {
     const request = dispatch(
       requestUpdateSectionVariableValues({
@@ -109,19 +126,17 @@ export default function EditableSectionContainer({
     setEditSectionValues(sectionValues);
   };
 
-  const onUpdateInternalComment = useCallback(
-    (internalComment: string) => {
-      const firstVariableValue = section.variableValues[0] || {};
-      const status = firstVariableValue?.status || ('Not Submitted' as NonUndefined<VariableValue['status']>);
-      const feedback = firstVariableValue?.feedback || '';
+  const onUpdateInternalComment = useCallback(() => {
+    const firstVariableValue = section.variableValues[0] || {};
+    const status = firstVariableValue?.status || ('Not Submitted' as NonUndefined<VariableValue['status']>);
+    const feedback = firstVariableValue?.feedback || '';
 
-      const request = dispatch(
-        requestUpdateVariableWorkflowDetails({ status, feedback, internalComment, projectId, variableId: section.id })
-      );
-      setUpdateInternalCommentRequestId(request.requestId);
-    },
-    [section]
-  );
+    const request = dispatch(
+      requestUpdateVariableWorkflowDetails({ status, feedback, internalComment, projectId, variableId: section.id })
+    );
+    setUpdateInternalCommentRequestId(request.requestId);
+    setOpenEditCommenteModal(false);
+  }, [section, internalComment]);
 
   const onEditVariableValue = (variable?: VariableWithValues) => {
     if (variable === undefined) {
@@ -182,6 +197,43 @@ export default function EditableSectionContainer({
 
   return (
     <>
+      {openEditCommentModal && (
+        <DialogBox
+          onClose={() => setOpenEditCommenteModal(false)}
+          open={openEditCommentModal}
+          title={strings.INTERNAL_COMMENTS}
+          size='large'
+          middleButtons={[
+            <Button
+              id='cancelEditInternalComment'
+              label={strings.CANCEL}
+              priority='secondary'
+              type='passive'
+              onClick={() => setOpenEditCommenteModal(false)}
+              key='button-1'
+            />,
+            <Button
+              id='updateInternalComment'
+              label={strings.SAVE}
+              onClick={() => onUpdateInternalComment()}
+              key='button-2'
+            />,
+          ]}
+        >
+          <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
+            <Grid item xs={12}>
+              <TextField
+                label={''}
+                type='textarea'
+                id='internalComment'
+                onChange={(value) => setInternalComment(value as string)}
+                value={internalComment}
+                preserveNewlines
+              />
+            </Grid>
+          </Grid>
+        </DialogBox>
+      )}
       {openEditVariableModal && clickedVariable && (
         <EditVariableModal
           display={!editing}
@@ -207,7 +259,7 @@ export default function EditableSectionContainer({
               marginBottom: theme.spacing(2),
             }}
           >
-            <VariableInternalComment editing update={onUpdateInternalComment} variable={section} />
+            <VariableInternalComment editing={false} update={onUpdateInternalComment} variable={section} />
           </Box>
 
           {nameAndDescription}
@@ -253,13 +305,13 @@ export default function EditableSectionContainer({
           sx={{
             padding: theme.spacing(2),
             borderRadius: '16px',
-            '.edit-button': {
+            '.edit-buttons': {
               display: 'none',
             },
             '&:hover': {
               backgroundColor: theme.palette.TwClrBgHover,
 
-              '.edit-button': {
+              '.edit-buttons': {
                 display: 'block',
               },
             },
@@ -274,7 +326,16 @@ export default function EditableSectionContainer({
                 onClick={onEditHandler}
                 icon='iconEdit'
                 priority='secondary'
-                className='edit-button'
+                className='edit-buttons'
+                size='small'
+                type='passive'
+              />
+              <Button
+                id='edit'
+                onClick={onEditCommentHandler}
+                icon='iconComment'
+                priority='secondary'
+                className='edit-buttons'
                 size='small'
                 type='passive'
               />
