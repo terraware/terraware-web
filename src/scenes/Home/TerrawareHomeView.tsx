@@ -130,7 +130,7 @@ const TerrawareHomeView = () => {
                       buttonLabel={strings.APPLY}
                       id='applicationHomeCard'
                       description={strings.formatString(
-                        'Find out more about Terraformation’s Seed to Carbon Forest Accelerator {0} and apply!',
+                        strings.FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,
                         <Link
                           fontSize='16px'
                           target='_blank'
