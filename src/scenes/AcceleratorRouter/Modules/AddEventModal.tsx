@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
-import { DatePicker } from '@terraware/web-components';
+import { DatePicker, Dropdown, DropdownItem, SelectT } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
+import { requestListModuleCohortsAndProjects } from 'src/redux/features/modules/modulesAsyncThunks';
+import { selectModuleCohortsAndProjects } from 'src/redux/features/modules/modulesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ModuleEvent } from 'src/types/Module';
+import { CohortModuleWithProject, ModuleEvent } from 'src/types/Module';
 import useForm from 'src/utils/useForm';
 
 export interface AddEventModalProps {
@@ -22,6 +25,29 @@ export interface AddEventModalProps {
 
 export default function AddEventModal(props: AddEventModalProps): JSX.Element {
   const { onClose, onSave, eventToEdit, moduleId, moduleName, type } = props;
+  const dispatch = useAppDispatch();
+  const result = useAppSelector(selectModuleCohortsAndProjects(moduleId.toString()));
+  const [availableCohorts, setAvailableCohorts] = useState<CohortModuleWithProject[]>();
+  const [selectedCohort, setSelectedCohort] = useState<CohortModuleWithProject>();
+  const [selectedProject, setSelectedProject] = useState<string>();
+
+  useEffect(() => {
+    if (module?.id) {
+      dispatch(requestListModuleCohortsAndProjects(moduleId.toString()));
+    }
+  }, [module?.id]);
+
+  useEffect(() => {
+    if (result?.status === 'success') {
+      const cohortsToSelect: CohortModuleWithProject[] = [];
+      const cohortModules = result.data?.cohortModules;
+      cohortModules?.forEach((cm) => {
+        cohortsToSelect.push(cm.cohort);
+      });
+
+      setAvailableCohorts(cohortsToSelect);
+    }
+  }, [result]);
 
   const theme = useTheme();
 
@@ -31,6 +57,17 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
 
   const save = () => {
     onSave(record);
+  };
+
+  const getProjectsForCohort = () => {
+    const allProjects: DropdownItem[] = [];
+    selectedCohort?.participants.forEach((pp) => {
+      pp.projects.forEach((proj) => {
+        allProjects.push({ label: proj.name, value: proj.id });
+      });
+    });
+
+    return allProjects;
   };
 
   return (
@@ -99,6 +136,34 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
             type='text'
             value={record.slidesUrl}
             onChange={(value: unknown) => onChange('slidesUrl', value)}
+          />
+        </Grid>
+        <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingRight: 1 }}>
+          <SelectT<CohortModuleWithProject>
+            id='cohort'
+            label={strings.COHORT}
+            placeholder={strings.SELECT}
+            options={availableCohorts}
+            onChange={(_cohort: CohortModuleWithProject) => {
+              setSelectedCohort(_cohort);
+            }}
+            selectedValue={selectedCohort}
+            fullWidth={true}
+            isEqual={(a: CohortModuleWithProject, b: CohortModuleWithProject) => a.id === b.id}
+            renderOption={(_cohort: CohortModuleWithProject) => _cohort?.name || ''}
+            displayLabel={(_cohort: CohortModuleWithProject) => _cohort?.name || ''}
+            toT={(name: string) => ({ name }) as unknown as CohortModuleWithProject}
+            required
+          />
+        </Grid>
+        <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingLeft: 1 }}>
+          <Dropdown
+            required
+            label={strings.PROJECT}
+            onChange={(projId: string) => setSelectedProject(projId)}
+            selectedValue={selectedProject}
+            options={getProjectsForCohort()}
+            fullWidth={true}
           />
         </Grid>
       </Grid>
