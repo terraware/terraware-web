@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
-import { Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { DatePicker, Dropdown, DropdownItem, SelectT } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
+import AddLink from 'src/components/common/AddLink';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
@@ -23,13 +24,17 @@ export interface AddEventModalProps {
   eventToEdit?: ModuleEvent;
 }
 
+export type ProjectsSection = {
+  cohort: CohortModuleWithProject;
+  projectId: string;
+};
+
 export default function AddEventModal(props: AddEventModalProps): JSX.Element {
   const { onClose, onSave, eventToEdit, moduleId, moduleName, type } = props;
   const dispatch = useAppDispatch();
   const result = useAppSelector(selectModuleCohortsAndProjects(moduleId.toString()));
   const [availableCohorts, setAvailableCohorts] = useState<CohortModuleWithProject[]>();
-  const [selectedCohort, setSelectedCohort] = useState<CohortModuleWithProject>();
-  const [selectedProject, setSelectedProject] = useState<string>();
+  const [projectsSections, setProjectsSections] = useState<ProjectsSection[]>([{ cohort: {}, projectId: '-1' }]);
 
   useEffect(() => {
     if (module?.id) {
@@ -59,15 +64,48 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
     onSave(record);
   };
 
-  const getProjectsForCohort = () => {
+  const getProjectsForCohort = (selectedCohort: CohortModuleWithProject) => {
     const allProjects: DropdownItem[] = [];
-    selectedCohort?.participants.forEach((pp) => {
+    selectedCohort?.participants?.forEach((pp) => {
       pp.projects.forEach((proj) => {
         allProjects.push({ label: proj.name, value: proj.id });
       });
     });
 
     return allProjects;
+  };
+
+  const updateProjectSectionCohort = (index: number, newCohort: CohortModuleWithProject) => {
+    setProjectsSections((prev) => {
+      const oldProjectSections = [...prev];
+      if (oldProjectSections[index]) {
+        oldProjectSections[index].cohort = newCohort;
+      } else {
+        oldProjectSections[index] = { cohort: newCohort, projectId: '-1' };
+      }
+
+      return oldProjectSections;
+    });
+  };
+
+  const updateProjectSectionProjectId = (index: number, projectId: string) => {
+    setProjectsSections((prev) => {
+      const oldProjectSections = [...prev];
+      if (oldProjectSections[index]) {
+        oldProjectSections[index].projectId = projectId;
+      }
+
+      return oldProjectSections;
+    });
+  };
+
+  const addProjectsSection = () => {
+    setProjectsSections((prev) => {
+      const oldProjectSections = [...prev];
+      oldProjectSections.push({ cohort: {}, projectId: '-1' });
+
+      return oldProjectSections;
+    });
   };
 
   return (
@@ -138,33 +176,49 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
             onChange={(value: unknown) => onChange('slidesUrl', value)}
           />
         </Grid>
-        <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingRight: 1 }}>
-          <SelectT<CohortModuleWithProject>
-            id='cohort'
-            label={strings.COHORT}
-            placeholder={strings.SELECT}
-            options={availableCohorts}
-            onChange={(_cohort: CohortModuleWithProject) => {
-              setSelectedCohort(_cohort);
-            }}
-            selectedValue={selectedCohort}
-            fullWidth={true}
-            isEqual={(a: CohortModuleWithProject, b: CohortModuleWithProject) => a.id === b.id}
-            renderOption={(_cohort: CohortModuleWithProject) => _cohort?.name || ''}
-            displayLabel={(_cohort: CohortModuleWithProject) => _cohort?.name || ''}
-            toT={(name: string) => ({ name }) as unknown as CohortModuleWithProject}
-            required
-          />
+        <Grid item xs={12}>
+          {projectsSections.map((ps, index) => {
+            return (
+              <Grid
+                container
+                sx={{
+                  borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                  paddingBottom: 2,
+                }}
+              >
+                <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingRight: 1 }}>
+                  <SelectT<CohortModuleWithProject>
+                    id='cohort'
+                    label={strings.COHORT}
+                    placeholder={strings.SELECT}
+                    options={availableCohorts}
+                    onChange={(_cohort: CohortModuleWithProject) => {
+                      updateProjectSectionCohort(index, _cohort);
+                    }}
+                    selectedValue={ps.cohort}
+                    fullWidth={true}
+                    isEqual={(a: CohortModuleWithProject, b: CohortModuleWithProject) => a.id === b.id}
+                    renderOption={(_cohort: CohortModuleWithProject) => _cohort?.name || ''}
+                    displayLabel={(_cohort: CohortModuleWithProject) => _cohort?.name || ''}
+                    toT={(name: string) => ({ name }) as unknown as CohortModuleWithProject}
+                  />
+                </Grid>
+                <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingLeft: 1 }}>
+                  <Dropdown
+                    required
+                    label={strings.PROJECT}
+                    onChange={(projId: string) => updateProjectSectionProjectId(index, projId)}
+                    selectedValue={ps.projectId}
+                    options={getProjectsForCohort(ps.cohort)}
+                    fullWidth={true}
+                  />
+                </Grid>
+              </Grid>
+            );
+          })}
         </Grid>
-        <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingLeft: 1 }}>
-          <Dropdown
-            required
-            label={strings.PROJECT}
-            onChange={(projId: string) => setSelectedProject(projId)}
-            selectedValue={selectedProject}
-            options={getProjectsForCohort()}
-            fullWidth={true}
-          />
+        <Grid item xs={12}>
+          <AddLink id='add-cohort-project' large={true} onClick={addProjectsSection} text={strings.ADD} />
         </Grid>
       </Grid>
     </DialogBox>

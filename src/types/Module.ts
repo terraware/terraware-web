@@ -56,7 +56,9 @@ export type ModuleCohortsAndProjectsSearchResult = {
   }[];
 };
 
-export type CohortModuleWithProject = NonNullable<ModuleCohortsAndProjectsSearchResult['cohortModules']>[0]['cohort'];
+export type CohortModuleWithProject = Partial<
+  NonNullable<ModuleCohortsAndProjectsSearchResult['cohortModules']>[0]['cohort']
+>;
 
 export const getEventStatus = (status: ModuleEventStatus) => {
   switch (status) {
