@@ -5,18 +5,18 @@ import { Button, TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
 import strings from 'src/strings';
-import { Module, ModuleEvent } from 'src/types/Module';
+import { Module, ModuleEventPartial } from 'src/types/Module';
 
 import AddEventModal from './AddEventModal';
 import EventsCellRenderer from './EventsCellRenderer';
 
 interface EventsTableProps {
   type: 'One-on-One Session' | 'Workshop' | 'Live Session' | 'Recorded Session';
-  events?: ModuleEvent[];
-  eventsToAdd?: ModuleEvent[];
-  setEventsToAdd?: React.Dispatch<React.SetStateAction<ModuleEvent[] | undefined>>;
-  eventsToDelete?: ModuleEvent[];
-  setEventsToDelete?: React.Dispatch<React.SetStateAction<ModuleEvent[] | undefined>>;
+  events?: ModuleEventPartial[];
+  eventsToAdd?: ModuleEventPartial[];
+  setEventsToAdd?: React.Dispatch<React.SetStateAction<ModuleEventPartial[] | undefined>>;
+  eventsToDelete?: ModuleEventPartial[];
+  setEventsToDelete?: React.Dispatch<React.SetStateAction<ModuleEventPartial[] | undefined>>;
   module?: Module;
 }
 
@@ -67,18 +67,18 @@ export default function EventsTable(props: EventsTableProps): JSX.Element {
   const { type, events, eventsToAdd, setEventsToAdd, eventsToDelete, setEventsToDelete, module } = props;
   const theme = useTheme();
   const [addEventModalOpened, setAddEventModalOpened] = useState(false);
-  const [prevEvents, setPrevEvents] = useState<ModuleEvent[]>(events || []);
-  const [selectedRows, setSelectedRows] = useState<ModuleEvent[]>([]);
-  const [eventToEdit, setEventToEdit] = useState<ModuleEvent>();
+  const [prevEvents, setPrevEvents] = useState<ModuleEventPartial[]>(events || []);
+  const [selectedRows, setSelectedRows] = useState<ModuleEventPartial[]>([]);
+  const [eventToEdit, setEventToEdit] = useState<ModuleEventPartial>();
 
-  const areEventsEqual = (a: ModuleEvent, b: ModuleEvent) => {
+  const areEventsEqual = (a: ModuleEventPartial, b: ModuleEventPartial) => {
     if (a.startTime === b.startTime && a.startTime === b.startTime) {
       return true;
     }
     return false;
   };
 
-  const onAddEvent = (eventToAdd: ModuleEvent) => {
+  const onAddEvent = (eventToAdd: ModuleEventPartial) => {
     if (setEventsToAdd) {
       setEventsToAdd((prev) => {
         if (prev) {
@@ -90,7 +90,7 @@ export default function EventsTable(props: EventsTableProps): JSX.Element {
     }
   };
 
-  const onEditedEvent = (editedEvent: ModuleEvent) => {
+  const onEditedEvent = (editedEvent: ModuleEventPartial) => {
     if (setEventsToDelete && setEventsToAdd) {
       // When editing a event, first we remove the old entrance and then we add it again
       const eventsToAddIds = eventsToAdd?.map((eta) => eta.id);
@@ -148,7 +148,7 @@ export default function EventsTable(props: EventsTableProps): JSX.Element {
     }
   }, [events]);
 
-  const onEditHandler = (clickedEvent: ModuleEvent, fromColumn?: string) => {
+  const onEditHandler = (clickedEvent: ModuleEventPartial, fromColumn?: string) => {
     if (fromColumn === 'title') {
       setEventToEdit(clickedEvent);
       setAddEventModalOpened(true);
@@ -160,7 +160,7 @@ export default function EventsTable(props: EventsTableProps): JSX.Element {
     setAddEventModalOpened(false);
   };
 
-  const onModalSaveHandler = (eventToSave: ModuleEvent) => {
+  const onModalSaveHandler = (eventToSave: ModuleEventPartial) => {
     if (eventToEdit) {
       setEventToEdit(undefined);
       onEditedEvent(eventToSave);

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -9,6 +9,7 @@ import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import useGetModule from 'src/hooks/useGetModule';
 import strings from 'src/strings';
+import { ModuleEventPartial } from 'src/types/Module';
 import useQuery from 'src/utils/useQuery';
 
 import EventsTable from './EventsTable';
@@ -20,6 +21,8 @@ export default function EventEditView(): JSX.Element {
   const { getModule, module, events } = useGetModule();
   const query = useQuery();
   const eventType = query.get('type');
+  const [eventsToAdd, setEventsToAdd] = useState<ModuleEventPartial[]>();
+  const [eventsToDelete, setEventsToDelete] = useState<ModuleEventPartial[]>();
 
   useEffect(() => {
     if (moduleId) {
@@ -106,7 +109,15 @@ export default function EventEditView(): JSX.Element {
             margin: 0,
           }}
         >
-          <EventsTable type={getType()} module={module} events={getEvents()} />
+          <EventsTable
+            type={getType()}
+            module={module}
+            events={getEvents()}
+            eventsToAdd={eventsToAdd}
+            setEventsToAdd={setEventsToAdd}
+            eventsToDelete={eventsToDelete}
+            setEventsToDelete={setEventsToDelete}
+          />
         </Box>
       </PageForm>
     </TfMain>

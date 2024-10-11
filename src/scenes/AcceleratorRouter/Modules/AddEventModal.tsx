@@ -13,16 +13,16 @@ import { requestListModuleCohortsAndProjects } from 'src/redux/features/modules/
 import { selectModuleCohortsAndProjects } from 'src/redux/features/modules/modulesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { CohortModuleWithProject, ModuleEvent } from 'src/types/Module';
+import { CohortModuleWithProject, ModuleEventPartial, ModuleEventProject } from 'src/types/Module';
 import useForm from 'src/utils/useForm';
 
 export interface AddEventModalProps {
   onClose: () => void;
-  onSave: (eventModule: ModuleEvent) => void;
+  onSave: (eventModule: ModuleEventPartial) => void;
   moduleId: number;
   type: 'One-on-One Session' | 'Workshop' | 'Live Session' | 'Recorded Session';
   moduleName: string;
-  eventToEdit?: ModuleEvent;
+  eventToEdit?: ModuleEventPartial;
 }
 
 export type ProjectsSection = {
@@ -31,7 +31,7 @@ export type ProjectsSection = {
 };
 
 export default function AddEventModal(props: AddEventModalProps): JSX.Element {
-  const { onClose, onSave, eventToEdit, moduleId, moduleName, type } = props;
+  const { onClose, onSave, eventToEdit, moduleId } = props;
   const dispatch = useAppDispatch();
   const result = useAppSelector(selectModuleCohortsAndProjects(moduleId.toString()));
   const [availableCohorts, setAvailableCohorts] = useState<CohortModuleWithProject[]>();
@@ -57,12 +57,20 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
 
   const theme = useTheme();
 
-  const [record, , onChange] = useForm<ModuleEvent>(
-    eventToEdit || { id: -1, moduleId: moduleId, type: type, moduleName: moduleName, status: 'Not Started' }
-  );
+  const [record, , onChange] = useForm<ModuleEventPartial>(eventToEdit || { id: -1 });
 
   const save = () => {
-    onSave(record);
+    const projectsWithCohort: ModuleEventProject[] = [];
+    projectsSections.forEach((ps) =>
+      ps.projectIds.forEach((projId) => {
+        const foundCohort = availableCohorts?.find((coh) => coh.id === ps.cohort.id);
+        const allCohortProjects = foundCohort?.participants?.flatMap((p) => p.projects.flatMap((p) => p));
+        const foundProject = allCohortProjects?.find((pr) => pr.id.toString() === projId.toString());
+        projectsWithCohort.push({ cohortId: ps.cohort.id, projectId: Number(projId), projectName: foundProject?.name });
+      })
+    );
+
+    onSave({ ...record, projects: projectsWithCohort });
   };
 
   const getProjectsForCohort = (selectedCohort: CohortModuleWithProject) => {
