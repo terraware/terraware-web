@@ -107,7 +107,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
     <Grid
       container
       sx={{
-        background: 'url(/assets/terraware-logo-mobile.svg) no-repeat center/105px',
+        background: 'url(/assets/terraware-logo-mobile.svg) no-repeat 32px/105px',
         display: 'flex',
         alignItems: 'center',
       }}
