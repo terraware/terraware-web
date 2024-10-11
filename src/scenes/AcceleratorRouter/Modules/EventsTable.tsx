@@ -8,7 +8,7 @@ import strings from 'src/strings';
 import { Module, ModuleEvent } from 'src/types/Module';
 
 import AddEventModal from './AddEventModal';
-import CohortModulesCellRenderer from './CohortModulesCellRenderer';
+import EventsCellRenderer from './EventsCellRenderer';
 
 interface EventsTableProps {
   type: 'One-on-One Session' | 'Workshop' | 'Live Session' | 'Recorded Session';
@@ -239,7 +239,7 @@ export default function EventsTable(props: EventsTableProps): JSX.Element {
                 icon: 'iconTrashCan',
               },
             ]}
-            Renderer={CohortModulesCellRenderer}
+            Renderer={EventsCellRenderer}
             controlledOnSelect={true}
             onSelect={onEditHandler}
             isClickable={() => false}

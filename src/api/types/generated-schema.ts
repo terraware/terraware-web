@@ -3396,6 +3396,7 @@ export interface components {
       /** Format: int64 */
       moduleId: number;
       moduleName: string;
+      projects?: components["schemas"]["ModuleEventProject"][];
       /** Format: uri */
       recordingUrl?: string;
       /** Format: uri */
@@ -3406,6 +3407,17 @@ export interface components {
       status: "Not Started" | "Starting Soon" | "In Progress" | "Ended";
       /** @enum {string} */
       type: "One-on-One Session" | "Workshop" | "Live Session" | "Recorded Session";
+    };
+    ModuleEventProject: {
+      /** Format: int64 */
+      cohortId: number;
+      cohortName: string;
+      /** Format: int64 */
+      participantId: number;
+      participantName: string;
+      /** Format: int64 */
+      projectId: number;
+      projectName: string;
     };
     ModulePayload: {
       additionalResources?: string;
