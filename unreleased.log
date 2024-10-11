@@ -1,6 +1,1 @@
-f64dd9ce1db SW-6107 New Document Producer Section editing implementation (#3270)
-5c5ff1171a7 SW-5291 Make name and module required when adding a new module to cohort (#3269)
-74d991f955e SW-5941 Module detail view  (#3266)
-dc96f66e36e SW-5291 Validate end date is after start date when adding a module to a cohort (#3265)
-5752ab90ae8 SW-5291 Upload Modules & Deliverables (#3259)
-79459426961 Hide edit internal comment/status icon instead of disable it, when editing a section (#3264)
+7dbaa368398 SW-6093: Accelerator apply card (#3272)
