@@ -75,7 +75,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
       <Box sx={leftStyles}>
         <Box sx={logoStyles}>
           <Link onClick={() => handleTopBarClick()}>
-            <Svg.Logo style={logoStyles} />
+            <Svg.TerrawareLogoDesktop style={logoStyles} />
           </Link>
         </Box>
 
@@ -107,12 +107,12 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
     <Grid
       container
       sx={{
-        background: 'url(/assets/logo.svg) no-repeat center/37px',
+        background: 'url(/assets/terraware-logo-mobile.svg) no-repeat 32px/105px',
         display: 'flex',
         alignItems: 'center',
       }}
     >
-      <Grid item xs={3} sx={leftStyles}>
+      <Grid item xs={1} sx={leftStyles}>
         {selectedOrganization.id !== -1 && (
           <IconButton onClick={() => setShowNavBar(true)} size='small'>
             <Icon name='iconMenu' />
@@ -133,7 +133,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         }}
       />
 
-      <Grid item xs={3} sx={rightStyles}>
+      <Grid item xs={5} sx={rightStyles}>
         <KnowledgeBaseLink />
         <NotificationsDropdown
           organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}
