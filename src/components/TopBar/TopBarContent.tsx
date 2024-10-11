@@ -112,7 +112,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         alignItems: 'center',
       }}
     >
-      <Grid item xs={3} sx={leftStyles}>
+      <Grid item xs={1} sx={leftStyles}>
         {selectedOrganization.id !== -1 && (
           <IconButton onClick={() => setShowNavBar(true)} size='small'>
             <Icon name='iconMenu' />
@@ -133,7 +133,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         }}
       />
 
-      <Grid item xs={3} sx={rightStyles}>
+      <Grid item xs={5} sx={rightStyles}>
         <KnowledgeBaseLink />
         <NotificationsDropdown
           organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}
