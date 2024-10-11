@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import { Box, Grid, useTheme } from '@mui/material';
-import { DatePicker, Dropdown, DropdownItem, SelectT } from '@terraware/web-components';
+import { Grid, useTheme } from '@mui/material';
+import { DatePicker, DropdownItem, MultiSelect, SelectT } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import AddLink from 'src/components/common/AddLink';
@@ -26,7 +26,7 @@ export interface AddEventModalProps {
 
 export type ProjectsSection = {
   cohort: CohortModuleWithProject;
-  projectId: string;
+  projectIds: string[];
 };
 
 export default function AddEventModal(props: AddEventModalProps): JSX.Element {
@@ -34,7 +34,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
   const dispatch = useAppDispatch();
   const result = useAppSelector(selectModuleCohortsAndProjects(moduleId.toString()));
   const [availableCohorts, setAvailableCohorts] = useState<CohortModuleWithProject[]>();
-  const [projectsSections, setProjectsSections] = useState<ProjectsSection[]>([{ cohort: {}, projectId: '-1' }]);
+  const [projectsSections, setProjectsSections] = useState<ProjectsSection[]>([{ cohort: {}, projectIds: [] }]);
 
   useEffect(() => {
     if (module?.id) {
@@ -81,18 +81,30 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
       if (oldProjectSections[index]) {
         oldProjectSections[index].cohort = newCohort;
       } else {
-        oldProjectSections[index] = { cohort: newCohort, projectId: '-1' };
+        oldProjectSections[index] = { cohort: newCohort, projectIds: [] };
       }
 
       return oldProjectSections;
     });
   };
 
-  const updateProjectSectionProjectId = (index: number, projectId: string) => {
+  const onAddProject = (index: number, projectId: string) => {
     setProjectsSections((prev) => {
       const oldProjectSections = [...prev];
       if (oldProjectSections[index]) {
-        oldProjectSections[index].projectId = projectId;
+        oldProjectSections[index].projectIds.push(projectId);
+      }
+
+      return oldProjectSections;
+    });
+  };
+
+  const onRemoveProject = (index: number, projectId: string) => {
+    setProjectsSections((prev) => {
+      const oldProjectSections = [...prev];
+      if (oldProjectSections[index]) {
+        const foundIndex = oldProjectSections[index].projectIds.findIndex((pId) => pId === projectId);
+        oldProjectSections[index].projectIds.splice(foundIndex, 1);
       }
 
       return oldProjectSections;
@@ -102,7 +114,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
   const addProjectsSection = () => {
     setProjectsSections((prev) => {
       const oldProjectSections = [...prev];
-      oldProjectSections.push({ cohort: {}, projectId: '-1' });
+      oldProjectSections.push({ cohort: {}, projectIds: [] });
 
       return oldProjectSections;
     });
@@ -180,6 +192,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
           {projectsSections.map((ps, index) => {
             return (
               <Grid
+                key={`proj-${index}`}
                 container
                 sx={{
                   borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
@@ -204,13 +217,14 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
                   />
                 </Grid>
                 <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingLeft: 1 }}>
-                  <Dropdown
-                    required
+                  <MultiSelect
                     label={strings.PROJECT}
-                    onChange={(projId: string) => updateProjectSectionProjectId(index, projId)}
-                    selectedValue={ps.projectId}
-                    options={getProjectsForCohort(ps.cohort)}
                     fullWidth={true}
+                    onAdd={(projectId) => onAddProject(index, projectId)}
+                    onRemove={(projectId) => onRemoveProject(index, projectId)}
+                    options={new Map(getProjectsForCohort(ps.cohort).map((pr) => [pr.value, pr.label]))}
+                    valueRenderer={(v) => v}
+                    selectedOptions={ps.projectIds}
                   />
                 </Grid>
               </Grid>
