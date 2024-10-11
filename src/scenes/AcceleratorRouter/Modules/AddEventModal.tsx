@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
-import { Grid, useTheme } from '@mui/material';
-import { DatePicker, DropdownItem, MultiSelect, SelectT } from '@terraware/web-components';
+import { Grid, Typography, useTheme } from '@mui/material';
+import { DatePicker, DropdownItem, Icon, MultiSelect, SelectT } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import AddLink from 'src/components/common/AddLink';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
+import Link from 'src/components/common/Link';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { requestListModuleCohortsAndProjects } from 'src/redux/features/modules/modulesAsyncThunks';
@@ -120,6 +121,15 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
     });
   };
 
+  const removeProjectsSection = (index: number) => {
+    setProjectsSections((prev) => {
+      const oldProjectSections = [...prev];
+      oldProjectSections.splice(index, 1);
+
+      return oldProjectSections;
+    });
+  };
+
   return (
     <DialogBox
       onClose={onClose}
@@ -137,6 +147,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
         />,
         <Button id='save' onClick={save} label={strings.ADD} key='button-2' />,
       ]}
+      scrolled
     >
       <Grid container textAlign={'left'} spacing={2}>
         <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingRight: 1 }}>
@@ -189,6 +200,11 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
           />
         </Grid>
         <Grid item xs={12}>
+          <Typography marginTop={2} fontSize='20px' fontWeight={600}>
+            {strings.PROJECTS}
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
           {projectsSections.map((ps, index) => {
             return (
               <Grid
@@ -217,15 +233,34 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
                   />
                 </Grid>
                 <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingLeft: 1 }}>
-                  <MultiSelect
-                    label={strings.PROJECT}
-                    fullWidth={true}
-                    onAdd={(projectId) => onAddProject(index, projectId)}
-                    onRemove={(projectId) => onRemoveProject(index, projectId)}
-                    options={new Map(getProjectsForCohort(ps.cohort).map((pr) => [pr.value, pr.label]))}
-                    valueRenderer={(v) => v}
-                    selectedOptions={ps.projectIds}
-                  />
+                  <Grid container alignItems='center'>
+                    <Grid item xs={10}>
+                      <MultiSelect
+                        label={strings.PROJECT}
+                        fullWidth={true}
+                        onAdd={(projectId) => onAddProject(index, projectId)}
+                        onRemove={(projectId) => onRemoveProject(index, projectId)}
+                        options={new Map(getProjectsForCohort(ps.cohort).map((pr) => [pr.value, pr.label]))}
+                        valueRenderer={(v) => v}
+                        selectedOptions={ps.projectIds}
+                      />
+                    </Grid>
+                    <Grid item xs={2}>
+                      <Link
+                        onClick={() => removeProjectsSection(index)}
+                        disabled={projectsSections.length === 1}
+                        style={{ paddingTop: 3, paddingLeft: 1 }}
+                      >
+                        <Icon
+                          name='iconSubtract'
+                          style={{
+                            height: '20px',
+                            width: '20px',
+                          }}
+                        />
+                      </Link>
+                    </Grid>
+                  </Grid>
                 </Grid>
               </Grid>
             );
