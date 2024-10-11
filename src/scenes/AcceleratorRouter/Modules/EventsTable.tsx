@@ -125,17 +125,14 @@ export default function EventsTable(props: EventsTableProps): JSX.Element {
     }
   };
 
-  const deleteModules = () => {
+  const deleteEvents = () => {
     if (setEventsToDelete && setEventsToAdd) {
-      const selectedRowsIds = selectedRows.map((sr) => sr.id);
-      const eventsToAddIds = eventsToAdd?.map((eta) => eta.id);
-
-      const eventsToDelete = selectedRows.filter((sr) => !eventsToAddIds?.includes(sr.id));
+      const eventsToDelete = selectedRows.filter((sr) => sr.id?.toString() !== '-1');
       setEventsToDelete((prev) => {
         return prev ? [...prev, ...eventsToDelete] : eventsToDelete;
       });
 
-      const newEventsToAdd = eventsToAdd?.filter((etAdd) => !selectedRowsIds.includes(etAdd.id));
+      const newEventsToAdd = eventsToAdd?.filter((etAdd) => !selectedRows.includes(etAdd));
       setEventsToAdd(newEventsToAdd);
 
       setSelectedRows([]);
@@ -235,7 +232,7 @@ export default function EventsTable(props: EventsTableProps): JSX.Element {
               {
                 buttonText: strings.REMOVE,
                 buttonType: 'destructive',
-                onButtonClick: () => deleteModules(),
+                onButtonClick: () => deleteEvents(),
                 icon: 'iconTrashCan',
               },
             ]}
