@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
+import { ButtonType } from '@terraware/web-components/components/Button/Button';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PageHeader from 'src/components/PageHeader';
@@ -9,7 +10,12 @@ import Link from 'src/components/common/Link';
 import PageCard from 'src/components/common/PageCard';
 import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
-import { ACCELERATOR_LINK, APP_PATHS } from 'src/constants';
+import {
+  ACCELERATOR_LINK,
+  APP_PATHS,
+  TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK,
+  TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK,
+} from 'src/constants';
 import isEnabled from 'src/features';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser } from 'src/providers';
@@ -20,20 +26,28 @@ import NewApplicationModal from '../ApplicationRouter/NewApplicationModal';
 
 type PageCardNextProps = {
   buttonLabel?: string;
+  buttonType?: ButtonType;
   description: string | (string | JSX.Element)[];
   id?: string;
+  imageSource?: string;
   onClickButton?: () => void;
   onClickSecondaryButton?: () => void;
   secondaryButtonLabel?: string;
+  secondaryButtonType?: ButtonType;
+  title?: string | (string | JSX.Element)[];
 };
 
 const PageCardNext = ({
   buttonLabel,
+  buttonType = 'passive',
   description,
   id,
+  imageSource,
   onClickButton,
   onClickSecondaryButton,
   secondaryButtonLabel,
+  secondaryButtonType = 'passive',
+  title,
 }: PageCardNextProps): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -54,22 +68,58 @@ const PageCardNext = ({
           padding: '16px',
         }}
       >
-        <Typography
-          component='p'
-          variant='h6'
+        {imageSource && (
+          <Box marginRight='32px'>
+            <img src={imageSource} />
+          </Box>
+        )}
+        <Box>
+          {title && (
+            <Typography
+              component='p'
+              variant='h6'
+              sx={{
+                color: theme.palette.TwClrTxt,
+                fontSize: '16px',
+                fontWeight: 600,
+                lineHeight: '24px',
+              }}
+            >
+              {title}
+            </Typography>
+          )}
+
+          <Typography
+            component='p'
+            variant='h6'
+            sx={{
+              color: theme.palette.TwClrTxt,
+              fontSize: '16px',
+              fontWeight: 400,
+              lineHeight: '24px',
+            }}
+          >
+            {description}
+          </Typography>
+        </Box>
+        <Box
           sx={{
-            color: theme.palette.TwClrTxt,
-            fontSize: '16px',
-            fontWeight: 400,
-            lineHeight: '24px',
+            flexDirection: 'row',
+            paddingLeft: '32px',
+            whiteSpace: 'nowrap',
           }}
         >
-          {description}
-        </Typography>
-        <Box>
-          {buttonLabel && onClickButton && <Button priority='secondary' label={buttonLabel} onClick={onClickButton} />}
+          {buttonLabel && onClickButton && (
+            <Button label={buttonLabel} onClick={onClickButton} priority='secondary' type={buttonType} />
+          )}
           {secondaryButtonLabel && onClickSecondaryButton && (
-            <Button priority='secondary' label={secondaryButtonLabel} onClick={onClickSecondaryButton} />
+            <Button
+              label={secondaryButtonLabel}
+              onClick={onClickSecondaryButton}
+              priority='secondary'
+              style={{ marginLeft: '19px' }}
+              type={secondaryButtonType}
+            />
           )}
         </Box>
       </Box>
@@ -130,7 +180,25 @@ const TerrawareHomeView = () => {
               <Grid container spacing={3} sx={{ padding: 0 }}>
                 <Grid item xs={12}>
                   <PageCardNext
+                    buttonLabel={strings.DOWNLOAD_FOR_ANDROID}
+                    description={strings.DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION}
+                    id='mobileAppHomeCard'
+                    imageSource='/assets/terraware-mobile-app.svg'
+                    onClickButton={() => {
+                      window.open(TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK, '_blank');
+                    }}
+                    onClickSecondaryButton={() => {
+                      window.open(TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK, '_blank');
+                    }}
+                    secondaryButtonLabel={strings.DOWNLOAD_FOR_IOS}
+                    title={strings.DOWNLOAD_THE_TERRAWARE_MOBILE_APP}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <PageCardNext
                     buttonLabel={strings.APPLY}
+                    buttonType='productive'
                     id='applicationHomeCard'
                     description={strings.formatString(
                       strings.FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,
