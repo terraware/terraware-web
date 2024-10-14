@@ -50,6 +50,9 @@ export default function EventEditView(): JSX.Element {
     if (reponseCreate?.status === 'error') {
       snackbar.toastError();
     }
+    if (reponseCreate?.status === 'success') {
+      goToEvent();
+    }
   }, [reponseCreate]);
 
   useEffect(() => {
@@ -66,7 +69,7 @@ export default function EventEditView(): JSX.Element {
     const allEventIdsToDelete = eventsToDelete?.map((etd) => etd.id);
     const eventIdsToDelete: number[] = allEventIdsToDelete?.filter((iid): iid is number => iid !== undefined) || [];
 
-    requestEventDeleteMany({ eventsId: eventIdsToDelete });
+    dispatch(requestEventDeleteMany({ eventsId: eventIdsToDelete }));
 
     eventsToAdd?.forEach((evta) => {
       if (evta.id?.toString() === '-1') {
