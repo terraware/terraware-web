@@ -68,8 +68,12 @@ export default function EventEditView(): JSX.Element {
   const save = () => {
     const allEventIdsToDelete = eventsToDelete?.map((etd) => etd.id);
     const eventIdsToDelete: number[] = allEventIdsToDelete?.filter((iid): iid is number => iid !== undefined) || [];
+    const eventsToUpdateIds = eventsToAdd?.filter((eta) => eta.id?.toString() !== '-1').map((ev) => ev.id);
+    const filteredIdsToDelete = eventIdsToDelete.filter((id) => !eventsToUpdateIds?.includes(id));
 
-    dispatch(requestEventDeleteMany({ eventsId: eventIdsToDelete }));
+    if (filteredIdsToDelete.length > 0) {
+      dispatch(requestEventDeleteMany({ eventsId: filteredIdsToDelete }));
+    }
 
     eventsToAdd?.forEach((evta) => {
       if (evta.id?.toString() === '-1') {
