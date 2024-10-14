@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { DateTime } from 'luxon';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageForm from 'src/components/common/PageForm';
@@ -19,6 +20,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { ModuleEventPartial } from 'src/types/Module';
 import useQuery from 'src/utils/useQuery';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import EventsTable from './EventsTable';
 
@@ -36,11 +38,19 @@ export default function EventEditView(): JSX.Element {
   const dispatch = useAppDispatch();
   const responseProjects = useAppSelector(selectUpdateEventProjects(updateEventProjectsRequestId));
   const reponseCreate = useAppSelector(selectCreateModuleEvent(createEventRequestId));
+  const snackbar = useSnackbar();
 
   useEffect(() => {
-    console.log('responseProjects', responseProjects);
-    console.log('reponseCreate', reponseCreate);
-  }, [responseProjects, reponseCreate]);
+    if (responseProjects?.status === 'error') {
+      snackbar.toastError();
+    }
+  }, [responseProjects]);
+
+  useEffect(() => {
+    if (reponseCreate?.status === 'error') {
+      snackbar.toastError();
+    }
+  }, [reponseCreate]);
 
   useEffect(() => {
     if (moduleId) {
@@ -59,16 +69,16 @@ export default function EventEditView(): JSX.Element {
     requestEventDeleteMany({ eventsId: eventIdsToDelete });
 
     eventsToAdd?.forEach((evta) => {
-      if (evta.id !== -1) {
+      if (evta.id?.toString() === '-1') {
         const { projects, ...rest } = evta;
-        if (rest.moduleId && rest.startTime) {
+        if (moduleId && rest.startTime) {
           const request = dispatch(
             requestCreateModuleEvent({
               event: {
                 eventType: getType(),
-                moduleId: rest.moduleId,
-                startTime: rest.startTime,
-                endTime: rest.endTime,
+                moduleId: Number(moduleId),
+                startTime: DateTime.fromISO(rest.startTime).toString(),
+                endTime: rest.endTime ? DateTime.fromISO(rest.endTime).toString() : undefined,
                 meetingUrl: rest.meetingUrl,
                 recordingUrl: rest.recordingUrl,
                 slidesUrl: rest.slidesUrl,
@@ -82,15 +92,15 @@ export default function EventEditView(): JSX.Element {
         const { id, projects, ...rest } = evta;
         if (id && evta.startTime) {
           const updateRequest = {
-            endTime: rest.endTime,
+            endTime: rest.endTime ? DateTime.fromISO(rest.endTime).toString() : undefined,
             meetingUrl: rest.meetingUrl,
             recordingUrl: rest.recordingUrl,
             slidesUrl: rest.slidesUrl,
-            startTime: evta.startTime,
+            startTime: DateTime.fromISO(evta.startTime).toString(),
           };
           dispatch(requestEventUpdate({ eventId: id, event: updateRequest }));
         }
-        if ((id && projects?.length) || 0 > 0) {
+        if (id && (projects?.length || 0) > 0) {
           const request2 = dispatch(
             requestEventProjectsUpdate({ eventId: id, projectIds: projects?.map((p) => p.projectId || -1) || [] })
           );
