@@ -53,10 +53,11 @@ export default function EventEditView(): JSX.Element {
   };
 
   const save = () => {
-    const eventIdsToDelete = eventsToDelete?.map((etd) => etd.id).filter((id) => id !== undefined);
-    if (eventIdsToDelete) {
-      requestEventDeleteMany({ eventsId: eventIdsToDelete });
-    }
+    const allEventIdsToDelete = eventsToDelete?.map((etd) => etd.id);
+    const eventIdsToDelete: number[] = allEventIdsToDelete?.filter((iid): iid is number => iid !== undefined) || [];
+
+    requestEventDeleteMany({ eventsId: eventIdsToDelete });
+
     eventsToAdd?.forEach((evta) => {
       if (evta.id !== -1) {
         const { projects, ...rest } = evta;
