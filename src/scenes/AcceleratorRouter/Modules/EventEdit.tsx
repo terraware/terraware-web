@@ -15,7 +15,12 @@ import {
   requestEventProjectsUpdate,
   requestEventUpdate,
 } from 'src/redux/features/events/eventsAsyncThunks';
-import { selectCreateModuleEvent, selectUpdateEventProjects } from 'src/redux/features/events/eventsSelectors';
+import {
+  selectCreateModuleEvent,
+  selectDeleteManyEvents,
+  selectUpdateEvent,
+  selectUpdateEventProjects,
+} from 'src/redux/features/events/eventsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { ModuleEventPartial } from 'src/types/Module';
@@ -35,9 +40,13 @@ export default function EventEditView(): JSX.Element {
   const [eventsToDelete, setEventsToDelete] = useState<ModuleEventPartial[]>();
   const [updateEventProjectsRequestId, setUpdateEventProjectsRequestId] = useState('');
   const [createEventRequestId, setCreateEventRequestId] = useState('');
+  const [updateEventRequestId, setUpdateEventRequestId] = useState('');
+  const [deleteEventRequestId, setDeleteEventRequestId] = useState('');
   const dispatch = useAppDispatch();
   const responseProjects = useAppSelector(selectUpdateEventProjects(updateEventProjectsRequestId));
   const reponseCreate = useAppSelector(selectCreateModuleEvent(createEventRequestId));
+  const reponseUpdate = useAppSelector(selectUpdateEvent(updateEventRequestId));
+  const responseDelete = useAppSelector(selectDeleteManyEvents(deleteEventRequestId));
   const snackbar = useSnackbar();
 
   useEffect(() => {
@@ -56,6 +65,24 @@ export default function EventEditView(): JSX.Element {
   }, [reponseCreate]);
 
   useEffect(() => {
+    if (reponseUpdate?.status === 'error') {
+      snackbar.toastError();
+    }
+    if (reponseUpdate?.status === 'success') {
+      goToEvent();
+    }
+  }, [reponseUpdate]);
+
+  useEffect(() => {
+    if (responseDelete?.status === 'error') {
+      snackbar.toastError();
+    }
+    if (responseDelete?.status === 'success') {
+      goToEvent();
+    }
+  }, [responseDelete]);
+
+  useEffect(() => {
     if (moduleId) {
       getModule({ moduleId: Number(moduleId) });
     }
@@ -68,11 +95,14 @@ export default function EventEditView(): JSX.Element {
   const save = () => {
     const allEventIdsToDelete = eventsToDelete?.map((etd) => etd.id);
     const eventIdsToDelete: number[] = allEventIdsToDelete?.filter((iid): iid is number => iid !== undefined) || [];
+
+    // if we are updating an existing event (id not -1), we don't want to remove it
     const eventsToUpdateIds = eventsToAdd?.filter((eta) => eta.id?.toString() !== '-1').map((ev) => ev.id);
     const filteredIdsToDelete = eventIdsToDelete.filter((id) => !eventsToUpdateIds?.includes(id));
 
     if (filteredIdsToDelete.length > 0) {
-      dispatch(requestEventDeleteMany({ eventsId: filteredIdsToDelete }));
+      const request = dispatch(requestEventDeleteMany({ eventsId: filteredIdsToDelete }));
+      setDeleteEventRequestId(request.requestId);
     }
 
     eventsToAdd?.forEach((evta) => {
@@ -105,7 +135,8 @@ export default function EventEditView(): JSX.Element {
             slidesUrl: rest.slidesUrl,
             startTime: DateTime.fromISO(evta.startTime).toString(),
           };
-          dispatch(requestEventUpdate({ eventId: id, event: updateRequest }));
+          const request = dispatch(requestEventUpdate({ eventId: id, event: updateRequest }));
+          setUpdateEventRequestId(request.requestId);
         }
         if (id && (projects?.length || 0) > 0) {
           const request2 = dispatch(
