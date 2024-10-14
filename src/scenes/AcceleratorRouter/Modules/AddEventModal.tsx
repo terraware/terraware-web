@@ -39,28 +39,29 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
   const [projectsSections, setProjectsSections] = useState<ProjectsSection[]>([{ cohort: {}, projectIds: [] }]);
 
   useEffect(() => {
-    const existingProjectsIdsByCohortId: Record<number, string[]> = {};
-    const cohortsIds = new Set<number>();
-    eventToEdit?.projects?.forEach((proj) => {
-      if (proj.cohortId && proj.projectId) {
-        cohortsIds.add(proj.cohortId);
-        existingProjectsIdsByCohortId[proj.cohortId]
-          ? (existingProjectsIdsByCohortId[proj.cohortId] = [
-              ...existingProjectsIdsByCohortId[proj.cohortId],
-              proj.projectId.toString(),
-            ])
-          : (existingProjectsIdsByCohortId[proj.cohortId] = [proj.projectId.toString()]);
-      }
-    });
-
-    setProjectsSections(() => {
-      return Array.from(cohortsIds).map((cohortId) => {
-        return {
-          cohort: availableCohorts?.find((c) => c.id?.toString() === cohortId.toString()),
-          projectIds: existingProjectsIdsByCohortId[cohortId],
-        } as ProjectsSection;
+    if (eventToEdit?.projects && eventToEdit.projects.length > 0) {
+      const existingProjectsIdsByCohortId: Record<number, string[]> = {};
+      const cohortsIds = new Set<number>();
+      eventToEdit?.projects?.forEach((proj) => {
+        if (proj.cohortId && proj.projectId) {
+          cohortsIds.add(proj.cohortId);
+          existingProjectsIdsByCohortId[proj.cohortId]
+            ? (existingProjectsIdsByCohortId[proj.cohortId] = [
+                ...existingProjectsIdsByCohortId[proj.cohortId],
+                proj.projectId.toString(),
+              ])
+            : (existingProjectsIdsByCohortId[proj.cohortId] = [proj.projectId.toString()]);
+        }
       });
-    });
+      setProjectsSections(() => {
+        return Array.from(cohortsIds).map((cohortId) => {
+          return {
+            cohort: availableCohorts?.find((c) => c.id?.toString() === cohortId.toString()),
+            projectIds: existingProjectsIdsByCohortId[cohortId],
+          } as ProjectsSection;
+        });
+      });
+    }
   }, [eventToEdit, availableCohorts]);
 
   useEffect(() => {

@@ -96,7 +96,6 @@ export default function EventsTable(props: EventsTableProps): JSX.Element {
         }
       } else {
         const found = prevEvents?.find((eventToAdd) => eventToAdd.id?.toString() === editedEvent.id?.toString());
-        console.log('found??', found);
         if (found) {
           setEventsToDelete((prev) => {
             if (prev && found) {
