@@ -8,6 +8,14 @@ import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import useGetModule from 'src/hooks/useGetModule';
+import {
+  requestCreateModuleEvent,
+  requestEventDeleteMany,
+  requestEventProjectsUpdate,
+  requestEventUpdate,
+} from 'src/redux/features/events/eventsAsyncThunks';
+import { selectCreateModuleEvent, selectUpdateEventProjects } from 'src/redux/features/events/eventsSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { ModuleEventPartial } from 'src/types/Module';
 import useQuery from 'src/utils/useQuery';
@@ -23,6 +31,16 @@ export default function EventEditView(): JSX.Element {
   const eventType = query.get('type');
   const [eventsToAdd, setEventsToAdd] = useState<ModuleEventPartial[]>();
   const [eventsToDelete, setEventsToDelete] = useState<ModuleEventPartial[]>();
+  const [updateEventProjectsRequestId, setUpdateEventProjectsRequestId] = useState('');
+  const [createEventRequestId, setCreateEventRequestId] = useState('');
+  const dispatch = useAppDispatch();
+  const responseProjects = useAppSelector(selectUpdateEventProjects(updateEventProjectsRequestId));
+  const reponseCreate = useAppSelector(selectCreateModuleEvent(createEventRequestId));
+
+  useEffect(() => {
+    console.log('responseProjects', responseProjects);
+    console.log('reponseCreate', reponseCreate);
+  }, [responseProjects, reponseCreate]);
 
   useEffect(() => {
     if (moduleId) {
@@ -30,12 +48,55 @@ export default function EventEditView(): JSX.Element {
     }
   }, [moduleId]);
 
-  const goToEvents = () => {
-    navigate(APP_PATHS.ACCELERATOR_MODULES);
+  const goToEvent = () => {
+    navigate(APP_PATHS.ACCELERATOR_MODULE_CONTENT.replace(':moduleId', moduleId || ''));
   };
 
   const save = () => {
-    goToEvents();
+    const eventIdsToDelete = eventsToDelete?.map((etd) => etd.id).filter((id) => id !== undefined);
+    if (eventIdsToDelete) {
+      requestEventDeleteMany({ eventsId: eventIdsToDelete });
+    }
+    eventsToAdd?.forEach((evta) => {
+      if (evta.id !== -1) {
+        const { projects, ...rest } = evta;
+        if (rest.moduleId && rest.startTime) {
+          const request = dispatch(
+            requestCreateModuleEvent({
+              event: {
+                eventType: getType(),
+                moduleId: rest.moduleId,
+                startTime: rest.startTime,
+                endTime: rest.endTime,
+                meetingUrl: rest.meetingUrl,
+                recordingUrl: rest.recordingUrl,
+                slidesUrl: rest.slidesUrl,
+              },
+              projectsIds: projects?.map((p) => p.projectId || -1),
+            })
+          );
+          setCreateEventRequestId(request.requestId);
+        }
+      } else {
+        const { id, projects, ...rest } = evta;
+        if (id && evta.startTime) {
+          const updateRequest = {
+            endTime: rest.endTime,
+            meetingUrl: rest.meetingUrl,
+            recordingUrl: rest.recordingUrl,
+            slidesUrl: rest.slidesUrl,
+            startTime: evta.startTime,
+          };
+          dispatch(requestEventUpdate({ eventId: id, event: updateRequest }));
+        }
+        if ((id && projects?.length) || 0 > 0) {
+          const request2 = dispatch(
+            requestEventProjectsUpdate({ eventId: id, projectIds: projects?.map((p) => p.projectId || -1) || [] })
+          );
+          setUpdateEventProjectsRequestId(request2.requestId);
+        }
+      }
+    });
   };
 
   const getTitleForType = () => {
@@ -94,7 +155,7 @@ export default function EventEditView(): JSX.Element {
 
   return (
     <TfMain>
-      <PageForm cancelID='cancelLiveSession' saveID='saveLiveSession' onCancel={() => goToEvents()} onSave={save}>
+      <PageForm cancelID='cancelLiveSession' saveID='saveLiveSession' onCancel={() => goToEvent()} onSave={save}>
         <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
           <Typography fontSize='24px' fontWeight={600}>
             {getTitleForType()}

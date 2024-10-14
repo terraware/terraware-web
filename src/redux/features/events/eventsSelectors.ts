@@ -8,3 +8,9 @@ export const selectCreateModuleEvent = (requestId: string) => (state: RootState)
 
 export const selectUpdateEventProjects = (requestId: string) => (state: RootState) =>
   state.eventProjectsUpdate[requestId];
+
+export const selectDeleteEvent = (requestId: string) => (state: RootState) => state.eventDelete[requestId];
+
+export const selectUpdateEvent = (requestId: string) => (state: RootState) => state.eventUpdate[requestId];
+
+export const selectDeleteManyEvents = (requestId: string) => (state: RootState) => state.eventDeleteMany[requestId];

@@ -3,7 +3,14 @@ import { createSlice } from '@reduxjs/toolkit';
 import { ModuleEvent } from 'src/types/Module';
 
 import { StatusT, buildReducers } from '../asyncUtils';
-import { requestCreateModuleEvent, requestGetEvent, requestListEvents } from './eventsAsyncThunks';
+import {
+  requestCreateModuleEvent,
+  requestEventDelete,
+  requestEventDeleteMany,
+  requestEventUpdate,
+  requestGetEvent,
+  requestListEvents,
+} from './eventsAsyncThunks';
 
 /**
  * Get Event
@@ -47,6 +54,34 @@ const createModuleEventSlice = createSlice({
   },
 });
 
+/**
+ * Delete Module Event
+ */
+const initialDeleteModuleEventState: { [key: string]: StatusT<boolean> } = {};
+
+const deleteModuleEventSlice = createSlice({
+  name: 'deleteModuleEventSlice',
+  initialState: initialDeleteModuleEventState,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestEventDelete)(builder);
+  },
+});
+
+/**
+ * Update Module Event
+ */
+const initialUpdateModuleEventState: { [key: string]: StatusT<boolean> } = {};
+
+const updateModuleEventSlice = createSlice({
+  name: 'updateModuleEventSlice',
+  initialState: initialUpdateModuleEventState,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestEventUpdate)(builder);
+  },
+});
+
 const initialEventProjectsUpdateState: { [key: string]: StatusT<number> } = {};
 
 const eventProjectsUpdateSlice = createSlice({
@@ -58,11 +93,28 @@ const eventProjectsUpdateSlice = createSlice({
   },
 });
 
+/**
+ * Deletes many events
+ */
+const initialStateEventDeleteMany: { [key: string]: StatusT<boolean> } = {};
+
+export const eventDeleteManySlice = createSlice({
+  name: 'eventDeleteManySlice',
+  initialState: initialStateEventDeleteMany,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestEventDeleteMany)(builder);
+  },
+});
+
 const eventReducers = {
   event: eventSlice.reducer,
   eventList: eventListSlice.reducer,
   eventCreate: createModuleEventSlice.reducer,
+  eventDelete: deleteModuleEventSlice.reducer,
+  eventUpdate: updateModuleEventSlice.reducer,
   eventProjectsUpdate: eventProjectsUpdateSlice.reducer,
+  eventDeleteMany: eventDeleteManySlice.reducer,
 };
 
 export default eventReducers;

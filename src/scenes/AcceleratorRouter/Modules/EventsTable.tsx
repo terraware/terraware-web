@@ -71,13 +71,6 @@ export default function EventsTable(props: EventsTableProps): JSX.Element {
   const [selectedRows, setSelectedRows] = useState<ModuleEventPartial[]>([]);
   const [eventToEdit, setEventToEdit] = useState<ModuleEventPartial>();
 
-  const areEventsEqual = (a: ModuleEventPartial, b: ModuleEventPartial) => {
-    if (a.startTime === b.startTime && a.startTime === b.startTime) {
-      return true;
-    }
-    return false;
-  };
-
   const onAddEvent = (eventToAdd: ModuleEventPartial) => {
     if (setEventsToAdd) {
       setEventsToAdd((prev) => {
@@ -93,17 +86,18 @@ export default function EventsTable(props: EventsTableProps): JSX.Element {
   const onEditedEvent = (editedEvent: ModuleEventPartial) => {
     if (setEventsToDelete && setEventsToAdd) {
       // When editing a event, first we remove the old entrance and then we add it again
-      const eventsToAddIds = eventsToAdd?.map((eta) => eta.id);
+      const eventsToAddIds = eventsToAdd?.map((mta) => mta.id).filter((id) => id !== -1);
       if (eventsToAddIds?.includes(editedEvent.id)) {
         const found = eventsToAdd?.find((eventToAdd) => eventToAdd.id === editedEvent.id);
-        if (!(found && areEventsEqual(found, editedEvent))) {
+        if (found) {
           const newEventsToAdd = eventsToAdd?.filter((etAdd) => etAdd.id !== editedEvent.id);
           newEventsToAdd?.push(editedEvent);
           setEventsToAdd(newEventsToAdd);
         }
       } else {
-        const found = prevEvents?.find((eventToAdd) => eventToAdd.id === editedEvent.id);
-        if (!(found && areEventsEqual(found, editedEvent))) {
+        const found = prevEvents?.find((eventToAdd) => eventToAdd.id?.toString() === editedEvent.id?.toString());
+        console.log('found??', found);
+        if (found) {
           setEventsToDelete((prev) => {
             if (prev && found) {
               return [...prev, found];
@@ -145,11 +139,9 @@ export default function EventsTable(props: EventsTableProps): JSX.Element {
     }
   }, [events]);
 
-  const onEditHandler = (clickedEvent: ModuleEventPartial, fromColumn?: string) => {
-    if (fromColumn === 'title') {
-      setEventToEdit(clickedEvent);
-      setAddEventModalOpened(true);
-    }
+  const onEditHandler = (clickedEvent: ModuleEventPartial) => {
+    setEventToEdit(clickedEvent);
+    setAddEventModalOpened(true);
   };
 
   const onCloseModalHandler = () => {
@@ -168,12 +160,11 @@ export default function EventsTable(props: EventsTableProps): JSX.Element {
   };
 
   const allEvents = useMemo(() => {
-    const eventsToDeleteIds = eventsToDelete?.map((etd) => etd.id);
     return prevEvents.concat(eventsToAdd || []).filter((evn) => {
-      if (eventsToDeleteIds?.includes(evn.id)) {
-        const found = eventsToDelete?.find((e) => e.id === evn.id);
+      if (eventsToDelete?.includes(evn)) {
+        const found = eventsToDelete?.find((e) => e === evn);
         if (found) {
-          return !areEventsEqual(evn, found);
+          return false;
         }
       } else {
         return true;

@@ -153,7 +153,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
           priority='secondary'
           key='button-1'
         />,
-        <Button id='save' onClick={save} label={strings.ADD} key='button-2' />,
+        <Button id='save' onClick={save} label={eventToEdit ? strings.UPDATE : strings.ADD} key='button-2' />,
       ]}
       scrolled
     >

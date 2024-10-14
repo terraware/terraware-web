@@ -1,4 +1,4 @@
-import { paths } from 'src/api/types/generated-schema';
+import { components, paths } from 'src/api/types/generated-schema';
 import { CreateModuleEventRequestPayload, UpdateModuleEventProjectsRequestPayload } from 'src/types/Event';
 import { ModuleEvent } from 'src/types/Module';
 
@@ -22,6 +22,11 @@ export type GetEventResponsePayload =
   paths[typeof EVENT_ENDPONT]['get']['responses'][200]['content']['application/json'];
 export type CreateModuleEventResponsePayload =
   paths[typeof EVENTS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+export type DeleteEventResponsePayload =
+  paths[typeof EVENT_ENDPONT]['delete']['responses'][200]['content']['application/json'];
+export type UpdateModuleEventRequestPayload = components['schemas']['UpdateModuleEventRequestPayload'];
+export type UpdateModuleEventResponsePayload =
+  paths[typeof EVENT_ENDPONT]['put']['responses'][200]['content']['application/json'];
 
 export type ListEventsRequestParam = {
   projectId?: number;
@@ -82,11 +87,26 @@ const updateEventProjects = (eventId: number, entity: UpdateModuleEventProjectsR
     entity,
   });
 
+const deleteEvent = (eventId: number) =>
+  HttpService.root(EVENT_ENDPONT).delete2<DeleteEventResponsePayload>({
+    url: EVENT_ENDPONT,
+    urlReplacements: { '{eventId}': `${eventId}` },
+  });
+
+const updateEvent = (eventId: number, payload: UpdateModuleEventRequestPayload) =>
+  HttpService.root(EVENT_ENDPONT).put2<UpdateModuleEventResponsePayload>({
+    url: EVENT_ENDPONT,
+    urlReplacements: { '{eventId}': `${eventId}` },
+    entity: payload,
+  });
+
 const EventService = {
   get,
   list,
   createEvent,
   updateEventProjects,
+  deleteEvent,
+  updateEvent,
 };
 
 export default EventService;
