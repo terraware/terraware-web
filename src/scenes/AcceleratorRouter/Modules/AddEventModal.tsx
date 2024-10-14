@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 import { DropdownItem, Icon, MultiSelect, SelectT } from '@terraware/web-components';
+import { DateTime } from 'luxon';
 
 import AddLink from 'src/components/common/AddLink';
+import DatePicker from 'src/components/common/DatePicker';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Link from 'src/components/common/Link';
 import TextField from 'src/components/common/Textfield/Textfield';
@@ -158,24 +160,27 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
     >
       <Grid container textAlign={'left'} spacing={2}>
         <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingRight: 1 }}>
-          {/* TODO: Create and use datetime component */}
-          <Typography>{strings.START_DATE}</Typography>
-          <input
-            type='datetime-local'
-            onChange={(ev) => {
-              onChange('startTime', ev.target.value);
-            }}
+          <DatePicker
+            id='startTime'
+            label={strings.START_DATE}
             value={record.startTime}
+            onDateChange={(value?: DateTime) => {
+              onChange('startTime', value?.toISO());
+            }}
+            aria-label='date-picker'
+            showTime={true}
           />
         </Grid>
         <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingLeft: 1 }}>
-          <Typography>{strings.END_DATE}</Typography>
-          <input
-            type='datetime-local'
-            onChange={(ev) => {
-              onChange('endTime', ev.target.value);
-            }}
+          <DatePicker
+            id='endTime'
+            label={strings.END_DATE}
             value={record.endTime}
+            onDateChange={(value?: DateTime) => {
+              onChange('endTime', value?.toISO());
+            }}
+            aria-label='date-picker'
+            showTime={true}
           />
         </Grid>
         <Grid item xs={12}>

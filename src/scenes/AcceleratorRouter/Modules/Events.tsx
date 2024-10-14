@@ -7,6 +7,7 @@ import { Button, TableColumnType } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
+import EventsCellRenderer from 'src/scenes/AcceleratorRouter/Modules/EventsCellRenderer';
 import strings from 'src/strings';
 import { Module, ModuleEvent } from 'src/types/Module';
 
@@ -104,7 +105,13 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
           </Box>
           <Box dangerouslySetInnerHTML={{ __html: liveSessions?.[0]?.description || '' }} />
           <Box marginTop={2}>
-            <Table rows={liveSessions || []} columns={columns} id={'module-liveSessions'} orderBy={'name'} />
+            <Table
+              rows={liveSessions || []}
+              columns={columns}
+              id={'module-liveSessions'}
+              orderBy={'name'}
+              Renderer={EventsCellRenderer}
+            />
           </Box>
         </Grid>
         <Grid item xs={12}>
@@ -132,7 +139,13 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
           </Box>
           <Box dangerouslySetInnerHTML={{ __html: oneOnOneSessions?.[0]?.description || '' }} />
           <Box marginTop={2}>
-            <Table rows={oneOnOneSessions || []} columns={columns} id={'module-oneOnOneSessions'} orderBy={'name'} />
+            <Table
+              rows={oneOnOneSessions || []}
+              columns={columns}
+              id={'module-oneOnOneSessions'}
+              orderBy={'name'}
+              Renderer={EventsCellRenderer}
+            />
           </Box>
         </Grid>
         <Grid item xs={12}>
@@ -160,7 +173,13 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
           </Box>
           <Box dangerouslySetInnerHTML={{ __html: recordedSessions?.[0]?.description || '' }} />
           <Box marginTop={2}>
-            <Table rows={recordedSessions || []} columns={columns} id={'module-recordedSessions'} orderBy={'name'} />
+            <Table
+              rows={recordedSessions || []}
+              columns={columns}
+              id={'module-recordedSessions'}
+              orderBy={'name'}
+              Renderer={EventsCellRenderer}
+            />
           </Box>
         </Grid>
         <Grid item xs={12}>
@@ -188,7 +207,13 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
           </Box>
           <Box dangerouslySetInnerHTML={{ __html: workshops?.[0]?.description || '' }} />
           <Box marginTop={2}>
-            <Table rows={workshops || []} columns={columns} id={'module-workshops'} orderBy={'name'} />
+            <Table
+              rows={workshops || []}
+              columns={columns}
+              id={'module-workshops'}
+              orderBy={'name'}
+              Renderer={EventsCellRenderer}
+            />
           </Box>
         </Grid>
       </Grid>
