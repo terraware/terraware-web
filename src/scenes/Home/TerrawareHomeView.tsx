@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 
-import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Container, Grid, SxProps, Typography, useTheme } from '@mui/material';
 import { Props as ButtonProps } from '@terraware/web-components/components/Button/Button';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -25,6 +25,7 @@ import { isAdmin } from 'src/utils/organization';
 import NewApplicationModal from '../ApplicationRouter/NewApplicationModal';
 
 type PageCardNextProps = {
+  buttonContainerSx?: SxProps;
   description: string | (string | JSX.Element)[];
   imageSource?: string;
   padding?: number | string;
@@ -34,6 +35,7 @@ type PageCardNextProps = {
 };
 
 const PageCardNext = ({
+  buttonContainerSx,
   description,
   imageSource,
   padding = '24px',
@@ -106,13 +108,16 @@ const PageCardNext = ({
         </Box>
 
         <Box
-          sx={{
-            display: 'flex',
-            flexDirection: isMobile ? 'column' : 'row',
-            marginLeft: isDesktop ? '27px' : 0,
-            marginTop: isMobile || isTablet ? '32px' : 0,
-            whiteSpace: 'nowrap',
-          }}
+          sx={[
+            {
+              display: 'flex',
+              flexDirection: isMobile ? 'column' : 'row',
+              marginLeft: isDesktop ? '27px' : 0,
+              marginTop: isMobile || isTablet ? '32px' : 0,
+              whiteSpace: 'nowrap',
+            },
+            ...(Array.isArray(buttonContainerSx) ? buttonContainerSx : [buttonContainerSx]),
+          ]}
         >
           {primaryButtonProps && <Button priority='secondary' type='productive' {...primaryButtonProps} />}
           {secondaryButtonProps && (
@@ -206,6 +211,9 @@ const TerrawareHomeView = () => {
 
                 <Grid item xs={12}>
                   <PageCardNext
+                    buttonContainerSx={{
+                      width: isMobile ? '100%' : 'auto',
+                    }}
                     description={strings.formatString(
                       strings.FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,
                       <Link
