@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { DateTime } from 'luxon';
+
 import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
@@ -30,6 +32,12 @@ export default function EventsCellRenderer(props: RendererProps<TableRowType>): 
           })
           .join(', ')
       : '';
+    return <CellRenderer index={index} column={column} value={valueToRender} row={row} />;
+  }
+
+  if (column.key === 'startTime' || column.key === 'endTime') {
+    const valueToRender = typeof value === 'string' ? DateTime.fromISO(value)?.toFormat('yyyy-MM-dd hh:mm a') : '';
+
     return <CellRenderer index={index} column={column} value={valueToRender} row={row} />;
   }
 
