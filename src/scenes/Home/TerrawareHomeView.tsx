@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
-import { ButtonType } from '@terraware/web-components/components/Button/Button';
+import { Props as ButtonProps } from '@terraware/web-components/components/Button/Button';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PageHeader from 'src/components/PageHeader';
@@ -25,31 +25,25 @@ import { isAdmin } from 'src/utils/organization';
 import NewApplicationModal from '../ApplicationRouter/NewApplicationModal';
 
 type PageCardNextProps = {
-  buttonLabel?: string;
-  buttonType?: ButtonType;
   description: string | (string | JSX.Element)[];
   id?: string;
   imageSource?: string;
-  onClickButton?: () => void;
-  onClickSecondaryButton?: () => void;
-  secondaryButtonLabel?: string;
-  secondaryButtonType?: ButtonType;
+  padding?: number | string;
+  primaryButtonProps?: ButtonProps;
+  secondaryButtonProps?: ButtonProps;
   title?: string | (string | JSX.Element)[];
 };
 
 const PageCardNext = ({
-  buttonLabel,
-  buttonType = 'passive',
   description,
   id,
   imageSource,
-  onClickButton,
-  onClickSecondaryButton,
-  secondaryButtonLabel,
-  secondaryButtonType = 'passive',
+  padding = '24px',
+  primaryButtonProps,
+  secondaryButtonProps,
   title,
 }: PageCardNextProps): JSX.Element => {
-  const { isMobile } = useDeviceInfo();
+  const { isDesktop, isMobile, isTablet } = useDeviceInfo();
   const theme = useTheme();
 
   return (
@@ -62,18 +56,18 @@ const PageCardNext = ({
           background: theme.palette.TwClrBg,
           borderRadius: '8px',
           display: 'flex',
-          flexDirection: 'row',
+          flexDirection: isDesktop ? 'row' : 'column',
           height: '100%',
           justifyContent: 'space-between',
-          padding: '16px',
+          padding,
         }}
       >
         {imageSource && (
-          <Box marginRight='32px'>
+          <Box>
             <img src={imageSource} />
           </Box>
         )}
-        <Box>
+        <Box sx={isMobile ? { padding: '32px 0' } : isTablet ? { padding: '0 0 32px 32px' } : { padding: '0 32px' }}>
           {title && (
             <Typography
               component='p'
@@ -104,21 +98,21 @@ const PageCardNext = ({
         </Box>
         <Box
           sx={{
-            flexDirection: 'row',
-            paddingLeft: '32px',
+            display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
             whiteSpace: 'nowrap',
           }}
         >
-          {buttonLabel && onClickButton && (
-            <Button label={buttonLabel} onClick={onClickButton} priority='secondary' type={buttonType} />
-          )}
-          {secondaryButtonLabel && onClickSecondaryButton && (
+          {primaryButtonProps && <Button priority='secondary' type='productive' {...primaryButtonProps} />}
+          {secondaryButtonProps && (
             <Button
-              label={secondaryButtonLabel}
-              onClick={onClickSecondaryButton}
               priority='secondary'
-              style={{ marginLeft: '19px' }}
-              type={secondaryButtonType}
+              style={{
+                marginLeft: isMobile ? 0 : '19px',
+                marginTop: isMobile ? '19px' : 0,
+              }}
+              type='passive'
+              {...secondaryButtonProps}
             />
           )}
         </Box>
@@ -180,25 +174,29 @@ const TerrawareHomeView = () => {
               <Grid container spacing={3} sx={{ padding: 0 }}>
                 <Grid item xs={12}>
                   <PageCardNext
-                    buttonLabel={strings.DOWNLOAD_FOR_ANDROID}
                     description={strings.DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION}
                     id='mobileAppHomeCard'
                     imageSource='/assets/terraware-mobile-app.svg'
-                    onClickButton={() => {
-                      window.open(TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK, '_blank');
+                    padding='32px'
+                    primaryButtonProps={{
+                      label: strings.DOWNLOAD_FOR_ANDROID,
+                      onClick: () => {
+                        window.open(TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK, '_blank');
+                      },
+                      type: 'passive',
                     }}
-                    onClickSecondaryButton={() => {
-                      window.open(TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK, '_blank');
+                    secondaryButtonProps={{
+                      label: strings.DOWNLOAD_FOR_IOS,
+                      onClick: () => {
+                        window.open(TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK, '_blank');
+                      },
                     }}
-                    secondaryButtonLabel={strings.DOWNLOAD_FOR_IOS}
                     title={strings.DOWNLOAD_THE_TERRAWARE_MOBILE_APP}
                   />
                 </Grid>
 
                 <Grid item xs={12}>
                   <PageCardNext
-                    buttonLabel={strings.APPLY}
-                    buttonType='productive'
                     id='applicationHomeCard'
                     description={strings.formatString(
                       strings.FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,
@@ -213,9 +211,13 @@ const TerrawareHomeView = () => {
                         {strings.HERE}
                       </Link>
                     )}
-                    onClickButton={() => {
-                      mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_APPLY_BUTTON);
-                      setIsNewApplicationModalOpen(true);
+                    primaryButtonProps={{
+                      label: strings.APPLY,
+                      onClick: () => {
+                        mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_APPLY_BUTTON);
+                        setIsNewApplicationModalOpen(true);
+                      },
+                      type: 'productive',
                     }}
                   />
                 </Grid>
