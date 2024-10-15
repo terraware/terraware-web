@@ -26,7 +26,6 @@ import NewApplicationModal from '../ApplicationRouter/NewApplicationModal';
 
 type PageCardNextProps = {
   description: string | (string | JSX.Element)[];
-  id?: string;
   imageSource?: string;
   padding?: number | string;
   primaryButtonProps?: ButtonProps;
@@ -36,7 +35,6 @@ type PageCardNextProps = {
 
 const PageCardNext = ({
   description,
-  id,
   imageSource,
   padding = '24px',
   primaryButtonProps,
@@ -49,8 +47,6 @@ const PageCardNext = ({
   return (
     <>
       <Box
-        className={isMobile ? '' : 'min-height'}
-        id={id ?? ''}
         sx={{
           alignItems: 'center',
           background: theme.palette.TwClrBg,
@@ -62,44 +58,59 @@ const PageCardNext = ({
           padding,
         }}
       >
-        {imageSource && (
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
+          }}
+        >
+          {imageSource && (
+            <Box
+              sx={{
+                marginBottom: isMobile ? '32px' : 0,
+                marginRight: isMobile ? 0 : '32px',
+                textAlign: 'center',
+              }}
+            >
+              <img src={imageSource} />
+            </Box>
+          )}
           <Box>
-            <img src={imageSource} />
-          </Box>
-        )}
-        <Box sx={isMobile ? { padding: '32px 0' } : isTablet ? { padding: '0 0 32px 32px' } : { padding: '0 32px' }}>
-          {title && (
+            {title && (
+              <Typography
+                component='p'
+                variant='h6'
+                sx={{
+                  color: theme.palette.TwClrTxt,
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  lineHeight: '24px',
+                }}
+              >
+                {title}
+              </Typography>
+            )}
             <Typography
               component='p'
               variant='h6'
               sx={{
                 color: theme.palette.TwClrTxt,
                 fontSize: '16px',
-                fontWeight: 600,
+                fontWeight: 400,
                 lineHeight: '24px',
               }}
             >
-              {title}
+              {description}
             </Typography>
-          )}
-
-          <Typography
-            component='p'
-            variant='h6'
-            sx={{
-              color: theme.palette.TwClrTxt,
-              fontSize: '16px',
-              fontWeight: 400,
-              lineHeight: '24px',
-            }}
-          >
-            {description}
-          </Typography>
+          </Box>
         </Box>
+
         <Box
           sx={{
             display: 'flex',
             flexDirection: isMobile ? 'column' : 'row',
+            marginLeft: isDesktop ? '27px' : 0,
+            marginTop: isMobile || isTablet ? '32px' : 0,
             whiteSpace: 'nowrap',
           }}
         >
@@ -126,7 +137,6 @@ const TerrawareHomeView = () => {
   const { selectedOrganization } = useOrganization();
   const { isTablet, isMobile } = useDeviceInfo();
   const mixpanel = useMixpanel();
-
   const homePageOnboardingImprovementsEnabled = isEnabled('Home Page Onboarding Improvements');
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
@@ -175,7 +185,6 @@ const TerrawareHomeView = () => {
                 <Grid item xs={12}>
                   <PageCardNext
                     description={strings.DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION}
-                    id='mobileAppHomeCard'
                     imageSource='/assets/terraware-mobile-app.svg'
                     padding='32px'
                     primaryButtonProps={{
@@ -197,7 +206,6 @@ const TerrawareHomeView = () => {
 
                 <Grid item xs={12}>
                   <PageCardNext
-                    id='applicationHomeCard'
                     description={strings.formatString(
                       strings.FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,
                       <Link
