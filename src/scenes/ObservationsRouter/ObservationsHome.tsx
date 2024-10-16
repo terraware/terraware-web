@@ -48,7 +48,8 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
     }
 
     return allObservationsResults?.filter((observationResult) => {
-      const matchesSite = observationResult.plantingSiteId === selectedPlantingSite.id;
+      const matchesSite =
+        selectedPlantingSite.id !== -1 ? observationResult.plantingSiteId === selectedPlantingSite.id : true;
       const matchesState = ['Completed', 'Overdue', 'InProgress'].indexOf(observationResult.state) !== -1;
       return matchesSite && matchesState;
     });
