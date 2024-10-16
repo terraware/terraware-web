@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1728693399103" clover="3.2.0">
-  <project timestamp="1728693399103" name="All files">
-    <metrics statements="25560" coveredstatements="1042" conditionals="16753" coveredconditionals="279" methods="7869" coveredmethods="176" elements="50182" coveredelements="1497" complexity="0" loc="25560" ncloc="25560" packages="236" files="1102" classes="1102"/>
+<coverage generated="1729083043729" clover="3.2.0">
+  <project timestamp="1729083043729" name="All files">
+    <metrics statements="25563" coveredstatements="1042" conditionals="16757" coveredconditionals="279" methods="7869" coveredmethods="176" elements="50189" coveredelements="1497" complexity="0" loc="25563" ncloc="25563" packages="236" files="1103" classes="1103"/>
     <package name="src">
       <metrics statements="175" coveredstatements="0" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -14017,7 +14017,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Modules">
-      <metrics statements="216" coveredstatements="0" conditionals="174" coveredconditionals="0" methods="81" coveredmethods="0"/>
+      <metrics statements="219" coveredstatements="0" conditionals="178" coveredconditionals="0" methods="81" coveredmethods="0"/>
       <file name="AddModuleModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Modules/AddModuleModal.tsx">
         <metrics statements="36" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="18" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
@@ -14159,6 +14159,13 @@
         <line num="251" count="0" type="stmt"/>
         <line num="253" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
+      <file name="CohortsAndProjectsRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Modules/CohortsAndProjectsRenderer.tsx">
+        <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="11" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+      </file>
       <file name="ContentAndMaterials.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Modules/ContentAndMaterials.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
@@ -14191,29 +14198,28 @@
       </file>
       <file name="ModuleDetails.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Modules/ModuleDetails.tsx">
         <metrics statements="18" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="7" coveredmethods="0"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
         <line num="56" count="0" type="stmt"/>
-        <line num="57" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="58" count="0" type="stmt"/>
-        <line num="62" count="0" type="stmt"/>
-        <line num="63" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="59" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="60" count="0" type="stmt"/>
         <line num="64" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
+        <line num="65" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="66" count="0" type="stmt"/>
         <line num="67" count="0" type="stmt"/>
         <line num="68" count="0" type="stmt"/>
         <line num="69" count="0" type="stmt"/>
-        <line num="80" count="0" type="stmt"/>
-        <line num="84" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
       </file>
       <file name="ModuleView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Modules/ModuleView.tsx">
-        <metrics statements="14" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="4" coveredmethods="0"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
+        <metrics statements="13" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="19" count="0" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
@@ -14221,11 +14227,11 @@
         <line num="49" count="0" type="stmt"/>
         <line num="50" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="51" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="59" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
+        <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
       </file>
       <file name="ModulesCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Modules/ModulesCellRenderer.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
