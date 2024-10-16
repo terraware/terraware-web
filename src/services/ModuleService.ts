@@ -1,7 +1,7 @@
 import { paths } from 'src/api/types/generated-schema';
 import { Module } from 'src/types/Module';
 
-import HttpService, { Response, Response2 } from './HttpService';
+import HttpService, { Response2 } from './HttpService';
 
 export type ModulesData = {
   modules: Module[] | undefined;
@@ -21,6 +21,15 @@ export type GetModuleResponsePayload =
   paths[typeof MODULE_ENDOINT]['get']['responses'][200]['content']['application/json'];
 export type ImportModuleResponsePayload =
   paths[typeof MODULES_IMPORT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+
+export type ImportProblemElement = {
+  problem: string;
+  row: number;
+};
+
+export type ImportResponsePayload = Omit<ImportModuleResponsePayload, 'problems'> & {
+  problems: ImportProblemElement[];
+};
 
 export type ListModulesRequestParam = {
   projectId?: number;
@@ -106,7 +115,7 @@ const get = async ({
 /**
  * import modules
  */
-const importModules = async (file: File): Promise<Response> => {
+const importModules = async (file: File): Promise<ImportResponsePayload> => {
   const entity = new FormData();
   entity.append('file', file);
   const headers = { 'content-type': 'multipart/form-data' };
@@ -116,7 +125,7 @@ const importModules = async (file: File): Promise<Response> => {
     headers,
   });
 
-  return serverResponse;
+  return serverResponse.data;
 };
 
 const ModuleService = {
