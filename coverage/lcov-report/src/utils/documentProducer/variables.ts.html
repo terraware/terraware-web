@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">47.94% </span>
+                <span class="strong">45.56% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>35/73</span>
+                <span class='fraction'>36/79</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">42.18% </span>
+                <span class="strong">40% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>27/64</span>
+                <span class='fraction'>28/70</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">30.76% </span>
+                <span class="strong">28.57% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/13</span>
+                <span class='fraction'>4/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">48.61% </span>
+                <span class="strong">46.15% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>35/72</span>
+                <span class='fraction'>36/78</span>
             </div>
         
             
@@ -238,7 +238,26 @@
 <a name='L173'></a><a href='#L173'>173</a>
 <a name='L174'></a><a href='#L174'>174</a>
 <a name='L175'></a><a href='#L175'>175</a>
-<a name='L176'></a><a href='#L176'>176</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -305,6 +324,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -414,7 +442,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { VariableTableCell, cellValue } from 'src/components/DocumentProducer/EditableTableModal/helpers';
-import { VariableWithValues, isSelectVariable, isTextVariable } from 'src/types/documentProducer/Variable';
+import {
+  SelectVariable,
+  VariableWithValues,
+  isSelectVariable,
+  isTextVariable,
+} from 'src/types/documentProducer/Variable';
 import {
   NewDateValuePayload,
   NewLinkValuePayload,
@@ -480,6 +513,15 @@ export const variableDependencyMet = (variable: VariableWithValues, allVariables
     case 'neq':
       if (isTextVariable(dependsOnVariable)) {
         return variable.dependencyValue.toLowerCase() !== `${rawDependsOnValue}`.toLowerCase();
+      }
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (isSelectVariable(dependsOnVariable)) {
+        const selectDependsOnVariable = <span class="cstat-no" title="statement not covered" >dependsOnVariable as SelectVariable;</span>
+<span class="cstat-no" title="statement not covered" >        if (Array.isArray(rawDependsOnValue) &amp;&amp; rawDependsOnValue[0]) {</span>
+          const dependsOnValueText = <span class="cstat-no" title="statement not covered" >selectDependsOnVariable.options.find(</span>
+<span class="fstat-no" title="function not covered" >            (o</span>pt) =&gt; <span class="cstat-no" title="statement not covered" >opt.id === rawDependsOnValue[0]</span>
+          )?.name;
+<span class="cstat-no" title="statement not covered" >          return variable.dependencyValue !== dependsOnValueText;</span>
+        }
       }
 &nbsp;
       return variable.dependencyValue != rawDependsOnValue;
@@ -595,7 +637,7 @@ export const getDependingVariablesStableIdsFromOtherDeliverable = <span class="f
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-16T12:50:42.961Z
+                at 2024-10-16T18:14:32.341Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
