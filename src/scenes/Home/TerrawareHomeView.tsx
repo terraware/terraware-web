@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 
 import { Box, Container, Grid, SxProps, Typography, useTheme } from '@mui/material';
+import { Icon, IconName } from '@terraware/web-components';
 import { Props as ButtonProps } from '@terraware/web-components/components/Button/Button';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -18,11 +19,175 @@ import {
 } from 'src/constants';
 import isEnabled from 'src/features';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
-import { useOrganization, useUser } from 'src/providers';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
 
 import NewApplicationModal from '../ApplicationRouter/NewApplicationModal';
+
+type StatsCard = {
+  label: string;
+  linkText?: string;
+  linkURL?: string;
+  value?: string;
+};
+
+const StatsCard = ({ label, linkText, linkURL, value }: StatsCard) => {
+  const { isDesktop } = useDeviceInfo();
+  const theme = useTheme();
+
+  return (
+    <Box
+      sx={{
+        alignItems: isDesktop ? 'flex-start' : 'center',
+        [isDesktop ? 'borderRight' : 'borderBottom']: `1px solid ${theme.palette.TwClrBaseGray100}`,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        overflow: 'hidden',
+        padding: '8px 0',
+        whiteSpace: 'nowrap',
+      }}
+    >
+      <Typography
+        sx={{
+          fontSize: '16px',
+          fontWeight: 600,
+          lineHeight: '24px',
+          marginBottom: '8px',
+        }}
+      >
+        {label}
+      </Typography>
+      <Typography
+        sx={{
+          fontSize: '24px',
+          fontWeight: 600,
+          lineHeight: '32px',
+          marginBottom: '8px',
+        }}
+      >
+        {value || '-'}
+      </Typography>
+      <Box sx={{ minHeight: '24px' }}>
+        {linkText && linkURL && <Link onClick={() => window.open(linkURL, '_blank')}>{linkText}</Link>}
+      </Box>
+    </Box>
+  );
+};
+
+type PlantingSiteStatsCardItem = {
+  buttonProps?: ButtonProps;
+  icon: IconName;
+  statsCards: StatsCard[];
+  title: string;
+};
+
+type PlantingSiteStatsCardProps = {
+  items: PlantingSiteStatsCardItem[];
+};
+
+const PlantingSiteStatsCard = ({ items }: PlantingSiteStatsCardProps): JSX.Element => {
+  const { isDesktop, isMobile } = useDeviceInfo();
+  const theme = useTheme();
+
+  const primaryGridSize = () => {
+    if (isDesktop) {
+      return 3;
+    }
+    return 12;
+  };
+
+  return (
+    <Box
+      sx={{
+        alignItems: 'center',
+        background: theme.palette.TwClrBg,
+        borderRadius: '8px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        padding: '16px',
+      }}
+    >
+      {items.map((item, index) => (
+        <Grid key={index} container spacing={3} sx={{ marginBottom: '16px', padding: 0 }}>
+          <Grid item xs={primaryGridSize()}>
+            <Box
+              sx={{
+                alignItems: 'center',
+                background: theme.palette.TwClrBgSecondary,
+                borderRadius: '8px',
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%',
+                justifyContent: 'center',
+                minHeight: '112px',
+                padding: '8px',
+              }}
+            >
+              <Icon
+                name={item.icon}
+                size='medium'
+                style={{
+                  fill: theme.palette.TwClrIcnSecondary,
+                }}
+              />
+              <Typography
+                sx={{
+                  color: theme.palette.TwClrTxt,
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  lineHeight: '24px',
+                }}
+              >
+                {item.title}
+              </Typography>
+            </Box>
+          </Grid>
+
+          {(isDesktop || item.statsCards[0]) && (
+            <Grid item xs={primaryGridSize()}>
+              {item.statsCards[0] && <StatsCard {...item.statsCards[0]} />}
+            </Grid>
+          )}
+
+          {(isDesktop || item.statsCards[1]) && (
+            <Grid item xs={primaryGridSize()}>
+              {item.statsCards[1] && <StatsCard {...item.statsCards[1]} />}
+            </Grid>
+          )}
+
+          <Grid item xs={primaryGridSize()}>
+            {item.buttonProps && (
+              <Box
+                sx={{
+                  alignItems: 'center',
+                  display: 'flex',
+                  height: '100%',
+                  justifyContent: 'center',
+                  marginBottom: isDesktop ? 0 : '24px',
+                  textAlign: 'center',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                <Button
+                  priority='secondary'
+                  style={{
+                    marginLeft: isMobile ? 0 : undefined,
+                    width: isMobile ? '100%' : 'auto',
+                  }}
+                  type='productive'
+                  {...item.buttonProps}
+                />
+              </Box>
+            )}
+          </Grid>
+        </Grid>
+      ))}
+    </Box>
+  );
+};
 
 type CTACardProps = {
   buttonsContainerSx?: SxProps;
@@ -136,6 +301,7 @@ const CTACard = ({
 };
 
 const TerrawareHomeView = () => {
+  const { activeLocale } = useLocalization();
   const { user } = useUser();
   const { selectedOrganization } = useOrganization();
   const { isTablet, isMobile } = useDeviceInfo();
@@ -161,6 +327,69 @@ const TerrawareHomeView = () => {
     return 4;
   };
 
+  const plantingSiteStatsCardItems: PlantingSiteStatsCardItem[] = useMemo(() => {
+    if (!activeLocale) {
+      return [];
+    }
+
+    return [
+      {
+        buttonProps: {
+          label: strings.ADD_SPECIES,
+          onClick: () => {
+            console.log('Add Species button clicked');
+          },
+        },
+        icon: 'seeds',
+        statsCards: [
+          { label: 'Total Species', value: '1' },
+          { label: strings.LAST_UPDATED, value: '06-02-2024' },
+        ],
+        title: strings.SPECIES,
+      },
+      {
+        buttonProps: {
+          label: 'Set up Seed Bank',
+          onClick: () => {
+            console.log('Set up Seed Bank button clicked');
+          },
+        },
+        icon: 'seeds',
+        statsCards: [
+          { label: strings.TOTAL_SEED_COUNT },
+          {
+            label: strings.TOTAL_ACTIVE_ACCESSIONS,
+            linkText: 'View Full Dashboard',
+            linkURL: 'https://google.com/',
+          },
+        ],
+        title: strings.SEEDS,
+      },
+      {
+        buttonProps: {
+          label: 'Set up Nursery',
+          onClick: () => {
+            console.log('Set Up Nursery button clicked');
+          },
+        },
+        icon: 'iconSeedling',
+        statsCards: [{ label: strings.TOTAL_SEED_COUNT }, { label: strings.TOTAL_SEEDLINGS_SENT }],
+        title: strings.SEEDLINGS,
+      },
+      {
+        buttonProps: {
+          label: strings.ADD_PLANTING_SITE,
+          onClick: () => {
+            console.log('Add Planting Site button clicked');
+          },
+        },
+        icon: 'iconRestorationSite',
+        statsCards: [],
+        title: strings.PLANTS,
+      },
+    ];
+  }, [activeLocale]);
+
   return (
     <TfMain>
       <NewApplicationModal open={isNewApplicationModalOpen} onClose={() => setIsNewApplicationModalOpen(false)} />
@@ -185,6 +414,10 @@ const TerrawareHomeView = () => {
             />
             <Container maxWidth={false} sx={{ padding: 0 }}>
               <Grid container spacing={3} sx={{ padding: 0 }}>
+                <Grid item xs={12}>
+                  <PlantingSiteStatsCard items={plantingSiteStatsCardItems} />
+                </Grid>
+
                 <Grid item xs={12}>
                   <CTACard
                     description={strings.DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION}
