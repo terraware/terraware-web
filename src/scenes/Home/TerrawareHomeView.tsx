@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 
-import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Container, Grid, SxProps, Typography, useTheme } from '@mui/material';
+import { Props as ButtonProps } from '@terraware/web-components/components/Button/Button';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PageHeader from 'src/components/PageHeader';
@@ -9,7 +10,12 @@ import Link from 'src/components/common/Link';
 import PageCard from 'src/components/common/PageCard';
 import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
-import { ACCELERATOR_LINK, APP_PATHS } from 'src/constants';
+import {
+  ACCELERATOR_LINK,
+  APP_PATHS,
+  TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK,
+  TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK,
+} from 'src/constants';
 import isEnabled from 'src/features';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser } from 'src/providers';
@@ -18,62 +24,114 @@ import { isAdmin } from 'src/utils/organization';
 
 import NewApplicationModal from '../ApplicationRouter/NewApplicationModal';
 
-type PageCardNextProps = {
-  buttonLabel?: string;
+type CTACardProps = {
+  buttonsContainerSx?: SxProps;
   description: string | (string | JSX.Element)[];
-  id?: string;
-  onClickButton?: () => void;
-  onClickSecondaryButton?: () => void;
-  secondaryButtonLabel?: string;
+  imageSource?: string;
+  padding?: number | string;
+  primaryButtonProps?: ButtonProps;
+  secondaryButtonProps?: ButtonProps;
+  title?: string | (string | JSX.Element)[];
 };
 
-const PageCardNext = ({
-  buttonLabel,
+const CTACard = ({
+  buttonsContainerSx,
   description,
-  id,
-  onClickButton,
-  onClickSecondaryButton,
-  secondaryButtonLabel,
-}: PageCardNextProps): JSX.Element => {
-  const { isMobile } = useDeviceInfo();
+  imageSource,
+  padding = '24px',
+  primaryButtonProps,
+  secondaryButtonProps,
+  title,
+}: CTACardProps): JSX.Element => {
+  const { isDesktop, isMobile, isTablet } = useDeviceInfo();
   const theme = useTheme();
 
   return (
-    <>
+    <Box
+      sx={{
+        alignItems: 'center',
+        background: theme.palette.TwClrBg,
+        borderRadius: '8px',
+        display: 'flex',
+        flexDirection: isDesktop ? 'row' : 'column',
+        height: '100%',
+        justifyContent: 'space-between',
+        padding,
+      }}
+    >
       <Box
-        className={isMobile ? '' : 'min-height'}
-        id={id ?? ''}
         sx={{
-          alignItems: 'center',
-          background: theme.palette.TwClrBg,
-          borderRadius: '8px',
           display: 'flex',
-          flexDirection: 'row',
-          height: '100%',
-          justifyContent: 'space-between',
-          padding: '16px',
+          flexDirection: isMobile ? 'column' : 'row',
         }}
       >
-        <Typography
-          component='p'
-          variant='h6'
-          sx={{
-            color: theme.palette.TwClrTxt,
-            fontSize: '16px',
-            fontWeight: 400,
-            lineHeight: '24px',
-          }}
-        >
-          {description}
-        </Typography>
+        {imageSource && (
+          <Box
+            sx={{
+              marginBottom: isMobile ? '32px' : 0,
+              marginRight: isMobile ? 0 : '32px',
+              textAlign: 'center',
+            }}
+          >
+            <img src={imageSource} />
+          </Box>
+        )}
         <Box>
-          {buttonLabel && onClickButton && <Button priority='secondary' label={buttonLabel} onClick={onClickButton} />}
-          {secondaryButtonLabel && onClickSecondaryButton && (
-            <Button priority='secondary' label={secondaryButtonLabel} onClick={onClickSecondaryButton} />
+          {title && (
+            <Typography
+              component='p'
+              variant='h6'
+              sx={{
+                color: theme.palette.TwClrTxt,
+                fontSize: '16px',
+                fontWeight: 600,
+                lineHeight: '24px',
+              }}
+            >
+              {title}
+            </Typography>
           )}
+          <Typography
+            component='p'
+            variant='h6'
+            sx={{
+              color: theme.palette.TwClrTxt,
+              fontSize: '16px',
+              fontWeight: 400,
+              lineHeight: '24px',
+            }}
+          >
+            {description}
+          </Typography>
         </Box>
       </Box>
-    </>
+
+      <Box
+        sx={[
+          {
+            display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
+            marginLeft: isDesktop ? '27px' : 0,
+            marginTop: isMobile || isTablet ? '32px' : 0,
+            whiteSpace: 'nowrap',
+          },
+          ...(Array.isArray(buttonsContainerSx) ? buttonsContainerSx : [buttonsContainerSx]),
+        ]}
+      >
+        {primaryButtonProps && <Button priority='secondary' type='productive' {...primaryButtonProps} />}
+        {secondaryButtonProps && (
+          <Button
+            priority='secondary'
+            style={{
+              marginLeft: isMobile ? 0 : '19px',
+              marginTop: isMobile ? '19px' : 0,
+            }}
+            type='passive'
+            {...secondaryButtonProps}
+          />
+        )}
+      </Box>
+    </Box>
   );
 };
 
@@ -82,7 +140,6 @@ const TerrawareHomeView = () => {
   const { selectedOrganization } = useOrganization();
   const { isTablet, isMobile } = useDeviceInfo();
   const mixpanel = useMixpanel();
-
   const homePageOnboardingImprovementsEnabled = isEnabled('Home Page Onboarding Improvements');
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
@@ -129,9 +186,32 @@ const TerrawareHomeView = () => {
             <Container maxWidth={false} sx={{ padding: 0 }}>
               <Grid container spacing={3} sx={{ padding: 0 }}>
                 <Grid item xs={12}>
-                  <PageCardNext
-                    buttonLabel={strings.APPLY}
-                    id='applicationHomeCard'
+                  <CTACard
+                    description={strings.DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION}
+                    imageSource='/assets/terraware-mobile-app.svg'
+                    padding='32px'
+                    primaryButtonProps={{
+                      label: strings.DOWNLOAD_FOR_ANDROID,
+                      onClick: () => {
+                        window.open(TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK, '_blank');
+                      },
+                      type: 'passive',
+                    }}
+                    secondaryButtonProps={{
+                      label: strings.DOWNLOAD_FOR_IOS,
+                      onClick: () => {
+                        window.open(TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK, '_blank');
+                      },
+                    }}
+                    title={strings.DOWNLOAD_THE_TERRAWARE_MOBILE_APP}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <CTACard
+                    buttonsContainerSx={{
+                      width: isMobile ? '100%' : 'auto',
+                    }}
                     description={strings.formatString(
                       strings.FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,
                       <Link
@@ -145,9 +225,13 @@ const TerrawareHomeView = () => {
                         {strings.HERE}
                       </Link>
                     )}
-                    onClickButton={() => {
-                      mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_APPLY_BUTTON);
-                      setIsNewApplicationModalOpen(true);
+                    primaryButtonProps={{
+                      label: strings.APPLY,
+                      onClick: () => {
+                        mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_APPLY_BUTTON);
+                        setIsNewApplicationModalOpen(true);
+                      },
+                      type: 'productive',
                     }}
                   />
                 </Grid>
