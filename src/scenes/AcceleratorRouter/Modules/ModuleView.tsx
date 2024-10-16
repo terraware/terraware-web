@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box } from '@mui/material';
@@ -11,6 +11,7 @@ import { APP_PATHS } from 'src/constants';
 import useGetModule from 'src/hooks/useGetModule';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
+import useStickyTabs from 'src/utils/useStickyTabs';
 
 import ContentAndMaterials from './ContentAndMaterials';
 import ModuleDetails from './ModuleDetails';
@@ -42,7 +43,6 @@ export type InventoryResult = {
 export default function ModuleView(): JSX.Element {
   const { activeLocale } = useLocalization();
   const contentRef = useRef(null);
-  const [activeTab, setActiveTab] = useState<string>('details');
   const { moduleId } = useParams<{ moduleId: string }>();
   const { getModule, module, deliverables } = useGetModule();
 
@@ -52,9 +52,31 @@ export default function ModuleView(): JSX.Element {
     }
   }, [moduleId]);
 
-  const onTabChange = (newTab: string) => {
-    setActiveTab(newTab);
-  };
+  const tabs = moduleId
+    ? [
+        {
+          id: 'details',
+          label: strings.DETAILS,
+          children: <ModuleDetails module={module} moduleId={moduleId} />,
+        },
+        {
+          id: 'contentAndMaterials',
+          label: strings.CONTENT_AND_MATERIALS,
+          children: <ContentAndMaterials module={module} deliverables={deliverables} />,
+        },
+        {
+          id: 'events',
+          label: strings.EVENTS,
+          children: <p>events</p>,
+        },
+      ]
+    : [];
+
+  const { activeTab, onTabChange } = useStickyTabs({
+    defaultTab: 'details',
+    tabs,
+    viewIdentifier: 'accelerator-module-view',
+  });
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -89,29 +111,7 @@ export default function ModuleView(): JSX.Element {
           },
         }}
       >
-        {moduleId && (
-          <Tabs
-            activeTab={activeTab}
-            onTabChange={onTabChange}
-            tabs={[
-              {
-                id: 'details',
-                label: strings.DETAILS,
-                children: <ModuleDetails module={module} moduleId={moduleId} />,
-              },
-              {
-                id: 'contentAndMaterials',
-                label: strings.CONTENT_AND_MATERIALS,
-                children: <ContentAndMaterials module={module} deliverables={deliverables} />,
-              },
-              {
-                id: 'events',
-                label: strings.EVENTS,
-                children: <p>events</p>,
-              },
-            ]}
-          />
-        )}
+        {moduleId && <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />}
       </Box>
     </Page>
   );
