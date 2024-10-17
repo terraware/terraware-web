@@ -166,7 +166,7 @@ const PlantingSiteStatsCard = ({ items }: PlantingSiteStatsCardProps): JSX.Eleme
                   display: 'flex',
                   height: '100%',
                   justifyContent: 'center',
-                  marginBottom: isDesktop ? 0 : '24px',
+                  paddingBottom: isDesktop ? 0 : '24px',
                   textAlign: 'center',
                   whiteSpace: 'nowrap',
                 }}
