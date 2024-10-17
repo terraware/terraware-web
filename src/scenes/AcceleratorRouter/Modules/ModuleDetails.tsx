@@ -11,6 +11,8 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Module } from 'src/types/Module';
 
+import CohortsAndProjectsRenderer from './CohortsAndProjectsRenderer';
+
 interface ModuleDetailsProps {
   moduleId: string;
   module?: Module;
@@ -112,7 +114,13 @@ export default function ModuleDetails({ moduleId, module }: ModuleDetailsProps):
             {strings.COHORTS_AND_PROJECTS_DESCRIPTION}
           </Typography>
           <Box paddingTop={4}>
-            <Table rows={tableRows || []} columns={columns} id={'module-cohorts-and-projects'} orderBy={'cohortName'} />
+            <Table
+              rows={tableRows || []}
+              columns={columns}
+              id={'module-cohorts-and-projects'}
+              orderBy={'cohortName'}
+              Renderer={CohortsAndProjectsRenderer}
+            />
           </Box>
         </Grid>
       </Grid>
