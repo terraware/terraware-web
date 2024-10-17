@@ -81,3 +81,11 @@ export type ModuleContentType = keyof Pick<Module, 'additionalResources' | 'prep
 export type UpdateCohortModuleRequest = components['schemas']['UpdateCohortModuleRequestPayload'];
 
 export type CohortModule = Partial<Module> & { deliverablesQuantity?: number };
+
+export type ModuleSearchResult = {
+  id: number;
+  name: string;
+  phaseId: string;
+  cohortsQuantity: number;
+  deliverablesQuantity: number;
+};

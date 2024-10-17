@@ -1,7 +1,9 @@
 import { paths } from 'src/api/types/generated-schema';
-import { Module } from 'src/types/Module';
+import { Module, ModuleSearchResult } from 'src/types/Module';
+import { SearchNodePayload, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 
 import HttpService, { Response2 } from './HttpService';
+import SearchService from './SearchService';
 
 export type ModulesData = {
   modules: Module[] | undefined;
@@ -128,10 +130,41 @@ const importModules = async (file: File): Promise<ImportResponsePayload> => {
   return serverResponse.data;
 };
 
+const search = async (
+  search?: SearchNodePayload,
+  sortOrder?: SearchSortOrder
+): Promise<ModuleSearchResult[] | null> => {
+  const searchParams: SearchRequestPayload = {
+    prefix: 'projects.participant.cohort.cohortModules.module',
+    fields: ['id', 'name', 'cohortModules.cohort_id', 'deliverables.id'],
+    search: search ?? { operation: 'and', children: [] },
+    sortOrder: [sortOrder ?? { field: 'name' }],
+    count: 0,
+  };
+
+  const response: SearchResponseElement[] | null = await SearchService.search(searchParams);
+
+  if (!response) {
+    return null;
+  }
+
+  return response.map((result: SearchResponseElement) => {
+    const { id, name, cohortModules, deliverables } = result;
+
+    return {
+      id,
+      name,
+      cohortsQuantity: Array.isArray(cohortModules) ? cohortModules.length : 0,
+      deliverablesQuantity: Array.isArray(deliverables) ? deliverables.length : 0,
+    } as ModuleSearchResult;
+  });
+};
+
 const ModuleService = {
   get,
   list,
   importModules,
+  search,
 };
 
 export default ModuleService;

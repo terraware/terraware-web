@@ -23,3 +23,5 @@ export const selectUpdateManyCohortModule = (requestId: string) => (state: RootS
 
 export const selectModuleCohortsAndProjects = (moduleId: string) => (state: RootState) =>
   state.moduleCohortsAndProjects[moduleId];
+
+export const selectSearchModules = (requestId: string) => (state: RootState) => state.searchModules[requestId];
