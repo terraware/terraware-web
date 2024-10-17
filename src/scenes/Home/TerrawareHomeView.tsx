@@ -29,12 +29,12 @@ import NewApplicationModal from '../ApplicationRouter/NewApplicationModal';
 
 type StatsCard = {
   label: string;
+  linkOnClick?: () => void;
   linkText?: string;
-  linkURL?: string;
   value?: string;
 };
 
-const StatsCard = ({ label, linkText, linkURL, value }: StatsCard) => {
+const StatsCard = ({ label, linkOnClick, linkText, value }: StatsCard) => {
   const { isDesktop } = useDeviceInfo();
   const theme = useTheme();
 
@@ -73,9 +73,7 @@ const StatsCard = ({ label, linkText, linkURL, value }: StatsCard) => {
       >
         {value || '-'}
       </Typography>
-      <Box sx={{ minHeight: '24px' }}>
-        {linkText && linkURL && <Link onClick={() => window.open(linkURL, '_blank')}>{linkText}</Link>}
-      </Box>
+      <Box sx={{ minHeight: '24px' }}>{linkText && linkOnClick && <Link onClick={linkOnClick}>{linkText}</Link>}</Box>
     </Box>
   );
 };
@@ -373,8 +371,10 @@ const TerrawareHomeView = () => {
           },
           {
             label: strings.TOTAL_ACTIVE_ACCESSIONS,
+            linkOnClick: () => {
+              navigate(APP_PATHS.SEEDS_DASHBOARD);
+            },
             linkText: strings.VIEW_FULL_DASHBOARD,
-            linkURL: 'https://google.com/',
             value: seedBankSummary?.value?.activeAccessions?.toString(),
           },
         ],
