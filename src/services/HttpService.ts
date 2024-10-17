@@ -79,7 +79,7 @@ async function handleRequest<I extends ServerData, O>(
       response.statusCode = serverResponse.status;
     }
     const data: I = serverResponse.data;
-    if (data?.status === 'error') {
+    if (data?.status === 'error' && serverResponse.status !== 200) {
       addError(data, response);
     } else {
       response.requestSucceeded = true;

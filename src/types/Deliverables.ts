@@ -3,6 +3,7 @@ import strings from 'src/strings';
 
 export type Deliverable = components['schemas']['DeliverablePayload'];
 export type DeliverableTypeType = components['schemas']['DeliverablePayload']['type'];
+export type ImportDeliverableProblemElement = components['schemas']['ImportDeliverableProblemElement'];
 export const DeliverableTypes: DeliverableTypeType[] = ['Document', 'Species', 'Questions'];
 
 export type DeliverableCategoryType = components['schemas']['DeliverablePayload']['category'];

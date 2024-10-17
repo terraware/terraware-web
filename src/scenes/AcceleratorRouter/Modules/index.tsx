@@ -1,42 +1,61 @@
-import React, { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { IconName, TableColumnType } from '@terraware/web-components';
 
 import PageListView, { PageListViewProps } from 'src/components/DocumentProducer/PageListView';
-import useListModules from 'src/hooks/useListModules';
 import { useLocalization } from 'src/providers';
+import { requestSearchModules } from 'src/redux/features/modules/modulesAsyncThunks';
+import { selectSearchModules } from 'src/redux/features/modules/modulesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { SearchSortOrder } from 'src/types/Search';
+import { ModuleSearchResult } from 'src/types/Module';
+import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 
 import ModulesCellRenderer from './ModulesCellRenderer';
 import UploadModulesModal from './UploadModulesModal';
 
+const columns = (activeLocale: string | null): TableColumnType[] =>
+  activeLocale
+    ? [
+        { key: 'name', name: strings.MODULE, type: 'string' },
+        { key: 'id', name: strings.MODULE_ID, type: 'string' },
+        { key: 'cohortsQuantity', name: strings.COHORTS, type: 'number' },
+        { key: 'deliverablesQuantity', name: strings.DELIVERABLES, type: 'number' },
+      ]
+    : [];
+
+const defaultSearchOrder: SearchSortOrder = {
+  field: 'name',
+  direction: 'Ascending',
+};
+
+const fuzzySearchColumns = ['name'];
+
 export default function ModuleContentView() {
   const { activeLocale } = useLocalization();
-  const { modules, listModules } = useListModules();
   const [openUploadModal, setOpenUploadModal] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const [requestId, setRequestId] = useState('');
+  const modulesResponse = useAppSelector(selectSearchModules(requestId));
+  const [modules, setModules] = useState<ModuleSearchResult[]>([]);
 
-  const dispatchSearchRequest = useCallback(() => {
-    listModules({});
-  }, [dispatch]);
+  const dispatchSearchRequest = useCallback(
+    (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
+      const request = dispatch(requestSearchModules({ search, sortOrder: searchSortOrder }));
+      setRequestId(request.requestId);
+    },
+    [dispatch]
+  );
 
-  const columns = (activeLocale: string | null): TableColumnType[] =>
-    activeLocale
-      ? [
-          { key: 'name', name: strings.MODULE, type: 'string' },
-          { key: 'id', name: strings.MODULE_ID, type: 'string' },
-          { key: 'phaseId', name: strings.PHASE_ID, type: 'string' },
-          { key: 'cohortsQuantity', name: strings.VERSION, type: 'number' },
-          { key: 'deliverablesQuantity', name: strings.CREATED, type: 'date' },
-        ]
-      : [];
+  useEffect(() => {
+    if (!modulesResponse) {
+      return;
+    }
 
-  const defaultSearchOrder: SearchSortOrder = {
-    field: 'name',
-    direction: 'Ascending',
-  };
+    if (modulesResponse?.status === 'success' && modulesResponse?.data) {
+      setModules(modulesResponse.data);
+    }
+  }, [modulesResponse]);
 
   const showUploadModal = () => {
     setOpenUploadModal(true);
@@ -53,8 +72,9 @@ export default function ModuleContentView() {
       columns: () => columns(activeLocale),
       defaultSearchOrder,
       dispatchSearchRequest,
+      fuzzySearchColumns,
       id: 'modules-list',
-      rows: modules || [],
+      rows: modules,
       Renderer: ModulesCellRenderer,
     },
   };

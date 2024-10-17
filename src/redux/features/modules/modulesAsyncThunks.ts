@@ -10,9 +10,10 @@ import { ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
 import {
   ModuleCohortsAndProjectsSearchResult,
   ModuleProjectSearchResult,
+  ModuleSearchResult,
   UpdateCohortModuleRequest,
 } from 'src/types/Module';
-import { SearchNodePayload, SearchRequestPayload } from 'src/types/Search';
+import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 
 export const requestGetModule = createAsyncThunk(
   'modules/get',
@@ -216,6 +217,21 @@ export const requestListModuleCohortsAndProjects = createAsyncThunk(
 
     if (response) {
       return response[0];
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestSearchModules = createAsyncThunk(
+  'modules/search',
+  async (request: { search?: SearchNodePayload; sortOrder?: SearchSortOrder }, { rejectWithValue }) => {
+    const { search, sortOrder } = request;
+
+    const response: ModuleSearchResult[] | null = await ModuleService.search(search, sortOrder);
+
+    if (response) {
+      return response;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
