@@ -56,6 +56,7 @@ const StatsCard = ({ label, linkText, linkURL, value }: StatsCard) => {
           lineHeight: '24px',
           marginBottom: '8px',
         }}
+        title={label}
       >
         {label}
       </Typography>
@@ -66,6 +67,7 @@ const StatsCard = ({ label, linkText, linkURL, value }: StatsCard) => {
           lineHeight: '32px',
           marginBottom: '8px',
         }}
+        title={value}
       >
         {value || '-'}
       </Typography>
