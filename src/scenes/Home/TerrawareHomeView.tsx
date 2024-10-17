@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Container, Grid, SxProps, Typography, useTheme } from '@mui/material';
 import { Icon, IconName } from '@terraware/web-components';
@@ -18,6 +19,7 @@ import {
   TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK,
 } from 'src/constants';
 import isEnabled from 'src/features';
+import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import strings from 'src/strings';
@@ -308,6 +310,8 @@ const TerrawareHomeView = () => {
   const { selectedOrganization } = useOrganization();
   const { isTablet, isMobile } = useDeviceInfo();
   const mixpanel = useMixpanel();
+  const navigate = useNavigate();
+  const { seedBankSummary } = useSeedBankSummary();
   const homePageOnboardingImprovementsEnabled = isEnabled('Home Page Onboarding Improvements');
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
@@ -339,50 +343,59 @@ const TerrawareHomeView = () => {
         buttonProps: {
           label: strings.ADD_SPECIES,
           onClick: () => {
-            console.log('Add Species button clicked');
+            navigate(APP_PATHS.SPECIES_NEW);
           },
         },
         icon: 'seeds',
         statsCards: [
-          { label: 'Total Species', value: '1' },
+          { label: strings.TOTAL_SPECIES, value: seedBankSummary?.value?.species?.toString() },
           { label: strings.LAST_UPDATED, value: '06-02-2024' },
         ],
         title: strings.SPECIES,
       },
       {
         buttonProps: {
-          label: 'Set up Seed Bank',
+          label: strings.SET_UP_SEED_BANK,
           onClick: () => {
-            console.log('Set up Seed Bank button clicked');
+            navigate(APP_PATHS.SEED_BANKS_NEW);
           },
         },
         icon: 'seeds',
         statsCards: [
-          { label: strings.TOTAL_SEED_COUNT },
+          {
+            label: strings.TOTAL_SEED_COUNT,
+            value: `${seedBankSummary?.value?.seedsRemaining.total}${
+              seedBankSummary?.value?.seedsRemaining &&
+              seedBankSummary?.value?.seedsRemaining.unknownQuantityAccessions > 0
+                ? '+'
+                : ''
+            }`,
+          },
           {
             label: strings.TOTAL_ACTIVE_ACCESSIONS,
-            linkText: 'View Full Dashboard',
+            linkText: strings.VIEW_FULL_DASHBOARD,
             linkURL: 'https://google.com/',
+            value: seedBankSummary?.value?.activeAccessions?.toString(),
           },
         ],
         title: strings.SEEDS,
       },
       {
         buttonProps: {
-          label: 'Set up Nursery',
+          label: strings.SET_UP_NURSERY,
           onClick: () => {
-            console.log('Set Up Nursery button clicked');
+            navigate(APP_PATHS.NURSERIES_NEW);
           },
         },
         icon: 'iconSeedling',
-        statsCards: [{ label: strings.TOTAL_SEED_COUNT }, { label: strings.TOTAL_SEEDLINGS_SENT }],
+        statsCards: [{ label: strings.TOTAL_SEEDLINGS_COUNT }, { label: strings.TOTAL_SEEDLINGS_SENT }],
         title: strings.SEEDLINGS,
       },
       {
         buttonProps: {
           label: strings.ADD_PLANTING_SITE,
           onClick: () => {
-            console.log('Add Planting Site button clicked');
+            navigate(APP_PATHS.PLANTING_SITES_NEW);
           },
         },
         icon: 'iconRestorationSite',
@@ -390,7 +403,7 @@ const TerrawareHomeView = () => {
         title: strings.PLANTS,
       },
     ];
-  }, [activeLocale]);
+  }, [activeLocale, seedBankSummary]);
 
   return (
     <TfMain>
