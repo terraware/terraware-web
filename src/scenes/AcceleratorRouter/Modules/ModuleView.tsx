@@ -14,6 +14,7 @@ import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import ContentAndMaterials from './ContentAndMaterials';
+import Events from './Events';
 import ModuleDetails from './ModuleDetails';
 
 export const InventoryListTypes: Record<string, string> = {
@@ -44,7 +45,7 @@ export default function ModuleView(): JSX.Element {
   const { activeLocale } = useLocalization();
   const contentRef = useRef(null);
   const { moduleId } = useParams<{ moduleId: string }>();
-  const { getModule, module, deliverables } = useGetModule();
+  const { getModule, module, deliverables, events } = useGetModule();
 
   useEffect(() => {
     if (moduleId) {
@@ -67,7 +68,7 @@ export default function ModuleView(): JSX.Element {
         {
           id: 'events',
           label: strings.EVENTS,
-          children: <p>events</p>,
+          children: <Events module={module} events={events} />,
         },
       ]
     : [];
