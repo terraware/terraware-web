@@ -347,7 +347,7 @@ const TerrawareHomeView = () => {
         icon: 'seeds',
         statsCards: [
           { label: strings.TOTAL_SPECIES, value: seedBankSummary?.value?.species?.toString() },
-          { label: strings.LAST_UPDATED, value: '06-02-2024' },
+          { label: strings.LAST_UPDATED },
         ],
         title: strings.SPECIES,
       },
@@ -362,12 +362,7 @@ const TerrawareHomeView = () => {
         statsCards: [
           {
             label: strings.TOTAL_SEED_COUNT,
-            value: `${seedBankSummary?.value?.seedsRemaining.total}${
-              seedBankSummary?.value?.seedsRemaining &&
-              seedBankSummary?.value?.seedsRemaining.unknownQuantityAccessions > 0
-                ? '+'
-                : ''
-            }`,
+            value: seedBankSummary?.value?.seedsRemaining.total?.toString(),
           },
           {
             label: strings.TOTAL_ACTIVE_ACCESSIONS,
