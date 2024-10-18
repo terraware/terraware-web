@@ -8,6 +8,7 @@ import { LocaleDetails } from '.';
 export const supportedLocales: LocaleDetails[] = [
   { id: 'en', name: 'English', loadModule: () => import('./strings-en') },
   { id: 'es', name: 'Español', loadModule: () => import('./strings-es') },
+  { id: 'fr', name: 'Français', loadModule: () => import('./strings-fr'), inDevelopment: true },
   { id: 'gx', name: 'Gibberish', loadModule: () => import('./strings-gx'), inDevelopment: true },
 ];
 
