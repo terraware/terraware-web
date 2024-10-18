@@ -314,6 +314,15 @@ const TerrawareHomeView = () => {
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 
+  const isLoadingInitialData = useMemo(() => seedBankSummary?.requestSucceeded === undefined, [seedBankSummary]);
+  const showHomePageOnboardingImprovements = useMemo(
+    () =>
+      homePageOnboardingImprovementsEnabled &&
+      typeof seedBankSummary?.value?.species === 'number' &&
+      seedBankSummary.value.species > 0,
+    [homePageOnboardingImprovementsEnabled, seedBankSummary]
+  );
+
   const primaryGridSize = () => {
     if (isMobile) {
       return 12;
@@ -412,7 +421,7 @@ const TerrawareHomeView = () => {
           flexDirection: 'column',
         }}
       >
-        {homePageOnboardingImprovementsEnabled ? (
+        {isLoadingInitialData ? null : showHomePageOnboardingImprovements ? (
           <Box paddingRight={'24px'} paddingLeft={isMobile ? '24px' : 0}>
             <PageHeader
               title={
