@@ -10,7 +10,7 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectPlantingSiteObservations } from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
-import { SearchService } from 'src/services';
+import { ObservationsService, SearchService } from 'src/services';
 import strings from 'src/strings';
 import { Observation, ObservationPlantingZoneResults, ObservationResults } from 'src/types/Observations';
 import { isAdmin } from 'src/utils/organization';
@@ -102,42 +102,21 @@ export default function OrgObservationsListView({
   }, [activeLocale, scheduleObservationsEnabled]);
 
   const exportObservation = useCallback(
-    async (observationId: number) => {
+    async (observationId: number, gpxOrCsv: 'gpx' | 'csv') => {
       const observation = (observations ?? []).find((item) => item.id === observationId);
 
       if (observation !== undefined) {
-        const csvContent = await SearchService.searchCsv({
-          prefix: 'plantingSites.observations',
-          fields: [
-            'startDate',
-            'plantingSite_name',
-            'observationPlots_isPermanent',
-            'observationPlots_monitoringPlot_plantingSubzone_plantingZone_name',
-            'observationPlots_monitoringPlot_plantingSubzone_name',
-            'observationPlots_monitoringPlot_fullName',
-            'observationPlots_monitoringPlot_southwestLatitude',
-            'observationPlots_monitoringPlot_southwestLongitude',
-            'observationPlots_monitoringPlot_northwestLatitude',
-            'observationPlots_monitoringPlot_northwestLongitude',
-            'observationPlots_monitoringPlot_southeastLatitude',
-            'observationPlots_monitoringPlot_southeastLongitude',
-            'observationPlots_monitoringPlot_northeastLatitude',
-            'observationPlots_monitoringPlot_northeastLongitude',
-          ],
-          sortOrder: [{ field: 'observationPlots_monitoringPlot_id' }],
-          search: {
-            operation: 'field',
-            type: 'Exact',
-            field: 'id',
-            values: [`${observationId}`],
-          },
-        });
+        const content =
+          gpxOrCsv === 'csv'
+            ? await ObservationsService.exportCsv(observation.id)
+            : await ObservationsService.exportGpx(observation.id);
 
-        if (csvContent !== null) {
+        if (content !== null) {
           const sanitizedSiteName = sanitize(observation.plantingSiteName);
-          const fileName = `${sanitizedSiteName}-${observation.startDate}.csv`;
+          const fileName = `${sanitizedSiteName}-${observation.startDate}.${gpxOrCsv}`;
 
-          const encodedUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent);
+          const mimeType = gpxOrCsv === 'csv' ? 'text/csv' : 'application/gpx+xml';
+          const encodedUri = `data:${mimeType};charset=utf-8,` + encodeURIComponent(content);
 
           const link = document.createElement('a');
           link.setAttribute('href', encodedUri);
@@ -190,7 +169,13 @@ export default function OrgObservationsListView({
         columns={columns}
         rows={results}
         orderBy='completedDate'
-        Renderer={OrgObservationsRenderer(theme, activeLocale, goToRescheduleObservation, exportObservation)}
+        Renderer={OrgObservationsRenderer(
+          theme,
+          activeLocale,
+          goToRescheduleObservation,
+          (observationId: number) => exportObservation(observationId, 'csv'),
+          (observationId: number) => exportObservation(observationId, 'gpx')
+        )}
       />
     </Box>
   );
