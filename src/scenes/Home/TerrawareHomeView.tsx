@@ -6,7 +6,6 @@ import { Box, Container, Grid, SxProps, Typography, useTheme } from '@mui/materi
 import { Icon, IconName } from '@terraware/web-components';
 import { Props as ButtonProps } from '@terraware/web-components/components/Button/Button';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
-import NewApplicationModal from 'scr/scenes/ApplicationRouter/NewApplicationModal';
 
 import PageHeader from 'src/components/PageHeader';
 import Link from 'src/components/common/Link';
@@ -24,6 +23,7 @@ import { useOrgNurserySummary } from 'src/hooks/useOrgNurserySummary';
 import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
+import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
