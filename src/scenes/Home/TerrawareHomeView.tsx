@@ -327,9 +327,9 @@ const TerrawareHomeView = () => {
   const showHomePageOnboardingImprovements = useMemo(
     () =>
       homePageOnboardingImprovementsEnabled &&
-      typeof seedBankSummary?.value?.species === 'number' &&
-      seedBankSummary.value.species > 0,
-    [homePageOnboardingImprovementsEnabled, seedBankSummary]
+      typeof availableSpecies?.length === 'number' &&
+      availableSpecies?.length > 0,
+    [availableSpecies, homePageOnboardingImprovementsEnabled]
   );
 
   const speciesLastModifiedDate = useMemo(() => {
