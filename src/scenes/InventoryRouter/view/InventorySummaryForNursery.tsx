@@ -4,10 +4,10 @@ import { Grid } from '@mui/material';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import TextTruncated from 'src/components/common/TextTruncated';
-import NurseryFacilitiesService, {
+import NurserySummaryService, {
   NurserySummaryPayload,
   NurserySummarySpecies,
-} from 'src/services/NurseryFacilitiesService';
+} from 'src/services/NurserySummaryService';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -28,7 +28,7 @@ export default function InventorySummaryForNursery({
 
   useEffect(() => {
     const reloadData = async () => {
-      const summaryResponse = await NurseryFacilitiesService.getNurserySummary(nurseryId);
+      const summaryResponse = await NurserySummaryService.getNurserySummary(nurseryId);
       if (!summaryResponse || !summaryResponse.requestSucceeded) {
         snackbar.toastError();
         return;
