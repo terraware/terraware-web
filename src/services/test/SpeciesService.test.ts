@@ -11,6 +11,8 @@ const SPECIES_LIST = [
 const SPECIES = {
   organizationId: 1,
   scientificName: 'New species',
+  createdTime: '2024-10-01 15:00:00.000 -0700',
+  modifiedTime: '2024-10-01 15:00:00.000 -0700',
 };
 
 const UPDATED_SPECIES = {
@@ -18,6 +20,8 @@ const UPDATED_SPECIES = {
   organizationId: 1,
   scientificName: 'New species',
   commonName: 'Common',
+  createdTime: '2024-10-01 15:00:00.000 -0700',
+  modifiedTime: '2024-10-01 15:00:00.000 -0700',
 };
 
 const SPECIES_DETAILS = {
