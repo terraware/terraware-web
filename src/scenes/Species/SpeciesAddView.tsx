@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
+import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
@@ -20,6 +21,8 @@ function initSpecies(species?: Species): Species {
     species ?? {
       scientificName: '',
       id: -1,
+      createdTime: getTodaysDateFormatted(),
+      modifiedTime: getTodaysDateFormatted(),
     }
   );
 }

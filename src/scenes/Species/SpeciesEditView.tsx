@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
+import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageForm from 'src/components/common/PageForm';
@@ -34,6 +35,8 @@ function initSpecies(species?: Species): Species {
     species ?? {
       scientificName: '',
       id: -1,
+      createdTime: getTodaysDateFormatted(),
+      modifiedTime: getTodaysDateFormatted(),
     }
   );
 }
@@ -126,6 +129,8 @@ export default function SpeciesEditView(): JSX.Element {
       seedStorageBehavior: species?.seedStorageBehavior,
       ecosystemTypes: species?.ecosystemTypes,
       rare: species?.rare,
+      createdTime: species?.createdTime ?? getTodaysDateFormatted(),
+      modifiedTime: species?.modifiedTime ?? getTodaysDateFormatted(),
     });
   }, [species, setRecord, selectedOrganization]);
 
