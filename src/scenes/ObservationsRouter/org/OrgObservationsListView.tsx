@@ -10,7 +10,7 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectPlantingSiteObservations } from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
-import { ObservationsService, SearchService } from 'src/services';
+import { ObservationsService } from 'src/services';
 import strings from 'src/strings';
 import { Observation, ObservationPlantingZoneResults, ObservationResults } from 'src/types/Observations';
 import { isAdmin } from 'src/utils/organization';
