@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Container, Grid, SxProps, Typography, useTheme } from '@mui/material';
 import { Icon, IconName } from '@terraware/web-components';
 import { Props as ButtonProps } from '@terraware/web-components/components/Button/Button';
-import { useDeviceInfo } from '@terraware/web-components/utils';
+import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
+import NewApplicationModal from 'scr/scenes/ApplicationRouter/NewApplicationModal';
 
 import PageHeader from 'src/components/PageHeader';
 import Link from 'src/components/common/Link';
@@ -19,13 +20,13 @@ import {
   TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK,
 } from 'src/constants';
 import isEnabled from 'src/features';
+import { useOrgNurserySummary } from 'src/hooks/useOrgNurserySummary';
 import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
+import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
-
-import NewApplicationModal from '../ApplicationRouter/NewApplicationModal';
 
 type StatsCard = {
   label: string;
@@ -309,12 +310,20 @@ const TerrawareHomeView = () => {
   const { isTablet, isMobile } = useDeviceInfo();
   const mixpanel = useMixpanel();
   const navigate = useNavigate();
+  const { availableSpecies } = useSpecies();
   const { seedBankSummary } = useSeedBankSummary();
+  const orgNurserySummary = useOrgNurserySummary();
   const homePageOnboardingImprovementsEnabled = isEnabled('Home Page Onboarding Improvements');
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 
-  const isLoadingInitialData = useMemo(() => seedBankSummary?.requestSucceeded === undefined, [seedBankSummary]);
+  const isLoadingInitialData = useMemo(
+    () =>
+      availableSpecies === undefined ||
+      orgNurserySummary?.requestSucceeded === undefined ||
+      seedBankSummary?.requestSucceeded === undefined,
+    [availableSpecies, orgNurserySummary, seedBankSummary]
+  );
   const showHomePageOnboardingImprovements = useMemo(
     () =>
       homePageOnboardingImprovementsEnabled &&
@@ -322,6 +331,18 @@ const TerrawareHomeView = () => {
       seedBankSummary.value.species > 0,
     [homePageOnboardingImprovementsEnabled, seedBankSummary]
   );
+
+  const speciesLastModifiedDate = useMemo(() => {
+    if (!availableSpecies?.length) {
+      return undefined;
+    }
+
+    const lastModifiedTime = availableSpecies.sort(
+      (a, b) => new Date(b.modifiedTime).getTime() - new Date(a.modifiedTime).getTime()
+    )[0].modifiedTime;
+
+    return getDateDisplayValue(lastModifiedTime);
+  }, [availableSpecies]);
 
   const primaryGridSize = () => {
     if (isMobile) {
@@ -355,8 +376,11 @@ const TerrawareHomeView = () => {
         },
         icon: 'seeds',
         statsCards: [
-          { label: strings.TOTAL_SPECIES, value: seedBankSummary?.value?.species?.toString() },
-          { label: strings.LAST_UPDATED },
+          { label: strings.TOTAL_SPECIES, value: availableSpecies?.length.toString() },
+          {
+            label: strings.LAST_UPDATED,
+            value: speciesLastModifiedDate,
+          },
         ],
         title: strings.SPECIES,
       },
@@ -392,7 +416,10 @@ const TerrawareHomeView = () => {
           },
         },
         icon: 'iconSeedling',
-        statsCards: [{ label: strings.TOTAL_SEEDLINGS_COUNT }, { label: strings.TOTAL_SEEDLINGS_SENT }],
+        statsCards: [
+          { label: strings.TOTAL_SEEDLINGS_COUNT, value: orgNurserySummary?.totalQuantity?.toString() },
+          { label: strings.TOTAL_SEEDLINGS_SENT, value: orgNurserySummary?.totalWithdrawn?.toString() },
+        ],
         title: strings.SEEDLINGS,
       },
       {
@@ -407,7 +434,7 @@ const TerrawareHomeView = () => {
         title: strings.PLANTS,
       },
     ];
-  }, [activeLocale, seedBankSummary]);
+  }, [activeLocale, availableSpecies, orgNurserySummary, seedBankSummary, speciesLastModifiedDate]);
 
   return (
     <TfMain>
