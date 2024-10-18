@@ -9,6 +9,7 @@ type GetNurserySummaryResponsePayload =
 type GetOrganizationNurserySummaryResponsePayload =
   paths[typeof ENDPOINT_ORGANIZATION_NURSERY_SUMMARY]['get']['responses'][200]['content']['application/json'];
 
+export type OrganizationNurserySummaryResponse = Response & OrganizationNurserySummaryPayload;
 export type NurserySummaryPayload = GetNurserySummaryResponsePayload['summary'];
 export type NurserySummarySpecies = NurserySummaryPayload['species'][0];
 export type OrganizationNurserySummaryPayload = GetOrganizationNurserySummaryResponsePayload['summary'];
@@ -26,7 +27,7 @@ const getNurserySummary = (nurseryId: number): Promise<Response & NurserySummary
     (response?: GetNurserySummaryResponsePayload) => response?.summary
   );
 
-const getOrganizationNurserySummary = (organizationId: number): Promise<Response & OrganizationNurserySummaryPayload> =>
+const getOrganizationNurserySummary = (organizationId: number): Promise<OrganizationNurserySummaryResponse> =>
   httpOrganizationNurserySummary.get<
     GetOrganizationNurserySummaryResponsePayload,
     OrganizationNurserySummaryPayload | undefined
