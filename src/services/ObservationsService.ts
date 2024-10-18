@@ -9,6 +9,7 @@ import {
 } from 'src/types/Observations';
 
 import HttpService, { Response } from './HttpService';
+import SearchService from './SearchService';
 
 /**
  * Tracking observations related services
@@ -17,6 +18,7 @@ import HttpService, { Response } from './HttpService';
 const OBSERVATIONS_RESULTS_ENDPOINT = '/api/v1/tracking/observations/results';
 const OBSERVATIONS_ENDPOINT = '/api/v1/tracking/observations';
 const OBSERVATION_ENDPOINT = '/api/v1/tracking/observations/{observationId}';
+const OBSERVATION_EXPORT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots';
 const REPLACE_OBSERVATION_PLOT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/replace';
 
 type ObservationsResultsResponsePayload =
@@ -39,6 +41,55 @@ export type ObservationsData = {
 const httpObservationsResults = HttpService.root(OBSERVATIONS_RESULTS_ENDPOINT);
 const httpObservations = HttpService.root(OBSERVATIONS_ENDPOINT);
 const httpObservation = HttpService.root(OBSERVATION_ENDPOINT);
+const httpObservationExport = HttpService.root(OBSERVATION_EXPORT_ENDPOINT);
+
+const exportCsv = async (observationId: number): Promise<any> => {
+  return SearchService.searchCsv({
+    prefix: 'plantingSites.observations',
+    fields: [
+      'startDate',
+      'plantingSite_name',
+      'observationPlots_isPermanent',
+      'observationPlots_monitoringPlot_plantingSubzone_plantingZone_name',
+      'observationPlots_monitoringPlot_plantingSubzone_name',
+      'observationPlots_monitoringPlot_fullName',
+      'observationPlots_monitoringPlot_southwestLatitude',
+      'observationPlots_monitoringPlot_southwestLongitude',
+      'observationPlots_monitoringPlot_northwestLatitude',
+      'observationPlots_monitoringPlot_northwestLongitude',
+      'observationPlots_monitoringPlot_southeastLatitude',
+      'observationPlots_monitoringPlot_southeastLongitude',
+      'observationPlots_monitoringPlot_northeastLatitude',
+      'observationPlots_monitoringPlot_northeastLongitude',
+    ],
+    sortOrder: [{ field: 'observationPlots_monitoringPlot_id' }],
+    search: {
+      operation: 'field',
+      type: 'Exact',
+      field: 'id',
+      values: [`${observationId}`],
+    },
+  });
+};
+
+const exportGpx = async (observationId: number): Promise<any> => {
+  const headers = {
+    accept: 'text/csv',
+  };
+  try {
+    const response = (
+      await httpObservationExport.get2({
+        headers,
+        urlReplacements: {
+          '{observationId}': observationId.toString(),
+        },
+      })
+    ).data;
+    return response;
+  } catch {
+    return null;
+  }
+};
 
 /**
  * List all observations results
@@ -118,6 +169,8 @@ const replaceObservationPlot = async (
  * Exported functions
  */
 const ObservationsService = {
+  exportCsv,
+  exportGpx,
   listObservationsResults,
   listObservations,
   replaceObservationPlot,
