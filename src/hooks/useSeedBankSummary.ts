@@ -45,5 +45,5 @@ export const useSeedBankSummary = () => {
     };
   }, [selectedOrganization]);
 
-  return { seedBankSummary };
+  return seedBankSummary;
 };

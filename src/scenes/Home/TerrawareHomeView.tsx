@@ -311,7 +311,7 @@ const TerrawareHomeView = () => {
   const mixpanel = useMixpanel();
   const navigate = useNavigate();
   const { availableSpecies } = useSpecies();
-  const { seedBankSummary } = useSeedBankSummary();
+  const seedBankSummary = useSeedBankSummary();
   const orgNurserySummary = useOrgNurserySummary();
   const homePageOnboardingImprovementsEnabled = isEnabled('Home Page Onboarding Improvements');
 
@@ -324,6 +324,7 @@ const TerrawareHomeView = () => {
       seedBankSummary?.requestSucceeded === undefined,
     [availableSpecies, orgNurserySummary, seedBankSummary]
   );
+
   const showHomePageOnboardingImprovements = useMemo(
     () =>
       homePageOnboardingImprovementsEnabled &&

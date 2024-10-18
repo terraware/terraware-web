@@ -30,7 +30,7 @@ export default function SeedSummary(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  const { seedBankSummary } = useSeedBankSummary();
+  const seedBankSummary = useSeedBankSummary();
   const isEmptyState = seedBankSummary ? !seedBankSummary.value?.activeAccessions : false;
   const errorOccurred = seedBankSummary ? !seedBankSummary.requestSucceeded : false;
 
