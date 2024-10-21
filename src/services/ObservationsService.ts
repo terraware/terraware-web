@@ -74,7 +74,7 @@ const exportCsv = async (observationId: number): Promise<any> => {
 
 const exportGpx = async (observationId: number): Promise<any> => {
   const headers = {
-    accept: 'text/csv',
+    accept: 'application/gpx+xml',
   };
   try {
     const response = (
