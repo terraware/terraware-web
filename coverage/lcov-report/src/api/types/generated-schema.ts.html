@@ -11388,7 +11388,71 @@
 <a name='L11323'></a><a href='#L11323'>11323</a>
 <a name='L11324'></a><a href='#L11324'>11324</a>
 <a name='L11325'></a><a href='#L11325'>11325</a>
-<a name='L11326'></a><a href='#L11326'>11326</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L11326'></a><a href='#L11326'>11326</a>
+<a name='L11327'></a><a href='#L11327'>11327</a>
+<a name='L11328'></a><a href='#L11328'>11328</a>
+<a name='L11329'></a><a href='#L11329'>11329</a>
+<a name='L11330'></a><a href='#L11330'>11330</a>
+<a name='L11331'></a><a href='#L11331'>11331</a>
+<a name='L11332'></a><a href='#L11332'>11332</a>
+<a name='L11333'></a><a href='#L11333'>11333</a>
+<a name='L11334'></a><a href='#L11334'>11334</a>
+<a name='L11335'></a><a href='#L11335'>11335</a>
+<a name='L11336'></a><a href='#L11336'>11336</a>
+<a name='L11337'></a><a href='#L11337'>11337</a>
+<a name='L11338'></a><a href='#L11338'>11338</a>
+<a name='L11339'></a><a href='#L11339'>11339</a>
+<a name='L11340'></a><a href='#L11340'>11340</a>
+<a name='L11341'></a><a href='#L11341'>11341</a>
+<a name='L11342'></a><a href='#L11342'>11342</a>
+<a name='L11343'></a><a href='#L11343'>11343</a>
+<a name='L11344'></a><a href='#L11344'>11344</a>
+<a name='L11345'></a><a href='#L11345'>11345</a>
+<a name='L11346'></a><a href='#L11346'>11346</a>
+<a name='L11347'></a><a href='#L11347'>11347</a>
+<a name='L11348'></a><a href='#L11348'>11348</a>
+<a name='L11349'></a><a href='#L11349'>11349</a>
+<a name='L11350'></a><a href='#L11350'>11350</a>
+<a name='L11351'></a><a href='#L11351'>11351</a>
+<a name='L11352'></a><a href='#L11352'>11352</a>
+<a name='L11353'></a><a href='#L11353'>11353</a>
+<a name='L11354'></a><a href='#L11354'>11354</a>
+<a name='L11355'></a><a href='#L11355'>11355</a>
+<a name='L11356'></a><a href='#L11356'>11356</a>
+<a name='L11357'></a><a href='#L11357'>11357</a>
+<a name='L11358'></a><a href='#L11358'>11358</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -25806,6 +25870,26 @@ export interface components {
     ImageVariablePayload: {
       type: "Image";
     } &amp; Omit&lt;components["schemas"]["VariablePayload"], "type"&gt;;
+    ImportDeliverableProblemElement: {
+      problem: string;
+      /** Format: int32 */
+      row: number;
+    };
+    ImportDeliverableResponsePayload: {
+      message?: string;
+      problems: components["schemas"]["ImportDeliverableProblemElement"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ImportModuleProblemElement: {
+      problem: string;
+      /** Format: int32 */
+      row: number;
+    };
+    ImportModuleResponsePayload: {
+      message?: string;
+      problems: components["schemas"]["ImportModuleProblemElement"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     InternalTagPayload: {
       /** Format: int64 */
       id: number;
@@ -26111,6 +26195,7 @@ export interface components {
       /** Format: int64 */
       moduleId: number;
       moduleName: string;
+      projects?: components["schemas"]["ModuleEventProject"][];
       /** Format: uri */
       recordingUrl?: string;
       /** Format: uri */
@@ -26121,6 +26206,17 @@ export interface components {
       status: "Not Started" | "Starting Soon" | "In Progress" | "Ended";
       /** @enum {string} */
       type: "One-on-One Session" | "Workshop" | "Live Session" | "Recorded Session";
+    };
+    ModuleEventProject: {
+      /** Format: int64 */
+      cohortId: number;
+      cohortName: string;
+      /** Format: int64 */
+      participantId: number;
+      participantName: string;
+      /** Format: int64 */
+      projectId: number;
+      projectName: string;
     };
     ModulePayload: {
       additionalResources?: string;
@@ -28689,7 +28785,7 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+          "application/json": components["schemas"]["ImportDeliverableResponsePayload"];
         };
       };
     };
@@ -29045,7 +29141,7 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+          "application/json": components["schemas"]["ImportModuleResponsePayload"];
         };
       };
     };
@@ -34045,7 +34141,7 @@ export interface operations {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-16T19:46:16.039Z
+                at 2024-10-21T14:12:29.242Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
