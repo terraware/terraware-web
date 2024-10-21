@@ -318,6 +318,8 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       fields: [
         ...BE_SORTED_FIELDS,
         'id',
+        'createdTime',
+        'modifiedTime',
         'rare',
         'growthForms.growthForm',
         'ecosystemTypes.ecosystemType',

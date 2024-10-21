@@ -89,7 +89,7 @@ export default function ModuleView(): JSX.Element {
   );
 
   return (
-    <Page crumbs={crumbs} title={<CommonTitleBar title={module?.name} subtitle={`${strings.PHASE_ID}:`} />}>
+    <Page crumbs={crumbs} title={<CommonTitleBar title={module?.name} />}>
       <Box
         ref={contentRef}
         display='flex'

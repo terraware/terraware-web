@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { ListDeliverablesElement } from 'src/types/Deliverables';
-import { Module, ModuleCohortsAndProjectsSearchResult } from 'src/types/Module';
+import { Module, ModuleCohortsAndProjectsSearchResult, ModuleSearchResult } from 'src/types/Module';
 
 import { StatusT, buildReducers } from '../asyncUtils';
 import {
@@ -12,6 +12,7 @@ import {
   requestListModuleDeliverables,
   requestListModuleProjects,
   requestListModules,
+  requestSearchModules,
   requestUpdateCohortModule,
   requestUpdateManyCohortModule,
 } from './modulesAsyncThunks';
@@ -142,6 +143,20 @@ export const moduleCohortsAndProjectsSlice = createSlice({
   },
 });
 
+/**
+ * Search modules
+ */
+const initialStateSearchModules: { [key: string]: StatusT<ModuleSearchResult[]> } = {};
+
+export const searchModulesSlice = createSlice({
+  name: 'searchModulesSlice',
+  initialState: initialStateSearchModules,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestSearchModules)(builder);
+  },
+});
+
 const moduleReducers = {
   module: moduleSlice.reducer,
   moduleDeliverables: ModuleDeliverablesSlice.reducer,
@@ -152,6 +167,7 @@ const moduleReducers = {
   cohortModuleDeleteMany: cohortModuleDeleteManySlice.reducer,
   cohortModuleUpdateMany: cohortModuleUpdateManySlice.reducer,
   moduleCohortsAndProjects: moduleCohortsAndProjectsSlice.reducer,
+  searchModules: searchModulesSlice.reducer,
 };
 
 export default moduleReducers;
