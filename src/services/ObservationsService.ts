@@ -84,8 +84,12 @@ const exportGpx = async (observationId: number): Promise<any> => {
           '{observationId}': observationId.toString(),
         },
       })
-    ).data;
-    return response;
+    );
+    if (response.requestSucceeded && response.data) {
+      return response.data
+    } else {
+      return Promise.reject(response.error)
+    }
   } catch {
     return null;
   }
