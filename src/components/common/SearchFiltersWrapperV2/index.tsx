@@ -6,6 +6,7 @@ import { PillList, PillListItem, Textfield } from '@terraware/web-components';
 import { FilterField } from 'src/components/common/FilterGroup';
 import strings from 'src/strings';
 import { SearchNodePayload } from 'src/types/Search';
+import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import FeaturedFilters from './FeaturedFilters';
@@ -41,6 +42,8 @@ export type SearchProps = SearchInputProps & {
   setCurrentFilters: (filters: Record<string, SearchNodePayload>) => void;
   rightComponent?: ReactNode;
   onFilterApplied?: (filter: string, values: (string | number | null)[]) => void;
+  tableId?: string;
+  stickyFilters?: boolean;
 };
 
 const defaultPillValueRenderer = (values: (string | number | null)[]): string | undefined => values.join(', ');
@@ -55,8 +58,12 @@ export default function SearchFiltersWrapperV2({
   setCurrentFilters,
   rightComponent,
   onFilterApplied,
+  tableId,
+  stickyFilters,
 }: SearchProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
+
+  const { sessionFilters, setSessionFilters } = useSessionFilters(tableId);
 
   const filterPillData = useMemo(
     () =>
@@ -85,6 +92,12 @@ export default function SearchFiltersWrapperV2({
             const result = { ...currentFilters };
             delete result[k];
             setCurrentFilters(result);
+
+            if (stickyFilters) {
+              const stickyFiltersResult = { ...sessionFilters };
+              delete stickyFiltersResult[k];
+              setSessionFilters(stickyFiltersResult);
+            }
           };
 
           return {
@@ -98,6 +111,33 @@ export default function SearchFiltersWrapperV2({
     [currentFilters, iconFilters, featuredFilters, setCurrentFilters]
   );
 
+  useMemo(() => {
+    if (stickyFilters && Object.keys(sessionFilters).length > 0 && Object.keys(currentFilters).length === 0) {
+      const sessionFiltersToApply: Record<string, SearchNodePayload> = {};
+      const existingKeys = Object.keys(sessionFilters);
+      existingKeys?.forEach((key) => {
+        const valuesOfTheExistingKey = Array.isArray(sessionFilters[key])
+          ? (sessionFilters[key] as any)
+              .map((val: string) => val?.toString() || null)
+              .filter((val: string | null) => val !== null)
+          : [];
+
+        sessionFiltersToApply[key] = {
+          field: key,
+          operation: 'field',
+          type: 'Exact',
+          values: valuesOfTheExistingKey,
+        };
+      });
+
+      if (Object.keys(sessionFiltersToApply).length > 0) {
+        setCurrentFilters({
+          ...sessionFiltersToApply,
+        });
+      }
+    }
+  }, [sessionFilters, currentFilters, stickyFilters]);
+
   // Since we have two different places filters can exist, we need to combine them before setting in the consumer
   const setFilters = useCallback(
     (incomingFilters: Record<string, SearchNodePayload>) => {
@@ -105,8 +145,23 @@ export default function SearchFiltersWrapperV2({
         ...currentFilters,
         ...incomingFilters,
       });
+
+      if (incomingFilters && stickyFilters) {
+        const existingKeys = Object.keys(sessionFilters);
+        const allFilters = { ...currentFilters, ...incomingFilters };
+        let sessionFiltersCopy = { ...sessionFilters };
+        Object.keys(allFilters).forEach((filter) => {
+          if (existingKeys.includes(filter)) {
+            sessionFiltersCopy[filter] = allFilters[filter].values;
+          } else {
+            sessionFiltersCopy = { ...sessionFiltersCopy, [filter]: allFilters[filter].values };
+          }
+        });
+
+        setSessionFilters(sessionFiltersCopy);
+      }
     },
-    [currentFilters, setCurrentFilters]
+    [currentFilters, setCurrentFilters, sessionFilters, stickyFilters]
   );
 
   return (

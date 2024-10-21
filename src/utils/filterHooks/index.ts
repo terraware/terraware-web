@@ -53,7 +53,7 @@ export const filtersEqual = (a: FiltersType, b: FiltersType) =>
   Object.keys(b).every((key) => (isEmptyArray(b[key]) && !a[key]) || filterValueEqual(a[key], b[key]));
 
 export const isFilterKey = (viewIdentifier: string, key: string) => key.includes(`${viewIdentifier}_filter_`);
-export const scrubFilterKey = (key: string) => key.replace(/[a-z]+_filter_(.+)/i, '$1');
+export const scrubFilterKey = (key: string) => key.replace(/.*_filter_(.+)/, '$1');
 export const makeFilterKey = (viewIdentifier: string, key: string) => `${viewIdentifier}_filter_${key}`;
 export const makeFiltersSessionKey = (viewIdentifier: string) => `${viewIdentifier}_filters`;
 
