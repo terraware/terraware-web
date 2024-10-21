@@ -72,15 +72,19 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
 
   useEffect(() => {
     if (result?.status === 'success') {
-      const cohortsToSelect: CohortModuleWithProject[] = [];
+      let cohortsToSelect: CohortModuleWithProject[] = [];
       const cohortModules = result.data?.cohortModules;
       cohortModules?.forEach((cm) => {
         cohortsToSelect.push(cm.cohort);
       });
 
+      const alreadySelectedCohortsIds = projectsSections.map((ps) => ps.cohort.id?.toString());
+
+      cohortsToSelect = cohortsToSelect.filter((cTS) => !alreadySelectedCohortsIds.includes(cTS.id?.toString()));
+
       setAvailableCohorts(cohortsToSelect);
     }
-  }, [result]);
+  }, [result, projectsSections]);
 
   const theme = useTheme();
 
