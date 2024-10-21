@@ -14,7 +14,6 @@ import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { today } from 'src/utils/dateUtils';
 import { SearchAndSortFn, SearchOrderConfig, searchAndSort as genericSearchAndSort } from 'src/utils/searchAndSort';
 
-import { ImportResponsePayload } from './ModuleService';
 import { getPromisesResponse } from './utils';
 
 /**
@@ -207,7 +206,7 @@ const incomplete = async (deliverableiId: number, projectId: number): Promise<Re
 /**
  * import deliverables
  */
-const importDeliverables = async (file: File): Promise<ImportResponsePayload> => {
+const importDeliverables = async (file: File): Promise<ImportDeliverablesResponsePayload> => {
   const entity = new FormData();
   entity.append('file', file);
   const headers = { 'content-type': 'multipart/form-data' };

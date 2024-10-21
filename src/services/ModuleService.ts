@@ -24,15 +24,6 @@ export type GetModuleResponsePayload =
 export type ImportModuleResponsePayload =
   paths[typeof MODULES_IMPORT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
-export type ImportProblemElement = {
-  problem: string;
-  row: number;
-};
-
-export type ImportResponsePayload = Omit<ImportModuleResponsePayload, 'problems'> & {
-  problems: ImportProblemElement[];
-};
-
 export type ListModulesRequestParam = {
   projectId?: number;
   participantId?: number;
@@ -117,7 +108,7 @@ const get = async ({
 /**
  * import modules
  */
-const importModules = async (file: File): Promise<ImportResponsePayload> => {
+const importModules = async (file: File): Promise<ImportModuleResponsePayload> => {
   const entity = new FormData();
   entity.append('file', file);
   const headers = { 'content-type': 'multipart/form-data' };

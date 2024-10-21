@@ -4,7 +4,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 
 import Link from 'src/components/common/Link';
 import { useOrganization } from 'src/providers/hooks';
-import { ImportResponsePayload } from 'src/services/ModuleService';
+import { ImportModuleResponsePayload } from 'src/services/ModuleService';
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
 import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse, UploadResponse } from 'src/types/File';
@@ -14,6 +14,15 @@ import DialogBox from './DialogBox/DialogBox';
 import ProgressCircle from './ProgressCircle/ProgressCircle';
 import Button from './button/Button';
 import Icon from './icon/Icon';
+
+export type ImportProblemElement = {
+  problem: string;
+  row: number;
+};
+
+export type ImportResponsePayload = Omit<ImportModuleResponsePayload, 'problems'> & {
+  problems: ImportProblemElement[];
+};
 
 export type ImportSpeciesModalProps = {
   open: boolean;
