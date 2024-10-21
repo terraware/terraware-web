@@ -77,18 +77,16 @@ const exportGpx = async (observationId: number): Promise<any> => {
     accept: 'application/gpx+xml',
   };
   try {
-    const response = (
-      await httpObservationExport.get2({
-        headers,
-        urlReplacements: {
-          '{observationId}': observationId.toString(),
-        },
-      })
-    );
+    const response = await httpObservationExport.get2({
+      headers,
+      urlReplacements: {
+        '{observationId}': observationId.toString(),
+      },
+    });
     if (response.requestSucceeded && response.data) {
-      return response.data
+      return response.data;
     } else {
-      return Promise.reject(response.error)
+      return Promise.reject(response.error);
     }
   } catch {
     return null;
