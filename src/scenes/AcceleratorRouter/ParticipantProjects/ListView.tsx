@@ -192,7 +192,7 @@ export default function ListView(): JSX.Element {
         rightComponent={actionMenus}
         rows={projects}
         title={strings.PROJECTS}
-        stickyFilters={true}
+        stickyFilters
       />
     </>
   );

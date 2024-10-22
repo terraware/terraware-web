@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
+import { DateTime } from 'luxon';
 
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
@@ -16,8 +17,11 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
 
 function initSpecies(species?: Species): Species {
+  const now = DateTime.now().toISO();
   return (
     species ?? {
+      createdTime: now,
+      modifiedTime: now,
       scientificName: '',
       id: -1,
     }
