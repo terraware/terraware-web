@@ -318,6 +318,8 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       fields: [
         ...BE_SORTED_FIELDS,
         'id',
+        'createdTime',
+        'modifiedTime',
         'rare',
         'growthForms.growthForm',
         'ecosystemTypes.ecosystemType',
@@ -442,6 +444,8 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               ecosystemTypes: (result.ecosystemTypes as any[])?.map((et) => et.ecosystemType) as string[],
               rare: result.rare === strings.BOOLEAN_TRUE ? 'true' : 'false',
               conservationCategory: result.conservationCategory as string,
+              createdTime: result.createdTime as string,
+              modifiedTime: result.modifiedTime as string,
             });
           });
 

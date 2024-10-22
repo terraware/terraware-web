@@ -1,18 +1,28 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { Box, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 
 import Link from 'src/components/common/Link';
 import { useOrganization } from 'src/providers/hooks';
-import { Response } from 'src/services/HttpService';
+import { ImportModuleResponsePayload } from 'src/services/ModuleService';
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
 import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse, UploadResponse } from 'src/types/File';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import DialogBox from './DialogBox/DialogBox';
 import ProgressCircle from './ProgressCircle/ProgressCircle';
 import Button from './button/Button';
 import Icon from './icon/Icon';
+
+export type ImportProblemElement = {
+  problem: string;
+  row: number;
+};
+
+export type ImportResponsePayload = Omit<ImportModuleResponsePayload, 'problems'> & {
+  problems: ImportProblemElement[];
+};
 
 export type ImportSpeciesModalProps = {
   open: boolean;
@@ -26,7 +36,7 @@ export type ImportSpeciesModalProps = {
   uploadApi?: (file: File, orgOrFacilityId: string) => Promise<UploadFileResponse>;
   templateApi?: () => Promise<any>;
   statusApi?: (uploadId: number) => Promise<UploadResponse>;
-  simpleUploadApi?: (file: File) => Promise<Response>;
+  simpleUploadApi?: (file: File) => Promise<ImportResponsePayload | null>;
   importCompleteLabel: string;
   importingLabel: string;
   duplicatedLabel: string;
@@ -79,6 +89,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
   const [warning, setWarning] = useState(false);
   const [uploadId, setUploadId] = useState<number>();
   const theme = useTheme();
+  const snackbar = useSnackbar();
 
   const spacingStyles = { marginRight: theme.spacing(2) };
 
@@ -189,9 +200,27 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
         setLoading(true);
         const response = await simpleUploadApi(file);
         if (response) {
-          if (response.requestSucceeded === false) {
+          if (response.status === 'error') {
             setLoading(false);
-            setError(<>{strings.DATA_IMPORT_FAILED}</>);
+            snackbar.toastError(
+              response.problems?.length > 0
+                ? [
+                    <ul key='errors'>
+                      {response.problems.map((problem, index) => (
+                        <li key={`import-error-item-${index}`}>
+                          {strings.formatString(
+                            strings.DATA_IMPORT_ROW_MESSAGE,
+                            `${problem.row}`,
+                            problem.problem || strings.GENERIC_ERROR
+                          )}
+                        </li>
+                      ))}
+                    </ul>,
+                  ]
+                : [<Typography key='error-message'>{response.message}</Typography>],
+              strings.UPLOAD_FAILED
+            );
+            onClose(false);
           } else {
             setLoading(false);
             setCompleted(true);

@@ -559,6 +559,10 @@ export interface paths {
     /** Gets a summary of the numbers of plants of each species in all nurseries. */
     get: operations["getSpeciesSummary"];
   };
+  "/api/v1/nursery/summary": {
+    /** Get a summary of the numbers of plants in all the nurseries in an organization. */
+    get: operations["getOrganizationNurserySummary"];
+  };
   "/api/v1/nursery/withdrawals": {
     /** Withdraws seedlings from one or more seedling batches at a nursery. */
     post: operations["createBatchWithdrawal"];
@@ -929,8 +933,8 @@ export interface paths {
     put: operations["rescheduleObservation"];
   };
   "/api/v1/tracking/observations/{observationId}/plots": {
-    /** Gets a list of monitoring plots assigned to an observation. */
-    get: operations["listAssignedPlots"];
+    /** Exports monitoring plots assigned to an observation as a GPX file. */
+    get: operations["listAssignedPlots_1"];
   };
   "/api/v1/tracking/observations/{observationId}/plots/{plotId}": {
     /** Updates information about the observation of a plot. */
@@ -2787,6 +2791,10 @@ export interface components {
       observation: components["schemas"]["ObservationResultsPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetOrganizationNurserySummaryResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      summary: components["schemas"]["OrganizationNurserySummaryPayload"];
+    };
     GetOrganizationResponsePayload: {
       organization: components["schemas"]["OrganizationPayload"];
       status: components["schemas"]["SuccessOrError"];
@@ -3091,6 +3099,26 @@ export interface components {
     ImageVariablePayload: {
       type: "Image";
     } & Omit<components["schemas"]["VariablePayload"], "type">;
+    ImportDeliverableProblemElement: {
+      problem: string;
+      /** Format: int32 */
+      row: number;
+    };
+    ImportDeliverableResponsePayload: {
+      message?: string;
+      problems: components["schemas"]["ImportDeliverableProblemElement"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ImportModuleProblemElement: {
+      problem: string;
+      /** Format: int32 */
+      row: number;
+    };
+    ImportModuleResponsePayload: {
+      message?: string;
+      problems: components["schemas"]["ImportModuleProblemElement"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     InternalTagPayload: {
       /** Format: int64 */
       id: number;
@@ -3850,6 +3878,36 @@ export interface components {
       organizationId: number;
       organizationName: string;
     };
+    OrganizationNurserySummaryPayload: {
+      /** Format: int64 */
+      germinatingQuantity: number;
+      /** Format: int32 */
+      germinationRate?: number;
+      /**
+       * Format: int32
+       * @description Percentage of current and past inventory that was withdrawn due to death.
+       */
+      lossRate?: number;
+      /** Format: int64 */
+      notReadyQuantity: number;
+      /** Format: int64 */
+      readyQuantity: number;
+      /**
+       * Format: int64
+       * @description Total number of plants that have been withdrawn due to death.
+       */
+      totalDead: number;
+      /**
+       * Format: int64
+       * @description Total number of germinated plants currently in inventory.
+       */
+      totalQuantity: number;
+      /**
+       * Format: int64
+       * @description Total number of plants that have been withdrawn in the past.
+       */
+      totalWithdrawn: number;
+    };
     OrganizationPayload: {
       /** @description Whether this organization can submit reports to Terraformation. */
       canSubmitReports: boolean;
@@ -4582,6 +4640,8 @@ export interface components {
        * @enum {string}
        */
       conservationCategory?: "CR" | "DD" | "EN" | "EW" | "EX" | "LC" | "NE" | "NT" | "VU";
+      /** Format: date-time */
+      createdTime: string;
       dbhSource?: string;
       dbhValue?: number;
       ecologicalRoleKnown?: string;
@@ -4593,6 +4653,8 @@ export interface components {
       /** Format: int64 */
       id: number;
       localUsesKnown?: string;
+      /** Format: date-time */
+      modifiedTime: string;
       nativeEcosystem?: string;
       otherFacts?: string;
       plantMaterialSourcingMethods?: (("Seed collection & germination") | ("Seed purchase & germination") | "Mangrove propagules" | "Vegetative propagation" | "Wildling harvest" | "Seedling purchase" | "Other")[];
@@ -5986,7 +6048,7 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+          "application/json": components["schemas"]["ImportDeliverableResponsePayload"];
         };
       };
     };
@@ -6342,7 +6404,7 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+          "application/json": components["schemas"]["ImportModuleResponsePayload"];
         };
       };
     };
@@ -8428,6 +8490,22 @@ export interface operations {
       };
     };
   };
+  /** Get a summary of the numbers of plants in all the nurseries in an organization. */
+  getOrganizationNurserySummary: {
+    parameters: {
+      query: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetOrganizationNurserySummaryResponsePayload"];
+        };
+      };
+    };
+  };
   /** Withdraws seedlings from one or more seedling batches at a nursery. */
   createBatchWithdrawal: {
     requestBody: {
@@ -10304,8 +10382,8 @@ export interface operations {
       };
     };
   };
-  /** Gets a list of monitoring plots assigned to an observation. */
-  listAssignedPlots: {
+  /** Exports monitoring plots assigned to an observation as a GPX file. */
+  listAssignedPlots_1: {
     parameters: {
       path: {
         observationId: number;
@@ -10315,6 +10393,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
+          "application/gpx+xml": string;
           "application/json": components["schemas"]["ListAssignedPlotsResponsePayload"];
         };
       };
