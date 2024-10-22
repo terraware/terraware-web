@@ -8,7 +8,7 @@ import ModuleService, { GetModuleRequestParam, ListModulesRequestParam } from 's
 import strings from 'src/strings';
 import { ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
 import {
-  ModuleCohortsAndProjectsSearchResult,
+  ModuleCohortsSearchResult,
   ModuleProjectSearchResult,
   ModuleSearchResult,
   UpdateCohortModuleRequest,
@@ -188,7 +188,7 @@ export const requestUpdateManyCohortModule = createAsyncThunk(
   }
 );
 
-export const requestListModuleCohortsAndProjects = createAsyncThunk(
+export const requestListModuleCohorts = createAsyncThunk(
   'module/cohortsAndProjects',
   async (moduleId: string, { rejectWithValue }) => {
     const searchParams: SearchRequestPayload = {
@@ -199,10 +199,6 @@ export const requestListModuleCohortsAndProjects = createAsyncThunk(
         'cohortModules.endDate',
         'cohortModules.cohort.id',
         'cohortModules.cohort.name',
-        'cohortModules.cohort.participants.id',
-        'cohortModules.cohort.participants.name',
-        'cohortModules.cohort.participants.projects.id',
-        'cohortModules.cohort.participants.projects.name',
       ],
       search: {
         operation: 'field',
@@ -213,7 +209,7 @@ export const requestListModuleCohortsAndProjects = createAsyncThunk(
       count: 20,
     };
 
-    const response: ModuleCohortsAndProjectsSearchResult[] | null = await SearchService.search(searchParams);
+    const response: ModuleCohortsSearchResult[] | null = await SearchService.search(searchParams);
 
     if (response) {
       return response[0];
