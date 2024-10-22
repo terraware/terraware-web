@@ -112,6 +112,9 @@ export default function ModuleView(): JSX.Element {
             flexDirection: 'column',
             flexGrow: 1,
           },
+          '& .MuiTab-root': {
+            textTransform: 'none',
+          },
         }}
       >
         {moduleId && <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />}
