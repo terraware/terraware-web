@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -138,7 +138,9 @@
 <a name='L73'></a><a href='#L73'>73</a>
 <a name='L74'></a><a href='#L74'>74</a>
 <a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -149,36 +151,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -225,6 +229,7 @@ interface StickyTabsProps {
   defaultTab: string;
   tabs: Tab[];
   viewIdentifier: string;
+  keepQuery?: boolean;
 }
 &nbsp;
 const makeTabSessionKey = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(v</span>iewIdentifier: string) =&gt; <span class="cstat-no" title="statement not covered" >`tab-${viewIdentifier}`;</span></span>
@@ -244,7 +249,7 @@ const writeTabToSession = <span class="cstat-no" title="statement not covered" >
   } catch (e) {}
 };
 &nbsp;
-const useStickyTabs = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> defaultTab, tabs, viewIdentifier }: StickyTabsProps) =&gt; {</span>
+const useStickyTabs = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> defaultTab, tabs, viewIdentifier, keepQuery = <span class="branch-0 cbranch-no" title="branch not covered" >true </span>}: StickyTabsProps) =&gt; {</span>
   const location = <span class="cstat-no" title="statement not covered" >useStateLocation();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
   const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
@@ -255,7 +260,8 @@ const useStickyTabs = <span class="cstat-no" title="statement not covered" ><spa
   const onTabChange = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (n</span>ewTab: string) =&gt; {
 <span class="cstat-no" title="statement not covered" >      query.set('tab', newTab);</span>
-<span class="cstat-no" title="statement not covered" >      navigate(getLocation(location.pathname, location, query.toString()));</span>
+      const emptyQuery = <span class="cstat-no" title="statement not covered" >tab === newTab ? query.toString() : new URLSearchParams(`tab=${newTab}`);</span>
+<span class="cstat-no" title="statement not covered" >      navigate(getLocation(location.pathname, location, keepQuery ? query.toString() : emptyQuery.toString()));</span>
 <span class="cstat-no" title="statement not covered" >      writeTabToSession(viewIdentifier, newTab);</span>
     },
     [navigate, location, query, viewIdentifier]
@@ -295,7 +301,7 @@ export default useStickyTabs;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-22T19:50:55.748Z
+                at 2024-10-22T20:20:09.287Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
