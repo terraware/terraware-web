@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -181,19 +181,7 @@
 <a name='L116'></a><a href='#L116'>116</a>
 <a name='L117'></a><a href='#L117'>117</a>
 <a name='L118'></a><a href='#L118'>118</a>
-<a name='L119'></a><a href='#L119'>119</a>
-<a name='L120'></a><a href='#L120'>120</a>
-<a name='L121'></a><a href='#L121'>121</a>
-<a name='L122'></a><a href='#L122'>122</a>
-<a name='L123'></a><a href='#L123'>123</a>
-<a name='L124'></a><a href='#L124'>124</a>
-<a name='L125'></a><a href='#L125'>125</a>
-<a name='L126'></a><a href='#L126'>126</a>
-<a name='L127'></a><a href='#L127'>127</a>
-<a name='L128'></a><a href='#L128'>128</a>
-<a name='L129'></a><a href='#L129'>129</a>
-<a name='L130'></a><a href='#L130'>130</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L119'></a><a href='#L119'>119</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -239,11 +227,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -261,11 +244,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -328,8 +306,8 @@ import { TableColumnType } from '@terraware/web-components';
 &nbsp;
 import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
-import { requestListModuleCohortsAndProjects } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectModuleCohortsAndProjects } from 'src/redux/features/modules/modulesSelectors';
+import { requestListModuleCohorts } from 'src/redux/features/modules/modulesAsyncThunks';
+import { selectModuleCohorts } from 'src/redux/features/modules/modulesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Module } from 'src/types/Module';
@@ -341,10 +319,9 @@ interface ModuleDetailsProps {
   module?: Module;
 }
 &nbsp;
-type CohortsAndProjectsTableRow = {
+type CohortsTableRow = {
   cohortId: number;
   cohortName: string;
-  projectName: string;
   startDate: string;
   endDate: string;
 };
@@ -353,11 +330,6 @@ const columns = <span class="cstat-no" title="statement not covered" ><span clas
   {
     key: 'cohortName',
     name: strings.COHORT,
-    type: 'string',
-  },
-  {
-    key: 'projectName',
-    name: strings.PROJECT,
     type: 'string',
   },
   {
@@ -375,30 +347,25 @@ const columns = <span class="cstat-no" title="statement not covered" ><span clas
 export default function <span class="fstat-no" title="function not covered" >ModuleDetails(</span>{ moduleId, module }: ModuleDetailsProps): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-  const result = <span class="cstat-no" title="statement not covered" >useAppSelector(selectModuleCohortsAndProjects(moduleId));</span>
-  const [tableRows, setTableRows] = <span class="cstat-no" title="statement not covered" >useState&lt;CohortsAndProjectsTableRow[]&gt;();</span>
+  const result = <span class="cstat-no" title="statement not covered" >useAppSelector(selectModuleCohorts(moduleId));</span>
+  const [tableRows, setTableRows] = <span class="cstat-no" title="statement not covered" >useState&lt;CohortsTableRow[]&gt;();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (module?.id) {</span>
-<span class="cstat-no" title="statement not covered" >      dispatch(requestListModuleCohortsAndProjects(moduleId));</span>
+<span class="cstat-no" title="statement not covered" >      dispatch(requestListModuleCohorts(moduleId));</span>
     }
   }, [module?.id]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (result?.status === 'success') {</span>
-      const rows: CohortsAndProjectsTableRow[] = <span class="cstat-no" title="statement not covered" >[];</span>
+      const rows: CohortsTableRow[] = <span class="cstat-no" title="statement not covered" >[];</span>
       const cohortModules = <span class="cstat-no" title="statement not covered" >result.data?.cohortModules;</span>
 <span class="cstat-no" title="statement not covered" >      cohortModules?.forEach(<span class="fstat-no" title="function not covered" >(c</span>m) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        cm.cohort.participants.forEach(<span class="fstat-no" title="function not covered" >(p</span>p) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >          pp.projects.forEach(<span class="fstat-no" title="function not covered" >(p</span>roj) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >            rows.push({</span>
-              cohortId: cm.cohort.id,
-              cohortName: cm.cohort.name,
-              projectName: proj.name,
-              startDate: cm.startDate,
-              endDate: cm.endDate,
-            });
-          });
+<span class="cstat-no" title="statement not covered" >        rows.push({</span>
+          cohortId: cm.cohort.id,
+          cohortName: cm.cohort.name,
+          startDate: cm.startDate,
+          endDate: cm.endDate,
         });
       });
 &nbsp;
@@ -431,10 +398,10 @@ export default function <span class="fstat-no" title="function not covered" >Mod
         &lt;/Grid&gt;
         &lt;Grid item xs={12}&gt;
           &lt;Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} paddingBottom={1}&gt;
-            {strings.COHORTS_AND_PROJECTS}
+            {strings.COHORTS}
           &lt;/Typography&gt;
           &lt;Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxt}&gt;
-            {strings.COHORTS_AND_PROJECTS_DESCRIPTION}
+            {strings.MODULE_COHORTS_DESCRIPTION}
           &lt;/Typography&gt;
           &lt;Box paddingTop={4}&gt;
             &lt;Table
@@ -457,7 +424,7 @@ export default function <span class="fstat-no" title="function not covered" >Mod
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-22T18:05:39.224Z
+                at 2024-10-22T19:50:55.748Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

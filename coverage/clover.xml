@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1729620339967" clover="3.2.0">
-  <project timestamp="1729620339967" name="All files">
-    <metrics statements="25620" coveredstatements="1047" conditionals="16824" coveredconditionals="282" methods="7885" coveredmethods="176" elements="50329" coveredelements="1505" complexity="0" loc="25620" ncloc="25620" packages="236" files="1103" classes="1103"/>
+<coverage generated="1729626656493" clover="3.2.0">
+  <project timestamp="1729626656493" name="All files">
+    <metrics statements="25619" coveredstatements="1047" conditionals="16826" coveredconditionals="282" methods="7884" coveredmethods="176" elements="50329" coveredelements="1505" complexity="0" loc="25619" ncloc="25619" packages="236" files="1103" classes="1103"/>
     <package name="src">
       <metrics statements="175" coveredstatements="0" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -11036,7 +11036,7 @@
       </file>
     </package>
     <package name="src.redux.features.modules">
-      <metrics statements="106" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="46" coveredmethods="0"/>
+      <metrics statements="105" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="modulesAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/modules/modulesAsyncThunks.ts">
         <metrics statements="59" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="16" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
@@ -11088,19 +11088,19 @@
         <line num="187" count="0" type="stmt"/>
         <line num="191" count="0" type="stmt"/>
         <line num="194" count="0" type="stmt"/>
-        <line num="216" count="0" type="stmt"/>
-        <line num="218" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="219" count="0" type="stmt"/>
+        <line num="212" count="0" type="stmt"/>
+        <line num="214" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="215" count="0" type="stmt"/>
+        <line num="218" count="0" type="stmt"/>
         <line num="222" count="0" type="stmt"/>
-        <line num="226" count="0" type="stmt"/>
-        <line num="229" count="0" type="stmt"/>
-        <line num="231" count="0" type="stmt"/>
-        <line num="233" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="234" count="0" type="stmt"/>
-        <line num="237" count="0" type="stmt"/>
+        <line num="225" count="0" type="stmt"/>
+        <line num="227" count="0" type="stmt"/>
+        <line num="229" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="230" count="0" type="stmt"/>
+        <line num="233" count="0" type="stmt"/>
       </file>
       <file name="modulesSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/modules/modulesSelectors.ts">
-        <metrics statements="16" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="20" coveredmethods="0"/>
+        <metrics statements="15" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="20" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
         <line num="5" count="0" type="stmt"/>
         <line num="6" count="0" type="stmt"/>
@@ -11115,8 +11115,7 @@
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
       </file>
       <file name="modulesSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/modules/modulesSlice.ts">
         <metrics statements="31" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="10" coveredmethods="0"/>
@@ -14030,7 +14029,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Modules">
-      <metrics statements="228" coveredstatements="0" conditionals="182" coveredconditionals="0" methods="82" coveredmethods="0"/>
+      <metrics statements="228" coveredstatements="0" conditionals="184" coveredconditionals="0" methods="81" coveredmethods="0"/>
       <file name="AddModuleModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Modules/AddModuleModal.tsx">
         <metrics statements="36" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="18" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
@@ -14210,28 +14209,26 @@
         <line num="58" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
       <file name="ModuleDetails.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Modules/ModuleDetails.tsx">
-        <metrics statements="18" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="7" coveredmethods="0"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
+        <metrics statements="16" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="54" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
         <line num="59" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="60" count="0" type="stmt"/>
-        <line num="64" count="0" type="stmt"/>
-        <line num="65" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="66" count="0" type="stmt"/>
-        <line num="67" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="70" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
         <line num="71" count="0" type="stmt"/>
-        <line num="82" count="0" type="stmt"/>
-        <line num="86" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
       </file>
       <file name="ModuleView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Modules/ModuleView.tsx">
-        <metrics statements="13" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="15" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="19" count="0" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
@@ -14239,12 +14236,14 @@
         <line num="47" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
         <line num="50" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
-        <line num="82" count="0" type="stmt"/>
-        <line num="91" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="58" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="94" count="0" type="stmt"/>
       </file>
       <file name="ModulesCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Modules/ModulesCellRenderer.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -28430,13 +28429,13 @@
         <line num="21" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
-        <line num="61" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="63" count="0" type="stmt"/>
-        <line num="66" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="72" count="0" type="stmt"/>
-        <line num="75" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
       </file>
       <file name="Notifications.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/Notifications.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
