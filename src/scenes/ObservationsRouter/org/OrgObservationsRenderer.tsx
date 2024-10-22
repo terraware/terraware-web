@@ -19,7 +19,8 @@ const OrgObservationsRenderer =
     theme: Theme,
     locale: string | undefined | null,
     goToRescheduleObservation: (observationId: number) => void,
-    exportObservation: (observationId: number) => void
+    exportObservationCsv: (observationId: number) => void,
+    exportObservationGpx: (observationId: number) => void
   ) =>
   // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
@@ -81,9 +82,17 @@ const OrgObservationsRenderer =
           menuItems={[
             {
               disabled: exportDisabled,
-              label: strings.EXPORT_LOCATIONS,
+              label: `${strings.EXPORT_LOCATIONS} (${strings.CSV_FILE})`,
               onClick: () => {
-                exportObservation(row.observationId);
+                exportObservationCsv(row.observationId);
+              },
+              tooltip: exportDisabled ? strings.EXPORT_LOCATIONS_DISABLED_TOOLTIP : undefined,
+            },
+            {
+              disabled: exportDisabled,
+              label: `${strings.EXPORT_LOCATIONS} (${strings.GPX_FILE})`,
+              onClick: () => {
+                exportObservationGpx(row.observationId);
               },
               tooltip: exportDisabled ? strings.EXPORT_LOCATIONS_DISABLED_TOOLTIP : undefined,
             },
