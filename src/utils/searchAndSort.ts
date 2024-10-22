@@ -43,23 +43,68 @@ export const splitTrigrams = (value: string): Set<string> => {
   return new Set(trigrams);
 };
 
-export const trigramWordSimilarity = (a: string, b: string) => {
-  // Split the search value and result value into trigrams and compare their similarity
-  const aTrigrams = new Set(splitTrigrams(a));
-  const bTrigrams = new Set(splitTrigrams(b));
+const levenshtein = (a: string, b: string): number => {
+  const matrix = [];
 
-  const matches: string[] = [];
-  bTrigrams.forEach((trigram) => {
-    if (aTrigrams.has(trigram)) {
-      matches.push(trigram);
+  // Create a matrix
+  for (let i = 0; i <= b.length; i++) {
+    matrix[i] = [i];
+  }
+  for (let j = 0; j <= a.length; j++) {
+    matrix[0][j] = j;
+  }
+
+  // Populate the matrix
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      if (b.charAt(i - 1) === a.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1, // substitution
+          Math.min(
+            matrix[i][j - 1] + 1, // insertion
+            matrix[i - 1][j] + 1
+          ) // deletion
+        );
+      }
     }
-  });
+  }
 
-  const similarity = matches.length / aTrigrams.size;
+  return matrix[b.length][a.length];
+};
+
+export const trigramWordSimilarity = (a: string, b: string) => {
+  const aTrigrams = splitTrigrams(a);
+  const bTrigrams = splitTrigrams(b);
+
+  if (aTrigrams.size === 0 || bTrigrams.size === 0) return 0;
+
+  // Convert Set to Array
+  const aTrigramArray = Array.from(aTrigrams);
+  const matches = aTrigramArray.filter((trigram) => bTrigrams.has(trigram));
+
+  // Adjust similarity calculation
+  const similarity = matches.length / Math.max(aTrigrams.size, bTrigrams.size);
   return similarity;
 };
 
-export const fuzzyMatch = (a: string, b: string) => trigramWordSimilarity(a, b) > TRIGRAM_SIMILARITY_THRESHOLD;
+export const fuzzyMatch = (a: string, b: string) => {
+  const maxDistance = 1; // Allow one character difference
+
+  // Normalize for case-insensitivity
+  const normalizedA = a.toLowerCase();
+  const normalizedB = b.toLowerCase();
+
+  // Check for direct substring matches first
+  if (normalizedB.includes(normalizedA)) {
+    return true;
+  }
+
+  // Calculate Levenshtein distance
+  const distance = levenshtein(normalizedA, normalizedB);
+  return distance <= maxDistance || trigramWordSimilarity(a, b) > TRIGRAM_SIMILARITY_THRESHOLD;
+};
 
 const searchConditionMet = <T extends Record<string, unknown>>(result: T, condition: SearchNodePayload): boolean => {
   // `as SearchNodePayload` casts below are because the SearchNodePayload in the generated types only has `operation`
