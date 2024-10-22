@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useMemo } from 'react';
+import React, { ReactNode, useCallback, useEffect, useMemo } from 'react';
 
 import { Box, Grid } from '@mui/material';
 import { PillList, PillListItem, Textfield } from '@terraware/web-components';
@@ -111,7 +111,7 @@ export default function SearchFiltersWrapperV2({
     [currentFilters, iconFilters, featuredFilters, setCurrentFilters]
   );
 
-  useMemo(() => {
+  useEffect(() => {
     if (stickyFilters && Object.keys(sessionFilters).length > 0 && Object.keys(currentFilters).length === 0) {
       const sessionFiltersToApply: Record<string, SearchNodePayload> = {};
       const existingKeys = Object.keys(sessionFilters);
