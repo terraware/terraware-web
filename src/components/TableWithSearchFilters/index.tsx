@@ -31,10 +31,12 @@ export interface TableWithSearchFiltersProps
   title?: string;
   clientSortedFields?: string[];
   onFilterApplied?: (filter: string, values: (string | number | null)[]) => void;
+  stickyFilters?: boolean;
 }
 
 const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
   const {
+    id,
     columns,
     busy,
     defaultSearchOrder,
@@ -47,6 +49,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
     title,
     clientSortedFields,
     onFilterApplied,
+    stickyFilters,
     ...tableProps
   } = props;
 
@@ -176,6 +179,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
       <Card busy={busy} flushMobile rightComponent={rightComponent} title={title}>
         <Grid item xs={12} sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }}>
           <SearchFiltersWrapperV2
+            tableId={id}
             search={searchValue}
             onSearch={setSearchValue}
             currentFilters={filters}
@@ -183,6 +187,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
             featuredFilters={_featuredFilters}
             rightComponent={<TableSettingsButton />}
             onFilterApplied={onFilterApplied}
+            stickyFilters={stickyFilters}
           />
         </Grid>
 
@@ -194,6 +199,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
             order={searchSortOrder?.direction === 'Ascending' ? 'asc' : 'desc'}
             sortHandler={onSortChange}
             isPresorted={!!searchSortOrder}
+            id={id}
           />
         </Grid>
       </Card>

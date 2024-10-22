@@ -95,7 +95,7 @@ export default function ListView(): JSX.Element {
     if (result?.status === 'error') {
       snackbar.toastError();
     }
-    if (result?.data) {
+    if (result?.status === 'success' && result?.data) {
       setProjects(result.data);
     }
   }, [result, snackbar]);
@@ -192,6 +192,7 @@ export default function ListView(): JSX.Element {
         rightComponent={actionMenus}
         rows={projects}
         title={strings.PROJECTS}
+        stickyFilters
       />
     </>
   );
