@@ -37,7 +37,7 @@ export type ModuleProjectSearchResult = {
   };
 };
 
-export type ModuleCohortsAndProjectsSearchResult = {
+export type ModuleCohortsSearchResult = {
   cohortModules?: {
     title: string;
     startDate: string;
@@ -45,14 +45,6 @@ export type ModuleCohortsAndProjectsSearchResult = {
     cohort: {
       id: number;
       name: string;
-      participants: {
-        id: number;
-        name: string;
-        projects: {
-          id: number;
-          name: string;
-        }[];
-      }[];
     };
   }[];
 };
