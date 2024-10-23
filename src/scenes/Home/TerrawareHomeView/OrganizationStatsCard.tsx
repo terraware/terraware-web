@@ -7,7 +7,8 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Button from 'src/components/common/button/Button';
 
-import { PlantingSiteStats, StatsCardItem, StatsCardItemProps } from '../TerrawareHomeView';
+import PlantingSiteStats from './PlantingSiteStats';
+import StatsCardItem, { StatsCardItemProps } from './StatsCardItem';
 
 export type OrganizationStatsCardRow = {
   buttonProps?: ButtonProps;
