@@ -33,12 +33,18 @@ export const PlantingSiteStats = () => {
     selectLatestObservation(state, selectedPlantingSiteId || -1, defaultTimeZone.get().id)
   );
 
-  const pathSegments = selectedPlantingSite?.boundary?.coordinates.map((polygon) => {
-    // Convert each coordinate pair to "lon,lat" with reduced precision
-    return polygon[0].map((coord) => coord.map((value) => value.toFixed(6)).join(',')).join(';');
-  });
-  const pathCoordinates = pathSegments?.join(':');
-  const staticMapURL = `https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/path-5+41C07F-1+41c07f-0.4(${pathCoordinates})/auto/580x360@2x?padding=10&access_token=${token}`;
+  const geojson = {
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        geometry: selectedPlantingSite?.boundary,
+        properties: {},
+      },
+    ],
+  };
+  const geojsonString = encodeURIComponent(JSON.stringify(geojson));
+  const staticMapURL = `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/geojson(${geojsonString})/auto/580x360@2x?padding=100&access_token=${token}`;
 
   const primaryGridSize = () => {
     if (isDesktop) {
