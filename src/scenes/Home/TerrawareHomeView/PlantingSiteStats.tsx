@@ -67,14 +67,18 @@ export const PlantingSiteStats = () => {
   return (
     <Box
       sx={{
+        border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+        borderRadius: '8px',
         display: 'flex',
         flexDirection: isDesktop ? 'row' : 'column',
         justifyContent: 'space-evenly',
-        padding: '16px',
+        marginBottom: '16px',
+        // overflow: 'hidden',
+        // padding: '16px',
         width: '100%',
       }}
     >
-      <Box sx={isDesktop ? { width: '50%' } : undefined}>
+      <Box sx={{ padding: '16px', width: isDesktop ? '50%' : '100%' }}>
         <Grid container spacing={3} sx={{ marginBottom: '16px', padding: 0 }}>
           <Grid item xs={primaryGridSize()}>
             <Box
@@ -179,7 +183,7 @@ export const PlantingSiteStats = () => {
           </Grid>
         </Grid>
 
-        <Grid container spacing={3} sx={{ marginBottom: '16px', padding: 0, whiteSpace: 'nowrap' }}>
+        <Grid container spacing={3} sx={{ padding: 0, whiteSpace: 'nowrap' }}>
           <Grid item xs={primaryGridSize()}>
             <Box sx={isDesktop ? undefined : { textAlign: 'center' }}>
               <Link
@@ -210,12 +214,37 @@ export const PlantingSiteStats = () => {
 
       <Box
         sx={{
+          overflow: 'hidden',
           width: isDesktop ? '50%' : '100%',
         }}
       >
-        {token && (
-          <img alt='Mapbox Static Map with Boundaries' src={staticMapURL} style={{ width: '100%', height: 'auto' }} />
-        )}
+        <Box
+          sx={{
+            borderBottomLeftRadius: isDesktop ? '0' : '8px',
+            borderBottomRightRadius: '8px',
+            borderTopRightRadius: isDesktop ? '8px' : 0,
+            height: '100%',
+            minHeight: '400px',
+            overflow: 'hidden',
+            position: 'relative',
+            width: '100%',
+          }}
+        >
+          {token && (
+            <img
+              alt='Mapbox Static Map with Boundaries'
+              src={staticMapURL}
+              style={{
+                height: '100%',
+                left: 0,
+                objectFit: 'cover',
+                position: 'absolute',
+                top: 0,
+                width: '100%',
+              }}
+            />
+          )}
+        </Box>
       </Box>
     </Box>
   );
