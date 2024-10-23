@@ -265,7 +265,7 @@ const DeliverablesTable = ({
       Renderer={DeliverableCellRenderer}
       rows={_deliverables}
       onFilterApplied={ofFilterAppliedHandler}
-      stickyFilters={true}
+      stickyFilters
     />
   );
 };

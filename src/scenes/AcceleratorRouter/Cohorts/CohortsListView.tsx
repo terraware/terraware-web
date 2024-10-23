@@ -125,7 +125,7 @@ const CohortsListView = ({ filterModifiers, extraTableFilters }: CohortsListView
       rows={cohorts || []}
       title={strings.COHORTS}
       clientSortedFields={['numOfParticipants']}
-      stickyFilters={true}
+      stickyFilters
     />
   );
 };
