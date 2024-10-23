@@ -10,7 +10,6 @@ export const useSeedBankSummary = () => {
   // populateSummaryInterval value is only being used when it is set.
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
   const [seedBankSummary, setSeedBankSummary] = useState<SummaryResponse>();
-  console.log('useSeedBankSummary - seedBankSummary:', seedBankSummary);
 
   useEffect(() => {
     if (selectedOrganization) {

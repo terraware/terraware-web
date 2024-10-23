@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,6 +10,7 @@ import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/ut
 import PageHeader from 'src/components/PageHeader';
 import Link from 'src/components/common/Link';
 import PageCard from 'src/components/common/PageCard';
+import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
 import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import {
@@ -23,19 +24,27 @@ import { useOrgNurserySummary } from 'src/hooks/useOrgNurserySummary';
 import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
+import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import strings from 'src/strings';
+import { PlantingSite } from 'src/types/Tracking';
 import { isAdmin } from 'src/utils/organization';
+import useMapboxToken from 'src/utils/useMapboxToken';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type StatsCard = {
   label: string;
   linkOnClick?: () => void;
   linkText?: string;
+  showLink?: boolean;
   value?: string;
 };
 
-const StatsCard = ({ label, linkOnClick, linkText, value }: StatsCard) => {
+const StatsCard = ({ label, linkOnClick, linkText, showLink = true, value }: StatsCard) => {
   const { isDesktop } = useDeviceInfo();
   const theme = useTheme();
 
@@ -74,23 +83,216 @@ const StatsCard = ({ label, linkOnClick, linkText, value }: StatsCard) => {
       >
         {value || '-'}
       </Typography>
-      <Box sx={{ minHeight: '24px' }}>{linkText && linkOnClick && <Link onClick={linkOnClick}>{linkText}</Link>}</Box>
+      {showLink && (
+        <Box sx={{ minHeight: '24px' }}>{linkText && linkOnClick && <Link onClick={linkOnClick}>{linkText}</Link>}</Box>
+      )}
     </Box>
   );
 };
 
-type PlantingSiteStatsCardItem = {
+const PlantingSiteStats = () => {
+  const { isDesktop } = useDeviceInfo();
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const plantingSites = useAppSelector(selectPlantingSites);
+  const { token } = useMapboxToken();
+  const defaultTimeZone = useDefaultTimeZone();
+
+  const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>();
+  const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
+
+  const observation = useAppSelector((state) =>
+    selectLatestObservation(state, selectedPlantingSiteId || -1, defaultTimeZone.get().id)
+  );
+
+  const pathSegments = selectedPlantingSite?.boundary?.coordinates.map((polygon) => {
+    // Convert each coordinate pair to "lon,lat" with reduced precision
+    return polygon[0].map((coord) => coord.map((value) => value.toFixed(6)).join(',')).join(';');
+  });
+  const pathCoordinatesNext = pathSegments?.join(':');
+  const staticMapURLNext = `https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/path-5+41C07F-1+41c07f-0.4(${pathCoordinatesNext})/auto/580x360@2x?padding=10&access_token=${token}`;
+
+  const primaryGridSize = () => {
+    if (isDesktop) {
+      return 6;
+    }
+    return 12;
+  };
+
+  // auto-select planting site when selectedPlantingSiteId is set
+  useEffect(() => {
+    if (selectedPlantingSiteId) {
+      setSelectedPlantingSite(plantingSites?.find((site) => site.id === selectedPlantingSiteId));
+    }
+  }, [plantingSites, selectedPlantingSiteId]);
+
+  if (!plantingSites?.length) {
+    return <></>;
+  }
+
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: isDesktop ? 'row' : 'column',
+        justifyContent: 'space-evenly',
+        padding: '16px',
+        width: '100%',
+      }}
+    >
+      <Box sx={isDesktop ? { width: '50%' } : undefined}>
+        <Grid container spacing={3} sx={{ marginBottom: '16px', padding: 0 }}>
+          <Grid item xs={primaryGridSize()}>
+            <Box
+              sx={{
+                alignItems: 'center',
+                background: theme.palette.TwClrBgSecondary,
+                borderRadius: '8px',
+                display: 'flex',
+                flexDirection: 'row',
+                height: '100%',
+                justifyContent: 'center',
+                padding: '18px',
+              }}
+            >
+              <Icon name='iconSeedling' size='medium' style={{ fill: theme.palette.TwClrIcnSecondary }} />
+              <Typography
+                sx={{
+                  color: theme.palette.TwClrTxt,
+                  fontSize: '16px',
+                  fontWeight: 600,
+                  lineHeight: '24px',
+                  marginLeft: '8px',
+                }}
+              >
+                {strings.PLANTS}
+              </Typography>
+            </Box>
+          </Grid>
+
+          <Grid
+            item
+            xs={primaryGridSize()}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: isDesktop ? 'normal' : 'center',
+              paddingRight: isDesktop ? '16px' : 0,
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: '16px',
+                fontWeight: 600,
+                lineHeight: '24px',
+                marginBottom: '8px',
+              }}
+              title={strings.PLANTING_SITE}
+            >
+              {strings.PLANTING_SITE}
+            </Typography>
+            <PlantingSiteSelector
+              onChange={(plantingSiteId) => {
+                setSelectedPlantingSiteId(plantingSiteId);
+              }}
+            />
+          </Grid>
+
+          <Grid item xs={primaryGridSize()}>
+            <StatsCard label={strings.LOCATION} showLink={false} />
+          </Grid>
+
+          <Grid item xs={primaryGridSize()}>
+            <StatsCard label={strings.TARGET_PLANTING_DENSITY} showLink={false} />
+          </Grid>
+
+          <Grid item xs={primaryGridSize()}>
+            <StatsCard
+              label='Area'
+              showLink={false}
+              value={
+                selectedPlantingSite?.areaHa
+                  ? strings.formatString(strings.X_HA, selectedPlantingSite.areaHa.toString())?.toString()
+                  : undefined
+              }
+            />
+          </Grid>
+
+          <Grid item xs={primaryGridSize()}>
+            <StatsCard label={strings.MORTALITY_RATE} showLink={false} value={observation?.mortalityRate?.toString()} />
+          </Grid>
+
+          <Grid item xs={primaryGridSize()}>
+            <StatsCard label={strings.OBSERVED_PLANTS} showLink={false} value={observation?.totalPlants?.toString()} />
+          </Grid>
+
+          <Grid item xs={primaryGridSize()}>
+            <StatsCard
+              label={strings.OBSERVED_SPECIES}
+              showLink={false}
+              value={observation?.species?.length?.toString()}
+            />
+          </Grid>
+        </Grid>
+
+        <Grid container spacing={3} sx={{ marginBottom: '16px', padding: 0, whiteSpace: 'nowrap' }}>
+          <Grid item xs={primaryGridSize()}>
+            <Box sx={isDesktop ? undefined : { textAlign: 'center' }}>
+              <Link
+                onClick={() => {
+                  navigate(APP_PATHS.PLANTING_SITES_NEW);
+                }}
+              >
+                {strings.ADD_PLANTING_SITE}
+              </Link>
+            </Box>
+          </Grid>
+
+          <Grid
+            item
+            xs={primaryGridSize()}
+            sx={isDesktop ? { paddingRight: '16px', textAlign: 'right' } : { textAlign: 'center' }}
+          >
+            <Link
+              onClick={() => {
+                navigate(APP_PATHS.PLANTS_DASHBOARD);
+              }}
+            >
+              {strings.VIEW_FULL_DASHBOARD}
+            </Link>
+          </Grid>
+        </Grid>
+      </Box>
+
+      <Box
+        sx={{
+          width: isDesktop ? '50%' : '100%',
+        }}
+      >
+        {token && (
+          <img
+            alt='Mapbox Static Map with Boundaries'
+            src={staticMapURLNext}
+            style={{ width: '100%', height: 'auto' }}
+          />
+        )}
+      </Box>
+    </Box>
+  );
+};
+
+type OrganizationStatsCardItem = {
   buttonProps?: ButtonProps;
   icon: IconName;
   statsCards: StatsCard[];
   title: string;
 };
 
-type PlantingSiteStatsCardProps = {
-  items: PlantingSiteStatsCardItem[];
+type OrganizationStatsCardProps = {
+  items: OrganizationStatsCardItem[];
 };
 
-const PlantingSiteStatsCard = ({ items }: PlantingSiteStatsCardProps): JSX.Element => {
+const OrganizationStatsCard = ({ items }: OrganizationStatsCardProps): JSX.Element => {
   const { isDesktop, isMobile } = useDeviceInfo();
   const theme = useTheme();
 
@@ -113,6 +315,7 @@ const PlantingSiteStatsCard = ({ items }: PlantingSiteStatsCardProps): JSX.Eleme
         padding: '16px',
       }}
     >
+      <PlantingSiteStats />
       {items.map((item, index) => (
         <Grid key={index} container spacing={3} sx={{ marginBottom: '16px', padding: 0 }}>
           <Grid item xs={primaryGridSize()}>
@@ -310,12 +513,19 @@ const TerrawareHomeView = () => {
   const { isTablet, isMobile } = useDeviceInfo();
   const mixpanel = useMixpanel();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const plantingSites = useAppSelector(selectPlantingSites);
   const { availableSpecies } = useSpecies();
   const seedBankSummary = useSeedBankSummary();
   const orgNurserySummary = useOrgNurserySummary();
   const homePageOnboardingImprovementsEnabled = isEnabled('Home Page Onboarding Improvements');
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    dispatch(requestObservations(selectedOrganization.id));
+    dispatch(requestObservationsResults(selectedOrganization.id));
+  }, [dispatch, selectedOrganization.id]);
 
   const isLoadingInitialData = useMemo(
     () =>
@@ -362,12 +572,12 @@ const TerrawareHomeView = () => {
     return 4;
   };
 
-  const plantingSiteStatsCardItems: PlantingSiteStatsCardItem[] = useMemo(() => {
+  const organizationStatsCardItems: OrganizationStatsCardItem[] = useMemo(() => {
     if (!activeLocale) {
       return [];
     }
 
-    return [
+    const items = [
       {
         buttonProps: {
           label: strings.ADD_SPECIES,
@@ -375,7 +585,7 @@ const TerrawareHomeView = () => {
             navigate(APP_PATHS.SPECIES_NEW);
           },
         },
-        icon: 'seeds',
+        icon: 'seeds' as IconName,
         statsCards: [
           { label: strings.TOTAL_SPECIES, value: availableSpecies?.length.toString() },
           {
@@ -392,7 +602,7 @@ const TerrawareHomeView = () => {
             navigate(APP_PATHS.SEED_BANKS_NEW);
           },
         },
-        icon: 'seeds',
+        icon: 'seeds' as IconName,
         statsCards: [
           {
             label: strings.TOTAL_SEED_COUNT,
@@ -416,25 +626,30 @@ const TerrawareHomeView = () => {
             navigate(APP_PATHS.NURSERIES_NEW);
           },
         },
-        icon: 'iconSeedling',
+        icon: 'iconSeedling' as IconName,
         statsCards: [
           { label: strings.TOTAL_SEEDLINGS_COUNT, value: orgNurserySummary?.totalQuantity?.toString() },
           { label: strings.TOTAL_SEEDLINGS_SENT, value: orgNurserySummary?.totalWithdrawn?.toString() },
         ],
         title: strings.SEEDLINGS,
       },
-      {
+    ];
+
+    if (!plantingSites?.length) {
+      items.push({
         buttonProps: {
           label: strings.ADD_PLANTING_SITE,
           onClick: () => {
             navigate(APP_PATHS.PLANTING_SITES_NEW);
           },
         },
-        icon: 'iconRestorationSite',
+        icon: 'iconRestorationSite' as IconName,
         statsCards: [],
         title: strings.PLANTS,
-      },
-    ];
+      });
+    }
+
+    return items;
   }, [activeLocale, availableSpecies, orgNurserySummary, seedBankSummary, speciesLastModifiedDate]);
 
   return (
@@ -462,7 +677,7 @@ const TerrawareHomeView = () => {
             <Container maxWidth={false} sx={{ padding: 0 }}>
               <Grid container spacing={3} sx={{ padding: 0 }}>
                 <Grid item xs={12}>
-                  <PlantingSiteStatsCard items={plantingSiteStatsCardItems} />
+                  <OrganizationStatsCard items={organizationStatsCardItems} />
                 </Grid>
 
                 <Grid item xs={12}>
