@@ -36,7 +36,7 @@ import { isAdmin } from 'src/utils/organization';
 import useMapboxToken from 'src/utils/useMapboxToken';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-type StatsCard = {
+type StatsCardItemProps = {
   label: string;
   linkOnClick?: () => void;
   linkText?: string;
@@ -45,7 +45,14 @@ type StatsCard = {
   value?: string;
 };
 
-const StatsCard = ({ label, linkOnClick, linkText, showBorder = true, showLink = true, value }: StatsCard) => {
+const StatsCardItem = ({
+  label,
+  linkOnClick,
+  linkText,
+  showBorder = true,
+  showLink = true,
+  value,
+}: StatsCardItemProps) => {
   const { isDesktop } = useDeviceInfo();
   const theme = useTheme();
 
@@ -202,15 +209,15 @@ const PlantingSiteStats = () => {
           </Grid>
 
           <Grid item xs={primaryGridSize()}>
-            <StatsCard label={strings.LOCATION} showLink={false} />
+            <StatsCardItem label={strings.LOCATION} showLink={false} />
           </Grid>
 
           <Grid item xs={primaryGridSize()}>
-            <StatsCard label={strings.TARGET_PLANTING_DENSITY} showBorder={!isDesktop} showLink={false} />
+            <StatsCardItem label={strings.TARGET_PLANTING_DENSITY} showBorder={!isDesktop} showLink={false} />
           </Grid>
 
           <Grid item xs={primaryGridSize()}>
-            <StatsCard
+            <StatsCardItem
               label='Area'
               showLink={false}
               value={
@@ -222,7 +229,7 @@ const PlantingSiteStats = () => {
           </Grid>
 
           <Grid item xs={primaryGridSize()}>
-            <StatsCard
+            <StatsCardItem
               label={strings.MORTALITY_RATE}
               showBorder={!isDesktop}
               showLink={false}
@@ -231,11 +238,15 @@ const PlantingSiteStats = () => {
           </Grid>
 
           <Grid item xs={primaryGridSize()}>
-            <StatsCard label={strings.OBSERVED_PLANTS} showLink={false} value={observation?.totalPlants?.toString()} />
+            <StatsCardItem
+              label={strings.OBSERVED_PLANTS}
+              showLink={false}
+              value={observation?.totalPlants?.toString()}
+            />
           </Grid>
 
           <Grid item xs={primaryGridSize()}>
-            <StatsCard
+            <StatsCardItem
               label={strings.OBSERVED_SPECIES}
               showBorder={!isDesktop}
               showLink={false}
@@ -286,18 +297,18 @@ const PlantingSiteStats = () => {
   );
 };
 
-type OrganizationStatsCardItem = {
+type OrganizationStatsCardRow = {
   buttonProps?: ButtonProps;
   icon: IconName;
-  statsCards: StatsCard[];
+  statsCardItems: StatsCardItemProps[];
   title: string;
 };
 
 type OrganizationStatsCardProps = {
-  items: OrganizationStatsCardItem[];
+  rows: OrganizationStatsCardRow[];
 };
 
-const OrganizationStatsCard = ({ items }: OrganizationStatsCardProps): JSX.Element => {
+const OrganizationStatsCard = ({ rows }: OrganizationStatsCardProps): JSX.Element => {
   const { isDesktop, isMobile } = useDeviceInfo();
   const theme = useTheme();
 
@@ -321,7 +332,7 @@ const OrganizationStatsCard = ({ items }: OrganizationStatsCardProps): JSX.Eleme
       }}
     >
       <PlantingSiteStats />
-      {items.map((item, index) => (
+      {rows.map((row, index) => (
         <Grid key={index} container spacing={3} sx={{ marginBottom: '16px', padding: 0 }}>
           <Grid item xs={primaryGridSize()}>
             <Box
@@ -338,7 +349,7 @@ const OrganizationStatsCard = ({ items }: OrganizationStatsCardProps): JSX.Eleme
               }}
             >
               <Icon
-                name={item.icon}
+                name={row.icon}
                 size='medium'
                 style={{
                   fill: theme.palette.TwClrIcnSecondary,
@@ -352,25 +363,25 @@ const OrganizationStatsCard = ({ items }: OrganizationStatsCardProps): JSX.Eleme
                   lineHeight: '24px',
                 }}
               >
-                {item.title}
+                {row.title}
               </Typography>
             </Box>
           </Grid>
 
-          {(isDesktop || item.statsCards[0]) && (
+          {(isDesktop || row.statsCardItems[0]) && (
             <Grid item xs={primaryGridSize()}>
-              {item.statsCards[0] && <StatsCard {...item.statsCards[0]} />}
+              {row.statsCardItems[0] && <StatsCardItem {...row.statsCardItems[0]} />}
             </Grid>
           )}
 
-          {(isDesktop || item.statsCards[1]) && (
+          {(isDesktop || row.statsCardItems[1]) && (
             <Grid item xs={primaryGridSize()}>
-              {item.statsCards[1] && <StatsCard {...item.statsCards[1]} />}
+              {row.statsCardItems[1] && <StatsCardItem {...row.statsCardItems[1]} />}
             </Grid>
           )}
 
           <Grid item xs={primaryGridSize()}>
-            {item.buttonProps && (
+            {row.buttonProps && (
               <Box
                 sx={{
                   alignItems: 'center',
@@ -389,7 +400,7 @@ const OrganizationStatsCard = ({ items }: OrganizationStatsCardProps): JSX.Eleme
                     width: isMobile ? '100%' : 'auto',
                   }}
                   type='productive'
-                  {...item.buttonProps}
+                  {...row.buttonProps}
                 />
               </Box>
             )}
@@ -577,7 +588,7 @@ const TerrawareHomeView = () => {
     return 4;
   };
 
-  const organizationStatsCardItems: OrganizationStatsCardItem[] = useMemo(() => {
+  const organizationStatsCardRows: OrganizationStatsCardRow[] = useMemo(() => {
     if (!activeLocale) {
       return [];
     }
@@ -591,7 +602,7 @@ const TerrawareHomeView = () => {
           },
         },
         icon: 'seeds' as IconName,
-        statsCards: [
+        statsCardItems: [
           { label: strings.TOTAL_SPECIES, value: availableSpecies?.length.toString() },
           {
             label: strings.LAST_UPDATED,
@@ -608,7 +619,7 @@ const TerrawareHomeView = () => {
           },
         },
         icon: 'seeds' as IconName,
-        statsCards: [
+        statsCardItems: [
           {
             label: strings.TOTAL_SEED_COUNT,
             value: seedBankSummary?.value?.seedsRemaining.total?.toString(),
@@ -632,7 +643,7 @@ const TerrawareHomeView = () => {
           },
         },
         icon: 'iconSeedling' as IconName,
-        statsCards: [
+        statsCardItems: [
           { label: strings.TOTAL_SEEDLINGS_COUNT, value: orgNurserySummary?.totalQuantity?.toString() },
           { label: strings.TOTAL_SEEDLINGS_SENT, value: orgNurserySummary?.totalWithdrawn?.toString() },
         ],
@@ -649,7 +660,7 @@ const TerrawareHomeView = () => {
           },
         },
         icon: 'iconRestorationSite' as IconName,
-        statsCards: [],
+        statsCardItems: [],
         title: strings.PLANTS,
       });
     }
@@ -682,7 +693,7 @@ const TerrawareHomeView = () => {
             <Container maxWidth={false} sx={{ padding: 0 }}>
               <Grid container spacing={3} sx={{ padding: 0 }}>
                 <Grid item xs={12}>
-                  <OrganizationStatsCard items={organizationStatsCardItems} />
+                  <OrganizationStatsCard rows={organizationStatsCardRows} />
                 </Grid>
 
                 <Grid item xs={12}>
