@@ -36,7 +36,9 @@ import { isAdmin } from 'src/utils/organization';
 import useMapboxToken from 'src/utils/useMapboxToken';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-type StatsCardItemProps = {
+import OrganizationStatsCard, { OrganizationStatsCardRow } from './TerrawareHomeView/OrganizationStatsCard';
+
+export type StatsCardItemProps = {
   label: string;
   linkOnClick?: () => void;
   linkText?: string;
@@ -45,7 +47,7 @@ type StatsCardItemProps = {
   value?: string;
 };
 
-const StatsCardItem = ({
+export const StatsCardItem = ({
   label,
   linkOnClick,
   linkText,
@@ -100,7 +102,7 @@ const StatsCardItem = ({
   );
 };
 
-const PlantingSiteStats = () => {
+export const PlantingSiteStats = () => {
   const { isDesktop } = useDeviceInfo();
   const theme = useTheme();
   const navigate = useNavigate();
@@ -293,120 +295,6 @@ const PlantingSiteStats = () => {
           <img alt='Mapbox Static Map with Boundaries' src={staticMapURL} style={{ width: '100%', height: 'auto' }} />
         )}
       </Box>
-    </Box>
-  );
-};
-
-type OrganizationStatsCardRow = {
-  buttonProps?: ButtonProps;
-  icon: IconName;
-  statsCardItems: StatsCardItemProps[];
-  title: string;
-};
-
-type OrganizationStatsCardProps = {
-  rows: OrganizationStatsCardRow[];
-};
-
-const OrganizationStatsCard = ({ rows }: OrganizationStatsCardProps): JSX.Element => {
-  const { isDesktop, isMobile } = useDeviceInfo();
-  const theme = useTheme();
-
-  const primaryGridSize = () => {
-    if (isDesktop) {
-      return 3;
-    }
-    return 12;
-  };
-
-  return (
-    <Box
-      sx={{
-        alignItems: 'center',
-        background: theme.palette.TwClrBg,
-        borderRadius: '8px',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        padding: '16px',
-      }}
-    >
-      <PlantingSiteStats />
-      {rows.map((row, index) => (
-        <Grid key={index} container spacing={3} sx={{ marginBottom: '16px', padding: 0 }}>
-          <Grid item xs={primaryGridSize()}>
-            <Box
-              sx={{
-                alignItems: 'center',
-                background: theme.palette.TwClrBgSecondary,
-                borderRadius: '8px',
-                display: 'flex',
-                flexDirection: 'column',
-                height: '100%',
-                justifyContent: 'center',
-                minHeight: '112px',
-                padding: '8px',
-              }}
-            >
-              <Icon
-                name={row.icon}
-                size='medium'
-                style={{
-                  fill: theme.palette.TwClrIcnSecondary,
-                }}
-              />
-              <Typography
-                sx={{
-                  color: theme.palette.TwClrTxt,
-                  fontSize: '16px',
-                  fontWeight: 600,
-                  lineHeight: '24px',
-                }}
-              >
-                {row.title}
-              </Typography>
-            </Box>
-          </Grid>
-
-          {(isDesktop || row.statsCardItems[0]) && (
-            <Grid item xs={primaryGridSize()}>
-              {row.statsCardItems[0] && <StatsCardItem {...row.statsCardItems[0]} />}
-            </Grid>
-          )}
-
-          {(isDesktop || row.statsCardItems[1]) && (
-            <Grid item xs={primaryGridSize()}>
-              {row.statsCardItems[1] && <StatsCardItem {...row.statsCardItems[1]} />}
-            </Grid>
-          )}
-
-          <Grid item xs={primaryGridSize()}>
-            {row.buttonProps && (
-              <Box
-                sx={{
-                  alignItems: 'center',
-                  display: 'flex',
-                  height: '100%',
-                  justifyContent: 'center',
-                  paddingBottom: isDesktop ? 0 : '24px',
-                  textAlign: 'center',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                <Button
-                  priority='secondary'
-                  style={{
-                    marginLeft: isMobile ? 0 : undefined,
-                    width: isMobile ? '100%' : 'auto',
-                  }}
-                  type='productive'
-                  {...row.buttonProps}
-                />
-              </Box>
-            )}
-          </Grid>
-        </Grid>
-      ))}
     </Box>
   );
 };
