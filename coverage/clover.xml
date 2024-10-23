@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1729701407924" clover="3.2.0">
-  <project timestamp="1729701407924" name="All files">
-    <metrics statements="25647" coveredstatements="1047" conditionals="16856" coveredconditionals="282" methods="7889" coveredmethods="176" elements="50392" coveredelements="1505" complexity="0" loc="25647" ncloc="25647" packages="236" files="1103" classes="1103"/>
+<coverage generated="1729703157309" clover="3.2.0">
+  <project timestamp="1729703157310" name="All files">
+    <metrics statements="25648" coveredstatements="1047" conditionals="16856" coveredconditionals="282" methods="7890" coveredmethods="176" elements="50394" coveredelements="1505" complexity="0" loc="25648" ncloc="25648" packages="236" files="1103" classes="1103"/>
     <package name="src">
       <metrics statements="175" coveredstatements="0" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -28179,7 +28179,7 @@
       </file>
     </package>
     <package name="src.strings">
-      <metrics statements="67" coveredstatements="1" conditionals="21" coveredconditionals="0" methods="19" coveredmethods="0"/>
+      <metrics statements="68" coveredstatements="1" conditionals="21" coveredconditionals="0" methods="20" coveredmethods="0"/>
       <file name="export.js" path="/home/runner/work/terraware-web/terraware-web/src/strings/export.js">
         <metrics statements="53" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="10" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
@@ -28241,20 +28241,21 @@
         <line num="40" count="6" type="stmt"/>
       </file>
       <file name="locales.ts" path="/home/runner/work/terraware-web/terraware-web/src/strings/locales.ts">
-        <metrics statements="13" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="9" coveredmethods="0"/>
+        <metrics statements="14" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="10" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="23" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="43" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.types">
