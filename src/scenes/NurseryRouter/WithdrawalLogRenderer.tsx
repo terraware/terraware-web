@@ -66,7 +66,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
   };
 
   const getTruncated = (inputValues: any) => {
-    return <TextTruncated stringList={inputValues} moreText={strings.TRUNCATED_TEXT_MORE_LINK}/>;
+    return <TextTruncated stringList={inputValues} moreText={strings.TRUNCATED_TEXT_MORE_LINK} />;
   };
 
   if (column.key === 'speciesScientificNames') {

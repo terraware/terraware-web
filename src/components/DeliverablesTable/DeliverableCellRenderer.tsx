@@ -2,13 +2,13 @@ import React from 'react';
 
 import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import Link from 'src/components/common/Link';
+import TextTruncated from 'src/components/common/TextTruncated';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
 import { DeliverableStatusType } from 'src/types/Deliverables';
-import TextTruncated from 'src/components/common/TextTruncated';
 
 export default function DeliverableCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { activeLocale } = useLocalization();
@@ -33,7 +33,7 @@ export default function DeliverableCellRenderer(props: RendererProps<TableRowTyp
         value={createLinkToDeliverable(value)}
         row={row}
         style={{
-          maxWidth: '500px'
+          maxWidth: '500px',
         }}
         sx={{
           fontSize: '16px',

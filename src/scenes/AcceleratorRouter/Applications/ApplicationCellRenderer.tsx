@@ -1,11 +1,11 @@
 import React from 'react';
 
 import Link from 'src/components/common/Link';
+import TextTruncated from 'src/components/common/TextTruncated';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { ApplicationStatus } from 'src/types/Application';
-import TextTruncated from 'src/components/common/TextTruncated';
 
 import ApplicationStatusBadge from './ApplicationStatusBadge';
 
