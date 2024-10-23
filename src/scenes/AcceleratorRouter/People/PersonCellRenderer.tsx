@@ -7,6 +7,7 @@ import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { getHighestGlobalRole } from 'src/types/GlobalRoles';
 import { InternalInterest, internalInterestLabel } from 'src/types/UserInternalInterests';
+import strings from 'src/strings';
 
 export default function PersonCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, index, value } = props;
@@ -52,7 +53,8 @@ export default function PersonCellRenderer(props: RendererProps<TableRowType>): 
         index={index}
         column={column}
         row={row}
-        value={<TextTruncated stringList={interests} columnWidth={400} fontSize={16} />}
+        value={<TextTruncated stringList={interests} width={400} fontSize={16} 
+        moreText={strings.TRUNCATED_TEXT_MORE_LINK} />}
       />
     );
   }

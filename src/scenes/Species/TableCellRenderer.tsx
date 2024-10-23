@@ -97,8 +97,9 @@ export default function SpeciesCellRenderer(props: RendererProps<TableRowType>):
           <TextTruncated
             fontSize={16}
             stringList={(value ?? []) as string[]}
-            columnWidth={150}
+            width={150}
             listSeparator={strings.LIST_SEPARATOR_SECONDARY}
+            moreText={strings.TRUNCATED_TEXT_MORE_LINK}
           />
         }
       />
@@ -114,7 +115,7 @@ export default function SpeciesCellRenderer(props: RendererProps<TableRowType>):
       />
     );
   } else if (column.key === 'participantProjects') {
-    return <CellRenderer {...props} value={<TextTruncated fontSize={16} stringList={(value || []) as string[]} />} />;
+    return <CellRenderer {...props} value={<TextTruncated fontSize={16} stringList={(value || []) as string[]} moreText={strings.TRUNCATED_TEXT_MORE_LINK}/>} />;
   }
 
   return <CellRenderer {...props} />;

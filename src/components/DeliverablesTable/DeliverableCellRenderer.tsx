@@ -8,6 +8,7 @@ import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
 import { DeliverableStatusType } from 'src/types/Deliverables';
+import TextTruncated from 'src/components/common/TextTruncated';
 
 export default function DeliverableCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { activeLocale } = useLocalization();
@@ -18,8 +19,8 @@ export default function DeliverableCellRenderer(props: RendererProps<TableRowTyp
     const deliverableUrl = isAcceleratorRoute ? APP_PATHS.ACCELERATOR_DELIVERABLE_VIEW : APP_PATHS.DELIVERABLE_VIEW;
     const to = deliverableUrl.replace(':deliverableId', `${row.id}`).replace(':projectId', `${row.projectId}`);
     return (
-      <Link fontSize='16px' to={to}>
-        {iValue as React.ReactNode}
+      <Link to={to}>
+        <TextTruncated fontSize={16} width={400} fontWeight={500} stringList={[iValue as string]} />
       </Link>
     );
   };
@@ -32,8 +33,7 @@ export default function DeliverableCellRenderer(props: RendererProps<TableRowTyp
         value={createLinkToDeliverable(value)}
         row={row}
         style={{
-          maxWidth: '500px',
-          textOverflow: 'ellipsis',
+          maxWidth: '500px'
         }}
         sx={{
           fontSize: '16px',
@@ -41,7 +41,6 @@ export default function DeliverableCellRenderer(props: RendererProps<TableRowTyp
             fontSize: '16px',
           },
         }}
-        title={value as string}
       />
     );
   }

@@ -106,8 +106,9 @@ export default function InventorySummaryForNursery({
         valueComponent: (
           <TextTruncated
             stringList={(species || []).map((s: NurserySummarySpecies) => s.scientificName)}
-            columnWidth={350}
+            width={350}
             fontSize={16}
+            moreText={strings.TRUNCATED_TEXT_MORE_LINK}
           />
         ),
         tooltipTitle: '',

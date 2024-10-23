@@ -4,10 +4,23 @@ import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { ENDPOINT_DELIVERABLE_DOCUMENT } from 'src/services/DeliverablesService';
+import TextTruncated from 'src/components/common/TextTruncated';
 
 export default function DocumentCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, index } = props;
 
+  if (column.key === 'name') {
+    return (
+      <CellRenderer
+      index={index}
+      column={column}
+      value={
+        <TextTruncated fontSize={16} fontWeight={500} width={600} stringList={[row.name]} />
+      }
+      row={row}
+      />
+    )
+  }
   if (column.key === 'link' && row.isAllowedRead) {
     return (
       <CellRenderer
