@@ -40,11 +40,12 @@ type StatsCard = {
   label: string;
   linkOnClick?: () => void;
   linkText?: string;
+  showBorder?: boolean;
   showLink?: boolean;
   value?: string;
 };
 
-const StatsCard = ({ label, linkOnClick, linkText, showLink = true, value }: StatsCard) => {
+const StatsCard = ({ label, linkOnClick, linkText, showBorder = true, showLink = true, value }: StatsCard) => {
   const { isDesktop } = useDeviceInfo();
   const theme = useTheme();
 
@@ -52,7 +53,9 @@ const StatsCard = ({ label, linkOnClick, linkText, showLink = true, value }: Sta
     <Box
       sx={{
         alignItems: isDesktop ? 'flex-start' : 'center',
-        [isDesktop ? 'borderRight' : 'borderBottom']: `1px solid ${theme.palette.TwClrBaseGray100}`,
+        [isDesktop ? 'borderRight' : 'borderBottom']: showBorder
+          ? `1px solid ${theme.palette.TwClrBaseGray100}`
+          : 'none',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -203,7 +206,7 @@ const PlantingSiteStats = () => {
           </Grid>
 
           <Grid item xs={primaryGridSize()}>
-            <StatsCard label={strings.TARGET_PLANTING_DENSITY} showLink={false} />
+            <StatsCard label={strings.TARGET_PLANTING_DENSITY} showBorder={!isDesktop} showLink={false} />
           </Grid>
 
           <Grid item xs={primaryGridSize()}>
@@ -219,7 +222,12 @@ const PlantingSiteStats = () => {
           </Grid>
 
           <Grid item xs={primaryGridSize()}>
-            <StatsCard label={strings.MORTALITY_RATE} showLink={false} value={observation?.mortalityRate?.toString()} />
+            <StatsCard
+              label={strings.MORTALITY_RATE}
+              showBorder={!isDesktop}
+              showLink={false}
+              value={observation?.mortalityRate?.toString()}
+            />
           </Grid>
 
           <Grid item xs={primaryGridSize()}>
@@ -229,6 +237,7 @@ const PlantingSiteStats = () => {
           <Grid item xs={primaryGridSize()}>
             <StatsCard
               label={strings.OBSERVED_SPECIES}
+              showBorder={!isDesktop}
               showLink={false}
               value={observation?.species?.length?.toString()}
             />
