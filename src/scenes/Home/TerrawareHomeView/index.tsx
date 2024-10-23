@@ -29,8 +29,8 @@ import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
 
-import CTACard from './TerrawareHomeView/CTACard';
-import OrganizationStatsCard, { OrganizationStatsCardRow } from './TerrawareHomeView/OrganizationStatsCard';
+import CTACard from './CTACard';
+import OrganizationStatsCard, { OrganizationStatsCardRow } from './OrganizationStatsCard';
 
 const TerrawareHomeView = () => {
   const { activeLocale } = useLocalization();
