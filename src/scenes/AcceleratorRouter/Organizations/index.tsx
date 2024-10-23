@@ -163,6 +163,7 @@ const OrganizationsView = () => {
         showCheckbox
         showTopBar
         topBarButtons={[<RemoveOrgsTopBarButton key={1} onConfirm={onRemoveOrganizations} />]}
+        stickyFilters={true}
       />
     </>
   );
