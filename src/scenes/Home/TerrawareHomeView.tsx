@@ -109,8 +109,8 @@ const PlantingSiteStats = () => {
     // Convert each coordinate pair to "lon,lat" with reduced precision
     return polygon[0].map((coord) => coord.map((value) => value.toFixed(6)).join(',')).join(';');
   });
-  const pathCoordinatesNext = pathSegments?.join(':');
-  const staticMapURLNext = `https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/path-5+41C07F-1+41c07f-0.4(${pathCoordinatesNext})/auto/580x360@2x?padding=10&access_token=${token}`;
+  const pathCoordinates = pathSegments?.join(':');
+  const staticMapURL = `https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/path-5+41C07F-1+41c07f-0.4(${pathCoordinates})/auto/580x360@2x?padding=10&access_token=${token}`;
 
   const primaryGridSize = () => {
     if (isDesktop) {
@@ -270,11 +270,7 @@ const PlantingSiteStats = () => {
         }}
       >
         {token && (
-          <img
-            alt='Mapbox Static Map with Boundaries'
-            src={staticMapURLNext}
-            style={{ width: '100%', height: 'auto' }}
-          />
+          <img alt='Mapbox Static Map with Boundaries' src={staticMapURL} style={{ width: '100%', height: 'auto' }} />
         )}
       </Box>
     </Box>
