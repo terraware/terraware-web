@@ -4,6 +4,10 @@ import strings from 'src/strings';
 export type Module = components['schemas']['ModulePayload'];
 
 export type ModuleEvent = components['schemas']['ModuleEvent'];
+export type ModuleEventPartial = Omit<Partial<components['schemas']['ModuleEvent']>, 'projects'> & {
+  projects?: ModuleEventProject[];
+};
+export type ModuleEventProject = Partial<NonNullable<components['schemas']['ModuleEvent']['projects']>[0]>;
 export type ModuleEventWithStartTime = Omit<ModuleEvent, 'startTime'> & { startTime: string };
 
 export type ModuleEventStatus = components['schemas']['ModuleEvent']['status'];
@@ -48,6 +52,10 @@ export type ModuleCohortsSearchResult = {
     };
   }[];
 };
+
+export type CohortModuleWithProject = Partial<
+  NonNullable<ModuleCohortsAndProjectsSearchResult['cohortModules']>[0]['cohort']
+>;
 
 export const getEventStatus = (status: ModuleEventStatus) => {
   switch (status) {
