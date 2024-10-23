@@ -1,5 +1,10 @@
 import { VariableTableCell, cellValue } from 'src/components/DocumentProducer/EditableTableModal/helpers';
-import { VariableWithValues, isSelectVariable, isTextVariable } from 'src/types/documentProducer/Variable';
+import {
+  SelectVariable,
+  VariableWithValues,
+  isSelectVariable,
+  isTextVariable,
+} from 'src/types/documentProducer/Variable';
 import {
   NewDateValuePayload,
   NewLinkValuePayload,
@@ -65,6 +70,15 @@ export const variableDependencyMet = (variable: VariableWithValues, allVariables
     case 'neq':
       if (isTextVariable(dependsOnVariable)) {
         return variable.dependencyValue.toLowerCase() !== `${rawDependsOnValue}`.toLowerCase();
+      }
+      if (isSelectVariable(dependsOnVariable)) {
+        const selectDependsOnVariable = dependsOnVariable as SelectVariable;
+        if (Array.isArray(rawDependsOnValue) && rawDependsOnValue[0]) {
+          const dependsOnValueText = selectDependsOnVariable.options.find(
+            (opt) => opt.id === rawDependsOnValue[0]
+          )?.name;
+          return variable.dependencyValue !== dependsOnValueText;
+        }
       }
 
       return variable.dependencyValue != rawDependsOnValue;

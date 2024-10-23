@@ -8,6 +8,7 @@ export type ModuleEventWithStartTime = Omit<ModuleEvent, 'startTime'> & { startT
 
 export type ModuleEventStatus = components['schemas']['ModuleEvent']['status'];
 export type ModuleEventType = ModuleEvent['type'];
+export type ImportModuleProblemElement = components['schemas']['ImportModuleProblemElement'];
 export const MODULE_EVENTS: ModuleEventType[] = ['Live Session', 'One-on-One Session', 'Recorded Session', 'Workshop'];
 
 export const getEventType = (input: ModuleEventType): string => {
@@ -36,7 +37,7 @@ export type ModuleProjectSearchResult = {
   };
 };
 
-export type ModuleCohortsAndProjectsSearchResult = {
+export type ModuleCohortsSearchResult = {
   cohortModules?: {
     title: string;
     startDate: string;
@@ -44,14 +45,6 @@ export type ModuleCohortsAndProjectsSearchResult = {
     cohort: {
       id: number;
       name: string;
-      participants: {
-        id: number;
-        name: string;
-        projects: {
-          id: number;
-          name: string;
-        }[];
-      }[];
     };
   }[];
 };
@@ -80,3 +73,11 @@ export type ModuleContentType = keyof Pick<Module, 'additionalResources' | 'prep
 export type UpdateCohortModuleRequest = components['schemas']['UpdateCohortModuleRequestPayload'];
 
 export type CohortModule = Partial<Module> & { deliverablesQuantity?: number };
+
+export type ModuleSearchResult = {
+  id: number;
+  name: string;
+  phaseId: string;
+  cohortsQuantity: number;
+  deliverablesQuantity: number;
+};

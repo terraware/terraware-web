@@ -8,11 +8,12 @@ import ModuleService, { GetModuleRequestParam, ListModulesRequestParam } from 's
 import strings from 'src/strings';
 import { ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
 import {
-  ModuleCohortsAndProjectsSearchResult,
+  ModuleCohortsSearchResult,
   ModuleProjectSearchResult,
+  ModuleSearchResult,
   UpdateCohortModuleRequest,
 } from 'src/types/Module';
-import { SearchNodePayload, SearchRequestPayload } from 'src/types/Search';
+import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 
 export const requestGetModule = createAsyncThunk(
   'modules/get',
@@ -187,7 +188,7 @@ export const requestUpdateManyCohortModule = createAsyncThunk(
   }
 );
 
-export const requestListModuleCohortsAndProjects = createAsyncThunk(
+export const requestListModuleCohorts = createAsyncThunk(
   'module/cohortsAndProjects',
   async (moduleId: string, { rejectWithValue }) => {
     const searchParams: SearchRequestPayload = {
@@ -198,10 +199,6 @@ export const requestListModuleCohortsAndProjects = createAsyncThunk(
         'cohortModules.endDate',
         'cohortModules.cohort.id',
         'cohortModules.cohort.name',
-        'cohortModules.cohort.participants.id',
-        'cohortModules.cohort.participants.name',
-        'cohortModules.cohort.participants.projects.id',
-        'cohortModules.cohort.participants.projects.name',
       ],
       search: {
         operation: 'field',
@@ -212,10 +209,25 @@ export const requestListModuleCohortsAndProjects = createAsyncThunk(
       count: 20,
     };
 
-    const response: ModuleCohortsAndProjectsSearchResult[] | null = await SearchService.search(searchParams);
+    const response: ModuleCohortsSearchResult[] | null = await SearchService.search(searchParams);
 
     if (response) {
       return response[0];
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestSearchModules = createAsyncThunk(
+  'modules/search',
+  async (request: { search?: SearchNodePayload; sortOrder?: SearchSortOrder }, { rejectWithValue }) => {
+    const { search, sortOrder } = request;
+
+    const response: ModuleSearchResult[] | null = await ModuleService.search(search, sortOrder);
+
+    if (response) {
+      return response;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

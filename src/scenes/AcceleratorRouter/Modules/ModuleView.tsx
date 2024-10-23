@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box } from '@mui/material';
@@ -11,6 +11,7 @@ import { APP_PATHS } from 'src/constants';
 import useGetModule from 'src/hooks/useGetModule';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
+import useStickyTabs from 'src/utils/useStickyTabs';
 
 import ContentAndMaterials from './ContentAndMaterials';
 import ModuleDetails from './ModuleDetails';
@@ -42,9 +43,11 @@ export type InventoryResult = {
 export default function ModuleView(): JSX.Element {
   const { activeLocale } = useLocalization();
   const contentRef = useRef(null);
-  const [activeTab, setActiveTab] = useState<string>('details');
   const { moduleId } = useParams<{ moduleId: string }>();
   const { getModule, module, deliverables } = useGetModule();
+
+  const deliverablesIds = new Set();
+  const uniqueDeliverables = deliverables?.filter((d) => !deliverablesIds.has(d.id) && deliverablesIds.add(d.id));
 
   useEffect(() => {
     if (moduleId) {
@@ -52,9 +55,31 @@ export default function ModuleView(): JSX.Element {
     }
   }, [moduleId]);
 
-  const onTabChange = (newTab: string) => {
-    setActiveTab(newTab);
-  };
+  const tabs = moduleId
+    ? [
+        {
+          id: 'details',
+          label: strings.DETAILS,
+          children: <ModuleDetails module={module} moduleId={moduleId} />,
+        },
+        {
+          id: 'contentAndMaterials',
+          label: strings.CONTENT_AND_MATERIALS,
+          children: <ContentAndMaterials module={module} deliverables={uniqueDeliverables} />,
+        },
+        {
+          id: 'events',
+          label: strings.EVENTS,
+          children: <p>events</p>,
+        },
+      ]
+    : [];
+
+  const { activeTab, onTabChange } = useStickyTabs({
+    defaultTab: 'details',
+    tabs,
+    viewIdentifier: 'accelerator-module-view',
+  });
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -67,7 +92,7 @@ export default function ModuleView(): JSX.Element {
   );
 
   return (
-    <Page crumbs={crumbs} title={<CommonTitleBar title={module?.name} subtitle={`${strings.PHASE_ID}:`} />}>
+    <Page crumbs={crumbs} title={<CommonTitleBar title={module?.name} />}>
       <Box
         ref={contentRef}
         display='flex'
@@ -87,31 +112,12 @@ export default function ModuleView(): JSX.Element {
             flexDirection: 'column',
             flexGrow: 1,
           },
+          '& .MuiTab-root': {
+            textTransform: 'none',
+          },
         }}
       >
-        {moduleId && (
-          <Tabs
-            activeTab={activeTab}
-            onTabChange={onTabChange}
-            tabs={[
-              {
-                id: 'details',
-                label: strings.DETAILS,
-                children: <ModuleDetails module={module} moduleId={moduleId} />,
-              },
-              {
-                id: 'contentAndMaterials',
-                label: strings.CONTENT_AND_MATERIALS,
-                children: <ContentAndMaterials module={module} deliverables={deliverables} />,
-              },
-              {
-                id: 'events',
-                label: strings.EVENTS,
-                children: <p>events</p>,
-              },
-            ]}
-          />
-        )}
+        {moduleId && <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />}
       </Box>
     </Page>
   );

@@ -42,6 +42,8 @@ export type UpdateSubmissionResponsePayload =
   paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION]['put']['responses'][200]['content']['application/json'];
 export type SubmitSubmissionResponsePayload =
   paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION_SUBMIT]['post']['responses'][200]['content']['application/json'];
+export type ImportDeliverablesResponsePayload =
+  paths[typeof DELIVERABLES_IMPORT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 const httpDeliverables = HttpService.root(ENDPOINT_DELIVERABLES);
 const httpDeliverableSubmission = HttpService.root(ENDPOINT_DELIVERABLE_SUBMISSION);
@@ -204,7 +206,7 @@ const incomplete = async (deliverableiId: number, projectId: number): Promise<Re
 /**
  * import deliverables
  */
-const importDeliverables = async (file: File): Promise<Response> => {
+const importDeliverables = async (file: File): Promise<ImportDeliverablesResponsePayload> => {
   const entity = new FormData();
   entity.append('file', file);
   const headers = { 'content-type': 'multipart/form-data' };
@@ -214,7 +216,7 @@ const importDeliverables = async (file: File): Promise<Response> => {
     headers,
   });
 
-  return serverResponse;
+  return serverResponse.data;
 };
 
 const DeliverablesService = {

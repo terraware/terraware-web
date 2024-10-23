@@ -50,6 +50,7 @@ const OverviewView = () => {
     defaultTab: 'projects',
     tabs,
     viewIdentifier: 'accelerator-overview',
+    keepQuery: false,
   });
 
   const onTabChangeHandler = (tab: string) => {

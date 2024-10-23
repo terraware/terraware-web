@@ -5,7 +5,7 @@ import { Button, Message } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
-import { SEED_COLLECTOR_APP_STORE_LINK, SEED_COLLECTOR_GOOGLE_PLAY_LINK } from 'src/constants';
+import { TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK, TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { getLongDate } from 'src/utils/dateFormatter';
@@ -94,7 +94,7 @@ export default function ObservationsEventsNotification({ events }: ObservationsE
             key='1'
             priority='secondary'
             type='passive'
-            onClick={() => openTab(SEED_COLLECTOR_APP_STORE_LINK)}
+            onClick={() => openTab(TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK)}
           />,
           <Button
             label={strings.DOWNLOAD_ON_GOOGLE_PLAY}
@@ -102,7 +102,7 @@ export default function ObservationsEventsNotification({ events }: ObservationsE
             key='2'
             priority='secondary'
             type='passive'
-            onClick={() => openTab(SEED_COLLECTOR_GOOGLE_PLAY_LINK)}
+            onClick={() => openTab(TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK)}
           />,
         ]}
       />
