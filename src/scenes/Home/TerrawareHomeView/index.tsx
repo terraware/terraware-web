@@ -103,7 +103,7 @@ const TerrawareHomeView = () => {
       return [];
     }
 
-    const items = [
+    const rows = [
       {
         buttonProps: {
           label: strings.ADD_SPECIES,
@@ -162,7 +162,7 @@ const TerrawareHomeView = () => {
     ];
 
     if (!plantingSites?.length) {
-      items.push({
+      rows.push({
         buttonProps: {
           label: strings.ADD_PLANTING_SITE,
           onClick: () => {
@@ -175,7 +175,7 @@ const TerrawareHomeView = () => {
       });
     }
 
-    return items;
+    return rows;
   }, [activeLocale, availableSpecies, orgNurserySummary, seedBankSummary, speciesLastModifiedDate]);
 
   return (
