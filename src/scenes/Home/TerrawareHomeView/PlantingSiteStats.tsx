@@ -69,7 +69,7 @@ export const PlantingSiteStats = () => {
       sx={{
         border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
         borderRadius: '8px',
-        boxShadow: 'rgba(58, 68, 69, 0.2) 0px 4px 8px',
+        boxShadow: isDesktop ? 'rgba(58, 68, 69, 0.2) 0px 4px 8px' : 'none',
         display: 'flex',
         flexDirection: isDesktop ? 'row' : 'column',
         justifyContent: 'space-evenly',
