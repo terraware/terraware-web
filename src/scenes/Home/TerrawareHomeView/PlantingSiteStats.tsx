@@ -141,7 +141,12 @@ export const PlantingSiteStats = () => {
           </Grid>
 
           <Grid item xs={primaryGridSize()}>
-            <StatsCardItem label={strings.TARGET_PLANTING_DENSITY} showBorder={!isDesktop} showLink={false} />
+            <StatsCardItem
+              label={strings.LAST_OBSERVED}
+              showBorder={!isDesktop}
+              showLink={false}
+              value={observation?.completedDate}
+            />
           </Grid>
 
           <Grid item xs={primaryGridSize()}>
