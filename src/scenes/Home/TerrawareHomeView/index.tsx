@@ -105,12 +105,14 @@ const TerrawareHomeView = () => {
 
     const rows = [
       {
-        buttonProps: {
-          label: strings.ADD_SPECIES,
-          onClick: () => {
-            navigate(APP_PATHS.SPECIES_NEW);
-          },
-        },
+        buttonProps: isAdmin(selectedOrganization)
+          ? {
+              label: strings.ADD_SPECIES,
+              onClick: () => {
+                navigate(APP_PATHS.SPECIES_NEW);
+              },
+            }
+          : undefined,
         icon: 'seeds' as IconName,
         statsCardItems: [
           { label: strings.TOTAL_SPECIES, value: availableSpecies?.length.toString() },
@@ -122,12 +124,19 @@ const TerrawareHomeView = () => {
         title: strings.SPECIES,
       },
       {
-        buttonProps: {
-          label: strings.SET_UP_SEED_BANK,
-          onClick: () => {
-            navigate(APP_PATHS.SEED_BANKS_NEW);
-          },
-        },
+        buttonProps: isAdmin(selectedOrganization)
+          ? {
+              label: strings.SET_UP_SEED_BANK,
+              onClick: () => {
+                navigate(APP_PATHS.SEED_BANKS_NEW);
+              },
+            }
+          : {
+              label: strings.ADD_AN_ACCESSION,
+              onClick: () => {
+                navigate(APP_PATHS.ACCESSIONS2_NEW);
+              },
+            },
         icon: 'seeds' as IconName,
         statsCardItems: [
           {
@@ -146,12 +155,19 @@ const TerrawareHomeView = () => {
         title: strings.SEEDS,
       },
       {
-        buttonProps: {
-          label: strings.SET_UP_NURSERY,
-          onClick: () => {
-            navigate(APP_PATHS.NURSERIES_NEW);
-          },
-        },
+        buttonProps: isAdmin(selectedOrganization)
+          ? {
+              label: strings.SET_UP_NURSERY,
+              onClick: () => {
+                navigate(APP_PATHS.NURSERIES_NEW);
+              },
+            }
+          : {
+              label: strings.ADD_INVENTORY,
+              onClick: () => {
+                navigate(APP_PATHS.INVENTORY_NEW);
+              },
+            },
         icon: 'iconSeedling' as IconName,
         statsCardItems: [
           { label: strings.TOTAL_SEEDLINGS_COUNT, value: orgNurserySummary?.totalQuantity?.toString() },
@@ -176,7 +192,14 @@ const TerrawareHomeView = () => {
     }
 
     return rows;
-  }, [activeLocale, availableSpecies, orgNurserySummary, seedBankSummary, speciesLastModifiedDate]);
+  }, [
+    activeLocale,
+    availableSpecies,
+    orgNurserySummary,
+    seedBankSummary,
+    selectedOrganization,
+    speciesLastModifiedDate,
+  ]);
 
   return (
     <TfMain>
