@@ -4,12 +4,11 @@ import bboxPolygon from '@turf/bbox-polygon';
 import { Feature, FeatureCollection, MultiPolygon, Polygon, Position } from 'geojson';
 
 import { overlayAndSubtract, toFeature } from 'src/components/Map/utils';
+import { SQ_M_TO_HECTARES } from 'src/constants';
 import strings from 'src/strings';
 import { GeometryFeature } from 'src/types/Map';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { MinimalPlantingSubzone, MinimalPlantingZone } from 'src/types/Tracking';
-
-export const SQ_M_TO_HECTARES = 1 / 10000;
 
 export type DefaultZonePayload = Omit<MinimalPlantingZone, 'plantingSubzones'>;
 

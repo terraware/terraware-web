@@ -5,7 +5,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
-import { APP_PATHS } from 'src/constants';
+import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
@@ -252,7 +252,7 @@ export default function PlantsDashboardView(): JSX.Element {
         )
         .reduce((acc, area) => acc + area, 0) ?? 0;
 
-    return totalSquareMeters / 10000;
+    return totalSquareMeters * SQ_M_TO_HECTARES;
   };
 
   const getDashboardSubhead = () => {
