@@ -106,7 +106,7 @@ const CTACard = ({
             priority='secondary'
             style={{
               marginLeft: isMobile ? 0 : '19px',
-              marginTop: isMobile ? '19px' : 0,
+              marginTop: isMobile ? '19px' : '5px',
             }}
             type='passive'
             {...secondaryButtonProps}
