@@ -21,7 +21,7 @@ export default function KnowledgeBaseLink(): JSX.Element {
   useEffect(() => {
     setCurrentLink(knowledgeBaseLinks.home);
     for (const key in knowledgeBaseLinks) {
-      if (location.pathname.includes(key)) {
+      if ((location.pathname + location.search).match(key)) {
         setCurrentLink(knowledgeBaseLinks[key as keyof typeof KnowledgeBaseLink]);
       }
     }
