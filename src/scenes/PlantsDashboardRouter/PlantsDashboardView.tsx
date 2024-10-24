@@ -245,12 +245,14 @@ export default function PlantsDashboardView(): JSX.Element {
     !!plantingSiteResult && !!plantingSiteResult.plantingZones && plantingSiteResult.plantingZones.length > 0;
 
   const getObservationHectares = () => {
-    const numMonitoringPlots =
-      latestObservation?.plantingZones.flatMap((pz) => pz.plantingSubzones.flatMap((psz) => psz.monitoringPlots))
-        ?.length ?? 0;
-    const monitoringPlotHa = 0.0625;
-    const totalHa = numMonitoringPlots * monitoringPlotHa;
-    return totalHa;
+    const totalSquareMeters =
+      latestObservation?.plantingZones
+        .flatMap((pz) =>
+          pz.plantingSubzones.flatMap((psz) => psz.monitoringPlots.map((mp) => mp.sizeMeters * mp.sizeMeters))
+        )
+        .reduce((acc, area) => acc + area, 0) ?? 0;
+
+    return totalSquareMeters / 10000;
   };
 
   const getDashboardSubhead = () => {
