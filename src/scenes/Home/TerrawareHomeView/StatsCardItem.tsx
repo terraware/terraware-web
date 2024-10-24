@@ -30,7 +30,7 @@ export const StatsCardItem = ({
       sx={{
         alignItems: isDesktop ? 'flex-start' : 'center',
         [isDesktop ? 'borderRight' : 'borderBottom']: showBorder
-          ? `1px solid ${theme.palette.TwClrBaseGray100}`
+          ? `1px solid ${theme.palette.TwClrBrdrTertiary}`
           : 'none',
         display: 'flex',
         flexDirection: 'column',
