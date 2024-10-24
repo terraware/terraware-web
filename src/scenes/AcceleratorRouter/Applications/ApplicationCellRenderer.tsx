@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Link from 'src/components/common/Link';
+import TextTruncated from 'src/components/common/TextTruncated';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
@@ -15,7 +16,7 @@ const ApplicationCellRenderer = (props: RendererProps<TableRowType>): JSX.Elemen
     const to = APP_PATHS.ACCELERATOR_APPLICATION.replace(':applicationId', `${row.id}`);
     return (
       <Link fontSize='16px' to={to}>
-        {value as React.ReactNode}
+        <TextTruncated fontSize={16} width={400} fontWeight={500} stringList={[value as string]} />
       </Link>
     );
   };
@@ -31,7 +32,7 @@ const ApplicationCellRenderer = (props: RendererProps<TableRowType>): JSX.Elemen
             fontSize: '16px',
           },
         }}
-        title={value as string}
+        title={''}
       />
     );
   }

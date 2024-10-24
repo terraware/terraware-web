@@ -93,7 +93,13 @@ export default function SearchCellRenderer(props: RendererProps<SearchResponseEl
         index={index}
         column={column}
         row={row}
-        value={<TextTruncated stringList={coordinatesValues} listSeparator={strings.LIST_SEPARATOR_SECONDARY} />}
+        value={
+          <TextTruncated
+            stringList={coordinatesValues}
+            listSeparator={strings.LIST_SEPARATOR_SECONDARY}
+            moreText={strings.TRUNCATED_TEXT_MORE_LINK}
+          />
+        }
       />
     );
   }
