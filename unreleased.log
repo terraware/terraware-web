@@ -1,2 +1,3 @@
+70c5c03770b SW-5707 Make some table columns use TextTruncated (#3290)
 a4a646c88bb SW-6186 Calculate observed hectares from plot sizes (#3294)
 7500a4f790b SW-5014 Fix email search in people dashboard (#3293)
