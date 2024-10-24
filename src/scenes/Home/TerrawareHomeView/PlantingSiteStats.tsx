@@ -39,7 +39,11 @@ export const PlantingSiteStats = () => {
       {
         type: 'Feature',
         geometry: selectedPlantingSite?.boundary,
-        properties: {},
+        properties: {
+          fill: theme.palette.TwClrBaseGreen300,
+          'fill-opacity': 0.2,
+          stroke: theme.palette.TwClrBaseGreen300,
+        },
       },
     ],
   };
