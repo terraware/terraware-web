@@ -15,7 +15,7 @@ import { VariableValue } from 'src/types/documentProducer/VariableValue';
 import { AsyncRequest, AsyncRequestT, Statuses } from '../../asyncUtils';
 import { deliverableCompositeKeyFn } from '../../deliverables/deliverablesSlice';
 import { variableListCompositeKeyFn } from '../values/valuesSlice';
-import { specificVariablesCompositeKeyFn } from './variablesSlice';
+import { specificVariablesCompositeKeyFn, variableHistoryCompositeKeyFn } from './variablesSlice';
 
 export const selectDocumentVariables = (state: RootState, documentId: number | undefined) =>
   documentId ? state.documentProducerDocumentVariables[documentId] : undefined;
@@ -302,3 +302,6 @@ export const selectUpdateVariableOwner = (requestId: string) => (state: RootStat
 
 export const selectVariablesOwners = (state: RootState, projectId: number | undefined) =>
   projectId ? state.variablesOwners[projectId] : undefined;
+
+export const selectVariableHistory = (state: RootState, variableId: number, projectId: number) =>
+  state.variableHistory[variableHistoryCompositeKeyFn({ variableId, projectId })];
