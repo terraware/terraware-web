@@ -10,7 +10,7 @@ import EditableMap from 'src/components/Map/EditableMapV2';
 import MapIcon from 'src/components/Map/MapIcon';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
-import { APP_PATHS } from 'src/constants';
+import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
@@ -21,7 +21,6 @@ import { requestGetCountryBoundary } from 'src/redux/features/location/locationA
 import { selectCountryBoundary } from 'src/redux/features/location/locationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import StepTitleDescription, { Description } from 'src/scenes/PlantingSitesRouter/edit/editor/StepTitleDescription';
-import { SQ_M_TO_HECTARES } from 'src/scenes/PlantingSitesRouter/edit/editor/utils';
 import strings from 'src/strings';
 import { RenderableReadOnlyBoundary } from 'src/types/Map';
 import { MultiPolygon } from 'src/types/Tracking';

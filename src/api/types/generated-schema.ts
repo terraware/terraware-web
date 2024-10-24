@@ -1443,6 +1443,11 @@ export interface components {
       /** Format: int64 */
       plotId: number;
       plotName: string;
+      /**
+       * Format: int32
+       * @description Length of each edge of the monitoring plot in meters.
+       */
+      sizeMeters: number;
     };
     AutomationPayload: {
       /** @description Human-readable description of this automation. */
@@ -3713,6 +3718,11 @@ export interface components {
        * @description Number of live plants per hectare.
        */
       plantingDensity: number;
+      /**
+       * Format: int32
+       * @description Length of each edge of the monitoring plot in meters.
+       */
+      sizeMeters: number;
       species: components["schemas"]["ObservationSpeciesResultsPayload"][];
       /** @enum {string} */
       status: "Outstanding" | "InProgress" | "Completed";

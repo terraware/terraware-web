@@ -5,7 +5,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
-import { APP_PATHS } from 'src/constants';
+import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
@@ -245,12 +245,14 @@ export default function PlantsDashboardView(): JSX.Element {
     !!plantingSiteResult && !!plantingSiteResult.plantingZones && plantingSiteResult.plantingZones.length > 0;
 
   const getObservationHectares = () => {
-    const numMonitoringPlots =
-      latestObservation?.plantingZones.flatMap((pz) => pz.plantingSubzones.flatMap((psz) => psz.monitoringPlots))
-        ?.length ?? 0;
-    const monitoringPlotHa = 0.0625;
-    const totalHa = numMonitoringPlots * monitoringPlotHa;
-    return totalHa;
+    const totalSquareMeters =
+      latestObservation?.plantingZones
+        .flatMap((pz) =>
+          pz.plantingSubzones.flatMap((psz) => psz.monitoringPlots.map((mp) => mp.sizeMeters * mp.sizeMeters))
+        )
+        .reduce((acc, area) => acc + area, 0) ?? 0;
+
+    return totalSquareMeters * SQ_M_TO_HECTARES;
   };
 
   const getDashboardSubhead = () => {
