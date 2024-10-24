@@ -69,6 +69,7 @@ export const PlantingSiteStats = () => {
       sx={{
         border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
         borderRadius: '8px',
+        boxShadow: 'rgba(58, 68, 69, 0.2) 0px 4px 8px',
         display: 'flex',
         flexDirection: isDesktop ? 'row' : 'column',
         justifyContent: 'space-evenly',
@@ -115,7 +116,6 @@ export const PlantingSiteStats = () => {
               display: 'flex',
               flexDirection: 'column',
               alignItems: isDesktop ? 'normal' : 'center',
-              paddingRight: isDesktop ? '16px' : 0,
             }}
           >
             <Typography
@@ -196,11 +196,7 @@ export const PlantingSiteStats = () => {
             </Box>
           </Grid>
 
-          <Grid
-            item
-            xs={primaryGridSize()}
-            sx={isDesktop ? { paddingRight: '16px', textAlign: 'right' } : { textAlign: 'center' }}
-          >
+          <Grid item xs={primaryGridSize()} sx={{ textAlign: isDesktop ? 'right' : 'center' }}>
             <Link
               onClick={() => {
                 navigate(APP_PATHS.PLANTS_DASHBOARD);
