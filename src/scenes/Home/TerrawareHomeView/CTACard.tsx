@@ -9,6 +9,7 @@ import Button from 'src/components/common/button/Button';
 type CTACardProps = {
   buttonsContainerSx?: SxProps;
   description: string | (string | JSX.Element)[];
+  imageAlt?: string;
   imageSource?: string;
   padding?: number | string;
   primaryButtonProps?: ButtonProps;
@@ -19,6 +20,7 @@ type CTACardProps = {
 const CTACard = ({
   buttonsContainerSx,
   description,
+  imageAlt,
   imageSource,
   padding = '24px',
   primaryButtonProps,
@@ -55,7 +57,7 @@ const CTACard = ({
               textAlign: 'center',
             }}
           >
-            <img src={imageSource} />
+            <img alt={imageAlt} src={imageSource} />
           </Box>
         )}
         <Box>

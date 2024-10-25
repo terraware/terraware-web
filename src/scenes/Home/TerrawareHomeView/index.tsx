@@ -232,6 +232,7 @@ const TerrawareHomeView = () => {
                 <Grid item xs={12}>
                   <CTACard
                     description={strings.DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION}
+                    imageAlt={strings.TERRAWARE_MOBILE_APP_IMAGE_ALT}
                     imageSource='/assets/terraware-mobile-app.svg'
                     padding='32px'
                     primaryButtonProps={{
