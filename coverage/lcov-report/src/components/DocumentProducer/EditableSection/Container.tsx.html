@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/78</span>
+                <span class='fraction'>0/80</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/47</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/77</span>
+                <span class='fraction'>0/79</span>
             </div>
         
             
@@ -426,7 +426,18 @@
 <a name='L361'></a><a href='#L361'>361</a>
 <a name='L362'></a><a href='#L362'>362</a>
 <a name='L363'></a><a href='#L363'>363</a>
-<a name='L364'></a><a href='#L364'>364</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L364'></a><a href='#L364'>364</a>
+<a name='L365'></a><a href='#L365'>365</a>
+<a name='L366'></a><a href='#L366'>366</a>
+<a name='L367'></a><a href='#L367'>367</a>
+<a name='L368'></a><a href='#L368'>368</a>
+<a name='L369'></a><a href='#L369'>369</a>
+<a name='L370'></a><a href='#L370'>370</a>
+<a name='L371'></a><a href='#L371'>371</a>
+<a name='L372'></a><a href='#L372'>372</a>
+<a name='L373'></a><a href='#L373'>373</a>
+<a name='L374'></a><a href='#L374'>374</a>
+<a name='L375'></a><a href='#L375'>375</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -473,6 +484,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -480,6 +492,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -655,6 +668,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -665,10 +681,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -795,6 +817,7 @@ import { Box, Grid, Typography } from '@mui/material';
 import { Button, DialogBox, Textfield, theme } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 &nbsp;
+import VariableHistoryModal from 'src/components/Variables/VariableHistoryModal';
 import VariableInternalComment from 'src/components/Variables/VariableInternalComment';
 import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
 import { requestUpdateSectionVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
@@ -844,6 +867,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
   const [variableCitation, setVariableCitation] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
 &nbsp;
   const [openEditVariableModal, setOpenEditVariableModal] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
+  const [openVariableHistoryModal, setOpenVariableHistoryModal] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [openEditCommentModal, setOpenEditCommenteModal] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [clickedVariable, setClickedVariable] = <span class="cstat-no" title="statement not covered" >useState&lt;VariableWithValues&gt;();</span>
 &nbsp;
@@ -1025,6 +1049,14 @@ export default function <span class="fstat-no" title="function not covered" >Edi
           &lt;/Grid&gt;
         &lt;/DialogBox&gt;
       )}
+      {openVariableHistoryModal &amp;&amp; clickedVariable &amp;&amp; (
+        &lt;VariableHistoryModal
+          open={openVariableHistoryModal}
+          setOpen={setOpenVariableHistoryModal}
+          projectId={projectId}
+          variableId={clickedVariable.id}
+        /&gt;
+      )}
       {openEditVariableModal &amp;&amp; clickedVariable &amp;&amp; (
         &lt;EditVariableModal
           display={!editing}
@@ -1032,6 +1064,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
           onFinish={variableUpdated}
           projectId={projectId}
           setUpdateWorkflowRequestId={setUpdateVariableWorkflowDetailsRequestId}
+          showVariableHistory={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setOpenVariableHistoryModal(true)}</span>
           variable={clickedVariable}
         /&gt;
       )}
@@ -1159,7 +1192,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-24T22:34:26.941Z
+                at 2024-10-25T01:42:59.902Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
