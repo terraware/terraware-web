@@ -17,6 +17,7 @@ type EditVariableModalProps = {
   onCancel: () => void;
   projectId: number;
   setUpdateWorkflowRequestId?: (requestId: string) => void;
+  showVariableHistory: () => void;
 };
 
 export default function EditVariableModal({
@@ -25,6 +26,7 @@ export default function EditVariableModal({
   onFinish,
   projectId,
   setUpdateWorkflowRequestId,
+  showVariableHistory,
   variable,
 }: EditVariableModalProps) {
   const { getUsedSections } = useDocumentProducerData();
@@ -38,6 +40,7 @@ export default function EditVariableModal({
           projectId={projectId}
           onFinish={onFinish}
           onCancel={onCancel}
+          showVariableHistory={showVariableHistory}
         />
       );
     case 'Table':
@@ -48,6 +51,7 @@ export default function EditVariableModal({
           projectId={projectId}
           onFinish={onFinish}
           onCancel={onCancel}
+          showVariableHistory={showVariableHistory}
         />
       );
     case 'Date':
@@ -62,6 +66,7 @@ export default function EditVariableModal({
           projectId={projectId}
           sectionsUsed={getUsedSections(variable.id)}
           setUpdateWorkflowRequestId={setUpdateWorkflowRequestId}
+          showVariableHistory={showVariableHistory}
           variable={variable}
         />
       );
