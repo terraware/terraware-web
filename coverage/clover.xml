@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1729829737861" clover="3.2.0">
-  <project timestamp="1729829737861" name="All files">
+<coverage generated="1729879243443" clover="3.2.0">
+  <project timestamp="1729879243443" name="All files">
     <metrics statements="25898" coveredstatements="1056" conditionals="17091" coveredconditionals="282" methods="7965" coveredmethods="176" elements="50954" coveredelements="1514" complexity="0" loc="25898" ncloc="25898" packages="237" files="1112" classes="1112"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
@@ -130,11 +130,11 @@
       </file>
       <file name="knowledgeBaseLinks.ts" path="/home/runner/work/terraware-web/terraware-web/src/knowledgeBaseLinks.ts">
         <metrics statements="5" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
-        <line num="79" count="0" type="stmt"/>
-        <line num="81" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="82" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="142" count="0" type="stmt"/>
+        <line num="143" count="0" type="stmt"/>
+        <line num="145" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="146" count="0" type="stmt"/>
       </file>
       <file name="mixpanelEvents.ts" path="/home/runner/work/terraware-web/terraware-web/src/mixpanelEvents.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
