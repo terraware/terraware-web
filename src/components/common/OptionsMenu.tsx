@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { Box, SxProps } from '@mui/material';
 import { Button, DropdownItem, Popover, Tooltip } from '@terraware/web-components';
+import { ButtonPriority, ButtonType } from '@terraware/web-components/components/Button/Button';
 
 import strings from 'src/strings';
 
@@ -11,7 +12,9 @@ export type OptionsMenuProps = {
   size?: 'medium' | 'small';
   onOpen?: () => void;
   onClose?: () => void;
+  priority?: ButtonPriority;
   sx?: SxProps;
+  type?: ButtonType;
 };
 
 export default function OptionsMenu({
@@ -20,7 +23,9 @@ export default function OptionsMenu({
   size,
   onOpen,
   onClose,
+  priority,
   sx,
+  type,
 }: OptionsMenuProps): JSX.Element {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -53,8 +58,9 @@ export default function OptionsMenu({
             id='more-options'
             icon='menuVertical'
             onClick={(event) => event && handleClickActionMenuButton(event)}
-            priority='secondary'
+            priority={priority ?? 'secondary'}
             size={size || 'medium'}
+            type={type}
           />
         </Tooltip>
       </Box>

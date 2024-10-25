@@ -100,3 +100,15 @@ export const requestListVariablesOwners = createAsyncThunk(
     return rejectWithValue(response.error || strings.GENERIC_ERROR);
   }
 );
+
+export const requestGetVariableHistory = createAsyncThunk(
+  'getVariableHistory',
+  async (request: { projectId: number; variableId: number }, { rejectWithValue }) => {
+    const response = await VariableService.getVariableHistory(request.projectId, request.variableId);
+    if (response.requestSucceeded && response.data) {
+      return response.data;
+    }
+
+    return rejectWithValue(response.error || strings.GENERIC_ERROR);
+  }
+);

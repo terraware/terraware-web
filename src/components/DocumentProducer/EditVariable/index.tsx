@@ -1,10 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Grid } from '@mui/material';
-import { Button } from '@terraware/web-components';
+import { Button, DropdownItem } from '@terraware/web-components';
 
 import PageDialog from 'src/components/DocumentProducer/PageDialog';
 import VariableDetailsInput from 'src/components/DocumentProducer/VariableDetailsInput';
+import OptionsMenu from 'src/components/common/OptionsMenu';
+import { useLocalization } from 'src/providers';
 import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
 import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { selectUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesSelector';
@@ -36,6 +38,7 @@ export type EditVariableProps = {
   sectionsUsed?: string[];
   onSectionClicked?: (sectionNumber: string) => void;
   setUpdateWorkflowRequestId?: (requestId: string) => void;
+  showVariableHistory: () => void;
 };
 
 const EditVariable = (props: EditVariableProps): JSX.Element => {
@@ -46,6 +49,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
     projectId,
     sectionsUsed,
     setUpdateWorkflowRequestId,
+    showVariableHistory,
     variable,
   } = props;
 
@@ -67,6 +71,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
     status: variableValue?.status || 'Not Submitted',
   });
 
+  const { activeLocale } = useLocalization();
   const [display, setDisplay] = useState<boolean>(displayProp);
   const [validate, setValidate] = useState<boolean>(false);
   const [hasErrors, setHasErrors] = useState<boolean>(false);
@@ -221,6 +226,32 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
     });
   };
 
+  const optionItems = useMemo(
+    (): DropdownItem[] =>
+      activeLocale
+        ? [
+            {
+              label: strings.VIEW_HISTORY,
+              value: 'view_history',
+            },
+          ]
+        : [],
+    [activeLocale]
+  );
+
+  const onOptionItemClick = useCallback(
+    (optionItem: DropdownItem) => {
+      switch (optionItem.value) {
+        case 'view_history': {
+          onCancel();
+          showVariableHistory();
+          break;
+        }
+      }
+    },
+    [showVariableHistory]
+  );
+
   return (
     <PageDialog
       workflowState={
@@ -252,19 +283,29 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
     >
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
         <Grid item xs={12} sx={{ position: 'relative' }}>
-          {display && (
-            <Button
-              icon='iconEdit'
-              id='edit-variable'
-              label={strings.EDIT}
-              onClick={() => {
-                setDisplay(false);
-              }}
+          <>
+            <OptionsMenu
+              onOptionItemClick={onOptionItemClick}
+              optionItems={optionItems}
               priority='secondary'
+              size='small'
               sx={{ float: 'right' }}
               type='passive'
             />
-          )}
+            {display && (
+              <Button
+                icon='iconEdit'
+                id='edit-variable'
+                label={strings.EDIT}
+                onClick={() => {
+                  setDisplay(false);
+                }}
+                priority='secondary'
+                sx={{ float: 'right', marginRight: '0px' }}
+                type='passive'
+              />
+            )}
+          </>
 
           <VariableDetailsInput
             display={display}

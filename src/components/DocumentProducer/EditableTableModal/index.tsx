@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import { Button, DatePicker, Dropdown, Textfield } from '@terraware/web-components';
+import { Button, DatePicker, Dropdown, DropdownItem, Textfield } from '@terraware/web-components';
 
 import PageDialog from 'src/components/DocumentProducer/PageDialog';
 import VariableWorkflowDetails from 'src/components/DocumentProducer/VariableWorkflowDetails';
+import OptionsMenu from 'src/components/common/OptionsMenu';
+import { useLocalization } from 'src/providers';
 import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
 import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { selectUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesSelector';
@@ -35,6 +37,7 @@ type EditableTableEditProps = {
   onFinish: (edited: boolean) => void;
   onCancel: () => void;
   setUpdateWorkflowRequestId?: (requestId: string) => void;
+  showVariableHistory: () => void;
 };
 
 const EditableTableEdit = ({
@@ -44,7 +47,9 @@ const EditableTableEdit = ({
   onCancel,
   onFinish,
   setUpdateWorkflowRequestId,
+  showVariableHistory,
 }: EditableTableEditProps) => {
+  const activeLocale = useLocalization();
   const columns = useMemo<TableColumn[]>(() => variable.columns, [variable]);
   const initialCellValues = useMemo<VariableTableCell[][]>(() => getInitialCellValues(variable), [variable]);
   const [cellValues, setCellValues] = useState<VariableTableCell[][]>(initialCellValues);
@@ -221,6 +226,32 @@ const EditableTableEdit = ({
     setCellValues(newCellValues);
   };
 
+  const optionItems = useMemo(
+    (): DropdownItem[] =>
+      activeLocale
+        ? [
+            {
+              label: strings.VIEW_HISTORY,
+              value: 'view_history',
+            },
+          ]
+        : [],
+    [activeLocale]
+  );
+
+  const onOptionItemClick = useCallback(
+    (optionItem: DropdownItem) => {
+      switch (optionItem.value) {
+        case 'view_history': {
+          onCancel();
+          showVariableHistory();
+          break;
+        }
+      }
+    },
+    [showVariableHistory]
+  );
+
   return (
     <PageDialog
       workflowState={
@@ -250,19 +281,29 @@ const EditableTableEdit = ({
             ]
       }
     >
-      {display && (
-        <Button
-          icon='iconEdit'
-          id='edit-variable'
-          label={strings.EDIT}
-          onClick={() => {
-            setDisplay(false);
-          }}
+      <>
+        <OptionsMenu
+          onOptionItemClick={onOptionItemClick}
+          optionItems={optionItems}
           priority='secondary'
+          size='small'
           sx={{ float: 'right' }}
           type='passive'
         />
-      )}
+        {display && (
+          <Button
+            icon='iconEdit'
+            id='edit-variable'
+            label={strings.EDIT}
+            onClick={() => {
+              setDisplay(false);
+            }}
+            priority='secondary'
+            sx={{ float: 'right' }}
+            type='passive'
+          />
+        )}
+      </>
       {variable.tableStyle === 'Horizontal' && (
         <TableContainer sx={{ overflowX: 'visible' }}>
           <Table aria-labelledby='tableTitle' size='medium' aria-label='variable-table'>

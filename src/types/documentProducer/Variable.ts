@@ -93,9 +93,13 @@ export type ImageFile = {
   citation?: string;
 };
 
+export type GetVariableHistoryResponse = components['schemas']['GetVariableWorkflowHistoryResponsePayload'];
+
 export type UpdateVariableWorkflowDetailsPayload = components['schemas']['UpdateVariableWorkflowDetailsRequestPayload'];
 
 export type UpdateVariableOwnerPayload = components['schemas']['UpdateVariableOwnerRequestPayload'];
+
+export type VariableHistoryElement = components['schemas']['VariableWorkflowHistoryElement'];
 
 export type VariableStatusType = components['schemas']['UpdateVariableWorkflowDetailsRequestPayload']['status'];
 

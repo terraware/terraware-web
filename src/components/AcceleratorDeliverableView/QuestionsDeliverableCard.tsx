@@ -40,6 +40,7 @@ import {
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import VariableHistoryModal from '../Variables/VariableHistoryModal';
 import VariableInternalComment from '../Variables/VariableInternalComment';
 import VariableRejectDialog from './RejectDialog';
 
@@ -76,6 +77,7 @@ const QuestionBox = ({
   } = useProjectVariablesUpdate(projectId, [variable]);
   const { isAcceleratorApplicationRoute } = useAcceleratorConsole();
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
+  const [showVariableHistoryModal, setShowVariableHistoryModal] = useState<boolean>(false);
   const [displayActions, setDisplayActions] = useState(false);
   const snackbar = useSnackbar();
 
@@ -164,6 +166,10 @@ const QuestionBox = ({
           updateWorkflow('Not Needed', workflowDetails.feedback, workflowDetails.internalComment, updateCallback);
           break;
         }
+        case 'view_history': {
+          setShowVariableHistoryModal(true);
+          break;
+        }
       }
     },
     [workflowDetails, updateCallback, updateWorkflow]
@@ -183,210 +189,220 @@ const QuestionBox = ({
               value: 'not_needed',
               disabled: workflowDetails.status === 'Not Needed',
             },
+            {
+              label: strings.VIEW_HISTORY,
+              value: 'view_history',
+            },
           ]
         : [],
     [activeLocale, workflowDetails.status]
   );
 
   return (
-    <>
-      <Box data-variable-id={variable.id} key={`question-${index}`} sx={{ scrollMarginTop: '50vh' }}>
-        {showRejectDialog && (
-          <VariableRejectDialog
-            onClose={() => setShowRejectDialog(false)}
-            onSubmit={rejectItem}
-            initialFeedback={initialFeedback}
-          />
-        )}
+    <Box data-variable-id={variable.id} key={`question-${index}`} sx={{ scrollMarginTop: '50vh' }}>
+      {showRejectDialog && (
+        <VariableRejectDialog
+          onClose={() => setShowRejectDialog(false)}
+          onSubmit={rejectItem}
+          initialFeedback={initialFeedback}
+        />
+      )}
+      {showVariableHistoryModal && (
+        <VariableHistoryModal
+          open={showVariableHistoryModal}
+          setOpen={setShowVariableHistoryModal}
+          projectId={projectId}
+          variableId={variable.id}
+        />
+      )}
+      <Box
+        sx={{
+          borderRadius: 2,
+          '&:hover': {
+            background: editing ? theme.palette.TwClrBgActive : theme.palette.TwClrBgHover,
+            '.actions': {
+              display: 'block',
+            },
+          },
+          background: editing ? theme.palette.TwClrBgActive : displayActions ? theme.palette.TwClrBgHover : 'none',
+          '& .actions': {
+            display: displayActions ? 'block' : 'none',
+          },
+          marginBottom: theme.spacing(4),
+          padding: 2,
+          width: '100%',
+        }}
+      >
         <Box
           sx={{
-            borderRadius: 2,
-            '&:hover': {
-              background: editing ? theme.palette.TwClrBgActive : theme.palette.TwClrBgHover,
-              '.actions': {
-                display: 'block',
-              },
-            },
-            background: editing ? theme.palette.TwClrBgActive : displayActions ? theme.palette.TwClrBgHover : 'none',
-            '& .actions': {
-              display: displayActions ? 'block' : 'none',
-            },
-            marginBottom: theme.spacing(4),
-            padding: 2,
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'space-apart',
+            marginBottom: '16px',
             width: '100%',
           }}
         >
+          <Typography
+            sx={{ fontWeight: '600' }}
+          >{`${variable.deliverableQuestion ?? variable.name} ${variable.isRequired ? '*' : ''}`}</Typography>
+
           <Box
             sx={{
               alignItems: 'center',
               display: 'flex',
-              justifyContent: 'space-apart',
-              marginBottom: '16px',
-              width: '100%',
+              flexGrow: 1,
+              justifyContent: 'flex-end',
             }}
           >
-            <Typography
-              sx={{ fontWeight: '600' }}
-            >{`${variable.deliverableQuestion ?? variable.name} ${variable.isRequired ? '*' : ''}`}</Typography>
-
-            <Box
-              sx={{
-                alignItems: 'center',
-                display: 'flex',
-                flexGrow: 1,
-                justifyContent: 'flex-end',
-              }}
-            >
-              <Box sx={{ margin: '4px', visibility: hideStatusBadge ? 'hidden' : 'visible' }}>
-                <VariableStatusBadge status={initialStatus} />
-              </Box>
-              {!editingId && (
-                <Box className='actions'>
-                  <Button
-                    id='edit'
-                    label={strings.EDIT}
-                    onClick={onEditItem}
-                    icon='iconEdit'
-                    priority='secondary'
-                    className='edit-button'
-                    size='small'
-                    sx={{ '&.button': { margin: '4px' } }}
-                    type='passive'
-                  />
-                  {!isAcceleratorApplicationRoute && (
-                    <>
-                      <Button
-                        label={strings.REJECT_ACTION}
-                        onClick={() => setShowRejectDialog(true)}
-                        priority='secondary'
-                        sx={{ '&.button': { margin: '4px' } }}
-                        type='destructive'
-                        disabled={status === 'Rejected'}
-                      />
-                      <Button
-                        label={strings.APPROVE}
-                        onClick={approveItem}
-                        priority='secondary'
-                        disabled={status === 'Approved'}
-                        sx={{ '&.button': { margin: '4px' } }}
-                      />
-                      <OptionsMenu
-                        onOptionItemClick={onOptionItemClick}
-                        optionItems={optionItems}
-                        onOpen={() => setDisplayActions(true)}
-                        onClose={() => setDisplayActions(false)}
-                        size='small'
-                        sx={{ '& .button': { margin: '4px' }, marginLeft: 0 }}
-                      />
-                    </>
-                  )}
-                </Box>
-              )}
+            <Box sx={{ margin: '4px', visibility: hideStatusBadge ? 'hidden' : 'visible' }}>
+              <VariableStatusBadge status={initialStatus} />
             </Box>
-          </Box>
-
-          {!!variable.description && (
-            <Typography
-              sx={{
-                color: 'rgba(0, 0, 0, 0.54)',
-                fontSize: '14px',
-                fontStyle: 'italic',
-                lineHeight: '20px',
-                marginY: '16px',
-              }}
-            >
-              {variable.description}
-            </Typography>
-          )}
-
-          {editing && (
-            <Grid container spacing={3} sx={{ marginBottom: '24px', padding: 0 }} textAlign='left'>
-              <Grid item xs={12}>
-                <DeliverableVariableDetailsInput
-                  hideDescription
-                  values={pendingValues || variable.values}
-                  setValues={(newValues: VariableValueValue[]) => setValues(variable.id, newValues)}
-                  variable={variable}
-                  addRemovedValue={(removedValue: VariableValueValue) => setRemovedValue(variable.id, removedValue)}
-                  setCellValues={(newValues: VariableTableCell[][]) => setCellValues(variable.id, newValues)}
-                  setDeletedImages={(newValues: VariableValueImageValue[]) => setDeletedImages(variable.id, newValues)}
-                  setImages={(newValues: VariableValueImageValue[]) => setImages(variable.id, newValues)}
-                  setNewImages={(newValues: PhotoWithAttributes[]) => setNewImages(variable.id, newValues)}
-                  projectId={projectId}
-                  validateFields={false}
+            {!editingId && (
+              <Box className='actions'>
+                <Button
+                  id='edit'
+                  label={strings.EDIT}
+                  onClick={onEditItem}
+                  icon='iconEdit'
+                  priority='secondary'
+                  className='edit-button'
+                  size='small'
+                  sx={{ '&.button': { margin: '4px' } }}
+                  type='passive'
                 />
-              </Grid>
+                {!isAcceleratorApplicationRoute && (
+                  <>
+                    <Button
+                      label={strings.REJECT_ACTION}
+                      onClick={() => setShowRejectDialog(true)}
+                      priority='secondary'
+                      sx={{ '&.button': { margin: '4px' } }}
+                      type='destructive'
+                      disabled={status === 'Rejected'}
+                    />
+                    <Button
+                      label={strings.APPROVE}
+                      onClick={approveItem}
+                      priority='secondary'
+                      disabled={status === 'Approved'}
+                      sx={{ '&.button': { margin: '4px' } }}
+                    />
+                    <OptionsMenu
+                      onOptionItemClick={onOptionItemClick}
+                      optionItems={optionItems}
+                      onOpen={() => setDisplayActions(true)}
+                      onClose={() => setDisplayActions(false)}
+                      size='small'
+                      sx={{ '& .button': { margin: '4px' }, marginLeft: 0 }}
+                    />
+                  </>
+                )}
+              </Box>
+            )}
+          </Box>
+        </Box>
+
+        {!!variable.description && (
+          <Typography
+            sx={{
+              color: 'rgba(0, 0, 0, 0.54)',
+              fontSize: '14px',
+              fontStyle: 'italic',
+              lineHeight: '20px',
+              marginY: '16px',
+            }}
+          >
+            {variable.description}
+          </Typography>
+        )}
+
+        {editing && (
+          <Grid container spacing={3} sx={{ marginBottom: '24px', padding: 0 }} textAlign='left'>
+            <Grid item xs={12}>
+              <DeliverableVariableDetailsInput
+                hideDescription
+                values={pendingValues || variable.values}
+                setValues={(newValues: VariableValueValue[]) => setValues(variable.id, newValues)}
+                variable={variable}
+                addRemovedValue={(removedValue: VariableValueValue) => setRemovedValue(variable.id, removedValue)}
+                setCellValues={(newValues: VariableTableCell[][]) => setCellValues(variable.id, newValues)}
+                setDeletedImages={(newValues: VariableValueImageValue[]) => setDeletedImages(variable.id, newValues)}
+                setImages={(newValues: VariableValueImageValue[]) => setImages(variable.id, newValues)}
+                setNewImages={(newValues: PhotoWithAttributes[]) => setNewImages(variable.id, newValues)}
+                projectId={projectId}
+                validateFields={false}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                type='textarea'
+                label={strings.INTERNAL_COMMENTS}
+                id='internalComment'
+                onChange={(value) => {
+                  onChange('internalComment', value as string);
+                }}
+                sx={{ marginTop: theme.spacing(1) }}
+                value={workflowDetails.internalComment}
+              />
+            </Grid>
+            {workflowDetails.status === 'Rejected' && (
               <Grid item xs={12}>
                 <TextField
                   type='textarea'
-                  label={strings.INTERNAL_COMMENTS}
-                  id='internalComment'
+                  label={strings.FEEDBACK_SHARED_WITH_PROJECT}
+                  id='feedback'
                   onChange={(value) => {
-                    onChange('internalComment', value as string);
+                    onChange('feedback', value as string);
                   }}
                   sx={{ marginTop: theme.spacing(1) }}
-                  value={workflowDetails.internalComment}
+                  value={workflowDetails.feedback}
                 />
               </Grid>
-              {workflowDetails.status === 'Rejected' && (
-                <Grid item xs={12}>
-                  <TextField
-                    type='textarea'
-                    label={strings.FEEDBACK_SHARED_WITH_PROJECT}
-                    id='feedback'
-                    onChange={(value) => {
-                      onChange('feedback', value as string);
-                    }}
-                    sx={{ marginTop: theme.spacing(1) }}
-                    value={workflowDetails.feedback}
-                  />
-                </Grid>
-              )}
-            </Grid>
-          )}
+            )}
+          </Grid>
+        )}
 
-          {workflowDetails.internalComment && !editing && (
-            <VariableInternalComment
-              editing={editing}
-              sx={{ marginY: theme.spacing(2) }}
-              update={onUpdateInternalComment}
-              variable={variable}
+        {workflowDetails.internalComment && !editing && (
+          <VariableInternalComment
+            editing={editing}
+            sx={{ marginY: theme.spacing(2) }}
+            update={onUpdateInternalComment}
+            variable={variable}
+          />
+        )}
+        {workflowDetails.status === 'Rejected' && workflowDetails.feedback && !editing && (
+          <Box marginY={theme.spacing(2)} display='flex' alignItems='center'>
+            <Message
+              body={
+                <Typography>
+                  <span style={{ fontWeight: 600 }}>{strings.FEEDBACK_SHARED_WITH_PROJECT}</span>{' '}
+                  {workflowDetails.feedback}
+                </Typography>
+              }
+              priority='critical'
+              type='page'
             />
-          )}
-          {workflowDetails.status === 'Rejected' && workflowDetails.feedback && !editing && (
-            <Box marginY={theme.spacing(2)} display='flex' alignItems='center'>
-              <Message
-                body={
-                  <Typography>
-                    <span style={{ fontWeight: 600 }}>{strings.FEEDBACK_SHARED_WITH_PROJECT}</span>{' '}
-                    {workflowDetails.feedback}
-                  </Typography>
-                }
-                priority='critical'
-                type='page'
-              />
-            </Box>
-          )}
-          <Typography>
-            {!editing && <DeliverableDisplayVariableValue projectId={projectId} variable={variable} />}
-          </Typography>
+          </Box>
+        )}
+        <Typography>
+          {!editing && <DeliverableDisplayVariableValue projectId={projectId} variable={variable} />}
+        </Typography>
 
-          {editing && (
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button
-                id='cancel'
-                label={strings.CANCEL}
-                type='passive'
-                onClick={() => setEditingId(undefined)}
-                priority='secondary'
-                key='button-1'
-              />
-              <Button id={'save'} onClick={onSave} label={strings.SAVE} key='button-2' priority='secondary' />
-            </Box>
-          )}
-        </Box>
+        {editing && (
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              id='cancel'
+              label={strings.CANCEL}
+              type='passive'
+              onClick={() => setEditingId(undefined)}
+              priority='secondary'
+              key='button-1'
+            />
+            <Button id={'save'} onClick={onSave} label={strings.SAVE} key='button-2' priority='secondary' />
+          </Box>
+        )}
       </Box>
-    </>
+    </Box>
   );
 };
 

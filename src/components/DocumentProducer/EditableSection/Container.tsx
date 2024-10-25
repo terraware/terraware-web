@@ -4,6 +4,7 @@ import { Box, Grid, Typography } from '@mui/material';
 import { Button, DialogBox, Textfield, theme } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
+import VariableHistoryModal from 'src/components/Variables/VariableHistoryModal';
 import VariableInternalComment from 'src/components/Variables/VariableInternalComment';
 import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
 import { requestUpdateSectionVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
@@ -53,6 +54,7 @@ export default function EditableSectionContainer({
   const [variableCitation, setVariableCitation] = useState<string>('');
 
   const [openEditVariableModal, setOpenEditVariableModal] = useState<boolean>(false);
+  const [openVariableHistoryModal, setOpenVariableHistoryModal] = useState<boolean>(false);
   const [openEditCommentModal, setOpenEditCommenteModal] = useState<boolean>(false);
   const [clickedVariable, setClickedVariable] = useState<VariableWithValues>();
 
@@ -234,6 +236,14 @@ export default function EditableSectionContainer({
           </Grid>
         </DialogBox>
       )}
+      {openVariableHistoryModal && clickedVariable && (
+        <VariableHistoryModal
+          open={openVariableHistoryModal}
+          setOpen={setOpenVariableHistoryModal}
+          projectId={projectId}
+          variableId={clickedVariable.id}
+        />
+      )}
       {openEditVariableModal && clickedVariable && (
         <EditVariableModal
           display={!editing}
@@ -241,6 +251,7 @@ export default function EditableSectionContainer({
           onFinish={variableUpdated}
           projectId={projectId}
           setUpdateWorkflowRequestId={setUpdateVariableWorkflowDetailsRequestId}
+          showVariableHistory={() => setOpenVariableHistoryModal(true)}
           variable={clickedVariable}
         />
       )}

@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
-import { Button, Textfield } from '@terraware/web-components';
+import { Button, DropdownItem, Textfield } from '@terraware/web-components';
 
 import PageDialog from 'src/components/DocumentProducer/PageDialog';
 import VariableWorkflowDetails from 'src/components/DocumentProducer/VariableWorkflowDetails';
+import OptionsMenu from 'src/components/common/OptionsMenu';
+import { useLocalization } from 'src/providers';
 import {
   selectUpdateVariableValues,
   selectUploadImageValue,
@@ -36,10 +38,20 @@ export type EditImagesModalProps = {
   onCancel: () => void;
   projectId: number;
   setUpdateWorkflowRequestId?: (requestId: string) => void;
+  showVariableHistory: () => void;
 };
 
 const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
-  const { display: displayProp = false, variable, onFinish, onCancel, projectId, setUpdateWorkflowRequestId } = props;
+  const {
+    display: displayProp = false,
+    variable,
+    onFinish,
+    onCancel,
+    projectId,
+    setUpdateWorkflowRequestId,
+    showVariableHistory,
+  } = props;
+  const activeLocale = useLocalization();
   const theme = useTheme();
   const [imagesCopy, setImagesCopy] = useState(variable.values);
   const [deletedImages, setDeletedImages] = useState<VariableValueImageValue[]>();
@@ -169,6 +181,32 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
     onCancel();
   };
 
+  const optionItems = useMemo(
+    (): DropdownItem[] =>
+      activeLocale
+        ? [
+            {
+              label: strings.VIEW_HISTORY,
+              value: 'view_history',
+            },
+          ]
+        : [],
+    [activeLocale]
+  );
+
+  const onOptionItemClick = useCallback(
+    (optionItem: DropdownItem) => {
+      switch (optionItem.value) {
+        case 'view_history': {
+          onCancel();
+          showVariableHistory();
+          break;
+        }
+      }
+    },
+    [showVariableHistory]
+  );
+
   return (
     <PageDialog
       workflowState={
@@ -202,19 +240,29 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
     >
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
         <Grid item xs={12} sx={{ position: 'relative' }}>
-          {display && (
-            <Button
-              icon='iconEdit'
-              id='edit-variable'
-              label={strings.EDIT}
-              onClick={() => {
-                setDisplay(false);
-              }}
+          <>
+            <OptionsMenu
+              onOptionItemClick={onOptionItemClick}
+              optionItems={optionItems}
               priority='secondary'
+              size='small'
               sx={{ float: 'right' }}
               type='passive'
             />
-          )}
+            {display && (
+              <Button
+                icon='iconEdit'
+                id='edit-variable'
+                label={strings.EDIT}
+                onClick={() => {
+                  setDisplay(false);
+                }}
+                priority='secondary'
+                sx={{ float: 'right' }}
+                type='passive'
+              />
+            )}
+          </>
           <Textfield label={strings.NAME} type='text' id='name' value={variable.name} display={true} />
         </Grid>
         <Grid item xs={12}>
