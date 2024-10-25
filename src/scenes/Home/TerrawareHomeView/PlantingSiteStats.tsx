@@ -76,13 +76,11 @@ export const PlantingSiteStats = () => {
         flexDirection: isDesktop ? 'row' : 'column',
         justifyContent: 'space-evenly',
         marginBottom: '16px',
-        // overflow: 'hidden',
-        // padding: '16px',
         width: '100%',
       }}
     >
       <Box sx={{ padding: '16px', width: isDesktop ? '50%' : '100%' }}>
-        <Grid container spacing={3} sx={{ marginBottom: '16px', padding: 0 }}>
+        <Grid container spacing={3} sx={{ padding: 0 }}>
           <Grid item xs={primaryGridSize}>
             <Box
               sx={{
@@ -188,10 +186,8 @@ export const PlantingSiteStats = () => {
               value={observation?.species?.length?.toString()}
             />
           </Grid>
-        </Grid>
 
-        <Grid container spacing={3} sx={{ padding: 0, whiteSpace: 'nowrap' }}>
-          <Grid item xs={primaryGridSize}>
+          <Grid item xs={primaryGridSize} sx={{ whiteSpace: 'nowrap' }}>
             <Box sx={isDesktop ? undefined : { textAlign: 'center' }}>
               {isAdmin(selectedOrganization) ? (
                 <Link

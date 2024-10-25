@@ -62,7 +62,9 @@ export const StatsCardItem = ({
         {value || '-'}
       </Typography>
       {showLink && (
-        <Box sx={{ minHeight: '24px' }}>{linkText && linkOnClick && <Link onClick={linkOnClick}>{linkText}</Link>}</Box>
+        <Box sx={{ marginBottom: isDesktop ? 0 : '8px', minHeight: '24px' }}>
+          {linkText && linkOnClick && <Link onClick={linkOnClick}>{linkText}</Link>}
+        </Box>
       )}
     </Box>
   );
