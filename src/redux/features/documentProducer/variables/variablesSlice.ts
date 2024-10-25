@@ -1,9 +1,10 @@
 import { ActionReducerMapBuilder, createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { Variable, VariableOwners } from 'src/types/documentProducer/Variable';
+import { GetVariableHistoryResponse, Variable, VariableOwners } from 'src/types/documentProducer/Variable';
 
 import {
+  requestGetVariableHistory,
   requestListAllVariables,
   requestListDeliverableVariables,
   requestListDocumentVariables,
@@ -64,6 +65,26 @@ const documentVariablesSlice = createSlice({
   },
 });
 
+export const variableHistoryCompositeKeyFn = (arg: unknown): string => {
+  const castArg = arg as { projectId: number; variableId: number };
+
+  return `v${castArg.variableId.toString()}-p${castArg.projectId}`;
+};
+
+/**
+ * Variable History
+ */
+const initialVariablesHistoryState: Record<string, StatusT<GetVariableHistoryResponse>> = {};
+
+const variableHistorySlice = createSlice({
+  name: 'variableHistorySlice',
+  initialState: initialVariablesHistoryState,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestGetVariableHistory, true, variableHistoryCompositeKeyFn)(builder);
+  },
+});
+
 /**
  * Variable Values Update
  */
@@ -113,6 +134,7 @@ export const documentProducerVariablesReducers = {
   documentProducerAllVariables: allVariablesSlice.reducer,
   documentProducerDeliverableVariables: deliverableVariablesSlice.reducer,
   documentProducerDocumentVariables: documentVariablesSlice.reducer,
+  variableHistory: variableHistorySlice.reducer,
   variableWorkflowDetailsUpdate: variableWorkflowDetailsUpdateSlice.reducer,
   variableOwnerUpdate: variableOwnerUpdateSlice.reducer,
   variablesOwners: variablesOwnersSlice.reducer,
