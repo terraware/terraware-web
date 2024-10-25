@@ -14,29 +14,27 @@ const VariableChangesCellRenderer = (props: RendererProps<TableRowType>): JSX.El
 
   const tableRow = row as VariableHistoryTableRow;
 
-  const changes = tableRow.changes
-    .map(({ field, previous, current }) => {
-      if (field === 'image') {
-        return `${strings.VALUE}: ${strings.IMAGE_UPDATED}`;
-      } else if (field === 'table') {
-        return `${strings.VALUE}: ${strings.TABLE_UPDATED}`;
-      } else {
-        const prefix =
-          field === 'feedback'
-            ? strings.FEEDBACK
-            : field === 'internalComment'
-              ? strings.INTERNAL_COMMENTS
-              : field === 'status'
-                ? strings.STATUS
-                : field === 'value'
-                  ? strings.VALUE
-                  : '';
-        return `${prefix}: '${previous}' → '${current}'`;
-      }
-    })
-    .join(', ');
+  const { field, previous, current } = tableRow.change;
 
-  return <CellRenderer {...props} value={changes} />;
+  const prefix =
+    field === 'feedback'
+      ? strings.FEEDBACK
+      : field === 'internalComment'
+        ? strings.INTERNAL_COMMENTS
+        : field === 'status'
+          ? strings.STATUS
+          : strings.VALUE;
+
+  const value =
+    field === 'image'
+      ? strings.IMAGE_UPDATED
+      : field === 'table'
+        ? strings.TABLE_UPDATED
+        : `'${previous}' → '${current}'`;
+
+  const result = `${prefix}: ${value}`;
+
+  return <CellRenderer {...props} value={result} />;
 };
 
 const VariableHistoryCellRenderer = (props: RendererProps<TableRowType>): JSX.Element => {
