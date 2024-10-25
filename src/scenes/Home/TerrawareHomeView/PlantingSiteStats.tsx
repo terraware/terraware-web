@@ -8,11 +8,13 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import Link from 'src/components/common/Link';
 import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
 import { APP_PATHS } from 'src/constants';
+import { useOrganization } from 'src/providers';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
+import { isAdmin } from 'src/utils/organization';
 import useMapboxToken from 'src/utils/useMapboxToken';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -22,6 +24,7 @@ export const PlantingSiteStats = () => {
   const { isDesktop } = useDeviceInfo();
   const theme = useTheme();
   const navigate = useNavigate();
+  const { selectedOrganization } = useOrganization();
   const plantingSites = useAppSelector(selectPlantingSites);
   const { token } = useMapboxToken();
   const defaultTimeZone = useDefaultTimeZone();
@@ -190,13 +193,15 @@ export const PlantingSiteStats = () => {
         <Grid container spacing={3} sx={{ padding: 0, whiteSpace: 'nowrap' }}>
           <Grid item xs={primaryGridSize}>
             <Box sx={isDesktop ? undefined : { textAlign: 'center' }}>
-              <Link
-                onClick={() => {
-                  navigate(APP_PATHS.PLANTING_SITES_NEW);
-                }}
-              >
-                {strings.ADD_PLANTING_SITE}
-              </Link>
+              {isAdmin(selectedOrganization) ? (
+                <Link
+                  onClick={() => {
+                    navigate(APP_PATHS.PLANTING_SITES_NEW);
+                  }}
+                >
+                  {strings.ADD_PLANTING_SITE}
+                </Link>
+              ) : null}
             </Box>
           </Grid>
 

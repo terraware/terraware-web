@@ -27,7 +27,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import strings from 'src/strings';
-import { isAdmin } from 'src/utils/organization';
+import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
 
 import CTACard from './CTACard';
 import OrganizationStatsCard, { OrganizationStatsCardRow } from './OrganizationStatsCard';
@@ -100,7 +100,7 @@ const TerrawareHomeView = () => {
 
     const rows = [
       {
-        buttonProps: isAdmin(selectedOrganization)
+        buttonProps: isManagerOrHigher(selectedOrganization)
           ? {
               label: strings.ADD_SPECIES,
               onClick: () => {
@@ -174,12 +174,14 @@ const TerrawareHomeView = () => {
 
     if (!plantingSites?.length) {
       rows.push({
-        buttonProps: {
-          label: strings.ADD_PLANTING_SITE,
-          onClick: () => {
-            navigate(APP_PATHS.PLANTING_SITES_NEW);
-          },
-        },
+        buttonProps: isAdmin(selectedOrganization)
+          ? {
+              label: strings.ADD_PLANTING_SITE,
+              onClick: () => {
+                navigate(APP_PATHS.PLANTING_SITES_NEW);
+              },
+            }
+          : undefined,
         icon: 'iconRestorationSite' as IconName,
         statsCardItems: [],
         title: strings.PLANTS,
