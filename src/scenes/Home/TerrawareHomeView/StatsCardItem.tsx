@@ -55,14 +55,14 @@ export const StatsCardItem = ({
           fontSize: '24px',
           fontWeight: 600,
           lineHeight: '32px',
-          marginBottom: showLink ? '8px' : 0,
+          marginBottom: !isDesktop || showLink ? '8px' : 0,
         }}
         title={value}
       >
         {value || '-'}
       </Typography>
       {showLink && (
-        <Box sx={{ marginBottom: isDesktop ? 0 : '8px', minHeight: '24px' }}>
+        <Box sx={{ marginBottom: isDesktop ? 0 : '8px', minHeight: !isDesktop ? 0 : '24px' }}>
           {linkText && linkOnClick && <Link onClick={linkOnClick}>{linkText}</Link>}
         </Box>
       )}
