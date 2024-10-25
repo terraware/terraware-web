@@ -266,7 +266,7 @@ const TerrawareHomeView = () => {
                       </Link>
                     )}
                     primaryButtonProps={{
-                      label: strings.APPLY,
+                      label: strings.APPLY_TO_ACCELERATOR,
                       onClick: () => {
                         mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_APPLY_BUTTON);
                         setIsNewApplicationModalOpen(true);
