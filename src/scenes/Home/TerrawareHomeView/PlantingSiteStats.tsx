@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -50,12 +50,7 @@ export const PlantingSiteStats = () => {
   const geojsonString = encodeURIComponent(JSON.stringify(geojson));
   const staticMapURL = `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/geojson(${geojsonString})/auto/580x360@2x?padding=100&access_token=${token}`;
 
-  const primaryGridSize = () => {
-    if (isDesktop) {
-      return 6;
-    }
-    return 12;
-  };
+  const primaryGridSize = useMemo(() => (isDesktop ? 6 : 12), [isDesktop]);
 
   // auto-select planting site when selectedPlantingSiteId is set
   useEffect(() => {
@@ -85,7 +80,7 @@ export const PlantingSiteStats = () => {
     >
       <Box sx={{ padding: '16px', width: isDesktop ? '50%' : '100%' }}>
         <Grid container spacing={3} sx={{ marginBottom: '16px', padding: 0 }}>
-          <Grid item xs={primaryGridSize()}>
+          <Grid item xs={primaryGridSize}>
             <Box
               sx={{
                 alignItems: 'center',
@@ -115,7 +110,7 @@ export const PlantingSiteStats = () => {
 
           <Grid
             item
-            xs={primaryGridSize()}
+            xs={primaryGridSize}
             sx={{
               display: 'flex',
               flexDirection: 'column',
@@ -140,11 +135,11 @@ export const PlantingSiteStats = () => {
             />
           </Grid>
 
-          <Grid item xs={primaryGridSize()}>
+          <Grid item xs={primaryGridSize}>
             <StatsCardItem label={strings.LOCATION} showLink={false} />
           </Grid>
 
-          <Grid item xs={primaryGridSize()}>
+          <Grid item xs={primaryGridSize}>
             <StatsCardItem
               label={strings.LAST_OBSERVED}
               showBorder={!isDesktop}
@@ -153,7 +148,7 @@ export const PlantingSiteStats = () => {
             />
           </Grid>
 
-          <Grid item xs={primaryGridSize()}>
+          <Grid item xs={primaryGridSize}>
             <StatsCardItem
               label='Area'
               showLink={false}
@@ -165,7 +160,7 @@ export const PlantingSiteStats = () => {
             />
           </Grid>
 
-          <Grid item xs={primaryGridSize()}>
+          <Grid item xs={primaryGridSize}>
             <StatsCardItem
               label={strings.MORTALITY_RATE}
               showBorder={!isDesktop}
@@ -174,7 +169,7 @@ export const PlantingSiteStats = () => {
             />
           </Grid>
 
-          <Grid item xs={primaryGridSize()}>
+          <Grid item xs={primaryGridSize}>
             <StatsCardItem
               label={strings.OBSERVED_PLANTS}
               showLink={false}
@@ -182,7 +177,7 @@ export const PlantingSiteStats = () => {
             />
           </Grid>
 
-          <Grid item xs={primaryGridSize()}>
+          <Grid item xs={primaryGridSize}>
             <StatsCardItem
               label={strings.OBSERVED_SPECIES}
               showBorder={!isDesktop}
@@ -193,7 +188,7 @@ export const PlantingSiteStats = () => {
         </Grid>
 
         <Grid container spacing={3} sx={{ padding: 0, whiteSpace: 'nowrap' }}>
-          <Grid item xs={primaryGridSize()}>
+          <Grid item xs={primaryGridSize}>
             <Box sx={isDesktop ? undefined : { textAlign: 'center' }}>
               <Link
                 onClick={() => {
@@ -205,7 +200,7 @@ export const PlantingSiteStats = () => {
             </Box>
           </Grid>
 
-          <Grid item xs={primaryGridSize()} sx={{ textAlign: isDesktop ? 'right' : 'center' }}>
+          <Grid item xs={primaryGridSize} sx={{ textAlign: isDesktop ? 'right' : 'center' }}>
             <Link
               onClick={() => {
                 navigate(APP_PATHS.PLANTS_DASHBOARD);

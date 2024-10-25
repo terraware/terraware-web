@@ -81,14 +81,9 @@ const TerrawareHomeView = () => {
     return getDateDisplayValue(lastModifiedTime);
   }, [availableSpecies]);
 
-  const primaryGridSize = () => {
-    if (isMobile) {
-      return 12;
-    }
-    return 6;
-  };
+  const primaryGridSize = useMemo(() => (isMobile ? 12 : 6), [isMobile]);
 
-  const secondaryGridSize = () => {
+  const secondaryGridSize = useMemo(() => {
     if (isMobile) {
       return 12;
     }
@@ -96,7 +91,7 @@ const TerrawareHomeView = () => {
       return 6;
     }
     return 4;
-  };
+  }, [isMobile, isTablet]);
 
   const organizationStatsCardRows: OrganizationStatsCardRow[] = useMemo(() => {
     if (!activeLocale) {
@@ -293,7 +288,7 @@ const TerrawareHomeView = () => {
               <Grid container spacing={3} sx={{ padding: 0 }}>
                 {isAdmin(selectedOrganization) && (
                   <>
-                    <Grid item xs={primaryGridSize()}>
+                    <Grid item xs={primaryGridSize}>
                       <PageCard
                         id='peopleHomeCard'
                         name={strings.PEOPLE}
@@ -304,7 +299,7 @@ const TerrawareHomeView = () => {
                         linkStyle={'plain'}
                       />
                     </Grid>
-                    <Grid item xs={primaryGridSize()}>
+                    <Grid item xs={primaryGridSize}>
                       <PageCard
                         id='seedbankHomeCard'
                         name={strings.SEED_BANKS}
@@ -317,7 +312,7 @@ const TerrawareHomeView = () => {
                     </Grid>
                   </>
                 )}
-                <Grid item xs={secondaryGridSize()}>
+                <Grid item xs={secondaryGridSize}>
                   <PageCard
                     id='speciesHomeCard'
                     name={strings.SPECIES}
@@ -328,7 +323,7 @@ const TerrawareHomeView = () => {
                     linkStyle={'plain'}
                   />
                 </Grid>
-                <Grid item xs={secondaryGridSize()}>
+                <Grid item xs={secondaryGridSize}>
                   <PageCard
                     id='accessionsHomeCard'
                     name={strings.ACCESSIONS}
@@ -340,7 +335,7 @@ const TerrawareHomeView = () => {
                   />
                 </Grid>
                 {isAdmin(selectedOrganization) && (
-                  <Grid item xs={secondaryGridSize()}>
+                  <Grid item xs={secondaryGridSize}>
                     <PageCard
                       cardIsClickable={false}
                       id='applicationHomeCard'

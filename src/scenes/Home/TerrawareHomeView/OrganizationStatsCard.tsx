@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Icon, IconName } from '@terraware/web-components';
@@ -25,12 +25,7 @@ const OrganizationStatsCard = ({ rows }: OrganizationStatsCardProps): JSX.Elemen
   const { isDesktop, isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  const primaryGridSize = () => {
-    if (isDesktop) {
-      return 3;
-    }
-    return 12;
-  };
+  const primaryGridSize = useMemo(() => (isDesktop ? 3 : 12), [isDesktop]);
 
   return (
     <Box
@@ -47,7 +42,7 @@ const OrganizationStatsCard = ({ rows }: OrganizationStatsCardProps): JSX.Elemen
       <PlantingSiteStats />
       {rows.map((row, index) => (
         <Grid key={index} container spacing={3} sx={{ marginBottom: '16px', padding: 0 }}>
-          <Grid item xs={primaryGridSize()}>
+          <Grid item xs={primaryGridSize}>
             <Box
               sx={{
                 alignItems: 'center',
@@ -82,18 +77,18 @@ const OrganizationStatsCard = ({ rows }: OrganizationStatsCardProps): JSX.Elemen
           </Grid>
 
           {(isDesktop || row.statsCardItems[0]) && (
-            <Grid item xs={primaryGridSize()}>
+            <Grid item xs={primaryGridSize}>
               {row.statsCardItems[0] && <StatsCardItem {...row.statsCardItems[0]} />}
             </Grid>
           )}
 
           {(isDesktop || row.statsCardItems[1]) && (
-            <Grid item xs={primaryGridSize()}>
+            <Grid item xs={primaryGridSize}>
               {row.statsCardItems[1] && <StatsCardItem {...row.statsCardItems[1]} />}
             </Grid>
           )}
 
-          <Grid item xs={primaryGridSize()}>
+          <Grid item xs={primaryGridSize}>
             {row.buttonProps && (
               <Box
                 sx={{
