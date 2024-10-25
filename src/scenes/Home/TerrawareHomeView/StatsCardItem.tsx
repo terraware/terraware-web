@@ -36,7 +36,6 @@ export const StatsCardItem = ({
         flexDirection: 'column',
         justifyContent: 'space-between',
         overflow: 'hidden',
-        padding: '8px 0',
         whiteSpace: 'nowrap',
       }}
     >
@@ -45,7 +44,7 @@ export const StatsCardItem = ({
           fontSize: '16px',
           fontWeight: 600,
           lineHeight: '24px',
-          marginBottom: '8px',
+          marginBottom: showLink ? '8px' : 0,
         }}
         title={label}
       >
@@ -56,7 +55,7 @@ export const StatsCardItem = ({
           fontSize: '24px',
           fontWeight: 600,
           lineHeight: '32px',
-          marginBottom: '8px',
+          marginBottom: showLink ? '8px' : 0,
         }}
         title={value}
       >

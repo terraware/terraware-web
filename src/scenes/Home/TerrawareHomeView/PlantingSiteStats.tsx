@@ -48,7 +48,7 @@ export const PlantingSiteStats = () => {
     ],
   };
   const geojsonString = encodeURIComponent(JSON.stringify(geojson));
-  const staticMapURL = `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/geojson(${geojsonString})/auto/580x360@2x?padding=100&access_token=${token}`;
+  const staticMapURL = `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/geojson(${geojsonString})/auto/580x360@2x?padding=80&access_token=${token}`;
 
   const primaryGridSize = useMemo(() => (isDesktop ? 6 : 12), [isDesktop]);
 
