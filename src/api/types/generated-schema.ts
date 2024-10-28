@@ -376,6 +376,10 @@ export interface paths {
     /** Update the workflow details for a variable in a project. */
     put: operations["updateVariableWorkflowDetails"];
   };
+  "/api/v1/document-producer/projects/{projectId}/workflow/{variableId}/history": {
+    /** Get the workflow history for a variable in a project. */
+    get: operations["getVariableWorkflowHistory"];
+  };
   "/api/v1/document-producer/templates": {
     /** Gets a list of all the valid document templates. */
     get: operations["listDocumentTemplates"];
@@ -2558,7 +2562,6 @@ export interface components {
     } & Omit<components["schemas"]["ExistingValuePayload"], "type"> & {
       textValue?: string;
     }, "id" | "listPosition" | "textValue" | "type">;
-    /** @description Values of this variable or this table cell. When getting the full set of values for a document, this will be the complete list of this variable's values in order of list position. When getting incremental changes to a document, this is only the items that have changed, and existing items won't be present. For example, if a variable is a list and has 3 values, and a fourth value is added, the incremental list of values in this payload will have one item and its list position will be 3 (since lists are 0-indexed). */
     ExistingValuePayload: {
       citation?: string;
       /** Format: int64 */
@@ -3004,6 +3007,11 @@ export interface components {
     GetUserResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
       user: components["schemas"]["UserProfilePayload"];
+    };
+    GetVariableWorkflowHistoryResponsePayload: {
+      history: components["schemas"]["VariableWorkflowHistoryElement"][];
+      status: components["schemas"]["SuccessOrError"];
+      variable: components["schemas"]["DateVariablePayload"] | components["schemas"]["ImageVariablePayload"] | components["schemas"]["LinkVariablePayload"] | components["schemas"]["NumberVariablePayload"] | components["schemas"]["SectionVariablePayload"] | components["schemas"]["SelectVariablePayload"] | components["schemas"]["TableVariablePayload"] | components["schemas"]["TextVariablePayload"];
     };
     GetViabilityTestPayload: {
       /** Format: int64 */
@@ -5563,6 +5571,23 @@ export interface components {
       /** @enum {string} */
       type: "Number" | "Text" | "Date" | "Image" | "Select" | "Table" | "Link" | "Section";
     };
+    VariableWorkflowHistoryElement: {
+      /** Format: int64 */
+      createdBy: number;
+      /** Format: date-time */
+      createdTime: string;
+      feedback?: string;
+      /** Format: int64 */
+      id: number;
+      internalComment?: string;
+      /** Format: int64 */
+      maxVariableValueId: number;
+      /** Format: int64 */
+      projectId: number;
+      /** @enum {string} */
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Incomplete" | "Complete";
+      variableValues: (components["schemas"]["ExistingDateValuePayload"] | components["schemas"]["ExistingDeletedValuePayload"] | components["schemas"]["ExistingImageValuePayload"] | components["schemas"]["ExistingLinkValuePayload"] | components["schemas"]["ExistingNumberValuePayload"] | components["schemas"]["ExistingSectionTextValuePayload"] | components["schemas"]["ExistingSectionVariableValuePayload"] | components["schemas"]["ExistingSelectValuePayload"] | components["schemas"]["ExistingTableValuePayload"] | components["schemas"]["ExistingTextValuePayload"])[];
+    };
     VersionsEntryPayload: {
       appName: string;
       minimumVersion: string;
@@ -7586,6 +7611,23 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Get the workflow history for a variable in a project. */
+  getVariableWorkflowHistory: {
+    parameters: {
+      path: {
+        projectId: number;
+        variableId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetVariableWorkflowHistoryResponsePayload"];
         };
       };
     };
