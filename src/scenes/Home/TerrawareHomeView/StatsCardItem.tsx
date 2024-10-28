@@ -36,7 +36,6 @@ export const StatsCardItem = ({
         flexDirection: 'column',
         justifyContent: 'space-between',
         overflow: 'hidden',
-        padding: '8px 0',
         whiteSpace: 'nowrap',
       }}
     >
@@ -45,7 +44,7 @@ export const StatsCardItem = ({
           fontSize: '16px',
           fontWeight: 600,
           lineHeight: '24px',
-          marginBottom: '8px',
+          marginBottom: showLink ? '8px' : 0,
         }}
         title={label}
       >
@@ -56,14 +55,16 @@ export const StatsCardItem = ({
           fontSize: '24px',
           fontWeight: 600,
           lineHeight: '32px',
-          marginBottom: '8px',
+          marginBottom: !isDesktop || showLink ? '8px' : 0,
         }}
         title={value}
       >
         {value || '-'}
       </Typography>
       {showLink && (
-        <Box sx={{ minHeight: '24px' }}>{linkText && linkOnClick && <Link onClick={linkOnClick}>{linkText}</Link>}</Box>
+        <Box sx={{ marginBottom: isDesktop ? 0 : '8px', minHeight: !isDesktop ? 0 : '24px' }}>
+          {linkText && linkOnClick && <Link onClick={linkOnClick}>{linkText}</Link>}
+        </Box>
       )}
     </Box>
   );
