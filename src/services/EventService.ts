@@ -1,7 +1,8 @@
-import { paths } from 'src/api/types/generated-schema';
+import { components, paths } from 'src/api/types/generated-schema';
+import { CreateModuleEventRequestPayload, UpdateModuleEventProjectsRequestPayload } from 'src/types/Event';
 import { ModuleEvent } from 'src/types/Module';
 
-import HttpService, { Response2 } from './HttpService';
+import HttpService, { Response, Response2 } from './HttpService';
 
 export type EventsData = {
   events: ModuleEvent[] | undefined;
@@ -12,12 +13,20 @@ export type EventData = {
 };
 
 const EVENTS_ENDPOINT = '/api/v1/accelerator/events';
-const EVENT_ENDPINT = '/api/v1/accelerator/events/{eventId}';
+const EVENT_ENDPONT = '/api/v1/accelerator/events/{eventId}';
+const EVENT_PROJECTS_ENDPOINT = '/api/v1/accelerator/events/{eventId}/projects';
 
 export type ListEventsResponsePayload =
   paths[typeof EVENTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 export type GetEventResponsePayload =
-  paths[typeof EVENT_ENDPINT]['get']['responses'][200]['content']['application/json'];
+  paths[typeof EVENT_ENDPONT]['get']['responses'][200]['content']['application/json'];
+export type CreateModuleEventResponsePayload =
+  paths[typeof EVENTS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+export type DeleteEventResponsePayload =
+  paths[typeof EVENT_ENDPONT]['delete']['responses'][200]['content']['application/json'];
+export type UpdateModuleEventRequestPayload = components['schemas']['UpdateModuleEventRequestPayload'];
+export type UpdateModuleEventResponsePayload =
+  paths[typeof EVENT_ENDPONT]['put']['responses'][200]['content']['application/json'];
 
 export type ListEventsRequestParam = {
   projectId?: number;
@@ -53,7 +62,7 @@ const list = ({ projectId, moduleId }: ListEventsRequestParam): Promise<Response
  * Get module data
  */
 const get = async (eventId: number): Promise<Response2<EventData | null>> => {
-  return HttpService.root(EVENT_ENDPINT).get<GetEventResponsePayload, { data: EventData | undefined }>(
+  return HttpService.root(EVENT_ENDPONT).get<GetEventResponsePayload, { data: EventData | undefined }>(
     {
       urlReplacements: { '{eventId}': `${eventId}` },
     },
@@ -65,9 +74,39 @@ const get = async (eventId: number): Promise<Response2<EventData | null>> => {
   );
 };
 
+/**
+ * Create an event
+ */
+const createEvent = (event: CreateModuleEventRequestPayload): Promise<Response> =>
+  HttpService.root(EVENTS_ENDPOINT).post({
+    entity: event,
+  });
+
+const updateEventProjects = (eventId: number, entity: UpdateModuleEventProjectsRequestPayload): Promise<Response> =>
+  HttpService.root(EVENT_PROJECTS_ENDPOINT.replace('{eventId}', eventId.toString())).post({
+    entity,
+  });
+
+const deleteEvent = (eventId: number) =>
+  HttpService.root(EVENT_ENDPONT).delete2<DeleteEventResponsePayload>({
+    url: EVENT_ENDPONT,
+    urlReplacements: { '{eventId}': `${eventId}` },
+  });
+
+const updateEvent = (eventId: number, payload: UpdateModuleEventRequestPayload) =>
+  HttpService.root(EVENT_ENDPONT).put2<UpdateModuleEventResponsePayload>({
+    url: EVENT_ENDPONT,
+    urlReplacements: { '{eventId}': `${eventId}` },
+    entity: payload,
+  });
+
 const EventService = {
   get,
   list,
+  createEvent,
+  updateEventProjects,
+  deleteEvent,
+  updateEvent,
 };
 
 export default EventService;

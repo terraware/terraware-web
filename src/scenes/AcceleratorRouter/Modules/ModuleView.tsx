@@ -1,19 +1,19 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Box } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Tabs } from '@terraware/web-components';
 
-import { Crumb } from 'src/components/BreadCrumbs';
-import Page from 'src/components/Page';
-import CommonTitleBar from 'src/components/common/TitleBar';
+import BackToLink from 'src/components/common/BackToLink';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import useGetModule from 'src/hooks/useGetModule';
-import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import ContentAndMaterials from './ContentAndMaterials';
+import Events from './Events';
 import ModuleDetails from './ModuleDetails';
 
 export const InventoryListTypes: Record<string, string> = {
@@ -41,10 +41,10 @@ export type InventoryResult = {
 };
 
 export default function ModuleView(): JSX.Element {
-  const { activeLocale } = useLocalization();
   const contentRef = useRef(null);
   const { moduleId } = useParams<{ moduleId: string }>();
-  const { getModule, module, deliverables } = useGetModule();
+  const { getModule, module, deliverables, events } = useGetModule();
+  const theme = useTheme();
 
   const deliverablesIds = new Set();
   const uniqueDeliverables = deliverables?.filter((d) => !deliverablesIds.has(d.id) && deliverablesIds.add(d.id));
@@ -70,7 +70,7 @@ export default function ModuleView(): JSX.Element {
         {
           id: 'events',
           label: strings.EVENTS,
-          children: <p>events</p>,
+          children: <Events module={module} events={events} />,
         },
       ]
     : [];
@@ -81,18 +81,27 @@ export default function ModuleView(): JSX.Element {
     viewIdentifier: 'accelerator-module-view',
   });
 
-  const crumbs: Crumb[] = useMemo(
-    () => [
-      {
-        name: activeLocale ? strings.MODULES : '',
-        to: APP_PATHS.ACCELERATOR_MODULES,
-      },
-    ],
-    [activeLocale]
-  );
-
   return (
-    <Page crumbs={crumbs} title={<CommonTitleBar title={module?.name} />}>
+    <TfMain>
+      <PageHeaderWrapper nextElement={contentRef.current}>
+        <Box sx={{ paddingBottom: theme.spacing(4), paddingLeft: theme.spacing(3) }}>
+          <Grid container>
+            <Grid item xs={12}>
+              <BackToLink
+                id='back'
+                to={APP_PATHS.ACCELERATOR_MODULES}
+                name={strings.MODULES}
+                style={{ marginBottom: theme.spacing(3) }}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography fontSize='24px' fontWeight={600}>
+                {module?.name}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Box>
+      </PageHeaderWrapper>
       <Box
         ref={contentRef}
         display='flex'
@@ -119,6 +128,6 @@ export default function ModuleView(): JSX.Element {
       >
         {moduleId && <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />}
       </Box>
-    </Page>
+    </TfMain>
   );
 }
