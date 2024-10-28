@@ -9,8 +9,6 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
 
-import OnboardingCardItem, { OnboardingCardItemProps } from './OnboardingCardItem';
-
 export type OnboardingCardRow = {
   buttonProps?: ButtonProps;
   icon: IconName;
@@ -35,23 +33,16 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
         background: theme.palette.TwClrBg,
         borderRadius: '8px',
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'row',
         justifyContent: 'space-between',
         padding: '16px',
       }}
     >
-      <Grid container spacing={3} sx={{ marginBottom: '16px', padding: 0 }}>
-        <Grid item xs={primaryGridSize}>
-          <Box
-            sx={{
-              marginBottom: isMobile ? '32px' : 0,
-              marginRight: isMobile ? 0 : '32px',
-            }}
-          >
+          <Box sx={{paddingRight: '48px'}}>
             <img alt={strings.TERRAWARE_MOBILE_APP_IMAGE_ALT} src={'/assets/onboarding.png'} />
           </Box>
-        </Grid>
-        <Grid item xs={12 - primaryGridSize}>
+          <Box>
+        <Grid container xs={12} sx={{ margin: 0, padding: 0 }}>
           <Typography
             component='p'
             variant='h6'
@@ -77,12 +68,11 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
             {strings.GET_STARTED_SUBTITLE}
           </Typography>
           {rows.map((row, index) => (
-            <Grid key={index} container spacing={3} sx={{ marginBottom: '16px', paddingTop: '24px' }}>
+            <Grid key={index} container sx={{ marginTop: '16px', marginBottom: '16px', marginLeft: '0px', marginRight: '0px' }}>
               <Grid
                 container
                 item
                 xs={12}
-                spacing={3}
                 sx={{
                   background: theme.palette.TwClrBgSecondary,
                   borderRadius: '8px',
@@ -91,9 +81,13 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                   justifyContent: 'center',
                   alignItems: 'center',
                   padding: '8px',
+                  marginLeft:'0px',
                 }}
               >
-                <Grid item xs={1}>
+                <Grid item xs={1} sx={{
+                  paddingLeft: '8px',
+                  margin:0,
+                }}>
                   <Box
                     sx={{
                       width: '46px',
@@ -111,7 +105,10 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                     {index}
                   </Box>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={2} sx={{
+                  padding: 0,
+                  margin:0,
+                }}>
                   <Box
                     sx={{
                       background: theme.palette.TwClrBaseGray025,
@@ -183,7 +180,7 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
             </Grid>
           ))}
         </Grid>
-      </Grid>
+      </Box>
     </Box>
   );
 };
