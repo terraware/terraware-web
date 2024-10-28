@@ -167,6 +167,7 @@ const PeopleView = () => {
         Renderer={PersonCellRenderer}
         rows={globalRoleUsers}
         topBarButtons={[<RemoveRolesTopBarButton key={1} onConfirm={onConfirmSelectionRemoveRoles} />]}
+        stickyFilters
       />
     </Page>
   );

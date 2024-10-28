@@ -226,6 +226,7 @@ const SingleView = () => {
                     fontSize={24}
                     fontWeight={600}
                     stringList={participantProject?.landUseModelTypes || []}
+                    moreText={strings.TRUNCATED_TEXT_MORE_LINK}
                   />
                 }
                 rightBorder={!isMobile}

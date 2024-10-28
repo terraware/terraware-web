@@ -5,6 +5,7 @@ import { CellRenderer, RendererProps, TableColumnType } from '@terraware/web-com
 import EditVariable from 'src/components/DocumentProducer/EditVariable';
 import PageContent from 'src/components/DocumentProducer/PageContent';
 import TableContent from 'src/components/DocumentProducer/TableContent';
+import VariableHistoryModal from 'src/components/Variables/VariableHistoryModal';
 import Link from 'src/components/common/Link';
 import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
 import strings from 'src/strings';
@@ -88,6 +89,7 @@ const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.E
   const [tableRows, setTableRows] = useState<TableRow[]>([]);
   const [variables, setVariables] = useState<VariableWithValues[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
+  const [openVariableHistoryModal, setOpenVariableHistoryModal] = useState<boolean>(false);
   const [openEditVariableModal, setOpenEditVariableModal] = useState<boolean>(false);
   const [selectedVariable, setSelectedVariable] = useState<VariableWithValues>();
   const [sectionsUsed, setSectionsUsed] = useState<string[]>([]);
@@ -170,6 +172,14 @@ const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.E
 
   return (
     <>
+      {openVariableHistoryModal && selectedVariable && (
+        <VariableHistoryModal
+          open={openVariableHistoryModal}
+          setOpen={setOpenVariableHistoryModal}
+          projectId={projectId}
+          variableId={selectedVariable.id}
+        />
+      )}
       {openEditVariableModal && selectedVariable && (
         <EditVariable
           onFinish={(updated: boolean) => {
@@ -179,6 +189,7 @@ const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.E
           projectId={projectId}
           variable={selectedVariable}
           sectionsUsed={sectionsUsed}
+          showVariableHistory={() => setOpenVariableHistoryModal(true)}
           onSectionClicked={onSectionClicked}
         />
       )}

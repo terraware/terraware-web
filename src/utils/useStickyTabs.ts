@@ -10,6 +10,7 @@ interface StickyTabsProps {
   defaultTab: string;
   tabs: Tab[];
   viewIdentifier: string;
+  keepQuery?: boolean;
 }
 
 const makeTabSessionKey = (viewIdentifier: string) => `tab-${viewIdentifier}`;
@@ -29,7 +30,7 @@ const writeTabToSession = (viewIdentifier: string, tab: string): void => {
   } catch (e) {}
 };
 
-const useStickyTabs = ({ defaultTab, tabs, viewIdentifier }: StickyTabsProps) => {
+const useStickyTabs = ({ defaultTab, tabs, viewIdentifier, keepQuery = true }: StickyTabsProps) => {
   const location = useStateLocation();
   const navigate = useNavigate();
   const query = useQuery();
@@ -40,7 +41,8 @@ const useStickyTabs = ({ defaultTab, tabs, viewIdentifier }: StickyTabsProps) =>
   const onTabChange = useCallback(
     (newTab: string) => {
       query.set('tab', newTab);
-      navigate(getLocation(location.pathname, location, query.toString()));
+      const emptyQuery = tab === newTab ? query.toString() : new URLSearchParams(`tab=${newTab}`);
+      navigate(getLocation(location.pathname, location, keepQuery ? query.toString() : emptyQuery.toString()));
       writeTabToSession(viewIdentifier, newTab);
     },
     [navigate, location, query, viewIdentifier]

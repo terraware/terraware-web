@@ -81,6 +81,12 @@ export default function PeopleListView(): JSX.Element {
                 type,
                 values,
               },
+              {
+                operation: 'field',
+                field: 'user_email',
+                type: 'Exact',
+                values,
+              },
             ],
           }
         : null;

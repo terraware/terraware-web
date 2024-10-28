@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, CircularProgress, Container, Grid, SxProps, Typography, useTheme } from '@mui/material';
@@ -10,11 +10,11 @@ import Link from 'src/components/common/Link';
 import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
-import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
+import { APP_PATHS } from 'src/constants';
+import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
 import { useOrganization } from 'src/providers/hooks';
 import AccessionByStatus from 'src/scenes/SeedsDashboard/AccessionByStatus';
 import SummaryPaper from 'src/scenes/SeedsDashboard/SummaryPaper';
-import SeedBankService, { SummaryResponse } from 'src/services/SeedBankService';
 import strings from 'src/strings';
 import { AccessionState, stateName } from 'src/types/Accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -27,13 +27,12 @@ Cookies.defaults = {
 export default function SeedSummary(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const navigate = useNavigate();
-  // populateSummaryInterval value is only being used when it is set.
-  const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
-  const [summary, setSummary] = useState<SummaryResponse>();
-  const [isEmptyState, setIsEmptyState] = useState<boolean>(false);
-  const errorOccurred = summary ? !summary.requestSucceeded : false;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
+
+  const seedBankSummary = useSeedBankSummary();
+  const isEmptyState = seedBankSummary ? !seedBankSummary.value?.activeAccessions : false;
+  const errorOccurred = seedBankSummary ? !seedBankSummary.requestSucceeded : false;
 
   const paperStyles: SxProps = {
     display: 'flex',
@@ -45,42 +44,6 @@ export default function SeedSummary(): JSX.Element {
     backgroundColor: theme.palette.TwClrBg,
     padding: theme.spacing(3),
   };
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      const populateSummary = async () => {
-        const response = await SeedBankService.getSummary(selectedOrganization.id);
-        if (!response.value?.activeAccessions) {
-          setIsEmptyState(true);
-        }
-        setSummary(response);
-      };
-
-      // Update summary information
-      populateSummary();
-
-      // Update interval that keeps summary up to date
-      if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {
-        setPopulateSummaryInterval((currInterval) => {
-          if (currInterval) {
-            // Clear an existing interval when the facilityId changes
-            clearInterval(currInterval);
-          }
-          return setInterval(populateSummary, API_PULL_INTERVAL);
-        });
-      }
-    }
-
-    // Clear interval on exit
-    return () => {
-      setPopulateSummaryInterval((currInterval) => {
-        if (currInterval) {
-          clearInterval(currInterval);
-        }
-        return undefined;
-      });
-    };
-  }, [selectedOrganization]);
 
   const cardGridSize = () => {
     if (isMobile) {
@@ -106,7 +69,7 @@ export default function SeedSummary(): JSX.Element {
         snackbarPageKey={'seeds'}
       />
       <Container maxWidth={false} sx={{ padding: 0 }}>
-        {selectedOrganization && summary ? (
+        {selectedOrganization && seedBankSummary ? (
           <Grid container spacing={3}>
             {isEmptyState === true && (
               <Grid item xs={12} paddingBottom={theme.spacing(1)}>
@@ -160,12 +123,13 @@ export default function SeedSummary(): JSX.Element {
                       id='seedCount'
                       title={strings.TOTAL_SEED_COUNT}
                       icon='seedbankNav'
-                      statistic={`${summary?.value?.seedsRemaining.total}${
-                        summary?.value?.seedsRemaining && summary?.value?.seedsRemaining.unknownQuantityAccessions > 0
+                      statistic={`${seedBankSummary?.value?.seedsRemaining.total}${
+                        seedBankSummary?.value?.seedsRemaining &&
+                        seedBankSummary?.value?.seedsRemaining.unknownQuantityAccessions > 0
                           ? '+'
                           : ''
                       }`}
-                      loading={summary === undefined}
+                      loading={seedBankSummary === undefined}
                       error={errorOccurred}
                     />
                   </MainPaper>
@@ -176,8 +140,8 @@ export default function SeedSummary(): JSX.Element {
                       id='sessions'
                       title={strings.TOTAL_ACTIVE_ACCESSIONS}
                       icon='seeds'
-                      statistic={summary?.value?.activeAccessions}
-                      loading={summary === undefined}
+                      statistic={seedBankSummary?.value?.activeAccessions}
+                      loading={seedBankSummary === undefined}
                       error={errorOccurred}
                       tooltipTitle={strings.TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS}
                     />
@@ -189,8 +153,8 @@ export default function SeedSummary(): JSX.Element {
                       id='species'
                       title={strings.NUMBER_OF_SPECIES}
                       icon='species'
-                      statistic={summary?.value?.species}
-                      loading={summary === undefined}
+                      statistic={seedBankSummary?.value?.species}
+                      loading={seedBankSummary === undefined}
                       error={errorOccurred}
                     />
                   </MainPaper>
@@ -221,7 +185,7 @@ export default function SeedSummary(): JSX.Element {
                           <AccessionByStatus
                             label={stateName(state)}
                             status={stateName(state)}
-                            quantity={summary.value?.accessionsByState[state]}
+                            quantity={seedBankSummary.value?.accessionsByState[state]}
                           />
                         </Grid>
                       ))}

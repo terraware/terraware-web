@@ -1,5 +1,5 @@
 import { clearHttpServiceMocks, setHttpServiceMocks } from './HttpServiceMocks';
-import NurseryFacilitiesService from '../NurseryFacilitiesService';
+import NurserySummaryService from '../NurserySummaryService';
 
 describe('Nursery Facilities service', () => {
   beforeEach(() => {
@@ -38,7 +38,7 @@ describe('Nursery Facilities service', () => {
         get: () => Promise.resolve(mockResponse),
       });
 
-      expect(await NurseryFacilitiesService.getNurserySummary(1)).toEqual(mockResponse);
+      expect(await NurserySummaryService.getNurserySummary(1)).toEqual(mockResponse);
     });
   });
 });

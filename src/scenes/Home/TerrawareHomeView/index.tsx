@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
+import { useNavigate } from 'react-router-dom';
 
-import { Box, Container, Grid, SxProps, Typography, useTheme } from '@mui/material';
-import { Props as ButtonProps } from '@terraware/web-components/components/Button/Button';
-import { useDeviceInfo } from '@terraware/web-components/utils';
+import { Box, Container, Grid } from '@mui/material';
+import { IconName } from '@terraware/web-components';
+import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
 import PageHeader from 'src/components/PageHeader';
 import Link from 'src/components/common/Link';
 import PageCard from 'src/components/common/PageCard';
 import TfMain from 'src/components/common/TfMain';
-import Button from 'src/components/common/button/Button';
 import {
   ACCELERATOR_LINK,
   APP_PATHS,
@@ -17,141 +17,73 @@ import {
   TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK,
 } from 'src/constants';
 import isEnabled from 'src/features';
+import { useOrgNurserySummary } from 'src/hooks/useOrgNurserySummary';
+import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
-import { useOrganization, useUser } from 'src/providers';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
+import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
+import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
 
-import NewApplicationModal from '../ApplicationRouter/NewApplicationModal';
-
-type CTACardProps = {
-  buttonsContainerSx?: SxProps;
-  description: string | (string | JSX.Element)[];
-  imageSource?: string;
-  padding?: number | string;
-  primaryButtonProps?: ButtonProps;
-  secondaryButtonProps?: ButtonProps;
-  title?: string | (string | JSX.Element)[];
-};
-
-const CTACard = ({
-  buttonsContainerSx,
-  description,
-  imageSource,
-  padding = '24px',
-  primaryButtonProps,
-  secondaryButtonProps,
-  title,
-}: CTACardProps): JSX.Element => {
-  const { isDesktop, isMobile, isTablet } = useDeviceInfo();
-  const theme = useTheme();
-
-  return (
-    <Box
-      sx={{
-        alignItems: 'center',
-        background: theme.palette.TwClrBg,
-        borderRadius: '8px',
-        display: 'flex',
-        flexDirection: isDesktop ? 'row' : 'column',
-        height: '100%',
-        justifyContent: 'space-between',
-        padding,
-      }}
-    >
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: isMobile ? 'column' : 'row',
-        }}
-      >
-        {imageSource && (
-          <Box
-            sx={{
-              marginBottom: isMobile ? '32px' : 0,
-              marginRight: isMobile ? 0 : '32px',
-              textAlign: 'center',
-            }}
-          >
-            <img src={imageSource} />
-          </Box>
-        )}
-        <Box>
-          {title && (
-            <Typography
-              component='p'
-              variant='h6'
-              sx={{
-                color: theme.palette.TwClrTxt,
-                fontSize: '16px',
-                fontWeight: 600,
-                lineHeight: '24px',
-              }}
-            >
-              {title}
-            </Typography>
-          )}
-          <Typography
-            component='p'
-            variant='h6'
-            sx={{
-              color: theme.palette.TwClrTxt,
-              fontSize: '16px',
-              fontWeight: 400,
-              lineHeight: '24px',
-            }}
-          >
-            {description}
-          </Typography>
-        </Box>
-      </Box>
-
-      <Box
-        sx={[
-          {
-            display: 'flex',
-            flexDirection: isMobile ? 'column' : 'row',
-            marginLeft: isDesktop ? '27px' : 0,
-            marginTop: isMobile || isTablet ? '32px' : 0,
-            whiteSpace: 'nowrap',
-          },
-          ...(Array.isArray(buttonsContainerSx) ? buttonsContainerSx : [buttonsContainerSx]),
-        ]}
-      >
-        {primaryButtonProps && <Button priority='secondary' type='productive' {...primaryButtonProps} />}
-        {secondaryButtonProps && (
-          <Button
-            priority='secondary'
-            style={{
-              marginLeft: isMobile ? 0 : '19px',
-              marginTop: isMobile ? '19px' : 0,
-            }}
-            type='passive'
-            {...secondaryButtonProps}
-          />
-        )}
-      </Box>
-    </Box>
-  );
-};
+import CTACard from './CTACard';
+import OrganizationStatsCard, { OrganizationStatsCardRow } from './OrganizationStatsCard';
 
 const TerrawareHomeView = () => {
+  const { activeLocale } = useLocalization();
   const { user } = useUser();
   const { selectedOrganization } = useOrganization();
   const { isTablet, isMobile } = useDeviceInfo();
   const mixpanel = useMixpanel();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const plantingSites = useAppSelector(selectPlantingSites);
+  const { availableSpecies } = useSpecies();
+  const seedBankSummary = useSeedBankSummary();
+  const orgNurserySummary = useOrgNurserySummary();
   const homePageOnboardingImprovementsEnabled = isEnabled('Home Page Onboarding Improvements');
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 
-  const primaryGridSize = () => {
-    if (isMobile) {
-      return 12;
-    }
-    return 6;
-  };
+  useEffect(() => {
+    dispatch(requestObservations(selectedOrganization.id));
+    dispatch(requestObservationsResults(selectedOrganization.id));
+  }, [dispatch, selectedOrganization.id]);
 
-  const secondaryGridSize = () => {
+  const isLoadingInitialData = useMemo(
+    () =>
+      availableSpecies === undefined ||
+      orgNurserySummary?.requestSucceeded === undefined ||
+      seedBankSummary?.requestSucceeded === undefined,
+    [availableSpecies, orgNurserySummary, seedBankSummary]
+  );
+
+  const showHomePageOnboardingImprovements = useMemo(
+    () =>
+      homePageOnboardingImprovementsEnabled &&
+      typeof availableSpecies?.length === 'number' &&
+      availableSpecies?.length > 0,
+    [availableSpecies, homePageOnboardingImprovementsEnabled]
+  );
+
+  const speciesLastModifiedDate = useMemo(() => {
+    if (!availableSpecies?.length) {
+      return undefined;
+    }
+
+    const lastModifiedTime = availableSpecies.sort(
+      (a, b) => new Date(b.modifiedTime).getTime() - new Date(a.modifiedTime).getTime()
+    )[0].modifiedTime;
+
+    return getDateDisplayValue(lastModifiedTime);
+  }, [availableSpecies]);
+
+  const primaryGridSize = useMemo(() => (isMobile ? 12 : 6), [isMobile]);
+
+  const secondaryGridSize = useMemo(() => {
     if (isMobile) {
       return 12;
     }
@@ -159,7 +91,110 @@ const TerrawareHomeView = () => {
       return 6;
     }
     return 4;
-  };
+  }, [isMobile, isTablet]);
+
+  const organizationStatsCardRows: OrganizationStatsCardRow[] = useMemo(() => {
+    if (!activeLocale) {
+      return [];
+    }
+
+    const rows = [
+      {
+        buttonProps: isAdmin(selectedOrganization)
+          ? {
+              label: strings.ADD_SPECIES,
+              onClick: () => {
+                navigate(APP_PATHS.SPECIES_NEW);
+              },
+            }
+          : undefined,
+        icon: 'seeds' as IconName,
+        statsCardItems: [
+          { label: strings.TOTAL_SPECIES, value: availableSpecies?.length.toString() },
+          {
+            label: strings.LAST_UPDATED,
+            value: speciesLastModifiedDate,
+          },
+        ],
+        title: strings.SPECIES,
+      },
+      {
+        buttonProps: isAdmin(selectedOrganization)
+          ? {
+              label: strings.SET_UP_SEED_BANK,
+              onClick: () => {
+                navigate(APP_PATHS.SEED_BANKS_NEW);
+              },
+            }
+          : {
+              label: strings.ADD_AN_ACCESSION,
+              onClick: () => {
+                navigate(APP_PATHS.ACCESSIONS2_NEW);
+              },
+            },
+        icon: 'seeds' as IconName,
+        statsCardItems: [
+          {
+            label: strings.TOTAL_SEED_COUNT,
+            value: seedBankSummary?.value?.seedsRemaining.total?.toString(),
+          },
+          {
+            label: strings.TOTAL_ACTIVE_ACCESSIONS,
+            linkOnClick: () => {
+              navigate(APP_PATHS.SEEDS_DASHBOARD);
+            },
+            linkText: strings.VIEW_FULL_DASHBOARD,
+            value: seedBankSummary?.value?.activeAccessions?.toString(),
+          },
+        ],
+        title: strings.SEEDS,
+      },
+      {
+        buttonProps: isAdmin(selectedOrganization)
+          ? {
+              label: strings.SET_UP_NURSERY,
+              onClick: () => {
+                navigate(APP_PATHS.NURSERIES_NEW);
+              },
+            }
+          : {
+              label: strings.ADD_INVENTORY,
+              onClick: () => {
+                navigate(APP_PATHS.INVENTORY_NEW);
+              },
+            },
+        icon: 'iconSeedling' as IconName,
+        statsCardItems: [
+          { label: strings.TOTAL_SEEDLINGS_COUNT, value: orgNurserySummary?.totalQuantity?.toString() },
+          { label: strings.TOTAL_SEEDLINGS_SENT, value: orgNurserySummary?.totalWithdrawn?.toString() },
+        ],
+        title: strings.SEEDLINGS,
+      },
+    ];
+
+    if (!plantingSites?.length) {
+      rows.push({
+        buttonProps: {
+          label: strings.ADD_PLANTING_SITE,
+          onClick: () => {
+            navigate(APP_PATHS.PLANTING_SITES_NEW);
+          },
+        },
+        icon: 'iconRestorationSite' as IconName,
+        statsCardItems: [],
+        title: strings.PLANTS,
+      });
+    }
+
+    return rows;
+  }, [
+    activeLocale,
+    availableSpecies,
+    orgNurserySummary,
+    seedBankSummary,
+    selectedOrganization,
+    speciesLastModifiedDate,
+  ]);
 
   return (
     <TfMain>
@@ -173,7 +208,7 @@ const TerrawareHomeView = () => {
           flexDirection: 'column',
         }}
       >
-        {homePageOnboardingImprovementsEnabled ? (
+        {isLoadingInitialData ? null : showHomePageOnboardingImprovements ? (
           <Box paddingRight={'24px'} paddingLeft={isMobile ? '24px' : 0}>
             <PageHeader
               title={
@@ -186,8 +221,13 @@ const TerrawareHomeView = () => {
             <Container maxWidth={false} sx={{ padding: 0 }}>
               <Grid container spacing={3} sx={{ padding: 0 }}>
                 <Grid item xs={12}>
+                  <OrganizationStatsCard rows={organizationStatsCardRows} />
+                </Grid>
+
+                <Grid item xs={12}>
                   <CTACard
                     description={strings.DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION}
+                    imageAlt={strings.TERRAWARE_MOBILE_APP_IMAGE_ALT}
                     imageSource='/assets/terraware-mobile-app.svg'
                     padding='32px'
                     primaryButtonProps={{
@@ -226,7 +266,7 @@ const TerrawareHomeView = () => {
                       </Link>
                     )}
                     primaryButtonProps={{
-                      label: strings.APPLY,
+                      label: strings.APPLY_TO_ACCELERATOR,
                       onClick: () => {
                         mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_APPLY_BUTTON);
                         setIsNewApplicationModalOpen(true);
@@ -248,7 +288,7 @@ const TerrawareHomeView = () => {
               <Grid container spacing={3} sx={{ padding: 0 }}>
                 {isAdmin(selectedOrganization) && (
                   <>
-                    <Grid item xs={primaryGridSize()}>
+                    <Grid item xs={primaryGridSize}>
                       <PageCard
                         id='peopleHomeCard'
                         name={strings.PEOPLE}
@@ -259,7 +299,7 @@ const TerrawareHomeView = () => {
                         linkStyle={'plain'}
                       />
                     </Grid>
-                    <Grid item xs={primaryGridSize()}>
+                    <Grid item xs={primaryGridSize}>
                       <PageCard
                         id='seedbankHomeCard'
                         name={strings.SEED_BANKS}
@@ -272,7 +312,7 @@ const TerrawareHomeView = () => {
                     </Grid>
                   </>
                 )}
-                <Grid item xs={secondaryGridSize()}>
+                <Grid item xs={secondaryGridSize}>
                   <PageCard
                     id='speciesHomeCard'
                     name={strings.SPECIES}
@@ -283,7 +323,7 @@ const TerrawareHomeView = () => {
                     linkStyle={'plain'}
                   />
                 </Grid>
-                <Grid item xs={secondaryGridSize()}>
+                <Grid item xs={secondaryGridSize}>
                   <PageCard
                     id='accessionsHomeCard'
                     name={strings.ACCESSIONS}
@@ -295,7 +335,7 @@ const TerrawareHomeView = () => {
                   />
                 </Grid>
                 {isAdmin(selectedOrganization) && (
-                  <Grid item xs={secondaryGridSize()}>
+                  <Grid item xs={secondaryGridSize}>
                     <PageCard
                       cardIsClickable={false}
                       id='applicationHomeCard'

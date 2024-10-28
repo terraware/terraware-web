@@ -46,6 +46,9 @@ export default function ModuleView(): JSX.Element {
   const { getModule, module, deliverables, events } = useGetModule();
   const theme = useTheme();
 
+  const deliverablesIds = new Set();
+  const uniqueDeliverables = deliverables?.filter((d) => !deliverablesIds.has(d.id) && deliverablesIds.add(d.id));
+
   useEffect(() => {
     if (moduleId) {
       getModule({ moduleId: Number(moduleId) });
@@ -62,7 +65,7 @@ export default function ModuleView(): JSX.Element {
         {
           id: 'contentAndMaterials',
           label: strings.CONTENT_AND_MATERIALS,
-          children: <ContentAndMaterials module={module} deliverables={deliverables} />,
+          children: <ContentAndMaterials module={module} deliverables={uniqueDeliverables} />,
         },
         {
           id: 'events',
@@ -117,6 +120,9 @@ export default function ModuleView(): JSX.Element {
             display: 'flex',
             flexDirection: 'column',
             flexGrow: 1,
+          },
+          '& .MuiTab-root': {
+            textTransform: 'none',
           },
         }}
       >
