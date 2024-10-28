@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -187,7 +187,16 @@
 <a name='L122'></a><a href='#L122'>122</a>
 <a name='L123'></a><a href='#L123'>123</a>
 <a name='L124'></a><a href='#L124'>124</a>
-<a name='L125'></a><a href='#L125'>125</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -271,16 +280,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -311,22 +310,41 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useMemo, useRef } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 &nbsp;
-import { Box } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Tabs } from '@terraware/web-components';
 &nbsp;
-import { Crumb } from 'src/components/BreadCrumbs';
-import Page from 'src/components/Page';
-import CommonTitleBar from 'src/components/common/TitleBar';
+import BackToLink from 'src/components/common/BackToLink';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import useGetModule from 'src/hooks/useGetModule';
-import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 &nbsp;
 import ContentAndMaterials from './ContentAndMaterials';
+import Events from './Events';
 import ModuleDetails from './ModuleDetails';
 &nbsp;
 export const InventoryListTypes: Record&lt;string, string&gt; = <span class="cstat-no" title="statement not covered" >{</span>
@@ -354,10 +372,10 @@ export type InventoryResult = {
 };
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >ModuleView(</span>): JSX.Element {
-  const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const contentRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
   const { moduleId } = <span class="cstat-no" title="statement not covered" >useParams&lt;{ moduleId: string }&gt;();</span>
-  const { getModule, module, deliverables } = <span class="cstat-no" title="statement not covered" >useGetModule();</span>
+  const { getModule, module, deliverables, events } = <span class="cstat-no" title="statement not covered" >useGetModule();</span>
+  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
   const deliverablesIds = <span class="cstat-no" title="statement not covered" >new Set();</span>
   const uniqueDeliverables = <span class="cstat-no" title="statement not covered" >deliverables?.filter(<span class="fstat-no" title="function not covered" >(d</span>) =&gt; <span class="cstat-no" title="statement not covered" >!deliverablesIds.has(d.id) &amp;&amp; deliverablesIds.add(d.id))</span>;</span>
@@ -383,7 +401,7 @@ export default function <span class="fstat-no" title="function not covered" >Mod
         {
           id: 'events',
           label: strings.EVENTS,
-          children: &lt;p&gt;events&lt;/p&gt;,
+          children: &lt;Events module={module} events={events} /&gt;,
         },
       ]
     : [];
@@ -394,18 +412,27 @@ export default function <span class="fstat-no" title="function not covered" >Mod
     viewIdentifier: 'accelerator-module-view',
   });
 &nbsp;
-  const crumbs: Crumb[] = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >[</span>
-      {
-        name: activeLocale ? strings.MODULES : '',
-        to: APP_PATHS.ACCELERATOR_MODULES,
-      },
-    ],
-    [activeLocale]
-  );
-&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Page crumbs={crumbs} title={&lt;CommonTitleBar title={module?.name} /&gt;}&gt;
+    &lt;TfMain&gt;
+      &lt;PageHeaderWrapper nextElement={contentRef.current}&gt;
+        &lt;Box sx={{ paddingBottom: theme.spacing(4), paddingLeft: theme.spacing(3) }}&gt;
+          &lt;Grid container&gt;
+            &lt;Grid item xs={12}&gt;
+              &lt;BackToLink
+                id='back'
+                to={APP_PATHS.ACCELERATOR_MODULES}
+                name={strings.MODULES}
+                style={{ marginBottom: theme.spacing(3) }}
+              /&gt;
+            &lt;/Grid&gt;
+            &lt;Grid item xs={12}&gt;
+              &lt;Typography fontSize='24px' fontWeight={600}&gt;
+                {module?.name}
+              &lt;/Typography&gt;
+            &lt;/Grid&gt;
+          &lt;/Grid&gt;
+        &lt;/Box&gt;
+      &lt;/PageHeaderWrapper&gt;
       &lt;Box
         ref={contentRef}
         display='flex'
@@ -432,7 +459,7 @@ export default function <span class="fstat-no" title="function not covered" >Mod
       &gt;
         {moduleId &amp;&amp; &lt;Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} /&gt;}
       &lt;/Box&gt;
-    &lt;/Page&gt;
+    &lt;/TfMain&gt;
   );
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -442,7 +469,7 @@ export default function <span class="fstat-no" title="function not covered" >Mod
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-28T19:07:14.227Z
+                at 2024-10-28T19:19:26.221Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
