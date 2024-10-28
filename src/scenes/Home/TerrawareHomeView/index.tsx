@@ -25,11 +25,11 @@ import { requestObservations, requestObservationsResults } from 'src/redux/featu
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
+import CTACard from 'src/scenes/Home/CTACard';
 import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
 
-import CTACard from './CTACard';
 import OrganizationStatsCard, { OrganizationStatsCardRow } from './OrganizationStatsCard';
 
 const TerrawareHomeView = () => {

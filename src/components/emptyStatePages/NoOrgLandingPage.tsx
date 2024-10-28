@@ -5,6 +5,7 @@ import { Box, Container, useTheme } from '@mui/material';
 import AddNewOrganizationModal from 'src/components/AddNewOrganizationModal';
 import PageSnackbar from 'src/components/PageSnackbar';
 import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
+import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
@@ -23,12 +24,15 @@ export default function NoOrgLandingPage(): JSX.Element {
   const theme = useTheme();
   const [isOrgModalOpen, setIsOrgModalOpen] = useState<boolean>(false);
   const { redirectAndNotify } = useOrganization();
+  const homePageOnboardingImprovementsEnabled = isEnabled('Home Page Onboarding Improvements');
 
-  const listItemContents: ListItemContent[] = [
-    { icon: 'organization', title: strings.ORGANIZATION, description: strings.DESCRIPTION_ORGANIZATION },
-    { icon: 'people', title: strings.PEOPLE, description: strings.DESCRIPTION_PEOPLE },
-    { icon: 'species2', title: strings.SPECIES, description: strings.DESCRIPTION_SPECIES },
-  ];
+  const listItemContents: ListItemContent[] = homePageOnboardingImprovementsEnabled
+    ? [{ icon: 'organization' }]
+    : [
+        { icon: 'organization', title: strings.ORGANIZATION, description: strings.DESCRIPTION_ORGANIZATION },
+        { icon: 'people', title: strings.PEOPLE, description: strings.DESCRIPTION_PEOPLE },
+        { icon: 'species2', title: strings.SPECIES, description: strings.DESCRIPTION_SPECIES },
+      ];
 
   return (
     <Box
@@ -45,10 +49,11 @@ export default function NoOrgLandingPage(): JSX.Element {
       <Container
         sx={{
           background: theme.palette.TwClrBg,
-          borderRadius: '24px',
+          borderRadius: homePageOnboardingImprovementsEnabled ? '8px' : '24px',
           margin: '0 auto',
           maxWidth: '900px',
           padding: isMobile ? '24px 26px' : '40px 26px',
+          boxShadow: homePageOnboardingImprovementsEnabled ? '0px 4px 8px 0px #3A444533' : 'none',
         }}
       >
         <PageSnackbar />
@@ -58,7 +63,7 @@ export default function NoOrgLandingPage(): JSX.Element {
           onSuccess={(organization: Organization) => redirectAndNotify(organization)}
         />
         <EmptyStateContent
-          title={strings.TITLE_WELCOME}
+          title={strings.TITLE_WELCOME_EXCLAM}
           subtitle={strings.SUBTITLE_GET_STARTED}
           listItems={listItemContents}
           buttonText={strings.CREATE_ORGANIZATION}
