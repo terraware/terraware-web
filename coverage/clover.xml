@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1730130538838" clover="3.2.0">
-  <project timestamp="1730130538838" name="All files">
-    <metrics statements="25894" coveredstatements="1056" conditionals="17089" coveredconditionals="282" methods="7963" coveredmethods="176" elements="50946" coveredelements="1514" complexity="0" loc="25894" ncloc="25894" packages="237" files="1112" classes="1112"/>
+<coverage generated="1730142434963" clover="3.2.0">
+  <project timestamp="1730142434963" name="All files">
+    <metrics statements="25895" coveredstatements="1056" conditionals="17103" coveredconditionals="282" methods="7963" coveredmethods="176" elements="50961" coveredelements="1514" complexity="0" loc="25895" ncloc="25895" packages="237" files="1112" classes="1112"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -18952,7 +18952,7 @@
       </file>
     </package>
     <package name="src.scenes.Home.TerrawareHomeView">
-      <metrics statements="98" coveredstatements="0" conditionals="138" coveredconditionals="0" methods="36" coveredmethods="0"/>
+      <metrics statements="99" coveredstatements="0" conditionals="152" coveredconditionals="0" methods="36" coveredmethods="0"/>
       <file name="CTACard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/TerrawareHomeView/CTACard.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="31" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="20" count="0" type="stmt"/>
@@ -18970,41 +18970,42 @@
         <line num="44" count="0" type="stmt"/>
       </file>
       <file name="PlantingSiteStats.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/TerrawareHomeView/PlantingSiteStats.tsx">
-        <metrics statements="24" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="8" coveredmethods="0"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
+        <metrics statements="25" coveredstatements="0" conditionals="32" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
-        <line num="33" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="53" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="57" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="62" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="63" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="36" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="60" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="65" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="66" count="0" type="stmt"/>
-        <line num="133" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="134" count="0" type="stmt"/>
         <line num="195" count="0" type="stmt"/>
-        <line num="206" count="0" type="stmt"/>
+        <line num="207" count="0" type="stmt"/>
       </file>
       <file name="StatsCardItem.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/TerrawareHomeView/StatsCardItem.tsx">
-        <metrics statements="4" coveredstatements="0" conditionals="15" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <metrics statements="4" coveredstatements="0" conditionals="25" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="17" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/TerrawareHomeView/index.tsx">
-        <metrics statements="60" coveredstatements="0" conditionals="42" coveredconditionals="0" methods="23" coveredmethods="0"/>
+        <metrics statements="60" coveredstatements="0" conditionals="44" coveredconditionals="0" methods="23" coveredmethods="0"/>
         <line num="35" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
@@ -19051,20 +19052,20 @@
         <line num="163" count="0" type="stmt"/>
         <line num="175" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="176" count="0" type="stmt"/>
-        <line num="180" count="0" type="stmt"/>
-        <line num="189" count="0" type="stmt"/>
-        <line num="199" count="0" type="stmt"/>
+        <line num="181" count="0" type="stmt"/>
+        <line num="191" count="0" type="stmt"/>
         <line num="201" count="0" type="stmt"/>
-        <line num="236" count="0" type="stmt"/>
-        <line num="243" count="0" type="stmt"/>
-        <line num="261" count="0" type="stmt"/>
-        <line num="262" count="0" type="stmt"/>
-        <line num="271" count="0" type="stmt"/>
-        <line num="272" count="0" type="stmt"/>
-        <line num="350" count="0" type="stmt"/>
-        <line num="351" count="0" type="stmt"/>
-        <line num="361" count="0" type="stmt"/>
-        <line num="362" count="0" type="stmt"/>
+        <line num="203" count="0" type="stmt"/>
+        <line num="238" count="0" type="stmt"/>
+        <line num="245" count="0" type="stmt"/>
+        <line num="263" count="0" type="stmt"/>
+        <line num="264" count="0" type="stmt"/>
+        <line num="273" count="0" type="stmt"/>
+        <line num="274" count="0" type="stmt"/>
+        <line num="352" count="0" type="stmt"/>
+        <line num="353" count="0" type="stmt"/>
+        <line num="363" count="0" type="stmt"/>
+        <line num="364" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.InventoryRouter">
