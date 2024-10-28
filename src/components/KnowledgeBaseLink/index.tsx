@@ -11,7 +11,7 @@ import strings from 'src/strings';
 export default function KnowledgeBaseLink(): JSX.Element {
   const theme = useTheme();
   const knowledgeBaseLinks = useKnowledgeBaseLinks();
-  const [currentLink, setCurrentLink] = useState(knowledgeBaseLinks.home);
+  const [currentLink, setCurrentLink] = useState(knowledgeBaseLinks['/home']);
   const location = useLocation();
 
   const onClick = () => {
@@ -19,7 +19,7 @@ export default function KnowledgeBaseLink(): JSX.Element {
   };
 
   useEffect(() => {
-    setCurrentLink(knowledgeBaseLinks.home);
+    setCurrentLink(knowledgeBaseLinks['/home']);
     for (const key in knowledgeBaseLinks) {
       if ((location.pathname + location.search).match(key)) {
         setCurrentLink(knowledgeBaseLinks[key as keyof typeof KnowledgeBaseLink]);
