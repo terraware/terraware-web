@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { IconName } from '@terraware/web-components';
 import { Icon } from '@terraware/web-components';
 import { Props as ButtonProps } from '@terraware/web-components/components/Button/Button';
@@ -24,8 +24,6 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
   const { isDesktop, isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  const primaryGridSize = useMemo(() => (isDesktop ? 3 : 12), [isDesktop]);
-
   return (
     <Box
       sx={{
@@ -38,11 +36,11 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
         padding: '16px',
       }}
     >
-          <Box sx={{paddingRight: '48px'}}>
-            <img alt={strings.TERRAWARE_MOBILE_APP_IMAGE_ALT} src={'/assets/onboarding.png'} />
-          </Box>
-          <Box>
-        <Grid container xs={12} sx={{ margin: 0, padding: 0 }}>
+      <Box sx={{ paddingRight: '48px' }}>
+        <img alt={strings.TERRAWARE_MOBILE_APP_IMAGE_ALT} src={'/assets/onboarding.png'} />
+      </Box>
+      <Box>
+        <Box>
           <Typography
             component='p'
             variant='h6'
@@ -68,63 +66,63 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
             {strings.GET_STARTED_SUBTITLE}
           </Typography>
           {rows.map((row, index) => (
-            <Grid key={index} container sx={{ marginTop: '16px', marginBottom: '16px', marginLeft: '0px', marginRight: '0px' }}>
-              <Grid
-                container
-                item
-                xs={12}
-                sx={{
-                  background: theme.palette.TwClrBgSecondary,
-                  borderRadius: '8px',
-                  height: '100%',
-                  width: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  padding: '8px',
-                  marginLeft:'0px',
-                }}
-              >
-                <Grid item xs={1} sx={{
-                  paddingLeft: '8px',
-                  margin:0,
-                }}>
-                  <Box
-                    sx={{
-                      width: '46px',
-                      height: '46px',
-                      borderRadius: '50%',
-                      backgroundColor: theme.palette.TwClrBgBrand,
-                      color: 'white',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      fontSize: '20px',
-                      fontWeight: '700',
-                    }}
-                  >
-                    {index}
-                  </Box>
-                </Grid>
-                <Grid item xs={2} sx={{
-                  padding: 0,
-                  margin:0,
-                }}>
-                  <Box
-                    sx={{
-                      background: theme.palette.TwClrBaseGray025,
-                      borderRadius: '8px',
-                      display:'flex',
-                      height: '88px',
-                      width: '88px',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      padding: '8px',
-                    }}
-                  >
-                    <Icon size='large' name={row.icon} />
-                  </Box>
-                </Grid>
-                <Grid item xs={6}>
+            <Box
+              key={index}
+              sx={{
+                marginTop: '16px',
+                marginBottom: '16px',
+                marginLeft: '0px',
+                marginRight: '0px',
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                width: '100%',
+                background: theme.palette.TwClrBgSecondary,
+                borderRadius: '8px',
+                paddingTop: '24px',
+                paddingBottom: '24px',
+              }}
+            >
+              <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                <Box
+                  sx={{
+                    width: '46px',
+                    height: '46px',
+                    borderRadius: '50%',
+                    backgroundColor: theme.palette.TwClrBgBrand,
+                    color: 'white',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    fontSize: '20px',
+                    fontWeight: '700',
+                    marginLeft: '16px',
+                  }}
+                >
+                  {index}
+                </Box>
+                <Box
+                  sx={{
+                    background: theme.palette.TwClrBaseGray025,
+                    borderRadius: '8px',
+                    display: 'flex',
+                    height: '88px',
+                    width: '88px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    padding: '8px',
+                    marginLeft: '24px',
+                  }}
+                >
+                  <Icon size='large' name={row.icon} />
+                </Box>
+              </Box>
+              <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
+                <Box
+                  sx={{
+                    marginLeft: '24px',
+                  }}
+                >
                   <Typography
                     component='p'
                     variant='h6'
@@ -149,16 +147,19 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                   >
                     {row.subtitle}
                   </Typography>
-                </Grid>
+                </Box>
+                <Box sx={{
 
-                <Grid item xs={primaryGridSize}>
+                    marginLeft: '24px',
+                    marginRight: '24px',
+                  }}>
                   {row.buttonProps && (
                     <Box
                       sx={{
                         alignItems: 'center',
                         display: 'flex',
                         height: '100%',
-                        justifyContent: 'center',
+                        justifyContent: 'right',
                         paddingBottom: isDesktop ? 0 : '24px',
                         textAlign: 'center',
                         whiteSpace: 'nowrap',
@@ -175,11 +176,11 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                       />
                     </Box>
                   )}
-                </Grid>
-              </Grid>
-            </Grid>
+                </Box>
+              </Box>
+            </Box>
           ))}
-        </Grid>
+        </Box>
       </Box>
     </Box>
   );
