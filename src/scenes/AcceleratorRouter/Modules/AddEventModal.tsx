@@ -10,8 +10,8 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Link from 'src/components/common/Link';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
-import { requestListModuleCohortsAndProjects } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectModuleCohortsAndProjects } from 'src/redux/features/modules/modulesSelectors';
+import { requestListModuleCohorts } from 'src/redux/features/modules/modulesAsyncThunks';
+import { selectModuleCohorts } from 'src/redux/features/modules/modulesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { CohortModuleWithProject, ModuleEventPartial, ModuleEventProject } from 'src/types/Module';
@@ -34,7 +34,7 @@ export type ProjectsSection = {
 export default function AddEventModal(props: AddEventModalProps): JSX.Element {
   const { onClose, onSave, eventToEdit, moduleId } = props;
   const dispatch = useAppDispatch();
-  const result = useAppSelector(selectModuleCohortsAndProjects(moduleId.toString()));
+  const result = useAppSelector(selectModuleCohorts(moduleId.toString()));
   const [availableCohorts, setAvailableCohorts] = useState<CohortModuleWithProject[]>();
   const [projectsSections, setProjectsSections] = useState<ProjectsSection[]>([{ cohort: {}, projectIds: [] }]);
 
@@ -66,7 +66,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
 
   useEffect(() => {
     if (module?.id) {
-      dispatch(requestListModuleCohortsAndProjects(moduleId.toString()));
+      dispatch(requestListModuleCohorts(moduleId.toString()));
     }
   }, [module?.id]);
 
