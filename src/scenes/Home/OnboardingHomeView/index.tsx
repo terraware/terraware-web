@@ -72,8 +72,9 @@ const OnboardingHomeView = () => {
             }
           : undefined,
         icon: 'seeds' as IconName,
-        onboardingCardItems: [{ label: strings.TOTAL_SPECIES, value: availableSpecies?.length.toString() }],
-        title: strings.SPECIES,
+        title: strings.ADD_PEOPLE,
+        subtitle:
+          'Invite people to your organization who will use Terraware. You can always add more people in your Settings.',
       },
       {
         buttonProps: isAdmin(selectedOrganization)
@@ -85,8 +86,8 @@ const OnboardingHomeView = () => {
             }
           : undefined,
         icon: 'seeds' as IconName,
-        onboardingCardItems: [{ label: strings.TOTAL_SPECIES, value: availableSpecies?.length.toString() }],
-        title: strings.SPECIES,
+        title: strings.ADD_SPECIES,
+        subtitle: 'Manage species that your organization collects and plants.',
       },
     ];
 
