@@ -40,7 +40,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/myaccount': 'https://knowledge.terraformation.com/hc/en-us/articles/27577397264020-Managing-Your-Account',
     '/myaccount/edit': 'https://knowledge.terraformation.com/hc/en-us/articles/27577397264020-Managing-Your-Account',
     '/organization': 'https://knowledge.terraformation.com/hc/en-us/sections/19697686429332-Managing-Organizations',
-    '/organization/edit': 'https://knowledge.terraformation.com/hc/en-us/sections/19697686429332-Managing-Organizations',
+    '/organization/edit':
+      'https://knowledge.terraformation.com/hc/en-us/sections/19697686429332-Managing-Organizations',
     '/people': 'https://knowledge.terraformation.com/hc/en-us/articles/19699591247764-Managing-People',
     '/projects': 'https://knowledge.terraformation.com/hc/en-us/articles/24405062807060-Managing-Projects',
     '/reports': 'https://knowledge.terraformation.com/hc/en-us/articles/19718368767636-Reporting',
@@ -48,7 +49,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/species/new': 'https://knowledge.terraformation.com/hc/en-us/articles/19699832923796-Adding-Species-To-Your-List',
     '/accessions': 'https://knowledge.terraformation.com/hc/en-us/articles/19717632286356-Viewing-Accessions',
     '/accessions/new': 'https://knowledge.terraformation.com/hc/en-us/articles/19717575654932-Adding-Accessions',
-    '/accessions.*tab=detail': 'https://knowledge.terraformation.com/hc/en-us/articles/19717746578196-Accession-Details',
+    '/accessions.*tab=detail':
+      'https://knowledge.terraformation.com/hc/en-us/articles/19717746578196-Accession-Details',
     '/accessions.*tab=history':
       'https://knowledge.terraformation.com/hc/en-us/articles/19717746578196-Accession-Details',
     '/accessions.*tab=viabilityTesting':
@@ -61,9 +63,12 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/nursery/withdrawals.*tab=withdrawal_history':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718192553876-Withdrawal-History',
     '/observations': 'https://knowledge.terraformation.com/hc/en-us/articles/28388716231956-Observations',
-    '/planting-sites': 'https://knowledge.terraformation.com/hc/en-us/articles/27918882767892-Creating-A-Planting-Sites',
-    '/seedbanks': 'https://knowledge.terraformation.com/hc/en-us/articles/19699636111508-Adding-Seed-Banks-and-Nurseries',
-    '/nurseries': 'https://knowledge.terraformation.com/hc/en-us/articles/19699636111508-Adding-Seed-Banks-and-Nurseries',
+    '/planting-sites':
+      'https://knowledge.terraformation.com/hc/en-us/articles/27918882767892-Creating-A-Planting-Sites',
+    '/seedbanks':
+      'https://knowledge.terraformation.com/hc/en-us/articles/19699636111508-Adding-Seed-Banks-and-Nurseries',
+    '/nurseries':
+      'https://knowledge.terraformation.com/hc/en-us/articles/19699636111508-Adding-Seed-Banks-and-Nurseries',
     '/contactus': 'https://knowledge.terraformation.com/hc/en-us/articles/19718438661140-Get-Help-Or-Provide-Feedback',
     '/modules': 'https://knowledge.terraformation.com/hc/en-us/articles/29551087572500-Modules',
     '/deliverables': 'https://knowledge.terraformation.com/hc/en-us/articles/29426531812116-Deliverables',
@@ -74,7 +79,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/myaccount': 'https://knowledge.terraformation.com/hc/en-us/articles/27577397264020-Managing-Your-Account',
     '/myaccount/edit': 'https://knowledge.terraformation.com/hc/en-us/articles/27577397264020-Managing-Your-Account',
     '/organization': 'https://knowledge.terraformation.com/hc/en-us/sections/19697686429332-Managing-Organizations',
-    '/organization/edit': 'https://knowledge.terraformation.com/hc/en-us/sections/19697686429332-Managing-Organizations',
+    '/organization/edit':
+      'https://knowledge.terraformation.com/hc/en-us/sections/19697686429332-Managing-Organizations',
     '/people': 'https://knowledge.terraformation.com/hc/en-us/articles/19699591247764-Managing-People',
     '/projects': 'https://knowledge.terraformation.com/hc/en-us/articles/24405062807060-Managing-Projects',
     '/reports': 'https://knowledge.terraformation.com/hc/en-us/articles/19718368767636-Reporting',
@@ -82,7 +88,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/species/new': 'https://knowledge.terraformation.com/hc/en-us/articles/19699832923796-Adding-Species-To-Your-List',
     '/accessions': 'https://knowledge.terraformation.com/hc/en-us/articles/19717632286356-Viewing-Accessions',
     '/accessions/new': 'https://knowledge.terraformation.com/hc/en-us/articles/19717575654932-Adding-Accessions',
-    '/accessions.*tab=detail': 'https://knowledge.terraformation.com/hc/en-us/articles/19717746578196-Accession-Details',
+    '/accessions.*tab=detail':
+      'https://knowledge.terraformation.com/hc/en-us/articles/19717746578196-Accession-Details',
     '/accessions.*tab=history':
       'https://knowledge.terraformation.com/hc/en-us/articles/19717746578196-Accession-Details',
     '/accessions.*tab=viabilityTesting':
@@ -95,9 +102,12 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/nursery/withdrawals.*tab=withdrawal_history':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718192553876-Withdrawal-History',
     '/observations': 'https://knowledge.terraformation.com/hc/en-us/articles/28388716231956-Observations',
-    '/planting-sites': 'https://knowledge.terraformation.com/hc/en-us/articles/27918882767892-Creating-A-Planting-Sites',
-    '/seedbanks': 'https://knowledge.terraformation.com/hc/en-us/articles/19699636111508-Adding-Seed-Banks-and-Nurseries',
-    '/nurseries': 'https://knowledge.terraformation.com/hc/en-us/articles/19699636111508-Adding-Seed-Banks-and-Nurseries',
+    '/planting-sites':
+      'https://knowledge.terraformation.com/hc/en-us/articles/27918882767892-Creating-A-Planting-Sites',
+    '/seedbanks':
+      'https://knowledge.terraformation.com/hc/en-us/articles/19699636111508-Adding-Seed-Banks-and-Nurseries',
+    '/nurseries':
+      'https://knowledge.terraformation.com/hc/en-us/articles/19699636111508-Adding-Seed-Banks-and-Nurseries',
     '/contactus': 'https://knowledge.terraformation.com/hc/en-us/articles/19718438661140-Get-Help-Or-Provide-Feedback',
     '/modules': 'https://knowledge.terraformation.com/hc/en-us/articles/29551087572500-Modules',
     '/deliverables': 'https://knowledge.terraformation.com/hc/en-us/articles/29426531812116-Deliverables',
@@ -108,7 +118,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/myaccount': 'https://knowledge.terraformation.com/hc/en-us/articles/27577397264020-Managing-Your-Account',
     '/myaccount/edit': 'https://knowledge.terraformation.com/hc/en-us/articles/27577397264020-Managing-Your-Account',
     '/organization': 'https://knowledge.terraformation.com/hc/en-us/sections/19697686429332-Managing-Organizations',
-    '/organization/edit': 'https://knowledge.terraformation.com/hc/en-us/sections/19697686429332-Managing-Organizations',
+    '/organization/edit':
+      'https://knowledge.terraformation.com/hc/en-us/sections/19697686429332-Managing-Organizations',
     '/people': 'https://knowledge.terraformation.com/hc/en-us/articles/19699591247764-Managing-People',
     '/projects': 'https://knowledge.terraformation.com/hc/en-us/articles/24405062807060-Managing-Projects',
     '/reports': 'https://knowledge.terraformation.com/hc/en-us/articles/19718368767636-Reporting',
@@ -116,7 +127,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/species/new': 'https://knowledge.terraformation.com/hc/en-us/articles/19699832923796-Adding-Species-To-Your-List',
     '/accessions': 'https://knowledge.terraformation.com/hc/en-us/articles/19717632286356-Viewing-Accessions',
     '/accessions/new': 'https://knowledge.terraformation.com/hc/en-us/articles/19717575654932-Adding-Accessions',
-    '/accessions.*tab=detail': 'https://knowledge.terraformation.com/hc/en-us/articles/19717746578196-Accession-Details',
+    '/accessions.*tab=detail':
+      'https://knowledge.terraformation.com/hc/en-us/articles/19717746578196-Accession-Details',
     '/accessions.*tab=history':
       'https://knowledge.terraformation.com/hc/en-us/articles/19717746578196-Accession-Details',
     '/accessions.*tab=viabilityTesting':
@@ -129,9 +141,12 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/nursery/withdrawals.*tab=withdrawal_history':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718192553876-Withdrawal-History',
     '/observations': 'https://knowledge.terraformation.com/hc/en-us/articles/28388716231956-Observations',
-    '/planting-sites': 'https://knowledge.terraformation.com/hc/en-us/articles/27918882767892-Creating-A-Planting-Sites',
-    '/seedbanks': 'https://knowledge.terraformation.com/hc/en-us/articles/19699636111508-Adding-Seed-Banks-and-Nurseries',
-    '/nurseries': 'https://knowledge.terraformation.com/hc/en-us/articles/19699636111508-Adding-Seed-Banks-and-Nurseries',
+    '/planting-sites':
+      'https://knowledge.terraformation.com/hc/en-us/articles/27918882767892-Creating-A-Planting-Sites',
+    '/seedbanks':
+      'https://knowledge.terraformation.com/hc/en-us/articles/19699636111508-Adding-Seed-Banks-and-Nurseries',
+    '/nurseries':
+      'https://knowledge.terraformation.com/hc/en-us/articles/19699636111508-Adding-Seed-Banks-and-Nurseries',
     '/contactus': 'https://knowledge.terraformation.com/hc/en-us/articles/19718438661140-Get-Help-Or-Provide-Feedback',
     '/modules': 'https://knowledge.terraformation.com/hc/en-us/articles/29551087572500-Modules',
     '/deliverables': 'https://knowledge.terraformation.com/hc/en-us/articles/29426531812116-Deliverables',
