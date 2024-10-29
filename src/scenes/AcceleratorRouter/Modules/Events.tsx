@@ -79,7 +79,7 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
           {strings.EVENTS}
         </Typography>
       </Box>
-      <Grid container>
+      <Grid container spacing={4}>
         <Grid item xs={12}>
           <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={1}>
             <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
