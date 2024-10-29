@@ -149,6 +149,10 @@ export default function ObservationPlantingZone(): JSX.Element {
     [getSubzoneName, plantingZone]
   );
 
+  const has25mPlots = plantingZone?.plantingSubzones
+    ?.flatMap((subzone: { monitoringPlots: any[] }) => subzone.monitoringPlots.flatMap((plot) => plot.sizeMeters))
+    .some((size: number) => size.toString() === '25');
+
   return (
     <>
       {replaceObservationPlot && (
@@ -184,6 +188,7 @@ export default function ObservationPlantingZone(): JSX.Element {
                   plantingZoneId,
                   setReplaceObservationPlot
                 )}
+                tableComments={has25mPlots ? strings.PLOTS_SIZE_NOTE : undefined}
               />
             </Box>
           </Card>

@@ -3720,6 +3720,10 @@ export interface components {
        */
       mortalityRate?: number;
       notes?: string;
+      /** @description IDs of any newer monitoring plots that overlap with this one. */
+      overlappedByPlotIds: number[];
+      /** @description IDs of any older monitoring plots this one overlaps with. */
+      overlapsWithPlotIds: number[];
       photos: components["schemas"]["ObservationMonitoringPlotPhotoPayload"][];
       /**
        * Format: int32

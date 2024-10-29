@@ -14,6 +14,10 @@ const ObservationDetailsRenderer =
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
 
+    const has25mPlots = row.plantingSubzones
+      ?.flatMap((subzone: { monitoringPlots: any[] }) => subzone.monitoringPlots.flatMap((plot) => plot.sizeMeters))
+      .some((size: number) => size.toString() === '25');
+
     const createLinkToPlantingZoneObservation = (name: string) => {
       const url = APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS.replace(':plantingSiteId', plantingSiteId.toString())
         .replace(':observationId', observationId.toString())
@@ -21,6 +25,7 @@ const ObservationDetailsRenderer =
       return (
         <Link fontSize='16px' to={url}>
           {name as React.ReactNode}
+          {has25mPlots ? '*' : ''}
         </Link>
       );
     };

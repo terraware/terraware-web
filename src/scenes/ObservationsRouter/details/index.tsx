@@ -134,6 +134,14 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     }
   }, [zoneNames, searchProps.filtersProps]);
 
+  const has25mPlots = details?.plantingZones
+    .flatMap((zone) =>
+      zone.plantingSubzones?.flatMap((subzone: { monitoringPlots: any[] }) =>
+        subzone.monitoringPlots.flatMap((plot) => plot.sizeMeters)
+      )
+    )
+    .some((size: number) => size.toString() === '25');
+
   return (
     <DetailsPage title={title} plantingSiteId={plantingSiteId}>
       <ObservationStatusSummaryMessage
@@ -155,6 +163,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
                 rows={details?.plantingZones ?? []}
                 orderBy='plantingZoneName'
                 Renderer={ObservationDetailsRenderer(plantingSiteId, observationId)}
+                tableComments={has25mPlots ? strings.PLOTS_SIZE_NOTE : undefined}
               />
             </Box>
           </Card>
