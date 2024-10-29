@@ -98,7 +98,7 @@ const TerrawareHomeView = () => {
       return [];
     }
 
-    const rows = [
+    const rows: OrganizationStatsCardRow[] = [
       {
         buttonProps: isManagerOrHigher(selectedOrganization)
           ? {
@@ -107,7 +107,12 @@ const TerrawareHomeView = () => {
                 navigate(APP_PATHS.SPECIES_NEW);
               },
             }
-          : undefined,
+          : {
+              label: strings.VIEW_SPECIES_LIST,
+              onClick: () => {
+                navigate(APP_PATHS.SPECIES);
+              },
+            },
         icon: 'seeds' as IconName,
         statsCardItems: [
           { label: strings.TOTAL_SPECIES, value: availableSpecies?.length.toString() },
