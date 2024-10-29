@@ -14,6 +14,7 @@ export type OnboardingCardRow = {
   icon: IconName;
   title: string;
   subtitle: string;
+  buttonEnabled: boolean;
 };
 
 type OnboardingCardProps = {
@@ -148,12 +149,13 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                     {row.subtitle}
                   </Typography>
                 </Box>
-                <Box sx={{
-
+                <Box
+                  sx={{
                     marginLeft: '24px',
                     marginRight: '24px',
-                  }}>
-                  {row.buttonProps && (
+                  }}
+                >
+                  {row.buttonProps && row.buttonEnabled ? (
                     <Box
                       sx={{
                         alignItems: 'center',
@@ -174,6 +176,31 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                         type='productive'
                         {...row.buttonProps}
                       />
+                    </Box>
+                  ) : (
+                    <Box
+                      sx={{
+                        alignItems: 'center',
+                        display: 'flex',
+                        height: '100%',
+                        justifyContent: 'right',
+                        paddingBottom: isDesktop ? 0 : '24px',
+                        textAlign: 'center',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      <Typography
+                        component='p'
+                        variant='h6'
+                        sx={{
+                          color: theme.palette.TwClrTxt,
+                          fontSize: '16px',
+                          fontWeight: 600,
+                          lineHeight: '24px',
+                        }}
+                      >
+                        {strings.COMPLETE}
+                      </Typography>
                     </Box>
                   )}
                 </Box>

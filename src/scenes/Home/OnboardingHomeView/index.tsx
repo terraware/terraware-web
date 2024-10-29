@@ -3,7 +3,6 @@ import { useMixpanel } from 'react-mixpanel-browser';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Container, Grid } from '@mui/material';
-//import isEnabled from 'src/features';
 import { IconName } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -16,8 +15,6 @@ import {
   TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK,
   TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK,
 } from 'src/constants';
-import { useOrgNurserySummary } from 'src/hooks/useOrgNurserySummary';
-import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser } from 'src/providers';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
@@ -25,8 +22,11 @@ import { useAppDispatch } from 'src/redux/store';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import CTACard from 'src/scenes/Home/CTACard';
 import OnboardingCard, { OnboardingCardRow } from 'src/scenes/Home/OnboardingHomeView/OnboardingCard';
-import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
+import { SpeciesService } from 'src/services';
+import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
+import { Species } from 'src/types/Species';
+import { OrganizationUser } from 'src/types/User';
 import { isAdmin } from 'src/utils/organization';
 
 const OnboardingHomeView = () => {
@@ -36,10 +36,29 @@ const OnboardingHomeView = () => {
   const mixpanel = useMixpanel();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { availableSpecies } = useSpecies();
-  const seedBankSummary = useSeedBankSummary();
-  const orgNurserySummary = useOrgNurserySummary();
-  //const homePageOnboardingImprovementsEnabled = isEnabled('Home Page Onboarding Improvements');
+  const [people, setPeople] = useState<OrganizationUser[]>();
+  const [allSpecies, setAllSpecies] = useState<Species[]>();
+
+  useEffect(() => {
+    const populatePeople = async () => {
+      const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
+      if (response.requestSucceeded) {
+        setPeople(response.users);
+      }
+    };
+    populatePeople();
+  }, [selectedOrganization]);
+
+  useEffect(() => {
+    const populateSpecies = async () => {
+      const response = await SpeciesService.getAllSpecies(selectedOrganization.id);
+      if (response.requestSucceeded) {
+        setAllSpecies(response.species);
+      }
+    };
+
+    void populateSpecies();
+  }, [selectedOrganization.id]);
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 
@@ -48,19 +67,9 @@ const OnboardingHomeView = () => {
     dispatch(requestObservationsResults(selectedOrganization.id));
   }, [dispatch, selectedOrganization.id]);
 
-  const isLoadingInitialData = useMemo(
-    () =>
-      availableSpecies === undefined ||
-      orgNurserySummary?.requestSucceeded === undefined ||
-      seedBankSummary?.requestSucceeded === undefined,
-    [availableSpecies, orgNurserySummary, seedBankSummary]
-  );
+  const isLoadingInitialData = useMemo(() => allSpecies === undefined || people === undefined, [allSpecies, people]);
 
   const onboardingCardRows: OnboardingCardRow[] = useMemo(() => {
-    // if (!activeLocale) {
-    //   return [];
-    // }
-
     const rows = [
       {
         buttonProps: isAdmin(selectedOrganization)
@@ -75,6 +84,7 @@ const OnboardingHomeView = () => {
         title: strings.ADD_PEOPLE,
         subtitle:
           'Invite people to your organization who will use Terraware. You can always add more people in your Settings.',
+        buttonEnabled: !isLoadingInitialData && people?.length === 1,
       },
       {
         buttonProps: isAdmin(selectedOrganization)
@@ -88,15 +98,12 @@ const OnboardingHomeView = () => {
         icon: 'seeds' as IconName,
         title: strings.ADD_SPECIES,
         subtitle: 'Manage species that your organization collects and plants.',
+        buttonEnabled: !isLoadingInitialData && allSpecies?.length === 0,
       },
     ];
 
     return rows;
-  }, [
-    //activeLocale,
-    availableSpecies,
-    selectedOrganization,
-  ]);
+  }, [allSpecies, people, selectedOrganization]);
 
   return (
     <TfMain>
