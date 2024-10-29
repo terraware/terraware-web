@@ -177,16 +177,14 @@ const TerrawareHomeView = () => {
       },
     ];
 
-    if (!plantingSites?.length) {
+    if (!plantingSites?.length && isAdmin(selectedOrganization)) {
       rows.push({
-        buttonProps: isAdmin(selectedOrganization)
-          ? {
-              label: strings.ADD_PLANTING_SITE,
-              onClick: () => {
-                navigate(APP_PATHS.PLANTING_SITES_NEW);
-              },
-            }
-          : undefined,
+        buttonProps: {
+          label: strings.ADD_PLANTING_SITE,
+          onClick: () => {
+            navigate(APP_PATHS.PLANTING_SITES_NEW);
+          },
+        },
         icon: 'iconRestorationSite' as IconName,
         statsCardItems: [],
         title: strings.PLANTS,
