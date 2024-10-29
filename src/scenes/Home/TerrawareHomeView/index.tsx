@@ -213,7 +213,7 @@ const TerrawareHomeView = () => {
           flexDirection: 'column',
         }}
       >
-        {isLoadingInitialData ? null : !showHomePageOnboardingImprovements ? (
+        {isLoadingInitialData ? null : showHomePageOnboardingImprovements ? (
           <Box>
             <PageHeader
               title={
