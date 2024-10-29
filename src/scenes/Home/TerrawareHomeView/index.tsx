@@ -213,8 +213,8 @@ const TerrawareHomeView = () => {
           flexDirection: 'column',
         }}
       >
-        {isLoadingInitialData ? null : showHomePageOnboardingImprovements ? (
-          <Box paddingRight={'24px'} paddingLeft={isMobile ? '24px' : 0}>
+        {isLoadingInitialData ? null : !showHomePageOnboardingImprovements ? (
+          <Box>
             <PageHeader
               title={
                 user?.firstName
@@ -284,7 +284,7 @@ const TerrawareHomeView = () => {
             </Container>
           </Box>
         ) : (
-          <Box paddingRight={'24px'} paddingLeft={isMobile ? '24px' : 0}>
+          <Box>
             <PageHeader
               title={user?.firstName ? strings.formatString(strings.WELCOME_PERSON, user.firstName) : strings.WELCOME}
               subtitle=''
