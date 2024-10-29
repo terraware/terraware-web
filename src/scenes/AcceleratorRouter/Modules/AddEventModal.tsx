@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 import { DropdownItem, Icon, MultiSelect, SelectT } from '@terraware/web-components';
@@ -71,16 +71,12 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
   }, [module?.id]);
 
   useEffect(() => {
-    if (result?.status === 'success') {
-      let cohortsToSelect: CohortModuleWithProject[] = [];
+    if (result?.status === 'success' && !availableCohorts) {
+      const cohortsToSelect: CohortModuleWithProject[] = [];
       const cohortModules = result.data?.cohortModules;
       cohortModules?.forEach((cm) => {
         cohortsToSelect.push(cm.cohort);
       });
-
-      const alreadySelectedCohortsIds = projectsSections.map((ps) => ps.cohort.id?.toString());
-
-      cohortsToSelect = cohortsToSelect.filter((cTS) => !alreadySelectedCohortsIds.includes(cTS.id?.toString()));
 
       setAvailableCohorts(cohortsToSelect);
     }
@@ -89,6 +85,11 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
   const theme = useTheme();
 
   const [record, , onChange] = useForm<ModuleEventPartial>(eventToEdit || { id: -1 });
+
+  const availableCohortsOptions = useMemo(() => {
+    const alreadySelectedCohortsIds = projectsSections.map((ps) => ps.cohort?.id?.toString());
+    return availableCohorts?.filter((cTS) => !alreadySelectedCohortsIds.includes(cTS.id?.toString()));
+  }, [projectsSections, availableCohorts]);
 
   const save = () => {
     const projectsWithCohort: ModuleEventProject[] = [];
@@ -261,7 +262,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
                     id='cohort'
                     label={strings.COHORT}
                     placeholder={strings.SELECT}
-                    options={availableCohorts}
+                    options={availableCohortsOptions}
                     onChange={(_cohort: CohortModuleWithProject) => {
                       updateProjectSectionCohort(index, _cohort);
                     }}

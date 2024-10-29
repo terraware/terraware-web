@@ -23,6 +23,21 @@ export default function EventsCellRenderer(props: RendererProps<TableRowType>): 
     return <CellRenderer index={index} column={column} value={valueToRender} row={row} />;
   }
 
+  if ((column.key === 'meetingUrl' || column.key === 'recordingUrl' || column.key === 'slidesUrl') && !onRowClick) {
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        value={
+          <Link fontSize='16px' target='_blank' to={value as string}>
+            {value as string}
+          </Link>
+        }
+        row={row}
+      />
+    );
+  }
+
   if (column.key === 'projects') {
     const valueToRender = Array.isArray(value)
       ? value
