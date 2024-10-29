@@ -75,179 +75,183 @@ export const VariableHistoryTable = ({ projectId, variableId }: VariableHistoryT
       return [];
     }
 
+    // Most recent first
     const variableHistory = historyResponse.data.history;
     const variable = historyResponse.data.variable;
 
-    return variableHistory.flatMap((history, idx) => {
-      const newRows: VariableHistoryTableRow[] = [];
-      const previous = idx > 0 ? variableHistory[idx - 1] : undefined;
+    return variableHistory
+      .toReversed()
+      .flatMap((history, idx) => {
+        const newRows: VariableHistoryTableRow[] = [];
+        const previous = idx > 0 ? variableHistory[idx - 1] : undefined;
 
-      if (previous?.feedback !== history.feedback) {
-        newRows.push({
-          date: history.createdTime,
-          editedBy: history.createdBy,
-          change: {
-            field: 'feedback',
-            previous: previous?.feedback ?? '',
-            current: history.feedback ?? '',
-          },
-        });
-      }
-
-      if (previous?.internalComment !== history.internalComment) {
-        newRows.push({
-          date: history.createdTime,
-          editedBy: history.createdBy,
-          change: {
-            field: 'internalComment',
-            previous: previous?.internalComment ?? '',
-            current: history.internalComment ?? '',
-          },
-        });
-      }
-
-      if (previous?.status !== history.status) {
-        newRows.push({
-          date: history.createdTime,
-          editedBy: history.createdBy,
-          change: {
-            field: 'status',
-            previous: previous?.status ?? '',
-            current: history.status,
-          },
-        });
-      }
-
-      if (variable.type === 'Table') {
-        const currentTableValueIds = history.variableValues
-          .toSorted((a, b) => a.listPosition - b.listPosition)
-          .map((value) => value.id)
-          .join(',');
-
-        const previousTableValueIds = (previous?.variableValues ?? [])
-          .toSorted((a, b) => a.listPosition - b.listPosition)
-          .map((value) => value.id)
-          .join(',');
-
-        if (previousTableValueIds !== currentTableValueIds) {
+        if (previous?.feedback !== history.feedback) {
           newRows.push({
             date: history.createdTime,
             editedBy: history.createdBy,
             change: {
-              field: 'table',
-              previous: previousTableValueIds,
-              current: currentTableValueIds,
+              field: 'feedback',
+              previous: previous?.feedback ?? '',
+              current: history.feedback ?? '',
             },
           });
         }
-      } else if (variable.type === 'Date') {
-        const currentValue = history.variableValues[0] as VariableValueDateValue | undefined;
-        const previousValue = previous?.variableValues[0] as VariableValueDateValue | undefined;
 
-        if (previousValue?.dateValue !== currentValue?.dateValue) {
+        if (previous?.internalComment !== history.internalComment) {
           newRows.push({
             date: history.createdTime,
             editedBy: history.createdBy,
             change: {
-              field: 'value',
-              previous: previousValue?.dateValue ?? '',
-              current: currentValue?.dateValue ?? '',
+              field: 'internalComment',
+              previous: previous?.internalComment ?? '',
+              current: history.internalComment ?? '',
             },
           });
         }
-      } else if (variable.type === 'Number') {
-        const currentValue = history.variableValues[0] as VariableValueNumberValue | undefined;
-        const previousValue = previous?.variableValues[0] as VariableValueNumberValue | undefined;
 
-        if (previousValue?.numberValue !== currentValue?.numberValue) {
+        if (previous?.status !== history.status) {
           newRows.push({
             date: history.createdTime,
             editedBy: history.createdBy,
             change: {
-              field: 'value',
-              previous: previousValue?.numberValue.toString() ?? '',
-              current: currentValue?.numberValue.toString() ?? '',
+              field: 'status',
+              previous: previous?.status ?? '',
+              current: history.status,
             },
           });
         }
-      } else if (variable.type === 'Text') {
-        const currentValue = history.variableValues[0] as VariableValueTextValue | undefined;
-        const previousValue = previous?.variableValues[0] as VariableValueTextValue | undefined;
 
-        if (previousValue?.textValue !== currentValue?.textValue) {
-          newRows.push({
-            date: history.createdTime,
-            editedBy: history.createdBy,
-            change: {
-              field: 'value',
-              previous: previousValue?.textValue ?? '',
-              current: currentValue?.textValue ?? '',
-            },
-          });
+        if (variable.type === 'Table') {
+          const currentTableValueIds = history.variableValues
+            .toSorted((a, b) => a.listPosition - b.listPosition)
+            .map((value) => value.id)
+            .join(',');
+
+          const previousTableValueIds = (previous?.variableValues ?? [])
+            .toSorted((a, b) => a.listPosition - b.listPosition)
+            .map((value) => value.id)
+            .join(',');
+
+          if (previousTableValueIds !== currentTableValueIds) {
+            newRows.push({
+              date: history.createdTime,
+              editedBy: history.createdBy,
+              change: {
+                field: 'table',
+                previous: previousTableValueIds,
+                current: currentTableValueIds,
+              },
+            });
+          }
+        } else if (variable.type === 'Date') {
+          const currentValue = history.variableValues[0] as VariableValueDateValue | undefined;
+          const previousValue = previous?.variableValues[0] as VariableValueDateValue | undefined;
+
+          if (previousValue?.dateValue !== currentValue?.dateValue) {
+            newRows.push({
+              date: history.createdTime,
+              editedBy: history.createdBy,
+              change: {
+                field: 'value',
+                previous: previousValue?.dateValue ?? '',
+                current: currentValue?.dateValue ?? '',
+              },
+            });
+          }
+        } else if (variable.type === 'Number') {
+          const currentValue = history.variableValues[0] as VariableValueNumberValue | undefined;
+          const previousValue = previous?.variableValues[0] as VariableValueNumberValue | undefined;
+
+          if (previousValue?.numberValue !== currentValue?.numberValue) {
+            newRows.push({
+              date: history.createdTime,
+              editedBy: history.createdBy,
+              change: {
+                field: 'value',
+                previous: previousValue?.numberValue.toString() ?? '',
+                current: currentValue?.numberValue.toString() ?? '',
+              },
+            });
+          }
+        } else if (variable.type === 'Text') {
+          const currentValue = history.variableValues[0] as VariableValueTextValue | undefined;
+          const previousValue = previous?.variableValues[0] as VariableValueTextValue | undefined;
+
+          if (previousValue?.textValue !== currentValue?.textValue) {
+            newRows.push({
+              date: history.createdTime,
+              editedBy: history.createdBy,
+              change: {
+                field: 'value',
+                previous: previousValue?.textValue ?? '',
+                current: currentValue?.textValue ?? '',
+              },
+            });
+          }
+        } else if (variable.type === 'Select') {
+          const currentValues = history.variableValues[0] as VariableValueSelectValue | undefined;
+          const previousValues = previous?.variableValues[0] as VariableValueSelectValue | undefined;
+
+          const currentOptionValues = (currentValues?.optionValues ?? [])
+            .toSorted()
+            .map((id) => variable.options.find((option) => option.id === id))
+            .filter((option): option is SelectOptionPayload => option !== undefined) // drop unrecognized select options
+            .map((option) => option.name)
+            .join(',');
+
+          const previousOptionValues = (previousValues?.optionValues ?? [])
+            .toSorted()
+            .map((id) => variable.options.find((option) => option.id === id))
+            .filter((option): option is SelectOptionPayload => option !== undefined)
+            .map((option) => option.name)
+            .join(',');
+
+          if (previousOptionValues !== currentOptionValues) {
+            newRows.push({
+              date: history.createdTime,
+              editedBy: history.createdBy,
+              change: {
+                field: 'value',
+                previous: previousOptionValues,
+                current: currentOptionValues,
+              },
+            });
+          }
+        } else if (variable.type === 'Link') {
+          const currentValue = history.variableValues[0] as VariableValueLinkValue | undefined;
+          const previousValue = previous?.variableValues[0] as VariableValueLinkValue | undefined;
+
+          if (previousValue?.url !== currentValue?.url) {
+            newRows.push({
+              date: history.createdTime,
+              editedBy: history.createdBy,
+              change: {
+                field: 'value',
+                previous: previousValue?.url ?? '',
+                current: currentValue?.url ?? '',
+              },
+            });
+          }
+        } else if (variable.type === 'Image') {
+          const currentValue = history.variableValues[0] as VariableValueImageValue | undefined;
+          const previousValue = previous?.variableValues[0] as VariableValueImageValue | undefined;
+
+          if (previousValue?.id !== currentValue?.id) {
+            newRows.push({
+              date: history.createdTime,
+              editedBy: history.createdBy,
+              change: {
+                field: 'image',
+                previous: previousValue?.id.toString() ?? '',
+                current: currentValue?.id.toString() ?? '',
+              },
+            });
+          }
         }
-      } else if (variable.type === 'Select') {
-        const currentValues = history.variableValues[0] as VariableValueSelectValue | undefined;
-        const previousValues = previous?.variableValues[0] as VariableValueSelectValue | undefined;
 
-        const currentOptionValues = (currentValues?.optionValues ?? [])
-          .toSorted()
-          .map((id) => variable.options.find((option) => option.id === id))
-          .filter((option): option is SelectOptionPayload => option !== undefined) // drop unrecognized select options
-          .map((option) => option.name)
-          .join(',');
-
-        const previousOptionValues = (previousValues?.optionValues ?? [])
-          .toSorted()
-          .map((id) => variable.options.find((option) => option.id === id))
-          .filter((option): option is SelectOptionPayload => option !== undefined)
-          .map((option) => option.name)
-          .join(',');
-
-        if (previousOptionValues !== currentOptionValues) {
-          newRows.push({
-            date: history.createdTime,
-            editedBy: history.createdBy,
-            change: {
-              field: 'value',
-              previous: previousOptionValues,
-              current: currentOptionValues,
-            },
-          });
-        }
-      } else if (variable.type === 'Link') {
-        const currentValue = history.variableValues[0] as VariableValueLinkValue | undefined;
-        const previousValue = previous?.variableValues[0] as VariableValueLinkValue | undefined;
-
-        if (previousValue?.url !== currentValue?.url) {
-          newRows.push({
-            date: history.createdTime,
-            editedBy: history.createdBy,
-            change: {
-              field: 'value',
-              previous: previousValue?.url ?? '',
-              current: currentValue?.url ?? '',
-            },
-          });
-        }
-      } else if (variable.type === 'Image') {
-        const currentValue = history.variableValues[0] as VariableValueImageValue | undefined;
-        const previousValue = previous?.variableValues[0] as VariableValueImageValue | undefined;
-
-        if (previousValue?.id !== currentValue?.id) {
-          newRows.push({
-            date: history.createdTime,
-            editedBy: history.createdBy,
-            change: {
-              field: 'image',
-              previous: previousValue?.id.toString() ?? '',
-              current: currentValue?.id.toString() ?? '',
-            },
-          });
-        }
-      }
-
-      return newRows;
-    });
+        return newRows;
+      })
+      .toReversed();
   }, [dispatch, historyResponse]);
 
   if (!historyResponse || historyResponse.status === 'pending') {
