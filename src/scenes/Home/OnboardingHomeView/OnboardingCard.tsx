@@ -22,7 +22,7 @@ type OnboardingCardProps = {
 };
 
 const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
-  const { isDesktop, isMobile } = useDeviceInfo();
+  const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
   return (
@@ -78,24 +78,24 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                 flexDirection: 'row',
                 alignItems: 'center',
                 width: '100%',
-                background: row.enabled ? theme.palette.TwClrBgSecondary: theme.palette.TwClrBg,
+                background: row.enabled ? theme.palette.TwClrBgSecondary : theme.palette.TwClrBg,
                 borderRadius: '8px',
                 paddingTop: '24px',
                 paddingBottom: '24px',
-                position: 'relative'
+                position: 'relative',
               }}
             >
-          <Box
-              sx={{
-                width: '100%',
-                height: '100%',
-                background: theme.palette.TwClrBgSecondary,
-                opacity: row.enabled ? 0 : 0.5,
-                borderRadius: '8px',
-                zindex: 1000,
-                position: 'absolute'
-              }}
-            ></Box>
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  background: theme.palette.TwClrBgSecondary,
+                  opacity: row.enabled ? 0 : 0.5,
+                  borderRadius: '8px',
+                  zindex: 1000,
+                  position: 'absolute',
+                }}
+              ></Box>
               <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                 <Box
                   sx={{
@@ -130,7 +130,7 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                   <Icon size='large' name={row.icon} />
                 </Box>
               </Box>
-              <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
+              <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box
                   sx={{
                     marginLeft: '24px',
@@ -165,20 +165,15 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                   sx={{
                     marginLeft: '24px',
                     marginRight: '24px',
+                    width: '150px',
+                    justifyContent: 'center',
+                      display: 'flex',
+                      alignItems: 'center',
+                      height: '100%',
+                      flexShrink: '0'
                   }}
                 >
-                  {row.buttonProps && row.enabled ? (
-                    <Box
-                      sx={{
-                        alignItems: 'center',
-                        display: 'flex',
-                        height: '100%',
-                        justifyContent: 'right',
-                        paddingBottom: isDesktop ? 0 : '24px',
-                        textAlign: 'center',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
+                    {row.buttonProps && row.enabled ? (
                       <Button
                         priority='primary'
                         style={{
@@ -188,19 +183,7 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                         type='productive'
                         {...row.buttonProps}
                       />
-                    </Box>
-                  ) : (
-                    <Box
-                      sx={{
-                        alignItems: 'center',
-                        display: 'flex',
-                        height: '100%',
-                        justifyContent: 'right',
-                        paddingBottom: isDesktop ? 0 : '24px',
-                        textAlign: 'center',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
+                    ) : (
                       <Typography
                         component='p'
                         variant='h6'
@@ -213,11 +196,10 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                       >
                         {strings.COMPLETE}
                       </Typography>
-                    </Box>
-                  )}
+                    )}
+                  </Box>
                 </Box>
               </Box>
-            </Box>
           ))}
         </Box>
       </Box>
