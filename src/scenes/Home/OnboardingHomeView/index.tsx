@@ -12,8 +12,6 @@ import TfMain from 'src/components/common/TfMain';
 import {
   ACCELERATOR_LINK,
   APP_PATHS,
-  TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK,
-  TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK,
 } from 'src/constants';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser } from 'src/providers';
@@ -132,28 +130,7 @@ const OnboardingHomeView = () => {
                 <Grid item xs={12}>
                   <OnboardingCard rows={onboardingCardRows} />
                 </Grid>
-                <Grid item xs={12}>
-                  <CTACard
-                    description={strings.DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION}
-                    imageAlt={strings.TERRAWARE_MOBILE_APP_IMAGE_ALT}
-                    imageSource='/assets/terraware-mobile-app.svg'
-                    padding='32px'
-                    primaryButtonProps={{
-                      label: strings.DOWNLOAD_FOR_ANDROID,
-                      onClick: () => {
-                        window.open(TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK, '_blank');
-                      },
-                      type: 'passive',
-                    }}
-                    secondaryButtonProps={{
-                      label: strings.DOWNLOAD_FOR_IOS,
-                      onClick: () => {
-                        window.open(TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK, '_blank');
-                      },
-                    }}
-                    title={strings.DOWNLOAD_THE_TERRAWARE_MOBILE_APP}
-                  />
-                </Grid>
+
 
                 <Grid item xs={12}>
                   <CTACard

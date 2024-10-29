@@ -130,7 +130,15 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                   <Icon size='large' name={row.icon} />
                 </Box>
               </Box>
-              <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  width: '100%',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}
+              >
                 <Box
                   sx={{
                     marginLeft: '24px',
@@ -166,40 +174,40 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                     marginLeft: '24px',
                     marginRight: '24px',
                     width: '150px',
-                    justifyContent: 'center',
-                      display: 'flex',
-                      alignItems: 'center',
-                      height: '100%',
-                      flexShrink: '0'
+                    justifyContent: 'right',
+                    display: 'flex',
+                    alignItems: 'right',
+                    height: '100%',
+                    flexShrink: '0',
                   }}
                 >
-                    {row.buttonProps && row.enabled ? (
-                      <Button
-                        priority='primary'
-                        style={{
-                          marginLeft: isMobile ? 0 : undefined,
-                          width: isMobile ? '100%' : 'auto',
-                        }}
-                        type='productive'
-                        {...row.buttonProps}
-                      />
-                    ) : (
-                      <Typography
-                        component='p'
-                        variant='h6'
-                        sx={{
-                          color: theme.palette.TwClrTxt,
-                          fontSize: '16px',
-                          fontWeight: 600,
-                          lineHeight: '24px',
-                        }}
-                      >
-                        {strings.COMPLETE}
-                      </Typography>
-                    )}
-                  </Box>
+                  {row.buttonProps && row.enabled ? (
+                    <Button
+                      priority='primary'
+                      style={{
+                        margin: 0,
+                        width: isMobile ? '100%' : 'auto',
+                      }}
+                      type='productive'
+                      {...row.buttonProps}
+                    />
+                  ) : (
+                    <Typography
+                      component='p'
+                      variant='h6'
+                      sx={{
+                        color: theme.palette.TwClrTxt,
+                        fontSize: '16px',
+                        fontWeight: 600,
+                        lineHeight: '24px',
+                      }}
+                    >
+                      {strings.COMPLETE}
+                    </Typography>
+                  )}
                 </Box>
               </Box>
+            </Box>
           ))}
         </Box>
       </Box>
