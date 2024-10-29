@@ -30,8 +30,7 @@ export default function EventsCellRenderer(props: RendererProps<TableRowType>): 
         column={column}
         value={
           <Link fontSize='16px' target='_blank' to={value as string}>
-            {' '}
-            {value as string}{' '}
+            {value as string}
           </Link>
         }
         row={row}
