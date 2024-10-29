@@ -84,7 +84,7 @@ const OnboardingHomeView = () => {
         title: strings.ADD_PEOPLE,
         subtitle:
           'Invite people to your organization who will use Terraware. You can always add more people in your Settings.',
-        buttonEnabled: !isLoadingInitialData && people?.length === 1,
+        enabled: !isLoadingInitialData && people?.length === 1,
       },
       {
         buttonProps: isAdmin(selectedOrganization)
@@ -98,7 +98,7 @@ const OnboardingHomeView = () => {
         icon: 'seeds' as IconName,
         title: strings.ADD_SPECIES,
         subtitle: 'Manage species that your organization collects and plants.',
-        buttonEnabled: !isLoadingInitialData && allSpecies?.length === 0,
+        enabled: !isLoadingInitialData && allSpecies?.length === 0,
       },
     ];
 
