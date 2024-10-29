@@ -79,11 +79,12 @@ export const VariableHistoryTable = ({ projectId, variableId }: VariableHistoryT
     const variableHistory = historyResponse.data.history;
     const variable = historyResponse.data.variable;
 
-    return variableHistory
-      .toReversed()
+    const reversedVariableHistory = variableHistory.toReversed();
+
+    return reversedVariableHistory
       .flatMap((history, idx) => {
         const newRows: VariableHistoryTableRow[] = [];
-        const previous = idx > 0 ? variableHistory[idx - 1] : undefined;
+        const previous = idx > 0 ? reversedVariableHistory[idx - 1] : undefined;
 
         if (previous?.feedback !== history.feedback) {
           newRows.push({
