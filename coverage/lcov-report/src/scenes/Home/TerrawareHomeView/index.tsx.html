@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/61</span>
+                <span class='fraction'>0/62</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/60</span>
+                <span class='fraction'>0/61</span>
             </div>
         
             
@@ -441,7 +441,10 @@
 <a name='L376'></a><a href='#L376'>376</a>
 <a name='L377'></a><a href='#L377'>377</a>
 <a name='L378'></a><a href='#L378'>378</a>
-<a name='L379'></a><a href='#L379'>379</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L379'></a><a href='#L379'>379</a>
+<a name='L380'></a><a href='#L380'>380</a>
+<a name='L381'></a><a href='#L381'>381</a>
+<a name='L382'></a><a href='#L382'>382</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -553,6 +556,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -620,9 +628,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -919,7 +925,7 @@ const TerrawareHomeView = <span class="cstat-no" title="statement not covered" >
 <span class="cstat-no" title="statement not covered" >      return [];</span>
     }
 &nbsp;
-    const rows = <span class="cstat-no" title="statement not covered" >[</span>
+    const rows: OrganizationStatsCardRow[] = <span class="cstat-no" title="statement not covered" >[</span>
       {
         buttonProps: isManagerOrHigher(selectedOrganization)
           ? {
@@ -928,7 +934,12 @@ const TerrawareHomeView = <span class="cstat-no" title="statement not covered" >
 <span class="cstat-no" title="statement not covered" >                navigate(APP_PATHS.SPECIES_NEW);</span>
               },
             }
-          : undefined,
+          : {
+              label: strings.VIEW_SPECIES_LIST,
+              onClick: <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >                navigate(APP_PATHS.SPECIES);</span>
+              },
+            },
         icon: 'seeds' as IconName,
         statsCardItems: [
           { label: strings.TOTAL_SPECIES, value: availableSpecies?.length.toString() },
@@ -993,16 +1004,14 @@ const TerrawareHomeView = <span class="cstat-no" title="statement not covered" >
       },
     ];
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (!plantingSites?.length) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!plantingSites?.length &amp;&amp; isAdmin(selectedOrganization)) {</span>
 <span class="cstat-no" title="statement not covered" >      rows.push({</span>
-        buttonProps: isAdmin(selectedOrganization)
-          ? {
-              label: strings.ADD_PLANTING_SITE,
-              onClick: <span class="fstat-no" title="function not covered" >()</span> =&gt; {
-<span class="cstat-no" title="statement not covered" >                navigate(APP_PATHS.PLANTING_SITES_NEW);</span>
-              },
-            }
-          : undefined,
+        buttonProps: {
+          label: strings.ADD_PLANTING_SITE,
+          onClick: <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >            navigate(APP_PATHS.PLANTING_SITES_NEW);</span>
+          },
+        },
         icon: 'iconRestorationSite' as IconName,
         statsCardItems: [],
         title: strings.PLANTS,
@@ -1032,7 +1041,7 @@ const TerrawareHomeView = <span class="cstat-no" title="statement not covered" >
         }}
       &gt;
         {isLoadingInitialData ? null : showHomePageOnboardingImprovements ? (
-          &lt;Box paddingRight={'24px'} paddingLeft={isMobile ? '24px' : 0}&gt;
+          &lt;Box&gt;
             &lt;PageHeader
               title={
                 user?.firstName
@@ -1102,7 +1111,7 @@ const TerrawareHomeView = <span class="cstat-no" title="statement not covered" >
             &lt;/Container&gt;
           &lt;/Box&gt;
         ) : (
-          &lt;Box paddingRight={'24px'} paddingLeft={isMobile ? '24px' : 0}&gt;
+          &lt;Box&gt;
             &lt;PageHeader
               title={user?.firstName ? strings.formatString(strings.WELCOME_PERSON, user.firstName) : strings.WELCOME}
               subtitle=''
@@ -1204,7 +1213,7 @@ export default TerrawareHomeView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-29T03:04:30.557Z
+                at 2024-10-29T20:42:21.567Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
