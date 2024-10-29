@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/100</span>
+                <span class='fraction'>0/101</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/28</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/48</span>
+                <span class='fraction'>0/49</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/93</span>
+                <span class='fraction'>0/94</span>
             </div>
         
             
@@ -379,7 +379,8 @@
 <a name='L314'></a><a href='#L314'>314</a>
 <a name='L315'></a><a href='#L315'>315</a>
 <a name='L316'></a><a href='#L316'>316</a>
-<a name='L317'></a><a href='#L317'>317</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L317'></a><a href='#L317'>317</a>
+<a name='L318'></a><a href='#L318'>318</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -461,15 +462,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -695,7 +697,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useMemo, useState } from 'react';
 &nbsp;
 import { Grid, Typography, useTheme } from '@mui/material';
 import { DropdownItem, Icon, MultiSelect, SelectT } from '@terraware/web-components';
@@ -768,16 +770,12 @@ export default function <span class="fstat-no" title="function not covered" >Add
   }, [module?.id]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (result?.status === 'success') {</span>
-      let cohortsToSelect: CohortModuleWithProject[] = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >    if (result?.status === 'success' &amp;&amp; !availableCohorts) {</span>
+      const cohortsToSelect: CohortModuleWithProject[] = <span class="cstat-no" title="statement not covered" >[];</span>
       const cohortModules = <span class="cstat-no" title="statement not covered" >result.data?.cohortModules;</span>
 <span class="cstat-no" title="statement not covered" >      cohortModules?.forEach(<span class="fstat-no" title="function not covered" >(c</span>m) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        cohortsToSelect.push(cm.cohort);</span>
       });
-&nbsp;
-      const alreadySelectedCohortsIds = <span class="cstat-no" title="statement not covered" >projectsSections.map(<span class="fstat-no" title="function not covered" >(p</span>s) =&gt; <span class="cstat-no" title="statement not covered" >ps.cohort.id?.toString())</span>;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      cohortsToSelect = cohortsToSelect.filter(<span class="fstat-no" title="function not covered" >(c</span>TS) =&gt; <span class="cstat-no" title="statement not covered" >!alreadySelectedCohortsIds.includes(cTS.id?.toString()))</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      setAvailableCohorts(cohortsToSelect);</span>
     }
@@ -786,6 +784,11 @@ export default function <span class="fstat-no" title="function not covered" >Add
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
   const [record, , onChange] = <span class="cstat-no" title="statement not covered" >useForm&lt;ModuleEventPartial&gt;(eventToEdit || { id: -1 });</span>
+&nbsp;
+  const availableCohortsOptions = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const alreadySelectedCohortsIds = <span class="cstat-no" title="statement not covered" >projectsSections.map(<span class="fstat-no" title="function not covered" >(p</span>s) =&gt; <span class="cstat-no" title="statement not covered" >ps.cohort?.id?.toString())</span>;</span>
+<span class="cstat-no" title="statement not covered" >    return availableCohorts?.filter(<span class="fstat-no" title="function not covered" >(c</span>TS) =&gt; <span class="cstat-no" title="statement not covered" >!alreadySelectedCohortsIds.includes(cTS.id?.toString()))</span>;</span>
+  }, [projectsSections, availableCohorts]);
 &nbsp;
   const save = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const projectsWithCohort: ModuleEventProject[] = <span class="cstat-no" title="statement not covered" >[];</span>
@@ -958,7 +961,7 @@ export default function <span class="fstat-no" title="function not covered" >Add
                     id='cohort'
                     label={strings.COHORT}
                     placeholder={strings.SELECT}
-                    options={availableCohorts}
+                    options={availableCohortsOptions}
                     onChange={<span class="fstat-no" title="function not covered" >(_</span>cohort: CohortModuleWithProject) =&gt; {
 <span class="cstat-no" title="statement not covered" >                      updateProjectSectionCohort(index, _cohort);</span>
                     }}
@@ -1018,7 +1021,7 @@ export default function <span class="fstat-no" title="function not covered" >Add
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-29T20:42:21.567Z
+                at 2024-10-29T20:46:36.859Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
