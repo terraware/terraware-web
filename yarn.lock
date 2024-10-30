@@ -3998,10 +3998,10 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@^3.4.3":
-  version "3.4.3"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-3.4.3.tgz#1027b0bddbd502eafe209191a3fdfe86030ed886"
-  integrity sha512-UhXXLt9p2piN05y7ritNG5HADryPGg7dJ3oUwKyPcZEEJYKY5Ze+w0TRu3gP8WhlVUlzYzDc0Xrg7eVct89Qxg==
+"@terraware/web-components@^3.4.4":
+  version "3.4.4"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-3.4.4.tgz#d58ee7ad87f9c766618ca78a9b5b32e40d0c8602"
+  integrity sha512-9PvOr6Phl9NiGZuhwFb/padRRuphJtJaZZtHg2P7OR8AJjC0qlGAx2sUnEsRP/KHPdqkgmy7FtSqOXtb2uQvbg==
   dependencies:
     "@date-io/luxon" "^3.0.0"
     "@dnd-kit/core" "^6.0.7"
