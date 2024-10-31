@@ -14,7 +14,7 @@ export default function InventoryTests() {
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory' }).click();
-    await page.getByRole('button', { name: 'Add Inventory' }).click();
+    await page.locator('#new-inventory').click();
     await page.getByPlaceholder('Search or Select...').click();
     await page.locator('li').filter({ hasText: 'Banana' }).locator('div').click();
     await page.locator('div:nth-child(2) > .select > .textfield-container').click();
@@ -71,7 +71,7 @@ export default function InventoryTests() {
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory' }).click();
-    await page.getByRole('button', { name: 'Add Inventory' }).click();
+    await page.locator('#new-inventory').click();
     await page.getByPlaceholder('Search or Select...').click();
     await page.locator('li').filter({ hasText: 'Coconut' }).locator('div').click();
 

@@ -20,7 +20,7 @@ export default function LocationTests() {
 
     await page.getByRole('button', { name: 'Add Seed Bank' }).click();
 
-    await page.getByLabel('Name *').fill(newSeedBankName);
+    await page.locator('#name').getByRole('textbox').fill(newSeedBankName);
     await page.locator('textarea').click();
     await page.locator('textarea').fill('My Brand New Seed Bank!');
     await page.getByLabel('Build Start Date').fill('2023-12-31');
@@ -61,7 +61,7 @@ export default function LocationTests() {
     await page.getByRole('button', { name: 'Locations' }).click();
     await page.getByRole('button', { name: 'Nurseries' }).click();
     await page.getByRole('button', { name: 'Add Nursery' }).click();
-    await page.getByLabel('Name *').fill(newNurseryName);
+    await page.locator('#name').getByRole('textbox').fill(newNurseryName);
     await page.locator('textarea').click();
     await page.locator('textarea').fill('My Super Special Test Nursery!!!');
     await page.getByLabel('Build Start Date').click();
