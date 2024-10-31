@@ -11,6 +11,7 @@ import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
 import { searchObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
+import { has25mPlots } from 'src/redux/features/observations/utils';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
@@ -149,10 +150,6 @@ export default function ObservationPlantingZone(): JSX.Element {
     [getSubzoneName, plantingZone]
   );
 
-  const has25mPlots = plantingZone?.plantingSubzones
-    ?.flatMap((subzone: { monitoringPlots: any[] }) => subzone.monitoringPlots.flatMap((plot) => plot.sizeMeters))
-    .some((size: number) => size.toString() === '25');
-
   return (
     <>
       {replaceObservationPlot && (
@@ -188,7 +185,11 @@ export default function ObservationPlantingZone(): JSX.Element {
                   plantingZoneId,
                   setReplaceObservationPlot
                 )}
-                tableComments={has25mPlots ? strings.PLOTS_SIZE_NOTE : undefined}
+                tableComments={
+                  plantingZone?.plantingSubzones && has25mPlots(plantingZone.plantingSubzones)
+                    ? strings.PLOTS_SIZE_NOTE
+                    : undefined
+                }
               />
             </Box>
           </Card>

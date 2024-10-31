@@ -270,3 +270,9 @@ const mergeSpecies = (
       })
     );
 };
+
+export const has25mPlots = (subzones: ObservationPlantingSubzoneResults[]) => {
+  return subzones
+    ?.flatMap((subzone: { monitoringPlots: any[] }) => subzone.monitoringPlots.flatMap((plot) => plot.sizeMeters))
+    .some((size: number) => size.toString() === '25');
+};

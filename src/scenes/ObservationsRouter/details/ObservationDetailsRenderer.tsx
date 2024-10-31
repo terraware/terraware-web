@@ -4,6 +4,7 @@ import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { has25mPlots } from 'src/redux/features/observations/utils';
 import { MonitoringPlotStatus, getPlotStatus } from 'src/types/Observations';
 
 const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'mortalityRate'];
@@ -14,10 +15,6 @@ const ObservationDetailsRenderer =
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
 
-    const has25mPlots = row.plantingSubzones
-      ?.flatMap((subzone: { monitoringPlots: any[] }) => subzone.monitoringPlots.flatMap((plot) => plot.sizeMeters))
-      .some((size: number) => size.toString() === '25');
-
     const createLinkToPlantingZoneObservation = (name: string) => {
       const url = APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS.replace(':plantingSiteId', plantingSiteId.toString())
         .replace(':observationId', observationId.toString())
@@ -25,7 +22,7 @@ const ObservationDetailsRenderer =
       return (
         <Link fontSize='16px' to={url}>
           {name as React.ReactNode}
-          {has25mPlots ? '*' : ''}
+          {has25mPlots(row.plantingSubzones) ? '*' : ''}
         </Link>
       );
     };
