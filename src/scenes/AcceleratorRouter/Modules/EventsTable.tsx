@@ -71,13 +71,29 @@ export default function EventsTable(props: EventsTableProps): JSX.Element {
   const [selectedRows, setSelectedRows] = useState<ModuleEventPartial[]>([]);
   const [eventToEdit, setEventToEdit] = useState<ModuleEventPartial>();
 
+  const generatedIds = new Set();
+
+  function generateUniqueId() {
+    let newId: number;
+    do {
+      newId = Math.random();
+    } while (generatedIds.has(newId)); // Check for uniqueness
+
+    generatedIds.add(newId);
+    return newId;
+  }
+
   const onAddEvent = (eventToAdd: ModuleEventPartial) => {
+    let newEventToAdd = { ...eventToAdd };
+    if (eventToAdd.id === -1 && !eventToAdd.feId) {
+      newEventToAdd = { ...eventToAdd, feId: generateUniqueId() };
+    }
     if (setEventsToAdd) {
       setEventsToAdd((prev) => {
         if (prev) {
-          return [...prev, eventToAdd];
+          return [...prev, newEventToAdd];
         } else {
-          return [eventToAdd];
+          return [newEventToAdd];
         }
       });
     }
@@ -85,34 +101,47 @@ export default function EventsTable(props: EventsTableProps): JSX.Element {
 
   const onEditedEvent = (editedEvent: ModuleEventPartial) => {
     if (setEventsToDelete && setEventsToAdd) {
-      // When editing a event, first we remove the old entrance and then we add it again
-      const eventsToAddIds = eventsToAdd?.map((mta) => mta.id).filter((id) => id !== -1);
-      if (eventsToAddIds?.includes(editedEvent.id)) {
-        const found = eventsToAdd?.find((eventToAdd) => eventToAdd.id === editedEvent.id);
-        if (found) {
-          const newEventsToAdd = eventsToAdd?.filter((etAdd) => etAdd.id !== editedEvent.id);
-          newEventsToAdd?.push(editedEvent);
-          setEventsToAdd(newEventsToAdd);
+      if (editedEvent.id === -1) {
+        const eventsToAddWithNoIds = eventsToAdd?.filter((ev) => ev.id === -1);
+        const feIds = eventsToAddWithNoIds?.map((ev) => ev.feId);
+        if (feIds?.includes(editedEvent.feId)) {
+          const found = eventsToAdd?.find((eventToAdd) => eventToAdd.feId === editedEvent.feId);
+          if (found) {
+            const newEventsToAdd = eventsToAdd?.filter((etAdd) => etAdd.feId !== editedEvent.feId);
+            newEventsToAdd?.push(editedEvent);
+            setEventsToAdd(newEventsToAdd);
+          }
         }
       } else {
-        const found = prevEvents?.find((eventToAdd) => eventToAdd.id?.toString() === editedEvent.id?.toString());
-        if (found) {
-          setEventsToDelete((prev) => {
-            if (prev && found) {
-              return [...prev, found];
-            }
-            if (found) {
-              return [found];
-            }
-            return [];
-          });
-          setEventsToAdd((prev) => {
-            if (prev) {
-              return [...prev, editedEvent];
-            } else {
-              return [editedEvent];
-            }
-          });
+        // When editing a event, first we remove the old entrance and then we add it again
+        const eventsToAddIds = eventsToAdd?.map((mta) => mta.id).filter((id) => id !== -1);
+        if (eventsToAddIds?.includes(editedEvent.id)) {
+          const found = eventsToAdd?.find((eventToAdd) => eventToAdd.id === editedEvent.id);
+          if (found) {
+            const newEventsToAdd = eventsToAdd?.filter((etAdd) => etAdd.id !== editedEvent.id);
+            newEventsToAdd?.push(editedEvent);
+            setEventsToAdd(newEventsToAdd);
+          }
+        } else {
+          const found = prevEvents?.find((eventToAdd) => eventToAdd.id?.toString() === editedEvent.id?.toString());
+          if (found) {
+            setEventsToDelete((prev) => {
+              if (prev && found) {
+                return [...prev, found];
+              }
+              if (found) {
+                return [found];
+              }
+              return [];
+            });
+            setEventsToAdd((prev) => {
+              if (prev) {
+                return [...prev, editedEvent];
+              } else {
+                return [editedEvent];
+              }
+            });
+          }
         }
       }
     }
