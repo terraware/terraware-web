@@ -13,7 +13,9 @@ export default function EventsCellRenderer(props: RendererProps<TableRowType>): 
   if (column.key === 'id' && onRowClick) {
     const valueToRender =
       value?.toString() === '-1' ? (
-        ''
+        <Link fontSize='16px' target='_blank' onClick={() => onRowClick()}>
+          {'<ID>'}
+        </Link>
       ) : (
         <Link fontSize='16px' target='_blank' onClick={() => onRowClick()}>
           {value as React.ReactNode}
