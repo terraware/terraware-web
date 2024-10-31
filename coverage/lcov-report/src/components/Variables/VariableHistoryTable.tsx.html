@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/76</span>
+                <span class='fraction'>0/77</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/73</span>
+                <span class='fraction'>0/74</span>
             </div>
         
             
@@ -321,7 +321,12 @@
 <a name='L256'></a><a href='#L256'>256</a>
 <a name='L257'></a><a href='#L257'>257</a>
 <a name='L258'></a><a href='#L258'>258</a>
-<a name='L259'></a><a href='#L259'>259</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L259'></a><a href='#L259'>259</a>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a>
+<a name='L262'></a><a href='#L262'>262</a>
+<a name='L263'></a><a href='#L263'>263</a>
+<a name='L264'></a><a href='#L264'>264</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -398,10 +403,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -570,6 +579,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -656,179 +666,184 @@ export const VariableHistoryTable = <span class="cstat-no" title="statement not 
 <span class="cstat-no" title="statement not covered" >      return [];</span>
     }
 &nbsp;
+    // Most recent first
     const variableHistory = <span class="cstat-no" title="statement not covered" >historyResponse.data.history;</span>
     const variable = <span class="cstat-no" title="statement not covered" >historyResponse.data.variable;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return variableHistory.flatMap(<span class="fstat-no" title="function not covered" >(h</span>istory, idx) =&gt; {</span>
-      const newRows: VariableHistoryTableRow[] = <span class="cstat-no" title="statement not covered" >[];</span>
-      const previous = <span class="cstat-no" title="statement not covered" >idx &gt; 0 ? variableHistory[idx - 1] : undefined;</span>
+    const reversedVariableHistory = <span class="cstat-no" title="statement not covered" >variableHistory.toReversed();</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      if (previous?.feedback !== history.feedback) {</span>
-<span class="cstat-no" title="statement not covered" >        newRows.push({</span>
-          date: history.createdTime,
-          editedBy: history.createdBy,
-          change: {
-            field: 'feedback',
-            previous: previous?.feedback ?? '',
-            current: history.feedback ?? '',
-          },
-        });
-      }
+<span class="cstat-no" title="statement not covered" >    return reversedVariableHistory</span>
+      .flatMap(<span class="fstat-no" title="function not covered" >(h</span>istory, idx) =&gt; {
+        const newRows: VariableHistoryTableRow[] = <span class="cstat-no" title="statement not covered" >[];</span>
+        const previous = <span class="cstat-no" title="statement not covered" >idx &gt; 0 ? reversedVariableHistory[idx - 1] : undefined;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      if (previous?.internalComment !== history.internalComment) {</span>
-<span class="cstat-no" title="statement not covered" >        newRows.push({</span>
-          date: history.createdTime,
-          editedBy: history.createdBy,
-          change: {
-            field: 'internalComment',
-            previous: previous?.internalComment ?? '',
-            current: history.internalComment ?? '',
-          },
-        });
-      }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      if (previous?.status !== history.status) {</span>
-<span class="cstat-no" title="statement not covered" >        newRows.push({</span>
-          date: history.createdTime,
-          editedBy: history.createdBy,
-          change: {
-            field: 'status',
-            previous: previous?.status ?? '',
-            current: history.status,
-          },
-        });
-      }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      if (variable.type === 'Table') {</span>
-        const currentTableValueIds = <span class="cstat-no" title="statement not covered" >history.variableValues</span>
-          .toSorted(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.listPosition - b.listPosition)</span>
-          .map(<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >value.id)</span>
-          .join(',');
-&nbsp;
-        const previousTableValueIds = <span class="cstat-no" title="statement not covered" >(previous?.variableValues ?? [])</span>
-          .toSorted(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.listPosition - b.listPosition)</span>
-          .map(<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >value.id)</span>
-          .join(',');
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        if (previousTableValueIds !== currentTableValueIds) {</span>
+<span class="cstat-no" title="statement not covered" >        if (previous?.feedback !== history.feedback) {</span>
 <span class="cstat-no" title="statement not covered" >          newRows.push({</span>
             date: history.createdTime,
             editedBy: history.createdBy,
             change: {
-              field: 'table',
-              previous: previousTableValueIds,
-              current: currentTableValueIds,
+              field: 'feedback',
+              previous: previous?.feedback ?? '',
+              current: history.feedback ?? '',
             },
           });
         }
-      } else <span class="cstat-no" title="statement not covered" >if (variable.type === 'Date') {</span>
-        const currentValue = <span class="cstat-no" title="statement not covered" >history.variableValues[0] as VariableValueDateValue | undefined;</span>
-        const previousValue = <span class="cstat-no" title="statement not covered" >previous?.variableValues[0] as VariableValueDateValue | undefined;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        if (previousValue?.dateValue !== currentValue?.dateValue) {</span>
+<span class="cstat-no" title="statement not covered" >        if (previous?.internalComment !== history.internalComment) {</span>
 <span class="cstat-no" title="statement not covered" >          newRows.push({</span>
             date: history.createdTime,
             editedBy: history.createdBy,
             change: {
-              field: 'value',
-              previous: previousValue?.dateValue ?? '',
-              current: currentValue?.dateValue ?? '',
+              field: 'internalComment',
+              previous: previous?.internalComment ?? '',
+              current: history.internalComment ?? '',
             },
           });
         }
-      } else <span class="cstat-no" title="statement not covered" >if (variable.type === 'Number') {</span>
-        const currentValue = <span class="cstat-no" title="statement not covered" >history.variableValues[0] as VariableValueNumberValue | undefined;</span>
-        const previousValue = <span class="cstat-no" title="statement not covered" >previous?.variableValues[0] as VariableValueNumberValue | undefined;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        if (previousValue?.numberValue !== currentValue?.numberValue) {</span>
+<span class="cstat-no" title="statement not covered" >        if (previous?.status !== history.status) {</span>
 <span class="cstat-no" title="statement not covered" >          newRows.push({</span>
             date: history.createdTime,
             editedBy: history.createdBy,
             change: {
-              field: 'value',
-              previous: previousValue?.numberValue.toString() ?? '',
-              current: currentValue?.numberValue.toString() ?? '',
+              field: 'status',
+              previous: previous?.status ?? '',
+              current: history.status,
             },
           });
         }
-      } else <span class="cstat-no" title="statement not covered" >if (variable.type === 'Text') {</span>
-        const currentValue = <span class="cstat-no" title="statement not covered" >history.variableValues[0] as VariableValueTextValue | undefined;</span>
-        const previousValue = <span class="cstat-no" title="statement not covered" >previous?.variableValues[0] as VariableValueTextValue | undefined;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        if (previousValue?.textValue !== currentValue?.textValue) {</span>
-<span class="cstat-no" title="statement not covered" >          newRows.push({</span>
-            date: history.createdTime,
-            editedBy: history.createdBy,
-            change: {
-              field: 'value',
-              previous: previousValue?.textValue ?? '',
-              current: currentValue?.textValue ?? '',
-            },
-          });
+<span class="cstat-no" title="statement not covered" >        if (variable.type === 'Table') {</span>
+          const currentTableValueIds = <span class="cstat-no" title="statement not covered" >history.variableValues</span>
+            .toSorted(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.listPosition - b.listPosition)</span>
+            .map(<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >value.id)</span>
+            .join(',');
+&nbsp;
+          const previousTableValueIds = <span class="cstat-no" title="statement not covered" >(previous?.variableValues ?? [])</span>
+            .toSorted(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.listPosition - b.listPosition)</span>
+            .map(<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >value.id)</span>
+            .join(',');
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          if (previousTableValueIds !== currentTableValueIds) {</span>
+<span class="cstat-no" title="statement not covered" >            newRows.push({</span>
+              date: history.createdTime,
+              editedBy: history.createdBy,
+              change: {
+                field: 'table',
+                previous: previousTableValueIds,
+                current: currentTableValueIds,
+              },
+            });
+          }
+        } else <span class="cstat-no" title="statement not covered" >if (variable.type === 'Date') {</span>
+          const currentValue = <span class="cstat-no" title="statement not covered" >history.variableValues[0] as VariableValueDateValue | undefined;</span>
+          const previousValue = <span class="cstat-no" title="statement not covered" >previous?.variableValues[0] as VariableValueDateValue | undefined;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          if (previousValue?.dateValue !== currentValue?.dateValue) {</span>
+<span class="cstat-no" title="statement not covered" >            newRows.push({</span>
+              date: history.createdTime,
+              editedBy: history.createdBy,
+              change: {
+                field: 'value',
+                previous: previousValue?.dateValue ?? '',
+                current: currentValue?.dateValue ?? '',
+              },
+            });
+          }
+        } else <span class="cstat-no" title="statement not covered" >if (variable.type === 'Number') {</span>
+          const currentValue = <span class="cstat-no" title="statement not covered" >history.variableValues[0] as VariableValueNumberValue | undefined;</span>
+          const previousValue = <span class="cstat-no" title="statement not covered" >previous?.variableValues[0] as VariableValueNumberValue | undefined;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          if (previousValue?.numberValue !== currentValue?.numberValue) {</span>
+<span class="cstat-no" title="statement not covered" >            newRows.push({</span>
+              date: history.createdTime,
+              editedBy: history.createdBy,
+              change: {
+                field: 'value',
+                previous: previousValue?.numberValue.toString() ?? '',
+                current: currentValue?.numberValue.toString() ?? '',
+              },
+            });
+          }
+        } else <span class="cstat-no" title="statement not covered" >if (variable.type === 'Text') {</span>
+          const currentValue = <span class="cstat-no" title="statement not covered" >history.variableValues[0] as VariableValueTextValue | undefined;</span>
+          const previousValue = <span class="cstat-no" title="statement not covered" >previous?.variableValues[0] as VariableValueTextValue | undefined;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          if (previousValue?.textValue !== currentValue?.textValue) {</span>
+<span class="cstat-no" title="statement not covered" >            newRows.push({</span>
+              date: history.createdTime,
+              editedBy: history.createdBy,
+              change: {
+                field: 'value',
+                previous: previousValue?.textValue ?? '',
+                current: currentValue?.textValue ?? '',
+              },
+            });
+          }
+        } else <span class="cstat-no" title="statement not covered" >if (variable.type === 'Select') {</span>
+          const currentValues = <span class="cstat-no" title="statement not covered" >history.variableValues[0] as VariableValueSelectValue | undefined;</span>
+          const previousValues = <span class="cstat-no" title="statement not covered" >previous?.variableValues[0] as VariableValueSelectValue | undefined;</span>
+&nbsp;
+          const currentOptionValues = <span class="cstat-no" title="statement not covered" >(currentValues?.optionValues ?? [])</span>
+            .toSorted()
+            .map(<span class="fstat-no" title="function not covered" >(i</span>d) =&gt; <span class="cstat-no" title="statement not covered" >variable.options.find(<span class="fstat-no" title="function not covered" >(o</span>ption) =&gt; <span class="cstat-no" title="statement not covered" >option.id === id)</span>)</span>
+            .filter(<span class="fstat-no" title="function not covered" >(o</span>ption): option is SelectOptionPayload =&gt; <span class="cstat-no" title="statement not covered" >option !== undefined)</span> // drop unrecognized select options
+            .map(<span class="fstat-no" title="function not covered" >(o</span>ption) =&gt; <span class="cstat-no" title="statement not covered" >option.name)</span>
+            .join(',');
+&nbsp;
+          const previousOptionValues = <span class="cstat-no" title="statement not covered" >(previousValues?.optionValues ?? [])</span>
+            .toSorted()
+            .map(<span class="fstat-no" title="function not covered" >(i</span>d) =&gt; <span class="cstat-no" title="statement not covered" >variable.options.find(<span class="fstat-no" title="function not covered" >(o</span>ption) =&gt; <span class="cstat-no" title="statement not covered" >option.id === id)</span>)</span>
+            .filter(<span class="fstat-no" title="function not covered" >(o</span>ption): option is SelectOptionPayload =&gt; <span class="cstat-no" title="statement not covered" >option !== undefined)</span>
+            .map(<span class="fstat-no" title="function not covered" >(o</span>ption) =&gt; <span class="cstat-no" title="statement not covered" >option.name)</span>
+            .join(',');
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          if (previousOptionValues !== currentOptionValues) {</span>
+<span class="cstat-no" title="statement not covered" >            newRows.push({</span>
+              date: history.createdTime,
+              editedBy: history.createdBy,
+              change: {
+                field: 'value',
+                previous: previousOptionValues,
+                current: currentOptionValues,
+              },
+            });
+          }
+        } else <span class="cstat-no" title="statement not covered" >if (variable.type === 'Link') {</span>
+          const currentValue = <span class="cstat-no" title="statement not covered" >history.variableValues[0] as VariableValueLinkValue | undefined;</span>
+          const previousValue = <span class="cstat-no" title="statement not covered" >previous?.variableValues[0] as VariableValueLinkValue | undefined;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          if (previousValue?.url !== currentValue?.url) {</span>
+<span class="cstat-no" title="statement not covered" >            newRows.push({</span>
+              date: history.createdTime,
+              editedBy: history.createdBy,
+              change: {
+                field: 'value',
+                previous: previousValue?.url ?? '',
+                current: currentValue?.url ?? '',
+              },
+            });
+          }
+        } else <span class="cstat-no" title="statement not covered" >if (variable.type === 'Image') {</span>
+          const currentValue = <span class="cstat-no" title="statement not covered" >history.variableValues[0] as VariableValueImageValue | undefined;</span>
+          const previousValue = <span class="cstat-no" title="statement not covered" >previous?.variableValues[0] as VariableValueImageValue | undefined;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          if (previousValue?.id !== currentValue?.id) {</span>
+<span class="cstat-no" title="statement not covered" >            newRows.push({</span>
+              date: history.createdTime,
+              editedBy: history.createdBy,
+              change: {
+                field: 'image',
+                previous: previousValue?.id.toString() ?? '',
+                current: currentValue?.id.toString() ?? '',
+              },
+            });
+          }
         }
-      } else <span class="cstat-no" title="statement not covered" >if (variable.type === 'Select') {</span>
-        const currentValues = <span class="cstat-no" title="statement not covered" >history.variableValues[0] as VariableValueSelectValue | undefined;</span>
-        const previousValues = <span class="cstat-no" title="statement not covered" >previous?.variableValues[0] as VariableValueSelectValue | undefined;</span>
 &nbsp;
-        const currentOptionValues = <span class="cstat-no" title="statement not covered" >(currentValues?.optionValues ?? [])</span>
-          .toSorted()
-          .map(<span class="fstat-no" title="function not covered" >(i</span>d) =&gt; <span class="cstat-no" title="statement not covered" >variable.options.find(<span class="fstat-no" title="function not covered" >(o</span>ption) =&gt; <span class="cstat-no" title="statement not covered" >option.id === id)</span>)</span>
-          .filter(<span class="fstat-no" title="function not covered" >(o</span>ption): option is SelectOptionPayload =&gt; <span class="cstat-no" title="statement not covered" >option !== undefined)</span> // drop unrecognized select options
-          .map(<span class="fstat-no" title="function not covered" >(o</span>ption) =&gt; <span class="cstat-no" title="statement not covered" >option.name)</span>
-          .join(',');
-&nbsp;
-        const previousOptionValues = <span class="cstat-no" title="statement not covered" >(previousValues?.optionValues ?? [])</span>
-          .toSorted()
-          .map(<span class="fstat-no" title="function not covered" >(i</span>d) =&gt; <span class="cstat-no" title="statement not covered" >variable.options.find(<span class="fstat-no" title="function not covered" >(o</span>ption) =&gt; <span class="cstat-no" title="statement not covered" >option.id === id)</span>)</span>
-          .filter(<span class="fstat-no" title="function not covered" >(o</span>ption): option is SelectOptionPayload =&gt; <span class="cstat-no" title="statement not covered" >option !== undefined)</span>
-          .map(<span class="fstat-no" title="function not covered" >(o</span>ption) =&gt; <span class="cstat-no" title="statement not covered" >option.name)</span>
-          .join(',');
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        if (previousOptionValues !== currentOptionValues) {</span>
-<span class="cstat-no" title="statement not covered" >          newRows.push({</span>
-            date: history.createdTime,
-            editedBy: history.createdBy,
-            change: {
-              field: 'value',
-              previous: previousOptionValues,
-              current: currentOptionValues,
-            },
-          });
-        }
-      } else <span class="cstat-no" title="statement not covered" >if (variable.type === 'Link') {</span>
-        const currentValue = <span class="cstat-no" title="statement not covered" >history.variableValues[0] as VariableValueLinkValue | undefined;</span>
-        const previousValue = <span class="cstat-no" title="statement not covered" >previous?.variableValues[0] as VariableValueLinkValue | undefined;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        if (previousValue?.url !== currentValue?.url) {</span>
-<span class="cstat-no" title="statement not covered" >          newRows.push({</span>
-            date: history.createdTime,
-            editedBy: history.createdBy,
-            change: {
-              field: 'value',
-              previous: previousValue?.url ?? '',
-              current: currentValue?.url ?? '',
-            },
-          });
-        }
-      } else <span class="cstat-no" title="statement not covered" >if (variable.type === 'Image') {</span>
-        const currentValue = <span class="cstat-no" title="statement not covered" >history.variableValues[0] as VariableValueImageValue | undefined;</span>
-        const previousValue = <span class="cstat-no" title="statement not covered" >previous?.variableValues[0] as VariableValueImageValue | undefined;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        if (previousValue?.id !== currentValue?.id) {</span>
-<span class="cstat-no" title="statement not covered" >          newRows.push({</span>
-            date: history.createdTime,
-            editedBy: history.createdBy,
-            change: {
-              field: 'image',
-              previous: previousValue?.id.toString() ?? '',
-              current: currentValue?.id.toString() ?? '',
-            },
-          });
-        }
-      }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      return newRows;</span>
-    });
+<span class="cstat-no" title="statement not covered" >        return newRows;</span>
+      })
+      .toReversed();
   }, [dispatch, historyResponse]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (!historyResponse || historyResponse.status === 'pending') {</span>
@@ -844,7 +859,7 @@ export const VariableHistoryTable = <span class="cstat-no" title="statement not 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-29T20:46:36.859Z
+                at 2024-10-31T23:00:09.777Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
