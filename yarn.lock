@@ -3980,10 +3980,10 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@^3.4.5":
-  version "3.4.5"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-3.4.5.tgz#c80c3405e949817ae979b093b54a0fd30b32ff28"
-  integrity sha512-fUS3bP5bo4ParShSR1YrnnwhFyHVoI0Pe3pVA8wAtCM02iTiYxoezvZAFGzCMt3gFzV8jUkqhaBwbBP8W1du1w==
+"@terraware/web-components@^3.4.6":
+  version "3.4.6"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-3.4.6.tgz#78eab7f8aeefe08e20556a4566c15972969337ab"
+  integrity sha512-vfyE0EQqHAZzfidf5Blj+6uDeAhOj3NtL0KkjEGO32ZhrqScqntRf6f+T1sWRoe1QwIXCV9AlGKZUN97G4h3zg==
   dependencies:
     "@dnd-kit/core" "^6.0.7"
     "@dnd-kit/sortable" "^7.0.2"
