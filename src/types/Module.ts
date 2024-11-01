@@ -6,6 +6,7 @@ export type Module = components['schemas']['ModulePayload'];
 export type ModuleEvent = components['schemas']['ModuleEvent'];
 export type ModuleEventPartial = Omit<Partial<components['schemas']['ModuleEvent']>, 'projects'> & {
   projects?: ModuleEventProject[];
+  feId?: symbol;
 };
 export type ModuleEventProject = Partial<NonNullable<components['schemas']['ModuleEvent']['projects']>[0]>;
 export type ModuleEventWithStartTime = Omit<ModuleEvent, 'startTime'> & { startTime: string };

@@ -37,6 +37,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
   const result = useAppSelector(selectModuleCohorts(moduleId.toString()));
   const [availableCohorts, setAvailableCohorts] = useState<CohortModuleWithProject[]>();
   const [projectsSections, setProjectsSections] = useState<ProjectsSection[]>([{ cohort: {}, projectIds: [] }]);
+  const [dateError, setDateError] = useState(false);
 
   useEffect(() => {
     if (eventToEdit?.projects && eventToEdit.projects.length > 0) {
@@ -93,6 +94,14 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
 
   const save = () => {
     const projectsWithCohort: ModuleEventProject[] = [];
+    if (record.endTime && record.startTime) {
+      const endDateDate = new Date(record.endTime);
+      const startDateDate = new Date(record.startTime);
+      if (endDateDate < startDateDate) {
+        setDateError(true);
+        return;
+      }
+    }
     projectsSections.forEach((ps) =>
       ps.projectIds.forEach((projId) => {
         const foundCohort = availableCohorts?.find((coh) => coh.id === ps.cohort.id);
@@ -212,6 +221,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
             }}
             aria-label='date-picker'
             showTime={true}
+            errorText={record.endTime && dateError ? strings.INVALID_DATE : ''}
           />
         </Grid>
         <Grid item xs={12}>
