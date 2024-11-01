@@ -49,7 +49,7 @@ export default function InventoryTests() {
     await page.locator('textarea').fill('Adding some notes');
     await page.getByRole('button', { name: 'Save' }).click();
 
-    await expect(page.getByText('Banana')).toBeVisible();
+    await expect(page.getByText('Banana', { exact: true })).toBeVisible();
     await expect(page.getByText('Garage')).toBeVisible();
     await expect(page.getByText('-02-01')).toBeVisible();
     await expect(page.getByText('Germinating Quantity 500')).toBeVisible();
@@ -109,7 +109,7 @@ export default function InventoryTests() {
     await page.locator('textarea').fill('Adding some notes');
     await page.getByRole('button', { name: 'Save' }).click();
 
-    await expect(page.getByText('Coconut')).toBeVisible();
+    await expect(page.getByText('Coconut', { exact: true })).toBeVisible();
     await expect(page.getByText('Garage')).toBeVisible();
     await expect(page.getByText('Germinating Quantity 25')).toBeVisible();
     await expect(page.getByText('Not Ready Quantity 25')).toBeVisible();
