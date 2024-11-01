@@ -203,8 +203,7 @@ export default function AccessionTests() {
     await expect(page.getByRole('main')).toContainText('15');
     await page.getByRole('button', { name: 'Edit' }).click();
     await page.getByRole('button', { name: 'Add Observation' }).click();
-    await page.locator('input[type="text"]').nth(2).click();
-    await page.locator('input[type="text"]').nth(2).fill('3');
+    await page.locator('div:nth-child(3) > div:nth-child(2) > div > .textfield > #seedsGerminated > input').fill('3');
     await page.getByLabel('Mark as Complete').check();
     await page.getByRole('button', { name: 'Save' }).click();
     await page.getByRole('button', { name: 'Apply Result' }).click();
