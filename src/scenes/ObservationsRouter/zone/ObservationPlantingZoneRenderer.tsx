@@ -29,6 +29,7 @@ const ObservationPlantingZoneRenderer =
       return (
         <Link fontSize='16px' to={url}>
           {name as React.ReactNode}
+          {row.sizeMeters.toString() === '25' ? '*' : ''}
         </Link>
       );
     };
