@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/101</span>
+                <span class='fraction'>0/108</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/94</span>
+                <span class='fraction'>0/101</span>
             </div>
         
             
@@ -380,7 +380,17 @@
 <a name='L315'></a><a href='#L315'>315</a>
 <a name='L316'></a><a href='#L316'>316</a>
 <a name='L317'></a><a href='#L317'>317</a>
-<a name='L318'></a><a href='#L318'>318</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L318'></a><a href='#L318'>318</a>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a>
+<a name='L324'></a><a href='#L324'>324</a>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a>
+<a name='L327'></a><a href='#L327'>327</a>
+<a name='L328'></a><a href='#L328'>328</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -419,6 +429,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -473,14 +484,22 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -591,6 +610,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -736,6 +756,7 @@ export default function <span class="fstat-no" title="function not covered" >Add
   const result = <span class="cstat-no" title="statement not covered" >useAppSelector(selectModuleCohorts(moduleId.toString()));</span>
   const [availableCohorts, setAvailableCohorts] = <span class="cstat-no" title="statement not covered" >useState&lt;CohortModuleWithProject[]&gt;();</span>
   const [projectsSections, setProjectsSections] = <span class="cstat-no" title="statement not covered" >useState&lt;ProjectsSection[]&gt;([{ cohort: {}, projectIds: [] }]);</span>
+  const [dateError, setDateError] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (eventToEdit?.projects &amp;&amp; eventToEdit.projects.length &gt; 0) {</span>
@@ -792,6 +813,14 @@ export default function <span class="fstat-no" title="function not covered" >Add
 &nbsp;
   const save = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const projectsWithCohort: ModuleEventProject[] = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >    if (record.endTime &amp;&amp; record.startTime) {</span>
+      const endDateDate = <span class="cstat-no" title="statement not covered" >new Date(record.endTime);</span>
+      const startDateDate = <span class="cstat-no" title="statement not covered" >new Date(record.startTime);</span>
+<span class="cstat-no" title="statement not covered" >      if (endDateDate &lt; startDateDate) {</span>
+<span class="cstat-no" title="statement not covered" >        setDateError(true);</span>
+<span class="cstat-no" title="statement not covered" >        return;</span>
+      }
+    }
 <span class="cstat-no" title="statement not covered" >    projectsSections.forEach(<span class="fstat-no" title="function not covered" >(p</span>s) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >      ps.projectIds.forEach(<span class="fstat-no" title="function not covered" >(p</span>rojId) =&gt; {</span>
         const foundCohort = <span class="cstat-no" title="statement not covered" >availableCohorts?.find(<span class="fstat-no" title="function not covered" >(c</span>oh) =&gt; <span class="cstat-no" title="statement not covered" >coh.id === ps.cohort.id)</span>;</span>
@@ -911,6 +940,7 @@ export default function <span class="fstat-no" title="function not covered" >Add
             }}
             aria-label='date-picker'
             showTime={true}
+            errorText={record.endTime &amp;&amp; dateError ? strings.INVALID_DATE : ''}
           /&gt;
         &lt;/Grid&gt;
         &lt;Grid item xs={12}&gt;
@@ -1021,7 +1051,7 @@ export default function <span class="fstat-no" title="function not covered" >Add
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-01T15:19:22.253Z
+                at 2024-11-01T16:16:49.218Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
