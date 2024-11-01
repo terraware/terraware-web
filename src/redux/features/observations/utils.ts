@@ -271,7 +271,9 @@ const mergeSpecies = (
     );
 };
 
-export const has25mPlots = (subzones: ObservationPlantingSubzoneResults[]) => {
+export const has25mPlots = (
+  subzones: ObservationPlantingSubzoneResults[] | ObservationPlantingSubzoneResultsPayload[]
+) => {
   return subzones
     ?.flatMap((subzone: { monitoringPlots: any[] }) => subzone.monitoringPlots.flatMap((plot) => plot.sizeMeters))
     .some((size: number) => size.toString() === '25');
