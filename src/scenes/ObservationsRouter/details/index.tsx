@@ -14,6 +14,7 @@ import {
   selectDetailsZoneNames,
 } from 'src/redux/features/observations/observationDetailsSelectors';
 import { selectObservation } from 'src/redux/features/observations/observationsSelectors';
+import { has25mPlots } from 'src/redux/features/observations/utils';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
@@ -134,6 +135,13 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     }
   }, [zoneNames, searchProps.filtersProps]);
 
+  const has25mPlotsZones = () => {
+    const allSubzones = details?.plantingZones.flatMap((zone) => zone.plantingSubzones.flatMap((subzone) => subzone));
+    if (allSubzones) {
+      return has25mPlots(allSubzones);
+    }
+  };
+
   return (
     <DetailsPage title={title} plantingSiteId={plantingSiteId}>
       <ObservationStatusSummaryMessage
@@ -155,6 +163,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
                 rows={details?.plantingZones ?? []}
                 orderBy='plantingZoneName'
                 Renderer={ObservationDetailsRenderer(plantingSiteId, observationId)}
+                tableComments={has25mPlotsZones() ? strings.PLOTS_SIZE_NOTE : undefined}
               />
             </Box>
           </Card>

@@ -5,8 +5,10 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
+import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
+import { searchObservationDetails } from 'src/redux/features/observations/observationDetailsSelectors';
 import { selectObservationMonitoringPlot } from 'src/redux/features/observations/observationMonitoringPlotSelectors';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
@@ -47,6 +49,19 @@ export default function ObservationMonitoringPlot(): JSX.Element {
   );
 
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
+
+  const details = useAppSelector((state) =>
+    searchObservationDetails(
+      state,
+      {
+        plantingSiteId: Number(plantingSiteId),
+        observationId: Number(observationId),
+        search: '',
+        zoneNames: [],
+      },
+      defaultTimeZone.get().id
+    )
+  );
 
   const gridSize = isMobile ? 12 : 4;
 
@@ -105,6 +120,38 @@ export default function ObservationMonitoringPlot(): JSX.Element {
     }
   }, [navigate, monitoringPlot, observationId, plantingZoneId, plantingSiteId]);
 
+  const getReplacedPlotsNames = (): JSX.Element[] => {
+    const names =
+      monitoringPlot?.overlapsWithPlotIds.map((plotId, index) => {
+        const allPlots = details?.plantingZones?.flatMap((pz) =>
+          pz.plantingSubzones.flatMap((subzone) => subzone.monitoringPlots.flatMap((plot) => plot))
+        );
+        const found = allPlots?.find((plot) => plot.monitoringPlotId === plotId);
+        if (found) {
+          return (
+            <Link
+              key={`plot-link-${index}`}
+              to={APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS.replace(
+                ':plantingSiteId',
+                Number(plantingSiteId).toString()
+              )
+                .replace(':observationId', Number(observationId).toString())
+                .replace(
+                  ':plantingZoneId',
+                  Number(plantingZoneId).toString().replace(':monitoringPlotId', found.monitoringPlotId.toString())
+                )}
+            >
+              {found.monitoringPlotName}
+            </Link>
+          );
+        }
+        return undefined;
+      }) || [];
+
+    const elements = (names ?? []).filter((element): element is JSX.Element => element !== undefined);
+    return elements;
+  };
+
   return (
     <DetailsPage
       title={monitoringPlot?.monitoringPlotName ?? ''}
@@ -129,6 +176,14 @@ export default function ObservationMonitoringPlot(): JSX.Element {
                   />
                 </Grid>
               ))}
+              {monitoringPlot?.overlapsWithPlotIds && monitoringPlot.overlapsWithPlotIds.length > 0 && (
+                <Grid item xs={gridSize} marginTop={2}>
+                  <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
+                    {strings.PLOT_REPLACES_THIS_25M_PLOT}
+                  </Typography>
+                  {getReplacedPlotsNames()}
+                </Grid>
+              )}
             </Grid>
             {title(strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES)}
             <Box height='360px'>
