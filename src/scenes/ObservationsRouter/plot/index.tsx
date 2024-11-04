@@ -1,15 +1,15 @@
 import React, { useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Textfield } from '@terraware/web-components';
+import { Box, Grid, Tooltip, Typography, useTheme } from '@mui/material';
+import { Icon, Textfield } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
-import { searchObservationDetails } from 'src/redux/features/observations/observationDetailsSelectors';
 import { selectObservationMonitoringPlot } from 'src/redux/features/observations/observationMonitoringPlotSelectors';
+import { selectObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
@@ -34,6 +34,17 @@ export default function ObservationMonitoringPlot(): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
+  const allObservationsResults = useAppSelector(selectObservationsResults);
+  const observationsResults = useMemo(() => {
+    if (!allObservationsResults || !plantingSiteId) {
+      return [];
+    }
+    return allObservationsResults?.filter((observationResult) => {
+      const matchesSite =
+        plantingSiteId !== '-1' ? observationResult.plantingSiteId.toString() === plantingSiteId : true;
+      return matchesSite;
+    });
+  }, [allObservationsResults, plantingSiteId]);
 
   const monitoringPlot = useAppSelector((state) =>
     selectObservationMonitoringPlot(
@@ -49,19 +60,6 @@ export default function ObservationMonitoringPlot(): JSX.Element {
   );
 
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
-
-  const details = useAppSelector((state) =>
-    searchObservationDetails(
-      state,
-      {
-        plantingSiteId: Number(plantingSiteId),
-        observationId: Number(observationId),
-        search: '',
-        zoneNames: [],
-      },
-      defaultTimeZone.get().id
-    )
-  );
 
   const gridSize = isMobile ? 12 : 4;
 
@@ -123,8 +121,14 @@ export default function ObservationMonitoringPlot(): JSX.Element {
   const getReplacedPlotsNames = (): JSX.Element[] => {
     const names =
       monitoringPlot?.overlapsWithPlotIds.map((plotId, index) => {
-        const allPlots = details?.plantingZones?.flatMap((pz) =>
-          pz.plantingSubzones.flatMap((subzone) => subzone.monitoringPlots.flatMap((plot) => plot))
+        const allPlots = observationsResults.flatMap((obv) =>
+          obv.plantingZones.flatMap((pz) =>
+            pz.plantingSubzones.flatMap((subzone) =>
+              subzone.monitoringPlots.map((plot) => {
+                return { ...plot, observationId: obv.observationId };
+              })
+            )
+          )
         );
         const found = allPlots?.find((plot) => plot.monitoringPlotId === plotId);
         if (found) {
@@ -135,11 +139,9 @@ export default function ObservationMonitoringPlot(): JSX.Element {
                 ':plantingSiteId',
                 Number(plantingSiteId).toString()
               )
-                .replace(':observationId', Number(observationId).toString())
-                .replace(
-                  ':plantingZoneId',
-                  Number(plantingZoneId).toString().replace(':monitoringPlotId', found.monitoringPlotId.toString())
-                )}
+                .replace(':observationId', Number(found.observationId).toString())
+                .replace(':plantingZoneId', Number(plantingZoneId).toString())
+                .replace(':monitoringPlotId', found.monitoringPlotId.toString())}
             >
               {found.monitoringPlotName}
             </Link>
@@ -178,10 +180,26 @@ export default function ObservationMonitoringPlot(): JSX.Element {
               ))}
               {monitoringPlot?.overlapsWithPlotIds && monitoringPlot.overlapsWithPlotIds.length > 0 && (
                 <Grid item xs={gridSize} marginTop={2}>
-                  <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
-                    {strings.PLOT_REPLACES_THIS_25M_PLOT}
-                  </Typography>
-                  {getReplacedPlotsNames()}
+                  <Box display={'flex'} alignItems={'center'}>
+                    <Typography
+                      fontSize='14px'
+                      fontWeight={400}
+                      color={theme.palette.TwClrTxtSecondary}
+                      paddingRight={0.5}
+                    >
+                      {strings.PREVIOUS_25M_PLOT}
+                    </Typography>
+                    <Tooltip title={strings.PREVIOUS_25M_PLOT_TOOLTIP}>
+                      <Box display='flex'>
+                        <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+                      </Box>
+                    </Tooltip>
+                  </Box>
+                  <Box paddingTop={1.5}>
+                    {getReplacedPlotsNames().map((plotLink, index) => (
+                      <Box key={`plot-link-${index}`}>{plotLink}</Box>
+                    ))}
+                  </Box>
                 </Grid>
               )}
             </Grid>
