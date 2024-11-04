@@ -1,7 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'Home Page Onboarding Improvements';
+export type FeatureName = 'Show Production View' | 'Home Page Onboarding Improvements' | 'New Plants Dashboard';
 
 export type Feature = {
   name: FeatureName;
@@ -42,6 +42,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Improvements to the Terraware home page onboarding experience.'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'New Plants Dashboard',
+    preferenceName: 'enableNewPlantsDashboard',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['New plants dashboard'],
     disclosure: ['This is a WIP'],
   },
 ];
