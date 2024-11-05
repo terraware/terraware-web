@@ -1,9 +1,8 @@
-import { Descendant } from 'slate';
-
-import { CustomElement, CustomText } from 'src/components/DocumentProducer/EditableSection/Edit';
 import strings from 'src/strings';
 import { VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValueSelectValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
+
+import { TextElement, VariableElement, isVariableElement } from './types';
 
 export const editorDisplayVariableWithValues = (
   variable: VariableWithValues,
@@ -57,10 +56,10 @@ export const displayValue = (value: VariableValueValue, placeholder?: string): s
 export const editorValueFromVariableValue = (
   variableValue: VariableValueValue,
   allValues: VariableWithValues[]
-): Descendant => {
+): VariableElement | TextElement => {
   switch (variableValue.type) {
     case 'SectionText':
-      return { text: variableValue.textValue ?? '' } as CustomText;
+      return { type: 'text', children: [{ text: variableValue.textValue ?? '' }] };
     case 'SectionVariable':
       const value = allValues.find((v) => v.id === variableValue.variableId);
       return {
@@ -68,31 +67,33 @@ export const editorValueFromVariableValue = (
         variableId: value?.id,
         children: [{ text: '' }],
         reference: variableValue.usageType === 'Reference',
-      } as CustomElement;
+      };
     default:
-      return { text: '' } as CustomText;
+      return { type: 'text', children: [{ text: '' }] };
   }
 };
 
 export const variableValueFromEditorValue = (
-  editorValue: Descendant,
-  allValues: VariableWithValues[],
+  editorValue: VariableElement | TextElement,
   listPosition: number
 ): VariableValueValue => {
-  if ((editorValue as CustomElement).variableId !== undefined) {
+  if (isVariableElement(editorValue)) {
     return {
       id: -1,
       listPosition,
       type: 'SectionVariable',
-      variableId: (editorValue as CustomElement).variableId!,
-      displayStyle: (editorValue as CustomElement).reference ? undefined : 'Inline',
-      usageType: (editorValue as CustomElement).reference ? 'Reference' : 'Injection',
+      variableId: editorValue.variableId!,
+      displayStyle: editorValue.reference ? undefined : 'Inline',
+      usageType: editorValue.reference ? 'Reference' : 'Injection',
     };
   }
+
   return {
     id: -1,
     listPosition,
     type: 'SectionText',
-    textValue: (editorValue as CustomText).text,
+    // Can we get rid of this? TextElement and CustomText should be the same thing. The SectionElement should be the only
+    // one with `children` if possible
+    textValue: editorValue.children[0].text,
   };
 };

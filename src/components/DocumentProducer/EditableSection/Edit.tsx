@@ -4,8 +4,8 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Autocomplete, Button, DropdownItem } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { isKeyHotkey } from 'is-hotkey';
-import { BaseEditor, Descendant, Element as SlateElement, Transforms, createEditor } from 'slate';
-import { Editable, ReactEditor, Slate, withReact } from 'slate-react';
+import { Descendant, Transforms, createEditor } from 'slate';
+import { Editable, Slate, withReact } from 'slate-react';
 
 import strings from 'src/strings';
 import { Section, VariableWithValues } from 'src/types/documentProducer/Variable';
@@ -15,23 +15,7 @@ import InsertOptionsDropdown from './InsertOptionsDropdown';
 import TextChunk from './TextChunk';
 import TextVariable from './TextVariable';
 import { editorValueFromVariableValue, variableValueFromEditorValue } from './helpers';
-
-// Required type definitions for slatejs (https://docs.slatejs.org/concepts/12-typescript):
-export type CustomElement = {
-  type?: 'text' | 'variable';
-  children: CustomText[];
-  variableId?: number;
-  docId: number;
-  reference?: boolean;
-};
-export type CustomText = { text: string };
-declare module 'slate' {
-  interface CustomTypes {
-    Editor: BaseEditor & ReactEditor;
-    Element: CustomElement;
-    Text: CustomText;
-  }
-}
+import { SectionElement, isCustomText, isSectionElement, isTextElement, isVariableElement } from './types';
 
 type EditableSectionEditProps = {
   section: Section;
@@ -59,27 +43,88 @@ const SectionEdit = ({
   const [variableToBeInserted, setVariableToBeInserted] = useState<VariableWithValues>();
 
   const initialValue: Descendant[] = useMemo(() => {
-    const editorValue =
-      sectionValues !== undefined && sectionValues.length > 0
-        ? [
-            {
-              children: [
-                { text: '' },
-                ...sectionValues.map((value) => editorValueFromVariableValue(value, allVariables)),
-                { text: '' },
-              ],
-            },
-          ]
-        : [{ children: [{ text: '' }] }];
-    return editorValue as Descendant[];
+    const editorValue: Descendant = {
+      type: 'section',
+      children: [],
+    };
+
+    if (sectionValues !== undefined && sectionValues.length > 0) {
+      editorValue.children = [
+        { type: 'text', children: [{ text: '' }] },
+        ...sectionValues.map((value) => editorValueFromVariableValue(value, allVariables)),
+        { type: 'text', children: [{ text: '' }] },
+      ];
+    }
+
+    return [editorValue];
   }, [sectionValues, allVariables]);
 
   const onChange = useCallback(
-    (value: Descendant[]) => {
+    (values: Descendant[]) => {
       const newVariableValues: VariableValueValue[] = [];
-      value.forEach((v) => {
-        const children = (v as SlateElement).children;
-        if (children.length === 1 && children[0].text === '') {
+
+      // An "empty" descendant is either a TextElement with no children that have text, or an empty CustomText
+      // A VariableElement is never considered "empty"
+      const isEmptyDescendant = (value: Descendant): boolean => {
+        // If https://tc39.es/proposal-pattern-matching/ ever lands, I can stop using this pattern!
+        switch (true) {
+          case isVariableElement(value):
+            return false;
+
+          case isSectionElement(value):
+          case isTextElement(value):
+            if (value.children.length > 1) {
+              return false;
+            }
+
+            const onlyChild = value.children[0];
+            return isEmptyDescendant(onlyChild);
+
+          case isCustomText(value):
+            return value.text === '';
+
+          default:
+            return true;
+        }
+      };
+
+      // If there are adjacent values, and neither is an "empty" value, we need to insert a line break.
+      // This is because when you add a line break in Slate, the first thing it does is split the text
+      // into multiple values. This causes it to seem like the first line break isn't added.
+      const adjustedValues = values.flatMap((value, index) => {
+        const nextDescendant = values[index + 1];
+
+        // If this is the last descendant, no need to check
+        if (!nextDescendant) {
+          return value;
+        }
+
+        if (!(isEmptyDescendant(value) && isEmptyDescendant(nextDescendant))) {
+          // Since neither of these are empty, this is probably the first line break added, which is
+          // causing Slate to split the value with children into multiple values with multiple children.
+          // In the UI this makes it seem like there is no line break added, so we will explicitly add the
+          // line break ourselves
+          const emptyValue: SectionElement = {
+            type: 'section',
+            children: [{ type: 'text', children: [{ text: '\n' }] }],
+          };
+
+          return [value, emptyValue];
+        }
+
+        return value;
+      });
+
+      adjustedValues.forEach((value: Descendant) => {
+        if (!isSectionElement(value)) {
+          // We shouldn't ever hit here, we are only using SectionElement as top level elements
+          return;
+        }
+
+        const children = value.children;
+
+        // This is an "empty" value
+        if (isEmptyDescendant(value)) {
           newVariableValues.push({
             id: -1,
             listPosition: newVariableValues.length,
@@ -87,13 +132,15 @@ const SectionEdit = ({
             textValue: '\n',
           });
         } else {
-          children.forEach((c) => {
-            if (c.text === undefined || c.text !== '') {
-              newVariableValues.push(variableValueFromEditorValue(c, allVariables, newVariableValues.length));
+          children.forEach((child) => {
+            if (isVariableElement(child) || isTextElement(child)) {
+              newVariableValues.push(variableValueFromEditorValue(child, newVariableValues.length));
             }
           });
         }
       });
+
+      console.log({ newVariableValues });
       setSectionValues(newVariableValues);
     },
     [allVariables, setSectionValues]
@@ -130,10 +177,10 @@ const SectionEdit = ({
     (variable: VariableWithValues, reference?: boolean) => {
       Transforms.insertNodes(editor, {
         type: 'variable',
-        children: [{ text: '' }],
+        children: [],
         variableId: variable.id,
         docId,
-        reference,
+        reference: reference !== undefined ? reference : false,
       });
     },
     [editor, docId]
