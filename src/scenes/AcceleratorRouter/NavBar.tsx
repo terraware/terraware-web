@@ -132,7 +132,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
       )}
 
       <NavItem
-        icon='iconFolder'
+        icon='iconModule'
         id='module-content'
         label={strings.MODULES}
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_MODULES)}
