@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1730744435909" clover="3.2.0">
-  <project timestamp="1730744435909" name="All files">
-    <metrics statements="26310" coveredstatements="1056" conditionals="17387" coveredconditionals="282" methods="8134" coveredmethods="176" elements="51831" coveredelements="1514" complexity="0" loc="26310" ncloc="26310" packages="237" files="1118" classes="1118"/>
+<coverage generated="1730809068943" clover="3.2.0">
+  <project timestamp="1730809068943" name="All files">
+    <metrics statements="26319" coveredstatements="1056" conditionals="17393" coveredconditionals="282" methods="8137" coveredmethods="176" elements="51849" coveredelements="1514" complexity="0" loc="26319" ncloc="26319" packages="237" files="1118" classes="1118"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -22738,7 +22738,7 @@
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter.plot">
-      <metrics statements="38" coveredstatements="0" conditionals="39" coveredconditionals="0" methods="19" coveredmethods="0"/>
+      <metrics statements="47" coveredstatements="0" conditionals="45" coveredconditionals="0" methods="22" coveredmethods="0"/>
       <file name="MonitoringPlotPhotos.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/plot/MonitoringPlotPhotos.tsx">
         <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
@@ -22749,39 +22749,48 @@
         <line num="30" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/plot/index.tsx">
-        <metrics statements="32" coveredstatements="0" conditionals="37" coveredconditionals="0" methods="16" coveredmethods="0"/>
+        <metrics statements="41" coveredstatements="0" conditionals="43" coveredconditionals="0" methods="19" coveredmethods="0"/>
         <line num="26" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="66" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="68" count="0" type="stmt"/>
-        <line num="69" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="71" count="0" type="stmt"/>
-        <line num="101" count="0" type="stmt"/>
-        <line num="102" count="0" type="stmt"/>
+        <line num="39" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="64" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="67" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="100" count="0" type="stmt"/>
+        <line num="111" count="0" type="stmt"/>
+        <line num="112" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="113" count="0" type="stmt"/>
-        <line num="114" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="115" count="0" type="stmt"/>
-        <line num="123" count="0" type="stmt"/>
-        <line num="125" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="121" count="0" type="stmt"/>
+        <line num="123" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="124" count="0" type="stmt"/>
+        <line num="125" count="0" type="stmt"/>
         <line num="126" count="0" type="stmt"/>
         <line num="127" count="0" type="stmt"/>
-        <line num="129" count="0" type="stmt"/>
-        <line num="130" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="131" count="0" type="stmt"/>
-        <line num="148" count="0" type="stmt"/>
-        <line num="151" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="152" count="0" type="stmt"/>
-        <line num="155" count="0" type="stmt"/>
-        <line num="168" count="0" type="stmt"/>
+        <line num="128" count="0" type="stmt"/>
+        <line num="133" count="0" type="stmt"/>
+        <line num="134" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="135" count="0" type="stmt"/>
+        <line num="150" count="0" type="stmt"/>
+        <line num="153" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="154" count="0" type="stmt"/>
+        <line num="157" count="0" type="stmt"/>
+        <line num="170" count="0" type="stmt"/>
+        <line num="200" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter.replacePlot">
