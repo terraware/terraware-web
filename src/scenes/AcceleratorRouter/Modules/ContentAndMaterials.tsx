@@ -72,8 +72,8 @@ export default function contentAndMaterials({ module, deliverables }: contentAnd
           {strings.CONTENT_AND_MATERIALS}
         </Typography>
       </Box>
-      <Grid container>
-        <Grid item>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
           <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
             {strings.DELIVERABLES}
           </Typography>
@@ -85,13 +85,13 @@ export default function contentAndMaterials({ module, deliverables }: contentAnd
             Renderer={DeliverablesRenderer}
           />
         </Grid>
-        <Grid item>
+        <Grid item xs={12}>
           <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
             {strings.PREPARATION_MATERIALS}
           </Typography>
           <Box dangerouslySetInnerHTML={{ __html: module?.preparationMaterials || '' }} />
         </Grid>
-        <Grid item>
+        <Grid item xs={12}>
           <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
             {strings.ADDITIONAL_RESOURCES}
           </Typography>
