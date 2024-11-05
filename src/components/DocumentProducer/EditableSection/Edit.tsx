@@ -225,6 +225,7 @@ const SectionEdit = ({
               if (!value || !(value as DropdownItem).value) {
                 return;
               }
+
               const variable = (value as DropdownItem).value as VariableWithValues;
               if (variable.type === 'Image' || variable.type === 'Table') {
                 setInsertOptionsDropdownAnchor(variableDropdownRef.current);
