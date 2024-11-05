@@ -6,6 +6,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
+import isEnabled from 'src/features';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
@@ -52,6 +53,7 @@ export default function PlantsDashboardView(): JSX.Element {
   const locale = useLocalization();
   const navigate = useNavigate();
   const theme = useTheme();
+  const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSiteId(site.id), [setSelectedPlantingSiteId]);
   const onPreferences = useCallback(
@@ -279,6 +281,7 @@ export default function PlantsDashboardView(): JSX.Element {
       lastVisitedPreferenceName='plants.dashboard.lastVisitedPlantingSite'
       plantsSitePreferences={plantsDashboardPreferences}
       setPlantsSitePreferences={onPreferences}
+      newHeader={newPlantsDashboardEnabled}
     >
       {selectedPlantingSiteId !== -1 ? (
         <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
