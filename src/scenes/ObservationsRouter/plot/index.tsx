@@ -187,9 +187,9 @@ export default function ObservationMonitoringPlot(): JSX.Element {
                       color={theme.palette.TwClrTxtSecondary}
                       paddingRight={0.5}
                     >
-                      {strings.PREVIOUS_25M_PLOT}
+                      {strings.PREVIOUS_25M_PLOTS}
                     </Typography>
-                    <Tooltip title={strings.PREVIOUS_25M_PLOT_TOOLTIP}>
+                    <Tooltip title={strings.PREVIOUS_25M_PLOTS_TOOLTIP}>
                       <Box display='flex'>
                         <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
                       </Box>
