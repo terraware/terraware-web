@@ -8,6 +8,7 @@ import { OrganizationService, PreferencesService } from 'src/services';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useEnvironment from 'src/utils/useEnvironment';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -42,6 +43,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const location = useStateLocation();
   const { userPreferences, updateUserPreferences, bootstrapped: userBootstrapped } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { isDev } = useEnvironment();
 
   const reloadOrganizations = useCallback(async (selectedOrgId?: number) => {
     const populateOrganizations = async () => {
@@ -181,7 +183,11 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   }, [selectedOrganization?.id]);
 
   if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
-    navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
+    if (isDev) {
+      alert(strings.GENERIC_ERROR);
+    } else {
+      navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
+    }
   }
 
   const [organizationData, setOrganizationData] = useState<ProvidedOrganizationData>({
