@@ -3,9 +3,12 @@ import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
+import { DateTime } from 'luxon';
 
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
+import Link from 'src/components/common/Link';
 import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
+import isEnabled from 'src/features';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
@@ -52,6 +55,7 @@ export default function PlantsDashboardView(): JSX.Element {
   const locale = useLocalization();
   const navigate = useNavigate();
   const theme = useTheme();
+  const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSiteId(site.id), [setSelectedPlantingSiteId]);
   const onPreferences = useCallback(
@@ -260,13 +264,31 @@ export default function PlantsDashboardView(): JSX.Element {
       return strings.FIRST_ADD_PLANTING_SITE;
     }
     if (latestObservation?.completedTime) {
-      return strings.formatString(
-        strings.DASHBOARD_HEADER_TEXT,
-        <b>
-          <FormattedNumber value={getObservationHectares()} />
-        </b>,
-        <>{getShortDate(latestObservation.completedTime, locale.activeLocale)}</>
-      ) as string;
+      return newPlantsDashboardEnabled
+        ? (strings.formatString(
+            strings.DASHBOARD_HEADER_TEXT_V2,
+            <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={getObservationHectares()} />)}</b>,
+            <b>
+              <Link
+                to={APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', selectedPlantingSiteId.toString()).replace(
+                  ':observationId',
+                  latestObservation.observationId.toString()
+                )}
+              >
+                {strings.formatString(
+                  strings.DATE_OBSERVATION,
+                  DateTime.fromISO(latestObservation.completedTime).toFormat('yyyy-MM-dd')
+                )}
+              </Link>
+            </b>
+          ) as string)
+        : (strings.formatString(
+            strings.DASHBOARD_HEADER_TEXT,
+            <b>
+              <FormattedNumber value={getObservationHectares()} />
+            </b>,
+            <>{getShortDate(latestObservation.completedTime, locale.activeLocale)}</>
+          ) as string);
     }
   };
 
@@ -279,6 +301,7 @@ export default function PlantsDashboardView(): JSX.Element {
       lastVisitedPreferenceName='plants.dashboard.lastVisitedPlantingSite'
       plantsSitePreferences={plantsDashboardPreferences}
       setPlantsSitePreferences={onPreferences}
+      newHeader={newPlantsDashboardEnabled}
     >
       {selectedPlantingSiteId !== -1 ? (
         <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
