@@ -182,13 +182,17 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     store.dispatch({ type: 'RESET_APP' });
   }, [selectedOrganization?.id]);
 
-  if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
-    if (isDev) {
-      alert(strings.GENERIC_ERROR);
-    } else {
-      navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
+  useEffect(() => {
+    if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
+      if (isDev) {
+        if (confirm(strings.DEV_SERVER_ERROR)) {
+          window.location.reload();
+        }
+      } else {
+        navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
+      }
     }
-  }
+  }, [orgAPIRequestStatus]);
 
   const [organizationData, setOrganizationData] = useState<ProvidedOrganizationData>({
     selectedOrganization: selectedOrganization || defaultSelectedOrg,
