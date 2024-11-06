@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1730864191341" clover="3.2.0">
-  <project timestamp="1730864191341" name="All files">
-    <metrics statements="26328" coveredstatements="1056" conditionals="17405" coveredconditionals="282" methods="8143" coveredmethods="176" elements="51876" coveredelements="1514" complexity="0" loc="26328" ncloc="26328" packages="237" files="1118" classes="1118"/>
+<coverage generated="1730915626466" clover="3.2.0">
+  <project timestamp="1730915626466" name="All files">
+    <metrics statements="26332" coveredstatements="1056" conditionals="17407" coveredconditionals="282" methods="8143" coveredmethods="176" elements="51882" coveredelements="1514" complexity="0" loc="26332" ncloc="26332" packages="237" files="1118" classes="1118"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -2653,7 +2653,7 @@
       </file>
     </package>
     <package name="src.components.DocumentProducer.EditableSection">
-      <metrics statements="228" coveredstatements="0" conditionals="183" coveredconditionals="0" methods="68" coveredmethods="0"/>
+      <metrics statements="232" coveredstatements="0" conditionals="185" coveredconditionals="0" methods="68" coveredmethods="0"/>
       <file name="Container.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DocumentProducer/EditableSection/Container.tsx">
         <metrics statements="79" coveredstatements="0" conditionals="47" coveredconditionals="0" methods="21" coveredmethods="0"/>
         <line num="49" count="0" type="stmt"/>
@@ -2762,7 +2762,7 @@
         <line num="99" count="0" type="stmt"/>
       </file>
       <file name="Edit.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DocumentProducer/EditableSection/Edit.tsx">
-        <metrics statements="67" coveredstatements="0" conditionals="47" coveredconditionals="0" methods="24" coveredmethods="0"/>
+        <metrics statements="71" coveredstatements="0" conditionals="49" coveredconditionals="0" methods="24" coveredmethods="0"/>
         <line num="45" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
@@ -2809,27 +2809,31 @@
         <line num="161" count="0" type="stmt"/>
         <line num="162" count="0" type="stmt"/>
         <line num="163" count="0" type="stmt"/>
-        <line num="170" count="0" type="stmt"/>
-        <line num="185" count="0" type="stmt"/>
-        <line num="192" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="193" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="194" count="0" type="stmt"/>
-        <line num="196" count="0" type="stmt"/>
-        <line num="225" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="226" count="0" type="stmt"/>
-        <line num="229" count="0" type="stmt"/>
+        <line num="165" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="166" count="0" type="stmt"/>
+        <line num="167" count="0" type="stmt"/>
+        <line num="168" count="0" type="stmt"/>
+        <line num="175" count="0" type="stmt"/>
+        <line num="190" count="0" type="stmt"/>
+        <line num="197" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="198" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="199" count="0" type="stmt"/>
+        <line num="201" count="0" type="stmt"/>
         <line num="230" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="231" count="0" type="stmt"/>
-        <line num="232" count="0" type="stmt"/>
         <line num="234" count="0" type="stmt"/>
+        <line num="235" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="236" count="0" type="stmt"/>
         <line num="237" count="0" type="stmt"/>
-        <line num="256" count="0" type="stmt"/>
-        <line num="277" count="0" type="stmt"/>
-        <line num="278" count="0" type="stmt"/>
-        <line num="280" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="282" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="284" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="286" count="0" type="stmt"/>
+        <line num="239" count="0" type="stmt"/>
+        <line num="242" count="0" type="stmt"/>
+        <line num="261" count="0" type="stmt"/>
+        <line num="282" count="0" type="stmt"/>
+        <line num="283" count="0" type="stmt"/>
+        <line num="285" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="287" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="289" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="291" count="0" type="stmt"/>
       </file>
       <file name="EditVariableModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DocumentProducer/EditableSection/EditVariableModal.tsx">
         <metrics statements="6" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="1" coveredmethods="0"/>
