@@ -43,7 +43,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const location = useStateLocation();
   const { userPreferences, updateUserPreferences, bootstrapped: userBootstrapped } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
-  const { isDev } = useEnvironment();
+  const { isDev, isStaging } = useEnvironment();
 
   const reloadOrganizations = useCallback(async (selectedOrgId?: number) => {
     const populateOrganizations = async () => {
@@ -184,7 +184,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
 
   useEffect(() => {
     if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
-      if (isDev) {
+      if (isDev || isStaging) {
         if (confirm(strings.DEV_SERVER_ERROR)) {
           window.location.reload();
         }
