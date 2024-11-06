@@ -1,3 +1,4 @@
+7a333a4a8ad In dev environments, do not redirect if backend is down (#3319)
 21469ba10d0 SW-6168 Explicitly add a newline when the enter key is hit in the Slate editor (#3316)
 99dc590cdd2 Updated translations from Phrase (#3317)
 c6bc4d8f34a SW-6031 Stop linking to admin UI's module details (#3318)
