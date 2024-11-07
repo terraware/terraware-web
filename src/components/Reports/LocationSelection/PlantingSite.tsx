@@ -272,7 +272,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
       <Grid item xs={smallItemGridWidth()}>
         <InfoField
           id={`${location.id}-total-plants-planted`}
-          label={strings.TOTAL_PLANTS_PLANTED}
+          label={strings.TOTAL_PLANTS_PLANTED_REQUIRED}
           value={(location as ReportPlantingSite).totalPlantsPlanted ?? ''}
           minNum={0}
           editable={editable}

@@ -15,19 +15,23 @@ import { useNumberFormatter } from 'src/utils/useNumber';
 
 type NumberOfSpeciesPlantedCardProps = {
   plantingSiteId: number;
+  newVersion?: boolean;
 };
 
-export default function NumberOfSpeciesPlantedCard({ plantingSiteId }: NumberOfSpeciesPlantedCardProps): JSX.Element {
+export default function NumberOfSpeciesPlantedCard({
+  plantingSiteId,
+  newVersion,
+}: NumberOfSpeciesPlantedCardProps): JSX.Element {
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
 
   if (!plantingSite?.plantingZones?.length) {
-    return <SiteWithoutZonesCard plantingSiteId={plantingSiteId} />;
+    return <SiteWithoutZonesCard plantingSiteId={plantingSiteId} newVersion={newVersion} />;
   } else {
-    return <SiteWithZonesCard plantingSiteId={plantingSiteId} />;
+    return <SiteWithZonesCard plantingSiteId={plantingSiteId} newVersion={newVersion} />;
   }
 }
 
-const SiteWithoutZonesCard = ({ plantingSiteId }: NumberOfSpeciesPlantedCardProps): JSX.Element => {
+const SiteWithoutZonesCard = ({ plantingSiteId, newVersion }: NumberOfSpeciesPlantedCardProps): JSX.Element => {
   const [totalSpecies, setTotalSpecies] = useState<number>();
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
@@ -70,10 +74,10 @@ const SiteWithoutZonesCard = ({ plantingSiteId }: NumberOfSpeciesPlantedCardProp
     );
   }, [plantings]);
 
-  return <ChartData labels={labels} values={values} totalSpecies={totalSpecies} />;
+  return <ChartData labels={labels} values={values} totalSpecies={totalSpecies} newVersion={newVersion} />;
 };
 
-const SiteWithZonesCard = ({}: NumberOfSpeciesPlantedCardProps): JSX.Element => {
+const SiteWithZonesCard = ({ newVersion }: NumberOfSpeciesPlantedCardProps): JSX.Element => {
   const populationSelector = useAppSelector((state) => selectSitePopulationZones(state));
   const speciesSelector = useAppSelector((state) => selectSpecies(state));
   const [totalSpecies, setTotalSpecies] = useState<number>();
@@ -126,16 +130,17 @@ const SiteWithZonesCard = ({}: NumberOfSpeciesPlantedCardProps): JSX.Element => 
     }
   }, [populationSelector, speciesSelector]);
 
-  return <ChartData labels={labels} values={values} totalSpecies={totalSpecies} />;
+  return <ChartData labels={labels} values={values} totalSpecies={totalSpecies} newVersion={newVersion} />;
 };
 
 type ChartDataProps = {
   labels?: string[];
   values?: number[];
   totalSpecies?: number;
+  newVersion?: boolean;
 };
 
-const ChartData = ({ labels, values, totalSpecies }: ChartDataProps): JSX.Element => {
+const ChartData = ({ labels, values, totalSpecies, newVersion }: ChartDataProps): JSX.Element => {
   const theme = useTheme();
   const user = useUser().user;
   const numberFormatter = useNumberFormatter();
@@ -178,7 +183,25 @@ const ChartData = ({ labels, values, totalSpecies }: ChartDataProps): JSX.Elemen
     return { annotations };
   }, [values, labels, numericFormatter]);
 
-  return (
+  return newVersion ? (
+    <Box marginRight={2}>
+      <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
+        {strings.formatString(strings.SPECIES_CATEGORIES_NUMBER, totalSpecies?.toString() || '')}
+      </Typography>
+
+      <Box height={'220px'} marginTop={6}>
+        <BarChart
+          chartId='speciesByCategory'
+          chartData={chartData}
+          maxWidth='100%'
+          minHeight='100px'
+          barAnnotations={getBarAnnotations()}
+          yLimits={{ min: 0, max: 100 }}
+          yStepSize={20}
+        />
+      </Box>
+    </Box>
+  ) : (
     <OverviewItemCard
       isEditable={false}
       contents={

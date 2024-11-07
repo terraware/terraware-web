@@ -105,7 +105,7 @@ export default function PlantsPrimaryPageView({
               </Box>
             </Grid>
             <Grid item xs={6}>
-              <Typography fontSize='14px' marginTop={theme.spacing(1)}>
+              <Typography fontSize='16px' marginTop={theme.spacing(1)}>
                 {text}
               </Typography>
             </Grid>
