@@ -37,7 +37,7 @@ import HectaresPlantedCard from './components/HectaresPlantedCard';
 import HighestAndLowestMortalityRateSpeciesCard from './components/HighestAndLowestMortalityRateSpeciesCard';
 import HighestAndLowestMortalityRateZonesCard from './components/HighestAndLowestMortalityRateZonesCard';
 import LiveDeadPlantsPerSpeciesCard from './components/LiveDeadPlantsPerSpeciesCard';
-import MortalityRateCard from './components/MortalityRateCard';
+import MortalityRateCard from './components/MoratlityRateCard';
 import NumberOfSpeciesPlantedCard from './components/NumberOfSpeciesPlantedCard';
 import PlantingDensityPerZoneCard from './components/PlantingDensityPerZoneCard';
 import PlantingProgressPerZoneCard from './components/PlantingProgressPerZoneCard';
