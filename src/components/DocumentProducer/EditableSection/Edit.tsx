@@ -162,6 +162,11 @@ const SectionEdit = ({
           Transforms.move(editor, { unit: 'offset' });
           return;
         }
+        if (isKeyHotkey('enter', nativeEvent)) {
+          event.preventDefault();
+          Transforms.insertNodes(editor, { text: '\n' });
+          return;
+        }
       }
     },
     [editor]
