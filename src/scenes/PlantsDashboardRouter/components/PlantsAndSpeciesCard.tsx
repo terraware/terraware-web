@@ -16,9 +16,13 @@ import PlantsReportedPerSpeciesCard from './PlantsReportedPerSpeciesCard';
 
 type PlantsAndSpeciesCardProps = {
   plantingSiteId: number;
+  hasObservations: boolean;
 };
 
-export default function PlantsAndSpeciesCard({ plantingSiteId }: PlantsAndSpeciesCardProps): JSX.Element {
+export default function PlantsAndSpeciesCard({
+  plantingSiteId,
+  hasObservations,
+}: PlantsAndSpeciesCardProps): JSX.Element {
   const siteReportedPlants = useAppSelector((state) => selectSiteReportedPlants(state, plantingSiteId));
   const theme = useTheme();
   const defaultTimeZone = useDefaultTimeZone();
@@ -39,8 +43,8 @@ export default function PlantsAndSpeciesCard({ plantingSiteId }: PlantsAndSpecie
   };
 
   return (
-    <Card radius='8px' style={{ display: 'flex', 'justify-content': 'space-between' }}>
-      <Box>
+    <Card radius='8px' style={{ display: 'flex' }}>
+      <Box flexBasis='100%'>
         <Box>
           <Box display={'flex'} alignItems={'center'}>
             <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
@@ -73,11 +77,15 @@ export default function PlantsAndSpeciesCard({ plantingSiteId }: PlantsAndSpecie
         </Box>
       </Box>
       <div style={separatorStyles} />
-      <Box>
-        <PlantsReportedPerSpeciesCard plantingSiteId={plantingSiteId} newVersion />
-      </Box>
-      <div style={separatorStyles} />
-      <Box>
+      {hasObservations && (
+        <>
+          <Box flexBasis='100%'>
+            <PlantsReportedPerSpeciesCard plantingSiteId={plantingSiteId} newVersion />
+          </Box>
+          <div style={separatorStyles} />
+        </>
+      )}
+      <Box flexBasis='100%'>
         <NumberOfSpeciesPlantedCard plantingSiteId={plantingSiteId} newVersion />
       </Box>
     </Card>

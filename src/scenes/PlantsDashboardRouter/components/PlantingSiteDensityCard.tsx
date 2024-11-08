@@ -4,6 +4,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSite, selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
@@ -24,6 +25,7 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingSite
   );
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const locale = useLocalization();
+  const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
 
   const targetPlantingDensity = useMemo(() => {
     const weightedSum =
@@ -41,7 +43,30 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingSite
     ? plantingDensity + numPlantedSinceObs / plantingSite.areaHa
     : plantingDensity;
 
-  return (
+  return newPlantsDashboardEnabled ? (
+    <Box>
+      <Typography fontSize='48px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)}>
+        {Math.round(plantingDensity)}
+      </Typography>
+      <Typography fontSize='16px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)}>
+        {`${strings.PLANTS_PER_HECTARE.charAt(0).toUpperCase()}${strings.PLANTS_PER_HECTARE.slice(1)}`}
+      </Typography>
+      <Typography fontSize='20px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)} textAlign='right'>
+        {strings.formatString(strings.PERCENTAGE_OF_TARGET_PLANTING_DENSITY, Math.round(percentageOfTargetDensity))}
+      </Typography>
+      <ProgressChart value={plantingDensity} target={targetPlantingDensity} />
+      <Typography
+        fontSize='16px'
+        fontWeight={600}
+        lineHeight={1}
+        marginTop={theme.spacing(2)}
+        marginBottom={theme.spacing(2)}
+        textAlign='right'
+      >
+        {strings.formatString(strings.TARGET_DENSITY_PLANTS_PER_HECTARE, Math.round(targetPlantingDensity))}
+      </Typography>
+    </Box>
+  ) : (
     <OverviewItemCard
       isEditable={false}
       contents={
