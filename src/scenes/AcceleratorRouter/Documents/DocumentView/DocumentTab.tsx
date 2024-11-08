@@ -50,7 +50,7 @@ const DocumentTab = (): JSX.Element => {
             projectId={projectId}
             section={section}
             allVariables={allVariables ?? []}
-            onUpdate={reload}
+            onUpdate={reloadVariables}
             onEdit={(editing) => setMetadataDisabled(editing)}
           />
         );
@@ -64,7 +64,7 @@ const DocumentTab = (): JSX.Element => {
       }
       return sectionsToRender;
     },
-    [allVariables, document, reload]
+    [allVariables, document, reload, reloadVariables]
   );
 
   const renderVariable = useCallback(
