@@ -41,6 +41,7 @@ import NumberOfSpeciesPlantedCard from './components/NumberOfSpeciesPlantedCard'
 import PlantingDensityPerZoneCard from './components/PlantingDensityPerZoneCard';
 import PlantingProgressPerZoneCard from './components/PlantingProgressPerZoneCard';
 import PlantingSiteProgressCard from './components/PlantingSiteProgressCard';
+import PlantsAndSpeciesCard from './components/PlantsAndSpeciesCard';
 import PlantsReportedPerSpeciesCard from './components/PlantsReportedPerSpeciesCard';
 import TotalMortalityRateCard from './components/TotalMoratlityRateCard';
 import TotalReportedPlantsCard from './components/TotalReportedPlantsCard';
@@ -109,26 +110,44 @@ export default function PlantsDashboardView(): JSX.Element {
     </>
   );
 
-  const renderTotalPlantsAndSpecies = () => (
-    <>
-      {sectionHeader(strings.TOTAL_PLANTS_AND_SPECIES)}
-      <Grid item xs={isMobile ? 12 : 4}>
-        <TotalReportedPlantsCard plantingSiteId={selectedPlantingSiteId} />
-      </Grid>
-      {hasObservations ? (
-        <Grid item xs={isMobile ? 12 : 4}>
-          <ObservedNumberOfSpeciesCard plantingSiteId={selectedPlantingSiteId} />
+  const renderTotalPlantsAndSpecies = () =>
+    newPlantsDashboardEnabled ? (
+      <>
+        <Grid item xs={12}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
+              {strings.PLANTS_AND_SPECIES_STATISTICS}
+            </Typography>
+            <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
+          </Box>
+          <Typography fontWeight={400} marginTop={1}>
+            {strings.PLANTED_NUMBERS_INFO}
+          </Typography>
         </Grid>
-      ) : (
-        <Grid item xs={isMobile ? 12 : 4}>
-          <PlantsReportedPerSpeciesCard plantingSiteId={selectedPlantingSiteId} />
+        <Grid item xs={12}>
+          <PlantsAndSpeciesCard plantingSiteId={selectedPlantingSiteId} />
         </Grid>
-      )}
-      <Grid item xs={isMobile ? 12 : 4}>
-        <NumberOfSpeciesPlantedCard plantingSiteId={selectedPlantingSiteId} />
-      </Grid>
-    </>
-  );
+      </>
+    ) : (
+      <>
+        {sectionHeader(strings.TOTAL_PLANTS_AND_SPECIES)}
+        <Grid item xs={isMobile ? 12 : 4}>
+          <TotalReportedPlantsCard plantingSiteId={selectedPlantingSiteId} />
+        </Grid>
+        {hasObservations ? (
+          <Grid item xs={isMobile ? 12 : 4}>
+            <ObservedNumberOfSpeciesCard plantingSiteId={selectedPlantingSiteId} />
+          </Grid>
+        ) : (
+          <Grid item xs={isMobile ? 12 : 4}>
+            <PlantsReportedPerSpeciesCard plantingSiteId={selectedPlantingSiteId} />
+          </Grid>
+        )}
+        <Grid item xs={isMobile ? 12 : 4}>
+          <NumberOfSpeciesPlantedCard plantingSiteId={selectedPlantingSiteId} />
+        </Grid>
+      </>
+    );
 
   const hasObservations = !!latestObservation;
 
@@ -259,6 +278,25 @@ export default function PlantsDashboardView(): JSX.Element {
     return totalSquareMeters * SQ_M_TO_HECTARES;
   };
 
+  const getLatestObservationLink = () => {
+    return latestObservation?.completedTime ? (
+      <Link
+        fontSize={'16px'}
+        to={APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', selectedPlantingSiteId.toString()).replace(
+          ':observationId',
+          latestObservation.observationId.toString()
+        )}
+      >
+        {strings.formatString(
+          strings.DATE_OBSERVATION,
+          DateTime.fromISO(latestObservation.completedTime).toFormat('yyyy-MM-dd')
+        )}
+      </Link>
+    ) : (
+      ''
+    );
+  };
+
   const getDashboardSubhead = () => {
     if (selectedPlantingSiteId === -1) {
       return strings.FIRST_ADD_PLANTING_SITE;
@@ -268,19 +306,7 @@ export default function PlantsDashboardView(): JSX.Element {
         ? (strings.formatString(
             strings.DASHBOARD_HEADER_TEXT_V2,
             <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={getObservationHectares()} />)}</b>,
-            <b>
-              <Link
-                to={APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', selectedPlantingSiteId.toString()).replace(
-                  ':observationId',
-                  latestObservation.observationId.toString()
-                )}
-              >
-                {strings.formatString(
-                  strings.DATE_OBSERVATION,
-                  DateTime.fromISO(latestObservation.completedTime).toFormat('yyyy-MM-dd')
-                )}
-              </Link>
-            </b>
+            <b>{getLatestObservationLink()}</b>
           ) as string)
         : (strings.formatString(
             strings.DASHBOARD_HEADER_TEXT,
@@ -305,14 +331,14 @@ export default function PlantsDashboardView(): JSX.Element {
     >
       {selectedPlantingSiteId !== -1 ? (
         <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
-          {!hasObservations && renderTotalPlantsAndSpecies()}
+          {(!hasObservations || newPlantsDashboardEnabled) && renderTotalPlantsAndSpecies()}
           {hasReportedPlants && (
             <>
               {renderPlantingProgressAndDensity()}
               {hasObservations && renderMortalityRate()}
             </>
           )}
-          {hasObservations && renderTotalPlantsAndSpecies()}
+          {hasObservations && !newPlantsDashboardEnabled && renderTotalPlantsAndSpecies()}
           {hasPlantingZones && renderZoneLevelData()}
           {hasPolygons && !hasPlantingZones && renderSimpleSiteMap()}
         </Grid>
