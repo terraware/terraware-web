@@ -37,6 +37,7 @@ import HectaresPlantedCard from './components/HectaresPlantedCard';
 import HighestAndLowestMortalityRateSpeciesCard from './components/HighestAndLowestMortalityRateSpeciesCard';
 import HighestAndLowestMortalityRateZonesCard from './components/HighestAndLowestMortalityRateZonesCard';
 import LiveDeadPlantsPerSpeciesCard from './components/LiveDeadPlantsPerSpeciesCard';
+import MortalityRateCard from './components/MortalityRateCard';
 import NumberOfSpeciesPlantedCard from './components/NumberOfSpeciesPlantedCard';
 import PlantingDensityPerZoneCard from './components/PlantingDensityPerZoneCard';
 import PlantingProgressPerZoneCard from './components/PlantingProgressPerZoneCard';
@@ -92,23 +93,41 @@ export default function PlantsDashboardView(): JSX.Element {
     </Grid>
   );
 
-  const renderMortalityRate = () => (
-    <>
-      {sectionHeader(strings.MORTALITY_RATE)}
-      <Grid item xs={isMobile ? 12 : 3}>
-        <TotalMortalityRateCard plantingSiteId={selectedPlantingSiteId} />
-      </Grid>
-      <Grid item xs={isMobile ? 12 : 3}>
-        <HighestAndLowestMortalityRateZonesCard plantingSiteId={selectedPlantingSiteId} />
-      </Grid>
-      <Grid item xs={isMobile ? 12 : 3}>
-        <HighestAndLowestMortalityRateSpeciesCard plantingSiteId={selectedPlantingSiteId} />
-      </Grid>
-      <Grid item xs={isMobile ? 12 : 3}>
-        <LiveDeadPlantsPerSpeciesCard plantingSiteId={selectedPlantingSiteId} />
-      </Grid>
-    </>
-  );
+  const renderMortalityRate = () =>
+    newPlantsDashboardEnabled ? (
+      <>
+        <Grid item xs={12}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
+              {strings.MORTALITY_RATE}
+            </Typography>
+            <Typography>{strings.formatString(strings.FROM_X, getLatestObservationLink())}</Typography>
+          </Box>
+          <Typography fontWeight={400} marginTop={1}>
+            {strings.MORTALITY_RATE_INFO}
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <MortalityRateCard plantingSiteId={selectedPlantingSiteId} />
+        </Grid>
+      </>
+    ) : (
+      <>
+        {sectionHeader(strings.MORTALITY_RATE)}
+        <Grid item xs={isMobile ? 12 : 3}>
+          <TotalMortalityRateCard plantingSiteId={selectedPlantingSiteId} />
+        </Grid>
+        <Grid item xs={isMobile ? 12 : 3}>
+          <HighestAndLowestMortalityRateZonesCard plantingSiteId={selectedPlantingSiteId} />
+        </Grid>
+        <Grid item xs={isMobile ? 12 : 3}>
+          <HighestAndLowestMortalityRateSpeciesCard plantingSiteId={selectedPlantingSiteId} />
+        </Grid>
+        <Grid item xs={isMobile ? 12 : 3}>
+          <LiveDeadPlantsPerSpeciesCard plantingSiteId={selectedPlantingSiteId} />
+        </Grid>
+      </>
+    );
 
   const renderTotalPlantsAndSpecies = () =>
     newPlantsDashboardEnabled ? (
@@ -332,7 +351,9 @@ export default function PlantsDashboardView(): JSX.Element {
       {selectedPlantingSiteId !== -1 ? (
         <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
           {(!hasObservations || newPlantsDashboardEnabled) && renderTotalPlantsAndSpecies()}
-          {hasReportedPlants && (
+          {newPlantsDashboardEnabled && hasObservations && renderMortalityRate()}
+
+          {hasReportedPlants && !newPlantsDashboardEnabled && (
             <>
               {renderPlantingProgressAndDensity()}
               {hasObservations && renderMortalityRate()}

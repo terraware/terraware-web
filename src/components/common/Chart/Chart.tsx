@@ -37,7 +37,7 @@ export type BaseChartProps = {
   minHeight?: string;
   maxWidth?: string;
   barWidth?: number;
-  elementColor?: string;
+  elementColor?: string | string[];
   barAnnotations?: AnnotationPluginOptions;
   yLimits?: { min?: number; max?: number };
   showLegend?: boolean;
