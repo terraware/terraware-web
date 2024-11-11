@@ -43,6 +43,7 @@ import PlantingDensityCard from './components/PlantingDensityCard';
 import PlantingDensityPerZoneCard from './components/PlantingDensityPerZoneCard';
 import PlantingProgressPerZoneCard from './components/PlantingProgressPerZoneCard';
 import PlantingSiteProgressCard from './components/PlantingSiteProgressCard';
+import PlantingSiteTrendsCard from './components/PlantingSiteTrendsCard';
 import PlantsAndSpeciesCard from './components/PlantsAndSpeciesCard';
 import PlantsReportedPerSpeciesCard from './components/PlantsReportedPerSpeciesCard';
 import TotalMortalityRateCard from './components/TotalMoratlityRateCard';
@@ -275,6 +276,23 @@ export default function PlantsDashboardView(): JSX.Element {
       </>
     );
 
+  const renderPlantingSiteTrends = () => (
+    <>
+      <Grid item xs={12}>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
+            {strings.PLANTING_SITE_TRENDS}
+          </Typography>
+
+          <Typography>{strings.ALL_OBSERVATIONS}</Typography>
+        </Box>
+      </Grid>
+      <Grid item xs={12}>
+        <PlantingSiteTrendsCard plantingSiteId={selectedPlantingSiteId} />
+      </Grid>
+    </>
+  );
+
   const renderZoneLevelData = () => (
     <>
       {sectionHeader(strings.ZONE_LEVEL_DATA)}
@@ -383,6 +401,7 @@ export default function PlantsDashboardView(): JSX.Element {
             </>
           )}
           {hasObservations && !newPlantsDashboardEnabled && renderTotalPlantsAndSpecies()}
+          {newPlantsDashboardEnabled && hasObservations && renderPlantingSiteTrends()}
           {hasPlantingZones && renderZoneLevelData()}
           {hasPolygons && !hasPlantingZones && renderSimpleSiteMap()}
         </Grid>
