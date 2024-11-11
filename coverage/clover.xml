@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1731353844170" clover="3.2.0">
-  <project timestamp="1731353844171" name="All files">
-    <metrics statements="26391" coveredstatements="1056" conditionals="17537" coveredconditionals="282" methods="8157" coveredmethods="176" elements="52085" coveredelements="1514" complexity="0" loc="26391" ncloc="26391" packages="237" files="1121" classes="1121"/>
+<coverage generated="1731357655751" clover="3.2.0">
+  <project timestamp="1731357655751" name="All files">
+    <metrics statements="26389" coveredstatements="1056" conditionals="17537" coveredconditionals="282" methods="8156" coveredmethods="176" elements="52082" coveredelements="1514" complexity="0" loc="26389" ncloc="26389" packages="237" files="1121" classes="1121"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -8962,7 +8962,7 @@
       </file>
     </package>
     <package name="src.hooks">
-      <metrics statements="337" coveredstatements="25" conditionals="126" coveredconditionals="6" methods="119" coveredmethods="11"/>
+      <metrics statements="335" coveredstatements="25" conditionals="126" coveredconditionals="6" methods="118" coveredmethods="11"/>
       <file name="useAcceleratorConsole.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useAcceleratorConsole.ts">
         <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
@@ -9097,7 +9097,7 @@
         <line num="26" count="0" type="stmt"/>
       </file>
       <file name="useListModules.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useListModules.ts">
-        <metrics statements="34" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="9" coveredmethods="0"/>
+        <metrics statements="32" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="13" count="0" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
@@ -9114,24 +9114,22 @@
         <line num="34" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
+        <line num="39" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
-        <line num="43" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="45" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="46" count="0" type="stmt"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="48" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="49" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
-        <line num="63" count="0" type="stmt"/>
-        <line num="64" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="65" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="70" count="0" type="stmt"/>
+        <line num="60" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="61" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
       </file>
       <file name="useNavigateTo.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useNavigateTo.ts">
         <metrics statements="44" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="35" coveredmethods="0"/>
