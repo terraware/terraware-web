@@ -36,10 +36,6 @@ const useListModules = () => {
   }, [dispatch, setDeliverablesRequestId]);
 
   useEffect(() => {
-    listModules();
-  }, [dispatch]);
-
-  useEffect(() => {
     if (allDeliverablesResponse && allDeliverablesResponse.status === 'success') {
       const deliverables = allDeliverablesResponse.data;
       const _deliverablesByModuleId: Record<number, ListDeliverablesElementWithOverdue[]> = {};
