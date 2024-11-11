@@ -177,7 +177,7 @@ const SectionEdit = ({
           event.preventDefault();
           Transforms.setNodes(
             editor,
-            { bold: true },
+            { bold: !Editor.marks(editor)?.bold },
             {
               at: range,
               match: () => true,

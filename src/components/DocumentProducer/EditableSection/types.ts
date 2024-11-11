@@ -2,7 +2,10 @@ import { BaseEditor, Descendant, Element as SlateElement } from 'slate';
 import { ReactEditor } from 'slate-react';
 
 // Required type definitions for slatejs (https://docs.slatejs.org/concepts/12-typescript):
-export type CustomText = { text: string };
+export type CustomText = {
+  text: string;
+  bold?: boolean;
+};
 
 export type VariableElement = {
   // This is unused, but required by Slate
