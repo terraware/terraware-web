@@ -39,6 +39,7 @@ import HighestAndLowestMortalityRateZonesCard from './components/HighestAndLowes
 import LiveDeadPlantsPerSpeciesCard from './components/LiveDeadPlantsPerSpeciesCard';
 import MortalityRateCard from './components/MortalityRateCard';
 import NumberOfSpeciesPlantedCard from './components/NumberOfSpeciesPlantedCard';
+import PlantingDensityCard from './components/PlantingDensityCard';
 import PlantingDensityPerZoneCard from './components/PlantingDensityPerZoneCard';
 import PlantingProgressPerZoneCard from './components/PlantingProgressPerZoneCard';
 import PlantingSiteProgressCard from './components/PlantingSiteProgressCard';
@@ -101,7 +102,9 @@ export default function PlantsDashboardView(): JSX.Element {
             <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
               {strings.MORTALITY_RATE}
             </Typography>
-            <Typography>{strings.formatString(strings.FROM_X, getLatestObservationLink())}</Typography>
+            {hasObservations && (
+              <Typography>{strings.formatString(strings.FROM_X, getLatestObservationLink())}</Typography>
+            )}
           </Box>
           <Typography fontWeight={400} marginTop={1}>
             {strings.MORTALITY_RATE_INFO}
@@ -137,14 +140,16 @@ export default function PlantsDashboardView(): JSX.Element {
             <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
               {strings.PLANTS_AND_SPECIES_STATISTICS}
             </Typography>
-            <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
+            {hasObservations && (
+              <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
+            )}
           </Box>
           <Typography fontWeight={400} marginTop={1}>
             {strings.PLANTED_NUMBERS_INFO}
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <PlantsAndSpeciesCard plantingSiteId={selectedPlantingSiteId} />
+          <PlantsAndSpeciesCard plantingSiteId={selectedPlantingSiteId} hasObservations={hasObservations} />
         </Grid>
       </>
     ) : (
@@ -199,59 +204,76 @@ export default function PlantsDashboardView(): JSX.Element {
     );
   }, [plantingSiteResult, latestObservation?.completedTime]);
 
-  const renderPlantingProgressAndDensity = () => (
-    <>
-      {sectionHeader(
-        hasObservationsSinceSitePlantingComplete ? strings.PLANTING_DENSITY : strings.PLANTING_PROGRESS_AND_DENSITY
-      )}
-      {!hasObservations && (
-        <>
-          <Grid item xs={isMobile ? 12 : 4}>
-            <PlantingSiteProgressCard plantingSiteId={selectedPlantingSiteId} />
-          </Grid>
-          <Grid item xs={isMobile ? 12 : 4}>
-            <PlantingProgressPerZoneCard plantingSiteId={selectedPlantingSiteId} />
-          </Grid>
-          <Grid item xs={isMobile ? 12 : 4}>
-            <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} />
-          </Grid>
-        </>
-      )}
-      {hasObservations && !sitePlantingComplete && (
-        <>
-          <Grid item xs={isMobile ? 12 : 6}>
-            <PlantingSiteProgressCard plantingSiteId={selectedPlantingSiteId} />
-          </Grid>
-          <Grid item xs={isMobile ? 12 : 6}>
-            <HectaresPlantedCard plantingSiteId={selectedPlantingSiteId} />
-          </Grid>
-          <Grid item xs={isMobile ? 12 : 6}>
-            <PlantingProgressPerZoneCard plantingSiteId={selectedPlantingSiteId} />
-          </Grid>
-          <Grid item xs={isMobile ? 12 : 6}>
-            <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} />
-          </Grid>
-        </>
-      )}
-      {hasObservations && sitePlantingComplete && (
-        <>
-          <Grid item xs={isMobile ? 12 : 4}>
-            {hasObservationsSinceSitePlantingComplete ? (
-              <PlantingSiteDensityCard plantingSiteId={selectedPlantingSiteId} />
-            ) : (
-              <PlantingSiteProgressCard plantingSiteId={selectedPlantingSiteId} />
+  const renderPlantingProgressAndDensity = () =>
+    newPlantsDashboardEnabled ? (
+      <>
+        <Grid item xs={12}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
+              {strings.PLANTING_DENSITY}
+            </Typography>
+            {hasObservations && (
+              <Typography>{strings.formatString(strings.FROM_X, getLatestObservationLink())}</Typography>
             )}
-          </Grid>
-          <Grid item xs={isMobile ? 12 : 4}>
-            <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} />
-          </Grid>
-          <Grid item xs={isMobile ? 12 : 4}>
-            <HectaresPlantedCard plantingSiteId={selectedPlantingSiteId} />
-          </Grid>
-        </>
-      )}
-    </>
-  );
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <PlantingDensityCard plantingSiteId={selectedPlantingSiteId} sitePlantingComplete={sitePlantingComplete} />
+        </Grid>
+      </>
+    ) : (
+      <>
+        {sectionHeader(
+          hasObservationsSinceSitePlantingComplete ? strings.PLANTING_DENSITY : strings.PLANTING_PROGRESS_AND_DENSITY
+        )}
+        {!hasObservations && (
+          <>
+            <Grid item xs={isMobile ? 12 : 4}>
+              <PlantingSiteProgressCard plantingSiteId={selectedPlantingSiteId} />
+            </Grid>
+            <Grid item xs={isMobile ? 12 : 4}>
+              <PlantingProgressPerZoneCard plantingSiteId={selectedPlantingSiteId} />
+            </Grid>
+            <Grid item xs={isMobile ? 12 : 4}>
+              <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} />
+            </Grid>
+          </>
+        )}
+        {hasObservations && !sitePlantingComplete && (
+          <>
+            <Grid item xs={isMobile ? 12 : 6}>
+              <PlantingSiteProgressCard plantingSiteId={selectedPlantingSiteId} />
+            </Grid>
+            <Grid item xs={isMobile ? 12 : 6}>
+              <HectaresPlantedCard plantingSiteId={selectedPlantingSiteId} />
+            </Grid>
+            <Grid item xs={isMobile ? 12 : 6}>
+              <PlantingProgressPerZoneCard plantingSiteId={selectedPlantingSiteId} />
+            </Grid>
+            <Grid item xs={isMobile ? 12 : 6}>
+              <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} />
+            </Grid>
+          </>
+        )}
+        {hasObservations && sitePlantingComplete && (
+          <>
+            <Grid item xs={isMobile ? 12 : 4}>
+              {hasObservationsSinceSitePlantingComplete ? (
+                <PlantingSiteDensityCard plantingSiteId={selectedPlantingSiteId} />
+              ) : (
+                <PlantingSiteProgressCard plantingSiteId={selectedPlantingSiteId} />
+              )}
+            </Grid>
+            <Grid item xs={isMobile ? 12 : 4}>
+              <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} />
+            </Grid>
+            <Grid item xs={isMobile ? 12 : 4}>
+              <HectaresPlantedCard plantingSiteId={selectedPlantingSiteId} />
+            </Grid>
+          </>
+        )}
+      </>
+    );
 
   const renderZoneLevelData = () => (
     <>
@@ -352,6 +374,7 @@ export default function PlantsDashboardView(): JSX.Element {
         <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
           {(!hasObservations || newPlantsDashboardEnabled) && renderTotalPlantsAndSpecies()}
           {newPlantsDashboardEnabled && hasObservations && renderMortalityRate()}
+          {newPlantsDashboardEnabled && renderPlantingProgressAndDensity()}
 
           {hasReportedPlants && !newPlantsDashboardEnabled && (
             <>
