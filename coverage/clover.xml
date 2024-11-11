@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1731102323890" clover="3.2.0">
-  <project timestamp="1731102323890" name="All files">
-    <metrics statements="26379" coveredstatements="1056" conditionals="17497" coveredconditionals="282" methods="8152" coveredmethods="176" elements="52028" coveredelements="1514" complexity="0" loc="26379" ncloc="26379" packages="237" files="1120" classes="1120"/>
+<coverage generated="1731327941902" clover="3.2.0">
+  <project timestamp="1731327941902" name="All files">
+    <metrics statements="26391" coveredstatements="1056" conditionals="17537" coveredconditionals="282" methods="8157" coveredmethods="176" elements="52085" coveredelements="1514" complexity="0" loc="26391" ncloc="26391" packages="237" files="1121" classes="1121"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -25210,10 +25210,9 @@
       </file>
     </package>
     <package name="src.scenes.PlantsDashboardRouter">
-      <metrics statements="73" coveredstatements="0" conditionals="103" coveredconditionals="0" methods="34" coveredmethods="0"/>
+      <metrics statements="73" coveredstatements="0" conditionals="113" coveredconditionals="0" methods="34" coveredmethods="0"/>
       <file name="PlantsDashboardView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/PlantsDashboardView.tsx">
-        <metrics statements="71" coveredstatements="0" conditionals="103" coveredconditionals="0" methods="33" coveredmethods="0"/>
-        <line num="52" count="0" type="stmt"/>
+        <metrics statements="71" coveredstatements="0" conditionals="113" coveredconditionals="0" methods="33" coveredmethods="0"/>
         <line num="53" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
@@ -25222,68 +25221,69 @@
         <line num="58" count="0" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
-        <line num="62" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
         <line num="63" count="0" type="stmt"/>
         <line num="64" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
         <line num="69" count="0" type="stmt"/>
         <line num="70" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
         <line num="74" count="0" type="stmt"/>
         <line num="75" count="0" type="stmt"/>
         <line num="76" count="0" type="stmt"/>
         <line num="77" count="0" type="stmt"/>
         <line num="78" count="0" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
-        <line num="82" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="83" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="83" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="84" count="0" type="stmt"/>
-        <line num="88" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
         <line num="89" count="0" type="stmt"/>
-        <line num="96" count="0" type="stmt"/>
-        <line num="97" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="132" count="0" type="stmt"/>
-        <line num="133" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="171" count="0" type="stmt"/>
-        <line num="173" count="0" type="stmt"/>
-        <line num="174" count="0" type="stmt"/>
-        <line num="176" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="177" count="0" type="stmt"/>
+        <line num="90" count="0" type="stmt"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="98" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="135" count="0" type="stmt"/>
+        <line num="136" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="176" count="0" type="stmt"/>
         <line num="178" count="0" type="stmt"/>
         <line num="179" count="0" type="stmt"/>
-        <line num="180" count="0" type="stmt"/>
-        <line num="181" count="0" type="stmt"/>
+        <line num="181" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="182" count="0" type="stmt"/>
+        <line num="183" count="0" type="stmt"/>
         <line num="184" count="0" type="stmt"/>
         <line num="185" count="0" type="stmt"/>
         <line num="186" count="0" type="stmt"/>
-        <line num="188" count="0" type="stmt"/>
         <line num="189" count="0" type="stmt"/>
+        <line num="190" count="0" type="stmt"/>
+        <line num="191" count="0" type="stmt"/>
         <line num="193" count="0" type="stmt"/>
         <line num="194" count="0" type="stmt"/>
-        <line num="196" count="0" type="stmt"/>
-        <line num="197" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="202" count="0" type="stmt"/>
-        <line num="203" count="0" type="stmt"/>
-        <line num="256" count="0" type="stmt"/>
-        <line num="257" count="0" type="stmt"/>
-        <line num="265" count="0" type="stmt"/>
-        <line num="266" count="0" type="stmt"/>
-        <line num="284" count="0" type="cond" truecount="0" falsecount="3"/>
-        <line num="287" count="0" type="cond" truecount="0" falsecount="3"/>
-        <line num="289" count="0" type="stmt"/>
-        <line num="291" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="293" count="0" type="stmt"/>
-        <line num="295" count="0" type="stmt"/>
-        <line num="297" count="0" type="stmt"/>
-        <line num="300" count="0" type="stmt"/>
-        <line num="301" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="198" count="0" type="stmt"/>
+        <line num="199" count="0" type="stmt"/>
+        <line num="201" count="0" type="stmt"/>
+        <line num="202" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="207" count="0" type="stmt"/>
+        <line num="208" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="278" count="0" type="stmt"/>
+        <line num="279" count="0" type="stmt"/>
+        <line num="287" count="0" type="stmt"/>
+        <line num="288" count="0" type="stmt"/>
+        <line num="306" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="309" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="311" count="0" type="stmt"/>
+        <line num="313" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="315" count="0" type="stmt"/>
+        <line num="317" count="0" type="stmt"/>
         <line num="319" count="0" type="stmt"/>
-        <line num="320" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="321" count="0" type="stmt"/>
+        <line num="322" count="0" type="stmt"/>
         <line num="323" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="324" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="340" count="0" type="stmt"/>
-        <line num="372" count="0" type="stmt"/>
+        <line num="341" count="0" type="stmt"/>
+        <line num="342" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="343" count="0" type="stmt"/>
+        <line num="345" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="346" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="362" count="0" type="stmt"/>
+        <line num="395" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/index.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -25292,7 +25292,7 @@
       </file>
     </package>
     <package name="src.scenes.PlantsDashboardRouter.components">
-      <metrics statements="448" coveredstatements="0" conditionals="362" coveredconditionals="0" methods="139" coveredmethods="0"/>
+      <metrics statements="460" coveredstatements="0" conditionals="392" coveredconditionals="0" methods="144" coveredmethods="0"/>
       <file name="HectaresPlantedCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/HectaresPlantedCard.tsx">
         <metrics statements="13" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="19" count="0" type="stmt"/>
@@ -25506,43 +25506,57 @@
         <line num="48" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
       </file>
-      <file name="PlantingDensityPerZoneCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/PlantingDensityPerZoneCard.tsx">
-        <metrics statements="35" coveredstatements="0" conditionals="21" coveredconditionals="0" methods="11" coveredmethods="0"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
+      <file name="PlantingDensityCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/PlantingDensityCard.tsx">
+        <metrics statements="10" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="27" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
+        <line num="31" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
         <line num="36" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="39" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+      </file>
+      <file name="PlantingDensityPerZoneCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/PlantingDensityPerZoneCard.tsx">
+        <metrics statements="36" coveredstatements="0" conditionals="31" coveredconditionals="0" methods="11" coveredmethods="0"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
-        <line num="38" count="0" type="stmt"/>
+        <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="39" count="0" type="stmt"/>
-        <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="40" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
         <line num="42" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="47" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
-        <line num="57" count="0" type="stmt"/>
-        <line num="58" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
-        <line num="62" count="0" type="stmt"/>
-        <line num="70" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="71" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
-        <line num="84" count="0" type="stmt"/>
+        <line num="60" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="72" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="86" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
       <file name="PlantingProgressPerZoneCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/PlantingProgressPerZoneCard.tsx">
         <metrics statements="15" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="7" coveredmethods="0"/>
@@ -25563,22 +25577,23 @@
         <line num="46" count="0" type="stmt"/>
       </file>
       <file name="PlantingSiteDensityCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/PlantingSiteDensityCard.tsx">
-        <metrics statements="15" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="7" coveredmethods="0"/>
-        <line num="20" count="0" type="stmt"/>
+        <metrics statements="16" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
-        <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="31" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="34" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="35" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="33" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="36" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="37" count="0" type="stmt"/>
-        <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="39" count="0" type="stmt"/>
         <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="44" count="0" type="stmt"/>
+        <line num="42" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
       <file name="PlantingSiteProgressCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/PlantingSiteProgressCard.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -25587,17 +25602,17 @@
         <line num="19" count="0" type="stmt"/>
       </file>
       <file name="PlantsAndSpeciesCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/PlantsAndSpeciesCard.tsx">
-        <metrics statements="10" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
+        <metrics statements="10" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
-        <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
+        <line num="34" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
       </file>
       <file name="PlantsReportedPerSpeciesCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/PlantsReportedPerSpeciesCard.tsx">
         <metrics statements="73" coveredstatements="0" conditionals="48" coveredconditionals="0" methods="16" coveredmethods="0"/>
