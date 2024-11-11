@@ -157,14 +157,39 @@ const SectionEdit = ({
           Transforms.move(editor, { unit: 'offset', reverse: true });
           return;
         }
+
         if (isKeyHotkey('right', nativeEvent)) {
           event.preventDefault();
           Transforms.move(editor, { unit: 'offset' });
           return;
         }
+
         if (isKeyHotkey('enter', nativeEvent)) {
           event.preventDefault();
           Transforms.insertNodes(editor, { text: '\n' });
+          return;
+        }
+
+        if (isKeyHotkey('cmd+b', nativeEvent)) {
+          // TODO We would need to figure out how to "unbold" the text.
+          // This sets properties onto the text that we need to use when rendering to achieve the desired effect
+          const range = Editor.unhangRange(editor, editor.selection, { voids: true });
+          event.preventDefault();
+          Transforms.setNodes(
+            editor,
+            { bold: true },
+            {
+              at: range,
+              match: () => true,
+              split: true,
+            }
+          );
+          return;
+        }
+
+        if (isKeyHotkey('cmd+i', nativeEvent)) {
+          event.preventDefault();
+          // TODO
           return;
         }
       }
