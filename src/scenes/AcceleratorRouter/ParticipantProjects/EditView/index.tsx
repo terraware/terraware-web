@@ -19,7 +19,7 @@ import PageForm from 'src/components/common/PageForm';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import useListModules from 'src/hooks/useListModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useLocalization, useUser } from 'src/providers';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import { requestAssignTerraformationContact } from 'src/redux/features/accelerator/acceleratorAsyncThunks';
 import { selectAssignTerraformationContact } from 'src/redux/features/accelerator/acceleratorSelectors';
@@ -46,14 +46,19 @@ const EditView = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const { crumbs, participant, participantProject, project, projectId, projectMeta, organization, reload } =
+  const { crumbs, participant, participantProject, project, projectId, projectMeta, acceleratorOrganization, reload } =
     useParticipantProjectData();
+  const { selectedOrganization, reloadOrganizations } = useOrganization();
   const { phase1Scores } = useScoringData();
   const { phaseVotes } = useVotingData();
   const { goToParticipantProject } = useNavigateTo();
   const { isAllowed } = useUser();
   const { getApplicationByProjectId } = useApplicationData();
   const { modules, listModules } = useListModules();
+
+  useEffect(() => {
+    reloadOrganizations(project?.organizationId);
+  }, [project?.organizationId]);
 
   useEffect(() => {
     if (project) {
@@ -105,11 +110,12 @@ const EditView = () => {
   }, [assignResponse, redirectToProjectView, snackbar]);
 
   useEffect(() => {
+    console.log({ selectedOrganization });
     const tfContactSelected = globalUsersOptions?.find(
-      (userOpt) => userOpt.value === organization?.tfContactUser?.userId
+      (userOpt) => userOpt.value === selectedOrganization?.tfContactUser?.userId
     );
     setTfContact(tfContactSelected);
-  }, [organization?.tfContactUser, globalUsersOptions]);
+  }, [selectedOrganization?.tfContactUser, globalUsersOptions]);
 
   useEffect(() => {
     const request = dispatch(requestListGlobalRolesUsers({ locale: activeLocale }));
@@ -153,17 +159,17 @@ const EditView = () => {
     }
   }, [projectId, projectRecord, dispatch]);
 
-  const saveTFContact = () => {
-    if (organization && tfContact) {
+  const saveTFContact = useCallback(() => {
+    if (selectedOrganization && tfContact) {
       const assignRequest = dispatch(
         requestAssignTerraformationContact({
-          organizationId: organization.id,
+          organizationId: selectedOrganization.id,
           terraformationContactId: tfContact?.value,
         })
       );
       setAssignTfContactRequestId(assignRequest.requestId);
     }
-  };
+  }, [selectedOrganization?.id, tfContact?.value]);
 
   const handleOnSave = useCallback(() => {
     if (projectRecord?.name !== project?.name) {
@@ -231,11 +237,11 @@ const EditView = () => {
   }, [goToParticipantProject, isAllowedEdit, projectId]);
 
   useEffect(() => {
-    if (organization?.id) {
-      const request = dispatch(requestListOrganizationUsers({ organizationId: organization.id }));
+    if (selectedOrganization?.id) {
+      const request = dispatch(requestListOrganizationUsers({ organizationId: selectedOrganization.id }));
       setOrganizationUsersRequestId(request.requestId);
     }
-  }, [organization]);
+  }, [selectedOrganization?.id]);
 
   const globalUsersWithNoOwner = useMemo(() => {
     const ownerId = organizationUsers?.find((orgUsr) => orgUsr.role === 'Owner')?.id;
@@ -459,7 +465,7 @@ const EditView = () => {
         <EditNameConfirm
           onClose={handleOnCloseModal}
           onConfirm={saveProject}
-          organizationName={organization?.name || ''}
+          organizationName={selectedOrganization?.name || ''}
         />
       )}
     </PageWithModuleTimeline>

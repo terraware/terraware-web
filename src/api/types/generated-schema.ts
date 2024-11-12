@@ -3959,6 +3959,7 @@ export interface components {
        * @enum {string}
        */
       role?: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
+      tfContactUser?: components["schemas"]["TerraformationContactUserPayload"];
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
