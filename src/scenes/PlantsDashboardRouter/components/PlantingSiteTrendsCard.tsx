@@ -6,6 +6,7 @@ import { Icon, Tooltip } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import Chart from 'src/components/common/Chart/Chart';
 import { selectObservationsResults } from 'src/redux/features/observations/observationsSelectors';
+import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 
@@ -16,6 +17,9 @@ type PlantingSiteTrendsCardProps = {
 export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteTrendsCardProps): JSX.Element {
   const theme = useTheme();
   const allObservationsResults = useAppSelector(selectObservationsResults);
+  const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
+
+  const totalArea = plantingSite?.areaHa ?? 1;
 
   const siteObservations = useMemo(() => {
     if (!allObservationsResults || !plantingSiteId) {
@@ -42,8 +46,8 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
 
   const plantsChartData = useMemo(() => {
     const labels = sortedObservations.map((ob) => ob.startDate);
-    const values = sortedObservations.map((ob) =>
-      ob.plantingZones.flatMap((zone) => zone.totalPlants).reduce((acc, curr) => acc + curr, 0)
+    const values = sortedObservations.map(
+      (ob) => ob.plantingZones.flatMap((zone) => zone.totalPlants).reduce((acc, curr) => acc + curr, 0) / totalArea
     );
 
     return {
