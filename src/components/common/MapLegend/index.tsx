@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Switch, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
+
+import isEnabled from 'src/features';
 
 type MapLegendItem = {
   borderColor: string;
@@ -15,17 +17,86 @@ type MapLegendItem = {
 export type MapLegendGroup = {
   title: string;
   items: MapLegendItem[];
+  switch?: boolean;
+  disabled?: boolean;
 };
 
 type MapLegendProps = {
   legends: MapLegendGroup[];
+  setLegends?: React.Dispatch<React.SetStateAction<MapLegendGroup[]>>;
 };
 
-export default function MapLegend({ legends }: MapLegendProps): JSX.Element {
+export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+  const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
 
-  return (
+  const separatorStyles = {
+    width: '1px',
+    height: 'auto',
+    backgroundColor: theme.palette.TwClrBrdrTertiary,
+    marginRight: '24px',
+    marginLeft: '24px',
+  };
+
+  return newPlantsDashboardEnabled ? (
+    <Box
+      display='flex'
+      justifyItems='flex-start'
+      border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+      borderRadius='8px'
+      padding={theme.spacing(2)}
+    >
+      {legends.map((legend) => (
+        <Fragment key={legend.title}>
+          <Box
+            border={legend.switch ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : 'none'}
+            display='flex'
+            padding={2}
+            borderRadius={1}
+          >
+            {legend.switch && (
+              <Box>
+                <Switch
+                  checked={!legend.disabled}
+                  onChange={(event, checked) => {
+                    if (setLegends) {
+                      setLegends((prev) => {
+                        const newLegends = [...prev];
+                        const found = prev.findIndex((l) => l.title === legend.title);
+                        const foundCopy = prev.slice(found, found + 1)[0];
+                        foundCopy.disabled = !checked;
+                        newLegends.splice(found, 1);
+                        return [...newLegends, foundCopy];
+                      });
+                    }
+                  }}
+                />
+              </Box>
+            )}
+            <Box>
+              <Typography
+                fontSize='14px'
+                fontWeight={600}
+                width={isMobile ? '100%' : undefined}
+                marginRight={isMobile ? 0 : theme.spacing(4)}
+              >
+                {legend.title}
+              </Typography>
+              <Box display='flex'>
+                {legend.items.map((item) => (
+                  <Box key={`${legend.title}-${item.label}`} paddingRight={1}>
+                    <LabeledSwatch {...item} />
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          </Box>
+          {!legend.switch && <div style={separatorStyles} />}
+        </Fragment>
+      ))}
+    </Box>
+  ) : (
     <Box
       display='flex'
       justifyItems='flex-start'
