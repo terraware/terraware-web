@@ -36,7 +36,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const { availableCohorts } = useCohorts();
-  const { acceleratorOrgs: allAcceleratorOrgs } = useAcceleratorOrgs(false);
+  const { acceleratorOrgs: allAcceleratorOrgs } = useAcceleratorOrgs();
 
   const [localRecord, setLocalRecord] = useState<T>(participant);
   const [validateFields, setValidateFields] = useState<boolean>(false);
