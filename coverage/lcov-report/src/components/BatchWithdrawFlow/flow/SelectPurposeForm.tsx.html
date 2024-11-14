@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/279</span>
+                <span class='fraction'>0/280</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/238</span>
+                <span class='fraction'>0/240</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/269</span>
+                <span class='fraction'>0/270</span>
             </div>
         
             
@@ -900,7 +900,9 @@
 <a name='L835'></a><a href='#L835'>835</a>
 <a name='L836'></a><a href='#L836'>836</a>
 <a name='L837'></a><a href='#L837'>837</a>
-<a name='L838'></a><a href='#L838'>838</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L838'></a><a href='#L838'>838</a>
+<a name='L839'></a><a href='#L839'>839</a>
+<a name='L840'></a><a href='#L840'>840</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1361,6 +1363,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1369,6 +1372,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -2193,19 +2197,21 @@ export default function <span class="fstat-no" title="function not covered" >Sel
   }, [localRecord.purpose, noReadySeedlings, snackbar, selectedNursery, batches, updatePurpose]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const fetchSpecies = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-      const result = <span class="cstat-no" title="statement not covered" >await SpeciesService.getAllSpecies(selectedOrganization.id);</span>
-      const speciesNamesMap = <span class="cstat-no" title="statement not covered" >(result.species || []).reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, sp) =&gt; {</span>
-        const { scientificName, commonName } = <span class="cstat-no" title="statement not covered" >sp;</span>
-<span class="cstat-no" title="statement not covered" >        return {</span>
-          ...acc,
-          [sp.id.toString()]: commonName ? `${scientificName} (${commonName})` : scientificName,
-        };
-      }, {});
-<span class="cstat-no" title="statement not covered" >      setSpeciesMap(speciesNamesMap);</span>
-    };
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization.id !== -1) {</span>
+      const fetchSpecies = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
+        const result = <span class="cstat-no" title="statement not covered" >await SpeciesService.getAllSpecies(selectedOrganization.id);</span>
+        const speciesNamesMap = <span class="cstat-no" title="statement not covered" >(result.species || []).reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, sp) =&gt; {</span>
+          const { scientificName, commonName } = <span class="cstat-no" title="statement not covered" >sp;</span>
+<span class="cstat-no" title="statement not covered" >          return {</span>
+            ...acc,
+            [sp.id.toString()]: commonName ? `${scientificName} (${commonName})` : scientificName,
+          };
+        }, {});
+<span class="cstat-no" title="statement not covered" >        setSpeciesMap(speciesNamesMap);</span>
+      };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    fetchSpecies();</span>
+<span class="cstat-no" title="statement not covered" >      fetchSpecies();</span>
+    }
   }, [selectedOrganization.id]);
 &nbsp;
   const batchesFromNursery = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -2581,7 +2587,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-13T19:56:38.445Z
+                at 2024-11-14T19:08:35.271Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

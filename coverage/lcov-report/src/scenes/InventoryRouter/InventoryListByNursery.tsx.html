@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
@@ -225,7 +225,9 @@
 <a name='L160'></a><a href='#L160'>160</a>
 <a name='L161'></a><a href='#L161'>161</a>
 <a name='L162'></a><a href='#L162'>162</a>
-<a name='L163'></a><a href='#L163'>163</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -303,6 +305,15 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -313,14 +324,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -337,6 +340,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -463,42 +467,44 @@ export default function <span class="fstat-no" title="function not covered" >Inv
   };
 &nbsp;
   const onApplyFilters = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-    const requestId = <span class="cstat-no" title="statement not covered" >Math.random().toString();</span>
-<span class="cstat-no" title="statement not covered" >    setRequestId('searchInventory', requestId);</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization.id !== -1) {</span>
+      const requestId = <span class="cstat-no" title="statement not covered" >Math.random().toString();</span>
+<span class="cstat-no" title="statement not covered" >      setRequestId('searchInventory', requestId);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    setReportData({</span>
-      organizationId: selectedOrganization.id,
-      query: debouncedSearchTerm,
-      facilityIds: filters.facilityIds,
-      speciesIds: filters.speciesIds,
-      searchSortOrder,
-    });
+<span class="cstat-no" title="statement not covered" >      setReportData({</span>
+        organizationId: selectedOrganization.id,
+        query: debouncedSearchTerm,
+        facilityIds: filters.facilityIds,
+        speciesIds: filters.speciesIds,
+        searchSortOrder,
+      });
 &nbsp;
-    const apiSearchResults = <span class="cstat-no" title="statement not covered" >await NurseryInventoryService.searchInventoryByNursery({</span>
-      organizationId: selectedOrganization.id,
-      query: debouncedSearchTerm,
-      facilityIds: filters.facilityIds,
-      speciesIds: filters.speciesIds,
-      searchSortOrder,
-    });
+      const apiSearchResults = <span class="cstat-no" title="statement not covered" >await NurseryInventoryService.searchInventoryByNursery({</span>
+        organizationId: selectedOrganization.id,
+        query: debouncedSearchTerm,
+        facilityIds: filters.facilityIds,
+        speciesIds: filters.speciesIds,
+        searchSortOrder,
+      });
 &nbsp;
-    const updatedResult = <span class="cstat-no" title="statement not covered" >apiSearchResults?.map(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; {</span>
-      const resultTyped = <span class="cstat-no" title="statement not covered" >result as FacilitySpeciesInventoryResult;</span>
-      const speciesNames = <span class="cstat-no" title="statement not covered" >resultTyped.facilityInventories</span>
-        .filter(<span class="fstat-no" title="function not covered" >(f</span>i) =&gt; <span class="cstat-no" title="statement not covered" >fi.species_id)</span>
-        .map(<span class="fstat-no" title="function not covered" >(i</span>nv) =&gt; <span class="cstat-no" title="statement not covered" >inv.species_scientificName)</span>;
-      const batchIds = <span class="cstat-no" title="statement not covered" >resultTyped.facilityInventories</span>
-        .filter(<span class="fstat-no" title="function not covered" >(f</span>i) =&gt; <span class="cstat-no" title="statement not covered" >fi.species_id)</span>
-        .flatMap(<span class="fstat-no" title="function not covered" >(i</span>nv) =&gt; <span class="cstat-no" title="statement not covered" >inv.batches.map(<span class="fstat-no" title="function not covered" >(b</span>atch) =&gt; <span class="cstat-no" title="statement not covered" >batch.id)</span>)</span>;
-<span class="cstat-no" title="statement not covered" >      return { ...resultTyped, facilityInventories: speciesNames.join('\r'), batchIds };</span>
-    });
+      const updatedResult = <span class="cstat-no" title="statement not covered" >apiSearchResults?.map(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; {</span>
+        const resultTyped = <span class="cstat-no" title="statement not covered" >result as FacilitySpeciesInventoryResult;</span>
+        const speciesNames = <span class="cstat-no" title="statement not covered" >resultTyped.facilityInventories</span>
+          .filter(<span class="fstat-no" title="function not covered" >(f</span>i) =&gt; <span class="cstat-no" title="statement not covered" >fi.species_id)</span>
+          .map(<span class="fstat-no" title="function not covered" >(i</span>nv) =&gt; <span class="cstat-no" title="statement not covered" >inv.species_scientificName)</span>;
+        const batchIds = <span class="cstat-no" title="statement not covered" >resultTyped.facilityInventories</span>
+          .filter(<span class="fstat-no" title="function not covered" >(f</span>i) =&gt; <span class="cstat-no" title="statement not covered" >fi.species_id)</span>
+          .flatMap(<span class="fstat-no" title="function not covered" >(i</span>nv) =&gt; <span class="cstat-no" title="statement not covered" >inv.batches.map(<span class="fstat-no" title="function not covered" >(b</span>atch) =&gt; <span class="cstat-no" title="statement not covered" >batch.id)</span>)</span>;
+<span class="cstat-no" title="statement not covered" >        return { ...resultTyped, facilityInventories: speciesNames.join('\r'), batchIds };</span>
+      });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (updatedResult) {</span>
-<span class="cstat-no" title="statement not covered" >      if (!debouncedSearchTerm &amp;&amp; !filters.facilityIds?.length &amp;&amp; !filters.speciesIds?.length) {</span>
-<span class="cstat-no" title="statement not covered" >        setShowResults(updatedResult.length &gt; 0);</span>
-      }
-<span class="cstat-no" title="statement not covered" >      if (getRequestId('searchInventory') === requestId) {</span>
-<span class="cstat-no" title="statement not covered" >        setSearchResults(updatedResult);</span>
+<span class="cstat-no" title="statement not covered" >      if (updatedResult) {</span>
+<span class="cstat-no" title="statement not covered" >        if (!debouncedSearchTerm &amp;&amp; !filters.facilityIds?.length &amp;&amp; !filters.speciesIds?.length) {</span>
+<span class="cstat-no" title="statement not covered" >          setShowResults(updatedResult.length &gt; 0);</span>
+        }
+<span class="cstat-no" title="statement not covered" >        if (getRequestId('searchInventory') === requestId) {</span>
+<span class="cstat-no" title="statement not covered" >          setSearchResults(updatedResult);</span>
+        }
       }
     }
   }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, setReportData]);
@@ -556,7 +562,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-13T19:56:38.445Z
+                at 2024-11-14T19:08:35.271Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

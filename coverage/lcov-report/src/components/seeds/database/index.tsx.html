@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/238</span>
+                <span class='fraction'>0/241</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/150</span>
+                <span class='fraction'>0/158</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/235</span>
+                <span class='fraction'>0/238</span>
             </div>
         
             
@@ -835,7 +835,13 @@
 <a name='L770'></a><a href='#L770'>770</a>
 <a name='L771'></a><a href='#L771'>771</a>
 <a name='L772'></a><a href='#L772'>772</a>
-<a name='L773'></a><a href='#L773'>773</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L773'></a><a href='#L773'>773</a>
+<a name='L774'></a><a href='#L774'>774</a>
+<a name='L775'></a><a href='#L775'>775</a>
+<a name='L776'></a><a href='#L776'>776</a>
+<a name='L777'></a><a href='#L777'>777</a>
+<a name='L778'></a><a href='#L778'>778</a>
+<a name='L779'></a><a href='#L779'>779</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -988,8 +994,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1061,12 +1069,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1163,6 +1173,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1179,6 +1190,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1759,7 +1771,9 @@ export default function <span class="fstat-no" title="function not covered" >Dat
   const closeMessageSelector = <span class="cstat-no" title="statement not covered" >useAppSelector(selectMessage(`seeds.${SNACKBAR_PAGE_CLOSE_KEY}.ackWeightSystem`));</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization.id !== -1) {</span>
+<span class="cstat-no" title="statement not covered" >      void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));</span>
+    }
   }, [activeLocale, dispatch, selectedOrganization.id]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -1833,8 +1847,10 @@ export default function <span class="fstat-no" title="function not covered" >Dat
 &nbsp;
   const saveSearchColumns = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    as</span>ync (columnNames?: string[]) =&gt; {
-<span class="cstat-no" title="statement not covered" >      await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, { accessionsColumns: columnNames });</span>
-<span class="cstat-no" title="statement not covered" >      reloadOrgPreferences();</span>
+<span class="cstat-no" title="statement not covered" >      if (selectedOrganization.id !== -1) {</span>
+<span class="cstat-no" title="statement not covered" >        await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, { accessionsColumns: columnNames });</span>
+<span class="cstat-no" title="statement not covered" >        reloadOrgPreferences();</span>
+      }
     },
     [selectedOrganization.id, reloadOrgPreferences]
   );
@@ -1933,24 +1949,26 @@ export default function <span class="fstat-no" title="function not covered" >Dat
   ]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const populateUnfilteredResults = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-      const apiResponse: SearchResponseElementWithId[] | null = <span class="cstat-no" title="statement not covered" >await SeedBankService.searchAccessions({</span>
-        organizationId: selectedOrganization.id,
-        fields: ['id'],
-      });
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization.id !== -1) {</span>
+      const populateUnfilteredResults = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
+        const apiResponse: SearchResponseElementWithId[] | null = <span class="cstat-no" title="statement not covered" >await SeedBankService.searchAccessions({</span>
+          organizationId: selectedOrganization.id,
+          fields: ['id'],
+        });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      setUnfilteredResults(apiResponse);</span>
-    };
+<span class="cstat-no" title="statement not covered" >        setUnfilteredResults(apiResponse);</span>
+      };
 &nbsp;
-    const populatePendingAccessions = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-      const data: SearchResponseElementWithId[] | null = <span class="cstat-no" title="statement not covered" >await SeedBankService.getPendingAccessions(</span>
-        selectedOrganization.id
-      );
-<span class="cstat-no" title="statement not covered" >      setPendingAccessions(data);</span>
-    };
+      const populatePendingAccessions = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
+        const data: SearchResponseElementWithId[] | null = <span class="cstat-no" title="statement not covered" >await SeedBankService.getPendingAccessions(</span>
+          selectedOrganization.id
+        );
+<span class="cstat-no" title="statement not covered" >        setPendingAccessions(data);</span>
+      };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    void populateUnfilteredResults();</span>
-<span class="cstat-no" title="statement not covered" >    void populatePendingAccessions();</span>
+<span class="cstat-no" title="statement not covered" >      void populateUnfilteredResults();</span>
+<span class="cstat-no" title="statement not covered" >      void populatePendingAccessions();</span>
+    }
   }, [selectedOrganization.id]);
 &nbsp;
   const initAccessions = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -1965,7 +1983,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
 <span class="cstat-no" title="statement not covered" >      return columnsNamesToSearch;</span>
     };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (selectedOrganization) {</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization &amp;&amp; selectedOrganization.id !== -1) {</span>
       const requestId = <span class="cstat-no" title="statement not covered" >setRequestId('accessions_search');</span>
 &nbsp;
       const populateSearchResults = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
@@ -2386,7 +2404,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-13T19:56:38.445Z
+                at 2024-11-14T19:08:35.271Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

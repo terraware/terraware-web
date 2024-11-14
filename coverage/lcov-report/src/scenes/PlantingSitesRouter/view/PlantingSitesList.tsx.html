@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/49</span>
+                <span class='fraction'>0/50</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/47</span>
+                <span class='fraction'>0/48</span>
             </div>
         
             
@@ -250,7 +250,9 @@
 <a name='L185'></a><a href='#L185'>185</a>
 <a name='L186'></a><a href='#L186'>186</a>
 <a name='L187'></a><a href='#L187'>187</a>
-<a name='L188'></a><a href='#L188'>188</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -302,22 +304,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -327,11 +313,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -343,6 +335,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -488,48 +492,50 @@ export default function <span class="fstat-no" title="function not covered" >Pla
    */
   const searchData = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    as</span>ync (searchFields: SearchNodePayload[]) =&gt; {
-      const searchRequests = <span class="cstat-no" title="statement not covered" >[</span>
-        TrackingService.searchPlantingSites(selectedOrganization.id, searchFields, searchSortOrder),
-      ];
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      searchRequests.push(</span>
-        DraftPlantingSiteService.searchDraftPlantingSites(selectedOrganization.id, searchFields, searchSortOrder)
-      );
-&nbsp;
-      // batch the search requests
-      const results = <span class="cstat-no" title="statement not covered" >await Promise.allSettled(searchRequests);</span>
-&nbsp;
-      const sites: PlantingSiteSearchResult[] = <span class="cstat-no" title="statement not covered" >results.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, result) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        if (result.status === 'rejected') {</span>
-<span class="cstat-no" title="statement not covered" >          return acc;</span>
-        }
-        const { value } = <span class="cstat-no" title="statement not covered" >result;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        return [</span>
-          ...acc,
-          ...(value ?? []).map(
-<span class="fstat-no" title="function not covered" >            (s</span>ite) =&gt;
-<span class="cstat-no" title="statement not covered" >              ({</span>
-                ...setTimeZone(site, timeZones, defaultTimeZone),
-                numPlantingSubzones: site.numPlantingSubzones ?? '0',
-                numPlantingZones: site.numPlantingZones ?? '0',
-              }) as PlantingSiteSearchResult
-          ),
+<span class="cstat-no" title="statement not covered" >      if (selectedOrganization.id !== -1) {</span>
+        const searchRequests = <span class="cstat-no" title="statement not covered" >[</span>
+          TrackingService.searchPlantingSites(selectedOrganization.id, searchFields, searchSortOrder),
         ];
-      }, [] as PlantingSiteSearchResult[]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      if (sites.some(<span class="fstat-no" title="function not covered" >(s</span>ite) =&gt; <span class="cstat-no" title="statement not covered" >site.isDraft)</span>) {</span>
-        // sort merged results by sort order
-<span class="cstat-no" title="statement not covered" >        return sortResults(sites, activeLocale, searchSortOrder, [</span>
-          'id',
-          'numPlantingSubzones',
-          'numPlantingZones',
-          'project_id',
-          'totalPlants',
-        ]);
+<span class="cstat-no" title="statement not covered" >        searchRequests.push(</span>
+          DraftPlantingSiteService.searchDraftPlantingSites(selectedOrganization.id, searchFields, searchSortOrder)
+        );
+&nbsp;
+        // batch the search requests
+        const results = <span class="cstat-no" title="statement not covered" >await Promise.allSettled(searchRequests);</span>
+&nbsp;
+        const sites: PlantingSiteSearchResult[] = <span class="cstat-no" title="statement not covered" >results.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, result) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          if (result.status === 'rejected') {</span>
+<span class="cstat-no" title="statement not covered" >            return acc;</span>
+          }
+          const { value } = <span class="cstat-no" title="statement not covered" >result;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          return [</span>
+            ...acc,
+            ...(value ?? []).map(
+<span class="fstat-no" title="function not covered" >              (s</span>ite) =&gt;
+<span class="cstat-no" title="statement not covered" >                ({</span>
+                  ...setTimeZone(site, timeZones, defaultTimeZone),
+                  numPlantingSubzones: site.numPlantingSubzones ?? '0',
+                  numPlantingZones: site.numPlantingZones ?? '0',
+                }) as PlantingSiteSearchResult
+            ),
+          ];
+        }, [] as PlantingSiteSearchResult[]);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (sites.some(<span class="fstat-no" title="function not covered" >(s</span>ite) =&gt; <span class="cstat-no" title="statement not covered" >site.isDraft)</span>) {</span>
+          // sort merged results by sort order
+<span class="cstat-no" title="statement not covered" >          return sortResults(sites, activeLocale, searchSortOrder, [</span>
+            'id',
+            'numPlantingSubzones',
+            'numPlantingZones',
+            'project_id',
+            'totalPlants',
+          ]);
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return sites;</span>
       }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      return sites;</span>
     },
     [activeLocale, defaultTimeZone, searchSortOrder, selectedOrganization.id, timeZones]
   );
@@ -631,7 +637,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-13T19:56:38.445Z
+                at 2024-11-14T19:08:35.271Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

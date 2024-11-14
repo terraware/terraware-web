@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/83</span>
+                <span class='fraction'>0/84</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/61</span>
+                <span class='fraction'>0/63</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/80</span>
+                <span class='fraction'>0/81</span>
             </div>
         
             
@@ -342,7 +342,9 @@
 <a name='L277'></a><a href='#L277'>277</a>
 <a name='L278'></a><a href='#L278'>278</a>
 <a name='L279'></a><a href='#L279'>279</a>
-<a name='L280'></a><a href='#L280'>280</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L280'></a><a href='#L280'>280</a>
+<a name='L281'></a><a href='#L281'>281</a>
+<a name='L282'></a><a href='#L282'>282</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -468,27 +470,29 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -742,32 +746,34 @@ const NewApplicationModal = <span class="cstat-no" title="statement not covered"
   }, [onClose]);
 &nbsp;
   const onSave = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    let error = <span class="cstat-no" title="statement not covered" >'';</span>
-<span class="cstat-no" title="statement not covered" >    if (newApplication.projectType === 'New') {</span>
-<span class="cstat-no" title="statement not covered" >      if ((error = validateProjectName(newApplication.projectName ?? ''))) {</span>
-<span class="cstat-no" title="statement not covered" >        setProjectNameError(error);</span>
-<span class="cstat-no" title="statement not covered" >        return;</span>
-      }
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization.id !== -1) {</span>
+      let error = <span class="cstat-no" title="statement not covered" >'';</span>
+<span class="cstat-no" title="statement not covered" >      if (newApplication.projectType === 'New') {</span>
+<span class="cstat-no" title="statement not covered" >        if ((error = validateProjectName(newApplication.projectName ?? ''))) {</span>
+<span class="cstat-no" title="statement not covered" >          setProjectNameError(error);</span>
+<span class="cstat-no" title="statement not covered" >          return;</span>
+        }
 &nbsp;
-      const createProjectApplicationRequest = <span class="cstat-no" title="statement not covered" >dispatch(</span>
-        requestCreateProjectApplication({
-          projectName: newApplication.projectName ?? '',
-          organizationId: selectedOrganization.id,
-        })
-      );
-<span class="cstat-no" title="statement not covered" >      setCreateProjectApplicationRequestId(createProjectApplicationRequest.requestId);</span>
-<span class="cstat-no" title="statement not covered" >      setIsLoading(true);</span>
-    } else {
-<span class="cstat-no" title="statement not covered" >      if ((error = validateProjectSelect(newApplication.projectId))) {</span>
-<span class="cstat-no" title="statement not covered" >        setProjectSelectError(error);</span>
-<span class="cstat-no" title="statement not covered" >        return;</span>
-      }
+        const createProjectApplicationRequest = <span class="cstat-no" title="statement not covered" >dispatch(</span>
+          requestCreateProjectApplication({
+            projectName: newApplication.projectName ?? '',
+            organizationId: selectedOrganization.id,
+          })
+        );
+<span class="cstat-no" title="statement not covered" >        setCreateProjectApplicationRequestId(createProjectApplicationRequest.requestId);</span>
+<span class="cstat-no" title="statement not covered" >        setIsLoading(true);</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        if ((error = validateProjectSelect(newApplication.projectId))) {</span>
+<span class="cstat-no" title="statement not covered" >          setProjectSelectError(error);</span>
+<span class="cstat-no" title="statement not covered" >          return;</span>
+        }
 &nbsp;
-      const createApplicationRequest = <span class="cstat-no" title="statement not covered" >dispatch(</span>
-        requestCreateApplication({ projectId: newApplication.projectId ?? -1 })
-      );
-<span class="cstat-no" title="statement not covered" >      setCreateApplicationRequestId(createApplicationRequest.requestId);</span>
-<span class="cstat-no" title="statement not covered" >      setIsLoading(true);</span>
+        const createApplicationRequest = <span class="cstat-no" title="statement not covered" >dispatch(</span>
+          requestCreateApplication({ projectId: newApplication.projectId ?? -1 })
+        );
+<span class="cstat-no" title="statement not covered" >        setCreateApplicationRequestId(createApplicationRequest.requestId);</span>
+<span class="cstat-no" title="statement not covered" >        setIsLoading(true);</span>
+      }
     }
   }, [
     dispatch,
@@ -907,7 +913,7 @@ export default NewApplicationModal;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-13T19:56:38.445Z
+                at 2024-11-14T19:08:35.271Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

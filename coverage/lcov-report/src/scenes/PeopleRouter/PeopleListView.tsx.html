@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/134</span>
+                <span class='fraction'>0/135</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/69</span>
+                <span class='fraction'>0/75</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/127</span>
+                <span class='fraction'>0/128</span>
             </div>
         
             
@@ -485,7 +485,9 @@
 <a name='L420'></a><a href='#L420'>420</a>
 <a name='L421'></a><a href='#L421'>421</a>
 <a name='L422'></a><a href='#L422'>422</a>
-<a name='L423'></a><a href='#L423'>423</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L423'></a><a href='#L423'>423</a>
+<a name='L424'></a><a href='#L424'>424</a>
+<a name='L425'></a><a href='#L425'>425</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -697,6 +699,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -731,6 +734,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1089,7 +1093,7 @@ export default function <span class="fstat-no" title="function not covered" >Peo
 <span class="cstat-no" title="statement not covered" >        setCannotRemovePeopleModalOpened(true);</span>
       } else {
         const selectedOwners = <span class="cstat-no" title="statement not covered" >selectedPeopleRows.filter(<span class="fstat-no" title="function not covered" >(s</span>electedPerson) =&gt; <span class="cstat-no" title="statement not covered" >selectedPerson.role === 'Owner')</span>;</span>
-<span class="cstat-no" title="statement not covered" >        if (selectedOwners.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >        if (selectedOwners.length &gt; 0 &amp;&amp; selectedOrganization.id !== -1) {</span>
           const organizationRoles = <span class="cstat-no" title="statement not covered" >await OrganizationService.getOrganizationRoles(selectedOrganization.id);</span>
           const totalOwners = <span class="cstat-no" title="statement not covered" >organizationRoles.roles?.find(<span class="fstat-no" title="function not covered" >(r</span>ole) =&gt; <span class="cstat-no" title="statement not covered" >role.role === 'Owner')</span>;</span>
 <span class="cstat-no" title="statement not covered" >          if (selectedOwners.length === totalOwners?.totalUsers) {</span>
@@ -1119,44 +1123,46 @@ export default function <span class="fstat-no" title="function not covered" >Peo
   };
 &nbsp;
   const removePeopleHandler = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-    let assignNewOwnerResponse;
-<span class="cstat-no" title="statement not covered" >    if (newOwner) {</span>
-<span class="cstat-no" title="statement not covered" >      assignNewOwnerResponse = await OrganizationUserService.updateOrganizationUser(</span>
-        selectedOrganization.id,
-        newOwner.id,
-        'Owner'
-      );
-    }
-    const promises: Promise&lt;Response&gt;[] = <span class="cstat-no" title="statement not covered" >[];</span>
-<span class="cstat-no" title="statement not covered" >    if ((assignNewOwnerResponse &amp;&amp; assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {</span>
-<span class="cstat-no" title="statement not covered" >      selectedPeopleRows.forEach(<span class="fstat-no" title="function not covered" >(p</span>erson) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        promises.push(OrganizationUserService.deleteOrganizationUser(selectedOrganization.id, person.id));</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization.id !== -1) {</span>
+      let assignNewOwnerResponse;
+<span class="cstat-no" title="statement not covered" >      if (newOwner) {</span>
+<span class="cstat-no" title="statement not covered" >        assignNewOwnerResponse = await OrganizationUserService.updateOrganizationUser(</span>
+          selectedOrganization.id,
+          newOwner.id,
+          'Owner'
+        );
+      }
+      const promises: Promise&lt;Response&gt;[] = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >      if ((assignNewOwnerResponse &amp;&amp; assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {</span>
+<span class="cstat-no" title="statement not covered" >        selectedPeopleRows.forEach(<span class="fstat-no" title="function not covered" >(p</span>erson) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          promises.push(OrganizationUserService.deleteOrganizationUser(selectedOrganization.id, person.id));</span>
+        });
+      }
+      const leaveOrgResponses = <span class="cstat-no" title="statement not covered" >await Promise.all(promises);</span>
+      let allRemoved = <span class="cstat-no" title="statement not covered" >true;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      leaveOrgResponses.forEach(<span class="fstat-no" title="function not covered" >(r</span>esp) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        if (!resp.requestSucceeded) {</span>
+<span class="cstat-no" title="statement not covered" >          allRemoved = false;</span>
+        }
       });
-    }
-    const leaveOrgResponses = <span class="cstat-no" title="statement not covered" >await Promise.all(promises);</span>
-    let allRemoved = <span class="cstat-no" title="statement not covered" >true;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    leaveOrgResponses.forEach(<span class="fstat-no" title="function not covered" >(r</span>esp) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      if (!resp.requestSucceeded) {</span>
-<span class="cstat-no" title="statement not covered" >        allRemoved = false;</span>
+<span class="cstat-no" title="statement not covered" >      if (allRemoved) {</span>
+<span class="cstat-no" title="statement not covered" >        setRemovePeopleModalOpened(false);</span>
+<span class="cstat-no" title="statement not covered" >        setSelectedPeopleRows([]);</span>
+<span class="cstat-no" title="statement not covered" >        if (reloadOrganizations) {</span>
+<span class="cstat-no" title="statement not covered" >          reloadOrganizations();</span>
+        }
+<span class="cstat-no" title="statement not covered" >        snackbar.toastSuccess(strings.CHANGES_SAVED);</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        snackbar.toastError();</span>
       }
-    });
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (allRemoved) {</span>
-<span class="cstat-no" title="statement not covered" >      setRemovePeopleModalOpened(false);</span>
-<span class="cstat-no" title="statement not covered" >      setSelectedPeopleRows([]);</span>
-<span class="cstat-no" title="statement not covered" >      if (reloadOrganizations) {</span>
-<span class="cstat-no" title="statement not covered" >        reloadOrganizations();</span>
-      }
-<span class="cstat-no" title="statement not covered" >      snackbar.toastSuccess(strings.CHANGES_SAVED);</span>
-    } else {
-<span class="cstat-no" title="statement not covered" >      snackbar.toastError();</span>
+<span class="cstat-no" title="statement not covered" >      navigate(APP_PATHS.PEOPLE);</span>
     }
-<span class="cstat-no" title="statement not covered" >    navigate(APP_PATHS.PEOPLE);</span>
   };
 &nbsp;
   const deleteOrgHandler = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (user) {</span>
+<span class="cstat-no" title="statement not covered" >    if (user &amp;&amp; selectedOrganization.id !== -1) {</span>
       let allRemoved = <span class="cstat-no" title="statement not covered" >true;</span>
       const keepOneOwnerId = <span class="cstat-no" title="statement not covered" >selectedPeopleRows.filter(<span class="fstat-no" title="function not covered" >(p</span>erson) =&gt; <span class="cstat-no" title="statement not covered" >person.role === 'Owner')</span>[0].id.toString();</span>
       const otherUsers = <span class="cstat-no" title="statement not covered" >selectedPeopleRows.filter(</span>
@@ -1336,7 +1342,7 @@ export default function <span class="fstat-no" title="function not covered" >Peo
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-13T19:56:38.445Z
+                at 2024-11-14T19:08:35.271Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

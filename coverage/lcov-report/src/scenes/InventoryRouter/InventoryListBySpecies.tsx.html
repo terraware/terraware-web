@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/49</span>
+                <span class='fraction'>0/50</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/45</span>
+                <span class='fraction'>0/46</span>
             </div>
         
             
@@ -283,7 +283,9 @@
 <a name='L218'></a><a href='#L218'>218</a>
 <a name='L219'></a><a href='#L219'>219</a>
 <a name='L220'></a><a href='#L220'>220</a>
-<a name='L221'></a><a href='#L221'>221</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -376,6 +378,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -453,6 +456,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -593,86 +597,88 @@ export default function <span class="fstat-no" title="function not covered" >Inv
   };
 &nbsp;
   const onApplyFilters = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-    const requestId = <span class="cstat-no" title="statement not covered" >Math.random().toString();</span>
-<span class="cstat-no" title="statement not covered" >    setRequestId('searchInventory', requestId);</span>
-<span class="cstat-no" title="statement not covered" >    setReportData({</span>
-      organizationId: selectedOrganization.id,
-      query: debouncedSearchTerm,
-      facilityIds: filters.facilityIds,
-      searchSortOrder,
-    });
-    const apiSearchResults = <span class="cstat-no" title="statement not covered" >await NurseryInventoryService.searchInventory({</span>
-      organizationId: selectedOrganization.id,
-      query: debouncedSearchTerm,
-      facilityIds: filters.facilityIds,
-      searchSortOrder,
-    });
-&nbsp;
-    let updatedResult: InventoryResultWithFacilityNames[] | undefined = <span class="cstat-no" title="statement not covered" >[];</span>
-<span class="cstat-no" title="statement not covered" >    if (filters.facilityIds &amp;&amp; filters.facilityIds.length) {</span>
-      const nextResults = <span class="cstat-no" title="statement not covered" >apiSearchResults?.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, result) =&gt; {</span>
-        const resultTyped = <span class="cstat-no" title="statement not covered" >result as FacilityInventoryResult;</span>
-        const indexFound = <span class="cstat-no" title="statement not covered" >acc.findIndex(<span class="fstat-no" title="function not covered" >(r</span>es) =&gt; <span class="cstat-no" title="statement not covered" >res.species_id === resultTyped.species_id)</span>;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        if (indexFound !== undefined &amp;&amp; indexFound !== -1) {</span>
-          const existingSpecies = <span class="cstat-no" title="statement not covered" >acc[indexFound];</span>
-<span class="cstat-no" title="statement not covered" >          acc[indexFound] = {</span>
-            ...existingSpecies,
-            germinatingQuantity: (
-              Number(existingSpecies.germinatingQuantity) + Number(resultTyped['germinatingQuantity(raw)'])
-            ).toString(),
-            notReadyQuantity: (
-              Number(existingSpecies.notReadyQuantity) + Number(resultTyped['notReadyQuantity(raw)'])
-            ).toString(),
-            readyQuantity: (
-              Number(existingSpecies.readyQuantity) + Number(resultTyped['readyQuantity(raw)'])
-            ).toString(),
-            totalQuantity: (
-              Number(existingSpecies.totalQuantity) + Number(resultTyped['totalQuantity(raw)'])
-            ).toString(),
-            facilityInventories: `${existingSpecies.facilityInventories}\r${resultTyped.facility_name}`,
-          };
-        } else {
-          const transformedResult: InventoryResultWithFacilityNames = <span class="cstat-no" title="statement not covered" >{</span>
-            facility_id: resultTyped.facility_id,
-            species_id: resultTyped.species_id,
-            species_scientificName: resultTyped.species_scientificName,
-            species_commonName: resultTyped.species_commonName,
-            germinatingQuantity: resultTyped['germinatingQuantity(raw)'],
-            notReadyQuantity: resultTyped['notReadyQuantity(raw)'],
-            readyQuantity: resultTyped['readyQuantity(raw)'],
-            totalQuantity: resultTyped['totalQuantity(raw)'],
-            facilityInventories: resultTyped.facility_name,
-          };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >          acc.push(transformedResult);</span>
-        }
-<span class="cstat-no" title="statement not covered" >        return acc;</span>
-      }, [] as InventoryResultWithFacilityNames[]);
-&nbsp;
-      // format results
-<span class="cstat-no" title="statement not covered" >      updatedResult = nextResults?.map(<span class="fstat-no" title="function not covered" >(u</span>R) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        return {</span>
-          ...uR,
-          germinatingQuantity: numericFormatter.format(uR.germinatingQuantity),
-          notReadyQuantity: numericFormatter.format(uR.notReadyQuantity),
-          readyQuantity: numericFormatter.format(uR.readyQuantity),
-          totalQuantity: numericFormatter.format(uR.totalQuantity),
-        };
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization.id !== -1) {</span>
+      const requestId = <span class="cstat-no" title="statement not covered" >Math.random().toString();</span>
+<span class="cstat-no" title="statement not covered" >      setRequestId('searchInventory', requestId);</span>
+<span class="cstat-no" title="statement not covered" >      setReportData({</span>
+        organizationId: selectedOrganization.id,
+        query: debouncedSearchTerm,
+        facilityIds: filters.facilityIds,
+        searchSortOrder,
       });
-    } else {
-<span class="cstat-no" title="statement not covered" >      updatedResult = apiSearchResults?.map(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; {</span>
-        const resultTyped = <span class="cstat-no" title="statement not covered" >result as InventoryResult;</span>
-        const facilityInventoriesNames = <span class="cstat-no" title="statement not covered" >resultTyped.facilityInventories.map(<span class="fstat-no" title="function not covered" >(n</span>ursery) =&gt; <span class="cstat-no" title="statement not covered" >nursery.facility_name)</span>;</span>
-<span class="cstat-no" title="statement not covered" >        return { ...resultTyped, facilityInventories: facilityInventoriesNames.join('\r') };</span>
+      const apiSearchResults = <span class="cstat-no" title="statement not covered" >await NurseryInventoryService.searchInventory({</span>
+        organizationId: selectedOrganization.id,
+        query: debouncedSearchTerm,
+        facilityIds: filters.facilityIds,
+        searchSortOrder,
       });
-    }
-<span class="cstat-no" title="statement not covered" >    if (updatedResult) {</span>
-<span class="cstat-no" title="statement not covered" >      if (!debouncedSearchTerm &amp;&amp; !filters.facilityIds?.length) {</span>
-<span class="cstat-no" title="statement not covered" >        setShowResults(updatedResult.length &gt; 0);</span>
+&nbsp;
+      let updatedResult: InventoryResultWithFacilityNames[] | undefined = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >      if (filters.facilityIds &amp;&amp; filters.facilityIds.length) {</span>
+        const nextResults = <span class="cstat-no" title="statement not covered" >apiSearchResults?.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, result) =&gt; {</span>
+          const resultTyped = <span class="cstat-no" title="statement not covered" >result as FacilityInventoryResult;</span>
+          const indexFound = <span class="cstat-no" title="statement not covered" >acc.findIndex(<span class="fstat-no" title="function not covered" >(r</span>es) =&gt; <span class="cstat-no" title="statement not covered" >res.species_id === resultTyped.species_id)</span>;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          if (indexFound !== undefined &amp;&amp; indexFound !== -1) {</span>
+            const existingSpecies = <span class="cstat-no" title="statement not covered" >acc[indexFound];</span>
+<span class="cstat-no" title="statement not covered" >            acc[indexFound] = {</span>
+              ...existingSpecies,
+              germinatingQuantity: (
+                Number(existingSpecies.germinatingQuantity) + Number(resultTyped['germinatingQuantity(raw)'])
+              ).toString(),
+              notReadyQuantity: (
+                Number(existingSpecies.notReadyQuantity) + Number(resultTyped['notReadyQuantity(raw)'])
+              ).toString(),
+              readyQuantity: (
+                Number(existingSpecies.readyQuantity) + Number(resultTyped['readyQuantity(raw)'])
+              ).toString(),
+              totalQuantity: (
+                Number(existingSpecies.totalQuantity) + Number(resultTyped['totalQuantity(raw)'])
+              ).toString(),
+              facilityInventories: `${existingSpecies.facilityInventories}\r${resultTyped.facility_name}`,
+            };
+          } else {
+            const transformedResult: InventoryResultWithFacilityNames = <span class="cstat-no" title="statement not covered" >{</span>
+              facility_id: resultTyped.facility_id,
+              species_id: resultTyped.species_id,
+              species_scientificName: resultTyped.species_scientificName,
+              species_commonName: resultTyped.species_commonName,
+              germinatingQuantity: resultTyped['germinatingQuantity(raw)'],
+              notReadyQuantity: resultTyped['notReadyQuantity(raw)'],
+              readyQuantity: resultTyped['readyQuantity(raw)'],
+              totalQuantity: resultTyped['totalQuantity(raw)'],
+              facilityInventories: resultTyped.facility_name,
+            };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            acc.push(transformedResult);</span>
+          }
+<span class="cstat-no" title="statement not covered" >          return acc;</span>
+        }, [] as InventoryResultWithFacilityNames[]);
+&nbsp;
+        // format results
+<span class="cstat-no" title="statement not covered" >        updatedResult = nextResults?.map(<span class="fstat-no" title="function not covered" >(u</span>R) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          return {</span>
+            ...uR,
+            germinatingQuantity: numericFormatter.format(uR.germinatingQuantity),
+            notReadyQuantity: numericFormatter.format(uR.notReadyQuantity),
+            readyQuantity: numericFormatter.format(uR.readyQuantity),
+            totalQuantity: numericFormatter.format(uR.totalQuantity),
+          };
+        });
+      } else {
+<span class="cstat-no" title="statement not covered" >        updatedResult = apiSearchResults?.map(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; {</span>
+          const resultTyped = <span class="cstat-no" title="statement not covered" >result as InventoryResult;</span>
+          const facilityInventoriesNames = <span class="cstat-no" title="statement not covered" >resultTyped.facilityInventories.map(<span class="fstat-no" title="function not covered" >(n</span>ursery) =&gt; <span class="cstat-no" title="statement not covered" >nursery.facility_name)</span>;</span>
+<span class="cstat-no" title="statement not covered" >          return { ...resultTyped, facilityInventories: facilityInventoriesNames.join('\r') };</span>
+        });
       }
-<span class="cstat-no" title="statement not covered" >      if (getRequestId('searchInventory') === requestId) {</span>
-<span class="cstat-no" title="statement not covered" >        setSearchResults(updatedResult);</span>
+<span class="cstat-no" title="statement not covered" >      if (updatedResult) {</span>
+<span class="cstat-no" title="statement not covered" >        if (!debouncedSearchTerm &amp;&amp; !filters.facilityIds?.length) {</span>
+<span class="cstat-no" title="statement not covered" >          setShowResults(updatedResult.length &gt; 0);</span>
+        }
+<span class="cstat-no" title="statement not covered" >        if (getRequestId('searchInventory') === requestId) {</span>
+<span class="cstat-no" title="statement not covered" >          setSearchResults(updatedResult);</span>
+        }
       }
     }
   }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, numericFormatter, setReportData]);
@@ -730,7 +736,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-13T19:56:38.445Z
+                at 2024-11-14T19:08:35.271Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/88</span>
+                <span class='fraction'>0/89</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/53</span>
+                <span class='fraction'>0/57</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/86</span>
+                <span class='fraction'>0/87</span>
             </div>
         
             
@@ -331,7 +331,9 @@
 <a name='L266'></a><a href='#L266'>266</a>
 <a name='L267'></a><a href='#L267'>267</a>
 <a name='L268'></a><a href='#L268'>268</a>
-<a name='L269'></a><a href='#L269'>269</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -391,9 +393,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -654,14 +658,16 @@ export default function <span class="fstat-no" title="function not covered" >Per
   }, [selectedOrganization, personSelectedToEdit, setNewPerson]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const populatePeople = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-      const response = <span class="cstat-no" title="statement not covered" >await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);</span>
-<span class="cstat-no" title="statement not covered" >      if (personId &amp;&amp; response.requestSucceeded) {</span>
-<span class="cstat-no" title="statement not covered" >        setPeople(response.users);</span>
-<span class="cstat-no" title="statement not covered" >        setPersonSelectedToEdit(response.users.find(<span class="fstat-no" title="function not covered" >(u</span>ser) =&gt; <span class="cstat-no" title="statement not covered" >user.id === parseInt(personId, 10))</span>);</span>
-      }
-    };
-<span class="cstat-no" title="statement not covered" >    populatePeople();</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization.id !== -1) {</span>
+      const populatePeople = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
+        const response = <span class="cstat-no" title="statement not covered" >await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);</span>
+<span class="cstat-no" title="statement not covered" >        if (personId &amp;&amp; response.requestSucceeded) {</span>
+<span class="cstat-no" title="statement not covered" >          setPeople(response.users);</span>
+<span class="cstat-no" title="statement not covered" >          setPersonSelectedToEdit(response.users.find(<span class="fstat-no" title="function not covered" >(u</span>ser) =&gt; <span class="cstat-no" title="statement not covered" >user.id === parseInt(personId, 10))</span>);</span>
+        }
+      };
+<span class="cstat-no" title="statement not covered" >      populatePeople();</span>
+    }
   }, [selectedOrganization, personId]);
 &nbsp;
   const onChangeRole = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>ewRole: string) =&gt; {</span>
@@ -697,7 +703,7 @@ export default function <span class="fstat-no" title="function not covered" >Per
     let successMessage: string | null = <span class="cstat-no" title="statement not covered" >null;</span>
     let userId = <span class="cstat-no" title="statement not covered" >-1;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (!!personSelectedToEdit) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!!personSelectedToEdit &amp;&amp; selectedOrganization.id !== -1) {</span>
       const response = <span class="cstat-no" title="statement not covered" >await OrganizationUserService.updateOrganizationUser(</span>
         selectedOrganization.id,
         newPerson.id,
@@ -874,7 +880,7 @@ export default function <span class="fstat-no" title="function not covered" >Per
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-13T19:56:38.445Z
+                at 2024-11-14T19:08:35.271Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

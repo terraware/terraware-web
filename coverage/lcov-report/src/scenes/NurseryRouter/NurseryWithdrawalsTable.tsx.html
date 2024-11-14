@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/94</span>
+                <span class='fraction'>0/96</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/48</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/89</span>
+                <span class='fraction'>0/91</span>
             </div>
         
             
@@ -374,7 +374,11 @@
 <a name='L309'></a><a href='#L309'>309</a>
 <a name='L310'></a><a href='#L310'>310</a>
 <a name='L311'></a><a href='#L311'>311</a>
-<a name='L312'></a><a href='#L312'>312</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -513,8 +517,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -593,6 +599,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -606,6 +613,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -822,10 +830,12 @@ export default function <span class="fstat-no" title="function not covered" >Nur
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const getApiSearchResults = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      setFilterOptions(await NurseryWithdrawalService.getFilterOptions(selectedOrganization.id));</span>
-    };
-<span class="cstat-no" title="statement not covered" >    void getApiSearchResults();</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization.id !== -1) {</span>
+      const getApiSearchResults = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        setFilterOptions(await NurseryWithdrawalService.getFilterOptions(selectedOrganization.id));</span>
+      };
+<span class="cstat-no" title="statement not covered" >      void getApiSearchResults();</span>
+    }
   }, [selectedOrganization]);
 &nbsp;
   const onWithdrawalClicked = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(w</span>ithdrawal: any) =&gt; {</span>
@@ -900,23 +910,25 @@ export default function <span class="fstat-no" title="function not covered" >Nur
   }, [filters, debouncedSearchTerm]);
 &nbsp;
   const onApplyFilters = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-    const searchChildren: SearchNodePayload[] = <span class="cstat-no" title="statement not covered" >getSearchChildren();</span>
-    const requestId = <span class="cstat-no" title="statement not covered" >Math.random().toString();</span>
-<span class="cstat-no" title="statement not covered" >    setRequestId('searchWithdrawals', requestId);</span>
-    const apiSearchResults = <span class="cstat-no" title="statement not covered" >await NurseryWithdrawalService.listNurseryWithdrawals(</span>
-      selectedOrganization.id,
-      searchChildren,
-      searchSortOrder
-    );
-<span class="cstat-no" title="statement not covered" >    if (apiSearchResults) {</span>
-<span class="cstat-no" title="statement not covered" >      if (getRequestId('searchWithdrawals') === requestId) {</span>
-        const destinationFilter = <span class="cstat-no" title="statement not covered" >filters.destinationName?.values ?? [];</span>
-<span class="cstat-no" title="statement not covered" >        if (destinationFilter.length) {</span>
-<span class="cstat-no" title="statement not covered" >          setSearchResults(</span>
-            apiSearchResults.filter(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; <span class="cstat-no" title="statement not covered" >destinationFilter.indexOf(result.destinationName) !== -1)</span>
-          );
-        } else {
-<span class="cstat-no" title="statement not covered" >          setSearchResults(apiSearchResults);</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization.id !== -1) {</span>
+      const searchChildren: SearchNodePayload[] = <span class="cstat-no" title="statement not covered" >getSearchChildren();</span>
+      const requestId = <span class="cstat-no" title="statement not covered" >Math.random().toString();</span>
+<span class="cstat-no" title="statement not covered" >      setRequestId('searchWithdrawals', requestId);</span>
+      const apiSearchResults = <span class="cstat-no" title="statement not covered" >await NurseryWithdrawalService.listNurseryWithdrawals(</span>
+        selectedOrganization.id,
+        searchChildren,
+        searchSortOrder
+      );
+<span class="cstat-no" title="statement not covered" >      if (apiSearchResults) {</span>
+<span class="cstat-no" title="statement not covered" >        if (getRequestId('searchWithdrawals') === requestId) {</span>
+          const destinationFilter = <span class="cstat-no" title="statement not covered" >filters.destinationName?.values ?? [];</span>
+<span class="cstat-no" title="statement not covered" >          if (destinationFilter.length) {</span>
+<span class="cstat-no" title="statement not covered" >            setSearchResults(</span>
+              apiSearchResults.filter(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; <span class="cstat-no" title="statement not covered" >destinationFilter.indexOf(result.destinationName) !== -1)</span>
+            );
+          } else {
+<span class="cstat-no" title="statement not covered" >            setSearchResults(apiSearchResults);</span>
+          }
         }
       }
     }
@@ -1003,7 +1015,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-13T19:56:38.445Z
+                at 2024-11-14T19:08:35.271Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
