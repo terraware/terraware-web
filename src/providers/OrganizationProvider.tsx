@@ -46,6 +46,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const { isDev, isStaging } = useEnvironment();
 
   const reloadOrganizations = useCallback(async (selectedOrgId?: number) => {
+    console.log({ selectedOrgId });
     const populateOrganizations = async () => {
       const response = await OrganizationService.getOrganizations();
       if (!response.error) {
@@ -53,6 +54,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
         setOrganizations(response.organizations);
         if (selectedOrgId) {
           const orgToSelect = response.organizations.find((org) => org.id === selectedOrgId);
+          console.log({ orgToSelect });
           if (orgToSelect) {
             setSelectedOrganization(orgToSelect);
           }

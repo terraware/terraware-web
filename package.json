@@ -21,6 +21,8 @@
     "format": "prettier --write .",
     "docker:start": "./scripts/launch_server.sh",
     "docker:stop": "docker compose down",
+    "docker:remote-be:start": "docker compose -f remote-backend/docker-compose.yml up --detach",
+    "docker:remote-be:stop": "docker compose -f remote-backend/docker-compose.yml down",
     "wait-be": "wait-on -t 120000 http://localhost:8080/swagger-ui/index.html",
     "server:prepare": "./scripts/preparedb.sh",
     "server:reset": "./scripts/resetdb.sh",

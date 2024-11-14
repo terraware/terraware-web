@@ -2,6 +2,7 @@ import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
 
 import { Facility } from './Facility';
+import { TfContactUser } from './User';
 
 export type ManagedLocationType = 'SeedBank' | 'Nursery' | 'PlantingSite';
 
@@ -30,6 +31,7 @@ export type Organization = {
   organizationType?: OrganizationType;
   organizationTypeDetails?: string;
   role?: OrganizationRole;
+  tfContactUser?: TfContactUser;
   totalUsers: number;
   timeZone?: string;
   website?: string;
