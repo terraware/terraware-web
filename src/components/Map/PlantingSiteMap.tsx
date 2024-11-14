@@ -132,7 +132,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
                   ['>', ['number', ['get', 'mortalityRate']], 50],
                   'mortality-rate-more-50',
                   ['>', ['number', ['get', 'mortalityRate']], 25],
-                  'mortality-rate-more-25',
+                  'mortality-rate-less-50',
                   'mortality-rate-less-25',
                 ]
               : undefined
