@@ -88,86 +88,88 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
   };
 
   const onApplyFilters = useCallback(async () => {
-    const requestId = Math.random().toString();
-    setRequestId('searchInventory', requestId);
-    setReportData({
-      organizationId: selectedOrganization.id,
-      query: debouncedSearchTerm,
-      facilityIds: filters.facilityIds,
-      searchSortOrder,
-    });
-    const apiSearchResults = await NurseryInventoryService.searchInventory({
-      organizationId: selectedOrganization.id,
-      query: debouncedSearchTerm,
-      facilityIds: filters.facilityIds,
-      searchSortOrder,
-    });
-
-    let updatedResult: InventoryResultWithFacilityNames[] | undefined = [];
-    if (filters.facilityIds && filters.facilityIds.length) {
-      const nextResults = apiSearchResults?.reduce((acc, result) => {
-        const resultTyped = result as FacilityInventoryResult;
-        const indexFound = acc.findIndex((res) => res.species_id === resultTyped.species_id);
-
-        if (indexFound !== undefined && indexFound !== -1) {
-          const existingSpecies = acc[indexFound];
-          acc[indexFound] = {
-            ...existingSpecies,
-            germinatingQuantity: (
-              Number(existingSpecies.germinatingQuantity) + Number(resultTyped['germinatingQuantity(raw)'])
-            ).toString(),
-            notReadyQuantity: (
-              Number(existingSpecies.notReadyQuantity) + Number(resultTyped['notReadyQuantity(raw)'])
-            ).toString(),
-            readyQuantity: (
-              Number(existingSpecies.readyQuantity) + Number(resultTyped['readyQuantity(raw)'])
-            ).toString(),
-            totalQuantity: (
-              Number(existingSpecies.totalQuantity) + Number(resultTyped['totalQuantity(raw)'])
-            ).toString(),
-            facilityInventories: `${existingSpecies.facilityInventories}\r${resultTyped.facility_name}`,
-          };
-        } else {
-          const transformedResult: InventoryResultWithFacilityNames = {
-            facility_id: resultTyped.facility_id,
-            species_id: resultTyped.species_id,
-            species_scientificName: resultTyped.species_scientificName,
-            species_commonName: resultTyped.species_commonName,
-            germinatingQuantity: resultTyped['germinatingQuantity(raw)'],
-            notReadyQuantity: resultTyped['notReadyQuantity(raw)'],
-            readyQuantity: resultTyped['readyQuantity(raw)'],
-            totalQuantity: resultTyped['totalQuantity(raw)'],
-            facilityInventories: resultTyped.facility_name,
-          };
-
-          acc.push(transformedResult);
-        }
-        return acc;
-      }, [] as InventoryResultWithFacilityNames[]);
-
-      // format results
-      updatedResult = nextResults?.map((uR) => {
-        return {
-          ...uR,
-          germinatingQuantity: numericFormatter.format(uR.germinatingQuantity),
-          notReadyQuantity: numericFormatter.format(uR.notReadyQuantity),
-          readyQuantity: numericFormatter.format(uR.readyQuantity),
-          totalQuantity: numericFormatter.format(uR.totalQuantity),
-        };
+    if (selectedOrganization.id !== -1) {
+      const requestId = Math.random().toString();
+      setRequestId('searchInventory', requestId);
+      setReportData({
+        organizationId: selectedOrganization.id,
+        query: debouncedSearchTerm,
+        facilityIds: filters.facilityIds,
+        searchSortOrder,
       });
-    } else {
-      updatedResult = apiSearchResults?.map((result) => {
-        const resultTyped = result as InventoryResult;
-        const facilityInventoriesNames = resultTyped.facilityInventories.map((nursery) => nursery.facility_name);
-        return { ...resultTyped, facilityInventories: facilityInventoriesNames.join('\r') };
+      const apiSearchResults = await NurseryInventoryService.searchInventory({
+        organizationId: selectedOrganization.id,
+        query: debouncedSearchTerm,
+        facilityIds: filters.facilityIds,
+        searchSortOrder,
       });
-    }
-    if (updatedResult) {
-      if (!debouncedSearchTerm && !filters.facilityIds?.length) {
-        setShowResults(updatedResult.length > 0);
+
+      let updatedResult: InventoryResultWithFacilityNames[] | undefined = [];
+      if (filters.facilityIds && filters.facilityIds.length) {
+        const nextResults = apiSearchResults?.reduce((acc, result) => {
+          const resultTyped = result as FacilityInventoryResult;
+          const indexFound = acc.findIndex((res) => res.species_id === resultTyped.species_id);
+
+          if (indexFound !== undefined && indexFound !== -1) {
+            const existingSpecies = acc[indexFound];
+            acc[indexFound] = {
+              ...existingSpecies,
+              germinatingQuantity: (
+                Number(existingSpecies.germinatingQuantity) + Number(resultTyped['germinatingQuantity(raw)'])
+              ).toString(),
+              notReadyQuantity: (
+                Number(existingSpecies.notReadyQuantity) + Number(resultTyped['notReadyQuantity(raw)'])
+              ).toString(),
+              readyQuantity: (
+                Number(existingSpecies.readyQuantity) + Number(resultTyped['readyQuantity(raw)'])
+              ).toString(),
+              totalQuantity: (
+                Number(existingSpecies.totalQuantity) + Number(resultTyped['totalQuantity(raw)'])
+              ).toString(),
+              facilityInventories: `${existingSpecies.facilityInventories}\r${resultTyped.facility_name}`,
+            };
+          } else {
+            const transformedResult: InventoryResultWithFacilityNames = {
+              facility_id: resultTyped.facility_id,
+              species_id: resultTyped.species_id,
+              species_scientificName: resultTyped.species_scientificName,
+              species_commonName: resultTyped.species_commonName,
+              germinatingQuantity: resultTyped['germinatingQuantity(raw)'],
+              notReadyQuantity: resultTyped['notReadyQuantity(raw)'],
+              readyQuantity: resultTyped['readyQuantity(raw)'],
+              totalQuantity: resultTyped['totalQuantity(raw)'],
+              facilityInventories: resultTyped.facility_name,
+            };
+
+            acc.push(transformedResult);
+          }
+          return acc;
+        }, [] as InventoryResultWithFacilityNames[]);
+
+        // format results
+        updatedResult = nextResults?.map((uR) => {
+          return {
+            ...uR,
+            germinatingQuantity: numericFormatter.format(uR.germinatingQuantity),
+            notReadyQuantity: numericFormatter.format(uR.notReadyQuantity),
+            readyQuantity: numericFormatter.format(uR.readyQuantity),
+            totalQuantity: numericFormatter.format(uR.totalQuantity),
+          };
+        });
+      } else {
+        updatedResult = apiSearchResults?.map((result) => {
+          const resultTyped = result as InventoryResult;
+          const facilityInventoriesNames = resultTyped.facilityInventories.map((nursery) => nursery.facility_name);
+          return { ...resultTyped, facilityInventories: facilityInventoriesNames.join('\r') };
+        });
       }
-      if (getRequestId('searchInventory') === requestId) {
-        setSearchResults(updatedResult);
+      if (updatedResult) {
+        if (!debouncedSearchTerm && !filters.facilityIds?.length) {
+          setShowResults(updatedResult.length > 0);
+        }
+        if (getRequestId('searchInventory') === requestId) {
+          setSearchResults(updatedResult);
+        }
       }
     }
   }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, numericFormatter, setReportData]);

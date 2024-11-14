@@ -57,7 +57,7 @@ const ParticipantProvider = ({ children }: Props) => {
   });
 
   useEffect(() => {
-    if (selectedOrganization && activeLocale) {
+    if (selectedOrganization && selectedOrganization.id !== -1 && activeLocale) {
       setCurrentParticipantProject(undefined);
       setModuleProjects([]);
       setOrgHasModules(undefined);
@@ -74,7 +74,7 @@ const ParticipantProvider = ({ children }: Props) => {
   }, [projects]);
 
   useEffect(() => {
-    if (selectedOrganization) {
+    if (selectedOrganization && selectedOrganization.id !== -1) {
       const request = dispatch(requestListModuleProjects(selectedOrganization.id));
       setListModuleProjectsRequestId(request.requestId);
     }

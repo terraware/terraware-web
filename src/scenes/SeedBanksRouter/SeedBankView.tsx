@@ -95,6 +95,9 @@ export default function SeedBankView(): JSX.Element {
   };
 
   const saveSeedBank = async () => {
+    if (selectedOrganization.id === -1) {
+      return;
+    }
     let id = selectedSeedBank?.id;
     if (
       !record.name ||

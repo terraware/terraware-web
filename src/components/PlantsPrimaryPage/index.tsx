@@ -61,7 +61,7 @@ export default function PlantsPrimaryPage({
   const { activeLocale } = useLocalization();
 
   useEffect(() => {
-    if (plantsSitePreferences) {
+    if (plantsSitePreferences && selectedOrganization.id !== -1) {
       const response = CachedUserService.getUserOrgPreferences(selectedOrganization.id);
       if (!_.isEqual(response[lastVisitedPreferenceName], plantsSitePreferences)) {
         PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
@@ -74,7 +74,7 @@ export default function PlantsPrimaryPage({
   useEffect(() => {
     const populatePlantingSites = async () => {
       let plantingSitesList: PlantingSite[] | undefined = plantingSitesData;
-      if (plantingSitesList === undefined) {
+      if (plantingSitesList === undefined && selectedOrganization.id !== -1) {
         const serverResponse = await TrackingService.listPlantingSites(
           selectedOrganization.id,
           undefined,
@@ -107,7 +107,7 @@ export default function PlantsPrimaryPage({
 
   useEffect(() => {
     const initializePlantingSite = () => {
-      if (plantingSites && plantingSites.length) {
+      if (plantingSites && plantingSites.length && selectedOrganization.id !== -1) {
         let lastVisitedPlantingSite: any = {};
         const response = CachedUserService.getUserOrgPreferences(selectedOrganization.id);
         if (response[lastVisitedPreferenceName]) {

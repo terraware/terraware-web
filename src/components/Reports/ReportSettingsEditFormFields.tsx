@@ -36,7 +36,7 @@ const ReportSettingsEditFormFields = ({ isEditing, onChange, reportsSettings }: 
   const projects = useAppSelector(selectProjects);
 
   useEffect(() => {
-    if (!projects) {
+    if (!projects && selectedOrganization.id !== -1) {
       void dispatch(requestProjects(selectedOrganization.id));
     }
   }, [dispatch, projects, selectedOrganization.id]);

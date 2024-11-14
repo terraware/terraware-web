@@ -45,7 +45,9 @@ export default function SpeciesSelector<T extends { speciesId?: number } | undef
   );
 
   useEffect(() => {
-    populateSpecies(debouncedSearchTerm);
+    if (selectedOrganization.id !== -1) {
+      populateSpecies(debouncedSearchTerm);
+    }
   }, [populateSpecies, debouncedSearchTerm]);
 
   useEffect(() => {

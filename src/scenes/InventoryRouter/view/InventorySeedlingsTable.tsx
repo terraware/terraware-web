@@ -149,7 +149,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     const requestId = setRequestId('inventory-seedlings');
 
     const populateResults = async () => {
-      if (!originId) {
+      if (!originId || selectedOrganization.id === -1) {
         return;
       }
 
@@ -178,7 +178,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     const requestId = setRequestId('inventory-seedlings-species-unfiltered');
 
     const populateSpeciesUnfilteredResults = async () => {
-      if (!originId) {
+      if (!originId || selectedOrganization.id === -1) {
         return;
       }
 
@@ -354,7 +354,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   };
 
   const batchesExport = useCallback(() => {
-    if (!originId || !getBatchesExport) {
+    if (!originId || !getBatchesExport || selectedOrganization.id === -1) {
       return Promise.resolve([] as SearchResponseElement[]);
     }
 

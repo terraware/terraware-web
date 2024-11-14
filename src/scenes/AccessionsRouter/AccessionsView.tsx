@@ -55,7 +55,7 @@ const AccessionsView = ({}: AccessionsViewProps) => {
   }, [setDefaults]);
 
   useEffect(() => {
-    if (!species) {
+    if (!species && selectedOrganization.id !== -1) {
       void dispatch(requestSpecies(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization.id, species]);

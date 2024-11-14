@@ -104,14 +104,16 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   }, [plantingSite, latestObservation]);
 
   useEffect(() => {
-    const populateSpecies = async () => {
-      const response = await SpeciesService.getAllSpecies(selectedOrganization.id);
-      if (response.requestSucceeded) {
-        setAllSpecies(response.species);
-      }
-    };
+    if (selectedOrganization.id !== -1) {
+      const populateSpecies = async () => {
+        const response = await SpeciesService.getAllSpecies(selectedOrganization.id);
+        if (response.requestSucceeded) {
+          setAllSpecies(response.species);
+        }
+      };
 
-    void populateSpecies();
+      void populateSpecies();
+    }
   }, [selectedOrganization.id, location]);
 
   useEffect(() => {

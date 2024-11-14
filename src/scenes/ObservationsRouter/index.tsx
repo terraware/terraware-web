@@ -47,11 +47,13 @@ export default function ObservationsRouter(): JSX.Element {
   const plantingSites = useAppSelector(selectPlantingSites);
 
   useEffect(() => {
-    dispatch(requestSpecies(selectedOrganization.id));
+    if (selectedOrganization.id !== -1) {
+      dispatch(requestSpecies(selectedOrganization.id));
+    }
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
-    if (species !== undefined && plantingSites !== undefined && !dispatched) {
+    if (species !== undefined && plantingSites !== undefined && !dispatched && selectedOrganization.id !== -1) {
       setDispatched(true);
       dispatch(requestObservationsResults(selectedOrganization.id));
       dispatch(requestObservations(selectedOrganization.id));

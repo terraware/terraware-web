@@ -24,23 +24,25 @@ export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JS
   const [cannotDelete, setCannotDelete] = useState<boolean>();
 
   useEffect(() => {
-    const fetchInUseSpecies = async () => {
-      const response = await SpeciesService.getAllSpecies(selectedOrganization.id, true);
-      if (response.requestSucceeded && response.species) {
-        setInUseSpecies(
-          response.species.reduce(
-            (acc, species) => ({ ...acc, [species.id.toString()]: species.scientificName }),
-            {} as Record<string, string>
-          )
-        );
-      } else {
-        snackbar.toastError(strings.GENERIC_ERROR);
-        onClose();
-      }
-    };
+    if (selectedOrganization.id !== -1) {
+      const fetchInUseSpecies = async () => {
+        const response = await SpeciesService.getAllSpecies(selectedOrganization.id, true);
+        if (response.requestSucceeded && response.species) {
+          setInUseSpecies(
+            response.species.reduce(
+              (acc, species) => ({ ...acc, [species.id.toString()]: species.scientificName }),
+              {} as Record<string, string>
+            )
+          );
+        } else {
+          snackbar.toastError(strings.GENERIC_ERROR);
+          onClose();
+        }
+      };
 
-    if (open) {
-      fetchInUseSpecies();
+      if (open) {
+        fetchInUseSpecies();
+      }
     }
   }, [selectedOrganization.id, open, onClose, snackbar]);
 
