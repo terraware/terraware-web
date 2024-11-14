@@ -3,7 +3,6 @@ import HttpService, { Response, Response2, ServerData } from 'src/services/HttpS
 import SearchService from 'src/services/SearchService';
 import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
-import { Organization } from 'src/types/Organization';
 import { ParticipantProject, ParticipantProjectSearchResult } from 'src/types/ParticipantProject';
 import { Project, ProjectMeta } from 'src/types/Project';
 import { PhaseScores } from 'src/types/Score';
@@ -82,7 +81,7 @@ const download = async ({
   project?: Project;
   projectId: number;
   projectMeta?: ProjectMeta;
-  organization?: AcceleratorOrg | Organization;
+  organization?: AcceleratorOrg;
   // eslint-disable-next-line @typescript-eslint/require-await
 }): Promise<string | null> => {
   const exportData = new Map<string, string | number | null | undefined>([

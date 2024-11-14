@@ -14,5 +14,3 @@ export type OrganizationUser = {
   role: OrganizationRole;
   addedTime?: string;
 };
-
-export type TfContactUser = components['schemas']['TerraformationContactUserPayload'];

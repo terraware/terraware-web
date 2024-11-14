@@ -19,7 +19,7 @@ import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
 import useListModules from 'src/hooks/useListModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useLocalization, useOrganization, useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
@@ -37,9 +37,8 @@ const SingleView = () => {
   const theme = useTheme();
   const { isAllowed } = useUser();
   const { isMobile } = useDeviceInfo();
-  const { crumbs, participant, participantProject, project, projectId, projectMeta, status } =
+  const { crumbs, participant, participantProject, project, projectId, projectMeta, organization, status } =
     useParticipantProjectData();
-  const { selectedOrganization, reloadOrganizations } = useOrganization();
   const { phase0Scores, phase1Scores } = useScoringData();
   const { phaseVotes } = useVotingData();
   const { goToParticipantProjectEdit } = useNavigateTo();
@@ -48,11 +47,6 @@ const SingleView = () => {
   const [searchDeliverablesRequestId, setSearchDeliverablesRequestId] = useState('');
   const deliverablesResponse = useAppSelector(selectDeliverablesSearchRequest(searchDeliverablesRequestId));
   const [hasDeliverables, setHasDeliverables] = useState(false);
-
-  useEffect(() => {
-    console.log({ project });
-    reloadOrganizations(project?.organizationId);
-  }, [project?.organizationId]);
 
   useEffect(() => {
     if (project) {
@@ -209,8 +203,8 @@ const SingleView = () => {
               <ProjectFieldDisplay
                 label={strings.PROJECT_LEAD}
                 value={
-                  selectedOrganization?.tfContactUser
-                    ? `${selectedOrganization.tfContactUser.firstName} ${selectedOrganization.tfContactUser.lastName}`
+                  organization?.tfContactUser
+                    ? `${organization.tfContactUser.firstName} ${organization.tfContactUser.lastName}`
                     : ''
                 }
                 rightBorder={!isMobile}
@@ -341,7 +335,7 @@ const SingleView = () => {
             project,
             projectId,
             projectMeta,
-            organization: selectedOrganization,
+            organization,
           })
         }
         onClose={() => {

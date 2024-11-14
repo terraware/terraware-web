@@ -930,23 +930,11 @@ export interface paths {
     /** Gets a list of the results of observations. */
     get: operations["listObservationResults"];
   };
-  "/api/v1/tracking/observations/results/summary": {
-    /** Gets the rollup observation summary of a planting site */
-    get: operations["getPlantingSiteObservationSummary"];
-  };
   "/api/v1/tracking/observations/{observationId}": {
     /** Gets information about a single observation. */
     get: operations["getObservation"];
     /** Reschedules an existing observation. */
     put: operations["rescheduleObservation"];
-  };
-  "/api/v1/tracking/observations/{observationId}/abandon": {
-    /** Abandon the observation. */
-    post: operations["abandonObservation"];
-  };
-  "/api/v1/tracking/observations/{observationId}/mergeOtherSpecies": {
-    /** Replaces a user-entered 'Other' species with one of the organization's species in an observation. */
-    post: operations["mergeOtherSpecies"];
   };
   "/api/v1/tracking/observations/{observationId}/plots": {
     /** Exports monitoring plots assigned to an observation as a GPX file. */
@@ -2835,11 +2823,6 @@ export interface components {
       participant: components["schemas"]["ParticipantPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
-    GetPlantingSiteObservationSummaryPayload: {
-      status: components["schemas"]["SuccessOrError"];
-      /** @description Rollup summary of planting site observations. Null if no observation has been made. */
-      summary?: components["schemas"]["PlantingSiteObservationSummaryPayload"];
-    };
     GetPlantingSiteReportedPlantsResponsePayload: {
       site: components["schemas"]["PlantingSiteReportedPlantsPayload"];
       status: components["schemas"]["SuccessOrError"];
@@ -3428,15 +3411,6 @@ export interface components {
       photos: components["schemas"]["NurseryWithdrawalPhotoPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
-    MergeOtherSpeciesRequestPayload: {
-      /** @description Name of the species of certainty Other whose recorded plants should be updated to refer to the known species. */
-      otherSpeciesName: string;
-      /**
-       * Format: int64
-       * @description ID of the existing species that the Other species' recorded plants should be merged into.
-       */
-      speciesId: number;
-    };
     ModuleDeliverablePayload: {
       /** @enum {string} */
       category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
@@ -3725,7 +3699,6 @@ export interface components {
       /** @enum {string} */
       position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
     };
-    /** @description Percentage of plants of all species that were dead in this subzone's permanent monitoring plots. */
     ObservationMonitoringPlotResultsPayload: {
       boundary: components["schemas"]["Polygon"];
       claimedByName?: string;
@@ -3764,7 +3737,7 @@ export interface components {
       sizeMeters: number;
       species: components["schemas"]["ObservationSpeciesResultsPayload"][];
       /** @enum {string} */
-      status: "Unclaimed" | "Claimed" | "Completed" | "Not Observed";
+      status: "Outstanding" | "InProgress" | "Completed";
       /**
        * Format: int32
        * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
@@ -3810,31 +3783,12 @@ export interface components {
        */
       startDate: string;
       /** @enum {string} */
-      state: "Upcoming" | "InProgress" | "Completed" | "Overdue" | "Abandoned";
+      state: "Upcoming" | "InProgress" | "Completed" | "Overdue";
     };
     ObservationPlantingSubzoneResultsPayload: {
-      /** @description Area of this planting subzone in hectares. */
-      areaHa: number;
-      /** Format: date-time */
-      completedTime?: string;
-      /**
-       * Format: int32
-       * @description Estimated number of plants in planting subzone based on estimated planting density and subzone area. Only present if the subzone has completed planting.
-       */
-      estimatedPlants?: number;
-      /** @description Percentage of plants of all species that were dead in this subzone's permanent monitoring plots. */
       monitoringPlots: components["schemas"]["ObservationMonitoringPlotResultsPayload"][];
-      /** Format: int32 */
-      mortalityRate: number;
-      /**
-       * Format: int32
-       * @description Estimated planting density for the subzone based on the observed planting densities of monitoring plots. Only present if the subzone has completed planting.
-       */
-      plantingDensity?: number;
       /** Format: int64 */
       plantingSubzoneId: number;
-      /** Format: int32 */
-      totalPlants: number;
     };
     ObservationPlantingZoneResultsPayload: {
       /** @description Area of this planting zone in hectares. */
@@ -3898,7 +3852,7 @@ export interface components {
       /** Format: date */
       startDate: string;
       /** @enum {string} */
-      state: "Upcoming" | "InProgress" | "Completed" | "Overdue" | "Abandoned";
+      state: "Upcoming" | "InProgress" | "Completed" | "Overdue";
       /** Format: int32 */
       totalSpecies: number;
     };
@@ -4133,40 +4087,10 @@ export interface components {
       /** Format: date */
       startDate: string;
     };
-    /** @description Rollup summary of planting site observations. Null if no observation has been made. */
-    PlantingSiteObservationSummaryPayload: {
-      /**
-       * Format: date-time
-       * @description The earliest time of the observations used in this summary.
-       */
-      earliestObservationTime: string;
-      /**
-       * Format: int32
-       * @description Estimated total number of live plants at the site, based on the estimated planting density and site size. Only present if all the subzones in the site have been marked as having completed planting.
-       */
-      estimatedPlants?: number;
-      /**
-       * Format: date-time
-       * @description The latest time of the observations used in this summary.
-       */
-      latestObservationTime: string;
-      /**
-       * Format: int32
-       * @description Percentage of plants of all species that were dead in this site's permanent monitoring plots.
-       */
-      mortalityRate?: number;
-      /**
-       * Format: int32
-       * @description Estimated planting density for the site, based on the observed planting densities of monitoring plots. Only present if all the subzones in the site have been marked as having completed planting.
-       */
-      plantingDensity?: number;
-      plantingZones: components["schemas"]["PlantingZoneObservationSummaryPayload"][];
-    };
     PlantingSitePayload: {
       /** @description Area of planting site in hectares. Only present if the site has planting zones. */
       areaHa?: number;
       boundary?: components["schemas"]["MultiPolygon"];
-      countryCode?: string;
       description?: string;
       exclusion?: components["schemas"]["MultiPolygon"];
       /** Format: int64 */
@@ -4231,39 +4155,6 @@ export interface components {
       /** Format: int64 */
       id: number;
       scientificName: string;
-    };
-    PlantingZoneObservationSummaryPayload: {
-      /** @description Area of this planting zone in hectares. */
-      areaHa: number;
-      /**
-       * Format: date-time
-       * @description The earliest time of the observations used in this summary.
-       */
-      earliestObservationTime: string;
-      /**
-       * Format: int32
-       * @description Estimated number of plants in planting zone based on estimated planting density and planting zone area. Only present if all the subzones in the zone have been marked as having completed planting.
-       */
-      estimatedPlants?: number;
-      /**
-       * Format: date-time
-       * @description The latest time of the observations used in this summary.
-       */
-      latestObservationTime: string;
-      /**
-       * Format: int32
-       * @description Percentage of plants of all species that were dead in this zone's permanent monitoring plots.
-       */
-      mortalityRate: number;
-      /**
-       * Format: int32
-       * @description Estimated planting density for the zone based on the observed planting densities of monitoring plots. Only present if all the subzones in the zone have been marked as having completed planting.
-       */
-      plantingDensity?: number;
-      /** @description List of subzone observations used in this summary. */
-      plantingSubzones: components["schemas"]["ObservationPlantingSubzoneResultsPayload"][];
-      /** Format: int64 */
-      plantingZoneId: number;
     };
     PlantingZonePayload: {
       /** @description Area of planting zone in hectares. */
@@ -10513,22 +10404,6 @@ export interface operations {
       };
     };
   };
-  /** Gets the rollup observation summary of a planting site */
-  getPlantingSiteObservationSummary: {
-    parameters: {
-      query: {
-        plantingSiteId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetPlantingSiteObservationSummaryPayload"];
-        };
-      };
-    };
-  };
   /** Gets information about a single observation. */
   getObservation: {
     parameters: {
@@ -10555,49 +10430,6 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["RescheduleObservationRequestPayload"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Abandon the observation. */
-  abandonObservation: {
-    parameters: {
-      path: {
-        observationId: number;
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-      /** @description Observation is already completed or abandoned. */
-      409: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Replaces a user-entered 'Other' species with one of the organization's species in an observation. */
-  mergeOtherSpecies: {
-    parameters: {
-      path: {
-        observationId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["MergeOtherSpeciesRequestPayload"];
       };
     };
     responses: {
