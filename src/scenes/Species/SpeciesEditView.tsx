@@ -114,7 +114,7 @@ export default function SpeciesEditView(): JSX.Element {
         navigate(APP_PATHS.SPECIES);
       }
     };
-    if (selectedOrganization && speciesId) {
+    if (selectedOrganization && selectedOrganization.id !== -1 && speciesId) {
       getSpecies();
     }
   }, [speciesId, selectedOrganization, navigate]);
@@ -137,6 +137,9 @@ export default function SpeciesEditView(): JSX.Element {
   }, [species, setRecord, selectedOrganization]);
 
   const saveSpecies = async () => {
+    if (selectedOrganization.id === -1) {
+      return;
+    }
     if (!record.scientificName) {
       setNameFormatError(strings.REQUIRED_FIELD);
     } else {

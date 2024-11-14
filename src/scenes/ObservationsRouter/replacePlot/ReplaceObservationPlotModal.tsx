@@ -79,7 +79,7 @@ export default function ReplaceObservationPlotModal(props: ReplaceObservationPlo
 
     if (result.status === 'error') {
       snackbar.toastError();
-    } else if (result.status === 'success') {
+    } else if (result.status === 'success' && selectedOrganization.id !== -1) {
       const { addedMonitoringPlotIds, removedMonitoringPlotIds } = result.data as ReplaceObservationPlotResponsePayload;
       setAddedPlotIds(addedMonitoringPlotIds);
       setRemovedPlotIds(removedMonitoringPlotIds);

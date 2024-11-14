@@ -49,48 +49,50 @@ export default function PlantingSitesList(): JSX.Element {
    */
   const searchData = useCallback(
     async (searchFields: SearchNodePayload[]) => {
-      const searchRequests = [
-        TrackingService.searchPlantingSites(selectedOrganization.id, searchFields, searchSortOrder),
-      ];
-
-      searchRequests.push(
-        DraftPlantingSiteService.searchDraftPlantingSites(selectedOrganization.id, searchFields, searchSortOrder)
-      );
-
-      // batch the search requests
-      const results = await Promise.allSettled(searchRequests);
-
-      const sites: PlantingSiteSearchResult[] = results.reduce((acc, result) => {
-        if (result.status === 'rejected') {
-          return acc;
-        }
-        const { value } = result;
-
-        return [
-          ...acc,
-          ...(value ?? []).map(
-            (site) =>
-              ({
-                ...setTimeZone(site, timeZones, defaultTimeZone),
-                numPlantingSubzones: site.numPlantingSubzones ?? '0',
-                numPlantingZones: site.numPlantingZones ?? '0',
-              }) as PlantingSiteSearchResult
-          ),
+      if (selectedOrganization.id !== -1) {
+        const searchRequests = [
+          TrackingService.searchPlantingSites(selectedOrganization.id, searchFields, searchSortOrder),
         ];
-      }, [] as PlantingSiteSearchResult[]);
 
-      if (sites.some((site) => site.isDraft)) {
-        // sort merged results by sort order
-        return sortResults(sites, activeLocale, searchSortOrder, [
-          'id',
-          'numPlantingSubzones',
-          'numPlantingZones',
-          'project_id',
-          'totalPlants',
-        ]);
+        searchRequests.push(
+          DraftPlantingSiteService.searchDraftPlantingSites(selectedOrganization.id, searchFields, searchSortOrder)
+        );
+
+        // batch the search requests
+        const results = await Promise.allSettled(searchRequests);
+
+        const sites: PlantingSiteSearchResult[] = results.reduce((acc, result) => {
+          if (result.status === 'rejected') {
+            return acc;
+          }
+          const { value } = result;
+
+          return [
+            ...acc,
+            ...(value ?? []).map(
+              (site) =>
+                ({
+                  ...setTimeZone(site, timeZones, defaultTimeZone),
+                  numPlantingSubzones: site.numPlantingSubzones ?? '0',
+                  numPlantingZones: site.numPlantingZones ?? '0',
+                }) as PlantingSiteSearchResult
+            ),
+          ];
+        }, [] as PlantingSiteSearchResult[]);
+
+        if (sites.some((site) => site.isDraft)) {
+          // sort merged results by sort order
+          return sortResults(sites, activeLocale, searchSortOrder, [
+            'id',
+            'numPlantingSubzones',
+            'numPlantingZones',
+            'project_id',
+            'totalPlants',
+          ]);
+        }
+
+        return sites;
       }
-
-      return sites;
     },
     [activeLocale, defaultTimeZone, searchSortOrder, selectedOrganization.id, timeZones]
   );

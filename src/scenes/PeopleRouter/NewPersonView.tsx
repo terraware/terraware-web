@@ -53,14 +53,16 @@ export default function PersonView(): JSX.Element {
   }, [selectedOrganization, personSelectedToEdit, setNewPerson]);
 
   useEffect(() => {
-    const populatePeople = async () => {
-      const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
-      if (personId && response.requestSucceeded) {
-        setPeople(response.users);
-        setPersonSelectedToEdit(response.users.find((user) => user.id === parseInt(personId, 10)));
-      }
-    };
-    populatePeople();
+    if (selectedOrganization.id !== -1) {
+      const populatePeople = async () => {
+        const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
+        if (personId && response.requestSucceeded) {
+          setPeople(response.users);
+          setPersonSelectedToEdit(response.users.find((user) => user.id === parseInt(personId, 10)));
+        }
+      };
+      populatePeople();
+    }
   }, [selectedOrganization, personId]);
 
   const onChangeRole = (newRole: string) => {
@@ -96,7 +98,7 @@ export default function PersonView(): JSX.Element {
     let successMessage: string | null = null;
     let userId = -1;
 
-    if (!!personSelectedToEdit) {
+    if (!!personSelectedToEdit && selectedOrganization.id !== -1) {
       const response = await OrganizationUserService.updateOrganizationUser(
         selectedOrganization.id,
         newPerson.id,

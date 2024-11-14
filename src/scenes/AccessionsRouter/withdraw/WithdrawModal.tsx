@@ -107,13 +107,15 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   }, [timeZone, setRecord]);
 
   useEffect(() => {
-    const getOrgUsers = async () => {
-      const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
-      if (response.requestSucceeded) {
-        setUsers(response.users);
-      }
-    };
-    getOrgUsers();
+    if (selectedOrganization.id !== -1) {
+      const getOrgUsers = async () => {
+        const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
+        if (response.requestSucceeded) {
+          setUsers(response.users);
+        }
+      };
+      getOrgUsers();
+    }
   }, [selectedOrganization]);
 
   useEffect(() => {

@@ -27,18 +27,20 @@ export default function PersonDetailsView(): JSX.Element {
   const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
-    const populatePersonData = async () => {
-      const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
-      if (response.requestSucceeded) {
-        const selectedUser = response.users.find((user) => user.id.toString() === personId);
-        if (selectedUser) {
-          setPerson(selectedUser);
-        } else {
-          navigate(APP_PATHS.PEOPLE);
+    if (selectedOrganization.id !== -1) {
+      const populatePersonData = async () => {
+        const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
+        if (response.requestSucceeded) {
+          const selectedUser = response.users.find((user) => user.id.toString() === personId);
+          if (selectedUser) {
+            setPerson(selectedUser);
+          } else {
+            navigate(APP_PATHS.PEOPLE);
+          }
         }
-      }
-    };
-    populatePersonData();
+      };
+      populatePersonData();
+    }
   }, [personId, selectedOrganization, navigate]);
 
   const getDateAdded = () => {

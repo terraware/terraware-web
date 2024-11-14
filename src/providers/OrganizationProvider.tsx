@@ -75,7 +75,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
 
   const reloadOrgPreferences = useCallback(() => {
     const getOrgPreferences = async () => {
-      if (selectedOrganization) {
+      if (selectedOrganization && selectedOrganization.id !== -1) {
         const response = await PreferencesService.getUserOrgPreferences(selectedOrganization.id);
         if (response.requestSucceeded && response.preferences) {
           setOrgPreferences(response.preferences);

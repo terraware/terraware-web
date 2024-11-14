@@ -59,7 +59,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   const { activeLocale } = useLocalization();
 
   useEffect(() => {
-    if (!allSpecies) {
+    if (!allSpecies && selectedOrganization.id !== -1) {
       dispatch(requestSpecies(selectedOrganization.id));
     }
   }, [allSpecies, selectedOrganization]);

@@ -58,21 +58,23 @@ export default function NurseryReassignmentView(): JSX.Element {
 
   // populate map of species id to scientific name
   useEffect(() => {
-    const populateSpecies = async () => {
-      const speciesResponse = await SpeciesService.getAllSpecies(selectedOrganization.id);
-      if (speciesResponse.requestSucceeded) {
-        setSpeciesMap(
-          speciesResponse.species?.reduce((acc: any, current: any) => {
-            acc[current.id] = current.scientificName;
-            return acc;
-          }, {})
-        );
-      } else {
-        snackbar.toastError();
-      }
-    };
+    if (selectedOrganization.id !== -1) {
+      const populateSpecies = async () => {
+        const speciesResponse = await SpeciesService.getAllSpecies(selectedOrganization.id);
+        if (speciesResponse.requestSucceeded) {
+          setSpeciesMap(
+            speciesResponse.species?.reduce((acc: any, current: any) => {
+              acc[current.id] = current.scientificName;
+              return acc;
+            }, {})
+          );
+        } else {
+          snackbar.toastError();
+        }
+      };
 
-    populateSpecies();
+      populateSpecies();
+    }
   }, [selectedOrganization, snackbar]);
 
   // populate delivery

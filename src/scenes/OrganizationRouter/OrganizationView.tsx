@@ -30,13 +30,15 @@ export default function OrganizationView(): JSX.Element {
   const currentTimeZone = timeZones.find((tz) => tz.id === selectedOrganization.timeZone)?.longName;
 
   useEffect(() => {
-    const populatePeople = async () => {
-      const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
-      if (response.requestSucceeded) {
-        setPeople(response.users);
-      }
-    };
-    populatePeople();
+    if (selectedOrganization.id !== -1) {
+      const populatePeople = async () => {
+        const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
+        if (response.requestSucceeded) {
+          setPeople(response.users);
+        }
+      };
+      populatePeople();
+    }
   }, [selectedOrganization]);
 
   const goToEditOrganization = () => {
