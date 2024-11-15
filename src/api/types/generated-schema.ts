@@ -179,7 +179,7 @@ export interface paths {
   };
   "/api/v1/accelerator/organizations": {
     /**
-     * Lists organizations with the Accelerator internal tag and their projects.
+     * Lists accelerator related organizations and their projects.
      * @description By default, only lists tagged organizations that have projects that have not been assigned to participants yet.
      */
     get: operations["listAcceleratorOrganizations"];
@@ -598,7 +598,7 @@ export interface paths {
   "/api/v1/organizations": {
     /**
      * Lists all organizations.
-     * @description Lists all organizations the user can access.
+     * @description Lists all organizations the user can access through organization roles.
      */
     get: operations["listOrganizations"];
     /** Creates a new organization. */
@@ -3959,6 +3959,7 @@ export interface components {
        * @enum {string}
        */
       role?: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
+      tfContactUser?: components["schemas"]["TerraformationContactUserPayload"];
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
@@ -6498,7 +6499,7 @@ export interface operations {
     };
   };
   /**
-   * Lists organizations with the Accelerator internal tag and their projects.
+   * Lists accelerator related organizations and their projects.
    * @description By default, only lists tagged organizations that have projects that have not been assigned to participants yet.
    */
   listAcceleratorOrganizations: {
@@ -6506,6 +6507,8 @@ export interface operations {
       query?: {
         /** @description Whether to also include projects that have been assigned to participants. */
         includeParticipants?: boolean;
+        /** @description Whether to load all organizations with a project with an application. */
+        hasProjectApplication?: boolean;
       };
     };
     responses: {
@@ -8706,7 +8709,7 @@ export interface operations {
   };
   /**
    * Lists all organizations.
-   * @description Lists all organizations the user can access.
+   * @description Lists all organizations the user can access through organization roles.
    */
   listOrganizations: {
     parameters: {
