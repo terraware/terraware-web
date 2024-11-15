@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">38.46% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/13</span>
+                <span class='fraction'>5/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">38.46% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/13</span>
+                <span class='fraction'>5/15</span>
             </div>
         
             
@@ -125,7 +125,13 @@
 <a name='L60'></a><a href='#L60'>60</a>
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -141,13 +147,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -155,6 +161,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -202,14 +214,14 @@ export type AcceleratorOrgData = {
 &nbsp;
 type AcceleratorOrgsResponse =
   paths[typeof ACCELERATOR_ORGS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+export type AcceleratorOrgsListRequestParams = paths[typeof ACCELERATOR_ORGS_ENDPOINT]['get']['parameters']['query'];
 &nbsp;
 const listAcceleratorOrgs = <span class="fstat-no" title="function not covered" >as</span>ync (
   locale: string | null,
-  includeParticipants?: boolean,
+  params?: AcceleratorOrgsListRequestParams,
   search?: SearchNodePayload,
   searchSortOrder?: SearchSortOrder
 ): Promise&lt;Response &amp; AcceleratorOrgData&gt; =&gt; {
-  const params: { includeParticipants?: string } = <span class="cstat-no" title="statement not covered" >{};</span>
   let searchOrderConfig: SearchOrderConfig;
 <span class="cstat-no" title="statement not covered" >  if (searchSortOrder) {</span>
 <span class="cstat-no" title="statement not covered" >    searchOrderConfig = {</span>
@@ -219,13 +231,19 @@ const listAcceleratorOrgs = <span class="fstat-no" title="function not covered" 
     };
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (includeParticipants !== undefined) {</span>
-<span class="cstat-no" title="statement not covered" >    params.includeParticipants = `${includeParticipants}`;</span>
+  const _params: { [key: string]: string } = <span class="cstat-no" title="statement not covered" >{};</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (params?.includeParticipants !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >    _params.includeParticipants = `${params.includeParticipants}`;</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (params?.hasProjectApplication !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >    _params.hasProjectApplication = `${params.hasProjectApplication}`;</span>
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return await HttpService.root(ACCELERATOR_ORGS_ENDPOINT).get&lt;AcceleratorOrgsResponse, AcceleratorOrgData&gt;(</span>
     {
-      params,
+      params: _params,
     },
 <span class="fstat-no" title="function not covered" >    (d</span>ata) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
       organizations: searchAndSort(data?.organizations || [], search, searchOrderConfig),
@@ -256,7 +274,7 @@ export default AcceleratorService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-14T19:08:35.271Z
+                at 2024-11-15T16:02:08.271Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
