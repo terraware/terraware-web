@@ -6,17 +6,28 @@ import { PlantingSiteMap } from 'src/components/Map';
 import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
 import MapLegend, { MapLegendGroup } from 'src/components/common/MapLegend';
 import isEnabled from 'src/features';
-import { useLocalization } from 'src/providers';
-import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
+import { useLocalization, useOrganization } from 'src/providers';
+import {
+  selectLatestObservation,
+  selectObservationsResults,
+} from 'src/redux/features/observations/observationsSelectors';
+import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { selectZonePopulationStats } from 'src/redux/features/tracking/sitePopulationSelector';
 import { selectPlantingSite, selectZoneProgress } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapSourceProperties } from 'src/types/Map';
-import { ObservationPlantingZoneResults, ObservationResults } from 'src/types/Observations';
+import {
+  ObservationPlantingZoneResults,
+  ObservationPlantingZoneResultsWithLastObv,
+  ObservationResults,
+  ObservationResultsPayload,
+  ObservationResultsWithLastObv,
+} from 'src/types/Observations';
 import { getRgbaFromHex } from 'src/utils/color';
 import { getShortDate } from 'src/utils/dateFormatter';
+import { isAfter } from 'src/utils/dateUtils';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type ZoneLevelDataMapProps = {
@@ -26,6 +37,8 @@ type ZoneLevelDataMapProps = {
 export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapProps): JSX.Element {
   const theme = useTheme();
   const locale = useLocalization();
+  const dispatch = useAppDispatch();
+  const { selectedOrganization } = useOrganization();
   const defaultTimeZone = useDefaultTimeZone();
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const zoneProgress = useAppSelector((state) => selectZoneProgress(state, plantingSiteId));
@@ -34,8 +47,38 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
   );
   const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
+  const allObservationsResults = useAppSelector(selectObservationsResults);
+  const plantingSiteObservations = allObservationsResults?.filter(
+    (observation) => observation.plantingSiteId === plantingSiteId
+  );
+  const zoneObservations: ObservationResultsPayload[][] = [];
+  plantingSiteObservations?.forEach((observation) => {
+    observation.plantingZones.forEach((pz) => {
+      zoneObservations[pz.plantingZoneId]
+        ? zoneObservations[pz.plantingZoneId].push(observation)
+        : (zoneObservations[pz.plantingZoneId] = [observation]);
+    });
+  });
+
+  const lastZoneObservation = (observationsList: ObservationResultsPayload[]) => {
+    const observationsToProcess = observationsList;
+    if (observationsToProcess && observationsToProcess.length > 0) {
+      let lastObs = observationsToProcess[0];
+      observationsToProcess.forEach((obs) => {
+        if (isAfter(obs.startDate, lastObs.startDate)) {
+          lastObs = obs;
+        }
+      });
+      return lastObs;
+    }
+  };
 
   const [legends, setLegends] = useState<MapLegendGroup[]>([]);
+
+  useEffect(() => {
+    if (selectedOrganization.id !== -1) dispatch(requestObservationsResults(selectedOrganization.id));
+  }, [dispatch, selectedOrganization.id]);
+
   useEffect(() => {
     const result: MapLegendGroup[] = [
       {
@@ -91,6 +134,22 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
         ],
         switch: newPlantsDashboardEnabled,
       });
+
+      if (newPlantsDashboardEnabled) {
+        result.push({
+          title: strings.OBSERVATION_RECENCY,
+          items: [
+            {
+              label: strings.LATEST_OBSERVATION,
+              borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+              fillColor: theme.palette.TwClrBasePink200 as string,
+              opacity: 0.9,
+              height: '16px',
+            },
+          ],
+          switch: true,
+        });
+      }
     }
     setLegends(result);
   }, [observation, theme.palette.TwClrBaseGreen300, theme.palette.TwClrBaseLightGreen300]);
@@ -105,7 +164,19 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
       return baseMap;
     }
 
-    const observationMapData = MapService.getMapDataFromObservation(observation);
+    const oldPlantingZones: ObservationPlantingZoneResults[] = observation.plantingZones;
+
+    const plantingZonesWithLastObservation: ObservationPlantingZoneResultsWithLastObv[] = oldPlantingZones.map(
+      (pz: ObservationPlantingZoneResults) => {
+        return { ...pz, lastObv: lastZoneObservation(zoneObservations?.[pz.plantingZoneId])?.startDate };
+      }
+    );
+    const observationWithLastObv: ObservationResultsWithLastObv = {
+      ...observation,
+      plantingZones: plantingZonesWithLastObservation,
+    };
+
+    const observationMapData = MapService.getMapDataFromObservation(observationWithLastObv);
     observationMapData.zone?.entities?.forEach((zoneEntity) => {
       const zoneReplaceIndex = baseMap.zone?.entities?.findIndex((e) => e.id === zoneEntity.id) ?? -1;
       if (baseMap.zone && zoneReplaceIndex >= 0) {
@@ -201,6 +272,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
           style={{ borderRadius: '24px' }}
           layers={['Planting Site', 'Zones']}
           showMortalityRateFill={!!observation && !legends.find((l) => l.title === strings.MORTALITY_RATE)?.disabled}
+          showRecencyFill={!!observation && !legends.find((l) => l.title === strings.OBSERVATION_RECENCY)?.disabled}
           focusEntities={focusEntities}
           contextRenderer={{
             render: getContextRenderer(),
