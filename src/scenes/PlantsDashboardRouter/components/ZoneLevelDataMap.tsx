@@ -272,7 +272,11 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
           style={{ borderRadius: '24px' }}
           layers={['Planting Site', 'Zones']}
           showMortalityRateFill={!!observation && !legends.find((l) => l.title === strings.MORTALITY_RATE)?.disabled}
-          showRecencyFill={!!observation && !legends.find((l) => l.title === strings.OBSERVATION_RECENCY)?.disabled}
+          showRecencyFill={
+            newPlantsDashboardEnabled &&
+            !!observation &&
+            !legends.find((l) => l.title === strings.OBSERVATION_RECENCY)?.disabled
+          }
           focusEntities={focusEntities}
           contextRenderer={{
             render: getContextRenderer(),
