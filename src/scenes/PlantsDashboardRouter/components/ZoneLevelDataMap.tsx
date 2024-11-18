@@ -51,16 +51,20 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
   const plantingSiteObservations = allObservationsResults?.filter(
     (observation) => observation.plantingSiteId === plantingSiteId
   );
-  const zoneObservations: ObservationResultsPayload[][] = [];
-  plantingSiteObservations?.forEach((observation) => {
-    observation.plantingZones.forEach((pz) => {
-      zoneObservations[pz.plantingZoneId]
-        ? zoneObservations[pz.plantingZoneId].push(observation)
-        : (zoneObservations[pz.plantingZoneId] = [observation]);
-    });
-  });
 
-  const lastZoneObservation = (observationsList: ObservationResultsPayload[]) => {
+  const zoneObservations = useMemo(() => {
+    const iZoneObservations: ObservationResultsPayload[][] = [];
+    plantingSiteObservations?.forEach((observation) => {
+      observation.plantingZones.forEach((pz) => {
+        iZoneObservations[pz.plantingZoneId]
+          ? iZoneObservations[pz.plantingZoneId].push(observation)
+          : (iZoneObservations[pz.plantingZoneId] = [observation]);
+      });
+    });
+    return iZoneObservations;
+  }, [plantingSiteObservations]);
+
+  const lastZoneObservation = useCallback((observationsList: ObservationResultsPayload[]) => {
     const observationsToProcess = observationsList;
     if (observationsToProcess && observationsToProcess.length > 0) {
       let lastObs = observationsToProcess[0];
@@ -71,7 +75,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
       });
       return lastObs;
     }
-  };
+  }, []);
 
   const [legends, setLegends] = useState<MapLegendGroup[]>([]);
 
