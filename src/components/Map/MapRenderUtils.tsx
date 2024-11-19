@@ -78,7 +78,7 @@ export function MapTooltip({ title, properties, subtitle }: MapTooltipProps): JS
                 padding: theme.spacing(2, 4),
                 borderRadius: 1,
               }
-            : {}
+            : undefined
         }
       >
         {title && (
