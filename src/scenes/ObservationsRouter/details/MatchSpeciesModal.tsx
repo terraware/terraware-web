@@ -62,12 +62,16 @@ export default function MatchSpeciesModal(props: MatchSpeciesModalProps): JSX.El
       ]}
       scrolled
     >
-      <Grid container textAlign={'left'} spacing={2}>
+      <Grid container textAlign={'left'} spacing={1}>
         <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingRight: 1 }}>
-          <Typography>{strings.UNRECOGNIZED_SPECIES}</Typography>
+          <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' fontWeight={400}>
+            {strings.UNRECOGNIZED_SPECIES}
+          </Typography>
         </Grid>
         <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingLeft: 1 }}>
-          <Typography>{strings.SCIENTIFIC_NAME}</Typography>
+          <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' fontWeight={400}>
+            {strings.SCIENTIFIC_NAME}
+          </Typography>
         </Grid>
 
         {unrecognizedSpecies.map((species, index) => (
@@ -93,6 +97,7 @@ export interface MatchSpeciesRowProps {
 function MatchSpeciesRow(props: MatchSpeciesRowProps): JSX.Element {
   const { matchSpeciesPayload, setRecords } = props;
   const [record, setRecord] = useForm<MergeOtherSpeciesPayloadPartial>(matchSpeciesPayload);
+  const theme = useTheme();
 
   useEffect(() => {
     setRecords((prev) => {
@@ -105,11 +110,11 @@ function MatchSpeciesRow(props: MatchSpeciesRowProps): JSX.Element {
 
   return (
     <>
-      <Grid item xs={6}>
+      <Grid item xs={6} borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`} paddingBottom={2}>
         <Typography>{record.otherSpeciesName}</Typography>
       </Grid>
-      <Grid item xs={12}>
-        <SpeciesSelector record={record} setRecord={setRecord} />
+      <Grid item xs={6} borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`} paddingBottom={2}>
+        <SpeciesSelector record={record} setRecord={setRecord} hideLabel />
       </Grid>
     </>
   );

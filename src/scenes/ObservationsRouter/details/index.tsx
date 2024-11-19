@@ -187,8 +187,14 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
       plantingSiteId={plantingSiteId}
       rightComponent={
         <OptionsMenu
-          onOptionItemClick={() => true}
-          optionItems={[{ label: strings.MATCH_UNRECOGNIZED_SPECIES, value: 'match' }]}
+          onOptionItemClick={() => setShowMatchSpeciesModal(true)}
+          optionItems={[
+            {
+              label: strings.MATCH_UNRECOGNIZED_SPECIES,
+              value: 'match',
+              disabled: (unrecognizedSpecies?.length || 0) === 0,
+            },
+          ]}
         />
       }
     >
@@ -211,7 +217,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
                 size='small'
               />,
               <Button
-                onClick={() => true}
+                onClick={() => setShowMatchSpeciesModal(true)}
                 label={strings.MATCH_SPECIES}
                 priority='secondary'
                 type='passive'
@@ -223,7 +229,11 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
         </Box>
       )}
       {showMatchSpeciesModal && (
-        <MatchSpeciesModal onClose={() => setShowMatchSpeciesModal(false)} onSave={onSaveMergedSpecies} />
+        <MatchSpeciesModal
+          onClose={() => setShowMatchSpeciesModal(false)}
+          onSave={onSaveMergedSpecies}
+          unrecognizedSpecies={unrecognizedSpecies || []}
+        />
       )}
       <ObservationStatusSummaryMessage
         plantingZones={plantingSite?.plantingZones}
