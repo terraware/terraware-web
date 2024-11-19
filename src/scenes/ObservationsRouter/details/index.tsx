@@ -6,6 +6,7 @@ import { Button, Message, TableColumnType } from '@terraware/web-components';
 import _ from 'lodash';
 
 import Card from 'src/components/common/Card';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
@@ -167,7 +168,16 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   };
 
   return (
-    <DetailsPage title={title} plantingSiteId={plantingSiteId}>
+    <DetailsPage
+      title={title}
+      plantingSiteId={plantingSiteId}
+      rightComponent={
+        <OptionsMenu
+          onOptionItemClick={() => true}
+          optionItems={[{ label: strings.MATCH_UNRECOGNIZED_SPECIES, value: 'match' }]}
+        />
+      }
+    >
       {showPageMessage && (
         <Box marginTop={1} marginBottom={4} width={'100%'}>
           <Message
