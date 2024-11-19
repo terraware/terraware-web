@@ -11,6 +11,7 @@ export type DocType =
   | 'terraformation'
   | 'terraformation_software_solutions'
   | 'knowledge_base'
+  | 'knowledge_base_add_species'
   | 'knowledge_base_stratification';
 
 type DocLink = Record<DocType, string>;
@@ -30,6 +31,8 @@ const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
     terraformation: 'https://www.terraformation.com',
     terraformation_software_solutions: 'https://www.terraformation.com/solutions/software',
     knowledge_base: 'https://knowledge.terraformation.com/',
+    knowledge_base_add_species:
+      'https://knowledge.terraformation.com/hc/en-us/articles/19699832923796-Adding-Species-To-Your-List',
     knowledge_base_stratification:
       'https://knowledge.terraformation.com/hc/en-us/articles/27884386873364-Strata-vs-Zones-Subzones',
   },
@@ -47,6 +50,8 @@ const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
     terraformation: 'https://www.terraformation.com',
     terraformation_software_solutions: 'https://www.terraformation.com/solutions/software',
     knowledge_base: 'https://knowledge.terraformation.com/',
+    knowledge_base_add_species:
+      'https://knowledge.terraformation.com/hc/en-us/articles/19699832923796-Adding-Species-To-Your-List',
     knowledge_base_stratification:
       'https://knowledge.terraformation.com/hc/en-us/articles/27884386873364-Strata-vs-Zones-Subzones',
   },
