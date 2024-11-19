@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Message, TableColumnType } from '@terraware/web-components';
+import _ from 'lodash';
 
 import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
@@ -117,9 +118,10 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   }, [activeLocale, details, observation]);
 
   useEffect(() => {
-    const speciesWithNoIdNames = details?.species.filter((sp) => !sp.speciesId).map((sp) => sp.speciesName || '');
-    const speciesWithNoIdSet = new Set(speciesWithNoIdNames);
-    const speciesWithNoIdMap = Array.from(speciesWithNoIdSet);
+    const speciesWithNoIdMap = _.uniqBy(
+      (details?.species || []).filter((sp) => !sp.speciesId),
+      'speciesName'
+    ).map((sp) => sp.speciesName || '');
 
     setUnrecognizedSpecies(speciesWithNoIdMap);
     if (speciesWithNoIdMap.length > 0) {

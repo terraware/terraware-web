@@ -94,10 +94,12 @@ export const getPlotStatus = (status?: MonitoringPlotStatus): string => {
   switch (status) {
     case 'Completed':
       return strings.COMPLETED;
-    case 'InProgress':
-      return strings.IN_PROGRESS;
-    case 'Outstanding':
-      return strings.OBSERVATION_STATUS_OUTSTANDING;
+    case 'Claimed':
+      return strings.CLAIMED;
+    case 'Unclaimed':
+      return strings.UNCLAIMED;
+    case 'Not Observed':
+      return strings.NOT_OBSERVED;
     default:
       return '';
   }
