@@ -16,17 +16,20 @@ import {
 } from 'src/redux/features/observations/observationDetailsSelectors';
 import { selectObservation } from 'src/redux/features/observations/observationsSelectors';
 import { has25mPlots } from 'src/redux/features/observations/utils';
+import { requestMergeOtherSpecies } from 'src/redux/features/species/speciesThunks';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
 import strings from 'src/strings';
 import { Observation } from 'src/types/Observations';
 import { FieldOptionsMap } from 'src/types/Search';
+import { MergeOtherSpeciesPayload } from 'src/types/Species';
 import { PlantingSite } from 'src/types/Tracking';
 import { getLongDate, getShortDate } from 'src/utils/dateFormatter';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
+import MatchSpeciesModal, { MergeOtherSpeciesPayloadPartial } from './MatchSpeciesModal';
 import ObservationDetailsRenderer from './ObservationDetailsRenderer';
 
 const columns = (): TableColumnType[] => [
@@ -67,6 +70,8 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const observationId = Number(params.observationId || -1);
   const [unrecognizedSpecies, setUnrecognizedSpecies] = useState<string[]>();
   const [showPageMessage, setShowPageMessage] = useState(false);
+  const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
+  const dispatch = useAppDispatch();
 
   const details = useAppSelector((state) =>
     searchObservationDetails(
@@ -165,6 +170,15 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     }
   };
 
+  const onSaveMergedSpecies = (mergedSpeciesPayloads: MergeOtherSpeciesPayloadPartial[]) => {
+    const merged: MergeOtherSpeciesPayload[] = mergedSpeciesPayloads
+      .filter((sp) => !!sp.otherSpeciesName && !!sp.speciesId)
+      .map((sp) => {
+        return { otherSpeciesName: sp.otherSpeciesName!, speciesId: sp.speciesId! };
+      });
+    dispatch(requestMergeOtherSpecies({ mergeOtherSpeciesPayloads: merged, observationId }));
+  };
+
   return (
     <DetailsPage
       title={title}
@@ -205,6 +219,9 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
             ]}
           />
         </Box>
+      )}
+      {showMatchSpeciesModal && (
+        <MatchSpeciesModal onClose={() => setShowMatchSpeciesModal(false)} onSave={onSaveMergedSpecies} />
       )}
       <ObservationStatusSummaryMessage
         plantingZones={plantingSite?.plantingZones}

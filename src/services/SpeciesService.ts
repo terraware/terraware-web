@@ -1,7 +1,7 @@
 import { paths } from 'src/api/types/generated-schema';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
 import { FieldNodePayload, SearchRequestPayload, SearchResponseElement } from 'src/types/Search';
-import { Species, SpeciesDetails, SuggestedSpecies } from 'src/types/Species';
+import { MergeOtherSpeciesPayload, Species, SpeciesDetails, SuggestedSpecies } from 'src/types/Species';
 import { parseSearchTerm } from 'src/utils/search';
 
 import HttpService, { Response, ServerData } from './HttpService';
@@ -57,6 +57,7 @@ const SPECIES_UPLOAD_RESOLVE_ENDPOINT = '/api/v1/species/uploads/{uploadId}/reso
 const SPECIES_UPLOAD_PROBLEM = '/api/v1/species/problems/{problemId}';
 const SPECIES_DETAILS_ENDPOINT = '/api/v1/species/lookup/details';
 const SPECIES_NAMES_ENDPOINT = '/api/v1/species/lookup/names';
+const MERGE_OTHER_SPECIES_ENDPOINT = '/api/v1/tracking/observations/{observationId}/mergeOtherSpecies';
 
 type CreateSpeciesRequestPayload = paths[typeof SPECIES_ENDPOINT]['post']['requestBody']['content']['application/json'];
 type UpdateSpeciesRequestPayload =
@@ -73,6 +74,7 @@ const httpSpecies = HttpService.root(SPECIES_ENDPOINT);
 const httpSpeciesId = HttpService.root(SPECIES_ID_ENDPOINT);
 const httpSpeciesDetails = HttpService.root(SPECIES_DETAILS_ENDPOINT);
 const httpSpeciesNames = HttpService.root(SPECIES_NAMES_ENDPOINT);
+const httpMergeOtherSpecies = HttpService.root(MERGE_OTHER_SPECIES_ENDPOINT);
 
 /**
  * create a species
@@ -404,6 +406,19 @@ const getSpeciesProjects = (
   return SearchService.search<SpeciesProjectsSearchResponse>(params);
 };
 
+const mergeOtherSpecies = async (
+  mergeOtherSpeciesPayload: MergeOtherSpeciesPayload,
+  observationId: number
+): Promise<Response> => {
+  const urlReplacements = {
+    '{observationId}': `${observationId}`,
+  };
+  return await httpMergeOtherSpecies.post({
+    urlReplacements,
+    entity: mergeOtherSpeciesPayload,
+  });
+};
+
 /**
  * Exported functions
  */
@@ -419,6 +434,7 @@ const SpeciesService = {
   getSpeciesProjects,
   getSpeciesUploadStatus,
   ignoreProblemSuggestion,
+  mergeOtherSpecies,
   resolveSpeciesUpload,
   suggestSpecies,
   updateSpecies,
