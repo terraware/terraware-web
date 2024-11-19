@@ -44,7 +44,7 @@ export default function DocumentView(): JSX.Element {
       await dispatch(
         requestUpgradeManifest({ id: `${documentId}`, payload: { variableManifestId: latestManifestId } })
       );
-      reload();
+      window.location.reload();
     }
     setShowUpgradeModal(false);
   }, [dispatch, documentId, latestManifestId, reload]);
