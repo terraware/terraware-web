@@ -44,7 +44,7 @@ export default function DocumentView(): JSX.Element {
     } else if (currentManifestId === latestManifestId) {
       setShowUpgradeModal(false);
     }
-  }, [document?.variableManifestId, latestManifestId]);
+  }, [currentManifestId, latestManifestId]);
 
   const onUpgradeManifest = useCallback(async () => {
     if (documentId && latestManifestId) {
