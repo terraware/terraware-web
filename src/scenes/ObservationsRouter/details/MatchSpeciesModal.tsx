@@ -73,9 +73,16 @@ export default function MatchSpeciesModal(props: MatchSpeciesModalProps): JSX.El
             {strings.SCIENTIFIC_NAME}
           </Typography>
         </Grid>
+      </Grid>
 
+      <Grid container textAlign={'left'}>
         {unrecognizedSpecies.map((species, index) => (
-          <MatchSpeciesRow key={index} matchSpeciesPayload={{ otherSpeciesName: species }} setRecords={setRecords} />
+          <MatchSpeciesRow
+            key={index}
+            matchSpeciesPayload={{ otherSpeciesName: species }}
+            setRecords={setRecords}
+            index={index}
+          />
         ))}
       </Grid>
     </DialogBox>
@@ -92,10 +99,11 @@ export interface MatchSpeciesRowProps {
       }>[]
     >
   >;
+  index: number;
 }
 
 function MatchSpeciesRow(props: MatchSpeciesRowProps): JSX.Element {
-  const { matchSpeciesPayload, setRecords } = props;
+  const { matchSpeciesPayload, setRecords, index } = props;
   const [record, setRecord] = useForm<MergeOtherSpeciesPayloadPartial>(matchSpeciesPayload);
   const theme = useTheme();
 
@@ -110,10 +118,22 @@ function MatchSpeciesRow(props: MatchSpeciesRowProps): JSX.Element {
 
   return (
     <>
-      <Grid item xs={6} borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`} paddingBottom={2}>
+      <Grid
+        item
+        xs={6}
+        borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+        paddingBottom={2}
+        paddingTop={index === 0 ? 1 : 2}
+      >
         <Typography>{record.otherSpeciesName}</Typography>
       </Grid>
-      <Grid item xs={6} borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`} paddingBottom={2}>
+      <Grid
+        item
+        xs={6}
+        borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+        paddingBottom={2}
+        paddingTop={index === 0 ? 1 : 2}
+      >
         <SpeciesSelector record={record} setRecord={setRecord} hideLabel />
       </Grid>
     </>

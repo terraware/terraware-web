@@ -17,6 +17,7 @@ import {
 } from 'src/redux/features/observations/observationDetailsSelectors';
 import { selectObservation } from 'src/redux/features/observations/observationsSelectors';
 import { has25mPlots } from 'src/redux/features/observations/utils';
+import { selectMergeOtherSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestMergeOtherSpecies } from 'src/redux/features/species/speciesThunks';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -28,6 +29,7 @@ import { FieldOptionsMap } from 'src/types/Search';
 import { MergeOtherSpeciesPayload } from 'src/types/Species';
 import { PlantingSite } from 'src/types/Tracking';
 import { getLongDate, getShortDate } from 'src/utils/dateFormatter';
+import useSnackbar from 'src/utils/useSnackbar';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import MatchSpeciesModal, { MergeOtherSpeciesPayloadPartial } from './MatchSpeciesModal';
@@ -53,10 +55,11 @@ type ObservationStatusSummary = {
 
 export type ObservationDetailsProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;
+  reload: () => void;
 };
 
 export default function ObservationDetails(props: ObservationDetailsProps): JSX.Element {
-  const { setFilterOptions } = props;
+  const { setFilterOptions, reload } = props;
   const { ...searchProps }: SearchProps = props;
 
   const { activeLocale } = useLocalization();
@@ -72,6 +75,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const [unrecognizedSpecies, setUnrecognizedSpecies] = useState<string[]>();
   const [showPageMessage, setShowPageMessage] = useState(false);
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
+  const [mergeRequestId, setMergeRequestId] = useState<string>('');
   const dispatch = useAppDispatch();
 
   const details = useAppSelector((state) =>
@@ -90,6 +94,8 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const observation = useAppSelector((state) => selectObservation(state, plantingSiteId, observationId));
   const zoneNames = useAppSelector((state) => selectDetailsZoneNames(state, plantingSiteId, observationId));
+  const matchResponse = useAppSelector(selectMergeOtherSpecies(mergeRequestId));
+  const snackbar = useSnackbar();
 
   const title = useMemo(() => {
     const plantingSiteName = details?.plantingSiteName ?? '';
@@ -126,6 +132,8 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     setUnrecognizedSpecies(speciesWithNoIdMap);
     if (speciesWithNoIdMap.length > 0) {
       setShowPageMessage(true);
+    } else {
+      setShowPageMessage(false);
     }
   }, [details]);
 
@@ -165,6 +173,16 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     }
   }, [zoneNames, searchProps.filtersProps]);
 
+  useEffect(() => {
+    if (matchResponse?.status === 'success') {
+      reload();
+      snackbar.toastSuccess(strings.CHANGES_SAVED);
+    }
+    if (matchResponse?.status === 'error') {
+      snackbar.toastError();
+    }
+  }, [matchResponse]);
+
   const has25mPlotsZones = () => {
     const allSubzones = details?.plantingZones.flatMap((zone) => zone.plantingSubzones.flatMap((subzone) => subzone));
     if (allSubzones) {
@@ -178,7 +196,9 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
       .map((sp) => {
         return { otherSpeciesName: sp.otherSpeciesName!, speciesId: sp.speciesId! };
       });
-    dispatch(requestMergeOtherSpecies({ mergeOtherSpeciesPayloads: merged, observationId }));
+    const request = dispatch(requestMergeOtherSpecies({ mergeOtherSpeciesPayloads: merged, observationId }));
+    setMergeRequestId(request.requestId);
+    setShowMatchSpeciesModal(false);
   };
 
   return (
