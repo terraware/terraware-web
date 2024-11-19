@@ -3,6 +3,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { MapService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import { getTokenFromSession, writeTokenToSession } from './storage';
+
 interface MapboxToken {
   /**
    * Identifier to pass to the ReactMapGL component. Updated every time a new token is fetched;
@@ -28,10 +30,19 @@ export default function useMapboxToken(): MapboxToken {
 
   // fetch token
   const fetchMapboxToken = useCallback(async () => {
+    // Pull from session storage, otherwise fetch a new token from the backend
+    const _token = getTokenFromSession();
+    if (_token) {
+      setToken(_token);
+      setMapId(Date.now().toString());
+      return;
+    }
+
     const response = await MapService.getMapboxToken();
-    if (response.requestSucceeded) {
+    if (response.requestSucceeded && response.token) {
       setToken(response.token);
       setMapId(Date.now().toString());
+      writeTokenToSession(response.token);
     } else {
       snackbar.toastError();
     }
