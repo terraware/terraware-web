@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Grid, useTheme } from '@mui/material';
-import { Message, TableColumnType } from '@terraware/web-components';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Button, Message, TableColumnType } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
@@ -64,6 +64,8 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
 
   const plantingSiteId = Number(params.plantingSiteId || -1);
   const observationId = Number(params.observationId || -1);
+  const [unrecognizedSpecies, setUnrecognizedSpecies] = useState<string[]>();
+  const [showPageMessage, setShowPageMessage] = useState(false);
 
   const details = useAppSelector((state) =>
     searchObservationDetails(
@@ -109,6 +111,26 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   }, [activeLocale, details, observation]);
 
   useEffect(() => {
+    const speciesWithNoIdNames = details?.species.filter((sp) => !sp.speciesId).map((sp) => sp.speciesName || '');
+    const speciesWithNoIdSet = new Set(speciesWithNoIdNames);
+    const speciesWithNoIdMap = Array.from(speciesWithNoIdSet);
+
+    setUnrecognizedSpecies(speciesWithNoIdMap);
+    if (speciesWithNoIdMap.length > 0) {
+      setShowPageMessage(true);
+    }
+  }, [details]);
+
+  const pageMessage = (
+    <Box key='unrecognized-species-message'>
+      <Typography>{strings.UNRECOGNIZED_SPECIES_MESSAGE}</Typography>
+      <ul style={{ margin: 0 }}>
+        {unrecognizedSpecies?.map((species, index) => <li key={`species-${index}`}>{species}</li>)}
+      </ul>
+    </Box>
+  );
+
+  useEffect(() => {
     setFilterOptions({
       zone: {
         partial: false,
@@ -144,6 +166,36 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
 
   return (
     <DetailsPage title={title} plantingSiteId={plantingSiteId}>
+      {showPageMessage && (
+        <Box marginTop={1} marginBottom={4} width={'100%'}>
+          <Message
+            body={pageMessage}
+            onClose={() => setShowPageMessage(false)}
+            priority='warning'
+            showCloseButton
+            title={strings.UNRECOGNIZED_SPECIES}
+            type='page'
+            pageButtons={[
+              <Button
+                onClick={() => setShowPageMessage(false)}
+                label={strings.DISMISS}
+                priority='secondary'
+                type='passive'
+                key='button-1'
+                size='small'
+              />,
+              <Button
+                onClick={() => true}
+                label={strings.MATCH_SPECIES}
+                priority='secondary'
+                type='passive'
+                key='button-2'
+                size='small'
+              />,
+            ]}
+          />
+        </Box>
+      )}
       <ObservationStatusSummaryMessage
         plantingZones={plantingSite?.plantingZones}
         requestedSubzoneIds={observation?.requestedSubzoneIds}
