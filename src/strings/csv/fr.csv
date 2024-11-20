@@ -1636,6 +1636,8 @@ SPECIES_IMPORT_COMPLETE,L'importation des données sur les espèces est terminé
 SPECIES_LIST,Liste d'espèces,
 SPECIES_LIST_DELIVERABLE_ADD_SPECIES_ACTIVE_DELIVERABLE_INFO,L’ajout de cette espèce à ce projet réinitialisera le statut de votre produit livrable actif relatif aux espèces. Vous devrez soumettre à nouveau le produit livrable pour approbation.,
 SPECIES_LIST_DELIVERABLE_ADD_SPECIES_RECENT_DELIVERABLE_INFO,L’ajout de cette espèce à ce projet réinitialisera le statut de votre dernier produit livrable sur les espèces. Vous devrez soumettre à nouveau le produit livrable pour approbation.,
+SPECIES_LIST_NO_ORGANIZATION_SPECIES_BODY,Allez dans « Espèces » et ajoutez des espèces à votre organisation afin de les sélectionner pour ce projet. Vous trouverez des instructions plus détaillées dans notre [base de connaissances].,
+SPECIES_LIST_NO_ORGANIZATION_SPECIES_TITLE,Aucune espèce pour l'organisation,
 SPECIES_MORTALITY,Mortalité des espèces,
 SPECIES_NAME,Nom de l'espèce,
 SPECIES_NOT_ACCEPTED,Espèces non acceptées,
