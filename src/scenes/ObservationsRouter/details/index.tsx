@@ -17,17 +17,22 @@ import {
 } from 'src/redux/features/observations/observationDetailsSelectors';
 import { selectObservation } from 'src/redux/features/observations/observationsSelectors';
 import { has25mPlots } from 'src/redux/features/observations/utils';
+import { selectMergeOtherSpecies } from 'src/redux/features/species/speciesSelectors';
+import { requestMergeOtherSpecies } from 'src/redux/features/species/speciesThunks';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
 import strings from 'src/strings';
 import { Observation } from 'src/types/Observations';
 import { FieldOptionsMap } from 'src/types/Search';
+import { MergeOtherSpeciesPayload } from 'src/types/Species';
 import { PlantingSite } from 'src/types/Tracking';
 import { getLongDate, getShortDate } from 'src/utils/dateFormatter';
+import useSnackbar from 'src/utils/useSnackbar';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
+import MatchSpeciesModal, { MergeOtherSpeciesPayloadPartial } from './MatchSpeciesModal';
 import ObservationDetailsRenderer from './ObservationDetailsRenderer';
 
 const columns = (): TableColumnType[] => [
@@ -50,10 +55,11 @@ type ObservationStatusSummary = {
 
 export type ObservationDetailsProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;
+  reload: () => void;
 };
 
 export default function ObservationDetails(props: ObservationDetailsProps): JSX.Element {
-  const { setFilterOptions } = props;
+  const { setFilterOptions, reload } = props;
   const { ...searchProps }: SearchProps = props;
 
   const { activeLocale } = useLocalization();
@@ -68,6 +74,9 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const observationId = Number(params.observationId || -1);
   const [unrecognizedSpecies, setUnrecognizedSpecies] = useState<string[]>();
   const [showPageMessage, setShowPageMessage] = useState(false);
+  const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
+  const [mergeRequestId, setMergeRequestId] = useState<string>('');
+  const dispatch = useAppDispatch();
 
   const details = useAppSelector((state) =>
     searchObservationDetails(
@@ -85,6 +94,8 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const observation = useAppSelector((state) => selectObservation(state, plantingSiteId, observationId));
   const zoneNames = useAppSelector((state) => selectDetailsZoneNames(state, plantingSiteId, observationId));
+  const matchResponse = useAppSelector(selectMergeOtherSpecies(mergeRequestId));
+  const snackbar = useSnackbar();
 
   const title = useMemo(() => {
     const plantingSiteName = details?.plantingSiteName ?? '';
@@ -121,6 +132,8 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     setUnrecognizedSpecies(speciesWithNoIdMap);
     if (speciesWithNoIdMap.length > 0) {
       setShowPageMessage(true);
+    } else {
+      setShowPageMessage(false);
     }
   }, [details]);
 
@@ -160,11 +173,32 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     }
   }, [zoneNames, searchProps.filtersProps]);
 
+  useEffect(() => {
+    if (matchResponse?.status === 'success') {
+      reload();
+      snackbar.toastSuccess(strings.CHANGES_SAVED);
+    }
+    if (matchResponse?.status === 'error') {
+      snackbar.toastError();
+    }
+  }, [matchResponse]);
+
   const has25mPlotsZones = () => {
     const allSubzones = details?.plantingZones.flatMap((zone) => zone.plantingSubzones.flatMap((subzone) => subzone));
     if (allSubzones) {
       return has25mPlots(allSubzones);
     }
+  };
+
+  const onSaveMergedSpecies = (mergedSpeciesPayloads: MergeOtherSpeciesPayloadPartial[]) => {
+    const merged: MergeOtherSpeciesPayload[] = mergedSpeciesPayloads
+      .filter((sp) => !!sp.otherSpeciesName && !!sp.speciesId)
+      .map((sp) => {
+        return { otherSpeciesName: sp.otherSpeciesName!, speciesId: sp.speciesId! };
+      });
+    const request = dispatch(requestMergeOtherSpecies({ mergeOtherSpeciesPayloads: merged, observationId }));
+    setMergeRequestId(request.requestId);
+    setShowMatchSpeciesModal(false);
   };
 
   return (
@@ -173,8 +207,14 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
       plantingSiteId={plantingSiteId}
       rightComponent={
         <OptionsMenu
-          onOptionItemClick={() => true}
-          optionItems={[{ label: strings.MATCH_UNRECOGNIZED_SPECIES, value: 'match' }]}
+          onOptionItemClick={() => setShowMatchSpeciesModal(true)}
+          optionItems={[
+            {
+              label: strings.MATCH_UNRECOGNIZED_SPECIES,
+              value: 'match',
+              disabled: (unrecognizedSpecies?.length || 0) === 0,
+            },
+          ]}
         />
       }
     >
@@ -197,7 +237,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
                 size='small'
               />,
               <Button
-                onClick={() => true}
+                onClick={() => setShowMatchSpeciesModal(true)}
                 label={strings.MATCH_SPECIES}
                 priority='secondary'
                 type='passive'
@@ -207,6 +247,13 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
             ]}
           />
         </Box>
+      )}
+      {showMatchSpeciesModal && (
+        <MatchSpeciesModal
+          onClose={() => setShowMatchSpeciesModal(false)}
+          onSave={onSaveMergedSpecies}
+          unrecognizedSpecies={unrecognizedSpecies || []}
+        />
       )}
       <ObservationStatusSummaryMessage
         plantingZones={plantingSite?.plantingZones}
