@@ -50,10 +50,20 @@ export type PlantingSiteMapProps = {
   // layers to be displayed on map
   layers?: MapLayer[];
   showMortalityRateFill?: boolean;
+  showRecencyFill?: boolean;
 } & MapControl;
 
 export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element | null {
-  const { mapData, style, contextRenderer, highlightEntities, focusEntities, layers, showMortalityRateFill } = props;
+  const {
+    mapData,
+    style,
+    contextRenderer,
+    highlightEntities,
+    focusEntities,
+    layers,
+    showMortalityRateFill,
+    showRecencyFill,
+  } = props;
   const { ...controlProps }: MapControl = props;
   const theme = useTheme();
   const snackbar = useSnackbar();
@@ -117,6 +127,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       if (mapData.zone && (layers === undefined || layers?.includes('Zones'))) {
         sources.push({
           ...mapData.zone,
+          ...getRenderAttributes('zone'),
           isInteractive: isFirstLayerAdded(),
           annotation: isFirstLayerAdded()
             ? {
@@ -125,6 +136,14 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
                 textSize: 16,
               }
             : undefined,
+          fillColor: showRecencyFill
+            ? [
+                'case',
+                ['==', ['number', ['get', 'recency']], 0],
+                getRenderAttributes('zone').fillColor,
+                theme.palette.TwClrBasePink200,
+              ]
+            : getRenderAttributes('zone').fillColor,
           patternFill: newPlantsDashboardEnabled
             ? showMortalityRateFill
               ? [
@@ -140,7 +159,18 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
               ? 'mortality-rate-indicator'
               : undefined,
           opacity: newPlantsDashboardEnabled
-            ? undefined
+            ? showRecencyFill
+              ? [
+                  'case',
+                  ['==', ['get', 'recency'], 1],
+                  0.9,
+                  ['==', ['get', 'recency'], 2],
+                  0.7,
+                  ['==', ['get', 'recency'], 3],
+                  0.5,
+                  0.3,
+                ]
+              : undefined
             : showMortalityRateFill
               ? [
                   'case',
@@ -155,7 +185,6 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
                   0.3,
                 ]
               : undefined,
-          ...getRenderAttributes('zone'),
         });
       }
       if (mapData.site && (layers === undefined || layers?.includes('Planting Site'))) {

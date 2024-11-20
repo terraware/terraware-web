@@ -79,7 +79,7 @@ export type MapSourceBaseData = {
 
 export type MapSourceRenderProperties = {
   annotation?: MapAnnotation;
-  fillColor: string;
+  fillColor: string | Expression;
   highlightFillColor?: string;
   hoverFillColor?: string;
   isInteractive?: boolean;

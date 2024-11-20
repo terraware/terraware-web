@@ -4,6 +4,13 @@ import { components } from 'src/api/types/generated-schema';
 export type PlantingSite = components['schemas']['PlantingSitePayload'];
 export type PlantingZone = components['schemas']['PlantingZonePayload'];
 export type PlantingSubzone = components['schemas']['PlantingSubzonePayload'];
+export type PlantingZoneWithSubzonesWithLastObservationDate = Omit<PlantingZone, 'plantingSubzones'> & {
+  plantingSubzones: PlantingSubzoneWithLastObservationDate[];
+};
+export type PlantingSubzoneWithLastObservationDate = PlantingSubzone & { lastObservationDate?: Date };
+export type PlantingSiteWithSubzonesWithLastObservationDate = Omit<PlantingSite, 'plantingZones'> & {
+  plantingZones?: PlantingZoneWithSubzonesWithLastObservationDate[];
+};
 
 // geometry and types of geometries
 export type Polygon = components['schemas']['Polygon'];

@@ -4,7 +4,8 @@
       "properties": {
         "id": 4,
         "name": "PZ1",
-        "type": "zone"
+        "type": "zone",
+        "recency": 0
       },
       "boundary": [
         [
@@ -24,7 +25,8 @@
       "properties": {
         "id": 3,
         "name": "PZ2",
-        "type": "zone"
+        "type": "zone",
+        "recency": 0
       },
       "boundary": [
         [
@@ -47,7 +49,8 @@
       "properties": {
         "id": 2,
         "name": "PZ3",
-        "type": "zone"
+        "type": "zone",
+        "recency": 0
       },
       "boundary": [
         [
@@ -69,7 +72,8 @@
       "properties": {
         "id": 1,
         "name": "PZ4",
-        "type": "zone"
+        "type": "zone",
+        "recency": 0
       },
       "boundary": [
         [
