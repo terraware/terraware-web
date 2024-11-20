@@ -406,14 +406,14 @@ const getSpeciesProjects = (
   return SearchService.search<SpeciesProjectsSearchResponse>(params);
 };
 
-const mergeOtherSpecies = async (
+const mergeOtherSpecies = (
   mergeOtherSpeciesPayload: MergeOtherSpeciesPayload,
   observationId: number
 ): Promise<Response> => {
   const urlReplacements = {
     '{observationId}': `${observationId}`,
   };
-  return await httpMergeOtherSpecies.post({
+  return httpMergeOtherSpecies.post({
     urlReplacements,
     entity: mergeOtherSpeciesPayload,
   });
