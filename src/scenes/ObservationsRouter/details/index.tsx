@@ -18,7 +18,11 @@ import {
 import { selectObservation } from 'src/redux/features/observations/observationsSelectors';
 import { has25mPlots } from 'src/redux/features/observations/utils';
 import { selectMergeOtherSpecies, selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import { requestMergeOtherSpecies, requestSpecies } from 'src/redux/features/species/speciesThunks';
+import {
+  MergeOtherSpeciesRequestData,
+  requestMergeOtherSpecies,
+  requestSpecies,
+} from 'src/redux/features/species/speciesThunks';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
@@ -26,7 +30,6 @@ import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
 import strings from 'src/strings';
 import { Observation } from 'src/types/Observations';
 import { FieldOptionsMap } from 'src/types/Search';
-import { MergeOtherSpeciesPayload } from 'src/types/Species';
 import { PlantingSite } from 'src/types/Tracking';
 import { getLongDate, getShortDate } from 'src/utils/dateFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -58,11 +61,7 @@ export type ObservationDetailsProps = SearchProps & {
   reload: () => void;
 };
 
-type MergeOtherSpeciesData = MergeOtherSpeciesPayload & {
-  newName: string;
-};
-
-const MergedSuccessMessage = (merged: MergeOtherSpeciesData[]): JSX.Element => (
+const MergedSuccessMessage = (merged: MergeOtherSpeciesRequestData[]): JSX.Element => (
   <ul style={{ paddingLeft: '24px', margin: 0 }}>
     {merged.map((sp, index) => (
       <li key={index}>
@@ -91,7 +90,6 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const [showPageMessage, setShowPageMessage] = useState(false);
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
   const [mergeRequestId, setMergeRequestId] = useState<string>('');
-  const [merged, setMerged] = useState<MergeOtherSpeciesData[]>([]);
   const dispatch = useAppDispatch();
 
   const details = useAppSelector((state) =>
@@ -197,15 +195,14 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   }, [zoneNames, searchProps.filtersProps]);
 
   useEffect(() => {
-    if (merged.length > 0 && matchResponse?.status === 'success') {
+    if (matchResponse?.status === 'success' && matchResponse?.data && matchResponse.data.length > 0) {
       reload();
-      snackbar.toastSuccess([MergedSuccessMessage(merged)], strings.SPECIES_MATCHED);
-      setMerged([]);
+      snackbar.toastSuccess([MergedSuccessMessage(matchResponse.data)], strings.SPECIES_MATCHED);
     }
     if (matchResponse?.status === 'error') {
       snackbar.toastError();
     }
-  }, [matchResponse, merged]);
+  }, [matchResponse]);
 
   const has25mPlotsZones = () => {
     const allSubzones = details?.plantingZones.flatMap((zone) => zone.plantingSubzones.flatMap((subzone) => subzone));
@@ -215,22 +212,16 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   };
 
   const onSaveMergedSpecies = (mergedSpeciesPayloads: MergeOtherSpeciesPayloadPartial[]) => {
-    const mergeOtherSpeciesPayloads: MergeOtherSpeciesPayload[] = mergedSpeciesPayloads
+    const mergeOtherSpeciesRequestData: MergeOtherSpeciesRequestData[] = mergedSpeciesPayloads
       .filter((sp) => !!sp.otherSpeciesName && !!sp.speciesId)
       .map((sp) => ({
+        newName: allSpecies?.find((existing) => existing.id === sp.speciesId)?.scientificName || '',
         otherSpeciesName: sp.otherSpeciesName!,
         speciesId: sp.speciesId!,
       }));
 
-    if (mergeOtherSpeciesPayloads.length > 0) {
-      setMerged(
-        mergeOtherSpeciesPayloads.map((sp) => ({
-          ...sp,
-          newName: allSpecies?.find((existing) => existing.id === sp.speciesId)?.scientificName || '',
-        }))
-      );
-
-      const request = dispatch(requestMergeOtherSpecies({ mergeOtherSpeciesPayloads, observationId }));
+    if (mergeOtherSpeciesRequestData.length > 0) {
+      const request = dispatch(requestMergeOtherSpecies({ mergeOtherSpeciesRequestData, observationId }));
       setMergeRequestId(request.requestId);
     }
 
