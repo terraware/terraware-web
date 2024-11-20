@@ -60,7 +60,7 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
 
   const dropdownOptions: DropdownItem[] = useMemo(() => {
     const unusedOptions = unusedModules.map((module) => ({
-      label: `(${module.id}), ${module.name}`,
+      label: `(${module.id}) ${module.name}`,
       value: module.id,
     }));
 

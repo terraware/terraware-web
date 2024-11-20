@@ -26,7 +26,6 @@ const list = (cohortId: number): Promise<Response2<ListCohortModulesResponsePayl
  */
 const get = (cohortId: number, moduleId: number): Promise<Response2<GetCohortModuleResponsePayload>> => {
   return HttpService.root(COHORT_MODULE_ENDOINT).get2<GetCohortModuleResponsePayload>({
-    url: COHORT_MODULES_ENDOINT,
     urlReplacements: { '{cohortId}': `${cohortId}`, '{moduleId}': `${moduleId}` },
   });
 };
