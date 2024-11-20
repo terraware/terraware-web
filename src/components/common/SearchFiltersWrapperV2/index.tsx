@@ -108,7 +108,7 @@ export default function SearchFiltersWrapperV2({
           };
         })
         .filter((item: PillListItem<string> | false): item is PillListItem<string> => !!item),
-    [currentFilters, iconFilters, featuredFilters, setCurrentFilters]
+    [currentFilters, iconFilters, featuredFilters, setCurrentFilters, stickyFilters]
   );
 
   useEffect(() => {
