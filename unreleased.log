@@ -1,3 +1,6 @@
+5e87bdbc0d2 SW-6277 Remove progress bar from Observed Planting Density card (#3348)
+828adee1a5a SW-6265 Plot mortality rate is not populated in Zone detail view table (#3347)
+efe24f2406a SW-6235 Add new map overlay for observation recency (#3335)
 483c99f5368 SW-6162 Fix document upgrade modal visibility (#3340)
 6870a6b2c16 SW-6263 Match Unrecognized species modal (#3343)
 bcd44b133a6 Updated translations from Phrase (#3342)
