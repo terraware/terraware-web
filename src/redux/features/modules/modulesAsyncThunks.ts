@@ -1,24 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { SearchService } from 'src/services';
-import CohortModuleService from 'src/services/CohortModuleService';
-import DeliverablesService from 'src/services/DeliverablesService';
-import { Response, Response2 } from 'src/services/HttpService';
-import ModuleService, { GetModuleRequestParam, ListModulesRequestParam } from 'src/services/ModuleService';
+import ModuleService from 'src/services/ModuleService';
 import strings from 'src/strings';
-import { ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
-import {
-  ModuleCohortsSearchResult,
-  ModuleProjectSearchResult,
-  ModuleSearchResult,
-  UpdateCohortModuleRequest,
-} from 'src/types/Module';
+import { ModuleCohortsSearchResult, ModuleProjectSearchResult, ModuleSearchResult } from 'src/types/Module';
 import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 
 export const requestGetModule = createAsyncThunk(
   'modules/get',
-  async (request: GetModuleRequestParam, { rejectWithValue }) => {
-    const response = await ModuleService.get(request);
+  async (request: { moduleId: number }, { rejectWithValue }) => {
+    const response = await ModuleService.get(request.moduleId);
 
     if (response !== null && response.requestSucceeded && response?.data?.module !== undefined) {
       return response.data.module;
@@ -28,18 +19,17 @@ export const requestGetModule = createAsyncThunk(
   }
 );
 
-export const requestListModules = createAsyncThunk(
-  'modules/list',
-  async (request: ListModulesRequestParam, { rejectWithValue }) => {
-    const response = await ModuleService.list(request);
+export const requestListModules = createAsyncThunk('modules/list', async (_, { rejectWithValue }) => {
+  const response = await ModuleService.list();
 
-    if (response !== null && response.requestSucceeded && response?.data?.modules !== undefined) {
-      return response.data.modules;
-    }
+  console.log(response);
 
-    return rejectWithValue(strings.GENERIC_ERROR);
+  if (response !== null && response.requestSucceeded && response?.data?.modules !== undefined) {
+    return response.data.modules;
   }
-);
+
+  return rejectWithValue(strings.GENERIC_ERROR);
+});
 
 export const requestListModuleProjects = createAsyncThunk(
   'modules/listProjects',
@@ -69,121 +59,6 @@ export const requestListModuleProjects = createAsyncThunk(
       return moduleProjectIds;
     }
 
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
-export const requestListModuleDeliverables = createAsyncThunk(
-  'modules/deliverables',
-  async (request: {
-    locale: string | null;
-    moduleId: number;
-    projectId: number;
-    search?: SearchNodePayload;
-  }): Promise<ListDeliverablesElementWithOverdue[]> => {
-    const result = await DeliverablesService.list(
-      request.locale,
-      {
-        projectId: request.projectId,
-        moduleId: request.moduleId,
-      },
-      request.search
-    );
-
-    return result.data ?? [];
-  }
-);
-
-export const requestDeleteCohortModule = createAsyncThunk(
-  'cohortModules/delete',
-  async (
-    request: {
-      moduleId: number;
-      cohortId: number;
-    },
-    { rejectWithValue }
-  ) => {
-    const { moduleId, cohortId } = request;
-    const response: Response2<number> = await CohortModuleService.deleteOne(moduleId, cohortId);
-
-    if (response && response.requestSucceeded) {
-      return true;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
-export const requestDeleteManyCohortModule = createAsyncThunk(
-  'cohortModules/deleteMany',
-  async (
-    request: {
-      modulesId: number[];
-      cohortId: number;
-    },
-    { rejectWithValue }
-  ) => {
-    const { modulesId, cohortId } = request;
-
-    const promises = modulesId.map((moduleId) => CohortModuleService.deleteOne(moduleId, cohortId));
-
-    const results = await Promise.all(promises);
-
-    if (results.every((result) => result && result.requestSucceeded)) {
-      return true;
-    }
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
-export const requestUpdateCohortModule = createAsyncThunk(
-  'cohortModules/update',
-  async (
-    {
-      moduleId,
-      cohortId,
-      request,
-    }: {
-      moduleId: number;
-      cohortId: number;
-      request: UpdateCohortModuleRequest;
-    },
-    { rejectWithValue }
-  ) => {
-    const response: Response = await CohortModuleService.update({ moduleId, cohortId, entity: request });
-
-    if (response && response.requestSucceeded) {
-      return true;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
-export const requestUpdateManyCohortModule = createAsyncThunk(
-  'cohortModules/updateMany',
-  async (
-    {
-      cohortId,
-      requests,
-    }: {
-      cohortId: number;
-      requests: (UpdateCohortModuleRequest & {
-        moduleId: number;
-      })[];
-    },
-    { rejectWithValue }
-  ) => {
-    const results = await Promise.all(
-      requests.map((request) => {
-        const { moduleId, ...entity } = request;
-        return CohortModuleService.update({ moduleId: moduleId, cohortId, entity });
-      })
-    );
-
-    if (results.every((result) => result && result.requestSucceeded)) {
-      return true;
-    }
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );

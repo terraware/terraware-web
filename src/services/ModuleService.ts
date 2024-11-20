@@ -1,17 +1,9 @@
 import { paths } from 'src/api/types/generated-schema';
-import { Module, ModuleSearchResult } from 'src/types/Module';
+import { ModuleSearchResult } from 'src/types/Module';
 import { SearchNodePayload, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 
 import HttpService, { Response2 } from './HttpService';
 import SearchService from './SearchService';
-
-export type ModulesData = {
-  modules: Module[] | undefined;
-};
-
-export type ModuleData = {
-  module: Module | undefined;
-};
 
 const MODULES_ENDOINT = '/api/v1/accelerator/modules';
 const MODULE_ENDOINT = '/api/v1/accelerator/modules/{moduleId}';
@@ -24,85 +16,20 @@ export type GetModuleResponsePayload =
 export type ImportModuleResponsePayload =
   paths[typeof MODULES_IMPORT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
-export type ListModulesRequestParam = {
-  projectId?: number;
-  participantId?: number;
-  cohortId?: number;
-};
-
-export type GetModuleRequestParam = {
-  projectId?: number;
-  participantId?: number;
-  cohortId?: number;
-  moduleId: number;
-};
-
 /**
  * List all modules
  */
-const list = ({
-  projectId,
-  cohortId,
-  participantId,
-}: ListModulesRequestParam): Promise<Response2<ModulesData | null>> => {
-  const params: Record<string, string> = {};
-  if (projectId) {
-    params.projectId = `${projectId}`;
-  }
-
-  if (participantId) {
-    params.participantId = `${participantId}`;
-  }
-
-  if (cohortId) {
-    params.cohortId = `${cohortId}`;
-  }
-
-  return HttpService.root(MODULES_ENDOINT).get<ListModulesResponsePayload, { data: ModulesData | undefined }>(
-    {
-      params,
-    },
-    (response) => ({
-      data: {
-        modules: response?.modules,
-      },
-    })
-  );
+const list = (): Promise<Response2<ListModulesResponsePayload>> => {
+  return HttpService.root(MODULES_ENDOINT).get2<ListModulesResponsePayload>();
 };
 
 /**
  * Get module data
  */
-const get = async ({
-  projectId,
-  cohortId,
-  participantId,
-  moduleId,
-}: GetModuleRequestParam): Promise<Response2<ModuleData | null>> => {
-  const params: Record<string, string> = {};
-  if (projectId) {
-    params.projectId = `${projectId}`;
-  }
-
-  if (participantId) {
-    params.participantId = `${participantId}`;
-  }
-
-  if (cohortId) {
-    params.cohortId = `${cohortId}`;
-  }
-
-  return HttpService.root(MODULE_ENDOINT).get<GetModuleResponsePayload, { data: ModuleData | undefined }>(
-    {
-      params,
-      urlReplacements: { '{moduleId}': `${moduleId}` },
-    },
-    (response) => ({
-      data: {
-        module: response?.module,
-      },
-    })
-  );
+const get = async (moduleId: number): Promise<Response2<GetModuleResponsePayload>> => {
+  return HttpService.root(MODULE_ENDOINT).get2<GetModuleResponsePayload>({
+    urlReplacements: { '{moduleId}': `${moduleId}` },
+  });
 };
 
 /**

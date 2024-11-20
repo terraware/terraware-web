@@ -1,20 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { ListDeliverablesElement } from 'src/types/Deliverables';
 import { Module, ModuleCohortsSearchResult, ModuleSearchResult } from 'src/types/Module';
 
 import { StatusT, buildReducers } from '../asyncUtils';
 import {
-  requestDeleteCohortModule,
-  requestDeleteManyCohortModule,
   requestGetModule,
   requestListModuleCohorts,
-  requestListModuleDeliverables,
   requestListModuleProjects,
   requestListModules,
   requestSearchModules,
-  requestUpdateCohortModule,
-  requestUpdateManyCohortModule,
 } from './modulesAsyncThunks';
 
 /**
@@ -60,77 +54,7 @@ export const moduleProjectsSlice = createSlice({
 });
 
 /**
- * List module deliverables for a project module pair
- */
-const initialStateModuleDeliverables: { [key: string]: StatusT<ListDeliverablesElement[]> } = {};
-
-export const ModuleDeliverablesSlice = createSlice({
-  name: 'ModuleDeliverablesSlice',
-  initialState: initialStateModuleDeliverables,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestListModuleDeliverables)(builder);
-  },
-});
-
-/**
- * Deletes a cohort module
- */
-const initialStateCohortModuleDelete: { [key: string]: StatusT<boolean> } = {};
-
-export const cohortModuleDeleteSlice = createSlice({
-  name: 'cohortModuleDeleteSlice',
-  initialState: initialStateCohortModuleDelete,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestDeleteCohortModule)(builder);
-  },
-});
-
-/**
- * Updates a cohort module
- */
-const initialStateCohortModuleUpdate: { [key: string]: StatusT<boolean> } = {};
-
-export const cohortModuleUpdateSlice = createSlice({
-  name: 'cohortModuleUpdateSlice',
-  initialState: initialStateCohortModuleUpdate,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestUpdateCohortModule)(builder);
-  },
-});
-
-/**
- * Deletes many cohort modules
- */
-const initialStateCohortModuleDeleteMany: { [key: string]: StatusT<boolean> } = {};
-
-export const cohortModuleDeleteManySlice = createSlice({
-  name: 'cohortModuleDeleteManySlice',
-  initialState: initialStateCohortModuleDeleteMany,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestDeleteManyCohortModule)(builder);
-  },
-});
-
-/**
- * Updates a cohort module
- */
-const initialStateCohortModuleUpdateMany: { [key: string]: StatusT<boolean> } = {};
-
-export const cohortModuleUpdateManySlice = createSlice({
-  name: 'cohortModuleUpdateManySlice',
-  initialState: initialStateCohortModuleUpdateMany,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestUpdateManyCohortModule)(builder);
-  },
-});
-
-/**
- * List all ohorts associated with a module
+ * List all cohorts associated with a module
  */
 const initialStateModuleCohorts: { [key: string]: StatusT<ModuleCohortsSearchResult> } = {};
 
@@ -159,13 +83,8 @@ export const searchModulesSlice = createSlice({
 
 const moduleReducers = {
   module: moduleSlice.reducer,
-  moduleDeliverables: ModuleDeliverablesSlice.reducer,
   moduleList: moduleListSlice.reducer,
   moduleProjects: moduleProjectsSlice.reducer,
-  cohortModuleDelete: cohortModuleDeleteSlice.reducer,
-  cohortModuleUpdate: cohortModuleUpdateSlice.reducer,
-  cohortModuleDeleteMany: cohortModuleDeleteManySlice.reducer,
-  cohortModuleUpdateMany: cohortModuleUpdateManySlice.reducer,
   moduleCohorts: moduleCohortsSlice.reducer,
   searchModules: searchModulesSlice.reducer,
 };

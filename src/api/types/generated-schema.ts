@@ -82,7 +82,13 @@ export interface paths {
     /** Deletes a single cohort. */
     delete: operations["deleteCohort"];
   };
+  "/api/v1/accelerator/cohorts/{cohortId}/modules": {
+    /** List cohort modules. */
+    get: operations["listCohortModules"];
+  };
   "/api/v1/accelerator/cohorts/{cohortId}/modules/{moduleId}": {
+    /** Gets one cohort module. */
+    get: operations["getCohortModule"];
     /**
      * Updates the information about a module's use by a cohort.
      * @description Adds the module to the cohort if it is not already associated.
@@ -172,10 +178,6 @@ export interface paths {
   "/api/v1/accelerator/modules/{moduleId}": {
     /** Gets one module. */
     get: operations["getModule"];
-  };
-  "/api/v1/accelerator/modules/{moduleId}/deliverables": {
-    /** List module deliverables. */
-    get: operations["listModuleDeliverables"];
   };
   "/api/v1/accelerator/organizations": {
     /**
@@ -1711,6 +1713,23 @@ export interface components {
       cohorts: components["schemas"]["CohortPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    CohortModulePayload: {
+      additionalResources?: string;
+      /** Format: date */
+      endDate: string;
+      eventDescriptions: {
+        [key: string]: string;
+      };
+      /** Format: int64 */
+      id: number;
+      isActive: boolean;
+      name: string;
+      overview?: string;
+      preparationMaterials?: string;
+      /** Format: date */
+      startDate: string;
+      title: string;
+    };
     CohortPayload: {
       /** Format: int64 */
       createdBy: number;
@@ -2705,6 +2724,10 @@ export interface components {
       history: components["schemas"]["BatchHistoryPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetCohortModuleResponsePayload: {
+      module: components["schemas"]["CohortModulePayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetCountryBorderResponsePayload: {
       border: components["schemas"]["MultiPolygon"];
       status: components["schemas"]["SuccessOrError"];
@@ -3194,6 +3217,10 @@ export interface components {
       photos: components["schemas"]["BatchPhotoPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    ListCohortModulesResponsePayload: {
+      modules: components["schemas"]["CohortModulePayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     ListDeliverablesElement: {
       /** @enum {string} */
       category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
@@ -3268,9 +3295,6 @@ export interface components {
         [key: string]: components["schemas"]["FieldValuesPayload"];
       };
       status: components["schemas"]["SuccessOrError"];
-    };
-    ListModuleDeliverablesResponsePayload: {
-      deliverables: components["schemas"]["ModuleDeliverablePayload"][];
     };
     ListModulesResponsePayload: {
       modules: components["schemas"]["ModulePayload"][];
@@ -3488,20 +3512,15 @@ export interface components {
     };
     ModulePayload: {
       additionalResources?: string;
-      /** Format: date */
-      endDate: string;
+      deliverables: components["schemas"]["ModuleDeliverablePayload"][];
       eventDescriptions: {
         [key: string]: string;
       };
       /** Format: int64 */
       id: number;
-      isActive: boolean;
       name: string;
       overview?: string;
       preparationMaterials?: string;
-      /** Format: date */
-      startDate: string;
-      title: string;
     };
     MultiLineString: WithRequired<{
       type: "MultiLineString";
@@ -6103,6 +6122,51 @@ export interface operations {
       };
     };
   };
+  /** List cohort modules. */
+  listCohortModules: {
+    parameters: {
+      path: {
+        cohortId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListCohortModulesResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets one cohort module. */
+  getCohortModule: {
+    parameters: {
+      path: {
+        cohortId: number;
+        moduleId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetCohortModuleResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   /**
    * Updates the information about a module's use by a cohort.
    * @description Adds the module to the cohort if it is not already associated.
@@ -6517,13 +6581,6 @@ export interface operations {
   };
   /** List modules. */
   listModules: {
-    parameters: {
-      query?: {
-        projectId?: number;
-        participantId?: number;
-        cohortId?: number;
-      };
-    };
     responses: {
       /** @description The requested operation succeeded. */
       200: {
@@ -6561,11 +6618,6 @@ export interface operations {
   /** Gets one module. */
   getModule: {
     parameters: {
-      query?: {
-        projectId?: number;
-        participantId?: number;
-        cohortId?: number;
-      };
       path: {
         moduleId: number;
       };
@@ -6575,28 +6627,6 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["GetModuleResponsePayload"];
-        };
-      };
-      /** @description The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  /** List module deliverables. */
-  listModuleDeliverables: {
-    parameters: {
-      path: {
-        moduleId: number;
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListModuleDeliverablesResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */

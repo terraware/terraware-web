@@ -17,7 +17,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
-import useListModules from 'src/hooks/useListModules';
+import useListCohortModules from 'src/hooks/useListCohortModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
@@ -43,16 +43,16 @@ const SingleView = () => {
   const { phaseVotes } = useVotingData();
   const { goToParticipantProjectEdit } = useNavigateTo();
   const dispatch = useAppDispatch();
-  const { modules, listModules } = useListModules();
+  const { cohortModules, listCohortModules } = useListCohortModules();
   const [searchDeliverablesRequestId, setSearchDeliverablesRequestId] = useState('');
   const deliverablesResponse = useAppSelector(selectDeliverablesSearchRequest(searchDeliverablesRequestId));
   const [hasDeliverables, setHasDeliverables] = useState(false);
 
   useEffect(() => {
-    if (project) {
-      void listModules({ projectId: project.id });
+    if (project && project.cohortId) {
+      void listCohortModules(project.cohortId);
     }
-  }, [project, listModules]);
+  }, [project, listCohortModules]);
 
   useEffect(() => {
     const request = dispatch(requestListDeliverables({ locale: activeLocale, listRequest: { projectId } }));
@@ -148,7 +148,7 @@ const SingleView = () => {
       rightComponent={rightComponent}
       titleContainerStyle={{ marginBottom: 0 }}
       cohortPhase={project?.cohortPhase}
-      modules={modules ?? []}
+      modules={cohortModules ?? []}
     >
       {status === 'pending' && <BusySpinner />}
 

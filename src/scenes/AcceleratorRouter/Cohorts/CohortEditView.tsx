@@ -3,12 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
-import { requestCohort, requestCohortUpdate } from 'src/redux/features/cohorts/cohortsAsyncThunks';
-import { selectCohort, selectCohortRequest } from 'src/redux/features/cohorts/cohortsSelectors';
+import useListCohortModules from 'src/hooks/useListCohortModules';
 import {
   requestDeleteManyCohortModule,
   requestUpdateManyCohortModule,
-} from 'src/redux/features/modules/modulesAsyncThunks';
+} from 'src/redux/features/cohortModules/cohortModulesAsyncThunks';
+import { requestCohort, requestCohortUpdate } from 'src/redux/features/cohorts/cohortsAsyncThunks';
+import { selectCohort, selectCohortRequest } from 'src/redux/features/cohorts/cohortsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { UpdateCohortRequestPayload } from 'src/types/Cohort';
@@ -26,34 +27,54 @@ export default function CohortEditView(): JSX.Element {
   const cohortId = Number(pathParams.cohortId);
 
   const cohort = useAppSelector(selectCohort(cohortId));
+  const { cohortModules, listCohortModules } = useListCohortModules();
   const [requestId, setRequestId] = useState<string>('');
   const cohortUpdateRequest = useAppSelector((state) => selectCohortRequest(state, requestId));
 
   useEffect(() => {
     if (!cohort) {
       dispatch(requestCohort({ cohortId }));
+      void listCohortModules(cohortId);
     }
   }, [cohortId, cohort, dispatch]);
 
   const saveCohort = useCallback(
-    (_cohort: UpdateCohortRequestPayload, modulesToAdd?: CohortModule[], modulesToDelete?: CohortModule[]) => {
+    (_cohort: UpdateCohortRequestPayload, pendingModules?: CohortModule[]) => {
       const dispatched = dispatch(requestCohortUpdate({ cohortId, cohort: _cohort }));
       setRequestId(dispatched.requestId);
-      if (modulesToAdd) {
-        const requests = modulesToAdd.map((mta) => ({
-          moduleId: mta.id || -1,
-          title: mta.title || '',
-          startDate: mta.startDate || '',
-          endDate: mta.endDate || '',
-        }));
-        dispatch(requestUpdateManyCohortModule({ cohortId, requests }));
-      }
-      if (modulesToDelete) {
-        const idsToDelete = modulesToDelete.map((mtd) => mtd.id || -1);
-        dispatch(requestDeleteManyCohortModule({ cohortId, modulesId: idsToDelete }));
+
+      if (pendingModules?.length !== undefined && pendingModules.length > 0) {
+        if (cohortModules.length > 0) {
+          // determine modules to add, and modules to delete
+          const toDelete = cohortModules.filter(
+            (oldModule) => pendingModules.find((newModule) => newModule.id === oldModule.id) === undefined
+          );
+
+          const toAdd = pendingModules.filter(
+            (newModule) => cohortModules.find((oldModule) => oldModule.id === newModule.id) === undefined
+          );
+
+          const toUpdate = pendingModules.filter((newModule) => {
+            const oldModule = cohortModules.find((oldModule) => oldModule.id === newModule.id);
+            return (
+              oldModule !== undefined &&
+              !(
+                oldModule.title === newModule.title &&
+                oldModule.startDate === newModule.startDate &&
+                oldModule.endDate === newModule.endDate
+              )
+            );
+          });
+
+          dispatch(requestUpdateManyCohortModule({ cohortId, modules: [...toAdd, ...toUpdate] }));
+          dispatch(requestDeleteManyCohortModule({ cohortId, moduleIds: toDelete.map((module) => module.id) }));
+        } else {
+          // add every module since there is none
+          dispatch(requestUpdateManyCohortModule({ cohortId, modules: pendingModules }));
+        }
       }
     },
-    [cohortId, dispatch]
+    [cohortId, cohortModules, dispatch]
   );
 
   const goToCohortView = useCallback(() => {
