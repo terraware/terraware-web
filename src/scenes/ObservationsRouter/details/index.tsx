@@ -58,6 +58,20 @@ export type ObservationDetailsProps = SearchProps & {
   reload: () => void;
 };
 
+type MergeOtherSpeciesData = MergeOtherSpeciesPayload & {
+  newName: string;
+};
+
+const MergedSuccessMessage = (merged: MergeOtherSpeciesData[]): JSX.Element => (
+  <ul style={{ paddingLeft: '24px', margin: 0 }}>
+    {merged.map((sp, index) => (
+      <li key={index}>
+        {sp.otherSpeciesName} &#8594; {sp.newName}
+      </li>
+    ))}
+  </ul>
+);
+
 export default function ObservationDetails(props: ObservationDetailsProps): JSX.Element {
   const { setFilterOptions, reload } = props;
   const { ...searchProps }: SearchProps = props;
@@ -77,7 +91,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const [showPageMessage, setShowPageMessage] = useState(false);
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
   const [mergeRequestId, setMergeRequestId] = useState<string>('');
-  const [mergedMessage, setMergedMessage] = useState<JSX.Element>();
+  const [merged, setMerged] = useState<MergeOtherSpeciesData[]>([]);
   const dispatch = useAppDispatch();
 
   const details = useAppSelector((state) =>
@@ -183,14 +197,15 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   }, [zoneNames, searchProps.filtersProps]);
 
   useEffect(() => {
-    if (mergedMessage && matchResponse?.status === 'success') {
+    if (merged.length > 0 && matchResponse?.status === 'success') {
       reload();
-      snackbar.toastSuccess([mergedMessage], strings.SPECIES_MATCHED);
+      snackbar.toastSuccess([MergedSuccessMessage(merged)], strings.SPECIES_MATCHED);
+      setMerged([]);
     }
     if (matchResponse?.status === 'error') {
       snackbar.toastError();
     }
-  }, [matchResponse]);
+  }, [matchResponse, merged]);
 
   const has25mPlotsZones = () => {
     const allSubzones = details?.plantingZones.flatMap((zone) => zone.plantingSubzones.flatMap((subzone) => subzone));
@@ -200,30 +215,25 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   };
 
   const onSaveMergedSpecies = (mergedSpeciesPayloads: MergeOtherSpeciesPayloadPartial[]) => {
-    const merged: MergeOtherSpeciesPayload[] = mergedSpeciesPayloads
+    const mergeOtherSpeciesPayloads: MergeOtherSpeciesPayload[] = mergedSpeciesPayloads
       .filter((sp) => !!sp.otherSpeciesName && !!sp.speciesId)
-      .map((sp) => {
-        return { otherSpeciesName: sp.otherSpeciesName!, speciesId: sp.speciesId! };
-      });
+      .map((sp) => ({
+        otherSpeciesName: sp.otherSpeciesName!,
+        speciesId: sp.speciesId!,
+      }));
 
-    if (merged.length > 0) {
-      const successMessageBody = (
-        <ul style={{ paddingLeft: '24px', margin: 0 }}>
-          {merged.map((sp, index) => {
-            const newName = allSpecies?.find((existing) => existing.id === sp.speciesId)?.scientificName;
-            return (
-              <li key={index}>
-                {sp.otherSpeciesName} &#8594; {newName}
-              </li>
-            );
-          })}
-        </ul>
+    if (mergeOtherSpeciesPayloads.length > 0) {
+      setMerged(
+        mergeOtherSpeciesPayloads.map((sp) => ({
+          ...sp,
+          newName: allSpecies?.find((existing) => existing.id === sp.speciesId)?.scientificName || '',
+        }))
       );
-      setMergedMessage(successMessageBody);
 
-      const request = dispatch(requestMergeOtherSpecies({ mergeOtherSpeciesPayloads: merged, observationId }));
+      const request = dispatch(requestMergeOtherSpecies({ mergeOtherSpeciesPayloads, observationId }));
       setMergeRequestId(request.requestId);
     }
+
     setShowMatchSpeciesModal(false);
   };
 
