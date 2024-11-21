@@ -37,6 +37,20 @@ export type ObservationResults = Omit<ObservationResultsPayload, 'species'> &
     hasObservedTemporaryPlots: boolean;
   };
 
+export type ObservationResultsWithLastObv = Omit<
+  Omit<ObservationResultsPayload, 'species'> &
+    Boundary & {
+      completedDate?: string;
+      plantingSiteName: string;
+      plantingZones: ObservationPlantingZoneResults[];
+      species: ObservationSpeciesResults[];
+      totalPlants: number;
+      hasObservedPermanentPlots: boolean;
+      hasObservedTemporaryPlots: boolean;
+    },
+  'plantingZones'
+> & { plantingZones: ObservationPlantingZoneResultsWithLastObv[] };
+
 // zone level results -> contains a list of subzone level results
 export type ObservationPlantingZoneResultsPayload = components['schemas']['ObservationPlantingZoneResultsPayload'];
 export type ObservationPlantingZoneResults = ObservationPlantingZoneResultsPayload &
@@ -49,6 +63,8 @@ export type ObservationPlantingZoneResults = ObservationPlantingZoneResultsPaylo
     hasObservedPermanentPlots: boolean;
     hasObservedTemporaryPlots: boolean;
   };
+
+export type ObservationPlantingZoneResultsWithLastObv = ObservationPlantingZoneResults & { lastObv?: string };
 
 // subzone level results -> contains lists of both species level results and monitoring plot level results
 export type ObservationPlantingSubzoneResultsPayload =

@@ -54,6 +54,7 @@ export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.
             display='flex'
             padding={2}
             borderRadius={1}
+            marginRight={2}
           >
             {legend.switch && (
               <Box>
@@ -63,11 +64,11 @@ export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.
                     if (setLegends) {
                       setLegends((prev) => {
                         const newLegends = [...prev];
-                        const found = prev.findIndex((l) => l.title === legend.title);
-                        const foundCopy = prev.slice(found, found + 1)[0];
-                        foundCopy.disabled = !checked;
-                        newLegends.splice(found, 1);
-                        return [...newLegends, foundCopy];
+                        const found = newLegends.find((l) => l.title === legend.title);
+                        if (found) {
+                          found.disabled = !checked;
+                        }
+                        return newLegends;
                       });
                     }
                   }}
