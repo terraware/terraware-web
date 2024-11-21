@@ -4,7 +4,7 @@ import { TableColumnType } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
-import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
+import { FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
 import { useLocalization } from 'src/providers';
 import { requestListApplications } from 'src/redux/features/application/applicationAsyncThunks';
 import { selectApplicationList } from 'src/redux/features/application/applicationSelectors';
@@ -78,12 +78,12 @@ const ApplicationList = () => {
   const result = useAppSelector(selectApplicationList(requestId));
   const [applications, setApplications] = useState<ApplicationRow[]>([]);
 
-  const featuredFilters: FilterConfig[] = useMemo(() => {
+  const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
     if (!activeLocale || !countries) {
       return [];
     }
 
-    const filters: FilterConfig[] = [
+    const filters: FilterConfigWithValues[] = [
       {
         field: 'countryCode',
         options: (countries || []).map((country) => country.code),
@@ -98,6 +98,7 @@ const ApplicationList = () => {
           (left, right) => ApplicationStatusOrder[left] - ApplicationStatusOrder[right]
         ),
         label: strings.STATUS,
+        values: [...ApplicationReviewStatuses],
       },
     ];
 
