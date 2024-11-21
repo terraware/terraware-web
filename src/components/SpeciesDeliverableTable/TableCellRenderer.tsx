@@ -123,7 +123,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
           <>
             {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectHandler} />}
             <Button
-              label={strings.REJECT_ACTION}
+              label={strings.REQUEST_UPDATE}
               onClick={() => setShowRejectDialog(true)}
               priority='secondary'
               type='destructive'
