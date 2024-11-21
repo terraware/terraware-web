@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -191,12 +191,7 @@
 <a name='L126'></a><a href='#L126'>126</a>
 <a name='L127'></a><a href='#L127'>127</a>
 <a name='L128'></a><a href='#L128'>128</a>
-<a name='L129'></a><a href='#L129'>129</a>
-<a name='L130'></a><a href='#L130'>130</a>
-<a name='L131'></a><a href='#L131'>131</a>
-<a name='L132'></a><a href='#L132'>132</a>
-<a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L129'></a><a href='#L129'>129</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -245,15 +240,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -277,6 +263,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -374,17 +364,8 @@ export type InventoryResult = {
 export default function <span class="fstat-no" title="function not covered" >ModuleView(</span>): JSX.Element {
   const contentRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
   const { moduleId } = <span class="cstat-no" title="statement not covered" >useParams&lt;{ moduleId: string }&gt;();</span>
-  const { getModule, module, deliverables, events } = <span class="cstat-no" title="statement not covered" >useGetModule();</span>
+  const { module, events, getModule } = <span class="cstat-no" title="statement not covered" >useGetModule(Number(moduleId));</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-&nbsp;
-  const deliverablesIds = <span class="cstat-no" title="statement not covered" >new Set();</span>
-  const uniqueDeliverables = <span class="cstat-no" title="statement not covered" >deliverables?.filter(<span class="fstat-no" title="function not covered" >(d</span>) =&gt; <span class="cstat-no" title="statement not covered" >!deliverablesIds.has(d.id) &amp;&amp; deliverablesIds.add(d.id))</span>;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (moduleId) {</span>
-<span class="cstat-no" title="statement not covered" >      getModule({ moduleId: Number(moduleId) });</span>
-    }
-  }, [moduleId]);
 &nbsp;
   const tabs = <span class="cstat-no" title="statement not covered" >moduleId</span>
     ? [
@@ -396,7 +377,7 @@ export default function <span class="fstat-no" title="function not covered" >Mod
         {
           id: 'contentAndMaterials',
           label: strings.CONTENT_AND_MATERIALS,
-          children: &lt;ContentAndMaterials module={module} deliverables={uniqueDeliverables} /&gt;,
+          children: &lt;ContentAndMaterials module={module} deliverables={module?.deliverables ?? []} /&gt;,
         },
         {
           id: 'events',
@@ -411,6 +392,10 @@ export default function <span class="fstat-no" title="function not covered" >Mod
     tabs,
     viewIdentifier: 'accelerator-module-view',
   });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    getModule();</span>
+  }, [getModule]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;TfMain&gt;
@@ -469,7 +454,7 @@ export default function <span class="fstat-no" title="function not covered" >Mod
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-21T17:18:48.709Z
+                at 2024-11-21T19:25:49.672Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

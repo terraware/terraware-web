@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/41</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/33</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
@@ -178,7 +178,17 @@
 <a name='L113'></a><a href='#L113'>113</a>
 <a name='L114'></a><a href='#L114'>114</a>
 <a name='L115'></a><a href='#L115'>115</a>
-<a name='L116'></a><a href='#L116'>116</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -204,9 +214,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -299,9 +315,11 @@ import { useMixpanel } from 'react-mixpanel-browser';
 import { DateTime } from 'luxon';
 &nbsp;
 import ModuleDetailsCard from 'src/components/ModuleDetailsCard';
-import useGetModule from 'src/hooks/useGetModule';
-import useListModules from 'src/hooks/useListModules';
+import useGetModule from 'src/hooks/useGetCohortModule';
+import useListCohortModules from 'src/hooks/useListCohortModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import useProjectModuleDeliverables from 'src/hooks/useProjectModuleDeliverables';
+import useProjectModuleEvents from 'src/hooks/useProjectModuleEvents';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
@@ -317,12 +335,18 @@ const ModuleDetailsCardWrapper = <span class="cstat-no" title="statement not cov
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { goToDeliverable, goToModuleEventSession } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
 &nbsp;
-  const { getModule, module, deliverables, events } = <span class="cstat-no" title="statement not covered" >useGetModule();</span>
+  const { getCohortModule, cohortModule } = <span class="cstat-no" title="statement not covered" >useGetModule();</span>
+  const { deliverables, listProjectModuleDeliverables } = <span class="cstat-no" title="statement not covered" >useProjectModuleDeliverables();</span>
+  const { events, listProjectModuleEvents } = <span class="cstat-no" title="statement not covered" >useProjectModuleEvents();</span>
   const mixpanel = <span class="cstat-no" title="statement not covered" >useMixpanel();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    void getModule({ moduleId, projectId: project.id });</span>
-  }, [moduleId, project, getModule]);
+<span class="cstat-no" title="statement not covered" >    if (project.cohortId) {</span>
+<span class="cstat-no" title="statement not covered" >      void getCohortModule({ moduleId, cohortId: project.cohortId });</span>
+<span class="cstat-no" title="statement not covered" >      void listProjectModuleDeliverables({ moduleId, projectId: project.id });</span>
+<span class="cstat-no" title="statement not covered" >      void listProjectModuleEvents({ moduleId, projectId: project.id });</span>
+    }
+  }, [moduleId, project, getCohortModule, listProjectModuleDeliverables, listProjectModuleEvents]);
 &nbsp;
   const deliverableDetails = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
@@ -351,13 +375,13 @@ const ModuleDetailsCardWrapper = <span class="cstat-no" title="statement not cov
 &nbsp;
   const moduleDetails = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >      module</span>
+<span class="cstat-no" title="statement not covered" >      cohortModule</span>
         ? {
-            ...module,
-            title: activeLocale ? strings.formatString(strings.TITLE_OVERVIEW, module.title).toString() : '',
+            ...cohortModule,
+            title: activeLocale ? strings.formatString(strings.TITLE_OVERVIEW, cohortModule.title).toString() : '',
           }
         : undefined,
-    [activeLocale, module]
+    [activeLocale, cohortModule]
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (!moduleDetails) {</span>
@@ -377,22 +401,22 @@ const ModuleDetailsCardWrapper = <span class="cstat-no" title="statement not cov
 const CurrentModule = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const { currentParticipantProject } = <span class="cstat-no" title="statement not covered" >useParticipantData();</span>
 &nbsp;
-  const { modules, listModules } = <span class="cstat-no" title="statement not covered" >useListModules();</span>
+  const { cohortModules, listCohortModules } = <span class="cstat-no" title="statement not covered" >useListCohortModules();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (currentParticipantProject) {</span>
-<span class="cstat-no" title="statement not covered" >      void listModules({ projectId: currentParticipantProject.id });</span>
+<span class="cstat-no" title="statement not covered" >    if (currentParticipantProject &amp;&amp; currentParticipantProject.cohortId) {</span>
+<span class="cstat-no" title="statement not covered" >      void listCohortModules(currentParticipantProject.cohortId);</span>
     }
-  }, [currentParticipantProject, listModules]);
+  }, [currentParticipantProject, listCohortModules]);
 &nbsp;
   // Only first active modules shown for now. TODO: upgrade to support multiple active modules for overlapping modules
   const activeModules = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!modules) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!cohortModules) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return modules.filter(<span class="fstat-no" title="function not covered" >(m</span>odule) =&gt; <span class="cstat-no" title="statement not covered" >module.isActive)</span>;</span>
-  }, [modules]);
+<span class="cstat-no" title="statement not covered" >    return cohortModules.filter(<span class="fstat-no" title="function not covered" >(m</span>odule) =&gt; <span class="cstat-no" title="statement not covered" >module.isActive)</span>;</span>
+  }, [cohortModules]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (!currentParticipantProject || !activeModules) {</span>
 <span class="cstat-no" title="statement not covered" >    return null;</span>
@@ -415,7 +439,7 @@ export default CurrentModule;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-21T17:18:48.709Z
+                at 2024-11-21T19:25:49.672Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

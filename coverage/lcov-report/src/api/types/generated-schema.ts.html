@@ -11706,7 +11706,67 @@
 <a name='L11641'></a><a href='#L11641'>11641</a>
 <a name='L11642'></a><a href='#L11642'>11642</a>
 <a name='L11643'></a><a href='#L11643'>11643</a>
-<a name='L11644'></a><a href='#L11644'>11644</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L11644'></a><a href='#L11644'>11644</a>
+<a name='L11645'></a><a href='#L11645'>11645</a>
+<a name='L11646'></a><a href='#L11646'>11646</a>
+<a name='L11647'></a><a href='#L11647'>11647</a>
+<a name='L11648'></a><a href='#L11648'>11648</a>
+<a name='L11649'></a><a href='#L11649'>11649</a>
+<a name='L11650'></a><a href='#L11650'>11650</a>
+<a name='L11651'></a><a href='#L11651'>11651</a>
+<a name='L11652'></a><a href='#L11652'>11652</a>
+<a name='L11653'></a><a href='#L11653'>11653</a>
+<a name='L11654'></a><a href='#L11654'>11654</a>
+<a name='L11655'></a><a href='#L11655'>11655</a>
+<a name='L11656'></a><a href='#L11656'>11656</a>
+<a name='L11657'></a><a href='#L11657'>11657</a>
+<a name='L11658'></a><a href='#L11658'>11658</a>
+<a name='L11659'></a><a href='#L11659'>11659</a>
+<a name='L11660'></a><a href='#L11660'>11660</a>
+<a name='L11661'></a><a href='#L11661'>11661</a>
+<a name='L11662'></a><a href='#L11662'>11662</a>
+<a name='L11663'></a><a href='#L11663'>11663</a>
+<a name='L11664'></a><a href='#L11664'>11664</a>
+<a name='L11665'></a><a href='#L11665'>11665</a>
+<a name='L11666'></a><a href='#L11666'>11666</a>
+<a name='L11667'></a><a href='#L11667'>11667</a>
+<a name='L11668'></a><a href='#L11668'>11668</a>
+<a name='L11669'></a><a href='#L11669'>11669</a>
+<a name='L11670'></a><a href='#L11670'>11670</a>
+<a name='L11671'></a><a href='#L11671'>11671</a>
+<a name='L11672'></a><a href='#L11672'>11672</a>
+<a name='L11673'></a><a href='#L11673'>11673</a>
+<a name='L11674'></a><a href='#L11674'>11674</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -23433,7 +23493,13 @@ export interface paths {
     /** Deletes a single cohort. */
     delete: operations["deleteCohort"];
   };
+  "/api/v1/accelerator/cohorts/{cohortId}/modules": {
+    /** List cohort modules. */
+    get: operations["listCohortModules"];
+  };
   "/api/v1/accelerator/cohorts/{cohortId}/modules/{moduleId}": {
+    /** Gets one cohort module. */
+    get: operations["getCohortModule"];
     /**
      * Updates the information about a module's use by a cohort.
      * @description Adds the module to the cohort if it is not already associated.
@@ -23523,10 +23589,6 @@ export interface paths {
   "/api/v1/accelerator/modules/{moduleId}": {
     /** Gets one module. */
     get: operations["getModule"];
-  };
-  "/api/v1/accelerator/modules/{moduleId}/deliverables": {
-    /** List module deliverables. */
-    get: operations["listModuleDeliverables"];
   };
   "/api/v1/accelerator/organizations": {
     /**
@@ -25062,6 +25124,23 @@ export interface components {
       cohorts: components["schemas"]["CohortPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    CohortModulePayload: {
+      additionalResources?: string;
+      /** Format: date */
+      endDate: string;
+      eventDescriptions: {
+        [key: string]: string;
+      };
+      /** Format: int64 */
+      id: number;
+      isActive: boolean;
+      name: string;
+      overview?: string;
+      preparationMaterials?: string;
+      /** Format: date */
+      startDate: string;
+      title: string;
+    };
     CohortPayload: {
       /** Format: int64 */
       createdBy: number;
@@ -26056,6 +26135,10 @@ export interface components {
       history: components["schemas"]["BatchHistoryPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetCohortModuleResponsePayload: {
+      module: components["schemas"]["CohortModulePayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetCountryBorderResponsePayload: {
       border: components["schemas"]["MultiPolygon"];
       status: components["schemas"]["SuccessOrError"];
@@ -26545,6 +26628,10 @@ export interface components {
       photos: components["schemas"]["BatchPhotoPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    ListCohortModulesResponsePayload: {
+      modules: components["schemas"]["CohortModulePayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     ListDeliverablesElement: {
       /** @enum {string} */
       category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
@@ -26619,9 +26706,6 @@ export interface components {
         [key: string]: components["schemas"]["FieldValuesPayload"];
       };
       status: components["schemas"]["SuccessOrError"];
-    };
-    ListModuleDeliverablesResponsePayload: {
-      deliverables: components["schemas"]["ModuleDeliverablePayload"][];
     };
     ListModulesResponsePayload: {
       modules: components["schemas"]["ModulePayload"][];
@@ -26839,20 +26923,15 @@ export interface components {
     };
     ModulePayload: {
       additionalResources?: string;
-      /** Format: date */
-      endDate: string;
+      deliverables: components["schemas"]["ModuleDeliverablePayload"][];
       eventDescriptions: {
         [key: string]: string;
       };
       /** Format: int64 */
       id: number;
-      isActive: boolean;
       name: string;
       overview?: string;
       preparationMaterials?: string;
-      /** Format: date */
-      startDate: string;
-      title: string;
     };
     MultiLineString: WithRequired&lt;{
       type: "MultiLineString";
@@ -29454,6 +29533,51 @@ export interface operations {
       };
     };
   };
+  /** List cohort modules. */
+  listCohortModules: {
+    parameters: {
+      path: {
+        cohortId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListCohortModulesResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets one cohort module. */
+  getCohortModule: {
+    parameters: {
+      path: {
+        cohortId: number;
+        moduleId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetCohortModuleResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   /**
    * Updates the information about a module's use by a cohort.
    * @description Adds the module to the cohort if it is not already associated.
@@ -29868,13 +29992,6 @@ export interface operations {
   };
   /** List modules. */
   listModules: {
-    parameters: {
-      query?: {
-        projectId?: number;
-        participantId?: number;
-        cohortId?: number;
-      };
-    };
     responses: {
       /** @description The requested operation succeeded. */
       200: {
@@ -29912,11 +30029,6 @@ export interface operations {
   /** Gets one module. */
   getModule: {
     parameters: {
-      query?: {
-        projectId?: number;
-        participantId?: number;
-        cohortId?: number;
-      };
       path: {
         moduleId: number;
       };
@@ -29926,28 +30038,6 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["GetModuleResponsePayload"];
-        };
-      };
-      /** @description The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  /** List module deliverables. */
-  listModuleDeliverables: {
-    parameters: {
-      path: {
-        moduleId: number;
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListModuleDeliverablesResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
@@ -34999,7 +35089,7 @@ export interface operations {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-21T17:18:48.709Z
+                at 2024-11-21T19:25:49.672Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

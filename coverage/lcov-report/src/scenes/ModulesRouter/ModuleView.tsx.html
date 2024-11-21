@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -161,7 +161,26 @@
 <a name='L96'></a><a href='#L96'>96</a>
 <a name='L97'></a><a href='#L97'>97</a>
 <a name='L98'></a><a href='#L98'>98</a>
-<a name='L99'></a><a href='#L99'>99</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -182,16 +201,29 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -269,10 +301,13 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import ModuleDetailsCard from 'src/components/ModuleDetailsCard';
 import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
 import { APP_PATHS } from 'src/constants';
-import useGetModule from 'src/hooks/useGetModule';
+import useGetCohortModule from 'src/hooks/useGetCohortModule';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import useProjectModuleDeliverables from 'src/hooks/useProjectModuleDeliverables';
+import useProjectModuleEvents from 'src/hooks/useProjectModuleEvents';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 &nbsp;
 import ModuleViewTitle from './ModuleViewTitle';
@@ -280,17 +315,30 @@ import ModuleViewTitle from './ModuleViewTitle';
 const ModuleView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { goToDeliverable, goToModuleEventSession } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
+  const { currentParticipantProject, setCurrentParticipantProject } = <span class="cstat-no" title="statement not covered" >useParticipantData();</span>
 &nbsp;
   const pathParams = <span class="cstat-no" title="statement not covered" >useParams&lt;{ sessionId: string; moduleId: string; projectId: string }&gt;();</span>
   const projectId = <span class="cstat-no" title="statement not covered" >Number(pathParams.projectId);</span>
   const moduleId = <span class="cstat-no" title="statement not covered" >Number(pathParams.moduleId);</span>
   const mixpanel = <span class="cstat-no" title="statement not covered" >useMixpanel();</span>
 &nbsp;
-  const { getModule, module, deliverables, events } = <span class="cstat-no" title="statement not covered" >useGetModule();</span>
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (projectId) {</span>
+<span class="cstat-no" title="statement not covered" >      setCurrentParticipantProject(projectId);</span>
+    }
+  }, [projectId, setCurrentParticipantProject]);
+&nbsp;
+  const { cohortModule, getCohortModule } = <span class="cstat-no" title="statement not covered" >useGetCohortModule();</span>
+  const { deliverables, listProjectModuleDeliverables } = <span class="cstat-no" title="statement not covered" >useProjectModuleDeliverables();</span>
+  const { events, listProjectModuleEvents } = <span class="cstat-no" title="statement not covered" >useProjectModuleEvents();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    void getModule({ moduleId, projectId });</span>
-  }, [projectId, moduleId, getModule]);
+<span class="cstat-no" title="statement not covered" >    if (currentParticipantProject &amp;&amp; currentParticipantProject.cohortId) {</span>
+<span class="cstat-no" title="statement not covered" >      void getCohortModule({ moduleId, cohortId: currentParticipantProject.cohortId });</span>
+<span class="cstat-no" title="statement not covered" >      void listProjectModuleDeliverables({ moduleId, projectId: currentParticipantProject.id });</span>
+<span class="cstat-no" title="statement not covered" >      void listProjectModuleEvents({ moduleId, projectId: currentParticipantProject.id });</span>
+    }
+  }, [currentParticipantProject, moduleId, getCohortModule, listProjectModuleDeliverables, listProjectModuleEvents]);
 &nbsp;
   const deliverableDetails = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
@@ -314,18 +362,18 @@ const ModuleView = <span class="cstat-no" title="statement not covered" ><span c
 <span class="cstat-no" title="statement not covered" >          goToModuleEventSession(projectId, moduleId, event.id);</span>
         },
       })),
-    [events, goToModuleEventSession, projectId, module, mixpanel]
+    [events, goToModuleEventSession, projectId, mixpanel]
   );
 &nbsp;
   const moduleDetails = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >      module</span>
+<span class="cstat-no" title="statement not covered" >      cohortModule</span>
         ? {
-            ...module,
-            title: activeLocale ? strings.formatString(strings.TITLE_OVERVIEW, module.title).toString() : '',
+            ...cohortModule,
+            title: activeLocale ? strings.formatString(strings.TITLE_OVERVIEW, cohortModule.title).toString() : '',
           }
         : undefined,
-    [activeLocale, module]
+    [activeLocale, cohortModule]
   );
 &nbsp;
   const crumbs: Crumb[] = <span class="cstat-no" title="statement not covered" >useMemo(</span>
@@ -342,7 +390,7 @@ const ModuleView = <span class="cstat-no" title="statement not covered" ><span c
     &lt;ParticipantPage
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      title={&lt;ModuleViewTitle module={module} projectId={projectId} /&gt;}
+      title={&lt;ModuleViewTitle module={cohortModule} projectId={projectId} /&gt;}
     &gt;
       {moduleDetails &amp;&amp; (
         &lt;ModuleDetailsCard
@@ -364,7 +412,7 @@ export default ModuleView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-21T17:18:48.709Z
+                at 2024-11-21T19:25:49.672Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

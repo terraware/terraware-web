@@ -1,3 +1,4 @@
+ec1609e65d5 Updated BE types and fix bugs with not being able to assign modules (#3352)
 faef1f87256 SW-6184 Added default values for application list filters (#3354)
 06556949c26 SW-6264 Toast message success after matching species (#3346)
 7d0cfba74a0 SW-6236 Other updates to map card on plants dashboard (#3336)

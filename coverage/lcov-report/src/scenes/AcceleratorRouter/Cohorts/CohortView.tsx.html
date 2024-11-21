@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/33</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/33</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -159,21 +159,7 @@
 <a name='L94'></a><a href='#L94'>94</a>
 <a name='L95'></a><a href='#L95'>95</a>
 <a name='L96'></a><a href='#L96'>96</a>
-<a name='L97'></a><a href='#L97'>97</a>
-<a name='L98'></a><a href='#L98'>98</a>
-<a name='L99'></a><a href='#L99'>99</a>
-<a name='L100'></a><a href='#L100'>100</a>
-<a name='L101'></a><a href='#L101'>101</a>
-<a name='L102'></a><a href='#L102'>102</a>
-<a name='L103'></a><a href='#L103'>103</a>
-<a name='L104'></a><a href='#L104'>104</a>
-<a name='L105'></a><a href='#L105'>105</a>
-<a name='L106'></a><a href='#L106'>106</a>
-<a name='L107'></a><a href='#L107'>107</a>
-<a name='L108'></a><a href='#L108'>108</a>
-<a name='L109'></a><a href='#L109'>109</a>
-<a name='L110'></a><a href='#L110'>110</a>
-<a name='L111'></a><a href='#L111'>111</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L97'></a><a href='#L97'>97</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -212,16 +198,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -279,11 +255,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 &nbsp;
 import { Box, Grid, useTheme } from '@mui/material';
@@ -294,14 +266,14 @@ import ProjectFieldDisplay from 'src/components/ProjectField/Display';
 import Card from 'src/components/common/Card';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import useListCohortModules from 'src/hooks/useListCohortModules';
 import useListModules from 'src/hooks/useListModules';
 import { useLocalization, useUser } from 'src/providers';
 import { requestCohort } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import CohortModulesTable from 'src/scenes/AcceleratorRouter/Modules/CohortModulesTable';
+import CohortModulesTable from 'src/scenes/AcceleratorRouter/Cohorts/CohortModulesTable';
 import strings from 'src/strings';
-import { CohortModule } from 'src/types/Module';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 &nbsp;
 const CohortView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -315,26 +287,16 @@ const CohortView = <span class="cstat-no" title="statement not covered" ><span c
   const pathParams = <span class="cstat-no" title="statement not covered" >useParams&lt;{ cohortId: string }&gt;();</span>
   const cohortId = <span class="cstat-no" title="statement not covered" >Number(pathParams.cohortId);</span>
   const cohort = <span class="cstat-no" title="statement not covered" >useAppSelector(selectCohort(cohortId));</span>
-  const { modules, listModules, listDeliverables, deliverablesByModuleId } = <span class="cstat-no" title="statement not covered" >useListModules();</span>
-  const [modulesWithDeliverablesQuantity, setModulesWithDeliverablesQuantity] = <span class="cstat-no" title="statement not covered" >useState&lt;CohortModule[]&gt;();</span>
+  const { cohortModules, listCohortModules } = <span class="cstat-no" title="statement not covered" >useListCohortModules();</span>
+  const { modules, listModules } = <span class="cstat-no" title="statement not covered" >useListModules();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (cohortId) {</span>
-<span class="cstat-no" title="statement not covered" >      void listDeliverables();</span>
 <span class="cstat-no" title="statement not covered" >      void dispatch(requestCohort({ cohortId }));</span>
-<span class="cstat-no" title="statement not covered" >      void listModules({ cohortId });</span>
+<span class="cstat-no" title="statement not covered" >      void listCohortModules(cohortId);</span>
+<span class="cstat-no" title="statement not covered" >      void listModules();</span>
     }
-  }, [cohortId, dispatch]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (deliverablesByModuleId) {</span>
-      const newModules = <span class="cstat-no" title="statement not covered" >modules?.map(<span class="fstat-no" title="function not covered" >(m</span>d) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        return { ...md, deliverablesQuantity: deliverablesByModuleId[md.id]?.length || 0 };</span>
-      });
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      setModulesWithDeliverablesQuantity(newModules);</span>
-    }
-  }, [modules, deliverablesByModuleId]);
+  }, [cohortId, dispatch, listCohortModules, listModules]);
 &nbsp;
   const goToEditCohort = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (pathParams.cohortId) {</span>
@@ -381,11 +343,7 @@ const CohortView = <span class="cstat-no" title="statement not covered" ><span c
           &lt;ProjectFieldDisplay label={strings.PHASE} value={cohort.phase} rightBorder={true} /&gt;
         &lt;/Grid&gt;
         &lt;Box paddingLeft={2} paddingRight={2}&gt;
-          &lt;CohortModulesTable
-            modules={modulesWithDeliverablesQuantity}
-            deliverablesByModuleId={deliverablesByModuleId}
-            cohortId={cohortId}
-          /&gt;
+          &lt;CohortModulesTable cohortModules={cohortModules} modules={modules} /&gt;
         &lt;/Box&gt;
       &lt;/Card&gt;
     &lt;/Page&gt;
@@ -400,7 +358,7 @@ export default CohortView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-21T17:18:48.709Z
+                at 2024-11-21T19:25:49.672Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
