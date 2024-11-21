@@ -56,9 +56,9 @@ const QuestionsDeliverableStatusMessage = ({ deliverable, variables }: Props): J
       {!!rejectedAnswers?.length && (
         <Box marginBottom={theme.spacing(4)}>
           <Message
-            body={strings.ONE_OR_MORE_ANSWERS_WERE_NOT_ACCEPTED}
+            body={strings.ONE_OR_MORE_ANSWERS_NEEDED_UPDATES}
             priority='critical'
-            title={strings.ANSWERS_NOT_ACCEPTED}
+            title={strings.ANSWERS_UPDATE_NEEDED}
             type='page'
           />
         </Box>

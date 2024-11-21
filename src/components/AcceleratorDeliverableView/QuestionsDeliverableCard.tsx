@@ -118,7 +118,7 @@ const QuestionBox = ({
   const rejectCallback = useCallback(() => {
     setUpdatePendingId(variable.id);
     waitAndReload();
-    snackbar.toastSuccess(strings.ANSWER_REJECTED);
+    snackbar.toastSuccess(strings.UPDATE_REQUESTED);
   }, [waitAndReload, snackbar]);
 
   const updateCallback = useCallback(() => {
