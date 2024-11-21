@@ -92,21 +92,6 @@ const ApplicationListTab = ({ isPrescreen }: ApplicationListTabProps) => {
         'Submitted',
       ];
 
-  const defaultFilterValues: ApplicationStatus[] = isPrescreen
-    ? []
-    : [
-        'Accepted',
-        'Carbon Eligible',
-        'Issue Active',
-        'Issue Pending',
-        'Issue Resolved',
-        'Needs Follow-up',
-        'PL Review',
-        'Pre-check',
-        'Ready for Review',
-        'Submitted',
-      ];
-
   const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
     if (!activeLocale || !countries) {
       return [];
@@ -125,7 +110,6 @@ const ApplicationListTab = ({ isPrescreen }: ApplicationListTabProps) => {
         field: 'status',
         options: allFilterValues,
         label: strings.STATUS,
-        values: defaultFilterValues,
       },
     ];
 
