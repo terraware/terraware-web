@@ -54,6 +54,11 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
 
   // Sync query filters into view
   useEffect(() => {
+    if (!sessionFilters) {
+      // Wait for session filters to finish loading
+      return;
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { showEmptyBatches: filterShowEmptyBatches, ...restFilters } = filters;
     const { showEmptyBatches: sessionFilterShowEmptyBatches, ...restSessionFilters } = sessionFilters;

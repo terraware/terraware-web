@@ -12,6 +12,7 @@ import { default as OrderPreservedTable, OrderPreservedTablePropsFull } from 'sr
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { useLocalization } from 'src/providers';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
 import { parseSearchTerm } from 'src/utils/search';
 import useDebounce from 'src/utils/useDebounce';
 
@@ -59,6 +60,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>(defaultSearchOrder);
+  const { sessionFilters } = useSessionFilters(id);
 
   const onSortChangeHandler = (order: SearchSortOrder) => {
     const isClientSorted = clientSortedFields ? clientSortedFields.indexOf(order.field) > -1 : false;
@@ -148,8 +150,17 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
     });
   }, [extraTableFilters]);
 
-  // set current filters if any featuredFilters has initial value
+  // set current filters if any featuredFilters has initial value, but not if we have sticky fitlers
   useEffect(() => {
+    if (!sessionFilters) {
+      // Wait for session filters to finish loading
+      return;
+    }
+
+    if (stickyFilters && Object.keys(sessionFilters).length > 0) {
+      return;
+    }
+
     const filtersWithValues = featuredFilters?.filter((ff) => ff.values && ff.values.length > 0);
     if (filtersWithValues && filtersWithValues.length > 0) {
       const newCurrentFilters = filtersWithValues.reduce(
@@ -172,7 +183,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
       );
       setFilters(newCurrentFilters);
     }
-  }, [featuredFilters]);
+  }, [featuredFilters, sessionFilters, stickyFilters]);
 
   return (
     <Container maxWidth={false} sx={{ padding: 0 }} disableGutters>

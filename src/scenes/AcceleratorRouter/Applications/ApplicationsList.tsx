@@ -10,12 +10,7 @@ import { requestListApplications } from 'src/redux/features/application/applicat
 import { selectApplicationList } from 'src/redux/features/application/applicationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import {
-  Application,
-  ApplicationReviewStatuses,
-  ApplicationStatus,
-  ApplicationStatusOrder,
-} from 'src/types/Application';
+import { Application, ApplicationStatus, ApplicationStatusOrder } from 'src/types/Application';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { getCountryByCode } from 'src/utils/country';
 import { SearchAndSortFn, SearchOrderConfig, searchAndSort as genericSearchAndSort } from 'src/utils/searchAndSort';
@@ -83,6 +78,35 @@ const ApplicationList = () => {
       return [];
     }
 
+    const allFilterValues: ApplicationStatus[] = [
+      'Failed Pre-screen',
+      'Passed Pre-screen',
+      'Accepted',
+      'Carbon Eligible',
+      'Issue Active',
+      'Issue Pending',
+      'Issue Resolved',
+      'Needs Follow-up',
+      'Not Accepted',
+      'PL Review',
+      'Pre-check',
+      'Ready for Review',
+      'Submitted',
+    ];
+
+    const defaultFilterValues: ApplicationStatus[] = [
+      'Accepted',
+      'Carbon Eligible',
+      'Issue Active',
+      'Issue Pending',
+      'Issue Resolved',
+      'Needs Follow-up',
+      'PL Review',
+      'Pre-check',
+      'Ready for Review',
+      'Submitted',
+    ];
+
     const filters: FilterConfigWithValues[] = [
       {
         field: 'countryCode',
@@ -94,11 +118,9 @@ const ApplicationList = () => {
       },
       {
         field: 'status',
-        options: ApplicationReviewStatuses.sort(
-          (left, right) => ApplicationStatusOrder[left] - ApplicationStatusOrder[right]
-        ),
+        options: allFilterValues,
         label: strings.STATUS,
-        values: [...ApplicationReviewStatuses],
+        values: defaultFilterValues,
       },
     ];
 
