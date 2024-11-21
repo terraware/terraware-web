@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1732135160733" clover="3.2.0">
-  <project timestamp="1732135160733" name="All files">
-    <metrics statements="26589" coveredstatements="1061" conditionals="17832" coveredconditionals="282" methods="8206" coveredmethods="176" elements="52627" coveredelements="1519" complexity="0" loc="26589" ncloc="26589" packages="237" files="1122" classes="1122"/>
+<coverage generated="1732195867048" clover="3.2.0">
+  <project timestamp="1732195867048" name="All files">
+    <metrics statements="26592" coveredstatements="1061" conditionals="17875" coveredconditionals="282" methods="8206" coveredmethods="176" elements="52673" coveredelements="1519" complexity="0" loc="26592" ncloc="26592" packages="237" files="1122" classes="1122"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -3585,7 +3585,7 @@
       </file>
     </package>
     <package name="src.components.Map">
-      <metrics statements="729" coveredstatements="52" conditionals="519" coveredconditionals="24" methods="195" coveredmethods="11"/>
+      <metrics statements="730" coveredstatements="52" conditionals="532" coveredconditionals="24" methods="195" coveredmethods="11"/>
       <file name="EditableMap.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Map/EditableMap.tsx">
         <metrics statements="33" coveredstatements="0" conditionals="24" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="22" count="0" type="stmt"/>
@@ -4106,27 +4106,28 @@
         <line num="34" count="0" type="stmt"/>
       </file>
       <file name="MapRenderUtils.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Map/MapRenderUtils.tsx">
-        <metrics statements="20" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="5" coveredmethods="0"/>
-        <line num="11" count="0" type="stmt"/>
-        <line num="12" count="0" type="stmt"/>
+        <metrics statements="21" coveredstatements="0" conditionals="21" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <line num="13" count="0" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
-        <line num="15" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="18" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="59" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="103" count="0" type="stmt"/>
-        <line num="104" count="0" type="stmt"/>
-        <line num="105" count="0" type="stmt"/>
-        <line num="107" count="0" type="stmt"/>
-        <line num="114" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="139" count="0" type="stmt"/>
+        <line num="140" count="0" type="stmt"/>
+        <line num="141" count="0" type="stmt"/>
+        <line num="143" count="0" type="stmt"/>
+        <line num="150" count="0" type="stmt"/>
       </file>
       <file name="MapSearchBox.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Map/MapSearchBox.tsx">
         <metrics statements="45" coveredstatements="0" conditionals="25" coveredconditionals="0" methods="12" coveredmethods="0"/>
@@ -25351,9 +25352,9 @@
       </file>
     </package>
     <package name="src.scenes.PlantsDashboardRouter">
-      <metrics statements="73" coveredstatements="0" conditionals="113" coveredconditionals="0" methods="34" coveredmethods="0"/>
+      <metrics statements="73" coveredstatements="0" conditionals="117" coveredconditionals="0" methods="34" coveredmethods="0"/>
       <file name="PlantsDashboardView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/PlantsDashboardView.tsx">
-        <metrics statements="71" coveredstatements="0" conditionals="113" coveredconditionals="0" methods="33" coveredmethods="0"/>
+        <metrics statements="71" coveredstatements="0" conditionals="117" coveredconditionals="0" methods="33" coveredmethods="0"/>
         <line num="53" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
@@ -25407,24 +25408,24 @@
         <line num="208" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="278" count="0" type="stmt"/>
         <line num="279" count="0" type="stmt"/>
-        <line num="287" count="0" type="stmt"/>
-        <line num="288" count="0" type="stmt"/>
-        <line num="306" count="0" type="cond" truecount="0" falsecount="3"/>
-        <line num="309" count="0" type="cond" truecount="0" falsecount="3"/>
-        <line num="311" count="0" type="stmt"/>
-        <line num="313" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="315" count="0" type="stmt"/>
-        <line num="317" count="0" type="stmt"/>
-        <line num="319" count="0" type="stmt"/>
-        <line num="322" count="0" type="stmt"/>
-        <line num="323" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="341" count="0" type="stmt"/>
-        <line num="342" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="343" count="0" type="stmt"/>
-        <line num="345" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="346" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="362" count="0" type="stmt"/>
-        <line num="395" count="0" type="stmt"/>
+        <line num="300" count="0" type="stmt"/>
+        <line num="301" count="0" type="stmt"/>
+        <line num="319" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="322" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="324" count="0" type="stmt"/>
+        <line num="326" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="328" count="0" type="stmt"/>
+        <line num="330" count="0" type="stmt"/>
+        <line num="332" count="0" type="stmt"/>
+        <line num="335" count="0" type="stmt"/>
+        <line num="336" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="354" count="0" type="stmt"/>
+        <line num="355" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="356" count="0" type="stmt"/>
+        <line num="358" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="359" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="375" count="0" type="stmt"/>
+        <line num="408" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/index.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -25433,7 +25434,7 @@
       </file>
     </package>
     <package name="src.scenes.PlantsDashboardRouter.components">
-      <metrics statements="492" coveredstatements="0" conditionals="423" coveredconditionals="0" methods="155" coveredmethods="0"/>
+      <metrics statements="494" coveredstatements="0" conditionals="449" coveredconditionals="0" methods="155" coveredmethods="0"/>
       <file name="HectaresPlantedCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/HectaresPlantedCard.tsx">
         <metrics statements="13" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="19" count="0" type="stmt"/>
@@ -25904,7 +25905,7 @@
         <line num="129" count="0" type="stmt"/>
       </file>
       <file name="ZoneLevelDataMap.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/ZoneLevelDataMap.tsx">
-        <metrics statements="74" coveredstatements="0" conditionals="57" coveredconditionals="0" methods="22" coveredmethods="0"/>
+        <metrics statements="76" coveredstatements="0" conditionals="83" coveredconditionals="0" methods="22" coveredmethods="0"/>
         <line num="38" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
@@ -25974,11 +25975,13 @@
         <line num="216" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="217" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="218" count="0" type="stmt"/>
-        <line num="236" count="0" type="stmt"/>
-        <line num="248" count="0" type="stmt"/>
-        <line num="253" count="0" type="stmt"/>
-        <line num="278" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="282" count="0" type="stmt"/>
+        <line num="239" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="240" count="0" type="stmt"/>
+        <line num="261" count="0" type="stmt"/>
+        <line num="274" count="0" type="stmt"/>
+        <line num="290" count="0" type="stmt"/>
+        <line num="321" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="325" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.RedirectsRouter">
