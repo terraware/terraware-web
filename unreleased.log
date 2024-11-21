@@ -1,3 +1,5 @@
+76a50878a1f SW-6219 Fix style issues with TextWithLink (#3356)
+b70c877254f SW-6268 Observation scheduling should not allow for same start and end day (#3355)
 ec1609e65d5 Updated BE types and fix bugs with not being able to assign modules (#3352)
 faef1f87256 SW-6184 Added default values for application list filters (#3354)
 06556949c26 SW-6264 Toast message success after matching species (#3346)

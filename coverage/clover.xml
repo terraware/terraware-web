@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1732217150433" clover="3.2.0">
-  <project timestamp="1732217150433" name="All files">
+<coverage generated="1732221135386" clover="3.2.0">
+  <project timestamp="1732221135386" name="All files">
     <metrics statements="26631" coveredstatements="1061" conditionals="17878" coveredconditionals="282" methods="8219" coveredmethods="176" elements="52728" coveredelements="1519" complexity="0" loc="26631" ncloc="26631" packages="238" files="1129" classes="1129"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
@@ -6308,13 +6308,13 @@
         <line num="110" count="0" type="stmt"/>
         <line num="116" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="122" count="0" type="stmt"/>
-        <line num="179" count="0" type="stmt"/>
-        <line num="182" count="0" type="stmt"/>
-        <line num="184" count="0" type="stmt"/>
-        <line num="185" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="186" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="187" count="0" type="stmt"/>
-        <line num="197" count="0" type="stmt"/>
+        <line num="185" count="0" type="stmt"/>
+        <line num="188" count="0" type="stmt"/>
+        <line num="190" count="0" type="stmt"/>
+        <line num="191" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="192" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="193" count="0" type="stmt"/>
+        <line num="203" count="0" type="stmt"/>
       </file>
       <file name="EditSpeciesModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/SpeciesDeliverableTable/EditSpeciesModal.tsx">
         <metrics statements="33" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="8" coveredmethods="0"/>
