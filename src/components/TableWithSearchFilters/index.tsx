@@ -150,7 +150,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
     });
   }, [extraTableFilters]);
 
-  // set current filters if any featuredFilters has initial value, but not if we have sticky fitlers
+  // set current filters if any featuredFilters has initial value, but not if we have sticky filters
   useEffect(() => {
     if (!sessionFilters) {
       // Wait for session filters to finish loading
