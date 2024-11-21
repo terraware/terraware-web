@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { TableColumnType } from '@terraware/web-components';
 
-import Page from 'src/components/Page';
 import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
 import { FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
 import { useLocalization } from 'src/providers';
@@ -18,7 +17,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import ApplicationCellRenderer from './ApplicationCellRenderer';
 
-type ApplicationRow = {
+export type ApplicationRow = {
   countryCode?: string;
   countryName?: string;
   id: number;
@@ -64,7 +63,11 @@ const defaultSearchOrder: SearchSortOrder = {
   direction: 'Ascending',
 };
 
-const ApplicationList = () => {
+type ApplicationListTabProps = {
+  isPrescreen: boolean;
+};
+
+const ApplicationListTab = ({ isPrescreen }: ApplicationListTabProps) => {
   const dispatch = useAppDispatch();
   const { activeLocale, countries } = useLocalization();
   const snackbar = useSnackbar();
@@ -73,39 +76,41 @@ const ApplicationList = () => {
   const result = useAppSelector(selectApplicationList(requestId));
   const [applications, setApplications] = useState<ApplicationRow[]>([]);
 
+  const allFilterValues: ApplicationStatus[] = isPrescreen
+    ? ['Failed Pre-screen', 'Passed Pre-screen']
+    : [
+        'Accepted',
+        'Carbon Eligible',
+        'Issue Active',
+        'Issue Pending',
+        'Issue Resolved',
+        'Needs Follow-up',
+        'Not Accepted',
+        'PL Review',
+        'Pre-check',
+        'Ready for Review',
+        'Submitted',
+      ];
+
+  const defaultFilterValues: ApplicationStatus[] = isPrescreen
+    ? []
+    : [
+        'Accepted',
+        'Carbon Eligible',
+        'Issue Active',
+        'Issue Pending',
+        'Issue Resolved',
+        'Needs Follow-up',
+        'PL Review',
+        'Pre-check',
+        'Ready for Review',
+        'Submitted',
+      ];
+
   const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
     if (!activeLocale || !countries) {
       return [];
     }
-
-    const allFilterValues: ApplicationStatus[] = [
-      'Failed Pre-screen',
-      'Passed Pre-screen',
-      'Accepted',
-      'Carbon Eligible',
-      'Issue Active',
-      'Issue Pending',
-      'Issue Resolved',
-      'Needs Follow-up',
-      'Not Accepted',
-      'PL Review',
-      'Pre-check',
-      'Ready for Review',
-      'Submitted',
-    ];
-
-    const defaultFilterValues: ApplicationStatus[] = [
-      'Accepted',
-      'Carbon Eligible',
-      'Issue Active',
-      'Issue Pending',
-      'Issue Resolved',
-      'Needs Follow-up',
-      'PL Review',
-      'Pre-check',
-      'Ready for Review',
-      'Submitted',
-    ];
 
     const filters: FilterConfigWithValues[] = [
       {
@@ -135,7 +140,7 @@ const ApplicationList = () => {
     if (result?.data) {
       setApplications(
         result.data
-          .filter((application) => application.status !== 'Not Submitted')
+          .filter((application) => allFilterValues.includes(application.status))
           .map((application) => ({
             countryCode: application?.countryCode,
             countryName:
@@ -149,7 +154,7 @@ const ApplicationList = () => {
           }))
       );
     }
-  }, [result, setApplications, snackbar]);
+  }, [result, setApplications, allFilterValues, snackbar]);
 
   const searchAndSort: SearchAndSortFn<Application> = useCallback(
     (results: Application[], search?: SearchNodePayload, sortOrderConfig?: SearchOrderConfig) => {
@@ -193,7 +198,7 @@ const ApplicationList = () => {
       dispatchSearchRequest={dispatchSearchRequest}
       featuredFilters={featuredFilters}
       fuzzySearchColumns={fuzzySearchColumns}
-      id='accelerator-applications-table'
+      id={isPrescreen ? 'accelerator-prescreen-table' : 'accelerator-applications-table'}
       Renderer={ApplicationCellRenderer}
       rows={applications}
       stickyFilters
@@ -201,12 +206,4 @@ const ApplicationList = () => {
   );
 };
 
-const ApplicationsListView = () => {
-  return (
-    <Page title={strings.APPLICATIONS} contentStyle={{ display: 'block' }}>
-      <ApplicationList />
-    </Page>
-  );
-};
-
-export default ApplicationsListView;
+export default ApplicationListTab;
