@@ -4,7 +4,7 @@ import { Species } from 'src/types/Species';
 
 import { StatusT, buildReducers } from '../asyncUtils';
 import { requestGetOneSpecies, requestUpdateSpecies } from './speciesAsyncThunks';
-import { requestMergeOtherSpecies } from './speciesThunks';
+import { MergeOtherSpeciesRequestData, requestMergeOtherSpecies } from './speciesThunks';
 
 // Define a type for the slice state
 type Data = {
@@ -62,7 +62,7 @@ export const speciesUpdateSlice = createSlice({
 /**
  * Merge other species
  */
-const initialStateMergeOtherSpecies: { [key: string]: StatusT<boolean> } = {};
+const initialStateMergeOtherSpecies: { [key: string]: StatusT<MergeOtherSpeciesRequestData[]> } = {};
 
 export const mergeOtherSpeciesSlice = createSlice({
   name: 'mergeOtherSpeciesSlice',
