@@ -435,7 +435,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   }, [activeLocale, setSearchCriteria]);
 
   useEffect(() => {
-    if (Object.keys(sessionFilters).length === 0) {
+    if (!sessionFilters || Object.keys(sessionFilters).length === 0) {
       return;
     }
 
