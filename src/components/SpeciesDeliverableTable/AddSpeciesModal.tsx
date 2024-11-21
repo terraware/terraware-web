@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { Grid, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, Message, SelectT } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -149,11 +149,17 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             <Message
               title={strings.SPECIES_LIST_NO_ORGANIZATION_SPECIES_TITLE}
               body={
-                <TextWithLink
-                  href={docLinks.knowledge_base_add_species}
-                  isExternal
-                  text={strings.SPECIES_LIST_NO_ORGANIZATION_SPECIES_BODY}
-                />
+                <Typography display={'inline'} whiteSpace={'wrap'}>
+                  <TextWithLink
+                    href={docLinks.knowledge_base_add_species}
+                    isExternal
+                    style={{
+                      position: 'relative',
+                      bottom: '1px',
+                    }}
+                    text={strings.SPECIES_LIST_NO_ORGANIZATION_SPECIES_BODY}
+                  />
+                </Typography>
               }
               priority='warning'
               type='page'
