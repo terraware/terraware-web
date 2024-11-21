@@ -7,12 +7,11 @@ import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
 import DeliverablesRenderer from 'src/scenes/AcceleratorRouter/Modules/DeliverablesRenderer';
 import strings from 'src/strings';
-import { ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
-import { Module } from 'src/types/Module';
+import { Module, ModuleDeliverable } from 'src/types/Module';
 
 interface contentAndMaterialsProps {
   module?: Module;
-  deliverables?: ListDeliverablesElementWithOverdue[];
+  deliverables?: ModuleDeliverable[];
 }
 
 const columns = (): TableColumnType[] => [
@@ -58,7 +57,7 @@ const columns = (): TableColumnType[] => [
   },
 ];
 
-export default function contentAndMaterials({ module, deliverables }: contentAndMaterialsProps): JSX.Element {
+export default function ContentAndMaterials({ module, deliverables }: contentAndMaterialsProps): JSX.Element {
   const theme = useTheme();
 
   return (

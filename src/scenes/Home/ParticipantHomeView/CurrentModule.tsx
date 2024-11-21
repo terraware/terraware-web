@@ -4,9 +4,11 @@ import { useMixpanel } from 'react-mixpanel-browser';
 import { DateTime } from 'luxon';
 
 import ModuleDetailsCard from 'src/components/ModuleDetailsCard';
-import useGetModule from 'src/hooks/useGetModule';
-import useListModules from 'src/hooks/useListModules';
+import useGetModule from 'src/hooks/useGetCohortModule';
+import useListCohortModules from 'src/hooks/useListCohortModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import useProjectModuleDeliverables from 'src/hooks/useProjectModuleDeliverables';
+import useProjectModuleEvents from 'src/hooks/useProjectModuleEvents';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
@@ -22,12 +24,18 @@ const ModuleDetailsCardWrapper = ({ moduleId, project }: ModuleDetailsCardWrappe
   const { activeLocale } = useLocalization();
   const { goToDeliverable, goToModuleEventSession } = useNavigateTo();
 
-  const { getModule, module, deliverables, events } = useGetModule();
+  const { getCohortModule, cohortModule } = useGetModule();
+  const { deliverables, listProjectModuleDeliverables } = useProjectModuleDeliverables();
+  const { events, listProjectModuleEvents } = useProjectModuleEvents();
   const mixpanel = useMixpanel();
 
   useEffect(() => {
-    void getModule({ moduleId, projectId: project.id });
-  }, [moduleId, project, getModule]);
+    if (project.cohortId) {
+      void getCohortModule({ moduleId, cohortId: project.cohortId });
+      void listProjectModuleDeliverables({ moduleId, projectId: project.id });
+      void listProjectModuleEvents({ moduleId, projectId: project.id });
+    }
+  }, [moduleId, project, getCohortModule, listProjectModuleDeliverables, listProjectModuleEvents]);
 
   const deliverableDetails = useMemo(
     () =>
@@ -56,13 +64,13 @@ const ModuleDetailsCardWrapper = ({ moduleId, project }: ModuleDetailsCardWrappe
 
   const moduleDetails = useMemo(
     () =>
-      module
+      cohortModule
         ? {
-            ...module,
-            title: activeLocale ? strings.formatString(strings.TITLE_OVERVIEW, module.title).toString() : '',
+            ...cohortModule,
+            title: activeLocale ? strings.formatString(strings.TITLE_OVERVIEW, cohortModule.title).toString() : '',
           }
         : undefined,
-    [activeLocale, module]
+    [activeLocale, cohortModule]
   );
 
   if (!moduleDetails) {
@@ -82,22 +90,22 @@ const ModuleDetailsCardWrapper = ({ moduleId, project }: ModuleDetailsCardWrappe
 const CurrentModule = () => {
   const { currentParticipantProject } = useParticipantData();
 
-  const { modules, listModules } = useListModules();
+  const { cohortModules, listCohortModules } = useListCohortModules();
 
   useEffect(() => {
-    if (currentParticipantProject) {
-      void listModules({ projectId: currentParticipantProject.id });
+    if (currentParticipantProject && currentParticipantProject.cohortId) {
+      void listCohortModules(currentParticipantProject.cohortId);
     }
-  }, [currentParticipantProject, listModules]);
+  }, [currentParticipantProject, listCohortModules]);
 
   // Only first active modules shown for now. TODO: upgrade to support multiple active modules for overlapping modules
   const activeModules = useMemo(() => {
-    if (!modules) {
+    if (!cohortModules) {
       return;
     }
 
-    return modules.filter((module) => module.isActive);
-  }, [modules]);
+    return cohortModules.filter((module) => module.isActive);
+  }, [cohortModules]);
 
   if (!currentParticipantProject || !activeModules) {
     return null;

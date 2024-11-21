@@ -1,15 +1,16 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Container, Grid, useTheme } from '@mui/material';
 import { Dropdown, Textfield } from '@terraware/web-components';
 
 import PageForm from 'src/components/common/PageForm';
+import useListCohortModules from 'src/hooks/useListCohortModules';
 import useListModules from 'src/hooks/useListModules';
 import { useLocalization } from 'src/providers/hooks';
 import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import CohortModulesTable from 'src/scenes/AcceleratorRouter/Modules/CohortModulesTable';
+import CohortModulesTable from 'src/scenes/AcceleratorRouter/Cohorts/CohortModulesTable';
 import strings from 'src/strings';
 import { CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
 import { CohortModule } from 'src/types/Module';
@@ -19,7 +20,7 @@ type CohortFormProps<T extends CreateCohortRequestPayload | UpdateCohortRequestP
   busy?: boolean;
   cohortId?: number;
   onCancel: () => void;
-  onSave: (cohort: T, modulesToAdd?: CohortModule[], modulesToDelete?: CohortModule[]) => void;
+  onSave: (cohort: T, modulesToUpdate?: CohortModule[], modulesToDelete?: CohortModule[]) => void;
   record: T;
 };
 
@@ -37,17 +38,20 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
   const [validateFields, setValidateFields] = useState<boolean>(false);
 
   const cohort = useAppSelector(selectCohort(cohortId));
-
+  const { cohortModules, listCohortModules } = useListCohortModules();
   const { modules, listModules } = useListModules();
+  const [pendingCohortModules, setPendingCohortModules] = useState<CohortModule[]>(cohortModules);
 
-  const [modulesToAdd, setModulesToAdd] = useState<CohortModule[]>();
-  const [modulesToDelete, setModulesToDelete] = useState<CohortModule[]>();
+  useEffect(() => {
+    setPendingCohortModules(cohortModules);
+  }, [cohortModules]);
 
   useEffect(() => {
     if (cohortId) {
-      void listModules({ cohortId });
+      void listCohortModules(cohortId);
+      void listModules();
     }
-  }, [cohortId, dispatch]);
+  }, [cohortId, dispatch, listCohortModules, listModules]);
 
   const currentPhaseDropdownOptions = useMemo(() => {
     if (!activeLocale) {
@@ -81,20 +85,41 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
     return true;
   };
 
-  const onSaveHandler = () => {
+  const onSaveHandler = useCallback(() => {
     if (!validateForm()) {
       setValidateFields(true);
       return;
     }
 
+    // determine modules to add, and modules to delete
+    const toDelete = cohortModules.filter(
+      (oldModule) => pendingCohortModules.find((newModule) => newModule.id === oldModule.id) === undefined
+    );
+
+    const toAdd = pendingCohortModules.filter(
+      (newModule) => cohortModules.find((oldModule) => oldModule.id === newModule.id) === undefined
+    );
+
+    const toUpdate = pendingCohortModules.filter((newModule) => {
+      const oldModule = cohortModules.find((oldModule) => oldModule.id === newModule.id);
+      return (
+        oldModule !== undefined &&
+        !(
+          oldModule.title === newModule.title &&
+          oldModule.startDate === newModule.startDate &&
+          oldModule.endDate === newModule.endDate
+        )
+      );
+    });
+
     onSave(
       {
         ...localRecord,
       },
-      modulesToAdd,
-      modulesToDelete
+      [...toAdd, ...toUpdate],
+      toDelete
     );
-  };
+  }, [cohortModules, pendingCohortModules, onSave]);
 
   useEffect(() => {
     // update local record when cohort changes
@@ -163,12 +188,10 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
           </Grid>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
             <CohortModulesTable
+              cohortModules={pendingCohortModules}
+              setCohortModules={setPendingCohortModules}
               modules={modules}
               editing={true}
-              modulesToAdd={modulesToAdd}
-              setModulesToAdd={setModulesToAdd}
-              modulesToDelete={modulesToDelete}
-              setModulesToDelete={setModulesToDelete}
             />
           </Grid>
         </Grid>

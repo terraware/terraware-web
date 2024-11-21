@@ -8,10 +8,13 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import ModuleDetailsCard from 'src/components/ModuleDetailsCard';
 import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
 import { APP_PATHS } from 'src/constants';
-import useGetModule from 'src/hooks/useGetModule';
+import useGetCohortModule from 'src/hooks/useGetCohortModule';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import useProjectModuleDeliverables from 'src/hooks/useProjectModuleDeliverables';
+import useProjectModuleEvents from 'src/hooks/useProjectModuleEvents';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 
 import ModuleViewTitle from './ModuleViewTitle';
@@ -19,17 +22,30 @@ import ModuleViewTitle from './ModuleViewTitle';
 const ModuleView = () => {
   const { activeLocale } = useLocalization();
   const { goToDeliverable, goToModuleEventSession } = useNavigateTo();
+  const { currentParticipantProject, setCurrentParticipantProject } = useParticipantData();
 
   const pathParams = useParams<{ sessionId: string; moduleId: string; projectId: string }>();
   const projectId = Number(pathParams.projectId);
   const moduleId = Number(pathParams.moduleId);
   const mixpanel = useMixpanel();
 
-  const { getModule, module, deliverables, events } = useGetModule();
+  useEffect(() => {
+    if (projectId) {
+      setCurrentParticipantProject(projectId);
+    }
+  }, [projectId, setCurrentParticipantProject]);
+
+  const { cohortModule, getCohortModule } = useGetCohortModule();
+  const { deliverables, listProjectModuleDeliverables } = useProjectModuleDeliverables();
+  const { events, listProjectModuleEvents } = useProjectModuleEvents();
 
   useEffect(() => {
-    void getModule({ moduleId, projectId });
-  }, [projectId, moduleId, getModule]);
+    if (currentParticipantProject && currentParticipantProject.cohortId) {
+      void getCohortModule({ moduleId, cohortId: currentParticipantProject.cohortId });
+      void listProjectModuleDeliverables({ moduleId, projectId: currentParticipantProject.id });
+      void listProjectModuleEvents({ moduleId, projectId: currentParticipantProject.id });
+    }
+  }, [currentParticipantProject, moduleId, getCohortModule, listProjectModuleDeliverables, listProjectModuleEvents]);
 
   const deliverableDetails = useMemo(
     () =>
@@ -53,18 +69,18 @@ const ModuleView = () => {
           goToModuleEventSession(projectId, moduleId, event.id);
         },
       })),
-    [events, goToModuleEventSession, projectId, module, mixpanel]
+    [events, goToModuleEventSession, projectId, mixpanel]
   );
 
   const moduleDetails = useMemo(
     () =>
-      module
+      cohortModule
         ? {
-            ...module,
-            title: activeLocale ? strings.formatString(strings.TITLE_OVERVIEW, module.title).toString() : '',
+            ...cohortModule,
+            title: activeLocale ? strings.formatString(strings.TITLE_OVERVIEW, cohortModule.title).toString() : '',
           }
         : undefined,
-    [activeLocale, module]
+    [activeLocale, cohortModule]
   );
 
   const crumbs: Crumb[] = useMemo(
@@ -81,7 +97,7 @@ const ModuleView = () => {
     <ParticipantPage
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      title={<ModuleViewTitle module={module} projectId={projectId} />}
+      title={<ModuleViewTitle module={cohortModule} projectId={projectId} />}
     >
       {moduleDetails && (
         <ModuleDetailsCard
