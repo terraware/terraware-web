@@ -19,20 +19,20 @@ const ApplicationListView = () => {
     }
     return [
       {
-        id: 'prescreen',
-        label: strings.PRESCREEN,
-        children: <ApplicationListTab isPrescreen />,
-      },
-      {
         id: 'applications',
         label: strings.APPLICATIONS,
         children: <ApplicationListTab isPrescreen={false} />,
+      },
+      {
+        id: 'prescreen',
+        label: strings.PRESCREEN,
+        children: <ApplicationListTab isPrescreen />,
       },
     ];
   }, [activeLocale]);
 
   const { activeTab, onTabChange } = useStickyTabs({
-    defaultTab: 'prescreen',
+    defaultTab: 'applications',
     tabs,
     viewIdentifier: 'accelerator-application-list',
     keepQuery: false,
