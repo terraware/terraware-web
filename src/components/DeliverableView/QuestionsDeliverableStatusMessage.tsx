@@ -4,6 +4,7 @@ import { Box, useTheme } from '@mui/material';
 import { Message } from '@terraware/web-components';
 
 import { ViewProps } from 'src/components/DeliverableView/types';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { VariableWithValues } from 'src/types/documentProducer/Variable';
@@ -16,6 +17,7 @@ type Props = ViewProps & {
 const QuestionsDeliverableStatusMessage = ({ deliverable, variables }: Props): JSX.Element | null => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const rejectedAnswers = variables?.reduce((acc, variableWithValues) => {
     const rejectedValues = variableWithValues.variableValues.filter(
@@ -45,7 +47,7 @@ const QuestionsDeliverableStatusMessage = ({ deliverable, variables }: Props): J
           <Message
             body={deliverable?.feedback || ''}
             priority='critical'
-            title={strings.DELIVERABLE_NOT_ACCEPTED}
+            title={isAcceleratorRoute ? strings.DELIVERABLE_UPDATE_REQUESTED : strings.DELIVERABLE_UPDATE_NEEDED}
             type='page'
           />
         </Box>

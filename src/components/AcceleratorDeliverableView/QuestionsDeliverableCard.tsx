@@ -273,7 +273,7 @@ const QuestionBox = ({
                 {!isAcceleratorApplicationRoute && (
                   <>
                     <Button
-                      label={strings.REJECT_ACTION}
+                      label={strings.REQUEST_UPDATE_ACTION}
                       onClick={() => setShowRejectDialog(true)}
                       priority='secondary'
                       sx={{ '&.button': { margin: '4px' } }}
