@@ -10,8 +10,8 @@ export const selectDeleteCohortModule = (requestId: string) => (state: RootState
 export const selectUpdateCohortModule = (requestId: string) => (state: RootState) =>
   state.cohortModuleUpdate[requestId];
 
-export const selectDeleteManyCohortModule = (requestId: string) => (state: RootState) =>
+export const selectDeleteManyCohortModules = (requestId: string) => (state: RootState) =>
   state.cohortModuleDeleteMany[requestId];
 
-export const selectUpdateManyCohortModule = (requestId: string) => (state: RootState) =>
+export const selectUpdateManyCohortModules = (requestId: string) => (state: RootState) =>
   state.cohortModuleUpdateMany[requestId];

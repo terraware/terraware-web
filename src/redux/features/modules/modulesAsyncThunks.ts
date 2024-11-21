@@ -22,8 +22,6 @@ export const requestGetModule = createAsyncThunk(
 export const requestListModules = createAsyncThunk('modules/list', async (_, { rejectWithValue }) => {
   const response = await ModuleService.list();
 
-  console.log(response);
-
   if (response !== null && response.requestSucceeded && response?.data?.modules !== undefined) {
     return response.data.modules;
   }

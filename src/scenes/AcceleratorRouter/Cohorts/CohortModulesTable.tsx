@@ -75,7 +75,7 @@ export default function CohortModulesTable(props: CohortModulesTableProps): JSX.
   const deleteModules = () => {
     setCohortModules?.((prev) =>
       prev.filter(
-        (existingModule) => selectedRows.find((deletedModules) => deletedModules.id === existingModule.id) !== undefined
+        (existingModule) => selectedRows.find((deletedModule) => deletedModule.id === existingModule.id) === undefined
       )
     );
   };

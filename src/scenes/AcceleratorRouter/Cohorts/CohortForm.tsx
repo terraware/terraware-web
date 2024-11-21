@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Container, Grid, useTheme } from '@mui/material';
 import { Dropdown, Textfield } from '@terraware/web-components';
@@ -20,7 +20,7 @@ type CohortFormProps<T extends CreateCohortRequestPayload | UpdateCohortRequestP
   busy?: boolean;
   cohortId?: number;
   onCancel: () => void;
-  onSave: (cohort: T, modules?: CohortModule[]) => void;
+  onSave: (cohort: T, modulesToUpdate?: CohortModule[], modulesToDelete?: CohortModule[]) => void;
   record: T;
 };
 
@@ -85,19 +85,41 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
     return true;
   };
 
-  const onSaveHandler = () => {
+  const onSaveHandler = useCallback(() => {
     if (!validateForm()) {
       setValidateFields(true);
       return;
     }
 
+    // determine modules to add, and modules to delete
+    const toDelete = cohortModules.filter(
+      (oldModule) => pendingCohortModules.find((newModule) => newModule.id === oldModule.id) === undefined
+    );
+
+    const toAdd = pendingCohortModules.filter(
+      (newModule) => cohortModules.find((oldModule) => oldModule.id === newModule.id) === undefined
+    );
+
+    const toUpdate = pendingCohortModules.filter((newModule) => {
+      const oldModule = cohortModules.find((oldModule) => oldModule.id === newModule.id);
+      return (
+        oldModule !== undefined &&
+        !(
+          oldModule.title === newModule.title &&
+          oldModule.startDate === newModule.startDate &&
+          oldModule.endDate === newModule.endDate
+        )
+      );
+    });
+
     onSave(
       {
         ...localRecord,
       },
-      pendingCohortModules
+      [...toAdd, ...toUpdate],
+      toDelete
     );
-  };
+  }, [cohortModules, pendingCohortModules, onSave]);
 
   useEffect(() => {
     // update local record when cohort changes
