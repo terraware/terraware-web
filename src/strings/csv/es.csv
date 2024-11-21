@@ -1642,6 +1642,7 @@ SPECIES_LIST_DELIVERABLE_ADD_SPECIES_ACTIVE_DELIVERABLE_INFO,Añadir esta especi
 SPECIES_LIST_DELIVERABLE_ADD_SPECIES_RECENT_DELIVERABLE_INFO,Añadir esta especie a este proyecto restablecerá el estado de su último producto de especie. Tendrá que volver a presentar el producto para su aprobación.,
 SPECIES_LIST_NO_ORGANIZATION_SPECIES_BODY,"Diríjase a ""Especies"" y agregue especies a su organización con el fin de seleccionarlas para este proyecto. Encontrará más instrucciones detalladas en nuestra [Base de conocimientos].",
 SPECIES_LIST_NO_ORGANIZATION_SPECIES_TITLE,Sin especies para la organización,
+SPECIES_MATCHED,Especies coincidentes,
 SPECIES_MORTALITY,Mortalidad por especies,
 SPECIES_NAME,Nombre de la especie,
 SPECIES_NOT_ACCEPTED,Especies no aceptadas,
