@@ -25,11 +25,30 @@ const SectionDeliverableEditView = () => {
 
   const deliverable = applicationDeliverables.find((deliverable) => deliverable.id === Number(deliverableId));
 
+  const hideId = useMemo(() => {
+    if (!selectedApplication || !deliverable || deliverable.type !== 'Questions') {
+      return undefined;
+    }
+
+    return (
+      selectedApplication.status === 'Not Submitted' ||
+      selectedApplication.status === 'Failed Pre-screen' ||
+      selectedApplication.status === 'Passed Pre-screen'
+    );
+  }, [deliverable]);
+
   if (!selectedApplication || !deliverable) {
     return null;
   }
 
-  return <QuestionsDeliverableEditForm deliverable={{ ...deliverable, documents: [] }} exit={exit} hideStatusBadge />;
+  return (
+    <QuestionsDeliverableEditForm
+      deliverable={{ ...deliverable, documents: [] }}
+      exit={exit}
+      hideId={hideId}
+      hideStatusBadge
+    />
+  );
 };
 
 const SectionDeliverableEditWrapper = () => {

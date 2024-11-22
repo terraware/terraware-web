@@ -38,6 +38,7 @@ import useCompleteDeliverable from './useCompleteDeliverable';
 
 type QuestionBoxProps = {
   addRemovedValue: (value: VariableValueValue) => void;
+  hideId?: boolean;
   hideStatusBadge?: boolean;
   index: number;
   pendingVariableValues: Map<number, VariableValueValue[]>;
@@ -53,6 +54,7 @@ type QuestionBoxProps = {
 
 const QuestionBox = ({
   addRemovedValue,
+  hideId,
   hideStatusBadge,
   index,
   projectId,
@@ -85,9 +87,24 @@ const QuestionBox = ({
               width: '100%',
             }}
           >
-            <Typography
-              sx={{ fontWeight: '600' }}
-            >{`${variable.deliverableQuestion ?? variable.name} ${variable.isRequired ? '*' : ''}`}</Typography>
+            <Box
+              sx={{
+                alignItems: 'start',
+                display: 'flex',
+                flexGrow: 1,
+                justifyContent: 'flex-start',
+                flexDirection: 'column',
+              }}
+            >
+              {hideId !== true && (
+                <Typography fontSize={'14px'} fontWeight={'400'} lineHeight={'20px'}>
+                  {`ID#: ${variable.stableId}`}
+                </Typography>
+              )}
+              <Typography
+                sx={{ fontWeight: '600' }}
+              >{`${variable.deliverableQuestion ?? variable.name} ${variable.isRequired ? '*' : ''}`}</Typography>
+            </Box>
 
             <Box
               sx={{

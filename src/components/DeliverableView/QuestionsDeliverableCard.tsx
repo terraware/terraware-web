@@ -35,10 +35,12 @@ const QuestionBox = ({
   projectId,
   variable,
   hideStatusBadge,
+  hideId,
 }: {
   projectId: number;
   variable: VariableWithValues;
   hideStatusBadge?: boolean;
+  hideId?: boolean;
 }): JSX.Element => {
   const theme = useTheme();
   const containerRef = useRef(null);
@@ -57,6 +59,11 @@ const QuestionBox = ({
       <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
         {hideStatusBadge !== true && <VariableStatusBadge status={firstVariableValueStatus} />}
       </Box>
+      {hideId !== true && (
+        <Typography fontSize={'14px'} fontWeight={'400'} lineHeight={'20px'}>
+          {`ID#: ${variable.stableId}`}
+        </Typography>
+      )}
       <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>
         {/* Defaults to deliverable question, then variable name */}
         {`${variable.deliverableQuestion ?? variable.name} ${variable.isRequired ? '*' : ''}`}
@@ -88,7 +95,7 @@ const QuestionBox = ({
 const QuestionsDeliverableCard = (props: EditProps): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const { deliverable, hideStatusBadge } = props;
+  const { deliverable, hideId, hideStatusBadge } = props;
   const [dependentVariableStableIds, setDependentVariableStableIds] = useState<string[]>([]);
 
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
@@ -160,6 +167,7 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element | null => {
                 key={index}
                 projectId={deliverable.projectId}
                 variable={variableWithValues}
+                hideId={hideId}
                 hideStatusBadge={hideStatusBadge}
               />
             ) : null

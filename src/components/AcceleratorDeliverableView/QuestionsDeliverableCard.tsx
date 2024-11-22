@@ -242,9 +242,22 @@ const QuestionBox = ({
             width: '100%',
           }}
         >
-          <Typography
-            sx={{ fontWeight: '600' }}
-          >{`${variable.deliverableQuestion ?? variable.name} ${variable.isRequired ? '*' : ''}`}</Typography>
+          <Box
+            sx={{
+              alignItems: 'start',
+              display: 'flex',
+              flexGrow: 1,
+              justifyContent: 'flex-start',
+              flexDirection: 'column',
+            }}
+          >
+            <Typography fontSize={'14px'} fontWeight={'400'} lineHeight={'20px'}>
+              {`ID#: ${variable.stableId}`}
+            </Typography>
+            <Typography
+              sx={{ fontWeight: '600' }}
+            >{`${variable.deliverableQuestion ?? variable.name} ${variable.isRequired ? '*' : ''}`}</Typography>
+          </Box>
 
           <Box
             sx={{
