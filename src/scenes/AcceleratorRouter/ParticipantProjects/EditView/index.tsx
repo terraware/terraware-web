@@ -17,7 +17,7 @@ import VotingDecisionCard from 'src/components/ProjectField/VotingDecisionCard';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
-import useListModules from 'src/hooks/useListModules';
+import useListCohortModules from 'src/hooks/useListCohortModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
@@ -53,13 +53,13 @@ const EditView = () => {
   const { goToParticipantProject } = useNavigateTo();
   const { isAllowed } = useUser();
   const { getApplicationByProjectId } = useApplicationData();
-  const { modules, listModules } = useListModules();
+  const { cohortModules, listCohortModules } = useListCohortModules();
 
   useEffect(() => {
-    if (project) {
-      void listModules({ projectId: project.id });
+    if (project && project.cohortId) {
+      void listCohortModules(project.cohortId);
     }
-  }, [project, listModules]);
+  }, [project, listCohortModules]);
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
   const isAllowedEditScoreAndVoting = isAllowed('UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING');
@@ -248,7 +248,7 @@ const EditView = () => {
       crumbs={crumbs}
       hierarchicalCrumbs={false}
       cohortPhase={project?.cohortPhase}
-      modules={modules ?? []}
+      modules={cohortModules ?? []}
     >
       <PageForm
         busy={participantProjectUpdateRequest?.status === 'pending'}

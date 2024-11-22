@@ -15,13 +15,15 @@ export const useSpecies = (record?: { speciesId?: number }) => {
   const [selectedSpecies, setSelectedSpecies] = useState<Species>();
 
   const initSpecies = useCallback(async () => {
-    const result: AllSpeciesResponse = await SpeciesService.getAllSpecies(selectedOrganization.id);
-    if (!result.requestSucceeded || !result.species) {
-      snackbar.toastError(strings.ERROR_LOAD_SPECIES);
-      return;
-    }
+    if (selectedOrganization.id !== -1) {
+      const result: AllSpeciesResponse = await SpeciesService.getAllSpecies(selectedOrganization.id);
+      if (!result.requestSucceeded || !result.species) {
+        snackbar.toastError(strings.ERROR_LOAD_SPECIES);
+        return;
+      }
 
-    setAvailableSpecies(result.species);
+      setAvailableSpecies(result.species);
+    }
   }, [selectedOrganization.id, snackbar]);
 
   useEffect(() => {

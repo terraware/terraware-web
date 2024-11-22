@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import useListModules from 'src/hooks/useListModules';
+import useListCohortModules from 'src/hooks/useListCohortModules';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { requestListModuleProjects } from 'src/redux/features/modules/modulesAsyncThunks';
 import { selectModuleProjects } from 'src/redux/features/modules/modulesSelectors';
@@ -37,7 +37,7 @@ const ParticipantProvider = ({ children }: Props) => {
   const currentParticipantRequest = useAppSelector(selectParticipantGetRequest(participantRequestId));
   const projects = useAppSelector(selectProjects);
 
-  const { listModules, modules, status: listModulesStatus } = useListModules();
+  const { listCohortModules, cohortModules, status: listModulesStatus } = useListCohortModules();
 
   const _setCurrentParticipantProject = useCallback(
     (projectId: string | number) => {
@@ -49,7 +49,7 @@ const ParticipantProvider = ({ children }: Props) => {
   const [participantData, setParticipantData] = useState<ParticipantData>({
     isLoading: true,
     projectsWithModules: moduleProjects,
-    modules,
+    modules: cohortModules,
     orgHasModules,
     orgHasParticipants,
     allParticipantProjects: participantProjects,
@@ -57,7 +57,7 @@ const ParticipantProvider = ({ children }: Props) => {
   });
 
   useEffect(() => {
-    if (selectedOrganization && activeLocale) {
+    if (selectedOrganization && selectedOrganization.id !== -1 && activeLocale) {
       setCurrentParticipantProject(undefined);
       setModuleProjects([]);
       setOrgHasModules(undefined);
@@ -74,17 +74,17 @@ const ParticipantProvider = ({ children }: Props) => {
   }, [projects]);
 
   useEffect(() => {
-    if (selectedOrganization) {
+    if (selectedOrganization && selectedOrganization.id !== -1) {
       const request = dispatch(requestListModuleProjects(selectedOrganization.id));
       setListModuleProjectsRequestId(request.requestId);
     }
   }, [selectedOrganization, dispatch]);
 
   useEffect(() => {
-    if (currentParticipantProject) {
-      void listModules({ projectId: currentParticipantProject.id });
+    if (currentParticipantProject && currentParticipantProject.cohortId) {
+      void listCohortModules(currentParticipantProject.cohortId);
     }
-  }, [currentParticipantProject, listModules]);
+  }, [currentParticipantProject, listCohortModules]);
 
   useEffect(() => {
     if (!currentParticipantProject || !currentParticipantProject.participantId) {
@@ -129,7 +129,7 @@ const ParticipantProvider = ({ children }: Props) => {
       currentParticipantProject,
       isLoading: moduleProjectsListRequest?.status === 'pending' || listModulesStatus === 'pending',
       projectsWithModules: moduleProjects,
-      modules,
+      modules: cohortModules,
       allParticipantProjects: participantProjects,
       orgHasModules: orgHasModules,
       orgHasParticipants: orgHasParticipants,
@@ -139,7 +139,7 @@ const ParticipantProvider = ({ children }: Props) => {
     currentParticipant,
     currentParticipantProject,
     listModulesStatus,
-    modules,
+    cohortModules,
     moduleProjects,
     moduleProjectsListRequest,
     orgHasModules,

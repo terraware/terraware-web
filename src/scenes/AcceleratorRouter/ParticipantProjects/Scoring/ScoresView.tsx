@@ -7,7 +7,7 @@ import { BusySpinner, Button } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
-import useListModules from 'src/hooks/useListModules';
+import useListCohortModules from 'src/hooks/useListCohortModules';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
@@ -20,13 +20,13 @@ const ScorecardView = () => {
   const navigate = useNavigate();
   const { crumbs, hasData, phase0Scores, phase1Scores, project, status } = useScoringData();
 
-  const { modules, listModules } = useListModules();
+  const { cohortModules, listCohortModules } = useListCohortModules();
 
   useEffect(() => {
-    if (project) {
-      void listModules({ projectId: project.id });
+    if (project && project.cohortId) {
+      void listCohortModules(project.cohortId);
     }
-  }, [project, listModules]);
+  }, [project, listCohortModules]);
 
   const goToScoresEdit = useCallback(() => {
     if (project) {
@@ -71,7 +71,7 @@ const ScorecardView = () => {
       hierarchicalCrumbs={false}
       rightComponent={rightComponent}
       cohortPhase={project?.cohortPhase}
-      modules={modules ?? []}
+      modules={cohortModules ?? []}
     >
       {status === 'pending' && <BusySpinner />}
       {hasData && (

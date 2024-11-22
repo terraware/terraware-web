@@ -6,8 +6,9 @@ import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 import { Crumb } from 'src/components/BreadCrumbs';
 import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
 import { APP_PATHS } from 'src/constants';
-import useGetModule from 'src/hooks/useGetModule';
+import useGetCohortModule from 'src/hooks/useGetCohortModule';
 import { useLocalization } from 'src/providers';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 import { ModuleContentType } from 'src/types/Module';
 
@@ -33,16 +34,25 @@ interface ModuleContentViewProps {
 const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
+  const { currentParticipantProject, setCurrentParticipantProject } = useParticipantData();
   const pathParams = useParams<{ sessionId: string; moduleId: string; projectId: string }>();
 
   const projectId = Number(pathParams.projectId);
   const moduleId = Number(pathParams.moduleId);
 
-  const { getModule, module } = useGetModule();
+  const { cohortModule, getCohortModule } = useGetCohortModule();
 
   useEffect(() => {
-    void getModule({ moduleId, projectId });
-  }, [projectId, moduleId]);
+    if (projectId) {
+      setCurrentParticipantProject(projectId);
+    }
+  }, [projectId, setCurrentParticipantProject]);
+
+  useEffect(() => {
+    if (currentParticipantProject && currentParticipantProject.cohortId) {
+      void getCohortModule({ moduleId, cohortId: currentParticipantProject.cohortId });
+    }
+  }, [currentParticipantProject, moduleId]);
 
   const [content, setContent] = useState('');
 
@@ -53,11 +63,11 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
         to: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`),
       },
       {
-        name: module?.title || '',
+        name: cohortModule?.title || '',
         to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
       },
     ],
-    [activeLocale, projectId, module, moduleId]
+    [activeLocale, cohortModule, projectId, moduleId]
   );
 
   const addBlankTargetToHtmlAHref = (htmlString: string): string => {
@@ -74,13 +84,13 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
   };
 
   useEffect(() => {
-    const nextContent = (module || {})[contentType];
+    const nextContent = (cohortModule || {})[contentType];
     if (module && nextContent) {
       setContent(addBlankTargetToHtmlAHref(nextContent));
     }
-  }, [module]);
+  }, [cohortModule]);
 
-  if (!module) {
+  if (!cohortModule) {
     return null;
   }
 
@@ -88,7 +98,7 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
     <ParticipantPage
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      title={<ModuleViewTitle module={module} projectId={projectId} />}
+      title={<ModuleViewTitle module={cohortModule} projectId={projectId} />}
     >
       <Card
         sx={{
@@ -101,16 +111,16 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
           padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
         }}
       >
-        {module && (
+        {cohortModule && (
           <Grid container spacing={theme.spacing(1)}>
             <Grid item xs style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
               <ModuleContentSection>
                 <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={500}>
-                  {module.title}
+                  {cohortModule.title}
                 </Typography>
 
                 <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
-                  {module.name}
+                  {cohortModule.name}
                 </Typography>
               </ModuleContentSection>
 

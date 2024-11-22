@@ -4,18 +4,13 @@ import { TableColumnType } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
-import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
+import { FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
 import { useLocalization } from 'src/providers';
 import { requestListApplications } from 'src/redux/features/application/applicationAsyncThunks';
 import { selectApplicationList } from 'src/redux/features/application/applicationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import {
-  Application,
-  ApplicationReviewStatuses,
-  ApplicationStatus,
-  ApplicationStatusOrder,
-} from 'src/types/Application';
+import { Application, ApplicationStatus, ApplicationStatusOrder } from 'src/types/Application';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { getCountryByCode } from 'src/utils/country';
 import { SearchAndSortFn, SearchOrderConfig, searchAndSort as genericSearchAndSort } from 'src/utils/searchAndSort';
@@ -78,12 +73,41 @@ const ApplicationList = () => {
   const result = useAppSelector(selectApplicationList(requestId));
   const [applications, setApplications] = useState<ApplicationRow[]>([]);
 
-  const featuredFilters: FilterConfig[] = useMemo(() => {
+  const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
     if (!activeLocale || !countries) {
       return [];
     }
 
-    const filters: FilterConfig[] = [
+    const allFilterValues: ApplicationStatus[] = [
+      'Failed Pre-screen',
+      'Passed Pre-screen',
+      'Accepted',
+      'Carbon Eligible',
+      'Issue Active',
+      'Issue Pending',
+      'Issue Resolved',
+      'Needs Follow-up',
+      'Not Accepted',
+      'PL Review',
+      'Pre-check',
+      'Ready for Review',
+      'Submitted',
+    ];
+
+    const defaultFilterValues: ApplicationStatus[] = [
+      'Accepted',
+      'Carbon Eligible',
+      'Issue Active',
+      'Issue Pending',
+      'Issue Resolved',
+      'Needs Follow-up',
+      'PL Review',
+      'Pre-check',
+      'Ready for Review',
+      'Submitted',
+    ];
+
+    const filters: FilterConfigWithValues[] = [
       {
         field: 'countryCode',
         options: (countries || []).map((country) => country.code),
@@ -94,10 +118,9 @@ const ApplicationList = () => {
       },
       {
         field: 'status',
-        options: ApplicationReviewStatuses.sort(
-          (left, right) => ApplicationStatusOrder[left] - ApplicationStatusOrder[right]
-        ),
+        options: allFilterValues,
         label: strings.STATUS,
+        values: defaultFilterValues,
       },
     ];
 

@@ -75,13 +75,15 @@ export default function DetailsInputForm<T extends MinimalPlantingSite>({
   }, [plantingSeasonsValid, record.name, usedNames]);
 
   useEffect(() => {
-    if (!plantingSites) {
+    if (!plantingSites && selectedOrganization.id !== -1) {
       dispatch(requestPlantingSites(selectedOrganization.id, activeLocale));
     }
   }, [activeLocale, dispatch, plantingSites, selectedOrganization.id]);
 
   useEffect(() => {
-    dispatch(requestSearchDrafts(selectedOrganization.id));
+    if (selectedOrganization.id !== -1) {
+      dispatch(requestSearchDrafts(selectedOrganization.id));
+    }
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {

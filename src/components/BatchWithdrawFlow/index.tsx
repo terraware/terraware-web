@@ -47,23 +47,25 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   const navigate = useNavigate();
 
   useEffect(() => {
-    const populateBatches = async () => {
-      const searchResponse: SearchResponseElement[] | null = await NurseryBatchService.getBatches(
-        selectedOrganization.id,
-        batchIds.map((id) => Number(id))
-      );
-
-      if (searchResponse) {
-        const withdrawable = searchResponse.filter(
-          (batch: any) => +batch['totalQuantity(raw)'] + +batch['germinatingQuantity(raw)'] > 0
+    if (selectedOrganization.id !== -1) {
+      const populateBatches = async () => {
+        const searchResponse: SearchResponseElement[] | null = await NurseryBatchService.getBatches(
+          selectedOrganization.id,
+          batchIds.map((id) => Number(id))
         );
-        if (!withdrawable.length) {
-          snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM); // temporary until we have a solution from design
+
+        if (searchResponse) {
+          const withdrawable = searchResponse.filter(
+            (batch: any) => +batch['totalQuantity(raw)'] + +batch['germinatingQuantity(raw)'] > 0
+          );
+          if (!withdrawable.length) {
+            snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM); // temporary until we have a solution from design
+          }
+          setBatches(withdrawable);
         }
-        setBatches(withdrawable);
-      }
-    };
-    void populateBatches();
+      };
+      void populateBatches();
+    }
   }, [batchIds, snackbar, selectedOrganization.id]);
 
   const onWithdrawalConfigured = (withdrawal: NurseryWithdrawalRequest) => {

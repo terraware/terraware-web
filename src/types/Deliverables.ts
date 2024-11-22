@@ -96,25 +96,6 @@ export const categoryLabel = (category: DeliverableCategoryType): string => {
   }
 };
 
-export const statusLabel = (status: DeliverableStatusType): string => {
-  switch (status) {
-    case 'Not Submitted':
-      return strings.NOT_SUBMITTED;
-    case 'In Review':
-      return strings.IN_REVIEW;
-    case 'Rejected':
-      return strings.NOT_ACCEPTED;
-    case 'Approved':
-      return strings.APPROVED;
-    case 'Not Needed':
-      return strings.NOT_NEEDED;
-    case 'Needs Translation':
-      return strings.NEEDS_TRANSLATION;
-    default:
-      return status as string;
-  }
-};
-
 export const getDeliverableTypeLabel = (status: DeliverableTypeType): string => {
   switch (status) {
     case 'Document':

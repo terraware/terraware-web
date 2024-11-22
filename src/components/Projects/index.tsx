@@ -41,9 +41,11 @@ export default function ProjectsList(): JSX.Element {
 
   const search = useCallback(
     async (searchTerm: string) => {
-      const projects = await ProjectsService.searchProjects(selectedOrganization.id, searchTerm);
-      if (projects) {
-        return projects;
+      if (selectedOrganization.id !== -1) {
+        const projects = await ProjectsService.searchProjects(selectedOrganization.id, searchTerm);
+        if (projects) {
+          return projects;
+        }
       }
     },
     [selectedOrganization.id]

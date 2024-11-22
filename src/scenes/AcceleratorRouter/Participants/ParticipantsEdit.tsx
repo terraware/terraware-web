@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { BusySpinner } from '@terraware/web-components';
 
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
-import useListModules from 'src/hooks/useListModules';
+import useListCohortModules from 'src/hooks/useListCohortModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipant } from 'src/hooks/useParticipant';
 import { requestUpdateParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
@@ -30,13 +30,13 @@ export default function ParticipantsNew(): JSX.Element {
 
   const { goToParticipant, goToParticipantsList } = useNavigateTo();
 
-  const { modules, listModules } = useListModules();
+  const { cohortModules, listCohortModules } = useListCohortModules();
 
   useEffect(() => {
-    if (participantId) {
-      void listModules({ participantId });
+    if (participant && participant.cohortId) {
+      void listCohortModules(participant.cohortId);
     }
-  }, [participantId, listModules]);
+  }, [participant, listCohortModules]);
 
   const onSave = useCallback(
     (updateRequest: ParticipantUpdateRequest, projectsDetails: ParticipantProject[]) => {
@@ -77,7 +77,7 @@ export default function ParticipantsNew(): JSX.Element {
     <PageWithModuleTimeline
       title={participant?.name ?? ''}
       contentStyle={{ display: 'flex', flexDirection: 'column' }}
-      modules={modules ?? []}
+      modules={cohortModules ?? []}
       cohortPhase={participant?.cohortPhase}
     >
       {isBusy && <BusySpinner />}

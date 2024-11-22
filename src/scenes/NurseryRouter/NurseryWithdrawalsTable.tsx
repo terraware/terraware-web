@@ -135,10 +135,12 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   );
 
   useEffect(() => {
-    const getApiSearchResults = async () => {
-      setFilterOptions(await NurseryWithdrawalService.getFilterOptions(selectedOrganization.id));
-    };
-    void getApiSearchResults();
+    if (selectedOrganization.id !== -1) {
+      const getApiSearchResults = async () => {
+        setFilterOptions(await NurseryWithdrawalService.getFilterOptions(selectedOrganization.id));
+      };
+      void getApiSearchResults();
+    }
   }, [selectedOrganization]);
 
   const onWithdrawalClicked = (withdrawal: any) => {
@@ -213,23 +215,25 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   }, [filters, debouncedSearchTerm]);
 
   const onApplyFilters = useCallback(async () => {
-    const searchChildren: SearchNodePayload[] = getSearchChildren();
-    const requestId = Math.random().toString();
-    setRequestId('searchWithdrawals', requestId);
-    const apiSearchResults = await NurseryWithdrawalService.listNurseryWithdrawals(
-      selectedOrganization.id,
-      searchChildren,
-      searchSortOrder
-    );
-    if (apiSearchResults) {
-      if (getRequestId('searchWithdrawals') === requestId) {
-        const destinationFilter = filters.destinationName?.values ?? [];
-        if (destinationFilter.length) {
-          setSearchResults(
-            apiSearchResults.filter((result) => destinationFilter.indexOf(result.destinationName) !== -1)
-          );
-        } else {
-          setSearchResults(apiSearchResults);
+    if (selectedOrganization.id !== -1) {
+      const searchChildren: SearchNodePayload[] = getSearchChildren();
+      const requestId = Math.random().toString();
+      setRequestId('searchWithdrawals', requestId);
+      const apiSearchResults = await NurseryWithdrawalService.listNurseryWithdrawals(
+        selectedOrganization.id,
+        searchChildren,
+        searchSortOrder
+      );
+      if (apiSearchResults) {
+        if (getRequestId('searchWithdrawals') === requestId) {
+          const destinationFilter = filters.destinationName?.values ?? [];
+          if (destinationFilter.length) {
+            setSearchResults(
+              apiSearchResults.filter((result) => destinationFilter.indexOf(result.destinationName) !== -1)
+            );
+          } else {
+            setSearchResults(apiSearchResults);
+          }
         }
       }
     }

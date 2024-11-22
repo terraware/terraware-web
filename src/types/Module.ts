@@ -1,7 +1,10 @@
 import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
 
+export type CohortModule = components['schemas']['CohortModulePayload'];
 export type Module = components['schemas']['ModulePayload'];
+
+export type ModuleDeliverable = components['schemas']['ModuleDeliverablePayload'];
 
 export type ModuleEvent = components['schemas']['ModuleEvent'];
 export type ModuleEventPartial = Omit<Partial<components['schemas']['ModuleEvent']>, 'projects'> & {
@@ -86,8 +89,6 @@ export const getEventStatus = (status: ModuleEventStatus) => {
 export type ModuleContentType = keyof Pick<Module, 'additionalResources' | 'preparationMaterials'>;
 
 export type UpdateCohortModuleRequest = components['schemas']['UpdateCohortModuleRequestPayload'];
-
-export type CohortModule = Partial<Module> & { deliverablesQuantity?: number };
 
 export type ModuleSearchResult = {
   id: number;

@@ -75,7 +75,9 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   }, [navigate, plantingSites?.length]);
 
   useEffect(() => {
-    dispatch(requestPlantings(selectedOrganization.id));
+    if (selectedOrganization.id !== -1) {
+      dispatch(requestPlantings(selectedOrganization.id));
+    }
   }, [dispatch, selectedOrganization.id]);
 
   const actionButton = useMemo<ButtonProps | undefined>(() => {

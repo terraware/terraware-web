@@ -20,7 +20,9 @@ const SpeciesRouter = () => {
   const species = useAppSelector(selectSpecies);
 
   const reloadSpecies = useCallback(() => {
-    void dispatch(requestSpecies(selectedOrganization.id));
+    if (selectedOrganization.id !== -1) {
+      void dispatch(requestSpecies(selectedOrganization.id));
+    }
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {

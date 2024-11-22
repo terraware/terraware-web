@@ -295,7 +295,20 @@ export default function PlantsDashboardView(): JSX.Element {
 
   const renderZoneLevelData = () => (
     <>
-      {sectionHeader(strings.ZONE_LEVEL_DATA)}
+      {newPlantsDashboardEnabled ? (
+        <Grid item xs={12}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
+              {strings.PLANTING_SITE_PROGRESS}
+            </Typography>
+            {hasObservations && (
+              <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
+            )}
+          </Box>
+        </Grid>
+      ) : (
+        sectionHeader(strings.ZONE_LEVEL_DATA)
+      )}
       <Grid item xs={12}>
         <ZoneLevelDataMap plantingSiteId={selectedPlantingSiteId} />
       </Grid>

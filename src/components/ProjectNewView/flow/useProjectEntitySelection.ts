@@ -50,29 +50,31 @@ export const useProjectEntitySelection = <T extends SearchResponseElement>({
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
 
   useEffect(() => {
-    const populate = async () => {
-      const searchResponse = await getSearchResults(
-        selectedOrganization.id,
-        getSearchFields(debouncedSearchTerm || ''),
-        searchSortOrder,
-        filters
-      );
+    if (selectedOrganization.id !== -1) {
+      const populate = async () => {
+        const searchResponse = await getSearchResults(
+          selectedOrganization.id,
+          getSearchFields(debouncedSearchTerm || ''),
+          searchSortOrder,
+          filters
+        );
 
-      if (searchResponse) {
-        setEntities(searchResponse);
+        if (searchResponse) {
+          setEntities(searchResponse);
 
-        if (searchResponse.find((element) => !!element.project_name)) {
-          setShowAssignmentWarning(true);
+          if (searchResponse.find((element) => !!element.project_name)) {
+            setShowAssignmentWarning(true);
+          }
         }
-      }
 
-      if (!isSearchDirty && !searchResponse) {
-        setHasEntities(false);
-        return;
-      }
-    };
+        if (!isSearchDirty && !searchResponse) {
+          setHasEntities(false);
+          return;
+        }
+      };
 
-    void populate();
+      void populate();
+    }
   }, [
     getSearchFields,
     debouncedSearchTerm,

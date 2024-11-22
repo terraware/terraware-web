@@ -17,7 +17,7 @@ const getToDoStatus = (status: ToDoBadge): string => {
     case 'In Review':
       return strings.IN_REVIEW;
     case 'Not Accepted':
-      return strings.NOT_ACCEPTED;
+      return strings.UPDATE_NEEDED;
     case 'Overdue':
       return strings.OVERDUE;
     case 'Completed':

@@ -119,32 +119,34 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
   }, [onClose]);
 
   const onSave = useCallback(() => {
-    let error = '';
-    if (newApplication.projectType === 'New') {
-      if ((error = validateProjectName(newApplication.projectName ?? ''))) {
-        setProjectNameError(error);
-        return;
-      }
+    if (selectedOrganization.id !== -1) {
+      let error = '';
+      if (newApplication.projectType === 'New') {
+        if ((error = validateProjectName(newApplication.projectName ?? ''))) {
+          setProjectNameError(error);
+          return;
+        }
 
-      const createProjectApplicationRequest = dispatch(
-        requestCreateProjectApplication({
-          projectName: newApplication.projectName ?? '',
-          organizationId: selectedOrganization.id,
-        })
-      );
-      setCreateProjectApplicationRequestId(createProjectApplicationRequest.requestId);
-      setIsLoading(true);
-    } else {
-      if ((error = validateProjectSelect(newApplication.projectId))) {
-        setProjectSelectError(error);
-        return;
-      }
+        const createProjectApplicationRequest = dispatch(
+          requestCreateProjectApplication({
+            projectName: newApplication.projectName ?? '',
+            organizationId: selectedOrganization.id,
+          })
+        );
+        setCreateProjectApplicationRequestId(createProjectApplicationRequest.requestId);
+        setIsLoading(true);
+      } else {
+        if ((error = validateProjectSelect(newApplication.projectId))) {
+          setProjectSelectError(error);
+          return;
+        }
 
-      const createApplicationRequest = dispatch(
-        requestCreateApplication({ projectId: newApplication.projectId ?? -1 })
-      );
-      setCreateApplicationRequestId(createApplicationRequest.requestId);
-      setIsLoading(true);
+        const createApplicationRequest = dispatch(
+          requestCreateApplication({ projectId: newApplication.projectId ?? -1 })
+        );
+        setCreateApplicationRequestId(createApplicationRequest.requestId);
+        setIsLoading(true);
+      }
     }
   }, [
     dispatch,

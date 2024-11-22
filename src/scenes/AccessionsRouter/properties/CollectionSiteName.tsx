@@ -18,10 +18,12 @@ export default function CollectionSiteName({ collectionSiteName = '', onChange }
   const [options, setOptions] = useState<string[]>();
 
   useEffect(() => {
-    const populateCollectionSiteNames = async () => {
-      setOptions(await SeedBankService.getCollectionSiteNames(selectedOrganization.id));
-    };
-    populateCollectionSiteNames();
+    if (selectedOrganization.id !== -1) {
+      const populateCollectionSiteNames = async () => {
+        setOptions(await SeedBankService.getCollectionSiteNames(selectedOrganization.id));
+      };
+      populateCollectionSiteNames();
+    }
   }, [selectedOrganization]);
 
   return !activeLocale ? null : (

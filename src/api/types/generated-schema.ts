@@ -82,7 +82,13 @@ export interface paths {
     /** Deletes a single cohort. */
     delete: operations["deleteCohort"];
   };
+  "/api/v1/accelerator/cohorts/{cohortId}/modules": {
+    /** List cohort modules. */
+    get: operations["listCohortModules"];
+  };
   "/api/v1/accelerator/cohorts/{cohortId}/modules/{moduleId}": {
+    /** Gets one cohort module. */
+    get: operations["getCohortModule"];
     /**
      * Updates the information about a module's use by a cohort.
      * @description Adds the module to the cohort if it is not already associated.
@@ -173,13 +179,9 @@ export interface paths {
     /** Gets one module. */
     get: operations["getModule"];
   };
-  "/api/v1/accelerator/modules/{moduleId}/deliverables": {
-    /** List module deliverables. */
-    get: operations["listModuleDeliverables"];
-  };
   "/api/v1/accelerator/organizations": {
     /**
-     * Lists organizations with the Accelerator internal tag and their projects.
+     * Lists accelerator related organizations and their projects.
      * @description By default, only lists tagged organizations that have projects that have not been assigned to participants yet.
      */
     get: operations["listAcceleratorOrganizations"];
@@ -598,7 +600,7 @@ export interface paths {
   "/api/v1/organizations": {
     /**
      * Lists all organizations.
-     * @description Lists all organizations the user can access.
+     * @description Lists all organizations the user can access through organization roles.
      */
     get: operations["listOrganizations"];
     /** Creates a new organization. */
@@ -930,11 +932,23 @@ export interface paths {
     /** Gets a list of the results of observations. */
     get: operations["listObservationResults"];
   };
+  "/api/v1/tracking/observations/results/summary": {
+    /** Gets the rollup observation summary of a planting site */
+    get: operations["getPlantingSiteObservationSummary"];
+  };
   "/api/v1/tracking/observations/{observationId}": {
     /** Gets information about a single observation. */
     get: operations["getObservation"];
     /** Reschedules an existing observation. */
     put: operations["rescheduleObservation"];
+  };
+  "/api/v1/tracking/observations/{observationId}/abandon": {
+    /** Abandon the observation. */
+    post: operations["abandonObservation"];
+  };
+  "/api/v1/tracking/observations/{observationId}/mergeOtherSpecies": {
+    /** Replaces a user-entered 'Other' species with one of the organization's species in an observation. */
+    post: operations["mergeOtherSpecies"];
   };
   "/api/v1/tracking/observations/{observationId}/plots": {
     /** Exports monitoring plots assigned to an observation as a GPX file. */
@@ -1698,6 +1712,23 @@ export interface components {
     CohortListResponsePayload: {
       cohorts: components["schemas"]["CohortPayload"][];
       status: components["schemas"]["SuccessOrError"];
+    };
+    CohortModulePayload: {
+      additionalResources?: string;
+      /** Format: date */
+      endDate: string;
+      eventDescriptions: {
+        [key: string]: string;
+      };
+      /** Format: int64 */
+      id: number;
+      isActive: boolean;
+      name: string;
+      overview?: string;
+      preparationMaterials?: string;
+      /** Format: date */
+      startDate: string;
+      title: string;
     };
     CohortPayload: {
       /** Format: int64 */
@@ -2693,6 +2724,10 @@ export interface components {
       history: components["schemas"]["BatchHistoryPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetCohortModuleResponsePayload: {
+      module: components["schemas"]["CohortModulePayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetCountryBorderResponsePayload: {
       border: components["schemas"]["MultiPolygon"];
       status: components["schemas"]["SuccessOrError"];
@@ -2822,6 +2857,11 @@ export interface components {
     GetParticipantResponsePayload: {
       participant: components["schemas"]["ParticipantPayload"];
       status: components["schemas"]["SuccessOrError"];
+    };
+    GetPlantingSiteObservationSummaryPayload: {
+      status: components["schemas"]["SuccessOrError"];
+      /** @description Rollup summary of planting site observations. Null if no observation has been made. */
+      summary?: components["schemas"]["PlantingSiteObservationSummaryPayload"];
     };
     GetPlantingSiteReportedPlantsResponsePayload: {
       site: components["schemas"]["PlantingSiteReportedPlantsPayload"];
@@ -3177,6 +3217,10 @@ export interface components {
       photos: components["schemas"]["BatchPhotoPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    ListCohortModulesResponsePayload: {
+      modules: components["schemas"]["CohortModulePayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     ListDeliverablesElement: {
       /** @enum {string} */
       category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
@@ -3251,9 +3295,6 @@ export interface components {
         [key: string]: components["schemas"]["FieldValuesPayload"];
       };
       status: components["schemas"]["SuccessOrError"];
-    };
-    ListModuleDeliverablesResponsePayload: {
-      deliverables: components["schemas"]["ModuleDeliverablePayload"][];
     };
     ListModulesResponsePayload: {
       modules: components["schemas"]["ModulePayload"][];
@@ -3411,6 +3452,15 @@ export interface components {
       photos: components["schemas"]["NurseryWithdrawalPhotoPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    MergeOtherSpeciesRequestPayload: {
+      /** @description Name of the species of certainty Other whose recorded plants should be updated to refer to the known species. */
+      otherSpeciesName: string;
+      /**
+       * Format: int64
+       * @description ID of the existing species that the Other species' recorded plants should be merged into.
+       */
+      speciesId: number;
+    };
     ModuleDeliverablePayload: {
       /** @enum {string} */
       category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
@@ -3462,20 +3512,15 @@ export interface components {
     };
     ModulePayload: {
       additionalResources?: string;
-      /** Format: date */
-      endDate: string;
+      deliverables: components["schemas"]["ModuleDeliverablePayload"][];
       eventDescriptions: {
         [key: string]: string;
       };
       /** Format: int64 */
       id: number;
-      isActive: boolean;
       name: string;
       overview?: string;
       preparationMaterials?: string;
-      /** Format: date */
-      startDate: string;
-      title: string;
     };
     MultiLineString: WithRequired<{
       type: "MultiLineString";
@@ -3699,6 +3744,7 @@ export interface components {
       /** @enum {string} */
       position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
     };
+    /** @description Percentage of plants of all species that were dead in this subzone's permanent monitoring plots. */
     ObservationMonitoringPlotResultsPayload: {
       boundary: components["schemas"]["Polygon"];
       claimedByName?: string;
@@ -3737,7 +3783,7 @@ export interface components {
       sizeMeters: number;
       species: components["schemas"]["ObservationSpeciesResultsPayload"][];
       /** @enum {string} */
-      status: "Outstanding" | "InProgress" | "Completed";
+      status: "Unclaimed" | "Claimed" | "Completed" | "Not Observed";
       /**
        * Format: int32
        * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
@@ -3783,12 +3829,31 @@ export interface components {
        */
       startDate: string;
       /** @enum {string} */
-      state: "Upcoming" | "InProgress" | "Completed" | "Overdue";
+      state: "Upcoming" | "InProgress" | "Completed" | "Overdue" | "Abandoned";
     };
     ObservationPlantingSubzoneResultsPayload: {
+      /** @description Area of this planting subzone in hectares. */
+      areaHa: number;
+      /** Format: date-time */
+      completedTime?: string;
+      /**
+       * Format: int32
+       * @description Estimated number of plants in planting subzone based on estimated planting density and subzone area. Only present if the subzone has completed planting.
+       */
+      estimatedPlants?: number;
+      /** @description Percentage of plants of all species that were dead in this subzone's permanent monitoring plots. */
       monitoringPlots: components["schemas"]["ObservationMonitoringPlotResultsPayload"][];
+      /** Format: int32 */
+      mortalityRate: number;
+      /**
+       * Format: int32
+       * @description Estimated planting density for the subzone based on the observed planting densities of monitoring plots. Only present if the subzone has completed planting.
+       */
+      plantingDensity?: number;
       /** Format: int64 */
       plantingSubzoneId: number;
+      /** Format: int32 */
+      totalPlants: number;
     };
     ObservationPlantingZoneResultsPayload: {
       /** @description Area of this planting zone in hectares. */
@@ -3852,7 +3917,7 @@ export interface components {
       /** Format: date */
       startDate: string;
       /** @enum {string} */
-      state: "Upcoming" | "InProgress" | "Completed" | "Overdue";
+      state: "Upcoming" | "InProgress" | "Completed" | "Overdue" | "Abandoned";
       /** Format: int32 */
       totalSpecies: number;
     };
@@ -3959,6 +4024,7 @@ export interface components {
        * @enum {string}
        */
       role?: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
+      tfContactUser?: components["schemas"]["TerraformationContactUserPayload"];
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
@@ -4086,10 +4152,40 @@ export interface components {
       /** Format: date */
       startDate: string;
     };
+    /** @description Rollup summary of planting site observations. Null if no observation has been made. */
+    PlantingSiteObservationSummaryPayload: {
+      /**
+       * Format: date-time
+       * @description The earliest time of the observations used in this summary.
+       */
+      earliestObservationTime: string;
+      /**
+       * Format: int32
+       * @description Estimated total number of live plants at the site, based on the estimated planting density and site size. Only present if all the subzones in the site have been marked as having completed planting.
+       */
+      estimatedPlants?: number;
+      /**
+       * Format: date-time
+       * @description The latest time of the observations used in this summary.
+       */
+      latestObservationTime: string;
+      /**
+       * Format: int32
+       * @description Percentage of plants of all species that were dead in this site's permanent monitoring plots.
+       */
+      mortalityRate?: number;
+      /**
+       * Format: int32
+       * @description Estimated planting density for the site, based on the observed planting densities of monitoring plots. Only present if all the subzones in the site have been marked as having completed planting.
+       */
+      plantingDensity?: number;
+      plantingZones: components["schemas"]["PlantingZoneObservationSummaryPayload"][];
+    };
     PlantingSitePayload: {
       /** @description Area of planting site in hectares. Only present if the site has planting zones. */
       areaHa?: number;
       boundary?: components["schemas"]["MultiPolygon"];
+      countryCode?: string;
       description?: string;
       exclusion?: components["schemas"]["MultiPolygon"];
       /** Format: int64 */
@@ -4154,6 +4250,39 @@ export interface components {
       /** Format: int64 */
       id: number;
       scientificName: string;
+    };
+    PlantingZoneObservationSummaryPayload: {
+      /** @description Area of this planting zone in hectares. */
+      areaHa: number;
+      /**
+       * Format: date-time
+       * @description The earliest time of the observations used in this summary.
+       */
+      earliestObservationTime: string;
+      /**
+       * Format: int32
+       * @description Estimated number of plants in planting zone based on estimated planting density and planting zone area. Only present if all the subzones in the zone have been marked as having completed planting.
+       */
+      estimatedPlants?: number;
+      /**
+       * Format: date-time
+       * @description The latest time of the observations used in this summary.
+       */
+      latestObservationTime: string;
+      /**
+       * Format: int32
+       * @description Percentage of plants of all species that were dead in this zone's permanent monitoring plots.
+       */
+      mortalityRate: number;
+      /**
+       * Format: int32
+       * @description Estimated planting density for the zone based on the observed planting densities of monitoring plots. Only present if all the subzones in the zone have been marked as having completed planting.
+       */
+      plantingDensity?: number;
+      /** @description List of subzone observations used in this summary. */
+      plantingSubzones: components["schemas"]["ObservationPlantingSubzoneResultsPayload"][];
+      /** Format: int64 */
+      plantingZoneId: number;
     };
     PlantingZonePayload: {
       /** @description Area of planting zone in hectares. */
@@ -5993,6 +6122,51 @@ export interface operations {
       };
     };
   };
+  /** List cohort modules. */
+  listCohortModules: {
+    parameters: {
+      path: {
+        cohortId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListCohortModulesResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets one cohort module. */
+  getCohortModule: {
+    parameters: {
+      path: {
+        cohortId: number;
+        moduleId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetCohortModuleResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   /**
    * Updates the information about a module's use by a cohort.
    * @description Adds the module to the cohort if it is not already associated.
@@ -6407,13 +6581,6 @@ export interface operations {
   };
   /** List modules. */
   listModules: {
-    parameters: {
-      query?: {
-        projectId?: number;
-        participantId?: number;
-        cohortId?: number;
-      };
-    };
     responses: {
       /** @description The requested operation succeeded. */
       200: {
@@ -6451,11 +6618,6 @@ export interface operations {
   /** Gets one module. */
   getModule: {
     parameters: {
-      query?: {
-        projectId?: number;
-        participantId?: number;
-        cohortId?: number;
-      };
       path: {
         moduleId: number;
       };
@@ -6475,30 +6637,8 @@ export interface operations {
       };
     };
   };
-  /** List module deliverables. */
-  listModuleDeliverables: {
-    parameters: {
-      path: {
-        moduleId: number;
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListModuleDeliverablesResponsePayload"];
-        };
-      };
-      /** @description The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
   /**
-   * Lists organizations with the Accelerator internal tag and their projects.
+   * Lists accelerator related organizations and their projects.
    * @description By default, only lists tagged organizations that have projects that have not been assigned to participants yet.
    */
   listAcceleratorOrganizations: {
@@ -6506,6 +6646,8 @@ export interface operations {
       query?: {
         /** @description Whether to also include projects that have been assigned to participants. */
         includeParticipants?: boolean;
+        /** @description Whether to load all organizations with a project with an application. */
+        hasProjectApplication?: boolean;
       };
     };
     responses: {
@@ -8706,7 +8848,7 @@ export interface operations {
   };
   /**
    * Lists all organizations.
-   * @description Lists all organizations the user can access.
+   * @description Lists all organizations the user can access through organization roles.
    */
   listOrganizations: {
     parameters: {
@@ -10401,6 +10543,22 @@ export interface operations {
       };
     };
   };
+  /** Gets the rollup observation summary of a planting site */
+  getPlantingSiteObservationSummary: {
+    parameters: {
+      query: {
+        plantingSiteId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetPlantingSiteObservationSummaryPayload"];
+        };
+      };
+    };
+  };
   /** Gets information about a single observation. */
   getObservation: {
     parameters: {
@@ -10427,6 +10585,49 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["RescheduleObservationRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Abandon the observation. */
+  abandonObservation: {
+    parameters: {
+      path: {
+        observationId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description Observation is already completed or abandoned. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Replaces a user-entered 'Other' species with one of the organization's species in an observation. */
+  mergeOtherSpecies: {
+    parameters: {
+      path: {
+        observationId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MergeOtherSpeciesRequestPayload"];
       };
     };
     responses: {

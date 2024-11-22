@@ -8,7 +8,7 @@ import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
-import useListModules from 'src/hooks/useListModules';
+import useListCohortModules from 'src/hooks/useListCohortModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import strings from 'src/strings';
 import { Score, ScoreCategory, ScoreValue } from 'src/types/Score';
@@ -27,13 +27,13 @@ const ScorecardEditView = () => {
   const [scores, setScores] = useState<Score[]>([]);
   const [updatedScores, setUpdatedScores] = useState<Score[]>([]);
 
-  const { modules, listModules } = useListModules();
+  const { cohortModules, listCohortModules } = useListCohortModules();
 
   useEffect(() => {
-    if (project) {
-      void listModules({ projectId: project.id });
+    if (project && project.cohortId) {
+      void listCohortModules(project.cohortId);
     }
-  }, [project, listModules]);
+  }, [project, listCohortModules]);
 
   const goToVoting = useCallback(() => {
     if (project) {
@@ -105,7 +105,7 @@ const ScorecardEditView = () => {
       title={`${project?.name ?? ''} ${strings.SCORES}`}
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      modules={modules ?? []}
+      modules={cohortModules ?? []}
       cohortPhase={project?.cohortPhase}
     >
       <PageForm

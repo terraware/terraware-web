@@ -69,7 +69,7 @@ export default function ScheduleObservation(): JSX.Element {
   useEffect(() => {
     if (result?.status === 'error') {
       snackbar.toastError();
-    } else if (result?.status === 'success') {
+    } else if (result?.status === 'success' && selectedOrganization.id !== -1) {
       snackbar.toastSuccess(strings.OBSERVATION_RESCHEDULED);
       dispatch(requestObservations(selectedOrganization.id));
       dispatch(requestObservationsResults(selectedOrganization.id));

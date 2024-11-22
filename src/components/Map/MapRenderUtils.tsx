@@ -4,6 +4,8 @@ import { useMap } from 'react-map-gl';
 import { Box, IconButton, Typography, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
 
+import isEnabled from 'src/features';
+
 /**
  * Full screen map container ref for Portals
  */
@@ -36,11 +38,13 @@ export type TooltipProperty = {
 
 export type MapTooltipProps = {
   title?: string;
+  subtitle?: string;
   properties: TooltipProperty[];
 };
 
-export function MapTooltip({ title, properties }: MapTooltipProps): JSX.Element {
+export function MapTooltip({ title, properties, subtitle }: MapTooltipProps): JSX.Element {
   const theme = useTheme();
+  const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
 
   const textStyle = {
     fontWeight: 400,
@@ -60,29 +64,61 @@ export function MapTooltip({ title, properties }: MapTooltipProps): JSX.Element 
     ...textStyle,
     marginLeft: theme.spacing(1),
     overflowWrap: 'anywhere',
+    textAlign: newPlantsDashboardEnabled ? 'right' : 'left',
   };
 
   return (
     <>
-      {title && (
-        <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(2)} textAlign='left'>
-          {title}
-        </Typography>
-      )}
-      <table>
-        <tbody>
-          {properties.map((prop: TooltipProperty, index: number) => (
-            <tr key={index}>
-              <td>
-                <Typography sx={keyStyle}>{prop.key}</Typography>
-              </td>
-              <td>
-                <Typography sx={valueStyle}>{prop.value}</Typography>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <Box
+        sx={
+          newPlantsDashboardEnabled
+            ? {
+                backgroundColor: theme.palette.TwClrBgSecondary,
+                borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                padding: theme.spacing(2, 4),
+                borderRadius: 1,
+              }
+            : undefined
+        }
+      >
+        {title && (
+          <Typography
+            fontSize={newPlantsDashboardEnabled ? '20px' : '16px'}
+            fontWeight={600}
+            marginBottom={newPlantsDashboardEnabled ? 0 : theme.spacing(2)}
+            textAlign='left'
+          >
+            {title}
+          </Typography>
+        )}
+        {newPlantsDashboardEnabled && subtitle && (
+          <Typography
+            fontSize='16px'
+            fontWeight={500}
+            marginBottom={0}
+            textAlign='left'
+            color={theme.palette.TwClrBasePink500}
+          >
+            {subtitle}
+          </Typography>
+        )}
+      </Box>
+      <Box padding={newPlantsDashboardEnabled ? 2 : 0}>
+        <table>
+          <tbody>
+            {properties.map((prop: TooltipProperty, index: number) => (
+              <tr key={index}>
+                <td>
+                  <Typography sx={keyStyle}>{prop.key}</Typography>
+                </td>
+                <td>
+                  <Typography sx={valueStyle}>{prop.value}</Typography>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </Box>
     </>
   );
 }

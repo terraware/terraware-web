@@ -33,7 +33,9 @@ export default function EventEditView(): JSX.Element {
   const theme = useTheme();
   const navigate = useNavigate();
   const { moduleId } = useParams<{ moduleId: string }>();
-  const { getModule, module, events } = useGetModule();
+
+  const { events, module } = useGetModule(Number(moduleId));
+
   const query = useQuery();
   const eventType = query.get('type');
   const [eventsToAdd, setEventsToAdd] = useState<ModuleEventPartial[]>();
@@ -81,12 +83,6 @@ export default function EventEditView(): JSX.Element {
       goToEvent();
     }
   }, [responseDelete]);
-
-  useEffect(() => {
-    if (moduleId) {
-      getModule({ moduleId: Number(moduleId) });
-    }
-  }, [moduleId]);
 
   const goToEvent = () => {
     navigate(APP_PATHS.ACCELERATOR_MODULE_CONTENT.replace(':moduleId', moduleId || ''));

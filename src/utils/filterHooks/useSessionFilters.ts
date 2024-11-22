@@ -17,7 +17,7 @@ export const useSessionFilters = (viewIdentifier?: string) => {
   const navigate = useNavigate();
   const query = useQuery();
 
-  const [localFilters, setLocalFilters] = useState<FiltersType>({});
+  const [localFilters, setLocalFilters] = useState<FiltersType>();
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
   // Sync filters to query and session, this happens when filters are changed within the consumer

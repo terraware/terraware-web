@@ -30,7 +30,9 @@ export const useAccessions = (record?: { accessionId?: number }, speciesId?: num
   }, [availableAccessions, record?.accessionId]);
 
   useEffect(() => {
-    void dispatch(requestAccessions(selectedOrganization.id, speciesId));
+    if (selectedOrganization.id !== -1) {
+      void dispatch(requestAccessions(selectedOrganization.id, speciesId));
+    }
   }, [dispatch, selectedOrganization, speciesId]);
 
   return { availableAccessions, selectedAccession };

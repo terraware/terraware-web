@@ -49,8 +49,10 @@ const TerrawareHomeView = () => {
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    dispatch(requestObservations(selectedOrganization.id));
-    dispatch(requestObservationsResults(selectedOrganization.id));
+    if (selectedOrganization.id !== -1) {
+      dispatch(requestObservations(selectedOrganization.id));
+      dispatch(requestObservationsResults(selectedOrganization.id));
+    }
   }, [dispatch, selectedOrganization.id]);
 
   const isLoadingInitialData = useMemo(

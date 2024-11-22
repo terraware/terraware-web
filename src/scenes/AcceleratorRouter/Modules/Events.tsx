@@ -80,142 +80,150 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
         </Typography>
       </Box>
       <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={1}>
-            <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
-              {strings.LIVE_SESSIONS}
-            </Typography>
-            {module && (
-              <Button
-                id='edit'
-                label={strings.EDIT}
-                onClick={() =>
-                  navigate({
-                    pathname: APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT.replace(':moduleId', `${module.id}`),
-                    search: '?type=live',
-                  })
-                }
-                icon='iconEdit'
-                priority='secondary'
-                className='edit-button'
-                size='small'
-                type='productive'
+        {module && module.eventDescriptions['Live Session'] !== undefined && (
+          <Grid item xs={12}>
+            <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={1}>
+              <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
+                {strings.LIVE_SESSIONS}
+              </Typography>
+              {module && (
+                <Button
+                  id='edit'
+                  label={strings.EDIT}
+                  onClick={() =>
+                    navigate({
+                      pathname: APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT.replace(':moduleId', `${module.id}`),
+                      search: '?type=live',
+                    })
+                  }
+                  icon='iconEdit'
+                  priority='secondary'
+                  className='edit-button'
+                  size='small'
+                  type='productive'
+                />
+              )}
+            </Box>
+            <Box dangerouslySetInnerHTML={{ __html: module.eventDescriptions['Live Session'] }} />
+            <Box marginTop={2}>
+              <Table
+                rows={liveSessions || []}
+                columns={columns}
+                id={'module-liveSessions'}
+                orderBy={'name'}
+                Renderer={EventsCellRenderer}
               />
-            )}
-          </Box>
-          <Box dangerouslySetInnerHTML={{ __html: liveSessions?.[0]?.description || '' }} />
-          <Box marginTop={2}>
-            <Table
-              rows={liveSessions || []}
-              columns={columns}
-              id={'module-liveSessions'}
-              orderBy={'name'}
-              Renderer={EventsCellRenderer}
-            />
-          </Box>
-        </Grid>
-        <Grid item xs={12}>
-          <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={1}>
-            <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
-              {strings.ONE_ON_ONE_SESSIONS}
-            </Typography>
-            {module && (
-              <Button
-                id='edit'
-                label={strings.EDIT}
-                onClick={() =>
-                  navigate({
-                    pathname: APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT.replace(':moduleId', `${module.id}`),
-                    search: '?type=one-on-one',
-                  })
-                }
-                icon='iconEdit'
-                priority='secondary'
-                className='edit-button'
-                size='small'
-                type='productive'
+            </Box>
+          </Grid>
+        )}
+        {module && module.eventDescriptions['One-on-One Session'] !== undefined && (
+          <Grid item xs={12}>
+            <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={1}>
+              <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
+                {strings.ONE_ON_ONE_SESSIONS}
+              </Typography>
+              {module && (
+                <Button
+                  id='edit'
+                  label={strings.EDIT}
+                  onClick={() =>
+                    navigate({
+                      pathname: APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT.replace(':moduleId', `${module.id}`),
+                      search: '?type=one-on-one',
+                    })
+                  }
+                  icon='iconEdit'
+                  priority='secondary'
+                  className='edit-button'
+                  size='small'
+                  type='productive'
+                />
+              )}
+            </Box>
+            <Box dangerouslySetInnerHTML={{ __html: module.eventDescriptions['One-on-One Session'] }} />
+            <Box marginTop={2}>
+              <Table
+                rows={oneOnOneSessions || []}
+                columns={columns}
+                id={'module-oneOnOneSessions'}
+                orderBy={'name'}
+                Renderer={EventsCellRenderer}
               />
-            )}
-          </Box>
-          <Box dangerouslySetInnerHTML={{ __html: oneOnOneSessions?.[0]?.description || '' }} />
-          <Box marginTop={2}>
-            <Table
-              rows={oneOnOneSessions || []}
-              columns={columns}
-              id={'module-oneOnOneSessions'}
-              orderBy={'name'}
-              Renderer={EventsCellRenderer}
-            />
-          </Box>
-        </Grid>
-        <Grid item xs={12}>
-          <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={1}>
-            <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
-              {strings.RECORDED_SESSIONS}
-            </Typography>
-            {module && (
-              <Button
-                id='edit'
-                label={strings.EDIT}
-                onClick={() =>
-                  navigate({
-                    pathname: APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT.replace(':moduleId', `${module.id}`),
-                    search: '?type=recorded',
-                  })
-                }
-                icon='iconEdit'
-                priority='secondary'
-                className='edit-button'
-                size='small'
-                type='productive'
+            </Box>
+          </Grid>
+        )}
+        {module && module.eventDescriptions['Recorded Session'] !== undefined && (
+          <Grid item xs={12}>
+            <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={1}>
+              <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
+                {strings.RECORDED_SESSIONS}
+              </Typography>
+              {module && (
+                <Button
+                  id='edit'
+                  label={strings.EDIT}
+                  onClick={() =>
+                    navigate({
+                      pathname: APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT.replace(':moduleId', `${module.id}`),
+                      search: '?type=recorded',
+                    })
+                  }
+                  icon='iconEdit'
+                  priority='secondary'
+                  className='edit-button'
+                  size='small'
+                  type='productive'
+                />
+              )}
+            </Box>
+            <Box dangerouslySetInnerHTML={{ __html: module.eventDescriptions['Recorded Session'] }} />
+            <Box marginTop={2}>
+              <Table
+                rows={recordedSessions || []}
+                columns={columns}
+                id={'module-recordedSessions'}
+                orderBy={'name'}
+                Renderer={EventsCellRenderer}
               />
-            )}
-          </Box>
-          <Box dangerouslySetInnerHTML={{ __html: recordedSessions?.[0]?.description || '' }} />
-          <Box marginTop={2}>
-            <Table
-              rows={recordedSessions || []}
-              columns={columns}
-              id={'module-recordedSessions'}
-              orderBy={'name'}
-              Renderer={EventsCellRenderer}
-            />
-          </Box>
-        </Grid>
-        <Grid item xs={12}>
-          <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={1}>
-            <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
-              {strings.WORKSHOPS}
-            </Typography>
-            {module && (
-              <Button
-                id='edit'
-                label={strings.EDIT}
-                onClick={() =>
-                  navigate({
-                    pathname: APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT.replace(':moduleId', `${module.id}`),
-                    search: '?type=workshop',
-                  })
-                }
-                icon='iconEdit'
-                priority='secondary'
-                className='edit-button'
-                size='small'
-                type='productive'
+            </Box>
+          </Grid>
+        )}
+        {module && module.eventDescriptions['Workshop'] !== undefined && (
+          <Grid item xs={12}>
+            <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={1}>
+              <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
+                {strings.WORKSHOPS}
+              </Typography>
+              {module && (
+                <Button
+                  id='edit'
+                  label={strings.EDIT}
+                  onClick={() =>
+                    navigate({
+                      pathname: APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT.replace(':moduleId', `${module.id}`),
+                      search: '?type=workshop',
+                    })
+                  }
+                  icon='iconEdit'
+                  priority='secondary'
+                  className='edit-button'
+                  size='small'
+                  type='productive'
+                />
+              )}
+            </Box>
+            <Box dangerouslySetInnerHTML={{ __html: module.eventDescriptions['Workshop'] }} />
+            <Box marginTop={2}>
+              <Table
+                rows={workshops || []}
+                columns={columns}
+                id={'module-workshops'}
+                orderBy={'name'}
+                Renderer={EventsCellRenderer}
               />
-            )}
-          </Box>
-          <Box dangerouslySetInnerHTML={{ __html: workshops?.[0]?.description || '' }} />
-          <Box marginTop={2}>
-            <Table
-              rows={workshops || []}
-              columns={columns}
-              id={'module-workshops'}
-              orderBy={'name'}
-              Renderer={EventsCellRenderer}
-            />
-          </Box>
-        </Grid>
+            </Box>
+          </Grid>
+        )}
       </Grid>
     </Card>
   );

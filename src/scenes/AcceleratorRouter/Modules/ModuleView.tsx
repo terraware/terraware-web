@@ -43,17 +43,8 @@ export type InventoryResult = {
 export default function ModuleView(): JSX.Element {
   const contentRef = useRef(null);
   const { moduleId } = useParams<{ moduleId: string }>();
-  const { getModule, module, deliverables, events } = useGetModule();
+  const { module, events, getModule } = useGetModule(Number(moduleId));
   const theme = useTheme();
-
-  const deliverablesIds = new Set();
-  const uniqueDeliverables = deliverables?.filter((d) => !deliverablesIds.has(d.id) && deliverablesIds.add(d.id));
-
-  useEffect(() => {
-    if (moduleId) {
-      getModule({ moduleId: Number(moduleId) });
-    }
-  }, [moduleId]);
 
   const tabs = moduleId
     ? [
@@ -65,7 +56,7 @@ export default function ModuleView(): JSX.Element {
         {
           id: 'contentAndMaterials',
           label: strings.CONTENT_AND_MATERIALS,
-          children: <ContentAndMaterials module={module} deliverables={uniqueDeliverables} />,
+          children: <ContentAndMaterials module={module} deliverables={module?.deliverables ?? []} />,
         },
         {
           id: 'events',
@@ -80,6 +71,10 @@ export default function ModuleView(): JSX.Element {
     tabs,
     viewIdentifier: 'accelerator-module-view',
   });
+
+  useEffect(() => {
+    getModule();
+  }, [getModule]);
 
   return (
     <TfMain>
