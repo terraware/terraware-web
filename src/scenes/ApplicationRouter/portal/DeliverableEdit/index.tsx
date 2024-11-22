@@ -35,7 +35,7 @@ const SectionDeliverableEditView = () => {
       selectedApplication.status === 'Failed Pre-screen' ||
       selectedApplication.status === 'Passed Pre-screen'
     );
-  }, [deliverable]);
+  }, [deliverable, selectedApplication]);
 
   if (!selectedApplication || !deliverable) {
     return null;
