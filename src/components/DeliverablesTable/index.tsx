@@ -141,6 +141,7 @@ const DeliverablesTable = ({
   };
 
   const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
+    const rejectedStatus = activeLocale ? (isAcceleratorRoute ? strings.UPDATE_REQUESTED : strings.UPDATE_NEEDED) : '';
     const filters: FilterConfigWithValues[] = [
       {
         field: 'status',
@@ -149,6 +150,9 @@ const DeliverablesTable = ({
         // human readable values
         options: DeliverableStatusesWithOverdue,
         label: strings.STATUS,
+        pillValueRenderer: (values: (string | number | null)[]) =>
+          values.map((value) => (value === 'Rejected' ? rejectedStatus : value)).join(', '),
+        renderOption: (value: string | number) => (value.toString() === 'Rejected' ? rejectedStatus : value.toString()),
       },
       {
         field: 'category',
