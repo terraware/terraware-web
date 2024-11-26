@@ -26,7 +26,7 @@ const ToDoDate = ({ toDo }: ToDoDateProps) => {
   const theme = useTheme();
 
   const dateLabel = toDo.getDisplayDateTimeString();
-  const dateString = toDo.getType() == 'Deliverable' ? strings.formatString(strings.DUE, dateLabel) : dateLabel;
+  const dateString = toDo.getType() === 'Deliverable' ? strings.formatString(strings.DUE, dateLabel) : dateLabel;
 
   return (
     <Typography

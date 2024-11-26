@@ -58,7 +58,7 @@ export const variableDependencyMet = (variable: VariableWithValues, allVariables
         return variable.dependencyValue.toLowerCase() === `${rawDependsOnValue}`.toLowerCase();
       }
 
-      return variable.dependencyValue == rawDependsOnValue;
+      return variable.dependencyValue === rawDependsOnValue;
     case 'gt':
       return Number(rawDependsOnValue) > Number(variable.dependencyValue);
     case 'gte':

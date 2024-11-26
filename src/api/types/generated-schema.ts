@@ -237,7 +237,7 @@ export interface paths {
      * Upserts score selections for a single project.
      * @description Update the scores for the project phase. If the (project, phase, category) does not exist, a new entry is created. Setting a `score` to `null` removes the score.
      */
-    put: operations["upsertProjectScores"];
+    put: operations["upsertProjectScores_1"];
   };
   "/api/v1/accelerator/projects/{projectId}/species": {
     /** Gets all species associated to a participant project. */
@@ -1083,6 +1083,12 @@ export interface paths {
   "/api/v1/versions": {
     /** Gets the minimum and recommended versions for Terraware's client applications. */
     get: operations["getVersions"];
+  };
+  "/api/v2/accelerator/projects/{projectId}/scores": {
+    /** Gets overall score for a single project. */
+    get: operations["getProjectOverallScore"];
+    /** Updates overall score for a single project. */
+    put: operations["upsertProjectScores"];
   };
   "/api/v2/seedbank/accessions": {
     /** Creates a new accession. */
@@ -2902,6 +2908,10 @@ export interface components {
       details: components["schemas"]["ProjectAcceleratorDetailsPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetProjectOverallScoreResponsePayload: {
+      score: components["schemas"]["ProjectOverallScorePayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetProjectResponsePayload: {
       project: components["schemas"]["ProjectPayload"];
       status: components["schemas"]["SuccessOrError"];
@@ -4362,6 +4372,17 @@ export interface components {
       totalExpansionPotential?: number;
       whatNeedsToBeTrue?: string;
     };
+    ProjectOverallScorePayload: {
+      /** Format: uri */
+      detailsUrl?: string;
+      /** Format: int64 */
+      modifiedBy?: number;
+      /** Format: date-time */
+      modifiedTime?: string;
+      /** Format: double */
+      overallScore?: number;
+      summary?: string;
+    };
     ProjectPayload: {
       /** Format: int64 */
       cohortId?: number;
@@ -5374,6 +5395,16 @@ export interface components {
       totalCarbon?: number;
       totalExpansionPotential?: number;
       whatNeedsToBeTrue?: string;
+    };
+    UpdateProjectOverallScorePayload: {
+      /** Format: uri */
+      detailsUrl?: string;
+      /** Format: double */
+      overallScore?: number;
+      summary?: string;
+    };
+    UpdateProjectOverallScoreRequestPayload: {
+      score: components["schemas"]["UpdateProjectOverallScorePayload"];
     };
     UpdateProjectRequestPayload: {
       description?: string;
@@ -6957,7 +6988,7 @@ export interface operations {
    * Upserts score selections for a single project.
    * @description Update the scores for the project phase. If the (project, phase, category) does not exist, a new entry is created. Setting a `score` to `null` removes the score.
    */
-  upsertProjectScores: {
+  upsertProjectScores_1: {
     parameters: {
       path: {
         projectId: number;
@@ -11254,6 +11285,55 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["VersionsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets overall score for a single project. */
+  getProjectOverallScore: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetProjectOverallScoreResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Updates overall score for a single project. */
+  upsertProjectScores: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateProjectOverallScoreRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };

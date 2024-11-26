@@ -85,7 +85,7 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
 
   const validateProjectName = useCallback(
     (name: string) => {
-      if (name.length == 0) {
+      if (name.length === 0) {
         return activeLocale ? strings.REQUIRED_FIELD : 'project_name_empty';
       }
       if (!availableProjects) {
