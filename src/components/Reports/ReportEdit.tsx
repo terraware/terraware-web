@@ -349,7 +349,7 @@ export default function ReportEdit(): JSX.Element {
         await updateFiles();
         await updatePhotos(report.id);
         const submitResult = await ReportService.submitReport(reportIdInt);
-        if (submitResult.requestSucceeded && reportId) {
+        if (submitResult.requestSucceeded && reportId && selectedOrganization.id !== -1) {
           reloadOrganizations(selectedOrganization.id);
           navigate({ pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId) }, { replace: true });
         } else {

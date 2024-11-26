@@ -70,24 +70,28 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
   );
 
   useEffect(() => {
-    void dispatch(requestReportsSettings(selectedOrganization.id));
+    if (selectedOrganization.id !== -1) {
+      void dispatch(requestReportsSettings(selectedOrganization.id));
+    }
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
-    const refreshSearch = async () => {
-      const reportsResults = await ReportService.getReports(selectedOrganization.id);
-      setResults(
-        (reportsResults.reports || []).map((report) => {
-          if (report.projectName) {
-            return report;
-          }
-          // Reports without a project name are for the organization
-          return { ...report, organizationName: selectedOrganization.name };
-        })
-      );
-    };
+    if (selectedOrganization.id !== -1) {
+      const refreshSearch = async () => {
+        const reportsResults = await ReportService.getReports(selectedOrganization.id);
+        setResults(
+          (reportsResults.reports || []).map((report) => {
+            if (report.projectName) {
+              return report;
+            }
+            // Reports without a project name are for the organization
+            return { ...report, organizationName: selectedOrganization.name };
+          })
+        );
+      };
 
-    void refreshSearch();
+      void refreshSearch();
+    }
   }, [selectedOrganization.id, selectedOrganization.name]);
 
   const reportsToComplete = useMemo(() => results.filter((report) => report.status !== 'Submitted'), [results]);

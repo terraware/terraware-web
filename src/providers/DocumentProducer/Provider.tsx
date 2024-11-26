@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { BusySpinner } from '@terraware/web-components';
+import _ from 'lodash';
 
 import { selectDocumentTemplate } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
 import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
@@ -59,10 +60,10 @@ const DocumentProducerProvider = ({ children }: Props) => {
 
   // Document variables may contain out-dated variables that are injected into sections within the document
   // They need to be added into the `allVariables` array so consumers can access out of date variables easily
-  const allVariables = useMemo(
-    () => ((data.allVariables || []) as VariableWithValues[]).concat(documentVariables || []),
-    [data.allVariables, documentVariables]
-  );
+  const allVariables = useMemo(() => {
+    const _allVariables = ((data.allVariables || []) as VariableWithValues[]).concat(documentVariables || []);
+    return _.uniqBy(_allVariables, (variable: VariableWithValues) => variable.id);
+  }, [data.allVariables, documentVariables]);
 
   const documentSectionVariables = useMemo(
     () => (documentVariables || []).filter(isSectionVariableWithValues) as SectionVariableWithValues[],

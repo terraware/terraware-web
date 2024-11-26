@@ -127,7 +127,7 @@ export default function NurseryView(): JSX.Element {
           subLocationNames: editedSubLocations?.map((l) => l.name as string),
         });
 
-    if (response.requestSucceeded) {
+    if (response.requestSucceeded && selectedOrganization.id !== -1) {
       if (selectedNursery && editedSubLocations) {
         await SubLocationService.saveEditedSubLocations(id as number, editedSubLocations);
       }

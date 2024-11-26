@@ -30,7 +30,7 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   const { activeLocale } = useLocalization();
   const { project, projectId } = useProjectData();
   const { participant } = useParticipant(project?.participantId ?? -1);
-  const { acceleratorOrgs, reload: reloadAll } = useAcceleratorOrgs(true);
+  const { acceleratorOrgs, reload: reloadAll } = useAcceleratorOrgs({ hasProjectApplication: true });
 
   const [participantProject, setParticipantProject] = useState<ParticipantProject>();
   const [participantProjectData, setParticipantProjectData] = useState<ParticipantProjectData>({
@@ -69,10 +69,10 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   }, [dispatch, projectId]);
 
   useEffect(() => {
-    if (!isNaN(projectId)) {
-      reload();
+    if (projectId !== -1) {
+      void dispatch(requestGetParticipantProject(projectId));
     }
-  }, [dispatch, projectId, reload]);
+  }, [dispatch, projectId]);
 
   useEffect(() => {
     const userIds = new Set([project?.createdBy, project?.modifiedBy]);

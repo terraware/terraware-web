@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
-import { Grid, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, Message, SelectT } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
+import { useDocLinks } from 'src/docLinks';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { requestCreateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
@@ -19,6 +20,8 @@ import { SpeciesForParticipantProject, getSpeciesNativeCategoryOptions } from 's
 import { Species } from 'src/types/Species';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
+
+import TextWithLink from '../common/TextWithLink';
 
 export interface AddSpeciesModalProps {
   hasActiveDeliverable: boolean;
@@ -37,20 +40,21 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   const { currentParticipantProject } = useParticipantData();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
+  const docLinks = useDocLinks();
 
   const allSpecies = useAppSelector(selectSpecies);
 
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectParticipantProjectSpeciesCreateRequest(requestId));
 
-  const [selectableSpecies, setSelectableSpecies] = useState<Species[]>();
   const [error, setError] = useState<string>('');
 
-  useEffect(() => {
-    const speciesToAdd = allSpecies?.filter((species) => {
-      return !participantProjectSpecies?.find((_species) => species.id === _species.species.id);
-    });
-    setSelectableSpecies(speciesToAdd);
+  const selectableSpecies = useMemo(() => {
+    return (
+      allSpecies?.filter((species) => {
+        return !participantProjectSpecies?.find((_species) => species.id === _species.species.id);
+      }) ?? []
+    );
   }, [allSpecies, participantProjectSpecies]);
 
   const [record, setRecord, onChange] = useForm<Partial<CreateParticipantProjectSpeciesRequestPayload>>({
@@ -59,7 +63,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   const { activeLocale } = useLocalization();
 
   useEffect(() => {
-    if (!allSpecies) {
+    if (!allSpecies && selectedOrganization.id !== -1) {
       dispatch(requestSpecies(selectedOrganization.id));
     }
   }, [allSpecies, selectedOrganization]);
@@ -140,6 +144,29 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
           </Grid>
         )}
 
+        {selectableSpecies.length === 0 && (
+          <Grid item xs={12} sx={{ marginBottom: theme.spacing(2) }}>
+            <Message
+              title={strings.SPECIES_LIST_NO_ORGANIZATION_SPECIES_TITLE}
+              body={
+                <Typography display={'inline'} whiteSpace={'wrap'}>
+                  <TextWithLink
+                    href={docLinks.knowledge_base_add_species}
+                    isExternal
+                    style={{
+                      position: 'relative',
+                      bottom: '1px',
+                    }}
+                    text={strings.SPECIES_LIST_NO_ORGANIZATION_SPECIES_BODY}
+                  />
+                </Typography>
+              }
+              priority='warning'
+              type='page'
+            />
+          </Grid>
+        )}
+
         <Grid item xs={12}>
           <TextField
             id='project-name'
@@ -154,7 +181,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             id='scientificName'
             label={strings.SCIENTIFIC_NAME}
             placeholder={strings.SELECT}
-            options={selectableSpecies?.sort((a: Species, b: Species) =>
+            options={selectableSpecies.sort((a: Species, b: Species) =>
               a.scientificName.localeCompare(b.scientificName)
             )}
             onChange={onChangeSpecies}
@@ -165,6 +192,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             displayLabel={(species: Species) => species?.scientificName || ''}
             toT={(scientificName: string) => ({ scientificName }) as Species}
             required
+            disabled={selectableSpecies.length === 0}
             errorText={error && !record?.speciesId ? error : ''}
           />
         </Grid>

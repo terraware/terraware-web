@@ -173,8 +173,8 @@ export const getMapDrawingLayer = (source: MapSourceRenderProperties, sourceId: 
           id: `${sourceId}-pattern`,
           type: 'fill',
           paint: {
-            'fill-pattern': source.patternFill.imageName,
-            'fill-opacity': source.patternFill.opacityExpression ?? 1.0,
+            'fill-pattern': source.patternFill,
+            'fill-opacity': source.opacity ?? 1.0,
           },
         }
       : null,

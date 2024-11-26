@@ -64,7 +64,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
         navigate(APP_PATHS.SPECIES);
       }
     };
-    if (selectedOrganization) {
+    if (selectedOrganization && selectedOrganization.id !== -1) {
       getSpecies();
     }
   }, [speciesId, selectedOrganization, navigate]);
@@ -85,16 +85,18 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
   };
 
   const deleteSelectedSpecies = async (id: number) => {
-    setIsBusy(true);
-    const success = await SpeciesService.deleteSpecies(id, selectedOrganization.id);
-    setIsBusy(false);
-    if (!success) {
-      snackbar.toastError(strings.GENERIC_ERROR);
-    } else {
-      reloadData();
+    if (selectedOrganization.id !== -1) {
+      setIsBusy(true);
+      const success = await SpeciesService.deleteSpecies(id, selectedOrganization.id);
+      setIsBusy(false);
+      if (!success) {
+        snackbar.toastError(strings.GENERIC_ERROR);
+      } else {
+        reloadData();
+      }
+      setDeleteSpeciesModalOpen(false);
+      navigate(APP_PATHS.SPECIES);
     }
-    setDeleteSpeciesModalOpen(false);
-    navigate(APP_PATHS.SPECIES);
   };
 
   const GridItemWrapper = useCallback(

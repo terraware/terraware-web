@@ -50,7 +50,9 @@ export default function ScheduleObservation(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    dispatch(requestPlantings(selectedOrganization.id));
+    if (selectedOrganization.id !== -1) {
+      dispatch(requestPlantings(selectedOrganization.id));
+    }
   }, [dispatch, selectedOrganization.id]);
 
   // This populates planting site specific data into the selectObservationSchedulableSitesWithPlantReportData selector
@@ -63,7 +65,7 @@ export default function ScheduleObservation(): JSX.Element {
   useEffect(() => {
     if (result?.status === 'error') {
       snackbar.toastError();
-    } else if (result?.status === 'success') {
+    } else if (result?.status === 'success' && selectedOrganization.id !== -1) {
       snackbar.toastSuccess(strings.OBSERVATION_SCHEDULED);
       dispatch(requestObservations(selectedOrganization.id));
       goToObservations();

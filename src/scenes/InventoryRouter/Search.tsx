@@ -82,7 +82,9 @@ export default function Search(props: SearchProps): JSX.Element | null {
   }, [filters.facilityIds, dispatch]);
 
   useEffect(() => {
-    void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
+    if (selectedOrganization.id !== -1) {
+      void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
+    }
   }, [dispatch, selectedOrganization.id, activeLocale]);
 
   useEffect(() => {
@@ -205,7 +207,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
   ]);
 
   useEffect(() => {
-    if (origin === 'Nursery') {
+    if (origin === 'Nursery' && selectedOrganization.id !== -1) {
       void dispatch(requestSpecies(selectedOrganization.id));
     }
   }, [origin, dispatch, selectedOrganization.id]);

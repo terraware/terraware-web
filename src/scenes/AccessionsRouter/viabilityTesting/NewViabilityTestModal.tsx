@@ -84,13 +84,15 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   }, [selectedOrganization, accession.facilityId]);
 
   useEffect(() => {
-    const getOrgUsers = async () => {
-      const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
-      if (response.requestSucceeded) {
-        setUsers(response.users);
-      }
-    };
-    getOrgUsers();
+    if (selectedOrganization.id !== -1) {
+      const getOrgUsers = async () => {
+        const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
+        if (response.requestSucceeded) {
+          setUsers(response.users);
+        }
+      };
+      getOrgUsers();
+    }
   }, [selectedOrganization]);
 
   useEffect(() => {

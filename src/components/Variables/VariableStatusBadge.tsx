@@ -65,7 +65,7 @@ const VariableStatusBadge = (props: VariableStatusBadgeProps): JSX.Element => {
           backgroundColor: theme.palette.TwClrBgDangerTertiary,
           borderColor: theme.palette.TwClrBrdrDanger,
           labelColor: theme.palette.TwClrTxtDanger,
-          label: strings.NOT_ACCEPTED,
+          label: isAcceleratorRoute ? strings.UPDATE_REQUESTED : strings.UPDATE_NEEDED,
         };
       default:
         return {

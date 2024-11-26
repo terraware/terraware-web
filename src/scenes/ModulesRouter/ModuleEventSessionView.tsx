@@ -8,9 +8,10 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import Link from 'src/components/common/Link';
 import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
 import { APP_PATHS } from 'src/constants';
+import useGetCohortModule from 'src/hooks/useGetCohortModule';
 import useGetEvent from 'src/hooks/useGetEvent';
-import useGetModule from 'src/hooks/useGetModule';
 import { useLocalization } from 'src/providers';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 import { getEventStatus, getEventType } from 'src/types/Module';
 import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
@@ -26,13 +27,20 @@ const openExternalURL = (url: string | undefined, target = '_blank', features = 
 const ModuleEventSessionView = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
+  const { currentParticipantProject, setCurrentParticipantProject } = useParticipantData();
   const pathParams = useParams<{ sessionId: string; moduleId: string; projectId: string }>();
   const projectId = Number(pathParams.projectId);
   const moduleId = Number(pathParams.moduleId);
   const sessionId = Number(pathParams.sessionId);
 
+  useEffect(() => {
+    if (projectId) {
+      setCurrentParticipantProject(projectId);
+    }
+  }, [projectId, setCurrentParticipantProject]);
+
   const { event, getEvent } = useGetEvent();
-  const { module, getModule } = useGetModule();
+  const { cohortModule, getCohortModule } = useGetCohortModule();
 
   useEffect(() => {
     if (sessionId) {
@@ -41,10 +49,10 @@ const ModuleEventSessionView = () => {
   }, [getEvent, sessionId]);
 
   useEffect(() => {
-    if (moduleId && projectId) {
-      void getModule({ moduleId, projectId });
+    if (currentParticipantProject && currentParticipantProject.cohortId) {
+      void getCohortModule({ moduleId, cohortId: currentParticipantProject.cohortId });
     }
-  }, [getEvent, moduleId, projectId]);
+  }, [currentParticipantProject, moduleId]);
 
   const eventType = event?.type ? getEventType(event.type) : '';
   const isRecordedSession = eventType === 'Recorded Session';
@@ -68,18 +76,18 @@ const ModuleEventSessionView = () => {
         to: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`),
       },
       {
-        name: module?.title || '',
+        name: cohortModule?.title || '',
         to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
       },
     ],
-    [activeLocale, projectId, module, moduleId]
+    [activeLocale, projectId, cohortModule, moduleId]
   );
 
   return (
     <ParticipantPage
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      title={<ModuleViewTitle module={module} projectId={projectId} />}
+      title={<ModuleViewTitle module={cohortModule} projectId={projectId} />}
     >
       <Card
         sx={{

@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import { Badge } from '@terraware/web-components';
 
 import { CohortPhaseType } from 'src/types/Cohort';
-import { Module } from 'src/types/Module';
+import { CohortModule } from 'src/types/Module';
 
 type AltStepIconProps = {
   index: number;
@@ -42,7 +42,7 @@ const AltStepIcon = ({ index, bgColor }: AltStepIconProps) => {
 
 export type ModuleTimelineProps = {
   cohortPhase?: CohortPhaseType;
-  modules: Module[];
+  modules: CohortModule[];
 };
 
 const ModuleTimeline = ({ cohortPhase, modules }: ModuleTimelineProps) => {

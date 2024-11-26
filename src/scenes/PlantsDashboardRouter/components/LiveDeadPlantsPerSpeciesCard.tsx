@@ -5,6 +5,7 @@ import { Dropdown } from '@terraware/web-components';
 
 import PieChart from 'src/components/common/Chart/PieChart';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import isEnabled from 'src/features';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -22,6 +23,7 @@ export default function LiveDeadPlantsPerSpeciesCard({
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
   );
+  const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
 
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
@@ -67,7 +69,39 @@ export default function LiveDeadPlantsPerSpeciesCard({
     }
   }, [selectedSpecies, observation]);
 
-  return (
+  return newPlantsDashboardEnabled ? (
+    <Box display='flex' flexDirection='column'>
+      <Dropdown
+        onChange={(newValue) => setSelectedSpecies(newValue)}
+        label=''
+        options={allSpecies}
+        selectedValue={selectedSpecies}
+        fullWidth={true}
+        selectStyles={{
+          inputContainer: {
+            maxWidth: '228px',
+          },
+        }}
+      />
+      {showChart && (
+        <Box>
+          <PieChart
+            chartId='liveDeadplantsBySpecies'
+            chartData={{
+              labels: labels ?? [],
+              datasets: [
+                {
+                  values: values ?? [],
+                },
+              ],
+            }}
+            maxWidth='100%'
+            elementColor={['#99B85F', '#CE9E97']}
+          />
+        </Box>
+      )}
+    </Box>
+  ) : (
     <OverviewItemCard
       isEditable={false}
       contents={

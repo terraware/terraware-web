@@ -6,16 +6,14 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import strings from 'src/strings';
-import { ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
-import { CohortModule } from 'src/types/Module';
+import { CohortModule, ModuleDeliverable } from 'src/types/Module';
 
-import ModuleDeliverablesCellRenderer from './ModuleDeliverablesCellRenderer';
+import ModuleDeliverablesCellRenderer from '../Modules/ModuleDeliverablesCellRenderer';
 
 export interface ModuleDeliverablesModalProps {
   onClose: () => void;
-  deliverables?: ListDeliverablesElementWithOverdue[];
+  deliverables?: ModuleDeliverable[];
   moduleToEdit?: CohortModule;
-  cohortId?: number;
 }
 
 const columns = (): TableColumnType[] => [
@@ -32,7 +30,7 @@ const columns = (): TableColumnType[] => [
 ];
 
 export default function ModuleDeliverablesModal(props: ModuleDeliverablesModalProps): JSX.Element {
-  const { onClose, deliverables, moduleToEdit, cohortId } = props;
+  const { onClose, deliverables, moduleToEdit } = props;
 
   return (
     <DialogBox
@@ -55,7 +53,7 @@ export default function ModuleDeliverablesModal(props: ModuleDeliverablesModalPr
       <Table
         id='module-deliverables-table'
         columns={columns}
-        rows={deliverables?.map((del) => ({ ...del, cohortId: cohortId })) || []}
+        rows={deliverables ?? []}
         orderBy='position'
         Renderer={ModuleDeliverablesCellRenderer}
       />

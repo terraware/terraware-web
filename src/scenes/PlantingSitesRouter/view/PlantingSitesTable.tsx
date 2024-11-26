@@ -61,7 +61,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
 
   const projects = useAppSelector(selectProjects);
 
-  const [isPresorted, setIsPresorted] = useState<boolean>(false);
+  const [isPresorted, setIsPresorted] = useState<boolean>(true);
   const [filterPillData, setFilterPillData] = useState<PillListItemWithEmptyValue[]>([]);
 
   const onSortChange = (order: SortOrder, orderBy: string) => {

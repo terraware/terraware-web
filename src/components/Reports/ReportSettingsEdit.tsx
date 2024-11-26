@@ -17,7 +17,7 @@ const ReportSettingsEdit = () => {
   const reportsSettings = useAppSelector(selectReportsSettings);
 
   useEffect(() => {
-    if (!reportsSettings) {
+    if (!reportsSettings && selectedOrganization.id !== -1) {
       void dispatch(requestReportsSettings(selectedOrganization.id));
     }
   }, [dispatch, reportsSettings, selectedOrganization.id]);

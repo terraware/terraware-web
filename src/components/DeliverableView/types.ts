@@ -4,6 +4,7 @@ import { DeliverableWithOverdue } from 'src/types/Deliverables';
 
 export type ViewProps = {
   deliverable: DeliverableWithOverdue;
+  hideId?: boolean;
   hideStatusBadge?: boolean;
   setSubmitButtonDisalbed?: (disabled: boolean) => void;
 };

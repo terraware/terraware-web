@@ -22,10 +22,12 @@ export default function Collectors2({ collectors = [''], onChange }: Props): JSX
   const theme = useTheme();
 
   useEffect(() => {
-    const populateCollectors = async () => {
-      setCollectorsOpt(await SeedBankService.getCollectors(selectedOrganization.id));
-    };
-    populateCollectors();
+    if (selectedOrganization.id !== -1) {
+      const populateCollectors = async () => {
+        setCollectorsOpt(await SeedBankService.getCollectors(selectedOrganization.id));
+      };
+      populateCollectors();
+    }
   }, [selectedOrganization]);
 
   const getNonEmptyCollectors = (updatedCollectors: string[]) => updatedCollectors.filter((collector) => !!collector);

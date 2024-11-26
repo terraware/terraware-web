@@ -4,6 +4,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 
 import BarChart from 'src/components/common/Chart/BarChart';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
@@ -31,6 +32,7 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
   const [targets, setTargets] = useState<(number | null)[]>();
   const [actuals, setActuals] = useState<(number | null)[]>();
   const [tooltipTitles, setTooltipTitles] = useState<string[]>();
+  const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
 
   useEffect(() => {
     if (plantingSite) {
@@ -61,7 +63,7 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
 
     const datasets = [
       {
-        label: strings.TARGET_PLANTING_DENSITY,
+        label: newPlantsDashboardEnabled ? strings.TARGET_DENSITY : strings.TARGET_PLANTING_DENSITY,
         values: targets,
         color: theme.palette.TwClrBaseBlue500,
       },
@@ -69,7 +71,7 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
 
     if (observation && actuals?.length && !actuals?.every((val) => val === null)) {
       datasets.push({
-        label: strings.PLANTING_DENSITY,
+        label: newPlantsDashboardEnabled ? strings.OBSERVED_DENSITY : strings.PLANTING_DENSITY,
         values: actuals,
         color: theme.palette.TwClrBaseBlue700,
       });
@@ -81,7 +83,20 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
     };
   }, [observation, labels, targets, actuals, theme.palette.TwClrBaseBlue500, theme.palette.TwClrBaseBlue700]);
 
-  return (
+  return newPlantsDashboardEnabled ? (
+    <Box marginBottom={theme.spacing(1.5)}>
+      <BarChart
+        showLegend={true}
+        elementColor={theme.palette.TwClrBgBrand}
+        barWidth={observation && actuals?.length ? 0 : undefined}
+        chartId='plantingDensityByZone'
+        chartData={chartData}
+        customTooltipTitles={tooltipTitles}
+        maxWidth='100%'
+        yAxisLabel={strings.PLANTS_PER_HECTARE}
+      />
+    </Box>
+  ) : (
     <OverviewItemCard
       isEditable={false}
       contents={

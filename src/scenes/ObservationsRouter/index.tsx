@@ -47,11 +47,13 @@ export default function ObservationsRouter(): JSX.Element {
   const plantingSites = useAppSelector(selectPlantingSites);
 
   useEffect(() => {
-    dispatch(requestSpecies(selectedOrganization.id));
+    if (selectedOrganization.id !== -1) {
+      dispatch(requestSpecies(selectedOrganization.id));
+    }
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
-    if (species !== undefined && plantingSites !== undefined && !dispatched) {
+    if (species !== undefined && plantingSites !== undefined && !dispatched && selectedOrganization.id !== -1) {
       setDispatched(true);
       dispatch(requestObservationsResults(selectedOrganization.id));
       dispatch(requestObservations(selectedOrganization.id));
@@ -64,15 +66,19 @@ export default function ObservationsRouter(): JSX.Element {
     }
   }, [snackbar, observationsResultsError, speciesError, plantingSitesError]);
 
+  const reload = () => {
+    setDispatched(false);
+  };
+
   // show spinner while initializing data
   if (observationsResults === undefined && !(observationsResultsError || speciesError || plantingSitesError)) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
 
-  return <ObservationsInnerRouter />;
+  return <ObservationsInnerRouter reload={reload} />;
 }
 
-const ObservationsInnerRouter = (): JSX.Element => {
+const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Element => {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
   const [search, setSearch] = useState<string>('');
@@ -135,7 +141,7 @@ const ObservationsInnerRouter = (): JSX.Element => {
       />
       <Route
         path={'/:plantingSiteId/results/:observationId'}
-        element={<ObservationDetails {...searchProps} setFilterOptions={setFilterOptionsCallback} />}
+        element={<ObservationDetails {...searchProps} setFilterOptions={setFilterOptionsCallback} reload={reload} />}
       />
       <Route
         path={'/:plantingSiteId'}

@@ -8,7 +8,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import Link from 'src/components/common/Link';
 import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
 import { APP_PATHS } from 'src/constants';
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
@@ -31,6 +31,7 @@ export const PlantingSiteStats = () => {
 
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
+  const { countries } = useLocalization();
 
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, selectedPlantingSiteId || -1, defaultTimeZone.get().id)
@@ -137,7 +138,11 @@ export const PlantingSiteStats = () => {
           </Grid>
 
           <Grid item xs={primaryGridSize}>
-            <StatsCardItem label={strings.LOCATION} showLink={false} />
+            <StatsCardItem
+              label={strings.LOCATION}
+              showLink={false}
+              value={countries.find((c) => c.code === selectedPlantingSite?.countryCode)?.name}
+            />
           </Grid>
 
           <Grid item xs={primaryGridSize}>
