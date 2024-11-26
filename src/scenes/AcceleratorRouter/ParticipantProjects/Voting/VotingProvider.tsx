@@ -31,7 +31,7 @@ const VotingProvider = ({ children }: Props): JSX.Element => {
   const votes = useAppSelector((state) => selectProjectVotes(state, projectId));
 
   const [phaseVotes, setPhaseVotes] = useState<PhaseVotes>();
-  const [votingData, setVotingData] = useState<VotingData>({ projectId });
+  const [votingData, setVotingData] = useState<VotingData>({ project });
 
   const goToProjects = useCallback(() => {
     navigate({ pathname: APP_PATHS.ACCELERATOR_OVERVIEW }); // TODO switch to project management lists page
@@ -63,11 +63,10 @@ const VotingProvider = ({ children }: Props): JSX.Element => {
   useEffect(() => {
     setVotingData({
       phaseVotes,
-      projectId,
-      projectName: project?.name,
+      project,
       status: votes?.status ?? 'pending',
     });
-  }, [phaseVotes, projectId, project?.name, votes?.status]);
+  }, [phaseVotes, project, votes?.status]);
 
   return <VotingContext.Provider value={votingData}>{children}</VotingContext.Provider>;
 };

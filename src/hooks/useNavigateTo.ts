@@ -10,8 +10,94 @@ export default function useNavigateTo() {
 
   return useMemo(
     () => ({
-      goToHelpSupport: () => {
-        navigate({ pathname: APP_PATHS.HELP_SUPPORT });
+      goToAccelerator: () => {
+        navigate({ pathname: APP_PATHS.ACCELERATOR });
+      },
+
+      goToAcceleratorApplication: (applicationId: number) => {
+        navigate({ pathname: APP_PATHS.ACCELERATOR_APPLICATION.replace(':applicationId', `${applicationId}`) });
+      },
+
+      goToAcceleratorApplicationDeliverable: (applicationId: number, deliverableId: number) => {
+        navigate({
+          pathname: APP_PATHS.ACCELERATOR_APPLICATION_DELIVERABLE.replace(':applicationId', `${applicationId}`).replace(
+            ':deliverableId',
+            `${deliverableId}`
+          ),
+        });
+      },
+
+      goToAcceleratorApplicationMap: (applicationId: number) => {
+        navigate({ pathname: APP_PATHS.ACCELERATOR_APPLICATION_MAP.replace(':applicationId', `${applicationId}`) });
+      },
+
+      goToApplication: (applicationId: number) => {
+        navigate({ pathname: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${applicationId}`) });
+      },
+
+      goToApplicationList: () => {
+        navigate({ pathname: APP_PATHS.APPLICATIONS });
+      },
+
+      goToApplicationMap: (applicationId: number) => {
+        navigate({
+          pathname: APP_PATHS.APPLICATION_MAP.replace(':applicationId', `${applicationId}`),
+        });
+      },
+
+      goToApplicationMapUpdate: (applicationId: number) => {
+        navigate({
+          pathname: APP_PATHS.APPLICATION_MAP_UPDATE.replace(':applicationId', `${applicationId}`),
+        });
+      },
+
+      goToApplicationPrescreen: (applicationId: number) => {
+        navigate({
+          pathname: APP_PATHS.APPLICATION_PRESCREEN.replace(':applicationId', `${applicationId}`),
+        });
+      },
+
+      goToApplicationPrescreenResult: (applicationId: number) => {
+        navigate({
+          pathname: APP_PATHS.APPLICATION_PRESCREEN_RESULT.replace(':applicationId', `${applicationId}`),
+        });
+      },
+
+      goToApplicationReview: (applicationId: number) => {
+        navigate({
+          pathname: APP_PATHS.APPLICATION_REVIEW.replace(':applicationId', `${applicationId}`),
+        });
+      },
+
+      goToApplicationSection: (applicationId: number, sectionId: number) => {
+        navigate({
+          pathname: APP_PATHS.APPLICATION_SECTION.replace(':applicationId', `${applicationId}`).replace(
+            ':sectionId',
+            `${sectionId}`
+          ),
+        });
+      },
+
+      goToApplicationSectionDeliverable: (applicationId: number, sectionId: number, deliverableId: number) => {
+        navigate({
+          pathname: APP_PATHS.APPLICATION_SECTION_DELIVERABLE.replace(':applicationId', `${applicationId}`)
+            .replace(':sectionId', `${sectionId}`)
+            .replace(':deliverableId', `${deliverableId}`),
+        });
+      },
+
+      goToApplicationSectionDeliverableEdit: (
+        applicationId: number,
+        sectionId: number,
+        deliverableId: number,
+        variableId?: number
+      ) => {
+        navigate({
+          pathname: APP_PATHS.APPLICATION_SECTION_DELIVERABLE_EDIT.replace(':applicationId', `${applicationId}`)
+            .replace(':sectionId', `${sectionId}`)
+            .replace(':deliverableId', `${deliverableId}`),
+          ...(variableId ? { search: `variableId=${variableId}` } : {}),
+        });
       },
 
       goToContactUsForm: (requestType: SupportRequestType) => {
@@ -28,6 +114,15 @@ export default function useNavigateTo() {
           ),
         }),
 
+      goToDeliverableEdit: (deliverableId: number, projectId: number, variableId?: number) =>
+        navigate({
+          pathname: APP_PATHS.DELIVERABLE_EDIT.replace(':deliverableId', `${deliverableId}`).replace(
+            ':projectId',
+            `${projectId}`
+          ),
+          ...(variableId ? { search: `variableId=${variableId}` } : {}),
+        }),
+
       goToDocuments: () =>
         navigate({
           pathname: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS,
@@ -38,11 +133,21 @@ export default function useNavigateTo() {
           pathname: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW,
         }),
 
-      goToModule: (projectId: number, moduleId: number) =>
+      goToHelpSupport: () => {
+        navigate({ pathname: APP_PATHS.HELP_SUPPORT });
+      },
+
+      goToHome: () =>
         navigate({
-          pathname: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
+          pathname: APP_PATHS.HOME,
         }),
 
+      goToModule: (projectId: number, moduleId: number) => {
+        navigate({
+          pathname: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
+        });
+        window.scrollTo(0, 0);
+      },
       goToModuleContent: (projectId: number, moduleId: number, type: ModuleContentType) => {
         let pathname = '';
         switch (type) {

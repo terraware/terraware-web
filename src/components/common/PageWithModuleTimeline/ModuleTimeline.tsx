@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -8,19 +8,15 @@ import Stepper from '@mui/material/Stepper';
 import Typography from '@mui/material/Typography';
 import { Badge } from '@terraware/web-components';
 
-import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { useProjectData } from 'src/providers/Project/ProjectContext';
-import { requestListModules } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { Module } from 'src/types/Module';
+import { CohortPhaseType } from 'src/types/Cohort';
+import { CohortModule } from 'src/types/Module';
 
 type AltStepIconProps = {
-  activeStep: number;
   index: number;
+  bgColor?: string;
 };
 
-const AltStepIcon = ({ activeStep, index }: AltStepIconProps) => {
+const AltStepIcon = ({ index, bgColor }: AltStepIconProps) => {
   const theme = useTheme();
   const stepNumber = index + 1;
 
@@ -28,7 +24,7 @@ const AltStepIcon = ({ activeStep, index }: AltStepIconProps) => {
     <Box
       sx={{
         alignItems: 'center',
-        bgcolor: index === activeStep ? theme.palette.TwClrBaseGreen500 : theme.palette.TwClrBaseGray300,
+        bgcolor: bgColor,
         borderRadius: '50%',
         color: theme.palette.TwClrBaseWhite,
         display: 'flex',
@@ -44,51 +40,53 @@ const AltStepIcon = ({ activeStep, index }: AltStepIconProps) => {
   );
 };
 
-const ModuleTimeline = () => {
-  const { activeModules, modules, currentParticipant } = useParticipantData();
-  const { project, projectId } = useProjectData();
-  const [requestId, setRequestId] = useState('');
-  const projectModuleList = useAppSelector(selectProjectModuleList(requestId));
-  const dispatch = useAppDispatch();
-  const [projectModules, setProjectModules] = useState<Module[] | undefined>();
-  const useDataFromParticipantData = activeModules && currentParticipant && modules;
+export type ModuleTimelineProps = {
+  cohortPhase?: CohortPhaseType;
+  modules: CohortModule[];
+};
 
-  useEffect(() => {
-    if (projectId) {
-      const request = dispatch(requestListModules(projectId));
-      setRequestId(request.requestId);
-    }
-  }, [projectId]);
+const ModuleTimeline = ({ cohortPhase, modules }: ModuleTimelineProps) => {
+  const theme = useTheme();
+  const now = new Date();
+  const futureModules = modules?.filter((module) => new Date(module.endDate) > now);
 
-  useEffect(() => {
-    if (projectModuleList?.status === 'success') {
-      setProjectModules(projectModuleList.data);
-    }
-  }, [projectModuleList]);
+  const soonestEndingModuleId = futureModules?.reduce((soonest, current) => {
+    const soonestEndDate = new Date(soonest.endDate);
+    const currentEndDate = new Date(current.endDate);
+    return currentEndDate < soonestEndDate ? current : soonest;
+  }, modules[0])?.id;
 
-  const modulesToUse = useDataFromParticipantData ? modules : projectModules;
-  // Find first active index. TODO upgrade stepper to handle multiple active steps
-  const activeIndex = useDataFromParticipantData
-    ? modules?.findIndex((module) => activeModules?.find((active) => module.id === active.id) != undefined)
-    : projectModules?.findIndex((module) => module.isActive);
+  const warningLabelStyles = {
+    '.MuiStepLabel-label.Mui-active': { color: theme.palette.TwClrTxtWarning },
+    '.MuiStepLabel-label.Mui-disabled': { color: theme.palette.TwClrTxtWarning, fontWeight: 600 },
+  };
 
   return (
     <Box maxWidth={'206px'}>
-      {(currentParticipant?.cohortPhase || project?.cohortPhase) && (
-        <Box sx={{ marginBottom: '24px', paddingRight: '16px' }}>
-          <Badge
-            label={useDataFromParticipantData ? currentParticipant.cohortPhase || '' : project?.cohortPhase || ''}
-          />
-        </Box>
-      )}
+      <Box sx={{ marginBottom: '24px', paddingRight: '16px' }}>{cohortPhase && <Badge label={cohortPhase} />}</Box>
 
       <Box sx={{ width: 180 }}>
-        <Stepper activeStep={activeIndex} orientation='vertical'>
-          {modulesToUse?.map((module, index) => (
-            <Step key={module.id}>
+        <Stepper orientation='vertical'>
+          {(modules ?? []).map((module, index) => (
+            <Step key={module.id} active={module.isActive}>
               <StepLabel
-                icon={<AltStepIcon activeStep={activeIndex || -1} index={index} />}
-                sx={{ fontWeight: 600, '.MuiStepLabel-label.Mui-disabled': { fontWeight: 600 } }}
+                icon={
+                  <AltStepIcon
+                    index={index}
+                    bgColor={
+                      soonestEndingModuleId === module.id
+                        ? theme.palette.TwClrBgWarning
+                        : module.isActive
+                          ? theme.palette.TwClrBaseGreen500
+                          : theme.palette.TwClrBaseGray300
+                    }
+                  />
+                }
+                sx={
+                  soonestEndingModuleId === module.id
+                    ? warningLabelStyles
+                    : { fontWeight: 600, '.MuiStepLabel-label.Mui-disabled': { fontWeight: 600 } }
+                }
               >
                 {module.title}
                 <br />

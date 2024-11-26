@@ -11,7 +11,14 @@ import SingleView from './SingleView';
 const PeopleRouter = () => {
   return (
     <Routes>
-      <Route path={'new'} element={<NewView />} />
+      <Route
+        path={'new'}
+        element={
+          <PersonProvider>
+            <NewView />
+          </PersonProvider>
+        }
+      />
       <Route
         path={':userId/*'}
         element={

@@ -8,8 +8,10 @@ import {
   requestListHistory,
   requestMarkSubmitted,
   requestSaveVersion,
+  requestSearchDocuments,
   requestUpdateDocument,
 } from 'src/redux/features/documentProducer/documents/documentsThunks';
+import { DocumentsSearchResponseElement } from 'src/services/documentProducer/DocumentService';
 import {
   DocumentHistoryCreatedPayload,
   DocumentHistoryEditedPayload,
@@ -83,9 +85,25 @@ const documentRequestsSlice = createSlice({
   },
 });
 
+/**
+ * Search Documents
+ */
+type DocumentSearchState = Record<string, StatusT<DocumentsSearchResponseElement[]>>;
+const initialDocumentSearchState: DocumentSearchState = {};
+
+const documentSearchSlice = createSlice({
+  name: 'documentSearchSlice',
+  initialState: initialDocumentSearchState,
+  reducers: {},
+  extraReducers: (builder: ActionReducerMapBuilder<DocumentSearchState>) => {
+    buildReducers(requestSearchDocuments)(builder);
+  },
+});
+
 export const documentProducerDocumentsReducers = {
   documentProducerDocumentList: documentListSlice.reducer,
   documentProducerDocumentListHistory: documentListHistorySlice.reducer,
   documentProducerDocument: documentSlice.reducer,
   documentProducerDocumentRequests: documentRequestsSlice.reducer,
+  documentProducerDocumentSearch: documentSearchSlice.reducer,
 };

@@ -5,16 +5,20 @@ import { Box, Slide, useTheme } from '@mui/material';
 
 import ErrorBoundary from 'src/ErrorBoundary';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
+import ApplicationProvider from 'src/providers/Application';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation from 'src/utils/useStateLocation';
 
+import Applications from './Applications';
 import Cohorts from './Cohorts';
 import Deliverables from './Deliverables';
 import DocumentsRouter from './Documents';
 import ModuleContent from './Modules';
+import EventEdit from './Modules/EventEdit';
+import ModuleView from './Modules/ModuleView';
 import NavBar from './NavBar';
+import Organizations from './Organizations';
 import Overview from './Overview';
 import ParticipantProjects from './ParticipantProjects';
 import Participants from './Participants';
@@ -28,7 +32,6 @@ interface AcceleratorRouterProps {
 const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps) => {
   const { type } = useDeviceInfo();
   const location = useStateLocation();
-  const documentProducerEnabled = isEnabled('Document Producer');
   const theme = useTheme();
 
   const viewHasBackgroundImage = useCallback((): boolean => {
@@ -61,7 +64,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
   };
 
   return (
-    <>
+    <ApplicationProvider>
       {type !== 'desktop' ? (
         <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
           <Box sx={navBarOpened}>
@@ -72,28 +75,28 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
         <NavBar setShowNavBar={setShowNavBar} backgroundTransparent={viewHasBackgroundImage()} />
       )}
       <Box
-        sx={type === 'desktop' && showNavBar ? { ...contentStyles, ...contentWithNavBar } : contentStyles}
+        sx={type === 'desktop' || showNavBar ? { ...contentStyles, ...contentWithNavBar } : contentStyles}
         className='scrollable-content'
       >
         <ErrorBoundary setShowNavBar={setShowNavBar}>
           <Routes>
             <Route path={APP_PATHS.ACCELERATOR_OVERVIEW} element={<Overview />} />
-
+            <Route path={`${APP_PATHS.ACCELERATOR_APPLICATIONS}/*`} element={<Applications />} />
             <Route path={`${APP_PATHS.ACCELERATOR_COHORTS}/*`} element={<Cohorts />} />
             <Route path={`${APP_PATHS.ACCELERATOR_DELIVERABLES}/*`} element={<Deliverables />} />
-            <Route path={APP_PATHS.ACCELERATOR_MODULE_CONTENT} element={<ModuleContent />} />
+            <Route path={`${APP_PATHS.ACCELERATOR_MODULES}/*`} element={<ModuleContent />} />
+            <Route path={`${APP_PATHS.ACCELERATOR_MODULE_CONTENT}/*`} element={<ModuleView />} />
+            <Route path={`${APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT}/*`} element={<EventEdit />} />
             <Route path={`${APP_PATHS.ACCELERATOR_PEOPLE}/*`} element={<People />} />
             <Route path={`${APP_PATHS.ACCELERATOR_PARTICIPANTS}/*`} element={<Participants />} />
             <Route path={`${APP_PATHS.ACCELERATOR_PROJECT_VIEW}/*`} element={<ParticipantProjects />} />
-
-            {documentProducerEnabled && (
-              <Route path={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}/*`} element={<DocumentsRouter />} />
-            )}
+            <Route path={`${APP_PATHS.ACCELERATOR_ORGANIZATIONS}/*`} element={<Organizations />} />
+            <Route path={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}/*`} element={<DocumentsRouter />} />
             <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_OVERVIEW} />} />
           </Routes>
         </ErrorBoundary>
       </Box>
-    </>
+    </ApplicationProvider>
   );
 };
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Button } from '@terraware/web-components';
 
+import RejectDialog from 'src/components/AcceleratorDeliverableView/RejectDialog';
 import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
@@ -11,7 +12,6 @@ import { useLocalization } from 'src/providers';
 import { requestUpdateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesUpdateRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import RejectDialog from 'src/scenes/AcceleratorRouter/Deliverables/RejectDialog';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 import { SpeciesForParticipantProject } from 'src/types/ParticipantProjectSpecies';
@@ -55,7 +55,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
     }
   };
 
-  if (column.key === 'species.scientificName') {
+  if (column.key === 'species_scientificName') {
     return (
       <CellRenderer
         column={column}
@@ -71,15 +71,15 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
               />
             )}
             {isAcceleratorRoute
-              ? createLinkToAcceleratorSpecies(row?.species?.scientificName)
-              : createLinkToSpecies(row?.species?.scientificName)}
+              ? createLinkToAcceleratorSpecies(row?.species_scientificName)
+              : createLinkToSpecies(row?.species_scientificName)}
           </>
         }
       />
     );
   }
 
-  if (column.key === 'participantProjectSpecies.submissionStatus') {
+  if (column.key === 'participantProjectSpecies_submissionStatus') {
     return (
       <CellRenderer
         style={{ width: '50px' }}
@@ -88,9 +88,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
         row={row}
         value={
           activeLocale ? (
-            <DeliverableStatusBadge
-              status={row?.participantProjectSpecies?.submissionStatus as DeliverableStatusType}
-            />
+            <DeliverableStatusBadge status={row?.participantProjectSpecies_submissionStatus as DeliverableStatusType} />
           ) : (
             ''
           )
@@ -125,11 +123,13 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
           <>
             {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectHandler} />}
             <Button
-              label={strings.REJECT_ACTION}
+              label={strings.REQUEST_UPDATE}
               onClick={() => setShowRejectDialog(true)}
               priority='secondary'
               type='destructive'
-              disabled={row.submissionStatus === 'Rejected'}
+              disabled={
+                row.submissionStatus === 'Rejected' || row?.participantProjectSpecies_submissionStatus === 'Rejected'
+              }
             />
           </>
         }
@@ -161,23 +161,13 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
             label={strings.APPROVE}
             onClick={() => approveHandler()}
             priority='secondary'
-            disabled={row.submissionStatus === 'Approved'}
+            disabled={
+              row.submissionStatus === 'Approved' || row?.participantProjectSpecies_submissionStatus === 'Approved'
+            }
           />
         }
       />
     );
-  }
-
-  if (column.key === 'species.commonName') {
-    return <CellRenderer {...props} value={row.species.commonName} />;
-  }
-
-  if (column.key === 'participantProjectSpecies.rationale') {
-    return <CellRenderer {...props} value={row.participantProjectSpecies.rationale} />;
-  }
-
-  if (column.key === 'participantProjectSpecies.speciesNativeCategory') {
-    return <CellRenderer {...props} value={row.participantProjectSpecies.speciesNativeCategory} />;
   }
 
   return <CellRenderer {...props} />;

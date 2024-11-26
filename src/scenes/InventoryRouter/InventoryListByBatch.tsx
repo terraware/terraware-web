@@ -93,77 +93,79 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
   };
 
   const onApplyFilters = useCallback(async () => {
-    const requestId = Math.random().toString();
-    setRequestId('searchInventory', requestId);
+    if (selectedOrganization.id !== -1) {
+      const requestId = Math.random().toString();
+      setRequestId('searchInventory', requestId);
 
-    const showEmptyBatches = (filters.showEmptyBatches || [])[0] === 'true';
+      const showEmptyBatches = (filters.showEmptyBatches || [])[0] === 'true';
 
-    setReportData({
-      organizationId: selectedOrganization.id,
-      query: debouncedSearchTerm,
-      facilityIds: filters.facilityIds,
-      subLocationIds: filters.subLocationsIds,
-      searchSortOrder,
-      showEmptyBatches,
-    });
-
-    const searchFields = [];
-    if (filters.projectIds && filters.projectIds.length > 0) {
-      searchFields.push({
-        operation: 'field',
-        field: 'project_id',
-        type: 'Exact',
-        values: filters.projectIds.map((id) => (id === null ? id : id.toString())),
-      } as SearchNodePayload);
-    }
-
-    const apiSearchResults = await NurseryBatchService.getAllBatches(
-      selectedOrganization.id,
-      searchSortOrder,
-      filters.facilityIds,
-      filters.subLocationsIds,
-      debouncedSearchTerm,
-      undefined,
-      searchFields
-    );
-
-    const processedResults = apiSearchResults?.map((result) => {
-      let subLocationsList = '';
-      (result.subLocations as any[])?.forEach((sl, index) => {
-        if (index === 0) {
-          subLocationsList = sl.subLocation_name;
-        } else {
-          subLocationsList += `\r${sl.subLocation_name}`;
-        }
+      setReportData({
+        organizationId: selectedOrganization.id,
+        query: debouncedSearchTerm,
+        facilityIds: filters.facilityIds,
+        subLocationIds: filters.subLocationsIds,
+        searchSortOrder,
+        showEmptyBatches,
       });
 
-      return {
-        ...result,
-        subLocations: subLocationsList,
-      };
-    });
-
-    let updatedResult: InventoryResultWithBatchNumber[] | undefined;
-
-    // format results
-    updatedResult = processedResults?.map((uR) => {
-      const resultTyped = uR as BatchInventoryResult;
-      return {
-        ...resultTyped,
-        batchId: resultTyped.id,
-        species_scientificName_noLink: resultTyped.species_scientificName,
-        facility_name_noLink: resultTyped.facility_name,
-      } as InventoryResultWithBatchNumber;
-    });
-
-    updatedResult = updatedResult?.filter((result) => showEmptyBatches || !isBatchEmpty(result));
-
-    if (updatedResult) {
-      if (!debouncedSearchTerm && !filters.facilityIds?.length && !filters.projectIds?.length) {
-        setShowResults(updatedResult.length > 0);
+      const searchFields = [];
+      if (filters.projectIds && filters.projectIds.length > 0) {
+        searchFields.push({
+          operation: 'field',
+          field: 'project_id',
+          type: 'Exact',
+          values: filters.projectIds.map((id) => (id === null ? id : id.toString())),
+        } as SearchNodePayload);
       }
-      if (getRequestId('searchInventory') === requestId) {
-        setSearchResults(updatedResult);
+
+      const apiSearchResults = await NurseryBatchService.getAllBatches(
+        selectedOrganization.id,
+        searchSortOrder,
+        filters.facilityIds,
+        filters.subLocationsIds,
+        debouncedSearchTerm,
+        undefined,
+        searchFields
+      );
+
+      const processedResults = apiSearchResults?.map((result) => {
+        let subLocationsList = '';
+        (result.subLocations as any[])?.forEach((sl, index) => {
+          if (index === 0) {
+            subLocationsList = sl.subLocation_name;
+          } else {
+            subLocationsList += `\r${sl.subLocation_name}`;
+          }
+        });
+
+        return {
+          ...result,
+          subLocations: subLocationsList,
+        };
+      });
+
+      let updatedResult: InventoryResultWithBatchNumber[] | undefined;
+
+      // format results
+      updatedResult = processedResults?.map((uR) => {
+        const resultTyped = uR as BatchInventoryResult;
+        return {
+          ...resultTyped,
+          batchId: resultTyped.id,
+          species_scientificName_noLink: resultTyped.species_scientificName,
+          facility_name_noLink: resultTyped.facility_name,
+        } as InventoryResultWithBatchNumber;
+      });
+
+      updatedResult = updatedResult?.filter((result) => showEmptyBatches || !isBatchEmpty(result));
+
+      if (updatedResult) {
+        if (!debouncedSearchTerm && !filters.facilityIds?.length && !filters.projectIds?.length) {
+          setShowResults(updatedResult.length > 0);
+        }
+        if (getRequestId('searchInventory') === requestId) {
+          setSearchResults(updatedResult);
+        }
       }
     }
   }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, setReportData]);

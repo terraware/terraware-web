@@ -29,6 +29,7 @@ const ObservationPlantingZoneRenderer =
       return (
         <Link fontSize='16px' to={url}>
           {name as React.ReactNode}
+          {row.sizeMeters.toString() === '25' ? '*' : ''}
         </Link>
       );
     };
@@ -39,16 +40,17 @@ const ObservationPlantingZoneRenderer =
     }
 
     if (column.key === 'monitoringPlotName') {
-      return <CellRenderer {...props} value={createLinkToMonitoringPlotObservation(value as string)} />;
-    }
-
-    if (column.key === 'mortalityRate') {
       return (
         <CellRenderer
           {...props}
-          value={value !== undefined && value !== null && row.hasObservedPermanentPlots ? `${value}%` : ''}
+          value={createLinkToMonitoringPlotObservation(value as string)}
+          title={value as string}
         />
       );
+    }
+
+    if (column.key === 'mortalityRate') {
+      return <CellRenderer {...props} value={value !== undefined && value !== null ? `${value}%` : ''} />;
     }
 
     if (column.key === 'status') {

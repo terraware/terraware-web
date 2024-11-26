@@ -11,6 +11,8 @@ import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
 import { searchObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
+import { has25mPlots } from 'src/redux/features/observations/utils';
+import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
@@ -25,6 +27,7 @@ import ObservationPlantingZoneRenderer from './ObservationPlantingZoneRenderer';
 
 const defaultColumns = (): TableColumnType[] => [
   { key: 'monitoringPlotName', name: strings.MONITORING_PLOT, type: 'string' },
+  { key: 'subzoneName', name: strings.SUBZONE, type: 'string' },
   { key: 'completedDate', name: strings.DATE, type: 'string' },
   { key: 'status', name: strings.STATUS, type: 'string' },
   { key: 'isPermanent', name: strings.MONITORING_PLOT_TYPE, type: 'string' },
@@ -43,21 +46,28 @@ const replaceObservationPlotColumn = (): TableColumnType[] => [
 ];
 
 export default function ObservationPlantingZone(): JSX.Element {
-  const { plantingSiteId, observationId, plantingZoneId } = useParams<{
-    plantingSiteId: string;
-    observationId: string;
-    plantingZoneId: string;
-  }>();
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const defaultTimeZone = useDefaultTimeZone();
   const navigate = useNavigate();
+  const params = useParams<{
+    plantingSiteId: string;
+    observationId: string;
+    plantingZoneId: string;
+  }>();
+
+  const plantingSiteId = Number(params.plantingSiteId);
+  const observationId = Number(params.observationId);
+  const plantingZoneId = Number(params.plantingZoneId);
+
   const [search, onSearch] = useState<string>('');
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [replaceObservationPlot, setReplaceObservationPlot] = useState<
     ObservationMonitoringPlotResultsPayload | undefined
   >();
   const replaceObservationPlotEnabled = isManagerOrHigher(selectedOrganization);
+
+  const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
 
   const columns = useCallback((): TableColumnType[] => {
     if (!activeLocale) {
@@ -100,9 +110,9 @@ export default function ObservationPlantingZone(): JSX.Element {
     searchObservationPlantingZone(
       state,
       {
-        plantingSiteId: Number(plantingSiteId),
-        observationId: Number(observationId),
-        plantingZoneId: Number(plantingZoneId),
+        plantingSiteId,
+        observationId,
+        plantingZoneId,
         search,
         plotType: filters.plotType === undefined ? undefined : filters.plotType.values[0] === strings.PERMANENT,
       },
@@ -117,22 +127,37 @@ export default function ObservationPlantingZone(): JSX.Element {
   useEffect(() => {
     if (!plantingZone) {
       navigate(
-        APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', Number(plantingSiteId).toString()).replace(
+        APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', `${plantingSiteId}`).replace(
           ':observationId',
-          Number(observationId).toString()
+          `${observationId}`
         )
       );
     }
   }, [navigate, observationId, plantingSiteId, plantingZone]);
+
+  const getSubzoneName = useCallback(
+    (id: number) =>
+      (plantingSite?.plantingZones || []).flatMap((zone) => zone.plantingSubzones).find((subzone) => subzone.id === id)
+        ?.name,
+    [plantingSite]
+  );
+
+  const rows: (ObservationMonitoringPlotResultsPayload & { subzoneName?: string })[] = useMemo(
+    () =>
+      plantingZone?.plantingSubzones?.flatMap((subzone) =>
+        subzone.monitoringPlots.map((plot) => ({ ...plot, subzoneName: getSubzoneName(subzone.plantingSubzoneId) }))
+      ) ?? [],
+    [getSubzoneName, plantingZone]
+  );
 
   return (
     <>
       {replaceObservationPlot && (
         <ReplaceObservationPlotModal
           monitoringPlot={replaceObservationPlot}
-          observationId={Number(observationId)}
+          observationId={observationId}
           onClose={onCloseModal}
-          plantingSiteId={Number(plantingSiteId)}
+          plantingSiteId={plantingSiteId}
         />
       )}
       <DetailsPage
@@ -152,14 +177,19 @@ export default function ObservationPlantingZone(): JSX.Element {
               <Table
                 id='observation-zone-table'
                 columns={columns}
-                rows={plantingZone?.plantingSubzones?.flatMap((subzone) => subzone.monitoringPlots) ?? []}
+                rows={rows}
                 orderBy='plantingZoneName'
                 Renderer={ObservationPlantingZoneRenderer(
-                  Number(plantingSiteId),
-                  Number(observationId),
-                  Number(plantingZoneId),
+                  plantingSiteId,
+                  observationId,
+                  plantingZoneId,
                   setReplaceObservationPlot
                 )}
+                tableComments={
+                  plantingZone?.plantingSubzones && has25mPlots(plantingZone.plantingSubzones)
+                    ? strings.PLOTS_SIZE_NOTE
+                    : undefined
+                }
               />
             </Box>
           </Card>

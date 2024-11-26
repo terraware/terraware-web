@@ -60,10 +60,7 @@ export type MapAnnotation = {
   textColor: string;
 };
 
-export type MapPatternFill = {
-  imageName: string;
-  opacityExpression?: Expression;
-};
+export type MapPatternFill = Expression | string;
 
 /**
  * A renderable map entity
@@ -82,13 +79,14 @@ export type MapSourceBaseData = {
 
 export type MapSourceRenderProperties = {
   annotation?: MapAnnotation;
-  fillColor: string;
+  fillColor: string | Expression;
   highlightFillColor?: string;
   hoverFillColor?: string;
   isInteractive?: boolean;
   lineColor: string;
   lineWidth: number;
   patternFill?: MapPatternFill;
+  opacity?: number | Expression;
   selectFillColor?: string;
   selectLineColor?: string;
   selectLineWidth?: number;
@@ -162,7 +160,7 @@ export type MapControl = {
 export type MapViewStyle = 'Outdoors' | 'Satellite';
 export const MapViewStyles: Record<MapViewStyle, string> = {
   Outdoors: 'mapbox://styles/mapbox/outdoors-v12?optimize=true',
-  Satellite: 'mapbox://styles/mapbox/satellite-v9?optimize=true',
+  Satellite: 'mapbox://styles/mapbox/satellite-streets-v12?optimize=true',
 };
 
 export type ReadOnlyBoundary = {
@@ -177,7 +175,7 @@ export type RenderableReadOnlyBoundary = ReadOnlyBoundary & {
 };
 
 // TODO: integrate exclusions as a first class MapObject (not there yet)
-export type RenderableObject = MapObject | 'exclusions' | 'draft-zone' | 'draft-subzone';
+export type RenderableObject = MapObject | 'exclusions' | 'draft-zone' | 'draft-subzone' | 'boundary';
 
 export type MapDrawingLayer = {
   id: string;

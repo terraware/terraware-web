@@ -58,6 +58,11 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
+          key: 'internalInterests',
+          name: strings.INTERNAL_INTERESTS,
+          type: 'string',
+        },
+        {
           key: 'createdTime',
           name: strings.DATE_ADDED,
           type: 'date',
@@ -162,6 +167,7 @@ const PeopleView = () => {
         Renderer={PersonCellRenderer}
         rows={globalRoleUsers}
         topBarButtons={[<RemoveRolesTopBarButton key={1} onConfirm={onConfirmSelectionRemoveRoles} />]}
+        stickyFilters
       />
     </Page>
   );

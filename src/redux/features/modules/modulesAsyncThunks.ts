@@ -1,16 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { DateTime } from 'luxon';
 
 import { SearchService } from 'src/services';
 import ModuleService from 'src/services/ModuleService';
 import strings from 'src/strings';
-import { ModuleDeliverable, ModuleProjectSearchResult } from 'src/types/Module';
-import { SearchRequestPayload } from 'src/types/Search';
+import { ModuleCohortsSearchResult, ModuleProjectSearchResult, ModuleSearchResult } from 'src/types/Module';
+import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 
 export const requestGetModule = createAsyncThunk(
   'modules/get',
-  async ({ moduleId, projectId }: { moduleId: number; projectId: number }, { rejectWithValue }) => {
-    const response = await ModuleService.get(projectId, moduleId);
+  async (request: { moduleId: number }, { rejectWithValue }) => {
+    const response = await ModuleService.get(request.moduleId);
 
     if (response !== null && response.requestSucceeded && response?.data?.module !== undefined) {
       return response.data.module;
@@ -20,8 +19,8 @@ export const requestGetModule = createAsyncThunk(
   }
 );
 
-export const requestListModules = createAsyncThunk('modules/list', async (projectId: number, { rejectWithValue }) => {
-  const response = await ModuleService.list(projectId);
+export const requestListModules = createAsyncThunk('modules/list', async (_, { rejectWithValue }) => {
+  const response = await ModuleService.list();
 
   if (response !== null && response.requestSucceeded && response?.data?.modules !== undefined) {
     return response.data.modules;
@@ -62,22 +61,52 @@ export const requestListModuleProjects = createAsyncThunk(
   }
 );
 
-export const requestListModuleDeliverables = createAsyncThunk(
-  'modules/deliverables',
-  async (request: { moduleId: number; projectId: number }): Promise<ModuleDeliverable[]> => {
-    const deliverableSearchResults = await ModuleService.searchDeliverables(request.projectId, request.moduleId);
+export const requestListModuleCohorts = createAsyncThunk(
+  'module/cohortsAndProjects',
+  async (moduleId: string, { rejectWithValue }) => {
+    const searchParams: SearchRequestPayload = {
+      prefix: 'projects.participant.cohort.cohortModules.module',
+      fields: [
+        'cohortModules.title',
+        'cohortModules.startDate',
+        'cohortModules.endDate',
+        'cohortModules.cohort.id',
+        'cohortModules.cohort.name',
+        'cohortModules.cohort.participants.id',
+        'cohortModules.cohort.participants.name',
+        'cohortModules.cohort.participants.projects.id',
+        'cohortModules.cohort.participants.projects.name',
+      ],
+      search: {
+        operation: 'field',
+        field: 'id',
+        type: 'Exact',
+        values: [moduleId.toString()],
+      },
+      count: 20,
+    };
 
-    return deliverableSearchResults
-      ? deliverableSearchResults.map((result) => ({
-          id: result.id,
-          moduleId: result.moduleId,
-          projectId: result.projectId,
-          name: result.name,
-          category: result.category,
-          dueDate: DateTime.fromISO(result.dueDate),
-          status: result.status,
-          type: result.type,
-        }))
-      : [];
+    const response: ModuleCohortsSearchResult[] | null = await SearchService.search(searchParams);
+
+    if (response) {
+      return response[0];
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestSearchModules = createAsyncThunk(
+  'modules/search',
+  async (request: { search?: SearchNodePayload; sortOrder?: SearchSortOrder }, { rejectWithValue }) => {
+    const { search, sortOrder } = request;
+
+    const response: ModuleSearchResult[] | null = await ModuleService.search(search, sortOrder);
+
+    if (response) {
+      return response;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
   }
 );

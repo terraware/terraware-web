@@ -4,7 +4,6 @@ import { Route, Routes } from 'react-router-dom';
 
 import { CircularProgress } from '@mui/material';
 
-import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import { requestPlantingSiteObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import {
@@ -33,12 +32,10 @@ export type PlantingSitesProps = {
 };
 
 export default function PlantingSites({ reloadTracking }: PlantingSitesProps): JSX.Element {
-  const userDrawnDetailedSites = isEnabled('User Detailed Sites');
-
   return (
     <Routes>
       <Route path={'/new'} element={<PlantingSiteCreate reloadPlantingSites={reloadTracking} />} />
-      {userDrawnDetailedSites && <Route path={'/draft/*'} element={<PlantingSitesDraftRouter />} />}
+      <Route path={'/draft/*'} element={<PlantingSitesDraftRouter />} />
       <Route path={'/:plantingSiteId/*'} element={<PlantingSitesRouter reloadTracking={reloadTracking} />} />
       <Route path={'*'} element={<PlantingSitesList />} />
     </Routes>
@@ -62,7 +59,7 @@ export function PlantingSitesRouter({ reloadTracking }: PlantingSitesProps): JSX
 
   useEffect(() => {
     const siteId = Number(plantingSiteId);
-    if (!isNaN(siteId)) {
+    if (!isNaN(siteId) && selectedOrganization.id !== -1) {
       dispatch(requestPlantingSiteObservationsResults(selectedOrganization.id, siteId));
       dispatch(requestPlantings(selectedOrganization.id));
     }

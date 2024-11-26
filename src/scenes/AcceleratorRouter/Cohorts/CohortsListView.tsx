@@ -44,9 +44,9 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
-          key: 'participantIds',
+          key: 'numOfParticipants',
           name: strings.PARTICIPANTS,
-          type: 'string',
+          type: 'number',
         },
       ]
     : [];
@@ -84,7 +84,7 @@ const CohortsListView = ({ filterModifiers, extraTableFilters }: CohortsListView
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
       setHasFilters(search.children.length > 0);
-      dispatch(requestCohorts({ locale, depth: 'Cohort', search, searchSortOrder }));
+      dispatch(requestCohorts({ locale, depth: 'Participant', search, searchSortOrder }));
     },
     [dispatch]
   );
@@ -124,6 +124,8 @@ const CohortsListView = ({ filterModifiers, extraTableFilters }: CohortsListView
       rightComponent={actionMenus}
       rows={cohorts || []}
       title={strings.COHORTS}
+      clientSortedFields={['numOfParticipants']}
+      stickyFilters
     />
   );
 };

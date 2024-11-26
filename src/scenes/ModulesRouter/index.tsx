@@ -5,13 +5,12 @@ import ListView from './ListView';
 import ModuleContentView from './ModuleContentView';
 import ModuleEventSessionView from './ModuleEventSessionView';
 import ModuleView from './ModuleView';
-import ModuleProvider from './Provider';
 
 const ModulesRouter = () => {
   return (
     <Routes>
       {/* @see /src/constants.ts:APP_PATHS.PROJECT_MODULE */}
-      <Route path={'/:moduleId'} element={<ModuleProvider />}>
+      <Route path={'/:moduleId'}>
         {/* @see /src/constants.ts:APP_PATHS.PROJECT_MODULE_ADDITIONAL_RESOURCES */}
         <Route path={'additionalResources'} element={<ModuleContentView contentType={'additionalResources'} />} />
         {/* @see /src/constants.ts:APP_PATHS.PROJECT_MODULE_PREPARATION_MATERIALS */}

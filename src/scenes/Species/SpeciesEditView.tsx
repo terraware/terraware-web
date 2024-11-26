@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
+import { DateTime } from 'luxon';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageForm from 'src/components/common/PageForm';
@@ -30,8 +31,11 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { ProjectSpecies } from './AddToProjectModal';
 
 function initSpecies(species?: Species): Species {
+  const now = DateTime.now().toISO();
   return (
     species ?? {
+      createdTime: now,
+      modifiedTime: now,
       scientificName: '',
       id: -1,
     }
@@ -110,12 +114,13 @@ export default function SpeciesEditView(): JSX.Element {
         navigate(APP_PATHS.SPECIES);
       }
     };
-    if (selectedOrganization && speciesId) {
+    if (selectedOrganization && selectedOrganization.id !== -1 && speciesId) {
       getSpecies();
     }
   }, [speciesId, selectedOrganization, navigate]);
 
   useEffect(() => {
+    const now = DateTime.now().toISO();
     setRecord({
       scientificName: species?.scientificName || '',
       commonName: species?.commonName,
@@ -126,10 +131,15 @@ export default function SpeciesEditView(): JSX.Element {
       seedStorageBehavior: species?.seedStorageBehavior,
       ecosystemTypes: species?.ecosystemTypes,
       rare: species?.rare,
+      createdTime: species?.createdTime ?? now,
+      modifiedTime: species?.modifiedTime ?? now,
     });
   }, [species, setRecord, selectedOrganization]);
 
   const saveSpecies = async () => {
+    if (selectedOrganization.id === -1) {
+      return;
+    }
     if (!record.scientificName) {
       setNameFormatError(strings.REQUIRED_FIELD);
     } else {

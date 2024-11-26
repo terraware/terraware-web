@@ -2,6 +2,7 @@ import React from 'react';
 
 import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import Link from 'src/components/common/Link';
+import TextTruncated from 'src/components/common/TextTruncated';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
@@ -18,8 +19,8 @@ export default function DeliverableCellRenderer(props: RendererProps<TableRowTyp
     const deliverableUrl = isAcceleratorRoute ? APP_PATHS.ACCELERATOR_DELIVERABLE_VIEW : APP_PATHS.DELIVERABLE_VIEW;
     const to = deliverableUrl.replace(':deliverableId', `${row.id}`).replace(':projectId', `${row.projectId}`);
     return (
-      <Link fontSize='16px' to={to}>
-        {iValue as React.ReactNode}
+      <Link to={to}>
+        <TextTruncated fontSize={16} width={400} fontWeight={500} stringList={[iValue as string]} />
       </Link>
     );
   };
@@ -33,7 +34,6 @@ export default function DeliverableCellRenderer(props: RendererProps<TableRowTyp
         row={row}
         style={{
           maxWidth: '500px',
-          textOverflow: 'ellipsis',
         }}
         sx={{
           fontSize: '16px',
@@ -57,7 +57,8 @@ export default function DeliverableCellRenderer(props: RendererProps<TableRowTyp
   }
 
   if (column.key === 'module') {
-    return <CellRenderer index={index} column={column} value={`${row.moduleTitle} - ${row.moduleName}`} row={row} />;
+    const title = row.moduleTitle ? `${row.moduleTitle} - ${row.moduleName}` : row.moduleName;
+    return <CellRenderer index={index} column={column} value={title} row={row} />;
   }
 
   return <CellRenderer {...props} />;

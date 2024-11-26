@@ -59,6 +59,8 @@ export const trigramWordSimilarity = (a: string, b: string) => {
   return similarity;
 };
 
+export const fuzzyMatch = (a: string, b: string) => trigramWordSimilarity(a, b) > TRIGRAM_SIMILARITY_THRESHOLD;
+
 const searchConditionMet = <T extends Record<string, unknown>>(result: T, condition: SearchNodePayload): boolean => {
   // `as SearchNodePayload` casts below are because the SearchNodePayload in the generated types only has `operation`
   // The the union type from our types has the correct properties
@@ -82,14 +84,14 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
     }
 
     if (condition.type === 'Exact') {
-      return searchValues.some((value) => resultValue.includes(value));
+      return searchValues.some((value) => resultValue === value);
     } else if (condition.type === 'Fuzzy') {
       return searchValues.some((searchValue) => {
         // Trigrams don't work with single letter searches
         if (searchValue.length === 1) {
           return resultValue.includes(searchValue);
         }
-        return trigramWordSimilarity(searchValue, resultValue) > TRIGRAM_SIMILARITY_THRESHOLD;
+        return fuzzyMatch(searchValue, resultValue);
       });
     }
   }
@@ -120,7 +122,6 @@ export const sortResults = <T extends Record<string, unknown>>(
   const isNumberField = (numberFields || []).includes(field);
 
   if (isNumberField) {
-    // eslint-disable-next-line  @typescript-eslint/no-base-to-string
     results = results.sort((a, b) => Number(getRawField(a, field)) - Number(getRawField(b, field)));
   } else {
     // eslint-disable-next-line  @typescript-eslint/no-base-to-string

@@ -3,9 +3,10 @@ import { useParams } from 'react-router-dom';
 
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUserRequest } from 'src/redux/features/user/usersSelectors';
+import { requestGetUserInternalInterests } from 'src/redux/features/userInternalInterests/userInternalInterestsAsyncThunks';
+import { selectUserInternalInterestsGetRequest } from 'src/redux/features/userInternalInterests/userInternalInterestsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { User } from 'src/types/User';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { PersonContext, PersonData } from './PersonContext';
@@ -18,37 +19,40 @@ const PersonProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const pathParams = useParams<{ userId: string }>();
-  const userId = Number(pathParams.userId);
+  const [userId, setUserId] = useState(Number(pathParams.userId || -1));
 
-  const [personData, setPersonData] = useState<PersonData>({ userId });
-
-  const [user, setUser] = useState<User>();
-  const userRequest = useAppSelector(selectUserRequest(userId));
+  const getUserRequest = useAppSelector(selectUserRequest(userId));
+  const getInternalInterestsRequest = useAppSelector(selectUserInternalInterestsGetRequest(userId));
 
   useEffect(() => {
     if (userId !== -1) {
       void dispatch(requestGetUser(userId));
+      void dispatch(requestGetUserInternalInterests(userId));
     }
-  }, [userId, dispatch]);
+  }, [dispatch, userId]);
+
+  const [personData, setPersonData] = useState<PersonData>({ setUserId, userId });
 
   useEffect(() => {
-    if (!userRequest) {
+    if (!getUserRequest || !getInternalInterestsRequest) {
       return;
     }
 
-    if (userRequest.status === 'success') {
-      setUser(userRequest.data?.user);
-    } else if (userRequest.status === 'error') {
+    if (getUserRequest.status === 'success' && getInternalInterestsRequest.status === 'success') {
+      const user = getUserRequest.data?.user;
+      const internalInterests = getInternalInterestsRequest.data?.internalInterests || [];
+
+      if (user) {
+        setPersonData({
+          setUserId,
+          user: { ...user, internalInterests },
+          userId,
+        });
+      }
+    } else if (getUserRequest.status === 'error' || getInternalInterestsRequest.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [userRequest, snackbar]);
-
-  useEffect(() => {
-    setPersonData({
-      user,
-      userId,
-    });
-  }, [userId, user]);
+  }, [getInternalInterestsRequest, getUserRequest, userId, snackbar]);
 
   return <PersonContext.Provider value={personData}>{children}</PersonContext.Provider>;
 };

@@ -20,20 +20,19 @@ export const editorDisplayVariableWithValues = (
       result = variable.values.map((v) => displayValue(v, placeholder)).join(separator);
       break;
     case 'Image':
-      result = `${variable.name}: ${variable.values.length} ${strings.IMAGES}`;
+      result = `${variable.values.length} ${strings.IMAGES}`;
       break;
     case 'Table':
-      result = `${variable.name}: ${variable.values.length} ${strings.ENTRIES}`;
+      result = `${variable.values.length} ${strings.ENTRIES}`;
       break;
     case 'Select':
       const selectedValues = (variable.values[0] as VariableValueSelectValue)?.optionValues;
-      result = `${variable.name}: ${
+      result =
         variable.options
           .filter((o) => selectedValues?.includes(o.id))
           .map((o) => o.name)
           .join(', ') ||
-        (placeholder ?? '')
-      }`;
+        (placeholder ?? '');
       break;
   }
 

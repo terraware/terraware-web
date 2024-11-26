@@ -22,10 +22,12 @@ export type PageProps = {
   containerStyles?: CSSProperties;
   titleStyle?: CSSProperties;
   contentStyle?: Record<string, string | number>;
+  titleContainerStyle?: CSSProperties;
   crumbs?: Crumb[];
   hierarchicalCrumbs?: boolean;
   isLoading?: boolean;
   primaryButton?: PrimaryButtonType;
+  leftComponent?: JSX.Element;
   rightComponent?: React.ReactNode;
   title?: React.ReactNode;
 };
@@ -38,10 +40,12 @@ export default function Page({
   containerStyles,
   contentStyle,
   titleStyle,
+  titleContainerStyle,
   crumbs,
   hierarchicalCrumbs,
   isLoading,
   primaryButton,
+  leftComponent,
   rightComponent,
   title,
 }: PageProps): JSX.Element {
@@ -60,17 +64,23 @@ export default function Page({
     <TfMain style={containerStyles}>
       <PageHeaderWrapper nextElement={contentRef.current}>
         <>{crumbs && <BreadCrumbs crumbs={crumbs} hierarchical={hierarchicalCrumbs ?? true} />}</>
-        <Grid container justifyContent='space-between' alignItems='center'>
+        <Grid
+          container
+          justifyContent='space-between'
+          alignItems='center'
+          marginBottom={theme.spacing(2)}
+          paddingX={theme.spacing(2)}
+          sx={titleContainerStyle}
+        >
           {title && typeof title !== 'string' && (
             <Grid item xs={8}>
               {title}
             </Grid>
           )}
           {title && typeof title === 'string' && (
-            <Grid item xs={8}>
+            <Grid item>
               <Typography
                 sx={{
-                  marginBottom: theme.spacing(4),
                   paddingLeft: theme.spacing(3),
                   fontSize: '24px',
                   fontWeight: 600,
@@ -80,6 +90,11 @@ export default function Page({
               >
                 {title}
               </Typography>
+            </Grid>
+          )}
+          {leftComponent && (
+            <Grid item xs={4} style={{ marginRight: 'auto' }}>
+              {leftComponent}
             </Grid>
           )}
           {rightComponent && (

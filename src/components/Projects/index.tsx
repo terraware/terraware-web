@@ -21,7 +21,7 @@ import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-import TableDensitySettingsButton from '../common/table/TableDensitySettingsButton';
+import TableSettingsButton from '../common/table/TableSettingsButton';
 
 const columns = (): TableColumnType[] => [
   { key: 'name', name: strings.NAME, type: 'string' },
@@ -41,9 +41,11 @@ export default function ProjectsList(): JSX.Element {
 
   const search = useCallback(
     async (searchTerm: string) => {
-      const projects = await ProjectsService.searchProjects(selectedOrganization.id, searchTerm);
-      if (projects) {
-        return projects;
+      if (selectedOrganization.id !== -1) {
+        const projects = await ProjectsService.searchProjects(selectedOrganization.id, searchTerm);
+        if (projects) {
+          return projects;
+        }
       }
     },
     [selectedOrganization.id]
@@ -136,7 +138,7 @@ export default function ProjectsList(): JSX.Element {
               onClickRightIcon={clearSearch}
               sx={{ width: '300px' }}
             />
-            <TableDensitySettingsButton />
+            <TableSettingsButton />
           </Grid>
 
           <Grid item xs={12}>

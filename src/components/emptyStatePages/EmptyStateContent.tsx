@@ -95,86 +95,88 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
           {para}
         </p>
       ))}
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: isMobile ? 'column' : 'row',
-          alignContent: 'center',
-          flexWrap: 'wrap',
-          fontSize: '14px',
-          justifyContent: 'center',
-          lineHeight: '20px',
-          margin: `${DEFAULT_EMPTY_STATE_CONTENT_STYLES.listContainerVerticalMargin} auto`,
-        }}
-      >
-        {listItems?.map((item, index) => {
-          return (
-            <Grid
-              item
-              xs={gridSize()}
-              key={`${item.title}-${index}`}
-              sx={{
-                flex: '1 1 auto',
-                maxWidth: '220px',
-                textAlign: 'center',
-                margin: isMobile ? theme.spacing(4, 3, 0, 3) : theme.spacing(0, 3),
-                '&:first-child': {
-                  marginTop: 0,
-                },
-                padding: isMobile ? '20px 0' : '0 5px',
-              }}
-            >
-              <Icon
-                name={item.icon}
-                style={{
-                  width: '205px',
-                  height: '128px',
+      {listItems && (
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
+            alignContent: 'center',
+            flexWrap: 'wrap',
+            fontSize: '14px',
+            justifyContent: 'center',
+            lineHeight: '20px',
+            margin: `${DEFAULT_EMPTY_STATE_CONTENT_STYLES.listContainerVerticalMargin} auto`,
+          }}
+        >
+          {listItems.map((item, index) => {
+            return (
+              <Grid
+                item
+                xs={gridSize()}
+                key={`${item.title}-${index}`}
+                sx={{
+                  flex: '1 1 auto',
+                  maxWidth: '220px',
+                  textAlign: 'center',
+                  margin: isMobile ? theme.spacing(4, 3, 0, 3) : theme.spacing(0, 3),
+                  '&:first-child': {
+                    marginTop: 0,
+                  },
+                  padding: isMobile ? '20px 0' : '0 5px',
                 }}
-              />
-              {item.title && (
-                <p
+              >
+                <Icon
+                  name={item.icon}
                   style={{
-                    fontWeight: 'bold',
-                    lineHeight: '20px',
-                    margin: '0 auto',
-                    marginTop: theme.spacing(2),
+                    width: '205px',
+                    height: '128px',
                   }}
-                >
-                  {item.title}
-                </p>
-              )}
-              <div>
-                <p
-                  style={
-                    item.buttonText
-                      ? {
-                          margin: '0 auto',
-                          fontSize: '12px',
-                        }
-                      : { margin: '0 auto' }
-                  }
-                >
-                  {item.description}
-                </p>
-                {item.linkText && item.onLinkClick && (
-                  <Link onClick={item.onLinkClick} fontSize='12px'>
-                    {item.linkText}
-                  </Link>
-                )}
-              </div>
-              {item.buttonText && item.onClickButton && (
-                <Button
-                  size='medium'
-                  label={item.buttonText}
-                  onClick={item.onClickButton}
-                  icon={item.buttonIcon}
-                  sx={{ marginTop: theme.spacing(2) }}
                 />
-              )}
-            </Grid>
-          );
-        })}
-      </Box>
+                {item.title && (
+                  <p
+                    style={{
+                      fontWeight: 'bold',
+                      lineHeight: '20px',
+                      margin: '0 auto',
+                      marginTop: theme.spacing(2),
+                    }}
+                  >
+                    {item.title}
+                  </p>
+                )}
+                <div>
+                  <p
+                    style={
+                      item.buttonText
+                        ? {
+                            margin: '0 auto',
+                            fontSize: '12px',
+                          }
+                        : { margin: '0 auto' }
+                    }
+                  >
+                    {item.description}
+                  </p>
+                  {item.linkText && item.onLinkClick && (
+                    <Link onClick={item.onLinkClick} fontSize='12px'>
+                      {item.linkText}
+                    </Link>
+                  )}
+                </div>
+                {item.buttonText && item.onClickButton && (
+                  <Button
+                    size='medium'
+                    label={item.buttonText}
+                    onClick={item.onClickButton}
+                    icon={item.buttonIcon}
+                    sx={{ marginTop: theme.spacing(2) }}
+                  />
+                )}
+              </Grid>
+            );
+          })}
+        </Box>
+      )}
       {buttonText && onClickButton && (
         <Button
           size='medium'
@@ -191,6 +193,7 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
             lineHeight: '16px',
             margin: '0 auto',
             maxWidth: '550px',
+            marginTop: '24px',
             marginBottom: '24px',
           }}
         >

@@ -37,12 +37,13 @@ export type BaseChartProps = {
   minHeight?: string;
   maxWidth?: string;
   barWidth?: number;
-  elementColor?: string;
+  elementColor?: string | string[];
   barAnnotations?: AnnotationPluginOptions;
   yLimits?: { min?: number; max?: number };
   showLegend?: boolean;
   xAxisLabel?: string;
   yAxisLabel?: string;
+  yStepSize?: number;
 };
 
 export type ChartProps = BaseChartProps & {
@@ -85,6 +86,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     showLegend,
     xAxisLabel,
     yAxisLabel,
+    yStepSize,
   } = props;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [chart, setChart] = useState<ChartJS | null>(null);
@@ -141,6 +143,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
                   y: {
                     ticks: {
                       precision: 0,
+                      stepSize: yStepSize,
                     },
                     min: yLimits?.min,
                     max: yLimits?.max,

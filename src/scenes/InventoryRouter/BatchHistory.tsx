@@ -110,17 +110,19 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
   );
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
-      if (response.requestSucceeded) {
-        const usersById: Record<number, OrganizationUser> = {};
-        for (const user of response.users ?? []) {
-          usersById[user.id] = user;
+    if (selectedOrganization.id !== -1) {
+      const fetchUsers = async () => {
+        const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
+        if (response.requestSucceeded) {
+          const usersById: Record<number, OrganizationUser> = {};
+          for (const user of response.users ?? []) {
+            usersById[user.id] = user;
+          }
+          setUsers(usersById);
         }
-        setUsers(usersById);
-      }
-    };
-    fetchUsers();
+      };
+      fetchUsers();
+    }
   }, [selectedOrganization.id]);
 
   const findPreviousEvent = useCallback(

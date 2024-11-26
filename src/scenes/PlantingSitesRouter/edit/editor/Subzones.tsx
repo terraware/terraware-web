@@ -278,7 +278,7 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
         const idGenerator = IdGenerator(Object.values(subzones).flatMap((sz) => sz.features));
         const subzonesWithIds = leftOrderedFeatures(cutSubzones).map(({ feature: subzone }) => {
           if (subzone && subzone.properties && !subzone.properties.name) {
-            const subzoneName = subzoneNameGenerator(usedNames);
+            const subzoneName = subzoneNameGenerator(usedNames, strings.SUBZONE);
             subzone.properties.name = subzoneName;
             usedNames.add(subzoneName);
           }
@@ -392,12 +392,14 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
           close();
         };
 
-        const subzoneNamesInUse = new Set<string>(
-          Object.values(subzones || ({} as Record<number, FeatureCollection>))
-            .flatMap((featureCollection) => featureCollection.features)
-            .filter((feature) => feature.properties?.id !== id)
-            .map((feature) => feature.properties?.name)
-        );
+        const selectedSubzones = subzones && selectedZone ? subzones[selectedZone] : undefined;
+        const subzoneNamesInUse = selectedSubzones
+          ? new Set<string>(
+              selectedSubzones.features
+                .filter((feature) => feature.properties?.id !== id)
+                .map((feature) => feature.properties?.name)
+            )
+          : new Set<string>();
 
         return (
           <TooltipContents name={name} onClose={close} onUpdate={onUpdate} subzoneNamesInUse={subzoneNamesInUse} />

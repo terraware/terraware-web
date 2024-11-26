@@ -9,6 +9,7 @@ type TableRowPopupMenuItem = {
   disabled: boolean;
   label: string;
   onClick: () => void;
+  tooltip?: string;
 };
 
 type TableRowPopupMenuProps = {
@@ -40,19 +41,31 @@ const TableRowPopupMenu = ({ menuItems }: TableRowPopupMenuProps): JSX.Element =
         }}
       >
         <MenuList sx={{ padding: theme.spacing(2, 0) }}>
-          {menuItems.map((menuItem, index) => (
-            <MenuItem
-              key={index}
-              id={`${menuItem.label}_${index}`}
-              onClick={menuItem.onClick}
-              sx={{ padding: theme.spacing(1, 2) }}
-              disabled={menuItem.disabled}
-            >
-              <Typography color={theme.palette.TwClrBaseGray800} paddingLeft={1}>
-                {menuItem.label}
-              </Typography>
-            </MenuItem>
-          ))}
+          {menuItems.map((menuItem, index) => {
+            const menuItemComponent = (
+              <MenuItem
+                key={index}
+                id={`${menuItem.label}_${index}`}
+                onClick={menuItem.onClick}
+                sx={{ padding: theme.spacing(1, 2) }}
+                disabled={menuItem.disabled}
+              >
+                <Typography color={theme.palette.TwClrBaseGray800} paddingLeft={1}>
+                  {menuItem.label}
+                </Typography>
+              </MenuItem>
+            );
+
+            if (menuItem.tooltip !== undefined) {
+              return (
+                <Tooltip key={index} title={menuItem.tooltip}>
+                  {menuItemComponent}
+                </Tooltip>
+              );
+            } else {
+              return menuItemComponent;
+            }
+          })}
         </MenuList>
       </Popover>
       <Tooltip title={strings.MORE_OPTIONS}>

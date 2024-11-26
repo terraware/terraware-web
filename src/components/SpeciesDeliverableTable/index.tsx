@@ -8,23 +8,23 @@ import Table from 'src/components/common/table';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
-import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
+import { useSpeciesDeliverableSearch } from 'src/providers/Participant/useSpeciesDeliverableSearch';
 import { requestListParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesListRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Deliverable } from 'src/types/Deliverables';
+import { DeliverableWithOverdue } from 'src/types/Deliverables';
 
 import AddSpeciesModal from './AddSpeciesModal';
 import RemoveSpeciesDialog from './RemoveSpeciesDialog';
 import TableCellRenderer from './TableCellRenderer';
 
 const columns = (): TableColumnType[] => [
-  { key: 'species.scientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
-  { key: 'species.commonName', name: strings.COMMON_NAME, type: 'string' },
-  { key: 'participantProjectSpecies.speciesNativeCategory', name: strings.NATIVE_NON_NATIVE, type: 'string' },
-  { key: 'participantProjectSpecies.rationale', name: strings.RATIONALE, type: 'string' },
-  { key: 'participantProjectSpecies.submissionStatus', name: strings.STATUS, type: 'string' },
+  { key: 'species_scientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
+  { key: 'species_commonName', name: strings.COMMON_NAME, type: 'string' },
+  { key: 'participantProjectSpecies_speciesNativeCategory', name: strings.NATIVE_NON_NATIVE, type: 'string' },
+  { key: 'participantProjectSpecies_rationale', name: strings.RATIONALE, type: 'string' },
+  { key: 'participantProjectSpecies_submissionStatus', name: strings.STATUS, type: 'string' },
 ];
 
 const consoleColumns = (): TableColumnType[] => [
@@ -34,7 +34,7 @@ const consoleColumns = (): TableColumnType[] => [
 ];
 
 type SpeciesDeliverableTableProps = {
-  deliverable: Deliverable;
+  deliverable: DeliverableWithOverdue;
 };
 
 const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps): JSX.Element => {
@@ -43,7 +43,11 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
   const theme = useTheme();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { goToParticipantProjectSpecies } = useNavigateTo();
-  const { currentDeliverables } = useParticipantData();
+  const {
+    hasActiveDeliverable,
+    hasRecentDeliverable,
+    reload: reloadSpeciesDeliverableSearch,
+  } = useSpeciesDeliverableSearch();
 
   const participantProjectSpecies = useAppSelector(selectParticipantProjectSpeciesListRequest(deliverable.projectId));
 
@@ -51,9 +55,16 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [openedAddSpeciesModal, setOpenedAddSpeciesModal] = useState(false);
 
-  const addSpeciesToProjectButtonIsDisabled = useMemo(() => {
-    return !currentDeliverables?.find((deliverable) => deliverable.id === deliverable.id);
-  }, [currentDeliverables, deliverable]);
+  const rows = useMemo(() => {
+    return (participantProjectSpecies?.data || []).map((value) => ({
+      ...value,
+      species_scientificName: value.species.scientificName,
+      species_commonName: value.species.commonName,
+      participantProjectSpecies_speciesNativeCategory: value.participantProjectSpecies.speciesNativeCategory,
+      participantProjectSpecies_rationale: value.participantProjectSpecies.rationale,
+      participantProjectSpecies_submissionStatus: value.participantProjectSpecies.submissionStatus,
+    }));
+  }, [participantProjectSpecies]);
 
   useEffect(() => {
     void dispatch(requestListParticipantProjectSpecies(deliverable.projectId));
@@ -61,6 +72,7 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
 
   const reload = () => {
     dispatch(requestListParticipantProjectSpecies(deliverable.projectId));
+    reloadSpeciesDeliverableSearch();
   };
 
   const onCloseRemoveSpecies = (_reload?: boolean) => {
@@ -90,6 +102,8 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
               participantProjectSpecies={participantProjectSpecies?.data || []}
               reload={reload}
               projectId={deliverable.projectId}
+              hasActiveDeliverable={hasActiveDeliverable}
+              hasRecentDeliverable={hasRecentDeliverable}
             />
           )}
 
@@ -107,7 +121,6 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
 
             {!isAcceleratorRoute && (
               <Button
-                disabled={addSpeciesToProjectButtonIsDisabled}
                 icon='plus'
                 id='add-species-to-project'
                 label='Add Species to Project'
@@ -124,7 +137,7 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
             id='species-deliverable-table'
             orderBy='speciesScientificName'
             Renderer={TableCellRenderer}
-            rows={participantProjectSpecies?.data || []}
+            rows={rows}
             selectedRows={selectedRows}
             setSelectedRows={setSelectedRows}
             showCheckbox={!isAcceleratorRoute}

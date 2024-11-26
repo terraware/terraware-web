@@ -21,7 +21,9 @@ export default function Renderer(props: RendererProps<TableRowType>): JSX.Elemen
   };
 
   if (column.key === 'email' && !isTfContact(row.role)) {
-    return <CellRenderer index={index} column={column} value={createLinkToPerson(value)} row={row} />;
+    return (
+      <CellRenderer index={index} column={column} value={createLinkToPerson(value)} row={row} title={value as string} />
+    );
   }
 
   return <CellRenderer {...props} />;

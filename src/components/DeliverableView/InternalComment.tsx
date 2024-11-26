@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, Grid } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
@@ -24,6 +24,12 @@ function InternalComment<T extends { internalComment?: string }>({ entity, updat
     update(internalComment);
     toggleDialog();
   };
+
+  useEffect(() => {
+    if (entity.internalComment) {
+      setInternalComment(entity.internalComment);
+    }
+  }, [entity.internalComment]);
 
   return (
     <>

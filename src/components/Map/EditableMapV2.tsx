@@ -33,7 +33,8 @@ import { getRgbaFromHex } from 'src/utils/color';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
 import MapSearchBox from './MapSearchBox';
-import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
+import { useMapViewStyle } from './MapViewStyleControl';
+import MapViewStyleSwitch from './MapViewStyleSwitch';
 import UndoRedoControl from './UndoRedoControl';
 import { getMapDrawingLayer, getMapErrorLayer, toMultiPolygon } from './utils';
 
@@ -95,24 +96,36 @@ export default function EditableMap({
     [refreshToken]
   );
 
-  const initialViewState = {
-    bounds: readOnlyBoundary?.length
-      ? (bbox({
+  const initialViewState = useMemo<{ bounds: LngLatBoundsLike } | undefined>(() => {
+    if (readOnlyBoundary?.length) {
+      const coordinates = readOnlyBoundary
+        .flatMap((b) => b.data.features)
+        .flatMap((feature) => toMultiPolygon(feature.geometry))
+        .filter((poly: MultiPolygon | null): poly is MultiPolygon => poly !== null)
+        .flatMap((poly: MultiPolygon) => poly.coordinates);
+
+      return {
+        bounds: bbox({
           type: 'MultiPolygon',
-          coordinates: readOnlyBoundary
-            .flatMap((b) => b.data.features)
-            .flatMap((feature) => toMultiPolygon(feature.geometry))
-            .filter((poly: MultiPolygon | null) => poly !== null)
-            .flatMap((poly: MultiPolygon | null) => poly!.coordinates),
-        }) as LngLatBoundsLike)
-      : editableBoundary
-        ? (bbox(editableBoundary) as LngLatBoundsLike)
-        : undefined,
-    fitBoundsOptions: {
-      animate: false,
-      padding: 25,
-    },
-  };
+          coordinates,
+        }) as LngLatBoundsLike,
+        fitBoundsOptions: {
+          animate: false,
+          padding: 25,
+        },
+      };
+    } else if (editableBoundary) {
+      return {
+        bounds: bbox(editableBoundary) as LngLatBoundsLike,
+        fitBoundsOptions: {
+          animate: false,
+          padding: 25,
+        },
+      };
+    } else {
+      return undefined;
+    }
+  }, [editableBoundary, readOnlyBoundary]);
 
   const mapLayers = useMemo(() => {
     if (!readOnlyBoundary?.length) {
@@ -291,6 +304,8 @@ export default function EditableMap({
   // This is to catch up on an already initalized active context.
   const onLoad = useCallback(() => void selectActiveContext(), [selectActiveContext]);
 
+  const mapStyle = useMemo(() => MapViewStyles[mapViewStyle], [mapViewStyle]);
+
   return (
     <Box
       ref={containerRef}
@@ -324,29 +339,43 @@ export default function EditableMap({
           : {}),
       }}
     >
-      {showSearchBox === true && (
-        <MapSearchBox
-          onSelect={(features: AddressAutofillFeatureSuggestion[] | null) => {
-            if (features && features.length > 0) {
-              const coordinates = features[0].geometry.coordinates;
-              mapRef?.current?.flyTo({
-                center: [coordinates[0], coordinates[1]],
-                essential: true,
-                zoom: 10, // https://docs.mapbox.com/help/glossary/zoom-level/
-              });
-            }
-          }}
-          style={{ paddingBottom: theme.spacing(4) }}
-        />
-      )}
       {firstVisible && (
         <>
+          <Box
+            display='flex'
+            flexDirection='row'
+            justifyContent={'space-between'}
+            alignItems='center'
+            paddingBottom={theme.spacing(4)}
+            width='fill'
+          >
+            {showSearchBox === true && (
+              <Box width='100%'>
+                <MapSearchBox
+                  onSelect={(features: AddressAutofillFeatureSuggestion[] | null) => {
+                    if (features && features.length > 0) {
+                      const coordinates = features[0].geometry.coordinates;
+                      mapRef?.current?.flyTo({
+                        center: [coordinates[0], coordinates[1]],
+                        essential: true,
+                        zoom: 10, // https://docs.mapbox.com/help/glossary/zoom-level/
+                      });
+                    }
+                  }}
+                />
+              </Box>
+            )}
+            <Box width='fit-content' marginLeft='auto' paddingLeft={theme.spacing(2)}>
+              <MapViewStyleSwitch mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
+            </Box>
+          </Box>
           <ReactMapGL
             key={mapId}
             onError={onMapError}
             ref={mapRef}
             mapboxAccessToken={token}
-            mapStyle={MapViewStyles[mapViewStyle]}
+            mapStyle={mapStyle}
+            styleDiffing={false}
             style={{
               position: 'relative',
               width: '100%',
@@ -354,6 +383,7 @@ export default function EditableMap({
               display: 'flex',
               flexGrow: 1,
               flexDirection: 'column',
+              minHeight: '640px',
               ...style,
             }}
             initialViewState={initialViewState}
@@ -364,7 +394,6 @@ export default function EditableMap({
             {mapLayers}
             {errorLayer}
             <FullscreenControl position='top-left' />
-            <MapViewStyleControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
             <EditableMapDraw
               boundary={editableBoundary}
               onBoundaryCreated={onEditableBoundaryChanged}

@@ -14,7 +14,7 @@ export default function InventoryTests() {
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory' }).click();
-    await page.getByRole('button', { name: 'Add Inventory' }).click();
+    await page.locator('#new-inventory').click();
     await page.getByPlaceholder('Search or Select...').click();
     await page.locator('li').filter({ hasText: 'Banana' }).locator('div').click();
     await page.locator('div:nth-child(2) > .select > .textfield-container').click();
@@ -49,7 +49,7 @@ export default function InventoryTests() {
     await page.locator('textarea').fill('Adding some notes');
     await page.getByRole('button', { name: 'Save' }).click();
 
-    await expect(page.getByText('Banana')).toBeVisible();
+    await expect(page.getByText('Banana', { exact: true })).toBeVisible();
     await expect(page.getByText('Garage')).toBeVisible();
     await expect(page.getByText('-02-01')).toBeVisible();
     await expect(page.getByText('Germinating Quantity 500')).toBeVisible();
@@ -71,7 +71,7 @@ export default function InventoryTests() {
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory' }).click();
-    await page.getByRole('button', { name: 'Add Inventory' }).click();
+    await page.locator('#new-inventory').click();
     await page.getByPlaceholder('Search or Select...').click();
     await page.locator('li').filter({ hasText: 'Coconut' }).locator('div').click();
 
@@ -109,7 +109,7 @@ export default function InventoryTests() {
     await page.locator('textarea').fill('Adding some notes');
     await page.getByRole('button', { name: 'Save' }).click();
 
-    await expect(page.getByText('Coconut')).toBeVisible();
+    await expect(page.getByText('Coconut', { exact: true })).toBeVisible();
     await expect(page.getByText('Garage')).toBeVisible();
     await expect(page.getByText('Germinating Quantity 25')).toBeVisible();
     await expect(page.getByText('Not Ready Quantity 25')).toBeVisible();

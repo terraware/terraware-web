@@ -11,43 +11,49 @@ import Link from './Link';
 import Icon from './icon/Icon';
 import { IconName } from './icon/icons';
 
-export type LinkStyle = 'plain' | 'button';
+export type LinkStyle = 'plain' | 'button-primary' | 'button-secondary';
 
 export interface PageCardProps {
-  name: string;
-  isNameBold?: boolean;
+  cardIsClickable?: boolean;
+  description: string | (string | JSX.Element)[];
   icon: IconName;
-  description: string;
-  linkText: string;
+  id?: string;
+  isNameBold?: boolean;
   link: string;
   linkStyle: LinkStyle;
-  id?: string;
+  linkText: string;
+  name: string;
+  onClick?: () => void;
 }
 
+const stopBubblingEvent = (event?: React.MouseEvent) => {
+  if (event) {
+    stopPropagation(event);
+  }
+};
+
 export default function PageCard(props: PageCardProps): JSX.Element {
-  const { name, icon, description, id, linkText, link, linkStyle } = props;
+  const { cardIsClickable = true, description, icon, id, link, linkStyle, linkText, name, onClick } = props;
   const theme = useTheme();
   const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
 
-  const stopBubblingEvent = (event?: React.MouseEvent) => {
-    if (event) {
-      stopPropagation(event);
-    }
+  const goToPage = () => {
+    navigate({ pathname: link });
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const goToPage = (event?: React.MouseEvent) => {
-    if (linkStyle === 'button') {
-      return;
+  const handleOnClick = () => {
+    if (onClick) {
+      onClick();
+    } else {
+      goToPage();
     }
-    navigate({ pathname: link });
   };
 
   return (
     <Box
       className={isMobile ? '' : 'min-height'}
-      onClick={goToPage}
+      onClick={cardIsClickable ? handleOnClick : undefined}
       id={id ?? ''}
       sx={{
         background: theme.palette.TwClrBg,
@@ -106,15 +112,14 @@ export default function PageCard(props: PageCardProps): JSX.Element {
           </Link>
         </Box>
       )}
-      {linkStyle === 'button' && (
+      {(linkStyle === 'button-primary' || linkStyle === 'button-secondary') && (
         <Button
-          priority='secondary'
+          priority={linkStyle === 'button-primary' ? 'primary' : 'secondary'}
           label={linkText}
-          onClick={() => window.open(link, '_blank')}
+          onClick={handleOnClick}
           style={{
             fontSize: '14px',
             lineHeight: '20px',
-            marginLeft: 'auto',
             marginTop: '14px',
             maxWidth: 'fit-content',
           }}

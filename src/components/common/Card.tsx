@@ -13,16 +13,25 @@ export type CardProps = {
   rightComponent?: ReactNode;
   style?: object;
   title?: string;
+  radius?: string;
 };
 
-export default function Card({ busy, children, flushMobile, rightComponent, style, title }: CardProps): JSX.Element {
+export default function Card({
+  busy,
+  children,
+  flushMobile,
+  rightComponent,
+  style,
+  title,
+  radius,
+}: CardProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const flush = isMobile && flushMobile;
 
   return (
     <Box
-      borderRadius={flush ? 0 : theme.spacing(3)}
+      borderRadius={flush ? 0 : radius || theme.spacing(3)}
       padding={3}
       margin={flush ? theme.spacing(0, -3) : 0}
       sx={{

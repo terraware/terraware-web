@@ -1,12 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Grid, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Dropdown, DropdownItem } from '@terraware/web-components';
 
-import Page from 'src/components/Page';
+import ApplicationStatusCard from 'src/components/ProjectField/ApplicationStatusCard';
 import CountrySelect from 'src/components/ProjectField/CountrySelect';
-import ProjectFieldDisplay from 'src/components/ProjectField/Display';
+import GridEntryWrapper from 'src/components/ProjectField/GridEntryWrapper';
 import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
 import ProjectFieldMeta from 'src/components/ProjectField/Meta';
+import MinMaxCarbonTextfield from 'src/components/ProjectField/MinMaxCarbonTextfield';
 import PhaseScoreCard from 'src/components/ProjectField/PhaseScoreCard';
 import RegionDisplay from 'src/components/ProjectField/RegionDisplay';
 import ProjectFieldTextAreaEdit from 'src/components/ProjectField/TextAreaEdit';
@@ -14,14 +16,24 @@ import ProjectFieldTextfield from 'src/components/ProjectField/Textfield';
 import VotingDecisionCard from 'src/components/ProjectField/VotingDecisionCard';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
+import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
+import useListCohortModules from 'src/hooks/useListCohortModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
+import { useApplicationData } from 'src/providers/Application/Context';
+import { requestAssignTerraformationContact } from 'src/redux/features/accelerator/acceleratorAsyncThunks';
+import { selectAssignTerraformationContact } from 'src/redux/features/accelerator/acceleratorSelectors';
+import { requestListGlobalRolesUsers } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
+import { selectGlobalRolesUsersSearchRequest } from 'src/redux/features/globalRoles/globalRolesSelectors';
+import { requestListOrganizationUsers } from 'src/redux/features/organizationUser/organizationUsersAsyncThunks';
+import { selectOrganizationUsers } from 'src/redux/features/organizationUser/organizationUsersSelectors';
 import { requestUpdateParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectUpdateRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { requestProjectUpdate } from 'src/redux/features/projects/projectsAsyncThunks';
 import { selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { OrganizationUser } from 'src/types/User';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -40,8 +52,17 @@ const EditView = () => {
   const { phaseVotes } = useVotingData();
   const { goToParticipantProject } = useNavigateTo();
   const { isAllowed } = useUser();
+  const { getApplicationByProjectId } = useApplicationData();
+  const { cohortModules, listCohortModules } = useListCohortModules();
+
+  useEffect(() => {
+    if (project && project.cohortId) {
+      void listCohortModules(project.cohortId);
+    }
+  }, [project, listCohortModules]);
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
+  const isAllowedEditScoreAndVoting = isAllowed('UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING');
 
   // Participant project (accelerator data) form record and update request
   const [participantProjectRequestId, setParticipantProjectRequestId] = useState<string>('');
@@ -53,10 +74,62 @@ const EditView = () => {
 
   // Project (terraware data) form record and update request
   const [projectRequestId, setProjectRequestId] = useState<string>('');
+  const [organizationUsersRequestId, setOrganizationUsersRequestId] = useState<string>('');
   const projectUpdateRequest = useAppSelector((state) => selectProjectRequest(state, projectRequestId));
   const [projectRecord, setProjectRecord, onChangeProject] = useForm(project);
 
   const [confirmProjectNameModalOpen, setConfirmProjectNameModalOpen] = useState(false);
+  const [listUsersRequestId, setListUsersRequestId] = useState('');
+  const listUsersRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(listUsersRequestId));
+  const [assignTfContactRequestId, setAssignTfContactRequestId] = useState('');
+  const assignResponse = useAppSelector(selectAssignTerraformationContact(assignTfContactRequestId));
+  const response = useAppSelector(selectOrganizationUsers(organizationUsersRequestId));
+  const { activeLocale } = useLocalization();
+  const [globalUsersOptions, setGlobalUsersOptions] = useState<DropdownItem[]>();
+  const [tfContact, setTfContact] = useState<DropdownItem>();
+  const [organizationUsers, setOrganizationUsers] = useState<OrganizationUser[]>();
+
+  const redirectToProjectView = () => {
+    reload();
+    snackbar.toastSuccess(strings.CHANGES_SAVED, strings.SAVED);
+    goToParticipantProject(projectId);
+  };
+
+  useEffect(() => {
+    if (assignResponse?.status === 'success') {
+      redirectToProjectView();
+    } else if (assignResponse?.status === 'error') {
+      snackbar.toastError();
+      setAssignTfContactRequestId('');
+    }
+  }, [assignResponse, redirectToProjectView, snackbar]);
+
+  useEffect(() => {
+    const tfContactSelected = globalUsersOptions?.find(
+      (userOpt) => userOpt.value === organization?.tfContactUser?.userId
+    );
+    setTfContact(tfContactSelected);
+  }, [organization?.tfContactUser, globalUsersOptions]);
+
+  useEffect(() => {
+    const request = dispatch(requestListGlobalRolesUsers({ locale: activeLocale }));
+    setListUsersRequestId(request.requestId);
+  }, [activeLocale, dispatch]);
+
+  useEffect(() => {
+    if (listUsersRequest?.status === 'success') {
+      const userOptions = listUsersRequest.data?.users.map((user) => ({
+        label: `${user.firstName} ${user.lastName}`,
+        value: user.id,
+      }));
+      setGlobalUsersOptions(userOptions);
+    }
+  }, [listUsersRequest]);
+
+  const projectApplication = useMemo(
+    () => getApplicationByProjectId(projectId),
+    [getApplicationByProjectId, projectId]
+  );
 
   const onChangeCountry = useCallback(
     (countryCode?: string, region?: string) => {
@@ -80,17 +153,34 @@ const EditView = () => {
     }
   }, [projectId, projectRecord, dispatch]);
 
+  const saveTFContact = () => {
+    if (organization && tfContact) {
+      const assignRequest = dispatch(
+        requestAssignTerraformationContact({
+          organizationId: organization.id,
+          terraformationContactId: tfContact?.value,
+        })
+      );
+      setAssignTfContactRequestId(assignRequest.requestId);
+    }
+  };
+
   const handleOnSave = useCallback(() => {
     if (projectRecord?.name !== project?.name) {
       setConfirmProjectNameModalOpen(true);
       return;
     }
-
     saveParticipantProject();
   }, [project, projectRecord, saveParticipantProject]);
 
   const handleOnCancel = useCallback(() => goToParticipantProject(projectId), [goToParticipantProject, projectId]);
   const handleOnCloseModal = useCallback(() => setConfirmProjectNameModalOpen(false), []);
+
+  useEffect(() => {
+    if (response?.status === 'success') {
+      setOrganizationUsers(response.data?.users);
+    }
+  }, [response]);
 
   useEffect(() => {
     if (!participantProjectUpdateRequest) {
@@ -100,11 +190,13 @@ const EditView = () => {
     if (participantProjectUpdateRequest.status === 'error') {
       snackbar.toastError();
     } else if (participantProjectUpdateRequest.status === 'success') {
-      snackbar.toastSuccess(strings.CHANGES_SAVED, strings.SAVED);
-      reload();
-      goToParticipantProject(projectId);
+      if (tfContact) {
+        saveTFContact();
+      } else {
+        redirectToProjectView();
+      }
     }
-  }, [goToParticipantProject, participantProjectUpdateRequest, projectId, snackbar, reload]);
+  }, [participantProjectUpdateRequest, snackbar]);
 
   useEffect(() => {
     if (!projectUpdateRequest) {
@@ -138,8 +230,26 @@ const EditView = () => {
     }
   }, [goToParticipantProject, isAllowedEdit, projectId]);
 
+  useEffect(() => {
+    if (organization?.id) {
+      const request = dispatch(requestListOrganizationUsers({ organizationId: organization.id }));
+      setOrganizationUsersRequestId(request.requestId);
+    }
+  }, [organization]);
+
+  const globalUsersWithNoOwner = useMemo(() => {
+    const ownerId = organizationUsers?.find((orgUsr) => orgUsr.role === 'Owner')?.id;
+    return globalUsersOptions?.filter((opt) => opt.value.toString() !== ownerId?.toString()) || [];
+  }, [organizationUsers, globalUsersOptions]);
+
   return (
-    <Page title={`${participant?.name || ''} / ${project?.name || ''}`} crumbs={crumbs} hierarchicalCrumbs={false}>
+    <PageWithModuleTimeline
+      title={`${participant?.name || ''} / ${project?.name || ''}`}
+      crumbs={crumbs}
+      hierarchicalCrumbs={false}
+      cohortPhase={project?.cohortPhase}
+      modules={cohortModules ?? []}
+    >
       <PageForm
         busy={participantProjectUpdateRequest?.status === 'pending'}
         cancelID='cancelNewParticipantProject'
@@ -157,27 +267,52 @@ const EditView = () => {
           }}
         >
           <Grid container>
-            <ProjectFieldTextfield
-              id={'name'}
-              label={strings.PROJECT_NAME}
-              onChange={onChangeProject}
-              value={projectRecord?.name}
-            />
-            <PhaseScoreCard phaseScores={phase1Scores} />
-            <VotingDecisionCard phaseVotes={phaseVotes} />
-            <ProjectFieldDisplay value={false} />
+            <Grid item xs={12}>
+              <ProjectFieldTextfield
+                height='auto'
+                id={'name'}
+                md={12}
+                label={strings.PROJECT_NAME}
+                onChange={onChangeProject}
+                value={projectRecord?.name}
+              />
+            </Grid>
+            {projectApplication && (
+              <ApplicationStatusCard
+                application={projectApplication}
+                md={!isAllowedEditScoreAndVoting ? 12 : undefined}
+              />
+            )}
+            {isAllowedEditScoreAndVoting && (
+              <>
+                <PhaseScoreCard md={!projectApplication?.id ? 6 : undefined} phaseScores={phase1Scores} />
+                <VotingDecisionCard md={!projectApplication?.id ? 6 : undefined} phaseVotes={phaseVotes} />
+              </>
+            )}
             <ProjectFieldTextfield
               id={'fileNaming'}
               label={strings.FILE_NAMING}
               onChange={onChangeParticipantProject}
               value={participantProjectRecord?.fileNaming}
             />
-            <ProjectFieldTextfield
-              id={'projectLead'}
-              label={strings.PROJECT_LEAD}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.projectLead}
-            />
+            <GridEntryWrapper>
+              <Box paddingX={theme.spacing(2)}>
+                <Dropdown
+                  id='projectLead'
+                  placeholder={strings.SELECT}
+                  selectedValue={tfContact?.value}
+                  options={globalUsersWithNoOwner}
+                  onChange={(value: string) => {
+                    setTfContact(
+                      globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString())
+                    );
+                  }}
+                  hideClearIcon={true}
+                  label={strings.PROJECT_LEAD}
+                  fullWidth
+                />
+              </Box>
+            </GridEntryWrapper>
             <CountrySelect
               id={'countryCode'}
               label={strings.COUNTRY}
@@ -221,20 +356,6 @@ const EditView = () => {
               value={participantProjectRecord?.totalExpansionPotential}
             />
             <ProjectFieldTextfield
-              id={'minCarbonAccumulation'}
-              label={strings.MINIMUM_CARBON_ACCUMULATION}
-              onChange={onChangeParticipantProject}
-              type={'number'}
-              value={participantProjectRecord?.minCarbonAccumulation}
-            />
-            <ProjectFieldTextfield
-              id={'maxCarbonAccumulation'}
-              label={strings.MAXIMUM_CARBON_ACCUMULATION}
-              onChange={onChangeParticipantProject}
-              type={'number'}
-              value={participantProjectRecord?.maxCarbonAccumulation}
-            />
-            <ProjectFieldTextfield
               id={'perHectareBudget'}
               label={strings.PER_HECTARE_ESTIMATED_BUDGET}
               onChange={onChangeParticipantProject}
@@ -242,11 +363,10 @@ const EditView = () => {
               value={participantProjectRecord?.perHectareBudget}
             />
             <ProjectFieldTextfield
-              id={'numCommunities'}
-              label={strings.NUMBER_OF_COMMUNITIES_WITHIN_PROJECT_AREA}
+              id={'hubSpotUrl'}
+              label={strings.HUBSPOT_LINK}
               onChange={onChangeParticipantProject}
-              type={'number'}
-              value={participantProjectRecord?.numCommunities}
+              value={participantProjectRecord?.hubSpotUrl}
             />
             <ProjectFieldMeta
               date={project?.createdTime}
@@ -261,6 +381,40 @@ const EditView = () => {
               userId={project?.modifiedBy}
               userName={projectMeta?.modifiedByUserName}
               userLabel={strings.BY}
+            />
+          </Grid>
+          <Grid container>
+            <Grid item xs={12} margin={`0 ${theme.spacing(2)}`}>
+              <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
+                {strings.CARBON}
+              </Typography>
+            </Grid>
+            <MinMaxCarbonTextfield
+              label={strings.MIN_MAX_CARBON_ACCUMULATION}
+              onChange={onChangeParticipantProject}
+              valueMax={participantProjectRecord?.maxCarbonAccumulation}
+              valueMin={participantProjectRecord?.minCarbonAccumulation}
+            />
+            <ProjectFieldTextfield
+              id={'carbonCapacity'}
+              label={strings.CARBON_CAPACITY_TC02_HA}
+              onChange={onChangeParticipantProject}
+              type={'number'}
+              value={participantProject?.carbonCapacity}
+            />
+            <ProjectFieldTextfield
+              id={'annualCarbon'}
+              label={strings.ANNUAL_CARBON_T}
+              onChange={onChangeParticipantProject}
+              type={'number'}
+              value={participantProject?.annualCarbon}
+            />
+            <ProjectFieldTextfield
+              id={'totalCarbon'}
+              label={strings.TOTAL_CARBON_T}
+              onChange={onChangeParticipantProject}
+              type={'number'}
+              value={participantProject?.totalCarbon}
             />
           </Grid>
         </Card>
@@ -308,7 +462,7 @@ const EditView = () => {
           organizationName={organization?.name || ''}
         />
       )}
-    </Page>
+    </PageWithModuleTimeline>
   );
 };
 export default EditView;

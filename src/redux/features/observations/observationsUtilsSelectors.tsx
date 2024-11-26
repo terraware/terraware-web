@@ -2,6 +2,14 @@ import { createSelector } from '@reduxjs/toolkit';
 
 import { selectPlantings } from 'src/redux/features/plantings/plantingsSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { RootState } from 'src/redux/rootReducer';
+import { SiteReportedPlantsData } from 'src/services/TrackingService';
+import {
+  PlantingSite,
+  PlantingSiteSubzoneWithReportedPlants,
+  PlantingSiteWithReportedPlants,
+  PlantingSiteZoneWithReportedPlants,
+} from 'src/types/Tracking';
 
 import { selectPlantingSiteObservations } from './observationsSelectors';
 
@@ -19,11 +27,11 @@ export const selectUpcomingObservations = createSelector(
 
 export const selectObservationSchedulableSites = createSelector(
   [
-    (state) => selectUpcomingObservations(state),
-    (state) => selectPlantingSites(state),
-    (state) => selectPlantings(state),
+    (state: RootState) => selectUpcomingObservations(state),
+    (state: RootState) => selectPlantingSites(state),
+    (state: RootState) => selectPlantings(state),
   ],
-  (upcomingObservations, plantingSites, plantings) => {
+  (upcomingObservations, plantingSites, plantings): PlantingSite[] => {
     // map sites with plantings
     const sitesWithPlantings = (plantings ?? []).reduce(
       (acc, planting) => {
@@ -47,5 +55,50 @@ export const selectObservationSchedulableSites = createSelector(
     );
 
     return observationSchedulableSites;
+  }
+);
+
+// Merge the reporting data for subzones into the planting sites returned in the above selector
+// This is currently only used in the "schedule observation" form which needs the subzone "total plants"
+// to determine how to auto populate the form
+export const selectObservationSchedulableSitesWithPlantReportData = createSelector(
+  [
+    (state: RootState) => selectObservationSchedulableSites(state),
+    (state: RootState) => state.siteReportedPlantsResults,
+  ],
+  (plantingSites, reportedPlantsResults): PlantingSiteWithReportedPlants[] => {
+    return plantingSites.map((plantingSite): PlantingSiteWithReportedPlants => {
+      const plantsResults: SiteReportedPlantsData['site'] | undefined = reportedPlantsResults[plantingSite.id]?.site;
+      if (!plantsResults) {
+        return plantingSite as PlantingSiteWithReportedPlants;
+      }
+
+      return {
+        ...plantingSite,
+        plantingZones: (plantingSite.plantingZones || []).map((zone): PlantingSiteZoneWithReportedPlants => {
+          const plantsResultsZone = plantsResults.plantingZones.find((_zone) => _zone.id === zone.id);
+          if (!plantsResultsZone) {
+            return zone as PlantingSiteZoneWithReportedPlants;
+          }
+
+          return {
+            ...zone,
+            plantingSubzones: zone.plantingSubzones.map((subzone): PlantingSiteSubzoneWithReportedPlants => {
+              const plantsResultsSubzone = plantsResultsZone.plantingSubzones.find(
+                (_subzone) => _subzone.id === subzone.id
+              );
+              if (!plantsResultsSubzone) {
+                return subzone as PlantingSiteSubzoneWithReportedPlants;
+              }
+
+              return {
+                ...subzone,
+                totalPlants: plantsResultsSubzone.totalPlants,
+              };
+            }),
+          };
+        }),
+      };
+    });
   }
 );

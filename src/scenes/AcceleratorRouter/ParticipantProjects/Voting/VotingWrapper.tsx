@@ -1,12 +1,13 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 import { BusySpinner, ErrorBox } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
-import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
+import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
+import useListCohortModules from 'src/hooks/useListCohortModules';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
@@ -23,7 +24,15 @@ export type Props = {
 const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { phaseVotes, projectId, projectName, status } = useVotingData();
+  const { phaseVotes, project, status } = useVotingData();
+
+  const { cohortModules, listCohortModules } = useListCohortModules();
+
+  useEffect(() => {
+    if (project && project.cohortId) {
+      void listCohortModules(project.cohortId);
+    }
+  }, [project, listCohortModules]);
 
   // construct the bread crumbs back to originating context
   const crumbs: Crumb[] = useMemo(
@@ -35,27 +44,29 @@ const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element
               to: APP_PATHS.ACCELERATOR_OVERVIEW, // TODO switch to project management page holding the project id
             },
             {
-              name: projectName ?? '--',
-              to: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`),
+              name: project?.name ?? '--',
+              to: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${project?.id}`),
             },
             {
               name: strings.SCORES,
-              to: APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${projectId}`),
+              to: APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project?.id}`),
             },
           ]
         : [],
-    [activeLocale, projectId, projectName]
+    [activeLocale, project]
   );
 
   const voteDecision = phaseVotes?.decision;
 
   return (
-    <Page
+    <PageWithModuleTimeline
       contentStyle={isForm ? { flexGrow: 1 } : {}}
       crumbs={crumbs}
       hierarchicalCrumbs={false}
       rightComponent={rightComponent}
       title={strings.INVESTMENT_COMMITTEE_VOTES}
+      cohortPhase={project?.cohortPhase}
+      modules={cohortModules ?? []}
     >
       {phaseVotes && phaseVotes.votes.length > 0 ? (
         <Card
@@ -83,7 +94,7 @@ const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element
       ) : (
         <ErrorBox title={strings.NO_VOTERS} text={strings.NO_VOTERS_FOR_PROJECT} />
       )}
-    </Page>
+    </PageWithModuleTimeline>
   );
 };
 

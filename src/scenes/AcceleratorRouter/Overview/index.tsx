@@ -1,9 +1,11 @@
 import React, { useMemo } from 'react';
+import { useMixpanel } from 'react-mixpanel-browser';
 
 import { Box } from '@mui/material';
 import { Tabs } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useUser } from 'src/providers';
 import CohortsListView from 'src/scenes/AcceleratorRouter/Cohorts/CohortsListView';
 import ParticipantProjectsList from 'src/scenes/AcceleratorRouter/ParticipantProjects/ListView';
@@ -14,6 +16,7 @@ import useStickyTabs from 'src/utils/useStickyTabs';
 const OverviewView = () => {
   const { isAllowed } = useUser();
   const { activeLocale } = useLocalization();
+  const mixpanel = useMixpanel();
 
   const tabs = useMemo(() => {
     if (!activeLocale) {
@@ -47,7 +50,17 @@ const OverviewView = () => {
     defaultTab: 'projects',
     tabs,
     viewIdentifier: 'accelerator-overview',
+    keepQuery: false,
   });
+
+  const onTabChangeHandler = (tab: string) => {
+    if (tab !== 'projects') {
+      mixpanel?.track(MIXPANEL_EVENTS.CONSOLE_OVERVIEW_TAB, {
+        tab,
+      });
+    }
+    onTabChange(tab);
+  };
 
   return (
     <Page title={strings.OVERVIEW} contentStyle={{ display: 'block' }}>
@@ -71,7 +84,7 @@ const OverviewView = () => {
           },
         }}
       >
-        <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
+        <Tabs activeTab={activeTab} onTabChange={onTabChangeHandler} tabs={tabs} />
       </Box>
     </Page>
   );

@@ -1,51 +1,35 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
+import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
+import { useNavigate } from 'react-router-dom';
+
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import ErrorContent from './ErrorContent';
+import { APP_PATHS } from './constants';
 
 interface Props {
   children: ReactNode;
-  handler?: () => void;
   setShowNavBar?: (value: boolean) => void;
 }
 
-interface State {
-  hasError: boolean;
-}
+const ErrorBoundary = (props: Props) => {
+  const navigate = useNavigate();
+  const { isDesktop } = useDeviceInfo();
 
-export default class ErrorBoundary extends Component<Props, State> {
-  public state: State = {
-    hasError: false,
-  };
+  return (
+    <ReactErrorBoundary
+      fallback={<ErrorContent inApp />}
+      onError={() => props.setShowNavBar?.(false)}
+      onReset={() => {
+        if (isDesktop) {
+          props.setShowNavBar?.(true);
+        }
+        navigate(APP_PATHS.HOME);
+      }}
+    >
+      {props.children}
+    </ReactErrorBoundary>
+  );
+};
 
-  // when an error occurred we want to update the statee
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public static getDerivedStateFromError(_e: Error): State {
-    // Update state so the next render will show the fallback UI.
-
-    return { hasError: true };
-  }
-
-  // when an error ocurred log the message
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    // tslint:disable-next-line: no-console
-    if (this.props.handler) {
-      this.props.handler();
-    }
-  }
-
-  public render(): ReactNode {
-    if (this.state.hasError) {
-      if (this.props.setShowNavBar) {
-        this.props.setShowNavBar(false);
-      }
-      if (this.props.handler) {
-        return <div />;
-      } else {
-        return <ErrorContent inApp={true} />;
-      }
-    }
-
-    return this.props.children;
-  }
-}
+export default ErrorBoundary;

@@ -5,6 +5,7 @@ import TextTruncated from 'src/components/common/TextTruncated';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import strings from 'src/strings';
 
 export default function ParticipantsCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, value } = props;
@@ -29,12 +30,20 @@ export default function ParticipantsCellRenderer(props: RendererProps<TableRowTy
             fontSize: '16px',
           },
         }}
+        title={value as string}
       />
     );
   }
 
   if (column.key === 'projects.name') {
-    return <CellRenderer {...props} value={<TextTruncated fontSize={16} stringList={value as string[]} />} />;
+    return (
+      <CellRenderer
+        {...props}
+        value={
+          <TextTruncated fontSize={16} stringList={value as string[]} moreText={strings.TRUNCATED_TEXT_MORE_LINK} />
+        }
+      />
+    );
   }
 
   return <CellRenderer {...props} />;

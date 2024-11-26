@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
 import Card from 'src/components/common/Card';
-import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
+import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 
@@ -26,8 +26,41 @@ export default function ListView(): JSX.Element {
     'displayed in the To Do list on your Home screen. Please log in to Terraware regularly to check which ' +
     'deliverables are due.';
 
+  const phases = [
+    {
+      name: 'Phase 0 - Due Diligence',
+      description:
+        'Submit project-relevant documentation that prove that the statements provided in the ' +
+        'application are truthful and accurate.',
+    },
+    {
+      name: 'Phase 1 - Feasibility Study',
+      description:
+        'Attend 10 weeks of training, and evaluate the strengths and risks of your proposed carbon project ' +
+        'by submitting key information that will also be used to create a Feasibility Study document.',
+    },
+    {
+      name: 'Phase 2 - PDD Writing & Registration',
+      description:
+        'Work toward having a PDA signed, a PDD written, and the PDD registered on Verra (Under Development & Full).',
+    },
+    {
+      name: 'Phase 3 - Implement and Monitor',
+      description: 'Mock desription',
+    },
+    {
+      name: 'Phase 4 - Should not be visible',
+      description: 'Mock desription',
+    },
+  ];
+
+  const currentPhaseIndex = useMemo(
+    () => phases.findIndex((phase) => phase.name === currentParticipant?.cohortPhase),
+    [currentParticipant]
+  );
+
   return (
-    <PageWithModuleTimeline
+    <ParticipantPage
       title={strings.ALL_MODULES}
       isLoading={!currentParticipant}
       contentStyle={{ paddingLeft: '24px' }}
@@ -38,14 +71,14 @@ export default function ListView(): JSX.Element {
       </Box>
 
       <Card style={{ width: '100%' }}>
-        <CurrentTimeline />
+        <CurrentTimeline steps={phases} currentIndex={currentPhaseIndex} />
 
-        <Box paddingY={theme.spacing(2)} borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}>
+        <Box paddingY={theme.spacing(3)} borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}>
           <Typography>{phaseDescription}</Typography>
         </Box>
 
         <ListModulesContent />
       </Card>
-    </PageWithModuleTimeline>
+    </ParticipantPage>
   );
 }

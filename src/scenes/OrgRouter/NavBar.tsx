@@ -1,6 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useMixpanel } from 'react-mixpanel-browser';
 import { useMatch, useNavigate } from 'react-router-dom';
 
+import { Box, Typography, useTheme } from '@mui/material';
+import { Icon } from '@terraware/web-components';
 import SubNavbar from '@terraware/web-components/components/Navbar/SubNavbar';
 
 import LocaleSelector from 'src/components/LocaleSelector';
@@ -8,8 +11,11 @@ import NavFooter from 'src/components/common/Navbar/NavFooter';
 import NavItem from 'src/components/common/Navbar/NavItem';
 import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
+import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
+import { useApplicationData } from 'src/providers/Application/Context';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { NurseryWithdrawalService } from 'src/services';
@@ -32,19 +38,24 @@ export default function NavBar({
   hasPlantingSites,
 }: NavBarProps): JSX.Element | null {
   const { selectedOrganization } = useOrganization();
+  const theme = useTheme();
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
   const [reports, setReports] = useState<Reports>([]);
   const [hasDeliverables, setHasDeliverables] = useState<boolean>(false);
   const { isDesktop, isMobile } = useDeviceInfo();
   const navigate = useNavigate();
+  const mixpanel = useMixpanel();
 
   const { isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
-  const { orgHasModules, currentParticipantProject, setCurrentParticipantProject, moduleProjects } =
+  const { orgHasModules, currentParticipantProject, setCurrentParticipantProject, projectsWithModules } =
     useParticipantData();
+
+  const { allApplications } = useApplicationData();
 
   const isAccessionDashboardRoute = useMatch({ path: APP_PATHS.SEEDS_DASHBOARD + '/', end: false });
   const isAccessionsRoute = useMatch({ path: APP_PATHS.ACCESSIONS + '/', end: false });
+  const isApplicationRoute = useMatch({ path: APP_PATHS.APPLICATIONS + '/', end: false });
   const isCheckinRoute = useMatch({ path: APP_PATHS.CHECKIN + '/', end: false });
   const isDeliverablesRoute = useMatch({ path: APP_PATHS.DELIVERABLES + '/', end: false });
   const isDeliverableViewRoute = useMatch({ path: APP_PATHS.DELIVERABLE_VIEW + '/', end: false });
@@ -83,9 +94,11 @@ export default function NavBar({
   );
 
   const checkNurseryWithdrawals = useCallback(() => {
-    NurseryWithdrawalService.hasNurseryWithdrawals(selectedOrganization.id).then((result: boolean) => {
-      setShowNurseryWithdrawals(result);
-    });
+    if (selectedOrganization.id !== -1) {
+      NurseryWithdrawalService.hasNurseryWithdrawals(selectedOrganization.id).then((result: boolean) => {
+        setShowNurseryWithdrawals(result);
+      });
+    }
   }, [selectedOrganization.id]);
 
   useEffect(() => {
@@ -102,14 +115,16 @@ export default function NavBar({
   }, [withdrawalCreated, checkNurseryWithdrawals, showNurseryWithdrawals]);
 
   useEffect(() => {
-    const reportSearch = async () => {
-      const reportsResults = await ReportService.getReports(selectedOrganization.id);
-      setReports(reportsResults.reports || []);
-    };
+    if (selectedOrganization.id !== -1) {
+      const reportSearch = async () => {
+        const reportsResults = await ReportService.getReports(selectedOrganization.id);
+        setReports(reportsResults.reports || []);
+      };
 
-    if (isAdmin(selectedOrganization)) {
-      // not open to contributors, will get a 403
-      reportSearch();
+      if (isAdmin(selectedOrganization)) {
+        // not open to contributors, will get a 403
+        reportSearch();
+      }
     }
   }, [selectedOrganization]);
 
@@ -120,7 +135,7 @@ export default function NavBar({
       const response = await DeliverablesService.list(activeLocale, {
         organizationId: selectedOrganization.id,
       });
-      setHasDeliverables(!!(response && response.deliverables.length > 0));
+      setHasDeliverables(!!(response && response.data && response.data.length > 0));
     };
     if (isManagerOrHigher(selectedOrganization)) {
       fetchDeliverables();
@@ -130,10 +145,10 @@ export default function NavBar({
   }, [activeLocale, selectedOrganization]);
 
   useEffect(() => {
-    if (!currentParticipantProject && moduleProjects && moduleProjects.length > 0) {
-      setCurrentParticipantProject(moduleProjects[0].id);
+    if (!currentParticipantProject && projectsWithModules && projectsWithModules.length > 0) {
+      setCurrentParticipantProject(projectsWithModules[0].id);
     }
-  }, [moduleProjects, currentParticipantProject, setCurrentParticipantProject]);
+  }, [projectsWithModules, currentParticipantProject, setCurrentParticipantProject]);
 
   const getSeedlingsMenuItems = () => {
     const inventoryMenu = (
@@ -171,6 +186,7 @@ export default function NavBar({
           icon='iconSubmit'
           selected={!!isDeliverablesRoute}
           onClick={() => {
+            mixpanel?.track(MIXPANEL_EVENTS.PART_EX_LEFT_NAV_DELIVERABLES);
             closeAndNavigateTo(isDeliverablesRoute && !isDeliverableViewRoute ? '' : APP_PATHS.DELIVERABLES);
           }}
           id='deliverables'
@@ -197,20 +213,53 @@ export default function NavBar({
 
   const modulesMenu = useMemo<JSX.Element | null>(
     () =>
-      currentParticipantProject && orgHasModules ? (
+      currentParticipantProject && orgHasModules && isManagerOrHigher(selectedOrganization) ? (
         <NavItem
           icon='iconModule'
           label={strings.MODULES}
           selected={!!isProjectModulesRoute}
           onClick={() => {
+            mixpanel?.track(MIXPANEL_EVENTS.PART_EX_LEFT_NAV_MODULES);
             closeAndNavigateTo(
               APP_PATHS.PROJECT_MODULES.replace(':projectId', currentParticipantProject.id.toString())
             );
           }}
-          id='reports-list'
+          id='modules-list'
         />
       ) : null,
     [closeAndNavigateTo, isProjectModulesRoute, currentParticipantProject, orgHasModules]
+  );
+
+  const applicationMenu = useMemo<JSX.Element | null>(
+    () =>
+      allApplications && allApplications.length > 0 ? (
+        <NavItem
+          label={
+            <Box
+              display='flex'
+              alignItems={'center'}
+              padding={'11px 0px'}
+              sx={{
+                '&:hover': {
+                  cursor: 'pointer',
+                },
+              }}
+            >
+              <Icon name='iconFile' className='nav-item--icon' fillColor={theme.palette.TwClrIcnSecondary} />
+              <Typography fontSize={'14px'} fontWeight={500} color={theme.palette.TwClrTxt} lineHeight={'normal'}>
+                {strings.APPLICATION}
+              </Typography>
+              <Box marginLeft={'8px'}>
+                <NewBadge />
+              </Box>
+            </Box>
+          }
+          selected={!!isApplicationRoute}
+          onClick={() => closeAndNavigateTo(APP_PATHS.APPLICATIONS)}
+          id='applications-list'
+        />
+      ) : null,
+    [closeAndNavigateTo, allApplications, isApplicationRoute]
   );
 
   const acceleratorSectionTitle = useMemo<string>(
@@ -249,9 +298,10 @@ export default function NavBar({
         }}
         id='speciesNb'
       />
-      {(deliverablesMenu || modulesMenu || reportsMenu) && (
+      {(applicationMenu || deliverablesMenu || modulesMenu || reportsMenu) && (
         <>
           <NavSection title={acceleratorSectionTitle} />
+          {applicationMenu}
           {deliverablesMenu}
           {modulesMenu}
           {reportsMenu}

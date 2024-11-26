@@ -1,4 +1,4 @@
-import { components, operations } from './generated-schema';
+import { components, operations } from 'src/api/types/generated-schema';
 
 export type VariableValuesListResponse = components['schemas']['ListVariableValuesResponsePayload'];
 
@@ -18,7 +18,7 @@ export const isLinkVariableValue = (input: unknown): input is LinkVariableValue 
 
 export type NumberVariableValue = components['schemas']['ExistingNumberValuePayload'];
 export const isNumberVariableValue = (input: unknown): input is NumberVariableValue =>
-  !!(input as NumberVariableValue).numberValue;
+  (input as NumberVariableValue).numberValue !== undefined;
 
 export type SectionTextVariableValue = components['schemas']['ExistingSectionTextValuePayload'];
 export type SectionVariableVariableValue = components['schemas']['ExistingSectionVariableValuePayload'];
@@ -105,6 +105,10 @@ export type UpdateVariableValuesRequestWithDocId = UpdateVariableValuesRequestPa
   docId: number;
 };
 
+export type UpdateVariableValuesRequestWithProjectId = UpdateVariableValuesRequestPayload & {
+  projectId: number;
+};
+
 export type UpdateTextVariableValueRequestWithDocId = Omit<
   components['schemas']['UpdateValueOperationPayload'],
   'value'
@@ -113,10 +117,22 @@ export type UpdateTextVariableValueRequestWithDocId = Omit<
   value: NewTextValuePayload | NewNumberValuePayload | NewImageValuePayload | NewSelectValuePayload;
 };
 
+export type UpdateTextVariableValueRequestWithProjectId = Omit<
+  components['schemas']['UpdateValueOperationPayload'],
+  'value'
+> & {
+  projectId: number;
+  value: NewTextValuePayload | NewNumberValuePayload | NewImageValuePayload | NewSelectValuePayload;
+};
+
 export type DeleteVariableValueOperation = components['schemas']['DeleteValueOperationPayload'];
 
 export type DeleteVariableValueRequestWithDocId = components['schemas']['DeleteValueOperationPayload'] & {
   docId: number;
+};
+
+export type DeleteVariableValueRequestWithProjectId = components['schemas']['DeleteValueOperationPayload'] & {
+  projectId: number;
 };
 
 export type NewValuePayload = components['schemas']['NewValuePayload'];
@@ -129,6 +145,10 @@ export type AppendVariableRequestWithDocId = components['schemas']['UpdateValueO
   docId: number;
 };
 
+export type AppendVariableRequestWithProjectId = components['schemas']['UpdateValueOperationPayload'] & {
+  projectId: number;
+};
+
 export type Operation =
   | components['schemas']['AppendValueOperationPayload']
   | components['schemas']['DeleteValueOperationPayload']
@@ -136,7 +156,7 @@ export type Operation =
   | components['schemas']['UpdateValueOperationPayload'];
 
 export type OriginalUploadImageValue = Required<
-  operations['uploadImageValue']
+  operations['uploadProjectImageValue']
 >['requestBody']['content']['application/json'];
 
 // Change type for file attribute from string to File, because that is how we process it in the frontend
@@ -144,6 +164,10 @@ export type UploadImageValueRequestPayload = Omit<OriginalUploadImageValue, 'fil
 
 export type UploadImageValueRequestPayloadWithDocId = UploadImageValueRequestPayload & {
   docId: number;
+};
+
+export type UploadImageValueRequestPayloadWithProjectId = UploadImageValueRequestPayload & {
+  projectId: number;
 };
 
 export type AppendVariableValueRequestWithDocId = Omit<
@@ -163,10 +187,18 @@ export type NewSectionTextValuePayload = components['schemas']['NewSectionTextVa
 
 export type NewSectionVariableValuePayload = components['schemas']['NewSectionVariableValuePayload'];
 
-export type ReplaceSectionValuesOperationPayload = Omit<
+export type ReplaceSectionValuesOperationPayloadWithDocId = Omit<
   components['schemas']['ReplaceValuesOperationPayload'],
   'values'
 > & {
   docId: number;
+  values: (NewSectionTextValuePayload | NewSectionVariableValuePayload)[];
+};
+
+export type ReplaceSectionValuesOperationPayloadWithProjectId = Omit<
+  components['schemas']['ReplaceValuesOperationPayload'],
+  'values'
+> & {
+  projectId: number;
   values: (NewSectionTextValuePayload | NewSectionVariableValuePayload)[];
 };

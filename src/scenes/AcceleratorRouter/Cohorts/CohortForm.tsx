@@ -1,32 +1,57 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Container, Grid, useTheme } from '@mui/material';
 import { Dropdown, Textfield } from '@terraware/web-components';
 
 import PageForm from 'src/components/common/PageForm';
+import useListCohortModules from 'src/hooks/useListCohortModules';
+import useListModules from 'src/hooks/useListModules';
 import { useLocalization } from 'src/providers/hooks';
+import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
+import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import CohortModulesTable from 'src/scenes/AcceleratorRouter/Cohorts/CohortModulesTable';
 import strings from 'src/strings';
 import { CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
+import { CohortModule } from 'src/types/Module';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type CohortFormProps<T extends CreateCohortRequestPayload | UpdateCohortRequestPayload> = {
   busy?: boolean;
-  cohort: T;
+  cohortId?: number;
   onCancel: () => void;
-  onSave: (cohort: T) => void;
+  onSave: (cohort: T, modulesToUpdate?: CohortModule[], modulesToDelete?: CohortModule[]) => void;
+  record: T;
 };
 
 export default function CohortForm<T extends CreateCohortRequestPayload | UpdateCohortRequestPayload>(
   props: CohortFormProps<T>
 ): JSX.Element {
-  const { busy, cohort, onCancel, onSave } = props;
+  const { busy, cohortId = -1, onCancel, onSave, record } = props;
 
+  const dispatch = useAppDispatch();
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
 
-  const [localRecord, setLocalRecord] = useState<T>(cohort);
+  const [localRecord, setLocalRecord] = useState<T>(record);
   const [validateFields, setValidateFields] = useState<boolean>(false);
+
+  const cohort = useAppSelector(selectCohort(cohortId));
+  const { cohortModules, listCohortModules } = useListCohortModules();
+  const { modules, listModules } = useListModules();
+  const [pendingCohortModules, setPendingCohortModules] = useState<CohortModule[]>(cohortModules);
+
+  useEffect(() => {
+    setPendingCohortModules(cohortModules);
+  }, [cohortModules]);
+
+  useEffect(() => {
+    if (cohortId) {
+      void listCohortModules(cohortId);
+      void listModules();
+    }
+  }, [cohortId, dispatch, listCohortModules, listModules]);
 
   const currentPhaseDropdownOptions = useMemo(() => {
     if (!activeLocale) {
@@ -60,21 +85,55 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
     return true;
   };
 
-  const onSaveHandler = () => {
+  const onSaveHandler = useCallback(() => {
     if (!validateForm()) {
       setValidateFields(true);
       return;
     }
 
-    onSave({
-      ...localRecord,
+    // determine modules to add, and modules to delete
+    const toDelete = cohortModules.filter(
+      (oldModule) => pendingCohortModules.find((newModule) => newModule.id === oldModule.id) === undefined
+    );
+
+    const toAdd = pendingCohortModules.filter(
+      (newModule) => cohortModules.find((oldModule) => oldModule.id === newModule.id) === undefined
+    );
+
+    const toUpdate = pendingCohortModules.filter((newModule) => {
+      const oldModule = cohortModules.find((oldModule) => oldModule.id === newModule.id);
+      return (
+        oldModule !== undefined &&
+        !(
+          oldModule.title === newModule.title &&
+          oldModule.startDate === newModule.startDate &&
+          oldModule.endDate === newModule.endDate
+        )
+      );
     });
-  };
+
+    onSave(
+      {
+        ...localRecord,
+      },
+      [...toAdd, ...toUpdate],
+      toDelete
+    );
+  }, [cohortModules, pendingCohortModules, onSave]);
 
   useEffect(() => {
     // update local record when cohort changes
-    setLocalRecord(cohort);
-  }, [cohort]);
+    setLocalRecord(record);
+  }, [record]);
+
+  useEffect(() => {
+    const userIds = new Set([cohort?.createdBy, cohort?.modifiedBy]);
+    userIds.forEach((userId) => {
+      if (userId) {
+        dispatch(requestGetUser(userId));
+      }
+    });
+  }, [dispatch, cohort?.createdBy, cohort?.modifiedBy]);
 
   return (
     <PageForm
@@ -126,6 +185,14 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
                 selectedValue={localRecord.phase}
               />
             </Grid>
+          </Grid>
+          <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+            <CohortModulesTable
+              cohortModules={pendingCohortModules}
+              setCohortModules={setPendingCohortModules}
+              modules={modules}
+              editing={true}
+            />
           </Grid>
         </Grid>
       </Container>

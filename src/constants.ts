@@ -2,12 +2,19 @@ export const API_PULL_INTERVAL = 60000;
 export const ONE_MINUTE_INTERVAL_MS = 60 * 1000;
 export const FIFTEEN_MINUTE_INTERVAL_MS = 15 * 60 * 1000;
 
-export const SEED_COLLECTOR_APP_STORE_LINK = 'https://apps.apple.com/us/app/terraware/id1568369900';
-export const SEED_COLLECTOR_GOOGLE_PLAY_LINK =
+export const SQ_M_TO_HECTARES = 1 / 10000;
+
+export const TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK = 'https://apps.apple.com/us/app/terraware/id1568369900';
+export const TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK =
   'https://play.google.com/store/apps/details?id=com.terraformation.seedcollector';
+export const ACCELERATOR_LINK = 'https://www.terraformation.com/accelerator';
 
 export enum APP_PATHS {
   ACCELERATOR = '/accelerator',
+  ACCELERATOR_APPLICATION = '/accelerator/applications/:applicationId',
+  ACCELERATOR_APPLICATION_DELIVERABLE = '/accelerator/applications/:applicationId/deliverable/:deliverableId',
+  ACCELERATOR_APPLICATION_MAP = '/accelerator/applications/:applicationId/map',
+  ACCELERATOR_APPLICATIONS = '/accelerator/applications',
   ACCELERATOR_COHORTS = '/accelerator/cohorts',
   ACCELERATOR_COHORTS_EDIT = '/accelerator/cohorts/:cohortId/edit',
   ACCELERATOR_COHORTS_NEW = '/accelerator/cohorts/new',
@@ -18,7 +25,10 @@ export enum APP_PATHS {
   ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_PREVIEW = '/accelerator/documents/:documentId/preview',
   ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_VIEW = '/accelerator/documents/:documentId',
   ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS = '/accelerator/documents',
-  ACCELERATOR_MODULE_CONTENT = '/accelerator/modules',
+  ACCELERATOR_MODULES = '/accelerator/modules',
+  ACCELERATOR_MODULE_CONTENT = '/accelerator/modules/:moduleId',
+  ACCELERATOR_MODULE_EVENTS_EDIT = '/accelerator/modules/:moduleId/event/edit',
+  ACCELERATOR_ORGANIZATIONS = 'accelerator/organizations',
   ACCELERATOR_OVERVIEW = '/accelerator/overview',
   ACCELERATOR_PARTICIPANTS = '/accelerator/participants',
   ACCELERATOR_PARTICIPANTS_EDIT = '/accelerator/participants/:participantId/edit',
@@ -40,9 +50,20 @@ export enum APP_PATHS {
   ACCESSIONS2_NEW = '/accessions/new',
   ACCESSIONS2_ITEM = '/accessions/:accessionId',
   ACCESSIONS2_EDIT = '/accessions/:accessionId/edit',
+  APPLICATIONS = '/applications',
+  APPLICATION_OVERVIEW = '/applications/:applicationId',
+  APPLICATION_MAP = '/applications/:applicationId/map',
+  APPLICATION_MAP_UPDATE = '/applications/:applicationId/map/update',
+  APPLICATION_PRESCREEN = '/applications/:applicationId/prescreen',
+  APPLICATION_PRESCREEN_RESULT = '/applications/:applicationId/prescreen/result',
+  APPLICATION_REVIEW = '/applications/:applicationId/review',
+  APPLICATION_SECTION = '/applications/:applicationId/sections/:sectionId',
+  APPLICATION_SECTION_DELIVERABLE = '/applications/:applicationId/sections/:sectionId/deliverables/:deliverableId',
+  APPLICATION_SECTION_DELIVERABLE_EDIT = '/applications/:applicationId/sections/:sectionId/deliverables/:deliverableId/edit',
   BATCH_WITHDRAW = '/batch/withdraw',
   CHECKIN = '/checkin',
   DELIVERABLES = '/deliverables',
+  DELIVERABLE_EDIT = '/deliverables/:deliverableId/submissions/:projectId/edit',
   DELIVERABLE_VIEW = '/deliverables/:deliverableId/submissions/:projectId',
   ERROR = '/error',
   ERROR_MOBILE_NOT_SUPPORTED = '/error/mobile-not-supported',
@@ -117,4 +138,5 @@ export enum APP_PATHS {
   NURSERY_WITHDRAWALS = '/nursery/withdrawals',
   NURSERY_WITHDRAWALS_DETAILS = '/nursery/withdrawals/:withdrawalId',
   NURSERY_REASSIGNMENT = '/nursery/reassignment/:deliveryId',
+  ADMIN_COHORT_DELIVERABLE = '/admin/cohorts/:cohortId/deliverables/:deliverableId',
 }

@@ -3,7 +3,7 @@ import React from 'react';
 import { Grid, useTheme } from '@mui/material';
 
 import DismissibleWrapper from 'src/components/common/DismissibleWrapper';
-import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
+import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
 
 import CurrentModule from './CurrentModule';
 import Header from './Header';
@@ -15,7 +15,7 @@ const ParticipantHomeView = () => {
   const theme = useTheme();
 
   return (
-    <PageWithModuleTimeline>
+    <ParticipantPage>
       <Grid display={'flex'} flexDirection={'column'} width={'100%'}>
         <Grid item>
           <Header />
@@ -39,7 +39,7 @@ const ParticipantHomeView = () => {
           <CurrentModule />
         </Grid>
       </Grid>
-    </PageWithModuleTimeline>
+    </ParticipantPage>
   );
 };
 

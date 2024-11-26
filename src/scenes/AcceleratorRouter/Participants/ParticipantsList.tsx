@@ -195,6 +195,7 @@ export default function ParticipantList(): JSX.Element {
           rightComponent={actionMenus}
           rows={participants}
           title={strings.PARTICIPANTS}
+          stickyFilters
         />
       )}
     </>

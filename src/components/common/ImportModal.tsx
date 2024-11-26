@@ -1,17 +1,28 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { Box, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 
 import Link from 'src/components/common/Link';
 import { useOrganization } from 'src/providers/hooks';
+import { ImportModuleResponsePayload } from 'src/services/ModuleService';
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
 import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse, UploadResponse } from 'src/types/File';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import DialogBox from './DialogBox/DialogBox';
 import ProgressCircle from './ProgressCircle/ProgressCircle';
 import Button from './button/Button';
 import Icon from './icon/Icon';
+
+export type ImportProblemElement = {
+  problem: string;
+  row: number;
+};
+
+export type ImportResponsePayload = Omit<ImportModuleResponsePayload, 'problems'> & {
+  problems: ImportProblemElement[];
+};
 
 export type ImportSpeciesModalProps = {
   open: boolean;
@@ -22,9 +33,10 @@ export type ImportSpeciesModalProps = {
   resolveApi: (uploadId: number, overwriteExisting: boolean) => Promise<ResolveResponse>;
   uploaderTitle: string;
   uploaderDescription: string;
-  uploadApi: (file: File, orgOrFacilityId: string) => Promise<UploadFileResponse>;
-  templateApi: () => Promise<any>;
-  statusApi: (uploadId: number) => Promise<UploadResponse>;
+  uploadApi?: (file: File, orgOrFacilityId: string) => Promise<UploadFileResponse>;
+  templateApi?: () => Promise<any>;
+  statusApi?: (uploadId: number) => Promise<UploadResponse>;
+  simpleUploadApi?: (file: File) => Promise<ImportResponsePayload | null>;
   importCompleteLabel: string;
   importingLabel: string;
   duplicatedLabel: string;
@@ -58,6 +70,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
     uploadApi,
     templateApi,
     statusApi,
+    simpleUploadApi,
     importCompleteLabel,
     importingLabel,
     duplicatedLabel,
@@ -76,6 +89,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
   const [warning, setWarning] = useState(false);
   const [uploadId, setUploadId] = useState<number>();
   const theme = useTheme();
+  const snackbar = useSnackbar();
 
   const spacingStyles = { marginRight: theme.spacing(2) };
 
@@ -169,9 +183,11 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
   };
 
   const getFileStatus = async (id: number) => {
-    const status: any = await statusApi(id);
-    if (status?.requestSucceeded === true) {
-      setFileStatus(status.uploadStatus as GetUploadStatusResponsePayload);
+    if (statusApi) {
+      const status: any = await statusApi(id);
+      if (status?.requestSucceeded === true) {
+        setFileStatus(status.uploadStatus as GetUploadStatusResponsePayload);
+      }
     }
   };
 
@@ -180,25 +196,61 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
       return;
     }
     if (file) {
-      setUploadId(undefined);
-      setFileStatus(undefined);
-      let response: UploadFileResponse = {
-        id: 0,
-        requestSucceeded: false,
-      };
-      if (facility) {
-        response = await uploadApi(file, facility.id.toString());
-      } else if (selectedOrganization) {
-        response = await uploadApi(file, selectedOrganization.id.toString());
-      }
-      if (response) {
-        if (response.requestSucceeded === false) {
-          setError(<>{strings.DATA_IMPORT_FAILED}</>);
-        } else {
-          if (response.id) {
-            setUploadId(response.id);
-            setLoading(true);
-            setUploadInterval(setInterval(() => getFileStatus(response.id), 2000));
+      if (simpleUploadApi) {
+        setLoading(true);
+        const response = await simpleUploadApi(file);
+        if (response) {
+          if (response.status === 'error') {
+            setLoading(false);
+            snackbar.toastError(
+              response.problems?.length > 0
+                ? [
+                    <ul key='errors'>
+                      {response.problems.map((problem, index) => (
+                        <li key={`import-error-item-${index}`}>
+                          {strings.formatString(
+                            strings.DATA_IMPORT_ROW_MESSAGE,
+                            `${problem.row}`,
+                            problem.problem || strings.GENERIC_ERROR
+                          )}
+                        </li>
+                      ))}
+                    </ul>,
+                  ]
+                : [<Typography key='error-message'>{response.message}</Typography>],
+              strings.UPLOAD_FAILED
+            );
+            onClose(false);
+          } else {
+            setLoading(false);
+            setCompleted(true);
+          }
+        }
+      } else {
+        setUploadId(undefined);
+        setFileStatus(undefined);
+        let response: UploadFileResponse = {
+          id: 0,
+          requestSucceeded: false,
+        };
+        if (facility) {
+          if (uploadApi) {
+            response = await uploadApi(file, facility.id.toString());
+          }
+        } else if (selectedOrganization && selectedOrganization.id !== -1) {
+          if (uploadApi) {
+            response = await uploadApi(file, selectedOrganization.id.toString());
+          }
+        }
+        if (response) {
+          if (response.requestSucceeded === false) {
+            setError(<>{strings.DATA_IMPORT_FAILED}</>);
+          } else {
+            if (response.id) {
+              setUploadId(response.id);
+              setLoading(true);
+              setUploadInterval(setInterval(() => getFileStatus(response.id), 2000));
+            }
           }
         }
       }
@@ -363,7 +415,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
             >
               {file ? strings.FILE_SELECTED : uploaderDescription}
             </p>
-            {!file && (
+            {templateApi && !file && (
               <Link
                 fontSize='12px'
                 onClick={() => {

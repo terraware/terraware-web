@@ -3,12 +3,18 @@ import { ActionReducerMapBuilder, PayloadAction, createSlice } from '@reduxjs/to
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { requestCohortDelete, requestCohortUpdate } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { UpdateCohortResponsePayload } from 'src/services/CohortService';
-import { Cohort } from 'src/types/Cohort';
+import { Cohort, CohortWithParticipantNum } from 'src/types/Cohort';
 
 // Define a type for the slice state
 type Data = {
   error?: string;
   cohorts?: Cohort[];
+};
+
+// Define a type for the slice state
+type DataWithParticipants = {
+  error?: string;
+  cohorts?: CohortWithParticipantNum[];
 };
 
 // Define the initial state
@@ -18,8 +24,8 @@ export const cohortsSlice = createSlice({
   name: 'cohortsSlice',
   initialState,
   reducers: {
-    setCohortsAction: (state, action: PayloadAction<Data>) => {
-      const data: Data = action.payload;
+    setCohortsAction: (state, action: PayloadAction<DataWithParticipants>) => {
+      const data: DataWithParticipants = action.payload;
       state.error = data.error;
       state.cohorts = data.cohorts;
     },

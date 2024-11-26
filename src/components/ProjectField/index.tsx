@@ -6,7 +6,9 @@ import { Props } from '@terraware/web-components/components/Textfield/Textfield'
 type DisplayFieldValue = string | number | null | undefined | JSX.Element | false;
 
 export interface ProjectFieldProps {
+  height?: string;
   label?: string;
+  md?: number;
   value?: DisplayFieldValue;
   rightBorder?: boolean;
   user?: string;
@@ -17,12 +19,14 @@ export type ProjectIdFieldProps = ProjectFieldProps & {
   id: string;
 };
 
-type EditFieldValue = string | number | undefined;
+export type EditFieldValue = string | number | undefined;
 
 export interface ProjectFieldEditProps {
+  height?: string;
   id: string;
   label: string;
   onChange: (id: string, value: string) => void;
+  md?: number;
   // Defaults to 'text'
   type?: Props['type'];
   value?: EditFieldValue;
@@ -34,7 +38,7 @@ export const renderFieldValue = (value: DisplayFieldValue): JSX.Element => {
   }
 
   return (
-    <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
+    <Typography fontSize='24px' fontWeight={600} lineHeight='32px' overflow='hidden' textOverflow='ellipsis'>
       {([undefined, null] as DisplayFieldValue[]).includes(value) ? 'N/A' : value}
     </Typography>
   );

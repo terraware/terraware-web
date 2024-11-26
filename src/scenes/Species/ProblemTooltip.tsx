@@ -12,14 +12,14 @@ import Button from '../../components/common/button/Button';
 type ProblemTooltipProps = {
   problems: SpeciesProblemElement[];
   openedTooltip: boolean;
-  setOpenedTooltip: React.Dispatch<React.SetStateAction<boolean>>;
+  onClose: () => void;
   reloadData?: () => void;
   onRowClick?: () => void;
 };
 
 export default function ProblemTooltip({
   problems,
-  setOpenedTooltip,
+  onClose,
   reloadData,
   onRowClick,
 }: ProblemTooltipProps): JSX.Element {
@@ -43,7 +43,7 @@ export default function ProblemTooltip({
 
   const ignoreFix = async (problemId: number) => {
     await SpeciesService.ignoreProblemSuggestion(problemId);
-    setOpenedTooltip(false);
+    onClose();
     if (reloadData) {
       reloadData();
     }
@@ -54,7 +54,7 @@ export default function ProblemTooltip({
     if (!response.requestSucceeded) {
       snackbar.toastError(strings.UNEXPECTED_ERROR, strings.GENERIC_ERROR);
     }
-    setOpenedTooltip(false);
+    onClose();
     if (reloadData) {
       reloadData();
     }
@@ -75,12 +75,12 @@ export default function ProblemTooltip({
     if (onRowClick) {
       onRowClick();
     }
-    setOpenedTooltip(false);
+    onClose();
   };
 
   const handleCancel = (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e?.stopPropagation();
-    setOpenedTooltip(false);
+    onClose();
   };
 
   let problemType;

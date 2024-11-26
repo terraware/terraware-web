@@ -1,9 +1,13 @@
-import React, { CSSProperties, useCallback, useEffect, useState } from 'react';
+import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { AddressAutofillFeatureSuggestion, AddressAutofillSuggestion } from '@mapbox/search-js-core';
-import { Autocomplete, TextField } from '@mui/material';
+import { Autocomplete, DropdownItem } from '@terraware/web-components';
+import '@terraware/web-components/components/Autocomplete/styles.scss';
+import '@terraware/web-components/components/Select/styles.scss';
 
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
+import useDebounce from 'src/utils/useDebounce';
 import useMapboxSearch from 'src/utils/useMapboxSearch';
 
 export type MapSearchBoxProp = {
@@ -12,18 +16,39 @@ export type MapSearchBoxProp = {
 };
 
 const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
-  const { clear, retrieve, suggest } = useMapboxSearch();
-  const [value, setValue] = useState<AddressAutofillSuggestion>();
-  const [inputValue, setInputValue] = useState<string>('');
-  const [options, setOptions] = useState<AddressAutofillSuggestion[]>([]);
+  const { activeLocale } = useLocalization();
+  const { clear, retrieve, suggest, suggestResult, suggestText } = useMapboxSearch();
+  const [value, setValue] = useState<string>('');
+  const [debouncedValue, setDebouncedValue] = useState<string>('');
 
-  const fetchSuggestions = useCallback(
-    async (searchText: string) => {
-      const results = await suggest(searchText);
-      setOptions(results);
+  const [open, setOpen] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [options, setOptions] = React.useState<DropdownItem[]>([]);
+
+  useEffect(() => {
+    if (suggestResult) {
+      setLoading(false);
+      setOptions(
+        suggestResult.map(
+          (result): DropdownItem => ({
+            label: `${result.feature_name}, ${result.full_address}`,
+            value: result,
+          })
+        )
+      );
+    }
+  }, [suggestResult]);
+
+  const updateDebouncedValue = useCallback(
+    (nextValue: string) => {
+      if (debouncedValue !== nextValue) {
+        setDebouncedValue(nextValue);
+      }
     },
-    [suggest]
+    [debouncedValue, setDebouncedValue]
   );
+
+  useDebounce(value, 500, updateDebouncedValue);
 
   const onSelectSuggestion = useCallback(
     async (suggestion: AddressAutofillSuggestion | null) => {
@@ -35,35 +60,66 @@ const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
     [retrieve]
   );
 
-  useEffect(() => {
-    if (inputValue === '') {
-      clear();
-      setOptions([]);
-      return;
-    }
+  const fetchSuggestions = useCallback(
+    async (searchText: string) => {
+      if (searchText !== suggestText) {
+        setLoading(true);
+        setOptions([]);
+        await suggest(searchText);
+      }
+    },
+    [setLoading, setOptions, suggest, suggestText]
+  );
 
-    fetchSuggestions(inputValue);
-  }, [clear, inputValue, value]);
+  useEffect(() => {
+    if (!debouncedValue) {
+      if (suggestText) {
+        clear();
+      }
+    } else {
+      fetchSuggestions(debouncedValue);
+    }
+  }, [clear, debouncedValue, fetchSuggestions, suggestText]);
+
+  const onChange = useCallback(
+    (value: string | DropdownItem | undefined) => {
+      if (typeof value === 'string') {
+        // When user types in the search box
+        setValue(value);
+      } else if (value === undefined) {
+        // When user clears the value
+        setValue('');
+      } else {
+        // When user selects from the dropdown option
+        setValue(value.label);
+        onSelectSuggestion(value.value);
+      }
+    },
+    [setValue, onSelectSuggestion]
+  );
+
+  const errorText = useMemo(() => {
+    if (activeLocale && open && !loading && suggestText && options.length === 0) {
+      return strings.NO_LOCATION_FOUND;
+    }
+  }, [activeLocale, open, loading, suggestText, options]);
 
   return (
     <Autocomplete
       id='mapbox-suggestions'
-      sx={{ width: 1000, ...style }}
-      getOptionLabel={(option: AddressAutofillSuggestion) => `${option.feature_name}, ${option.full_address}`}
-      filterOptions={(x) => x}
+      sx={{ width: '100%', ...style }}
+      errorText={errorText}
+      open={open}
+      onOpen={() => setOpen(true)}
+      onClose={() => setOpen(false)}
+      loading={loading}
+      loadingText={strings.LOADING}
       options={options}
-      filterSelectedOptions
-      value={value || null}
-      noOptionsText='No locations'
-      onChange={(event, newValue: AddressAutofillSuggestion | null) => {
-        setOptions(newValue ? [newValue, ...options] : options);
-        setValue(newValue ?? undefined);
-        onSelectSuggestion(newValue);
-      }}
-      onInputChange={(event, newInputValue: string) => {
-        setInputValue(newInputValue);
-      }}
-      renderInput={(params) => <TextField {...params} label={strings.LOCATION} fullWidth />}
+      selected={value}
+      onChange={onChange}
+      placeholder={strings.ENTER_LOCATION}
+      filterOptions={(options) => options} // Do not filter any options
+      freeSolo
     />
   );
 };

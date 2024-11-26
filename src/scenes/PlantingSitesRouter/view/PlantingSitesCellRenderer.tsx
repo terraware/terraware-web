@@ -39,6 +39,7 @@ export default function PlantingSitesCellRenderer(props: RendererProps<TableRowT
         value={createLinkToPlantingSiteView(value)}
         row={row}
         sx={textStyles}
+        title={value as string}
       />
     );
   }

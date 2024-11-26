@@ -454,19 +454,21 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   }, [localRecord.purpose, noReadySeedlings, snackbar, selectedNursery, batches, updatePurpose]);
 
   useEffect(() => {
-    const fetchSpecies = async () => {
-      const result = await SpeciesService.getAllSpecies(selectedOrganization.id);
-      const speciesNamesMap = (result.species || []).reduce((acc, sp) => {
-        const { scientificName, commonName } = sp;
-        return {
-          ...acc,
-          [sp.id.toString()]: commonName ? `${scientificName} (${commonName})` : scientificName,
-        };
-      }, {});
-      setSpeciesMap(speciesNamesMap);
-    };
+    if (selectedOrganization.id !== -1) {
+      const fetchSpecies = async () => {
+        const result = await SpeciesService.getAllSpecies(selectedOrganization.id);
+        const speciesNamesMap = (result.species || []).reduce((acc, sp) => {
+          const { scientificName, commonName } = sp;
+          return {
+            ...acc,
+            [sp.id.toString()]: commonName ? `${scientificName} (${commonName})` : scientificName,
+          };
+        }, {});
+        setSpeciesMap(speciesNamesMap);
+      };
 
-    fetchSpecies();
+      fetchSpecies();
+    }
   }, [selectedOrganization.id]);
 
   const batchesFromNursery = useMemo(() => {

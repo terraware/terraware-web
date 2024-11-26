@@ -9,9 +9,12 @@ import AcceleratorBreadcrumbs from 'src/components/TopBar/AcceleratorBreadcrumbs
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useApplicationPortal from 'src/hooks/useApplicationPortal';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser } from 'src/providers/hooks';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+import KnowledgeBaseLink from '../KnowledgeBaseLink';
 import NotificationsDropdown from '../NotificationsDropdown';
 import OrganizationsDropdown from '../OrganizationsDropdown';
 import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
@@ -30,6 +33,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   const { isDesktop } = useDeviceInfo();
   const { user } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { isApplicationPortal } = useApplicationPortal();
   const mixpanel = useMixpanel();
 
   const logoStyles = {
@@ -62,7 +66,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   };
 
   const handleTopBarClick = () => {
-    mixpanel?.track('TopBarHome');
+    mixpanel?.track(MIXPANEL_EVENTS.TOP_BAR_HOME);
     navigate(APP_PATHS.HOME);
   };
 
@@ -71,20 +75,26 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
       <Box sx={leftStyles}>
         <Box sx={logoStyles}>
           <Link onClick={() => handleTopBarClick()}>
-            <Svg.Logo style={logoStyles} />
+            <Svg.TerrawareLogoDesktop style={logoStyles} />
           </Link>
         </Box>
 
+        <div style={separatorStyles} />
+        {user && <AcceleratorBreadcrumbs />}
         {organizations && organizations.length > 0 && (
           <>
-            <div style={separatorStyles} />
-            {user && <AcceleratorBreadcrumbs />}
-            {!isAcceleratorRoute && <OrganizationsDropdown />}
+            {isApplicationPortal && (
+              <>
+                <p style={{ fontSize: '16px' }}>{selectedOrganization.name}</p>
+              </>
+            )}
+            {!isAcceleratorRoute && !isApplicationPortal && <OrganizationsDropdown />}
           </>
         )}
       </Box>
 
       <Box sx={rightStyles}>
+        <KnowledgeBaseLink />
         <NotificationsDropdown
           organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}
           reloadOrganizationData={reloadOrganizations}
@@ -97,12 +107,12 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
     <Grid
       container
       sx={{
-        background: 'url(/assets/logo.svg) no-repeat center/37px',
+        background: 'url(/assets/terraware-logo-mobile.svg) no-repeat 32px/105px',
         display: 'flex',
         alignItems: 'center',
       }}
     >
-      <Grid item xs={3} sx={leftStyles}>
+      <Grid item xs={1} sx={leftStyles}>
         {selectedOrganization.id !== -1 && (
           <IconButton onClick={() => setShowNavBar(true)} size='small'>
             <Icon name='iconMenu' />
@@ -123,7 +133,8 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         }}
       />
 
-      <Grid item xs={3} sx={rightStyles}>
+      <Grid item xs={5} sx={rightStyles}>
+        <KnowledgeBaseLink />
         <NotificationsDropdown
           organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}
           reloadOrganizationData={reloadOrganizations}

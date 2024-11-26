@@ -32,7 +32,7 @@ export default function PageSnackbar({ pageKey }: PageSnackbarProps): JSX.Elemen
   }, [snackbarData]);
 
   useEffect(() => {
-    if (!!pathname) {
+    if (pathname) {
       // clear page messages on route change
       handleClose();
     }

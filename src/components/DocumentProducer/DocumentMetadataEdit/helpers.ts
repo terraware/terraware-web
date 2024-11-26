@@ -1,20 +1,20 @@
 import { DropdownItem } from '@terraware/web-components/components/types';
 
-import { User } from 'src/types/User';
-import { Methodology } from 'src/types/documentProducer/Methodology';
+import { UserWithGlobalRoles } from 'src/types/GlobalRoles';
+import { DocumentTemplate } from 'src/types/documentProducer/DocumentTemplate';
 import { getUserDisplayName } from 'src/utils/user';
 
-export const getMethodologyOptions = (methodologies: Methodology[]): DropdownItem[] =>
-  methodologies.map((methodology) => ({
-    label: methodology.name,
-    value: methodology.id.toString(),
+export const getDocumentTemplateOptions = (documentTemplates: DocumentTemplate[]): DropdownItem[] =>
+  documentTemplates.map((documentTemplate) => ({
+    label: documentTemplate.name,
+    value: documentTemplate.id.toString(),
   }));
 
-export const getDocumentOwnerOptions = (users: User[]): DropdownItem[] =>
+export const getDocumentOwnerOptions = (users: UserWithGlobalRoles[]): DropdownItem[] =>
   users.map((user) => ({
     label: getUserDisplayName(user) ?? '',
     value: user.id.toString(),
   }));
 
-export const getMethodologyName = (methodologies: Methodology[], id?: string | number): string =>
-  methodologies.find((methodology) => methodology.id.toString() === id?.toString())?.name ?? '';
+export const getDocumentTemplateName = (documentTemplates: DocumentTemplate[], id?: string | number): string =>
+  documentTemplates.find((documentTemplate) => documentTemplate.id.toString() === id?.toString())?.name ?? '';

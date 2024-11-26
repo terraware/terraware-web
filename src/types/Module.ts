@@ -1,26 +1,32 @@
-import { DateTime } from 'luxon';
-
 import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
 
-import { DeliverableCategoryType, DeliverableStatusType, DeliverableTypeType } from './Deliverables';
+export type CohortModule = components['schemas']['CohortModulePayload'];
+export type Module = components['schemas']['ModulePayload'];
 
-export type Module = components['schemas']['ProjectModule'];
+export type ModuleDeliverable = components['schemas']['ModuleDeliverablePayload'];
 
-export type ModuleEvent = components['schemas']['ProjectModuleEvent'];
+export type ModuleEvent = components['schemas']['ModuleEvent'];
+export type ModuleEventPartial = Omit<Partial<components['schemas']['ModuleEvent']>, 'projects'> & {
+  projects?: ModuleEventProject[];
+  feId?: symbol;
+};
+export type ModuleEventProject = Partial<NonNullable<components['schemas']['ModuleEvent']['projects']>[0]>;
+export type ModuleEventWithStartTime = Omit<ModuleEvent, 'startTime'> & { startTime: string };
 
-export type ModuleEventSession = components['schemas']['ProjectModuleEventSession'];
+export type ModuleEventStatus = components['schemas']['ModuleEvent']['status'];
+export type ModuleEventType = ModuleEvent['type'];
+export type ImportModuleProblemElement = components['schemas']['ImportModuleProblemElement'];
+export const MODULE_EVENTS: ModuleEventType[] = ['Live Session', 'One-on-One Session', 'Recorded Session', 'Workshop'];
 
-export type ModuleEventSessionStatus = components['schemas']['ProjectModuleEventSession']['status'];
-
-export type ModuleEventType = ModuleEventSession['type'];
-export const MODULE_EVENTS: ModuleEventType[] = ['Live Session', 'One-on-One Session', 'Workshop'];
 export const getEventType = (input: ModuleEventType): string => {
   switch (input) {
     case 'Live Session':
       return strings.LIVE_SESSION;
     case 'One-on-One Session':
       return strings.ONE_ON_ONE_SESSION;
+    case 'Recorded Session':
+      return strings.RECORDED_SESSION;
     case 'Workshop':
       return strings.WORKSHOP;
     default:
@@ -39,7 +45,29 @@ export type ModuleProjectSearchResult = {
   };
 };
 
-export const getEventStatus = (status: ModuleEventSessionStatus) => {
+export type ModuleCohortsSearchResult = {
+  cohortModules?: {
+    title: string;
+    startDate: string;
+    endDate: string;
+    cohort: {
+      id: number;
+      name: string;
+      participants: {
+        id: number;
+        name: string;
+        projects: {
+          id: number;
+          name: string;
+        }[];
+      }[];
+    };
+  }[];
+};
+
+export type CohortModuleWithProject = Partial<NonNullable<ModuleCohortsSearchResult['cohortModules']>[0]['cohort']>;
+
+export const getEventStatus = (status: ModuleEventStatus) => {
   switch (status) {
     case 'Not Started': {
       return strings.SESSION_HAS_NOT_STARTED;
@@ -58,15 +86,14 @@ export const getEventStatus = (status: ModuleEventSessionStatus) => {
   }
 };
 
-export type ModuleDeliverable = {
-  id: number;
-  moduleId: number;
-  projectId: number;
-  name: string;
-  category: DeliverableCategoryType;
-  dueDate: DateTime;
-  status: DeliverableStatusType;
-  type: DeliverableTypeType;
-};
-
 export type ModuleContentType = keyof Pick<Module, 'additionalResources' | 'preparationMaterials'>;
+
+export type UpdateCohortModuleRequest = components['schemas']['UpdateCohortModuleRequestPayload'];
+
+export type ModuleSearchResult = {
+  id: number;
+  name: string;
+  phaseId: string;
+  cohortsQuantity: number;
+  deliverablesQuantity: number;
+};

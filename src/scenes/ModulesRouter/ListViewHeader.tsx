@@ -1,21 +1,22 @@
 import React, { useMemo } from 'react';
 
+import { Typography } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
 
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 
 const ListViewHeader = () => {
-  const { currentParticipantProject, moduleProjects, setCurrentParticipantProject } = useParticipantData();
+  const { currentParticipantProject, projectsWithModules, setCurrentParticipantProject } = useParticipantData();
   const { goToModules } = useNavigateTo();
 
   const options: DropdownItem[] = useMemo(
     () =>
-      moduleProjects.map((project) => ({
+      projectsWithModules.map((project) => ({
         label: project.name,
         value: project.id,
       })),
-    [moduleProjects]
+    [projectsWithModules]
   );
 
   const selectStyles = {
@@ -33,7 +34,7 @@ const ListViewHeader = () => {
     },
   };
 
-  return (
+  return options?.length > 1 ? (
     <Dropdown
       onChange={(id) => {
         const projectId = +id;
@@ -46,6 +47,8 @@ const ListViewHeader = () => {
       selectStyles={selectStyles}
       selectedValue={currentParticipantProject?.id}
     />
+  ) : (
+    <Typography sx={selectStyles.input}>{options[0].label}</Typography>
   );
 };
 

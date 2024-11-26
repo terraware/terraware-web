@@ -7,7 +7,6 @@ import DeliverablesTable from 'src/components/DeliverablesTable';
 import PageHeader from 'src/components/PageHeader';
 import ParticipantsDropdown from 'src/components/ParticipantsDropdown';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import { useAcceleratorOrgs } from 'src/hooks/useAcceleratorOrgs';
 import { useParticipants } from 'src/hooks/useParticipants';
 import { useLocalization } from 'src/providers';
 import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
@@ -18,10 +17,7 @@ import { SearchNodePayload } from 'src/types/Search';
 const DeliverablesList = () => {
   const { activeLocale } = useLocalization();
   const { availableParticipants } = useParticipants();
-  const { acceleratorOrgs } = useAcceleratorOrgs(true);
   const contentRef = useRef(null);
-
-  const acceleratorProjects = useMemo(() => (acceleratorOrgs || [])?.flatMap((org) => org.projects), [acceleratorOrgs]);
 
   const [participantFilter, setParticipantFilter] = useState<{ id?: number }>({ id: undefined });
 
@@ -60,6 +56,7 @@ const DeliverablesList = () => {
                 record={participantFilter}
                 setRecord={setParticipantFilter}
                 label={''}
+                unselectLabel={strings.ALL}
               />
             </Grid>
           </Grid>
@@ -76,7 +73,6 @@ const DeliverablesList = () => {
 
       {/* -1 for "non-organization scoped search" IE admin search */}
       <DeliverablesTable
-        acceleratorProjects={acceleratorProjects}
         extraTableFilters={extraTableFilters}
         isAcceleratorRoute={true}
         organizationId={-1}

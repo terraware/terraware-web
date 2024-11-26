@@ -15,14 +15,20 @@ import { getShortDate } from 'src/utils/dateFormatter';
 const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'mortalityRate'];
 
 const OrgObservationsRenderer =
-  (theme: Theme, locale: string | undefined | null, goToRescheduleObservation: (observationId: number) => void) =>
+  (
+    theme: Theme,
+    locale: string | undefined | null,
+    goToRescheduleObservation: (observationId: number) => void,
+    exportObservationCsv: (observationId: number) => void,
+    exportObservationGpx: (observationId: number) => void
+  ) =>
   // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
 
     const getTruncatedNames = (inputNames: string) => {
       const names = inputNames.split('\r');
-      return <TextTruncated fontSize={16} stringList={names} />;
+      return <TextTruncated fontSize={16} stringList={names} moreText={strings.TRUNCATED_TEXT_MORE_LINK} />;
     };
 
     const createLinkToSiteObservation = (date: string) => {
@@ -57,9 +63,8 @@ const OrgObservationsRenderer =
       );
     }
 
-    if (column.key === 'completedDate') {
-      const dateValue: string = (value as string) || (row.startDate as string);
-      return <CellRenderer {...props} value={createLinkToSiteObservation(getShortDate(dateValue, locale))} />;
+    if (column.key === 'observationDate') {
+      return <CellRenderer {...props} value={createLinkToSiteObservation(getShortDate(value as string, locale))} />;
     }
 
     if (column.key === 'state') {
@@ -71,9 +76,26 @@ const OrgObservationsRenderer =
     }
 
     if (column.key === 'actionsMenu') {
+      const exportDisabled = row.state === 'Upcoming';
       const tableMenuItem = (
         <TableRowPopupMenu
           menuItems={[
+            {
+              disabled: exportDisabled,
+              label: `${strings.EXPORT_LOCATIONS} (${strings.CSV_FILE})`,
+              onClick: () => {
+                exportObservationCsv(row.observationId);
+              },
+              tooltip: exportDisabled ? strings.EXPORT_LOCATIONS_DISABLED_TOOLTIP : undefined,
+            },
+            {
+              disabled: exportDisabled,
+              label: `${strings.EXPORT_LOCATIONS} (${strings.GPX_FILE})`,
+              onClick: () => {
+                exportObservationGpx(row.observationId);
+              },
+              tooltip: exportDisabled ? strings.EXPORT_LOCATIONS_DISABLED_TOOLTIP : undefined,
+            },
             {
               disabled: row.state === 'Completed' || row.hasObservedPermanentPlots || row.hasObservedTemporaryPlots,
               label: strings.RESCHEDULE,

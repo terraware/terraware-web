@@ -5,7 +5,9 @@ import { Box, Container, useTheme } from '@mui/material';
 import AddNewOrganizationModal from 'src/components/AddNewOrganizationModal';
 import PageSnackbar from 'src/components/PageSnackbar';
 import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
+import { useOrganization } from 'src/providers';
 import strings from 'src/strings';
+import { Organization } from 'src/types/Organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const EMPTY_STATE_CONTENT_STYLES = {
@@ -20,6 +22,7 @@ export default function NoOrgLandingPage(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const [isOrgModalOpen, setIsOrgModalOpen] = useState<boolean>(false);
+  const { redirectAndNotify } = useOrganization();
 
   const listItemContents: ListItemContent[] = [
     { icon: 'organization', title: strings.ORGANIZATION, description: strings.DESCRIPTION_ORGANIZATION },
@@ -49,7 +52,11 @@ export default function NoOrgLandingPage(): JSX.Element {
         }}
       >
         <PageSnackbar />
-        <AddNewOrganizationModal open={isOrgModalOpen} onCancel={() => setIsOrgModalOpen(false)} />
+        <AddNewOrganizationModal
+          open={isOrgModalOpen}
+          onCancel={() => setIsOrgModalOpen(false)}
+          onSuccess={(organization: Organization) => redirectAndNotify(organization)}
+        />
         <EmptyStateContent
           title={strings.TITLE_WELCOME}
           subtitle={strings.SUBTITLE_GET_STARTED}

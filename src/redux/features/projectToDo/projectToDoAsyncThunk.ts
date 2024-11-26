@@ -5,8 +5,8 @@ import { DeliverableToDoItem, EventToDoItem } from 'src/types/ProjectToDo';
 
 export const requestProjectToDoDeliverables = createAsyncThunk(
   'projectToDoList/getDeliverables',
-  async (request: { projectId: number }) => {
-    const deliverableSearchResults = await ToDoService.searchDeliverables(request.projectId);
+  async (request: { locale: string | null; projectId: number }) => {
+    const deliverableSearchResults = await ToDoService.searchDeliverables(request.locale, request.projectId);
     return deliverableSearchResults ? deliverableSearchResults.map((result) => new DeliverableToDoItem(result)) : [];
   }
 );

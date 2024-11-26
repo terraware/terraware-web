@@ -6,15 +6,21 @@ import { Separator } from '@terraware/web-components';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
 export default function AcceleratorBreadcrumbs(): JSX.Element | null {
   const theme = useTheme();
+  const { isApplicationPortal } = useApplicationPortal();
   const { isAcceleratorRoute, isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
 
   if (!activeLocale) {
+    return null;
+  }
+
+  if (isApplicationPortal) {
     return null;
   }
 

@@ -1,7 +1,8 @@
 import { isArray } from 'lodash';
 
+import { components } from 'src/api/types/generated-schema';
+
 import { VariableValue, VariableValueImageValue, VariableValueTableValue, VariableValueValue } from './VariableValue';
-import { components } from './generated-schema';
 
 export type VariableListResponse = components['schemas']['ListVariablesResponsePayload'];
 
@@ -11,9 +12,14 @@ export type VariableType = components['schemas']['ExistingValuePayload']['type']
 
 export type Column = components['schemas']['TableColumnPayload'];
 
+export type LinkVariable = components['schemas']['LinkVariablePayload'];
+
+export type SectionVariable = components['schemas']['SectionVariablePayload'];
+
 export type DateVariable = components['schemas']['DateVariablePayload'];
 
 export type TextVariable = components['schemas']['TextVariablePayload'];
+export const isTextVariable = (input: unknown): input is TableVariable => (input as TextVariable).type === 'Text';
 
 export type ImageVariable = components['schemas']['ImageVariablePayload'];
 export const isImageVariable = (input: unknown): input is ImageVariable => (input as ImageVariable).type === 'Image';
@@ -35,7 +41,9 @@ export type VariableUnion =
   | TableVariable
   | NumberVariable
   | SelectVariable
-  | DateVariable;
+  | DateVariable
+  | LinkVariable
+  | SectionVariable;
 
 export type Section = components['schemas']['SectionVariablePayload'];
 
@@ -84,3 +92,31 @@ export type ImageFile = {
   caption?: string;
   citation?: string;
 };
+
+export type GetVariableHistoryResponse = components['schemas']['GetVariableWorkflowHistoryResponsePayload'];
+
+export type UpdateVariableWorkflowDetailsPayload = components['schemas']['UpdateVariableWorkflowDetailsRequestPayload'];
+
+export type UpdateVariableOwnerPayload = components['schemas']['UpdateVariableOwnerRequestPayload'];
+
+export type VariableHistoryElement = components['schemas']['VariableWorkflowHistoryElement'];
+
+export type VariableStatusType = components['schemas']['UpdateVariableWorkflowDetailsRequestPayload']['status'];
+
+export const VariableStatuses: VariableStatusType[] = [
+  'Approved',
+  'Complete',
+  'In Review',
+  'Incomplete',
+  'Needs Translation',
+  'Not Needed',
+  'Not Submitted',
+  'Rejected',
+];
+
+export type VariableOwnersListResponse = components['schemas']['ListVariableOwnersResponsePayload'];
+
+export type VariableOwners = components['schemas']['ListVariableOwnersResponsePayload']['variables'][0];
+
+export type DependencyCondition = VariableWithValues['dependencyCondition'];
+export const DependencyConditions: DependencyCondition[] = ['gt', 'gte', 'lt', 'lte', 'eq', 'neq'];

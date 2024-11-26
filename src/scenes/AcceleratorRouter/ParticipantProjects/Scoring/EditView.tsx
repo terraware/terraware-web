@@ -4,10 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Grid, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
-import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
+import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
+import useListCohortModules from 'src/hooks/useListCohortModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import strings from 'src/strings';
 import { Score, ScoreCategory, ScoreValue } from 'src/types/Score';
@@ -19,28 +20,42 @@ import useScoresUpdate from './useScoresUpdate';
 const ScorecardEditView = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const { crumbs, hasData, phase0Scores, phase1Scores, projectId, projectName, status } = useScoringData();
-  const { update, status: updateStatus } = useScoresUpdate(projectId);
+  const { crumbs, hasData, phase0Scores, phase1Scores, project, status } = useScoringData();
+  const { update, status: updateStatus } = useScoresUpdate(project?.id);
   const { goToParticipantProject } = useNavigateTo();
 
   const [scores, setScores] = useState<Score[]>([]);
   const [updatedScores, setUpdatedScores] = useState<Score[]>([]);
 
+  const { cohortModules, listCohortModules } = useListCohortModules();
+
+  useEffect(() => {
+    if (project && project.cohortId) {
+      void listCohortModules(project.cohortId);
+    }
+  }, [project, listCohortModules]);
+
   const goToVoting = useCallback(() => {
-    navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`) });
-  }, [navigate, projectId]);
+    if (project) {
+      navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${project.id}`) });
+    }
+  }, [navigate, project]);
 
   const goToScorecardView = useCallback(() => {
-    navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${projectId}`) });
-  }, [navigate, projectId]);
+    if (project) {
+      navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`) });
+    }
+  }, [navigate, project]);
 
   const onCancel = useCallback(() => {
-    if (hasData === false) {
-      goToParticipantProject(projectId);
-    } else {
-      goToScorecardView();
+    if (project) {
+      if (hasData === false) {
+        goToParticipantProject(project.id);
+      } else {
+        goToScorecardView();
+      }
     }
-  }, [hasData, goToParticipantProject, goToScorecardView, projectId]);
+  }, [hasData, goToParticipantProject, goToScorecardView, project]);
 
   const handleOnChange = (key: 'value' | 'qualitative', category: ScoreCategory, value: ScoreValue | string) => {
     const originalScore = scores.find((score: Score) => score.category === category);
@@ -65,9 +80,14 @@ const ScorecardEditView = () => {
       goToScorecardView();
       return;
     }
-    // For now we can only save Phase 1 scores
-    update('Phase 1 - Feasibility Study', updatedScores);
-  }, [goToScorecardView, update, updatedScores]);
+    if (project?.cohortPhase) {
+      const phaseToSend =
+        project.cohortPhase === 'Application' || project.cohortPhase === 'Pre-Screen'
+          ? 'Phase 0 - Due Diligence'
+          : project.cohortPhase;
+      update(phaseToSend, updatedScores);
+    }
+  }, [goToScorecardView, update, updatedScores, project]);
 
   useEffect(() => {
     const localPhase1Scores = [...(phase1Scores?.scores || [])];
@@ -81,7 +101,13 @@ const ScorecardEditView = () => {
   }, [updateStatus, goToScorecardView]);
 
   return (
-    <Page title={`Edit Scoring for project ${projectName}`} crumbs={crumbs} hierarchicalCrumbs={false}>
+    <PageWithModuleTimeline
+      title={`${project?.name ?? ''} ${strings.SCORES}`}
+      crumbs={crumbs}
+      hierarchicalCrumbs={false}
+      modules={cohortModules ?? []}
+      cohortPhase={project?.cohortPhase}
+    >
       <PageForm
         busy={status === 'pending'}
         cancelID='cancelEditScorecard'
@@ -108,6 +134,10 @@ const ScorecardEditView = () => {
                 phaseScores={phase0Scores}
                 onChangeValue={handleOnChangeValue}
                 onChangeQualitative={handleOnChangeQualitative}
+                editable={
+                  project?.cohortPhase &&
+                  ['Pre-Screen', 'Application', 'Phase 0 - Due Diligence'].includes(project.cohortPhase)
+                }
               />
             </Grid>
             <Grid item xs={6}>
@@ -115,13 +145,13 @@ const ScorecardEditView = () => {
                 phaseScores={phase1Scores}
                 onChangeValue={handleOnChangeValue}
                 onChangeQualitative={handleOnChangeQualitative}
-                editable
+                editable={project?.cohortPhase === 'Phase 1 - Feasibility Study'}
               />
             </Grid>
           </Grid>
         </Card>
       </PageForm>
-    </Page>
+    </PageWithModuleTimeline>
   );
 };
 

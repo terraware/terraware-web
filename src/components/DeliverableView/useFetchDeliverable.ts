@@ -11,7 +11,7 @@ import {
 } from 'src/redux/features/deliverables/deliverablesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Deliverable } from 'src/types/Deliverables';
+import { DeliverableWithOverdue } from 'src/types/Deliverables';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type Props = {
@@ -21,7 +21,7 @@ export type Props = {
 
 export type Response = {
   status: Statuses;
-  deliverable?: Deliverable;
+  deliverable?: DeliverableWithOverdue;
 };
 
 /**
@@ -35,7 +35,7 @@ export default function useFetchDeliverable({ deliverableId, projectId }: Props)
   const dispatch = useAppDispatch();
 
   const [requestId, setRequestId] = useState('');
-  const [deliverable, setDeliverable] = useState<Deliverable>();
+  const [deliverable, setDeliverable] = useState<DeliverableWithOverdue>();
 
   const deliverableResult = useAppSelector(selectDeliverableFetchRequest(requestId));
   const deliverableData = useAppSelector(selectDeliverableData(deliverableId, projectId));
@@ -57,7 +57,7 @@ export default function useFetchDeliverable({ deliverableId, projectId }: Props)
     if (deliverableResult?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
       goToDeliverables();
-    } else if (deliverableResult?.status === 'success' && deliverableResult?.data) {
+    } else if (deliverableResult?.status === 'success') {
       setDeliverable(deliverableResult.data);
     }
   }, [deliverableResult?.status, deliverableResult?.data, goToDeliverables, snackbar]);

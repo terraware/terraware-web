@@ -1,6 +1,6 @@
 import { Geometry } from 'geojson';
 import { GeometryFeature } from 'src/types/Map';
-import { cutPolygons, leftMostFeature } from './utils';
+import { overlayAndSubtract, leftMostFeature } from './utils';
 import { feature1, feature2, feature3, cutOnNoOverlap, cutWithOverlap } from './testdata';
 
 describe('Map utils', () => {
@@ -18,16 +18,16 @@ describe('Map utils', () => {
     });
   });
 
-  describe('cutPolygons', () => {
-    test('should return null when the cut-on geometry is not a polygon', () => {
-      expect(cutPolygons([feature1, feature2], { type: 'Point', coordinates: [1, 2] })).toBeNull();
+  describe('overlayAndSubtract', () => {
+    test('should return null when the overlay geometry is not a polygon', () => {
+      expect(overlayAndSubtract([feature1, feature2], { type: 'Point', coordinates: [1, 2] })).toBeNull();
     });
 
-    test('should return null when the cut-on geometry does not overlap with the input', () => {
-      expect(cutPolygons([feature1, feature2], cutOnNoOverlap)).toBeNull();
+    test('should return null when the overlay geometry does not overlap with the input', () => {
+      expect(overlayAndSubtract([feature1, feature2], cutOnNoOverlap)).toBeNull();
     });
 
-    test('should return cut polygons when there is an overlap with cutting geometry', () => {
+    test('should return existing polygons without the intersection, and the new polygon consisting of + the intersection, when there is an overlap with cutting geometry', () => {
       const expected = [
         {
           type: 'Feature',
@@ -53,22 +53,6 @@ describe('Map utils', () => {
           geometry: {
             coordinates: [
               [
-                [7.5, 5],
-                [10, 5],
-                [10, 10],
-                [7.5, 10],
-                [7.5, 5],
-              ],
-            ],
-            type: 'Polygon',
-          },
-          properties: {},
-        },
-        {
-          type: 'Feature',
-          geometry: {
-            coordinates: [
-              [
                 [
                   [12.5, 5],
                   [15, 5],
@@ -82,22 +66,6 @@ describe('Map utils', () => {
           },
           id: 1,
           properties: { yoyo: 'ma' },
-        },
-        {
-          type: 'Feature',
-          geometry: {
-            coordinates: [
-              [
-                [10, 5],
-                [12.5, 5],
-                [12.5, 10],
-                [10, 10],
-                [10, 5],
-              ],
-            ],
-            type: 'Polygon',
-          },
-          properties: {},
         },
         {
           type: 'Feature',
@@ -118,9 +86,27 @@ describe('Map utils', () => {
           id: 2,
           properties: { lorem: 'ipsum' },
         },
+        {
+          type: 'Feature',
+          geometry: {
+            coordinates: [
+              [
+                [
+                  [7.5, 5],
+                  [12.5, 5],
+                  [12.5, 10],
+                  [7.5, 10],
+                  [7.5, 5],
+                ],
+              ],
+            ],
+            type: 'MultiPolygon',
+          },
+          properties: {},
+        },
       ];
 
-      expect(cutPolygons([feature1, feature2, feature3], cutWithOverlap)).toStrictEqual(expected);
+      expect(overlayAndSubtract([feature1, feature2, feature3], cutWithOverlap)).toStrictEqual(expected);
     });
   });
 });

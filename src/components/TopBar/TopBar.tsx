@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import { AppBar, Box, Toolbar, useTheme } from '@mui/material';
 
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type TopBarProps = {
@@ -13,7 +14,16 @@ type TopBarProps = {
 export default function TopBar(props: TopBarProps): JSX.Element {
   const { isDesktop } = useDeviceInfo();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { isApplicationPortal } = useApplicationPortal();
   const theme = useTheme();
+
+  const borderTop = useCallback(() => {
+    if (isAcceleratorRoute) {
+      return `8px solid ${theme.palette.TwClrBgAccent}`;
+    } else {
+      return undefined;
+    }
+  }, [isAcceleratorRoute]);
 
   return (
     <AppBar
@@ -28,11 +38,11 @@ export default function TopBar(props: TopBarProps): JSX.Element {
       <Toolbar
         disableGutters={true}
         sx={{
-          borderTop: isAcceleratorRoute ? `8px solid ${theme.palette.TwClrBgAccent}` : undefined,
+          borderTop: borderTop(),
           paddingBottom: '24px',
           paddingLeft: '32px',
           paddingRight: '32px',
-          paddingTop: isAcceleratorRoute ? '16px' : '24px',
+          paddingTop: isAcceleratorRoute || isApplicationPortal ? '16px' : '24px',
           ...(isDesktop ? {} : { minHeight: '64px' }),
         }}
       >

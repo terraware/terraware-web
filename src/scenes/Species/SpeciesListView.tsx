@@ -22,7 +22,7 @@ import SearchFiltersWrapperV2, { FilterConfig } from 'src/components/common/Sear
 import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import { OrderPreserveableTable as Table } from 'src/components/common/table';
-import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
+import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
@@ -318,6 +318,8 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       fields: [
         ...BE_SORTED_FIELDS,
         'id',
+        'createdTime',
+        'modifiedTime',
         'rare',
         'growthForms.growthForm',
         'ecosystemTypes.ecosystemType',
@@ -442,6 +444,8 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               ecosystemTypes: (result.ecosystemTypes as any[])?.map((et) => et.ecosystemType) as string[],
               rare: result.rare === strings.BOOLEAN_TRUE ? 'true' : 'false',
               conservationCategory: result.conservationCategory as string,
+              createdTime: result.createdTime as string,
+              modifiedTime: result.modifiedTime as string,
             });
           });
 
@@ -666,7 +670,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
                       icon='iconExport'
                     />
                   </Tooltip>
-                  <TableDensitySettingsButton />
+                  <TableSettingsButton />
                 </>
               }
             />

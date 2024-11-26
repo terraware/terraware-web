@@ -90,7 +90,9 @@ export default function ProjectEntitySearch(props: ProjectEntitySearchProps): JS
   }, [entitySpecificFilterConfigs, filters, projectEntityFilterConfig]);
 
   useEffect(() => {
-    void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
+    if (selectedOrganization.id !== -1) {
+      void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
+    }
   }, [activeLocale, dispatch, selectedOrganization.id]);
 
   return (

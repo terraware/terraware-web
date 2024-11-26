@@ -1,13 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { Module, ModuleDeliverable } from 'src/types/Module';
+import { Module, ModuleCohortsSearchResult, ModuleSearchResult } from 'src/types/Module';
 
 import { StatusT, buildReducers } from '../asyncUtils';
 import {
   requestGetModule,
-  requestListModuleDeliverables,
+  requestListModuleCohorts,
   requestListModuleProjects,
   requestListModules,
+  requestSearchModules,
 } from './modulesAsyncThunks';
 
 /**
@@ -53,24 +54,39 @@ export const moduleProjectsSlice = createSlice({
 });
 
 /**
- * List module deliverables for a project module pair
+ * List all cohorts associated with a module
  */
-const initialStateModuleDeliverables: { [key: string]: StatusT<ModuleDeliverable[]> } = {};
+const initialStateModuleCohorts: { [key: string]: StatusT<ModuleCohortsSearchResult> } = {};
 
-export const ModuleDeliverablesSlice = createSlice({
-  name: 'ModuleDeliverablesSlice',
-  initialState: initialStateModuleDeliverables,
+export const moduleCohortsSlice = createSlice({
+  name: 'moduleCohortsSlice',
+  initialState: initialStateModuleCohorts,
   reducers: {},
   extraReducers: (builder) => {
-    buildReducers(requestListModuleDeliverables)(builder);
+    buildReducers(requestListModuleCohorts, true)(builder);
+  },
+});
+
+/**
+ * Search modules
+ */
+const initialStateSearchModules: { [key: string]: StatusT<ModuleSearchResult[]> } = {};
+
+export const searchModulesSlice = createSlice({
+  name: 'searchModulesSlice',
+  initialState: initialStateSearchModules,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestSearchModules)(builder);
   },
 });
 
 const moduleReducers = {
   module: moduleSlice.reducer,
-  moduleDeliverables: ModuleDeliverablesSlice.reducer,
   moduleList: moduleListSlice.reducer,
   moduleProjects: moduleProjectsSlice.reducer,
+  moduleCohorts: moduleCohortsSlice.reducer,
+  searchModules: searchModulesSlice.reducer,
 };
 
 export default moduleReducers;

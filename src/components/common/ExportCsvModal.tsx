@@ -26,8 +26,7 @@ export default function ExportCsvModal(props: ExportCsvModalProps): JSX.Element 
     const apiResponse = await onExport();
 
     if (apiResponse !== null) {
-      const csvContent = 'data:text/csv;charset=utf-8,' + apiResponse;
-      const encodedUri = encodeURI(csvContent);
+      const encodedUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(apiResponse);
       const link = document.createElement('a');
       link.setAttribute('href', encodedUri);
       link.setAttribute('download', `${name}.csv`);

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
@@ -6,27 +6,17 @@ import { Button } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Link from 'src/components/common/Link';
-import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
+import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
 import { APP_PATHS } from 'src/constants';
+import useGetCohortModule from 'src/hooks/useGetCohortModule';
+import useGetEvent from 'src/hooks/useGetEvent';
 import { useLocalization } from 'src/providers';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 import { getEventStatus, getEventType } from 'src/types/Module';
-import { getLongDateTime } from 'src/utils/dateFormatter';
+import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 
 import ModuleViewTitle from './ModuleViewTitle';
-import { useModuleData } from './Provider/Context';
-
-const CALL_DESCRIPTION_HTML = `
-  <div>
-    <p>Clicking "Join" will open up a browser window to join a Google Meet video call.</p>
-    <p>For this Live Session you will need:</p>
-    <ul>
-      <li>An internet connection – broadband wired or wireless (3G or 4G/LTE)</li>
-      <li>Speakers and a microphone – built-in, USB plug-in, or wireless Bluetooth</li>
-      <li>A webcam or HD webcam - built-in, USB plug-in</li>
-    </ul>
-  </div>
-`;
 
 const openExternalURL = (url: string | undefined, target = '_blank', features = 'noopener noreferrer') => {
   if (url) {
@@ -37,11 +27,47 @@ const openExternalURL = (url: string | undefined, target = '_blank', features = 
 const ModuleEventSessionView = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
+  const { currentParticipantProject, setCurrentParticipantProject } = useParticipantData();
   const pathParams = useParams<{ sessionId: string; moduleId: string; projectId: string }>();
   const projectId = Number(pathParams.projectId);
-  const { event, module, moduleId, session } = useModuleData();
+  const moduleId = Number(pathParams.moduleId);
+  const sessionId = Number(pathParams.sessionId);
 
-  const eventType = session?.type ? getEventType(session.type) : '';
+  useEffect(() => {
+    if (projectId) {
+      setCurrentParticipantProject(projectId);
+    }
+  }, [projectId, setCurrentParticipantProject]);
+
+  const { event, getEvent } = useGetEvent();
+  const { cohortModule, getCohortModule } = useGetCohortModule();
+
+  useEffect(() => {
+    if (sessionId) {
+      void getEvent(sessionId);
+    }
+  }, [getEvent, sessionId]);
+
+  useEffect(() => {
+    if (currentParticipantProject && currentParticipantProject.cohortId) {
+      void getCohortModule({ moduleId, cohortId: currentParticipantProject.cohortId });
+    }
+  }, [currentParticipantProject, moduleId]);
+
+  const eventType = event?.type ? getEventType(event.type) : '';
+  const isRecordedSession = eventType === 'Recorded Session';
+  const buttonUrl = isRecordedSession ? event?.recordingUrl : event?.meetingUrl;
+  const buttonLabel = isRecordedSession
+    ? strings.VIEW_SESSION
+    : eventType
+      ? strings.formatString(strings.JOIN_EVENT_NAME, eventType)?.toString()
+      : '';
+  const slidesLabel = isRecordedSession
+    ? strings.SESSION_SLIDES
+    : eventType
+      ? strings.formatString(strings.EVENT_NAME_SLIDES, eventType)
+      : '';
+  const startTimeRenderer = isRecordedSession ? getLongDate : getLongDateTime;
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -50,18 +76,18 @@ const ModuleEventSessionView = () => {
         to: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`),
       },
       {
-        name: module?.title || '',
+        name: cohortModule?.title || '',
         to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
       },
     ],
-    [activeLocale, projectId, module, moduleId]
+    [activeLocale, projectId, cohortModule, moduleId]
   );
 
   return (
-    <PageWithModuleTimeline
+    <ParticipantPage
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      title={<ModuleViewTitle module={module} projectId={projectId} />}
+      title={<ModuleViewTitle module={cohortModule} projectId={projectId} />}
     >
       <Card
         sx={{
@@ -74,7 +100,7 @@ const ModuleEventSessionView = () => {
           padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
         }}
       >
-        {session && (
+        {event && (
           <Grid container spacing={theme.spacing(1)}>
             <Grid item xs={6} style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
               <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
@@ -82,46 +108,50 @@ const ModuleEventSessionView = () => {
               </Typography>
 
               <Typography marginBottom={theme.spacing(1)}>
-                {session.startTime ? getLongDateTime(session.startTime, activeLocale) : ''}
+                {event.startTime ? startTimeRenderer(event.startTime, activeLocale) : ''}
               </Typography>
 
               <Box marginBottom={theme.spacing(2)}>
-                <Typography
-                  fontSize={'16px'}
-                  fontWeight={600}
-                  lineHeight={'32px'}
-                  sx={{ color: theme.palette.TwClrTxtWarning }}
-                >
-                  {getEventStatus(session.status)}
-                </Typography>
+                {!isRecordedSession && (
+                  <Typography
+                    fontSize={'16px'}
+                    fontWeight={600}
+                    lineHeight={'32px'}
+                    sx={{ color: theme.palette.TwClrTxtWarning }}
+                  >
+                    {getEventStatus(event.status)}
+                  </Typography>
+                )}
 
                 <Button
-                  label={eventType ? strings.formatString(strings.JOIN_EVENT_NAME, eventType)?.toString() : ''}
+                  label={buttonLabel}
+                  priority='primary'
+                  size='large'
                   onClick={() => {
-                    openExternalURL(session.meetingUrl);
+                    openExternalURL(buttonUrl);
                   }}
                 />
               </Box>
 
-              {session?.slidesUrl && (
+              {event?.slidesUrl && (
                 <Box marginBottom={theme.spacing(2)}>
                   <Link
                     fontSize='16px'
                     onClick={() => {
-                      openExternalURL(session.slidesUrl);
+                      openExternalURL(event.slidesUrl);
                     }}
                   >
-                    {eventType ? strings.formatString(strings.EVENT_NAME_SLIDES, eventType) : ''}
+                    {slidesLabel}
                   </Link>
                 </Box>
               )}
 
-              {session?.recordingUrl && (
+              {event?.recordingUrl && !isRecordedSession && (
                 <Box marginBottom={theme.spacing(2)}>
                   <Link
                     fontSize='16px'
                     onClick={() => {
-                      openExternalURL(session.recordingUrl);
+                      openExternalURL(event.recordingUrl);
                     }}
                   >
                     {eventType ? strings.formatString(strings.EVENT_NAME_RECORDING, eventType) : ''}
@@ -132,9 +162,32 @@ const ModuleEventSessionView = () => {
 
             <Grid item xs={6} style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
               <Box
-                dangerouslySetInnerHTML={{ __html: CALL_DESCRIPTION_HTML }}
-                sx={{ backgroundColor: theme.palette.TwClrBgSecondary, borderRadius: '8px', padding: '8px 16px' }}
-              />
+                sx={{
+                  backgroundColor: theme.palette.TwClrBgSecondary,
+                  borderRadius: '8px',
+                  padding: '8px 16px',
+                }}
+              >
+                <div>
+                  {isRecordedSession ? (
+                    <p>
+                      <b>{strings.EVENT_RECORDED_SESSION_DESCRIPTION_1}</b>
+                    </p>
+                  ) : (
+                    <p>{strings.formatString(strings.EVENT_CALL_DESCRIPTION_1, buttonLabel).toString()}</p>
+                  )}
+                  <p>{strings.formatString(strings.EVENT_CALL_DESCRIPTION_2, eventType).toString()}</p>
+                  <ul>
+                    <li>{strings.EVENT_CALL_REQUIREMENTS_INTERNET}</li>
+                    <li>
+                      {isRecordedSession
+                        ? strings.EVENT_RECORDED_SESSION_REQUIREMENTS_SPEAKERS
+                        : strings.EVENT_CALL_REQUIREMENTS_SPEAKERS_MIC}
+                    </li>
+                    {!isRecordedSession && <li>{strings.EVENT_CALL_REQUIREMENTS_WEBCAM}</li>}
+                  </ul>
+                </div>
+              </Box>
             </Grid>
 
             <Grid item xs style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
@@ -170,7 +223,7 @@ const ModuleEventSessionView = () => {
           </Grid>
         )}
       </Card>
-    </PageWithModuleTimeline>
+    </ParticipantPage>
   );
 };
 

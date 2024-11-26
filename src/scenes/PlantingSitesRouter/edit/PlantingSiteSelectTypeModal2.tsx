@@ -3,6 +3,8 @@ import React, { useCallback, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
 
+import TextWithLink from 'src/components/common/TextWithLink';
+import { useDocLinks } from 'src/docLinks';
 import strings from 'src/strings';
 import { SiteType } from 'src/types/PlantingSite';
 import { getRgbaFromHex } from 'src/utils/color';
@@ -19,6 +21,7 @@ export default function PlantingSiteSelectTypeModal(props: PlantingSiteSelectTyp
   const theme = useTheme();
   const [detailed, setDetailed] = useState<boolean | null>(null);
   const { isMobile } = useDeviceInfo();
+  const docLinks = useDocLinks();
 
   const handleClose = () => {
     setDetailed(null);
@@ -68,6 +71,14 @@ export default function PlantingSiteSelectTypeModal(props: PlantingSiteSelectTyp
             isSelected={detailed === true}
             onClick={() => setDetailed(true)}
             title={strings.DETAILED_SITE}
+          />
+        </Box>
+        <Box margin={theme.spacing(3, 0, 0, 0)}>
+          <TextWithLink
+            fontSize='16px'
+            href={docLinks.knowledge_base_stratification}
+            isExternal
+            text={strings.LEARN_MORE_STRATA}
           />
         </Box>
       </Box>

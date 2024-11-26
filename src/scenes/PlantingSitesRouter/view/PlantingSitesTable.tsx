@@ -6,9 +6,8 @@ import { PillList, PillListItem, TableColumnType, Textfield } from '@terraware/w
 import Card from 'src/components/common/Card';
 import FilterMultiSelectContainer from 'src/components/common/FilterMultiSelectContainer';
 import Table from 'src/components/common/table';
-import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
+import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { SortOrder } from 'src/components/common/table/sort';
-import isEnabled from 'src/features';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -59,11 +58,10 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
   const { results, setTemporalSearchValue, temporalSearchValue, setSearchSortOrder, filters, setFilters } = props;
 
   const theme = useTheme();
-  const featureFlagSites = isEnabled('User Detailed Sites');
 
   const projects = useAppSelector(selectProjects);
 
-  const [isPresorted, setIsPresorted] = useState<boolean>(false);
+  const [isPresorted, setIsPresorted] = useState<boolean>(true);
   const [filterPillData, setFilterPillData] = useState<PillListItemWithEmptyValue[]>([]);
 
   const onSortChange = (order: SortOrder, orderBy: string) => {
@@ -99,11 +97,6 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
     [filterPillData, filters, setFilters]
   );
 
-  const tableColumns = useCallback(() => {
-    const columnsData = columns();
-    return featureFlagSites ? columnsData : columnsData.filter((column) => column.key !== 'draft');
-  }, [featureFlagSites]);
-
   return (
     <Card flushMobile>
       <Box display='flex' flexDirection='row' alignItems='center' gap={theme.spacing(1)}>
@@ -130,7 +123,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
           renderOption={(id: string | number) => projects?.find((project) => project.id === id)?.name ?? ''}
         />
 
-        <TableDensitySettingsButton />
+        <TableSettingsButton />
       </Box>
 
       <Grid display='flex' flexDirection='row' alignItems='center' sx={{ marginTop: theme.spacing(2) }}>
@@ -143,7 +136,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
             <Grid item xs={12}>
               <Table
                 id='planting-sites-table'
-                columns={tableColumns}
+                columns={columns}
                 rows={results}
                 orderBy='name'
                 Renderer={PlantingSitesCellRenderer}

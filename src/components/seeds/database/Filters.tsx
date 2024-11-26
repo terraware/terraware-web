@@ -8,7 +8,7 @@ import FilterGroup from 'src/components/common/FilterGroup';
 import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Icon from 'src/components/common/icon/Icon';
-import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
+import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import strings from 'src/strings';
 import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
 import useDebounce from 'src/utils/useDebounce';
@@ -27,10 +27,20 @@ interface Props {
   availableValues: FieldValuesPayload;
   allValues: FieldValuesPayload;
   onChange: (filters: Record<string, SearchNodePayload>) => void;
+  customizeColumns: () => void;
 }
 
 export default function Filters(props: Props): JSX.Element {
-  const { columns, searchColumns, preExpFilterColumns, filters, availableValues, allValues, onChange } = props;
+  const {
+    columns,
+    searchColumns,
+    preExpFilterColumns,
+    filters,
+    availableValues,
+    allValues,
+    onChange,
+    customizeColumns,
+  } = props;
 
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -316,7 +326,9 @@ export default function Filters(props: Props): JSX.Element {
           />
         </Popover>
 
-        <TableDensitySettingsButton />
+        <TableSettingsButton
+          extraSections={[[{ label: strings.CUSTOMIZE_COLUMNS, value: 'customizeColumns', onClick: customizeColumns }]]}
+        />
       </Box>
       <PillList data={filterPillItems} onRemove={removeFilter} />
     </Container>

@@ -1,9 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox, Dropdown } from '@terraware/web-components';
-import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import RegionSelector from 'src/components/RegionSelector';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
@@ -24,25 +22,24 @@ import { TimeZoneDescription } from 'src/types/TimeZones';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import { APP_PATHS } from '../constants';
 import DialogBox from './common/ScrollableDialogBox';
 import TextField from './common/Textfield/Textfield';
 
 type LocationTypesSelected = Record<ManagedLocationType, boolean>;
 
 export type AddNewOrganizationModalProps = {
+  isApplication?: boolean;
   open: boolean;
   onCancel: () => void;
+  onSuccess: (organization: Organization) => void;
 };
 
 export default function AddNewOrganizationModal(props: AddNewOrganizationModalProps): JSX.Element {
   const { reloadOrganizations } = useOrganization();
   const { activeLocale } = useLocalization();
-  const navigate = useNavigate();
-  const { onCancel, open } = props;
+  const { isApplication, onCancel, onSuccess, open } = props;
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const { isDesktop } = useDeviceInfo();
   const [nameError, setNameError] = useState('');
   const [timeZoneError, setTimeZoneError] = useState('');
   const [countryError, setCountryError] = useState('');
@@ -143,11 +140,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     );
     if (response.requestSucceeded && response.organization) {
       reloadOrganizations();
-      navigate({ pathname: APP_PATHS.HOME });
-      snackbar.pageSuccess(
-        isDesktop ? strings.ORGANIZATION_CREATED_MSG_DESKTOP : strings.ORGANIZATION_CREATED_MSG,
-        strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization.name)
-      );
+      onSuccess(response.organization);
     } else {
       snackbar.toastError(strings.GENERIC_ERROR, strings.ORGANIZATION_CREATE_FAILED);
     }
@@ -198,15 +191,17 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
             value={newOrganization.name}
           />
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label={strings.DESCRIPTION}
-            type='text'
-            id='description'
-            onChange={(value) => onChange('description', value)}
-            value={newOrganization.description}
-          />
-        </Grid>
+        {isApplication !== true && (
+          <Grid item xs={12}>
+            <TextField
+              label={strings.DESCRIPTION}
+              type='text'
+              id='description'
+              onChange={(value) => onChange('description', value)}
+              value={newOrganization.description}
+            />
+          </Grid>
+        )}
         <RegionSelector
           selectedCountryCode={newOrganization.countryCode}
           selectedCountrySubdivisionCode={newOrganization.countrySubdivisionCode}
@@ -234,27 +229,29 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
             errorText={timeZoneError}
           />
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            type='text'
-            label={strings.CREATE_ORGANIZATION_QUESTION_LOCATION_TYPES}
-            id='create-org-question-location-types'
-            display={true}
-          />
-          <Box display='flex' flexDirection='column'>
-            {managedLocationTypeOptions.map((option) => (
-              <Checkbox
-                key={option.value}
-                disabled={false}
-                id={`location-type-${option.value}`}
-                name={option.label}
-                label={option.label}
-                value={locationTypes[option.value] === true}
-                onChange={(value) => setLocationTypes((prev) => ({ ...prev, [option.value]: value }))}
-              />
-            ))}
-          </Box>
-        </Grid>
+        {isApplication !== true && (
+          <Grid item xs={12}>
+            <TextField
+              type='text'
+              label={strings.CREATE_ORGANIZATION_QUESTION_LOCATION_TYPES}
+              id='create-org-question-location-types'
+              display={true}
+            />
+            <Box display='flex' flexDirection='column'>
+              {managedLocationTypeOptions.map((option) => (
+                <Checkbox
+                  key={option.value}
+                  disabled={false}
+                  id={`location-type-${option.value}`}
+                  name={option.label}
+                  label={option.label}
+                  value={locationTypes[option.value] === true}
+                  onChange={(value) => setLocationTypes((prev) => ({ ...prev, [option.value]: value }))}
+                />
+              ))}
+            </Box>
+          </Grid>
+        )}
         <Grid item xs={12}>
           <Dropdown
             required
@@ -282,16 +279,23 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
             />
           )}
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            type='text'
-            label={strings.ORGANIZATION_WEBSITE}
-            id='create-org-question-website'
-            display={false}
-            onChange={(value) => onChange('website', value)}
-            value={newOrganization.website}
-          />
-        </Grid>
+        {isApplication !== true && (
+          <Grid item xs={12}>
+            <TextField
+              type='text'
+              label={strings.ORGANIZATION_WEBSITE}
+              id='create-org-question-website'
+              display={false}
+              onChange={(value) => onChange('website', value)}
+              value={newOrganization.website}
+            />
+          </Grid>
+        )}
+      </Grid>
+      <Grid item xs={12}>
+        <Typography fontSize={'14px'} fontWeight={400} lineHeight={'20px'} marginTop={'16px'}>
+          {strings.ADD_NEW_ORGANIZATION_FOOTNOTE}
+        </Typography>
       </Grid>
     </DialogBox>
   );

@@ -11,7 +11,7 @@ import Card from 'src/components/common/Card';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import Table from 'src/components/common/table';
-import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
+import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { APP_PATHS } from 'src/constants';
 import { useTimeZones } from 'src/providers';
 import { FacilityService } from 'src/services';
@@ -133,7 +133,7 @@ export default function NurseriesListView({ organization }: NurseriesListProps):
                 onClickRightIcon={clearSearch}
               />
             </Box>
-            <TableDensitySettingsButton />
+            <TableSettingsButton />
           </Grid>
           <Grid item xs={12}>
             {results && (

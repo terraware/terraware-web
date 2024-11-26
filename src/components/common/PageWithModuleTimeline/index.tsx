@@ -5,12 +5,12 @@ import { Grid, useTheme } from '@mui/material';
 import Page, { PageProps } from 'src/components/Page';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-import ModuleTimeline from './ModuleTimeline';
+import ModuleTimeline, { ModuleTimelineProps } from './ModuleTimeline';
 
-const PageWithModuleTimeline = (props: PageProps) => {
+const PageWithModuleTimeline = (props: PageProps & ModuleTimelineProps) => {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const { contentStyle, titleStyle } = props;
+  const { contentStyle, titleStyle, titleContainerStyle } = props;
 
   const desktopContainerStyles = {
     paddingTop: 0,
@@ -32,10 +32,11 @@ const PageWithModuleTimeline = (props: PageProps) => {
           containerStyles={isMobile ? {} : desktopContainerStyles}
           contentStyle={contentStyle}
           titleStyle={titleStyle}
+          titleContainerStyle={titleContainerStyle}
         />
       </Grid>
       <Grid item sx={{ display: { xs: 'none', sm: 'none', md: 'none', lg: 'block', xl: 'block' } }} minWidth={'206px'}>
-        <ModuleTimeline />
+        <ModuleTimeline {...props} />
       </Grid>
     </Grid>
   );

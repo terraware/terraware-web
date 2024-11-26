@@ -5,8 +5,12 @@ import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { store } from 'src/redux/store';
 import { OrganizationService, PreferencesService } from 'src/services';
+import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useEnvironment from 'src/utils/useEnvironment';
 import useQuery from 'src/utils/useQuery';
+import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import { PreferencesType, ProvidedOrganizationData } from './DataTypes';
@@ -26,6 +30,8 @@ enum APIRequestStatus {
 }
 
 export default function OrganizationProvider({ children }: OrganizationProviderProps): JSX.Element {
+  const { isDesktop } = useDeviceInfo();
+  const snackbar = useSnackbar();
   const [bootstrapped, setBootstrapped] = useState<boolean>(false);
   const [selectedOrganization, setSelectedOrganization] = useState<Organization>();
   const [orgPreferences, setOrgPreferences] = useState<PreferencesType>({});
@@ -37,6 +43,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const location = useStateLocation();
   const { userPreferences, updateUserPreferences, bootstrapped: userBootstrapped } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { isDev, isStaging } = useEnvironment();
 
   const reloadOrganizations = useCallback(async (selectedOrgId?: number) => {
     const populateOrganizations = async () => {
@@ -68,7 +75,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
 
   const reloadOrgPreferences = useCallback(() => {
     const getOrgPreferences = async () => {
-      if (selectedOrganization) {
+      if (selectedOrganization && selectedOrganization.id !== -1) {
         const response = await PreferencesService.getUserOrgPreferences(selectedOrganization.id);
         if (response.requestSucceeded && response.preferences) {
           setOrgPreferences(response.preferences);
@@ -82,6 +89,17 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     getOrgPreferences();
   }, [selectedOrganization]);
 
+  const redirectAndNotify = useCallback(
+    (organization: Organization) => {
+      navigate({ pathname: APP_PATHS.HOME });
+      snackbar.pageSuccess(
+        isDesktop ? strings.ORGANIZATION_CREATED_MSG_DESKTOP : strings.ORGANIZATION_CREATED_MSG,
+        strings.formatString(strings.ORGANIZATION_CREATED_TITLE, organization.name)
+      );
+    },
+    [snackbar, isDesktop]
+  );
+
   useEffect(() => {
     reloadOrganizations();
   }, [reloadOrganizations]);
@@ -89,6 +107,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   useEffect(() => {
     setOrganizationData((prev) => ({
       ...prev,
+      redirectAndNotify,
       selectedOrganization: selectedOrganization || defaultSelectedOrg,
       organizations: organizations ?? [],
       orgPreferences,
@@ -96,7 +115,15 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       orgPreferenceForId,
       reloadOrgPreferences,
     }));
-  }, [selectedOrganization, organizations, orgPreferences, bootstrapped, orgPreferenceForId, reloadOrgPreferences]);
+  }, [
+    redirectAndNotify,
+    selectedOrganization,
+    organizations,
+    orgPreferences,
+    bootstrapped,
+    orgPreferenceForId,
+    reloadOrgPreferences,
+  ]);
 
   useEffect(() => {
     reloadOrgPreferences();
@@ -155,16 +182,24 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     store.dispatch({ type: 'RESET_APP' });
   }, [selectedOrganization?.id]);
 
-  if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
-    navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
-  }
+  useEffect(() => {
+    if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
+      if (isDev || isStaging) {
+        if (confirm(strings.DEV_SERVER_ERROR)) {
+          window.location.reload();
+        }
+      } else {
+        navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
+      }
+    }
+  }, [orgAPIRequestStatus]);
 
   const [organizationData, setOrganizationData] = useState<ProvidedOrganizationData>({
     selectedOrganization: selectedOrganization || defaultSelectedOrg,
     setSelectedOrganization,
     organizations: organizations ?? [],
     orgPreferences,
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    redirectAndNotify,
     reloadOrganizations,
     reloadOrgPreferences,
     bootstrapped,

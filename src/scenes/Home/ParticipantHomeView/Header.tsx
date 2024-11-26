@@ -8,19 +8,18 @@ import { getDateRangeString } from 'src/utils/dateFormatter';
 
 const Header = () => {
   const theme = useTheme();
-  const { activeModules, currentParticipantProject, moduleProjects, setCurrentParticipantProject } =
+  const { currentParticipantProject, setCurrentParticipantProject, projectsWithModules, modules } =
     useParticipantData();
 
-  // Only first active modules shown for now. TODO: upgrade to support multiple active modules for overlapping modules
-  const currentModule = activeModules && activeModules.length > 0 ? activeModules[0] : undefined;
+  const currentModule = useMemo(() => modules?.find((module) => module.isActive), [modules]);
 
   const options: DropdownItem[] = useMemo(
     () =>
-      moduleProjects.map((project) => ({
+      projectsWithModules.map((project) => ({
         label: project.name,
         value: project.id,
       })),
-    [moduleProjects]
+    [projectsWithModules]
   );
 
   const selectStyles = {
@@ -43,12 +42,16 @@ const Header = () => {
       <Grid item marginTop={theme.spacing(1)} marginLeft={theme.spacing(1)}>
         <Grid container alignItems={'center'} columnSpacing={theme.spacing(2)}>
           <Grid item>
-            <Dropdown
-              onChange={setCurrentParticipantProject}
-              options={options}
-              selectStyles={selectStyles}
-              selectedValue={currentParticipantProject?.id}
-            />
+            {options?.length > 1 ? (
+              <Dropdown
+                onChange={setCurrentParticipantProject}
+                options={options}
+                selectStyles={selectStyles}
+                selectedValue={currentParticipantProject?.id}
+              />
+            ) : (
+              <Typography sx={selectStyles.input}>{options[0].label}</Typography>
+            )}
           </Grid>
 
           <Grid item>

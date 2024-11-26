@@ -50,7 +50,7 @@ const submitSupportRequest = (request: SupportRequest): Promise<Response2<Submit
 const uploadSupportAttachment = (file: File): Promise<Response2<UploadAttachmentServerResponse>> => {
   const headers = { 'content-type': 'multipart/form-data' };
   return httpSupportUpload.post2<UploadAttachmentServerResponse>({
-    entity: { file: file },
+    entity: { file },
     headers,
   });
 };

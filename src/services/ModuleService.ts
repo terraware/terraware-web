@@ -1,124 +1,63 @@
 import { paths } from 'src/api/types/generated-schema';
-import { DeliverableCategoryType, DeliverableStatusType, DeliverableTypeType } from 'src/types/Deliverables';
-import { Module } from 'src/types/Module';
-import { SearchRequestPayload, SearchResponseElement } from 'src/types/Search';
+import { ModuleSearchResult } from 'src/types/Module';
+import { SearchNodePayload, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 
 import HttpService, { Response2 } from './HttpService';
 import SearchService from './SearchService';
 
-export type ModulesData = {
-  modules: Module[] | undefined;
-};
-
-export type ModuleData = {
-  module: Module | undefined;
-};
-
-export type ModuleDeliverableSearchResult = {
-  id: number;
-  moduleId: number;
-  projectId: number;
-  name: string;
-  category: DeliverableCategoryType;
-  categoryDisplayName: string;
-  dueDate: string;
-  status: DeliverableStatusType;
-  statusDisplayName: string;
-  type: DeliverableTypeType;
-  typeDisplayName: string;
-};
-
-const PROJECT_MODULES_ENDPOINT = '/api/v1/projects/{projectId}/modules';
+const MODULES_ENDOINT = '/api/v1/accelerator/modules';
+const MODULE_ENDOINT = '/api/v1/accelerator/modules/{moduleId}';
+const MODULES_IMPORT_ENDPOINT = '/api/v1/accelerator/modules/import';
 
 export type ListModulesResponsePayload =
-  paths[typeof PROJECT_MODULES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-
-const httpProjectModules = HttpService.root(PROJECT_MODULES_ENDPOINT);
-
-/**
- * List all modules for a project
- */
-const list = (projectId: number | null): Promise<Response2<ModulesData | null>> =>
-  httpProjectModules.get<ListModulesResponsePayload, { data: ModulesData | undefined }>(
-    {
-      url: PROJECT_MODULES_ENDPOINT,
-      urlReplacements: { '{projectId}': `${projectId}` },
-    },
-    (response) => ({
-      data: {
-        modules: response?.modules,
-      },
-    })
-  );
+  paths[typeof MODULES_ENDOINT]['get']['responses'][200]['content']['application/json'];
+export type GetModuleResponsePayload =
+  paths[typeof MODULE_ENDOINT]['get']['responses'][200]['content']['application/json'];
+export type ImportModuleResponsePayload =
+  paths[typeof MODULES_IMPORT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 /**
- * Get module data for a specific module / project ID.
+ * List all modules
  */
-const get = async (projectId: number, moduleId: number): Promise<Response2<ModuleData | null>> => {
-  // TODO this will become its own API in the BE soon.
-  const _list = await list(projectId);
-  if (_list && _list.requestSucceeded && _list.data?.modules) {
-    const module = _list.data.modules.find((module) => module.id === moduleId);
-    if (module) {
-      return {
-        requestSucceeded: true,
-        data: {
-          module: module,
-        },
-      };
-    }
-  }
-
-  return {
-    requestSucceeded: false,
-  };
+const list = (): Promise<Response2<ListModulesResponsePayload>> => {
+  return HttpService.root(MODULES_ENDOINT).get2<ListModulesResponsePayload>();
 };
 
 /**
- * Get module deliverables for a specific module / project ID.
+ * Get module data
  */
-const searchDeliverables = async (
-  projectId: number,
-  moduleId: number
-): Promise<ModuleDeliverableSearchResult[] | null> => {
+const get = async (moduleId: number): Promise<Response2<GetModuleResponsePayload>> => {
+  return HttpService.root(MODULE_ENDOINT).get2<GetModuleResponsePayload>({
+    urlReplacements: { '{moduleId}': `${moduleId}` },
+  });
+};
+
+/**
+ * import modules
+ */
+const importModules = async (file: File): Promise<ImportModuleResponsePayload> => {
+  const entity = new FormData();
+  entity.append('file', file);
+  const headers = { 'content-type': 'multipart/form-data' };
+
+  const serverResponse = await HttpService.root(MODULES_IMPORT_ENDPOINT).post({
+    entity,
+    headers,
+  });
+
+  return serverResponse.data;
+};
+
+const search = async (
+  search?: SearchNodePayload,
+  sortOrder?: SearchSortOrder
+): Promise<ModuleSearchResult[] | null> => {
   const searchParams: SearchRequestPayload = {
-    prefix: 'projects.projectDeliverables',
-    fields: [
-      'id',
-      'module_id',
-      'project_id',
-      'name',
-      'category',
-      'category(raw)',
-      'dueDate',
-      'status',
-      'status(raw)',
-      'type',
-      'type(raw)',
-    ],
-    search: {
-      operation: 'and',
-      children: [
-        {
-          operation: 'field',
-          field: 'project.id',
-          type: 'Exact',
-          values: [projectId],
-        },
-        {
-          operation: 'field',
-          field: 'module.id',
-          type: 'Exact',
-          values: [moduleId],
-        },
-      ],
-    },
-    sortOrder: [
-      {
-        field: 'dueDate',
-      },
-    ],
-    count: 20,
+    prefix: 'projects.participant.cohort.cohortModules.module',
+    fields: ['id', 'name', 'cohortModules.cohort_id', 'deliverables.id'],
+    search: search ?? { operation: 'and', children: [] },
+    sortOrder: [sortOrder ?? { field: 'name' }],
+    count: 0,
   };
 
   const response: SearchResponseElement[] | null = await SearchService.search(searchParams);
@@ -127,29 +66,23 @@ const searchDeliverables = async (
     return null;
   }
 
-  return response.map((result: SearchResponseElement): ModuleDeliverableSearchResult => {
-    const { id, module_id, project_id, name, category, dueDate, status, type } = result;
+  return response.map((result: SearchResponseElement) => {
+    const { id, name, cohortModules, deliverables } = result;
 
     return {
-      id: Number(id),
-      moduleId: Number(module_id),
-      projectId: Number(project_id),
-      name: String(name),
-      category: result['category(raw)'] as DeliverableCategoryType,
-      categoryDisplayName: String(category),
-      dueDate: String(dueDate),
-      status: result['status(raw)'] as DeliverableStatusType,
-      statusDisplayName: String(status),
-      type: result['type(raw)'] as DeliverableTypeType,
-      typeDisplayName: String(type),
-    };
+      id,
+      name,
+      cohortsQuantity: Array.isArray(cohortModules) ? cohortModules.length : 0,
+      deliverablesQuantity: Array.isArray(deliverables) ? deliverables.length : 0,
+    } as ModuleSearchResult;
   });
 };
 
 const ModuleService = {
   get,
   list,
-  searchDeliverables,
+  importModules,
+  search,
 };
 
 export default ModuleService;
