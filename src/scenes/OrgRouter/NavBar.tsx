@@ -94,9 +94,11 @@ export default function NavBar({
   );
 
   const checkNurseryWithdrawals = useCallback(() => {
-    NurseryWithdrawalService.hasNurseryWithdrawals(selectedOrganization.id).then((result: boolean) => {
-      setShowNurseryWithdrawals(result);
-    });
+    if (selectedOrganization.id !== -1) {
+      NurseryWithdrawalService.hasNurseryWithdrawals(selectedOrganization.id).then((result: boolean) => {
+        setShowNurseryWithdrawals(result);
+      });
+    }
   }, [selectedOrganization.id]);
 
   useEffect(() => {
@@ -113,14 +115,16 @@ export default function NavBar({
   }, [withdrawalCreated, checkNurseryWithdrawals, showNurseryWithdrawals]);
 
   useEffect(() => {
-    const reportSearch = async () => {
-      const reportsResults = await ReportService.getReports(selectedOrganization.id);
-      setReports(reportsResults.reports || []);
-    };
+    if (selectedOrganization.id !== -1) {
+      const reportSearch = async () => {
+        const reportsResults = await ReportService.getReports(selectedOrganization.id);
+        setReports(reportsResults.reports || []);
+      };
 
-    if (isAdmin(selectedOrganization)) {
-      // not open to contributors, will get a 403
-      reportSearch();
+      if (isAdmin(selectedOrganization)) {
+        // not open to contributors, will get a 403
+        reportSearch();
+      }
     }
   }, [selectedOrganization]);
 

@@ -150,7 +150,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const closeMessageSelector = useAppSelector(selectMessage(`seeds.${SNACKBAR_PAGE_CLOSE_KEY}.ackWeightSystem`));
 
   useEffect(() => {
-    void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
+    if (selectedOrganization.id !== -1) {
+      void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
+    }
   }, [activeLocale, dispatch, selectedOrganization.id]);
 
   useEffect(() => {
@@ -224,8 +226,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   const saveSearchColumns = useCallback(
     async (columnNames?: string[]) => {
-      await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, { accessionsColumns: columnNames });
-      reloadOrgPreferences();
+      if (selectedOrganization.id !== -1) {
+        await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, { accessionsColumns: columnNames });
+        reloadOrgPreferences();
+      }
     },
     [selectedOrganization.id, reloadOrgPreferences]
   );
@@ -324,24 +328,26 @@ export default function Database(props: DatabaseProps): JSX.Element {
   ]);
 
   useEffect(() => {
-    const populateUnfilteredResults = async () => {
-      const apiResponse: SearchResponseElementWithId[] | null = await SeedBankService.searchAccessions({
-        organizationId: selectedOrganization.id,
-        fields: ['id'],
-      });
+    if (selectedOrganization.id !== -1) {
+      const populateUnfilteredResults = async () => {
+        const apiResponse: SearchResponseElementWithId[] | null = await SeedBankService.searchAccessions({
+          organizationId: selectedOrganization.id,
+          fields: ['id'],
+        });
 
-      setUnfilteredResults(apiResponse);
-    };
+        setUnfilteredResults(apiResponse);
+      };
 
-    const populatePendingAccessions = async () => {
-      const data: SearchResponseElementWithId[] | null = await SeedBankService.getPendingAccessions(
-        selectedOrganization.id
-      );
-      setPendingAccessions(data);
-    };
+      const populatePendingAccessions = async () => {
+        const data: SearchResponseElementWithId[] | null = await SeedBankService.getPendingAccessions(
+          selectedOrganization.id
+        );
+        setPendingAccessions(data);
+      };
 
-    void populateUnfilteredResults();
-    void populatePendingAccessions();
+      void populateUnfilteredResults();
+      void populatePendingAccessions();
+    }
   }, [selectedOrganization.id]);
 
   const initAccessions = useCallback(() => {
@@ -356,7 +362,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       return columnsNamesToSearch;
     };
 
-    if (selectedOrganization) {
+    if (selectedOrganization && selectedOrganization.id !== -1) {
       const requestId = setRequestId('accessions_search');
 
       const populateSearchResults = async () => {
@@ -429,7 +435,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   }, [activeLocale, setSearchCriteria]);
 
   useEffect(() => {
-    if (Object.keys(sessionFilters).length === 0) {
+    if (!sessionFilters || Object.keys(sessionFilters).length === 0) {
       return;
     }
 

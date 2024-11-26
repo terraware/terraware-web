@@ -124,7 +124,7 @@ const DeliverableView = () => {
           <Button
             disabled={deliverable?.status === 'Rejected'}
             id='rejectDeliverable'
-            label={strings.REJECT_ACTION}
+            label={strings.REQUEST_UPDATE_ACTION}
             priority='secondary'
             onClick={() => void setShowRejectDialog(true)}
             size='medium'

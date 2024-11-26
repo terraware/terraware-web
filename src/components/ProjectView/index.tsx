@@ -73,7 +73,7 @@ export default function ProjectView(): JSX.Element {
 
     if (projectDeleteRequest.status === 'error') {
       snackbar.toastError();
-    } else if (projectDeleteRequest.status === 'success') {
+    } else if (projectDeleteRequest.status === 'success' && selectedOrganization.id !== -1) {
       void dispatch(requestProjects(selectedOrganization.id));
       goToProjects();
     }

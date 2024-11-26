@@ -2,20 +2,14 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { TableColumnType } from '@terraware/web-components';
 
-import Page from 'src/components/Page';
 import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
-import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
+import { FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
 import { useLocalization } from 'src/providers';
 import { requestListApplications } from 'src/redux/features/application/applicationAsyncThunks';
 import { selectApplicationList } from 'src/redux/features/application/applicationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import {
-  Application,
-  ApplicationReviewStatuses,
-  ApplicationStatus,
-  ApplicationStatusOrder,
-} from 'src/types/Application';
+import { Application, ApplicationStatus, ApplicationStatusOrder } from 'src/types/Application';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { getCountryByCode } from 'src/utils/country';
 import { SearchAndSortFn, SearchOrderConfig, searchAndSort as genericSearchAndSort } from 'src/utils/searchAndSort';
@@ -23,7 +17,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import ApplicationCellRenderer from './ApplicationCellRenderer';
 
-type ApplicationRow = {
+export type ApplicationRow = {
   countryCode?: string;
   countryName?: string;
   id: number;
@@ -69,7 +63,11 @@ const defaultSearchOrder: SearchSortOrder = {
   direction: 'Ascending',
 };
 
-const ApplicationList = () => {
+type ApplicationListTabProps = {
+  isPrescreen: boolean;
+};
+
+const ApplicationListTab = ({ isPrescreen }: ApplicationListTabProps) => {
   const dispatch = useAppDispatch();
   const { activeLocale, countries } = useLocalization();
   const snackbar = useSnackbar();
@@ -78,12 +76,28 @@ const ApplicationList = () => {
   const result = useAppSelector(selectApplicationList(requestId));
   const [applications, setApplications] = useState<ApplicationRow[]>([]);
 
-  const featuredFilters: FilterConfig[] = useMemo(() => {
+  const allFilterValues: ApplicationStatus[] = isPrescreen
+    ? ['Failed Pre-screen', 'Passed Pre-screen']
+    : [
+        'Accepted',
+        'Carbon Eligible',
+        'Issue Active',
+        'Issue Pending',
+        'Issue Resolved',
+        'Needs Follow-up',
+        'Not Accepted',
+        'PL Review',
+        'Pre-check',
+        'Ready for Review',
+        'Submitted',
+      ];
+
+  const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
     if (!activeLocale || !countries) {
       return [];
     }
 
-    const filters: FilterConfig[] = [
+    const filters: FilterConfigWithValues[] = [
       {
         field: 'countryCode',
         options: (countries || []).map((country) => country.code),
@@ -94,9 +108,7 @@ const ApplicationList = () => {
       },
       {
         field: 'status',
-        options: ApplicationReviewStatuses.sort(
-          (left, right) => ApplicationStatusOrder[left] - ApplicationStatusOrder[right]
-        ),
+        options: allFilterValues,
         label: strings.STATUS,
       },
     ];
@@ -112,7 +124,7 @@ const ApplicationList = () => {
     if (result?.data) {
       setApplications(
         result.data
-          .filter((application) => application.status !== 'Not Submitted')
+          .filter((application) => allFilterValues.includes(application.status))
           .map((application) => ({
             countryCode: application?.countryCode,
             countryName:
@@ -126,7 +138,7 @@ const ApplicationList = () => {
           }))
       );
     }
-  }, [result, setApplications, snackbar]);
+  }, [result, setApplications, allFilterValues, snackbar]);
 
   const searchAndSort: SearchAndSortFn<Application> = useCallback(
     (results: Application[], search?: SearchNodePayload, sortOrderConfig?: SearchOrderConfig) => {
@@ -170,7 +182,7 @@ const ApplicationList = () => {
       dispatchSearchRequest={dispatchSearchRequest}
       featuredFilters={featuredFilters}
       fuzzySearchColumns={fuzzySearchColumns}
-      id='accelerator-applications-table'
+      id={isPrescreen ? 'accelerator-prescreen-table' : 'accelerator-applications-table'}
       Renderer={ApplicationCellRenderer}
       rows={applications}
       stickyFilters
@@ -178,12 +190,4 @@ const ApplicationList = () => {
   );
 };
 
-const ApplicationsListView = () => {
-  return (
-    <Page title={strings.APPLICATIONS} contentStyle={{ display: 'block' }}>
-      <ApplicationList />
-    </Page>
-  );
-};
-
-export default ApplicationsListView;
+export default ApplicationListTab;

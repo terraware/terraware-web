@@ -7,12 +7,11 @@ import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
 import DeliverablesRenderer from 'src/scenes/AcceleratorRouter/Modules/DeliverablesRenderer';
 import strings from 'src/strings';
-import { ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
-import { Module } from 'src/types/Module';
+import { Module, ModuleDeliverable } from 'src/types/Module';
 
 interface contentAndMaterialsProps {
   module?: Module;
-  deliverables?: ListDeliverablesElementWithOverdue[];
+  deliverables?: ModuleDeliverable[];
 }
 
 const columns = (): TableColumnType[] => [
@@ -58,7 +57,7 @@ const columns = (): TableColumnType[] => [
   },
 ];
 
-export default function contentAndMaterials({ module, deliverables }: contentAndMaterialsProps): JSX.Element {
+export default function ContentAndMaterials({ module, deliverables }: contentAndMaterialsProps): JSX.Element {
   const theme = useTheme();
 
   return (
@@ -72,8 +71,8 @@ export default function contentAndMaterials({ module, deliverables }: contentAnd
           {strings.CONTENT_AND_MATERIALS}
         </Typography>
       </Box>
-      <Grid container>
-        <Grid item>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
           <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
             {strings.DELIVERABLES}
           </Typography>
@@ -85,13 +84,13 @@ export default function contentAndMaterials({ module, deliverables }: contentAnd
             Renderer={DeliverablesRenderer}
           />
         </Grid>
-        <Grid item>
+        <Grid item xs={12}>
           <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
             {strings.PREPARATION_MATERIALS}
           </Typography>
           <Box dangerouslySetInnerHTML={{ __html: module?.preparationMaterials || '' }} />
         </Grid>
-        <Grid item>
+        <Grid item xs={12}>
           <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
             {strings.ADDITIONAL_RESOURCES}
           </Typography>

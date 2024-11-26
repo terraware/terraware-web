@@ -44,6 +44,9 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
   const newGridSize = isMobile ? 12 : 4;
 
   const createNewSpecies = async () => {
+    if (organizationId === -1) {
+      return;
+    }
     if (!record.scientificName) {
       setNameFormatError(strings.REQUIRED_FIELD);
     } else {

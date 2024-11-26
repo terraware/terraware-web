@@ -66,7 +66,7 @@ const ApplicationProvider = ({ children }: Props) => {
     if (isAcceleratorRoute && isAllowedAllApplications) {
       const listAll = dispatch(requestListApplications({ listAll: true }));
       setListApplicationRequest(listAll.requestId);
-    } else if (selectedOrganization) {
+    } else if (selectedOrganization && selectedOrganization.id !== -1) {
       const listOrg = dispatch(requestListApplications({ organizationId: selectedOrganization.id }));
       setListApplicationRequest(listOrg.requestId);
     }

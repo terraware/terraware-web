@@ -73,7 +73,9 @@ export default function SpeciesProjectsTable({
   const [selectableProjects, setSelectableProjects] = useState<Project[]>([]);
 
   useEffect(() => {
-    void dispatch(requestProjects(selectedOrganization.id));
+    if (selectedOrganization.id !== -1) {
+      void dispatch(requestProjects(selectedOrganization.id));
+    }
   }, [selectedOrganization]);
 
   useEffect(() => {

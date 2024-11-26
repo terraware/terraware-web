@@ -118,7 +118,7 @@ const QuestionBox = ({
   const rejectCallback = useCallback(() => {
     setUpdatePendingId(variable.id);
     waitAndReload();
-    snackbar.toastSuccess(strings.ANSWER_REJECTED);
+    snackbar.toastSuccess(strings.UPDATE_REQUESTED);
   }, [waitAndReload, snackbar]);
 
   const updateCallback = useCallback(() => {
@@ -273,7 +273,7 @@ const QuestionBox = ({
                 {!isAcceleratorApplicationRoute && (
                   <>
                     <Button
-                      label={strings.REJECT_ACTION}
+                      label={strings.REQUEST_UPDATE_ACTION}
                       onClick={() => setShowRejectDialog(true)}
                       priority='secondary'
                       sx={{ '&.button': { margin: '4px' } }}

@@ -108,11 +108,16 @@ export default function SearchFiltersWrapperV2({
           };
         })
         .filter((item: PillListItem<string> | false): item is PillListItem<string> => !!item),
-    [currentFilters, iconFilters, featuredFilters, setCurrentFilters]
+    [currentFilters, iconFilters, featuredFilters, setCurrentFilters, stickyFilters]
   );
 
   useEffect(() => {
-    if (stickyFilters && Object.keys(sessionFilters).length > 0 && Object.keys(currentFilters).length === 0) {
+    if (
+      stickyFilters &&
+      sessionFilters &&
+      Object.keys(sessionFilters).length > 0 &&
+      Object.keys(currentFilters).length === 0
+    ) {
       const sessionFiltersToApply: Record<string, SearchNodePayload> = {};
       const existingKeys = Object.keys(sessionFilters);
       existingKeys?.forEach((key) => {
@@ -146,7 +151,7 @@ export default function SearchFiltersWrapperV2({
         ...incomingFilters,
       });
 
-      if (incomingFilters && stickyFilters) {
+      if (incomingFilters && stickyFilters && sessionFilters) {
         const existingKeys = Object.keys(sessionFilters);
         const allFilters = { ...currentFilters, ...incomingFilters };
         let sessionFiltersCopy = { ...sessionFilters };

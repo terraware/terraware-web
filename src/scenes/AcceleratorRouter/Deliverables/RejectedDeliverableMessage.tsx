@@ -4,6 +4,7 @@ import { Box, useTheme } from '@mui/material';
 import { Button, Message } from '@terraware/web-components';
 
 import { ViewProps } from 'src/components/DeliverableView/types';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
 
@@ -14,6 +15,7 @@ type Props = ViewProps & {
 const RejectedDeliverableMessage = ({ deliverable, showRejectDialog }: Props): JSX.Element => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   return (
     <>
@@ -33,7 +35,7 @@ const RejectedDeliverableMessage = ({ deliverable, showRejectDialog }: Props): J
               />,
             ]}
             priority='critical'
-            title={strings.DELIVERABLE_REJECTED}
+            title={isAcceleratorRoute ? strings.DELIVERABLE_UPDATE_REQUESTED : strings.DELIVERABLE_UPDATE_NEEDED}
             type='page'
           />
         </Box>

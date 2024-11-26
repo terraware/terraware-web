@@ -11,7 +11,7 @@ import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
-import useListModules from 'src/hooks/useListModules';
+import useListCohortModules from 'src/hooks/useListCohortModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipant } from 'src/hooks/useParticipant';
 import { useLocalization, useUser } from 'src/providers';
@@ -46,13 +46,13 @@ export default function ParticipantsView(): JSX.Element {
 
   const [showDelete, setShowDelete] = useState<boolean>(false);
 
-  const { modules, listModules } = useListModules();
+  const { cohortModules, listCohortModules } = useListCohortModules();
 
   useEffect(() => {
-    if (participantId) {
-      void listModules({ participantId });
+    if (participant && participant.cohortId) {
+      void listCohortModules(participant.cohortId);
     }
-  }, [participantId, listModules]);
+  }, [participant, listCohortModules]);
 
   const goToEdit = useCallback(() => {
     navigate(APP_PATHS.ACCELERATOR_PARTICIPANTS_EDIT.replace(':participantId', `${participantId}`));
@@ -155,7 +155,7 @@ export default function ParticipantsView(): JSX.Element {
       crumbs={crumbs}
       rightComponent={actionMenu}
       title={participant.name}
-      modules={modules ?? []}
+      modules={cohortModules ?? []}
       cohortPhase={participant.cohortPhase}
     >
       <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>

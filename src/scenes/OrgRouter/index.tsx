@@ -96,7 +96,9 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
 
   const reloadSpecies = useCallback(() => {
-    void dispatch(requestSpecies(selectedOrganization.id));
+    if (selectedOrganization.id !== -1) {
+      void dispatch(requestSpecies(selectedOrganization.id));
+    }
   }, [dispatch, selectedOrganization.id]);
 
   const reloadProjects = useCallback(() => {

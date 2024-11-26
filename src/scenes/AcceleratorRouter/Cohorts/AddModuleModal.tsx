@@ -1,13 +1,12 @@
 import React, { useMemo, useState } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
-import { DatePicker, SelectT } from '@terraware/web-components';
+import { Autocomplete, DatePicker, DropdownItem } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
-import useListModules from 'src/hooks/useListModules';
 import strings from 'src/strings';
 import { CohortModule, Module } from 'src/types/Module';
 import useForm from 'src/utils/useForm';
@@ -15,50 +14,67 @@ import useForm from 'src/utils/useForm';
 export interface AddModuleModalProps {
   onClose: () => void;
   onSave: (cohortModule: CohortModule) => void;
-  moduleToEdit?: CohortModule;
-  existingModules?: CohortModule[];
+  selectedModule?: CohortModule;
+  unusedModules: Module[];
 }
 
 export default function AddModuleModal(props: AddModuleModalProps): JSX.Element {
-  const { onClose, onSave, moduleToEdit, existingModules } = props;
+  const { onClose, onSave, selectedModule, unusedModules } = props;
 
   const theme = useTheme();
 
-  const { modules } = useListModules();
-  const [record, setRecord, onChange] = useForm<CohortModule>(moduleToEdit || {});
+  const [record, , onChange] = useForm<Partial<CohortModule>>(selectedModule ?? {});
   const [validate, setValidate] = useState(false);
 
-  const onChangeModule = (moduleSelected: CohortModule) => {
-    setRecord((prev) => {
-      return { ...prev, id: moduleSelected.id, name: moduleSelected.name };
-    });
-  };
-
   const save = () => {
-    let someError = false;
-    if (!record.title || !record.id) {
-      someError = true;
-    }
-    if (record.endDate && record.startDate) {
-      const endDateDate = new Date(record.endDate);
-      const startDateDate = new Date(record.startDate);
-      if (endDateDate < startDateDate) {
-        someError = true;
-      }
-    }
-    if (someError) {
+    if (!record.title || !record.id || !record.endDate || !record.startDate) {
       setValidate(true);
       return;
     }
-    onSave(record);
+
+    const endDateDate = new Date(record.endDate);
+    const startDateDate = new Date(record.startDate);
+
+    if (endDateDate < startDateDate) {
+      setValidate(true);
+      return;
+    }
+
+    if (selectedModule) {
+      onSave({ ...selectedModule, ...record });
+    } else {
+      const module = unusedModules.find((module) => module.id === record.id);
+      if (module !== undefined) {
+        const today = Date.now();
+        const isActive = startDateDate.valueOf() <= today && today <= endDateDate.valueOf();
+        onSave({
+          ...module,
+          title: record.title,
+          startDate: record.startDate,
+          endDate: record.endDate,
+          isActive: isActive,
+        });
+      }
+    }
   };
 
-  const moduleOptions = useMemo(() => {
-    const existingModulesId = existingModules?.filter((exM) => exM.id !== record.id).map((eMod) => eMod.id);
-    const moduleIds = new Set();
-    const uniqueModulesList = modules?.filter(({ id }) => !moduleIds.has(id) && moduleIds.add(id));
-    return uniqueModulesList?.filter((mod) => !existingModulesId?.includes(mod.id));
-  }, [modules, existingModules, record.id]);
+  const dropdownOptions: DropdownItem[] = useMemo(() => {
+    const unusedOptions = unusedModules.map((module) => ({
+      label: `(${module.id}) ${module.name}`,
+      value: module.id,
+    }));
+
+    const selectedOption = selectedModule
+      ? [
+          {
+            label: `(${selectedModule.id}), ${selectedModule.name}`,
+            value: selectedModule.id,
+          },
+        ]
+      : [];
+
+    return [...unusedOptions, ...selectedOption].toSorted((a, b) => a.value - b.value);
+  }, [unusedModules, selectedModule]);
 
   return (
     <DialogBox
@@ -90,22 +106,16 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
           />
         </Grid>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
-          <SelectT<Module>
-            id='module'
+          <Autocomplete
             label={strings.MODULE}
-            placeholder={strings.SELECT}
-            options={moduleOptions}
-            onChange={(_module: Module) => {
-              onChangeModule(_module);
+            onChange={(option) => {
+              const dropdown = option as DropdownItem;
+              onChange('id', dropdown.value);
             }}
-            selectedValue={moduleOptions?.find((iModule) => iModule.id === record.id)}
-            fullWidth={true}
-            isEqual={(a: Module, b: Module) => a.id === b.id}
-            renderOption={(_module: Module) => _module?.name || ''}
-            displayLabel={(_module: Module) => _module?.name || ''}
-            toT={(name: string) => ({ name }) as Module}
+            options={dropdownOptions}
+            selected={dropdownOptions.find((option) => option.value === selectedModule?.id)}
             required
-            errorText={validate && !record.id ? strings.REQUIRED_FIELD : undefined}
+            disabled={selectedModule !== undefined}
           />
         </Grid>
         <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingRight: 1 }}>
@@ -117,6 +127,7 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
               onChange('startDate', value?.toFormat('yyyy-MM-dd'));
             }}
             aria-label='date-picker'
+            errorText={validate ? strings.INVALID_DATE : undefined}
           />
         </Grid>
         <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingLeft: 1 }}>

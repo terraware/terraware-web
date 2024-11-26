@@ -180,7 +180,7 @@ export default function PeopleListView(): JSX.Element {
         setCannotRemovePeopleModalOpened(true);
       } else {
         const selectedOwners = selectedPeopleRows.filter((selectedPerson) => selectedPerson.role === 'Owner');
-        if (selectedOwners.length > 0) {
+        if (selectedOwners.length > 0 && selectedOrganization.id !== -1) {
           const organizationRoles = await OrganizationService.getOrganizationRoles(selectedOrganization.id);
           const totalOwners = organizationRoles.roles?.find((role) => role.role === 'Owner');
           if (selectedOwners.length === totalOwners?.totalUsers) {
@@ -210,44 +210,46 @@ export default function PeopleListView(): JSX.Element {
   };
 
   const removePeopleHandler = async () => {
-    let assignNewOwnerResponse;
-    if (newOwner) {
-      assignNewOwnerResponse = await OrganizationUserService.updateOrganizationUser(
-        selectedOrganization.id,
-        newOwner.id,
-        'Owner'
-      );
-    }
-    const promises: Promise<Response>[] = [];
-    if ((assignNewOwnerResponse && assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {
-      selectedPeopleRows.forEach((person) => {
-        promises.push(OrganizationUserService.deleteOrganizationUser(selectedOrganization.id, person.id));
+    if (selectedOrganization.id !== -1) {
+      let assignNewOwnerResponse;
+      if (newOwner) {
+        assignNewOwnerResponse = await OrganizationUserService.updateOrganizationUser(
+          selectedOrganization.id,
+          newOwner.id,
+          'Owner'
+        );
+      }
+      const promises: Promise<Response>[] = [];
+      if ((assignNewOwnerResponse && assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {
+        selectedPeopleRows.forEach((person) => {
+          promises.push(OrganizationUserService.deleteOrganizationUser(selectedOrganization.id, person.id));
+        });
+      }
+      const leaveOrgResponses = await Promise.all(promises);
+      let allRemoved = true;
+
+      leaveOrgResponses.forEach((resp) => {
+        if (!resp.requestSucceeded) {
+          allRemoved = false;
+        }
       });
-    }
-    const leaveOrgResponses = await Promise.all(promises);
-    let allRemoved = true;
 
-    leaveOrgResponses.forEach((resp) => {
-      if (!resp.requestSucceeded) {
-        allRemoved = false;
+      if (allRemoved) {
+        setRemovePeopleModalOpened(false);
+        setSelectedPeopleRows([]);
+        if (reloadOrganizations) {
+          reloadOrganizations();
+        }
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
+      } else {
+        snackbar.toastError();
       }
-    });
-
-    if (allRemoved) {
-      setRemovePeopleModalOpened(false);
-      setSelectedPeopleRows([]);
-      if (reloadOrganizations) {
-        reloadOrganizations();
-      }
-      snackbar.toastSuccess(strings.CHANGES_SAVED);
-    } else {
-      snackbar.toastError();
+      navigate(APP_PATHS.PEOPLE);
     }
-    navigate(APP_PATHS.PEOPLE);
   };
 
   const deleteOrgHandler = async () => {
-    if (user) {
+    if (user && selectedOrganization.id !== -1) {
       let allRemoved = true;
       const keepOneOwnerId = selectedPeopleRows.filter((person) => person.role === 'Owner')[0].id.toString();
       const otherUsers = selectedPeopleRows.filter(

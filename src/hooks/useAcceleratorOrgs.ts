@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useLocalization } from 'src/providers';
 import { requestAcceleratorOrgs } from 'src/redux/features/accelerator/acceleratorAsyncThunks';
@@ -13,7 +13,20 @@ export type Response = {
   reload: () => void;
 };
 
-export const useAcceleratorOrgs = (includeParticipants?: boolean): Response => {
+// The default behavior, if no options are passed in with the props,
+//   is to get all organizations that have an "accelerator internal tag"
+//
+// The `includeParticipants` option will additionally contain organizations that have no internal tags,
+//   but do have a project that is associated to a participant
+//
+// The `hasProjectApplication` option will only return organizations that have no internal tags,
+//   but have a project that has an application submitted
+export const useAcceleratorOrgs = (props?: {
+  includeParticipants?: boolean;
+  hasProjectApplication?: boolean;
+}): Response => {
+  const { includeParticipants, hasProjectApplication } = props || {};
+
   const { activeLocale } = useLocalization();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
@@ -22,20 +35,21 @@ export const useAcceleratorOrgs = (includeParticipants?: boolean): Response => {
   const result = useAppSelector(selectAcceleratorOrgsRequest(requestId));
 
   useEffect(() => {
-    const request = dispatch(requestAcceleratorOrgs({ locale: activeLocale, includeParticipants }));
-    setRequestId(request.requestId);
-  }, [activeLocale, dispatch, includeParticipants]);
-
-  useEffect(() => {
     if (result?.status === 'error') {
       snackbar.toastError();
     }
   }, [result?.status, snackbar]);
 
-  const reload = () => {
-    const request = dispatch(requestAcceleratorOrgs({ locale: activeLocale, includeParticipants }));
+  const reload = useCallback(() => {
+    const request = dispatch(
+      requestAcceleratorOrgs({ locale: activeLocale, hasProjectApplication, includeParticipants })
+    );
     setRequestId(request.requestId);
-  };
+  }, [activeLocale, dispatch, hasProjectApplication, includeParticipants]);
+
+  useEffect(() => {
+    reload();
+  }, [reload]);
 
   return useMemo<Response>(
     () => ({

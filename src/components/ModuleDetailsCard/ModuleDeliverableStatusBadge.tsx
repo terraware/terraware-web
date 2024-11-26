@@ -24,7 +24,7 @@ const getStatusText = (status: DeliverableStatusTypeWithOverdue, showSimplifiedS
     case 'Not Needed':
       return strings.COMPLETED;
     case 'Rejected':
-      return strings.NOT_ACCEPTED;
+      return strings.UPDATE_NEEDED;
     case 'Overdue':
       return strings.OVERDUE;
     default:

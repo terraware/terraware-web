@@ -1,26 +1,21 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
 import strings from 'src/strings';
-import { ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
-import { CohortModule } from 'src/types/Module';
+import { CohortModule, Module, ModuleDeliverable } from 'src/types/Module';
 
 import AddModuleModal from './AddModuleModal';
 import CohortModulesCellRenderer from './CohortModulesCellRenderer';
 import ModuleDeliverablesModal from './ModuleDeliverablesModal';
 
 interface CohortModulesTableProps {
-  modules?: CohortModule[];
+  cohortModules: CohortModule[];
+  modules: Module[];
   editing?: boolean;
-  modulesToAdd?: CohortModule[];
-  setModulesToAdd?: React.Dispatch<React.SetStateAction<CohortModule[] | undefined>>;
-  modulesToDelete?: CohortModule[];
-  setModulesToDelete?: React.Dispatch<React.SetStateAction<CohortModule[] | undefined>>;
-  deliverablesByModuleId?: Record<number, ListDeliverablesElementWithOverdue[]>;
-  cohortId?: number;
+  setCohortModules?: React.Dispatch<React.SetStateAction<CohortModule[]>>;
 }
 
 const columns = (): TableColumnType[] => [
@@ -49,93 +44,41 @@ const viewColumns = (): TableColumnType[] => [
 ];
 
 export default function CohortModulesTable(props: CohortModulesTableProps): JSX.Element {
-  const {
-    modules,
-    editing,
-    modulesToAdd,
-    setModulesToAdd,
-    modulesToDelete,
-    setModulesToDelete,
-    deliverablesByModuleId,
-    cohortId,
-  } = props;
+  const { cohortModules, modules, editing, setCohortModules } = props;
   const theme = useTheme();
   const [addModuleModalOpened, setAddModuleModalOpened] = useState(false);
   const [deliverablesModalOpened, setDeliverablesModalOpened] = useState(false);
-  const [prevModules, setPrevModules] = useState<CohortModule[]>(modules || []);
   const [selectedRows, setSelectedRows] = useState<CohortModule[]>([]);
   const [moduleToEdit, setModuleToEdit] = useState<CohortModule>();
 
-  const areModulesEqual = (a: CohortModule, b: CohortModule) => {
-    if (a.title === b.title && a.name === b.name && a.startDate === b.startDate && a.endDate === b.endDate) {
-      return true;
-    }
-    return false;
-  };
+  const moduleDeliverables = useMemo(() => {
+    const record: Record<string, ModuleDeliverable[]> = {};
+    cohortModules.forEach((cohortModule) => {
+      const deliverables = modules.find((module) => cohortModule.id === module.id)?.deliverables ?? [];
+      record[cohortModule.id] = deliverables;
+    });
+    return record;
+  }, [cohortModules, modules]);
 
   const onAddCohortModule = (cohortModule: CohortModule) => {
-    if (setModulesToAdd) {
-      setModulesToAdd((prev) => {
-        if (prev) {
-          return [...prev, cohortModule];
-        } else {
-          return [cohortModule];
-        }
-      });
-    }
+    setCohortModules?.((prev) => [...prev, cohortModule]);
   };
 
   const onEditedCohortModule = (cohortModule: CohortModule) => {
-    if (setModulesToDelete && setModulesToAdd) {
-      // When editing a module, first we remove the old entrance and then we add it again
-      const modulesToAddIds = modulesToAdd?.map((mta) => mta.id);
-      if (modulesToAddIds?.includes(cohortModule.id)) {
-        const found = modulesToAdd?.find((moduleToAdd) => moduleToAdd.id === cohortModule.id);
-        if (!(found && areModulesEqual(found, cohortModule))) {
-          const newModulesToAdd = modulesToAdd?.filter((mtAdd) => mtAdd.id !== cohortModule.id);
-          newModulesToAdd?.push(cohortModule);
-          setModulesToAdd(newModulesToAdd);
-        }
-      } else {
-        const found = prevModules?.find((moduleToAdd) => moduleToAdd.id === cohortModule.id);
-        if (!(found && areModulesEqual(found, cohortModule))) {
-          setModulesToDelete((prev) => {
-            return prev && found ? [...prev, found] : [found || {}];
-          });
-          setModulesToAdd((prev) => {
-            if (prev) {
-              return [...prev, cohortModule];
-            } else {
-              return [cohortModule];
-            }
-          });
-        }
-      }
-    }
+    setCohortModules?.((prev) => {
+      // filter out updated cohortModule, then add edited cohortModule
+      const unchangedModules = prev.filter((existingModule) => existingModule.id !== cohortModule.id);
+      return [...unchangedModules, cohortModule];
+    });
   };
 
   const deleteModules = () => {
-    if (setModulesToDelete && setModulesToAdd) {
-      const selectedRowsIds = selectedRows.map((sr) => sr.id);
-      const modulesToAddIds = modulesToAdd?.map((mta) => mta.id);
-
-      const modulesToDelete = selectedRows.filter((sr) => !modulesToAddIds?.includes(sr.id));
-      setModulesToDelete((prev) => {
-        return prev ? [...prev, ...modulesToDelete] : modulesToDelete;
-      });
-
-      const newModulesToAdd = modulesToAdd?.filter((mtAdd) => !selectedRowsIds.includes(mtAdd.id));
-      setModulesToAdd(newModulesToAdd);
-
-      setSelectedRows([]);
-    }
+    setCohortModules?.((prev) =>
+      prev.filter(
+        (existingModule) => selectedRows.find((deletedModule) => deletedModule.id === existingModule.id) === undefined
+      )
+    );
   };
-
-  useEffect(() => {
-    if (modules) {
-      setPrevModules(modules);
-    }
-  }, [modules]);
 
   const onEditHandler = (clickedModule: CohortModule, fromColumn?: string) => {
     if (fromColumn === 'title') {
@@ -167,19 +110,11 @@ export default function CohortModulesTable(props: CohortModulesTableProps): JSX.
     setAddModuleModalOpened(false);
   };
 
-  const allModules = useMemo(() => {
-    const modulesToDeleteIds = modulesToDelete?.map((mtd) => mtd.id);
-    return prevModules.concat(modulesToAdd || []).filter((mod) => {
-      if (modulesToDeleteIds?.includes(mod.id)) {
-        const found = modulesToDelete?.find((m) => m.id === mod.id);
-        if (found) {
-          return !areModulesEqual(mod, found);
-        }
-      } else {
-        return true;
-      }
-    });
-  }, [prevModules, modulesToAdd, modulesToDelete]);
+  const unusedModules = useMemo(() => {
+    return modules.filter(
+      (module) => cohortModules.find((existingModule) => module.id === existingModule.id) === undefined
+    );
+  }, [cohortModules, modules]);
 
   return (
     <>
@@ -187,18 +122,17 @@ export default function CohortModulesTable(props: CohortModulesTableProps): JSX.
         <ModuleDeliverablesModal
           onClose={onCloseModalHandler}
           deliverables={
-            deliverablesByModuleId && moduleToEdit && moduleToEdit.id ? deliverablesByModuleId[moduleToEdit.id] : []
+            moduleDeliverables && moduleToEdit && moduleToEdit.id ? moduleDeliverables[moduleToEdit.id] : []
           }
           moduleToEdit={moduleToEdit}
-          cohortId={cohortId}
         />
       )}
       {addModuleModalOpened && (
         <AddModuleModal
           onClose={onCloseModalHandler}
           onSave={onModalSaveHandler}
-          moduleToEdit={moduleToEdit}
-          existingModules={allModules}
+          selectedModule={moduleToEdit}
+          unusedModules={unusedModules}
         />
       )}
       <Grid container spacing={3}>
@@ -231,7 +165,7 @@ export default function CohortModulesTable(props: CohortModulesTableProps): JSX.
             <Table
               id='modules-table'
               columns={editing ? columns : viewColumns}
-              rows={allModules}
+              rows={cohortModules}
               orderBy='startDate'
               showCheckbox={editing}
               showTopBar={editing}
