@@ -1,3 +1,5 @@
+ac5a95abda1 Update dependency @babel/traverse to v7.25.9 (#2815)
+20a0ad51bed Update Node.js to v20.18.1 (#1748)
 9752b1c1f6c SW-6252 Added question IDs to deliverable questions (#3360)
 10a7ecd0daa Update dependency react-redux to v9 (#1882)
 9cea0d78e2e Update dependency jwt-decode to v4 (#1758)
