@@ -1,9 +1,15 @@
-import { Box, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import React, { Box, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  button: {
+export type UndoRedoBoundaryControlProps = {
+  onRedo?: () => void;
+  onUndo?: () => void;
+};
+
+const UndoRedoBoundaryControl = ({ onRedo, onUndo }: UndoRedoBoundaryControlProps): JSX.Element => {
+  const theme = useTheme();
+
+  const buttonStyles = {
     background: theme.palette.TwClrBaseWhite,
     color: theme.palette.TwClrTxt,
     '&:hover': {
@@ -13,17 +19,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     '&:focus': {
       outline: 'none',
     },
-  },
-}));
-
-export type UndoRedoBoundaryControlProps = {
-  onRedo?: () => void;
-  onUndo?: () => void;
-};
-
-const UndoRedoBoundaryControl = ({ onRedo, onUndo }: UndoRedoBoundaryControlProps): JSX.Element => {
-  const classes = useStyles();
-  const theme = useTheme();
+  };
 
   return (
     <Box
@@ -39,9 +35,9 @@ const UndoRedoBoundaryControl = ({ onRedo, onUndo }: UndoRedoBoundaryControlProp
         alignItems: 'center',
       }}
     >
-      <Button className={classes.button} icon='iconUndo' onClick={() => onUndo?.()} disabled={!onUndo} />
+      <Button icon='iconUndo' onClick={() => onUndo?.()} disabled={!onUndo} style={buttonStyles} />
       <Box width='1px' height='20px' border={`1px solid ${theme.palette.TwClrBgTertiary}`} />
-      <Button className={classes.button} icon='iconRedo' onClick={() => onRedo?.()} disabled={!onRedo} />
+      <Button icon='iconRedo' onClick={() => onRedo?.()} disabled={!onRedo} style={buttonStyles} />
     </Box>
   );
 };

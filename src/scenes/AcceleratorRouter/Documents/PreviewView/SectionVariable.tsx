@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { SectionVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
   CombinedInjectedValue,
   ExistingVariableValueUnion,
@@ -11,18 +10,19 @@ import {
 import { PreviewImage, getSourceImageVariable } from './PreviewImage';
 import { PreviewTable, getSourceTableVariable } from './PreviewTable';
 import { getPrintValue } from './render';
+import { SectionVariableWithRelevantVariables } from './util';
 
 type SectionVariableProps = {
-  sectionVariable: SectionVariableWithValues & { relevantVariables: VariableWithValues[] };
+  sectionVariable: SectionVariableWithRelevantVariables;
   sectionVariableValue: VariableValueValue;
-  docId: number;
+  projectId: number;
   suppressCaptions?: boolean;
 };
 
 const SectionVariable = ({
   sectionVariable,
   sectionVariableValue,
-  docId,
+  projectId,
   suppressCaptions,
 }: SectionVariableProps): React.ReactElement => {
   const injectedValue = sectionVariable.variableValues.find(
@@ -51,7 +51,7 @@ const SectionVariable = ({
   if (sourceImageVariable) {
     return (
       <PreviewImage
-        docId={docId}
+        projectId={projectId}
         combinedInjectedValue={combinedInjectedValue}
         sectionVariable={sectionVariable}
         sourceImageVariable={sourceImageVariable}

@@ -28,22 +28,23 @@ export default function SpeciesTests() {
 
     await page.locator('#commonName').getByRole('textbox').click();
     await page.locator('#commonName').getByRole('textbox').fill('Koa');
-    await page.locator('#growthForm').getByPlaceholder('Select...').click();
+
+    await page.locator('#growthForms').getByText('Select...').click();
     await page
       .locator('li')
       .filter({ hasText: /^Tree$/ })
       .click();
+    await page.getByRole('heading', { name: 'Add Species' }).click();
+
     await page.locator('#seedStorageBehavior').getByPlaceholder('Select...').click();
     await page
       .locator('li')
       .filter({ hasText: /^Orthodox$/ })
       .click();
-    await page
-      .locator('div')
-      .filter({ hasText: /^Select\.\.\.$/ })
-      .nth(1)
-      .click();
-    await page.getByText('Tropical and subtropical dry').click();
+
+    await page.locator('#ecosystemTypes').getByText('Select...').click();
+    await page.locator('li').getByText('Tropical and subtropical dry').click();
+
     await page.getByRole('button', { name: 'Save' }).click();
 
     await expect(page.getByRole('main')).toContainText(`Scientific Name${newSpeciesName}`);

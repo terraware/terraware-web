@@ -1,20 +1,20 @@
-import {
-  SectionVariableWithValues,
-  Variable,
-  VariableUnion,
-  VariableWithValues,
-} from 'src/types/documentProducer/Variable';
+import { SectionVariableWithValues, VariableUnion, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { CombinedInjectedValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
 import { memoize } from 'src/utils/memoize';
+
+export type SectionVariableWithRelevantVariables = SectionVariableWithValues & {
+  relevantVariables: VariableWithValues[];
+};
 
 export const getSourceVariable = memoize(
   (
     combinedInjectedValue: CombinedInjectedValue,
-    sectionVariable: SectionVariableWithValues
-  ): VariableUnion | undefined =>
-    (sectionVariable.variableValueVariables || ([] as VariableUnion[])).find(
-      (variable: Variable) => variable.id === combinedInjectedValue.variableId
-    )
+    sectionVariable: SectionVariableWithRelevantVariables
+  ): VariableUnion | undefined => {
+    return sectionVariable.relevantVariables.find(
+      (variable: VariableWithValues) => variable.id === combinedInjectedValue.variableId
+    );
+  }
 );
 
 const variableInSectionHierarchy = (

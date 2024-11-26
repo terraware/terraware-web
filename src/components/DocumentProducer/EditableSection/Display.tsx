@@ -1,55 +1,67 @@
 import React from 'react';
 
-import { Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Typography } from '@mui/material';
 
 import { VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValueValue } from 'src/types/documentProducer/VariableValue';
 
 import DisplayVariableValue from './DisplayVariableValue';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  sectionText: {
-    fontSize: '16px',
-  },
-}));
-
 export type EditableSectionDisplayProps = {
-  docId: number;
-  sectionValues?: VariableValueValue[];
   allVariables: VariableWithValues[];
+  projectId: number;
+  onEditVariableValue: (variable?: VariableWithValues) => void;
+  sectionValues?: VariableValueValue[];
 };
 
 const EditableSectionDisplay = ({
-  docId,
-  sectionValues,
   allVariables,
+  projectId,
+  onEditVariableValue,
+  sectionValues,
 }: EditableSectionDisplayProps): React.ReactElement | null => {
   return sectionValues ? (
     <Typography fontSize='14px' fontWeight={400}>
       {sectionValues.map((v, index) => (
-        <SectionValue key={index} pddId={docId} value={v} allVariables={allVariables} />
+        <SectionValue
+          allVariables={allVariables}
+          projectId={projectId}
+          key={index}
+          onEditVariableValue={onEditVariableValue}
+          value={v}
+        />
       ))}
     </Typography>
   ) : null;
 };
 
 type SectionValueProps = {
-  pddId: number;
-  value: VariableValueValue;
   allVariables: VariableWithValues[];
+  projectId: number;
+  onEditVariableValue: (variable?: VariableWithValues) => void;
+  value: VariableValueValue;
 };
 
-const SectionValue = ({ pddId, value, allVariables }: SectionValueProps): React.ReactElement | null => {
-  const classes = useStyles();
-
+const SectionValue = ({
+  allVariables,
+  projectId,
+  onEditVariableValue,
+  value,
+}: SectionValueProps): React.ReactElement | null => {
   switch (value.type) {
     case 'SectionText':
-      return <span className={classes.sectionText}>{value.textValue}</span>;
+      return <span style={{ fontSize: '16px', whiteSpace: 'pre-wrap' }}>{value.textValue}</span>;
     case 'SectionVariable':
       const reference = value.usageType === 'Reference';
       const variable = allVariables.find((v) => v.id === value.variableId);
-      return variable ? <DisplayVariableValue docId={pddId} variable={variable} reference={reference} /> : null;
+      return variable ? (
+        <DisplayVariableValue
+          projectId={projectId}
+          onEditVariableValue={onEditVariableValue}
+          reference={reference}
+          variable={variable}
+        />
+      ) : null;
     default:
       return null;
   }

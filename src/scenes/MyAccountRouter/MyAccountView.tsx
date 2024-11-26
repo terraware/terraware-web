@@ -1,29 +1,24 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { CSSProperties, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
 
 import RegionSelector from 'src/components/RegionSelector';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import WeightSystemSelector from 'src/components/WeightSystemSelector';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import TextWithLink from 'src/components/common/TextWithLink';
 import TfMain from 'src/components/common/TfMain';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useDocLinks } from 'src/docLinks';
 import { useLocalization, useUser } from 'src/providers';
 import { useTimeZones } from 'src/providers';
-import {
-  LocationService,
-  OrganizationService,
-  OrganizationUserService,
-  PreferencesService,
-  UserService,
-} from 'src/services';
+import { OrganizationService, OrganizationUserService, PreferencesService, UserService } from 'src/services';
 import strings from 'src/strings';
 import { findLocaleDetails, useSupportedLocales } from 'src/strings/locales';
-import { Country } from 'src/types/Country';
 import { Organization, roleName } from 'src/types/Organization';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { OrganizationUser, User } from 'src/types/User';
@@ -47,8 +42,10 @@ import DeleteOrgDialog from './DeleteOrgModal';
 import LeaveOrganizationDialog from './LeaveOrganizationModal';
 
 type MyAccountProps = {
-  organizations?: Organization[];
+  className?: string;
   edit: boolean;
+  hasNav?: boolean;
+  organizations?: Organization[];
   reloadData?: () => void;
 };
 
@@ -63,11 +60,13 @@ export default function MyAccountView(props: MyAccountProps): JSX.Element | null
 }
 
 type MyAccountContentProps = {
-  user: User;
-  organizations?: Organization[];
+  style?: CSSProperties;
   edit: boolean;
-  reloadUser: () => void;
+  hasNav?: boolean;
+  organizations?: Organization[];
   reloadData?: () => void;
+  reloadUser: () => void;
+  user: User;
 };
 
 /**
@@ -92,18 +91,20 @@ const columns = (): TableColumnType[] => [
 ];
 
 const MyAccountContent = ({
-  user,
-  organizations,
+  style,
   edit,
-  reloadUser,
+  hasNav,
+  organizations,
   reloadData,
+  reloadUser,
+  user,
 }: MyAccountContentProps): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const supportedLocales = useSupportedLocales();
   const theme = useTheme();
   const [selectedRows, setSelectedRows] = useState<PersonOrganization[]>([]);
   const [personOrganizations, setPersonOrganizations] = useState<PersonOrganization[]>([]);
-  const history = useHistory();
+  const navigate = useNavigate();
   const [record, setRecord, onChange] = useForm<User>(user);
   const [openDeleteAccountModal, setOpenDeleteAccountModal] = useState<boolean>(false);
   const [removedOrg, setRemovedOrg] = useState<Organization>();
@@ -115,9 +116,9 @@ const MyAccountContent = ({
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
   const { userPreferences, reloadUserPreferences } = useUser();
   const snackbar = useSnackbar();
+  const docLinks = useDocLinks();
   const contentRef = useRef(null);
-  const { activeLocale, selectedLocale, setSelectedLocale } = useLocalization();
-  const [countries, setCountries] = useState<Country[]>();
+  const { countries, selectedLocale, setSelectedLocale } = useLocalization();
   const timeZones = useTimeZones();
   const tz = timeZones.find((timeZone) => timeZone.id === record.timeZone) || getUTC(timeZones);
   const [preferredWeightSystemSelected, setPreferredWeightSystemSelected] = useState(
@@ -150,19 +151,6 @@ const MyAccountContent = ({
       setCountryCodeSelected(user.countryCode);
     }
   }, [user, setRecord, countryCodeSelected, setCountryCodeSelected]);
-
-  useEffect(() => {
-    if (activeLocale) {
-      const populateCountries = async () => {
-        const response = await LocationService.getCountries();
-        if (response) {
-          setCountries(response);
-        }
-      };
-
-      populateCountries();
-    }
-  }, [activeLocale]);
 
   useEffect(() => {
     const populatePeople = async () => {
@@ -199,7 +187,8 @@ const MyAccountContent = ({
     setPreferredWeightSystemSelected((userPreferences?.preferredWeightSystem as string) || 'metric');
     setLocaleSelected(selectedLocale);
     setSelectedRows([]);
-    history.push(APP_PATHS.MY_ACCOUNT);
+    onChange('cookiesConsented', user.cookiesConsented);
+    navigate(APP_PATHS.MY_ACCOUNT);
   };
 
   const saveChanges = async () => {
@@ -234,7 +223,7 @@ const MyAccountContent = ({
         setSelectedLocale(lastLocale);
         snackbar.toastError();
       }
-      history.push(APP_PATHS.MY_ACCOUNT);
+      navigate(APP_PATHS.MY_ACCOUNT);
     }
   };
 
@@ -282,7 +271,7 @@ const MyAccountContent = ({
       snackbar.toastError();
     }
     setLeaveOrganizationModalOpened(false);
-    history.push(APP_PATHS.MY_ACCOUNT);
+    navigate(APP_PATHS.MY_ACCOUNT);
   };
 
   const deleteOrgHandler = async () => {
@@ -298,7 +287,7 @@ const MyAccountContent = ({
       } else {
         snackbar.toastError();
       }
-      history.push(APP_PATHS.HOME);
+      navigate(APP_PATHS.HOME);
     }
   };
 
@@ -320,7 +309,7 @@ const MyAccountContent = ({
   };
 
   return (
-    <TfMain>
+    <TfMain style={style}>
       <PageForm
         cancelID='cancelAccountChange'
         saveID='saveAccountChange'
@@ -357,12 +346,12 @@ const MyAccountContent = ({
             />
           </>
         )}
-        <PageHeaderWrapper nextElement={contentRef.current}>
+        <PageHeaderWrapper nextElement={contentRef.current} hasNav={hasNav}>
           <Box
             display='flex'
             justifyContent='space-between'
             marginBottom={theme.spacing(4)}
-            paddingLeft={theme.spacing(3)}
+            padding={hasNav === false ? theme.spacing(0, 5) : theme.spacing(0, 0, 0, 3)}
             marginTop={organizations && organizations.length > 0 ? 0 : theme.spacing(12)}
           >
             <TitleDescription title={strings.MY_ACCOUNT} description={strings.MY_ACCOUNT_DESC} style={{ padding: 0 }} />
@@ -373,7 +362,7 @@ const MyAccountContent = ({
                   id='edit-account'
                   icon='iconEdit'
                   label={isMobile ? '' : strings.EDIT_ACCOUNT}
-                  onClick={() => history.push(APP_PATHS.MY_ACCOUNT_EDIT)}
+                  onClick={() => navigate(APP_PATHS.MY_ACCOUNT_EDIT)}
                   size='medium'
                   priority='primary'
                 />
@@ -389,8 +378,9 @@ const MyAccountContent = ({
           ref={contentRef}
           sx={{
             backgroundColor: theme.palette.TwClrBg,
-            padding: theme.spacing(3),
             borderRadius: '32px',
+            margin: theme.spacing(0, hasNav === false ? 4 : 0),
+            padding: theme.spacing(3),
           }}
         >
           <Box sx={isMobile ? { width: 'calc(100vw - 72px)' } : {}}>
@@ -534,6 +524,33 @@ const MyAccountContent = ({
                   value={record.emailNotificationsEnabled}
                   onChange={(value) => onChange('emailNotificationsEnabled', value)}
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
+                  {strings.COOKIES}
+                </Typography>
+                <RadioGroup
+                  name='radio-buttons-cookies-consent'
+                  onChange={(_event, value) => onChange('cookiesConsented', value === 'true' ? true : false)}
+                  value={record.cookiesConsented}
+                >
+                  <Grid item xs={12} textAlign='left' display='flex' flexDirection='row'>
+                    <FormControlLabel
+                      control={<Radio />}
+                      disabled={!edit}
+                      label={strings.COOKIES_ACCEPT}
+                      value={true}
+                    />
+                    <FormControlLabel
+                      control={<Radio />}
+                      disabled={!edit}
+                      label={strings.COOKIES_DECLINE}
+                      value={false}
+                    />
+                  </Grid>
+                </RadioGroup>
+                <Typography>{strings.COOKIES_DESCRIPTION}</Typography>
+                <TextWithLink href={docLinks.cookie_policy} isExternal text={strings.COOKIES_LEARN_MORE} />
               </Grid>
             </Grid>
           </Box>

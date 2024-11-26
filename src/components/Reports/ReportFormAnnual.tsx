@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 
-import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox, Textfield } from '@terraware/web-components';
 
 import { REPORT_FILE_ENDPOINT } from 'src/services/ReportService';
@@ -13,34 +12,11 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import useSDGProgress from './useSDGProgress';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  hiddenInput: {
-    display: 'none',
+const quarterPageStyles = {
+  '& textarea': {
+    minHeight: '240px',
   },
-  noDisplayTextField: {
-    '& .textfield-value--display': {
-      display: 'none',
-    },
-    '& .textfield-label-container': {
-      marginTop: theme.spacing(1),
-    },
-  },
-  quarterPage: {
-    '& textarea': {
-      minHeight: '240px',
-    },
-  },
-  halfPage: {
-    '& textarea': {
-      minHeight: '480px',
-    },
-  },
-  fullPage: {
-    '& textarea': {
-      minHeight: '720px',
-    },
-  },
-}));
+};
 
 export type ReportFormAnnualProps = {
   editable: boolean;
@@ -64,7 +40,6 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
     onExistingFilesChanged,
     validate,
   } = props;
-  const classes = useStyles();
   const theme = useTheme();
   const { isMobile, isTablet } = useDeviceInfo();
 
@@ -258,12 +233,19 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           type='text'
           display={true}
           preserveNewlines={true}
-          className={classes.noDisplayTextField}
           errorText={
             validate && (report.annualDetails?.bestMonthsForObservation?.length ?? 0) === 0
               ? strings.BEST_MONTHS_FOR_OBSERVATIONS_VALIDATION_ERROR
               : ''
           }
+          sx={{
+            '& .textfield-value--display': {
+              display: 'none',
+            },
+            '& .textfield-label-container': {
+              marginTop: theme.spacing(1),
+            },
+          }}
         />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
@@ -283,8 +265,8 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
             validate && !report.annualDetails?.projectSummary
               ? strings.REQUIRED_FIELD
               : validate && overWordLimit(projectSummary, 100)
-              ? strings.OVER_WORD_LIMIT
-              : ''
+                ? strings.OVER_WORD_LIMIT
+                : ''
           }
         />
         {editable && (
@@ -333,7 +315,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
         />
       </Grid>
       <Grid item xs={12} ref={divRef}>
-        <input type='file' ref={inputRef} className={classes.hiddenInput} value='' onChange={onFileChosen} />
+        <input type='file' ref={inputRef} value='' onChange={onFileChosen} style={{ display: 'none' }} />
         <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
           {strings.BUDGET_DOCUMENT_XLS}
         </Typography>
@@ -510,7 +492,6 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           <Textfield
             id={`catalytic-detail`}
             type='textarea'
-            className={classes.quarterPage}
             label={strings.CATALYTIC_DETAIL_INSTRUCTIONS}
             display={!editable}
             preserveNewlines={true}
@@ -526,6 +507,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
                 ? strings.REQUIRED_FIELD
                 : ''
             }
+            sx={quarterPageStyles}
           />
         </Grid>
       )}
@@ -581,7 +563,7 @@ type ReportFieldProps = {
 function ReportField(props: ReportFieldProps): JSX.Element {
   const { id, title, instructions, editable, value, onChange, errorText, pageSize } = props;
   const theme = useTheme();
-  const classes = useStyles();
+
   return (
     <>
       <Typography id={id} fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1)}>
@@ -596,15 +578,19 @@ function ReportField(props: ReportFieldProps): JSX.Element {
         onChange={(v) => onChange(v as string)}
         value={value}
         errorText={errorText}
-        className={
-          pageSize === 'quarter'
-            ? classes.quarterPage
-            : pageSize === 'half'
-            ? classes.halfPage
-            : pageSize === 'full'
-            ? classes.fullPage
-            : ''
-        }
+        sx={[
+          pageSize === 'quarter' && quarterPageStyles,
+          pageSize === 'half' && {
+            '& textarea': {
+              minHeight: '480px',
+            },
+          },
+          pageSize === 'full' && {
+            '& textarea': {
+              minHeight: '720px',
+            },
+          },
+        ]}
       />
     </>
   );

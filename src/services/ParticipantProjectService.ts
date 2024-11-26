@@ -49,6 +49,7 @@ const getSearchParams = (search?: SearchNodePayload, sortOrder?: SearchSortOrder
       'participant_cohort_id',
       'participant_cohort_name',
       'participant_cohort_phase',
+      'acceleratorDetails_fileNaming',
       'country_name',
       'country_region',
       'acceleratorDetails_confirmedReforestableLand',
@@ -81,6 +82,7 @@ const download = async ({
   projectId: number;
   projectMeta?: ProjectMeta;
   organization?: AcceleratorOrg;
+  // eslint-disable-next-line @typescript-eslint/require-await
 }): Promise<string | null> => {
   const exportData = new Map<string, string | number | null | undefined>([
     [strings.ORGANIZATION_NAME, organization?.name],
@@ -143,6 +145,7 @@ const list = async (
       participant_cohort_id,
       participant_cohort_name,
       participant_cohort_phase,
+      acceleratorDetails_fileNaming,
       country_name,
       country_region,
       acceleratorDetails_confirmedReforestableLand,
@@ -162,6 +165,7 @@ const list = async (
       participant_cohort_id: Number(participant_cohort_id),
       participant_cohort_name,
       participant_cohort_phase,
+      acceleratorDetails_fileNaming,
       participant_name,
     } as ParticipantProjectSearchResult;
   });
@@ -172,7 +176,7 @@ const update = async (participantProject: ParticipantProject): Promise<Response>
 
   return httpParticipantProject.put2<UpdateProjectAcceleratorDetailsResponsePayload>({
     urlReplacements: {
-      '{projectId}': `${participantProject.projectId}`,
+      '{projectId}': `${projectId}`,
     },
     entity: payload as UpdateProjectAcceleratorDetailsRequestPayload,
   });

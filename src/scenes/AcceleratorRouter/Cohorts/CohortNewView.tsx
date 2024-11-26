@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
@@ -12,7 +12,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import CohortForm from './CohortForm';
 
 export default function CohortNewView(): JSX.Element {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isBusy, setIsBusy] = useState<boolean>(false);
   const snackbar = useSnackbar();
 
@@ -22,14 +22,14 @@ export default function CohortNewView(): JSX.Element {
   });
 
   const goToCohortsList = useCallback(() => {
-    history.push({ pathname: APP_PATHS.ACCELERATOR_COHORTS });
-  }, [history]);
+    navigate({ pathname: APP_PATHS.ACCELERATOR_COHORTS });
+  }, [navigate]);
 
   const goToCohortView = useCallback(
     (cohortId: number) => {
-      history.push({ pathname: APP_PATHS.ACCELERATOR_COHORTS_VIEW.replace(':cohortId', `${cohortId}`) });
+      navigate({ pathname: APP_PATHS.ACCELERATOR_COHORTS_VIEW.replace(':cohortId', `${cohortId}`) });
     },
-    [history]
+    [navigate]
   );
 
   const createNewCohort = useCallback(
@@ -72,9 +72,9 @@ export default function CohortNewView(): JSX.Element {
     <Page title={strings.ADD_COHORT} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
       <CohortForm<CreateCohortRequestPayload>
         busy={isBusy}
-        cohort={record}
         onCancel={goToCohortsList}
         onSave={onCohortSaved}
+        record={record}
       />
     </Page>
   );

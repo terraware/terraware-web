@@ -1,16 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Box, Container, Grid, List, ListItem, Tab, Typography, useTheme } from '@mui/material';
-import { Message, TableColumnType } from '@terraware/web-components';
+import { Box, Container, Grid, List, ListItem, Typography, useTheme } from '@mui/material';
+import { Message, TableColumnType, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PageHeader from 'src/components/PageHeader';
 import PreSetupView from 'src/components/Reports/PreSetupView';
 import ReportLink from 'src/components/Reports/ReportLink';
 import ReportsCellRenderer from 'src/components/Reports/TableCellRenderer';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
@@ -22,7 +20,6 @@ import ReportService from 'src/services/ReportService';
 import strings from 'src/strings';
 import { ListReport } from 'src/types/Report';
 
-import Card from '../common/Card';
 import ReportSettingsEditFormFields from './ReportSettingsEditFormFields';
 
 const columns = (): TableColumnType[] => [
@@ -48,92 +45,54 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const reportsSettings = useAppSelector(selectReportsSettings);
 
-  const [selectedTab, setSelectedTab] = useState(tab);
+  const [activeTab, setActiveTab] = useState<string>(tab);
   const [results, setResults] = useState<(ListReport & { organizationName?: string })[]>([]);
 
-  useEffect(() => {
-    void dispatch(requestReportsSettings(selectedOrganization.id));
-  }, [dispatch, selectedOrganization.id]);
+  const onTabChange = useCallback(
+    (newTab: string) => {
+      setActiveTab(newTab);
 
-  useEffect(() => {
-    const refreshSearch = async () => {
-      const reportsResults = await ReportService.getReports(selectedOrganization.id);
-      setResults(
-        (reportsResults.reports || []).map((report) => {
-          if (report.projectName) {
-            return report;
-          }
-          // Reports without a project name are for the organization
-          return { ...report, organizationName: selectedOrganization.name };
-        })
-      );
-    };
-
-    void refreshSearch();
-  }, [selectedOrganization.id, selectedOrganization.name]);
-
-  const handleTabChange = useCallback(
-    (newValue: string) => {
-      switch (newValue) {
+      switch (newTab) {
         case 'reports': {
-          history.push(APP_PATHS.REPORTS);
+          navigate(APP_PATHS.REPORTS);
           break;
         }
         case 'settings': {
-          history.push(APP_PATHS.REPORTS_SETTINGS);
+          navigate(APP_PATHS.REPORTS_SETTINGS);
         }
       }
-
-      setSelectedTab(newValue as ReportsViewTabs);
     },
-    [history]
+    [navigate]
   );
 
-  const tabHeaderProps = useMemo(
-    () => ({
-      borderBottom: 1,
-      borderColor: 'divider',
-      margin: isMobile ? 0 : theme.spacing(0, 4),
-    }),
-    [isMobile, theme]
-  );
+  useEffect(() => {
+    if (selectedOrganization.id !== -1) {
+      void dispatch(requestReportsSettings(selectedOrganization.id));
+    }
+  }, [dispatch, selectedOrganization.id]);
 
-  const tabPanelProps = useMemo(
-    () => ({
-      borderRadius: isMobile ? '0 0 16px 16px' : '32px',
-      backgroundColor: theme.palette.TwClrBg,
-    }),
-    [isMobile, theme]
-  );
+  useEffect(() => {
+    if (selectedOrganization.id !== -1) {
+      const refreshSearch = async () => {
+        const reportsResults = await ReportService.getReports(selectedOrganization.id);
+        setResults(
+          (reportsResults.reports || []).map((report) => {
+            if (report.projectName) {
+              return report;
+            }
+            // Reports without a project name are for the organization
+            return { ...report, organizationName: selectedOrganization.name };
+          })
+        );
+      };
 
-  const tabStyles = useMemo(
-    () => ({
-      fontSize: '14px',
-      padding: theme.spacing(1, 2),
-      minHeight: theme.spacing(4.5),
-      textTransform: 'capitalize',
-      '&.Mui-selected': {
-        color: theme.palette.TwClrTxtBrand as string,
-        fontWeight: 500,
-      },
-    }),
-    [theme]
-  );
-
-  const tabIndicatorProps = useMemo(
-    () => ({
-      style: {
-        background: theme.palette.TwClrBgBrand,
-        height: '4px',
-        borderRadius: '4px 4px 0 0',
-      },
-    }),
-    [theme]
-  );
+      void refreshSearch();
+    }
+  }, [selectedOrganization.id, selectedOrganization.name]);
 
   const reportsToComplete = useMemo(() => results.filter((report) => report.status !== 'Submitted'), [results]);
 
@@ -170,50 +129,63 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
         </Box>
       )}
 
-      <TabContext value={selectedTab}>
-        <Box sx={tabHeaderProps}>
-          <TabList
-            sx={{ minHeight: theme.spacing(4.5) }}
-            onChange={(unused, value) => handleTabChange(value)}
-            TabIndicatorProps={tabIndicatorProps}
-          >
-            <Tab label={strings.REPORTS} value='reports' sx={tabStyles} />
-            <Tab label={strings.SETTINGS} value='settings' sx={tabStyles} />
-          </TabList>
-        </Box>
-        <Card flushMobile>
-          <TabPanel value='reports' sx={tabPanelProps}>
-            <Grid container>
-              <PageHeaderWrapper nextElement={contentRef.current}>
-                <Grid item xs={12} sx={{ paddingLeft: 3, marginBottom: 4 }}>
-                  <Typography sx={{ fontSize: '24px', fontWeight: 600 }}>{strings.REPORTS}</Typography>
-                </Grid>
-              </PageHeaderWrapper>
-              <Container
-                ref={contentRef}
-                maxWidth={false}
-                sx={{ padding: 3, borderRadius: 4, backgroundColor: theme.palette.TwClrBaseWhite }}
+      <Tabs
+        activeTab={activeTab}
+        onTabChange={onTabChange}
+        tabs={[
+          {
+            id: 'reports',
+            label: strings.REPORTS,
+            children: (
+              <Grid
+                container
+                width={'100%'}
+                sx={{
+                  backgroundColor: theme.palette.TwClrBg,
+                  borderRadius: isMobile ? '0 0 16px 16px' : '32px',
+                  paddingTop: theme.spacing(4),
+                }}
               >
-                <Grid item xs={12}>
-                  <Table
-                    id='reports-table'
-                    columns={columns}
-                    rows={results}
-                    orderBy='name'
-                    Renderer={ReportsCellRenderer}
-                  />
+                <Grid item xs={12} sx={{ paddingLeft: 4 }}>
+                  <Typography variant={'h5'} sx={{ fontWeight: 600 }}>
+                    {strings.REPORTS}
+                  </Typography>
                 </Grid>
-              </Container>
-            </Grid>
-          </TabPanel>
-
-          <TabPanel value='settings' sx={tabPanelProps}>
-            <Grid container width={'100%'} sx={{ padding: '0' }}>
-              {reportsSettings && <ReportSettingsEditFormFields reportsSettings={reportsSettings} isEditing={false} />}
-            </Grid>
-          </TabPanel>
-        </Card>
-      </TabContext>
+                <Container ref={contentRef} maxWidth={false}>
+                  <Grid item xs={12}>
+                    <Table
+                      id='reports-table'
+                      columns={columns}
+                      rows={results}
+                      orderBy='name'
+                      Renderer={ReportsCellRenderer}
+                    />
+                  </Grid>
+                </Container>
+              </Grid>
+            ),
+          },
+          {
+            id: 'settings',
+            label: strings.SETTINGS,
+            children: (
+              <Grid
+                container
+                width={'100%'}
+                sx={{
+                  backgroundColor: theme.palette.TwClrBg,
+                  borderRadius: isMobile ? '0 0 16px 16px' : '32px',
+                  padding: theme.spacing(4),
+                }}
+              >
+                {reportsSettings && (
+                  <ReportSettingsEditFormFields reportsSettings={reportsSettings} isEditing={false} />
+                )}
+              </Grid>
+            ),
+          },
+        ]}
+      />
     </TfMain>
   );
 }

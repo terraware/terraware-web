@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Grid, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import { Button, Textfield } from '@terraware/web-components';
+import { Box, Grid, useTheme } from '@mui/material';
+import { Button, DropdownItem, Textfield } from '@terraware/web-components';
 
 import PageDialog from 'src/components/DocumentProducer/PageDialog';
+import VariableWorkflowDetails from 'src/components/DocumentProducer/VariableWorkflowDetails';
+import OptionsMenu from 'src/components/common/OptionsMenu';
+import { useLocalization } from 'src/providers';
 import {
   selectUpdateVariableValues,
   selectUploadImageValue,
@@ -13,55 +15,85 @@ import {
   requestUpdateVariableValues,
   requestUploadImageValue,
 } from 'src/redux/features/documentProducer/values/valuesThunks';
+import { selectUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesSelector';
+import { requestUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ImageVariableWithValues } from 'src/types/documentProducer/Variable';
+import { ImageVariableWithValues, UpdateVariableWorkflowDetailsPayload } from 'src/types/documentProducer/Variable';
 import {
   DeleteVariableValueOperation,
   Operation,
   UpdateVariableValueOperation,
+  VariableValue,
   VariableValueImageValue,
 } from 'src/types/documentProducer/VariableValue';
 import { getImagePath } from 'src/utils/images';
 
 import PhotoSelector, { PhotoWithAttributes } from './PhotoSelector';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  removePhoto: {
-    position: 'absolute',
-    top: -10,
-    right: -10,
-    backgroundColor: theme.palette.TwClrBgDanger,
-  },
-  thumbnail: {
-    margin: 'auto auto',
-    objectFit: 'contain',
-    display: 'flex',
-    maxWidth: '120px',
-    maxHeight: '120px',
-  },
-}));
-
 export type EditImagesModalProps = {
+  display?: boolean;
   variable: ImageVariableWithValues;
-  onFinish: () => void;
+  onFinish: (edited: boolean) => void;
   onCancel: () => void;
-  docId: number;
+  projectId: number;
+  setUpdateWorkflowRequestId?: (requestId: string) => void;
+  showVariableHistory: () => void;
 };
 
 const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
-  const { variable, onFinish, onCancel, docId } = props;
+  const {
+    display: displayProp = false,
+    variable,
+    onFinish,
+    onCancel,
+    projectId,
+    setUpdateWorkflowRequestId,
+    showVariableHistory,
+  } = props;
+  const activeLocale = useLocalization();
   const theme = useTheme();
-  const classes = useStyles();
   const [imagesCopy, setImagesCopy] = useState(variable.values);
   const [deletedImages, setDeletedImages] = useState<VariableValueImageValue[]>();
   const [newImages, setNewImages] = useState<PhotoWithAttributes[]>();
   const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState<string>('');
-  const [uploadRequestId, setUploadRequestId] = useState<string>('');
+  const [updateVariableValueRequestId, setUpdateVariableValueRequestId] = useState<string>('');
+  const [uploadImageRequestId, setUploadImageRequestId] = useState<string>('');
+  const [display, setDisplay] = useState<boolean>(displayProp);
 
-  const selector = useAppSelector(selectUpdateVariableValues(requestId));
-  const uploadSelector = useAppSelector(selectUploadImageValue(uploadRequestId));
+  const updateVariableValuesRequest = useAppSelector(selectUpdateVariableValues(updateVariableValueRequestId));
+  const uploadImageRequest = useAppSelector(selectUploadImageValue(uploadImageRequestId));
+
+  const [updateVariableWorkflowDetailsRequestId, setUpdateVariableWorkflowDetailsRequestId] = useState<string>('');
+  const updateVariableWorkflowDetailsRequest = useAppSelector(
+    selectUpdateVariableWorkflowDetails(updateVariableWorkflowDetailsRequestId)
+  );
+
+  const variableValue: VariableValue | undefined = (variable?.variableValues || []).find(
+    (value) => value.variableId === variable.id
+  );
+
+  const [variableWorkflowDetails, setVariableWorkflowDetails] = useState<UpdateVariableWorkflowDetailsPayload>({
+    feedback: variableValue?.feedback,
+    internalComment: variableValue?.internalComment,
+    status: variableValue?.status || 'Not Submitted',
+  });
+
+  useEffect(() => {
+    if (updateVariableValuesRequest?.status === 'success' && !updateVariableWorkflowDetailsRequestId) {
+      const request = dispatch(
+        requestUpdateVariableWorkflowDetails({
+          feedback: variableWorkflowDetails?.feedback,
+          internalComment: variableWorkflowDetails?.internalComment,
+          projectId,
+          status: variableWorkflowDetails.status,
+          variableId: variable.id,
+        })
+      );
+      setUpdateVariableWorkflowDetailsRequestId(request.requestId);
+      setUpdateWorkflowRequestId?.(request.requestId);
+    }
+  }, [updateVariableValuesRequest, updateVariableWorkflowDetailsRequestId, variableWorkflowDetails]);
 
   const handleSave = () => {
     // update old images
@@ -76,7 +108,7 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
       return operation;
     });
 
-    // upload new imagess
+    // upload new images
     if (newImages) {
       newImages.forEach((newImage, index) => {
         const upRequest = dispatch(
@@ -85,13 +117,13 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
             file: newImage.file,
             caption: newImage.caption,
             citation: newImage.citation,
-            docId,
+            projectId,
           })
         );
 
         // set request id with last image request
         if (newImages.length - 1 === index) {
-          setUploadRequestId(upRequest.requestId);
+          setUploadImageRequestId(upRequest.requestId);
         }
       });
     }
@@ -112,10 +144,10 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
     const request = dispatch(
       requestUpdateVariableValues({
         operations,
-        docId,
+        projectId,
       })
     );
-    setRequestId(request.requestId);
+    setUpdateVariableValueRequestId(request.requestId);
   };
 
   const onUpdateImage = (newImage: VariableValueImageValue) => {
@@ -144,34 +176,93 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
   };
 
   const onCloseHandler = () => {
-    setUploadRequestId('');
-    setRequestId('');
+    setUploadImageRequestId('');
+    setUpdateVariableValueRequestId('');
     onCancel();
   };
 
+  const optionItems = useMemo(
+    (): DropdownItem[] =>
+      activeLocale
+        ? [
+            {
+              label: strings.VIEW_HISTORY,
+              value: 'view_history',
+            },
+          ]
+        : [],
+    [activeLocale]
+  );
+
+  const onOptionItemClick = useCallback(
+    (optionItem: DropdownItem) => {
+      switch (optionItem.value) {
+        case 'view_history': {
+          onCancel();
+          showVariableHistory();
+          break;
+        }
+      }
+    },
+    [showVariableHistory]
+  );
+
   return (
     <PageDialog
-      workflowState={uploadRequestId ? uploadSelector : requestId ? selector : undefined}
+      workflowState={
+        uploadImageRequestId
+          ? uploadImageRequest
+          : updateVariableValuesRequest?.status === 'success'
+            ? updateVariableWorkflowDetailsRequest
+            : updateVariableValuesRequest
+      }
       onSuccess={onFinish}
       onClose={onCloseHandler}
       open={true}
       title={strings.VARIABLE_DETAILS}
       size='large'
       scrolled={true}
-      middleButtons={[
-        <Button
-          id='edit-images-cancel'
-          label={strings.CANCEL}
-          priority='secondary'
-          type='passive'
-          onClick={onCancel}
-          key='button-1'
-        />,
-        <Button id='edit-images-save' label={strings.SAVE} onClick={handleSave} key='button-2' />,
-      ]}
+      middleButtons={
+        display
+          ? undefined
+          : [
+              <Button
+                id='edit-images-cancel'
+                label={strings.CANCEL}
+                priority='secondary'
+                type='passive'
+                onClick={onCancel}
+                key='button-1'
+              />,
+              <Button id='edit-images-save' label={strings.SAVE} onClick={handleSave} key='button-2' />,
+            ]
+      }
     >
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{ position: 'relative' }}>
+          <>
+            <OptionsMenu
+              onOptionItemClick={onOptionItemClick}
+              optionItems={optionItems}
+              priority='secondary'
+              size='small'
+              sx={{ float: 'right' }}
+              type='passive'
+            />
+            {display && (
+              <Button
+                icon='iconEdit'
+                id='edit-variable'
+                label={strings.EDIT}
+                onClick={() => {
+                  setDisplay(false);
+                }}
+                priority='secondary'
+                sx={{ float: 'right' }}
+                type='passive'
+              />
+            )}
+          </>
           <Textfield label={strings.NAME} type='text' id='name' value={variable.name} display={true} />
         </Grid>
         <Grid item xs={12}>
@@ -194,44 +285,72 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
                 marginTop={theme.spacing(1)}
                 border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
               >
-                <Button
-                  icon='iconTrashCan'
-                  onClick={() => removeFileAtIndex(index)}
-                  size='small'
-                  className={classes.removePhoto}
-                />
+                {!display && (
+                  <Button
+                    icon='iconTrashCan'
+                    onClick={() => removeFileAtIndex(index)}
+                    size='small'
+                    style={{
+                      position: 'absolute',
+                      top: -10,
+                      right: -10,
+                      backgroundColor: theme.palette.TwClrBgDanger,
+                    }}
+                  />
+                )}
+
                 <img
                   height='120px'
-                  src={getImagePath(docId, image.id, 120, 120)}
-                  className={classes.thumbnail}
+                  src={getImagePath(projectId, image.id, 120, 120)}
                   alt='doc'
+                  style={{
+                    margin: 'auto auto',
+                    objectFit: 'contain',
+                    display: 'flex',
+                    maxWidth: '120px',
+                    maxHeight: '120px',
+                  }}
                 />
               </Box>
               <Box paddingLeft={theme.spacing(3)} width='100%'>
                 <Grid>
                   <Textfield
+                    display={display}
                     type='text'
                     label={strings.CAPTION}
                     id='citation'
                     value={image.caption}
-                    onChange={(newValue) => onUpdateImage({ ...image, caption: newValue as string })}
+                    onChange={
+                      display ? undefined : (newValue) => onUpdateImage({ ...image, caption: newValue as string })
+                    }
                   />
                 </Grid>
                 <Grid paddingTop={theme.spacing(2)}>
                   <Textfield
+                    display={display}
                     type='text'
                     label={strings.CITATION}
                     id='citation'
                     value={image.citation}
-                    onChange={(newValue) => onUpdateImage({ ...image, citation: newValue as string })}
+                    onChange={
+                      display ? undefined : (newValue) => onUpdateImage({ ...image, citation: newValue as string })
+                    }
                   />
                 </Grid>
               </Box>
             </Box>
           ))}
-        <Grid item xs={12}>
-          <PhotoSelector onPhotosChanged={onFilesChanged} multipleSelection={variable.isList} />
-        </Grid>
+        {!display && (
+          <Grid item xs={12}>
+            <PhotoSelector onPhotosChanged={onFilesChanged} multipleSelection={variable.isList} />
+          </Grid>
+        )}
+
+        <VariableWorkflowDetails
+          display={display}
+          setVariableWorkflowDetails={setVariableWorkflowDetails}
+          variableWorkflowDetails={variableWorkflowDetails}
+        />
       </Grid>
     </PageDialog>
   );

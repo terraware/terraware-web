@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Grid, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 import { Option } from '@terraware/web-components/components/table/types';
 
@@ -25,16 +24,6 @@ import { getUserDisplayName } from 'src/utils/user';
 import BatchHistoryRenderer from './BatchHistoryRenderer';
 import EventDetailsModal from './EventDetailsModal';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  searchField: {
-    width: '300px',
-  },
-  searchBar: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-}));
-
 const columns = (): TableColumnType[] => [
   { key: 'createdTime', name: strings.DATE, type: 'date' },
   { key: 'type', name: strings.EVENT, type: 'string' },
@@ -55,7 +44,6 @@ export type BatchHistoryItemForTable = BatchHistoryItem & {
 
 export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps): JSX.Element {
   const theme = useTheme();
-  const classes = useStyles();
   const [search, setSearch] = useState<string>('');
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
@@ -122,17 +110,19 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
   );
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
-      if (response.requestSucceeded) {
-        const usersById: Record<number, OrganizationUser> = {};
-        for (const user of response.users ?? []) {
-          usersById[user.id] = user;
+    if (selectedOrganization.id !== -1) {
+      const fetchUsers = async () => {
+        const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
+        if (response.requestSucceeded) {
+          const usersById: Record<number, OrganizationUser> = {};
+          for (const user of response.users ?? []) {
+            usersById[user.id] = user;
+          }
+          setUsers(usersById);
         }
-        setUsers(usersById);
-      }
-    };
-    fetchUsers();
+      };
+      fetchUsers();
+    }
   }, [selectedOrganization.id]);
 
   const findPreviousEvent = useCallback(
@@ -219,6 +209,7 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
     }
   }, [users, batchId, findPreviousEvent, nurseryName, filters, search]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onBatchSelected = (batch: any, fromColumn?: string) => {
     setSelectedEvent(batch);
     setOpenEventDetailsModal(true);
@@ -239,7 +230,7 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
       <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} marginBottom={theme.spacing(1)}>
         {strings.HISTORY}
       </Typography>
-      <Grid item xs={12} className={classes.searchBar}>
+      <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
         <Search {...searchProps} />
       </Grid>
       <Grid item xs={12}>

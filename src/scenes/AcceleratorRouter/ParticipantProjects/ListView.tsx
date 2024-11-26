@@ -1,4 +1,5 @@
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { useMixpanel } from 'react-mixpanel-browser';
 
 import { DropdownItem, TableColumnType } from '@terraware/web-components';
 
@@ -6,6 +7,7 @@ import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
 import ExportCsvModal from 'src/components/common/ExportCsvModal';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useUser } from 'src/providers';
 import { requestListParticipantProjects } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectsListRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
@@ -42,6 +44,11 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
+          key: 'acceleratorDetails_fileNaming',
+          name: strings.FILE_NAMING,
+          type: 'string',
+        },
+        {
           key: 'country_name',
           name: strings.COUNTRY,
           type: 'string',
@@ -64,7 +71,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
       ]
     : [];
 
-const fuzzySearchColumns = ['name'];
+const fuzzySearchColumns = ['name', 'acceleratorDetails_fileNaming'];
 const defaultSearchOrder: SearchSortOrder = {
   field: 'name',
   direction: 'Ascending',
@@ -75,6 +82,7 @@ export default function ListView(): JSX.Element {
   const { isAllowed } = useUser();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
+  const mixpanel = useMixpanel();
 
   const [openDownload, setOpenDownload] = useState<boolean>(false);
   const [lastSearch, setLastSearch] = useState<SearchNodePayload>();
@@ -87,7 +95,7 @@ export default function ListView(): JSX.Element {
     if (result?.status === 'error') {
       snackbar.toastError();
     }
-    if (result?.data) {
+    if (result?.status === 'success' && result?.data) {
       setProjects(result.data);
     }
   }, [result, snackbar]);
@@ -156,6 +164,7 @@ export default function ListView(): JSX.Element {
         size='small'
         onOptionItemClick={(item: DropdownItem) => {
           if (item.value === 'export') {
+            mixpanel?.track(MIXPANEL_EVENTS.CONSOLE_PROJECTS_EXPORT);
             setOpenDownload(true);
           }
         }}
@@ -183,6 +192,7 @@ export default function ListView(): JSX.Element {
         rightComponent={actionMenus}
         rows={projects}
         title={strings.PROJECTS}
+        stickyFilters
       />
     </>
   );

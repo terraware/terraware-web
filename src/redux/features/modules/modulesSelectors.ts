@@ -1,7 +1,11 @@
 import { RootState } from 'src/redux/rootReducer';
 
-export const selectModule = (moduleId: number) => (state: RootState) => state.module[moduleId]?.data;
+export const selectModuleRequest = (requestId: string) => (state: RootState) => state.module[requestId];
 
-export const selectModuleEvent = (eventId: number) => (state: RootState) => state.moduleEvent[eventId]?.data;
+export const selectModuleList = (requestId: string) => (state: RootState) => state.moduleList[requestId];
 
-export const selectModuleList = (projectId: number) => (state: RootState) => state.moduleList[projectId]?.data;
+export const selectModuleProjects = (requestId: string) => (state: RootState) => state.moduleProjects[requestId];
+
+export const selectModuleCohorts = (moduleId: string) => (state: RootState) => state.moduleCohorts[moduleId];
+
+export const selectSearchModules = (requestId: string) => (state: RootState) => state.searchModules[requestId];

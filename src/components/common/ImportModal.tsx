@@ -1,72 +1,28 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { Box, useTheme } from '@mui/material';
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Typography, useTheme } from '@mui/material';
 
 import Link from 'src/components/common/Link';
 import { useOrganization } from 'src/providers/hooks';
+import { ImportModuleResponsePayload } from 'src/services/ModuleService';
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
 import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse, UploadResponse } from 'src/types/File';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import DialogBox from './DialogBox/DialogBox';
 import ProgressCircle from './ProgressCircle/ProgressCircle';
 import Button from './button/Button';
 import Icon from './icon/Icon';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  spacing: {
-    marginRight: theme.spacing(2),
-  },
-  dropContainer: {
-    background: theme.palette.TwClrBg,
-    border: `1px dashed ${theme.palette.TwClrBrdrTertiary}`,
-    borderRadius: '8px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: '32px',
-  },
-  hiddenInput: {
-    display: 'none',
-  },
-  title: {
-    color: theme.palette.TwClrTxt,
-    fontSize: '14px',
-    fontWeight: 600,
-    margin: '0 0 8px 0',
-  },
-  description: {
-    color: theme.palette.TwClrTxt,
-    fontSize: '12px',
-    fontWeight: 400,
-    margin: 0,
-  },
-  icon: {
-    height: '120px',
-    width: '120px',
-  },
-  importButton: {
-    marginTop: '24px',
-  },
-  loadingText: {
-    fontSie: '16px',
-    margin: 0,
-    color: theme.palette.TwClrTxt,
-  },
-  spinnerContainer: {
-    margin: '40px auto',
-  },
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  warningContent: {
-    textAlign: 'left',
-  },
-}));
+export type ImportProblemElement = {
+  problem: string;
+  row: number;
+};
+
+export type ImportResponsePayload = Omit<ImportModuleResponsePayload, 'problems'> & {
+  problems: ImportProblemElement[];
+};
 
 export type ImportSpeciesModalProps = {
   open: boolean;
@@ -77,9 +33,10 @@ export type ImportSpeciesModalProps = {
   resolveApi: (uploadId: number, overwriteExisting: boolean) => Promise<ResolveResponse>;
   uploaderTitle: string;
   uploaderDescription: string;
-  uploadApi: (file: File, orgOrFacilityId: string) => Promise<UploadFileResponse>;
-  templateApi: () => Promise<any>;
-  statusApi: (uploadId: number) => Promise<UploadResponse>;
+  uploadApi?: (file: File, orgOrFacilityId: string) => Promise<UploadFileResponse>;
+  templateApi?: () => Promise<any>;
+  statusApi?: (uploadId: number) => Promise<UploadResponse>;
+  simpleUploadApi?: (file: File) => Promise<ImportResponsePayload | null>;
   importCompleteLabel: string;
   importingLabel: string;
   duplicatedLabel: string;
@@ -101,7 +58,6 @@ export const downloadCsvTemplateHandler = async (templateApi: () => Promise<any>
 
 export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const classes = useStyles();
   const {
     open,
     onClose,
@@ -114,6 +70,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
     uploadApi,
     templateApi,
     statusApi,
+    simpleUploadApi,
     importCompleteLabel,
     importingLabel,
     duplicatedLabel,
@@ -127,11 +84,28 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
   const [error, setError] = useState<JSX.Element>();
   const [loading, setLoading] = useState(false);
   const [fileStatus, setFileStatus] = useState<GetUploadStatusResponsePayload>();
-  const [uploadInterval, setUploadInterval] = useState<NodeJS.Timer>();
+  const [uploadInterval, setUploadInterval] = useState<ReturnType<typeof setInterval>>();
   const [completed, setCompleted] = useState(false);
   const [warning, setWarning] = useState(false);
   const [uploadId, setUploadId] = useState<number>();
   const theme = useTheme();
+  const snackbar = useSnackbar();
+
+  const spacingStyles = { marginRight: theme.spacing(2) };
+
+  const warningContentSyles = { textAlign: 'left' };
+
+  const containerStyles = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  };
+
+  const loadingTextStyles = {
+    fontSize: '16px',
+    margin: 0,
+    color: theme.palette.TwClrTxt,
+  };
 
   const handleCancel = () => {
     onClose(completed);
@@ -160,7 +134,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
   useEffect(() => {
     const getErrors = () => {
       return (
-        <div className={classes.warningContent} key='import-error-1'>
+        <Box key='import-error-1' sx={warningContentSyles}>
           {strings.DATA_IMPORT_FAILED}
           <ul>
             {fileStatus?.details.errors?.map((err, index) => (
@@ -173,7 +147,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
               </li>
             ))}
           </ul>
-        </div>
+        </Box>
       );
     };
 
@@ -197,7 +171,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
       clearUploadInterval();
       setWarning(true);
     }
-  }, [fileStatus, uploadInterval, classes]);
+  }, [fileStatus, uploadInterval]);
 
   const dropHandler = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -209,9 +183,11 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
   };
 
   const getFileStatus = async (id: number) => {
-    const status: any = await statusApi(id);
-    if (status?.requestSucceeded === true) {
-      setFileStatus(status.uploadStatus as GetUploadStatusResponsePayload);
+    if (statusApi) {
+      const status: any = await statusApi(id);
+      if (status?.requestSucceeded === true) {
+        setFileStatus(status.uploadStatus as GetUploadStatusResponsePayload);
+      }
     }
   };
 
@@ -220,25 +196,61 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
       return;
     }
     if (file) {
-      setUploadId(undefined);
-      setFileStatus(undefined);
-      let response: UploadFileResponse = {
-        id: 0,
-        requestSucceeded: false,
-      };
-      if (facility) {
-        response = await uploadApi(file, facility.id.toString());
-      } else if (selectedOrganization) {
-        response = await uploadApi(file, selectedOrganization.id.toString());
-      }
-      if (response) {
-        if (response.requestSucceeded === false) {
-          setError(<>{strings.DATA_IMPORT_FAILED}</>);
-        } else {
-          if (response.id) {
-            setUploadId(response.id);
-            setLoading(true);
-            setUploadInterval(setInterval(() => getFileStatus(response.id), 2000));
+      if (simpleUploadApi) {
+        setLoading(true);
+        const response = await simpleUploadApi(file);
+        if (response) {
+          if (response.status === 'error') {
+            setLoading(false);
+            snackbar.toastError(
+              response.problems?.length > 0
+                ? [
+                    <ul key='errors'>
+                      {response.problems.map((problem, index) => (
+                        <li key={`import-error-item-${index}`}>
+                          {strings.formatString(
+                            strings.DATA_IMPORT_ROW_MESSAGE,
+                            `${problem.row}`,
+                            problem.problem || strings.GENERIC_ERROR
+                          )}
+                        </li>
+                      ))}
+                    </ul>,
+                  ]
+                : [<Typography key='error-message'>{response.message}</Typography>],
+              strings.UPLOAD_FAILED
+            );
+            onClose(false);
+          } else {
+            setLoading(false);
+            setCompleted(true);
+          }
+        }
+      } else {
+        setUploadId(undefined);
+        setFileStatus(undefined);
+        let response: UploadFileResponse = {
+          id: 0,
+          requestSucceeded: false,
+        };
+        if (facility) {
+          if (uploadApi) {
+            response = await uploadApi(file, facility.id.toString());
+          }
+        } else if (selectedOrganization && selectedOrganization.id !== -1) {
+          if (uploadApi) {
+            response = await uploadApi(file, selectedOrganization.id.toString());
+          }
+        }
+        if (response) {
+          if (response.requestSucceeded === false) {
+            setError(<>{strings.DATA_IMPORT_FAILED}</>);
+          } else {
+            if (response.id) {
+              setUploadId(response.id);
+              setLoading(true);
+              setUploadInterval(setInterval(() => getFileStatus(response.id), 2000));
+            }
           }
         }
       }
@@ -287,8 +299,8 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
             label={strings.CANCEL}
             priority='secondary'
             type='passive'
-            className={classes.spacing}
             key='mb-1'
+            style={spacingStyles}
           />,
           <Button onClick={tryAgainHandler} label={strings.TRY_AGAIN} key='mb-2' />,
         ];
@@ -300,8 +312,8 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
             label={strings.CANCEL}
             priority='secondary'
             type='passive'
-            className={classes.spacing}
             key='mb-1'
+            style={spacingStyles}
           />,
           <Button onClick={importDataHandler} label={strings.IMPORT} key='mb-2' />,
         ];
@@ -362,11 +374,48 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
       <div ref={divRef} tabIndex={0}>
         {error && !loading && <p>{error}</p>}
         {!error && !loading && !completed && !warning && (
-          <div onDrop={dropHandler} onDragOver={enableDropping} className={classes.dropContainer}>
-            <Icon name='blobbyGrayIconUploadToTheCloud' className={classes.icon} size='xlarge' />
-            <p className={classes.title}>{file ? file.name : uploaderTitle}</p>
-            <p className={classes.description}>{file ? strings.FILE_SELECTED : uploaderDescription}</p>
-            {!file && (
+          <Box
+            onDrop={dropHandler}
+            onDragOver={enableDropping}
+            sx={{
+              background: theme.palette.TwClrBg,
+              border: `1px dashed ${theme.palette.TwClrBrdrTertiary}`,
+              borderRadius: '8px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              padding: '32px',
+            }}
+          >
+            <Icon
+              name='blobbyGrayIconUploadToTheCloud'
+              size='xlarge'
+              style={{
+                height: '120px',
+                width: '120px',
+              }}
+            />
+            <p
+              style={{
+                color: theme.palette.TwClrTxt,
+                fontSize: '14px',
+                fontWeight: 600,
+                margin: '0 0 8px 0',
+              }}
+            >
+              {file ? file.name : uploaderTitle}
+            </p>
+            <p
+              style={{
+                color: theme.palette.TwClrTxt,
+                fontSize: '12px',
+                fontWeight: 400,
+                margin: 0,
+              }}
+            >
+              {file ? strings.FILE_SELECTED : uploaderDescription}
+            </p>
+            {templateApi && !file && (
               <Link
                 fontSize='12px'
                 onClick={() => {
@@ -376,37 +425,43 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
                 {strings.DOWNLOAD_CSV_TEMPLATE}
               </Link>
             )}
-            <input type='file' ref={inputRef} className={classes.hiddenInput} onChange={onFileChosen} />
+            <input type='file' ref={inputRef} onChange={onFileChosen} style={{ display: 'none' }} />
             <Button
               onClick={onChooseFileHandler}
               label={file ? strings.REPLACE_FILE : strings.CHOOSE_FILE}
               priority='secondary'
+              style={{ marginTop: '24px' }}
               type='passive'
-              className={classes.importButton}
             />
-          </div>
+          </Box>
         )}
         {completed && (
-          <div className={classes.container}>
-            <p className={classes.loadingText}>{importCompleteLabel}</p>
-            <Icon name='blobbyIconLeaf' className={classes.icon} />
-          </div>
+          <Box sx={containerStyles}>
+            <p style={loadingTextStyles}>{importCompleteLabel}</p>
+            <Icon
+              name='blobbyIconLeaf'
+              style={{
+                height: '120px',
+                width: '120px',
+              }}
+            />
+          </Box>
         )}
         {loading && (
-          <div className={classes.container}>
-            <p className={classes.loadingText}>{importingLabel}</p>
-            <div className={classes.spinnerContainer}>
+          <Box sx={containerStyles}>
+            <p style={loadingTextStyles}>{importingLabel}</p>
+            <Box sx={{ margin: '40px auto' }}>
               <ProgressCircle determinate={false} />
-            </div>
-          </div>
+            </Box>
+          </Box>
         )}
         {warning && fileStatus?.details.warnings?.length && (
-          <div className={classes.warningContent}>
+          <Box sx={warningContentSyles}>
             <p>{strings.formatString(duplicatedLabel, fileStatus?.details.warnings?.length)}</p>
             <ul>
               {fileStatus?.details.warnings?.map((wr, index) => <li key={`duplicate-sp-${index}`}>{wr.value}</li>)}
             </ul>
-          </div>
+          </Box>
         )}
       </div>
     </DialogBox>

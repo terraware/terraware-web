@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Popover, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button, PillListItem, Textfield, Tooltip } from '@terraware/web-components';
 import { PillList } from '@terraware/web-components';
 
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
+import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
@@ -24,16 +24,6 @@ import { SearchNodePayload } from 'src/types/Search';
 import { Species } from 'src/types/Species';
 import { getAllNurseries } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
-
-const useStyles = makeStyles(() => ({
-  popoverContainer: {
-    '& .MuiPaper-root': {
-      borderRadius: '8px',
-      overflow: 'visible',
-      width: '480px',
-    },
-  },
-}));
 
 const initialFilters: Record<string, SearchNodePayload> = {
   showEmptyBatches: {
@@ -73,7 +63,6 @@ export default function Search(props: SearchProps): JSX.Element | null {
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const classes = useStyles();
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
 
@@ -93,7 +82,9 @@ export default function Search(props: SearchProps): JSX.Element | null {
   }, [filters.facilityIds, dispatch]);
 
   useEffect(() => {
-    void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
+    if (selectedOrganization.id !== -1) {
+      void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
+    }
   }, [dispatch, selectedOrganization.id, activeLocale]);
 
   useEffect(() => {
@@ -216,7 +207,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
   ]);
 
   useEffect(() => {
-    if (origin === 'Nursery') {
+    if (origin === 'Nursery' && selectedOrganization.id !== -1) {
       void dispatch(requestSpecies(selectedOrganization.id));
     }
   }, [origin, dispatch, selectedOrganization.id]);
@@ -345,7 +336,13 @@ export default function Search(props: SearchProps): JSX.Element | null {
                 vertical: 'top',
                 horizontal: 'center',
               }}
-              className={classes.popoverContainer}
+              sx={{
+                '& .MuiPaper-root': {
+                  borderRadius: '8px',
+                  overflow: 'visible',
+                  width: '480px',
+                },
+              }}
             >
               <FilterGroup
                 initialFilters={filterGroupFilters}
@@ -364,6 +361,8 @@ export default function Search(props: SearchProps): JSX.Element | null {
             </Popover>
           </Box>
         )}
+
+        <TableSettingsButton />
       </Grid>
       <Grid display='flex' flexDirection='row' alignItems='center' sx={{ marginTop: theme.spacing(2) }}>
         <PillList data={filterPillData} onRemove={onRemovePillList} />

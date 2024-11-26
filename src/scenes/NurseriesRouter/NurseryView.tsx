@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { DatePicker } from '@terraware/web-components';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import PageSnackbar from 'src/components/PageSnackbar';
+import DatePicker from 'src/components/common/DatePicker';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers/hooks';
@@ -18,10 +19,12 @@ import { getAllNurseries } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import LocationTimeZoneSelector from '../../components/LocationTimeZoneSelector';
 import PageForm from '../../components/common/PageForm';
 import TextField from '../../components/common/Textfield/Textfield';
+import { NavigateToFacilityObject } from '../SeedBanksRouter/SeedBankView';
 
 export default function NurseryView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
@@ -31,6 +34,10 @@ export default function NurseryView(): JSX.Element {
   const [editedSubLocations, setEditedSubLocations] = useState<PartialSubLocation[]>();
   const snackbar = useSnackbar();
   const theme = useTheme();
+  const [navigateToNursery, setNavigateToNursery] = useState<NavigateToFacilityObject>({
+    navigate: false,
+    id: undefined,
+  });
 
   const [record, setRecord, onChange] = useForm<Facility>({
     name: '',
@@ -41,7 +48,7 @@ export default function NurseryView(): JSX.Element {
   });
   const { nurseryId } = useParams<{ nurseryId: string }>();
   const [selectedNursery, setSelectedNursery] = useState<Facility | null>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
   const gridSize = () => {
     if (isMobile) {
@@ -49,11 +56,20 @@ export default function NurseryView(): JSX.Element {
     }
     return 4;
   };
+  const timeZoneId = useLocationTimeZone().get(record)?.id;
 
   useEffect(() => {
-    const seedBanks = getAllNurseries(selectedOrganization);
-    setSelectedNursery(seedBanks?.find((sb) => sb?.id === parseInt(nurseryId, 10)));
+    if (nurseryId) {
+      const seedBanks = getAllNurseries(selectedOrganization);
+      setSelectedNursery(seedBanks?.find((sb) => sb?.id === parseInt(nurseryId, 10)));
+    }
   }, [nurseryId, selectedOrganization]);
+
+  useEffect(() => {
+    if (navigateToNursery.navigate) {
+      goToNursery(navigateToNursery.id);
+    }
+  }, [selectedOrganization]);
 
   useEffect(() => {
     setRecord({
@@ -75,7 +91,7 @@ export default function NurseryView(): JSX.Element {
     const nurseriesLocation = {
       pathname: APP_PATHS.NURSERIES + (id ? `/${id}` : ''),
     };
-    history.push(nurseriesLocation);
+    navigate(nurseriesLocation);
   };
 
   const saveNursery = async () => {
@@ -111,16 +127,16 @@ export default function NurseryView(): JSX.Element {
           subLocationNames: editedSubLocations?.map((l) => l.name as string),
         });
 
-    if (response.requestSucceeded) {
+    if (response.requestSucceeded && selectedOrganization.id !== -1) {
       if (selectedNursery && editedSubLocations) {
         await SubLocationService.saveEditedSubLocations(id as number, editedSubLocations);
       }
-      await reloadOrganizations(selectedOrganization.id);
+      reloadOrganizations(selectedOrganization.id);
       snackbar.toastSuccess(selectedNursery ? strings.CHANGES_SAVED : strings.NURSERY_ADDED);
       if (!selectedNursery) {
         id = (response as CreateFacilityResponse).facilityId || undefined;
       }
-      goToNursery(id);
+      setNavigateToNursery({ navigate: true, id: id });
     } else {
       snackbar.toastError();
     }
@@ -135,11 +151,11 @@ export default function NurseryView(): JSX.Element {
     });
   };
 
-  const onUpdateDate = (field: string, value: any) => {
+  const onUpdateDate = (field: string, value?: Date | null) => {
     setRecord((previousRecord: Facility): Facility => {
       return {
         ...previousRecord,
-        [field]: value,
+        [field]: value ? getDateDisplayValue(value, timeZoneId) : value,
       };
     });
   };
@@ -204,11 +220,8 @@ export default function NurseryView(): JSX.Element {
             </Grid>
             <Grid item xs={gridSize()}>
               <DatePicker
-                id={'buildStartedDate'}
-                label={strings.FACILITY_BUILD_START_DATE}
-                value={record.buildStartedDate ?? ''}
-                onChange={(value) => onUpdateDate('buildStartedDate', value)}
                 aria-label='date-picker'
+                defaultTimeZone={timeZoneId}
                 errorText={
                   validateDates &&
                   !FacilityService.facilityBuildStartedDateValid(
@@ -219,16 +232,17 @@ export default function NurseryView(): JSX.Element {
                     ? strings.FACILITY_BUILD_START_DATE_INVALID
                     : ''
                 }
+                id={'buildStartedDate'}
+                label={strings.FACILITY_BUILD_START_DATE}
                 maxDate={record.buildCompletedDate}
+                onChange={(value?: Date | null) => onUpdateDate('buildStartedDate', value)}
+                value={record.buildStartedDate ?? ''}
               />
             </Grid>
             <Grid item xs={gridSize()}>
               <DatePicker
-                id={'buildCompletedDate'}
-                label={strings.FACILITY_BUILD_COMPLETION_DATE}
-                value={record.buildCompletedDate ?? ''}
-                onChange={(value) => onUpdateDate('buildCompletedDate', value)}
                 aria-label='date-picker'
+                defaultTimeZone={timeZoneId}
                 errorText={
                   validateDates &&
                   !FacilityService.facilityBuildCompletedDateValid(
@@ -239,17 +253,18 @@ export default function NurseryView(): JSX.Element {
                     ? strings.FACILITY_BUILD_COMPLETION_DATE_INVALID
                     : ''
                 }
-                minDate={record.buildStartedDate}
+                id={'buildCompletedDate'}
+                label={strings.FACILITY_BUILD_COMPLETION_DATE}
                 maxDate={record.operationStartedDate}
+                minDate={record.buildStartedDate}
+                onChange={(value?: Date | null) => onUpdateDate('buildCompletedDate', value)}
+                value={record.buildCompletedDate ?? ''}
               />
             </Grid>
             <Grid item xs={gridSize()}>
               <DatePicker
-                id={'operationStartedDate'}
-                label={strings.FACILITY_OPERATION_START_DATE}
-                value={record.operationStartedDate ?? ''}
-                onChange={(value) => onUpdateDate('operationStartedDate', value)}
                 aria-label='date-picker'
+                defaultTimeZone={timeZoneId}
                 errorText={
                   validateDates &&
                   !FacilityService.facilityOperationStartedDateValid(
@@ -260,7 +275,11 @@ export default function NurseryView(): JSX.Element {
                     ? strings.FACILITY_OPERATION_START_DATE_INVALID
                     : ''
                 }
+                id={'operationStartedDate'}
+                label={strings.FACILITY_OPERATION_START_DATE}
                 minDate={record.buildCompletedDate}
+                onChange={(value?: Date | null) => onUpdateDate('operationStartedDate', value)}
+                value={record.operationStartedDate ?? ''}
               />
             </Grid>
             <Grid item xs={gridSize()}>

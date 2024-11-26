@@ -1,6 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useMixpanel } from 'react-mixpanel-browser';
+import { useMatch, useNavigate } from 'react-router-dom';
 
+import { Box, Typography, useTheme } from '@mui/material';
+import { Icon } from '@terraware/web-components';
 import SubNavbar from '@terraware/web-components/components/Navbar/SubNavbar';
 
 import LocaleSelector from 'src/components/LocaleSelector';
@@ -8,8 +11,12 @@ import NavFooter from 'src/components/common/Navbar/NavFooter';
 import NavItem from 'src/components/common/Navbar/NavItem';
 import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
+import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
+import { useApplicationData } from 'src/providers/Application/Context';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { NurseryWithdrawalService } from 'src/services';
 import DeliverablesService from 'src/services/DeliverablesService';
@@ -31,36 +38,44 @@ export default function NavBar({
   hasPlantingSites,
 }: NavBarProps): JSX.Element | null {
   const { selectedOrganization } = useOrganization();
+  const theme = useTheme();
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
   const [reports, setReports] = useState<Reports>([]);
   const [hasDeliverables, setHasDeliverables] = useState<boolean>(false);
   const { isDesktop, isMobile } = useDeviceInfo();
-  const history = useHistory();
+  const navigate = useNavigate();
+  const mixpanel = useMixpanel();
+
   const { isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
+  const { orgHasModules, currentParticipantProject, setCurrentParticipantProject, projectsWithModules } =
+    useParticipantData();
 
-  const isAccessionDashboardRoute = useRouteMatch(APP_PATHS.SEEDS_DASHBOARD + '/');
-  const isAccessionsRoute = useRouteMatch(APP_PATHS.ACCESSIONS + '/');
-  const isCheckinRoute = useRouteMatch(APP_PATHS.CHECKIN + '/');
-  const isContactUsRoute = useRouteMatch(APP_PATHS.CONTACT_US + '/');
-  const isDeliverablesRoute = useRouteMatch(APP_PATHS.DELIVERABLES + '/');
-  const isDeliverableViewRoute = useRouteMatch(APP_PATHS.DELIVERABLE_VIEW + '/');
-  const isHomeRoute = useRouteMatch(APP_PATHS.HOME + '/');
-  const isPeopleRoute = useRouteMatch(APP_PATHS.PEOPLE + '/');
-  const isSpeciesRoute = useRouteMatch(APP_PATHS.SPECIES + '/');
-  const isOrganizationRoute = useRouteMatch(APP_PATHS.ORGANIZATION + '/');
-  const isMonitoringRoute = useRouteMatch(APP_PATHS.MONITORING + '/');
-  const isSeedbanksRoute = useRouteMatch(APP_PATHS.SEED_BANKS + '/');
-  const isNurseriesRoute = useRouteMatch(APP_PATHS.NURSERIES + '/');
-  const isInventoryRoute = useRouteMatch(APP_PATHS.INVENTORY + '/');
-  const isBatchWithdrawRoute = useRouteMatch(APP_PATHS.BATCH_WITHDRAW + '/');
-  const isPlantingSitesRoute = useRouteMatch(APP_PATHS.PLANTING_SITES + '/');
-  const isPlantsDashboardRoute = useRouteMatch(APP_PATHS.PLANTS_DASHBOARD + '/');
-  const isWithdrawalLogRoute = useRouteMatch(APP_PATHS.NURSERY_WITHDRAWALS + '/');
-  const isReassignmentRoute = useRouteMatch(APP_PATHS.NURSERY_REASSIGNMENT + '/');
-  const isReportsRoute = useRouteMatch(APP_PATHS.REPORTS + '/');
-  const isObservationsRoute = useRouteMatch(APP_PATHS.OBSERVATIONS + '/');
-  const isProjectsRoute = useRouteMatch(APP_PATHS.PROJECTS + '/');
+  const { allApplications } = useApplicationData();
+
+  const isAccessionDashboardRoute = useMatch({ path: APP_PATHS.SEEDS_DASHBOARD + '/', end: false });
+  const isAccessionsRoute = useMatch({ path: APP_PATHS.ACCESSIONS + '/', end: false });
+  const isApplicationRoute = useMatch({ path: APP_PATHS.APPLICATIONS + '/', end: false });
+  const isCheckinRoute = useMatch({ path: APP_PATHS.CHECKIN + '/', end: false });
+  const isDeliverablesRoute = useMatch({ path: APP_PATHS.DELIVERABLES + '/', end: false });
+  const isDeliverableViewRoute = useMatch({ path: APP_PATHS.DELIVERABLE_VIEW + '/', end: false });
+  const isHomeRoute = useMatch({ path: APP_PATHS.HOME + '/', end: false });
+  const isPeopleRoute = useMatch({ path: APP_PATHS.PEOPLE + '/', end: false });
+  const isSpeciesRoute = useMatch({ path: APP_PATHS.SPECIES + '/', end: false });
+  const isOrganizationRoute = useMatch({ path: APP_PATHS.ORGANIZATION + '/', end: false });
+  const isSeedbanksRoute = useMatch({ path: APP_PATHS.SEED_BANKS + '/', end: false });
+  const isNurseriesRoute = useMatch({ path: APP_PATHS.NURSERIES + '/', end: false });
+  const isInventoryRoute = useMatch({ path: APP_PATHS.INVENTORY + '/', end: false });
+  const isBatchWithdrawRoute = useMatch({ path: APP_PATHS.BATCH_WITHDRAW + '/', end: false });
+  const isPlantingSitesRoute = useMatch({ path: APP_PATHS.PLANTING_SITES + '/', end: false });
+  const isPlantsDashboardRoute = useMatch({ path: APP_PATHS.PLANTS_DASHBOARD + '/', end: false });
+  const isWithdrawalLogRoute = useMatch({ path: APP_PATHS.NURSERY_WITHDRAWALS + '/', end: false });
+  const isReassignmentRoute = useMatch({ path: APP_PATHS.NURSERY_REASSIGNMENT + '/', end: false });
+  const isReportsRoute = useMatch({ path: APP_PATHS.REPORTS + '/', end: false });
+  const isObservationsRoute = useMatch({ path: APP_PATHS.OBSERVATIONS + '/', end: false });
+  const isProjectsRoute = useMatch({ path: APP_PATHS.PROJECTS + '/', end: true });
+  const isProjectRoute = useMatch({ path: APP_PATHS.PROJECT_VIEW + '/', end: true });
+  const isProjectModulesRoute = useMatch({ path: APP_PATHS.PROJECT_MODULES + '/', end: false });
 
   const closeNavBar = useCallback(() => {
     if (!isDesktop) {
@@ -72,16 +87,18 @@ export default function NavBar({
     (path: string) => {
       closeNavBar();
       if (path) {
-        history.push(path);
+        navigate(path);
       }
     },
-    [closeNavBar, history]
+    [closeNavBar, navigate]
   );
 
   const checkNurseryWithdrawals = useCallback(() => {
-    NurseryWithdrawalService.hasNurseryWithdrawals(selectedOrganization.id).then((result: boolean) => {
-      setShowNurseryWithdrawals(result);
-    });
+    if (selectedOrganization.id !== -1) {
+      NurseryWithdrawalService.hasNurseryWithdrawals(selectedOrganization.id).then((result: boolean) => {
+        setShowNurseryWithdrawals(result);
+      });
+    }
   }, [selectedOrganization.id]);
 
   useEffect(() => {
@@ -98,14 +115,16 @@ export default function NavBar({
   }, [withdrawalCreated, checkNurseryWithdrawals, showNurseryWithdrawals]);
 
   useEffect(() => {
-    const reportSearch = async () => {
-      const reportsResults = await ReportService.getReports(selectedOrganization.id);
-      setReports(reportsResults.reports || []);
-    };
+    if (selectedOrganization.id !== -1) {
+      const reportSearch = async () => {
+        const reportsResults = await ReportService.getReports(selectedOrganization.id);
+        setReports(reportsResults.reports || []);
+      };
 
-    if (isAdmin(selectedOrganization)) {
-      // not open to contributors, will get a 403
-      reportSearch();
+      if (isAdmin(selectedOrganization)) {
+        // not open to contributors, will get a 403
+        reportSearch();
+      }
     }
   }, [selectedOrganization]);
 
@@ -116,7 +135,7 @@ export default function NavBar({
       const response = await DeliverablesService.list(activeLocale, {
         organizationId: selectedOrganization.id,
       });
-      setHasDeliverables(!!(response && response.deliverables.length > 0));
+      setHasDeliverables(!!(response && response.data && response.data.length > 0));
     };
     if (isManagerOrHigher(selectedOrganization)) {
       fetchDeliverables();
@@ -124,6 +143,12 @@ export default function NavBar({
       setHasDeliverables(false);
     }
   }, [activeLocale, selectedOrganization]);
+
+  useEffect(() => {
+    if (!currentParticipantProject && projectsWithModules && projectsWithModules.length > 0) {
+      setCurrentParticipantProject(projectsWithModules[0].id);
+    }
+  }, [projectsWithModules, currentParticipantProject, setCurrentParticipantProject]);
 
   const getSeedlingsMenuItems = () => {
     const inventoryMenu = (
@@ -153,6 +178,23 @@ export default function NavBar({
     return showNurseryWithdrawals ? [inventoryMenu, withdrawalLogMenu] : [inventoryMenu];
   };
 
+  const deliverablesMenu = useMemo<JSX.Element | null>(
+    () =>
+      hasDeliverables ? (
+        <NavItem
+          label={strings.DELIVERABLES}
+          icon='iconSubmit'
+          selected={!!isDeliverablesRoute}
+          onClick={() => {
+            mixpanel?.track(MIXPANEL_EVENTS.PART_EX_LEFT_NAV_DELIVERABLES);
+            closeAndNavigateTo(isDeliverablesRoute && !isDeliverableViewRoute ? '' : APP_PATHS.DELIVERABLES);
+          }}
+          id='deliverables'
+        />
+      ) : null,
+    [closeAndNavigateTo, isDeliverablesRoute, isDeliverableViewRoute, hasDeliverables]
+  );
+
   const reportsMenu = useMemo<JSX.Element | null>(
     () =>
       reports.length > 0 && selectedOrganization.canSubmitReports ? (
@@ -167,6 +209,62 @@ export default function NavBar({
         />
       ) : null,
     [closeAndNavigateTo, isReportsRoute, reports.length, selectedOrganization.canSubmitReports]
+  );
+
+  const modulesMenu = useMemo<JSX.Element | null>(
+    () =>
+      currentParticipantProject && orgHasModules && isManagerOrHigher(selectedOrganization) ? (
+        <NavItem
+          icon='iconModule'
+          label={strings.MODULES}
+          selected={!!isProjectModulesRoute}
+          onClick={() => {
+            mixpanel?.track(MIXPANEL_EVENTS.PART_EX_LEFT_NAV_MODULES);
+            closeAndNavigateTo(
+              APP_PATHS.PROJECT_MODULES.replace(':projectId', currentParticipantProject.id.toString())
+            );
+          }}
+          id='modules-list'
+        />
+      ) : null,
+    [closeAndNavigateTo, isProjectModulesRoute, currentParticipantProject, orgHasModules]
+  );
+
+  const applicationMenu = useMemo<JSX.Element | null>(
+    () =>
+      allApplications && allApplications.length > 0 ? (
+        <NavItem
+          label={
+            <Box
+              display='flex'
+              alignItems={'center'}
+              padding={'11px 0px'}
+              sx={{
+                '&:hover': {
+                  cursor: 'pointer',
+                },
+              }}
+            >
+              <Icon name='iconFile' className='nav-item--icon' fillColor={theme.palette.TwClrIcnSecondary} />
+              <Typography fontSize={'14px'} fontWeight={500} color={theme.palette.TwClrTxt} lineHeight={'normal'}>
+                {strings.APPLICATION}
+              </Typography>
+              <Box marginLeft={'8px'}>
+                <NewBadge />
+              </Box>
+            </Box>
+          }
+          selected={!!isApplicationRoute}
+          onClick={() => closeAndNavigateTo(APP_PATHS.APPLICATIONS)}
+          id='applications-list'
+        />
+      ) : null,
+    [closeAndNavigateTo, allApplications, isApplicationRoute]
+  );
+
+  const acceleratorSectionTitle = useMemo<string>(
+    () => (deliverablesMenu || modulesMenu ? strings.ACCELERATOR.toUpperCase() : ''),
+    [deliverablesMenu, modulesMenu]
   );
 
   return (
@@ -200,6 +298,15 @@ export default function NavBar({
         }}
         id='speciesNb'
       />
+      {(applicationMenu || deliverablesMenu || modulesMenu || reportsMenu) && (
+        <>
+          <NavSection title={acceleratorSectionTitle} />
+          {applicationMenu}
+          {deliverablesMenu}
+          {modulesMenu}
+          {reportsMenu}
+        </>
+      )}
       <NavSection />
       <NavItem label={strings.SEEDS} icon='seeds' id='seeds'>
         <SubNavbar>
@@ -218,14 +325,6 @@ export default function NavBar({
               closeAndNavigateTo(APP_PATHS.ACCESSIONS);
             }}
             id='accessions'
-          />
-          <NavItem
-            label={strings.MONITORING}
-            selected={!!isMonitoringRoute}
-            onClick={() => {
-              closeAndNavigateTo(APP_PATHS.MONITORING);
-            }}
-            id='monitoring'
           />
         </SubNavbar>
       </NavItem>
@@ -256,27 +355,7 @@ export default function NavBar({
           )}
         </SubNavbar>
       </NavItem>
-      {!hasDeliverables && reportsMenu && (
-        <>
-          <NavSection />
-          {reportsMenu}
-        </>
-      )}
-      {hasDeliverables && (
-        <>
-          <NavSection title={strings.ACCELERATOR.toUpperCase()} />
-          <NavItem
-            label={strings.DELIVERABLES}
-            icon='iconSubmit'
-            selected={!!isDeliverablesRoute}
-            onClick={() => {
-              closeAndNavigateTo(isDeliverablesRoute && !isDeliverableViewRoute ? '' : APP_PATHS.DELIVERABLES);
-            }}
-            id='deliverables'
-          />
-          {reportsMenu}
-        </>
-      )}
+
       {isAdmin(selectedOrganization) && (
         <>
           <NavSection title={strings.SETTINGS.toUpperCase()} />
@@ -301,7 +380,7 @@ export default function NavBar({
           <NavItem
             label={strings.PROJECTS}
             icon='iconFolder'
-            selected={!!isProjectsRoute}
+            selected={!!(isProjectsRoute || isProjectRoute)}
             onClick={() => {
               closeAndNavigateTo(APP_PATHS.PROJECTS);
             }}
@@ -339,16 +418,6 @@ export default function NavBar({
       )}
 
       <NavFooter>
-        <NavItem
-          label={strings.CONTACT_US}
-          icon='mail'
-          selected={!!isContactUsRoute}
-          onClick={() => {
-            closeAndNavigateTo(APP_PATHS.CONTACT_US);
-          }}
-          id='contactus'
-        />
-
         <LocaleSelector transparent={true} />
       </NavFooter>
     </Navbar>

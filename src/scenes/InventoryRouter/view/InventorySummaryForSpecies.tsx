@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Grid } from '@mui/material';
 import _ from 'lodash';
@@ -40,7 +40,7 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
       }
     };
 
-    if (speciesId !== undefined) {
+    if (speciesId !== undefined && selectedOrganization.id !== -1) {
       void populateSummary();
       void dispatch(requestSpeciesProjects(selectedOrganization.id, speciesId));
     } else {

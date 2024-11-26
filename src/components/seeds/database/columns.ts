@@ -163,6 +163,18 @@ function columns(): DatabaseColumn[] {
       type: 'number',
       filter: { type: 'number_range' },
     },
+    {
+      key: 'geolocations.coordinates',
+      name: strings.LATITUDE_LONGITUDE,
+      type: 'string',
+      filter: { type: 'search' },
+    },
+    {
+      key: 'plantId',
+      name: strings.PLANT_ID,
+      type: 'string',
+      filter: { type: 'search' },
+    },
   ];
 }
 

@@ -14,7 +14,7 @@ export default function InventoryTests() {
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory' }).click();
-    await page.getByRole('button', { name: 'Add Inventory' }).click();
+    await page.locator('#new-inventory').click();
     await page.getByPlaceholder('Search or Select...').click();
     await page.locator('li').filter({ hasText: 'Banana' }).locator('div').click();
     await page.locator('div:nth-child(2) > .select > .textfield-container').click();
@@ -49,7 +49,7 @@ export default function InventoryTests() {
     await page.locator('textarea').fill('Adding some notes');
     await page.getByRole('button', { name: 'Save' }).click();
 
-    await expect(page.getByText('Banana')).toBeVisible();
+    await expect(page.getByText('Banana', { exact: true })).toBeVisible();
     await expect(page.getByText('Garage')).toBeVisible();
     await expect(page.getByText('-02-01')).toBeVisible();
     await expect(page.getByText('Germinating Quantity 500')).toBeVisible();
@@ -71,7 +71,7 @@ export default function InventoryTests() {
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory' }).click();
-    await page.getByRole('button', { name: 'Add Inventory' }).click();
+    await page.locator('#new-inventory').click();
     await page.getByPlaceholder('Search or Select...').click();
     await page.locator('li').filter({ hasText: 'Coconut' }).locator('div').click();
 
@@ -109,7 +109,7 @@ export default function InventoryTests() {
     await page.locator('textarea').fill('Adding some notes');
     await page.getByRole('button', { name: 'Save' }).click();
 
-    await expect(page.getByText('Coconut')).toBeVisible();
+    await expect(page.getByText('Coconut', { exact: true })).toBeVisible();
     await expect(page.getByText('Garage')).toBeVisible();
     await expect(page.getByText('Germinating Quantity 25')).toBeVisible();
     await expect(page.getByText('Not Ready Quantity 25')).toBeVisible();
@@ -164,9 +164,9 @@ export default function InventoryTests() {
     await expect(page.locator('#row1-notReady')).toContainText('10');
     await expect(page.locator('#row1-ready')).toContainText('0');
     await expect(page.locator('#row1-total')).toContainText('15');
-    await page.getByRole('link', { name: 'Withdrawal Log' }).click();
+    await page.getByRole('link', { name: 'Withdrawal History' }).click();
     await expect(page.locator('#row1-speciesScientificNames')).toContainText('Coconut');
-    await expect(page.getByRole('cell', { name: '15' })).toBeVisible();
+    await expect(page.getByRole('cell', { name: '15', exact: true })).toBeVisible();
   });
 
   test('Transfer Nurseries', async ({ page }, testInfo) => {
@@ -257,7 +257,7 @@ export default function InventoryTests() {
 
     await page.getByRole('link', { name: '-2-2-003' }).click();
     await page.getByRole('button', { name: 'Withdraw', exact: true }).click();
-    await page.getByLabel('Outplant').check();
+    await page.getByLabel('Planting').check();
     await page.locator('#plantingSiteId').getByPlaceholder('Select...').click();
     await page.getByText('Planting Site', { exact: true }).click();
     await page.getByLabel('Open').first().click();
@@ -281,7 +281,7 @@ export default function InventoryTests() {
     await page.getByRole('link', { name: '60' }).click();
     await expect(page.getByText('Destination:Planting Site')).toBeVisible();
     await expect(page.getByText('Subzone:East-North')).toBeVisible();
-    await expect(page.locator('#row1-purpose')).toContainText('Outplant');
+    await expect(page.locator('#row1-purpose')).toContainText('Planting');
     await expect(page.locator('#row1-facility_name')).toContainText('My New Nursery-');
     await expect(page.locator('#row1-destinationName')).toContainText('Planting Site');
     await expect(page.locator('#row1-plantingSubzoneNames')).toContainText('East-North');
@@ -301,8 +301,8 @@ export default function InventoryTests() {
     await page.waitForTimeout(2000); //Wait for map to load
     await page.getByLabel('Map', { exact: true }).click({
       position: {
-        x: 562,
-        y: 245,
+        x: 526,
+        y: 172,
       },
     });
     await expect(page.getByRole('cell', { name: '60 Plants' })).toBeVisible();
@@ -313,8 +313,8 @@ export default function InventoryTests() {
     await page.waitForTimeout(2000); //Wait for map to load
     await page.getByLabel('Map', { exact: true }).click({
       position: {
-        x: 687,
-        y: 276,
+        x: 526,
+        y: 172,
       },
     });
 

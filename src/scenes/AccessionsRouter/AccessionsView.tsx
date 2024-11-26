@@ -14,7 +14,7 @@ interface AccessionsViewProps {
   setWithdrawalCreated: (value: boolean) => void;
 }
 
-const AccessionsView = ({ setWithdrawalCreated }: AccessionsViewProps) => {
+const AccessionsView = ({}: AccessionsViewProps) => {
   const dispatch = useAppDispatch();
   const { userPreferences } = useUser();
   const { selectedOrganization, reloadOrganizations, orgPreferences } = useOrganization();
@@ -55,7 +55,7 @@ const AccessionsView = ({ setWithdrawalCreated }: AccessionsViewProps) => {
   }, [setDefaults]);
 
   useEffect(() => {
-    if (!species) {
+    if (!species && selectedOrganization.id !== -1) {
       void dispatch(requestSpecies(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization.id, species]);

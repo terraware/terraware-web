@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useMixpanel } from 'react-mixpanel-browser';
+import { useNavigate } from 'react-router-dom';
 
 import { TableColumnType } from '@terraware/web-components';
 
-import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
-import { useAcceleratorOrgs } from 'src/hooks/useAcceleratorOrgs';
+import { FilterConfig, FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
 import { useParticipants } from 'src/hooks/useParticipants';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
@@ -12,33 +14,80 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ListDeliverablesRequestParams } from 'src/services/DeliverablesService';
 import strings from 'src/strings';
 import { AcceleratorOrgProject } from 'src/types/Accelerator';
-import { DeliverableCategories, DeliverableStatuses, ListDeliverablesElement } from 'src/types/Deliverables';
+import {
+  DeliverableCategories,
+  DeliverableStatusesWithOverdue,
+  DeliverableTypes,
+  ListDeliverablesElementWithOverdue,
+} from 'src/types/Deliverables';
+import { ParticipantProjectSearchResult } from 'src/types/Participant';
 import { Project } from 'src/types/Project';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchAndSortFn } from 'src/utils/searchAndSort';
+import useQuery from 'src/utils/useQuery';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import TableWithSearchFilters from '../TableWithSearchFilters';
 import DeliverableCellRenderer from './DeliverableCellRenderer';
 
 interface DeliverablesTableProps {
-  columns: (activeLocale: string | null) => TableColumnType[];
   extraTableFilters?: SearchNodePayload[];
   filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
   isAcceleratorRoute?: boolean;
   organizationId: number;
   participantId?: number;
-  searchAndSort?: SearchAndSortFn<ListDeliverablesElement>;
+  searchAndSort?: SearchAndSortFn<ListDeliverablesElementWithOverdue>;
   tableId: string;
 }
 
+const columns = (activeLocale: string | null): TableColumnType[] =>
+  activeLocale
+    ? [
+        {
+          key: 'name',
+          name: strings.DELIVERABLE_NAME,
+          type: 'string',
+        },
+        {
+          key: 'dueDate',
+          name: strings.DUE_DATE,
+          type: 'date',
+        },
+        {
+          key: 'status',
+          name: strings.STATUS,
+          type: 'string',
+        },
+        {
+          key: 'projectName',
+          name: strings.PROJECT,
+          type: 'string',
+        },
+        {
+          key: 'module',
+          name: strings.MODULE,
+          type: 'string',
+        },
+        {
+          key: 'category',
+          name: strings.CATEGORY,
+          type: 'string',
+        },
+        {
+          key: 'type',
+          name: strings.TYPE,
+          type: 'string',
+        },
+      ]
+    : [];
+
 const fuzzySearchColumns = ['name', 'projectName'];
 const defaultSearchOrder: SearchSortOrder = {
-  field: 'name',
+  field: 'status',
   direction: 'Ascending',
 };
 
 const DeliverablesTable = ({
-  columns,
   extraTableFilters,
   filterModifiers,
   isAcceleratorRoute,
@@ -51,24 +100,27 @@ const DeliverablesTable = ({
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
   const { selectedOrganization } = useOrganization();
-  const { acceleratorOrgs } = useAcceleratorOrgs(true);
   const { selectedParticipant } = useParticipants(participantId);
 
-  const acceleratorProjects = useMemo(() => acceleratorOrgs?.flatMap((org) => org.projects), [acceleratorOrgs]);
-
-  const [deliverables, setDeliverables] = useState<ListDeliverablesElement[]>([]);
+  const [deliverables, setDeliverables] = useState<ListDeliverablesElementWithOverdue[]>([]);
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');
   const deliverablesSearchRequest = useAppSelector(selectDeliverablesSearchRequest(deliverablesSearchRequestId));
+  const query = useQuery();
+  const projectParam = query.get('projectId');
+  const navigate = useNavigate();
+  const location = useStateLocation();
+  const mixpanel = useMixpanel();
 
   const projectsFilterOptions = useMemo(
     () =>
-      (acceleratorProjects || []).filter((project) =>
-        deliverables.find((deliverable) => deliverable.projectId === project.id)
-      ),
-    [acceleratorProjects, deliverables]
+      deliverables.map((deliverable) => ({
+        id: deliverable.projectId,
+        name: deliverable.projectName,
+      })),
+    [deliverables]
   );
 
-  const isAllowedReadDeliverable = isAllowed('READ_DELIVERABLE', selectedOrganization);
+  const isAllowedReadDeliverable = isAllowed('READ_DELIVERABLE', { organization: selectedOrganization });
 
   const getFilterProjectName = useCallback(
     (projectId: number | string) => {
@@ -81,14 +133,21 @@ const DeliverablesTable = ({
     [participantId, projectsFilterOptions, selectedParticipant?.projects]
   );
 
-  const featuredFilters: FilterConfig[] = useMemo(() => {
-    const filters: FilterConfig[] = [
+  const removeParam = () => {
+    if (projectParam) {
+      query.delete('projectId');
+      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+    }
+  };
+
+  const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
+    const filters: FilterConfigWithValues[] = [
       {
         field: 'status',
         // These options are strings for now, but may end up as enums when the BE types come through, if that is
         // the case we will need to implement the renderOption and pillValueRenderer to render the desired
         // human readable values
-        options: DeliverableStatuses,
+        options: DeliverableStatusesWithOverdue,
         label: strings.STATUS,
       },
       {
@@ -97,34 +156,45 @@ const DeliverablesTable = ({
         options: DeliverableCategories,
         label: strings.CATEGORY,
       },
+      {
+        field: 'type',
+        options: DeliverableTypes,
+        label: strings.TYPE,
+        pillValueRenderer: (values: (string | number | null)[]) =>
+          values.map((value) => (value === 'Questions' ? 'Questionnaire' : value)).join(', '),
+        renderOption: (value: string | number) =>
+          value.toString() === 'Questions' ? 'Questionnaire' : value.toString(),
+      },
     ];
 
     // show the project filter only in the accelerator route
     // the participant view already has a projects filter above the table
-    if (isAcceleratorRoute) {
+    const availableProjects = selectedParticipant?.projects || projectsFilterOptions || [];
+    if (isAcceleratorRoute && availableProjects && availableProjects.length > 0) {
+      let projectFromParam: ParticipantProjectSearchResult | undefined;
+      if (projectParam) {
+        projectFromParam = availableProjects.find((proj) => proj.id.toString() === projectParam);
+      }
       filters.unshift({
-        field: 'project_id',
-        options: (selectedParticipant?.projects || projectsFilterOptions || [])?.map(
-          (project: Project | AcceleratorOrgProject) => `${project.id}`
-        ),
-        searchNodeCreator: (values: (number | string | null)[]) => ({
-          field: 'projectId',
-          operation: 'field',
-          type: 'Exact',
-          values: values.map((value: number | string | null): string | null => (value === null ? value : `${value}`)),
-        }),
+        field: 'projectName',
+        options: availableProjects
+          .map((project: Project | AcceleratorOrgProject) => `${project.name}`)
+          .sort((a, b) => a.localeCompare(b, activeLocale || undefined)),
         label: strings.PROJECTS,
-        renderOption: (id: string | number) => getFilterProjectName(id),
-        pillValueRenderer: (values: (string | number | null)[]) =>
-          values
-            .map((value: string | number | null) => (value === null ? value : getFilterProjectName(value)))
-            .filter((value) => value)
-            .join(', '),
+        values: projectFromParam ? [projectFromParam.name] : [],
       });
+      removeParam();
     }
 
     return activeLocale ? filters : [];
-  }, [activeLocale, getFilterProjectName, isAcceleratorRoute, projectsFilterOptions, selectedParticipant?.projects]);
+  }, [
+    activeLocale,
+    getFilterProjectName,
+    isAcceleratorRoute,
+    projectsFilterOptions,
+    selectedParticipant?.projects,
+    projectParam,
+  ]);
 
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
@@ -151,6 +221,7 @@ const DeliverablesTable = ({
     () =>
       deliverables.map((deliverable) => ({
         ...deliverable,
+        type: deliverable.type === 'Questions' ? 'Questionnaire' : deliverable.type,
         isAllowedRead: isAllowedReadDeliverable,
       })),
     [deliverables, isAllowedReadDeliverable]
@@ -158,10 +229,28 @@ const DeliverablesTable = ({
 
   useEffect(() => {
     // TODO do something if the request has an error
-    if (deliverablesSearchRequest && deliverablesSearchRequest.data?.deliverables) {
-      setDeliverables(deliverablesSearchRequest.data.deliverables);
+    if (deliverablesSearchRequest && deliverablesSearchRequest.status === 'success') {
+      setDeliverables(deliverablesSearchRequest.data ?? []);
     }
   }, [deliverablesSearchRequest]);
+
+  const ofFilterAppliedHandler = (filter?: string, values?: (string | number | null)[]) => {
+    if (values && values.length) {
+      if ((filter === 'status' || filter === 'category') && isAcceleratorRoute) {
+        mixpanel?.track(MIXPANEL_EVENTS.CONSOLE_DELIVERABLES_LIST_FILTER, {
+          filter,
+          values,
+        });
+        return;
+      }
+      if (!isAcceleratorRoute) {
+        mixpanel?.track(MIXPANEL_EVENTS.PART_EX_DELIVERABLES_LIST_FILTER, {
+          filter,
+          values,
+        });
+      }
+    }
+  };
 
   return (
     <TableWithSearchFilters
@@ -175,6 +264,8 @@ const DeliverablesTable = ({
       id={tableId}
       Renderer={DeliverableCellRenderer}
       rows={_deliverables}
+      onFilterApplied={ofFilterAppliedHandler}
+      stickyFilters
     />
   );
 };

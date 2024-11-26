@@ -1,23 +1,14 @@
 import React, { useCallback, useState } from 'react';
 
-import { Box, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
 
+import TextWithLink from 'src/components/common/TextWithLink';
+import { useDocLinks } from 'src/docLinks';
 import strings from 'src/strings';
 import { SiteType } from 'src/types/PlantingSite';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  buttonSpacing: {
-    marginRight: theme.spacing(2),
-  },
-  icon: {
-    width: '150px',
-    height: '150px',
-  },
-}));
 
 export type PlantingSiteSelectTypeModalProps = {
   open: boolean;
@@ -27,10 +18,10 @@ export type PlantingSiteSelectTypeModalProps = {
 
 export default function PlantingSiteSelectTypeModal(props: PlantingSiteSelectTypeModalProps): JSX.Element {
   const { open, onNext, onClose } = props;
-  const classes = useStyles();
   const theme = useTheme();
   const [detailed, setDetailed] = useState<boolean | null>(null);
   const { isMobile } = useDeviceInfo();
+  const docLinks = useDocLinks();
 
   const handleClose = () => {
     setDetailed(null);
@@ -56,8 +47,8 @@ export default function PlantingSiteSelectTypeModal(props: PlantingSiteSelectTyp
           label={strings.CANCEL}
           priority='secondary'
           type='passive'
-          className={classes.buttonSpacing}
           key='button-1'
+          style={{ marginRight: theme.spacing(2) }}
         />,
         <Button onClick={handleNext} id='next' label={strings.NEXT} key='button-2' disabled={detailed === null} />,
       ]}
@@ -80,6 +71,14 @@ export default function PlantingSiteSelectTypeModal(props: PlantingSiteSelectTyp
             isSelected={detailed === true}
             onClick={() => setDetailed(true)}
             title={strings.DETAILED_SITE}
+          />
+        </Box>
+        <Box margin={theme.spacing(3, 0, 0, 0)}>
+          <TextWithLink
+            fontSize='16px'
+            href={docLinks.knowledge_base_stratification}
+            isExternal
+            text={strings.LEARN_MORE_STRATA}
           />
         </Box>
       </Box>

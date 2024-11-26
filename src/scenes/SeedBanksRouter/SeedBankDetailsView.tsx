@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { Grid, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Grid, Typography, useTheme } from '@mui/material';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
@@ -19,25 +18,16 @@ import TextField from '../../components/common/Textfield/Textfield';
 import TfMain from '../../components/common/TfMain';
 import Button from '../../components/common/button/Button';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  titleWithButton: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-}));
-
 export default function SeedBankDetailsView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { seedBankId } = useParams<{ seedBankId: string }>();
   const [seedBank, setSeedBank] = useState<Facility>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const tz = useLocationTimeZone().get(seedBank);
 
   useEffect(() => {
-    if (selectedOrganization) {
+    if (selectedOrganization && seedBankId) {
       const selectedSeedBank = FacilityService.getFacility({
         organization: selectedOrganization,
         facilityId: seedBankId,
@@ -46,18 +36,18 @@ export default function SeedBankDetailsView(): JSX.Element {
       if (selectedSeedBank) {
         setSeedBank(selectedSeedBank);
       } else {
-        history.push(APP_PATHS.SEED_BANKS);
+        navigate(APP_PATHS.SEED_BANKS);
       }
     }
-  }, [seedBankId, selectedOrganization, history]);
-
-  const classes = useStyles();
+  }, [seedBankId, selectedOrganization, navigate]);
 
   const goToEditSeedBank = () => {
-    const editSeedBankLocation = {
-      pathname: APP_PATHS.SEED_BANKS_EDIT.replace(':seedBankId', seedBankId),
-    };
-    history.push(editSeedBankLocation);
+    if (seedBankId) {
+      const editSeedBankLocation = {
+        pathname: APP_PATHS.SEED_BANKS_EDIT.replace(':seedBankId', seedBankId),
+      };
+      navigate(editSeedBankLocation);
+    }
   };
 
   const { isMobile } = useDeviceInfo();
@@ -74,7 +64,17 @@ export default function SeedBankDetailsView(): JSX.Element {
         <Grid item xs={12} marginBottom={theme.spacing(3)}>
           <BackToLink id='back' to={APP_PATHS.SEED_BANKS} name={strings.SEED_BANKS} />
         </Grid>
-        <Grid item xs={12} padding={theme.spacing(0, 3)} className={classes.titleWithButton}>
+        <Grid
+          item
+          xs={12}
+          padding={theme.spacing(0, 3)}
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
           <Typography fontSize='20px' fontWeight={600} margin={0}>
             {seedBank?.name}
           </Typography>

@@ -1,29 +1,12 @@
 import React from 'react';
 
-import { Box, Link, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Link, useTheme } from '@mui/material';
 
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
 import DialogBox from '../common/DialogBox/DialogBox';
 import Button from '../common/button/Button';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  spacing: {
-    marginRight: theme.spacing(2),
-  },
-  content: {
-    color: theme.palette.TwClrTxt,
-    textAlign: 'left',
-  },
-  learnMoreLink: {
-    color: theme.palette.TwClrTxtInverse,
-    fontSize: 'inherit',
-    textDecorationColor: theme.palette.TwClrTxtInverse,
-    verticalAlign: 'text-top',
-  },
-}));
 
 export type TooltipLearnMoreModalData = {
   content?: NonNullable<React.ReactNode>;
@@ -38,7 +21,7 @@ export type TooltipLearnMoreModalProps = {
 };
 
 export default function TooltipLearnMoreModal(props: TooltipLearnMoreModalProps): JSX.Element {
-  const classes = useStyles();
+  const theme = useTheme();
   const { open, onClose, title, content } = props;
 
   return (
@@ -50,19 +33,35 @@ export default function TooltipLearnMoreModal(props: TooltipLearnMoreModalProps)
       size='medium'
       title={title ?? strings.LEARN_MORE}
     >
-      <Box className={classes.content}>{content}</Box>
+      <Box
+        sx={{
+          color: theme.palette.TwClrTxt,
+          textAlign: 'left',
+        }}
+      >
+        {content}
+      </Box>
     </DialogBox>
   );
 }
 
 export const LearnMoreLink = (props: { onClick: () => void }): JSX.Element => {
-  const classes = useStyles();
+  const theme = useTheme();
   const { onClick } = props;
 
   return (
     <>
       {' '}
-      <Link className={classes.learnMoreLink} component='button' onClick={onClick}>
+      <Link
+        component='button'
+        onClick={onClick}
+        sx={{
+          color: theme.palette.TwClrTxtInverse,
+          fontSize: 'inherit',
+          textDecorationColor: theme.palette.TwClrTxtInverse,
+          verticalAlign: 'text-top',
+        }}
+      >
         {strings.LEARN_MORE}
       </Link>
     </>
@@ -87,6 +86,7 @@ export const LearnMoreModalContentGrowthForm = (): JSX.Element => {
     [strings.SHRUB_TREE, strings.LEARN_MORE_GROWTH_FORM_SHRUB_TREE],
     [strings.SUBSHRUB, strings.LEARN_MORE_GROWTH_FORM_SUBSHRUB],
     [strings.MULTIPLE_FORMS, strings.LEARN_MORE_GROWTH_FORM_MULTIPLE_FORMS],
+    [strings.HERB, strings.LEARN_MORE_GROWTH_FORM_HERB],
   ]
     .sort((a, b) => collator.compare(a[0], b[0]))
     .map(([name, description], index) => (

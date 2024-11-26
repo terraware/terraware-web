@@ -1,4 +1,6 @@
-import { Box, Typography, useTheme } from '@mui/material';
+import React from 'react';
+
+import { Box, SxProps, Typography, useTheme } from '@mui/material';
 import { Button, IconTooltip, Tooltip } from '@terraware/web-components';
 
 import strings from 'src/strings';
@@ -15,18 +17,19 @@ type OverviewItemCardProps = {
   contents: JSX.Element | string | number | null;
   className?: string;
   grid?: boolean;
+  sx?: SxProps;
 };
 
 export default function OverviewItemCard({
   isEditable,
   hideEditIcon,
-  onClick,
   handleEdit,
   title,
   titleInfoTooltip,
   contents,
   className,
   grid,
+  sx,
 }: OverviewItemCardProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -43,6 +46,7 @@ export default function OverviewItemCard({
         justifyContent: 'space-between',
         padding: grid ? theme.spacing(1.5, 0) : theme.spacing(3),
         width: '100%',
+        ...sx,
       }}
     >
       <Box

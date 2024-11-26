@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Message } from '@terraware/web-components';
 
 import TitleBar from 'src/components/DeliverableView/TitleBar';

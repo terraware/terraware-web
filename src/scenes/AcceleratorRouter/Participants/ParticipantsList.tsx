@@ -1,5 +1,5 @@
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, TableColumnType } from '@terraware/web-components';
@@ -55,7 +55,7 @@ const defaultSearchOrder: SearchSortOrder = {
 };
 
 export default function ParticipantList(): JSX.Element {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
   const { isMobile } = useDeviceInfo();
@@ -107,8 +107,8 @@ export default function ParticipantList(): JSX.Element {
   );
 
   const goToNewParticipant = useCallback(() => {
-    history.push(APP_PATHS.ACCELERATOR_PARTICIPANTS_NEW);
-  }, [history]);
+    navigate(APP_PATHS.ACCELERATOR_PARTICIPANTS_NEW);
+  }, [navigate]);
 
   const cohorts = useMemo<Record<string, string>>(
     () =>
@@ -195,6 +195,7 @@ export default function ParticipantList(): JSX.Element {
           rightComponent={actionMenus}
           rows={participants}
           title={strings.PARTICIPANTS}
+          stickyFilters
         />
       )}
     </>

@@ -1,4 +1,20 @@
-import { SearchType } from 'src/types/Search';
+import { SearchNodePayload, SearchType } from 'src/types/Search';
+
+/**
+ * Creates a spreadable array of a search node for a given set of ids. It stringifies the ids and
+ * returns an empty array if there are no ids, which would throw an error in the Search API
+ */
+const createSearchNodeForIds = (field: string, ids: number[]): SearchNodePayload[] =>
+  ids.length > 0
+    ? [
+        {
+          operation: 'field',
+          field,
+          type: 'Exact',
+          values: ids.map((id) => `${id}`),
+        } as SearchNodePayload,
+      ]
+    : [];
 
 /**
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#escaping
@@ -8,13 +24,15 @@ function escapeRegExp(input: string) {
 }
 
 /**
- * Parse the text search term and return the query and the type of search, Fuzzy or PhraseMatch.
+ * Parse the text search term and return the query and the type of search. If the query is
+ * surrounded by double quotes, the type is PhraseMatch (and the search term will have the quotes
+ * stripped). Otherwise the type is the value of the "type" parameter, which is Fuzzy by default.
  */
-const parseSearchTerm = (searchTerm: string): { type: SearchType; values: string[] } => {
+const parseSearchTerm = (searchTerm: string, type: SearchType = 'Fuzzy'): { type: SearchType; values: string[] } => {
   const phraseMatchQuery = removeDoubleQuotes(searchTerm);
 
   return {
-    type: phraseMatchQuery ? 'PhraseMatch' : 'Fuzzy',
+    type: phraseMatchQuery ? 'PhraseMatch' : type,
     values: [phraseMatchQuery || searchTerm],
   };
 };
@@ -51,4 +69,4 @@ const removeDoubleQuotes = (str: string): string | null => {
   }
 };
 
-export { parseSearchTerm, phraseMatch, regexMatch, removeDoubleQuotes };
+export { createSearchNodeForIds, parseSearchTerm, phraseMatch, regexMatch, removeDoubleQuotes };

@@ -1,16 +1,21 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import { Grid, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Grid, useTheme } from '@mui/material';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import TextField from 'src/components/common/Textfield/Textfield';
+import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
+import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
+import AssignNewOwnerDialog from 'src/scenes/MyAccountRouter/AssignNewOwnerModal';
+import DeleteOrgDialog from 'src/scenes/MyAccountRouter/DeleteOrgModal';
 import { OrganizationService, OrganizationUserService, Response } from 'src/services';
 import { SearchService } from 'src/services';
 import strings from 'src/strings';
@@ -24,37 +29,9 @@ import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import PageHeaderWrapper from '../../components/common/PageHeaderWrapper';
-import TextField from '../../components/common/Textfield/Textfield';
-import TfMain from '../../components/common/TfMain';
-import AssignNewOwnerDialog from '../MyAccountRouter/AssignNewOwnerModal';
-import DeleteOrgDialog from '../MyAccountRouter/DeleteOrgModal';
 import CannotRemovePeopleDialog from './CannotRemovePeopleModal';
 import RemovePeopleDialog from './RemovePeopleModal';
 import TableCellRenderer from './TableCellRenderer';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  title: {
-    margin: 0,
-    fontSize: '24px',
-    fontWeight: 600,
-  },
-  contentContainer: {
-    backgroundColor: theme.palette.TwClrBg,
-    padding: theme.spacing(3),
-    borderRadius: '32px',
-  },
-  centered: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    marginBottom: '32px',
-  },
-  searchField: {
-    width: '300px',
-  },
-}));
 
 const columns = (): TableColumnType[] => [
   { key: 'email', name: strings.EMAIL, type: 'string' },
@@ -67,9 +44,8 @@ const columns = (): TableColumnType[] => [
 export default function PeopleListView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
   const { user } = useUser();
-  const classes = useStyles();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [selectedPeopleRows, setSelectedPeopleRows] = useState<OrganizationUser[]>([]);
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
   const [removePeopleModalOpened, setRemovePeopleModalOpened] = useState(false);
@@ -103,6 +79,12 @@ export default function PeopleListView(): JSX.Element {
                 operation: 'field',
                 field: 'user_lastName',
                 type,
+                values,
+              },
+              {
+                operation: 'field',
+                field: 'user_email',
+                type: 'Exact',
                 values,
               },
             ],
@@ -183,7 +165,7 @@ export default function PeopleListView(): JSX.Element {
     const newPersonLocation = {
       pathname: APP_PATHS.PEOPLE_NEW,
     };
-    history.push(newPersonLocation);
+    navigate(newPersonLocation);
   };
 
   const openDeleteOrgModal = () => {
@@ -198,7 +180,7 @@ export default function PeopleListView(): JSX.Element {
         setCannotRemovePeopleModalOpened(true);
       } else {
         const selectedOwners = selectedPeopleRows.filter((selectedPerson) => selectedPerson.role === 'Owner');
-        if (selectedOwners.length > 0) {
+        if (selectedOwners.length > 0 && selectedOrganization.id !== -1) {
           const organizationRoles = await OrganizationService.getOrganizationRoles(selectedOrganization.id);
           const totalOwners = organizationRoles.roles?.find((role) => role.role === 'Owner');
           if (selectedOwners.length === totalOwners?.totalUsers) {
@@ -228,44 +210,46 @@ export default function PeopleListView(): JSX.Element {
   };
 
   const removePeopleHandler = async () => {
-    let assignNewOwnerResponse;
-    if (newOwner) {
-      assignNewOwnerResponse = await OrganizationUserService.updateOrganizationUser(
-        selectedOrganization.id,
-        newOwner.id,
-        'Owner'
-      );
-    }
-    const promises: Promise<Response>[] = [];
-    if ((assignNewOwnerResponse && assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {
-      selectedPeopleRows.forEach((person) => {
-        promises.push(OrganizationUserService.deleteOrganizationUser(selectedOrganization.id, person.id));
+    if (selectedOrganization.id !== -1) {
+      let assignNewOwnerResponse;
+      if (newOwner) {
+        assignNewOwnerResponse = await OrganizationUserService.updateOrganizationUser(
+          selectedOrganization.id,
+          newOwner.id,
+          'Owner'
+        );
+      }
+      const promises: Promise<Response>[] = [];
+      if ((assignNewOwnerResponse && assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {
+        selectedPeopleRows.forEach((person) => {
+          promises.push(OrganizationUserService.deleteOrganizationUser(selectedOrganization.id, person.id));
+        });
+      }
+      const leaveOrgResponses = await Promise.all(promises);
+      let allRemoved = true;
+
+      leaveOrgResponses.forEach((resp) => {
+        if (!resp.requestSucceeded) {
+          allRemoved = false;
+        }
       });
-    }
-    const leaveOrgResponses = await Promise.all(promises);
-    let allRemoved = true;
 
-    leaveOrgResponses.forEach((resp) => {
-      if (!resp.requestSucceeded) {
-        allRemoved = false;
+      if (allRemoved) {
+        setRemovePeopleModalOpened(false);
+        setSelectedPeopleRows([]);
+        if (reloadOrganizations) {
+          reloadOrganizations();
+        }
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
+      } else {
+        snackbar.toastError();
       }
-    });
-
-    if (allRemoved) {
-      setRemovePeopleModalOpened(false);
-      setSelectedPeopleRows([]);
-      if (reloadOrganizations) {
-        reloadOrganizations();
-      }
-      snackbar.toastSuccess(strings.CHANGES_SAVED);
-    } else {
-      snackbar.toastError();
+      navigate(APP_PATHS.PEOPLE);
     }
-    history.push(APP_PATHS.PEOPLE);
   };
 
   const deleteOrgHandler = async () => {
-    if (user) {
+    if (user && selectedOrganization.id !== -1) {
       let allRemoved = true;
       const keepOneOwnerId = selectedPeopleRows.filter((person) => person.role === 'Owner')[0].id.toString();
       const otherUsers = selectedPeopleRows.filter(
@@ -296,7 +280,7 @@ export default function PeopleListView(): JSX.Element {
       } else {
         snackbar.toastError();
       }
-      history.push(APP_PATHS.HOME);
+      navigate(APP_PATHS.HOME);
     }
   };
 
@@ -347,9 +331,27 @@ export default function PeopleListView(): JSX.Element {
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Grid container paddingBottom={theme.spacing(4)} paddingLeft={isMobile ? 0 : theme.spacing(3)}>
           <Grid item xs={8}>
-            <h1 className={classes.title}>{strings.PEOPLE}</h1>
+            <h1
+              style={{
+                margin: 0,
+                fontSize: '24px',
+                fontWeight: 600,
+              }}
+            >
+              {strings.PEOPLE}
+            </h1>
           </Grid>
-          <Grid item xs={4} className={classes.centered}>
+          <Grid
+            item
+            xs={4}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'flex-end',
+              marginBottom: '32px',
+            }}
+          >
             {isMobile ? (
               <Button id='new-person' icon='plus' onClick={goToNewPerson} size='medium' />
             ) : (
@@ -361,19 +363,27 @@ export default function PeopleListView(): JSX.Element {
       </PageHeaderWrapper>
       <Card flushMobile>
         <Grid container ref={contentRef}>
-          <Grid item xs={12} marginBottom='16px'>
+          <Grid
+            item
+            xs={12}
+            marginBottom='16px'
+            sx={{
+              display: 'flex',
+            }}
+          >
             <TextField
               placeholder={strings.SEARCH}
               iconLeft='search'
               label=''
               id='search'
               type='text'
-              className={classes.searchField}
               onChange={(value) => onChangeSearch('search', value)}
               value={temporalSearchValue}
               iconRight='cancel'
               onClickRightIcon={clearSearch}
+              sx={{ width: '300px' }}
             />
+            <TableSettingsButton />
           </Grid>
 
           <Grid item xs={12}>

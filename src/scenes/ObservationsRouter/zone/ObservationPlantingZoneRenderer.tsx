@@ -17,6 +17,7 @@ const ObservationPlantingZoneRenderer =
     plantingZoneId: number,
     setReplaceObservationPlot: React.Dispatch<React.SetStateAction<ObservationMonitoringPlotResultsPayload | undefined>>
   ) =>
+  // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
 
@@ -25,7 +26,12 @@ const ObservationPlantingZoneRenderer =
         .replace(':observationId', observationId.toString())
         .replace(':plantingZoneId', plantingZoneId.toString())
         .replace(':monitoringPlotId', row.monitoringPlotId.toString());
-      return <Link to={url}>{name as React.ReactNode}</Link>;
+      return (
+        <Link fontSize='16px' to={url}>
+          {name as React.ReactNode}
+          {row.sizeMeters.toString() === '25' ? '*' : ''}
+        </Link>
+      );
     };
 
     // don't render data if we don't have data
@@ -34,16 +40,17 @@ const ObservationPlantingZoneRenderer =
     }
 
     if (column.key === 'monitoringPlotName') {
-      return <CellRenderer {...props} value={createLinkToMonitoringPlotObservation(value as string)} />;
-    }
-
-    if (column.key === 'mortalityRate') {
       return (
         <CellRenderer
           {...props}
-          value={value !== undefined && value !== null && row.hasObservedPermanentPlots ? `${value}%` : ''}
+          value={createLinkToMonitoringPlotObservation(value as string)}
+          title={value as string}
         />
       );
+    }
+
+    if (column.key === 'mortalityRate') {
+      return <CellRenderer {...props} value={value !== undefined && value !== null ? `${value}%` : ''} />;
     }
 
     if (column.key === 'status') {

@@ -18,9 +18,11 @@ export default function SubLocationsCellRenderer({
   editMode,
   renderLink,
 }: SubLocationsCellRendererProps) {
+  // eslint-disable-next-line react/display-name
   return (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, value, row, onRowClick } = props;
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const rowClick = (event?: React.SyntheticEvent) => {
       if (editMode && !!onRowClick) {
         onRowClick();
@@ -31,16 +33,27 @@ export default function SubLocationsCellRenderer({
       if (!renderLink || !facilityId) {
         return data;
       }
-      return <Link to={renderLink(facilityId, locationName)}>{data}</Link>;
+      return (
+        <Link fontSize='16px' to={renderLink(facilityId, locationName)}>
+          {data}
+        </Link>
+      );
     };
 
     const createLinkToName = (locationName: string) => {
-      return <Link onClick={rowClick}>{locationName}</Link>;
+      return (
+        <Link fontSize='16px' onClick={rowClick}>
+          {locationName}
+        </Link>
+      );
     };
 
     if (column.key === 'activeAccessions' || column.key === 'activeBatches') {
-      const activeDataStr = numericFormatter.format(value as number);
-      const data = editMode ? activeDataStr : createLinkToData(row.name, activeDataStr);
+      const activeDataStr = value ? numericFormatter.format(value as number) : undefined;
+      let data: string | JSX.Element = '0';
+      if (activeDataStr) {
+        data = editMode ? activeDataStr : createLinkToData(row.name, activeDataStr);
+      }
 
       return <CellRenderer {...props} value={data} />;
     }

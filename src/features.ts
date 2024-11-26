@@ -1,12 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName =
-  | 'Show Production View'
-  | 'User Detailed Sites'
-  | 'Console'
-  | 'Participant Experience'
-  | 'Document Producer';
+export type FeatureName = 'Show Production View' | 'Home Page Onboarding Improvements' | 'New Plants Dashboard';
 
 export type Feature = {
   name: FeatureName;
@@ -41,31 +36,22 @@ export const OPT_IN_FEATURES: Feature[] = [
     set: env().forceProductionView,
   },
   {
-    name: 'User Detailed Sites',
-    preferenceName: 'enableUserDetailedSites',
+    name: 'Home Page Onboarding Improvements',
+    preferenceName: 'enableHomePageOnboardingImprovements',
     active: true,
     enabled: false,
     allowInternalProduction: false,
-    description: ['User drawn detailed sites'],
-    disclosure: ['This is WIP'],
+    description: ['Improvements to the Terraware home page onboarding experience.'],
+    disclosure: ['This is a WIP'],
   },
   {
-    name: 'Participant Experience',
-    preferenceName: 'enableParticipantExperience',
+    name: 'New Plants Dashboard',
+    preferenceName: 'enableNewPlantsDashboard',
     active: true,
     enabled: false,
     allowInternalProduction: false,
-    description: ['Participant-facing functionality related to the Terraware Accelerator'],
-    disclosure: ['This is WIP'],
-  },
-  {
-    name: 'Document Producer',
-    preferenceName: 'enableDocumentProducer',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Terraware Accelerator Console access to the document producer tool'],
-    disclosure: ['This is WIP'],
+    description: ['New plants dashboard'],
+    disclosure: ['This is a WIP'],
   },
 ];
 

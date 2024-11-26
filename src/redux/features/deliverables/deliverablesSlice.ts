@@ -2,17 +2,20 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import {
+  requestCompleteDeliverable,
   requestGetDeliverable,
+  requestIncompleteDeliverable,
   requestListDeliverables,
+  requestSubmitDeliverable,
   requestUpdateDeliverable,
   requestUploadDeliverableDocument,
 } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
-import { Deliverable, DeliverablesData } from 'src/types/Deliverables';
+import { DeliverableWithOverdue, ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
 
 /**
  * Deliverable list
  */
-const initialStateDeliverablesList: { [key: string]: StatusT<DeliverablesData> } = {};
+const initialStateDeliverablesList: { [key: string]: StatusT<ListDeliverablesElementWithOverdue[]> } = {};
 
 export const deliverablesListSlice = createSlice({
   name: 'deliverablesListSlice',
@@ -23,13 +26,11 @@ export const deliverablesListSlice = createSlice({
   },
 });
 
-export const deliverablesSearchReducer = deliverablesListSlice.reducer;
-
 /**
  * Individual Deliverable
  * Can be accessed by a request ID or by a deliverable/project ID string
  */
-const initialStateDeliverables: { [key: number | string]: StatusT<Deliverable> } = {};
+const initialStateDeliverable: { [key: number | string]: StatusT<DeliverableWithOverdue> } = {};
 
 type DeliverableProjectIdArg = { deliverableId: number; projectId: number };
 export const deliverableCompositeKeyFn = (arg: unknown): string => {
@@ -43,20 +44,18 @@ export const deliverableCompositeKeyFn = (arg: unknown): string => {
 
 export const deliverablesSlice = createSlice({
   name: 'deliverablesSlice',
-  initialState: initialStateDeliverables,
+  initialState: initialStateDeliverable,
   reducers: {},
   extraReducers: (builder) => {
     buildReducers(requestGetDeliverable, true, deliverableCompositeKeyFn)(builder);
   },
 });
 
-export const deliverablesReducer = deliverablesSlice.reducer;
-
 /**
  * Simple OK/response for requests such as updating deliverable status, keeps
  * state of deliverable id that was edited.
  */
-const initialStateEditDeliverable: { [key: number | string]: StatusT<number> } = {};
+const initialStateEditDeliverable: { [key: number | string]: StatusT<number | string> } = {};
 
 export const deliverablesEditSlice = createSlice({
   name: 'deliverablesEditSlice',
@@ -65,7 +64,16 @@ export const deliverablesEditSlice = createSlice({
   extraReducers: (builder) => {
     buildReducers(requestUpdateDeliverable)(builder);
     buildReducers(requestUploadDeliverableDocument)(builder);
+    buildReducers(requestSubmitDeliverable)(builder);
+    buildReducers(requestCompleteDeliverable)(builder);
+    buildReducers(requestIncompleteDeliverable)(builder);
   },
 });
 
-export const deliverablesEditReducer = deliverablesEditSlice.reducer;
+const deliverablesReducers = {
+  deliverablesSearch: deliverablesListSlice.reducer,
+  deliverables: deliverablesSlice.reducer,
+  deliverablesEdit: deliverablesEditSlice.reducer,
+};
+
+export default deliverablesReducers;

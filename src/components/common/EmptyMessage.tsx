@@ -1,61 +1,11 @@
 import React from 'react';
 
-import { Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, SxProps, Typography, useTheme } from '@mui/material';
 
 import Link from 'src/components/common/Link';
 import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-
-interface StyleProps {
-  isMobile: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  mainContainer: {
-    background: theme.palette.TwClrBg,
-    padding: '24px',
-    borderRadius: '24px',
-    textAlign: 'center',
-  },
-  text: {
-    paddingBottom: '24px',
-    fontSize: '16px',
-  },
-  title: {
-    fontSize: '20px',
-  },
-  rowItemsContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginTop: theme.spacing(5),
-  },
-  rowItem: {
-    borderTop: `1px solid ${theme.palette.TwClrBgTertiary}`,
-    padding: `${theme.spacing(3)} 0`,
-    margin: `0 ${theme.spacing(1)}`,
-  },
-  rowItemInfo: {
-    textAlign: 'left',
-    marginBottom: (props: StyleProps) => (props.isMobile ? theme.spacing(2) : 0),
-  },
-  rowItemGroup: {
-    display: 'flex',
-    flexDirection: (props: StyleProps) => (props.isMobile ? 'column' : 'row'),
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flexGrow: 1,
-    '& > button': {
-      textAlign: 'center',
-      width: '160px',
-    },
-  },
-  or: {
-    textAlign: 'left',
-    margin: `${theme.spacing(2)} 0`,
-  },
-}));
 
 type RowAltItem = {
   title: string;
@@ -82,38 +32,79 @@ type EmptyMessageProps = {
   onClick?: () => void;
   className?: string;
   rowItems?: RowItem[];
+  sx?: SxProps;
 };
 
 export default function EmptyMessage(props: EmptyMessageProps): JSX.Element {
-  const { title, text, buttonText, onClick, className, rowItems } = props;
+  const { title, text, buttonText, onClick, className, rowItems, sx } = props;
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
+
+  const rowItemInfoStyles = {
+    textAlign: 'left',
+    marginBottom: isMobile ? theme.spacing(2) : 0,
+  };
+
+  const rowItemGroupStyles = {
+    display: 'flex',
+    flexDirection: isMobile ? 'column' : 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexGrow: 1,
+    '& > button': {
+      textAlign: 'center',
+      width: '160px',
+    },
+  };
 
   return (
-    <div className={`${classes.mainContainer} ${className ?? ''}`}>
-      {title && <h3 className={classes.title}>{title}</h3>}
-      {text && <p className={classes.text}>{text}</p>}
+    <Box
+      className={`${className ?? ''}`}
+      sx={[
+        {
+          background: theme.palette.TwClrBg,
+          padding: '24px',
+          borderRadius: '24px',
+          textAlign: 'center',
+        },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
+    >
+      {title && <h3 style={{ fontSize: '20px' }}>{title}</h3>}
+      {text && <p style={{ paddingBottom: '24px', fontSize: '16px' }}>{text}</p>}
       {rowItems !== undefined && (
-        <div className={classes.rowItemsContainer}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            marginTop: theme.spacing(5),
+          }}
+        >
           {rowItems.map((rowItem, index) => (
-            <div className={classes.rowItem} key={index}>
-              <div className={classes.rowItemGroup}>
-                <div className={classes.rowItemInfo}>
+            <Box
+              key={index}
+              sx={{
+                borderTop: `1px solid ${theme.palette.TwClrBgTertiary}`,
+                padding: `${theme.spacing(3)} 0`,
+                margin: `0 ${theme.spacing(1)}`,
+              }}
+            >
+              <Box sx={rowItemGroupStyles}>
+                <Box sx={rowItemInfoStyles}>
                   <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrTxt} lineHeight='20px'>
                     {rowItem.title}
                   </Typography>
                   <Typography fontSize='14px' fontWeight={500} color={theme.palette.TwClrTxt} lineHeight='20px'>
                     {rowItem.text}
                   </Typography>
-                </div>
+                </Box>
                 <Button label={rowItem.buttonText} onClick={rowItem.onClick} disabled={rowItem.disabled} />
-              </div>
+              </Box>
               {rowItem.altItem !== undefined ? (
                 <>
-                  <Typography className={classes.or}>- {strings.OR} -</Typography>
-                  <div className={classes.rowItemGroup}>
-                    <div className={classes.rowItemInfo}>
+                  <Typography sx={{ textAlign: 'left', margin: `${theme.spacing(2)} 0` }}>- {strings.OR} -</Typography>
+                  <Box sx={rowItemGroupStyles}>
+                    <Box sx={rowItemInfoStyles}>
                       <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrTxt} lineHeight='20px'>
                         {rowItem.altItem.title}
                       </Typography>
@@ -121,21 +112,21 @@ export default function EmptyMessage(props: EmptyMessageProps): JSX.Element {
                         {rowItem.altItem.text}
                       </Typography>
                       <Link onClick={rowItem.altItem.onLinkClick}>{rowItem.altItem.linkText}</Link>
-                    </div>
+                    </Box>
                     <Button
                       label={rowItem.altItem.buttonText}
                       onClick={rowItem.altItem.onClick}
                       priority='secondary'
                       disabled={rowItem.disabled}
                     />
-                  </div>
+                  </Box>
                 </>
               ) : null}
-            </div>
+            </Box>
           ))}
-        </div>
+        </Box>
       )}
       {onClick && buttonText && <Button label={buttonText} onClick={onClick} />}
-    </div>
+    </Box>
   );
 }

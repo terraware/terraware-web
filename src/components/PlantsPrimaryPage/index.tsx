@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import _ from 'lodash';
 
@@ -26,6 +26,7 @@ export type PlantsPrimaryPageProps = {
   style?: Record<string, string | number>;
   title: string;
   text?: string;
+  newHeader?: boolean;
 };
 
 const allSitesOption = (organizationId: number): PlantingSite => ({
@@ -49,17 +50,18 @@ export default function PlantsPrimaryPage({
   style,
   title,
   text,
+  newHeader,
 }: PlantsPrimaryPageProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
 
   useEffect(() => {
-    if (plantsSitePreferences) {
+    if (plantsSitePreferences && selectedOrganization.id !== -1) {
       const response = CachedUserService.getUserOrgPreferences(selectedOrganization.id);
       if (!_.isEqual(response[lastVisitedPreferenceName], plantsSitePreferences)) {
         PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
@@ -72,7 +74,7 @@ export default function PlantsPrimaryPage({
   useEffect(() => {
     const populatePlantingSites = async () => {
       let plantingSitesList: PlantingSite[] | undefined = plantingSitesData;
-      if (plantingSitesList === undefined) {
+      if (plantingSitesList === undefined && selectedOrganization.id !== -1) {
         const serverResponse = await TrackingService.listPlantingSites(
           selectedOrganization.id,
           undefined,
@@ -97,15 +99,15 @@ export default function PlantsPrimaryPage({
   const setActivePlantingSite = useCallback(
     (site: PlantingSite | undefined) => {
       if (site) {
-        history.push(pagePath.replace(':plantingSiteId', site.id.toString()));
+        navigate(pagePath.replace(':plantingSiteId', site.id.toString()));
       }
     },
-    [history, pagePath]
+    [navigate, pagePath]
   );
 
   useEffect(() => {
     const initializePlantingSite = () => {
-      if (plantingSites && plantingSites.length) {
+      if (plantingSites && plantingSites.length && selectedOrganization.id !== -1) {
         let lastVisitedPlantingSite: any = {};
         const response = CachedUserService.getUserOrgPreferences(selectedOrganization.id);
         if (response[lastVisitedPreferenceName]) {
@@ -146,6 +148,7 @@ export default function PlantsPrimaryPage({
   return (
     <PlantsPrimaryPageView
       actionButton={actionButton}
+      // eslint-disable-next-line react/no-children-prop
       children={children}
       isEmptyState={isEmptyState}
       onSelect={setActivePlantingSite}
@@ -154,6 +157,7 @@ export default function PlantsPrimaryPage({
       style={style}
       title={title}
       text={text}
+      newHeader={newHeader}
     />
   );
 }

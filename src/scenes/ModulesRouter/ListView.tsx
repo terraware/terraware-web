@@ -1,53 +1,84 @@
-import React, { useEffect } from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
 import Card from 'src/components/common/Card';
-import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
-import { useProject } from 'src/providers';
-import { requestListModules } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectModuleList } from 'src/redux/features/modules/modulesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 
 import CurrentTimeline from './CurrentTimeline';
-import ModuleEntry from './ModuleEntry';
+import ListModulesContent from './ListModulesContent';
+import ListViewHeader from './ListViewHeader';
 
 export default function ListView(): JSX.Element {
-  const dispatch = useAppDispatch();
   const theme = useTheme();
 
-  const { project, projectId } = useProject();
-
-  const modules = useAppSelector(selectModuleList(projectId));
-  // tslint:disable:no-console
-  console.log(project, modules);
+  const { currentParticipant } = useParticipantData();
 
   // TODO - where will this be stored? Is this stored in the back end within another enum table?
   // Should we store it and localize it in the front end? Will it be stored somewhere an admin can edit it?
   // For now, I am hard coding it to get the UI done while we figure out where it belongs.
   const phaseDescription =
-    'We have divided Phase 1 into a series of modules that will help you keep on track and ' +
-    'provide resources like live workshops throughout your project. Each module has a specific timeframe, but you ' +
-    'will need to review all deliverables over the course of Phase 1. A list of deliverables that you need to ' +
-    'review is displayed in your To Do list on your home screen. Please login to Terraware regularly to check which ' +
-    'deliverables are due or need review.';
+    'Phase 1 is divided into a series of modules that provide resources, such as live sessions and workshops, ' +
+    'that help you keep your project on track with the program. Each module has a timeframe. Over the course of ' +
+    'Phase 1, you will need to review all Phase 1 deliverables. The deliverables that are due or need review are ' +
+    'displayed in the To Do list on your Home screen. Please log in to Terraware regularly to check which ' +
+    'deliverables are due.';
 
-  useEffect(() => {
-    void dispatch(requestListModules(projectId));
-  }, [dispatch, projectId]);
+  const phases = [
+    {
+      name: 'Phase 0 - Due Diligence',
+      description:
+        'Submit project-relevant documentation that prove that the statements provided in the ' +
+        'application are truthful and accurate.',
+    },
+    {
+      name: 'Phase 1 - Feasibility Study',
+      description:
+        'Attend 10 weeks of training, and evaluate the strengths and risks of your proposed carbon project ' +
+        'by submitting key information that will also be used to create a Feasibility Study document.',
+    },
+    {
+      name: 'Phase 2 - PDD Writing & Registration',
+      description:
+        'Work toward having a PDA signed, a PDD written, and the PDD registered on Verra (Under Development & Full).',
+    },
+    {
+      name: 'Phase 3 - Implement and Monitor',
+      description: 'Mock desription',
+    },
+    {
+      name: 'Phase 4 - Should not be visible',
+      description: 'Mock desription',
+    },
+  ];
+
+  const currentPhaseIndex = useMemo(
+    () => phases.findIndex((phase) => phase.name === currentParticipant?.cohortPhase),
+    [currentParticipant]
+  );
 
   return (
-    <PageWithModuleTimeline title={strings.ALL_MODULES}>
-      <Card style={{ width: '100%' }}>
-        <CurrentTimeline cohortPhase={project?.cohortPhase} />
+    <ParticipantPage
+      title={strings.ALL_MODULES}
+      isLoading={!currentParticipant}
+      contentStyle={{ paddingLeft: '24px' }}
+      titleStyle={{ marginBottom: 2 }}
+    >
+      <Box sx={{ paddingBottom: 2 }}>
+        <ListViewHeader />
+      </Box>
 
-        <Box paddingY={theme.spacing(2)} borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}>
+      <Card style={{ width: '100%' }}>
+        <CurrentTimeline steps={phases} currentIndex={currentPhaseIndex} />
+
+        <Box paddingY={theme.spacing(3)} borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}>
           <Typography>{phaseDescription}</Typography>
         </Box>
 
-        {modules?.map((module, index) => <ModuleEntry module={module} projectId={projectId} key={index} />)}
+        <ListModulesContent />
       </Card>
-    </PageWithModuleTimeline>
+    </ParticipantPage>
   );
 }

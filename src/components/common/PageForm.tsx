@@ -1,4 +1,4 @@
-import { BusySpinner } from '@terraware/web-components';
+import React, { BusySpinner } from '@terraware/web-components';
 import PageForm, { PageFormProps as FormProps } from '@terraware/web-components/components/PageForm';
 
 import strings from 'src/strings';

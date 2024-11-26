@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { useTheme } from '@mui/material';
 import { Badge } from '@terraware/web-components';
@@ -7,10 +7,10 @@ import { BadgeProps } from '@terraware/web-components/components/Badge';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
-import { DeliverableStatusType } from 'src/types/Deliverables';
+import { DeliverableStatusTypeWithOverdue } from 'src/types/Deliverables';
 
 type DeliverableStatusBadgeProps = {
-  status: DeliverableStatusType;
+  status: DeliverableStatusTypeWithOverdue;
 };
 
 const DeliverableStatusBadge = (props: DeliverableStatusBadgeProps): JSX.Element => {
@@ -41,9 +41,9 @@ const DeliverableStatusBadge = (props: DeliverableStatusBadgeProps): JSX.Element
         };
       case 'Needs Translation':
         return {
-          backgroundColor: theme.palette.TwClrBgInfoTertiary,
-          borderColor: theme.palette.TwClrBrdrInfo,
-          labelColor: theme.palette.TwClrTxtInfo,
+          backgroundColor: theme.palette.TwClrBgWarningTertiary,
+          borderColor: theme.palette.TwClrBrdrWarning,
+          labelColor: theme.palette.TwClrTxtWarning,
           label: isAcceleratorRoute ? strings.NEEDS_TRANSLATION : strings.IN_REVIEW,
         };
       case 'Not Needed':
@@ -65,7 +65,21 @@ const DeliverableStatusBadge = (props: DeliverableStatusBadgeProps): JSX.Element
           backgroundColor: theme.palette.TwClrBgDangerTertiary,
           borderColor: theme.palette.TwClrBrdrDanger,
           labelColor: theme.palette.TwClrTxtDanger,
-          label: strings.REJECTED,
+          label: isAcceleratorRoute ? strings.UPDATE_REQUESTED : strings.UPDATE_NEEDED,
+        };
+      case 'Overdue':
+        return {
+          backgroundColor: theme.palette.TwClrBgDangerTertiary,
+          borderColor: theme.palette.TwClrBrdrDanger,
+          labelColor: theme.palette.TwClrTxtDanger,
+          label: strings.OVERDUE,
+        };
+      case 'Completed':
+        return {
+          backgroundColor: theme.palette.TwClrBgInfoTertiary,
+          borderColor: theme.palette.TwClrBrdrInfo,
+          labelColor: theme.palette.TwClrTxtInfo,
+          label: strings.COMPLETED,
         };
       default:
         return undefined;

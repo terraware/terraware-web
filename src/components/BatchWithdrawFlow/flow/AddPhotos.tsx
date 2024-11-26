@@ -23,6 +23,7 @@ export default function AddPhotos(props: AddPhotosProps): JSX.Element {
   };
 
   const onNextHandler = async () => {
+    // eslint-disable-next-line @typescript-eslint/await-thenable
     await onNext(photos);
   };
 

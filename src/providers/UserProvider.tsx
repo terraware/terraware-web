@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { selectUserAnalytics } from 'src/redux/features/user/userAnalyticsSelectors';
 import { updateGtmInstrumented } from 'src/redux/features/user/userAnalyticsSlice';
+import { requestUserCookieConsentUpdate } from 'src/redux/features/user/usersAsyncThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { PreferencesService, UserService } from 'src/services';
 import { User } from 'src/types/User';
@@ -45,7 +46,7 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
       const response = await UserService.getUser();
 
       if (response.requestSucceeded) {
-        setUser(response.user!);
+        setUser(response.user);
         if (response.user && !userAnalyticsState?.gtmInstrumented && (window as any).INIT_GTAG) {
           dispatch(updateGtmInstrumented({ gtmInstrumented: true }));
 
@@ -69,6 +70,14 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
     populateUser();
   }, [setUser, userAnalyticsState?.gtmInstrumented, dispatch]);
 
+  const updateUserCookieConsent = useCallback(
+    async (consent: boolean) => {
+      await dispatch(requestUserCookieConsentUpdate({ cookiesConsented: consent }));
+      reloadUser();
+    },
+    [dispatch, reloadUser]
+  );
+
   const isAllowed = useCallback(
     (permission: GlobalRolePermission, metadata?: unknown): boolean => {
       if (!(userPreferences && user)) {
@@ -85,6 +94,7 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
     bootstrapped: false,
     userPreferences: {},
     reloadUserPreferences,
+    updateUserCookieConsent,
     updateUserPreferences,
     isAllowed,
   });

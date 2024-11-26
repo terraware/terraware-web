@@ -1,7 +1,7 @@
 import React from 'react';
 
-import DialogBox from 'src/components/common/DialogBox/DialogBox';
-import Button from 'src/components/common/button/Button';
+import { Confirm } from '@terraware/web-components';
+
 import strings from 'src/strings';
 
 export interface EmptyBatchesInfoModalProps {
@@ -13,24 +13,13 @@ export default function EmptyBatchesInfoModal(props: EmptyBatchesInfoModalProps)
   const { open, onClose } = props;
 
   return (
-    <DialogBox
-      onClose={onClose}
+    <Confirm
+      confirmButtonId='acknowledge-button'
+      confirmButtonText={strings.GOT_IT}
+      onConfirm={onClose}
       open={open}
-      title={strings.EMPTY_BATCH}
-      size='medium'
-      middleButtons={[
-        <Button
-          id='acknowledge-button'
-          label={strings.GOT_IT}
-          priority='primary'
-          type='productive'
-          onClick={onClose}
-          size='medium'
-          key='button-1'
-        />,
-      ]}
-      skrim={true}
       message={strings.EMPTY_BATCHES_AFTER_WITHDRAW}
+      title={strings.EMPTY_BATCH}
     />
   );
 }

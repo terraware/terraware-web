@@ -1,101 +1,99 @@
 import React from 'react';
 
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, useTheme } from '@mui/material';
 
 import TableDisplay from 'src/components/DocumentProducer/TableDisplay';
 import strings from 'src/strings';
 import { TableVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';
-import { VariableValueImageValue, VariableValueSelectValue } from 'src/types/documentProducer/VariableValue';
+import { VariableValueImageValue } from 'src/types/documentProducer/VariableValue';
 import { getImagePath } from 'src/utils/images';
 
-import { displayValue } from './helpers';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  variable: {
-    color: theme.palette.TwClrTxt,
-    backgroundColor: '#e9e2ba',
-    fontSize: '16px',
-    margin: '0 1px',
-    padding: '0 1px',
-  },
-  image: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    width: '100%',
-  },
-  caption: {
-    fontSize: '16px',
-  },
-  table: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    width: '100%',
-  },
-}));
+import TextVariable from './TextVariable';
 
 type DisplayVariableValueProps = {
-  docId: number;
+  projectId: number;
+  onEditVariableValue: (variable?: VariableWithValues) => void;
   variable: VariableWithValues;
   reference: boolean;
 };
 
 export default function DisplayVariableValue({
-  docId,
+  projectId,
+  onEditVariableValue,
   variable,
   reference,
 }: DisplayVariableValueProps): React.ReactElement {
-  const classes = useStyles();
+  const theme = useTheme();
+
+  const variableStyles = {
+    color: theme.palette.TwClrTxt,
+    backgroundColor: '#e9e2ba',
+    fontSize: '16px',
+    margin: '0 1px',
+    padding: '0 1px',
+  };
 
   switch (variable.type) {
     case 'Text':
     case 'Number':
     case 'Date':
     case 'Link':
-      return <span className={classes.variable}>{variable.values.map((v) => displayValue(v)).join(', ')}</span>;
+    case 'Select':
+      return (
+        <TextVariable
+          isEditing={false}
+          icon='iconVariable'
+          onClick={() => {
+            onEditVariableValue(variable);
+          }}
+          reference={reference}
+          variable={variable}
+        />
+      );
     case 'Image':
       return reference ? (
-        <span className={classes.variable}>
+        <span style={variableStyles}>
           {variable.name} {strings.REFERENCE}
         </span>
       ) : (
         <>
           {variable.values.map((v, index) => {
             return (
-              <div key={index} className={classes.image}>
+              <Box
+                key={index}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  width: '100%',
+                }}
+              >
                 <img
-                  src={getImagePath(docId, v.id, 500, 500)}
+                  src={getImagePath(projectId, v.id, 500, 500)}
                   alt={(v as VariableValueImageValue).caption ?? `${variable.name}-${index}`}
                 />
-                <p className={classes.caption}>{(v as VariableValueImageValue).caption}</p>
-              </div>
+                <p style={{ fontSize: '16px' }}>{(v as VariableValueImageValue).caption}</p>
+              </Box>
             );
           })}
         </>
       );
-    case 'Select':
-      const selectedValues = (variable.values[0] as VariableValueSelectValue)?.optionValues;
-      return (
-        <span className={classes.variable}>
-          {`${
-            variable.options
-              .filter((o) => selectedValues?.includes(o.id))
-              .map((o) => o.renderedText ?? o.name)
-              .join(', ') || '--'
-          }`}
-        </span>
-      );
     case 'Table':
       return reference ? (
-        <span className={classes.variable}>
+        <span style={variableStyles}>
           {variable.name} {strings.REFERENCE}
         </span>
       ) : (
-        <div className={classes.table}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: '100%',
+          }}
+        >
           <TableDisplay variable={variable as TableVariableWithValues} />
-        </div>
+        </Box>
       );
     default:
       return <span />;

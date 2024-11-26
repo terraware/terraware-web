@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactMapGL, {
   FullscreenControl,
   GeolocateControl,
@@ -12,8 +12,8 @@ import ReactMapGL, {
   Source,
 } from 'react-map-gl';
 
-import { Box, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { AddressAutofillFeatureSuggestion } from '@mapbox/search-js-core';
+import { Box, useTheme } from '@mui/material';
 import bbox from '@turf/bbox';
 import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 
@@ -32,27 +32,11 @@ import {
 import { getRgbaFromHex } from 'src/utils/color';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
-import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
+import MapSearchBox from './MapSearchBox';
+import { useMapViewStyle } from './MapViewStyleControl';
+import MapViewStyleSwitch from './MapViewStyleSwitch';
 import UndoRedoControl from './UndoRedoControl';
 import { getMapDrawingLayer, getMapErrorLayer, toMultiPolygon } from './utils';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  sliceTool: {
-    '& .mapbox-gl-draw_polygon': {
-      backgroundImage: 'url("/assets/icon-slice.svg")',
-      backgroundColor: 'transparent',
-      backgroundPosition: 'center',
-      backgroundSize: '20px',
-      backgroundRepeat: 'no-repeat',
-      height: '29px',
-      width: '29px',
-      padding: '9px',
-    },
-    '& .mapbox-gl-draw_polygon.active': {
-      backgroundColor: getRgbaFromHex(theme.palette.TwClrBaseGray100 as string, 0.5),
-    },
-  },
-}));
 
 // Callback to select one feature from among list of features on the map that overlap the click target.
 export type LayerFeature = MapboxGeoJSONFeature;
@@ -71,6 +55,7 @@ export type EditableMapProps = {
   popupRenderer?: MapPopupRenderer;
   readOnlyBoundary?: RenderableReadOnlyBoundary[];
   setMode?: (mode: MapEditorMode) => void;
+  showSearchBox?: boolean;
   style?: object;
 };
 
@@ -87,6 +72,7 @@ export default function EditableMap({
   popupRenderer,
   readOnlyBoundary,
   setMode,
+  showSearchBox,
   style,
 }: EditableMapProps): JSX.Element {
   const { mapId, refreshToken, token } = useMapboxToken();
@@ -94,15 +80,12 @@ export default function EditableMap({
   const [firstVisible, setFirstVisible] = useState<boolean>(false);
   const [interactiveLayerIds, setInteractiveLayerIds] = useState<string[] | undefined>();
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
-  const [isOverridePopupEvent, setIsOverridePopupEvent] = useState<boolean>(false);
-  const [isUpdateEvent, setIsUpdateEvent] = useState<boolean>(false);
   const [, setActiveContext] = useState<MapEntityOptions | undefined>();
   const containerRef = useRef(null);
   const mapRef = useRef<MapRef | null>(null);
   const visible = useIsVisible(containerRef);
   const theme = useTheme();
   const [mapViewStyle, onChangeMapViewStyle] = useMapViewStyle();
-  const classes = useStyles();
 
   const onMapError = useCallback(
     (event: any) => {
@@ -113,31 +96,43 @@ export default function EditableMap({
     [refreshToken]
   );
 
-  const initialViewState = {
-    bounds: readOnlyBoundary?.length
-      ? (bbox({
+  const initialViewState = useMemo<{ bounds: LngLatBoundsLike } | undefined>(() => {
+    if (readOnlyBoundary?.length) {
+      const coordinates = readOnlyBoundary
+        .flatMap((b) => b.data.features)
+        .flatMap((feature) => toMultiPolygon(feature.geometry))
+        .filter((poly: MultiPolygon | null): poly is MultiPolygon => poly !== null)
+        .flatMap((poly: MultiPolygon) => poly.coordinates);
+
+      return {
+        bounds: bbox({
           type: 'MultiPolygon',
-          coordinates: readOnlyBoundary!
-            .flatMap((b) => b.data.features)
-            .flatMap((feature) => toMultiPolygon(feature.geometry))
-            .filter((poly: MultiPolygon | null) => poly !== null)
-            .flatMap((poly: MultiPolygon | null) => poly!.coordinates),
-        }) as LngLatBoundsLike)
-      : editableBoundary
-      ? (bbox(editableBoundary) as LngLatBoundsLike)
-      : undefined,
-    fitBoundsOptions: {
-      animate: false,
-      padding: 25,
-    },
-  };
+          coordinates,
+        }) as LngLatBoundsLike,
+        fitBoundsOptions: {
+          animate: false,
+          padding: 25,
+        },
+      };
+    } else if (editableBoundary) {
+      return {
+        bounds: bbox(editableBoundary) as LngLatBoundsLike,
+        fitBoundsOptions: {
+          animate: false,
+          padding: 25,
+        },
+      };
+    } else {
+      return undefined;
+    }
+  }, [editableBoundary, readOnlyBoundary]);
 
   const mapLayers = useMemo(() => {
     if (!readOnlyBoundary?.length) {
       return null;
     }
 
-    return readOnlyBoundary!.map((boundaryData: RenderableReadOnlyBoundary) => {
+    return readOnlyBoundary.map((boundaryData: RenderableReadOnlyBoundary) => {
       const drawingLayer: MapDrawingLayer = getMapDrawingLayer(boundaryData.renderProperties, boundaryData.id);
       return (
         <Source type='geojson' key={boundaryData.id} data={boundaryData.data} id={boundaryData.id}>
@@ -183,7 +178,10 @@ export default function EditableMap({
       clearPopupInfo();
       // update selection
       mapRef?.current?.setFeatureState({ source: info.sourceId, id: `${info.id}` }, { select: true });
-      setPopupInfo(info);
+      // this is needed to avoid a click-out closing the newly opened popup
+      setTimeout(() => {
+        setPopupInfo(info);
+      }, 0);
     },
     [clearPopupInfo, mapRef]
   );
@@ -199,14 +197,6 @@ export default function EditableMap({
   // map click to fetch geometry and show a popup at that location
   const onMapClick = useCallback(
     (event: MapLayerMouseEvent) => {
-      if (isOverridePopupEvent) {
-        if (overridePopupInfo) {
-          initializePopupInfo(overridePopupInfo);
-        }
-        setIsOverridePopupEvent(false);
-        return;
-      }
-
       if (!event?.features) {
         return;
       }
@@ -231,17 +221,17 @@ export default function EditableMap({
         });
       }
     },
-    [featureSelectorOnClick, initializePopupInfo, isOverridePopupEvent, overridePopupInfo, readOnlyBoundary]
+    [featureSelectorOnClick, initializePopupInfo, overridePopupInfo, readOnlyBoundary]
   );
 
   /**
    * Call the prop function when boundary changes.
    * Use local state to capture if this was a click or drag event.
    */
+  /*
   const onBoundaryCallback = useCallback(
-    (data: FeatureCollection | undefined, isUpdate: boolean) => {
+    (data: FeatureCollection | undefined) => {
       if (onEditableBoundaryChanged) {
-        setIsUpdateEvent(isUpdate);
         onEditableBoundaryChanged(data);
       }
     },
@@ -261,6 +251,7 @@ export default function EditableMap({
     },
     [onBoundaryCallback]
   );
+*/
 
   const selectActiveContext = useCallback(() => {
     const markActiveContext = (data: MapEntityId[], value: boolean) => {
@@ -305,32 +296,18 @@ export default function EditableMap({
   // Separate useEffect from clearing popup state due to dependencies.
   useEffect(() => {
     if (overridePopupInfo) {
-      setIsOverridePopupEvent(true);
+      initializePopupInfo(overridePopupInfo);
     }
-  }, [overridePopupInfo]);
-
-  /**
-   * Show popup info if boundary was moved to a valid location,
-   * capturing when user drags the polygon.
-   * On click is handled by the onMapClick function.
-   */
-  useEffect(() => {
-    if (isUpdateEvent && isOverridePopupEvent && overridePopupInfo) {
-      if (overridePopupInfo) {
-        initializePopupInfo(overridePopupInfo);
-      }
-      setIsOverridePopupEvent(false);
-      setIsUpdateEvent(false);
-    }
-  }, [initializePopupInfo, isOverridePopupEvent, isUpdateEvent, overridePopupInfo]);
+  }, [initializePopupInfo, overridePopupInfo]);
 
   // Show active context as selected once the map is loaded.
   // This is to catch up on an already initalized active context.
   const onLoad = useCallback(() => void selectActiveContext(), [selectActiveContext]);
 
+  const mapStyle = useMemo(() => MapViewStyles[mapViewStyle], [mapViewStyle]);
+
   return (
     <Box
-      className={isSliceTool ? classes.sliceTool : ''}
       ref={containerRef}
       display='flex'
       flexDirection='column'
@@ -343,23 +320,70 @@ export default function EditableMap({
         '& .mapboxgl-map': {
           borderRadius: theme.spacing(2),
         },
+        ...(isSliceTool
+          ? {
+              '& .mapbox-gl-draw_polygon': {
+                backgroundImage: 'url("/assets/icon-slice.svg")',
+                backgroundColor: 'transparent',
+                backgroundPosition: 'center',
+                backgroundSize: '20px',
+                backgroundRepeat: 'no-repeat',
+                height: '29px',
+                width: '29px',
+                padding: '9px',
+              },
+              '& .mapbox-gl-draw_polygon.active': {
+                backgroundColor: getRgbaFromHex(theme.palette.TwClrBaseGray100 as string, 0.5),
+              },
+            }
+          : {}),
       }}
     >
       {firstVisible && (
         <>
+          <Box
+            display='flex'
+            flexDirection='row'
+            justifyContent={'space-between'}
+            alignItems='center'
+            paddingBottom={theme.spacing(4)}
+            width='fill'
+          >
+            {showSearchBox === true && (
+              <Box width='100%'>
+                <MapSearchBox
+                  onSelect={(features: AddressAutofillFeatureSuggestion[] | null) => {
+                    if (features && features.length > 0) {
+                      const coordinates = features[0].geometry.coordinates;
+                      mapRef?.current?.flyTo({
+                        center: [coordinates[0], coordinates[1]],
+                        essential: true,
+                        zoom: 10, // https://docs.mapbox.com/help/glossary/zoom-level/
+                      });
+                    }
+                  }}
+                />
+              </Box>
+            )}
+            <Box width='fit-content' marginLeft='auto' paddingLeft={theme.spacing(2)}>
+              <MapViewStyleSwitch mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
+            </Box>
+          </Box>
           <ReactMapGL
             key={mapId}
             onError={onMapError}
             ref={mapRef}
             mapboxAccessToken={token}
-            mapStyle={MapViewStyles[mapViewStyle]}
+            mapStyle={mapStyle}
+            styleDiffing={false}
             style={{
               position: 'relative',
               width: '100%',
               height: '100%',
               display: 'flex',
-              flexGrow: '1',
+              flexGrow: 1,
               flexDirection: 'column',
+              minHeight: '640px',
               ...style,
             }}
             initialViewState={initialViewState}
@@ -370,12 +394,11 @@ export default function EditableMap({
             {mapLayers}
             {errorLayer}
             <FullscreenControl position='top-left' />
-            <MapViewStyleControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
             <EditableMapDraw
               boundary={editableBoundary}
-              onBoundaryCreated={onBoundaryCreated}
+              onBoundaryCreated={onEditableBoundaryChanged}
               onBoundaryDeleted={onEditableBoundaryChanged}
-              onBoundaryUpdated={onBoundaryUpdated}
+              onBoundaryUpdated={onEditableBoundaryChanged}
               setMode={setEditMode}
             />
             <UndoRedoControl onRedo={onRedo} onUndo={onUndo} />
@@ -388,6 +411,7 @@ export default function EditableMap({
             {popupInfo && popupRenderer && renderedPopup && (
               <Popup
                 anchor={popupRenderer.anchor ?? 'top'}
+                closeButton={false}
                 key={popupInfo.id}
                 longitude={Number(popupInfo.lng)}
                 latitude={Number(popupInfo.lat)}

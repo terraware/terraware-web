@@ -1,40 +1,63 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-import { Box, Typography, useTheme } from '@mui/material';
-import { BusySpinner } from '@terraware/web-components';
+import { Box } from '@mui/material';
+import { Button } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
-import DocumentsUploader from 'src/components/DeliverableView/DocumentsUploader';
-import Metadata from 'src/components/DeliverableView/Metadata';
-import MobileMessage from 'src/components/DeliverableView/MobileMessage';
-import TitleBar from 'src/components/DeliverableView/TitleBar';
-import { EditProps, ViewProps } from 'src/components/DeliverableView/types';
+import DeliverableViewCard from 'src/components/DeliverableView/DeliverableCard';
+import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
+import useSubmitDeliverable from 'src/components/DeliverableView/useSubmitDeliverable';
 import Page from 'src/components/Page';
-import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
-import DocumentLimitReachedMessage from 'src/scenes/DeliverablesRouter/DocumentLimitReachedMessage';
-import DocumentsList from 'src/scenes/DeliverablesRouter/DocumentsList';
-import RejectedDeliverableMessage from 'src/scenes/DeliverablesRouter/RejectedDeliverableMessage';
+import { requestListDeliverableVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
+import { selectDeliverableVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { VariableWithValues } from 'src/types/documentProducer/Variable';
+import { missingRequiredFields } from 'src/utils/documentProducer/variables';
+import useSnackbar from 'src/utils/useSnackbar';
 
-const MAX_FILES_LIMIT = 15;
+import DeliverablePage from './DeliverablePage';
+import SubmitDeliverableDialog from './SubmitDeliverableDialog';
 
-export type Props = EditProps & {
-  isBusy?: boolean;
-};
-
-const DeliverableView = (props: Props): JSX.Element => {
-  const { ...viewProps }: ViewProps = props;
-  const { isMobile } = useDeviceInfo();
+const DeliverableView = (): JSX.Element => {
   const { activeLocale } = useLocalization();
-  const theme = useTheme();
+  const { deliverableId, projectId } = useParams<{ deliverableId: string; projectId: string }>();
+  const { goToDeliverableEdit } = useNavigateTo();
 
-  const documentLimitReached = useMemo(
-    () => viewProps.deliverable.documents.length >= MAX_FILES_LIMIT,
-    [viewProps.deliverable.documents.length]
+  const { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId), projectId: Number(projectId) });
+  const { status: requestStatus, submit } = useSubmitDeliverable();
+
+  const [submitButtonDisabled, setSubmitButtonDisalbed] = useState<boolean>(false);
+  const [showSubmitDialog, setShowSubmitDialog] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const snackbar = useSnackbar();
+
+  const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
+    selectDeliverableVariablesWithValues(state, deliverable?.id || -1, deliverable?.projectId)
   );
+
+  useEffect(() => {
+    if (deliverable) {
+      void dispatch(
+        requestListDeliverableVariablesValues({ deliverableId: deliverable.id, projectId: deliverable.projectId })
+      );
+    }
+  }, [deliverable]);
+
+  const submitDeliverable = useCallback(() => {
+    if (deliverable?.id !== undefined) {
+      if (deliverable.type === 'Questions' && missingRequiredFields(variablesWithValues)) {
+        snackbar.toastError(strings.CHECK_THAT_ALL_REQUIRED_QUESTIONS_ARE_FILLED_OUT_BEFORE_SUBMITTING);
+      } else {
+        submit(deliverable);
+      }
+    }
+    setShowSubmitDialog(false);
+  }, [deliverable, variablesWithValues]);
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -46,32 +69,82 @@ const DeliverableView = (props: Props): JSX.Element => {
     [activeLocale]
   );
 
-  if (isMobile) {
-    return <MobileMessage {...viewProps} />;
+  const actionMenu = useMemo(() => {
+    if (!activeLocale || !deliverable) {
+      return null;
+    }
+
+    return (
+      <Box display='flex' justifyContent='right'>
+        {deliverable.type === 'Questions' && (
+          <Button
+            id='edit-deliverable'
+            icon='iconEdit'
+            label={strings.EDIT}
+            onClick={() => {
+              const firstVisibleQuestion = document.querySelector('.question-visible');
+              const variableId = firstVisibleQuestion?.getAttribute('data-variable-id');
+              const scrolledBeyondViewport = window.scrollY > window.innerHeight;
+
+              goToDeliverableEdit(
+                deliverable.id,
+                deliverable.projectId,
+                Boolean(scrolledBeyondViewport && variableId) ? Number(variableId) : undefined
+              );
+            }}
+            size='medium'
+            priority='secondary'
+          />
+        )}
+        {(deliverable.type === 'Questions' || deliverable.type === 'Species') && (
+          <Button
+            disabled={submitButtonDisabled}
+            label={strings.SUBMIT_FOR_APPROVAL}
+            onClick={() => setShowSubmitDialog(true)}
+            size='medium'
+            id='submit-deliverable'
+          />
+        )}
+      </Box>
+    );
+  }, [activeLocale, deliverable, submitButtonDisabled]);
+
+  const isLoading = useMemo(() => {
+    return requestStatus === 'pending';
+  }, [requestStatus]);
+
+  const submitMessage = useMemo(() => {
+    if (!activeLocale || !deliverable) {
+      return '';
+    }
+
+    switch (deliverable.type) {
+      case 'Species':
+        return strings.SUBMIT_SPECIES_CONFIRMATION;
+      case 'Questions':
+        return strings.SUBMIT_QUESTIONNAIRE_CONFIRMATION;
+      default:
+        return '';
+    }
+  }, [activeLocale, deliverable]);
+
+  if (!deliverable) {
+    return <Page isLoading crumbs={crumbs} />;
   }
 
   return (
-    <Page title={<TitleBar {...props} />} crumbs={crumbs}>
-      {props.isBusy && <BusySpinner />}
-      <Box display='flex' flexDirection='column' flexGrow={1}>
-        <RejectedDeliverableMessage {...viewProps} />
-        {documentLimitReached && <DocumentLimitReachedMessage maxFiles={MAX_FILES_LIMIT} />}
-        <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-          <Metadata {...viewProps} />
-          <Typography marginBottom={theme.spacing(2)} fontSize='20px' lineHeight='28px' fontWeight={600}>
-            {strings.DOCUMENTS}
-          </Typography>
-          {!documentLimitReached && (
-            <DocumentsUploader
-              {...viewProps}
-              deliverableStatusesToIgnore={['Not Submitted', 'In Review', 'Needs Translation']}
-              maxFiles={MAX_FILES_LIMIT}
-            />
-          )}
-          <DocumentsList {...viewProps} />
-        </Card>
-      </Box>
-    </Page>
+    <>
+      {deliverable && showSubmitDialog && (
+        <SubmitDeliverableDialog
+          onClose={() => setShowSubmitDialog(false)}
+          onSubmit={submitDeliverable}
+          submitMessage={submitMessage}
+        />
+      )}
+      <DeliverablePage deliverable={deliverable} crumbs={crumbs} rightComponent={actionMenu} isLoading={isLoading}>
+        <DeliverableViewCard deliverable={deliverable} setSubmitButtonDisalbed={setSubmitButtonDisalbed} />
+      </DeliverablePage>
+    </>
   );
 };
 

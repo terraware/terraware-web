@@ -4,13 +4,21 @@ import { components } from 'src/api/types/generated-schema';
 export type PlantingSite = components['schemas']['PlantingSitePayload'];
 export type PlantingZone = components['schemas']['PlantingZonePayload'];
 export type PlantingSubzone = components['schemas']['PlantingSubzonePayload'];
+export type PlantingZoneWithSubzonesWithLastObservationDate = Omit<PlantingZone, 'plantingSubzones'> & {
+  plantingSubzones: PlantingSubzoneWithLastObservationDate[];
+};
+export type PlantingSubzoneWithLastObservationDate = PlantingSubzone & { lastObservationDate?: Date };
+export type PlantingSiteWithSubzonesWithLastObservationDate = Omit<PlantingSite, 'plantingZones'> & {
+  plantingZones?: PlantingZoneWithSubzonesWithLastObservationDate[];
+};
 
 // geometry and types of geometries
+export type Polygon = components['schemas']['Polygon'];
 export type MultiPolygon = components['schemas']['MultiPolygon'];
 
 // Search API always returns strings
 export type PlantingSiteSearchResult = {
-  boundary?: MultiPolygon;
+  boundary?: MultiPolygon | Polygon;
   id: string;
   name: string;
   description?: string;
@@ -31,6 +39,20 @@ export type Planting = components['schemas']['PlantingPayload'];
 
 // reported plants
 export type PlantingSiteReportedPlants = components['schemas']['PlantingSiteReportedPlantsPayload'];
+export type PlantingSiteReportedZonePlants = components['schemas']['PlantingZoneReportedPlantsPayload'];
+export type PlantingSiteReportedSubzonePlants = components['schemas']['PlantingSubzoneReportedPlantsPayload'];
+
+// Planting site with select data from reports merged in
+export type PlantingSiteWithReportedPlants = Omit<PlantingSite, 'plantingZones'> & {
+  plantingZones: PlantingSiteZoneWithReportedPlants[];
+};
+export type PlantingSiteZoneWithReportedPlants = Omit<PlantingZone, 'plantingSubzones'> & {
+  plantingSubzones: PlantingSiteSubzoneWithReportedPlants[];
+};
+export type PlantingSiteSubzoneWithReportedPlants = PlantingSubzone &
+  Omit<PlantingSiteReportedSubzonePlants, 'totalPlants'> & {
+    totalPlants?: number;
+  };
 
 // monitoring plots
 export type MonitoringPlotSearchResult = {

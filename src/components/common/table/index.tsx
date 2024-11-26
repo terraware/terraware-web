@@ -8,6 +8,8 @@ import { useLocalization, useOrganization } from 'src/providers';
 import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
 
+import useTableDensity from './useTableDensity';
+
 function renderPaginationText(from: number, to: number, total: number): string {
   if (total > 0) {
     return strings.formatString(strings.PAGINATION_FOOTER, from, to, total) as string;
@@ -56,6 +58,8 @@ interface TableProps<T> extends Omit<Props<T>, keyof LocalizationProps> {
 }
 
 export function BaseTable<T extends TableRowType>(props: TableProps<T>): JSX.Element {
+  const { tableDensity } = useTableDensity();
+
   const addAlignment = useMemo(() => {
     return props.columns.map((col) => {
       if (col.type === 'number') {
@@ -70,6 +74,7 @@ export function BaseTable<T extends TableRowType>(props: TableProps<T>): JSX.Ele
     ...props,
     booleanFalseText: strings.NO,
     booleanTrueText: strings.YES,
+    density: tableDensity,
     editText: strings.EDIT,
     renderNumSelectedText,
     ...(props.showPagination !== false ? { renderPaginationText } : {}),
@@ -85,18 +90,20 @@ export function BaseTable<T extends TableRowType>(props: TableProps<T>): JSX.Ele
  */
 
 export type OrderPreserveableTableProps = {
-  setColumns: (columns: TableColumnType[]) => void;
+  // user preference name to store the columns order
+  columnsPreferenceName?: string;
   id: string;
+  setColumns: (columns: TableColumnType[]) => void;
 };
 
 export function OrderPreserveableTable<T extends TableRowType>(
   props: TableProps<T> & OrderPreserveableTableProps
 ): JSX.Element {
   const [initialized, setInitialized] = useState<boolean>(false);
-  const { setColumns, onReorderEnd, columns, id, ...tableProps } = props;
+  const { columns, columnsPreferenceName, id, onReorderEnd, setColumns, ...tableProps } = props;
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
 
-  const getPreferenceName = useCallback(() => `${id}-columns`, [id]);
+  const getPreferenceName = useCallback(() => columnsPreferenceName || `${id}-columns`, [columnsPreferenceName, id]);
 
   const getTableColumns = useCallback(
     (columnNames: string[]): TableColumnType[] =>
@@ -181,9 +188,18 @@ export default function OrderPreservedTable<T extends TableRowType>(
     }
   }, [activeLocale, columns, tableColumns]);
 
+  const columnsPreferenceName = useMemo<string>(() => {
+    const columnNames = columns()
+      .map((column) => column.key)
+      .sort()
+      .join('_');
+    return `${props.id}_columns_${columnNames}`;
+  }, [columns, props.id]);
+
   return OrderPreserveableTable<T>({
     ...tableProps,
     columns: tableColumns,
+    columnsPreferenceName,
     setColumns: (columnsToSet: TableColumnType[]) => setTableColumns(columnsToSet),
   });
 }

@@ -8,12 +8,15 @@ import Stepper from '@mui/material/Stepper';
 import Typography from '@mui/material/Typography';
 import { Badge } from '@terraware/web-components';
 
+import { CohortPhaseType } from 'src/types/Cohort';
+import { CohortModule } from 'src/types/Module';
+
 type AltStepIconProps = {
-  activeStep: number;
   index: number;
+  bgColor?: string;
 };
 
-const AltStepIcon = ({ activeStep, index }: AltStepIconProps) => {
+const AltStepIcon = ({ index, bgColor }: AltStepIconProps) => {
   const theme = useTheme();
   const stepNumber = index + 1;
 
@@ -21,7 +24,7 @@ const AltStepIcon = ({ activeStep, index }: AltStepIconProps) => {
     <Box
       sx={{
         alignItems: 'center',
-        bgcolor: index === activeStep ? theme.palette.TwClrBaseGreen500 : theme.palette.TwClrBaseGray300,
+        bgcolor: bgColor,
         borderRadius: '50%',
         color: theme.palette.TwClrBaseWhite,
         display: 'flex',
@@ -37,36 +40,58 @@ const AltStepIcon = ({ activeStep, index }: AltStepIconProps) => {
   );
 };
 
-type ModuleTimelineStep = {
-  description: string;
-  label: string;
+export type ModuleTimelineProps = {
+  cohortPhase?: CohortPhaseType;
+  modules: CohortModule[];
 };
 
-type ModuleTimelineProps = {
-  activeStep: number;
-  steps: ModuleTimelineStep[];
-  title: string;
-};
+const ModuleTimeline = ({ cohortPhase, modules }: ModuleTimelineProps) => {
+  const theme = useTheme();
+  const now = new Date();
+  const futureModules = modules?.filter((module) => new Date(module.endDate) > now);
 
-const ModuleTimeline = ({ activeStep, steps, title }: ModuleTimelineProps) => {
+  const soonestEndingModuleId = futureModules?.reduce((soonest, current) => {
+    const soonestEndDate = new Date(soonest.endDate);
+    const currentEndDate = new Date(current.endDate);
+    return currentEndDate < soonestEndDate ? current : soonest;
+  }, modules[0])?.id;
+
+  const warningLabelStyles = {
+    '.MuiStepLabel-label.Mui-active': { color: theme.palette.TwClrTxtWarning },
+    '.MuiStepLabel-label.Mui-disabled': { color: theme.palette.TwClrTxtWarning, fontWeight: 600 },
+  };
+
   return (
-    <Box>
-      <Box sx={{ marginBottom: '24px', paddingRight: '16px' }}>
-        <Badge label={title} />
-      </Box>
+    <Box maxWidth={'206px'}>
+      <Box sx={{ marginBottom: '24px', paddingRight: '16px' }}>{cohortPhase && <Badge label={cohortPhase} />}</Box>
 
       <Box sx={{ width: 180 }}>
-        <Stepper activeStep={activeStep} orientation='vertical'>
-          {steps.map((step, index) => (
-            <Step key={step.label}>
+        <Stepper orientation='vertical'>
+          {(modules ?? []).map((module, index) => (
+            <Step key={module.id} active={module.isActive}>
               <StepLabel
-                icon={<AltStepIcon activeStep={activeStep} index={index} />}
-                sx={{ fontWeight: 600, '.MuiStepLabel-label.Mui-disabled': { fontWeight: 600 } }}
+                icon={
+                  <AltStepIcon
+                    index={index}
+                    bgColor={
+                      soonestEndingModuleId === module.id
+                        ? theme.palette.TwClrBgWarning
+                        : module.isActive
+                          ? theme.palette.TwClrBaseGreen500
+                          : theme.palette.TwClrBaseGray300
+                    }
+                  />
+                }
+                sx={
+                  soonestEndingModuleId === module.id
+                    ? warningLabelStyles
+                    : { fontWeight: 600, '.MuiStepLabel-label.Mui-disabled': { fontWeight: 600 } }
+                }
               >
-                {step.label}
+                {module.title}
                 <br />
                 <Typography component='span' style={{ fontSize: '14px', fontWeight: 400 }}>
-                  {step.description}
+                  {module.name}
                 </Typography>
               </StepLabel>
             </Step>

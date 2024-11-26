@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, CircularProgress, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, CircularProgress, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 
+import useApplicationPortal from 'src/hooks/useApplicationPortal';
+import { useApplicationData } from 'src/providers/Application/Context';
 import {
   requestGetDeliverable,
   requestUploadDeliverableDocument,
@@ -11,42 +12,22 @@ import {
 import { selectDeliverablesEditRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Deliverable, UploadDeliverableDocumentRequest } from 'src/types/Deliverables';
+import { DeliverableWithOverdue, UploadDeliverableDocumentRequest } from 'src/types/Deliverables';
 import useSnackbar from 'src/utils/useSnackbar';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  description: {
-    marginTop: theme.spacing(2),
-  },
-  spinner: {
-    height: '100px',
-    width: '100px',
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    margin: 'auto',
-    '& .MuiCircularProgress-svg': {
-      color: theme.palette.TwClrIcnBrand,
-      height: '100px',
-      width: '100px',
-    },
-  },
-}));
-
 export type FileUploadDialogProps = {
-  deliverable: Deliverable;
+  deliverable: DeliverableWithOverdue;
   files: File[];
   onClose: () => void;
 };
 
 export default function FileUploadDialog({ deliverable, files, onClose }: FileUploadDialogProps): JSX.Element {
+  const { isApplicationPortal } = useApplicationPortal();
+  const { reload } = useApplicationData();
   const [validate, setValidate] = useState<boolean>(false);
   const [requestId, setRequestId] = useState<string>('');
-  const [description, setDescription] = useState<string[]>(files.map((_) => ''));
+  const [description, setDescription] = useState<string[]>(files.map(() => ''));
   const theme = useTheme();
-  const classes = useStyles();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const uploadResult = useAppSelector(selectDeliverablesEditRequest(requestId));
@@ -56,12 +37,20 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
       return;
     }
     if (uploadResult?.status === 'error') {
-      snackbar.toastError();
+      if (typeof uploadResult?.data === 'string') {
+        snackbar.toastError(uploadResult.data);
+      } else {
+        snackbar.toastError();
+      }
     }
     // close the modal and refresh deliverable even in case of error, there may have been partial successes
     onClose();
-    dispatch(requestGetDeliverable({ deliverableId: deliverable.id, projectId: deliverable.projectId }));
-  }, [deliverable.id, deliverable.projectId, dispatch, onClose, snackbar, uploadResult?.status]);
+    if (!isApplicationPortal) {
+      dispatch(requestGetDeliverable({ deliverableId: deliverable.id, projectId: deliverable.projectId }));
+    } else {
+      reload();
+    }
+  }, [deliverable.id, deliverable.projectId, dispatch, isApplicationPortal, onClose, snackbar, uploadResult?.status]);
 
   const submit = useCallback(() => {
     setValidate(true);
@@ -124,12 +113,30 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
       title={strings.SUBMIT_DOCUMENT}
     >
       <Box display='flex' flexDirection='column'>
-        {uploadResult?.status === 'pending' && <CircularProgress className={classes.spinner} size='100' />}
+        {uploadResult?.status === 'pending' && (
+          <CircularProgress
+            size='100'
+            sx={{
+              height: '100px',
+              width: '100px',
+              position: 'absolute',
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              margin: 'auto',
+              '& .MuiCircularProgress-svg': {
+                color: theme.palette.TwClrIcnBrand,
+                height: '100px',
+                width: '100px',
+              },
+            }}
+          />
+        )}
         {files.map((file, index) => (
           <Box key={`${file.name}_${index}`} textAlign='left' sx={index < files.length - 1 ? blockStyle : {}}>
             <Textfield display id={`name_${index}`} label={strings.FILE_NAME} type='text' value={file.name} />
             <Textfield
-              className={classes.description}
               errorText={validate && !description[index] ? strings.REQUIRED_FIELD : ''}
               id={`description_${index}`}
               label={strings.DESCRIPTION}
@@ -137,6 +144,7 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
               required
               type='text'
               value={description[index]}
+              sx={{ marginTop: theme.spacing(2) }}
             />
           </Box>
         ))}

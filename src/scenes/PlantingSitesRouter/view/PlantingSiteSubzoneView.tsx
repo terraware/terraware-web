@@ -1,8 +1,7 @@
-import { useMemo, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { TableColumnType } from '@terraware/web-components';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 
@@ -19,15 +18,6 @@ import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelector
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-
-const useStyles = makeStyles(() => ({
-  text: {
-    fontSize: '14px',
-    '& > p': {
-      fontSize: '14px',
-    },
-  },
-}));
 
 const columns = (): TableColumnType[] => [
   {
@@ -49,8 +39,7 @@ const columns = (): TableColumnType[] => [
 
 export default function PlantingSiteZoneView(): JSX.Element {
   const [search, setSearch] = useState<string>('');
-  const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const defaultTimeZone = useDefaultTimeZone();
 
   const { plantingSiteId, zoneId, subzoneId } = useParams<{
@@ -75,17 +64,15 @@ export default function PlantingSiteZoneView(): JSX.Element {
   );
 
   if (!plantingSite) {
-    history.push(APP_PATHS.PLANTING_SITES);
+    navigate(APP_PATHS.PLANTING_SITES);
   }
 
-  if (!plantingZone) {
-    history.push(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSiteId));
+  if (plantingSiteId && !plantingZone) {
+    navigate(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSiteId));
   }
 
-  if (!plantingZone?.plantingSubzones.length) {
-    history.push(
-      APP_PATHS.PLANTING_SITES_ZONE_VIEW.replace(':plantingSiteId', plantingSiteId).replace(':zoneId', zoneId)
-    );
+  if (zoneId && plantingSiteId && !plantingZone?.plantingSubzones.length) {
+    navigate(APP_PATHS.PLANTING_SITES_ZONE_VIEW.replace(':plantingSiteId', plantingSiteId).replace(':zoneId', zoneId));
   }
 
   const crumbs: Crumb[] = useMemo(
@@ -116,7 +103,7 @@ export default function PlantingSiteZoneView(): JSX.Element {
             columns={columns}
             rows={plantingZone?.plantingSubzones[0]?.monitoringPlots ?? []}
             orderBy='monitoringPlotName'
-            Renderer={DetailsRenderer(classes, timeZone)}
+            Renderer={DetailsRenderer(timeZone)}
           />
         </Box>
       </Card>
@@ -125,27 +112,27 @@ export default function PlantingSiteZoneView(): JSX.Element {
 }
 
 const DetailsRenderer =
-  (classes: any, timeZone: string) =>
+  (timeZone: string) =>
+  // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
 
+    const textStyles = {
+      fontSize: '16px',
+      '& > p': {
+        fontSize: '16px',
+      },
+    };
+
     if (column.key === 'completedTime') {
       return (
-        <CellRenderer
-          {...props}
-          value={value ? getDateDisplayValue(value as string, timeZone) : ''}
-          className={classes.text}
-        />
+        <CellRenderer {...props} value={value ? getDateDisplayValue(value as string, timeZone) : ''} sx={textStyles} />
       );
     }
 
     if (column.key === 'isPermanent') {
       return (
-        <CellRenderer
-          {...props}
-          value={row.isPermanent ? strings.PERMANENT : strings.TEMPORARY}
-          className={classes.text}
-        />
+        <CellRenderer {...props} value={row.isPermanent ? strings.PERMANENT : strings.TEMPORARY} sx={textStyles} />
       );
     }
 

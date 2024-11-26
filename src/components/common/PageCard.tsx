@@ -1,8 +1,7 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import { Box, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Typography, useTheme } from '@mui/material';
 
 import Button from 'src/components/common/button/Button';
 import stopPropagation from 'src/utils/stopPropagationEvent';
@@ -12,125 +11,118 @@ import Link from './Link';
 import Icon from './icon/Icon';
 import { IconName } from './icon/icons';
 
-export type LinkStyle = 'plain' | 'button';
-
-type StyleProps = {
-  linkStyle: LinkStyle;
-};
-
-const useStyles = makeStyles((theme: Theme) => ({
-  container: {
-    background: theme.palette.TwClrBg,
-    borderRadius: '24px',
-    cursor: (props: StyleProps) => (props.linkStyle === 'plain' ? 'pointer' : 'default'),
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    padding: '24px',
-    '&.min-height': {
-      minHeight: '220px',
-    },
-  },
-  title: {
-    display: 'flex',
-    paddingBottom: '16px',
-    alignItems: 'center',
-  },
-  bold: {
-    fontWeight: 600,
-  },
-  icon: {
-    fill: theme.palette.TwClrIcnSecondary,
-  },
-  titleText: {
-    fontSize: '20px',
-    lineHeight: '28px',
-    paddingLeft: '10px',
-    fontWeight: 600,
-  },
-  description: {
-    fontSize: '16px',
-    lineHeight: '24px',
-    height: '100%',
-    fontWeight: 400,
-  },
-  link: {
-    display: 'block',
-    fontSize: '16px',
-  },
-  buttonLink: {
-    fontSize: '14px',
-    lineHeight: '20px',
-    marginLeft: 'auto',
-    marginTop: '14px',
-    maxWidth: 'fit-content',
-  },
-}));
+export type LinkStyle = 'plain' | 'button-primary' | 'button-secondary';
 
 export interface PageCardProps {
-  name: string;
-  isNameBold?: boolean;
+  cardIsClickable?: boolean;
+  description: string | (string | JSX.Element)[];
   icon: IconName;
-  description: string;
-  linkText: string;
+  id?: string;
+  isNameBold?: boolean;
   link: string;
   linkStyle: LinkStyle;
-  id?: string;
+  linkText: string;
+  name: string;
+  onClick?: () => void;
 }
 
+const stopBubblingEvent = (event?: React.MouseEvent) => {
+  if (event) {
+    stopPropagation(event);
+  }
+};
+
 export default function PageCard(props: PageCardProps): JSX.Element {
-  const { name, isNameBold, icon, description, id, linkText, link, linkStyle } = props;
-  const classes = useStyles({ linkStyle });
+  const { cardIsClickable = true, description, icon, id, link, linkStyle, linkText, name, onClick } = props;
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
 
-  const stopBubblingEvent = (event?: React.MouseEvent) => {
-    if (event) {
-      stopPropagation(event);
-    }
+  const goToPage = () => {
+    navigate({ pathname: link });
   };
 
-  const goToPage = (event?: React.MouseEvent) => {
-    if (linkStyle === 'button') {
-      return;
+  const handleOnClick = () => {
+    if (onClick) {
+      onClick();
+    } else {
+      goToPage();
     }
-    history.push({ pathname: link });
   };
 
   return (
-    <Box className={`${classes.container} ${isMobile ? '' : 'min-height'}`} onClick={goToPage} id={id ?? ''}>
-      <div className={classes.title}>
-        <Icon name={icon} size='medium' className={classes.icon} />
-        <Typography
-          component='p'
-          className={`${classes.titleText} ${isNameBold ? classes.bold : ''}`}
-          sx={{ fontSize: '20px', lineHeight: '28px', paddingLeft: '10px', fontWeight: 600 }}
-        >
+    <Box
+      className={isMobile ? '' : 'min-height'}
+      onClick={cardIsClickable ? handleOnClick : undefined}
+      id={id ?? ''}
+      sx={{
+        background: theme.palette.TwClrBg,
+        borderRadius: '24px',
+        cursor: linkStyle === 'plain' ? 'pointer' : 'default',
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        padding: '24px',
+        '&.min-height': {
+          minHeight: '220px',
+        },
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          paddingBottom: '16px',
+          alignItems: 'center',
+        }}
+      >
+        <Icon
+          name={icon}
+          size='medium'
+          style={{
+            fill: theme.palette.TwClrIcnSecondary,
+          }}
+        />
+        <Typography component='p' sx={{ fontSize: '20px', lineHeight: '28px', paddingLeft: '10px', fontWeight: 600 }}>
           {name}
         </Typography>
-      </div>
+      </Box>
       <Typography
         component='p'
         variant='h6'
-        className={classes.description}
-        sx={{ fontSize: '16px', fontWeight: 400, lineHeight: '24px', height: '100%', color: theme.palette.TwClrTxt }}
+        sx={{
+          fontSize: '16px',
+          fontWeight: 400,
+          lineHeight: '24px',
+          height: '100%',
+          color: theme.palette.TwClrTxt,
+        }}
       >
         {description}
       </Typography>
       {linkStyle === 'plain' && (
         <Box onClick={stopBubblingEvent} marginTop='28px'>
-          <Link className={classes.link} to={link}>
+          <Link
+            to={link}
+            style={{
+              display: 'block',
+              fontSize: '16px',
+            }}
+          >
             {linkText}
           </Link>
         </Box>
       )}
-      {linkStyle === 'button' && (
+      {(linkStyle === 'button-primary' || linkStyle === 'button-secondary') && (
         <Button
-          priority='secondary'
+          priority={linkStyle === 'button-primary' ? 'primary' : 'secondary'}
           label={linkText}
-          className={classes.buttonLink}
-          onClick={() => window.open(link, '_blank')}
+          onClick={handleOnClick}
+          style={{
+            fontSize: '14px',
+            lineHeight: '20px',
+            marginTop: '14px',
+            maxWidth: 'fit-content',
+          }}
         />
       )}
     </Box>

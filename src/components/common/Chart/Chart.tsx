@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-import { Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { useTheme } from '@mui/material';
 import { Chart as ChartJS, ChartTypeRegistry } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { AnnotationPluginOptions } from 'chartjs-plugin-annotation/types/options';
@@ -31,13 +30,6 @@ export interface StyleProps {
   maxWidth?: string;
 }
 
-const useStyles = makeStyles<Theme, StyleProps>(() => ({
-  chart: {
-    minHeight: (props) => props.minHeight ?? '200px',
-    maxWidth: (props) => props.maxWidth ?? undefined,
-  },
-}));
-
 export type BaseChartProps = {
   chartId: string;
   chartData?: ChartData;
@@ -45,12 +37,13 @@ export type BaseChartProps = {
   minHeight?: string;
   maxWidth?: string;
   barWidth?: number;
-  elementColor?: string;
+  elementColor?: string | string[];
   barAnnotations?: AnnotationPluginOptions;
   yLimits?: { min?: number; max?: number };
   showLegend?: boolean;
   xAxisLabel?: string;
   yAxisLabel?: string;
+  yStepSize?: number;
 };
 
 export type ChartProps = BaseChartProps & {
@@ -93,77 +86,83 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     showLegend,
     xAxisLabel,
     yAxisLabel,
+    yStepSize,
   } = props;
-  const classes = useStyles({ minHeight, maxWidth });
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [chart, setChart] = useState<ChartJS | null>(null);
   const theme = useTheme();
+  const initialized = useRef(false);
 
   const barThickness: number | 'flex' | undefined = barWidth === undefined ? 50 : barWidth === 0 ? 'flex' : barWidth;
 
   useEffect(() => {
-    const getAxisLabelProps = (label?: string) => {
-      if (!label) {
-        return {};
-      }
-      return {
-        title: {
-          display: true,
-          align: 'center',
-          text: label,
-        },
-      };
-    };
-
-    const createChart = async () => {
-      if (chart) {
-        chart.destroy();
-      }
-
-      const ctx = canvasRef?.current?.getContext('2d');
-      if (ctx) {
-        setChart(
-          await newChart(locale, ctx, {
-            type,
-            data: {
-              labels: [],
-              datasets: [],
-            },
-            options: {
-              maintainAspectRatio: false,
-              layout: {
-                padding: {
-                  left: 0,
-                  right: 0,
-                  top: 10,
-                },
-              },
-              scales: {
-                x: {
-                  display: type === 'pie' ? false : undefined,
-                  ...getAxisLabelProps(xAxisLabel),
-                },
-                y: {
-                  ticks: {
-                    precision: 0,
-                  },
-                  min: yLimits?.min,
-                  max: yLimits?.max,
-                  display: type === 'pie' ? false : undefined,
-                  ...getAxisLabelProps(yAxisLabel),
-                },
-              },
-            },
-          })
-        );
-        // when component unmounts
-        return () => {
-          chart?.destroy();
+    // used to prevent double render on dev scope (react 18)
+    if (!initialized.current) {
+      initialized.current = true;
+      const getAxisLabelProps = (label?: string) => {
+        if (!label) {
+          return {};
+        }
+        return {
+          title: {
+            display: true,
+            align: 'center',
+            text: label,
+          },
         };
-      }
-    };
-    createChart();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      };
+
+      const createChart = async () => {
+        if (chart) {
+          chart.destroy();
+        }
+
+        const ctx = canvasRef?.current?.getContext('2d');
+        if (ctx) {
+          setChart(
+            await newChart(locale, ctx, {
+              type,
+              data: {
+                labels: [],
+                datasets: [],
+              },
+              options: {
+                maintainAspectRatio: false,
+                layout: {
+                  padding: {
+                    left: 0,
+                    right: 0,
+                    top: 10,
+                  },
+                },
+                scales: {
+                  x: {
+                    display: type === 'pie' ? false : undefined,
+                    ...getAxisLabelProps(xAxisLabel),
+                  },
+                  y: {
+                    ticks: {
+                      precision: 0,
+                      stepSize: yStepSize,
+                    },
+                    min: yLimits?.min,
+                    max: yLimits?.max,
+                    display: type === 'pie' ? false : undefined,
+                    ...getAxisLabelProps(yAxisLabel),
+                  },
+                },
+              },
+            })
+          );
+          // when component unmounts
+          return () => {
+            chart?.destroy();
+          };
+        }
+      };
+      createChart();
+    }
+    // eslint-disable-next-line
   }, [locale]);
 
   useEffect(() => {
@@ -200,5 +199,14 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     }
   }, [chart, chartData, showLegend, barAnnotations, customTooltipTitles, barThickness, elementColor, theme]);
 
-  return <canvas id={chartId} ref={canvasRef} className={classes.chart} />;
+  return (
+    <canvas
+      id={chartId}
+      ref={canvasRef}
+      style={{
+        minHeight: minHeight ?? '200px',
+        maxWidth: maxWidth ?? undefined,
+      }}
+    />
+  );
 }

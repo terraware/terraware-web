@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Grid, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -20,27 +19,10 @@ import PageForm from '../../components/common/PageForm';
 import TextField from '../../components/common/Textfield/Textfield';
 import { useOrganization } from '../../providers/hooks';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  titleSubtitle: {
-    marginTop: '8px',
-    marginBottom: 0,
-  },
-  title: {
-    marginBottom: '8px',
-  },
-  roleDescription: {
-    margin: 0,
-  },
-  rolesList: {
-    margin: 0,
-  },
-}));
-
 export default function PersonView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
-  const classes = useStyles();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [emailError, setEmailError] = useState('');
   const snackbar = useSnackbar();
   const [repeatedEmail, setRepeatedEmail] = useState('');
@@ -71,14 +53,16 @@ export default function PersonView(): JSX.Element {
   }, [selectedOrganization, personSelectedToEdit, setNewPerson]);
 
   useEffect(() => {
-    const populatePeople = async () => {
-      const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
-      if (response.requestSucceeded) {
-        setPeople(response.users);
-        setPersonSelectedToEdit(response.users.find((user) => user.id === parseInt(personId, 10)));
-      }
-    };
-    populatePeople();
+    if (selectedOrganization.id !== -1) {
+      const populatePeople = async () => {
+        const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
+        if (personId && response.requestSucceeded) {
+          setPeople(response.users);
+          setPersonSelectedToEdit(response.users.find((user) => user.id === parseInt(personId, 10)));
+        }
+      };
+      populatePeople();
+    }
   }, [selectedOrganization, personId]);
 
   const onChangeRole = (newRole: string) => {
@@ -86,11 +70,11 @@ export default function PersonView(): JSX.Element {
   };
 
   const goToPeople = () => {
-    history.push({ pathname: APP_PATHS.PEOPLE });
+    navigate({ pathname: APP_PATHS.PEOPLE });
   };
 
   const goToViewPerson = (userId: string) => {
-    history.push({ pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', userId) });
+    navigate({ pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', userId) });
   };
 
   const saveUser = async () => {
@@ -112,9 +96,9 @@ export default function PersonView(): JSX.Element {
     }
 
     let successMessage: string | null = null;
-    let userId: number = -1;
+    let userId = -1;
 
-    if (!!personSelectedToEdit) {
+    if (!!personSelectedToEdit && selectedOrganization.id !== -1) {
       const response = await OrganizationUserService.updateOrganizationUser(
         selectedOrganization.id,
         newPerson.id,
@@ -144,7 +128,7 @@ export default function PersonView(): JSX.Element {
 
     if (successMessage) {
       snackbar.toastSuccess(successMessage);
-      await reloadOrganizations();
+      reloadOrganizations();
       goToViewPerson(userId.toString());
     } else {
       snackbar.toastError();
@@ -159,7 +143,7 @@ export default function PersonView(): JSX.Element {
         const profileLocation = {
           pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', profile.id.toString()),
         };
-        history.push(profileLocation);
+        navigate(profileLocation);
       }
     }
   };
@@ -196,8 +180,12 @@ export default function PersonView(): JSX.Element {
       <PageForm cancelID='cancelNewPerson' saveID='saveNewPerson' onCancel={goToPeople} onSave={() => saveUser()}>
         <Grid container marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
           <Grid item xs={12}>
-            <h2 className={classes.title}>{personSelectedToEdit ? personSelectedToEdit.email : strings.ADD_PERSON}</h2>
-            {!personSelectedToEdit ? <p className={classes.titleSubtitle}>{strings.ADD_PERSON_DESC}</p> : null}
+            <h2 style={{ marginBottom: '8px' }}>
+              {personSelectedToEdit ? personSelectedToEdit.email : strings.ADD_PERSON}
+            </h2>
+            {!personSelectedToEdit ? (
+              <p style={{ marginTop: '8px', marginBottom: 0 }}>{strings.ADD_PERSON_DESC}</p>
+            ) : null}
             <PageSnackbar />
             {pageError === 'REPEATED_EMAIL' && repeatedEmail && (
               <ErrorBox
@@ -264,8 +252,8 @@ export default function PersonView(): JSX.Element {
                 fullWidth
                 tooltipTitle={
                   <Box>
-                    <p className={classes.roleDescription}>{strings.ROLES_INFO}</p>
-                    <ul className={classes.rolesList}>
+                    <p style={{ margin: 0 }}>{strings.ROLES_INFO}</p>
+                    <ul style={{ margin: 0 }}>
                       <li>{strings.CONTRIBUTOR_INFO}</li>
                       <li>{strings.MANAGER_INFO}</li>
                       <li>{strings.ADMIN_INFO}</li>

@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { Box, Grid, List, ListItem, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import { Button, DropdownItem } from '@terraware/web-components';
+import { Box, Grid, List, ListItem, Typography, useTheme } from '@mui/material';
+import { DropdownItem } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';
@@ -13,6 +12,7 @@ import BackToLink from 'src/components/common/BackToLink';
 import Card from 'src/components/common/Card';
 import { View } from 'src/components/common/ListMapSelector';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import TooltipButton from 'src/components/common/button/TooltipButton';
 import { APP_PATHS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
 import { RootState } from 'src/redux/rootReducer';
@@ -24,16 +24,6 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import BoundariesAndZones from './BoundariesAndZones';
 import SimplePlantingSite from './SimplePlantingSite';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  titleWithButton: {
-    alignItems: 'center',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    minHeight: '50px',
-  },
-}));
 
 export type GenericSiteViewProps<T extends MinimalPlantingSite> = {
   editDisabled?: boolean;
@@ -53,9 +43,8 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
   zoneViewUrl,
 }: GenericSiteViewProps<T>): JSX.Element {
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const tz = useLocationTimeZone().get(plantingSite);
   const [plantingSeasons, setPlantingSeasons] = useState<PlantingSeason[]>([]);
   const [search, setSearch] = useState<string>('');
@@ -75,7 +64,7 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
       const editPlantingSiteLocation = {
         pathname: editUrl.replace(':plantingSiteId', `${plantingSite.id}`),
       };
-      history.push(editPlantingSiteLocation);
+      navigate(editPlantingSiteLocation);
     }
   };
 
@@ -83,8 +72,12 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
     if (plantingSite.plantingSeasons) {
       // Only show upcoming planting seasons.
       const today = DateTime.fromJSDate(new Date(), { zone: tz.id }).toISODate();
-      const upcomingSeasons = plantingSite.plantingSeasons.filter((plantingSeason) => plantingSeason.endDate >= today);
-      setPlantingSeasons(upcomingSeasons);
+      if (today) {
+        const upcomingSeasons = plantingSite.plantingSeasons.filter(
+          (plantingSeason) => plantingSeason.endDate >= today
+        );
+        setPlantingSeasons(upcomingSeasons);
+      }
     }
   }, [plantingSite, tz.id]);
 
@@ -98,30 +91,45 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
       <Grid item xs={12} marginBottom={theme.spacing(3)}>
         <BackToLink id='back' to={APP_PATHS.PLANTING_SITES} name={strings.PLANTING_SITES} />
       </Grid>
-      <Grid item xs={12} padding={theme.spacing(0, 3)} className={classes.titleWithButton}>
+      <Grid
+        item
+        xs={12}
+        padding={theme.spacing(0, 3)}
+        sx={{
+          alignItems: 'center',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          minHeight: '50px',
+        }}
+      >
         <Typography fontSize='20px' fontWeight={600}>
           {plantingSite?.name}
         </Typography>
-        {editDisabled !== true && (
+        {
           <Box display='flex' alignItems='center'>
-            <Button
+            <TooltipButton
+              disabled={editDisabled}
               icon='iconEdit'
               label={isMobile ? undefined : strings.EDIT_PLANTING_SITE}
               priority='primary'
               size='medium'
+              tooltip={editDisabled ? strings.SITE_EDIT_DISABLED_TOOLTIP : undefined}
               onClick={goToEditPlantingSite}
             />
-            <OptionsMenu
-              size='small'
-              onOptionItemClick={(item: DropdownItem) => {
-                if (item.value === 'delete-planting-site') {
-                  onDelete();
-                }
-              }}
-              optionItems={[{ label: strings.DELETE, value: 'delete-planting-site', type: 'destructive' }]}
-            />
+            {editDisabled !== true && (
+              <OptionsMenu
+                size='small'
+                onOptionItemClick={(item: DropdownItem) => {
+                  if (item.value === 'delete-planting-site') {
+                    onDelete();
+                  }
+                }}
+                optionItems={[{ label: strings.DELETE, value: 'delete-planting-site', type: 'destructive' }]}
+              />
+            )}
           </Box>
-        )}
+        }
       </Grid>
       <Grid item xs={12}>
         <PageSnackbar />

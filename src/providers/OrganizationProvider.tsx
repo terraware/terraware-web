@@ -1,12 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { store } from 'src/redux/store';
 import { OrganizationService, PreferencesService } from 'src/services';
+import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useEnvironment from 'src/utils/useEnvironment';
 import useQuery from 'src/utils/useQuery';
+import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import { PreferencesType, ProvidedOrganizationData } from './DataTypes';
@@ -26,17 +30,20 @@ enum APIRequestStatus {
 }
 
 export default function OrganizationProvider({ children }: OrganizationProviderProps): JSX.Element {
+  const { isDesktop } = useDeviceInfo();
+  const snackbar = useSnackbar();
   const [bootstrapped, setBootstrapped] = useState<boolean>(false);
   const [selectedOrganization, setSelectedOrganization] = useState<Organization>();
   const [orgPreferences, setOrgPreferences] = useState<PreferencesType>({});
   const [orgPreferenceForId, setOrgPreferenceForId] = useState<number>(defaultSelectedOrg.id);
   const [orgAPIRequestStatus, setOrgAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
   const [organizations, setOrganizations] = useState<Organization[]>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const query = useQuery();
   const location = useStateLocation();
   const { userPreferences, updateUserPreferences, bootstrapped: userBootstrapped } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { isDev, isStaging } = useEnvironment();
 
   const reloadOrganizations = useCallback(async (selectedOrgId?: number) => {
     const populateOrganizations = async () => {
@@ -68,7 +75,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
 
   const reloadOrgPreferences = useCallback(() => {
     const getOrgPreferences = async () => {
-      if (selectedOrganization) {
+      if (selectedOrganization && selectedOrganization.id !== -1) {
         const response = await PreferencesService.getUserOrgPreferences(selectedOrganization.id);
         if (response.requestSucceeded && response.preferences) {
           setOrgPreferences(response.preferences);
@@ -82,6 +89,17 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     getOrgPreferences();
   }, [selectedOrganization]);
 
+  const redirectAndNotify = useCallback(
+    (organization: Organization) => {
+      navigate({ pathname: APP_PATHS.HOME });
+      snackbar.pageSuccess(
+        isDesktop ? strings.ORGANIZATION_CREATED_MSG_DESKTOP : strings.ORGANIZATION_CREATED_MSG,
+        strings.formatString(strings.ORGANIZATION_CREATED_TITLE, organization.name)
+      );
+    },
+    [snackbar, isDesktop]
+  );
+
   useEffect(() => {
     reloadOrganizations();
   }, [reloadOrganizations]);
@@ -89,6 +107,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   useEffect(() => {
     setOrganizationData((prev) => ({
       ...prev,
+      redirectAndNotify,
       selectedOrganization: selectedOrganization || defaultSelectedOrg,
       organizations: organizations ?? [],
       orgPreferences,
@@ -96,7 +115,15 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       orgPreferenceForId,
       reloadOrgPreferences,
     }));
-  }, [selectedOrganization, organizations, orgPreferences, bootstrapped, orgPreferenceForId, reloadOrgPreferences]);
+  }, [
+    redirectAndNotify,
+    selectedOrganization,
+    organizations,
+    orgPreferences,
+    bootstrapped,
+    orgPreferenceForId,
+    reloadOrgPreferences,
+  ]);
 
   useEffect(() => {
     reloadOrgPreferences();
@@ -122,7 +149,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
           }
           if (queryOrganizationId !== orgToUse.id.toString()) {
             query.set('organizationId', orgToUse.id.toString());
-            history.replace(getLocation(location.pathname, location, query.toString()));
+            navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
           }
         }
       }
@@ -130,7 +157,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       if (queryOrganizationId && (!orgToUse || isAcceleratorRoute)) {
         // user does not belong to any orgs, clear the url param org id
         query.delete('organizationId');
-        history.replace(getLocation(location.pathname, location, query.toString()));
+        navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       }
     }
   }, [
@@ -138,7 +165,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     selectedOrganization,
     query,
     location,
-    history,
+    navigate,
     userPreferences,
     userBootstrapped,
     isAcceleratorRoute,
@@ -155,15 +182,24 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     store.dispatch({ type: 'RESET_APP' });
   }, [selectedOrganization?.id]);
 
-  if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
-    history.push(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
-  }
+  useEffect(() => {
+    if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
+      if (isDev || isStaging) {
+        if (confirm(strings.DEV_SERVER_ERROR)) {
+          window.location.reload();
+        }
+      } else {
+        navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
+      }
+    }
+  }, [orgAPIRequestStatus]);
 
   const [organizationData, setOrganizationData] = useState<ProvidedOrganizationData>({
     selectedOrganization: selectedOrganization || defaultSelectedOrg,
     setSelectedOrganization,
     organizations: organizations ?? [],
     orgPreferences,
+    redirectAndNotify,
     reloadOrganizations,
     reloadOrgPreferences,
     bootstrapped,

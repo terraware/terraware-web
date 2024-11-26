@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { DatePicker } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
+import DatePicker from 'src/components/common/DatePicker';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers/hooks';
@@ -23,6 +23,11 @@ import LocationTimeZoneSelector from '../../components/LocationTimeZoneSelector'
 import PageForm from '../../components/common/PageForm';
 import TextField from '../../components/common/Textfield/Textfield';
 
+export type NavigateToFacilityObject = {
+  navigate: boolean;
+  id?: number;
+};
+
 export default function SeedBankView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
   const theme = useTheme();
@@ -31,6 +36,10 @@ export default function SeedBankView(): JSX.Element {
   const [validateDates, setValidateDates] = useState(false);
   const [editedSubLocations, setEditedSubLocations] = useState<PartialSubLocation[]>();
   const snackbar = useSnackbar();
+  const [navigateToSeedBank, setNavigateToSeedBank] = useState<NavigateToFacilityObject>({
+    navigate: false,
+    id: undefined,
+  });
 
   const [record, setRecord, onChange] = useForm<Facility>({
     name: '',
@@ -41,7 +50,7 @@ export default function SeedBankView(): JSX.Element {
   });
   const { seedBankId } = useParams<{ seedBankId: string }>();
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility | null>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
   const gridSize = () => {
     if (isMobile) {
@@ -51,8 +60,16 @@ export default function SeedBankView(): JSX.Element {
   };
 
   useEffect(() => {
-    const seedBanks = getAllSeedBanks(selectedOrganization);
-    setSelectedSeedBank(seedBanks?.find((sb) => sb?.id === parseInt(seedBankId, 10)));
+    if (navigateToSeedBank.navigate) {
+      goToSeedBank(navigateToSeedBank.id);
+    }
+  }, [selectedOrganization]);
+
+  useEffect(() => {
+    if (seedBankId) {
+      const seedBanks = getAllSeedBanks(selectedOrganization);
+      setSelectedSeedBank(seedBanks?.find((sb) => sb?.id === parseInt(seedBankId, 10)));
+    }
   }, [seedBankId, selectedOrganization]);
 
   useEffect(() => {
@@ -74,10 +91,13 @@ export default function SeedBankView(): JSX.Element {
     const sitesLocation = {
       pathname: APP_PATHS.SEED_BANKS + (id ? `/${id}` : ''),
     };
-    history.push(sitesLocation);
+    navigate(sitesLocation);
   };
 
   const saveSeedBank = async () => {
+    if (selectedOrganization.id === -1) {
+      return;
+    }
     let id = selectedSeedBank?.id;
     if (
       !record.name ||
@@ -107,9 +127,9 @@ export default function SeedBankView(): JSX.Element {
       const response = await FacilityService.updateFacility({ ...record } as Facility);
       if (response.requestSucceeded) {
         if (editedSubLocations) {
-          await SubLocationService.saveEditedSubLocations(selectedSeedBank.id as number, editedSubLocations);
+          await SubLocationService.saveEditedSubLocations(selectedSeedBank.id, editedSubLocations);
         }
-        await reloadOrganizations(selectedOrganization.id);
+        reloadOrganizations(selectedOrganization.id);
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
         snackbar.toastError();
@@ -120,6 +140,7 @@ export default function SeedBankView(): JSX.Element {
         subLocationNames: editedSubLocations?.map((l) => l.name as string),
       });
       if (response.requestSucceeded) {
+        // eslint-disable-next-line @typescript-eslint/await-thenable
         await reloadOrganizations(selectedOrganization.id);
         snackbar.toastSuccess(strings.SEED_BANK_ADDED);
         id = response.facilityId || undefined;
@@ -127,7 +148,7 @@ export default function SeedBankView(): JSX.Element {
         snackbar.toastError();
       }
     }
-    goToSeedBank(id);
+    setNavigateToSeedBank({ navigate: true, id: id });
   };
 
   const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {

@@ -1,21 +1,7 @@
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import { Icon } from '@terraware/web-components';
+import React, { CSSProperties } from 'react';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  icon: {
-    backgroundColor: theme.palette.TwClrBaseWhite,
-    border: `1px solid ${theme.palette.TwClrBgTertiary}`,
-    borderRadius: theme.spacing(0.5),
-    margin: theme.spacing(0, 0.5),
-    width: '20px',
-    height: '20px',
-  },
-  centerAligned: {
-    position: 'relative',
-    top: '3px',
-  },
-}));
+import { useTheme } from '@mui/material';
+import { Icon } from '@terraware/web-components';
 
 export type MapIconType = 'polygon' | 'slice' | 'trash';
 
@@ -25,16 +11,25 @@ export type MapIconProps = {
 };
 
 export default function MapIcon({ centerAligned, icon }: MapIconProps): JSX.Element {
-  const classes = useStyles();
-  const className = centerAligned ? classes.centerAligned : '';
+  const theme = useTheme();
+
+  const iconStyles: CSSProperties = {
+    backgroundColor: theme.palette.TwClrBaseWhite,
+    border: `1px solid ${theme.palette.TwClrBgTertiary}`,
+    borderRadius: theme.spacing(0.5),
+    margin: theme.spacing(0, 0.5),
+    width: '20px',
+    height: '20px',
+    ...(centerAligned ? { position: 'relative', top: '3px' } : {}),
+  };
 
   if (icon === 'polygon') {
-    return <button className={`mapbox-gl-draw_polygon mapbox-gl-draw_ctrl-draw-btn ${classes.icon} ${className}`} />;
+    return <button className={`mapbox-gl-draw_polygon mapbox-gl-draw_ctrl-draw-btn`} style={iconStyles} />;
   }
 
   if (icon === 'trash') {
-    return <button className={`mapbox-gl-draw_trash mapbox-gl-draw_ctrl-draw-btn ${classes.icon} ${className}`} />;
+    return <button className={`mapbox-gl-draw_trash mapbox-gl-draw_ctrl-draw-btn`} style={iconStyles} />;
   }
 
-  return <Icon className={`${classes.icon} ${className}`} name='iconSlice' />;
+  return <Icon name='iconSlice' style={iconStyles} />;
 }

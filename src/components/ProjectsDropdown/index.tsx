@@ -4,22 +4,34 @@ import { Dropdown, DropdownItem } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { Project } from 'src/types/Project';
 
-type ProjectsDropdownProps<T extends { projectId?: number } | undefined> = {
-  allowUnselect?: boolean;
-  availableProjects: Project[] | undefined;
-  label?: string | undefined;
-  record: T;
-  setRecord: (setFn: (previousValue: T) => T) => void;
+type ProjectDropdownOption = {
+  name: string;
+  id: number;
 };
 
-function ProjectsDropdown<T extends { projectId?: number } | undefined>({
+type ProjectsDropdownProps<T extends { projectId?: number | string } | undefined> = {
+  allowUnselect?: boolean;
+  autoComplete?: boolean;
+  availableProjects: ProjectDropdownOption[] | undefined;
+  label?: string | undefined;
+  record: T;
+  required?: boolean;
+  setRecord: (setFn: (previousValue: T) => T) => void;
+  unselectLabel?: string;
+  unselectValue?: string;
+};
+
+function ProjectsDropdown<T extends { projectId?: number | string } | undefined>({
   allowUnselect,
+  autoComplete,
   availableProjects,
   label,
   record,
+  required,
   setRecord,
+  unselectLabel,
+  unselectValue,
 }: ProjectsDropdownProps<T>) {
   const { activeLocale } = useLocalization();
 
@@ -32,8 +44,8 @@ function ProjectsDropdown<T extends { projectId?: number } | undefined>({
 
     if (allowUnselect) {
       options.push({
-        label: strings.NO_PROJECT,
-        value: '',
+        label: unselectLabel ?? strings.NO_PROJECT,
+        value: unselectValue,
       });
     }
 
@@ -48,6 +60,7 @@ function ProjectsDropdown<T extends { projectId?: number } | undefined>({
 
   return (
     <Dropdown
+      autocomplete={autoComplete}
       id='projectId'
       label={label === '' ? label : strings.PROJECT}
       selectedValue={record?.projectId}
@@ -56,11 +69,13 @@ function ProjectsDropdown<T extends { projectId?: number } | undefined>({
         setRecord((previousValue) => {
           return {
             ...previousValue,
-            projectId: projectId ? Number(projectId) : null,
+            projectId: projectId ? Number(projectId) : undefined,
           };
         });
       }}
       fullWidth
+      required={required}
+      sx={{ backgroundColor: '#fff', minWidth: '240px' }}
     />
   );
 }

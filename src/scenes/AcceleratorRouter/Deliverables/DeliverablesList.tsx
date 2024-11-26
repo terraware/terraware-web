@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState } from 'react';
 
 import { Grid, Typography } from '@mui/material';
-import { Separator, TableColumnType } from '@terraware/web-components';
+import { Separator } from '@terraware/web-components';
 
 import DeliverablesTable from 'src/components/DeliverablesTable';
 import PageHeader from 'src/components/PageHeader';
@@ -13,42 +13,6 @@ import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
 import strings from 'src/strings';
 import theme from 'src/theme';
 import { SearchNodePayload } from 'src/types/Search';
-
-const columns = (activeLocale: string | null): TableColumnType[] =>
-  activeLocale
-    ? [
-        {
-          key: 'name',
-          name: strings.DELIVERABLE_NAME,
-          type: 'string',
-        },
-        {
-          key: 'type',
-          name: strings.TYPE,
-          type: 'string',
-        },
-        {
-          key: 'numDocuments',
-          name: strings.DOCUMENTS,
-          type: 'number',
-        },
-        {
-          key: 'category',
-          name: strings.CATEGORY,
-          type: 'string',
-        },
-        {
-          key: 'projectName',
-          name: strings.PROJECT,
-          type: 'string',
-        },
-        {
-          key: 'status',
-          name: strings.STATUS,
-          type: 'string',
-        },
-      ]
-    : [];
 
 const DeliverablesList = () => {
   const { activeLocale } = useLocalization();
@@ -92,6 +56,7 @@ const DeliverablesList = () => {
                 record={participantFilter}
                 setRecord={setParticipantFilter}
                 label={''}
+                unselectLabel={strings.ALL}
               />
             </Grid>
           </Grid>
@@ -108,7 +73,6 @@ const DeliverablesList = () => {
 
       {/* -1 for "non-organization scoped search" IE admin search */}
       <DeliverablesTable
-        columns={columns}
         extraTableFilters={extraTableFilters}
         isAcceleratorRoute={true}
         organizationId={-1}

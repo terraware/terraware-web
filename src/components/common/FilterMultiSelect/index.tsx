@@ -1,27 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
-import { Box, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Button, MultiSelect } from '@terraware/web-components';
 
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import Checkbox from '../Checkbox';
-
-interface StyleProps {
-  isMobile?: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  button: {
-    width: (props: StyleProps) => (props.isMobile ? '100%' : 'auto'),
-  },
-  multiSelectStyle: {
-    height: '100%',
-    width: '100%',
-  },
-}));
 
 type FilterMultiSelectProps<T> = {
   filterKey: string;
@@ -56,11 +41,12 @@ export default function FilterMultiSelect<T>(props: FilterMultiSelectProps<T>): 
 
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const classes = useStyles({ isMobile });
 
   const [selection, setSelection] = useState(initialSelection);
   const [multiSelectOptions, setMultiSelectOptions] = useState<Map<T | null, string>>(new Map());
   const [isNotPresentFilterSelected, setIsNotPresentFilterSelected] = useState<boolean>(selection[0] === null);
+
+  const buttonStyles = { width: isMobile ? '100%' : 'auto' };
 
   useEffect(() => {
     const optionsMap = new Map<T, string>(options.map((option) => [option, renderOption(option)]));
@@ -120,7 +106,6 @@ export default function FilterMultiSelect<T>(props: FilterMultiSelectProps<T>): 
         }}
       >
         <MultiSelect<T | null, string>
-          className={classes.multiSelectStyle}
           fullWidth={true}
           onAdd={onAdd}
           onRemove={onRemove}
@@ -132,6 +117,10 @@ export default function FilterMultiSelect<T>(props: FilterMultiSelectProps<T>): 
           optionsVisible={optionsVisible}
           onBlur={onBlur}
           onFocus={onFocus}
+          sx={{
+            height: '100%',
+            width: '100%',
+          }}
         />
 
         {notPresentFilterShown && (
@@ -167,25 +156,25 @@ export default function FilterMultiSelect<T>(props: FilterMultiSelectProps<T>): 
         }}
       >
         <Button
-          className={classes.button}
           onClick={() => onCancel()}
           type='passive'
           priority='secondary'
           label={strings.CANCEL}
+          style={buttonStyles}
         />
         <Button
-          className={classes.button}
           onClick={() => clearFilters()}
           type='passive'
           priority='secondary'
           label={strings.RESET}
+          style={buttonStyles}
         />
         <Button
-          className={classes.button}
           onClick={() => onConfirm(selection)}
           type='productive'
           priority='primary'
           label={strings.APPLY}
+          style={buttonStyles}
         />
       </Box>
     </Box>

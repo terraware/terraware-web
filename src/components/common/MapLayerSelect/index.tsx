@@ -1,26 +1,11 @@
 import React, { useState } from 'react';
 
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { useTheme } from '@mui/material';
 import { Icon, PopoverMultiSelect } from '@terraware/web-components';
 
 import { useMapPortalContainer } from 'src/components/Map/MapRenderUtils';
 
 export type MapLayer = 'Planting Site' | 'Zones' | 'Sub-Zones' | 'Monitoring Plots';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  layerButton: {
-    border: `1px solid ${theme.palette.TwClrBaseGray300}`,
-    borderRadius: '4px',
-    backgroundColor: theme.palette.TwClrBg,
-    cursor: 'pointer',
-    height: '24px',
-    minWidth: '24px',
-    display: 'flex',
-    alignItems: 'center',
-    padding: `0 ${theme.spacing(0.5)}`,
-  },
-}));
 
 type MapLayerSelectProps = {
   initialSelection: MapLayer[];
@@ -33,7 +18,7 @@ export default function MapLayerSelect({
   onUpdateSelection,
   menuSections,
 }: MapLayerSelectProps): JSX.Element | null {
-  const classes = useStyles();
+  const theme = useTheme();
   const mapPortalContainer = useMapPortalContainer();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleClick = (event?: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
@@ -54,7 +39,20 @@ export default function MapLayerSelect({
         onChange={onUpdateSelection}
         menuAlign='right'
       />
-      <button onClick={handleClick} className={classes.layerButton}>
+      <button
+        onClick={handleClick}
+        style={{
+          border: `1px solid ${theme.palette.TwClrBaseGray300}`,
+          borderRadius: '4px',
+          backgroundColor: theme.palette.TwClrBg,
+          cursor: 'pointer',
+          height: '24px',
+          minWidth: '24px',
+          display: 'flex',
+          alignItems: 'center',
+          padding: `0 ${theme.spacing(0.5)}`,
+        }}
+      >
         <Icon name='iconLayers' size='small' />
       </button>
     </>

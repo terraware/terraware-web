@@ -51,7 +51,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
   const onChange = (id: string, checked: boolean) => {
     if (checked) {
       const newValue = [...value];
-      newValue.push(id as string);
+      newValue.push(id);
       setValue(newValue);
     } else {
       setValue(value.filter((v) => v !== id));
@@ -198,12 +198,13 @@ function sections(system?: string): Section[] {
     {
       name: strings.SEED_COLLECTION,
       options: [
-        [columns.speciesName, columns.species_commonName, columns.species_familyName],
+        [columns.speciesName, columns.species_commonName, columns.species_familyName, columns.plantId],
         [
           columns.collectedDate,
           columns.collectionSiteName,
           columns.collectionSiteLandowner,
           columns.collectionSiteNotes,
+          columns['geolocations.coordinates'],
         ],
         [columns.ageYears, columns.ageMonths],
       ],

@@ -1,5 +1,5 @@
 import React, { ReactNode, useCallback, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Card, Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -44,9 +44,9 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
-          key: 'participantIds',
+          key: 'numOfParticipants',
           name: strings.PARTICIPANTS,
-          type: 'string',
+          type: 'number',
         },
       ]
     : [];
@@ -54,7 +54,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
 const CohortsListView = ({ filterModifiers, extraTableFilters }: CohortsListViewProps) => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isAllowed } = useUser();
   const { isMobile } = useDeviceInfo();
 
@@ -78,13 +78,13 @@ const CohortsListView = ({ filterModifiers, extraTableFilters }: CohortsListView
     const newProjectLocation = {
       pathname: APP_PATHS.ACCELERATOR_COHORTS_NEW,
     };
-    history.push(newProjectLocation);
-  }, [history]);
+    navigate(newProjectLocation);
+  }, [navigate]);
 
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
       setHasFilters(search.children.length > 0);
-      dispatch(requestCohorts({ locale, depth: 'Cohort', search, searchSortOrder }));
+      dispatch(requestCohorts({ locale, depth: 'Participant', search, searchSortOrder }));
     },
     [dispatch]
   );
@@ -124,6 +124,8 @@ const CohortsListView = ({ filterModifiers, extraTableFilters }: CohortsListView
       rightComponent={actionMenus}
       rows={cohorts || []}
       title={strings.COHORTS}
+      clientSortedFields={['numOfParticipants']}
+      stickyFilters
     />
   );
 };

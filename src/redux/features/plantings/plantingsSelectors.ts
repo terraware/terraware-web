@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSelector } from '@reduxjs/toolkit';
 
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';

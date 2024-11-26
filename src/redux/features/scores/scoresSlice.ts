@@ -18,8 +18,6 @@ export const scoreListSlice = createSlice({
   },
 });
 
-export const scoreListReducer = scoreListSlice.reducer;
-
 /**
  * Simple response to know if the scores of the project were updated
  */
@@ -34,4 +32,9 @@ export const scoresUpdateSlice = createSlice({
   },
 });
 
-export const scoresUpdateReducer = scoresUpdateSlice.reducer;
+const scoresReducers = {
+  scoreList: scoreListSlice.reducer,
+  scoresUpdate: scoresUpdateSlice.reducer,
+};
+
+export default scoresReducers;

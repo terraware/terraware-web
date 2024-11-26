@@ -30,3 +30,11 @@ code {
 #root {
   height: 100%;
 }
+
+a,
+a:link,
+a:visited,
+a:hover,
+a:active {
+  color: #2c8658;
+}

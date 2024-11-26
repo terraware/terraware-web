@@ -1,8 +1,8 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useMixpanel } from 'react-mixpanel-browser';
+import { useNavigate } from 'react-router-dom';
 
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { useTheme } from '@mui/material';
 import { DropdownItem, PopoverMenu } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
@@ -12,27 +12,21 @@ import useEnvironment from 'src/utils/useEnvironment';
 
 import strings from '../../src/strings';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  userName: {
-    fontSize: '16px',
-    paddingLeft: '8px',
-    color: theme.palette.TwClrTxt,
-  },
-}));
-
 type UserMenuProps = {
   hasOrganizations?: boolean;
 };
 
-export default function UserMenu({ hasOrganizations }: UserMenuProps): JSX.Element {
-  const classes = useStyles();
+export default function UserMenu({}: UserMenuProps): JSX.Element {
+  const theme = useTheme();
   const { user } = useUser();
   const { isProduction } = useEnvironment();
-  const history = useHistory();
+  const navigate = useNavigate();
   const docLinks = useDocLinks();
+  const mixpanel = useMixpanel();
 
   const onHandleLogout = () => {
-    window.location.href = `/sso/logout`;
+    mixpanel?.reset();
+    window.location.href = '/sso/logout';
   };
 
   const onItemClick = (selectedItem: DropdownItem) => {
@@ -46,7 +40,7 @@ export default function UserMenu({ hasOrganizations }: UserMenuProps): JSX.Eleme
         break;
       }
       default: {
-        history.push(selectedItem.value);
+        navigate(selectedItem.value);
         break;
       }
     }
@@ -56,6 +50,7 @@ export default function UserMenu({ hasOrganizations }: UserMenuProps): JSX.Eleme
     const items: DropdownItem[] = [
       { label: strings.MY_ACCOUNT, value: APP_PATHS.MY_ACCOUNT },
       { label: strings.PRIVACY_POLICY, value: 'privacyPolicy' },
+      { label: strings.HELP_SUPPORT, value: APP_PATHS.HELP_SUPPORT },
       { label: strings.LOG_OUT, value: 'logOut' },
     ];
 
@@ -69,7 +64,13 @@ export default function UserMenu({ hasOrganizations }: UserMenuProps): JSX.Eleme
   return (
     <PopoverMenu
       anchor={
-        <span className={classes.userName}>
+        <span
+          style={{
+            fontSize: '16px',
+            paddingLeft: '8px',
+            color: theme.palette.TwClrTxt,
+          }}
+        >
           {user?.firstName} {user?.lastName}
         </span>
       }

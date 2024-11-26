@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { Box, CircularProgress, Container, Grid, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, CircularProgress, Container, Grid, SxProps, Typography, useTheme } from '@mui/material';
 import Cookies from 'cookies-js';
 
 import MainPaper from 'src/components/MainPaper';
@@ -11,44 +10,14 @@ import Link from 'src/components/common/Link';
 import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
-import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
+import { APP_PATHS } from 'src/constants';
+import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
 import { useOrganization } from 'src/providers/hooks';
 import AccessionByStatus from 'src/scenes/SeedsDashboard/AccessionByStatus';
 import SummaryPaper from 'src/scenes/SeedsDashboard/SummaryPaper';
-import SeedBankService, { SummaryResponse } from 'src/services/SeedBankService';
 import strings from 'src/strings';
 import { AccessionState, stateName } from 'src/types/Accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  accessionsLink: {
-    marginRight: '12px',
-  },
-  mainContainer: {
-    padding: 0,
-  },
-  messageIcon: {
-    fill: theme.palette.TwClrIcnInfo,
-  },
-  paper: {
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-    alignItems: 'start',
-    borderRadius: '24px',
-    border: 'none',
-    backgroundColor: theme.palette.TwClrBg,
-    padding: theme.spacing(3),
-  },
-  spinnerContainer: {
-    position: 'fixed',
-    top: '50%',
-    left: 'calc(50% + 100px)',
-  },
-  accessionsByStatusIcon: {
-    fill: theme.palette.TwClrIcnSecondary,
-  },
-}));
 
 Cookies.defaults = {
   path: '/',
@@ -57,51 +26,24 @@ Cookies.defaults = {
 
 export default function SeedSummary(): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const classes = useStyles();
-  const history = useHistory();
-  // populateSummaryInterval value is only being used when it is set.
-  const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
-  const [summary, setSummary] = useState<SummaryResponse>();
-  const [isEmptyState, setIsEmptyState] = useState<boolean>(false);
-  const errorOccurred = summary ? !summary.requestSucceeded : false;
+  const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  useEffect(() => {
-    if (selectedOrganization) {
-      const populateSummary = async () => {
-        const response = await SeedBankService.getSummary(selectedOrganization.id);
-        if (!response.value?.activeAccessions) {
-          setIsEmptyState(true);
-        }
-        setSummary(response);
-      };
+  const seedBankSummary = useSeedBankSummary();
+  const isEmptyState = seedBankSummary ? !seedBankSummary.value?.activeAccessions : false;
+  const errorOccurred = seedBankSummary ? !seedBankSummary.requestSucceeded : false;
 
-      // Update summary information
-      populateSummary();
-
-      // Update interval that keeps summary up to date
-      if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {
-        setPopulateSummaryInterval((currInterval) => {
-          if (currInterval) {
-            // Clear an existing interval when the facilityId changes
-            clearInterval(currInterval);
-          }
-          return setInterval(populateSummary, API_PULL_INTERVAL);
-        });
-      }
-    }
-
-    // Clear interval on exit
-    return () => {
-      setPopulateSummaryInterval((currInterval) => {
-        if (currInterval) {
-          clearInterval(currInterval);
-        }
-        return undefined;
-      });
-    };
-  }, [selectedOrganization]);
+  const paperStyles: SxProps = {
+    display: 'flex',
+    overflow: 'auto',
+    flexDirection: 'column',
+    alignItems: 'start',
+    borderRadius: '24px',
+    border: 'none',
+    backgroundColor: theme.palette.TwClrBg,
+    padding: theme.spacing(3),
+  };
 
   const cardGridSize = () => {
     if (isMobile) {
@@ -126,8 +68,8 @@ export default function SeedSummary(): JSX.Element {
         parentPage={strings.SEEDS}
         snackbarPageKey={'seeds'}
       />
-      <Container maxWidth={false} className={classes.mainContainer}>
-        {selectedOrganization && summary ? (
+      <Container maxWidth={false} sx={{ padding: 0 }}>
+        {selectedOrganization && seedBankSummary ? (
           <Grid container spacing={3}>
             {isEmptyState === true && (
               <Grid item xs={12} paddingBottom={theme.spacing(1)}>
@@ -143,7 +85,7 @@ export default function SeedSummary(): JSX.Element {
                   }}
                 >
                   <Box sx={{ flexGrow: 0, marginRight: '18px' }}>
-                    <Icon name='info' className={classes.messageIcon} size='large' />
+                    <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='large' />
                   </Box>
                   <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
                     <Typography
@@ -167,7 +109,7 @@ export default function SeedSummary(): JSX.Element {
                       {strings.DASHBOARD_MESSAGE}
                     </Typography>
                     <Box sx={{ alignSelf: 'end' }}>
-                      <Button label={strings.GET_STARTED} onClick={() => history.push(APP_PATHS.ACCESSIONS)} />
+                      <Button label={strings.GET_STARTED} onClick={() => navigate(APP_PATHS.ACCESSIONS)} />
                     </Box>
                   </Box>
                 </Box>
@@ -176,42 +118,43 @@ export default function SeedSummary(): JSX.Element {
             <Grid item xs={12}>
               <Grid container spacing={3}>
                 <Grid item xs={cardGridSize()}>
-                  <MainPaper className={classes.paper}>
+                  <MainPaper sx={paperStyles}>
                     <SummaryPaper
                       id='seedCount'
                       title={strings.TOTAL_SEED_COUNT}
                       icon='seedbankNav'
-                      statistic={`${summary?.value?.seedsRemaining.total}${
-                        summary?.value?.seedsRemaining && summary?.value?.seedsRemaining.unknownQuantityAccessions > 0
+                      statistic={`${seedBankSummary?.value?.seedsRemaining.total}${
+                        seedBankSummary?.value?.seedsRemaining &&
+                        seedBankSummary?.value?.seedsRemaining.unknownQuantityAccessions > 0
                           ? '+'
                           : ''
                       }`}
-                      loading={summary === undefined}
+                      loading={seedBankSummary === undefined}
                       error={errorOccurred}
                     />
                   </MainPaper>
                 </Grid>
                 <Grid item xs={cardGridSize()}>
-                  <MainPaper className={classes.paper}>
+                  <MainPaper sx={paperStyles}>
                     <SummaryPaper
                       id='sessions'
                       title={strings.TOTAL_ACTIVE_ACCESSIONS}
                       icon='seeds'
-                      statistic={summary?.value?.activeAccessions}
-                      loading={summary === undefined}
+                      statistic={seedBankSummary?.value?.activeAccessions}
+                      loading={seedBankSummary === undefined}
                       error={errorOccurred}
                       tooltipTitle={strings.TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS}
                     />
                   </MainPaper>
                 </Grid>
                 <Grid item xs={cardGridSize()}>
-                  <MainPaper className={classes.paper}>
+                  <MainPaper sx={paperStyles}>
                     <SummaryPaper
                       id='species'
                       title={strings.NUMBER_OF_SPECIES}
                       icon='species'
-                      statistic={summary?.value?.species}
-                      loading={summary === undefined}
+                      statistic={seedBankSummary?.value?.species}
+                      loading={seedBankSummary === undefined}
                       error={errorOccurred}
                     />
                   </MainPaper>
@@ -226,7 +169,7 @@ export default function SeedSummary(): JSX.Element {
                     }}
                   >
                     <Box display='flex' alignContent='center' alignItems='center'>
-                      <Icon name='futures' size='medium' className={classes.accessionsByStatusIcon} />
+                      <Icon fillColor={theme.palette.TwClrIcnSecondary} name='futures' size='medium' />
                       <Typography
                         fontSize='20px'
                         fontWeight={600}
@@ -242,12 +185,12 @@ export default function SeedSummary(): JSX.Element {
                           <AccessionByStatus
                             label={stateName(state)}
                             status={stateName(state)}
-                            quantity={summary.value?.accessionsByState[state]}
+                            quantity={seedBankSummary.value?.accessionsByState[state]}
                           />
                         </Grid>
                       ))}
                     </Grid>
-                    <Link className={classes.accessionsLink} to={`${APP_PATHS.ACCESSIONS}?stage=}`} fontSize='16px'>
+                    <Link to={`${APP_PATHS.ACCESSIONS}?stage=}`} fontSize='16px' style={{ marginRight: '12px' }}>
                       {strings.SEE_ALL_ACCESSIONS}
                     </Link>
                   </Box>
@@ -256,9 +199,15 @@ export default function SeedSummary(): JSX.Element {
             </Grid>
           </Grid>
         ) : (
-          <div className={classes.spinnerContainer}>
+          <Box
+            sx={{
+              position: 'fixed',
+              top: '50%',
+              left: 'calc(50% + 100px)',
+            }}
+          >
             <CircularProgress />
-          </div>
+          </Box>
         )}
       </Container>
     </TfMain>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -7,12 +7,13 @@ import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import PageForm from 'src/components/common/PageForm';
+import SelectPhotos from 'src/components/common/SelectPhotos';
 import SpeciesSelector from 'src/components/common/SpeciesSelector';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import SeedBankService, { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import strings from 'src/strings';
 import { accessionCreateStates } from 'src/types/Accession';
@@ -31,6 +32,7 @@ import {
   Collectors2,
   SeedBank2Selector,
 } from './properties';
+import CollectionSiteName from './properties/CollectionSiteName';
 
 const SubTitleStyle = {
   fontSize: '20px',
@@ -41,10 +43,13 @@ const MANDATORY_FIELDS = ['speciesId', 'collectedDate', 'receivedDate', 'state',
 
 type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 
-export default function CreateAccession(): JSX.Element {
+export const MAX_ACCESSION_PHOTOS = 10;
+
+export default function CreateAccession(): JSX.Element | null {
+  const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
@@ -53,6 +58,11 @@ export default function CreateAccession(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const [collectedDateError, setCollectedDateError] = useState<string>();
   const [receivedDateError, setReceivedDateError] = useState<string>();
+  const [photos, setPhotos] = useState<File[]>([]);
+
+  const onPhotosChanged = (photosList: File[]) => {
+    setPhotos(photosList);
+  };
 
   const onCollectedDateError = (error?: string) => {
     setCollectedDateError(error);
@@ -65,6 +75,7 @@ export default function CreateAccession(): JSX.Element {
   const defaultAccession = (): AccessionPostRequestBody =>
     ({
       state: 'Awaiting Check-In',
+      collectedDate: getTodaysDateFormatted(timeZone),
       receivedDate: getTodaysDateFormatted(timeZone),
     }) as AccessionPostRequestBody;
 
@@ -118,7 +129,7 @@ export default function CreateAccession(): JSX.Element {
   };
 
   const goToAccessions = () => {
-    history.push(accessionsDatabase);
+    navigate(accessionsDatabase);
   };
 
   const hasErrors = () => {
@@ -133,8 +144,13 @@ export default function CreateAccession(): JSX.Element {
     }
     const response = await SeedBankService.createAccession(record);
     if (response.requestSucceeded) {
-      history.replace(accessionsDatabase);
-      history.push({
+      if (photos.length) {
+        // upload photos
+        await SeedBankService.uploadAccessionPhotos(response.id, photos);
+      }
+
+      navigate(accessionsDatabase, { replace: true });
+      navigate({
         pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', response.id.toString()),
       });
     } else {
@@ -144,7 +160,7 @@ export default function CreateAccession(): JSX.Element {
 
   const gridSize = () => (isMobile ? 12 : 6);
 
-  return (
+  return !activeLocale ? null : (
     <TfMain>
       <PageForm
         cancelID='cancelCreateAccession'
@@ -183,6 +199,7 @@ export default function CreateAccession(): JSX.Element {
               onChange={onChange}
               validate={validateFields}
               timeZone={timeZone}
+              value={record.collectedDate}
               id='collectedDate'
               onDateError={onCollectedDateError}
               label={strings.COLLECTION_DATE_REQUIRED}
@@ -200,14 +217,7 @@ export default function CreateAccession(): JSX.Element {
               justifyContent='space-between'
             >
               <Grid item xs={gridSize()} sx={{ ...marginTop, marginRight: isMobile ? 0 : theme.spacing(2) }}>
-                <Textfield
-                  id='collectionSiteName'
-                  value={record.collectionSiteName}
-                  onChange={(value) => onChange('collectionSiteName', value)}
-                  type='text'
-                  label={strings.COLLECTION_SITE}
-                  tooltipTitle={strings.TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE}
-                />
+                <CollectionSiteName onChange={onChange} collectionSiteName={record?.collectionSiteName} />
               </Grid>
               <Grid item xs={gridSize()} sx={marginTop}>
                 <Textfield
@@ -256,6 +266,26 @@ export default function CreateAccession(): JSX.Element {
             </Grid>
             <SeedBank2Selector record={record} onChange={onChange} validate={validateFields} />
           </Grid>
+
+          <Box sx={marginTop}>
+            <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
+              {strings.PHOTOS}
+            </Typography>
+
+            <Box
+              sx={{
+                marginLeft: `-${theme.spacing(3)}`,
+                marginRight: `-${theme.spacing(3)}`,
+                marginTop: `-${theme.spacing(1)}`,
+              }}
+            >
+              <SelectPhotos
+                maxPhotos={MAX_ACCESSION_PHOTOS}
+                multipleSelection={true}
+                onPhotosChanged={onPhotosChanged}
+              />
+            </Box>
+          </Box>
         </Container>
       </PageForm>
     </TfMain>

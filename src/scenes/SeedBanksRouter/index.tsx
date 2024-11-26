@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
-import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import SeedBankDetailsView from 'src/scenes/SeedBanksRouter/SeedBankDetailsView';
 import SeedBankView from 'src/scenes/SeedBanksRouter/SeedBankView';
@@ -20,20 +19,12 @@ const SeedBanksRouter = () => {
   }, [selectedOrganization]);
 
   return (
-    <Switch>
-      <Route exact path={APP_PATHS.SEED_BANKS_NEW}>
-        <SeedBankView />
-      </Route>
-      <Route exact path={APP_PATHS.SEED_BANKS_EDIT}>
-        <SeedBankView />
-      </Route>
-      <Route path={APP_PATHS.SEED_BANKS_VIEW}>
-        <SeedBankDetailsView />
-      </Route>
-      <Route exact path={APP_PATHS.SEED_BANKS}>
-        {getSeedBanksView()}
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path={'/new'} element={<SeedBankView />} />
+      <Route path={'/:seedBankId'} element={<SeedBankDetailsView />} />
+      <Route path={'/:seedBankId/edit'} element={<SeedBankView />} />
+      <Route path={'/*'} element={getSeedBanksView()} />
+    </Routes>
   );
 };
 

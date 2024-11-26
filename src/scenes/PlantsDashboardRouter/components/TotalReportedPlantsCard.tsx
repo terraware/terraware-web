@@ -163,8 +163,8 @@ const CardData = ({ completedTime, estimated, totalPlants }: CardDataProps): JSX
                 <Typography fontSize='12px' fontWeight={400} marginTop={theme.spacing(2)}>
                   {strings.formatString(
                     strings.HOW_MANY_PLANTS_CARD_W_OBS_DESCRIPTION_2,
-                    estimated.numPlantedSinceObs!,
-                    Math.round(estimated.percentDiff!)
+                    estimated.numPlantedSinceObs,
+                    Math.round(estimated.percentDiff)
                   )}
                 </Typography>
               ) : null}

@@ -9,8 +9,7 @@ import ReactMapGL, {
   Source,
 } from 'react-map-gl';
 
-import { Box, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 
 /**
@@ -40,43 +39,8 @@ import { getMapDrawingLayer } from './utils';
 
 const mapboxImpl: any = mapboxgl;
 // @tslint
-// eslint-disable-next-line import/no-webpack-loader-syntax
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 mapboxImpl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default; /* tslint:disable-line */
-
-const useStyles = makeStyles((theme: Theme) => ({
-  viewControl: {
-    '& .MuiButtonBase-root': {
-      padding: 0,
-    },
-    '& .MuiButtonBase-root.MuiMenuItem-root': {
-      fontSize: '12px',
-    },
-    '& svg': {
-      marginLeft: 0,
-    },
-  },
-  viewControlSelected: {
-    fontSize: '12px',
-    paddingLeft: theme.spacing(0.5),
-    color: theme.palette.TwClrTxt,
-  },
-  bottomLeftControl: {
-    height: 'max-content',
-    position: 'absolute',
-    left: theme.spacing(2),
-    bottom: theme.spacing(4),
-    width: 'max-content',
-    zIndex: 1000,
-  },
-  topRightControl: {
-    height: 'max-content',
-    position: 'absolute',
-    right: theme.spacing(2),
-    top: theme.spacing(2),
-    width: 'max-content',
-    zIndex: 1000,
-  },
-}));
 
 type FeatureStateId = Record<string, Record<string, number | undefined>>;
 
@@ -121,7 +85,7 @@ export default function Map(props: MapProps): JSX.Element {
     topRightMapControl,
     bottomLeftMapControl,
   } = props;
-  const classes = useStyles();
+  const theme = useTheme();
   const [geoData, setGeoData] = useState<any[]>();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
@@ -391,12 +355,12 @@ export default function Map(props: MapProps): JSX.Element {
     if (!geoData) {
       return null;
     }
-    const sources = (geoData as any[]).map((geo: any) => (
+    const sources = geoData.map((geo: any) => (
       <Source type='geojson' key={geo.id} data={geo.data} id={geo.id}>
-        {geo.patternFill && <Layer {...geo.patternFill} />}
-        {geo.textAnnotation && <Layer {...geo.textAnnotation} />}
-        {geo.layerOutline && <Layer {...geo.layerOutline} />}
         {geo.layer && <Layer {...geo.layer} />}
+        {geo.patternFill && <Layer {...geo.patternFill} beforeId={geo.textAnnotation.id} />}
+        {geo.textAnnotation && <Layer {...geo.textAnnotation} beforeId={geo.layerOutline.id} />}
+        {geo.layerOutline && <Layer {...geo.layerOutline} />}
       </Source>
     ));
 
@@ -438,7 +402,15 @@ export default function Map(props: MapProps): JSX.Element {
   let destroying = false;
 
   return (
-    <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 250, position: 'relative' }} ref={containerRef}>
+    <Box
+      ref={containerRef}
+      sx={[
+        { display: 'flex', flexGrow: 1, height: '100%', minHeight: 250, position: 'relative' },
+        // popup renderer sx styles are applied to the container because the Popup component
+        // doesn't support the sx prop
+        ...(Array.isArray(popupRenderer?.sx) ? popupRenderer.sx : [popupRenderer?.sx]),
+      ]}
+    >
       {bannerMessage && <MapBanner message={bannerMessage} />}
       {firstVisible && (
         <ReactMapGL
@@ -447,7 +419,7 @@ export default function Map(props: MapProps): JSX.Element {
           mapStyle={MapViewStyles[mapViewStyle]}
           initialViewState={{
             bounds: hasEntities ? [options.bbox.lowerLeft, options.bbox.upperRight] : undefined,
-            fitBoundsOptions: hasEntities ? { padding: 20, linear: true } : undefined,
+            fitBoundsOptions: hasEntities ? { padding: 20 } : undefined,
           }}
           interactiveLayerIds={layerIds}
           onError={onMapError}
@@ -474,6 +446,7 @@ export default function Map(props: MapProps): JSX.Element {
           <MapViewStyleControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
           {popupInfo && popupRenderer && renderedPopup && (
             <Popup
+              key={popupInfo.lat + popupInfo.lng}
               anchor={popupRenderer.anchor ?? 'top'}
               longitude={Number(popupInfo.lng)}
               latitude={Number(popupInfo.lat)}
@@ -490,8 +463,34 @@ export default function Map(props: MapProps): JSX.Element {
               {renderedPopup}
             </Popup>
           )}
-          {topRightMapControl && <div className={classes.topRightControl}>{topRightMapControl}</div>}
-          {bottomLeftMapControl && <div className={classes.bottomLeftControl}>{bottomLeftMapControl}</div>}
+          {topRightMapControl && (
+            <div
+              style={{
+                height: 'max-content',
+                position: 'absolute',
+                right: theme.spacing(2),
+                top: theme.spacing(2),
+                width: 'max-content',
+                zIndex: 1000,
+              }}
+            >
+              {topRightMapControl}
+            </div>
+          )}
+          {bottomLeftMapControl && (
+            <div
+              style={{
+                height: 'max-content',
+                position: 'absolute',
+                left: theme.spacing(2),
+                bottom: theme.spacing(4),
+                width: 'max-content',
+                zIndex: 1000,
+              }}
+            >
+              {bottomLeftMapControl}
+            </div>
+          )}
         </ReactMapGL>
       )}
     </Box>

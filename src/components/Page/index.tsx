@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { CSSProperties, useRef } from 'react';
 
 import { CircularProgress, Grid, Typography, useTheme } from '@mui/material';
 import { Button, IconName } from '@terraware/web-components';
@@ -19,12 +19,15 @@ export type PrimaryButtonType = ButtonType & {
 
 export type PageProps = {
   children?: React.ReactNode;
-  containerClassName?: string;
+  containerStyles?: CSSProperties;
+  titleStyle?: CSSProperties;
   contentStyle?: Record<string, string | number>;
+  titleContainerStyle?: CSSProperties;
   crumbs?: Crumb[];
   hierarchicalCrumbs?: boolean;
   isLoading?: boolean;
   primaryButton?: PrimaryButtonType;
+  leftComponent?: JSX.Element;
   rightComponent?: React.ReactNode;
   title?: React.ReactNode;
 };
@@ -34,12 +37,15 @@ export type PageProps = {
  */
 export default function Page({
   children,
-  containerClassName,
+  containerStyles,
   contentStyle,
+  titleStyle,
+  titleContainerStyle,
   crumbs,
   hierarchicalCrumbs,
   isLoading,
   primaryButton,
+  leftComponent,
   rightComponent,
   title,
 }: PageProps): JSX.Element {
@@ -55,29 +61,40 @@ export default function Page({
   }
 
   return (
-    <TfMain className={containerClassName}>
+    <TfMain style={containerStyles}>
       <PageHeaderWrapper nextElement={contentRef.current}>
         <>{crumbs && <BreadCrumbs crumbs={crumbs} hierarchical={hierarchicalCrumbs ?? true} />}</>
-        <Grid container justifyContent='space-between' alignItems='center'>
+        <Grid
+          container
+          justifyContent='space-between'
+          alignItems='center'
+          marginBottom={theme.spacing(2)}
+          paddingX={theme.spacing(2)}
+          sx={titleContainerStyle}
+        >
           {title && typeof title !== 'string' && (
             <Grid item xs={8}>
               {title}
             </Grid>
           )}
           {title && typeof title === 'string' && (
-            <Grid item xs={8}>
+            <Grid item>
               <Typography
                 sx={{
-                  marginTop: theme.spacing(3),
-                  marginBottom: theme.spacing(4),
                   paddingLeft: theme.spacing(3),
                   fontSize: '24px',
                   fontWeight: 600,
                   color: theme.palette.TwClrBaseGray800,
+                  ...titleStyle,
                 }}
               >
                 {title}
               </Typography>
+            </Grid>
+          )}
+          {leftComponent && (
+            <Grid item xs={4} style={{ marginRight: 'auto' }}>
+              {leftComponent}
             </Grid>
           )}
           {rightComponent && (

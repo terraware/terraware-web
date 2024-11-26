@@ -42,7 +42,7 @@ const OverviewItemCardSubLocations = (props: OverviewItemCardSubLocationsProps) 
 
   const syncSubLocations = useCallback(
     (_batch: Batch) => {
-      if (!_.isEqual(props.batch.subLocationIds, _batch.subLocationIds)) {
+      if (!_.isEqual(props.batch.subLocationIds, _batch.subLocationIds) && selectedOrganization.id !== -1) {
         const request = dispatch(requestSaveBatch({ batch: _batch, organizationId: selectedOrganization.id }));
         setRequestId(request.requestId);
       }

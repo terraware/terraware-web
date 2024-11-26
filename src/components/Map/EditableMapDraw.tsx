@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useCallback, useEffect, useState } from 'react';
 import { MapRef, useControl } from 'react-map-gl';
 
@@ -128,6 +129,7 @@ export default function EditableMapDraw({ boundary, onBoundaryChanged, setMode, 
       const initialMode = boundary ? 'simple_select' : 'draw_polygon';
 
       setDrawMode(initialMode);
+      // @ts-ignore
       setMapRef(map);
 
       return new MapboxDraw({ defaultMode: initialMode, ...defaultProps, ...otherProps });

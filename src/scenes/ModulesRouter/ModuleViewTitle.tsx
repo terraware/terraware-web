@@ -2,29 +2,37 @@ import React from 'react';
 
 import { Box, Typography } from '@mui/material';
 
-import { Module } from 'src/types/Module';
-import { Project } from 'src/types/Project';
+import { selectProject } from 'src/redux/features/projects/projectsSelectors';
+import { useAppSelector } from 'src/redux/store';
+import { CohortModule } from 'src/types/Module';
+import { getDateRangeString } from 'src/utils/dateFormatter';
 
 type ModulePageTitleProps = {
-  module: Module | undefined;
-  project: Project | undefined;
+  module: CohortModule | undefined;
+  projectId: number;
 };
 
-const ModuleViewTitle = ({ module, project }: ModulePageTitleProps) => {
+const ModuleViewTitle = ({ module, projectId }: ModulePageTitleProps) => {
+  const project = useAppSelector(selectProject(projectId));
+
   return (
     <Box alignItems='center' display='flex' flexDirection='row' flexWrap='wrap' marginY='24px' width='100%'>
       <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600} paddingRight='24px' whiteSpace='nowrap'>
-        {project?.name ? project?.name : ''}
+        {project?.name ?? ''}
       </Typography>
 
       <Box alignItems='center' display='flex' flexDirection='row'>
-        <Typography fontSize={'20px'} lineHeight={'28px'} fontWeight={600} paddingRight='8px'>
-          {module?.name ? module.name : ''}
-        </Typography>
+        {module && (
+          <Typography fontSize={'20px'} lineHeight={'28px'} fontWeight={600} paddingRight='8px'>
+            {module.title}
+          </Typography>
+        )}
 
-        <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'}>
-          {module?.dateRange ? module.dateRange : ''}
-        </Typography>
+        {module?.startDate && module?.endDate && (
+          <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'}>
+            {getDateRangeString(module?.startDate, module?.endDate)}
+          </Typography>
+        )}
       </Box>
     </Box>
   );

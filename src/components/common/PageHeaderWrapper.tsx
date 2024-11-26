@@ -17,11 +17,17 @@ const LEFT_NAV_WIDTH = 220;
  */
 interface Props {
   children?: React.ReactChild | React.ReactChild[];
+  hasNav?: boolean;
   nextElement?: HTMLElement | null;
   nextElementInitialMargin?: number;
 }
 
-export default function PageHeaderWrapper({ children, nextElement, nextElementInitialMargin = 0 }: Props): JSX.Element {
+export default function PageHeaderWrapper({
+  children,
+  hasNav = true,
+  nextElement,
+  nextElementInitialMargin = 0,
+}: Props): JSX.Element {
   const theme = useTheme();
   const ref = useRef<HTMLDivElement>(null);
   const [sticky, setSticky] = useState(false);
@@ -45,7 +51,7 @@ export default function PageHeaderWrapper({ children, nextElement, nextElementIn
     }
 
     let lastScrollY = 0;
-    const handleScroll = (ev: Event) => {
+    const handleScroll = () => {
       const delta = window.scrollY - lastScrollY;
       setScrollDown(delta > 0);
 
@@ -120,7 +126,7 @@ export default function PageHeaderWrapper({ children, nextElement, nextElementIn
     animation: anim,
     zIndex: debouncedSticky ? 100 : undefined,
     width: '100%',
-    maxWidth: isMobile || isTablet ? '100vw' : `calc(100vw - ${LEFT_NAV_WIDTH}px)`,
+    maxWidth: isMobile || isTablet || !hasNav ? '100vw' : `calc(100vw - ${LEFT_NAV_WIDTH}px)`,
   };
 
   return (

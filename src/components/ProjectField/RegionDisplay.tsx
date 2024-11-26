@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { getRegionLabel } from 'src/types/ParticipantProject';
 import { Region } from 'src/types/ParticipantProject';
 

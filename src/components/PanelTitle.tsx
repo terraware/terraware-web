@@ -1,17 +1,7 @@
 import React from 'react';
 
-import { Box, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Typography, useTheme } from '@mui/material';
 import { IconTooltip } from '@terraware/web-components';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  panelTitle: {
-    fontSize: '20px',
-    lineHeight: '28px',
-    fontWeight: 600,
-    color: theme.palette.TwClrTxt,
-  },
-}));
 
 interface Props {
   title: string;
@@ -21,11 +11,20 @@ interface Props {
 }
 
 export default function PanelTitle({ title, id, gutterBottom, tooltipTitle }: Props): JSX.Element {
-  const classes = useStyles();
-
+  const theme = useTheme();
   return (
     <Box sx={{ display: 'flex', alignItems: 'end' }}>
-      <Typography variant='h6' className={classes.panelTitle} id={id} gutterBottom={gutterBottom}>
+      <Typography
+        variant='h6'
+        id={id}
+        gutterBottom={gutterBottom}
+        sx={{
+          fontSize: '20px',
+          lineHeight: '28px',
+          fontWeight: 600,
+          color: theme.palette.TwClrTxt,
+        }}
+      >
         {title}
       </Typography>
       {tooltipTitle && <IconTooltip title={tooltipTitle} />}

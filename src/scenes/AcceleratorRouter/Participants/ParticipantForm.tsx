@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Grid, useTheme } from '@mui/material';
-import { Dropdown, Message, Textfield } from '@terraware/web-components';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Dropdown, Icon, Message, Textfield } from '@terraware/web-components';
 import _ from 'lodash';
 
 import AddLink from 'src/components/common/AddLink';
 import Card from 'src/components/common/Card';
+import Link from 'src/components/common/Link';
 import PageForm from 'src/components/common/PageForm';
 import { useAcceleratorOrgs } from 'src/hooks/useAcceleratorOrgs';
 import { useCohorts } from 'src/hooks/useCohorts';
@@ -14,6 +15,7 @@ import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
 import { Cohort } from 'src/types/Cohort';
 import { ParticipantCreateRequest, ParticipantProject, ParticipantUpdateRequest } from 'src/types/Participant';
+import { ParticipantProject as ParticipantProjectType } from 'src/types/ParticipantProject';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import OrgProjectsSectionEdit, { OrgProjectsSection } from './OrgProjectsSectionEdit';
@@ -23,7 +25,7 @@ type ParticipantFormProps<T extends ParticipantCreateRequest | ParticipantUpdate
   existingProjects?: ParticipantProject[];
   participant: T;
   onCancel: () => void;
-  onSave: (participant: T) => void;
+  onSave: (participant: T, projectsDetails: ParticipantProjectType[]) => void;
 };
 
 export default function ParticipantForm<T extends ParticipantCreateRequest | ParticipantUpdateRequest>(
@@ -34,7 +36,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const { availableCohorts } = useCohorts();
-  const { acceleratorOrgs: allAcceleratorOrgs } = useAcceleratorOrgs(false);
+  const { acceleratorOrgs: allAcceleratorOrgs } = useAcceleratorOrgs();
 
   const [localRecord, setLocalRecord] = useState<T>(participant);
   const [validateFields, setValidateFields] = useState<boolean>(false);
@@ -94,6 +96,21 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
       return false;
     }
 
+    const details = orgProjectsSections.map((ops) => ops.projectDetails);
+    const detailsMissingFields = details.some((detail) => {
+      return (
+        !detail.fileNaming ||
+        !detail.googleFolderUrl ||
+        !detail.dropboxFolderPath ||
+        detail.projectId === -1 ||
+        !detail.projectId
+      );
+    });
+
+    if (detailsMissingFields) {
+      return false;
+    }
+
     return true;
   };
 
@@ -103,10 +120,13 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
       return;
     }
 
-    onSave({
-      ...localRecord,
-      projectIds: orgProjectsSections.flatMap((data) => data.selectedProjectIds),
-    });
+    onSave(
+      {
+        ...localRecord,
+        projectIds: orgProjectsSections.flatMap((data) => data.projectId),
+      },
+      orgProjectsSections.map((ops) => ops.projectDetails)
+    );
   };
 
   /**
@@ -138,7 +158,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
     [acceleratorOrgs]
   );
 
-  const onProjects = useCallback((sectionId: number, selectedProjectIds: number[]) => {
+  const onProjectSelect = useCallback((sectionId: number, projectId: number) => {
     setModified(true);
     setOrgProjectsSections((prev) => {
       const updated = [...prev].map((section) =>
@@ -146,42 +166,48 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
           ? section
           : {
               ...section,
-              selectedProjectIds,
+              projectId,
             }
       );
       return updated;
     });
   }, []);
 
+  const removeOrgProjectsSection = useCallback((index: number) => {
+    setOrgProjectsSections((prev) => {
+      const newProjects = [...prev];
+      newProjects.splice(index, 1);
+      return newProjects;
+    });
+  }, []);
+
   const addOrgProjectsSection = useCallback(() => {
-    setOrgProjectsSections((prev) => [...prev, { id: prev.length + 1, selectedProjectIds: [] }]);
+    setOrgProjectsSections((prev) => [
+      ...prev,
+      { id: prev.length + 1, projectId: -1, projectDetails: { projectId: -1, landUseModelTypes: [] } },
+    ]);
   }, []);
 
   // initialize sections for participant that already had project ids (edit use-case)
   useEffect(() => {
-    if (modified) {
-      return;
-    }
-
-    const sections = acceleratorOrgs
-      .filter((org) => org.projects.some((p) => (localRecord.projectIds ?? []).some((id) => id === p.id)))
-      .sort((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
-      .map((org, index) => ({
+    const sections: OrgProjectsSection[] = [];
+    localRecord.projectIds?.forEach((projectId, index) => {
+      sections.push({
         id: index + 1,
-        org,
-        selectedProjectIds: org.projects
-          .map((p) => p.id)
-          .filter((projectId) => (localRecord.projectIds ?? []).some((id) => id === projectId)),
-      }));
+        org: acceleratorOrgs.find((org) => org.projects.some((proj) => proj.id === projectId)),
+        projectId: projectId,
+        projectDetails: { projectId, landUseModelTypes: [] },
+      });
+    });
 
     if (sections.length) {
       setModified(true);
       setOrgProjectsSections(sections);
       // remove the orgs as being available for selection (since they already has projects selected prior to edit)
-      setAvailableOrgs(acceleratorOrgs.filter((org) => !sections.some((section) => section.org.id === org.id)));
+      setAvailableOrgs(acceleratorOrgs.filter((org) => !sections.some((section) => section?.org?.id === org.id)));
     } else if (acceleratorOrgs.length) {
       // allow initial selection
-      setOrgProjectsSections([{ id: 1, selectedProjectIds: [] }]);
+      setOrgProjectsSections([{ id: 1, projectId: -1, projectDetails: { projectId: -1, landUseModelTypes: [] } }]);
     }
   }, [acceleratorOrgs, activeLocale, localRecord.projectIds, modified]);
 
@@ -195,6 +221,37 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
       setAvailableOrgs(acceleratorOrgs);
     }
   }, [acceleratorOrgs]);
+
+  const updateProjectDetails = (
+    projectId: number,
+    field?: string,
+    value?: string,
+    allDetails?: ParticipantProjectType
+  ) => {
+    const sectionToUpdate = orgProjectsSections.find((section) => section.projectId === projectId);
+    let newDetails: ParticipantProjectType = { landUseModelTypes: [], projectId };
+
+    if (sectionToUpdate) {
+      if (field && value !== undefined) {
+        newDetails = { ...sectionToUpdate?.projectDetails, [field]: value };
+      } else if (allDetails) {
+        newDetails = allDetails;
+      }
+
+      setOrgProjectsSections((prev) => {
+        const updated = [...prev].map((section) =>
+          section.projectId === projectId
+            ? {
+                ...section,
+                projectDetails: { ...newDetails, landUseModelTypes: newDetails.landUseModelTypes || [], projectId },
+              }
+            : section
+        );
+
+        return updated;
+      });
+    }
+  };
 
   return (
     <PageForm
@@ -249,13 +306,44 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
           </Grid>
         )}
         {orgProjectsSections.map((section, index) => (
-          <OrgProjectsSectionEdit
-            availableOrgs={availableOrgs}
-            key={section.id}
-            onOrgSelect={onOrgSelect}
-            onProjects={onProjects}
-            section={section}
-          />
+          <Box
+            key={`section-${section.id}`}
+            sx={{
+              borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+              paddingBottom: theme.spacing(3),
+            }}
+          >
+            <OrgProjectsSectionEdit
+              availableOrgs={availableOrgs}
+              key={section.id}
+              onOrgSelect={onOrgSelect}
+              onProjectSelect={onProjectSelect}
+              section={section}
+              updateProjectDetails={updateProjectDetails}
+              validateFields={validateFields}
+            />
+            <Box display='flex' marginTop={theme.spacing(2)}>
+              <Link
+                onClick={() => removeOrgProjectsSection(index)}
+                fontSize='16px'
+                disabled={orgProjectsSections.length === 1}
+              >
+                <Box display='flex' alignItems='center'>
+                  <Icon
+                    name='iconSubtract'
+                    style={{
+                      fill: theme.palette.TwClrIcnSecondary,
+                      height: '20px',
+                      width: '20px',
+                    }}
+                  />
+                  <Typography fontWeight={500} color={theme.palette.TwClrIcnSecondary}>
+                    &nbsp;{strings.REMOVE_PROJECT}
+                  </Typography>
+                </Box>
+              </Link>
+            </Box>
+          </Box>
         ))}
         {acceleratorOrgs.length > 0 && (
           <Box display='flex' marginTop={theme.spacing(2)}>
@@ -264,7 +352,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
               id='add-org-project'
               large={true}
               onClick={addOrgProjectsSection}
-              text={strings.ADD_PROJECTS_BY_ORGANIZATION}
+              text={strings.ADD_PROJECT_BY_ORGANIZATION}
               tooltipTitle={
                 orgProjectsSections.length === acceleratorOrgs.length ? strings.ACCELERATOR_ORGS_EXHAUSTED_WARNING : ''
               }

@@ -1,5 +1,6 @@
+import React from 'react';
+
 import { Box } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { TableColumnType } from '@terraware/web-components';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 
@@ -21,15 +22,6 @@ type PlantingSiteDetailsTableProps = {
   plantingSite: MinimalPlantingSite;
   zoneViewUrl: string;
 };
-
-const useStyles = makeStyles(() => ({
-  text: {
-    fontSize: '14px',
-    '& > p': {
-      fontSize: '14px',
-    },
-  },
-}));
 
 const columns = (): TableColumnType[] => [
   {
@@ -71,7 +63,6 @@ export default function PlantingSiteDetailsTable({
   plantingSite,
   zoneViewUrl,
 }: PlantingSiteDetailsTableProps): JSX.Element {
-  const classes = useStyles();
   const defaultTimeZone = useDefaultTimeZone();
 
   const timeZone = plantingSite.timeZone ?? defaultTimeZone.get().id;
@@ -83,47 +74,53 @@ export default function PlantingSiteDetailsTable({
         columns={columns}
         rows={data}
         orderBy='name'
-        Renderer={DetailsRenderer(classes, timeZone, plantingSite.id, zoneViewUrl)}
+        Renderer={DetailsRenderer(timeZone, plantingSite.id, zoneViewUrl)}
       />
     </Box>
   );
 }
 
 const DetailsRenderer =
-  (classes: any, timeZone: string, plantingSiteId: number, zoneViewUrl: string) =>
+  (timeZone: string, plantingSiteId: number, zoneViewUrl: string) =>
+  // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
+
+    const textStyles = {
+      fontSize: '16px',
+      '& > p': {
+        fontSize: '16px',
+      },
+    };
 
     const createLinkToZone = () => {
       const url = zoneViewUrl
         .replace(':plantingSiteId', plantingSiteId.toString())
         .replace(':zoneId', row.id.toString());
-      return <Link to={url}>{(row.name || '--') as React.ReactNode}</Link>;
+      return (
+        <Link fontSize='16px' to={url}>
+          {(row.name || '--') as React.ReactNode}
+        </Link>
+      );
     };
 
     if (column.key === 'name') {
-      return <CellRenderer {...props} value={createLinkToZone()} className={classes.text} />;
+      return <CellRenderer {...props} value={createLinkToZone()} sx={textStyles} title={value as string} />;
     }
 
     if (column.key === 'completedTime') {
       return (
-        <CellRenderer
-          {...props}
-          value={value ? getDateDisplayValue(value as string, timeZone) : ''}
-          className={classes.text}
-        />
+        <CellRenderer {...props} value={value ? getDateDisplayValue(value as string, timeZone) : ''} sx={textStyles} />
       );
     }
 
     if (column.key === 'monitoringPlots') {
       const numMonitoringPlots = row.plantingSubzones.flatMap((sz: SubzoneAggregation) => sz.monitoringPlots).length;
-      return (
-        <CellRenderer {...props} value={numMonitoringPlots > 0 ? numMonitoringPlots : ''} className={classes.text} />
-      );
+      return <CellRenderer {...props} value={numMonitoringPlots > 0 ? numMonitoringPlots : ''} sx={textStyles} />;
     }
 
     if (column.key === 'plantingSubzones') {
-      return <CellRenderer {...props} value={row.plantingSubzones.length} className={classes.text} />;
+      return <CellRenderer {...props} value={row.plantingSubzones.length} sx={textStyles} />;
     }
 
     return <CellRenderer {...props} />;

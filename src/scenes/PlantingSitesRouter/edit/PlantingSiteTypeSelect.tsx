@@ -1,12 +1,9 @@
-import { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { SiteType } from 'src/types/PlantingSite';
 
-import DetailedPlantingSiteHelpModal from './DetailedPlantingSiteHelpModal';
-import PlantingSiteSelectTypeModal from './PlantingSiteSelectTypeModal';
 import PlantingSiteSelectTypeModal2 from './PlantingSiteSelectTypeModal2';
 
 export type PlantingSiteTypeSelectProps = {
@@ -17,9 +14,7 @@ export type PlantingSiteTypeSelectProps = {
 export default function PlantingSiteTypeSelect(props: PlantingSiteTypeSelectProps): JSX.Element {
   const { open, onClose } = props;
   const [plantingSiteTypeModalOpen, setPlantingSiteTypeModalOpen] = useState(false);
-  const [plantingSiteTypeHelpModalOpen, setPlantingSiteTypeHelpModalOpen] = useState(false);
-  const history = useHistory();
-  const userDrawnDetailedSites = isEnabled('User Detailed Sites');
+  const navigate = useNavigate();
 
   useEffect(() => {
     setPlantingSiteTypeModalOpen(open);
@@ -30,47 +25,19 @@ export default function PlantingSiteTypeSelect(props: PlantingSiteTypeSelectProp
       pathname: appPath,
       search,
     };
-    history.push(appPathLocation);
+    navigate(appPathLocation);
   };
 
-  if (userDrawnDetailedSites) {
-    return (
-      <PlantingSiteSelectTypeModal2
-        open={plantingSiteTypeModalOpen}
-        onNext={(siteType: SiteType) =>
-          void goTo(APP_PATHS.PLANTING_SITES_DRAFT_NEW, siteType === 'detailed' ? '?detailed' : '')
-        }
-        onClose={() => {
-          setPlantingSiteTypeModalOpen(false);
-          onClose();
-        }}
-      />
-    );
-  }
-
   return (
-    <>
-      <PlantingSiteSelectTypeModal
-        open={plantingSiteTypeModalOpen}
-        onNext={(siteType: SiteType) => {
-          if (siteType === 'simple') {
-            goTo(APP_PATHS.PLANTING_SITES_NEW);
-          } else {
-            setPlantingSiteTypeHelpModalOpen(true);
-          }
-        }}
-        onClose={() => {
-          setPlantingSiteTypeModalOpen(false);
-          onClose();
-        }}
-      />
-      <DetailedPlantingSiteHelpModal
-        open={plantingSiteTypeHelpModalOpen}
-        onClose={() => {
-          setPlantingSiteTypeHelpModalOpen(false);
-          onClose();
-        }}
-      />
-    </>
+    <PlantingSiteSelectTypeModal2
+      open={plantingSiteTypeModalOpen}
+      onNext={(siteType: SiteType) =>
+        void goTo(APP_PATHS.PLANTING_SITES_DRAFT_NEW, siteType === 'detailed' ? '?detailed' : '')
+      }
+      onClose={() => {
+        setPlantingSiteTypeModalOpen(false);
+        onClose();
+      }}
+    />
   );
 }

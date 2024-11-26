@@ -1,11 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-import { Badge, IconButton, List, ListItem, ListItemIcon, ListItemText, Popover, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import {
+  Badge,
+  Box,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Popover,
+  styled,
+  useTheme,
+} from '@mui/material';
 import { Button, Tooltip } from '@terraware/web-components';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 
 import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
 import { NotificationsService } from 'src/services';
@@ -22,126 +31,21 @@ import ErrorBox from './common/ErrorBox/ErrorBox';
 import Timestamp from './common/Timestamp';
 import Icon from './common/icon/Icon';
 
-interface StyleProps {
-  isMobile?: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  error: {
-    width: '432px',
-    height: '88px',
-    margin: '20px 0',
+const StyledIcon = styled(Icon)(({ theme }) => ({
+  width: '16px',
+  height: '16px',
+  fill: 'grey',
+  '&.info': {
+    fill: theme.palette.TwClrIcnSecondary,
   },
-  notificationIcon: {
-    fill: theme.palette.TwClrIcn,
-    margin: 'auto auto',
+  '&.warning': {
+    fill: theme.palette.TwClrIcnWarning,
   },
-  noNotifications: {
-    color: theme.palette.TwClrTxt,
-    height: '107px',
-    textAlign: 'center',
+  '&.error': {
+    fill: theme.palette.TwClrIcnDanger,
   },
-  notificationsBadgeWrapper: {
-    width: '24px',
-    height: '24px',
-  },
-  newNotificationsIndicator: {
-    minWidth: '8px',
-    height: '8px',
-    borderRadius: '4px',
-    background: theme.palette.TwClrIcnDanger,
-    position: 'absolute',
-    left: '15px',
-    top: '2px',
-  },
-  listContainer: {
-    padding: 0,
-    overflowY: 'auto',
-  },
-  unreadNotification: {
-    backgroundColor: theme.palette.TwClrBgBrandTertiary,
-    '&.error': {
-      backgroundColor: theme.palette.TwClrBgDangerTertiary,
-    },
-  },
-  unreadNotificationIndicator: {
-    marginLeft: '8px',
-    width: '8px',
-    height: '8px',
-    borderRadius: '4px',
-    backgroundColor: theme.palette.TwClrIcnBrand,
-  },
-  notification: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    padding: (props: StyleProps) => (props.isMobile ? theme.spacing(1, 2, 1, 1) : '8px 20px 8px 26px'),
-    borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    '&:last-child': {
-      borderBottom: 'none',
-    },
-    '&:hover': {
-      backgroundColor: theme.palette.TwClrBgHover,
-    },
-  },
-  notificationContent: {
-    display: 'flex',
-    flexDirection: 'column',
-    fontSize: '14px',
-    fontWeight: 400,
-    margin: '0px',
-    minWidth: (props: StyleProps) => (props.isMobile ? 'auto' : '375px'),
-  },
-  notificationTitle: {
-    display: 'block',
-    color: theme.palette.TwClrTxt,
-    fontSize: '16px',
-    fontWeight: 600,
-    margin: '8px',
-  },
-  notificationBody: {
-    display: 'block',
-    color: theme.palette.TwClrTxt,
-    margin: '0px 8px',
-  },
-  notificationTimestamp: {
-    display: 'block',
-    color: theme.palette.TwClrTxtSecondary,
-    margin: '8px',
-  },
-  iconContainer: {
-    borderRadius: 0,
-    fontSize: '16px',
-  },
-  icon: {
-    fill: theme.palette.TwClrIcn,
-  },
-  notificationType: {
-    margin: '12px 0',
-    minWidth: '16px',
-  },
-  notificationTypeIcon: {
-    width: '16px',
-    height: '16px',
-    fill: 'grey',
-    '&.info': {
-      fill: theme.palette.TwClrIcnSecondary,
-    },
-    '&.warning': {
-      fill: theme.palette.TwClrIcnWarning,
-    },
-    '&.error': {
-      fill: theme.palette.TwClrIcnDanger,
-    },
-    '&.success': {
-      fill: theme.palette.TwClrIcnSuccess,
-    },
-  },
-  notificationMenuWrapper: {
-    maxWidth: '40px',
-    margin: 'auto 0',
-    display: 'flex',
-    justifyContent: 'left',
-    padding: '0px 8px',
+  '&.success': {
+    fill: theme.palette.TwClrIcnSuccess,
   },
 }));
 
@@ -151,8 +55,8 @@ type NotificationsDropdownProps = {
 };
 
 export default function NotificationsDropdown(props: NotificationsDropdownProps): JSX.Element {
-  const classes = useStyles({});
-  const history = useHistory();
+  const theme = useTheme();
+  const navigate = useNavigate();
   const { organizationId, reloadOrganizationData } = props;
   // notificationsInterval value is only being used when it is set.
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
@@ -208,7 +112,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
     }
   }, [featureNotifications, serverNotifications]);
 
-  const getTimeStamp = (notification: Notification) => moment(notification.createdTime).valueOf();
+  const getTimeStamp = (notification: Notification) => DateTime.fromISO(notification.createdTime).toMillis();
 
   const getRecentUnreadTime = () => {
     if (notifications) {
@@ -230,7 +134,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   };
 
   const goToSettings = () => {
-    history.push({ pathname: APP_PATHS.MY_ACCOUNT });
+    navigate({ pathname: APP_PATHS.MY_ACCOUNT });
     onPopoverClose();
   };
 
@@ -278,9 +182,21 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
     <div>
       <Tooltip title={strings.NOTIFICATIONS}>
         <IconButton id='notifications-button' onClick={onIconClick}>
-          <Badge id='notifications-badge' color='secondary' className={classes.notificationsBadgeWrapper}>
-            <Icon name='notification' size='medium' className={classes.notificationIcon} />
-            {hasUnseen() && <div className={classes.newNotificationsIndicator} />}
+          <Badge id='notifications-badge' color='secondary' sx={{ width: '24px', height: '24px' }}>
+            <Icon name='notification' size='medium' style={{ fill: theme.palette.TwClrIcn, margin: 'auto auto' }} />
+            {hasUnseen() && (
+              <Box
+                sx={{
+                  minWidth: '8px',
+                  height: '8px',
+                  borderRadius: '4px',
+                  background: theme.palette.TwClrIcnDanger,
+                  position: 'absolute',
+                  left: '15px',
+                  top: '2px',
+                }}
+              />
+            )}
           </Badge>
         </IconButton>
       </Tooltip>
@@ -291,9 +207,15 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
         headerMenuItems={getHeaderMenuItems()}
         size='large'
       >
-        <List className={classes.listContainer}>
+        <List sx={{ padding: 0, overflowY: 'auto' }}>
           {(notifications === undefined || (notifications.items.length === 0 && notifications.requestSucceeded)) && (
-            <ListItem className={classes.noNotifications}>
+            <ListItem
+              sx={{
+                color: theme.palette.TwClrTxt,
+                height: '107px',
+                textAlign: 'center',
+              }}
+            >
               <ListItemText primary={strings.NO_NOTIFICATIONS} />
             </ListItem>
           )}
@@ -311,7 +233,11 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
               <ErrorBox
                 title={strings.SOMETHING_WENT_WRONG}
                 text={strings.UNABLE_TO_LOAD_NOTIFICATIONS}
-                className={classes.error}
+                sx={{
+                  width: '432px',
+                  height: '88px',
+                  margin: '20px 0',
+                }}
               />
             </ListItem>
           )}
@@ -330,7 +256,7 @@ type NotificationItemProps = {
 function NotificationItem(props: NotificationItemProps): JSX.Element {
   const { isMobile, isDesktop } = useDeviceInfo();
   const [inFocus, setInFocus] = useState<boolean>(false);
-  const classes = useStyles({ isMobile });
+  const theme = useTheme();
   const { notification, markAsRead, reloadOrganizationData } = props;
   const { id, title, body, localUrl, createdTime, isRead, notificationCriticality, hideDate } = notification;
   const criticality = notificationCriticality.toLowerCase();
@@ -338,6 +264,7 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
   const onNotificationClick = async (read: boolean, close?: boolean) => {
     if (close && localUrl.startsWith('/home')) {
       const orgId: string | null = new URL(localUrl, window.location.origin).searchParams.get('organizationId');
+      // eslint-disable-next-line @typescript-eslint/await-thenable
       await reloadOrganizationData(orgId ? parseInt(orgId, 10) : undefined);
     }
     markAsRead(read, id, close, notification.markAsRead);
@@ -368,29 +295,105 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
     <ListItem
       id={`notification${id}`}
       button
-      className={(isRead || inFocus ? '' : classes.unreadNotification) + ' ' + classes.notification + ' ' + criticality}
+      className={criticality}
       onClick={() => onNotificationClick(true, true)}
       component={Link}
       to={localUrl}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      sx={[
+        !(isRead || inFocus) && {
+          backgroundColor: theme.palette.TwClrBgBrandTertiary,
+          '&.error': {
+            backgroundColor: theme.palette.TwClrBgDangerTertiary,
+          },
+        },
+        {
+          display: 'flex',
+          alignItems: 'flex-start',
+          padding: isMobile ? theme.spacing(1, 2, 1, 1) : '8px 20px 8px 26px',
+          borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+          '&:last-child': {
+            borderBottom: 'none',
+          },
+          '&:hover': {
+            backgroundColor: theme.palette.TwClrBgHover,
+          },
+        },
+      ]}
     >
-      <ListItemIcon className={classes.notificationType}>
-        <Icon name={getTypeIcon()} className={classes.notificationTypeIcon + ' ' + criticality} />
+      <ListItemIcon sx={{ margin: '12px 0', minWidth: '16px' }}>
+        <StyledIcon name={getTypeIcon()} className={criticality} />
       </ListItemIcon>
       <ListItemText
-        className={classes.notificationContent}
-        primary={<span className={classes.notificationTitle}>{title}</span>}
-        sx={{ paddingBottom: hideDate ? 1 : 0 }}
+        primary={
+          <span
+            style={{
+              display: 'block',
+              color: theme.palette.TwClrTxt,
+              fontSize: '16px',
+              fontWeight: 600,
+              margin: '8px',
+            }}
+          >
+            {title}
+          </span>
+        }
         secondary={
           <>
-            <span className={classes.notificationBody}>{body}</span>
-            {!hideDate && <Timestamp className={classes.notificationTimestamp} isoString={createdTime} />}
+            <span
+              style={{
+                display: 'block',
+                color: theme.palette.TwClrTxt,
+                margin: '0px 8px',
+              }}
+            >
+              {body}
+            </span>
+            {!hideDate && (
+              <Timestamp
+                isoString={createdTime}
+                sx={{
+                  display: 'block',
+                  color: theme.palette.TwClrTxtSecondary,
+                  margin: '8px',
+                }}
+              />
+            )}
           </>
         }
+        sx={[
+          { paddingBottom: hideDate ? 1 : 0 },
+          {
+            display: 'flex',
+            flexDirection: 'column',
+            fontSize: '14px',
+            fontWeight: 400,
+            margin: '0px',
+            minWidth: isMobile ? 'auto' : '375px',
+          },
+        ]}
       />
-      <ListItem className={classes.notificationMenuWrapper}>
-        {!inFocus && !isRead && <div className={classes.unreadNotificationIndicator} />}
+      <ListItem
+        sx={{
+          maxWidth: '40px',
+          margin: 'auto 0',
+          display: 'flex',
+          justifyContent: 'left',
+          padding: '0px 8px',
+        }}
+      >
+        {!inFocus && !isRead && (
+          <Box
+            sx={{
+              marginLeft: '8px',
+              width: '8px',
+              height: '8px',
+              borderRadius: '4px',
+              backgroundColor: theme.palette.TwClrIcnBrand,
+            }}
+          />
+        )}
         {(inFocus || (isRead && !isDesktop)) && (
           <NotificationItemMenu markAsRead={onNotificationClick} notification={notification} />
         )}

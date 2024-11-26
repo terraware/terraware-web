@@ -1,20 +1,22 @@
+import React, { CSSProperties } from 'react';
+
 import Link from './Link';
 
 export interface TextWithLinkProps {
-  className?: string;
   fontSize?: string | number;
   handlePrefix?: (prefix: string) => string | JSX.Element[];
   handleSuffix?: (suffix: string) => string | JSX.Element[];
   href?: string;
   isExternal?: boolean;
   onClick?: () => void;
+  style?: CSSProperties;
   text: string;
 }
 
 /**
  * Renders a string with an embedded link.
  *
- * @param className
+ * @param style The styles to render.
  * @param text The text to render. The link should be surrounded by square brackets. For
  * example, `'See [Jane] run'` would be rendered as `See <a href=...>Jane</a> run`. If there are
  * no square brackets, [text] is rendered as a link. For example, `'See Jane run'` would be rendered
@@ -23,13 +25,13 @@ export interface TextWithLinkProps {
  * @param isExternal Whether the href is an external url.
  */
 export default function TextWithLink({
-  className,
   fontSize,
   handlePrefix,
   handleSuffix,
   href,
   isExternal,
   onClick,
+  style,
   text,
 }: TextWithLinkProps): JSX.Element {
   const linkStart = text.indexOf('[');
@@ -51,15 +53,15 @@ export default function TextWithLink({
   return (
     <>
       {handlePrefix ? handlePrefix(prefix) : prefix}
-      <Link
-        className={className}
-        to={isExternal ? { pathname: href } : href}
-        onClick={onClick}
-        fontSize={fontSize ?? '16px'}
-        target={isExternal ? '_blank' : undefined}
-      >
-        {linkText}
-      </Link>
+      {isExternal ? (
+        <Link onClick={() => window.open(href)} fontSize={fontSize ?? '16px'} style={style}>
+          {linkText}
+        </Link>
+      ) : (
+        <Link to={href} onClick={onClick} fontSize={fontSize ?? '16px'} style={style}>
+          {linkText}
+        </Link>
+      )}
       {handleSuffix ? handleSuffix(suffix) : suffix}
     </>
   );

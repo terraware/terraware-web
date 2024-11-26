@@ -1,16 +1,19 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { BusySpinner } from '@terraware/web-components';
 
-import Page from 'src/components/Page';
+import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
+import useListCohortModules from 'src/hooks/useListCohortModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipant } from 'src/hooks/useParticipant';
+import { requestUpdateParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { requestUpdateParticipant } from 'src/redux/features/participants/participantsAsyncThunks';
 import { selectParticipantUpdateRequest } from 'src/redux/features/participants/participantsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { ParticipantUpdateRequest } from 'src/types/Participant';
+import { ParticipantProject } from 'src/types/ParticipantProject';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ParticipantForm from './ParticipantForm';
@@ -27,10 +30,21 @@ export default function ParticipantsNew(): JSX.Element {
 
   const { goToParticipant, goToParticipantsList } = useNavigateTo();
 
+  const { cohortModules, listCohortModules } = useListCohortModules();
+
+  useEffect(() => {
+    if (participant && participant.cohortId) {
+      void listCohortModules(participant.cohortId);
+    }
+  }, [participant, listCohortModules]);
+
   const onSave = useCallback(
-    (updateRequest: ParticipantUpdateRequest) => {
+    (updateRequest: ParticipantUpdateRequest, projectsDetails: ParticipantProject[]) => {
       const request = dispatch(requestUpdateParticipant({ participantId, request: updateRequest }));
       setRequestId(request.requestId);
+      projectsDetails.forEach((pd) => {
+        dispatch(requestUpdateParticipantProject(pd));
+      });
     },
     [dispatch, participantId]
   );
@@ -60,15 +74,20 @@ export default function ParticipantsNew(): JSX.Element {
   }, [goToParticipant, participantId, result?.status, snackbar]);
 
   return (
-    <Page title={participant?.name ?? ''} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
+    <PageWithModuleTimeline
+      title={participant?.name ?? ''}
+      contentStyle={{ display: 'flex', flexDirection: 'column' }}
+      modules={cohortModules ?? []}
+      cohortPhase={participant?.cohortPhase}
+    >
       {isBusy && <BusySpinner />}
       <ParticipantForm<ParticipantUpdateRequest>
         busy={result?.status === 'pending'}
-        onCancel={goToParticipantsList}
+        onCancel={() => goToParticipant(participantId)}
         onSave={onSave}
         participant={updateData}
         existingProjects={participant?.projects}
       />
-    </Page>
+    </PageWithModuleTimeline>
   );
 }

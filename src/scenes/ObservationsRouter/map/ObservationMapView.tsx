@@ -1,7 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box } from '@mui/material';
 
 import { PlantingSiteMap } from 'src/components/Map';
 import MapDateSelect from 'src/components/common/MapDateSelect';
@@ -16,17 +15,6 @@ import { ObservationResults } from 'src/types/Observations';
 import { PlantingSite } from 'src/types/Tracking';
 import { regexMatch } from 'src/utils/search';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  popover: {
-    '&.mapboxgl-popup': {
-      maxWidth: '324px !important', // !important to override a default mapbox style
-    },
-    '& .mapboxgl-popup-content': {
-      padding: '0px !important',
-    },
-  },
-}));
-
 type ObservationMapViewProps = SearchProps & {
   observationsResults?: ObservationResults[];
   selectedPlantingSite: PlantingSite;
@@ -38,15 +26,13 @@ export default function ObservationMapView({
   filtersProps,
   selectedPlantingSite,
 }: ObservationMapViewProps): JSX.Element {
-  const classes = useStyles();
-
   const observationsDates = useMemo(() => {
     const uniqueDates = new Set(observationsResults?.map((obs) => obs.completedDate || obs.startDate));
 
     return Array.from(uniqueDates)
       ?.filter((time) => time)
-      ?.map((time) => time!)
-      ?.sort((a, b) => (Date.parse(a!) > Date.parse(b!) ? 1 : -1));
+      ?.map((time) => time)
+      ?.sort((a, b) => (Date.parse(a) > Date.parse(b) ? 1 : -1));
   }, [observationsResults]);
 
   const [selectedObservationDate, setSelectedObservationDate] = useState<string | undefined>();
@@ -119,34 +105,37 @@ export default function ObservationMapView({
 
   const hasSearchCriteria = search.trim() || filterZoneNames.length;
 
-  const contextRenderer = (properties: MapSourceProperties): JSX.Element | null => {
-    let entity: any;
-    if (properties.type === 'site') {
-      entity = selectedObservation;
-    } else if (properties.type === 'zone') {
-      entity = selectedObservation?.plantingZones?.find((z) => z.plantingZoneId === properties.id);
-    } else {
-      // monitoring plot
-      entity = selectedObservation?.plantingZones
-        ?.flatMap((z) => z.plantingSubzones)
-        ?.flatMap((sz) => sz.monitoringPlots)
-        ?.find((p) => p.monitoringPlotId === properties.id);
-    }
+  const contextRenderer = useCallback(
+    (properties: MapSourceProperties): JSX.Element | null => {
+      let entity: any;
+      if (properties.type === 'site') {
+        entity = selectedObservation;
+      } else if (properties.type === 'zone') {
+        entity = selectedObservation?.plantingZones?.find((z) => z.plantingZoneId === properties.id);
+      } else {
+        // monitoring plot
+        entity = selectedObservation?.plantingZones
+          ?.flatMap((z) => z.plantingSubzones)
+          ?.flatMap((sz) => sz.monitoringPlots)
+          ?.find((p) => p.monitoringPlotId === properties.id);
+      }
 
-    if (!entity) {
-      return null;
-    }
+      if (!entity) {
+        return null;
+      }
 
-    return (
-      <TooltipContents
-        monitoringPlot={entity}
-        observationId={selectedObservation?.observationId}
-        observationState={selectedObservation?.state}
-        plantingSiteId={selectedPlantingSite.id}
-        title={`${properties.name}${properties.type === 'temporaryPlot' ? ` (${strings.TEMPORARY})` : ''}`}
-      />
-    );
-  };
+      return (
+        <TooltipContents
+          monitoringPlot={entity}
+          observationId={selectedObservation?.observationId}
+          observationState={selectedObservation?.state}
+          plantingSiteId={selectedPlantingSite.id}
+          title={`${properties.name}${properties.type === 'temporaryPlot' ? ` (${strings.TEMPORARY})` : ''}`}
+        />
+      );
+    },
+    [selectedObservation, selectedPlantingSite]
+  );
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
@@ -181,7 +170,14 @@ export default function ObservationMapView({
             }
             contextRenderer={{
               render: contextRenderer,
-              className: classes.popover,
+              sx: {
+                '.mapboxgl-popup': {
+                  maxWidth: '324px !important', // !important to override a default mapbox style
+                },
+                '.mapboxgl-popup .mapboxgl-popup-content': {
+                  padding: '0px !important',
+                },
+              },
             }}
             highlightEntities={hasSearchCriteria ? searchZoneEntities : []}
             focusEntities={

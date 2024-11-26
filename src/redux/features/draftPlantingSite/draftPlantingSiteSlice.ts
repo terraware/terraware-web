@@ -65,7 +65,11 @@ const draftPlantingSiteSearchSlice = createSlice({
   },
 });
 
-export const draftPlantingSiteCreateReducer = draftPlantingSiteCreateSlice.reducer;
-export const draftPlantingSiteEditReducer = draftPlantingSiteEditSlice.reducer;
-export const draftPlantingSiteGetReducer = draftPlantingSiteGetSlice.reducer;
-export const draftPlantingSiteSearchReducer = draftPlantingSiteSearchSlice.reducer;
+const draftPlantingSiteReducers = {
+  draftPlantingSiteCreate: draftPlantingSiteCreateSlice.reducer,
+  draftPlantingSiteEdit: draftPlantingSiteEditSlice.reducer,
+  draftPlantingSiteGet: draftPlantingSiteGetSlice.reducer,
+  draftPlantingSiteSearch: draftPlantingSiteSearchSlice.reducer,
+};
+
+export default draftPlantingSiteReducers;

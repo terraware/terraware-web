@@ -6,7 +6,8 @@ export const selectParticipantCreateRequest = (requestId: string) => (state: Roo
 export const selectParticipantDeleteRequest = (requestId: string) => (state: RootState) =>
   state.participantDelete[requestId];
 
-export const selectParticipant = (participantId: number) => (state: RootState) => state.participant[participantId].data;
+export const selectParticipant = (participantId: number) => (state: RootState) =>
+  state.participant[participantId]?.data;
 
 export const selectParticipantGetRequest = (requestId: string) => (state: RootState) => state.participant[requestId];
 

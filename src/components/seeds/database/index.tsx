@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Box, CircularProgress, Container, Grid, useTheme } from '@mui/material';
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { DropdownItem, Message } from '@terraware/web-components';
 import { DatabaseColumn } from '@terraware/web-components/components/table/types';
 import _ from 'lodash';
@@ -48,78 +46,6 @@ import Filters from './Filters';
 import ImportAccessionsModal from './ImportAccessionsModal';
 import SearchCellRenderer from './TableCellRenderer';
 import { columnsIndexed } from './columns';
-
-interface StyleProps {
-  isMobile: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  mainContainer: {
-    padding: 0,
-  },
-  downloadReport: {
-    background: theme.palette.common.black,
-    color: theme.palette.common.white,
-    marginLeft: theme.spacing(2),
-    '&:hover, &:focus': {
-      backgroundColor: `${theme.palette.common.black}!important`,
-    },
-  },
-  addAccession: {
-    marginLeft: theme.spacing(2),
-    color: theme.palette.common.white,
-  },
-  addAccessionIcon: {
-    color: theme.palette.common.white,
-  },
-  checkinMessage: {
-    marginBottom: theme.spacing(1),
-  },
-  checkInContent: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '24px',
-  },
-  checkInButton: {
-    marginTop: theme.spacing(2),
-    marginRight: (props: StyleProps) => (props.isMobile ? 0 : theme.spacing(3)),
-    marginLeft: (props: StyleProps) => (props.isMobile ? theme.spacing(1) : 0),
-    '&.mobile': {
-      minWidth: '70px',
-    },
-    height: 'auto',
-  },
-  message: {
-    margin: '0 auto',
-    maxWidth: '800px',
-    padding: '48px',
-    width: '800px',
-  },
-  checkInText: {
-    marginBottom: 0,
-  },
-  buttonSpc: {
-    marginRight: '8px',
-    '&:last-child': {
-      marginRight: '0',
-    },
-  },
-  requestMobileMessage: {
-    marginBottom: '32px',
-  },
-  spinnerContainer: {
-    position: 'fixed',
-    top: '50%',
-    left: 'calc(50% + 100px)',
-  },
-  headerButtonsContainer: {
-    display: 'flex',
-    '& .button--medium': {
-      fontSize: '14px',
-    },
-  },
-}));
 
 const filterSelectFields = (fields: string[]): string[] => {
   const columns = columnsIndexed();
@@ -167,12 +93,18 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const { activeLocale } = useLocalization();
   const { reloadUserPreferences } = useUser();
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const query = useQuery();
   const location = useStateLocation();
   const { sessionFilters, setSessionFilters } = useSessionFilters('accessions');
+
+  const messageStyles = {
+    margin: '0 auto',
+    maxWidth: '800px',
+    padding: '48px',
+    width: '800px',
+  };
 
   const projects = useAppSelector(selectProjects);
 
@@ -218,7 +150,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const closeMessageSelector = useAppSelector(selectMessage(`seeds.${SNACKBAR_PAGE_CLOSE_KEY}.ackWeightSystem`));
 
   useEffect(() => {
-    void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
+    if (selectedOrganization.id !== -1) {
+      void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
+    }
   }, [activeLocale, dispatch, selectedOrganization.id]);
 
   useEffect(() => {
@@ -292,8 +226,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   const saveSearchColumns = useCallback(
     async (columnNames?: string[]) => {
-      await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, { accessionsColumns: columnNames });
-      reloadOrgPreferences();
+      if (selectedOrganization.id !== -1) {
+        await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, { accessionsColumns: columnNames });
+        reloadOrgPreferences();
+      }
     },
     [selectedOrganization.id, reloadOrgPreferences]
   );
@@ -363,7 +299,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     }
 
     if ((facilityId && selectedOrganization) || subLocationName) {
-      history.replace(getLocation(location.pathname, location, query.toString()));
+      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       setSearchCriteria(newSearchCriteria);
 
       // add seed bank and sub-location columns to show the filtered values as needed
@@ -383,7 +319,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   }, [
     query,
     location,
-    history,
+    navigate,
     setSearchCriteria,
     selectedOrganization,
     searchCriteria,
@@ -392,24 +328,26 @@ export default function Database(props: DatabaseProps): JSX.Element {
   ]);
 
   useEffect(() => {
-    const populateUnfilteredResults = async () => {
-      const apiResponse: SearchResponseElementWithId[] | null = await SeedBankService.searchAccessions({
-        organizationId: selectedOrganization.id,
-        fields: ['id'],
-      });
+    if (selectedOrganization.id !== -1) {
+      const populateUnfilteredResults = async () => {
+        const apiResponse: SearchResponseElementWithId[] | null = await SeedBankService.searchAccessions({
+          organizationId: selectedOrganization.id,
+          fields: ['id'],
+        });
 
-      setUnfilteredResults(apiResponse);
-    };
+        setUnfilteredResults(apiResponse);
+      };
 
-    const populatePendingAccessions = async () => {
-      const data: SearchResponseElementWithId[] | null = await SeedBankService.getPendingAccessions(
-        selectedOrganization.id
-      );
-      setPendingAccessions(data);
-    };
+      const populatePendingAccessions = async () => {
+        const data: SearchResponseElementWithId[] | null = await SeedBankService.getPendingAccessions(
+          selectedOrganization.id
+        );
+        setPendingAccessions(data);
+      };
 
-    void populateUnfilteredResults();
-    void populatePendingAccessions();
+      void populateUnfilteredResults();
+      void populatePendingAccessions();
+    }
   }, [selectedOrganization.id]);
 
   const initAccessions = useCallback(() => {
@@ -424,7 +362,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       return columnsNamesToSearch;
     };
 
-    if (selectedOrganization) {
+    if (selectedOrganization && selectedOrganization.id !== -1) {
       const requestId = setRequestId('accessions_search');
 
       const populateSearchResults = async () => {
@@ -497,7 +435,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   }, [activeLocale, setSearchCriteria]);
 
   useEffect(() => {
-    if (Object.keys(sessionFilters).length === 0) {
+    if (!sessionFilters || Object.keys(sessionFilters).length === 0) {
       return;
     }
 
@@ -526,17 +464,17 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const onSelect = (row: SearchResponseElementWithId) => {
     if (row.id) {
       const seedCollectionLocation = {
-        pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', row.id as string),
+        pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', row.id),
         // eslint-disable-next-line no-restricted-globals
         state: { from: location.pathname },
       };
-      history.push(seedCollectionLocation);
+      navigate(seedCollectionLocation);
     }
   };
 
   const onSortChange = (order: Order, orderBy: string) => {
     setSearchSortOrder({
-      field: orderBy as string,
+      field: orderBy,
       direction: order === 'asc' ? 'Ascending' : 'Descending',
     });
   };
@@ -572,24 +510,25 @@ export default function Database(props: DatabaseProps): JSX.Element {
     setReportModalOpen(false);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const isInactive = (row: SearchResponseElementWithId) => {
     return false;
   };
 
   const handleViewCollections = () => {
-    history.push(APP_PATHS.CHECKIN);
+    navigate(APP_PATHS.CHECKIN);
   };
 
   const goTo = (appPath: string) => {
     const appPathLocation = {
       pathname: appPath,
     };
-    history.push(appPathLocation);
+    navigate(appPathLocation);
   };
 
   const goToNewAccession = () => {
     const newAccessionLocation = getLocation(APP_PATHS.ACCESSIONS2_NEW, location);
-    history.push(newAccessionLocation);
+    navigate(newAccessionLocation);
   };
 
   const onSeedBankForImportSelected = (selectedFacilityOnModal: Facility | undefined) => {
@@ -649,10 +588,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
         onDownloadReport();
         break;
       }
-      case 'tableColumns': {
-        onOpenEditColumnsModal();
-        break;
-      }
     }
   };
 
@@ -685,7 +620,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           <SelectSeedBankModal open={selectSeedBankForImportModalOpen} onClose={onSeedBankForImportSelected} />
         </>
       )}
-      <TfMain backgroundImageVisible={!isOnboarded}>
+      <TfMain>
         <EditColumns open={editColumnsModalOpen} value={displayColumnNames} onClose={onCloseEditColumnsModal} />
         {selectedOrganization && (
           <DownloadReportModal
@@ -723,7 +658,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
                     optionItems={[
                       { label: strings.IMPORT, value: 'import' },
                       { label: strings.EXPORT, value: 'export' },
-                      { label: strings.CUSTOMIZE_TABLE_COLUMNS, value: 'tableColumns' },
                     ]}
                   />
                 </>
@@ -753,9 +687,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
             )}
           </PageHeader>
         </PageHeaderWrapper>
-        <Container ref={contentRef} maxWidth={false} className={classes.mainContainer}>
+        <Container ref={contentRef} maxWidth={false} sx={{ padding: 0 }}>
           {selectedOrganization && unfilteredResults ? (
-            <Card flushMobile>
+            <Card>
               {isOnboarded ? (
                 <>
                   <Box
@@ -772,6 +706,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                         searchColumns={searchTermColumns}
                         preExpFilterColumns={preExpFilterColumns}
                         onChange={onFilterChange}
+                        customizeColumns={onOpenEditColumnsModal}
                       />
                     )}
 
@@ -812,27 +747,29 @@ export default function Database(props: DatabaseProps): JSX.Element {
               ) : isAdmin(selectedOrganization) ? (
                 <>
                   {!isMobile && emptyStateSpacer()}
-                  <EmptyMessage
-                    className={classes.message}
-                    title={strings.ONBOARDING_ADMIN_TITLE}
-                    rowItems={getEmptyState()}
-                  />
+                  <EmptyMessage title={strings.ONBOARDING_ADMIN_TITLE} rowItems={getEmptyState()} sx={messageStyles} />
                 </>
               ) : (
                 <>
                   {!isMobile && emptyStateSpacer()}
                   <EmptyMessage
-                    className={classes.message}
                     title={strings.REACH_OUT_TO_ADMIN_TITLE}
                     text={strings.NO_SEEDBANKS_NON_ADMIN_MSG}
+                    sx={messageStyles}
                   />
                 </>
               )}
             </Card>
           ) : (
-            <div className={classes.spinnerContainer}>
+            <Box
+              sx={{
+                position: 'fixed',
+                top: '50%',
+                left: 'calc(50% + 100px)',
+              }}
+            >
               <CircularProgress />
-            </div>
+            </Box>
           )}
         </Container>
       </TfMain>

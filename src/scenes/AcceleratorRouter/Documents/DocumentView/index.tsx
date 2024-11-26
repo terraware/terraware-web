@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
 import { BusySpinner, Button, Tab, Tabs } from '@terraware/web-components';
@@ -9,76 +8,54 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import PageDialog from 'src/components/DocumentProducer/PageDialog';
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
-import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
-import { selectGetDocument } from 'src/redux/features/documentProducer/documents/documentsSelector';
-import {
-  requestGetDocument,
-  requestUpgradeManifest,
-} from 'src/redux/features/documentProducer/documents/documentsThunks';
-import { selectMethodology } from 'src/redux/features/documentProducer/methodologies/methodologiesSelector';
-import { requestListMethodologies } from 'src/redux/features/documentProducer/methodologies/methodologiesThunks';
-import { useSelectorProcessor } from 'src/redux/hooks/useSelectorProcessor';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
+import { requestUpgradeManifest } from 'src/redux/features/documentProducer/documents/documentsThunks';
+import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
-import { Document } from 'src/types/documentProducer/Document';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import DocumentActions from './DocumentActions';
 import DocumentHistoryTab from './DocumentHistoryTab';
 import DocumentMetadata from './DocumentMetadata';
+import DocumentOutlinePanel from './DocumentOutlinePanel';
 import DocumentTab from './DocumentTab';
 import DocumentVariablesTab from './DocumentVariablesTab';
 
 export default function DocumentView(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const dispatch = useAppDispatch();
-  const { goToDocuments } = useNavigateTo();
   const { activeLocale } = useLocalization();
-  const { documentId: documentIdParam } = useParams<{ documentId: string }>();
-  const documentId = Number(documentIdParam);
-
-  const [document, setDocument] = useState<Document>();
-  const methodology = useAppSelector((state) => selectMethodology(state, document?.methodologyId ?? -1));
+  const { document, documentId, documentTemplate, reload } = useDocumentProducerData();
 
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [outlinePanelOpen, setOutlinePanelOpen] = useState(true);
 
-  const latestManifestId = useMemo(() => methodology?.variableManifestId ?? -1, [methodology]);
-
-  const pddSelect = useAppSelector(selectGetDocument(documentId));
-
-  useSelectorProcessor(pddSelect, setDocument, {
-    handleError: true,
-    onError: goToDocuments,
-  });
+  const currentManifestId = document?.variableManifestId;
+  const latestManifestId = documentTemplate?.variableManifestId;
 
   useEffect(() => {
-    dispatch(requestListMethodologies);
-  }, [dispatch]);
-
-  const fetchPdd = useCallback(() => {
-    dispatch(requestGetDocument(documentId));
-  }, [dispatch, documentId]);
-
-  useEffect(() => {
-    fetchPdd();
-  }, [fetchPdd]);
-
-  useEffect(() => {
-    if (document?.variableManifestId && document.variableManifestId < latestManifestId) {
-      setShowUpgradeModal(true);
+    if (!currentManifestId || !latestManifestId) {
+      return;
     }
-  }, [document, methodology, latestManifestId]);
+
+    if (currentManifestId < latestManifestId) {
+      setShowUpgradeModal(true);
+    } else if (currentManifestId === latestManifestId) {
+      setShowUpgradeModal(false);
+    }
+  }, [currentManifestId, latestManifestId]);
 
   const onUpgradeManifest = useCallback(async () => {
     if (documentId && latestManifestId) {
       await dispatch(
         requestUpgradeManifest({ id: `${documentId}`, payload: { variableManifestId: latestManifestId } })
       );
-      fetchPdd();
+      reload();
     }
+
     setShowUpgradeModal(false);
-  }, [dispatch, documentId, latestManifestId, fetchPdd]);
+  }, [dispatch, documentId, latestManifestId, reload]);
 
   const onDismissUpgradeManifest = useCallback(() => {
     setShowUpgradeModal(false);
@@ -94,6 +71,10 @@ export default function DocumentView(): JSX.Element {
     [activeLocale]
   );
 
+  const setSelectedTab = useCallback((tab: string) => {
+    onTabChange(tab);
+  }, []);
+
   const tabs: Tab[] = useMemo(
     () =>
       activeLocale && document
@@ -102,19 +83,19 @@ export default function DocumentView(): JSX.Element {
               id: 'document',
               label: strings.DOCUMENT,
               icon: 'iconParchment',
-              children: <DocumentTab document={document} />,
+              children: <DocumentTab />,
             },
             {
               id: 'variables',
               label: strings.VARIABLES,
               icon: 'iconModule',
-              children: <DocumentVariablesTab document={document} />,
+              children: <DocumentVariablesTab setSelectedTab={setSelectedTab} />,
             },
             {
               id: 'history',
               label: strings.HISTORY,
               icon: 'iconHistory',
-              children: <DocumentHistoryTab document={document} />,
+              children: <DocumentHistoryTab />,
             },
           ]
         : [],
@@ -127,12 +108,12 @@ export default function DocumentView(): JSX.Element {
     viewIdentifier: 'accelerator-documents',
   });
 
-  if (!document) {
+  if (!(document && documentTemplate)) {
     return <BusySpinner />;
   }
 
   return (
-    <Page crumbs={crumbs}>
+    <Page crumbs={crumbs} contentStyle={{ 'flex-direction': 'column' }}>
       <PageDialog
         title={strings.NEW_TEMPLATE_MODAL_TITLE}
         message={strings.NEW_TEMPLATE_MODAL_DESCRIPTION}
@@ -155,14 +136,16 @@ export default function DocumentView(): JSX.Element {
         justifyContent='space-between'
         alignItems='flex-start'
       >
-        <DocumentMetadata document={document} />
-        <DocumentActions document={document} onPddUpdate={fetchPdd} />
+        <DocumentMetadata document={document} documentTemplate={documentTemplate} />
+        <DocumentActions document={document} onDocumentUpdate={reload} />
       </Box>
       <Box marginTop={3} display='flex' flexDirection='row' flexGrow={1}>
         <Box display='flex' flexGrow={1}>
           <Tabs tabs={tabs} activeTab={activeTab} onTabChange={onTabChange} />
         </Box>
-        <Box width='100px'>{/* add TOC here perhaps */}</Box>
+        <Box>
+          {activeTab === 'document' && <DocumentOutlinePanel open={outlinePanelOpen} setOpen={setOutlinePanelOpen} />}
+        </Box>
       </Box>
     </Page>
   );

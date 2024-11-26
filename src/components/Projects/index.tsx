@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Grid, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import ProjectCellRenderer from 'src/components/Projects/ProjectCellRenderer';
@@ -22,23 +21,7 @@ import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-const useStyles = makeStyles(() => ({
-  title: {
-    margin: 0,
-    fontSize: '24px',
-    fontWeight: 600,
-  },
-  centered: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    marginBottom: '32px',
-  },
-  searchField: {
-    width: '300px',
-  },
-}));
+import TableSettingsButton from '../common/table/TableSettingsButton';
 
 const columns = (): TableColumnType[] => [
   { key: 'name', name: strings.NAME, type: 'string' },
@@ -47,9 +30,8 @@ const columns = (): TableColumnType[] => [
 
 export default function ProjectsList(): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const classes = useStyles();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [results, setResults] = useState<Project[]>();
@@ -59,9 +41,11 @@ export default function ProjectsList(): JSX.Element {
 
   const search = useCallback(
     async (searchTerm: string) => {
-      const projects = await ProjectsService.searchProjects(selectedOrganization.id, searchTerm);
-      if (projects) {
-        return projects;
+      if (selectedOrganization.id !== -1) {
+        const projects = await ProjectsService.searchProjects(selectedOrganization.id, searchTerm);
+        if (projects) {
+          return projects;
+        }
       }
     },
     [selectedOrganization.id]
@@ -86,7 +70,7 @@ export default function ProjectsList(): JSX.Element {
     const newProjectLocation = {
       pathname: APP_PATHS.PROJECTS_NEW,
     };
-    history.push(newProjectLocation);
+    navigate(newProjectLocation);
   };
 
   const clearSearch = () => {
@@ -102,9 +86,27 @@ export default function ProjectsList(): JSX.Element {
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Grid container paddingBottom={theme.spacing(4)} paddingLeft={isMobile ? 0 : theme.spacing(3)}>
           <Grid item xs={8}>
-            <h1 className={classes.title}>{strings.PROJECTS}</h1>
+            <h1
+              style={{
+                margin: 0,
+                fontSize: '24px',
+                fontWeight: 600,
+              }}
+            >
+              {strings.PROJECTS}
+            </h1>
           </Grid>
-          <Grid item xs={4} className={classes.centered}>
+          <Grid
+            item
+            xs={4}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'flex-end',
+              marginBottom: '32px',
+            }}
+          >
             {isMobile ? (
               <Button id='new-project' icon='plus' onClick={goToNewProject} size='medium' />
             ) : (
@@ -116,19 +118,27 @@ export default function ProjectsList(): JSX.Element {
       </PageHeaderWrapper>
       <Card flushMobile>
         <Grid container ref={contentRef}>
-          <Grid item xs={12} marginBottom='16px'>
+          <Grid
+            item
+            xs={12}
+            marginBottom='16px'
+            sx={{
+              display: 'flex',
+            }}
+          >
             <TextField
               placeholder={strings.SEARCH}
               iconLeft='search'
               label=''
               id='search'
               type='text'
-              className={classes.searchField}
               onChange={(value) => onChangeSearch('search', value)}
               value={temporalSearchValue}
               iconRight='cancel'
               onClickRightIcon={clearSearch}
+              sx={{ width: '300px' }}
             />
+            <TableSettingsButton />
           </Grid>
 
           <Grid item xs={12}>

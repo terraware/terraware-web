@@ -1,33 +1,19 @@
 import React from 'react';
 
 import { FiberManualRecord } from '@mui/icons-material';
-import { TableCell, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, TableCell, Typography, useTheme } from '@mui/material';
 
 import Link from 'src/components/common/Link';
+import TextTruncated from 'src/components/common/TextTruncated';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import strings from 'src/strings';
 import { SearchResponseElement } from 'src/types/Search';
-
-const statusStyles = makeStyles((theme: Theme) => ({
-  flex: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  statusIndicator: {
-    fontSize: theme.typography.overline.fontSize,
-  },
-  inactive: {
-    display: 'flex',
-    alignItems: 'center',
-    color: theme.palette.neutral[600],
-  },
-}));
 
 export default function SearchCellRenderer(props: RendererProps<SearchResponseElement>): JSX.Element {
   const { column, value, index, row } = props;
-  const classes = statusStyles();
+  const theme = useTheme();
 
   const id = `row${index}-${column.key}`;
   if (column.key === 'active' && typeof value === 'string' && value) {
@@ -35,10 +21,27 @@ export default function SearchCellRenderer(props: RendererProps<SearchResponseEl
 
     return (
       <TableCell id={id} align='left'>
-        <div className={classes.flex}>
-          <FiberManualRecord color={active ? 'primary' : 'disabled'} className={classes.statusIndicator} />
-          <Typography classes={{ root: active ? undefined : classes.inactive }}>{value}</Typography>
-        </div>
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <FiberManualRecord
+            color={active ? 'primary' : 'disabled'}
+            sx={{ fontSize: theme.typography.overline.fontSize }}
+          />
+          <Typography
+            sx={
+              active
+                ? undefined
+                : {
+                    '&.MuiTypography-root': {
+                      display: 'flex',
+                      alignItems: 'center',
+                      color: theme.palette.neutral[600],
+                    },
+                  }
+            }
+          >
+            {value}
+          </Typography>
+        </Box>
       </TableCell>
     );
   }
@@ -48,7 +51,9 @@ export default function SearchCellRenderer(props: RendererProps<SearchResponseEl
       <CellRenderer
         index={index}
         column={column}
-        value={<Link to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', `${row.id}`)}>{`${value}`}</Link>}
+        value={
+          <Link fontSize='16px' to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', `${row.id}`)}>{`${value}`}</Link>
+        }
         row={row}
       />
     );
@@ -79,6 +84,24 @@ export default function SearchCellRenderer(props: RendererProps<SearchResponseEl
 
   if (column.key === 'totalViabilityPercent' && value !== undefined) {
     return <CellRenderer index={index} column={column} value={`${value}%`} row={row} />;
+  }
+
+  if (column.key === 'geolocations.coordinates') {
+    const coordinatesValues = ((row.geolocations || []) as any[]).map((gl) => gl.coordinates);
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        row={row}
+        value={
+          <TextTruncated
+            stringList={coordinatesValues}
+            listSeparator={strings.LIST_SEPARATOR_SECONDARY}
+            moreText={strings.TRUNCATED_TEXT_MORE_LINK}
+          />
+        }
+      />
+    );
   }
 
   return <CellRenderer {...props} />;

@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { MultiPolygon } from 'geojson';
 
 import PlantingSiteMapEditor from 'src/components/Map/PlantingSiteMapEditor';
@@ -17,11 +16,7 @@ import { searchPlantingSiteZones } from 'src/redux/features/observations/plantin
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import BoundariesAndZones from 'src/scenes/PlantingSitesRouter/view/BoundariesAndZones';
-import TrackingService, {
-  PlantingSiteId,
-  PlantingSitePostRequestBody,
-  PlantingSitePutRequestBody,
-} from 'src/services/TrackingService';
+import TrackingService, { PlantingSitePostRequestBody, PlantingSitePutRequestBody } from 'src/services/TrackingService';
 import strings from 'src/strings';
 import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
 import useForm from 'src/utils/useForm';
@@ -33,20 +28,12 @@ type CreatePlantingSiteProps = {
   reloadPlantingSites: () => void;
 };
 
-const useStyles = makeStyles(() => ({
-  form: {
-    display: 'flex',
-    flexGrow: 1,
-  },
-}));
-
 export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
-  const classes = useStyles();
   const { reloadPlantingSites } = props;
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
   const [loaded, setLoaded] = useState(false);
   const [onValidate, setOnValidate] = useState<((hasErrors: boolean) => void) | undefined>(undefined);
@@ -89,7 +76,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     const plantingSitesLocation = {
       pathname: APP_PATHS.PLANTING_SITES + (id && id !== -1 ? `/${id}` : ''),
     };
-    history.push(plantingSitesLocation);
+    navigate(plantingSitesLocation);
   };
 
   const onSave = () =>
@@ -121,8 +108,9 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
         projectId: record.projectId,
         timeZone: record.timeZone,
       };
+      // TODO use redux here
       response = await TrackingService.createPlantingSite(newPlantingSite);
-      id = (response as PlantingSiteId).id;
+      id = response.data?.id || -1;
     } else {
       const updatedPlantingSite: PlantingSitePutRequestBody = {
         boundary: record.boundary,
@@ -132,6 +120,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
         projectId: record.projectId,
         timeZone: record.timeZone,
       };
+      // TODO use redux here
       response = await TrackingService.updatePlantingSite(record.id, updatedPlantingSite);
     }
 
@@ -162,7 +151,10 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
         saveID='saveCreatePlantingSite'
         onCancel={() => goToPlantingSite(record.id)}
         onSave={onSave}
-        className={classes.form}
+        style={{
+          display: 'flex',
+          flexGrow: 1,
+        }}
       >
         <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, paddingRight: 0 }}>
           {loaded && (

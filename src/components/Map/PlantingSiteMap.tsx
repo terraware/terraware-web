@@ -4,6 +4,7 @@ import { Box, CircularProgress, useTheme } from '@mui/material';
 import _ from 'lodash';
 
 import { MapLayer } from 'src/components/common/MapLayerSelect';
+import isEnabled from 'src/features';
 import { MapService } from 'src/services';
 import {
   MapControl,
@@ -24,6 +25,18 @@ const mapImages = [
     name: 'mortality-rate-indicator',
     url: '/assets/mortality-rate-indicator.png',
   },
+  {
+    name: 'mortality-rate-less-25',
+    url: '/assets/mortality-rate-less-25.png',
+  },
+  {
+    name: 'mortality-rate-less-50',
+    url: '/assets/mortality-rate-less-50.png',
+  },
+  {
+    name: 'mortality-rate-more-50',
+    url: '/assets/mortality-rate-more-50.png',
+  },
 ];
 
 export type PlantingSiteMapProps = {
@@ -37,15 +50,26 @@ export type PlantingSiteMapProps = {
   // layers to be displayed on map
   layers?: MapLayer[];
   showMortalityRateFill?: boolean;
+  showRecencyFill?: boolean;
 } & MapControl;
 
 export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element | null {
-  const { mapData, style, contextRenderer, highlightEntities, focusEntities, layers, showMortalityRateFill } = props;
+  const {
+    mapData,
+    style,
+    contextRenderer,
+    highlightEntities,
+    focusEntities,
+    layers,
+    showMortalityRateFill,
+    showRecencyFill,
+  } = props;
   const { ...controlProps }: MapControl = props;
   const theme = useTheme();
   const snackbar = useSnackbar();
   const [mapOptions, setMapOptions] = useState<MapOptions>();
   const getRenderAttributes = useRenderAttributes();
+  const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
 
   // fetch polygons and boundaries
   useEffect(() => {
@@ -103,6 +127,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       if (mapData.zone && (layers === undefined || layers?.includes('Zones'))) {
         sources.push({
           ...mapData.zone,
+          ...getRenderAttributes('zone'),
           isInteractive: isFirstLayerAdded(),
           annotation: isFirstLayerAdded()
             ? {
@@ -111,10 +136,43 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
                 textSize: 16,
               }
             : undefined,
-          patternFill: showMortalityRateFill
-            ? {
-                imageName: 'mortality-rate-indicator',
-                opacityExpression: [
+          fillColor: showRecencyFill
+            ? [
+                'case',
+                ['==', ['number', ['get', 'recency']], 0],
+                getRenderAttributes('zone').fillColor,
+                theme.palette.TwClrBasePink200,
+              ]
+            : getRenderAttributes('zone').fillColor,
+          patternFill: newPlantsDashboardEnabled
+            ? showMortalityRateFill
+              ? [
+                  'case',
+                  ['>', ['number', ['get', 'mortalityRate']], 50],
+                  'mortality-rate-more-50',
+                  ['>', ['number', ['get', 'mortalityRate']], 25],
+                  'mortality-rate-less-50',
+                  'mortality-rate-less-25',
+                ]
+              : undefined
+            : showMortalityRateFill
+              ? 'mortality-rate-indicator'
+              : undefined,
+          opacity: newPlantsDashboardEnabled
+            ? showRecencyFill
+              ? [
+                  'case',
+                  ['==', ['get', 'recency'], 1],
+                  0.9,
+                  ['==', ['get', 'recency'], 2],
+                  0.7,
+                  ['==', ['get', 'recency'], 3],
+                  0.5,
+                  0.3,
+                ]
+              : undefined
+            : showMortalityRateFill
+              ? [
                   'case',
                   ['==', ['get', 'mortalityRate'], null],
                   0.0,
@@ -125,10 +183,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
                   ['>', ['get', 'mortalityRate'], 25],
                   0.5,
                   0.3,
-                ],
-              }
-            : undefined,
-          ...getRenderAttributes('zone'),
+                ]
+              : undefined,
         });
       }
       if (mapData.site && (layers === undefined || layers?.includes('Planting Site'))) {

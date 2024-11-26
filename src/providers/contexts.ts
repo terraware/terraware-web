@@ -16,7 +16,9 @@ export const UserContext = createContext<ProvidedUserData>({
   },
   userPreferences: {},
   bootstrapped: false,
+  updateUserCookieConsent: () => Promise.resolve(),
   updateUserPreferences: () => Promise.resolve(true),
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isAllowed: (_: GlobalRolePermission, __?: unknown) => false,
 });
 
@@ -30,14 +32,22 @@ export const defaultSelectedOrg: Organization = {
 export const OrganizationContext = createContext<ProvidedOrganizationData>({
   organizations: [],
   orgPreferences: {},
-  reloadOrganizations: (selectedOrgId?: number) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  redirectAndNotify: (organization: Organization) => {
     // default no-op implementation
     return;
+  },
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  reloadOrganizations: (selectedOrgId?: number) => {
+    // default no-op implementation
+    return Promise.resolve();
   },
   reloadOrgPreferences: () => {
     // default no-op implementation
     return;
   },
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setSelectedOrganization: (org) => {
     // no-op
     return;
@@ -50,6 +60,7 @@ export const OrganizationContext = createContext<ProvidedOrganizationData>({
 
 export const LocalizationContext = createContext<ProvidedLocalizationData>({
   activeLocale: null,
+  countries: [],
   selectedLocale: 'en',
   setSelectedLocale: () => undefined,
   supportedTimeZones: [],

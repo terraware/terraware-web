@@ -1,13 +1,13 @@
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Grid } from '@mui/material';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import TextTruncated from 'src/components/common/TextTruncated';
-import NurseryFacilitiesService, {
+import NurserySummaryService, {
   NurserySummaryPayload,
   NurserySummarySpecies,
-} from 'src/services/NurseryFacilitiesService';
+} from 'src/services/NurserySummaryService';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -28,7 +28,7 @@ export default function InventorySummaryForNursery({
 
   useEffect(() => {
     const reloadData = async () => {
-      const summaryResponse = await NurseryFacilitiesService.getNurserySummary(nurseryId);
+      const summaryResponse = await NurserySummaryService.getNurserySummary(nurseryId);
       if (!summaryResponse || !summaryResponse.requestSucceeded) {
         snackbar.toastError();
         return;
@@ -106,8 +106,9 @@ export default function InventorySummaryForNursery({
         valueComponent: (
           <TextTruncated
             stringList={(species || []).map((s: NurserySummarySpecies) => s.scientificName)}
-            columnWidth={350}
+            width={350}
             fontSize={16}
+            moreText={strings.TRUNCATED_TEXT_MORE_LINK}
           />
         ),
         tooltipTitle: '',

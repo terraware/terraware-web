@@ -28,12 +28,14 @@ export default function ReportList(): JSX.Element {
   const { selectedOrganization } = useOrganization();
 
   useEffect(() => {
-    const refreshSearch = async () => {
-      const reportsResults = await ReportService.getReports(selectedOrganization.id);
-      setResults(reportsResults.reports || []);
-    };
+    if (selectedOrganization.id !== -1) {
+      const refreshSearch = async () => {
+        const reportsResults = await ReportService.getReports(selectedOrganization.id);
+        setResults(reportsResults.reports || []);
+      };
 
-    refreshSearch();
+      refreshSearch();
+    }
   }, [selectedOrganization.id]);
 
   return (

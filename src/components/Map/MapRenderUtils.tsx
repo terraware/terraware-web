@@ -1,87 +1,10 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useMap } from 'react-map-gl';
 
-import { Box, IconButton, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, IconButton, Typography, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
 
-import strings from 'src/strings';
-import { MapPopupRenderer, MapSourceProperties } from 'src/types/Map';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  popup: {
-    '& > .mapboxgl-popup-content': {
-      borderRadius: '8px',
-      padding: '10px',
-    },
-  },
-  button: {
-    marginLeft: theme.spacing(2),
-    '&:focus': {
-      outline: 'none',
-    },
-  },
-  tooltip: {
-    '& .mapboxgl-popup-content': {
-      borderRadius: theme.spacing(1),
-      padding: 0,
-    },
-    '& .mapboxgl-popup-close-button': {
-      display: 'none',
-    },
-  },
-}));
-
-export const mapTooltipDialogStyle = (theme: Theme) => ({
-  tooltip: {
-    '& .mapboxgl-popup-content': {
-      borderRadius: theme.spacing(1),
-      padding: 0,
-    },
-    '& .mapboxgl-popup-close-button': {
-      display: 'none',
-    },
-  },
-});
-
-/**
- * Species / plants renderer
- */
-export function useSpeciesPlantsRenderer(subzonesWithPlants: any): MapPopupRenderer {
-  const theme = useTheme();
-  const classes = useStyles();
-
-  const textStyle = {
-    fontWeight: 400,
-    fontSize: '16px',
-    color: theme.palette.TwClrBaseBlack as string,
-  };
-
-  return {
-    className: classes.popup,
-    render: (data: MapSourceProperties): JSX.Element => {
-      const { id } = data;
-      const populations = subzonesWithPlants[id.toString()];
-
-      if (!populations) {
-        return (
-          <Box display='flex' justifyContent='center' padding={1}>
-            <Typography sx={textStyle}>{strings.NO_PLANTS}</Typography>
-          </Box>
-        );
-      }
-
-      return (
-        <MapTooltip
-          properties={populations.map((population: any) => ({
-            key: population.totalPlants,
-            value: population.species_scientificName,
-          }))}
-        />
-      );
-    },
-  };
-}
+import isEnabled from 'src/features';
 
 /**
  * Full screen map container ref for Portals
@@ -115,11 +38,13 @@ export type TooltipProperty = {
 
 export type MapTooltipProps = {
   title?: string;
+  subtitle?: string;
   properties: TooltipProperty[];
 };
 
-export function MapTooltip({ title, properties }: MapTooltipProps): JSX.Element {
+export function MapTooltip({ title, properties, subtitle }: MapTooltipProps): JSX.Element {
   const theme = useTheme();
+  const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
 
   const textStyle = {
     fontWeight: 400,
@@ -139,29 +64,61 @@ export function MapTooltip({ title, properties }: MapTooltipProps): JSX.Element 
     ...textStyle,
     marginLeft: theme.spacing(1),
     overflowWrap: 'anywhere',
+    textAlign: newPlantsDashboardEnabled ? 'right' : 'left',
   };
 
   return (
     <>
-      {title && (
-        <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(2)} textAlign='left'>
-          {title}
-        </Typography>
-      )}
-      <table>
-        <tbody>
-          {properties.map((prop: TooltipProperty, index: number) => (
-            <tr key={index}>
-              <td>
-                <Typography sx={keyStyle}>{prop.key}</Typography>
-              </td>
-              <td>
-                <Typography sx={valueStyle}>{prop.value}</Typography>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <Box
+        sx={
+          newPlantsDashboardEnabled
+            ? {
+                backgroundColor: theme.palette.TwClrBgSecondary,
+                borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                padding: theme.spacing(2, 4),
+                borderRadius: 1,
+              }
+            : undefined
+        }
+      >
+        {title && (
+          <Typography
+            fontSize={newPlantsDashboardEnabled ? '20px' : '16px'}
+            fontWeight={600}
+            marginBottom={newPlantsDashboardEnabled ? 0 : theme.spacing(2)}
+            textAlign='left'
+          >
+            {title}
+          </Typography>
+        )}
+        {newPlantsDashboardEnabled && subtitle && (
+          <Typography
+            fontSize='16px'
+            fontWeight={500}
+            marginBottom={0}
+            textAlign='left'
+            color={theme.palette.TwClrBasePink500}
+          >
+            {subtitle}
+          </Typography>
+        )}
+      </Box>
+      <Box padding={newPlantsDashboardEnabled ? 2 : 0}>
+        <table>
+          <tbody>
+            {properties.map((prop: TooltipProperty, index: number) => (
+              <tr key={index}>
+                <td>
+                  <Typography sx={keyStyle}>{prop.key}</Typography>
+                </td>
+                <td>
+                  <Typography sx={valueStyle}>{prop.value}</Typography>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </Box>
     </>
   );
 }
@@ -182,7 +139,13 @@ export type MapTooltipDialogProps = {
 export const MapTooltipDialog = (props: MapTooltipDialogProps): JSX.Element => {
   const { cancelButton, children, onClose, saveButton, title } = props;
   const theme = useTheme();
-  const classes = useStyles();
+
+  const buttonStyles = {
+    marginLeft: theme.spacing(2),
+    '&:focus': {
+      outline: 'none',
+    },
+  };
 
   return (
     <Box borderRadius={theme.spacing(1)} display='flex' flexDirection='column'>
@@ -210,23 +173,17 @@ export const MapTooltipDialog = (props: MapTooltipDialogProps): JSX.Element => {
       >
         {cancelButton && (
           <Button
-            className={classes.button}
             id='cancel'
             key='cancel'
             label={cancelButton.title}
             onClick={cancelButton.onClick}
             priority='secondary'
+            sx={buttonStyles}
             type='passive'
           />
         )}
         {saveButton && (
-          <Button
-            className={classes.button}
-            id='save'
-            key='save'
-            label={saveButton.title}
-            onClick={saveButton.onClick}
-          />
+          <Button id='save' key='save' label={saveButton.title} onClick={saveButton.onClick} sx={buttonStyles} />
         )}
       </Box>
     </Box>

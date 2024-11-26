@@ -20,4 +20,8 @@ export const appVersionSlice = createSlice({
 
 export const { setVersionAction } = appVersionSlice.actions;
 
-export const appVersionReducer = appVersionSlice.reducer;
+const appVersionReducers = {
+  appVersion: appVersionSlice.reducer,
+};
+
+export default appVersionReducers;

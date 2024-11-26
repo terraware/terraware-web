@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { TableColumnType } from '@terraware/web-components';
 import { RendererProps } from '@terraware/web-components/components/table/types';
@@ -7,12 +7,14 @@ import getDateDisplayValue from '@terraware/web-components/utils/date';
 import PageContent from 'src/components/DocumentProducer/PageContent';
 import TableContent from 'src/components/DocumentProducer/TableContent';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
+import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
 import { searchHistory } from 'src/redux/features/documentProducer/documents/documentsSelector';
 import { requestListHistory } from 'src/redux/features/documentProducer/documents/documentsThunks';
+import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { useSelectorProcessor } from 'src/redux/hooks/useSelectorProcessor';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Document, DocumentHistoryEvent } from 'src/types/documentProducer/Document';
+import { DocumentHistoryEvent } from 'src/types/documentProducer/Document';
 
 import DocumentHistoryRowMenu from './DocumentHistoryRowMenu';
 
@@ -63,26 +65,37 @@ const tableCellRenderer = (props: RendererProps<any>): JSX.Element => {
   return <CellRenderer {...props} />;
 };
 
-export type DocumentHistoryProps = {
-  document: Document;
-};
-
-const DocumentHistoryTab = ({ document }: DocumentHistoryProps): JSX.Element => {
+const DocumentHistoryTab = (): JSX.Element => {
   const dispatch = useAppDispatch();
+  const { documentId } = useDocumentProducerData();
+
   const [tableRows, setTableRows] = useState<DocumentHistoryEvent[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const onSearch = (str: string) => setSearchValue(str);
 
   // select history data
-  const history = useAppSelector((state) => searchHistory(state, document.id, searchValue));
-
+  const history = useAppSelector((state) => searchHistory(state, documentId, searchValue));
   useSelectorProcessor(history, setTableRows);
+
+  const [userIdsRequested, setUserIdsRequested] = useState<number[]>([]);
+
+  useEffect(() => {
+    const newUserIdsRequested: number[] = [];
+    const userIds = tableRows.map((row) => row.createdBy);
+    userIds.forEach((userId) => {
+      if (!userIdsRequested.includes(userId) && !newUserIdsRequested.includes(userId)) {
+        dispatch(requestGetUser(userId));
+        newUserIdsRequested.push(userId);
+      }
+    });
+    setUserIdsRequested((prev) => [...prev, ...newUserIdsRequested]);
+  }, [tableRows]);
 
   useEffect(() => {
     // TODO should these be admin users? TF accelerator users?
     // dispatch(requestListUsers());
-    dispatch(requestListHistory(document.id));
-  }, [dispatch, document.id]);
+    dispatch(requestListHistory(documentId));
+  }, [dispatch, documentId]);
 
   const props = {
     searchProps: {
@@ -95,7 +108,7 @@ const DocumentHistoryTab = ({ document }: DocumentHistoryProps): JSX.Element => 
       tableOrderBy: 'date',
       tableColumns,
       tableCellRenderer,
-      tableReloadData: () => dispatch(requestListHistory(document.id)),
+      tableReloadData: () => dispatch(requestListHistory(documentId)),
     },
   };
 

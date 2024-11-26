@@ -17,13 +17,14 @@ interface SpeciesSelectorProps<T extends { speciesId?: number } | undefined> {
   disabled?: boolean;
   validate?: boolean;
   tooltipTitle?: string;
+  hideLabel?: boolean;
 }
 
 export default function SpeciesSelector<T extends { speciesId?: number } | undefined>(
   props: SpeciesSelectorProps<T>
 ): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const { speciesId, record, setRecord, disabled, validate, tooltipTitle } = props;
+  const { speciesId, record, setRecord, disabled, validate, tooltipTitle, hideLabel } = props;
   const [speciesList, setSpeciesList] = useState<SuggestedSpecies[]>([]);
   const [selectedValue, setSelectedValue] = useState<SuggestedSpecies>();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
@@ -45,7 +46,9 @@ export default function SpeciesSelector<T extends { speciesId?: number } | undef
   );
 
   useEffect(() => {
-    populateSpecies(debouncedSearchTerm);
+    if (selectedOrganization.id !== -1) {
+      populateSpecies(debouncedSearchTerm);
+    }
   }, [populateSpecies, debouncedSearchTerm]);
 
   useEffect(() => {
@@ -100,7 +103,7 @@ export default function SpeciesSelector<T extends { speciesId?: number } | undef
       <Grid item xs={12}>
         <SelectT<SuggestedSpecies>
           id='speciesSelector'
-          label={strings.SPECIES_REQUIRED}
+          label={hideLabel ? '' : strings.SPECIES_REQUIRED}
           disabled={disabled}
           placeholder={strings.SEARCH_OR_SELECT}
           options={speciesList}

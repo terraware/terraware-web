@@ -1,4 +1,4 @@
-import React, { Redirect, Route, Switch } from 'react-router-dom';
+import React, { Navigate, Route, Routes } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 
@@ -10,29 +10,29 @@ import SingleView from './SingleView';
 
 const PeopleRouter = () => {
   return (
-    <Switch>
-      <Route exact path={APP_PATHS.ACCELERATOR_PEOPLE}>
-        <ListView />
-      </Route>
-      <Route exact path={APP_PATHS.ACCELERATOR_PERSON_NEW}>
-        <NewView />
-      </Route>
-      <Route path={APP_PATHS.ACCELERATOR_PERSON}>
-        <PersonProvider>
-          <Switch>
-            <Route exact path={APP_PATHS.ACCELERATOR_PERSON}>
-              <SingleView />
-            </Route>
-            <Route exact path={APP_PATHS.ACCELERATOR_PERSON_EDIT}>
-              <EditView />
-            </Route>
-          </Switch>
-        </PersonProvider>
-      </Route>
-      <Route path={'*'}>
-        <Redirect to={APP_PATHS.ACCELERATOR_PEOPLE} />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route
+        path={'new'}
+        element={
+          <PersonProvider>
+            <NewView />
+          </PersonProvider>
+        }
+      />
+      <Route
+        path={':userId/*'}
+        element={
+          <PersonProvider>
+            <Routes>
+              <Route path={''} element={<SingleView />} />
+              <Route path={'edit'} element={<EditView />} />
+            </Routes>
+          </PersonProvider>
+        }
+      />
+      <Route path={''} element={<ListView />} />
+      <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_PEOPLE} />} />
+    </Routes>
   );
 };
 

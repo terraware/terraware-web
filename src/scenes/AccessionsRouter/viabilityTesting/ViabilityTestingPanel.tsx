@@ -1,5 +1,6 @@
-import { Box, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import React from 'react';
+
+import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -8,14 +9,6 @@ import { Accession } from 'src/types/Accession';
 import { ViabilityTest } from 'src/types/Accession';
 
 import ViabilityTestingDatabase from './ViabilityTestingDatabase';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  icon: {
-    width: '180px',
-    height: '115px',
-    margin: `${theme.spacing(2)} 0`,
-  },
-}));
 
 type ViabilityTestingPanelProps = {
   accession: Accession;
@@ -27,7 +20,6 @@ type ViabilityTestingPanelProps = {
 };
 
 export default function ViabilityTestingPanel(props: ViabilityTestingPanelProps): JSX.Element {
-  const classes = useStyles();
   const { accession, canAddTest, setNewViabilityTestOpened, setSelectedTest, setViewViabilityTestModalOpened } = props;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -55,7 +47,14 @@ export default function ViabilityTestingPanel(props: ViabilityTestingPanelProps)
           sx={{ margin: '0 auto', padding: theme.spacing(9, 0) }}
         >
           <Typography>{strings.VIABILITY_TESTING_EMPTY_MESSAGE}</Typography>
-          <Icon name='blobbyIconSeedBank' className={classes.icon} />
+          <Icon
+            name='blobbyIconSeedBank'
+            style={{
+              width: '180px',
+              height: '115px',
+              margin: `${theme.spacing(2)} 0`,
+            }}
+          />
           {canAddTest ? (
             <Box>
               <Button priority='secondary' label={strings.ADD_TEST} onClick={() => setNewViabilityTestOpened(true)} />

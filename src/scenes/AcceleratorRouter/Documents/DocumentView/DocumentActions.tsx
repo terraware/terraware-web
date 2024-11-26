@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
@@ -14,10 +14,10 @@ import UpdateMetadata from './UpdateMetadata';
 
 export type DocumentActionsProps = {
   document: Document;
-  onPddUpdate: () => void;
+  onDocumentUpdate: () => void;
 };
 
-const DocumentActions = ({ document, onPddUpdate }: DocumentActionsProps): JSX.Element => {
+const DocumentActions = ({ document, onDocumentUpdate }: DocumentActionsProps): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const [openSaveVersion, setOpenSaveVersion] = useState<boolean>(false);
@@ -26,7 +26,7 @@ const DocumentActions = ({ document, onPddUpdate }: DocumentActionsProps): JSX.E
 
   const onFinish = (saved: boolean) => {
     if (saved) {
-      onPddUpdate();
+      onDocumentUpdate();
     }
   };
 
@@ -56,17 +56,17 @@ const DocumentActions = ({ document, onPddUpdate }: DocumentActionsProps): JSX.E
           }}
         />
       )}
-      {openPreview && <Preview docId={document.id} close={() => setOpenPreview(false)} />}
+      {openPreview && <Preview close={() => setOpenPreview(false)} />}
       <Box margin={theme.spacing(isMobile ? 2 : 5, isMobile ? 'auto' : 0, 0)}>
         <Button
-          id={`preview-pdd-${document.id}`}
+          id={`preview-document-${document.id}`}
           label={strings.PREVIEW}
           onClick={() => setOpenPreview(true)}
           size='medium'
           priority='secondary'
         />
         <Button
-          id={`save-pdd-version-${document.id}`}
+          id={`save-document-version-${document.id}`}
           label={strings.SAVE_VERSION_ELLIPSIS}
           onClick={() => setOpenSaveVersion(true)}
           size='medium'

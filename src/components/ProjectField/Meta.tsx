@@ -58,7 +58,7 @@ const ProjectFieldMeta = ({ date, dateLabel, userId, userName, userLabel }: Proj
             // do name and ID here but if they are spread into the project entity the structure
             // will be different */}
             <Link
-              to={APP_PATHS.PEOPLE_VIEW.replace(':userId', `${userId}`)}
+              to={APP_PATHS.PEOPLE_VIEW.replace(':personId', `${userId}`)}
               fontSize={'16px'}
               fontWeight={400}
               lineHeight={'24px'}

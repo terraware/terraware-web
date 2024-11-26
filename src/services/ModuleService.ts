@@ -1,375 +1,88 @@
-import { Module, ModuleEvent } from 'src/types/Module';
+import { paths } from 'src/api/types/generated-schema';
+import { ModuleSearchResult } from 'src/types/Module';
+import { SearchNodePayload, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 
-import { Response2 } from './HttpService';
+import HttpService, { Response2 } from './HttpService';
+import SearchService from './SearchService';
 
-export type ModulesData = {
-  modules: Module[] | undefined;
-};
+const MODULES_ENDOINT = '/api/v1/accelerator/modules';
+const MODULE_ENDOINT = '/api/v1/accelerator/modules/{moduleId}';
+const MODULES_IMPORT_ENDPOINT = '/api/v1/accelerator/modules/import';
 
-export type ModuleData = {
-  module: Module | undefined;
-};
-
-export type ModuleEventData = {
-  event: ModuleEvent | undefined;
-};
-
-const mockEvents: ModuleEvent[] = [
-  {
-    eventTime: '2024-03-16T22:00:00.000Z',
-    eventURL: 'https://google.com/',
-    id: 1,
-    moduleId: 6,
-    name: 'Live Session',
-    links: [
-      { label: 'Live Session Slides', url: 'https://google.com/' },
-      { label: 'Live Session Recording', url: 'https://google.com/' },
-    ],
-    callDescription: `
-      <div>
-        <p>Clicking "Join" will open up a browser window to join a Zoom video call.</p>
-        <p>For this Live Session you will need:</p>
-        <ul>
-          <li>An internet connection – broadband wired or wireless (3G or 4G/LTE)</li>
-          <li>Speakers and a microphone – built-in, USB plug-in, or wireless Bluetooth</li>
-          <li>A webcam or HD webcam - built-in, USB plug-in</li>
-        </ul>
-      </div>
-    `,
-    description: `
-      <div>
-        <h3>Details</h3>
-        <p>The workshop will take place on Monday, September 18th and cover the following topics:</p>
-        <ol>
-          <li>Welcomes</li>
-          <li>Participant Introductions</li>
-          <li>Breakout Rooms</li>
-          <li>Shared Ideas</li>
-          <li>Send off</li>
-          <li>Conclusion and next steps for this week</li>
-        </ol>
-        <h3>Key Speakers</h3>
-        <strong>Maddy Bell, Terraformation Accelerator Program Manager</strong>
-        <p>Madeleine Bell is the Program Manager of Terraformation's Seed to Carbon Forest Accelerator. Prior to Terraformation, she spent the past 4 years working on a solar-thermal desalination technology, and supporting communities and corporations at the frontline of the global water crisis. Given this pattern, it looks like her life is going to revolve around scaling solutions to address climate change, which seems a good way to spend it.</p>
-        <strong>Damien Kuhn, VP Forestry Partnerships and Development, Terraformation</strong>
-        <p>Damien Kuhn is an agronomist and forestry engineer from AgroParisTech, where he specialized in environmental economics. He has spent the past 16 years working on forestry and climate projects across Africa, Latin America, and Southeast Asia. As former COO of Kinomé, he developed partnerships worldwide and managing a portfolio of community-based forestry projects. He has also been an advisor to governments and companies on their climate, forestry, and agricultural strategies, including as lead expert for four countries' Nationally Determined Contributions under the Paris Climate Accords.</p>
-      </div>
-    `,
-  },
-  {
-    eventTime: '2024-03-14T22:00:00.000Z',
-    eventURL: 'https://google.com/',
-    id: 2,
-    moduleId: 6,
-    name: '1:1 Session',
-    links: [
-      { label: '1:1 Session Slides', url: 'https://google.com/' },
-      { label: '1:1 Session Recording', url: 'https://google.com/' },
-    ],
-    additionalLinks: [
-      { label: 'Preparation Materials', url: 'https://google.com/' },
-      { label: 'Additional Resources', url: 'https://google.com/' },
-    ],
-    callDescription: `
-      <div>
-        <p>Clicking "Join" will open up a browser window to join a Zoom video call.</p>
-        <p>For this Live Session you will need:</p>
-        <ul>
-          <li>An internet connection – broadband wired or wireless (3G or 4G/LTE)</li>
-          <li>Speakers and a microphone – built-in, USB plug-in, or wireless Bluetooth</li>
-          <li>A webcam or HD webcam - built-in, USB plug-in</li>
-        </ul>
-      </div>
-    `,
-    description: `
-      <div>
-        <h3>Details</h3>
-        <p>This week's one-on-one session will focus on reviewing Budget Template.</p>
-        <p>Please ensure to complete all the Stakeholders & Co-Benefits questions for the Feasibility Study by Friday 3rd November.</p>
-      </div>
-    `,
-  },
-];
-
-const mockModules: Module[] = [
-  {
-    dateRange: 'Week of 2/24 - 3/1',
-    description: `
-      <div>
-        <p>The purpose of this module is to welcome all participants, share an overview of each project, and set some goals for the Accelerator program.</p>
-        <p>By the end of this week, you should be equipped with the following:</p>
-        <ul>
-          <li>Who’s who — within both Terraformation and your Accelerator cohort</li>
-          <li>Shared goals - holding yourselves accountable to your peers on what you hope to achieve</li>
-        </ul>
-      </div>
-    `,
-    id: 1,
-    name: 'Module 1',
-    title: 'Kick-Off',
-    contents: [
-      {
-        content: '',
-        dueDate: '2024-03-21T07:00:00.000Z',
-        id: 1,
-        moduleId: 6,
-        title: 'Module 6 Feasibility Questions',
-        url: 'https://google.com/',
-      },
-      {
-        content: '',
-        dueDate: null,
-        id: 2,
-        moduleId: 6,
-        title: 'Preparation Materials',
-        url: 'https://google.com/',
-      },
-      {
-        content: '',
-        dueDate: null,
-        id: 3,
-        moduleId: 6,
-        title: 'Live Session Slides',
-        url: 'https://google.com/',
-      },
-      {
-        content: `
-          <div>
-            <ul>
-              <li><a href="#">Verified Carbon Standard</a></li>
-              <li><a href="#">Methodology For Afforestation, Reforestation and Revegetation Projects</a></li>
-              <li><a href="#">Plan Vivo</a></li>
-              <li><a href="#">AFOLU Non-Permanence Risk Tool</a></li>
-              <li><a href="#">Climate Change: Atmospheric Carbon Dioxide</a></li>
-              <li><a href="#">En-ROADS - Climate Interactive</a></li>
-              <li><a href="#">Tool for the Demonstration and Assessment of Additionality in VCS Agriculture, Forestry and Other Land Use (Afolu) Project Activities</a></li>
-            </ul>
-          </div>
-        `,
-        dueDate: null,
-        id: 4,
-        moduleId: 6,
-        title: 'Additional Resources',
-        url: 'https://google.com/',
-      },
-    ],
-    events: [
-      {
-        eventTime: '2024-03-16T22:00:00.000Z',
-        id: 1,
-        moduleId: 6,
-        name: 'Live Session',
-      },
-      {
-        eventTime: '2024-03-14T22:00:00.000Z',
-        id: 2,
-        moduleId: 6,
-        name: '1:1 Session',
-      },
-    ],
-  },
-  {
-    dateRange: 'Week of 3/3 - 3/10',
-    description: `
-      <div>
-        <p>The purpose of this module is to introduce you to carbon market basics and help you understand what a carbon project entails. After this session, you will be able to complete the deliverable which is the Carbon Eligibility questions for the Feasibility Study.</p>
-        <p>By the end of this module, you should be equipped with the following:</p>
-        <ul>
-          <li>Knowledge of the major carbon standards (Verra/VCS, Plan Vivo, etc)</li>
-          <li>Knowledge of the different types of carbon projects (Afforestation, Reforestation and Revegetation (ARR), Improved Forest Management (IFM), Avoided Deforestation)</li>
-          <li>A good understanding of who is involved in a carbon project (project proponent, land owner, investors, buyers…)</li>
-          <li>Some familiarity with the timeline of a carbon project</li>
-          <li>New knowledge about Feasibility Studies and Project Design Documents (PDD)</li>
-          <li>An understanding of why it is important to provide high-quality due diligence information, in order to produce the best Feasibility Studies possible for your project and provide you with better chances to get selected and registered.</li>
-        </ul>
-      </div>
-    `,
-    id: 2,
-    name: 'Module 2',
-    title: 'Introduction to Carbon Projects',
-    contents: [
-      {
-        content: '',
-        dueDate: '2024-03-21T07:00:00.000Z',
-        id: 1,
-        moduleId: 6,
-        title: 'Module 6 Feasibility Questions',
-        url: 'https://google.com/',
-      },
-      {
-        content: '',
-        dueDate: null,
-        id: 2,
-        moduleId: 6,
-        title: 'Preparation Materials',
-        url: 'https://google.com/',
-      },
-      {
-        content: '',
-        dueDate: null,
-        id: 3,
-        moduleId: 6,
-        title: 'Live Session Slides',
-        url: 'https://google.com/',
-      },
-      {
-        content: `
-          <div>
-            <ul>
-              <li><a href="#">Verified Carbon Standard</a></li>
-              <li><a href="#">Methodology For Afforestation, Reforestation and Revegetation Projects</a></li>
-              <li><a href="#">Plan Vivo</a></li>
-              <li><a href="#">AFOLU Non-Permanence Risk Tool</a></li>
-              <li><a href="#">Climate Change: Atmospheric Carbon Dioxide</a></li>
-              <li><a href="#">En-ROADS - Climate Interactive</a></li>
-              <li><a href="#">Tool for the Demonstration and Assessment of Additionality in VCS Agriculture, Forestry and Other Land Use (Afolu) Project Activities</a></li>
-            </ul>
-          </div>
-        `,
-        dueDate: null,
-        id: 4,
-        moduleId: 6,
-        title: 'Additional Resources',
-        url: 'https://google.com/',
-      },
-    ],
-    events: [
-      {
-        eventTime: '2024-03-16T22:00:00.000Z',
-        id: 1,
-        moduleId: 6,
-        name: 'Live Session',
-      },
-      {
-        eventTime: '2024-03-14T22:00:00.000Z',
-        id: 2,
-        moduleId: 6,
-        name: '1:1 Session',
-      },
-    ],
-  },
-  {
-    dateRange: 'Week of 3/12 - 3/17',
-    description: `
-      <div>
-        <p>The purpose of this module is to introduce you to the legal frameworks needed to register a carbon project. After this session, you will be able to complete the deliverable which is the Legal Eligibility questions for the Feasibility Study.</p>
-        <p>By the end of this module, you should be equipped with the following:</p>
-        <ul>
-          <li>Role of Terraformation Legal Department</li>
-          <li>Importance of Land Tenure</li>
-          <li>Overview of Legal Agreements</li>
-          <li>International Compliance Obligations</li>
-        </ul>
-      </div>
-    `,
-    id: 3,
-    name: 'Module 3',
-    title: 'Legal Eligibility',
-    contents: [
-      {
-        content: '',
-        dueDate: '2024-03-21T07:00:00.000Z',
-        id: 1,
-        moduleId: 6,
-        title: 'Module 6 Feasibility Questions',
-        url: 'https://google.com/',
-      },
-      {
-        content: '',
-        dueDate: null,
-        id: 2,
-        moduleId: 6,
-        title: 'Preparation Materials',
-        url: 'https://google.com/',
-      },
-      {
-        content: '',
-        dueDate: null,
-        id: 3,
-        moduleId: 6,
-        title: 'Live Session Slides',
-        url: 'https://google.com/',
-      },
-      {
-        content: `
-          <div>
-            <ul>
-              <li><a href="#">Verified Carbon Standard</a></li>
-              <li><a href="#">Methodology For Afforestation, Reforestation and Revegetation Projects</a></li>
-              <li><a href="#">Plan Vivo</a></li>
-              <li><a href="#">AFOLU Non-Permanence Risk Tool</a></li>
-              <li><a href="#">Climate Change: Atmospheric Carbon Dioxide</a></li>
-              <li><a href="#">En-ROADS - Climate Interactive</a></li>
-              <li><a href="#">Tool for the Demonstration and Assessment of Additionality in VCS Agriculture, Forestry and Other Land Use (Afolu) Project Activities</a></li>
-            </ul>
-          </div>
-        `,
-        dueDate: null,
-        id: 4,
-        moduleId: 6,
-        title: 'Additional Resources',
-        url: 'https://google.com/',
-      },
-    ],
-    events: [
-      {
-        eventTime: '2024-03-16T22:00:00.000Z',
-        id: 1,
-        moduleId: 6,
-        name: 'Live Session',
-      },
-      {
-        eventTime: '2024-03-14T22:00:00.000Z',
-        id: 2,
-        moduleId: 6,
-        name: '1:1 Session',
-      },
-    ],
-  },
-];
+export type ListModulesResponsePayload =
+  paths[typeof MODULES_ENDOINT]['get']['responses'][200]['content']['application/json'];
+export type GetModuleResponsePayload =
+  paths[typeof MODULE_ENDOINT]['get']['responses'][200]['content']['application/json'];
+export type ImportModuleResponsePayload =
+  paths[typeof MODULES_IMPORT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 /**
- * List all modules for a project
+ * List all modules
  */
-const list = async (projectId: number | null): Promise<Response2<ModulesData | null>> => {
-  return {
-    requestSucceeded: true,
-    data: {
-      modules: mockModules,
-    },
-  };
+const list = (): Promise<Response2<ListModulesResponsePayload>> => {
+  return HttpService.root(MODULES_ENDOINT).get2<ListModulesResponsePayload>();
 };
 
 /**
- * Get module data for a specific module / project ID.
+ * Get module data
  */
-const get = async (moduleId: number): Promise<Response2<ModuleData | null>> => {
-  const module = mockModules.find((_module) => _module.id === moduleId);
-  return {
-    requestSucceeded: true,
-    data: {
-      module,
-    },
-  };
+const get = async (moduleId: number): Promise<Response2<GetModuleResponsePayload>> => {
+  return HttpService.root(MODULE_ENDOINT).get2<GetModuleResponsePayload>({
+    urlReplacements: { '{moduleId}': `${moduleId}` },
+  });
 };
 
 /**
- * Get module event data for a specific module event.
+ * import modules
  */
-const getEvent = async (eventId: number): Promise<Response2<ModuleEventData | null>> => {
-  const event = mockEvents.find((_event) => _event.id === eventId);
-  return {
-    requestSucceeded: true,
-    data: {
-      event,
-    },
+const importModules = async (file: File): Promise<ImportModuleResponsePayload> => {
+  const entity = new FormData();
+  entity.append('file', file);
+  const headers = { 'content-type': 'multipart/form-data' };
+
+  const serverResponse = await HttpService.root(MODULES_IMPORT_ENDPOINT).post({
+    entity,
+    headers,
+  });
+
+  return serverResponse.data;
+};
+
+const search = async (
+  search?: SearchNodePayload,
+  sortOrder?: SearchSortOrder
+): Promise<ModuleSearchResult[] | null> => {
+  const searchParams: SearchRequestPayload = {
+    prefix: 'projects.participant.cohort.cohortModules.module',
+    fields: ['id', 'name', 'cohortModules.cohort_id', 'deliverables.id'],
+    search: search ?? { operation: 'and', children: [] },
+    sortOrder: [sortOrder ?? { field: 'name' }],
+    count: 0,
   };
+
+  const response: SearchResponseElement[] | null = await SearchService.search(searchParams);
+
+  if (!response) {
+    return null;
+  }
+
+  return response.map((result: SearchResponseElement) => {
+    const { id, name, cohortModules, deliverables } = result;
+
+    return {
+      id,
+      name,
+      cohortsQuantity: Array.isArray(cohortModules) ? cohortModules.length : 0,
+      deliverablesQuantity: Array.isArray(deliverables) ? deliverables.length : 0,
+    } as ModuleSearchResult;
+  });
 };
 
 const ModuleService = {
   get,
-  getEvent,
   list,
+  importModules,
+  search,
 };
 
 export default ModuleService;

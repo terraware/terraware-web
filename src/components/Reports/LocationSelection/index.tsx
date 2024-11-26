@@ -78,8 +78,8 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                 validate && !(location as ReportSeedBank | ReportNursery).buildStartedDate
                   ? strings.REQUIRED_FIELD
                   : validate && !buildStartedDateValid(location as ReportSeedBank | ReportNursery)
-                  ? strings.FACILITY_BUILD_START_DATE_INVALID
-                  : ''
+                    ? strings.FACILITY_BUILD_START_DATE_INVALID
+                    : ''
               }
             />
           </Grid>
@@ -102,8 +102,8 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                 validate && !(location as ReportSeedBank | ReportNursery).buildCompletedDate
                   ? strings.REQUIRED_FIELD
                   : validate && !buildCompletedDateValid(location as ReportSeedBank | ReportNursery)
-                  ? strings.FACILITY_BUILD_COMPLETION_DATE_INVALID
-                  : ''
+                    ? strings.FACILITY_BUILD_COMPLETION_DATE_INVALID
+                    : ''
               }
             />
           </Grid>
@@ -125,8 +125,8 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                 validate && !(location as ReportSeedBank | ReportNursery).operationStartedDate
                   ? strings.REQUIRED_FIELD
                   : validate && !operationStartedDateValid(location as ReportSeedBank | ReportNursery)
-                  ? strings.FACILITY_OPERATION_START_DATE_INVALID
-                  : ''
+                    ? strings.FACILITY_OPERATION_START_DATE_INVALID
+                    : ''
               }
             />
           </Grid>

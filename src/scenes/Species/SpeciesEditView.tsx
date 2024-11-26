@@ -1,25 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
+import { DateTime } from 'luxon';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers/hooks';
+import {
+  requestAddManyParticipantProjectSpecies,
+  requestDeleteManyParticipantProjectSpecies,
+} from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
+import {
+  selectParticipantProjectSpeciesAddManyRequest,
+  selectParticipantProjectSpeciesDeleteManyRequest,
+} from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
 import { SpeciesService } from 'src/services';
+import { CreateParticipantProjectSpeciesRequestPayload } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import { ProjectSpecies } from './AddToProjectModal';
+
 function initSpecies(species?: Species): Species {
+  const now = DateTime.now().toISO();
   return (
     species ?? {
+      createdTime: now,
+      modifiedTime: now,
       scientificName: '',
       id: -1,
     }
@@ -29,7 +45,7 @@ function initSpecies(species?: Species): Species {
 export default function SpeciesEditView(): JSX.Element {
   const theme = useTheme();
   const [species, setSpecies] = useState<Species>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
   const { speciesId } = useParams<{ speciesId: string }>();
@@ -37,6 +53,40 @@ export default function SpeciesEditView(): JSX.Element {
   const [record, setRecord, onChange] = useForm<Species>(initSpecies());
   const snackbar = useSnackbar();
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
+  const [addedProjectsSpecies, setAddedProjectsSpecies] = useState<ProjectSpecies[]>();
+  const [removedProjectsIds, setRemovedProjectsIds] = useState<number[]>();
+
+  const [addRequestId, setAddRequestId] = useState<string>('');
+  const [removeRequestId, setRemoveRequestId] = useState<string>('');
+  const addedResult = useAppSelector(selectParticipantProjectSpeciesAddManyRequest(addRequestId));
+  const removedResult = useAppSelector(selectParticipantProjectSpeciesDeleteManyRequest(removeRequestId));
+  const dispatch = useAppDispatch();
+
+  const onRemoveExistingHandler = (removedIds: number[]) => {
+    setRemovedProjectsIds(removedIds);
+  };
+
+  const onRemoveNewHandler = (removedIds: number[]) => {
+    setAddedProjectsSpecies((oldProjectsSpecies: ProjectSpecies[] | undefined) => {
+      const newProjectSpecies = oldProjectsSpecies?.filter((oPS) => !removedIds.includes(oPS.project.id));
+      return newProjectSpecies;
+    });
+  };
+
+  const onAddHandler = (addedProjectSpecies: ProjectSpecies[]) => {
+    setAddedProjectsSpecies((oldProjectSpecies: ProjectSpecies[] | undefined) => {
+      return oldProjectSpecies ? [...oldProjectSpecies, ...addedProjectSpecies] : addedProjectSpecies;
+    });
+  };
+
+  useEffect(() => {
+    if (removedResult?.status === 'success') {
+      goToSpecies(record.id);
+    }
+    if (addedResult?.status === 'success') {
+      goToSpecies(record.id);
+    }
+  }, [addedResult, removedResult]);
 
   const gridSize = () => {
     if (isMobile) {
@@ -45,11 +95,14 @@ export default function SpeciesEditView(): JSX.Element {
     return 4;
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const goToSpecies = (id?: number) => {
-    const speciesLocation = {
-      pathname: APP_PATHS.SPECIES_DETAILS.replace(':speciesId', speciesId.toString()),
-    };
-    history.push(speciesLocation);
+    if (speciesId) {
+      const speciesLocation = {
+        pathname: APP_PATHS.SPECIES_DETAILS.replace(':speciesId', speciesId.toString()),
+      };
+      navigate(speciesLocation);
+    }
   };
 
   useEffect(() => {
@@ -58,29 +111,35 @@ export default function SpeciesEditView(): JSX.Element {
       if (speciesResponse.requestSucceeded) {
         setSpecies(speciesResponse.species);
       } else {
-        history.push(APP_PATHS.SPECIES);
+        navigate(APP_PATHS.SPECIES);
       }
     };
-    if (selectedOrganization && speciesId) {
+    if (selectedOrganization && selectedOrganization.id !== -1 && speciesId) {
       getSpecies();
     }
-  }, [speciesId, selectedOrganization, history]);
+  }, [speciesId, selectedOrganization, navigate]);
 
   useEffect(() => {
+    const now = DateTime.now().toISO();
     setRecord({
       scientificName: species?.scientificName || '',
       commonName: species?.commonName,
       id: species?.id ?? -1,
       familyName: species?.familyName,
       conservationCategory: species?.conservationCategory,
-      growthForm: species?.growthForm,
+      growthForms: species?.growthForms,
       seedStorageBehavior: species?.seedStorageBehavior,
       ecosystemTypes: species?.ecosystemTypes,
       rare: species?.rare,
+      createdTime: species?.createdTime ?? now,
+      modifiedTime: species?.modifiedTime ?? now,
     });
   }, [species, setRecord, selectedOrganization]);
 
   const saveSpecies = async () => {
+    if (selectedOrganization.id === -1) {
+      return;
+    }
     if (!record.scientificName) {
       setNameFormatError(strings.REQUIRED_FIELD);
     } else {
@@ -88,7 +147,27 @@ export default function SpeciesEditView(): JSX.Element {
       const response = await SpeciesService.updateSpecies(record, selectedOrganization.id);
       setIsBusy(false);
       if (response.requestSucceeded) {
-        goToSpecies(record.id);
+        if (removedProjectsIds) {
+          const request = dispatch(requestDeleteManyParticipantProjectSpecies(removedProjectsIds));
+          setRemoveRequestId(request.requestId);
+        }
+        if (addedProjectsSpecies && speciesId) {
+          const createRequests = addedProjectsSpecies.map((aPS) => {
+            return {
+              projectId: aPS.project.id,
+              speciesId: Number(speciesId),
+              speciesNativeCategory: aPS.nativeCategory,
+            } as CreateParticipantProjectSpeciesRequestPayload;
+          });
+          const request = dispatch(requestAddManyParticipantProjectSpecies(createRequests));
+          setAddRequestId(request.requestId);
+        }
+        if (
+          (!removedProjectsIds || !removedProjectsIds.length) &&
+          (!addedProjectsSpecies || !addedProjectsSpecies.length)
+        ) {
+          goToSpecies(record.id);
+        }
       } else {
         snackbar.toastError();
       }
@@ -125,6 +204,11 @@ export default function SpeciesEditView(): JSX.Element {
             setRecord={setRecord}
             nameFormatError={nameFormatError}
             setNameFormatError={setNameFormatError}
+            onAdd={onAddHandler}
+            onRemoveExisting={onRemoveExistingHandler}
+            onRemoveNew={onRemoveNewHandler}
+            addedProjectsSpecies={addedProjectsSpecies}
+            removedProjectsIds={removedProjectsIds}
           />
         </Box>
       </PageForm>

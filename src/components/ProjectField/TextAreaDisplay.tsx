@@ -1,24 +1,37 @@
 import React from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import { ProjectFieldProps } from '.';
-import GridEntryWrapper from './GridEntryWrapper';
 
 const ProjectFieldTextAreaDisplay = ({ label, value }: ProjectFieldProps) => {
   const theme = useTheme();
 
   return (
-    <GridEntryWrapper md={6} height={'144px'}>
+    <Grid
+      item
+      xs={12}
+      md={6}
+      margin={`${theme.spacing(2)} 0`}
+      sx={{
+        minHeight: '144px',
+      }}
+    >
       <Box paddingX={theme.spacing(2)}>
         <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={600} marginBottom={theme.spacing(1)}>
           {label}
         </Typography>
-        <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={400}>
+        <Typography
+          fontSize={'16px'}
+          lineHeight={'24px'}
+          fontWeight={400}
+          whiteSpace='pre-wrap'
+          sx={{ wordBreak: 'break-word' }}
+        >
           {value}
         </Typography>
       </Box>
-    </GridEntryWrapper>
+    </Grid>
   );
 };
 

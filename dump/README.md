@@ -18,7 +18,7 @@ Generally, the dumps here will be updated by a backend engineer since they'll be
 
 ### Restoring the database
 
-```
+```shell
 dropdb terraware
 createdb terraware
 psql terraware < dump.sql
@@ -35,6 +35,12 @@ DELETE FROM jobrunr_recurring_jobs;
 
 ### Dumping the local database
 
-```
+```shell
 pg_dump -O -x -f dump.sql terraware
+```
+
+OR
+
+```shell
+docker compose exec postgres pg_dump -O -x -U postgres terraware > dump.sql
 ```

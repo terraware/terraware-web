@@ -1,133 +1,84 @@
 import { Action, combineReducers } from '@reduxjs/toolkit';
 
-import { cohortsReducer, cohortsRequestsReducer } from 'src/redux/features/cohorts/cohortsSlice';
-import {
-  deliverablesEditReducer,
-  deliverablesReducer,
-  deliverablesSearchReducer,
-} from 'src/redux/features/deliverables/deliverablesSlice';
-import {
-  draftPlantingSiteCreateReducer,
-  draftPlantingSiteEditReducer,
-  draftPlantingSiteGetReducer,
-  draftPlantingSiteSearchReducer,
-} from 'src/redux/features/draftPlantingSite/draftPlantingSiteSlice';
-import {
-  globalRolesUserUpdateReducer,
-  globalRolesUsersListReducer,
-  globalRolesUsersRemoveReducer,
-} from 'src/redux/features/globalRoles/globalRolesSlice';
-import { projectsReducer, projectsRequestsReducer } from 'src/redux/features/projects/projectsSlice';
-import { reportsSettingsReducer } from 'src/redux/features/reportsSettings/reportsSettingsSlice';
-import { speciesProjectsReducer } from 'src/redux/features/species/speciesProjectsSlice';
-
-import { acceleratorOrgsReducer } from './features/accelerator/acceleratorSlice';
-import { accessionsReducer } from './features/accessions/accessionsSlice';
-import { appVersionReducer } from './features/appVersion/appVersionSlice';
-import { batchesReducer, batchesRequestsReducer } from './features/batches/batchesSlice';
+import acceleratorReducers from './features/accelerator/acceleratorSlice';
+import accessionsReducers from './features/accessions/accessionsSlice';
+import appVersionReducers from './features/appVersion/appVersionSlice';
+import applicationReducers from './features/application/applicationSlice';
+import batchesReducers from './features/batches/batchesSlice';
+import cohortModuleReducers from './features/cohortModules/cohortModulesSlice';
+import cohortsReducers from './features/cohorts/cohortsSlice';
+import deliverablesReducers from './features/deliverables/deliverablesSlice';
 import documentProducerReducers from './features/documentProducer';
-import { messageReducer } from './features/message/messageSlice';
-import { moduleEventReducer, moduleListReducer, moduleReducer } from './features/modules/modulesSlice';
-import {
-  observationsReducer,
-  observationsResultsReducer,
-  plantingSiteObservationsResultsReducer,
-  replaceObservationPlotReducer,
-  rescheduleObservationReducer,
-  scheduleObservationReducer,
-} from './features/observations/observationsSlice';
-import {
-  participantProjectReducer,
-  participantProjectUpdateReducer,
-  participantProjectsListReducer,
-} from './features/participantProjects/participantProjectsSlice';
-import {
-  participantCreateReducer,
-  participantDeleteReducer,
-  participantListReducer,
-  participantReducer,
-  participantUpdateReducer,
-} from './features/participants/participantsSlice';
-import {
-  plantingsReducer,
-  updatePlantingCompletedReducer,
-  updatePlantingsCompletedReducer,
-} from './features/plantings/plantingsSlice';
-import { scoreListReducer, scoresUpdateReducer } from './features/scores/scoresSlice';
-import { snackbarReducer } from './features/snackbar/snackbarSlice';
-import { speciesReducer } from './features/species/speciesSlice';
-import { subLocationsReducer } from './features/subLocations/subLocationsSlice';
-import {
-  monitoringPlotsReducer,
-  plantingSitesSearchResultsReducer,
-  sitePopulationReducer,
-  siteReportedPlantsReducer,
-  trackingReducer,
-} from './features/tracking/trackingSlice';
-import { userAnalyticsReducer } from './features/user/userAnalyticsSlice';
-import { usersByEmailReducer, usersReducer } from './features/user/usersSlice';
-import { votesReducer, votesRequestsReducer } from './features/votes/votesSlice';
+import draftPlantingSiteReducers from './features/draftPlantingSite/draftPlantingSiteSlice';
+import eventReducers from './features/events/eventsSlice';
+import globalRolesReducers from './features/globalRoles/globalRolesSlice';
+import locationReducers from './features/location/locationSlice';
+import messageReducers from './features/message/messageSlice';
+import moduleReducers from './features/modules/modulesSlice';
+import observationsReducers from './features/observations/observationsSlice';
+import organizationUsersReducers from './features/organizationUser/organizationUsersSlice';
+import organizationsReducers from './features/organizations/organizationsSlice';
+import participantProjectSpeciesReducers from './features/participantProjectSpecies/participantProjectSpeciesSlice';
+import participantProjectsReducers from './features/participantProjects/participantProjectsSlice';
+import participantsReducers from './features/participants/participantsSlice';
+import plantingSiteReducers from './features/plantingSite/plantingSiteSlice';
+import plantingsReducers from './features/plantings/plantingsSlice';
+import projectSpeciesReducers from './features/projectSpecies/projectSpeciesSlice';
+import projectToDoReducers from './features/projectToDo/projectToDoSlice';
+import projectsReducers from './features/projects/projectsSlice';
+import reportsSettingsReducers from './features/reportsSettings/reportsSettingsSlice';
+import scoresReducers from './features/scores/scoresSlice';
+import snackbarReducers from './features/snackbar/snackbarSlice';
+import speciesReducers from './features/species';
+import speciesAsyncThunkReducers from './features/species/speciesSlice';
+import subLocationsReducers from './features/subLocations/subLocationsSlice';
+import supportReducers from './features/support/supportSlice';
+import trackingReducers from './features/tracking/trackingSlice';
+import userAnalyticsReducers from './features/user/userAnalyticsSlice';
+import usersReducers from './features/user/usersSlice';
+import userInternalInterestsReducers from './features/userInternalInterests/userInternalInterestsSlice';
+import votesReducers from './features/votes/votesSlice';
 
 // assembly of app reducers
 export const reducers = {
-  acceleratorOrgs: acceleratorOrgsReducer,
-  accessions: accessionsReducer,
-  appVersion: appVersionReducer,
-  batches: batchesReducer,
-  batchesRequests: batchesRequestsReducer,
-  cohorts: cohortsReducer,
-  cohortsRequests: cohortsRequestsReducer,
-  deliverablesEdit: deliverablesEditReducer,
-  deliverablesSearch: deliverablesSearchReducer,
-  deliverables: deliverablesReducer,
+  ...acceleratorReducers,
+  ...accessionsReducers,
+  ...applicationReducers,
+  ...appVersionReducers,
+  ...batchesReducers,
+  ...cohortModuleReducers,
+  ...cohortsReducers,
+  ...deliverablesReducers,
   ...documentProducerReducers,
-  draftPlantingSiteCreate: draftPlantingSiteCreateReducer,
-  draftPlantingSiteEdit: draftPlantingSiteEditReducer,
-  draftPlantingSiteGet: draftPlantingSiteGetReducer,
-  draftPlantingSiteSearch: draftPlantingSiteSearchReducer,
-  globalRolesUsersList: globalRolesUsersListReducer,
-  globalRolesUsersRemove: globalRolesUsersRemoveReducer,
-  globalRolesUserUpdate: globalRolesUserUpdateReducer,
-  message: messageReducer,
-  module: moduleReducer,
-  moduleEvent: moduleEventReducer,
-  moduleList: moduleListReducer,
-  monitoringPlots: monitoringPlotsReducer,
-  observations: observationsReducer,
-  observationsResults: observationsResultsReducer,
-  participantCreate: participantCreateReducer,
-  participantDelete: participantDeleteReducer,
-  participant: participantReducer,
-  participantProject: participantProjectReducer,
-  participantProjectsList: participantProjectsListReducer,
-  participantProjectUpdate: participantProjectUpdateReducer,
-  participantList: participantListReducer,
-  participantUpdate: participantUpdateReducer,
-  plantingSiteObservationsResults: plantingSiteObservationsResultsReducer,
-  plantingSitesSearchResults: plantingSitesSearchResultsReducer,
-  plantings: plantingsReducer,
-  projects: projectsReducer,
-  projectsRequests: projectsRequestsReducer,
-  replaceObservationPlot: replaceObservationPlotReducer,
-  reportsSettings: reportsSettingsReducer,
-  rescheduleObservation: rescheduleObservationReducer,
-  scheduleObservation: scheduleObservationReducer,
-  scoreList: scoreListReducer,
-  scoresUpdate: scoresUpdateReducer,
-  sitePopulation: sitePopulationReducer,
-  siteReportedPlantsResults: siteReportedPlantsReducer,
-  snackbar: snackbarReducer,
-  species: speciesReducer,
-  speciesProjects: speciesProjectsReducer,
-  subLocations: subLocationsReducer,
-  tracking: trackingReducer,
-  updatePlantingCompleted: updatePlantingCompletedReducer,
-  updatePlantingsCompleted: updatePlantingsCompletedReducer,
-  userAnalytics: userAnalyticsReducer,
-  users: usersReducer,
-  usersByEmail: usersByEmailReducer,
-  votes: votesReducer,
-  votesRequests: votesRequestsReducer,
+  ...draftPlantingSiteReducers,
+  ...eventReducers,
+  ...globalRolesReducers,
+  ...locationReducers,
+  ...messageReducers,
+  ...moduleReducers,
+  ...observationsReducers,
+  ...organizationsReducers,
+  ...organizationUsersReducers,
+  ...participantsReducers,
+  ...participantProjectsReducers,
+  ...participantProjectSpeciesReducers,
+  ...plantingsReducers,
+  ...plantingSiteReducers,
+  ...projectsReducers,
+  ...projectSpeciesReducers,
+  ...projectToDoReducers,
+  ...reportsSettingsReducers,
+  ...scoresReducers,
+  ...snackbarReducers,
+  ...speciesAsyncThunkReducers,
+  ...speciesReducers,
+  ...subLocationsReducers,
+  ...supportReducers,
+  ...trackingReducers,
+  ...userAnalyticsReducers,
+  ...userInternalInterestsReducers,
+  ...usersReducers,
+  ...votesReducers,
 };
 const combinedReducers = combineReducers(reducers);
 

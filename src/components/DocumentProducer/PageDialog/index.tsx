@@ -1,3 +1,5 @@
+import React from 'react';
+
 import DialogBox, { Props as DialogBoxProps } from '@terraware/web-components/components/DialogBox/DialogBox';
 
 import PageWorkflow from 'src/components/DocumentProducer/PageWorkflow';

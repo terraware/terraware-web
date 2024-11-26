@@ -1,15 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button, Icon } from '@terraware/web-components';
 
 import PhotosList from 'src/components/common/PhotosList';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { LocationService } from 'src/services';
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
-import { Country } from 'src/types/Country';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -22,7 +19,7 @@ type DetailPanelProps = {
 };
 export default function DetailPanel(props: DetailPanelProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const { activeLocale } = useLocalization();
+  const { countries } = useLocalization();
   const { accession, reload } = props;
   const userCanEdit = !isContributor(selectedOrganization);
   const theme = useTheme();
@@ -51,30 +48,9 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
     marginBottom: theme.spacing(3),
   };
 
-  const useStyles = makeStyles(() => ({
-    folderIcon: {
-      fill: theme.palette.TwClrIcn,
-      marginRight: theme.spacing(1),
-    },
-  }));
-
   const gridLeftSide = isMobile ? 12 : 2;
   const gridRightSide = isMobile ? 12 : 10;
   const [openEditAccessionModal, setOpenEditAccessionModal] = useState(false);
-  const [countries, setCountries] = useState<Country[]>();
-  const classes = useStyles();
-
-  useEffect(() => {
-    if (activeLocale) {
-      const populateCountries = async () => {
-        const response = await LocationService.getCountries();
-        if (response) {
-          setCountries(response);
-        }
-      };
-      populateCountries();
-    }
-  }, [activeLocale]);
 
   const getCollectionSource = () => {
     const source = accession?.collectionSource;
@@ -168,7 +144,13 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
               {accession.collectionSiteNotes && (
                 <Box marginTop={2} display='flex'>
                   <Typography>
-                    <Icon name='iconFile' className={classes.folderIcon} />
+                    <Icon
+                      name='iconFile'
+                      style={{
+                        marginRight: theme.spacing(1),
+                        fill: theme.palette.TwClrIcn,
+                      }}
+                    />
                     {accession.collectionSiteNotes}
                   </Typography>
                 </Box>
@@ -195,11 +177,21 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
               {`${strings.COLLECTED_FROM}${numPlants === undefined ? '' : ' ' + numPlants}${
                 collectionSource && collectionSource !== 'Other' ? ' ' + collectionSource : ''
               } ${isNotPlural ? strings.PLANT : strings.PLANTS.toLowerCase()}`}
-              {accession.plantId ? <Typography>{`${strings.PLANT_ID}: ${accession.plantId}`}</Typography> : ''}
+              {accession.plantId ? (
+                <Typography>{`${strings.PLANT_ID_IF_APPLICABLE}: ${accession.plantId}`}</Typography>
+              ) : (
+                ''
+              )}
               {accession.notes ? (
                 <Box marginTop={2} display='flex'>
                   <Typography>
-                    <Icon name='iconFile' className={classes.folderIcon} />
+                    <Icon
+                      name='iconFile'
+                      style={{
+                        marginRight: theme.spacing(1),
+                        fill: theme.palette.TwClrIcn,
+                      }}
+                    />
                     {accession.notes}
                   </Typography>
                 </Box>

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
-import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
@@ -34,7 +33,9 @@ const NurseryRouter = () => {
   }, [dispatch, selectedOrganization.id, activeLocale]);
 
   const reloadSpecies = useCallback(() => {
-    void dispatch(requestSpecies(selectedOrganization.id));
+    if (selectedOrganization.id !== -1) {
+      void dispatch(requestSpecies(selectedOrganization.id));
+    }
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
@@ -57,17 +58,14 @@ const NurseryRouter = () => {
   }, [plantingSites]);
 
   return (
-    <Switch>
-      <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS}>
-        <NurseryPlantingsAndWithdrawalsView reloadTracking={reloadTracking} />
-      </Route>
-      <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS}>
-        <NurseryWithdrawalsDetailsView species={species || []} plantingSubzoneNames={plantingSubzoneNames} />
-      </Route>
-      <Route exact path={APP_PATHS.NURSERY_REASSIGNMENT}>
-        <NurseryReassignmentView />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path={'/withdrawals'} element={<NurseryPlantingsAndWithdrawalsView reloadTracking={reloadTracking} />} />
+      <Route
+        path={'/withdrawals/:withdrawalId'}
+        element={<NurseryWithdrawalsDetailsView species={species || []} plantingSubzoneNames={plantingSubzoneNames} />}
+      />
+      <Route path={'/reassignment/:deliveryId'} element={<NurseryReassignmentView />} />
+    </Routes>
   );
 };
 

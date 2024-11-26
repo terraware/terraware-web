@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 
-import { Box, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Autocomplete, Button, DropdownItem } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { isKeyHotkey } from 'is-hotkey';
@@ -12,41 +11,10 @@ import strings from 'src/strings';
 import { Section, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValueValue } from 'src/types/documentProducer/VariableValue';
 
-import EditVariableModal from './EditVariableModal';
 import InsertOptionsDropdown from './InsertOptionsDropdown';
 import TextChunk from './TextChunk';
 import TextVariable from './TextVariable';
-import { editorDisplayVariableWithValues, editorValueFromVariableValue, variableValueFromEditorValue } from './helpers';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  editor: {
-    borderRadius: '8px',
-    border: `1px solid ${theme.palette.TwClrBrdrSecondary}`,
-    padding: theme.spacing(1),
-    backgroundColor: theme.palette.TwClrBg,
-    fontFamily: 'Inter',
-    fontSize: '16px',
-    overflow: 'scroll',
-    resize: 'vertical',
-  },
-  placeholder: {
-    top: `${theme.spacing(1)} !important`,
-  },
-  variableDropdown: {
-    background: theme.palette.TwClrBg,
-    borderRadius: '8px',
-  },
-  recommendedVariable: {
-    borderRadius: 0,
-    padding: `0 ${theme.spacing(1)}`,
-    margin: 0,
-    backgroundColor: '#e9e2ba',
-    color: theme.palette.TwClrTxt,
-    fontWeight: 400,
-    minHeight: 'fit-content',
-    minWidth: 'fit-content',
-  },
-}));
+import { editorValueFromVariableValue, variableValueFromEditorValue } from './helpers';
 
 // Required type definitions for slatejs (https://docs.slatejs.org/concepts/12-typescript):
 export type CustomElement = {
@@ -71,8 +39,7 @@ type EditableSectionEditProps = {
   setSectionValues: (values: VariableValueValue[] | undefined) => void;
   allVariables: VariableWithValues[];
   docId: number;
-  onUpdate: () => void;
-  manifestId: number;
+  onEditVariableValue: (variable?: VariableWithValues) => void;
 };
 
 const SectionEdit = ({
@@ -81,18 +48,15 @@ const SectionEdit = ({
   setSectionValues,
   allVariables,
   docId,
-  onUpdate,
-  manifestId,
+  onEditVariableValue,
 }: EditableSectionEditProps): JSX.Element => {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles();
+  const variableDropdownRef = useRef(null);
+
   const [editor] = useState(() => withInlines(withReact(createEditor())));
-  const [openEditVariableModal, setOpenEditVariableModal] = useState<boolean>(false);
-  const [clickedVariable, setClickedVariable] = useState<VariableWithValues>();
   const [insertOptionsDropdownAnchor, setInsertOptionsDropdownAnchor] = useState<HTMLElement | null>(null);
   const [variableToBeInserted, setVariableToBeInserted] = useState<VariableWithValues>();
-  const variableDropdownRef = useRef(null);
 
   const initialValue: Descendant[] = useMemo(() => {
     const editorValue =
@@ -112,11 +76,25 @@ const SectionEdit = ({
 
   const onChange = useCallback(
     (value: Descendant[]) => {
-      setSectionValues(
-        (value[0] as SlateElement).children
-          .filter((v) => v.text === undefined || v.text !== '')
-          .map((v, index) => variableValueFromEditorValue(v, allVariables, index))
-      );
+      const newVariableValues: VariableValueValue[] = [];
+      value.forEach((v) => {
+        const children = (v as SlateElement).children;
+        if (children.length === 1 && children[0].text === '') {
+          newVariableValues.push({
+            id: -1,
+            listPosition: newVariableValues.length,
+            type: 'SectionText',
+            textValue: '\n',
+          });
+        } else {
+          children.forEach((c) => {
+            if (c.text === undefined || c.text !== '') {
+              newVariableValues.push(variableValueFromEditorValue(c, allVariables, newVariableValues.length));
+            }
+          });
+        }
+      });
+      setSectionValues(newVariableValues);
     },
     [allVariables, setSectionValues]
   );
@@ -131,14 +109,13 @@ const SectionEdit = ({
       switch (props.element.type) {
         case 'variable':
           const variable = allVariables.find((v) => v.id === props.element.variableId);
-          const displayValue = variable
-            ? editorDisplayVariableWithValues(variable, ', ', '--', props.element.reference)
-            : '--';
           return (
             <TextVariable
-              icon='iconModule'
+              isEditing
+              icon='iconVariable'
               onClick={() => onEditVariableValue(variable)}
-              displayValue={displayValue}
+              reference={props.element.reference}
+              variable={variable}
               {...props}
             />
           );
@@ -148,14 +125,6 @@ const SectionEdit = ({
     },
     [allVariables]
   );
-
-  const onEditVariableValue = (variable?: VariableWithValues) => {
-    if (variable === undefined) {
-      return;
-    }
-    setClickedVariable(variable);
-    setOpenEditVariableModal(true);
-  };
 
   const insertVariable = useCallback(
     (variable: VariableWithValues, reference?: boolean) => {
@@ -193,27 +162,18 @@ const SectionEdit = ({
           Transforms.move(editor, { unit: 'offset' });
           return;
         }
+        if (isKeyHotkey('enter', nativeEvent)) {
+          event.preventDefault();
+          Transforms.insertNodes(editor, { text: '\n' });
+          return;
+        }
       }
     },
     [editor]
   );
 
-  const variableUpdated = () => {
-    onUpdate();
-    setOpenEditVariableModal(false);
-  };
-
   return (
     <>
-      {openEditVariableModal && clickedVariable && (
-        <EditVariableModal
-          variable={clickedVariable}
-          docId={docId}
-          onFinish={variableUpdated}
-          onCancel={() => setOpenEditVariableModal(false)}
-          manifestId={manifestId}
-        />
-      )}
       {recommendedVariables && recommendedVariables.length > 0 && (
         <>
           <InsertOptionsDropdown
@@ -226,10 +186,9 @@ const SectionEdit = ({
               {strings.RECOMMENDED}:
             </Typography>
             <Box sx={{ display: 'flex', gap: theme.spacing(1), flexWrap: 'wrap' }}>
-              {recommendedVariables.map((variable, index) => (
+              {recommendedVariables.map((variable) => (
                 <Button
                   key={`variable-${variable.id}`}
-                  className={classes.recommendedVariable}
                   rightIcon='iconAdd'
                   priority='ghost'
                   type='productive'
@@ -241,6 +200,16 @@ const SectionEdit = ({
                     } else {
                       insertVariable(variable);
                     }
+                  }}
+                  sx={{
+                    borderRadius: 0,
+                    padding: `0 ${theme.spacing(1)}`,
+                    margin: 0,
+                    backgroundColor: '#e9e2ba',
+                    color: theme.palette.TwClrTxt,
+                    fontWeight: 400,
+                    minHeight: 'fit-content',
+                    minWidth: 'fit-content',
                   }}
                 />
               ))}
@@ -257,11 +226,11 @@ const SectionEdit = ({
         </Typography>
         <Box ref={variableDropdownRef} flexGrow={1}>
           <Autocomplete
-            className={classes.variableDropdown}
             onChange={(value) => {
               if (!value || !(value as DropdownItem).value) {
                 return;
               }
+
               const variable = (value as DropdownItem).value as VariableWithValues;
               if (variable.type === 'Image' || variable.type === 'Table') {
                 setInsertOptionsDropdownAnchor(variableDropdownRef.current);
@@ -274,6 +243,10 @@ const SectionEdit = ({
               label: v.name,
               value: v,
             }))}
+            sx={{
+              background: theme.palette.TwClrBg,
+              borderRadius: '8px',
+            }}
           />
         </Box>
       </Box>
@@ -281,15 +254,24 @@ const SectionEdit = ({
       <Box marginTop={theme.spacing(2)}>
         <Slate editor={editor} initialValue={initialValue} onChange={onChange}>
           <Editable
-            className={classes.editor}
             renderElement={renderElement}
             onKeyDown={onKeyDown}
             placeholder={strings.PLACEHOLDER}
             renderPlaceholder={({ children, attributes }) => (
-              <div className={classes.placeholder} {...attributes}>
+              <Box sx={{ top: `${theme.spacing(1)} !important` }} {...attributes}>
                 {children}
-              </div>
+              </Box>
             )}
+            style={{
+              borderRadius: '8px',
+              border: `1px solid ${theme.palette.TwClrBrdrSecondary}`,
+              padding: theme.spacing(1),
+              backgroundColor: theme.palette.TwClrBg,
+              fontFamily: 'Inter',
+              fontSize: '16px',
+              overflow: 'scroll',
+              resize: 'vertical',
+            }}
           />
         </Slate>
       </Box>

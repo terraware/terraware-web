@@ -25,8 +25,8 @@ export default function AccessionTests() {
     await page.getByLabel('Close').click();
     await page.getByPlaceholder('Collectors').click();
     await page.getByPlaceholder('Collectors').fill('Alex');
-    await page.locator('#collectionSiteName').getByRole('textbox').click();
-    await page.locator('#collectionSiteName').getByRole('textbox').fill("Alex's Mansion");
+    await page.locator('#collectionSiteName').click();
+    await page.locator('#collectionSiteName').fill("Alex's Mansion");
     await page.locator('#collectionSiteLandowner').getByRole('textbox').click();
     await page.locator('#collectionSiteLandowner').getByRole('textbox').fill('Ashtyn');
     await page.getByRole('button', { name: 'Add GPS Coordinates' }).click();
@@ -89,8 +89,7 @@ export default function AccessionTests() {
     await page.getByText('Fresh').click();
     await page.getByPlaceholder('Select...').nth(2).click();
     await page.getByText('Nursery Media').click();
-    await page.locator('input[type="text"]').click();
-    await page.locator('input[type="text"]').fill('5');
+    await page.locator('#seedsTested').getByRole('textbox').fill('5');
     await page.getByRole('button', { name: 'Save' }).click();
     await page.getByRole('button', { name: '#' }).click();
     await page.getByRole('button', { name: 'Edit' }).click();
@@ -125,7 +124,7 @@ export default function AccessionTests() {
       .getByText(/My New Nursery/)
       .nth(0)
       .click();
-    await page.locator('input[type="text"]').fill('300');
+    await page.locator('#withdrawnQuantity').getByRole('textbox').fill('300');
     await page.getByRole('button', { name: 'Add Notes' }).click();
     await page.locator('textarea').fill('Adding some test notes here!');
     await page.locator('#saveWithdraw').click();
@@ -159,8 +158,7 @@ export default function AccessionTests() {
     await page.getByPlaceholder('Select...').first().click();
     await page.getByText('Out-planting').click();
     await page.getByLabel('Seed Count', { exact: true }).check();
-    await page.locator('input[type="text"]').click();
-    await page.locator('input[type="text"]').fill('100');
+    await page.locator('#withdrawnQuantity').getByRole('textbox').fill('100');
     await page.locator('#saveWithdraw').click();
     await expect(page.getByRole('main')).toContainText('95 Grams');
     await expect(page.getByRole('main')).toContainText('~95 ct');
@@ -183,8 +181,7 @@ export default function AccessionTests() {
     await page.getByText('Soil').click();
     await page.getByPlaceholder('Select...').nth(3).click();
     await page.getByText('Soak').click();
-    await page.locator('input[type="text"]').click();
-    await page.locator('input[type="text"]').fill('20');
+    await page.locator('#withdrawnQuantity').getByRole('textbox').fill('20');
     await page.locator('#saveWithdraw').click();
     await expect(page.getByRole('main')).toContainText('75 Grams');
     await expect(page.getByRole('main')).toContainText('~75 ct');
@@ -206,8 +203,7 @@ export default function AccessionTests() {
     await expect(page.getByRole('main')).toContainText('15');
     await page.getByRole('button', { name: 'Edit' }).click();
     await page.getByRole('button', { name: 'Add Observation' }).click();
-    await page.locator('input[type="text"]').nth(2).click();
-    await page.locator('input[type="text"]').nth(2).fill('3');
+    await page.locator('div:nth-child(3) > div:nth-child(2) > div > .textfield > #seedsGerminated > input').fill('3');
     await page.getByLabel('Mark as Complete').check();
     await page.getByRole('button', { name: 'Save' }).click();
     await page.getByRole('button', { name: 'Apply Result' }).click();

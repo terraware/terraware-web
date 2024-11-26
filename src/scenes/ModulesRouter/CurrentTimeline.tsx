@@ -1,43 +1,41 @@
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import React, { Box, Grid, Typography, useTheme } from '@mui/material';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import strings from 'src/strings';
-import { CohortPhaseType } from 'src/types/Cohort';
 
-interface CurrentTimelineProps {
-  cohortPhase?: CohortPhaseType;
-}
+export type TimelineStep = {
+  name: string;
+  description: string;
+};
 
-const CurrentTimeline = ({ cohortPhase }: CurrentTimelineProps) => {
+type CurrentTimelineProps = {
+  steps: TimelineStep[];
+  currentIndex: number;
+};
+
+const CurrentTimeline = ({ steps, currentIndex }: CurrentTimelineProps): JSX.Element => {
   const theme = useTheme();
 
-  // TODO these will probably come from the BE, not sure if they will be attached to the project, or cohort, or some
-  // other data model, so for now they are hard coded.
-  const phases = [
-    {
-      phase: 'Phase 0 - Due Diligence',
-      description: 'Review application, final due diligence reviewing documents from shortlisted cohort.',
-    },
-    {
-      phase: 'Phase 1 - Feasibility Study',
-      description:
-        'Attending modules & 1:1s, filling out Feasibility Study sections, completing deliverables. Possible site visit.',
-    },
-    {
-      phase: 'Phase 2 - PDD Writing & Registration',
-      description: 'PDA signed, PDD writing from FS information, PDD registered on Verra (Under Development & Full).',
-    },
-    {
-      phase: 'Phase 3 - Should not be visible',
-      description: 'Mock desription',
-    },
-    {
-      phase: 'Phase 4 - Should not be visible',
-      description: 'Mock desription',
-    },
-  ];
+  const { isDesktop } = useDeviceInfo();
 
-  const currentPhaseIndex = phases.findIndex((phase) => phase.phase === cohortPhase);
-  const displayPhases = phases.slice(currentPhaseIndex - 1, 3);
+  const sliceTimeline = (steps: TimelineStep[], currentIndex: number): TimelineStep[] => {
+    const numSteps = steps.length;
+    if (numSteps === 0) {
+      return [];
+    }
+    // If index is at the start
+    if (currentIndex === 0) {
+      return steps.slice(0, Math.min(3, numSteps));
+    }
+    // If index is at the end
+    if (currentIndex === numSteps - 1) {
+      return steps.slice(Math.max(0, numSteps - 3), numSteps);
+    }
+    // If index is in the middle
+    return steps.slice(Math.max(0, currentIndex - 1), Math.min(currentIndex + 2, numSteps));
+  };
+
+  const displayPhases = sliceTimeline(steps, currentIndex);
 
   return (
     <Box borderRadius={theme.spacing(1)} padding={theme.spacing(3)} bgcolor={theme.palette.TwClrBgSecondary}>
@@ -46,9 +44,14 @@ const CurrentTimeline = ({ cohortPhase }: CurrentTimelineProps) => {
           <Typography fontWeight={600}>{strings.CURRENT_TIMELINE}</Typography>
         </Grid>
         <Grid item>
-          <Grid display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-            {displayPhases.map((phase, index) => {
-              const isActivePhase = phase.phase === cohortPhase;
+          <Grid
+            display={'flex'}
+            flexDirection={isDesktop ? 'row' : 'column'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+          >
+            {displayPhases.map((step, index) => {
+              const isActivePhase = index === currentIndex;
 
               return (
                 <>
@@ -56,42 +59,48 @@ const CurrentTimeline = ({ cohortPhase }: CurrentTimelineProps) => {
                     <Grid item key={index + 0.5}>
                       <Box
                         borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}
-                        width={'45px'}
+                        borderLeft={`1px solid ${theme.palette.TwClrBgTertiary}`}
+                        height={isDesktop ? undefined : '40px'}
+                        width={isDesktop ? '40px' : undefined}
                         marginX={theme.spacing(2)}
-                        marginTop={theme.spacing(3)}
+                        marginY={isDesktop ? undefined : theme.spacing(3)}
                       />
                     </Grid>
                   ) : null}
                   <Grid
                     item
                     key={index}
-                    color={isActivePhase ? theme.palette.TwClrBaseBlack : theme.palette.TwClrBgTertiary}
+                    color={theme.palette.TwClrBaseBlack}
                     alignSelf={'start'}
+                    xs={isDesktop ? undefined : 12}
                   >
-                    <Box
-                      bgcolor={isActivePhase ? theme.palette.TwClrBgBrand : ''}
-                      width={'100%'}
-                      marginBottom={theme.spacing(1)}
-                      borderRadius={theme.spacing(0.5)}
-                      padding={theme.spacing(0.5)}
-                      minHeight={theme.spacing(3)}
-                    >
-                      {isActivePhase ? (
-                        <Typography
-                          color={theme.palette.TwClrBaseWhite}
-                          fontWeight={600}
-                          fontSize={'12px'}
-                          lineHeight={'16px'}
-                          textAlign={'center'}
-                        >
-                          {strings.YOU_ARE_HERE}
-                        </Typography>
-                      ) : null}
-                    </Box>
+                    {(isDesktop || isActivePhase) && (
+                      <Box
+                        bgcolor={isActivePhase ? theme.palette.TwClrBgBrand : ''}
+                        width={'100%'}
+                        marginBottom={theme.spacing(1)}
+                        borderRadius={theme.spacing(0.5)}
+                        padding={theme.spacing(0.5)}
+                        minHeight={theme.spacing(3)}
+                      >
+                        {isActivePhase && (
+                          <Typography
+                            color={theme.palette.TwClrBaseWhite}
+                            fontWeight={600}
+                            fontSize={'12px'}
+                            lineHeight={'16px'}
+                            textAlign={'center'}
+                          >
+                            {strings.YOU_ARE_HERE}
+                          </Typography>
+                        )}
+                      </Box>
+                    )}
+
                     <Typography fontWeight={600} marginBottom={theme.spacing(1)}>
-                      {phase.phase}
+                      {step.name}
                     </Typography>
-                    <Typography>{phase.description}</Typography>
+                    <Typography>{step.description}</Typography>
                   </Grid>
                 </>
               );

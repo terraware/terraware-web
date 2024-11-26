@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Box, CircularProgress } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { BusySpinner, TableColumnType } from '@terraware/web-components';
 import { TopBarButton } from '@terraware/web-components/components/table';
 
@@ -23,15 +22,6 @@ import strings from 'src/strings';
 import { SearchNodePayload } from 'src/types/Search';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-
-const useStyles = makeStyles(() => ({
-  text: {
-    fontSize: '14px',
-    '& > p': {
-      fontSize: '14px',
-    },
-  },
-}));
 
 const columnsWithoutZones = (): TableColumnType[] => [
   {
@@ -103,7 +93,6 @@ export default function PlantingProgressList({
   reloadTracking,
 }: PlantingProgressListProps): JSX.Element {
   const [hasZones, setHasZones] = useState<boolean | undefined>();
-  const classes = useStyles();
   const data = useAppSelector((state: any) => searchPlantingProgress(state, search.trim(), filters));
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const dispatch = useAppDispatch();
@@ -219,7 +208,7 @@ export default function PlantingProgressList({
         columns={hasZones ? columnsWithZones : columnsWithoutZones}
         rows={data}
         orderBy={hasZones ? 'subzoneName' : 'siteName'}
-        Renderer={DetailsRenderer(classes)}
+        Renderer={DetailsRenderer}
         selectedRows={selectedRows}
         setSelectedRows={setSelectedRows}
         showCheckbox={true}
@@ -231,26 +220,31 @@ export default function PlantingProgressList({
   );
 }
 
-const DetailsRenderer =
-  (classes: any) =>
-  (props: RendererProps<TableRowType>): JSX.Element => {
-    const { column, row } = props;
+const DetailsRenderer = (props: RendererProps<TableRowType>): JSX.Element => {
+  const { column, row } = props;
 
-    const createLinkToWithdrawals = () => {
-      const filterParam = row.subzoneName
-        ? `subzoneName=${encodeURIComponent(row.subzoneName)}&siteName=${encodeURIComponent(row.siteName)}`
-        : `siteName=${encodeURIComponent(row.siteName)}`;
-      const url = `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history&${filterParam}`;
-      return (
-        <Link to={url}>
-          <FormattedNumber value={row.totalSeedlingsSent} />
-        </Link>
-      );
-    };
-
-    if (column.key === 'totalSeedlingsSent') {
-      return <CellRenderer {...props} value={createLinkToWithdrawals()} className={classes.text} />;
-    }
-
-    return <CellRenderer {...props} className={classes.text} />;
+  const textStyles = {
+    fontSize: '16px',
+    '& > p': {
+      fontSize: '16px',
+    },
   };
+
+  const createLinkToWithdrawals = () => {
+    const filterParam = row.subzoneName
+      ? `subzoneName=${encodeURIComponent(row.subzoneName)}&siteName=${encodeURIComponent(row.siteName)}`
+      : `siteName=${encodeURIComponent(row.siteName)}`;
+    const url = `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history&${filterParam}`;
+    return (
+      <Link fontSize='16px' to={url}>
+        <FormattedNumber value={row.totalSeedlingsSent} />
+      </Link>
+    );
+  };
+
+  if (column.key === 'totalSeedlingsSent') {
+    return <CellRenderer {...props} value={createLinkToWithdrawals()} sx={textStyles} />;
+  }
+
+  return <CellRenderer {...props} sx={textStyles} />;
+};

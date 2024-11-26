@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
+import { DateTime } from 'luxon';
 
+import PageForm from 'src/components/common/PageForm';
+import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers/hooks';
 import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
@@ -13,12 +16,12 @@ import { Species, SpeciesRequestError } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
 
-import PageForm from '../../components/common/PageForm';
-import TfMain from '../../components/common/TfMain';
-
 function initSpecies(species?: Species): Species {
+  const now = DateTime.now().toISO();
   return (
     species ?? {
+      createdTime: now,
+      modifiedTime: now,
       scientificName: '',
       id: -1,
     }
@@ -34,11 +37,16 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
   const [record, setRecord, onChange] = useForm<Species>(initSpecies());
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
   const [isBusy, setIsBusy] = useState<boolean>(false);
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
+  const newGridSize = isMobile ? 12 : 4;
+
   const createNewSpecies = async () => {
+    if (organizationId === -1) {
+      return;
+    }
     if (!record.scientificName) {
       setNameFormatError(strings.REQUIRED_FIELD);
     } else {
@@ -48,7 +56,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
       if (response.requestSucceeded) {
         if (response.speciesId) {
           reloadData();
-          history.push(APP_PATHS.SPECIES_DETAILS.replace(':speciesId', response.speciesId.toString()));
+          navigate(APP_PATHS.SPECIES_DETAILS.replace(':speciesId', response.speciesId.toString()));
         }
       } else {
         if (response.error === SpeciesRequestError.PreexistingSpecies) {
@@ -64,7 +72,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
       <PageForm
         cancelID='cancelAddSpecies'
         saveID='saveAddSpecies'
-        onCancel={() => history.push(APP_PATHS.SPECIES)}
+        onCancel={() => navigate(APP_PATHS.SPECIES)}
         onSave={createNewSpecies}
       >
         <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 'bold', paddingLeft: theme.spacing(3) }}>
@@ -75,7 +83,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
           sx={{
             display: 'flex',
             margin: '0 auto',
-            width: isMobile ? '100%' : '700px',
+            width: '100%',
             paddingLeft: theme.spacing(isMobile ? 0 : 4),
             paddingRight: theme.spacing(isMobile ? 0 : 4),
             paddingTop: theme.spacing(5),
@@ -83,7 +91,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
         >
           <Grid
             container
-            width={isMobile ? '100%' : '700px'}
+            width={'100%'}
             sx={{
               backgroundColor: theme.palette.TwClrBg,
               borderRadius: theme.spacing(4),
@@ -91,7 +99,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
             }}
           >
             <SpeciesDetailsForm
-              gridSize={12}
+              gridSize={newGridSize}
               record={record}
               onChange={onChange}
               setRecord={setRecord}

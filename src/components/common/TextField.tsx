@@ -1,13 +1,6 @@
 import React, { KeyboardEventHandler } from 'react';
 
-import { TextField as MUITextField } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-
-const useStyles = makeStyles(() => ({
-  adornedEnd: {
-    paddingRight: 0,
-  },
-}));
+import { TextField as MUITextField, SxProps } from '@mui/material';
 
 export interface Props {
   id: string;
@@ -25,11 +18,10 @@ export interface Props {
   placeholder?: string;
   required?: boolean;
   autocomplete?: string;
+  sx?: SxProps;
 }
 
 export default function TextField(props: Props): JSX.Element {
-  const classes = useStyles();
-
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     props.onChange(props.id, event.target.value);
   };
@@ -49,17 +41,18 @@ export default function TextField(props: Props): JSX.Element {
       onKeyPress={props.onKeyPress}
       InputProps={{
         endAdornment: props.endAdornment,
-        classes: {
-          adornedEnd: classes.adornedEnd,
-        },
         inputProps: {
           min: props.min,
+        },
+        sx: {
+          paddingRight: 0,
         },
       }}
       error={props.error}
       helperText={props.helperText}
       required={props.required}
       autoComplete={props.autocomplete}
+      sx={props.sx}
     />
   );
 }

@@ -1,20 +1,45 @@
-import { Route, Switch } from 'react-router-dom';
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
 
-import { APP_PATHS } from 'src/constants';
+import DeliverableProvider from 'src/providers/Deliverable/DeliverableProvider';
+import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
+import ProjectProvider from 'src/providers/Project/ProjectProvider';
 
-import DeliverableViewWrapper from './DeliverableViewWrapper';
+import DeliverableView from './DeliverableView';
 import DeliverablesList from './DeliverablesList';
+import QuestionsDeliverableEdit from './QuestionsDeliverableEditView';
 
 const DeliverablesRouter = (): JSX.Element => {
   return (
-    <Switch>
-      <Route path={APP_PATHS.DELIVERABLE_VIEW}>
-        <DeliverableViewWrapper />
-      </Route>
-      <Route path={'*'}>
-        <DeliverablesList />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route
+        path={'/:deliverableId/submissions/:projectId'}
+        element={
+          <ProjectProvider>
+            <ParticipantProvider>
+              <DeliverableProvider>
+                <DeliverableView />
+              </DeliverableProvider>
+            </ParticipantProvider>
+          </ProjectProvider>
+        }
+      />
+
+      <Route
+        path={'/:deliverableId/submissions/:projectId/edit'}
+        element={
+          <ProjectProvider>
+            <ParticipantProvider>
+              <DeliverableProvider>
+                <QuestionsDeliverableEdit />
+              </DeliverableProvider>
+            </ParticipantProvider>
+          </ProjectProvider>
+        }
+      />
+
+      <Route path={'*'} element={<DeliverablesList />} />
+    </Routes>
   );
 };
 

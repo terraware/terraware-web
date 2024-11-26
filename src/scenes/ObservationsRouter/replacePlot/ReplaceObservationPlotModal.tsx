@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DialogBox, Dropdown, Textfield } from '@terraware/web-components';
@@ -79,7 +79,7 @@ export default function ReplaceObservationPlotModal(props: ReplaceObservationPlo
 
     if (result.status === 'error') {
       snackbar.toastError();
-    } else if (result.status === 'success') {
+    } else if (result.status === 'success' && selectedOrganization.id !== -1) {
       const { addedMonitoringPlotIds, removedMonitoringPlotIds } = result.data as ReplaceObservationPlotResponsePayload;
       setAddedPlotIds(addedMonitoringPlotIds);
       setRemovedPlotIds(removedMonitoringPlotIds);

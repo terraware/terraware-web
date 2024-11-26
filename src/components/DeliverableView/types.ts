@@ -1,11 +1,14 @@
 import { ReactNode } from 'react';
 
-import { Deliverable } from 'src/types/Deliverables';
+import { DeliverableWithOverdue } from 'src/types/Deliverables';
 
 export type ViewProps = {
-  deliverable: Deliverable;
+  deliverable: DeliverableWithOverdue;
+  hideStatusBadge?: boolean;
+  setSubmitButtonDisalbed?: (disabled: boolean) => void;
 };
 
 export type EditProps = ViewProps & {
   callToAction?: ReactNode;
+  optionsMenu?: ReactNode;
 };

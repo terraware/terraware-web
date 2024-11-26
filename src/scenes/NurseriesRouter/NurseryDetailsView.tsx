@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { Grid, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Grid, Typography, useTheme } from '@mui/material';
 
 import BackToLink from 'src/components/common/BackToLink';
 import { APP_PATHS } from 'src/constants';
@@ -19,25 +18,16 @@ import TfMain from '../../components/common/TfMain';
 import Button from '../../components/common/button/Button';
 import NurserySubLocations from './NurserySubLocations';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  titleWithButton: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-}));
-
 export default function NurseryDetailsView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { nurseryId } = useParams<{ nurseryId: string }>();
   const [nursery, setNursery] = useState<Facility>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const tz = useLocationTimeZone().get(nursery);
 
   useEffect(() => {
-    if (selectedOrganization) {
+    if (selectedOrganization && nurseryId) {
       const selectedNursery = FacilityService.getFacility({
         organization: selectedOrganization,
         facilityId: nurseryId,
@@ -46,18 +36,18 @@ export default function NurseryDetailsView(): JSX.Element {
       if (selectedNursery) {
         setNursery(selectedNursery);
       } else {
-        history.push(APP_PATHS.NURSERIES);
+        navigate(APP_PATHS.NURSERIES);
       }
     }
-  }, [nurseryId, selectedOrganization, history]);
-
-  const classes = useStyles();
+  }, [nurseryId, selectedOrganization, navigate]);
 
   const goToEditNursery = () => {
-    const editNurseryLocation = {
-      pathname: APP_PATHS.NURSERIES_EDIT.replace(':nurseryId', nurseryId),
-    };
-    history.push(editNurseryLocation);
+    if (nurseryId) {
+      const editNurseryLocation = {
+        pathname: APP_PATHS.NURSERIES_EDIT.replace(':nurseryId', nurseryId),
+      };
+      navigate(editNurseryLocation);
+    }
   };
 
   const { isMobile } = useDeviceInfo();
@@ -74,7 +64,17 @@ export default function NurseryDetailsView(): JSX.Element {
         <Grid item xs={12} marginBottom={theme.spacing(3)}>
           <BackToLink id='back' to={APP_PATHS.NURSERIES} name={strings.NURSERIES} />
         </Grid>
-        <Grid item xs={12} padding={theme.spacing(0, 3)} className={classes.titleWithButton}>
+        <Grid
+          item
+          xs={12}
+          padding={theme.spacing(0, 3)}
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
           <Typography fontSize='20px' fontWeight={600}>
             {nursery?.name}
           </Typography>

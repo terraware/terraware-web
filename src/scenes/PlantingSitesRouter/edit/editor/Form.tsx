@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { CSSProperties, useMemo } from 'react';
 
 import { Step, StepLabel, Stepper, Typography, useTheme } from '@mui/material';
 import { FormButton, PageForm } from '@terraware/web-components';
@@ -26,6 +26,7 @@ export type FormProps = {
   onSaveAndClose: () => void;
   onStartOver: () => void;
   steps: PlantingSiteStep[];
+  style?: CSSProperties;
 };
 
 export default function Form({
@@ -37,6 +38,7 @@ export default function Form({
   onSaveAndClose,
   onStartOver,
   steps,
+  style,
 }: FormProps): JSX.Element {
   const theme = useTheme();
 
@@ -84,6 +86,7 @@ export default function Form({
       saveButtonText={isLastStep ? strings.SAVE : strings.SAVE_AND_NEXT}
       additionalRightButtons={pageFormRightButtons}
       className={className}
+      style={style}
     >
       <Stepper activeStep={currentStepIndex} sx={{ margin: theme.spacing(0, 5) }}>
         {steps.map((step: PlantingSiteStep, index: number) => {

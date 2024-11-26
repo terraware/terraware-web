@@ -1,11 +1,9 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { CircularProgress } from '@mui/material';
 
-import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import { requestPlantingSiteObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import {
@@ -34,25 +32,13 @@ export type PlantingSitesProps = {
 };
 
 export default function PlantingSites({ reloadTracking }: PlantingSitesProps): JSX.Element {
-  const userDrawnDetailedSites = isEnabled('User Detailed Sites');
-
   return (
-    <Switch>
-      <Route path={APP_PATHS.PLANTING_SITES_NEW}>
-        <PlantingSiteCreate reloadPlantingSites={reloadTracking} />
-      </Route>
-      {userDrawnDetailedSites && (
-        <Route path={APP_PATHS.PLANTING_SITES_DRAFT_VIEW}>
-          <PlantingSitesDraftRouter />
-        </Route>
-      )}
-      <Route path={APP_PATHS.PLANTING_SITES_VIEW}>
-        <PlantingSitesRouter reloadTracking={reloadTracking} />
-      </Route>
-      <Route path={'*'}>
-        <PlantingSitesList />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path={'/new'} element={<PlantingSiteCreate reloadPlantingSites={reloadTracking} />} />
+      <Route path={'/draft/*'} element={<PlantingSitesDraftRouter />} />
+      <Route path={'/:plantingSiteId/*'} element={<PlantingSitesRouter reloadTracking={reloadTracking} />} />
+      <Route path={'*'} element={<PlantingSitesList />} />
+    </Routes>
   );
 }
 
@@ -73,7 +59,7 @@ export function PlantingSitesRouter({ reloadTracking }: PlantingSitesProps): JSX
 
   useEffect(() => {
     const siteId = Number(plantingSiteId);
-    if (!isNaN(siteId)) {
+    if (!isNaN(siteId) && selectedOrganization.id !== -1) {
       dispatch(requestPlantingSiteObservationsResults(selectedOrganization.id, siteId));
       dispatch(requestPlantings(selectedOrganization.id));
     }
@@ -88,38 +74,23 @@ export function PlantingSitesRouter({ reloadTracking }: PlantingSitesProps): JSX
   }
 
   return (
-    <Switch>
-      <Route path={APP_PATHS.PLANTING_SITES_SUBZONE_VIEW}>
-        <PlantingSiteSubzoneView />
-      </Route>
-      <Route path={APP_PATHS.PLANTING_SITES_ZONE_VIEW}>
-        <PlantingSiteZoneView />
-      </Route>
-      <Route path={APP_PATHS.PLANTING_SITES_EDIT}>
-        <PlantingSiteCreate reloadPlantingSites={reloadTracking} />
-      </Route>
-      <Route path={APP_PATHS.PLANTING_SITES_VIEW}>
-        <PlantingSiteView />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path={'/zone/:zoneId/subzone/:subzoneId'} element={<PlantingSiteSubzoneView />} />
+      <Route path={'/zone/:zoneId'} element={<PlantingSiteZoneView />} />
+      <Route path={'/edit'} element={<PlantingSiteCreate reloadPlantingSites={reloadTracking} />} />
+      <Route path={'*'} element={<PlantingSiteView />} />
+    </Routes>
   );
 }
 
 export function PlantingSitesDraftRouter(): JSX.Element {
   return (
-    <Switch>
-      <Route path={APP_PATHS.PLANTING_SITES_DRAFT_ZONE_VIEW}>
-        <PlantingSiteDraftZoneView />
-      </Route>
-      <Route path={APP_PATHS.PLANTING_SITES_DRAFT_NEW}>
-        <PlantingSiteDraftCreate />
-      </Route>
-      <Route path={APP_PATHS.PLANTING_SITES_DRAFT_EDIT}>
-        <PlantingSiteDraftEdit />
-      </Route>
-      <Route path={APP_PATHS.PLANTING_SITES_DRAFT_VIEW}>
-        <PlantingSiteDraftView />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path={'/:plantingSiteId/zone/:zoneId'} element={<PlantingSiteDraftZoneView />} />
+      <Route path={'/new'} element={<PlantingSiteDraftCreate />} />
+      <Route path={'/:plantingSiteId/edit'} element={<PlantingSiteDraftEdit />} />
+      <Route path={'/:plantingSiteId'} element={<PlantingSiteDraftView />} />
+      <Route path={'*'} element={<PlantingSiteDraftView />} />
+    </Routes>
   );
 }

@@ -15,6 +15,7 @@ export type ParticipantProjectSearchResult = {
   name: string;
   participant_cohort_id: number;
   participant_cohort_name: string;
+  acceleratorDetails_fileNaming: string;
   participant_cohort_phase: CohortPhaseType;
   participant_name: string;
 };

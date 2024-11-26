@@ -1,7 +1,10 @@
+import React from 'react';
+
 import { Box, Divider, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import isEnabled from 'src/features';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -19,6 +22,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
   );
+  const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
 
   let highestMortalityRate = 0;
   let highestSpecies = '';
@@ -40,7 +44,43 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
     }
   });
 
-  return (
+  return newPlantsDashboardEnabled ? (
+    <Box>
+      {highestSpecies && (
+        <>
+          <Box sx={{ backgroundColor: '#CB4D4533', padding: 1, borderRadius: 1, marginBottom: 1 }}>
+            <Typography fontSize='16px' fontWeight={400}>
+              {strings.HIGHEST}
+            </Typography>
+            <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}>
+              {highestSpecies}
+            </Typography>
+            <Typography fontSize='24px' fontWeight={600}>
+              <FormattedNumber value={highestMortalityRate || 0} />%
+            </Typography>
+          </Box>
+          {(!lowestSpecies || lowestSpecies === highestSpecies) && (
+            <Typography fontWeight={400} fontSize='14px' color={theme.palette.TwClrTxtSecondary} marginTop={1}>
+              {strings.SINGLE_SPECIES_MORTALITY_RATE_MESSAGE}
+            </Typography>
+          )}
+        </>
+      )}
+      {lowestSpecies && lowestSpecies !== highestSpecies && (
+        <Box sx={{ backgroundColor: ' #5D822B33', padding: 1, borderRadius: 1 }}>
+          <Typography fontSize='16px' fontWeight={400}>
+            {strings.LOWEST}
+          </Typography>
+          <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}>
+            {lowestSpecies}
+          </Typography>
+          <Typography fontSize='24px' fontWeight={600}>
+            <FormattedNumber value={lowestMortalityRate || 0} />%
+          </Typography>
+        </Box>
+      )}
+    </Box>
+  ) : (
     <OverviewItemCard
       isEditable={false}
       contents={

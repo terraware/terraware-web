@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button, Checkbox } from '@terraware/web-components';
 
 import { useOrganization } from 'src/providers';
@@ -28,26 +27,16 @@ interface ReportsSettingsCheckboxConfig {
   value: boolean | undefined;
 }
 
-const useStyles = makeStyles(() => ({
-  checkbox: {
-    marginTop: 0,
-    '& span[class*="-label"]': {
-      fontWeight: 500,
-    },
-  },
-}));
-
 const ReportSettingsEditFormFields = ({ isEditing, onChange, reportsSettings }: ReportSettingsEditFormFieldsProps) => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { selectedOrganization } = useOrganization();
-  const classes = useStyles();
 
   const projects = useAppSelector(selectProjects);
 
   useEffect(() => {
-    if (!projects) {
+    if (!projects && selectedOrganization.id !== -1) {
       void dispatch(requestProjects(selectedOrganization.id));
     }
   }, [dispatch, projects, selectedOrganization.id]);
@@ -62,13 +51,18 @@ const ReportSettingsEditFormFields = ({ isEditing, onChange, reportsSettings }: 
             id={key}
             name={key}
             value={value}
-            className={classes.checkbox}
             disabled={!isEditing}
+            sx={{
+              marginTop: 0,
+              '& span[class*="-label"]': {
+                fontWeight: 500,
+              },
+            }}
           />
         </Grid>
       );
     },
-    [classes.checkbox, isEditing, onChange, theme]
+    [isEditing, onChange, theme]
   );
 
   const getProjectName = useCallback(
@@ -91,7 +85,7 @@ const ReportSettingsEditFormFields = ({ isEditing, onChange, reportsSettings }: 
               <Button
                 icon={'iconEdit'}
                 label={strings.EDIT}
-                onClick={() => history.push(APP_PATHS.REPORTS_SETTINGS_EDIT)}
+                onClick={() => navigate(APP_PATHS.REPORTS_SETTINGS_EDIT)}
               />
             </Grid>
           )}

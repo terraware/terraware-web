@@ -1,20 +1,24 @@
 import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
-import { mapTooltipDialogStyle } from 'src/components/Map/MapRenderUtils';
-
-const useMapStyle = makeStyles((theme: Theme) => ({
-  ...mapTooltipDialogStyle(theme),
+const useMapStyle = (theme: Theme) => ({
+  tooltip: {
+    '.mapboxgl-popup .mapboxgl-popup-content': {
+      borderRadius: theme.spacing(1),
+      padding: 0,
+    },
+    '.mapboxgl-popup .mapboxgl-popup-close-button': {
+      display: 'none',
+    },
+  },
   box: {
-    minWidth: '300px',
-    '& .mapboxgl-popup-content': {
+    '.mapboxgl-popup': {
+      minWidth: '300px',
+    },
+    '.mapboxgl-popup .mapboxgl-popup-content': {
       display: 'flex',
       flexDirection: 'column',
     },
   },
-  textInput: {
-    marginTop: theme.spacing(1.5),
-  },
-}));
+});
 
 export default useMapStyle;

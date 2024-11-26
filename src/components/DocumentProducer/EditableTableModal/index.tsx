@@ -1,63 +1,109 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import { Button, DatePicker, Dropdown, Textfield } from '@terraware/web-components';
+import { Button, DatePicker, Dropdown, DropdownItem, Textfield } from '@terraware/web-components';
 
 import PageDialog from 'src/components/DocumentProducer/PageDialog';
+import VariableWorkflowDetails from 'src/components/DocumentProducer/VariableWorkflowDetails';
+import OptionsMenu from 'src/components/common/OptionsMenu';
+import { useLocalization } from 'src/providers';
 import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
 import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
+import { selectUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesSelector';
+import { requestUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import {
   NumberVariable,
   SelectVariable,
   TableColumn,
-  TableColumnWithValues,
   TableVariableWithValues,
+  UpdateVariableWorkflowDetailsPayload,
 } from 'src/types/documentProducer/Variable';
 import {
   AppendVariableValueOperation,
   NewSelectValuePayload,
-  UpdateVariableValuesRequestWithDocId,
+  UpdateVariableValuesRequestWithProjectId,
+  VariableValue,
   VariableValueSelectValue,
 } from 'src/types/documentProducer/VariableValue';
 
-import { VariableTableCell, cellValue, getCellValues, newValueFromEntry } from './helpers';
+import { VariableTableCell, cellValue, getInitialCellValues, newValueFromEntry } from './helpers';
 
 type EditableTableEditProps = {
+  display?: boolean;
   variable: TableVariableWithValues;
-  pddId: number;
-  onFinish: () => void;
+  projectId: number;
+  onFinish: (edited: boolean) => void;
   onCancel: () => void;
+  setUpdateWorkflowRequestId?: (requestId: string) => void;
+  showVariableHistory: () => void;
 };
 
-const EditableTableEdit = ({ variable, pddId, onCancel, onFinish }: EditableTableEditProps) => {
+const EditableTableEdit = ({
+  display: displayProp = false,
+  variable,
+  projectId,
+  onCancel,
+  onFinish,
+  setUpdateWorkflowRequestId,
+  showVariableHistory,
+}: EditableTableEditProps) => {
+  const activeLocale = useLocalization();
   const columns = useMemo<TableColumn[]>(() => variable.columns, [variable]);
-  const initialCellValues = useMemo<VariableTableCell[][]>(
-    () =>
-      variable.values.map((row) =>
-        variable.columns.map((col) => ({
-          type: col.variable.type,
-          rowId: row.id,
-          colId: col.variable.id,
-          values: getCellValues(row, col as TableColumnWithValues),
-          changed: false,
-        }))
-      ),
-    [variable]
-  );
+  const initialCellValues = useMemo<VariableTableCell[][]>(() => getInitialCellValues(variable), [variable]);
   const [cellValues, setCellValues] = useState<VariableTableCell[][]>(initialCellValues);
+  const [display, setDisplay] = useState<boolean>(displayProp);
 
   const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState<string>('');
-  const selector = useAppSelector(selectUpdateVariableValues(requestId));
+  const [updateVariableValuesRequestId, setUpdateVariableValuesRequestId] = useState<string>('');
+  const updateVariableValuesRequest = useAppSelector(selectUpdateVariableValues(updateVariableValuesRequestId));
+
+  const [updateVariableWorkflowDetailsRequestId, setUpdateVariableWorkflowDetailsRequestId] = useState<string>('');
+  const updateVariableWorkflowDetailsRequest = useAppSelector(
+    selectUpdateVariableWorkflowDetails(updateVariableWorkflowDetailsRequestId)
+  );
+
+  const variableValue: VariableValue | undefined = (variable?.variableValues || []).find(
+    (value) => value.variableId === variable.id
+  );
+
+  const [variableWorkflowDetails, setVariableWorkflowDetails] = useState<UpdateVariableWorkflowDetailsPayload>({
+    feedback: variableValue?.feedback,
+    internalComment: variableValue?.internalComment,
+    status: variableValue?.status || 'Not Submitted',
+  });
+
+  useEffect(() => {
+    if (updateVariableValuesRequest?.status === 'success' && !updateVariableWorkflowDetailsRequestId) {
+      const request = dispatch(
+        requestUpdateVariableWorkflowDetails({
+          feedback: variableWorkflowDetails?.feedback,
+          internalComment: variableWorkflowDetails?.internalComment,
+          projectId,
+          status: variableWorkflowDetails.status,
+          variableId: variable.id,
+        })
+      );
+      setUpdateVariableWorkflowDetailsRequestId(request.requestId);
+      setUpdateWorkflowRequestId?.(request.requestId);
+    }
+  }, [updateVariableValuesRequest, updateVariableWorkflowDetailsRequestId, variableWorkflowDetails]);
+
+  useEffect(() => {
+    if (initialCellValues.length === 0 && cellValues.length === 0) {
+      // if there are no initial values, add a row
+      addRow();
+    }
+  }, [cellValues, initialCellValues]);
+
   const handleSave = useCallback(() => {
     if (columns.length === 0) {
       return;
     }
-    const update: UpdateVariableValuesRequestWithDocId = {
+    const update: UpdateVariableValuesRequestWithProjectId = {
       operations: [],
-      docId: pddId,
+      projectId: projectId,
     };
 
     initialCellValues.forEach((row) => {
@@ -134,8 +180,8 @@ const EditableTableEdit = ({ variable, pddId, onCancel, onFinish }: EditableTabl
 
     // dispatch
     const request = dispatch(requestUpdateVariableValues(update));
-    setRequestId(request.requestId);
-  }, [initialCellValues, cellValues, columns.length, dispatch, pddId, variable.id]);
+    setUpdateVariableValuesRequestId(request.requestId);
+  }, [initialCellValues, cellValues, columns.length, dispatch, projectId, variable.id]);
 
   const setCellValue = (rowNum: number, colNum: number, newValue: string | number) => {
     const newCellValues: VariableTableCell[][] = [];
@@ -180,27 +226,84 @@ const EditableTableEdit = ({ variable, pddId, onCancel, onFinish }: EditableTabl
     setCellValues(newCellValues);
   };
 
+  const optionItems = useMemo(
+    (): DropdownItem[] =>
+      activeLocale
+        ? [
+            {
+              label: strings.VIEW_HISTORY,
+              value: 'view_history',
+            },
+          ]
+        : [],
+    [activeLocale]
+  );
+
+  const onOptionItemClick = useCallback(
+    (optionItem: DropdownItem) => {
+      switch (optionItem.value) {
+        case 'view_history': {
+          onCancel();
+          showVariableHistory();
+          break;
+        }
+      }
+    },
+    [showVariableHistory]
+  );
+
   return (
     <PageDialog
-      workflowState={requestId ? selector : undefined}
+      workflowState={
+        updateVariableValuesRequest?.status === 'success'
+          ? updateVariableWorkflowDetailsRequest
+          : updateVariableValuesRequest
+      }
       onSuccess={onFinish}
       onClose={onCancel}
       open={true}
       title={strings.VARIABLE_DETAILS}
       size='x-large'
       scrolled={true}
-      middleButtons={[
-        <Button
-          id='edit-table-cancel'
-          label={strings.CANCEL}
-          priority='secondary'
-          type='passive'
-          onClick={onCancel}
-          key='button-1'
-        />,
-        <Button id='edit-table-save' label={strings.SAVE} onClick={handleSave} key='button-2' />,
-      ]}
+      middleButtons={
+        display
+          ? undefined
+          : [
+              <Button
+                id='edit-table-cancel'
+                label={strings.CANCEL}
+                priority='secondary'
+                type='passive'
+                onClick={onCancel}
+                key='button-1'
+              />,
+              <Button id='edit-table-save' label={strings.SAVE} onClick={handleSave} key='button-2' />,
+            ]
+      }
     >
+      <>
+        <OptionsMenu
+          onOptionItemClick={onOptionItemClick}
+          optionItems={optionItems}
+          priority='secondary'
+          size='small'
+          sx={{ float: 'right' }}
+          type='passive'
+        />
+        {display && (
+          <Button
+            icon='iconEdit'
+            id='edit-variable'
+            label={strings.EDIT}
+            onClick={() => {
+              setDisplay(false);
+            }}
+            priority='secondary'
+            sx={{ float: 'right' }}
+            type='passive'
+          />
+        )}
+      </>
       {variable.tableStyle === 'Horizontal' && (
         <TableContainer sx={{ overflowX: 'visible' }}>
           <Table aria-labelledby='tableTitle' size='medium' aria-label='variable-table'>
@@ -230,6 +333,7 @@ const EditableTableEdit = ({ variable, pddId, onCancel, onFinish }: EditableTabl
                   {row.map((cell, colNum) => (
                     <TableCell colSpan={columns.length + 1} align='left' sx={{ padding: '8px' }} key={colNum}>
                       <EditableCell
+                        display={display}
                         id={`${cell.rowId}-${cell.colId}`}
                         column={columns[colNum]}
                         onChange={(value) => setCellValue(rowNum, colNum, value as string | number)}
@@ -237,7 +341,7 @@ const EditableTableEdit = ({ variable, pddId, onCancel, onFinish }: EditableTabl
                       />
                     </TableCell>
                   ))}
-                  {cellValues.length > 1 ? (
+                  {cellValues.length > 1 && !display ? (
                     <TableCell colSpan={columns.length + 1} align='left' sx={{ padding: '8px' }}>
                       <Button
                         onClick={() => removeRow(rowNum)}
@@ -273,6 +377,7 @@ const EditableTableEdit = ({ variable, pddId, onCancel, onFinish }: EditableTabl
                           <TableCell align='left' sx={{ padding: '8px' }}>
                             {correspondingColumn && (
                               <EditableCell
+                                display={display}
                                 id={`${col.rowId}-${col.colId}`}
                                 column={correspondingColumn}
                                 onChange={(value) => setCellValue(index, colNum, value as string | number)}
@@ -287,45 +392,59 @@ const EditableTableEdit = ({ variable, pddId, onCancel, onFinish }: EditableTabl
                 </Table>
               </TableContainer>
 
-              <Button
-                onClick={() => removeRow(index)}
-                icon='cancel'
-                type='passive'
-                priority='ghost'
-                size='medium'
-                label={strings.EDITABLE_TABLE_REMOVE_TABLE}
-              />
+              {!display && (
+                <Button
+                  onClick={() => removeRow(index)}
+                  icon='cancel'
+                  type='passive'
+                  priority='ghost'
+                  size='medium'
+                  label={strings.EDITABLE_TABLE_REMOVE_TABLE}
+                />
+              )}
             </Box>
           ))}
         </>
       )}
 
-      <Button
-        onClick={addRow}
-        icon={'iconAdd'}
-        type='productive'
-        priority='ghost'
-        size='medium'
-        label={variable.tableStyle === 'Horizontal' ? strings.EDITABLE_TABLE_ADD_ROW : strings.EDITABLE_TABLE_ADD_TABLE}
+      {!display && (
+        <Button
+          onClick={addRow}
+          icon={'iconAdd'}
+          type='productive'
+          priority='ghost'
+          size='medium'
+          label={
+            variable.tableStyle === 'Horizontal' ? strings.EDITABLE_TABLE_ADD_ROW : strings.EDITABLE_TABLE_ADD_TABLE
+          }
+        />
+      )}
+
+      <VariableWorkflowDetails
+        display={display}
+        setVariableWorkflowDetails={setVariableWorkflowDetails}
+        variableWorkflowDetails={variableWorkflowDetails}
       />
     </PageDialog>
   );
 };
 
-type EditableCellProps = {
+export type EditableCellProps = {
+  display?: boolean;
   id: string;
   column: TableColumn;
   onChange: (value: unknown) => void;
   value?: string | number;
 };
 
-const EditableCell = ({ id, column, onChange, value }: EditableCellProps) => {
+export const EditableCell = ({ display, id, column, onChange, value }: EditableCellProps) => {
   switch (column.variable.type) {
     case 'Text':
-      return <Textfield label='' id={id} type='text' onChange={onChange} value={value} />;
+      return <Textfield display={display} label='' id={id} type='text' onChange={onChange} value={value} />;
     case 'Number':
       return (
         <Textfield
+          display={display}
           label=''
           id={id}
           type='number'

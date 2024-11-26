@@ -1,4 +1,4 @@
-import { paths } from 'src/api/types/generated-schema';
+import { components, paths } from 'src/api/types/generated-schema';
 
 import CachedUserService from './CachedUserService';
 import HttpService, { Response } from './HttpService';
@@ -30,6 +30,7 @@ export type UpdateResponse = Response & {
 };
 
 // end point
+const COOKIE_CONSENT_ENDPOINT = '/api/v1/users/me/cookies';
 const PREFERENCES_ENDPOINT = '/api/v1/users/me/preferences';
 
 type PreferencesServerResponse =
@@ -37,8 +38,13 @@ type PreferencesServerResponse =
 type UpdatePreferencesPayloadType =
   paths[typeof PREFERENCES_ENDPOINT]['put']['requestBody']['content']['application/json'];
 
-// http service
+export type UpdateUserCookieConsentRequestPayload =
+  paths[typeof COOKIE_CONSENT_ENDPOINT]['put']['requestBody']['content']['application/json'];
+export type UpdateUserCookieConsentResponsePayload = components['schemas']['SimpleSuccessResponsePayload'];
+
+// http services
 const httpPreferences = HttpService.root(PREFERENCES_ENDPOINT);
+const httpCookieConsent = HttpService.root(COOKIE_CONSENT_ENDPOINT);
 
 // primary get preferences code with optional org
 const getPreferences = async (organizationId: string = ''): Promise<UserPreferencesResponse> => {
@@ -104,6 +110,20 @@ const updateUserPreferences = async (toUpdate: Preferences): Promise<UpdateRespo
   return response;
 };
 
+// set user cookie preferences
+const updateUserCookieConsentPreferences = async (
+  payload: UpdateUserCookieConsentRequestPayload
+): Promise<Response> => {
+  const response: Response = await httpCookieConsent.put2<UpdateUserCookieConsentResponsePayload>({ entity: payload });
+
+  if (response.requestSucceeded) {
+    // TODO: remove after user preferences is in redux
+    CachedUserService.setUserCookieConsentPreferences(payload.cookiesConsented);
+  }
+
+  return response;
+};
+
 // set org preferences
 const updateUserOrgPreferences = async (organizationId: number, toUpdate: Preferences): Promise<UpdateResponse> => {
   const response: UpdateResponse = await updatePreferences(toUpdate, organizationId);
@@ -123,6 +143,7 @@ const PreferencesService = {
   getUserPreferences,
   getUserOrgPreferences,
   updateUserPreferences,
+  updateUserCookieConsentPreferences,
   updateUserOrgPreferences,
 };
 

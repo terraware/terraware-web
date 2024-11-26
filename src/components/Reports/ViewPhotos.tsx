@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { Box, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, useTheme } from '@mui/material';
 import { Button, ViewPhotosDialog } from '@terraware/web-components';
 
 import ReportService, { REPORT_PHOTO_ENDPOINT } from 'src/services/ReportService';
@@ -18,29 +17,12 @@ type PhotosSectionProps = {
 
 type ReportPhotoWithUrl = ReportPhoto & { url: string };
 
-const useStyles = makeStyles((theme: Theme) => ({
-  removePhoto: {
-    position: 'absolute',
-    top: -10,
-    right: -10,
-    backgroundColor: theme.palette.TwClrBgDanger,
-  },
-  thumbnail: {
-    margin: 'auto auto',
-    objectFit: 'contain',
-    display: 'flex',
-    maxWidth: '120px',
-    maxHeight: '120px',
-  },
-}));
-
 export default function ViewPhotos({ reportId, onPhotoRemove, editable }: PhotosSectionProps): JSX.Element {
   const theme = useTheme();
   const snackbar = useSnackbar();
   const [photos, setPhotos] = useState<ReportPhotoWithUrl[]>([]);
   const [photosModalOpened, setPhotosModalOpened] = useState(false);
   const [selectedSlide, setSelectedSlide] = useState(0);
-  const classes = useStyles();
   const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
@@ -109,16 +91,27 @@ export default function ViewPhotos({ reportId, onPhotoRemove, editable }: Photos
                 icon='iconTrashCan'
                 onClick={() => removePhoto(photo.id, index)}
                 size='small'
-                className={classes.removePhoto}
+                style={{
+                  position: 'absolute',
+                  top: -10,
+                  right: -10,
+                  backgroundColor: theme.palette.TwClrBgDanger,
+                }}
               />
             )}
             <img
-              className={classes.thumbnail}
               src={`${photo.url}?maxHeight=120&maxWidth=120`}
               alt={`${index}`}
               onClick={() => {
                 setSelectedSlide(index);
                 setPhotosModalOpened(true);
+              }}
+              style={{
+                margin: 'auto auto',
+                objectFit: 'contain',
+                display: 'flex',
+                maxWidth: '120px',
+                maxHeight: '120px',
               }}
             />
           </Box>

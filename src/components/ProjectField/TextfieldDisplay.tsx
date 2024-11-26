@@ -1,4 +1,4 @@
-import { Box, useTheme } from '@mui/material';
+import React, { Box, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
 import { ProjectIdFieldProps } from './';

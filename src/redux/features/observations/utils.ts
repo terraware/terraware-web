@@ -166,8 +166,9 @@ export const mergeObservations = (
 
 const StatusWeights: Record<MonitoringPlotStatus, number> = {
   Completed: 1,
-  InProgress: 2,
-  Outstanding: 3,
+  Claimed: 2,
+  Unclaimed: 3,
+  'Not Observed': 4,
 };
 
 // merge zone
@@ -269,4 +270,12 @@ const mergeSpecies = (
         speciesScientificName: species[speciesObservation.speciesId ?? -1]?.scientificName ?? '',
       })
     );
+};
+
+export const has25mPlots = (
+  subzones: ObservationPlantingSubzoneResults[] | ObservationPlantingSubzoneResultsPayload[]
+) => {
+  return subzones
+    ?.flatMap((subzone: { monitoringPlots: any[] }) => subzone.monitoringPlots.flatMap((plot) => plot.sizeMeters))
+    .some((size: number) => size.toString() === '25');
 };

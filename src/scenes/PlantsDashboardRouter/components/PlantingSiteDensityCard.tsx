@@ -1,11 +1,13 @@
 import React, { useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { Icon } from '@terraware/web-components';
 
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
-import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
+import { selectLatestObservation, selectObservations } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSite, selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -24,6 +26,9 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingSite
   );
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const locale = useLocalization();
+  const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
+  const observationsData = useAppSelector(selectObservations);
+  const observationData = observationsData?.find((obs) => obs.id === observation?.observationId);
 
   const targetPlantingDensity = useMemo(() => {
     const weightedSum =
@@ -41,7 +46,26 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingSite
     ? plantingDensity + numPlantedSinceObs / plantingSite.areaHa
     : plantingDensity;
 
-  return (
+  return newPlantsDashboardEnabled ? (
+    <Box>
+      <Typography fontSize='48px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)}>
+        {Math.round(plantingDensity)}
+      </Typography>
+      <Typography fontSize='16px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)}>
+        {`${strings.PLANTS_PER_HECTARE.charAt(0).toUpperCase()}${strings.PLANTS_PER_HECTARE.slice(1)}`}
+      </Typography>
+      {observationData?.requestedSubzoneIds && (
+        <Box display={'flex'}>
+          <Box paddingRight={0.5}>
+            <Icon name='warning' fillColor={theme.palette.TwClrIcnWarning} size='medium' />
+          </Box>
+          <Typography color={theme.palette.TwClrTxtWarning} fontSize='14px' fontWeight={400}>
+            {strings.SAMPLE_OBSERVED_DENSITY_WARNING}
+          </Typography>
+        </Box>
+      )}
+    </Box>
+  ) : (
     <OverviewItemCard
       isEditable={false}
       contents={

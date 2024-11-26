@@ -1,10 +1,10 @@
-import { Grid } from '@mui/material';
+import React, { Grid } from '@mui/material';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { NurseryWithdrawal } from 'src/types/Batch';
-import { NurseryWithdrawalPurpose, purposeLabel } from 'src/types/Batch';
+import { purposeLabel } from 'src/types/Batch';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import { WithdrawalSummary } from '../NurseryWithdrawalsDetailsView';
@@ -26,7 +26,7 @@ export default function WithdrawalOverview({ withdrawal, withdrawalSummary }: Wi
     },
     {
       title: strings.PURPOSE,
-      data: withdrawal?.purpose ? purposeLabel(withdrawal.purpose as NurseryWithdrawalPurpose) : '',
+      data: withdrawal?.purpose ? purposeLabel(withdrawal.purpose) : '',
     },
     {
       title: strings.QUANTITY,

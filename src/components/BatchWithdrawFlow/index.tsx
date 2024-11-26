@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Typography } from '@mui/material';
 import { BusySpinner, theme } from '@terraware/web-components';
@@ -10,7 +10,7 @@ import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers/hooks';
 import { NurseryBatchService, NurseryWithdrawalService } from 'src/services';
 import strings from 'src/strings';
-import { NurseryWithdrawal, NurseryWithdrawalPurposes, NurseryWithdrawalRequest } from 'src/types/Batch';
+import { NurseryWithdrawal, NurseryWithdrawalRequest, NurseryWithdrawalRequestPurposes } from 'src/types/Batch';
 import { SearchResponseElement } from 'src/types/Search';
 import { isContributor } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
@@ -32,7 +32,7 @@ type BatchWithdrawFlowProps = {
 export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { batchIds, sourcePage, withdrawalCreatedCallback } = props;
-  const { OUTPLANT, NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
+  const { OUTPLANT, NURSERY_TRANSFER } = NurseryWithdrawalRequestPurposes;
   const [flowState, setFlowState] = useState<FlowStates>('purpose');
   const [record, setRecord] = useForm<NurseryWithdrawalRequest>({
     batchWithdrawals: [],
@@ -44,26 +44,28 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   const [showEmptyBatchesModalFor, setShowEmptyBatchesModalFor] = useState<NurseryWithdrawal | null>(null);
   const [filterProjectId, setFilterProjectId] = useState<number>();
   const snackbar = useSnackbar();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const populateBatches = async () => {
-      const searchResponse: SearchResponseElement[] | null = await NurseryBatchService.getBatches(
-        selectedOrganization.id,
-        batchIds.map((id) => Number(id))
-      );
-
-      if (searchResponse) {
-        const withdrawable = searchResponse.filter(
-          (batch: any) => +batch['totalQuantity(raw)'] + +batch['germinatingQuantity(raw)'] > 0
+    if (selectedOrganization.id !== -1) {
+      const populateBatches = async () => {
+        const searchResponse: SearchResponseElement[] | null = await NurseryBatchService.getBatches(
+          selectedOrganization.id,
+          batchIds.map((id) => Number(id))
         );
-        if (!withdrawable.length) {
-          snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM); // temporary until we have a solution from design
+
+        if (searchResponse) {
+          const withdrawable = searchResponse.filter(
+            (batch: any) => +batch['totalQuantity(raw)'] + +batch['germinatingQuantity(raw)'] > 0
+          );
+          if (!withdrawable.length) {
+            snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM); // temporary until we have a solution from design
+          }
+          setBatches(withdrawable);
         }
-        setBatches(withdrawable);
-      }
-    };
-    void populateBatches();
+      };
+      void populateBatches();
+    }
   }, [batchIds, snackbar, selectedOrganization.id]);
 
   const onWithdrawalConfigured = (withdrawal: NurseryWithdrawalRequest) => {
@@ -181,9 +183,9 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
 
   const goToInventory = () => {
     if (sourcePage && sourcePage.startsWith(APP_PATHS.INVENTORY)) {
-      history.push({ pathname: sourcePage });
+      navigate({ pathname: sourcePage });
     } else {
-      history.push({ pathname: APP_PATHS.INVENTORY });
+      navigate({ pathname: APP_PATHS.INVENTORY });
     }
   };
 

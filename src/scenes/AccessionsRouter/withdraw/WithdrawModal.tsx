@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Box, FormControlLabel, Grid, Radio, RadioGroup, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { SelectT, Textfield } from '@terraware/web-components';
 import { Dropdown } from '@terraware/web-components';
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
@@ -30,14 +29,6 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
 import { withdrawalPurposes } from 'src/utils/withdrawalPurposes';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  withdraw: {
-    borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    paddingTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-  },
-}));
 export interface WithdrawDialogProps {
   open: boolean;
   accession: Accession;
@@ -67,7 +58,6 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const tz = useLocationTimeZone().get(selectedSeedBank);
   const [timeZone, setTimeZone] = useState(tz.id);
   const [isByWeight, setIsByWeight] = useState(accession.remainingQuantity?.units === 'Seeds' ? false : true);
-  const classes = useStyles();
   const [withdrawalQty, setWithdrawalQty] = useState<number>(0);
   const [withdrawalUnits, setWithdrawalUnits] = useState<Unit['value']>('Grams');
   const [withdrawalValid, setWithdrawalValid] = useState<boolean>(false);
@@ -117,13 +107,15 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   }, [timeZone, setRecord]);
 
   useEffect(() => {
-    const getOrgUsers = async () => {
-      const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
-      if (response.requestSucceeded) {
-        setUsers(response.users);
-      }
-    };
-    getOrgUsers();
+    if (selectedOrganization.id !== -1) {
+      const getOrgUsers = async () => {
+        const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
+        if (response.requestSucceeded) {
+          setUsers(response.users);
+        }
+      };
+      getOrgUsers();
+    }
   }, [selectedOrganization]);
 
   useEffect(() => {
@@ -343,7 +335,14 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             </Grid>
           </>
         ) : null}
-        <Box className={classes.withdraw}>
+        <Box
+          sx={{
+            borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+            borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+            paddingTop: theme.spacing(2),
+            marginBottom: theme.spacing(2),
+          }}
+        >
           <Grid item xs={12} textAlign='left'>
             <Typography color={theme.palette.TwClrTxtSecondary} display='flex' fontSize={14}>
               {strings.WITHDRAW_BY}

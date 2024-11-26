@@ -1,50 +1,82 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import ApplicationStatusCard from 'src/components/ProjectField/ApplicationStatusCard';
 import ProjectFieldDisplay from 'src/components/ProjectField/Display';
-import ProjectFieldLink from 'src/components/ProjectField/Link';
 import ProjectFieldMeta from 'src/components/ProjectField/Meta';
 import PhaseScoreCard from 'src/components/ProjectField/PhaseScoreCard';
 import ProjectFieldTextAreaDisplay from 'src/components/ProjectField/TextAreaDisplay';
 import VotingDecisionCard from 'src/components/ProjectField/VotingDecisionCard';
 import Card from 'src/components/common/Card';
 import ExportCsvModal from 'src/components/common/ExportCsvModal';
+import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
+import useListCohortModules from 'src/hooks/useListCohortModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
-import { LocationService } from 'src/services';
+import { useApplicationData } from 'src/providers/Application/Context';
+import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
+import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import ParticipantProjectService from 'src/services/ParticipantProjectService';
 import strings from 'src/strings';
-import { Country } from 'src/types/Country';
 import { getCountryByCode } from 'src/utils/country';
 
-import { useScoringData } from '../Scoring/ScoringContext';
-import { useVotingData } from '../Voting/VotingContext';
 import { useParticipantProjectData } from './ParticipantProjectContext';
+import { useScoringData } from './Scoring/ScoringContext';
+import { useVotingData } from './Voting/VotingContext';
 
 const SingleView = () => {
-  const { activeLocale } = useLocalization();
+  const { activeLocale, countries } = useLocalization();
   const theme = useTheme();
   const { isAllowed } = useUser();
   const { isMobile } = useDeviceInfo();
   const { crumbs, participant, participantProject, project, projectId, projectMeta, organization, status } =
     useParticipantProjectData();
-  const { phase1Scores } = useScoringData();
+  const { phase0Scores, phase1Scores } = useScoringData();
   const { phaseVotes } = useVotingData();
   const { goToParticipantProjectEdit } = useNavigateTo();
+  const dispatch = useAppDispatch();
+  const { cohortModules, listCohortModules } = useListCohortModules();
+  const [searchDeliverablesRequestId, setSearchDeliverablesRequestId] = useState('');
+  const deliverablesResponse = useAppSelector(selectDeliverablesSearchRequest(searchDeliverablesRequestId));
+  const [hasDeliverables, setHasDeliverables] = useState(false);
 
-  const [countries, setCountries] = useState<Country[]>();
+  useEffect(() => {
+    if (project && project.cohortId) {
+      void listCohortModules(project.cohortId);
+    }
+  }, [project, listCohortModules]);
+
+  useEffect(() => {
+    const request = dispatch(requestListDeliverables({ locale: activeLocale, listRequest: { projectId } }));
+    setSearchDeliverablesRequestId(request.requestId);
+  }, [activeLocale, projectId]);
+
+  useEffect(() => {
+    if (deliverablesResponse?.status === 'success' && (deliverablesResponse?.data?.length || 0) > 0) {
+      setHasDeliverables(true);
+    }
+  }, [deliverablesResponse]);
+
   const [exportModalOpen, setExportModalOpen] = useState(false);
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
   const isAllowedExport = isAllowed('EXPORT_PARTICIPANT_PROJECT');
   const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
+
+  const { getApplicationByProjectId } = useApplicationData();
+
+  const projectApplication = useMemo(
+    () => getApplicationByProjectId(projectId),
+    [getApplicationByProjectId, projectId]
+  );
 
   const onOptionItemClick = useCallback((item: DropdownItem) => {
     if (item.value === 'export-participant-project') {
@@ -84,30 +116,51 @@ const SingleView = () => {
     [goToParticipantProjectEdit, isAllowedEdit, isAllowedExport, projectId, onOptionItemClick, theme]
   );
 
-  useEffect(() => {
-    if (activeLocale) {
-      const populateCountries = async () => {
-        const response = await LocationService.getCountries();
-        if (response) {
-          setCountries(response);
-        }
-      };
-
-      populateCountries();
+  const activeScores = useMemo(() => {
+    switch (project?.cohortPhase) {
+      case 'Pre-Screen':
+      case 'Application':
+      case 'Phase 0 - Due Diligence':
+        return phase0Scores;
+      case 'Phase 1 - Feasibility Study':
+      case 'Phase 2 - Plan and Scale':
+      case 'Phase 3 - Implement and Monitor':
+        return phase1Scores;
     }
-  }, [activeLocale]);
+
+    // Default to phase 1 when data is missing
+    return phase1Scores;
+  }, [project?.cohortPhase, phase0Scores, phase1Scores]);
+
+  const projectViewTitle = (
+    <Box paddingLeft={1}>
+      <Typography fontSize={'24px'} fontWeight={600}>
+        {participant?.name || ''} / {project?.name || ''}
+      </Typography>
+    </Box>
+  );
 
   return (
     <PageWithModuleTimeline
-      title={`${participant?.name || ''} / ${project?.name || ''}`}
+      title={projectViewTitle}
       crumbs={crumbs}
       hierarchicalCrumbs={false}
       rightComponent={rightComponent}
+      titleContainerStyle={{ marginBottom: 0 }}
+      cohortPhase={project?.cohortPhase}
+      modules={cohortModules ?? []}
     >
       {status === 'pending' && <BusySpinner />}
 
       {project && (
         <>
+          {hasDeliverables && (
+            <Box paddingLeft={3}>
+              <Link to={`${APP_PATHS.ACCELERATOR_DELIVERABLES}?projectId=${project.id}`} style={{ fontWeight: 400 }}>
+                {strings.VIEW_ALL_DELIVERABLES}
+              </Link>
+            </Box>
+          )}
           <Card
             style={{
               display: 'flex',
@@ -115,25 +168,33 @@ const SingleView = () => {
               flexGrow: 1,
               marginBottom: theme.spacing(3),
               padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
+              marginTop: 4,
             }}
           >
+            <ProjectFieldDisplay label={strings.PROJECT_NAME} value={project?.name} md={12} />
+
             <Grid container>
-              <ProjectFieldDisplay label={strings.PROJECT_NAME} value={project?.name} />
-              {isAllowedViewScoreAndVoting ? (
+              {!!projectApplication?.id && (
+                <ApplicationStatusCard
+                  application={projectApplication}
+                  linkTo={APP_PATHS.ACCELERATOR_APPLICATION.replace(':applicationId', `${projectApplication.id}`)}
+                  md={!isAllowedViewScoreAndVoting ? 12 : undefined}
+                />
+              )}
+              {isAllowedViewScoreAndVoting && (
                 <>
-                  <PhaseScoreCard phaseScores={phase1Scores} />
-                  <VotingDecisionCard phaseVotes={phaseVotes} />
-                </>
-              ) : (
-                <>
-                  <ProjectFieldDisplay value={false} />
-                  <ProjectFieldDisplay value={false} />
+                  <PhaseScoreCard
+                    linkTo={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
+                    md={!projectApplication?.id ? 6 : undefined}
+                    phaseScores={activeScores}
+                  />
+                  <VotingDecisionCard
+                    linkTo={APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`)}
+                    md={!projectApplication?.id ? 6 : undefined}
+                    phaseVotes={phaseVotes}
+                  />
                 </>
               )}
-              <ProjectFieldLink
-                label={strings.SEE_SCORECARD}
-                value={APP_PATHS.ACCELERATOR_SCORING.replace(':projectId', `${project.id}`)}
-              />
               <ProjectFieldDisplay
                 label={strings.FILE_NAMING}
                 value={participantProject?.fileNaming}
@@ -141,7 +202,11 @@ const SingleView = () => {
               />
               <ProjectFieldDisplay
                 label={strings.PROJECT_LEAD}
-                value={participantProject?.projectLead}
+                value={
+                  organization?.tfContactUser
+                    ? `${organization.tfContactUser.firstName} ${organization.tfContactUser.lastName}`
+                    : ''
+                }
                 rightBorder={!isMobile}
               />
               <ProjectFieldDisplay
@@ -156,7 +221,14 @@ const SingleView = () => {
               <ProjectFieldDisplay label={strings.REGION} value={participantProject?.region} />
               <ProjectFieldDisplay
                 label={strings.LAND_USE_MODEL_TYPE}
-                value={<TextTruncated fontSize={24} stringList={participantProject?.landUseModelTypes || []} />}
+                value={
+                  <TextTruncated
+                    fontSize={24}
+                    fontWeight={600}
+                    stringList={participantProject?.landUseModelTypes || []}
+                    moreText={strings.TRUNCATED_TEXT_MORE_LINK}
+                  />
+                }
                 rightBorder={!isMobile}
               />
               <ProjectFieldDisplay
@@ -179,23 +251,18 @@ const SingleView = () => {
                 rightBorder={!isMobile}
               />
               <ProjectFieldDisplay
-                label={strings.MINIMUM_CARBON_ACCUMULATION}
-                value={participantProject?.minCarbonAccumulation}
-                rightBorder={!isMobile}
-              />
-              <ProjectFieldDisplay
-                label={strings.MAXIMUM_CARBON_ACCUMULATION}
-                value={participantProject?.maxCarbonAccumulation}
-                rightBorder={!isMobile}
-              />
-              <ProjectFieldDisplay
                 label={strings.PER_HECTARE_ESTIMATED_BUDGET}
                 value={participantProject?.perHectareBudget}
               />
               <ProjectFieldDisplay
-                label={strings.NUMBER_OF_COMMUNITIES_WITHIN_PROJECT_AREA}
-                value={participantProject?.numCommunities}
-                rightBorder={!isMobile}
+                label={strings.HUBSPOT_LINK}
+                value={
+                  participantProject?.hubSpotUrl ? (
+                    <a href={participantProject.hubSpotUrl} rel='noopener noreferrer' target='_blank'>
+                      {strings.LINK}
+                    </a>
+                  ) : null
+                }
               />
               <ProjectFieldMeta
                 date={project?.createdTime}
@@ -211,6 +278,24 @@ const SingleView = () => {
                 userName={projectMeta?.modifiedByUserName}
                 userLabel={strings.BY}
               />
+            </Grid>
+            <Grid container>
+              <Grid item xs={12} margin={`0 ${theme.spacing(2)}`}>
+                <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
+                  {strings.CARBON}
+                </Typography>
+              </Grid>
+              <ProjectFieldDisplay
+                label={strings.MIN_MAX_CARBON_ACCUMULATION}
+                value={
+                  participantProject?.minCarbonAccumulation && participantProject?.maxCarbonAccumulation
+                    ? `${participantProject.minCarbonAccumulation}-${participantProject.maxCarbonAccumulation}`
+                    : undefined
+                }
+              />
+              <ProjectFieldDisplay label={strings.CARBON_CAPACITY_TC02_HA} value={participantProject?.carbonCapacity} />
+              <ProjectFieldDisplay label={strings.ANNUAL_CARBON_T} value={participantProject?.annualCarbon} />
+              <ProjectFieldDisplay label={strings.TOTAL_CARBON_T} value={participantProject?.totalCarbon} />
             </Grid>
           </Card>
           <Card

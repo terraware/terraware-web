@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import createCachedSelector from 're-reselect';
 
 import { RootState } from 'src/redux/rootReducer';
@@ -11,11 +12,16 @@ import {
 } from 'src/types/documentProducer/Variable';
 import { VariableValue } from 'src/types/documentProducer/VariableValue';
 
-export const selectVariables = (state: RootState, manifestId: number | string) =>
-  state.documentProducerVariables[manifestId];
+import { AsyncRequest, AsyncRequestT, Statuses } from '../../asyncUtils';
+import { deliverableCompositeKeyFn } from '../../deliverables/deliverablesSlice';
+import { variableListCompositeKeyFn } from '../values/valuesSlice';
+import { specificVariablesCompositeKeyFn, variableHistoryCompositeKeyFn } from './variablesSlice';
+
+export const selectDocumentVariables = (state: RootState, documentId: number | undefined) =>
+  documentId ? state.documentProducerDocumentVariables[documentId] : undefined;
 
 export const selectSections = createCachedSelector(
-  (state: RootState, manifestId: number) => selectVariables(state, manifestId),
+  (state: RootState, documentId: number | undefined) => selectDocumentVariables(state, documentId),
   (response) => {
     if (response?.data) {
       return {
@@ -26,16 +32,17 @@ export const selectSections = createCachedSelector(
       return response;
     }
   }
-)((state: RootState, id: number) => 'sections');
+)((state: RootState, documentId: number | undefined) => 'sections');
 
 export const searchVariables = createCachedSelector(
-  (state: RootState, manifestId: number, query: string) => selectVariables(state, manifestId),
-  (state: RootState, id: number, query: string) => query,
+  (state: RootState, documentId: number | undefined, query: string) => selectDocumentVariables(state, documentId),
+  (state: RootState, documentId: number | undefined, query: string) => query,
   (response, query) => {
     // filter Section, Image and Table variables because we don't want them in the variables table
-    const dataResponseToReturn = (response.data || []).filter(
+    const dataResponseToReturn = (response?.data || []).filter(
       (variable: Variable) => variable.type !== 'Section' && variable.type !== 'Image' && variable.type !== 'Table'
     );
+
     if (response?.data && query) {
       const regex = new RegExp(query, 'i');
       const fields = ['name', 'type', 'value'];
@@ -49,13 +56,12 @@ export const searchVariables = createCachedSelector(
       return { ...response, data: dataResponseToReturn };
     }
   }
-)((state: RootState, id: number, query: string) => query);
+)((state: RootState, documentId: number | undefined, query: string) => query);
 
 export const selectGetVariable = createCachedSelector(
-  (state: RootState, manifestId: number | string, variableId: number) => state.documentProducerVariables[manifestId],
-  (state: RootState, manifestId: number | string, variableId: number) => manifestId,
-  (state: RootState, manifestId: number | string, variableId: number) => variableId,
-  (response, manifestId, variableId) => {
+  (state: RootState, variableId: number) => state.documentProducerAllVariables['all'],
+  (state: RootState, variableId: number) => variableId,
+  (response, variableId) => {
     if (response?.data) {
       const variableToReturn = response.data.find((variable: Variable) => variable.id === variableId);
       return {
@@ -66,10 +72,10 @@ export const selectGetVariable = createCachedSelector(
       return response;
     }
   }
-)((state: RootState, manifestId: number | string, variableId: number) => variableId);
+)((state: RootState, variableId: number) => variableId);
 
-const getCombinedProps = (listA: any, listB: any) => {
-  let status = 'pending';
+const getCombinedProps = (listA: any, listB: any): { status: Statuses; error: string | undefined } => {
+  let status: Statuses = 'pending';
   if (listA.status === 'error' || listB.status === 'error') {
     status = 'error';
   }
@@ -159,26 +165,143 @@ const associateValues = (
   };
 };
 
-export const selectVariablesWithValues = createCachedSelector(
-  (state: RootState, manifestId: number | string, documentId: number) =>
-    (state.documentProducerVariables as any)[manifestId],
-  (state: RootState, manifestId: number | string, documentId: number) =>
-    (state.documentProducerVariableValuesList as any)[documentId],
-  (variableList, valueList) => {
-    if (variableList?.data && valueList?.data) {
+export const selectDocumentVariablesWithValues = createCachedSelector(
+  (state: RootState, documentId: number | undefined, projectId: number, maxValueId?: number) =>
+    selectDocumentVariables(state, documentId),
+  (state: RootState, documentId: number | undefined, projectId: number, maxValueId?: number) =>
+    state.documentProducerVariableValuesList[variableListCompositeKeyFn({ projectId, maxValueId })],
+  (variableList, valueList): AsyncRequest | undefined => {
+    const variables = variableList?.data;
+    const values = valueList?.data;
+
+    if (variables && values) {
       let topLevelSectionPosition = 0;
-      const output = variableList.data.map((v: Variable) => {
+      const output = variables.map((v: Variable) => {
         if (v.type === 'Section' && v.renderHeading) {
           topLevelSectionPosition++;
         }
-        return associateValues(v, valueList.data, variableList.data, topLevelSectionPosition);
+        return associateValues(v, values, variables, topLevelSectionPosition);
       });
       return {
         ...getCombinedProps(variableList, valueList),
         data: output,
       };
     } else {
+      return undefined;
+    }
+  }
+)((state: RootState, documentId: number | undefined, projectId: number) => `${projectId}-${documentId}`);
+
+const associateNonSectionVariableValues = (
+  variable: Variable,
+  values: VariableValue[],
+  variableList: VariableUnion[]
+): VariableWithValues => {
+  const currentValue = values.find((val: VariableValue) => val.variableId === variable.id);
+
+  const variablesInVariable: number[] = (currentValue?.values || [])
+    .map((value) => ('variableId' in value ? value.variableId : false))
+    .filter((value): value is number => value === 0 || !!value);
+
+  // Link up the variable values that are referenced within this variable
+  const variableValues = values.filter(
+    (val) => val.variableId === variable.id || variablesInVariable.includes(val.variableId)
+  );
+
+  if (variable.type === 'Table') {
+    let columns: TableColumnWithValues[] = [];
+    if (variable.columns) {
+      columns = variable.columns.map((col) => ({
+        ...col,
+        variable: associateNonSectionVariableValues(col.variable as Variable, values, variableList),
+      }));
+    }
+    return {
+      ...variable,
+      columns,
+      values: currentValue?.values ?? [],
+      variableValues,
+    };
+  }
+
+  return {
+    ...variable,
+    values: currentValue?.values ?? [],
+    variableValues,
+  };
+};
+
+export const selectAllVariablesWithValues = createCachedSelector(
+  (state: RootState, projectId: number | undefined, maxValueId?: number) => state.documentProducerAllVariables['all'],
+  (state: RootState, projectId: number | undefined, maxValueId?: number) =>
+    state.documentProducerVariableValuesList[variableListCompositeKeyFn({ projectId, maxValueId })],
+  (variableList, valueList): AsyncRequestT<VariableWithValues[]> | undefined => {
+    const variables = variableList?.data;
+    const values = valueList?.data;
+
+    if (variables && values) {
+      return {
+        ...getCombinedProps(variableList, valueList),
+        data: variables.map((v: Variable) => associateNonSectionVariableValues(v, values, variables)),
+      };
+    } else {
+      return undefined;
+    }
+  }
+)((state: RootState, projectId: number | undefined, maxValueId?: number) =>
+  variableListCompositeKeyFn({ projectId, maxValueId })
+);
+
+export const selectDeliverableVariablesWithValues = createCachedSelector(
+  (state: RootState, deliverableId: number, projectId: number) =>
+    state.documentProducerDeliverableVariables[deliverableId],
+  (state: RootState, deliverableId: number, projectId: number) =>
+    state.documentProducerDeliverableVariableValues[deliverableCompositeKeyFn({ deliverableId, projectId })],
+  (variableList, valueList) => {
+    const variables = variableList?.data;
+    const values = valueList?.data;
+
+    if (variables && values) {
+      return variables.map((v: Variable) => associateNonSectionVariableValues(v, values, variables));
+    } else {
       return [];
     }
   }
-)((state: RootState, manifestId: number | string, documentId: number) => `${documentId}-${manifestId}`);
+)((state: RootState, deliverableId: number, projectId: number) =>
+  deliverableCompositeKeyFn({ deliverableId, projectId })
+);
+
+export const selectSpecificVariablesWithValues = createCachedSelector(
+  (state: RootState, variablesStableIds: string[], projectId: number) => {
+    return state.documentProducerSpecificVariables[variablesStableIds.toString()];
+  },
+  (state: RootState, variablesStableIds: string[], projectId: number) => {
+    return state.documentProducerSpecificVariableValues[
+      specificVariablesCompositeKeyFn({ variablesStableIds, projectId })
+    ];
+  },
+  (variableList, valueList) => {
+    const variables = variableList?.data;
+    const values = valueList?.data;
+
+    if (variables && values) {
+      return variables.map((v: Variable) => associateNonSectionVariableValues(v, values, variables));
+    } else {
+      return [];
+    }
+  }
+)((state: RootState, variablesStableIds: string[], projectId: number) =>
+  specificVariablesCompositeKeyFn({ variablesStableIds, projectId })
+);
+
+export const selectUpdateVariableWorkflowDetails = (requestId: string) => (state: RootState) =>
+  state.variableWorkflowDetailsUpdate[requestId];
+
+export const selectUpdateVariableOwner = (requestId: string) => (state: RootState) =>
+  state.variableOwnerUpdate[requestId];
+
+export const selectVariablesOwners = (state: RootState, projectId: number | undefined) =>
+  projectId ? state.variablesOwners[projectId] : undefined;
+
+export const selectVariableHistory = (state: RootState, variableId: number, projectId: number) =>
+  state.variableHistory[variableHistoryCompositeKeyFn({ variableId, projectId })];

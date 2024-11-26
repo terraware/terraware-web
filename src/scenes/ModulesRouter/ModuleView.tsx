@@ -1,150 +1,114 @@
 import React, { useEffect, useMemo } from 'react';
+import { useMixpanel } from 'react-mixpanel-browser';
 import { useParams } from 'react-router-dom';
 
-import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
+import { DateTime } from 'luxon';
 
 import { Crumb } from 'src/components/BreadCrumbs';
-import Link from 'src/components/common/Link';
-import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
+import ModuleDetailsCard from 'src/components/ModuleDetailsCard';
+import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
 import { APP_PATHS } from 'src/constants';
+import useGetCohortModule from 'src/hooks/useGetCohortModule';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useLocalization, useProject } from 'src/providers';
-import { requestGetModule } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectModule } from 'src/redux/features/modules/modulesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import useProjectModuleDeliverables from 'src/hooks/useProjectModuleDeliverables';
+import useProjectModuleEvents from 'src/hooks/useProjectModuleEvents';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
+import { useLocalization } from 'src/providers';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
-import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 
-import ModuleEventCard from './ModuleEventCard';
 import ModuleViewTitle from './ModuleViewTitle';
 
-const ModuleContentSection = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <Box
-      sx={{
-        flexDirection: 'column',
-        marginBottom: '16px',
-      }}
-    >
-      {children}
-    </Box>
-  );
-};
-
-const ModuleContentView = () => {
-  const dispatch = useAppDispatch();
+const ModuleView = () => {
   const { activeLocale } = useLocalization();
-  const theme = useTheme();
-  const { goToModuleEvent } = useNavigateTo();
-  const { project, projectId } = useProject();
-  const pathParams = useParams<{ moduleId: string; projectId: string }>();
+  const { goToDeliverable, goToModuleEventSession } = useNavigateTo();
+  const { currentParticipantProject, setCurrentParticipantProject } = useParticipantData();
+
+  const pathParams = useParams<{ sessionId: string; moduleId: string; projectId: string }>();
+  const projectId = Number(pathParams.projectId);
   const moduleId = Number(pathParams.moduleId);
-  const module = useAppSelector(selectModule(moduleId));
+  const mixpanel = useMixpanel();
+
+  useEffect(() => {
+    if (projectId) {
+      setCurrentParticipantProject(projectId);
+    }
+  }, [projectId, setCurrentParticipantProject]);
+
+  const { cohortModule, getCohortModule } = useGetCohortModule();
+  const { deliverables, listProjectModuleDeliverables } = useProjectModuleDeliverables();
+  const { events, listProjectModuleEvents } = useProjectModuleEvents();
+
+  useEffect(() => {
+    if (currentParticipantProject && currentParticipantProject.cohortId) {
+      void getCohortModule({ moduleId, cohortId: currentParticipantProject.cohortId });
+      void listProjectModuleDeliverables({ moduleId, projectId: currentParticipantProject.id });
+      void listProjectModuleEvents({ moduleId, projectId: currentParticipantProject.id });
+    }
+  }, [currentParticipantProject, moduleId, getCohortModule, listProjectModuleDeliverables, listProjectModuleEvents]);
+
+  const deliverableDetails = useMemo(
+    () =>
+      deliverables?.map((deliverable) => ({
+        ...deliverable,
+        dueDate: deliverable.dueDate ? DateTime.fromISO(deliverable.dueDate) : undefined,
+        onClick: () => goToDeliverable(deliverable.id, projectId),
+      })),
+    [deliverables, goToDeliverable, projectId]
+  );
+
+  const eventDetails = useMemo(
+    () =>
+      events?.map((event) => ({
+        ...event,
+        onClick: () => {
+          mixpanel?.track(MIXPANEL_EVENTS.ACCELERATOR_MDDULE_SESSION_EVENT_LINK, {
+            eventId: event.id,
+            type: event.type,
+          });
+          goToModuleEventSession(projectId, moduleId, event.id);
+        },
+      })),
+    [events, goToModuleEventSession, projectId, mixpanel]
+  );
+
+  const moduleDetails = useMemo(
+    () =>
+      cohortModule
+        ? {
+            ...cohortModule,
+            title: activeLocale ? strings.formatString(strings.TITLE_OVERVIEW, cohortModule.title).toString() : '',
+          }
+        : undefined,
+    [activeLocale, cohortModule]
+  );
 
   const crumbs: Crumb[] = useMemo(
     () => [
       {
         name: activeLocale ? strings.ALL_MODULES : '',
-        to: APP_PATHS.MODULES_FOR_PROJECT.replace(':projectId', `${projectId}`),
+        to: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`),
       },
     ],
     [activeLocale, projectId]
   );
 
-  useEffect(() => {
-    void dispatch(requestGetModule(moduleId));
-  }, [dispatch, moduleId]);
-
   return (
-    <PageWithModuleTimeline
+    <ParticipantPage
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      title={<ModuleViewTitle module={module} project={project} />}
+      title={<ModuleViewTitle module={cohortModule} projectId={projectId} />}
     >
-      <Card
-        sx={{
-          borderRadius: '24px',
-          boxShadow: 'none',
-          display: 'flex',
-          flexDirection: 'column',
-          flexGrow: 1,
-          marginBottom: theme.spacing(3),
-          padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
-        }}
-      >
-        {module && (
-          <Grid container spacing={theme.spacing(1)}>
-            <Grid item xs style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
-              <ModuleContentSection>
-                <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={500}>
-                  {strings.formatString(strings.MODULE_NAME_OVERVIEW, module.name)}
-                </Typography>
-                <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
-                  {module.title}
-                </Typography>
-              </ModuleContentSection>
-
-              <ModuleContentSection>
-                <Box dangerouslySetInnerHTML={{ __html: module.description || '' }} />
-              </ModuleContentSection>
-
-              {module.contents.length && (
-                <>
-                  <ModuleContentSection>
-                    <Typography fontSize={'20px'} lineHeight={'28px'} fontWeight={600}>
-                      {strings.THIS_MODULE_CONTAINS}
-                    </Typography>
-                  </ModuleContentSection>
-
-                  {module.contents.map((content) => (
-                    <ModuleContentSection key={content.id}>
-                      <Link
-                        fontSize='16px'
-                        onClick={() => {
-                          if (content.url) {
-                            window.open(content.url, '_blank', 'noopener noreferrer');
-                          }
-                        }}
-                      >
-                        {content.title}
-                      </Link>
-                      {content.dueDate && (
-                        <Typography
-                          component='span'
-                          fontSize={'16px'}
-                          fontWeight={600}
-                          lineHeight={'24px'}
-                          sx={{
-                            color: theme.palette.TwClrTxtWarning,
-                            marginLeft: '8px',
-                          }}
-                        >
-                          {strings.formatString(strings.DUE, getLongDate(content.dueDate, activeLocale))}
-                        </Typography>
-                      )}
-                    </ModuleContentSection>
-                  ))}
-                </>
-              )}
-            </Grid>
-
-            {module.events.length && (
-              <Grid item>
-                {module.events.map((event) => (
-                  <ModuleEventCard
-                    key={event.id}
-                    label={event.name}
-                    onClickButton={() => goToModuleEvent(projectId, event.id, module.id)}
-                    value={event.eventTime ? getLongDateTime(event.eventTime, activeLocale) : ''}
-                  />
-                ))}
-              </Grid>
-            )}
-          </Grid>
-        )}
-      </Card>
-    </PageWithModuleTimeline>
+      {moduleDetails && (
+        <ModuleDetailsCard
+          deliverables={deliverableDetails}
+          events={eventDetails}
+          module={moduleDetails}
+          projectId={projectId}
+        />
+      )}
+    </ParticipantPage>
   );
 };
 
-export default ModuleContentView;
+export default ModuleView;

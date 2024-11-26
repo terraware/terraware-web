@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
@@ -25,7 +25,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { OnValidate } from './types';
-import useStyles from './useMapStyle';
+import useMapStyle from './useMapStyle';
 import {
   IdGenerator,
   cutOverlappingBoundaries,
@@ -34,6 +34,7 @@ import {
   getLatestFeature,
   plantingZoneToFeature,
   toZoneFeature,
+  zoneNameGenerator,
 } from './utils';
 
 export type ZonesProps = {
@@ -56,7 +57,7 @@ const createDraftSiteWith = (site: DraftPlantingSite) => (cutZones: GeometryFeat
     defaultZonePayload({
       boundary: toMultiPolygon(zone.geometry) as MultiPolygon,
       id: index,
-      name: `${index}`, // temporary name for error checking
+      name: zoneNameGenerator(new Set<string>(), strings.ZONE),
       targetPlantingDensity: zone.properties?.targetPlantingDensity ?? 1500,
     })
   ),
@@ -87,8 +88,8 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
     fixedBoundaries: featureSiteZones(site),
   });
   const [overridePopupInfo, setOverridePopupInfo] = useState<PopupInfo | undefined>();
-  const classes = useStyles();
   const theme = useTheme();
+  const mapStyles = useMapStyle(theme);
   const snackbar = useSnackbar();
   const getRenderAttributes = useRenderAttributes();
   const activeLocale = useLocalization();
@@ -100,7 +101,7 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
       const missingZones = zones === undefined;
       const zonesTooSmall = !!zonesData?.errorAnnotations?.length;
       // check for missing zone names
-      const missingZoneNames = !missingZones && zones!.features.some((zone) => !zone?.properties?.name?.trim());
+      const missingZoneNames = !missingZones && zones.features.some((zone) => !zone?.properties?.name?.trim());
       const missingData = (missingZones || missingZoneNames) && !onValidate.isSaveAndClose;
 
       if (zonesTooSmall || missingData) {
@@ -147,7 +148,7 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
     const exclusionsBoundary: RenderableReadOnlyBoundary[] = site.exclusion
       ? [
           {
-            data: { type: 'FeatureCollection', features: [toFeature(site.exclusion!, {}, 0)] },
+            data: { type: 'FeatureCollection', features: [toFeature(site.exclusion, {}, 0)] },
             id: 'exclusions',
             renderProperties: getRenderAttributes('exclusions'),
           },
@@ -157,6 +158,7 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
     return [
       ...exclusionsBoundary,
       {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         data: { type: 'FeatureCollection', features: [toFeature(site.boundary!, {}, site.id)] },
         id: 'site',
         renderProperties: getRenderAttributes('site'),
@@ -164,7 +166,7 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
       {
         data: {
           type: 'FeatureCollection',
-          features: zones!.features.map((feature: Feature) => toZoneFeature(feature, idGenerator)),
+          features: zones.features.map((feature: Feature) => toZoneFeature(feature, idGenerator)),
         },
         id: 'zone',
         isInteractive: true,
@@ -188,7 +190,8 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
             {
               text: strings.SITE_ZONE_BOUNDARIES_DESCRIPTION_1,
               hasTutorial: true,
-              handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon icon='slice' />) as JSX.Element[],
+              handlePrefix: (prefix: string) =>
+                strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
             },
             {
               text: strings.SITE_ZONE_BOUNDARIES_SIZE,
@@ -217,7 +220,17 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
     const onSuccess = (cutZones: GeometryFeature[]) => {
       // if it is feasible to cut zones without making them too small, create new fixed zone boundaries and clear the cut geometry
       const idGenerator = IdGenerator(cutZones);
-      const zonesWithIds = cutZones.map((zone) => toZoneFeature(zone, idGenerator)) as GeometryFeature[];
+      const usedNames: Set<string> = new Set(
+        (zones?.features ?? []).map((f) => f.properties?.name).filter((name) => !!name)
+      );
+      const zonesWithIds = cutZones.map((zone) => {
+        if (!zone.properties?.name) {
+          const zoneName = zoneNameGenerator(usedNames, strings.ZONE);
+          zone.properties = { ...zone.properties, name: zoneName };
+          usedNames.add(zoneName);
+        }
+        return toZoneFeature(zone, idGenerator);
+      }) as GeometryFeature[];
 
       setZonesData({
         editableBoundary: emptyBoundary(),
@@ -277,7 +290,7 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
 
   const popupRenderer = useMemo(
     (): MapPopupRenderer => ({
-      className: `${classes.tooltip} ${classes.box}`,
+      sx: [mapStyles.tooltip, mapStyles.box],
       render: (properties: MapSourceProperties, onClose?: () => void): JSX.Element | null => {
         const { id, name, targetPlantingDensity } = properties;
 
@@ -324,7 +337,7 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
         );
       },
     }),
-    [classes.box, classes.tooltip, setZonesData, zones]
+    [setZonesData, zones]
   );
 
   return (
@@ -332,7 +345,7 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
       <StepTitleDescription
         description={description}
         dontShowAgainPreferenceName='dont-show-site-zone-boundaries-instructions'
-        title={strings.SITE_ZONE_BOUNDARIES}
+        title={strings.ADDING_ZONE_BOUNDARIES}
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_zone_boundary_instructions_video'
         tutorialTitle={strings.ADDING_ZONE_BOUNDARIES}
@@ -374,7 +387,6 @@ const TooltipContents = ({
   const [densityError, setDensityError] = useState<string>('');
   const [validate, setValidate] = useState<boolean>(false);
   const theme = useTheme();
-  const classes = useStyles();
 
   const validateInput = useCallback((): boolean => {
     let hasNameErrors = true;
@@ -409,7 +421,7 @@ const TooltipContents = ({
     }
 
     if (validateInput()) {
-      onUpdate(zoneName, density as number);
+      onUpdate(zoneName, density);
     }
   };
 
@@ -430,22 +442,22 @@ const TooltipContents = ({
         <Typography>{strings.PLANTING_SITE_ZONE_NAME_HELP}</Typography>
         <Textfield
           autoFocus
-          className={classes.textInput}
           label={strings.NAME}
           id='zone-name'
           type='text'
           onChange={(value) => setZoneName(value as string)}
           value={zoneName}
           errorText={nameError}
+          sx={{ marginTop: theme.spacing(1.5) }}
         />
         <Textfield
-          className={classes.textInput}
           label={strings.TARGET_PLANTING_DENSITY}
           id='target-planting-density'
           type='number'
           onChange={(value) => setDensity(value as number)}
           value={density}
           errorText={densityError}
+          sx={{ marginTop: theme.spacing(1.5) }}
         />
       </Box>
     </MapTooltipDialog>

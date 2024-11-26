@@ -8,11 +8,9 @@ import {
   Grid,
   Radio,
   RadioGroup,
-  Theme,
   Typography,
   useTheme,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Dropdown, DropdownItem, IconTooltip, Textfield } from '@terraware/web-components';
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
 
@@ -39,29 +37,6 @@ import { useNumberFormatter } from 'src/utils/useNumber';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  withdrawnQuantity: {
-    '&> #withdrawnQuantity': {
-      height: '44px',
-    },
-  },
-  notReadyQuantityWithdrawn: {
-    '&> #notReadyQuantityWithdrawn': {
-      height: '44px',
-    },
-  },
-  readyQuantityWithdrawn: {
-    '&> #readyQuantityWithdrawn': {
-      height: '44px',
-    },
-  },
-  germinatingQuantityWithdrawn: {
-    '&> #germinatingQuantityWithdrawn': {
-      height: '44px',
-    },
-  },
-}));
-
 type SelectPurposeFormProps = {
   onNext: (withdrawal: NurseryWithdrawalRequest) => void;
   batches: SearchResponseElement[];
@@ -83,7 +58,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const classes = useStyles();
 
   const plantingSites = useAppSelector(selectPlantingSites);
   const projects = useAppSelector(selectProjects);
@@ -95,10 +69,10 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [selectedNursery, setSelectedNursery] = useState<Facility>();
   const [destinationNurseriesOptions, setDestinationNurseriesOptions] = useState<DropdownItem[]>();
   const [isSingleBatch] = useState<boolean>(batches.length === 1);
-  const [withdrawnQuantity, setWithdrawnQuantity] = useState<number>();
-  const [readyQuantityWithdrawn, setReadyQuantityWithdrawn] = useState<number>();
-  const [notReadyQuantityWithdrawn, setNotReadyQuantityWithdrawn] = useState<number>();
-  const [germinatingQuantityWithdrawn, setGerminatingQuantityWithdrawn] = useState<number>();
+  const [withdrawnQuantity, setWithdrawnQuantity] = useState<number>(0);
+  const [readyQuantityWithdrawn, setReadyQuantityWithdrawn] = useState<number>(0);
+  const [notReadyQuantityWithdrawn, setNotReadyQuantityWithdrawn] = useState<number>(0);
+  const [germinatingQuantityWithdrawn, setGerminatingQuantityWithdrawn] = useState<number>(0);
   const [zones, setZones] = useState<any[]>([]);
   const [zoneId, setZoneId] = useState<number>();
   const [noReadySeedlings, setNoReadySeedlings] = useState<boolean>(false);
@@ -193,14 +167,14 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     }));
   };
 
-  const validateDate = (id: string, value?: any) => {
+  const validateDate = (id: string, value?: any, allowFutureDates?: boolean) => {
     if (!value) {
       setIndividualError(id, strings.REQUIRED_FIELD);
       return false;
     } else if (isNaN(value.getTime())) {
       setIndividualError(id, strings.INVALID_DATE);
       return false;
-    } else if (isInTheFuture(value.getTime())) {
+    } else if (!allowFutureDates && isInTheFuture(value.getTime())) {
       setIndividualError(id, strings.NO_FUTURE_DATES);
       return false;
     } else {
@@ -209,9 +183,9 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     }
   };
 
-  const onChangeDate = (id: 'readyByDate' | 'withdrawnDate', value?: any) => {
+  const onChangeDate = (id: 'readyByDate' | 'withdrawnDate', value?: any, allowFutureDates?: boolean) => {
     const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
-    const valid = validateDate(id, value);
+    const valid = validateDate(id, value, allowFutureDates);
     if (valid) {
       updateField(id, date);
     }
@@ -263,6 +237,13 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const validateGerminatingReadyAndNotReadyQuantities = () => {
     let allValid = true;
     if (isSingleBatch && !isOutplant) {
+      if (notReadyQuantityWithdrawn === 0 && readyQuantityWithdrawn === 0 && germinatingQuantityWithdrawn === 0) {
+        setIndividualError('totalQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_GREATER_THAN_ZERO_ERROR);
+        allValid = false;
+      } else {
+        setIndividualError('totalQuantityWithdrawn', '');
+      }
+
       if (!notReadyQuantityWithdrawn && notReadyQuantityWithdrawn !== 0) {
         setIndividualError('notReadyQuantityWithdrawn', strings.REQUIRED_FIELD);
         allValid = false;
@@ -386,8 +367,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             readyQuantityWithdrawn: isSingleOutplant
               ? withdrawnQuantity || 0
               : isSingleBatch
-              ? readyQuantityWithdrawn || 0
-              : 0,
+                ? readyQuantityWithdrawn || 0
+                : 0,
           })
         ),
     });
@@ -473,19 +454,21 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   }, [localRecord.purpose, noReadySeedlings, snackbar, selectedNursery, batches, updatePurpose]);
 
   useEffect(() => {
-    const fetchSpecies = async () => {
-      const result = await SpeciesService.getAllSpecies(selectedOrganization.id);
-      const speciesNamesMap = (result.species || []).reduce((acc, sp) => {
-        const { scientificName, commonName } = sp;
-        return {
-          ...acc,
-          [sp.id.toString()]: commonName ? `${scientificName} (${commonName})` : scientificName,
-        };
-      }, {});
-      setSpeciesMap(speciesNamesMap);
-    };
+    if (selectedOrganization.id !== -1) {
+      const fetchSpecies = async () => {
+        const result = await SpeciesService.getAllSpecies(selectedOrganization.id);
+        const speciesNamesMap = (result.species || []).reduce((acc, sp) => {
+          const { scientificName, commonName } = sp;
+          return {
+            ...acc,
+            [sp.id.toString()]: commonName ? `${scientificName} (${commonName})` : scientificName,
+          };
+        }, {});
+        setSpeciesMap(speciesNamesMap);
+      };
 
-    fetchSpecies();
+      fetchSpecies();
+    }
   }, [selectedOrganization.id]);
 
   const batchesFromNursery = useMemo(() => {
@@ -505,10 +488,10 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const getOutplantLabel = () => {
     return (
       <>
-        {strings.OUTPLANT}
-        {noReadySeedlings && <IconTooltip placement='top' title={strings.OUTPLANTS_REQUIRE_READY_SEEDLINGS} />}
+        {strings.PLANTING}
+        {noReadySeedlings && <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_READY_SEEDLINGS} />}
         {!noReadySeedlings && outplantDisabled && (
-          <IconTooltip placement='top' title={strings.OUTPLANTS_REQUIRE_PLANTING_SITES} />
+          <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_PLANTING_SITES} />
         )}
       </>
     );
@@ -718,7 +701,11 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                       type='number'
                       value={withdrawnQuantity}
                       errorText={fieldsErrors.withdrawnQuantity}
-                      className={classes.withdrawnQuantity}
+                      sx={{
+                        '&> #withdrawnQuantity': {
+                          height: '44px',
+                        },
+                      }}
                     />
                   </Grid>
                   <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}>
@@ -747,9 +734,13 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         type='number'
                         value={germinatingQuantityWithdrawn}
                         tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
-                        className={classes.germinatingQuantityWithdrawn}
                         errorText={fieldsErrors.germinatingQuantityWithdrawn}
                         required
+                        sx={{
+                          '&> #germinatingQuantityWithdrawn': {
+                            height: '44px',
+                          },
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -765,9 +756,13 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         type='number'
                         value={notReadyQuantityWithdrawn}
                         tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
-                        className={classes.notReadyQuantityWithdrawn}
                         errorText={fieldsErrors.notReadyQuantityWithdrawn}
                         required
+                        sx={{
+                          '&> #notReadyQuantityWithdrawn': {
+                            height: '44px',
+                          },
+                        }}
                       />
                     </Grid>
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}>
@@ -776,7 +771,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         label={strings.ESTIMATED_READY_DATE}
                         aria-label={strings.ESTIMATED_READY_DATE}
                         value={localRecord.readyByDate}
-                        onChange={(value) => onChangeDate('readyByDate', value)}
+                        onChange={(value) => onChangeDate('readyByDate', value, true)}
                         defaultTimeZone={timeZone}
                       />
                     </Grid>
@@ -792,9 +787,13 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         type='number'
                         value={readyQuantityWithdrawn}
                         tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
-                        className={classes.readyQuantityWithdrawn}
                         errorText={fieldsErrors.readyQuantityWithdrawn}
                         required
+                        sx={{
+                          '&> #readyQuantityWithdrawn': {
+                            height: '44px',
+                          },
+                        }}
                       />
                     </Grid>
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}>
@@ -804,6 +803,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         onChange={(value: unknown) => setWithdrawnQuantity(value as number)}
                         type='text'
                         value={numericFormatter.format(withdrawnQuantity)}
+                        errorText={fieldsErrors.totalQuantityWithdrawn}
                         display={true}
                       />
                     </Grid>

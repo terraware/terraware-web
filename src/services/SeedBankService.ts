@@ -14,7 +14,9 @@ import {
 import { UnitType } from 'src/units';
 
 import HttpService, { Response } from './HttpService';
+import PhotoService, { PhotoId } from './PhotoService';
 import SearchService from './SearchService';
+import { getPromisesResponse } from './utils';
 
 /**
  * Seed bank related services
@@ -22,6 +24,8 @@ import SearchService from './SearchService';
 
 const SUMMARY_ENDPOINT = '/api/v1/seedbank/summary';
 const ACCESSIONS_ENDPOINT = '/api/v2/seedbank/accessions';
+const ACCESSION_PHOTO_ENDPOINT = '/api/v1/seedbank/accessions/{accessionId}/photos/{photoFilename}';
+const ACCESSION_PHOTOS_ENDPOINT = '/api/v1/seedbank/accessions/{accessionId}/photos';
 const ACCESSIONS_TEMPLATE_ENDPOINT = '/api/v2/seedbank/accessions/uploads/template';
 const ACCESSIONS_UPLOADS_ENDPOINT = '/api/v2/seedbank/accessions/uploads';
 const ACCESSIONS_UPLOAD_STATUS_ENDPOINT = '/api/v2/seedbank/accessions/uploads/{uploadId}';
@@ -172,6 +176,19 @@ const getCollectors = async (organizationId: number): Promise<string[] | undefin
 };
 
 /**
+ * Returns all the CollectionSiteName values associated with an organization id, or undefined if the API request failed.
+ */
+const getCollectionSiteNames = async (organizationId: number): Promise<string[] | undefined> => {
+  try {
+    const collectionSiteNames =
+      (await searchFieldValues(['collectionSiteName'], {}, organizationId))?.collectionSiteName?.values || [];
+    return collectionSiteNames.filter((collectionSiteName) => collectionSiteName !== null) as string[];
+  } catch {
+    return undefined;
+  }
+};
+
+/**
  * Get accessions awaiting check-in
  */
 const getPendingAccessions = async (organizationId: number): Promise<SearchResponseElementWithId[] | null> => {
@@ -223,6 +240,38 @@ const uploadAccessions = async (file: File, seedbankId: string): Promise<UploadF
   };
 
   return response;
+};
+
+/**
+ * upload accession photos
+ */
+const uploadAccessionPhotos = async (
+  accessionId: number,
+  photos: File[]
+): Promise<((Response & PhotoId) | string)[]> => {
+  const url = ACCESSION_PHOTOS_ENDPOINT.replace('{accessionId}', accessionId.toString());
+  return PhotoService.uploadPhotos(url, photos, true);
+};
+
+/**
+ * Delete multiple photos for an accession
+ */
+const deleteAccessionPhotos = async (accessionId: number, photoFilenames: string[]): Promise<(Response | null)[]> => {
+  const deletePhotoPromises = photoFilenames.map((photoFilename) => deleteAccessionPhoto(accessionId, photoFilename));
+
+  return getPromisesResponse<Response>(deletePhotoPromises);
+};
+
+/**
+ * delete accession photo
+ */
+const deleteAccessionPhoto = async (accessionId: number, photoFilename: string): Promise<Response> => {
+  return await HttpService.root(ACCESSION_PHOTO_ENDPOINT).delete({
+    urlReplacements: {
+      '{accessionId}': accessionId.toString(),
+      '{photoFilename}': photoFilename,
+    },
+  });
 };
 
 /**
@@ -296,9 +345,12 @@ const SeedBankService = {
   searchAccessions,
   searchFieldValues,
   getCollectors,
+  getCollectionSiteNames,
   getPendingAccessions,
   downloadAccessionsTemplate,
   uploadAccessions,
+  uploadAccessionPhotos,
+  deleteAccessionPhotos,
   getAccessionsUploadStatus,
   resolveAccessionsUpload,
   getAccessionForSpecies,

@@ -1,18 +1,12 @@
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
-import { Box, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Typography, useTheme } from '@mui/material';
 
 import TextWithLink from 'src/components/common/TextWithLink';
 import VideoDialog from 'src/components/common/VideoDialog';
 import { DocType, useDocLinks } from 'src/docLinks';
-import { useUser } from 'src/providers';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  clickableText: {
-    marginLeft: theme.spacing(0.5),
-  },
-}));
+import { useLocalization, useUser } from 'src/providers';
+import strings from 'src/strings';
 
 export type Description = {
   handlePrefix?: (prefix: string) => string | JSX.Element[];
@@ -43,8 +37,8 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
     tutorialDocLinkKey,
     tutorialTitle,
   } = props;
+  const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const classes = useStyles();
   const docLinks = useDocLinks();
   const { userPreferences, updateUserPreferences } = useUser();
 
@@ -55,6 +49,13 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
   );
   const [showModal, setShowModal] = useState<boolean>(userPreferenceControlled);
 
+  const titleWithPrefix = useMemo(() => {
+    if (!activeLocale || !tutorialTitle) {
+      return '';
+    }
+    return strings.formatString(strings.TUTORIAL_PREFIX, tutorialTitle).toString();
+  }, [activeLocale, tutorialTitle]);
+
   const onClose = (dontShowAgain?: boolean) => {
     setShowModal(false);
     if (dontShowAgain && !!dontShowAgainPreferenceName) {
@@ -64,14 +65,13 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
 
   return (
     <Box marginBottom={theme.spacing(2)} display='flex' flexDirection='column' minHeight={minHeight}>
-      {tutorialDescription && tutorialDocLinkKey && tutorialTitle && (
+      {tutorialDescription && tutorialDocLinkKey && titleWithPrefix && (
         <VideoDialog
           description={tutorialDescription}
           link={docLinks[tutorialDocLinkKey]}
-          onClose={() => onClose()}
-          onDontShowAgain={userPreferenceControlled ? () => onClose(true) : undefined}
+          onClose={() => onClose(true)}
           open={showModal}
-          title={tutorialTitle}
+          title={titleWithPrefix}
         />
       )}
       <Typography fontSize='20px' fontWeight={600} lineHeight='28px' color={theme.palette.TwClrTxt}>
@@ -79,7 +79,7 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
       </Typography>
       {description.map((line: Description, index: number) => (
         <Typography
-          display='flex'
+          display='inline'
           alignItems='center'
           key={index}
           fontSize='14px'
@@ -87,16 +87,17 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
           lineHeight='20px'
           color={line.isWarning ? theme.palette.TwClrIcnWarning : theme.palette.TwClrTxt}
           margin={theme.spacing(1, 0)}
+          whiteSpace={'line-wrap'}
         >
           {line.hasTutorial ? (
             <TextWithLink
-              className={classes.clickableText}
               fontSize='14px'
               handlePrefix={line.handlePrefix}
               handleSuffix={line.handleSuffix}
               onClick={() => setShowModal(true)}
               text={line.text as string}
               key={index}
+              style={{ position: 'relative', bottom: '2px' }}
             />
           ) : (
             line.text

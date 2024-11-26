@@ -1,121 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
-import { Divider, List, ListItem, ListSubheader, Popover, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Divider, List, ListItem, ListSubheader, Popover, Typography, useTheme } from '@mui/material';
 import { Button, Tooltip } from '@terraware/web-components';
 
 import Icon from 'src/components/common/icon/Icon';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-
-interface StyleProps {
-  isMobile?: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  subheader: {
-    paddingLeft: 0,
-    paddingRight: 0,
-    borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    display: 'flex',
-    borderRadius: '7px 7px 0 0',
-    backgroundColor: theme.palette.TwClrBgSecondary,
-  },
-  title: {
-    fontSize: '20px',
-    fontWeight: 'bold',
-    color: theme.palette.TwClrTxt,
-  },
-  mainTitle: {
-    display: 'flex',
-    flexGrow: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    lineHeight: '28px',
-    padding: (props: StyleProps) => (props.isMobile ? theme.spacing(2, 2) : theme.spacing(2, 3)),
-  },
-  popover: {
-    padding: 0,
-    borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    borderRadius: '7px 7px 0 0',
-    height: '64px',
-  },
-  paper: {
-    overflowX: 'visible',
-    overflowY: 'visible',
-    borderRadius: '7px',
-    borderLeft: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    borderRight: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    display: 'flex',
-    flexDirection: 'column',
-
-    '&.divot-popover-small': {
-      // TODO set small width
-      width: '478px',
-    },
-    '&.divot-popover-medium': {
-      // TODO set medium width
-      width: '478px',
-    },
-    '&.divot-popover-large': {
-      width: '478px',
-    },
-
-    '&.non-mobile': {
-      maxHeight: 'calc(100vh - 100px)',
-    },
-
-    '&.mobile': {
-      position: 'fixed !important',
-      top: '56px !important',
-      left: '0px !important',
-      right: '0px !important',
-      bottom: 'auto !important',
-      maxWidth: '100vw',
-    },
-  },
-  divotWrapper: {
-    display: 'flex',
-    height: 0,
-  },
-  divot: {
-    width: '16px',
-    height: '16px',
-    border: '2px solid transparent',
-    borderLeft: `2px solid ${theme.palette.TwClrBrdrTertiary}`,
-    borderTop: `2px solid ${theme.palette.TwClrBrdrTertiary}`,
-    top: '-8px',
-    position: 'absolute',
-    transform: 'rotate(45deg)',
-    zIndex: 1400,
-    backgroundColor: theme.palette.TwClrBgSecondary,
-    boxSizing: 'border-box',
-  },
-  iconContainer: {
-    borderRadius: 0,
-    fontSize: '16px',
-    padding: 0,
-  },
-  icon: {
-    fill: theme.palette.TwClrIcn,
-    marginLeft: '8px',
-  },
-  iconClose: {
-    fill: theme.palette.TwClrIcnSecondary,
-    width: '22px',
-    height: '22px',
-  },
-  closeButton: {
-    background: 'none',
-    border: 'none',
-    cursor: 'pointer',
-  },
-  buttonContainer: {
-    display: 'flex',
-  },
-}));
 
 type MenuItem = {
   text: string;
@@ -197,7 +87,7 @@ export default function DivotPopover({
   size,
 }: DivotPopoverProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
+  const theme = useTheme();
   const [divotStyle, setDivotStyle] = useState<DivotPositionProps>({ visibility: 'hidden' });
   const [divotRef, setDivotRef] = useState<HTMLElement | null>();
 
@@ -230,27 +120,121 @@ export default function DivotPopover({
           horizontal: 'center',
         }}
         classes={{
-          paper: `${classes.paper}  ${isMobile ? 'mobile' : 'non-mobile divot-popover-' + size}`,
+          paper: `${isMobile ? 'mobile' : 'non-mobile divot-popover-' + size}`,
+        }}
+        sx={{
+          overflowX: 'visible',
+          overflowY: 'visible',
+          borderRadius: '7px',
+          borderLeft: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+          borderRight: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+          borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+          display: 'flex',
+          flexDirection: 'column',
+
+          '&.divot-popover-small': {
+            // TODO set small width
+            width: '478px',
+          },
+          '&.divot-popover-medium': {
+            // TODO set medium width
+            width: '478px',
+          },
+          '&.divot-popover-large': {
+            width: '478px',
+          },
+
+          '&.non-mobile': {
+            maxHeight: 'calc(100vh - 100px)',
+          },
+
+          '&.mobile': {
+            position: 'fixed !important',
+            top: '56px !important',
+            left: '0px !important',
+            right: '0px !important',
+            bottom: 'auto !important',
+            maxWidth: '100vw',
+          },
         }}
       >
-        <List id='divot-popover' className={classes.popover} ref={setDivotRef}>
+        <List
+          id='divot-popover'
+          ref={setDivotRef}
+          sx={{
+            padding: 0,
+            borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+            borderRadius: '7px 7px 0 0',
+            height: '64px',
+          }}
+        >
           {isMobile === false && (
-            <div className={classes.divotWrapper}>
-              <div className={classes.divot} style={divotStyle} />
-            </div>
+            <Box sx={{ display: 'flex', height: 0 }}>
+              <Box
+                style={divotStyle}
+                sx={{
+                  width: '16px',
+                  height: '16px',
+                  border: '2px solid transparent',
+                  borderLeft: `2px solid ${theme.palette.TwClrBrdrTertiary}`,
+                  borderTop: `2px solid ${theme.palette.TwClrBrdrTertiary}`,
+                  top: '-8px',
+                  position: 'absolute',
+                  transform: 'rotate(45deg)',
+                  zIndex: 1400,
+                  backgroundColor: theme.palette.TwClrBgSecondary,
+                  boxSizing: 'border-box',
+                }}
+              />
+            </Box>
           )}
-          <ListSubheader inset className={classes.subheader}>
-            <div className={classes.mainTitle}>
-              <Typography className={classes.title}>{title}</Typography>
-              <div className={classes.buttonContainer}>
+          <ListSubheader
+            inset
+            sx={{
+              paddingLeft: 0,
+              paddingRight: 0,
+              borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+              display: 'flex',
+              borderRadius: '7px 7px 0 0',
+              backgroundColor: theme.palette.TwClrBgSecondary,
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                flexGrow: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                lineHeight: '28px',
+                padding: isMobile ? theme.spacing(2, 2) : theme.spacing(2, 3),
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                  color: theme.palette.TwClrTxt,
+                }}
+              >
+                {title}
+              </Typography>
+              <Box sx={{ display: 'flex' }}>
                 {headerMenuItems !== undefined && <PopoverHeaderMenu menuItems={headerMenuItems} />}
                 {isMobile && (
-                  <button onClick={onClose} className={classes.closeButton}>
-                    <Icon name='close' className={classes.iconClose} />
+                  <button
+                    onClick={onClose}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <Icon name='close' style={{ fill: theme.palette.TwClrIcn, marginLeft: '8px' }} />
                   </button>
                 )}
-              </div>
-            </div>
+              </Box>
+            </Box>
             <Divider />
           </ListSubheader>
         </List>

@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
 
 import { CircularProgress } from '@mui/material';
 
 import { FilterField } from 'src/components/common/FilterGroup';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
   selectObservationsResults,
@@ -48,11 +47,13 @@ export default function ObservationsRouter(): JSX.Element {
   const plantingSites = useAppSelector(selectPlantingSites);
 
   useEffect(() => {
-    dispatch(requestSpecies(selectedOrganization.id));
+    if (selectedOrganization.id !== -1) {
+      dispatch(requestSpecies(selectedOrganization.id));
+    }
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
-    if (species !== undefined && plantingSites !== undefined && !dispatched) {
+    if (species !== undefined && plantingSites !== undefined && !dispatched && selectedOrganization.id !== -1) {
       setDispatched(true);
       dispatch(requestObservationsResults(selectedOrganization.id));
       dispatch(requestObservations(selectedOrganization.id));
@@ -65,15 +66,19 @@ export default function ObservationsRouter(): JSX.Element {
     }
   }, [snackbar, observationsResultsError, speciesError, plantingSitesError]);
 
+  const reload = () => {
+    setDispatched(false);
+  };
+
   // show spinner while initializing data
   if (observationsResults === undefined && !(observationsResultsError || speciesError || plantingSitesError)) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
 
-  return <ObservationsInnerRouter />;
+  return <ObservationsInnerRouter reload={reload} />;
 }
 
-const ObservationsInnerRouter = (): JSX.Element => {
+const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Element => {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
   const [search, setSearch] = useState<string>('');
@@ -123,32 +128,26 @@ const ObservationsInnerRouter = (): JSX.Element => {
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
 
   return (
-    <Switch>
-      {scheduleObservationsEnabled && (
-        <Route path={APP_PATHS.RESCHEDULE_OBSERVATION}>
-          <RescheduleObservation />
-        </Route>
-      )}
-      {scheduleObservationsEnabled && (
-        <Route path={APP_PATHS.SCHEDULE_OBSERVATION}>
-          <ScheduleObservation />
-        </Route>
-      )}
-      <Route path={APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS}>
-        <ObservationMonitoringPlotDetails />
-      </Route>
-      <Route path={APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS}>
-        <ObservationPlantingZoneDetails />
-      </Route>
-      <Route path={APP_PATHS.OBSERVATION_DETAILS}>
-        <ObservationDetails {...searchProps} setFilterOptions={setFilterOptionsCallback} />
-      </Route>
-      <Route path={APP_PATHS.OBSERVATIONS_SITE}>
-        <ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />
-      </Route>
-      <Route path={'*'}>
-        <ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />
-      </Route>
-    </Switch>
+    <Routes>
+      {scheduleObservationsEnabled && <Route path={'schedule/:observationId'} element={<RescheduleObservation />} />}
+      {scheduleObservationsEnabled && <Route path={'/schedule'} element={<ScheduleObservation />} />}
+      <Route
+        path={'/:plantingSiteId/results/:observationId/zone/:plantingZoneId/plot/:monitoringPlotId'}
+        element={<ObservationMonitoringPlotDetails />}
+      />
+      <Route
+        path={'/:plantingSiteId/results/:observationId/zone/:plantingZoneId'}
+        element={<ObservationPlantingZoneDetails />}
+      />
+      <Route
+        path={'/:plantingSiteId/results/:observationId'}
+        element={<ObservationDetails {...searchProps} setFilterOptions={setFilterOptionsCallback} reload={reload} />}
+      />
+      <Route
+        path={'/:plantingSiteId'}
+        element={<ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />}
+      />
+      <Route path={'/*'} element={<ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />} />
+    </Routes>
   );
 };

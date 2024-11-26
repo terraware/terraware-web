@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
-import { Container, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Container, useTheme } from '@mui/material';
 
 import PageHeader from 'src/components/PageHeader';
 import EmptyMessage from 'src/components/common/EmptyMessage';
@@ -20,34 +19,6 @@ import useSnackbar from 'src/utils/useSnackbar';
 import ImportSpeciesModal, { downloadCsvTemplate } from '../../scenes/Species/ImportSpeciesModal';
 import TfMain from '../common/TfMain';
 
-interface StyleProps {
-  isMobile: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  mainContainer: {
-    marginBottom: theme.spacing(8),
-    padding: '0',
-  },
-  content: {
-    background: theme.palette.TwClrBg,
-    borderRadius: '24px',
-    margin: 'auto',
-    marginTop: `max(10vh, ${theme.spacing(8)}px)`,
-    maxWidth: '800px',
-    padding: '24px',
-  },
-  message: {
-    margin: '0 auto',
-    marginTop: '10%',
-    maxWidth: '800px',
-    width: (props: StyleProps) => (props.isMobile ? 'auto' : '800px'),
-  },
-  spacer: {
-    padding: theme.spacing(3),
-  },
-}));
-
 type PageContent = {
   title1?: string;
   title2: string;
@@ -59,27 +30,22 @@ type PageContent = {
 };
 
 type EmptyStatePageProps = {
-  backgroundImageVisible?: boolean;
   pageName: 'Species' | 'SeedBanks' | 'Nurseries' | 'Inventory' | 'PlantingSites' | 'Projects';
   reloadData?: () => void;
 };
 
-export default function EmptyStatePage({
-  backgroundImageVisible = true,
-  pageName,
-  reloadData,
-}: EmptyStatePageProps): JSX.Element {
+export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
-  const history = useHistory();
+  const theme = useTheme();
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
 
   const goToNewLocation = () => {
     const newLocation = {
       pathname: content.linkLocation,
     };
-    history.push(newLocation);
+    navigate(newLocation);
   };
 
   const downloadCsvTemplateHandler = () => {
@@ -118,7 +84,7 @@ export default function EmptyStatePage({
         buttonText: strings.ADD_SPECIES,
         buttonIcon: 'plus',
         onClickButton: () => {
-          history.push(APP_PATHS.SPECIES_NEW);
+          navigate(APP_PATHS.SPECIES_NEW);
         },
       },
     ],
@@ -147,7 +113,7 @@ export default function EmptyStatePage({
         buttonText: strings.ADD_INVENTORY,
         buttonIcon: 'plus',
         onClickButton: () => {
-          history.push(APP_PATHS.INVENTORY_NEW);
+          navigate(APP_PATHS.INVENTORY_NEW);
         },
       },
     ],
@@ -248,7 +214,7 @@ export default function EmptyStatePage({
       if (reloadData) {
         reloadData();
       }
-      history.push({ pathname: APP_PATHS.SPECIES, search: '?checkData' });
+      navigate({ pathname: APP_PATHS.SPECIES, search: '?checkData' });
     }
     setImportSpeciesModalOpened(false);
     if (snackbarMessage) {
@@ -261,7 +227,7 @@ export default function EmptyStatePage({
       if (reloadData) {
         reloadData();
       }
-      history.push(APP_PATHS.INVENTORY);
+      navigate(APP_PATHS.INVENTORY);
     }
     setImportInventoryModalOpened(false);
     if (snackbarMessage) {
@@ -270,11 +236,11 @@ export default function EmptyStatePage({
   };
 
   const spacer = () => {
-    return <div className={classes.spacer} />;
+    return <Box sx={{ padding: theme.spacing(3) }} />;
   };
 
   return (
-    <TfMain backgroundImageVisible={backgroundImageVisible}>
+    <TfMain>
       {selectedOrganization && (
         <>
           <ImportSpeciesModal open={importSpeciesModalOpened} onClose={onCloseImportSpeciesModal} />
@@ -289,10 +255,28 @@ export default function EmptyStatePage({
         </>
       )}
       {content.listItems.length === 0 && content.linkLocation === undefined ? (
-        <EmptyMessage className={classes.message} title={content.title2} text={content.subtitle} />
+        <EmptyMessage
+          title={content.title2}
+          text={content.subtitle}
+          sx={{
+            margin: '0 auto',
+            marginTop: '10%',
+            maxWidth: '800px',
+            width: isMobile ? 'auto' : '800px',
+          }}
+        />
       ) : (
-        <Container className={classes.mainContainer}>
-          <div className={classes.content}>
+        <Container sx={{ marginBottom: theme.spacing(8), padding: '0' }}>
+          <Box
+            sx={{
+              background: theme.palette.TwClrBg,
+              borderRadius: '24px',
+              margin: 'auto',
+              marginTop: `max(10vh, ${theme.spacing(8)}px)`,
+              maxWidth: '800px',
+              padding: '24px',
+            }}
+          >
             <EmptyStateContent
               title={content.title2}
               subtitle={content.subtitle}
@@ -301,7 +285,7 @@ export default function EmptyStatePage({
               buttonIcon={content.buttonIcon}
               onClickButton={goToNewLocation}
             />
-          </div>
+          </Box>
         </Container>
       )}
     </TfMain>

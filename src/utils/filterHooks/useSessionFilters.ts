@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import {
   FiltersType,
@@ -12,26 +12,28 @@ import {
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
-export const useSessionFilters = (viewIdentifier: string, writeToQuery = true) => {
+export const useSessionFilters = (viewIdentifier?: string) => {
   const location = useStateLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const query = useQuery();
 
-  const [localFilters, setLocalFilters] = useState<FiltersType>({});
+  const [localFilters, setLocalFilters] = useState<FiltersType>();
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
   // Sync filters to query and session, this happens when filters are changed within the consumer
   const _setLocalFilters = useCallback(
     (filters: FiltersType) => {
-      setLocalFilters(filters);
+      if (viewIdentifier) {
+        setLocalFilters(filters);
 
-      writeFiltersToSession(viewIdentifier, filters);
+        writeFiltersToSession(viewIdentifier, filters);
 
-      resetQuery(query, viewIdentifier);
-      writeFiltersToQuery(query, viewIdentifier, filters);
-      history.replace(getLocation(location.pathname, location, query.toString()));
+        resetQuery(query, viewIdentifier);
+        writeFiltersToQuery(query, viewIdentifier, filters);
+        navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+      }
     },
-    [history, location, query, viewIdentifier]
+    [navigate, location, query, viewIdentifier]
   );
 
   // Query overrides session, pull filters from query and session, write merged filters back to session
@@ -40,23 +42,25 @@ export const useSessionFilters = (viewIdentifier: string, writeToQuery = true) =
       return;
     }
 
-    const currentQueryFilters = getFiltersFromQuery(query, viewIdentifier);
-    const currentSessionFilters = getFiltersFromSession(viewIdentifier);
+    if (viewIdentifier) {
+      const currentQueryFilters = getFiltersFromQuery(query, viewIdentifier);
+      const currentSessionFilters = getFiltersFromSession(viewIdentifier);
 
-    const mergedFilters: FiltersType = {
-      ...currentSessionFilters,
-      ...currentQueryFilters,
-    };
+      const mergedFilters: FiltersType = {
+        ...currentSessionFilters,
+        ...currentQueryFilters,
+      };
 
-    setLocalFilters(mergedFilters);
+      setLocalFilters(mergedFilters);
 
-    writeFiltersToSession(viewIdentifier, mergedFilters);
+      writeFiltersToSession(viewIdentifier, mergedFilters);
 
-    writeFiltersToQuery(query, viewIdentifier, mergedFilters);
-    history.replace(getLocation(location.pathname, location, query.toString()));
+      writeFiltersToQuery(query, viewIdentifier, mergedFilters);
+      navigate(getLocation(location.pathname, location, query.toString()));
 
-    setIsInitialized(true);
-  }, [history, isInitialized, location, query, viewIdentifier]);
+      setIsInitialized(true);
+    }
+  }, [navigate, isInitialized, location, query, viewIdentifier]);
 
   useEffect(() => {
     if (isInitialized) {

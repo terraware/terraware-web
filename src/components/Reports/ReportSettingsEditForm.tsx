@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Grid } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -21,27 +21,29 @@ interface ReportSettingsEditFormProps {
 const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEditFormProps) => {
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
-  const history = useHistory();
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
 
   const [localReportsSettings, setLocalReportsSettings] = useState(reportsSettings);
   const [isBusy, setIsBusy] = useState<boolean>(false);
 
   const onSave = useCallback(async () => {
-    setIsBusy(true);
-    const result = await ReportSettingsService.updateSettings({
-      organizationId: selectedOrganization.id,
-      ...localReportsSettings,
-    });
+    if (selectedOrganization.id !== -1) {
+      setIsBusy(true);
+      const result = await ReportSettingsService.updateSettings({
+        organizationId: selectedOrganization.id,
+        ...localReportsSettings,
+      });
 
-    setIsBusy(false);
-    if (!result.requestSucceeded) {
-      snackbar.toastError();
-      return;
+      setIsBusy(false);
+      if (!result.requestSucceeded) {
+        snackbar.toastError();
+        return;
+      }
+
+      navigate(APP_PATHS.REPORTS_SETTINGS);
     }
-
-    history.push(APP_PATHS.REPORTS_SETTINGS);
-  }, [history, localReportsSettings, selectedOrganization.id, snackbar]);
+  }, [navigate, localReportsSettings, selectedOrganization.id, snackbar]);
 
   const onChange = useCallback(
     (key: string | number, value: boolean) => {
@@ -78,7 +80,7 @@ const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEd
     <PageForm
       cancelID='cancelReportsSettings'
       saveID='saveReportsSettings'
-      onCancel={() => history.push(APP_PATHS.REPORTS_SETTINGS)}
+      onCancel={() => navigate(APP_PATHS.REPORTS_SETTINGS)}
       onSave={onSave}
       busy={isBusy}
     >

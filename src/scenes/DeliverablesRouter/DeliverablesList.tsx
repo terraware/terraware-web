@@ -1,7 +1,7 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Grid, Typography } from '@mui/material';
-import { Separator, TableColumnType } from '@terraware/web-components';
+import { Box, Grid, Typography } from '@mui/material';
+import { Separator } from '@terraware/web-components';
 
 import DeliverablesTable from 'src/components/DeliverablesTable';
 import PageHeader from 'src/components/PageHeader';
@@ -9,11 +9,11 @@ import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import TfMain from 'src/components/common/TfMain';
-import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization } from 'src/providers';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 import theme from 'src/theme';
-import { ListDeliverablesElement } from 'src/types/Deliverables';
+import { DeliverableStatusOrder, ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
 import { SearchNodePayload } from 'src/types/Search';
 import {
   SearchAndSortFn,
@@ -23,48 +23,23 @@ import {
   modifySearchNode,
 } from 'src/utils/searchAndSort';
 
-const columns = (activeLocale: string | null): TableColumnType[] =>
-  activeLocale
-    ? [
-        {
-          key: 'name',
-          name: strings.DELIVERABLE_NAME,
-          type: 'string',
-        },
-        {
-          key: 'type',
-          name: strings.TYPE,
-          type: 'string',
-        },
-        {
-          key: 'numDocuments',
-          name: strings.DOCUMENTS,
-          type: 'number',
-        },
-        {
-          key: 'category',
-          name: strings.CATEGORY,
-          type: 'string',
-        },
-        {
-          key: 'projectName',
-          name: strings.PROJECT,
-          type: 'string',
-        },
-        {
-          key: 'status',
-          name: strings.STATUS,
-          type: 'string',
-        },
-      ]
-    : [];
-
 const DeliverablesList = (): JSX.Element => {
   const { activeLocale } = useLocalization();
-  const { availableProjects } = useProjects();
   const { selectedOrganization } = useOrganization();
+  const {
+    currentParticipantProject,
+    projectsWithModules: moduleProjects,
+    setCurrentParticipantProject,
+  } = useParticipantData();
+  const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({
+    projectId: currentParticipantProject?.id || '',
+  });
 
-  const [projectFilter, setProjectFilter] = useState<{ projectId?: number }>({ projectId: undefined });
+  useEffect(() => {
+    if (projectFilter.projectId) {
+      setCurrentParticipantProject(projectFilter.projectId);
+    }
+  }, [projectFilter]);
 
   const extraTableFilters: SearchNodePayload[] = useMemo(
     () =>
@@ -78,7 +53,7 @@ const DeliverablesList = (): JSX.Element => {
             },
           ]
         : [],
-    [projectFilter]
+    [projectFilter.projectId]
   );
 
   const filterModifiers = useCallback(
@@ -97,8 +72,12 @@ const DeliverablesList = (): JSX.Element => {
     []
   );
 
-  const searchAndSort: SearchAndSortFn<ListDeliverablesElement> = useCallback(
-    (results: ListDeliverablesElement[], search?: SearchNodePayload, sortOrderConfig?: SearchOrderConfig) => {
+  const searchAndSort: SearchAndSortFn<ListDeliverablesElementWithOverdue> = useCallback(
+    (
+      results: ListDeliverablesElementWithOverdue[],
+      search?: SearchNodePayload,
+      sortOrderConfig?: SearchOrderConfig
+    ) => {
       // In the participant view, "needs translation" needs to be "in review", so we will coerce results with "needs translation"
       // into the filter rules for "in review"
       // We need to find the search node payload that contains the "status" filter and add "needs translation" as a search value
@@ -110,7 +89,29 @@ const DeliverablesList = (): JSX.Element => {
       };
 
       const modifiedSearch = modifySearchNode(modifyStatus, search);
-      return genericSearchAndSort(results, modifiedSearch, sortOrderConfig);
+      const firstSort = genericSearchAndSort(results, modifiedSearch, sortOrderConfig);
+      if (sortOrderConfig?.sortOrder.field === 'status') {
+        const direction = sortOrderConfig?.sortOrder.direction;
+        return firstSort.sort((a, b) => {
+          if (a.status !== b.status) {
+            if (direction === 'Descending') {
+              return DeliverableStatusOrder[b.status] - DeliverableStatusOrder[a.status];
+            } else {
+              return DeliverableStatusOrder[a.status] - DeliverableStatusOrder[b.status];
+            }
+          } else {
+            // if the have same status sort by due date
+            if ((a.dueDate || 0) < (b.dueDate || 0)) {
+              return -1;
+            } else if ((a.dueDate || 0) > (b.dueDate || 0)) {
+              return 1;
+            }
+            return 0;
+          }
+        });
+      } else {
+        return firstSort;
+      }
     },
     []
   );
@@ -119,28 +120,35 @@ const DeliverablesList = (): JSX.Element => {
     () =>
       activeLocale ? (
         <>
-          <Grid container sx={{ marginTop: theme.spacing(0.5) }}>
+          <Grid container sx={{ marginTop: theme.spacing(0.5), alignItems: 'center' }}>
             <Grid item>
               <Separator height={'40px'} />
             </Grid>
-            <Grid item>
-              <Typography sx={{ lineHeight: '40px' }} component={'span'}>
-                {strings.PROJECT}
-              </Typography>
-            </Grid>
-            <Grid item sx={{ marginLeft: theme.spacing(1.5) }}>
-              <ProjectsDropdown
-                allowUnselect
-                availableProjects={availableProjects}
-                record={projectFilter}
-                setRecord={setProjectFilter}
-                label={''}
-              />
-            </Grid>
+            {moduleProjects?.length > 0 && (
+              <Grid item>
+                {moduleProjects?.length > 1 ? (
+                  <Box display='flex'>
+                    <Typography sx={{ lineHeight: '40px', marginRight: theme.spacing(1.5) }} component={'span'}>
+                      {strings.PROJECT}
+                    </Typography>
+                    <ProjectsDropdown
+                      allowUnselect
+                      availableProjects={moduleProjects}
+                      label={''}
+                      record={projectFilter}
+                      setRecord={setProjectFilter}
+                      unselectLabel={strings.ALL}
+                    />
+                  </Box>
+                ) : (
+                  <Typography>{moduleProjects[0].name}</Typography>
+                )}
+              </Grid>
+            )}
           </Grid>
         </>
       ) : null,
-    [activeLocale, availableProjects, projectFilter]
+    [activeLocale, currentParticipantProject, projectFilter]
   );
 
   return (
@@ -150,7 +158,6 @@ const DeliverablesList = (): JSX.Element => {
       </PageHeaderWrapper>
 
       <DeliverablesTable
-        columns={columns}
         extraTableFilters={extraTableFilters}
         filterModifiers={filterModifiers}
         organizationId={selectedOrganization.id}

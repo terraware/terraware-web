@@ -4,12 +4,14 @@ import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { has25mPlots } from 'src/redux/features/observations/utils';
 import { MonitoringPlotStatus, getPlotStatus } from 'src/types/Observations';
 
 const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'mortalityRate'];
 
 const ObservationDetailsRenderer =
   (plantingSiteId: number, observationId: number) =>
+  // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
 
@@ -17,7 +19,12 @@ const ObservationDetailsRenderer =
       const url = APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS.replace(':plantingSiteId', plantingSiteId.toString())
         .replace(':observationId', observationId.toString())
         .replace(':plantingZoneId', row.plantingZoneId.toString());
-      return <Link to={url}>{name as React.ReactNode}</Link>;
+      return (
+        <Link fontSize='16px' to={url}>
+          {name as React.ReactNode}
+          {has25mPlots(row.plantingSubzones) ? '*' : ''}
+        </Link>
+      );
     };
 
     // don't render data if we don't have data
@@ -26,7 +33,9 @@ const ObservationDetailsRenderer =
     }
 
     if (column.key === 'plantingZoneName') {
-      return <CellRenderer {...props} value={createLinkToPlantingZoneObservation(value as string)} />;
+      return (
+        <CellRenderer {...props} value={createLinkToPlantingZoneObservation(value as string)} title={value as string} />
+      );
     }
 
     if (column.key === 'mortalityRate') {

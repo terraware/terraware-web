@@ -17,16 +17,18 @@ const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'mortalityRate'];
 const OrgObservationsRenderer =
   (
     theme: Theme,
-    classes: any,
     locale: string | undefined | null,
-    goToRescheduleObservation: (observationId: number) => void
+    goToRescheduleObservation: (observationId: number) => void,
+    exportObservationCsv: (observationId: number) => void,
+    exportObservationGpx: (observationId: number) => void
   ) =>
+  // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
 
     const getTruncatedNames = (inputNames: string) => {
       const names = inputNames.split('\r');
-      return <TextTruncated stringList={names} />;
+      return <TextTruncated fontSize={16} stringList={names} moreText={strings.TRUNCATED_TEXT_MORE_LINK} />;
     };
 
     const createLinkToSiteObservation = (date: string) => {
@@ -34,7 +36,11 @@ const OrgObservationsRenderer =
         ':observationId',
         row.observationId.toString()
       );
-      return <Link to={url}>{date as React.ReactNode}</Link>;
+      return (
+        <Link fontSize='16px' to={url}>
+          {date as React.ReactNode}
+        </Link>
+      );
     };
 
     // don't render data if we don't have data
@@ -43,12 +49,22 @@ const OrgObservationsRenderer =
     }
 
     if (column.key === 'plantingZones' || column.key === 'plantingSubzones') {
-      return <CellRenderer {...props} value={getTruncatedNames(value as string)} className={classes.text} />;
+      return (
+        <CellRenderer
+          {...props}
+          value={getTruncatedNames(value as string)}
+          sx={{
+            fontSize: '16px',
+            '& > p': {
+              fontSize: '16px',
+            },
+          }}
+        />
+      );
     }
 
-    if (column.key === 'completedDate') {
-      const dateValue: string = (value as string) || (row.startDate as string);
-      return <CellRenderer {...props} value={createLinkToSiteObservation(getShortDate(dateValue, locale))} />;
+    if (column.key === 'observationDate') {
+      return <CellRenderer {...props} value={createLinkToSiteObservation(getShortDate(value as string, locale))} />;
     }
 
     if (column.key === 'state') {
@@ -60,9 +76,26 @@ const OrgObservationsRenderer =
     }
 
     if (column.key === 'actionsMenu') {
+      const exportDisabled = row.state === 'Upcoming';
       const tableMenuItem = (
         <TableRowPopupMenu
           menuItems={[
+            {
+              disabled: exportDisabled,
+              label: `${strings.EXPORT_LOCATIONS} (${strings.CSV_FILE})`,
+              onClick: () => {
+                exportObservationCsv(row.observationId);
+              },
+              tooltip: exportDisabled ? strings.EXPORT_LOCATIONS_DISABLED_TOOLTIP : undefined,
+            },
+            {
+              disabled: exportDisabled,
+              label: `${strings.EXPORT_LOCATIONS} (${strings.GPX_FILE})`,
+              onClick: () => {
+                exportObservationGpx(row.observationId);
+              },
+              tooltip: exportDisabled ? strings.EXPORT_LOCATIONS_DISABLED_TOOLTIP : undefined,
+            },
             {
               disabled: row.state === 'Completed' || row.hasObservedPermanentPlots || row.hasObservedTemporaryPlots,
               label: strings.RESCHEDULE,

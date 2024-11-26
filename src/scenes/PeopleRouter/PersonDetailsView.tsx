@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Grid, Typography, useTheme } from '@mui/material';
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -20,44 +18,30 @@ import TfMain from '../../components/common/TfMain';
 import { useOrganization } from '../../providers/hooks';
 import { roleName } from '../../types/Organization';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  back: {
-    marginBottom: theme.spacing(3),
-  },
-  titleWithButton: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  editButton: {
-    float: 'right',
-  },
-}));
-
 export default function PersonDetailsView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const classes = useStyles();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { personId } = useParams<{ personId: string }>();
   const [person, setPerson] = useState<OrganizationUser>();
   const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
-    const populatePersonData = async () => {
-      const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
-      if (response.requestSucceeded) {
-        const selectedUser = response.users.find((user) => user.id.toString() === personId);
-        if (selectedUser) {
-          setPerson(selectedUser);
-        } else {
-          history.push(APP_PATHS.PEOPLE);
+    if (selectedOrganization.id !== -1) {
+      const populatePersonData = async () => {
+        const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
+        if (response.requestSucceeded) {
+          const selectedUser = response.users.find((user) => user.id.toString() === personId);
+          if (selectedUser) {
+            setPerson(selectedUser);
+          } else {
+            navigate(APP_PATHS.PEOPLE);
+          }
         }
-      }
-    };
-    populatePersonData();
-  }, [personId, selectedOrganization, history]);
+      };
+      populatePersonData();
+    }
+  }, [personId, selectedOrganization, navigate]);
 
   const getDateAdded = () => {
     if (person?.addedTime) {
@@ -66,10 +50,12 @@ export default function PersonDetailsView(): JSX.Element {
   };
 
   const goToEditPerson = () => {
-    const newLocation = {
-      pathname: APP_PATHS.PEOPLE_EDIT.replace(':personId', personId),
-    };
-    history.push(newLocation);
+    if (personId) {
+      const newLocation = {
+        pathname: APP_PATHS.PEOPLE_EDIT.replace(':personId', personId),
+      };
+      navigate(newLocation);
+    }
   };
 
   const gridSize = (defaultSize?: number) => {
@@ -83,9 +69,24 @@ export default function PersonDetailsView(): JSX.Element {
     <TfMain>
       <Grid container padding={theme.spacing(0, 0, 4, 0)}>
         <Grid item xs={12}>
-          <BackToLink id='back' to={APP_PATHS.PEOPLE} className={classes.back} name={strings.PEOPLE} />
+          <BackToLink
+            id='back'
+            to={APP_PATHS.PEOPLE}
+            name={strings.PEOPLE}
+            style={{ marginBottom: theme.spacing(3) }}
+          />
         </Grid>
-        <Grid item xs={12} padding={theme.spacing(0, 3)} className={classes.titleWithButton}>
+        <Grid
+          item
+          xs={12}
+          padding={theme.spacing(0, 3)}
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
           <Grid item xs={9}>
             <Typography
               fontSize='20px'
@@ -105,7 +106,7 @@ export default function PersonDetailsView(): JSX.Element {
                 priority='primary'
                 size='medium'
                 onClick={goToEditPerson}
-                className={classes.editButton}
+                style={{ float: 'right' }}
               />
             ) : (
               <Button
@@ -114,7 +115,7 @@ export default function PersonDetailsView(): JSX.Element {
                 priority='primary'
                 size='medium'
                 onClick={goToEditPerson}
-                className={classes.editButton}
+                style={{ float: 'right' }}
               />
             )}
           </Grid>

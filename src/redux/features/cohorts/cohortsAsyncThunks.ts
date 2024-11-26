@@ -38,8 +38,9 @@ export const requestCohorts = createAsyncThunk(
 
 export const requestCohort = createAsyncThunk(
   'cohorts/get',
-  async (request: { cohortId: number }, { dispatch, rejectWithValue }) => {
-    const response: Response2<Cohort> = await CohortService.getCohort(request.cohortId);
+  async (request: { cohortId: number; depth?: ListCohortsRequestDepth }, { dispatch, rejectWithValue }) => {
+    const { depth } = request;
+    const response: Response2<Cohort> = await CohortService.getCohort(request.cohortId, depth);
 
     if (response !== null && response.requestSucceeded && response.data !== undefined) {
       dispatch(setCohortAction({ error: response.error, cohorts: [response.data] }));

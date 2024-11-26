@@ -1,5 +1,5 @@
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem, Textfield } from '@terraware/web-components';
@@ -9,11 +9,17 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
+import useListCohortModules from 'src/hooks/useListCohortModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipant } from 'src/hooks/useParticipant';
 import { useLocalization, useUser } from 'src/providers';
+import { requestGetParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
+import { selectParticipantProjectRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { ParticipantProject } from 'src/types/ParticipantProject';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import RemoveParticipant from './RemoveParticipant';
@@ -28,7 +34,7 @@ type ProjectsByOrg = {
 };
 
 export default function ParticipantsView(): JSX.Element {
-  const history = useHistory();
+  const navigate = useNavigate();
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
@@ -40,9 +46,17 @@ export default function ParticipantsView(): JSX.Element {
 
   const [showDelete, setShowDelete] = useState<boolean>(false);
 
+  const { cohortModules, listCohortModules } = useListCohortModules();
+
+  useEffect(() => {
+    if (participant && participant.cohortId) {
+      void listCohortModules(participant.cohortId);
+    }
+  }, [participant, listCohortModules]);
+
   const goToEdit = useCallback(() => {
-    history.push(APP_PATHS.ACCELERATOR_PARTICIPANTS_EDIT.replace(':participantId', `${participantId}`));
-  }, [history, participantId]);
+    navigate(APP_PATHS.ACCELERATOR_PARTICIPANTS_EDIT.replace(':participantId', `${participantId}`));
+  }, [navigate, participantId]);
 
   const onOptionItemClick = useCallback((optionItem: DropdownItem) => {
     if (optionItem.value === 'remove-participant') {
@@ -132,70 +146,86 @@ export default function ParticipantsView(): JSX.Element {
     [activeLocale]
   );
 
+  if (!participant) {
+    return <Page isLoading />;
+  }
+
   return (
-    <Page crumbs={crumbs} rightComponent={actionMenu} title={participant?.name ?? ''}>
+    <PageWithModuleTimeline
+      crumbs={crumbs}
+      rightComponent={actionMenu}
+      title={participant.name}
+      modules={cohortModules ?? []}
+      cohortPhase={participant.cohortPhase}
+    >
       <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         {isBusy && <BusySpinner />}
-        {showDelete && participant !== undefined && (
-          <RemoveParticipant onClose={() => setShowDelete(false)} participant={participant} />
-        )}
+        {showDelete && <RemoveParticipant onClose={() => setShowDelete(false)} participant={participant} />}
         <DataRow
           leftChild={<Textfield display id='name' label={strings.NAME} type='text' value={participant?.name ?? ''} />}
           rightChild={
-            <Textfield
-              display
-              id='cohort-name'
-              label={strings.COHORT}
-              type='text'
-              value={participant?.cohortName ?? ''}
-            />
+            <Textfield display id='cohort-name' label={strings.COHORT} type='text' value={participant.cohortName} />
           }
         />
-        {projectsByOrg.map((data) => (
-          <DataRow
-            key={data.organizationId}
-            leftChild={
-              <Textfield display id='name' label={strings.ORGANIZATION} type='text' value={data.organizationName} />
-            }
-            rightChild={
-              <Box display='flex' flexDirection='column'>
-                <Typography fontSize='14px' fontWeight={400} lineHeight='20px'>
-                  {strings.PROJECTS}
-                </Typography>
-                <Box display='flex' flexDirection='row' flexWrap='wrap' marginTop={theme.spacing(1.5)}>
-                  {data.projects.map((project, index) => (
-                    <span key={index}>
-                      <Link
-                        fontSize='16px'
-                        to={APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${project.id}`)}
-                      >
-                        {project.name}
+        {projectsByOrg.map((data) =>
+          data.projects.map((proj) => (
+            <DataRow
+              key={`${data.organizationId}-${proj.id}`}
+              projectId={proj.id}
+              leftChild={
+                <Textfield display id='name' label={strings.ORGANIZATION} type='text' value={data.organizationName} />
+              }
+              rightChild={
+                <Box display='flex' flexDirection='column'>
+                  <Typography fontSize='14px' fontWeight={400} lineHeight='20px' color={theme.palette.TwClrBaseGray500}>
+                    {strings.PROJECT}
+                  </Typography>
+                  <Box display='flex' flexDirection='row' flexWrap='wrap' marginTop={theme.spacing(1.5)}>
+                    <span>
+                      <Link fontSize='16px' to={APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${proj.id}`)}>
+                        {proj.name}
                       </Link>
-                      {index < data.projects.length - 1 ? ', ' : ''}&nbsp;
                     </span>
-                  ))}
+                  </Box>
                 </Box>
-              </Box>
-            }
-          />
-        ))}
+              }
+            />
+          ))
+        )}
       </Card>
-    </Page>
+    </PageWithModuleTimeline>
   );
 }
 
 type Props = {
   leftChild: ReactNode;
   rightChild: ReactNode;
+  projectId?: number;
 };
 
-const DataRow = ({ leftChild, rightChild }: Props): JSX.Element => {
+const DataRow = ({ leftChild, rightChild, projectId }: Props): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+  const projectDetailsRequest = useAppSelector(selectParticipantProjectRequest(Number(projectId)));
+  const [projectDetails, setProjectDetails] = useState<ParticipantProject>();
+
+  useEffect(() => {
+    if (projectId) {
+      dispatch(requestGetParticipantProject(projectId));
+    }
+  }, [projectId]);
+
+  useEffect(() => {
+    if (projectDetailsRequest?.status === 'success') {
+      setProjectDetails(projectDetailsRequest.data);
+    }
+  }, [projectDetailsRequest]);
 
   return (
     <Grid
       container
+      spacing={2}
       sx={{
         borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
         display: 'flex',
@@ -215,6 +245,47 @@ const DataRow = ({ leftChild, rightChild }: Props): JSX.Element => {
       <Grid item xs={isMobile ? 12 : 8}>
         {rightChild}
       </Grid>
+      {projectId && (
+        <>
+          <Grid item xs={isMobile ? 12 : 4}>
+            <Textfield display id='name' label={strings.FILE_NAMING} type='text' value={projectDetails?.fileNaming} />
+          </Grid>
+          <Grid item xs={isMobile ? 12 : 4}>
+            <Box display='flex' flexDirection='column'>
+              <Typography fontSize='14px' fontWeight={400} lineHeight='20px' color={theme.palette.TwClrBaseGray500}>
+                {strings.GOOGLE_FOLDER_URL}
+              </Typography>
+              <Box display='flex' flexDirection='row' flexWrap='wrap' marginTop={theme.spacing(1.5)}>
+                <Link
+                  target='_blank'
+                  fontSize='16px'
+                  to={projectDetails?.googleFolderUrl}
+                  style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
+                >
+                  {projectDetails?.googleFolderUrl}
+                </Link>
+              </Box>
+            </Box>
+          </Grid>
+          <Grid item xs={isMobile ? 12 : 4}>
+            <Box display='flex' flexDirection='column'>
+              <Typography fontSize='14px' fontWeight={400} lineHeight='20px' color={theme.palette.TwClrBaseGray500}>
+                {strings.DROPBOX_FOLDER_URL}
+              </Typography>
+              <Box display='flex' flexDirection='row' flexWrap='wrap' marginTop={theme.spacing(1.5)}>
+                <Link
+                  target='_blank'
+                  fontSize='16px'
+                  to={projectDetails?.dropboxFolderPath}
+                  style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
+                >
+                  {projectDetails?.dropboxFolderPath}
+                </Link>
+              </Box>
+            </Box>
+          </Grid>
+        </>
+      )}
     </Grid>
   );
 };

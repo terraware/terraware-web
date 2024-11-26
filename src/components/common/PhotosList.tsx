@@ -1,21 +1,10 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { ViewPhotosDialog } from '@terraware/web-components';
 
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-
-const useStyles = makeStyles(() => ({
-  thumbnail: {
-    margin: 'auto auto',
-    objectFit: 'contain',
-    display: 'flex',
-    maxWidth: '120px',
-    maxHeight: '120px',
-  },
-}));
 
 export type PhotosListProps = {
   photoUrls: string[];
@@ -27,7 +16,6 @@ export default function PhotosList({ photoUrls, initialSlide }: PhotosListProps)
   const [selectedSlide, setSelectedSlide] = useState<number>(initialSlide ?? 0);
   const [photosModalOpened, setPhotosModalOpened] = useState<boolean>(false);
   const theme = useTheme();
-  const classes = useStyles();
 
   return (
     <>
@@ -54,12 +42,18 @@ export default function PhotosList({ photoUrls, initialSlide }: PhotosListProps)
             sx={{ cursor: 'pointer' }}
           >
             <img
-              className={classes.thumbnail}
               src={`${photoUrl}?maxHeight=120`}
               alt={`${index}`}
               onClick={() => {
                 setSelectedSlide(index);
                 setPhotosModalOpened(true);
+              }}
+              style={{
+                margin: 'auto auto',
+                objectFit: 'contain',
+                display: 'flex',
+                maxWidth: '120px',
+                maxHeight: '120px',
               }}
             />
           </Box>

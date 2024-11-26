@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, useTheme } from '@mui/material';
 import { TableRowType } from '@terraware/web-components';
@@ -58,6 +58,11 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
+          key: 'internalInterests',
+          name: strings.INTERNAL_INTERESTS,
+          type: 'string',
+        },
+        {
           key: 'createdTime',
           name: strings.DATE_ADDED,
           type: 'date',
@@ -70,7 +75,7 @@ const PeopleView = () => {
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [globalRoleUsers, setGlobalRoleUsers] = useState<UserWithGlobalRoles[]>([]);
@@ -84,8 +89,8 @@ const PeopleView = () => {
   const deleteRolesRequest = useAppSelector(selectGlobalRolesUsersRemoveRequest(deleteRolesRequestId));
 
   const goToAddPerson = useCallback(() => {
-    history.push({ pathname: APP_PATHS.ACCELERATOR_PERSON_NEW });
-  }, [history]);
+    navigate({ pathname: APP_PATHS.ACCELERATOR_PERSON_NEW });
+  }, [navigate]);
 
   const dispatchSearchRequest = useCallback(
     (locale?: string | null, search?: SearchNodePayload, searchSortOrder?: SearchSortOrder) => {
@@ -162,6 +167,7 @@ const PeopleView = () => {
         Renderer={PersonCellRenderer}
         rows={globalRoleUsers}
         topBarButtons={[<RemoveRolesTopBarButton key={1} onConfirm={onConfirmSelectionRemoveRoles} />]}
+        stickyFilters
       />
     </Page>
   );

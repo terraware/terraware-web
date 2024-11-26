@@ -1,7 +1,10 @@
+import React from 'react';
+
 import { Box, Divider, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import isEnabled from 'src/features';
 import { selectObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
@@ -21,6 +24,7 @@ export default function TotalMortalityRateCard({
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
   );
+  const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
 
   let highestMortalityRate = 0;
   let highestZoneId: number;
@@ -74,7 +78,43 @@ export default function TotalMortalityRateCard({
     )
   );
 
-  return (
+  return newPlantsDashboardEnabled ? (
+    <Box>
+      {highestPlantingZone && (
+        <>
+          <Box sx={{ backgroundColor: '#CB4D4533', padding: 1, borderRadius: 1, marginBottom: 1 }}>
+            <Typography fontSize='16px' fontWeight={400}>
+              {strings.HIGHEST}
+            </Typography>
+            <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}>
+              {highestPlantingZone.plantingZoneName}
+            </Typography>
+            <Typography fontSize='24px' fontWeight={600}>
+              <FormattedNumber value={highestMortalityRate || 0} />%
+            </Typography>
+          </Box>
+          {(!lowestPlantingZone || lowestPlantingZone.plantingZoneId === highestPlantingZone.plantingZoneId) && (
+            <Typography fontWeight={400} fontSize='14px' color={theme.palette.TwClrTxtSecondary} marginTop={1}>
+              {strings.SINGLE_ZONE_MORTALITY_RATE_MESSAGE}
+            </Typography>
+          )}
+        </>
+      )}
+      {lowestPlantingZone && lowestPlantingZone.plantingZoneId !== highestPlantingZone?.plantingZoneId && (
+        <Box sx={{ backgroundColor: ' #5D822B33', padding: 1, borderRadius: 1 }}>
+          <Typography fontSize='16px' fontWeight={400}>
+            {strings.LOWEST}
+          </Typography>
+          <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}>
+            {lowestPlantingZone.plantingZoneName}
+          </Typography>
+          <Typography fontSize='24px' fontWeight={600}>
+            <FormattedNumber value={lowestMortalityRate || 0} />%
+          </Typography>
+        </Box>
+      )}
+    </Box>
+  ) : (
     <OverviewItemCard
       isEditable={false}
       contents={

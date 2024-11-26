@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { Snackbar as SnackbarUI } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Snackbar as SnackbarUI } from '@mui/material';
 import { Button, Message } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -13,28 +12,6 @@ import { clearSnackbar } from 'src/redux/features/snackbar/snackbarSlice';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Snackbar } from 'src/types/Snackbar';
 import { SNACKBAR_PAGE_CLOSE_KEY } from 'src/utils/useSnackbar';
-
-interface StyleProps {
-  isMobile?: boolean;
-}
-
-const useStyles = makeStyles(() => ({
-  fullWidth: {
-    width: '100%',
-  },
-  mainSnackbar: {
-    '&.MuiSnackbar-anchorOriginTopCenter': {
-      top: '0px',
-    },
-    '&.MuiSnackbar-root': {
-      position: 'relative',
-      margin: '32px 0px',
-      left: (props: StyleProps) => (props.isMobile ? '0px' : '50%'),
-      transform: (props: StyleProps) => (props.isMobile ? 'translateX(0)' : 'translateX(-50%)'),
-      zIndex: 0,
-    },
-  },
-}));
 
 export type PageSnackbarProps = {
   pageKey?: string;
@@ -55,7 +32,7 @@ export default function PageSnackbar({ pageKey }: PageSnackbarProps): JSX.Elemen
   }, [snackbarData]);
 
   useEffect(() => {
-    if (!!pathname) {
+    if (pathname) {
       // clear page messages on route change
       handleClose();
     }
@@ -94,7 +71,6 @@ type SnackbarMessageProps = {
 
 function SnackbarMessage({ snack, onClose }: SnackbarMessageProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
 
   return (
     <SnackbarUI
@@ -103,9 +79,20 @@ function SnackbarMessage({ snack, onClose }: SnackbarMessageProps): JSX.Element 
       onClose={onClose}
       autoHideDuration={null}
       id='page-snackbar'
-      className={classes.mainSnackbar}
+      sx={{
+        '&.MuiSnackbar-anchorOriginTopCenter': {
+          top: '0px',
+        },
+        '&.MuiSnackbar-root': {
+          position: 'relative',
+          margin: '32px 0px',
+          left: isMobile ? '0px' : '50%',
+          transform: isMobile ? 'translateX(0)' : 'translateX(-50%)',
+          zIndex: 0,
+        },
+      }}
     >
-      <div className={classes.fullWidth}>
+      <Box sx={{ width: '100%' }}>
         {snack && (
           <Message
             type='page'
@@ -130,7 +117,7 @@ function SnackbarMessage({ snack, onClose }: SnackbarMessageProps): JSX.Element 
             }
           />
         )}
-      </div>
+      </Box>
     </SnackbarUI>
   );
 }

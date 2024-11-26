@@ -6,9 +6,11 @@ import { MultiSelect, Textfield } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import { useLocalization, useUser } from 'src/providers/hooks';
+import { UserWithInternalnterests } from 'src/scenes/AcceleratorRouter/People/UserWithInternalInterests';
 import strings from 'src/strings';
 import { USER_GLOBAL_ROLES, UserWithGlobalRoles, getGlobalRole } from 'src/types/GlobalRoles';
-import { User, UserGlobalRole } from 'src/types/User';
+import { UserGlobalRole } from 'src/types/User';
+import { InternalInterest, InternalInterests, internalInterestLabel } from 'src/types/UserInternalInterests';
 import { isAllowed } from 'src/utils/acl';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -16,21 +18,36 @@ type PersonFormProps = {
   busy?: boolean;
   emailEnabled?: boolean;
   emailError?: string;
-  user?: User;
+  roleError?: string;
+  user?: UserWithInternalnterests;
   onCancel: () => void;
-  onChange?: (person: User) => void;
-  onSave: (person: User) => void;
+  onChange?: (person: UserWithInternalnterests) => void;
+  onSave: (person: UserWithInternalnterests) => void;
 };
 
 export default function PersonForm(props: PersonFormProps): JSX.Element {
-  const { busy, emailEnabled, emailError, user, onCancel, onChange, onSave } = props;
+  const { busy, emailEnabled, emailError, roleError, user, onCancel, onChange, onSave } = props;
 
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
   const { user: activeUser } = useUser();
   const theme = useTheme();
 
-  const [localRecord, setLocalRecord] = useState<Partial<User>>({});
+  const [localRecord, setLocalRecord] = useState<Partial<UserWithInternalnterests>>({});
+
+  const InternalInterestDropdownOptions = useMemo(() => {
+    const options = new Map<string, string>([]);
+
+    if (!activeLocale || !activeUser) {
+      return options;
+    }
+
+    for (const internalInterest of InternalInterests) {
+      options.set(internalInterest, internalInterestLabel(internalInterest));
+    }
+
+    return options;
+  }, [activeLocale, activeUser]);
 
   const globalRoleDropdownOptions = useMemo(() => {
     const options = new Map<string, string>([]);
@@ -55,6 +72,22 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
     }));
   }, []);
 
+  const onAddInternalInterest = useCallback((internalInterest: string) => {
+    setLocalRecord((prev) => ({
+      ...prev,
+      internalInterests: [...(prev.internalInterests || []), internalInterest as InternalInterest],
+    }));
+  }, []);
+
+  const onRemoveInternalInterest = useCallback((internalInterest: string) => {
+    setLocalRecord((prev) => ({
+      ...prev,
+      internalInterests: (prev.internalInterests || []).filter(
+        (_internalInterest) => _internalInterest !== internalInterest
+      ),
+    }));
+  }, []);
+
   const onAddGlobalRole = useCallback((globalRole: string) => {
     setLocalRecord((prev) => ({
       ...prev,
@@ -70,12 +103,12 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
   }, []);
 
   const onSaveHandler = () => {
-    if (!localRecord.email || emailError) {
+    if (emailError) {
       return;
     }
 
     onSave({
-      ...(localRecord as User),
+      ...(localRecord as UserWithInternalnterests),
     });
   };
 
@@ -87,7 +120,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
 
   useEffect(() => {
     if (onChange) {
-      onChange(localRecord as User);
+      onChange(localRecord as UserWithInternalnterests);
     }
   }, [localRecord, onChange]);
 
@@ -114,6 +147,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
               type='text'
               value={localRecord.email}
               disabled={!emailEnabled}
+              required={true}
             />
           </Grid>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
@@ -145,7 +179,20 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
               placeHolder={strings.SELECT}
               valueRenderer={(v) => v}
               selectedOptions={localRecord.globalRoles || []}
-              label={strings.ROLE}
+              label={strings.ROLE_REQUIRED}
+              errorText={roleError}
+            />
+          </Grid>
+          <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+            <MultiSelect<string, string>
+              fullWidth
+              onAdd={onAddInternalInterest}
+              onRemove={onRemoveInternalInterest}
+              options={InternalInterestDropdownOptions}
+              placeHolder={strings.SELECT}
+              valueRenderer={(v) => v}
+              selectedOptions={localRecord.internalInterests?.toSorted() || []}
+              label={strings.INTERNAL_INTERESTS}
             />
           </Grid>
         </Card>

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
-import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
@@ -25,7 +24,9 @@ const InventoryRouter = ({ setWithdrawalCreated }: InventoryRouterProps) => {
   const species = useAppSelector(selectSpecies);
 
   const reloadSpecies = useCallback(() => {
-    void dispatch(requestSpecies(selectedOrganization.id));
+    if (selectedOrganization.id !== -1) {
+      void dispatch(requestSpecies(selectedOrganization.id));
+    }
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
@@ -35,35 +36,33 @@ const InventoryRouter = ({ setWithdrawalCreated }: InventoryRouterProps) => {
   }, [species, reloadSpecies]);
 
   return (
-    <Switch>
-      <Route exact path={APP_PATHS.INVENTORY}>
-        <InventoryV2View
-          hasNurseries={selectedOrgHasFacilityType(selectedOrganization, 'Nursery')}
-          hasSpecies={(species || []).length > 0}
-        />
-      </Route>
-      <Route exact path={APP_PATHS.INVENTORY_NEW}>
-        <InventoryCreateView />
-      </Route>
-      <Route path={APP_PATHS.INVENTORY_WITHDRAW}>
-        <SpeciesBulkWithdrawView withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />
-      </Route>
-      <Route path={APP_PATHS.INVENTORY_BATCH}>
-        <InventoryBatchView origin='Batches' species={species || []} />
-      </Route>
-      <Route path={APP_PATHS.INVENTORY_BATCH_FOR_NURSERY}>
-        <InventoryBatchView origin='Nursery' species={species || []} />
-      </Route>
-      <Route path={APP_PATHS.INVENTORY_BATCH_FOR_SPECIES}>
-        <InventoryBatchView origin='Species' species={species || []} />
-      </Route>
-      <Route path={APP_PATHS.INVENTORY_ITEM_FOR_NURSERY}>
-        <InventoryForNurseryView />
-      </Route>
-      <Route path={APP_PATHS.INVENTORY_ITEM_FOR_SPECIES}>
-        <InventoryForSpeciesView species={species || []} />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route
+        path={'/*'}
+        element={
+          <InventoryV2View
+            hasNurseries={selectedOrgHasFacilityType(selectedOrganization, 'Nursery')}
+            hasSpecies={(species || []).length > 0}
+          />
+        }
+      />
+      <Route path={'/new'} element={<InventoryCreateView />} />
+      <Route
+        path={'/withdraw'}
+        element={<SpeciesBulkWithdrawView withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />}
+      />
+      <Route path={'/batch/:batchId'} element={<InventoryBatchView origin='Batches' species={species || []} />} />
+      <Route
+        path={'/nursery/:nurseryId/batch/:batchId'}
+        element={<InventoryBatchView origin='Nursery' species={species || []} />}
+      />
+      <Route
+        path={'/species/:speciesId/batch/:batchId'}
+        element={<InventoryBatchView origin='Species' species={species || []} />}
+      />
+      <Route path={'/nursery/:nurseryId'} element={<InventoryForNurseryView />} />
+      <Route path={'/:speciesId'} element={<InventoryForSpeciesView species={species || []} />} />
+    </Routes>
   );
 };
 

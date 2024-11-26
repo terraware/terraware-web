@@ -1,7 +1,6 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 
-import { Box, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
@@ -10,19 +9,6 @@ import { APP_PATHS } from 'src/constants';
 import { selectSubzoneSpeciesPopulations } from 'src/redux/features/tracking/sitePopulationSelector';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  speciesList: {
-    margin: 0,
-    paddingLeft: theme.spacing(3),
-  },
-  withdrawalHistoryLink: {
-    textAlign: 'left',
-    fontSize: '16px',
-    fontWeight: 400,
-    marginTop: theme.spacing(3),
-  },
-}));
 
 type PlantingProgressMapDialogProps = {
   id: number;
@@ -42,7 +28,6 @@ export default function PlantingProgressMapDialog({
   busy,
 }: PlantingProgressMapDialogProps): JSX.Element {
   const theme = useTheme();
-  const classes = useStyles();
   const species = useAppSelector((state) => selectSubzoneSpeciesPopulations(state, id));
   const totalPlants = useMemo(() => {
     return Object.values(species).reduce((prev, curr) => prev + curr, 0);
@@ -52,7 +37,15 @@ export default function PlantingProgressMapDialog({
     const filterParam = `subzoneName=${encodeURIComponent(subzoneName)}&siteName=${encodeURIComponent(siteName)}`;
     const url = `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history&${filterParam}`;
     return (
-      <Link className={classes.withdrawalHistoryLink} to={url}>
+      <Link
+        to={url}
+        style={{
+          textAlign: 'left',
+          fontSize: '16px',
+          fontWeight: 400,
+          marginTop: theme.spacing(3),
+        }}
+      >
         {strings.SEE_WITHDRAWAL_HISTORY}
       </Link>
     );
@@ -76,7 +69,7 @@ export default function PlantingProgressMapDialog({
           <FormattedNumber value={totalPlants} />
           &nbsp;{strings.SEEDLINGS_SENT}
         </Typography>
-        <ul className={classes.speciesList}>
+        <ul style={{ margin: 0, paddingLeft: theme.spacing(3) }}>
           {Object.keys(species).map((speciesName) => (
             <li key={speciesName}>
               <Typography fontSize='16px' fontWeight={400}>

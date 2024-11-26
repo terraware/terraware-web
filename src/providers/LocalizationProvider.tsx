@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
-import { HttpService, LocationService } from 'src/services';
+import { requestListCountries, requestListTimezones } from 'src/redux/features/location/locationAsyncThunks';
+import { selectCountries, selectTimezones } from 'src/redux/features/location/locationSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { HttpService } from 'src/services';
 import strings, { ILocalizedStringsMap } from 'src/strings';
+import { Country } from 'src/types/Country';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 
 import { ProvidedLocalizationData, useUser } from '.';
@@ -23,9 +27,19 @@ export default function LocalizationProvider({
   activeLocale,
   setActiveLocale,
 }: LocalizationProviderProps): JSX.Element | null {
+  const dispatch = useAppDispatch();
+
+  const [countries, setCountries] = useState<Country[]>([]);
   const [timeZones, setTimeZones] = useState<TimeZoneDescription[]>([]);
+
   const { user } = useUser();
   const supportedLocales = useSupportedLocales();
+
+  const [countriesRequestId, setCountriesRequestId] = useState<string>('');
+  const countriesResponse = useAppSelector(selectCountries(countriesRequestId));
+
+  const [timeZonesRequestId, setTimeZonesRequestId] = useState<string>('');
+  const timeZoneResponse = useAppSelector(selectTimezones(timeZonesRequestId));
 
   useEffect(() => {
     if (user?.locale) {
@@ -35,32 +49,25 @@ export default function LocalizationProvider({
 
   useEffect(() => {
     HttpService.setDefaultHeaders({ 'Accept-Language': selectedLocale });
-  }, [selectedLocale]);
-
-  // This must come after the effect that configures the Accept-Language header.
-  useEffect(() => {
-    const fetchTimeZones = async () => {
-      const timeZoneResponse = await LocationService.getTimeZones();
-      if (!timeZoneResponse.error && timeZoneResponse.timeZones) {
-        setTimeZones(timeZoneResponse.timeZones.sort((a, b) => a.longName.localeCompare(b.longName, selectedLocale)));
-      }
-    };
-
-    fetchTimeZones();
-  }, [selectedLocale]);
+    const countriesDispatched = dispatch(requestListCountries());
+    const timezoneDispatched = dispatch(requestListTimezones());
+    setCountriesRequestId(countriesDispatched.requestId);
+    setTimeZonesRequestId(timezoneDispatched.requestId);
+  }, [dispatch, selectedLocale]);
 
   useEffect(() => {
-    // Switch locales on the cookie consent UI, if enabled. This is an undocumented internal API of
-    // the cookie-script.com code, so it might stop working in future versions.
-    const func = (window as any).CookieScript?.instance?.applyTranslationByCode;
-    if (typeof func === 'function') {
-      try {
-        func(selectedLocale);
-      } catch (e) {
-        // Swallow it rather than surfacing an error to the user.
-      }
+    if (countriesResponse && countriesResponse.status === 'success' && countriesResponse.data) {
+      const countriesCopy = [...countriesResponse.data];
+      setCountries(countriesCopy.sort((a, b) => a.name.localeCompare(b.name, selectedLocale)));
     }
-  }, [selectedLocale]);
+  }, [selectedLocale, countriesResponse]);
+
+  useEffect(() => {
+    if (timeZoneResponse && timeZoneResponse.status === 'success' && timeZoneResponse.data) {
+      const timezonesCopy = [...timeZoneResponse.data];
+      setTimeZones(timezonesCopy.sort((a, b) => a.longName.localeCompare(b.longName, selectedLocale)));
+    }
+  }, [selectedLocale, timeZoneResponse]);
 
   useEffect(() => {
     const fetchStrings = async () => {
@@ -83,6 +90,7 @@ export default function LocalizationProvider({
 
   const context: ProvidedLocalizationData = {
     activeLocale,
+    countries,
     bootstrapped: !!activeLocale,
     selectedLocale,
     setSelectedLocale,

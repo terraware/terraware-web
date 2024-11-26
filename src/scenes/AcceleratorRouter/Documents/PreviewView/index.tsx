@@ -1,80 +1,46 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { useParams } from 'react-router-dom';
 
-import PageContent from 'src/components/DocumentProducer/PageContent';
-import Page from 'src/components/Page';
-import useNavigateTo from 'src/hooks/useNavigateTo';
-import { selectGetDocument } from 'src/redux/features/documentProducer/documents/documentsSelector';
-import { requestGetDocument } from 'src/redux/features/documentProducer/documents/documentsThunks';
-import { useSelectorProcessor } from 'src/redux/hooks/useSelectorProcessor';
+import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
+import { selectProject } from 'src/redux/features/projects/projectsSelectors';
+import { requestProject } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import strings from 'src/strings';
-import { Document } from 'src/types/documentProducer/Document';
-import useQuery from 'src/utils/useQuery';
-import useSnackbar from 'src/utils/useSnackbar';
 
 import PreviewDocument from './PreviewDocument';
 
 export type PreviewProps = {
-  docId?: number;
   close?: () => void;
 };
 
-export default function Preview({ docId, close }: PreviewProps) {
+export default function Preview({ close }: PreviewProps) {
   const dispatch = useAppDispatch();
-  const snackbar = useSnackbar();
-  const { goToDocuments } = useNavigateTo();
-  const { documentId: docIdParam } = useParams<{ documentId: string }>();
-  const query = useQuery();
+  const { document: doc, projectId } = useDocumentProducerData();
 
   const [newWindow, setNewWindow] = useState<Window | null>(null);
   const [containerEl, setContainerEl] = useState<HTMLElement | null>(null);
   const [initialized, setInitialized] = useState(false);
-  const [doc, setDoc] = useState<Document>();
 
-  const id = docId ?? Number(docIdParam);
-  const viewInWindow = query.get('viewInWindow') === 'true';
-
-  const docSelect = useAppSelector(selectGetDocument(id));
-  useSelectorProcessor(docSelect, setDoc, {
-    handleError: true,
-    onError: goToDocuments,
-  });
-
-  const fetchDoc = useCallback(() => {
-    // TODO: get version # from query params and use in API call
-    dispatch(requestGetDocument(id));
-  }, [dispatch, id]);
+  const project = useAppSelector(selectProject(projectId));
 
   useEffect(() => {
-    fetchDoc();
-  }, [fetchDoc]);
-
-  useEffect(() => {
-    if (viewInWindow) {
-      return;
+    if (projectId !== -1) {
+      dispatch(requestProject(projectId));
     }
+  }, [dispatch, projectId]);
 
+  useEffect(() => {
     const win = window.open('/preview.html', '_blank');
     if (win) {
       win.addEventListener('load', () => {
         // successfully created window (tab); create a div to hold the document contents
         setNewWindow(win);
-        setContainerEl(document.createElement('div'));
+        setContainerEl(win.document.createElement('div'));
         win.focus();
       });
-    } else {
-      // failed to open window; show an error
-      snackbar.toastError(strings.PREVIEW_ERROR);
     }
-  }, [snackbar, viewInWindow]);
+  }, []);
 
   useEffect(() => {
-    if (viewInWindow) {
-      return;
-    }
-
     if (newWindow && containerEl && !initialized && doc) {
       // attach the container div to the new window
       newWindow.document.body.appendChild(containerEl);
@@ -89,31 +55,25 @@ export default function Preview({ docId, close }: PreviewProps) {
       // attach the table-of-contents script
       attachScript('js/table-of-contents.js');
 
-      // attach the pagedjs polyfill script
-      attachScript('js/paged-0.4.3.polyfill.min.js');
+      // This is a bit dirty, but it was the only way to get it to show up correctly every time in local dev
+      // The page (including the table of contents) needs to be "done" by the time pagedjs runs, so the TOC needs
+      // to be done executing
+      window.setTimeout(() => {
+        // attach the pagedjs polyfill script
+        attachScript('js/paged-0.4.3.polyfill.min.js');
+        // TODO is this value acceptable? Should we figure out another way to do this?
+      }, 200);
 
       if (close) {
         newWindow.onbeforeunload = () => close();
       }
       setInitialized(true);
     }
-  }, [newWindow, containerEl, close, initialized, doc, viewInWindow]);
+  }, [newWindow, containerEl, close, initialized, doc]);
 
-  useEffect(() => () => newWindow?.close(), [newWindow]);
-
-  if (viewInWindow && doc) {
-    return (
-      <Page title={strings.PREVIEW}>
-        <PageContent styles={{ width: '100%', margin: 'auto' }}>
-          <PreviewDocument doc={doc} />;
-        </PageContent>
-      </Page>
-    );
-  }
-
-  if (newWindow === null || containerEl === null || !initialized || !doc) {
+  if (newWindow === null || containerEl === null || !initialized || !doc || !project) {
     return null;
   }
 
-  return createPortal(<PreviewDocument doc={doc} />, containerEl);
+  return createPortal(<PreviewDocument projectName={project.name} />, containerEl);
 }

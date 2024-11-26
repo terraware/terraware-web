@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
@@ -26,7 +26,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { OnValidate } from './types';
-import useStyles from './useMapStyle';
+import useMapStyle from './useMapStyle';
 import {
   IdGenerator,
   cutOverlappingBoundaries,
@@ -111,8 +111,8 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
     fixedBoundaries: featureSiteSubzones(site),
   });
   const [overridePopupInfo, setOverridePopupInfo] = useState<PopupInfo | undefined>();
-  const classes = useStyles();
   const theme = useTheme();
+  const mapStyles = useMapStyle(theme);
   const getRenderAttributes = useRenderAttributes();
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
@@ -189,7 +189,7 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
     const zonesData: RenderableReadOnlyBoundary = {
       data: {
         type: 'FeatureCollection',
-        features: zones!.features.map((feature: Feature) => toZoneFeature(feature, zoneIdGenerator)),
+        features: zones.features.map((feature: Feature) => toZoneFeature(feature, zoneIdGenerator)),
       },
       selectedId: selectedZone,
       id: 'zone',
@@ -209,8 +209,9 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
         type: 'FeatureCollection',
         features: Object.keys(subzones ?? {}).flatMap((key: string) => {
           const zoneId = Number(key);
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           const data = subzones![zoneId];
-          return data!.features.map((feature: Feature) =>
+          return data.features.map((feature: Feature) =>
             toIdentifiableFeature(feature, subzoneIdGenerator, { parentId: zoneId })
           );
         }),
@@ -238,9 +239,9 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
             {
               text: strings.SITE_SUBZONE_BOUNDARIES_DESCRIPTION_1,
               hasTutorial: true,
-              handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon icon='slice' />) as JSX.Element[],
+              handlePrefix: (prefix: string) =>
+                strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
             },
-            { text: strings.SITE_SUBZONE_BOUNDARIES_SELECT_A_ZONE },
             {
               text: strings.formatString(
                 strings.SITE_SUBZONE_BOUNDARIES_SELECTED_ZONE,
@@ -277,14 +278,14 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
         const idGenerator = IdGenerator(Object.values(subzones).flatMap((sz) => sz.features));
         const subzonesWithIds = leftOrderedFeatures(cutSubzones).map(({ feature: subzone }) => {
           if (subzone && subzone.properties && !subzone.properties.name) {
-            const subzoneName = subzoneNameGenerator(usedNames);
+            const subzoneName = subzoneNameGenerator(usedNames, strings.SUBZONE);
             subzone.properties.name = subzoneName;
             usedNames.add(subzoneName);
           }
           return toIdentifiableFeature(subzone, idGenerator, { parentId: selectedZone });
         }) as GeometryFeature[];
 
-        setSubzonesData((prev) => ({
+        setSubzonesData(() => ({
           editableBoundary: emptyBoundary(),
           errorAnnotations: [],
           fixedBoundaries: {
@@ -362,7 +363,7 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
 
   const popupRenderer = useMemo(
     (): MapPopupRenderer => ({
-      className: `${classes.tooltip} ${classes.box}`,
+      sx: [mapStyles.tooltip, mapStyles.box],
       render: (properties: MapSourceProperties, onClose?: () => void): JSX.Element | null => {
         const { id, name } = properties;
 
@@ -391,19 +392,21 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
           close();
         };
 
-        const subzoneNamesInUse = new Set<string>(
-          Object.values(subzones || ({} as Record<number, FeatureCollection>))
-            .flatMap((featureCollection) => featureCollection.features)
-            .filter((feature) => feature.properties?.id !== id)
-            .map((feature) => feature.properties?.name)
-        );
+        const selectedSubzones = subzones && selectedZone ? subzones[selectedZone] : undefined;
+        const subzoneNamesInUse = selectedSubzones
+          ? new Set<string>(
+              selectedSubzones.features
+                .filter((feature) => feature.properties?.id !== id)
+                .map((feature) => feature.properties?.name)
+            )
+          : new Set<string>();
 
         return (
           <TooltipContents name={name} onClose={close} onUpdate={onUpdate} subzoneNamesInUse={subzoneNamesInUse} />
         );
       },
     }),
-    [classes.box, classes.tooltip, selectedZone, setSubzonesData, subzones]
+    [selectedZone, setSubzonesData, subzones]
   );
 
   const activeContext = useMemo<MapEntityOptions | undefined>(() => {
@@ -452,7 +455,6 @@ const TooltipContents = ({ name, onClose, onUpdate, subzoneNamesInUse }: Tooltip
   const [nameError, setNameError] = useState<string>('');
   const [validate, setValidate] = useState<boolean>(false);
   const theme = useTheme();
-  const classes = useStyles();
 
   const validateInput = useCallback((): boolean => {
     let hasNameErrors = true;
@@ -496,13 +498,13 @@ const TooltipContents = ({ name, onClose, onUpdate, subzoneNamesInUse }: Tooltip
         <Typography>{strings.PLANTING_SITE_ZONE_NAME_HELP}</Typography>
         <Textfield
           autoFocus={true}
-          className={classes.textInput}
           label={strings.NAME}
           id='subzone-name'
           type='text'
           onChange={(value) => setSubzoneName(value as string)}
           value={subzoneName}
           errorText={nameError}
+          sx={{ marginTop: theme.spacing(1.5) }}
         />
       </Box>
     </MapTooltipDialog>

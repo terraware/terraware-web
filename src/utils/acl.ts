@@ -21,6 +21,10 @@ import { isManagerOrHigher, isMember } from './organization';
 /**
  * We split the permissions up loosely by the entity that the user is being authorized to interact with or view
  */
+type PermissionApplication =
+  | 'READ_ALL_APPLICATIONS'
+  | 'UPDATE_APPLICATION_INTERNAL_COMMENTS'
+  | 'UPDATE_APPLICATION_STATUS';
 type PermissionCohort = 'CREATE_COHORTS' | 'READ_COHORTS' | 'UPDATE_COHORTS' | 'DELETE_COHORTS';
 type PermissionConsole = 'VIEW_CONSOLE';
 type PermissionDeliverable =
@@ -41,9 +45,11 @@ type PermissionParticipantProject =
   | 'UPDATE_PARTICIPANT_PROJECT'
   | 'ASSIGN_PROJECT_TO_PARTICIPANT'
   | 'VIEW_PARTICIPANT_PROJECT_SCORING_VOTING'
+  | 'UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING'
   | 'EXPORT_PARTICIPANT_PROJECT';
 
 export type GlobalRolePermission =
+  | PermissionApplication
   | PermissionCohort
   | PermissionConsole
   | PermissionDeliverable
@@ -138,14 +144,18 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   DELETE_PARTICIPANTS: AcceleratorAdminPlus,
   EXPORT_PARTICIPANTS: ReadOnlyPlus,
   EXPORT_PARTICIPANT_PROJECT: ReadOnlyPlus,
+  READ_ALL_APPLICATIONS: ReadOnlyPlus,
   READ_COHORTS: TFExpertPlus,
   READ_DELIVERABLE: isAllowedReadDeliverable,
   READ_GLOBAL_ROLES: AcceleratorAdminPlus,
   READ_PARTICIPANTS: TFExpertPlus,
   READ_PARTICIPANT_PROJECT: ReadOnlyPlus,
   READ_SUBMISSION_DOCUMENT: ReadOnlyPlus,
+  UPDATE_APPLICATION_INTERNAL_COMMENTS: AcceleratorAdminPlus,
+  UPDATE_APPLICATION_STATUS: TFExpertPlus,
   UPDATE_COHORTS: AcceleratorAdminPlus,
-  UPDATE_PARTICIPANTS: TFExpertPlus,
+  UPDATE_PARTICIPANTS: AcceleratorAdminPlus,
+  UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING: TFExpertPlus,
   UPDATE_PARTICIPANT_PROJECT: TFExpertPlus,
   UPDATE_SUBMISSION_STATUS: TFExpertPlus,
   VIEW_CONSOLE: ReadOnlyPlus,

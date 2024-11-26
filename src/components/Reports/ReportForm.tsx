@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Container, Grid, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox, Textfield } from '@terraware/web-components';
 
 import LocationSection from 'src/components/Reports/LocationSelection';
@@ -21,17 +20,6 @@ import { ReportSeedBank } from 'src/types/Report';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const MAX_PHOTOS = 30;
-
-const useStyles = makeStyles((theme: Theme) => ({
-  infoCardStyle: {
-    padding: 0,
-  },
-  section: {
-    padding: 0,
-    marginLeft: theme.spacing(3),
-    borderBottom: `solid 1px ${theme.palette.TwClrBrdrTertiary}`,
-  },
-}));
 
 export type ReportFormProps = {
   editable: boolean;
@@ -75,13 +63,22 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const classes = useStyles();
   const { isMobile, isTablet } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
 
   const [summaryOfProgress, setSummaryOfProgress] = useState(draftReport.summaryOfProgress ?? '');
   const [projectNotes, setProjectNotes] = useState(draftReport.notes ?? '');
   const [photoCount, setPhotoCount] = useState(0);
+
+  const infoCardStyle = {
+    padding: 0,
+  };
+
+  const sectionStyles = {
+    padding: 0,
+    marginLeft: theme.spacing(3),
+    borderBottom: `solid 1px ${theme.palette.TwClrBrdrTertiary}`,
+  };
 
   // We check the project name because a project can be deleted, and if that happens the ID will not be present
   const isProjectReport = !!draftReport.projectName;
@@ -109,7 +106,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
   );
 
   useEffect(() => {
-    if (selectedOrganization) {
+    if (selectedOrganization && selectedOrganization.id !== -1) {
       void dispatch(requestObservations(selectedOrganization.id));
       void dispatch(requestObservationsResults(selectedOrganization.id));
       void dispatch(requestSpecies(selectedOrganization.id));
@@ -169,7 +166,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           isEditable={false}
           title={strings.ORGANIZATION}
           contents={draftReport.organizationName ?? ''}
-          className={classes.infoCardStyle}
+          sx={infoCardStyle}
         />
       </Grid>
       <Grid item xs={smallItemGridWidth()}>
@@ -177,7 +174,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           isEditable={false}
           title={strings.SEED_BANKS}
           contents={`${draftReport?.seedBanks?.filter((sb) => sb.selected)?.length}` ?? '0'}
-          className={classes.infoCardStyle}
+          sx={infoCardStyle}
         />
       </Grid>
       <Grid item xs={smallItemGridWidth()}>
@@ -185,7 +182,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           isEditable={false}
           title={strings.NURSERIES}
           contents={`${draftReport?.nurseries?.filter((n) => n.selected)?.length}` ?? '0'}
-          className={classes.infoCardStyle}
+          sx={infoCardStyle}
         />
       </Grid>
       <Grid item xs={smallItemGridWidth()}>
@@ -193,7 +190,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           isEditable={false}
           title={strings.PLANTING_SITES}
           contents={`${draftReport?.plantingSites?.filter((ps) => ps.selected)?.length}` ?? '0'}
-          className={classes.infoCardStyle}
+          sx={infoCardStyle}
         />
       </Grid>
       <Grid item xs={mediumItemGridWidth()}>
@@ -264,7 +261,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
               description={
                 strings.PHOTOS_TO_UPLOAD +
                 ' ' +
-                strings.formatString(strings.PHOTOS_TO_UPLOAD_LIMIT, MAX_PHOTOS - photoCount) +
+                strings.formatString(strings.PHOTOS_TO_UPLOAD_LIMIT, MAX_PHOTOS - photoCount).toString() +
                 ':'
               }
             />
@@ -280,7 +277,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         {allSeedbanks ? (
           allSeedbanks.map((seedbank, index) => (
             <Grid key={index} container spacing={theme.spacing(3)} margin={0}>
-              {index !== 0 && <Grid item xs={12} className={classes.section} />}
+              {index !== 0 && <Grid item xs={12} sx={sectionStyles} />}
               <Grid item xs={12}>
                 {LocationCheckbox(seedbank.name, seedbank.selected, `seedbank-${index}`, index, 'seedBanks')}
               </Grid>
@@ -314,7 +311,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         {allNurseries ? (
           allNurseries.map((nursery, index) => (
             <Grid key={index} container spacing={theme.spacing(3)} margin={0}>
-              {index !== 0 && <Grid item xs={12} className={classes.section} />}
+              {index !== 0 && <Grid item xs={12} sx={sectionStyles} />}
               <Grid item xs={12}>
                 {LocationCheckbox(nursery.name, nursery.selected, `nursery-${index}`, index, 'nurseries')}
               </Grid>
@@ -349,7 +346,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         {allPlantingSites ? (
           allPlantingSites.map((plantingSite, index) => (
             <Grid key={index} container spacing={theme.spacing(3)} margin={0}>
-              {index !== 0 && <Grid item xs={12} className={classes.section} />}
+              {index !== 0 && <Grid item xs={12} sx={sectionStyles} />}
               <Grid item xs={12}>
                 {LocationCheckbox(
                   plantingSite.name,

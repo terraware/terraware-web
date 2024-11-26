@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { IconButton } from '@mui/material';
 import { DropdownItem, Icon, Popover } from '@terraware/web-components';
@@ -9,7 +9,7 @@ import { requestMarkSubmitted } from 'src/redux/features/documentProducer/docume
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 
-type PddHistoryMenuProps = {
+type DocumentHistoryMenuProps = {
   documentId: number;
   versionId: number;
   isSubmitted?: boolean;
@@ -21,7 +21,7 @@ export default function DocumentHistoryRowMenu({
   versionId,
   isSubmitted,
   reloadData,
-}: PddHistoryMenuProps): JSX.Element {
+}: DocumentHistoryMenuProps): JSX.Element {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<HTMLElement | null>(null);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
@@ -57,6 +57,7 @@ export default function DocumentHistoryRowMenu({
               : { label: strings.MARK_AS_SUBMITTED, value: 'mark-as-submitted' },
           ],
         ]}
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         handleClick={(item: DropdownItem) => {
           markAsSubmitted();
         }}

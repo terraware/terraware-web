@@ -34,7 +34,7 @@ if [ -z "$speciesId1" ]; then
     echo
     echo Failed to make request to server
     echo
-    docker-compose logs terraware-server
+    docker compose logs terraware-server
     exit 1
 fi
 

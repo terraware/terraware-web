@@ -12,20 +12,22 @@ interface FeaturedFiltersProps {
   filters: FilterConfig[];
   setCurrentFilters: (filters: Record<string, any>) => void;
   currentFilters: Record<string, SearchNodePayload>;
+  onFilterApplied?: (filter: string, values: (string | number | null)[]) => void;
 }
 
 type MultiSelectFilters = Record<string, (string | number | null)[]>;
 
-const defaultSearchNodeCreator = (field: string, values: (number | string | null)[]) => ({
-  field,
-  operation: 'field',
-  type: 'Exact',
-  values: values.map((value: number | string | null): string | null => (value === null ? value : `${value}`)),
-});
+export const defaultSearchNodeCreator = (field: string, values: (number | string | null)[]) =>
+  ({
+    field,
+    operation: 'field',
+    type: 'Exact',
+    values: values.map((value: number | string | null): string | null => (value === null ? value : `${value}`)),
+  }) as SearchNodePayload;
 
 const defaultRenderOption = (status: string | number) => `${status}`;
 
-const FeaturedFilters = ({ filters, setCurrentFilters, currentFilters }: FeaturedFiltersProps) => {
+const FeaturedFilters = ({ filters, setCurrentFilters, currentFilters, onFilterApplied }: FeaturedFiltersProps) => {
   // Since the multi select should stay unaware of our Search API structure, convert the filters to multi select filters
   const multiSelectFilters = useMemo(
     () =>
@@ -71,6 +73,7 @@ const FeaturedFilters = ({ filters, setCurrentFilters, currentFilters }: Feature
 
                 setCurrentFilters(nextFilters);
               }}
+              onFilterApplied={onFilterApplied}
             />
           </Box>
         );

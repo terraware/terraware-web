@@ -1,24 +1,30 @@
 import React from 'react';
 
-import { Paper, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  paper: {
-    padding: theme.spacing(2),
-    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    borderRadius: '8px',
-    boxShadow: 'none',
-  },
-}));
+import { Paper, SxProps, useTheme } from '@mui/material';
 
 interface Props {
   children?: React.ReactNode;
   className?: string;
+  sx?: SxProps;
 }
 
-export default function MainPaper({ children, className }: Props): JSX.Element {
-  const classes = useStyles();
+export default function MainPaper({ children, className, sx }: Props): JSX.Element {
+  const theme = useTheme();
 
-  return <Paper className={className ? `${classes.paper} ${className}` : classes.paper}>{children}</Paper>;
+  return (
+    <Paper
+      className={className}
+      sx={[
+        {
+          padding: theme.spacing(2),
+          border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+          borderRadius: '8px',
+          boxShadow: 'none',
+        },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
+    >
+      {children}
+    </Paper>
+  );
 }

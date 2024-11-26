@@ -7,6 +7,7 @@ import { SpeciesProjectsSearchResponse } from 'src/services/SpeciesService';
 import { setSpeciesProjectsAction } from './speciesProjectsSlice';
 
 export const requestSpeciesProjects = (organizationId: number, speciesId: number) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
       const response: SpeciesProjectsSearchResponse[] | null = await SpeciesService.getSpeciesProjects(

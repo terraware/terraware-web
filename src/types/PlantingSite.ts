@@ -1,6 +1,6 @@
 import { components } from 'src/api/types/generated-schema';
 
-import { MinimalPlantingSite, MultiPolygon, PlantingSite } from './Tracking';
+import { MinimalPlantingSite, MultiPolygon } from './Tracking';
 
 export type Population = {
   species_scientificName: string;
@@ -55,6 +55,19 @@ export type CreateDraftPlantingSiteRequestPayload = components['schemas']['Creat
 export type CreateDraftPlantingSiteResponsePayload = components['schemas']['CreateDraftPlantingSiteResponsePayload'];
 export type UpdateDraftPlantingSiteRequestPayload = components['schemas']['UpdateDraftPlantingSiteRequestPayload'];
 export type GetDraftPlantingSiteResponsePayload = components['schemas']['GetDraftPlantingSiteResponsePayload'];
+
+/**
+ * Planting Sites Payloads
+ */
+export type PlantingSitePayload = components['schemas']['PlantingSitePayload'];
+export type CreatePlantingSiteRequestPayload = components['schemas']['CreatePlantingSiteRequestPayload'];
+export type CreatePlantingSiteResponsePayload = components['schemas']['CreatePlantingSiteResponsePayload'];
+export type ValidatePlantingSiteResponsePayload = components['schemas']['ValidatePlantingSiteResponsePayload'];
+export type UpdatePlantingSiteRequestPayload = components['schemas']['UpdatePlantingSiteRequestPayload'];
+export type GetPlantingSiteResponsePayload = components['schemas']['GetPlantingSiteResponsePayload'];
+
+export type PlantingSiteProblem = components['schemas']['PlantingSiteValidationProblemPayload'];
+export type PlantingSiteProblemType = components['schemas']['PlantingSiteValidationProblemPayload']['problemType'];
 
 /**
  * Client side draft planting site with first class properties.

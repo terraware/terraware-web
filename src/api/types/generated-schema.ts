@@ -8,6 +8,66 @@
 type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
 export interface paths {
+  "/api/v1/accelerator/applications": {
+    /**
+     * List all the applications with optional search criteria
+     * @description Only applications visible to the current user are returned.
+     */
+    get: operations["listApplications"];
+    /** Create a new application */
+    post: operations["createApplication"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}": {
+    /** Get information about an application */
+    get: operations["getApplication"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}/boundary": {
+    /** Update an application's boundary */
+    put: operations["updateApplicationBoundary"];
+    /** Update an application's boundary using an uploaded file */
+    post: operations["uploadApplicationBoundary"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}/deliverables": {
+    /** Get deliverables for an application */
+    get: operations["getApplicationDeliverables"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}/export": {
+    /** Get GeoJSON for an application */
+    get: operations["getApplicationGeoJson"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}/history": {
+    /** Get the history of changes to the metadata of an application */
+    get: operations["getApplicationHistory"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}/modules": {
+    /** Get modules for an application */
+    get: operations["getApplicationModules"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}/modules/{moduleId}/deliverables": {
+    /** Get deliverables for an application module */
+    get: operations["getApplicationModuleDeliverables"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}/restart": {
+    /**
+     * Restart a previously-submitted application
+     * @description If the application has not been submitted yet, this is a no-op.
+     */
+    post: operations["restartApplication"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}/review": {
+    /**
+     * Update an application's metadata to reflect a review
+     * @description This is an internal-user-only operation.
+     */
+    post: operations["reviewApplication"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}/submit": {
+    /**
+     * Submit an application for review
+     * @description If the application has already been submitted, this is a no-op.
+     */
+    post: operations["submitApplication"];
+  };
   "/api/v1/accelerator/cohorts": {
     /** Gets the list of cohorts. */
     get: operations["listCohorts"];
@@ -22,12 +82,31 @@ export interface paths {
     /** Deletes a single cohort. */
     delete: operations["deleteCohort"];
   };
+  "/api/v1/accelerator/cohorts/{cohortId}/modules": {
+    /** List cohort modules. */
+    get: operations["listCohortModules"];
+  };
+  "/api/v1/accelerator/cohorts/{cohortId}/modules/{moduleId}": {
+    /** Gets one cohort module. */
+    get: operations["getCohortModule"];
+    /**
+     * Updates the information about a module's use by a cohort.
+     * @description Adds the module to the cohort if it is not already associated.
+     */
+    put: operations["updateCohortModule"];
+    /** Deletes a module from a cohort if it is currently associated. */
+    delete: operations["deleteCohortModule"];
+  };
   "/api/v1/accelerator/deliverables": {
     /**
      * Lists the deliverables for accelerator projects
      * @description The list may optionally be filtered based on certain criteria as specified in the query string. If no filter parameters are supplied, lists all the deliverables in all the participants and projects that are visible to the user. For users with accelerator admin privileges, this will be the full list of all deliverables for all accelerator projects.
      */
     get: operations["listDeliverables"];
+  };
+  "/api/v1/accelerator/deliverables/import": {
+    /** Import a list of deliverables metadata. */
+    post: operations["importDeliverables"];
   };
   "/api/v1/accelerator/deliverables/{deliverableId}/documents": {
     /** Uploads a new document to satisfy a deliverable. */
@@ -46,12 +125,73 @@ export interface paths {
      */
     put: operations["updateSubmission"];
   };
+  "/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}/complete": {
+    /** Marks a submission from a project as complete. */
+    post: operations["completeSubmission"];
+  };
+  "/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}/incomplete": {
+    /** Marks a submission from a project as incomplete. */
+    post: operations["incompleteSubmission"];
+  };
+  "/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}/submit": {
+    /** Submits a submission from a project. */
+    post: operations["submitSubmission"];
+  };
+  "/api/v1/accelerator/events": {
+    /** List events */
+    get: operations["listEvents"];
+    /**
+     * Create a new event on a module.
+     * @description Only accessible by accelerator administrators.
+     */
+    post: operations["createEvent"];
+  };
+  "/api/v1/accelerator/events/{eventId}": {
+    /** Gets one event for a project. */
+    get: operations["getEvent"];
+    /**
+     * Update an event on a module.
+     * @description Only accessible by accelerator administrators.
+     */
+    put: operations["updateEvent"];
+    /**
+     * Delete an event from a module.
+     * @description Only accessible by accelerator administrators.
+     */
+    delete: operations["deleteEvent"];
+  };
+  "/api/v1/accelerator/events/{eventId}/projects": {
+    /**
+     * Update the list of projects for a module event.
+     * @description Only accessible by accelerator administrators.
+     */
+    post: operations["updateEventProjects"];
+  };
+  "/api/v1/accelerator/modules": {
+    /** List modules. */
+    get: operations["listModules"];
+  };
+  "/api/v1/accelerator/modules/import": {
+    /** Import a list of modules. */
+    post: operations["importModules"];
+  };
+  "/api/v1/accelerator/modules/{moduleId}": {
+    /** Gets one module. */
+    get: operations["getModule"];
+  };
   "/api/v1/accelerator/organizations": {
     /**
-     * Lists organizations with the Accelerator internal tag and their projects.
+     * Lists accelerator related organizations and their projects.
      * @description By default, only lists tagged organizations that have projects that have not been assigned to participants yet.
      */
     get: operations["listAcceleratorOrganizations"];
+  };
+  "/api/v1/accelerator/organizations/{organizationId}/tfContact": {
+    /**
+     * Assign a user as the Terraformation contact for an organization.
+     * @description The user will be added to the organization if they are not already a member.
+     */
+    put: operations["assignTerraformationContact"];
   };
   "/api/v1/accelerator/participants": {
     /** Creates a new participant. */
@@ -64,6 +204,22 @@ export interface paths {
     put: operations["updateParticipant"];
     /** Deletes a participant that has no projects. */
     delete: operations["deleteParticipant"];
+  };
+  "/api/v1/accelerator/projects/species": {
+    /** Creates a new participant project species entry. */
+    post: operations["createParticipantProjectSpecies"];
+    /** Deletes participant project species entries. */
+    delete: operations["deleteParticipantProjectSpecies"];
+  };
+  "/api/v1/accelerator/projects/species/assign": {
+    /** Creates a new participant project species entry for every project ID and species ID pairing. */
+    post: operations["assignParticipantProjectSpecies"];
+  };
+  "/api/v1/accelerator/projects/species/{participantProjectSpeciesId}": {
+    /** Gets information about a participant project species. */
+    get: operations["getParticipantProjectSpecies"];
+    /** Updates a participant project species entry. */
+    put: operations["updateParticipantProjectSpecies"];
   };
   "/api/v1/accelerator/projects/{projectId}": {
     /**
@@ -83,6 +239,14 @@ export interface paths {
      */
     put: operations["upsertProjectScores"];
   };
+  "/api/v1/accelerator/projects/{projectId}/species": {
+    /** Gets all species associated to a participant project. */
+    get: operations["getSpeciesForProject"];
+  };
+  "/api/v1/accelerator/projects/{projectId}/species/snapshots/{deliverableId}": {
+    /** Creates a new participant project species entry. */
+    get: operations["getParticipantProjectSpeciesSnapshot"];
+  };
   "/api/v1/accelerator/projects/{projectId}/votes": {
     /**
      * Gets vote selections for a single project.
@@ -99,6 +263,10 @@ export interface paths {
      * @description Remove the voters from the project phase, making them ineligible from voting. This is different from undoing a vote (by setting the `voteOption` to `null`). To remove voters from the entire project phase, set `userId` to `null`, and set `phaseDelete` to `true`
      */
     delete: operations["deleteProjectVotes"];
+  };
+  "/api/v1/accelerator/species/{speciesId}/projects": {
+    /** Gets all participant projects associated to a species with active deliverable information if applicable. */
+    get: operations["getProjectsForSpecies"];
   };
   "/api/v1/automations": {
     /** Gets a list of automations for a device or facility. */
@@ -118,25 +286,13 @@ export interface paths {
     /** Reports that an automation has been triggered. */
     post: operations["postAutomationTrigger"];
   };
+  "/api/v1/countries/{countryCode}/boundary": {
+    /** Gets boundary of one country given the 2-letter country code. */
+    get: operations["getBorder"];
+  };
   "/api/v1/devices": {
     /** Registers a new device a facility's device manager. */
     post: operations["createDevice"];
-  };
-  "/api/v1/devices/managers": {
-    /** Searches for device managers matching a set of criteria. */
-    get: operations["getDeviceManagers"];
-  };
-  "/api/v1/devices/managers/{deviceManagerId}": {
-    /** Gets information about a specific device manager. */
-    get: operations["getDeviceManager"];
-  };
-  "/api/v1/devices/managers/{deviceManagerId}/connect": {
-    /** Connects a device manager to a facility. */
-    post: operations["connectDeviceManager"];
-  };
-  "/api/v1/devices/templates": {
-    /** Lists the available templates for new devices. */
-    get: operations["listDeviceTemplates"];
   };
   "/api/v1/devices/{id}": {
     /** Gets the configuration of a single device. */
@@ -150,6 +306,92 @@ export interface paths {
      * @description Notifies the appropriate users so they can troubleshoot the problem.
      */
     post: operations["deviceUnresponsive"];
+  };
+  "/api/v1/document-producer/documents": {
+    /** Gets a list of all the documents. */
+    get: operations["listDocuments"];
+    /** Creates a new document. */
+    post: operations["createDocument"];
+  };
+  "/api/v1/document-producer/documents/{documentId}/upgrade": {
+    /**
+     * Upgrades a document to a newer manifest.
+     * @description The manifest must be for the same document template as the existing manifest.
+     */
+    post: operations["upgradeManifest"];
+  };
+  "/api/v1/document-producer/documents/{documentId}/versions": {
+    /** Saves a version of a document. */
+    post: operations["createSavedDocumentVersion"];
+  };
+  "/api/v1/document-producer/documents/{documentId}/versions/{versionId}": {
+    /** Gets details of a specific saved version of a document. */
+    get: operations["getSavedDocumentVersion"];
+    /** Updates a saved version of a document. */
+    put: operations["updateSavedDocumentVersion"];
+  };
+  "/api/v1/document-producer/documents/{id}": {
+    /** Gets a document. */
+    get: operations["getDocument"];
+    /** Updates a document. */
+    put: operations["updateDocument"];
+  };
+  "/api/v1/document-producer/documents/{id}/history": {
+    /** Gets the history of a document. This includes both information about document edits and information about saved versions. */
+    get: operations["getDocumentHistory"];
+  };
+  "/api/v1/document-producer/projects/{projectId}/images": {
+    /** Save an image to a new variable value. */
+    post: operations["uploadProjectImageValue"];
+  };
+  "/api/v1/document-producer/projects/{projectId}/images/{valueId}": {
+    /**
+     * Gets the contents of an image variable value.
+     * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
+     */
+    get: operations["getProjectImageValue"];
+  };
+  "/api/v1/document-producer/projects/{projectId}/owners": {
+    /**
+     * List the owners of a project's variables.
+     * @description Only variables that actually have owners are returned.
+     */
+    get: operations["listVariableOwners"];
+  };
+  "/api/v1/document-producer/projects/{projectId}/owners/{variableId}": {
+    /** Update or remove the owner of a variable in a project. */
+    put: operations["updateVariableOwner"];
+  };
+  "/api/v1/document-producer/projects/{projectId}/values": {
+    /**
+     * Get the values of the variables in a project.
+     * @description This may be used to fetch the full set of current values (the default behavior), the values from a saved version (if maxValueId is specified), or to poll for recent edits (if minValueId is specified).
+     */
+    get: operations["listProjectVariableValues"];
+    /**
+     * Update the values of the variables in a project.
+     * @description Make a list of changes to a project's variable values. The changes are applied in order and are treated as an atomic unit. That is, the changes will either all succeed or all fail; there won't be a case where some of the changes are applied and some aren't. See the payload descriptions for more details about the operations you can perform on values.
+     */
+    post: operations["updateProjectVariableValues"];
+  };
+  "/api/v1/document-producer/projects/{projectId}/workflow/{variableId}": {
+    /** Update the workflow details for a variable in a project. */
+    put: operations["updateVariableWorkflowDetails"];
+  };
+  "/api/v1/document-producer/projects/{projectId}/workflow/{variableId}/history": {
+    /** Get the workflow history for a variable in a project. */
+    get: operations["getVariableWorkflowHistory"];
+  };
+  "/api/v1/document-producer/templates": {
+    /** Gets a list of all the valid document templates. */
+    get: operations["listDocumentTemplates"];
+  };
+  "/api/v1/document-producer/variables": {
+    /**
+     * List the available variables, optionally filtered by a document or deliverable.
+     * @description Variables returned for a document include all section hierarchies and variables injected into section text.
+     */
+    get: operations["listVariables"];
   };
   "/api/v1/facilities": {
     /** Lists all accessible facilities. */
@@ -208,6 +450,23 @@ export interface paths {
   "/api/v1/i18n/timeZones": {
     /** Gets a list of supported time zones and their names. */
     get: operations["listTimeZoneNames"];
+  };
+  "/api/v1/internalTags": {
+    /** List all the available internal tags */
+    get: operations["listAllInternalTags"];
+  };
+  "/api/v1/internalTags/organizations": {
+    /**
+     * List the internal tags assigned to all organizations
+     * @description This includes organizations with no internal tags, whose list of tags will be empty.
+     */
+    get: operations["listAllOrganizationInternalTags"];
+  };
+  "/api/v1/internalTags/organizations/{organizationId}": {
+    /** List the internal tags assigned to an organization */
+    get: operations["listOrganizationInternalTags"];
+    /** Replace the list of internal tags assigned to an organization */
+    put: operations["updateOrganizationInternalTags"];
   };
   "/api/v1/login": {
     /**
@@ -306,6 +565,10 @@ export interface paths {
     /** Gets a summary of the numbers of plants of each species in all nurseries. */
     get: operations["getSpeciesSummary"];
   };
+  "/api/v1/nursery/summary": {
+    /** Get a summary of the numbers of plants in all the nurseries in an organization. */
+    get: operations["getOrganizationNurserySummary"];
+  };
   "/api/v1/nursery/withdrawals": {
     /** Withdraws seedlings from one or more seedling batches at a nursery. */
     post: operations["createBatchWithdrawal"];
@@ -327,10 +590,17 @@ export interface paths {
      */
     get: operations["getWithdrawalPhoto"];
   };
+  "/api/v1/nursery/withdrawals/{withdrawalId}/undo": {
+    /**
+     * Undoes a withdrawal.
+     * @description The withdrawal's plants will be returned to their original batches. Nursery transfers may not be undone. If the withdrawal was an outplanting to a planting site, the plants will be removed from the planting site's plant totals. This does not delete the original withdrawal.
+     */
+    post: operations["undoBatchWithdrawal"];
+  };
   "/api/v1/organizations": {
     /**
      * Lists all organizations.
-     * @description Lists all organizations the user can access.
+     * @description Lists all organizations the user can access through organization roles.
      */
     get: operations["listOrganizations"];
     /** Creates a new organization. */
@@ -507,6 +777,8 @@ export interface paths {
      * @description If there was already a photo with the specified filename, replaces it.
      */
     post: operations["uploadPhoto"];
+    /** Delete one photo for an accession. */
+    delete: operations["deletePhoto"];
   };
   "/api/v1/seedbank/clock": {
     /**
@@ -528,10 +800,6 @@ export interface paths {
   "/api/v1/seedbank/values": {
     /** List the values of a set of search fields for a set of accessions matching certain filter criteria. */
     post: operations["listFieldValues"];
-  };
-  "/api/v1/seedbank/values/all": {
-    /** List the possible values of a set of search fields. */
-    post: operations["listAllFieldValues"];
   };
   "/api/v1/species": {
     /** Lists all the species available in an organization. */
@@ -599,6 +867,19 @@ export interface paths {
      */
     delete: operations["deleteSpecies"];
   };
+  "/api/v1/support": {
+    /** Lists support request types. */
+    get: operations["listRequestTypes"];
+    /** Submit support request types. */
+    post: operations["submitRequest"];
+  };
+  "/api/v1/support/attachment": {
+    /**
+     * Upload a temporary attachment.
+     * @description Uploads an attachment, which can be assigned to a support request during submission.
+     */
+    post: operations["uploadAttachment"];
+  };
   "/api/v1/timeseries": {
     /** Lists the timeseries for one or more devices. */
     get: operations["listTimeseries"];
@@ -609,10 +890,6 @@ export interface paths {
      * @description If there are existing timeseries with the same names, the old definitions will be overwritten.
      */
     post: operations["createMultipleTimeseries"];
-  };
-  "/api/v1/timeseries/history": {
-    /** Returns historical values of timeseries. */
-    post: operations["getTimeseriesHistory"];
   };
   "/api/v1/timeseries/values": {
     /** Records new values for one or more timeseries. */
@@ -655,15 +932,27 @@ export interface paths {
     /** Gets a list of the results of observations. */
     get: operations["listObservationResults"];
   };
+  "/api/v1/tracking/observations/results/summary": {
+    /** Gets the rollup observation summary of a planting site */
+    get: operations["getPlantingSiteObservationSummary"];
+  };
   "/api/v1/tracking/observations/{observationId}": {
     /** Gets information about a single observation. */
     get: operations["getObservation"];
     /** Reschedules an existing observation. */
     put: operations["rescheduleObservation"];
   };
+  "/api/v1/tracking/observations/{observationId}/abandon": {
+    /** Abandon the observation. */
+    post: operations["abandonObservation"];
+  };
+  "/api/v1/tracking/observations/{observationId}/mergeOtherSpecies": {
+    /** Replaces a user-entered 'Other' species with one of the organization's species in an observation. */
+    post: operations["mergeOtherSpecies"];
+  };
   "/api/v1/tracking/observations/{observationId}/plots": {
-    /** Gets a list of monitoring plots assigned to an observation. */
-    get: operations["listAssignedPlots"];
+    /** Exports monitoring plots assigned to an observation as a GPX file. */
+    get: operations["listAssignedPlots_1"];
   };
   "/api/v1/tracking/observations/{observationId}/plots/{plotId}": {
     /** Updates information about the observation of a plot. */
@@ -716,6 +1005,10 @@ export interface paths {
     /** Creates a new planting site. */
     post: operations["createPlantingSite"];
   };
+  "/api/v1/tracking/sites/validate": {
+    /** Validates the definition of a new planting site. */
+    post: operations["validatePlantingSite"];
+  };
   "/api/v1/tracking/sites/{id}": {
     /**
      * Gets information about a specific planting site.
@@ -763,6 +1056,10 @@ export interface paths {
      */
     delete: operations["deleteMyself"];
   };
+  "/api/v1/users/me/cookies": {
+    /** Updates the current user's cookie consent selection. */
+    put: operations["updateCookieConsent"];
+  };
   "/api/v1/users/me/preferences": {
     /** Gets the current user's preferences. */
     get: operations["getUserPreferences"];
@@ -776,6 +1073,12 @@ export interface paths {
   "/api/v1/users/{userId}/globalRoles": {
     /** Apply the supplied global roles to the user. */
     post: operations["updateGlobalRoles"];
+  };
+  "/api/v1/users/{userId}/internalInterests": {
+    /** Get the list of internal interests assigned to a user. */
+    get: operations["getUserDeliverableCategories"];
+    /** Update which internal interests are assigned to a user. */
+    put: operations["updateUserDeliverableCategories"];
   };
   "/api/v1/versions": {
     /** Gets the minimum and recommended versions for Terraware's client applications. */
@@ -882,6 +1185,7 @@ export interface components {
       id: number;
       name: string;
       projects: components["schemas"]["AcceleratorProjectPayload"][];
+      tfContactUser?: components["schemas"]["TerraformationContactUserPayload"];
     };
     AcceleratorProjectPayload: {
       /** Format: int64 */
@@ -1006,12 +1310,6 @@ export interface components {
       /** @enum {string} */
       role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
     };
-    AllFieldValuesPayload: {
-      /** @description If true, the list of values is too long to return in its entirety and "values" is a partial list. */
-      partial: boolean;
-      /** @description All the values this field could possibly have, whether or not any accessions have them. For fields that allow the user to enter arbitrary values, this is equivalent to querying the list of values without any filter criteria, that is, it's a list of all the user-entered values. */
-      values: string[];
-    };
     /** @description Search criterion that matches results that meet all of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x AND y AND z. */
     AndNodePayload: WithRequired<{
       operation: "and";
@@ -1034,10 +1332,113 @@ export interface components {
       successStories?: string;
       sustainableDevelopmentGoals: components["schemas"]["GoalProgressPayloadV1"][];
     };
+    /**
+     * @description Operation that appends a new value to a variable. If the variable does not have an existing value, creates the value with list position 0.
+     *
+     * If the variable has an existing value and it is NOT a list, replaces the existing value. In this case, the new list position will be 0.
+     *
+     * If the variable has existing values and it IS a list, creates the value with a list position 1 greater than the currently-highest position, that is, appends the value to the list.
+     *
+     * If the variable is a table column and no rowValueId is specified, associates the new value with the most recently appended row. You MUST append a row value before appending the values of the columns.
+     */
+    AppendValueOperationPayload: WithRequired<{
+      operation: "Append";
+    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & {
+      /**
+       * Format: int64
+       * @description If the variable is a table column and the new value should be appended to an existing row, the existing row's value ID.
+       */
+      rowValueId?: number;
+      value?: components["schemas"]["NewValuePayload"];
+      /** Format: int64 */
+      variableId?: number;
+    }, "value" | "variableId">;
+    ApplicationDeliverablePayload: {
+      /** @enum {string} */
+      category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
+      /** @description Optional description of the deliverable in HTML form. */
+      descriptionHtml?: string;
+      documents: components["schemas"]["SubmissionDocumentPayload"][];
+      /** Format: int64 */
+      id: number;
+      internalComment?: string;
+      /** Format: date-time */
+      modifiedTime?: string;
+      /** Format: int64 */
+      moduleId: number;
+      moduleName: string;
+      name: string;
+      /** Format: int64 */
+      organizationId: number;
+      organizationName: string;
+      /** Format: int32 */
+      position: number;
+      /** Format: int64 */
+      projectId: number;
+      projectName: string;
+      required: boolean;
+      sensitive: boolean;
+      /** @enum {string} */
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
+      /** @enum {string} */
+      type: "Document" | "Species" | "Questions";
+    };
+    ApplicationHistoryPayload: {
+      feedback?: string;
+      /** @description Internal-only comment, if any. Only set if the current user is an internal user. */
+      internalComment?: string;
+      /** Format: date-time */
+      modifiedTime: string;
+      /** @enum {string} */
+      status: "Accepted" | "Carbon Eligible" | "Failed Pre-screen" | "Issue Active" | "Issue Pending" | "Issue Resolved" | "Needs Follow-up" | "Not Accepted" | "Not Submitted" | "Passed Pre-screen" | "PL Review" | "Pre-check" | "Ready for Review" | "Submitted" | "In Review" | "Waitlist";
+    };
+    ApplicationModulePayload: {
+      /** Format: int64 */
+      applicationId?: number;
+      /** Format: int64 */
+      moduleId: number;
+      name: string;
+      overview?: string;
+      /** @enum {string} */
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
+      /** @enum {string} */
+      status?: "Incomplete" | "Complete";
+    };
+    ApplicationPayload: {
+      boundary?: components["schemas"]["MultiPolygon"];
+      countryCode?: string;
+      /** Format: date-time */
+      createdTime: string;
+      feedback?: string;
+      /** Format: int64 */
+      id: number;
+      /** @description Internal-only comment, if any. Only set if the current user is an internal user. */
+      internalComment?: string;
+      /** @description Internal-only reference name of application. Only set if the current user is an internal user. */
+      internalName?: string;
+      /** Format: date-time */
+      modifiedTime?: string;
+      /** Format: int64 */
+      organizationId: number;
+      organizationName: string;
+      /** Format: int64 */
+      projectId: number;
+      projectName: string;
+      /** @enum {string} */
+      status: "Accepted" | "Carbon Eligible" | "Failed Pre-screen" | "Issue Active" | "Issue Pending" | "Issue Resolved" | "Needs Follow-up" | "Not Accepted" | "Not Submitted" | "Passed Pre-screen" | "PL Review" | "Pre-check" | "Ready for Review" | "Submitted" | "In Review" | "Waitlist";
+    };
+    AssignParticipantProjectSpeciesPayload: {
+      projectIds: number[];
+      speciesIds: number[];
+    };
     AssignProjectRequestPayload: {
       accessionIds?: number[];
       batchIds?: number[];
       plantingSiteIds?: number[];
+    };
+    AssignTerraformationContactRequestPayload: {
+      /** Format: int64 */
+      userId: number;
     };
     AssignedPlotPayload: {
       boundary: components["schemas"]["Geometry"];
@@ -1060,6 +1461,11 @@ export interface components {
       /** Format: int64 */
       plotId: number;
       plotName: string;
+      /**
+       * Format: int32
+       * @description Length of each edge of the monitoring plot in meters.
+       */
+      sizeMeters: number;
     };
     AutomationPayload: {
       /** @description Human-readable description of this automation. */
@@ -1140,7 +1546,7 @@ export interface components {
       /** Format: int32 */
       notReadyQuantityWithdrawn?: number;
       /** @enum {string} */
-      purpose?: "Nursery Transfer" | "Dead" | "Out Plant" | "Other";
+      purpose?: "Nursery Transfer" | "Dead" | "Out Plant" | "Other" | "Undo";
       /** Format: int32 */
       readyQuantityWithdrawn?: number;
       /** @enum {string} */
@@ -1307,13 +1713,38 @@ export interface components {
       cohorts: components["schemas"]["CohortPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
-    CohortPayload: {
+    CohortModulePayload: {
+      additionalResources?: string;
+      /** Format: date */
+      endDate: string;
+      eventDescriptions: {
+        [key: string]: string;
+      };
       /** Format: int64 */
       id: number;
+      isActive: boolean;
+      name: string;
+      overview?: string;
+      preparationMaterials?: string;
+      /** Format: date */
+      startDate: string;
+      title: string;
+    };
+    CohortPayload: {
+      /** Format: int64 */
+      createdBy: number;
+      /** Format: date-time */
+      createdTime: string;
+      /** Format: int64 */
+      id: number;
+      /** Format: int64 */
+      modifiedBy: number;
+      /** Format: date-time */
+      modifiedTime: string;
       name: string;
       participantIds?: number[];
       /** @enum {string} */
-      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
     };
     CohortResponsePayload: {
       cohort: components["schemas"]["CohortPayload"];
@@ -1328,10 +1759,6 @@ export interface components {
        */
       observedTime: string;
       plants: components["schemas"]["RecordedPlantPayload"][];
-    };
-    ConnectDeviceManagerRequestPayload: {
-      /** Format: int64 */
-      facilityId: number;
     };
     CreateAccessionRequestPayloadV2: {
       bagNumbers?: string[];
@@ -1370,6 +1797,15 @@ export interface components {
     };
     CreateAccessionResponsePayloadV2: {
       accession: components["schemas"]["AccessionPayloadV2"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    CreateApplicationRequestPayload: {
+      /** Format: int64 */
+      projectId: number;
+    };
+    CreateApplicationResponsePayload: {
+      /** Format: int64 */
+      id: number;
       status: components["schemas"]["SuccessOrError"];
     };
     CreateAutomationRequestPayload: {
@@ -1430,7 +1866,7 @@ export interface components {
     CreateCohortRequestPayload: {
       name: string;
       /** @enum {string} */
-      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
     };
     CreateDeviceRequestPayload: {
       /**
@@ -1488,6 +1924,19 @@ export interface components {
        * @description Level of diagnostic information to log.
        */
       verbosity?: number;
+    };
+    CreateDocumentRequestPayload: {
+      /** Format: int64 */
+      documentTemplateId: number;
+      name: string;
+      /** Format: int64 */
+      ownedBy: number;
+      /** Format: int64 */
+      projectId: number;
+    };
+    CreateDocumentResponsePayload: {
+      document: components["schemas"]["DocumentPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateDraftPlantingSiteRequestPayload: {
       /** @description In-progress state of the draft. This includes map data and other information needed by the client. It is treated as opaque data by the server. */
@@ -1553,6 +2002,27 @@ export interface components {
       type: "Seed Bank" | "Desalination" | "Reverse Osmosis" | "Nursery";
     };
     CreateFacilityResponsePayload: {
+      /** Format: int64 */
+      id: number;
+      status: components["schemas"]["SuccessOrError"];
+    };
+    CreateModuleEventRequestPayload: {
+      /** Format: date-time */
+      endTime?: string;
+      /** @enum {string} */
+      eventType: "One-on-One Session" | "Workshop" | "Live Session" | "Recorded Session";
+      /** Format: uri */
+      meetingUrl?: string;
+      /** Format: int64 */
+      moduleId: number;
+      /** Format: uri */
+      recordingUrl?: string;
+      /** Format: uri */
+      slidesUrl?: string;
+      /** Format: date-time */
+      startTime: string;
+    };
+    CreateModuleEventResponsePayload: {
       /** Format: int64 */
       id: number;
       status: components["schemas"]["SuccessOrError"];
@@ -1653,6 +2123,15 @@ export interface components {
       id: number;
       status: components["schemas"]["SuccessOrError"];
     };
+    CreateParticipantProjectSpeciesPayload: {
+      /** Format: int64 */
+      projectId: number;
+      rationale?: string;
+      /** Format: int64 */
+      speciesId: number;
+      /** @enum {string} */
+      speciesNativeCategory?: "Native" | "Non-native";
+    };
     CreateParticipantRequestPayload: {
       /**
        * Format: int64
@@ -1666,10 +2145,13 @@ export interface components {
     CreatePlantingSiteRequestPayload: {
       boundary?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
       description?: string;
+      exclusion?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
       name: string;
       /** Format: int64 */
       organizationId: number;
       plantingSeasons?: components["schemas"]["NewPlantingSeasonPayload"][];
+      /** @description List of planting zones to create. If present and not empty, "boundary" must also be specified. */
+      plantingZones?: components["schemas"]["NewPlantingZonePayload"][];
       /** Format: int64 */
       projectId?: number;
       /**
@@ -1693,6 +2175,15 @@ export interface components {
       /** Format: int64 */
       id: number;
       status: components["schemas"]["SuccessOrError"];
+    };
+    CreateSavedDocumentVersionRequestPayload: {
+      /** @default false */
+      isSubmitted?: boolean;
+      name: string;
+    };
+    CreateSavedDocumentVersionResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      version: components["schemas"]["DocumentSavedVersionPayload"];
     };
     CreateSpeciesResponsePayload: {
       /** Format: int64 */
@@ -1769,12 +2260,18 @@ export interface components {
       /** @description Quantity of seeds withdrawn. If this quantity is in weight and the remaining quantity of the accession is in seeds or vice versa, the accession must have a subset weight and count. */
       withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
     };
+    DateVariablePayload: {
+      type: "Date";
+    } & Omit<components["schemas"]["VariablePayload"], "type">;
     DeleteGlobalRolesRequestPayload: {
       userIds: number[];
     };
+    DeleteParticipantProjectSpeciesPayload: {
+      participantProjectSpeciesIds: number[];
+    };
     DeleteProjectVotesRequestPayload: {
       /** @enum {string} */
-      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
       /** @description A safeguard flag that must be set to `true` for deleting all voters in a project phase. */
       phaseDelete?: boolean;
       /**
@@ -1783,13 +2280,30 @@ export interface components {
        */
       userId?: number;
     };
+    /**
+     * @description Operation that deletes a value from a variable. Deletion is non-destructive; this actually creates a new value with its own value ID, where the new value is marked as deleted. This "is deleted" value is included in incremental value query results.
+     *
+     * If the variable is a list and there are other values with higher list positions, the remaining items will be renumbered such that the list remains contiguously numbered starting at 0.
+     *
+     * If the variable is a table, or in other words if the value is a table row, any values associated with the row are also deleted. The row itself gets a new value that is marked as deleted, and the new values that are created to delete the row's contents are associated with this newly-created deleted row value.
+     */
+    DeleteValueOperationPayload: WithRequired<{
+      operation: "Delete";
+    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & {
+      /** Format: int64 */
+      valueId?: number;
+    }, "existingValueId" | "valueId">;
     DeliverablePayload: {
       /** @enum {string} */
       category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
       /** @description Optional description of the deliverable in HTML form. */
       descriptionHtml?: string;
       documents: components["schemas"]["SubmissionDocumentPayload"][];
-      /** @description If the deliverable has been reviewed, the user-visible feedback from the review. */
+      /**
+       * Format: date
+       * @description If the deliverable has been reviewed, the user-visible feedback from the review.
+       */
+      dueDate?: string;
       feedback?: string;
       /** Format: int64 */
       id: number;
@@ -1800,17 +2314,21 @@ export interface components {
       organizationId: number;
       organizationName: string;
       /** Format: int64 */
-      participantId: number;
-      participantName: string;
+      participantId?: number;
+      participantName?: string;
+      /** Format: int32 */
+      position: number;
       /** Format: int64 */
       projectId: number;
       projectName: string;
+      required: boolean;
+      sensitive: boolean;
       /** @enum {string} */
-      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
       /** Format: uri */
       templateUrl?: string;
       /** @enum {string} */
-      type: "Document";
+      type: "Document" | "Species" | "Questions";
     };
     /** @description If the withdrawal was an outplanting to a planting site, the delivery that was created. Not present for other withdrawal purposes. */
     DeliveryPayload: {
@@ -1881,49 +2399,6 @@ export interface components {
        */
       verbosity?: number;
     };
-    DeviceManagerPayload: {
-      /** @description If true, this device manager is available to connect to a facility. */
-      available: boolean;
-      /**
-       * Format: int64
-       * @description The facility this device manager is connected to, or null if it is not connected.
-       */
-      facilityId?: number;
-      /** Format: int64 */
-      id: number;
-      /** @description If true, this device manager is currently online. */
-      isOnline: boolean;
-      /**
-       * Format: date-time
-       * @description When the device manager's isOnline value changed most recently. In other words, if isOnline is true, the device manager has been online since this time; if isOnline is false, the device manager has been offline since this time. This may be null if the device manager has not come online for the first time yet.
-       */
-      onlineChangedTime?: string;
-      sensorKitId: string;
-      /**
-       * Format: int32
-       * @description If an update is being downloaded or installed, its progress as a percentage. Not present if no update is in progress.
-       */
-      updateProgress?: number;
-    };
-    DeviceTemplatePayload: {
-      address?: string;
-      /** @enum {string} */
-      category: "PV" | "Seed Bank Default";
-      /** Format: int64 */
-      id: number;
-      make: string;
-      model: string;
-      name: string;
-      /** Format: int32 */
-      port?: number;
-      protocol?: string;
-      settings?: {
-        [key: string]: unknown;
-      };
-      type: string;
-      /** Format: int32 */
-      verbosity?: number;
-    };
     DeviceUnresponsiveRequestPayload: {
       /**
        * Format: int32
@@ -1935,6 +2410,87 @@ export interface components {
        * @description When the device most recently responded. Null or absent if the device has never responded.
        */
       lastRespondedTime?: string;
+    };
+    /** @description History entry about the creation of the document. This is always the last element in the reverse-chronological list of history events. It has the same information as the createdBy and createdTime fields in DocumentPayload. */
+    DocumentHistoryCreatedPayload: WithRequired<{
+      type: "Created";
+    } & Omit<components["schemas"]["DocumentHistoryPayload"], "type">, "createdBy" | "createdTime" | "type">;
+    /** @description History entry about a document being edited. This represents the most recent edit by the given user; if the same user edits the document multiple times in a row, only the last edit will be listed in the history. */
+    DocumentHistoryEditedPayload: WithRequired<{
+      type: "Edited";
+    } & Omit<components["schemas"]["DocumentHistoryPayload"], "type">, "createdBy" | "createdTime" | "type">;
+    DocumentHistoryPayload: {
+      /** Format: int64 */
+      createdBy: number;
+      /** Format: date-time */
+      createdTime: string;
+      /** @enum {string} */
+      type: "Created" | "Edited" | "Saved";
+    };
+    /** @description History entry about a saved version of a document. The maxVariableValueId and variableManifestId may be used to retrieve the contents of the saved version. */
+    DocumentHistorySavedPayload: WithRequired<{
+      type: "Saved";
+    } & Omit<components["schemas"]["DocumentHistoryPayload"], "type"> & {
+      isSubmitted?: boolean;
+      /** Format: int64 */
+      maxVariableValueId?: number;
+      name?: string;
+      /** Format: int64 */
+      variableManifestId?: number;
+      /** Format: int64 */
+      versionId?: number;
+    }, "createdBy" | "createdTime" | "isSubmitted" | "maxVariableValueId" | "name" | "type" | "variableManifestId" | "versionId">;
+    DocumentPayload: {
+      /** Format: int64 */
+      createdBy: number;
+      /** Format: date-time */
+      createdTime: string;
+      /** Format: int64 */
+      documentTemplateId: number;
+      /** Format: int64 */
+      id: number;
+      internalComment?: string;
+      /** Format: int64 */
+      lastSavedVersionId?: number;
+      /** Format: int64 */
+      modifiedBy: number;
+      /** Format: date-time */
+      modifiedTime: string;
+      name: string;
+      /** Format: int64 */
+      ownedBy: number;
+      /** Format: int64 */
+      projectId: number;
+      projectName: string;
+      /** @enum {string} */
+      status: "Draft" | "Locked" | "Published" | "Ready" | "Submitted";
+      /** Format: int64 */
+      variableManifestId: number;
+    };
+    /** @description Information about a saved version of a document. The maxVariableValueId and variableManifestId may be used to retrieve the contents of the saved version. */
+    DocumentSavedVersionPayload: {
+      /** Format: int64 */
+      createdBy: number;
+      /** Format: date-time */
+      createdTime: string;
+      isSubmitted: boolean;
+      /** Format: int64 */
+      maxVariableValueId: number;
+      name: string;
+      /** Format: int64 */
+      variableManifestId: number;
+      /** Format: int64 */
+      versionId: number;
+    };
+    DocumentTemplatePayload: {
+      /** Format: int64 */
+      id: number;
+      name: string;
+      /**
+       * Format: int64
+       * @description ID of the most recent variable manifest for the document template, if any.
+       */
+      variableManifestId?: number;
     };
     DraftPlantingSitePayload: {
       /**
@@ -1979,6 +2535,92 @@ export interface components {
     };
     ErrorDetails: {
       message: string;
+    };
+    ExistingDateValuePayload: WithRequired<{
+      type: "Date";
+    } & Omit<components["schemas"]["ExistingValuePayload"], "type"> & {
+      /** Format: date */
+      dateValue?: string;
+    }, "dateValue" | "id" | "listPosition" | "type">;
+    /** @description Represents the deletion of an earlier value at the same location. This is only included when you are querying for incremental changes to a document's values. */
+    ExistingDeletedValuePayload: WithRequired<{
+      type: "Deleted";
+    } & Omit<components["schemas"]["ExistingValuePayload"], "type">, "id" | "listPosition" | "type">;
+    /** @description Metadata about an image. The actual image data (e.g., the JPEG or PNG file) must be retrieved in a separate request using the value ID in this payload. */
+    ExistingImageValuePayload: WithRequired<{
+      type: "Image";
+    } & Omit<components["schemas"]["ExistingValuePayload"], "type"> & {
+      caption?: string;
+    }, "id" | "listPosition" | "type">;
+    ExistingLinkValuePayload: WithRequired<{
+      type: "Link";
+    } & Omit<components["schemas"]["ExistingValuePayload"], "type"> & {
+      title?: string;
+      /** Format: uri */
+      url?: string;
+    }, "id" | "listPosition" | "type" | "url">;
+    ExistingNumberValuePayload: WithRequired<{
+      type: "Number";
+    } & Omit<components["schemas"]["ExistingValuePayload"], "type"> & {
+      numberValue?: number;
+    }, "id" | "listPosition" | "numberValue" | "type">;
+    ExistingSectionTextValuePayload: WithRequired<{
+      type: "SectionText";
+    } & Omit<components["schemas"]["ExistingValuePayload"], "type"> & {
+      textValue?: string;
+    }, "id" | "listPosition" | "textValue" | "type">;
+    ExistingSectionVariableValuePayload: WithRequired<{
+      type: "SectionVariable";
+    } & Omit<components["schemas"]["ExistingValuePayload"], "type"> & ({
+      /** @enum {string} */
+      displayStyle?: "Inline" | "Block";
+      /** @enum {string} */
+      usageType?: "Injection" | "Reference";
+      /** Format: int64 */
+      variableId?: number;
+    }), "id" | "listPosition" | "type" | "usageType" | "variableId">;
+    ExistingSelectValuePayload: WithRequired<{
+      type: "Select";
+    } & Omit<components["schemas"]["ExistingValuePayload"], "type"> & {
+      optionValues?: number[];
+    }, "id" | "listPosition" | "optionValues" | "type">;
+    /** @description A row in a table. Each row has its own value ID. ExistingVariableValuesPayload includes this ID for values of variables that are defined as columns of a table. */
+    ExistingTableValuePayload: WithRequired<{
+      type: "Table";
+    } & Omit<components["schemas"]["ExistingValuePayload"], "type">, "id" | "listPosition" | "type">;
+    ExistingTextValuePayload: WithRequired<{
+      type: "Text";
+    } & Omit<components["schemas"]["ExistingValuePayload"], "type"> & {
+      textValue?: string;
+    }, "id" | "listPosition" | "textValue" | "type">;
+    ExistingValuePayload: {
+      citation?: string;
+      /** Format: int64 */
+      id: number;
+      /** Format: int32 */
+      listPosition: number;
+      /** @enum {string} */
+      type: "Date" | "Deleted" | "Image" | "Link" | "Number" | "SectionText" | "SectionVariable" | "Select" | "Table" | "Text";
+    };
+    ExistingVariableValuesPayload: {
+      /** @description User-visible feedback from reviewer. Not populated for table cell values. */
+      feedback?: string;
+      /** @description Internal comment from reviewer. Only populated if the current user has permission to read internal comments. Not populated for table cell values. */
+      internalComment?: string;
+      /**
+       * Format: int64
+       * @description If this is the value of a table cell, the ID of the row it's part of.
+       */
+      rowValueId?: number;
+      /**
+       * @description Current status of this variable. Not populated for table cell values.
+       * @enum {string}
+       */
+      status?: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Incomplete" | "Complete";
+      /** @description Values of this variable or this table cell. When getting the full set of values for a document, this will be the complete list of this variable's values in order of list position. When getting incremental changes to a document, this is only the items that have changed, and existing items won't be present. For example, if a variable is a list and has 3 values, and a fourth value is added, the incremental list of values in this payload will have one item and its list position will be 3 (since lists are 0-indexed). */
+      values: (components["schemas"]["ExistingDateValuePayload"] | components["schemas"]["ExistingDeletedValuePayload"] | components["schemas"]["ExistingImageValuePayload"] | components["schemas"]["ExistingLinkValuePayload"] | components["schemas"]["ExistingNumberValuePayload"] | components["schemas"]["ExistingSectionTextValuePayload"] | components["schemas"]["ExistingSectionVariableValuePayload"] | components["schemas"]["ExistingSelectValuePayload"] | components["schemas"]["ExistingTableValuePayload"] | components["schemas"]["ExistingTextValuePayload"])[];
+      /** Format: int64 */
+      variableId: number;
     };
     FacilityPayload: {
       /** Format: date */
@@ -2057,12 +2699,37 @@ export interface components {
       accession: components["schemas"]["AccessionPayloadV2"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetApplicationDeliverablesResponsePayload: {
+      deliverables: components["schemas"]["ApplicationDeliverablePayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetApplicationHistoryResponsePayload: {
+      /** @description History of metadata changes in reverse chronological order. */
+      history: components["schemas"]["ApplicationHistoryPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetApplicationModulesResponsePayload: {
+      modules: components["schemas"]["ApplicationModulePayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetApplicationResponsePayload: {
+      application: components["schemas"]["ApplicationPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetAutomationResponsePayload: {
       automation: components["schemas"]["AutomationPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
     GetBatchHistoryResponsePayload: {
       history: components["schemas"]["BatchHistoryPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetCohortModuleResponsePayload: {
+      module: components["schemas"]["CohortModulePayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetCountryBorderResponsePayload: {
+      border: components["schemas"]["MultiPolygon"];
       status: components["schemas"]["SuccessOrError"];
     };
     GetCurrentTimeResponsePayload: {
@@ -2078,21 +2745,25 @@ export interface components {
       delivery: components["schemas"]["DeliveryPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
-    GetDeviceManagerResponsePayload: {
-      manager: components["schemas"]["DeviceManagerPayload"];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    GetDeviceManagersResponsePayload: {
-      /** @description List of device managers that match the conditions in the request. Empty if there were no matches, e.g., the requested short code didn't exist. */
-      managers: components["schemas"]["DeviceManagerPayload"][];
-      status: components["schemas"]["SuccessOrError"];
-    };
     GetDeviceResponsePayload: {
       device: components["schemas"]["DeviceConfig"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetDocumentHistoryResponsePayload: {
+      /** @description List of events in the document's history in reverse chronological order. The last element is always the "Created" event. */
+      history: (components["schemas"]["DocumentHistoryCreatedPayload"] | components["schemas"]["DocumentHistoryEditedPayload"] | components["schemas"]["DocumentHistorySavedPayload"])[];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetDocumentResponsePayload: {
+      document: components["schemas"]["DocumentPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetDraftPlantingSiteResponsePayload: {
       site: components["schemas"]["DraftPlantingSitePayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetEventResponsePayload: {
+      event: components["schemas"]["ModuleEvent"];
       status: components["schemas"]["SuccessOrError"];
     };
     GetFacilityResponse: {
@@ -2102,6 +2773,10 @@ export interface components {
     GetMapboxTokenResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
       token: string;
+    };
+    GetModuleResponsePayload: {
+      module: components["schemas"]["ModulePayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetNotificationResponsePayload: {
       notification: components["schemas"]["NotificationPayload"];
@@ -2159,6 +2834,10 @@ export interface components {
       observation: components["schemas"]["ObservationResultsPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetOrganizationNurserySummaryResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      summary: components["schemas"]["OrganizationNurserySummaryPayload"];
+    };
     GetOrganizationResponsePayload: {
       organization: components["schemas"]["OrganizationPayload"];
       status: components["schemas"]["SuccessOrError"];
@@ -2167,9 +2846,22 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
       user: components["schemas"]["OrganizationUserPayload"];
     };
+    GetParticipantProjectSpeciesResponsePayload: {
+      participantProjectSpecies: components["schemas"]["ParticipantProjectSpeciesPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetParticipantProjectsForSpeciesResponsePayload: {
+      participantProjectsForSpecies: components["schemas"]["ParticipantProjectForSpeciesPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetParticipantResponsePayload: {
       participant: components["schemas"]["ParticipantPayload"];
       status: components["schemas"]["SuccessOrError"];
+    };
+    GetPlantingSiteObservationSummaryPayload: {
+      status: components["schemas"]["SuccessOrError"];
+      /** @description Rollup summary of planting site observations. Null if no observation has been made. */
+      summary?: components["schemas"]["PlantingSiteObservationSummaryPayload"];
     };
     GetPlantingSiteReportedPlantsResponsePayload: {
       site: components["schemas"]["PlantingSiteReportedPlantsPayload"];
@@ -2282,6 +2974,10 @@ export interface components {
       projects: components["schemas"]["ProjectReportSettingsPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetSavedDocumentVersionResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      version: components["schemas"]["DocumentSavedVersionPayload"];
+    };
     GetSeedBankV1: {
       /** Format: date */
       buildCompletedDate?: string;
@@ -2303,6 +2999,10 @@ export interface components {
       totalSeedsStoredForProject?: number;
       workers: components["schemas"]["WorkersPayloadV1"];
     };
+    GetSpeciesForParticipantProjectsResponsePayload: {
+      speciesForParticipantProjects: components["schemas"]["SpeciesForParticipantProjectPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetSpeciesProblemResponsePayload: {
       problem: components["schemas"]["SpeciesProblemElement"];
       status: components["schemas"]["SuccessOrError"];
@@ -2319,33 +3019,6 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
       subLocation: components["schemas"]["SubLocationPayload"];
     };
-    GetTimeseriesHistoryRequestPayload: {
-      /**
-       * Format: int32
-       * @description Number of values to return. The time range is divided into this many equal intervals, and a value is returned from each interval if available.
-       */
-      count: number;
-      /**
-       * Format: date-time
-       * @description End of time range to query. If this is non-null, startTime must also be specified, and seconds must be null or absent.
-       */
-      endTime?: string;
-      /**
-       * Format: int64
-       * @description Number of seconds in the past to start the time range. If this is non-null, startTime and endTime must be null or absent.
-       */
-      seconds?: number;
-      /**
-       * Format: date-time
-       * @description Start of time range to query. If this is non-null, endTime must also be specified, and seconds must be null or absent.
-       */
-      startTime?: string;
-      /** @description Timeseries to query. May be from different devices. */
-      timeseries: components["schemas"]["TimeseriesIdPayload"][];
-    };
-    GetTimeseriesHistoryResponsePayload: {
-      values: components["schemas"]["TimeseriesValuesPayload"][];
-    };
     GetUploadStatusDetailsPayload: {
       errors?: components["schemas"]["UploadProblemPayload"][];
       /** @description True if the server is finished processing the file, either successfully or not. */
@@ -2360,6 +3033,10 @@ export interface components {
       details: components["schemas"]["GetUploadStatusDetailsPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetUserInternalInterestsResponsePayload: {
+      internalInterests: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files" | "Sourcing")[];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetUserPreferencesResponsePayload: {
       /** @description The user's preferences, or null if no preferences have been stored yet. */
       preferences?: {
@@ -2370,6 +3047,11 @@ export interface components {
     GetUserResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
       user: components["schemas"]["UserProfilePayload"];
+    };
+    GetVariableWorkflowHistoryResponsePayload: {
+      history: components["schemas"]["VariableWorkflowHistoryElement"][];
+      status: components["schemas"]["SuccessOrError"];
+      variable: components["schemas"]["DateVariablePayload"] | components["schemas"]["ImageVariablePayload"] | components["schemas"]["LinkVariablePayload"] | components["schemas"]["NumberVariablePayload"] | components["schemas"]["SectionVariablePayload"] | components["schemas"]["SelectVariablePayload"] | components["schemas"]["TableVariablePayload"] | components["schemas"]["TextVariablePayload"];
     };
     GetViabilityTestPayload: {
       /** Format: int64 */
@@ -2467,6 +3149,36 @@ export interface components {
       goal: "NoPoverty" | "ZeroHunger" | "GoodHealth" | "QualityEducation" | "GenderEquality" | "CleanWater" | "AffordableEnergy" | "DecentWork" | "Industry" | "ReducedInequalities" | "SustainableCities" | "ResponsibleConsumption" | "ClimateAction" | "LifeBelowWater" | "LifeOnLand" | "Peace" | "Partnerships";
       progress?: string;
     };
+    ImageVariablePayload: {
+      type: "Image";
+    } & Omit<components["schemas"]["VariablePayload"], "type">;
+    ImportDeliverableProblemElement: {
+      problem: string;
+      /** Format: int32 */
+      row: number;
+    };
+    ImportDeliverableResponsePayload: {
+      message?: string;
+      problems: components["schemas"]["ImportDeliverableProblemElement"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ImportModuleProblemElement: {
+      problem: string;
+      /** Format: int32 */
+      row: number;
+    };
+    ImportModuleResponsePayload: {
+      message?: string;
+      problems: components["schemas"]["ImportModuleProblemElement"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    InternalTagPayload: {
+      /** Format: int64 */
+      id: number;
+      /** @description If true, this internal tag is system-defined and may affect the behavior of the application. If falso, the tag is admin-defined and is only used for reporting. */
+      isSystem: boolean;
+      name: string;
+    };
     LineString: WithRequired<{
       type: "LineString";
     } & Omit<components["schemas"]["Geometry"], "type"> & {
@@ -2474,19 +3186,23 @@ export interface components {
       /** @enum {string} */
       type?: "LineString";
     }, "coordinates" | "type">;
+    LinkVariablePayload: {
+      type: "Link";
+    } & Omit<components["schemas"]["VariablePayload"], "type">;
     ListAcceleratorOrganizationsResponsePayload: {
       organizations: components["schemas"]["AcceleratorOrganizationPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
-    ListAllFieldValuesRequestPayload: {
-      fields: string[];
-      /** Format: int64 */
-      organizationId: number;
+    ListAllInternalTagsResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      tags: components["schemas"]["InternalTagPayload"][];
     };
-    ListAllFieldValuesResponsePayload: {
-      results: {
-        [key: string]: components["schemas"]["AllFieldValuesPayload"];
-      };
+    ListAllOrganizationInternalTagsResponsePayload: {
+      organizations: components["schemas"]["OrganizationInternalTagsPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListApplicationsResponsePayload: {
+      applications: components["schemas"]["ApplicationPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListAssignedPlotsResponsePayload: {
@@ -2501,13 +3217,23 @@ export interface components {
       photos: components["schemas"]["BatchPhotoPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    ListCohortModulesResponsePayload: {
+      modules: components["schemas"]["CohortModulePayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     ListDeliverablesElement: {
       /** @enum {string} */
       category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
       /** @description Optional description of the deliverable in HTML form. */
       descriptionHtml?: string;
+      /** Format: date */
+      dueDate?: string;
       /** Format: int64 */
       id: number;
+      /** Format: int64 */
+      moduleId: number;
+      moduleName: string;
+      moduleTitle?: string;
       name: string;
       /**
        * Format: int32
@@ -2518,15 +3244,19 @@ export interface components {
       organizationId: number;
       organizationName: string;
       /** Format: int64 */
-      participantId: number;
-      participantName: string;
+      participantId?: number;
+      participantName?: string;
+      /** Format: int32 */
+      position: number;
       /** Format: int64 */
       projectId: number;
       projectName: string;
+      required: boolean;
+      sensitive: boolean;
       /** @enum {string} */
-      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
       /** @enum {string} */
-      type: "Document";
+      type: "Document" | "Species" | "Questions";
     };
     ListDeliverablesResponsePayload: {
       deliverables: components["schemas"]["ListDeliverablesElement"][];
@@ -2536,9 +3266,17 @@ export interface components {
       devices: components["schemas"]["DeviceConfig"][];
       status: components["schemas"]["SuccessOrError"];
     };
-    ListDeviceTemplatesResponsePayload: {
+    ListDocumentTemplatesResponsePayload: {
+      documentTemplates: components["schemas"]["DocumentTemplatePayload"][];
       status: components["schemas"]["SuccessOrError"];
-      templates: components["schemas"]["DeviceTemplatePayload"][];
+    };
+    ListDocumentsResponsePayload: {
+      documents: components["schemas"]["DocumentPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListEventsResponsePayload: {
+      events: components["schemas"]["ModuleEvent"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListFacilitiesResponse: {
       facilities: components["schemas"]["FacilityPayload"][];
@@ -2558,6 +3296,10 @@ export interface components {
       };
       status: components["schemas"]["SuccessOrError"];
     };
+    ListModulesResponsePayload: {
+      modules: components["schemas"]["ModulePayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     ListObservationResultsResponsePayload: {
       observations: components["schemas"]["ObservationResultsPayload"][];
       status: components["schemas"]["SuccessOrError"];
@@ -2575,6 +3317,10 @@ export interface components {
        * @description Total number of monitoring plots that haven't been claimed yet across all current observations.
        */
       totalUnclaimedPlots: number;
+    };
+    ListOrganizationInternalTagsResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      tagIds: number[];
     };
     ListOrganizationRolesResponsePayload: {
       roles: components["schemas"]["OrganizationRolePayload"][];
@@ -2668,6 +3414,10 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
       subLocations: components["schemas"]["SubLocationPayload"][];
     };
+    ListSupportRequestTypesResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      types: ("Bug Report" | "Feature Request" | "Contact Us")[];
+    };
     ListTimeZoneNamesResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
       timeZones: components["schemas"]["TimeZonePayload"][];
@@ -2676,6 +3426,24 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
       timeseries: components["schemas"]["TimeseriesPayload"][];
     };
+    ListVariableOwnersResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      variables: components["schemas"]["VariableOwnersResponseElement"][];
+    };
+    ListVariableValuesResponsePayload: {
+      /**
+       * Format: int64
+       * @description The next unused value ID. You can pass this back to the endpoint as the minValueId parameter to poll for newly-updated values.
+       */
+      nextValueId: number;
+      status: components["schemas"]["SuccessOrError"];
+      /** @description Variable values organized by variable ID and table row. If you are getting incremental values (that is, you passed minValueId to the endpoint) this list may include values of type "Deleted" to indicate that existing values were deleted and not replaced with new values. */
+      values: components["schemas"]["ExistingVariableValuesPayload"][];
+    };
+    ListVariablesResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      variables: (components["schemas"]["DateVariablePayload"] | components["schemas"]["ImageVariablePayload"] | components["schemas"]["LinkVariablePayload"] | components["schemas"]["NumberVariablePayload"] | components["schemas"]["SectionVariablePayload"] | components["schemas"]["SelectVariablePayload"] | components["schemas"]["TableVariablePayload"] | components["schemas"]["TextVariablePayload"])[];
+    };
     ListViabilityTestsResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
       viabilityTests: components["schemas"]["GetViabilityTestPayload"][];
@@ -2683,6 +3451,76 @@ export interface components {
     ListWithdrawalPhotosResponsePayload: {
       photos: components["schemas"]["NurseryWithdrawalPhotoPayload"][];
       status: components["schemas"]["SuccessOrError"];
+    };
+    MergeOtherSpeciesRequestPayload: {
+      /** @description Name of the species of certainty Other whose recorded plants should be updated to refer to the known species. */
+      otherSpeciesName: string;
+      /**
+       * Format: int64
+       * @description ID of the existing species that the Other species' recorded plants should be merged into.
+       */
+      speciesId: number;
+    };
+    ModuleDeliverablePayload: {
+      /** @enum {string} */
+      category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
+      /** @description Optional description of the deliverable in HTML form. */
+      descriptionHtml?: string;
+      /** Format: int64 */
+      id: number;
+      name: string;
+      /** Format: int32 */
+      position: number;
+      required: boolean;
+      sensitive: boolean;
+      /** @enum {string} */
+      type: "Document" | "Species" | "Questions";
+    };
+    ModuleEvent: {
+      description?: string;
+      /** Format: date-time */
+      endTime?: string;
+      /** Format: int64 */
+      id: number;
+      /** Format: uri */
+      meetingUrl?: string;
+      /** Format: int64 */
+      moduleId: number;
+      moduleName: string;
+      projects?: components["schemas"]["ModuleEventProject"][];
+      /** Format: uri */
+      recordingUrl?: string;
+      /** Format: uri */
+      slidesUrl?: string;
+      /** Format: date-time */
+      startTime?: string;
+      /** @enum {string} */
+      status: "Not Started" | "Starting Soon" | "In Progress" | "Ended";
+      /** @enum {string} */
+      type: "One-on-One Session" | "Workshop" | "Live Session" | "Recorded Session";
+    };
+    ModuleEventProject: {
+      /** Format: int64 */
+      cohortId: number;
+      cohortName: string;
+      /** Format: int64 */
+      participantId: number;
+      participantName: string;
+      /** Format: int64 */
+      projectId: number;
+      projectName: string;
+    };
+    ModulePayload: {
+      additionalResources?: string;
+      deliverables: components["schemas"]["ModuleDeliverablePayload"][];
+      eventDescriptions: {
+        [key: string]: string;
+      };
+      /** Format: int64 */
+      id: number;
+      name: string;
+      overview?: string;
+      preparationMaterials?: string;
     };
     MultiLineString: WithRequired<{
       type: "MultiLineString";
@@ -2705,11 +3543,91 @@ export interface components {
       /** @enum {string} */
       type?: "MultiPolygon";
     }, "coordinates" | "type">;
+    NewDateValuePayload: WithRequired<{
+      type: "Date";
+    } & Omit<components["schemas"]["NewValuePayload"], "type"> & {
+      citation?: string;
+      /** Format: date */
+      dateValue?: string;
+    }, "dateValue">;
+    /** @description Updated metadata about an image value. May only be used in Update operations, and cannot be used to replace the actual image data. */
+    NewImageValuePayload: {
+      type: "Image";
+    } & Omit<components["schemas"]["NewValuePayload"], "type"> & {
+      caption?: string;
+      citation?: string;
+    };
+    NewLinkValuePayload: WithRequired<{
+      type: "Link";
+    } & Omit<components["schemas"]["NewValuePayload"], "type"> & {
+      citation?: string;
+      title?: string;
+      /** Format: uri */
+      url?: string;
+    }, "url">;
+    NewNumberValuePayload: WithRequired<{
+      type: "Number";
+    } & Omit<components["schemas"]["NewValuePayload"], "type"> & {
+      citation?: string;
+      numberValue?: number;
+    }, "numberValue">;
     NewPlantingSeasonPayload: {
       /** Format: date */
       endDate: string;
       /** Format: date */
       startDate: string;
+    };
+    NewPlantingSubzonePayload: {
+      boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+      /** @description Name of this planting subzone. Two subzones in the same planting zone may not have the same name, but using the same subzone name in different planting zones is valid. */
+      name: string;
+    };
+    /** @description List of planting zones to create. If present and not empty, "boundary" must also be specified. */
+    NewPlantingZonePayload: {
+      boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+      /** @description Name of this planting zone. Two zones in the same planting site may not have the same name. */
+      name: string;
+      plantingSubzones?: components["schemas"]["NewPlantingSubzonePayload"][];
+      targetPlantingDensity?: number;
+    };
+    NewSectionTextValuePayload: WithRequired<{
+      type: "SectionText";
+    } & Omit<components["schemas"]["NewValuePayload"], "type"> & {
+      /** @description Citation for this chunk of text. If you want text with multiple citations at different positions, you can split it into multiple text values and put a citation on each of them. */
+      citation?: string;
+      textValue?: string;
+    }, "textValue">;
+    NewSectionVariableValuePayload: WithRequired<{
+      type: "SectionVariable";
+    } & Omit<components["schemas"]["NewValuePayload"], "type"> & ({
+      /** @enum {string} */
+      displayStyle?: "Inline" | "Block";
+      /** @enum {string} */
+      usageType?: "Injection" | "Reference";
+      /** Format: int64 */
+      variableId?: number;
+    }), "usageType" | "variableId">;
+    NewSelectValuePayload: WithRequired<{
+      type: "Select";
+    } & Omit<components["schemas"]["NewValuePayload"], "type"> & {
+      citation?: string;
+      optionIds?: number[];
+    }, "optionIds">;
+    NewTableValuePayload: {
+      type: "Table";
+    } & Omit<components["schemas"]["NewValuePayload"], "type"> & {
+      /** @description Citations on table values can be used if you want a citation that is associated with the table as a whole rather than with individual cells, or if you want a citation on an empty table: append a row with no column values but with a citation. */
+      citation?: string;
+    };
+    NewTextValuePayload: WithRequired<{
+      type: "Text";
+    } & Omit<components["schemas"]["NewValuePayload"], "type"> & {
+      citation?: string;
+      textValue?: string;
+    }, "textValue">;
+    /** @description Supertype for payloads that represent new variable values. See the descriptions of individual payload types for more details. */
+    NewValuePayload: {
+      type: string;
     };
     /** @description Search criterion that matches results that do not match a set of search criteria. */
     NotNodePayload: WithRequired<{
@@ -2737,6 +3655,14 @@ export interface components {
       /** Format: int64 */
       organizationId?: number;
       title: string;
+    };
+    NumberVariablePayload: {
+      type: "Number";
+    } & Omit<components["schemas"]["VariablePayload"], "type"> & {
+      /** Format: int32 */
+      decimalPlaces?: number;
+      maxValue?: number;
+      minValue?: number;
     };
     NurserySummaryPayload: {
       /** Format: int64 */
@@ -2788,7 +3714,17 @@ export interface components {
       id: number;
       notes?: string;
       /** @enum {string} */
-      purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other";
+      purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other" | "Undo";
+      /**
+       * Format: int64
+       * @description If purpose is "Undo", the ID of the withdrawal this one undoes.
+       */
+      undoesWithdrawalId?: number;
+      /**
+       * Format: int64
+       * @description If this withdrawal was undone, the ID of the withdrawal that undid it.
+       */
+      undoneByWithdrawalId?: number;
       /** Format: date */
       withdrawnDate: string;
     };
@@ -2808,6 +3744,7 @@ export interface components {
       /** @enum {string} */
       position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
     };
+    /** @description Percentage of plants of all species that were dead in this subzone's permanent monitoring plots. */
     ObservationMonitoringPlotResultsPayload: {
       boundary: components["schemas"]["Polygon"];
       claimedByName?: string;
@@ -2829,15 +3766,24 @@ export interface components {
        */
       mortalityRate?: number;
       notes?: string;
+      /** @description IDs of any newer monitoring plots that overlap with this one. */
+      overlappedByPlotIds: number[];
+      /** @description IDs of any older monitoring plots this one overlaps with. */
+      overlapsWithPlotIds: number[];
       photos: components["schemas"]["ObservationMonitoringPlotPhotoPayload"][];
       /**
        * Format: int32
        * @description Number of live plants per hectare.
        */
       plantingDensity: number;
+      /**
+       * Format: int32
+       * @description Length of each edge of the monitoring plot in meters.
+       */
+      sizeMeters: number;
       species: components["schemas"]["ObservationSpeciesResultsPayload"][];
       /** @enum {string} */
-      status: "Outstanding" | "InProgress" | "Completed";
+      status: "Unclaimed" | "Claimed" | "Completed" | "Not Observed";
       /**
        * Format: int32
        * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
@@ -2875,18 +3821,39 @@ export interface components {
       /** Format: int64 */
       plantingSiteId: number;
       plantingSiteName: string;
+      /** @description If specific subzones were requested for this observation, their IDs. */
+      requestedSubzoneIds?: number[];
       /**
        * Format: date
        * @description Date this observation started.
        */
       startDate: string;
       /** @enum {string} */
-      state: "Upcoming" | "InProgress" | "Completed" | "Overdue";
+      state: "Upcoming" | "InProgress" | "Completed" | "Overdue" | "Abandoned";
     };
     ObservationPlantingSubzoneResultsPayload: {
+      /** @description Area of this planting subzone in hectares. */
+      areaHa: number;
+      /** Format: date-time */
+      completedTime?: string;
+      /**
+       * Format: int32
+       * @description Estimated number of plants in planting subzone based on estimated planting density and subzone area. Only present if the subzone has completed planting.
+       */
+      estimatedPlants?: number;
+      /** @description Percentage of plants of all species that were dead in this subzone's permanent monitoring plots. */
       monitoringPlots: components["schemas"]["ObservationMonitoringPlotResultsPayload"][];
+      /** Format: int32 */
+      mortalityRate: number;
+      /**
+       * Format: int32
+       * @description Estimated planting density for the subzone based on the observed planting densities of monitoring plots. Only present if the subzone has completed planting.
+       */
+      plantingDensity?: number;
       /** Format: int64 */
       plantingSubzoneId: number;
+      /** Format: int32 */
+      totalPlants: number;
     };
     ObservationPlantingZoneResultsPayload: {
       /** @description Area of this planting zone in hectares. */
@@ -2950,7 +3917,7 @@ export interface components {
       /** Format: date */
       startDate: string;
       /** @enum {string} */
-      state: "Upcoming" | "InProgress" | "Completed" | "Overdue";
+      state: "Upcoming" | "InProgress" | "Completed" | "Overdue" | "Abandoned";
       /** Format: int32 */
       totalSpecies: number;
     };
@@ -2992,6 +3959,42 @@ export interface components {
       /** @description List of criteria at least one of which must be satisfied */
       children?: components["schemas"]["SearchNodePayload"][];
     }, "children">;
+    OrganizationInternalTagsPayload: {
+      internalTagIds: number[];
+      /** Format: int64 */
+      organizationId: number;
+      organizationName: string;
+    };
+    OrganizationNurserySummaryPayload: {
+      /** Format: int64 */
+      germinatingQuantity: number;
+      /** Format: int32 */
+      germinationRate?: number;
+      /**
+       * Format: int32
+       * @description Percentage of current and past inventory that was withdrawn due to death.
+       */
+      lossRate?: number;
+      /** Format: int64 */
+      notReadyQuantity: number;
+      /** Format: int64 */
+      readyQuantity: number;
+      /**
+       * Format: int64
+       * @description Total number of plants that have been withdrawn due to death.
+       */
+      totalDead: number;
+      /**
+       * Format: int64
+       * @description Total number of germinated plants currently in inventory.
+       */
+      totalQuantity: number;
+      /**
+       * Format: int64
+       * @description Total number of plants that have been withdrawn in the past.
+       */
+      totalWithdrawn: number;
+    };
     OrganizationPayload: {
       /** @description Whether this organization can submit reports to Terraformation. */
       canSubmitReports: boolean;
@@ -3021,6 +4024,7 @@ export interface components {
        * @enum {string}
        */
       role?: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
+      tfContactUser?: components["schemas"]["TerraformationContactUserPayload"];
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
@@ -3063,11 +4067,29 @@ export interface components {
       cohortId?: number;
       cohortName?: string;
       /** @enum {string} */
-      cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
       /** Format: int64 */
       id: number;
       name: string;
       projects: components["schemas"]["ParticipantProjectPayload"][];
+    };
+    ParticipantProjectForSpeciesPayload: {
+      /**
+       * Format: int64
+       * @description This deliverable ID is associated to the active or most recent cohort module, if available.
+       */
+      deliverableId?: number;
+      /** Format: int64 */
+      participantProjectSpeciesId: number;
+      /** @enum {string} */
+      participantProjectSpeciesNativeCategory?: "Native" | "Non-native";
+      /** @enum {string} */
+      participantProjectSpeciesSubmissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
+      /** Format: int64 */
+      projectId: number;
+      projectName: string;
+      /** Format: int64 */
+      speciesId: number;
     };
     ParticipantProjectPayload: {
       /** Format: int64 */
@@ -3077,9 +4099,24 @@ export interface components {
       projectId: number;
       projectName: string;
     };
+    ParticipantProjectSpeciesPayload: {
+      feedback?: string;
+      /** Format: int64 */
+      id: number;
+      internalComment?: string;
+      /** Format: int64 */
+      projectId: number;
+      rationale?: string;
+      /** Format: int64 */
+      speciesId: number;
+      /** @enum {string} */
+      speciesNativeCategory?: "Native" | "Non-native";
+      /** @enum {string} */
+      submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
+    };
     PhaseScores: {
       /** @enum {string} */
-      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
       scores: components["schemas"]["Score"][];
       totalScore?: number;
     };
@@ -3087,7 +4124,7 @@ export interface components {
       /** @enum {string} */
       decision?: "No" | "Conditional" | "Yes";
       /** @enum {string} */
-      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
       votes: components["schemas"]["VoteSelection"][];
     };
     PlantingPayload: {
@@ -3105,7 +4142,7 @@ export interface components {
       /** Format: int64 */
       speciesId: number;
       /** @enum {string} */
-      type: "Delivery" | "Reassignment From" | "Reassignment To";
+      type: "Delivery" | "Reassignment From" | "Reassignment To" | "Undo";
     };
     PlantingSeasonPayload: {
       /** Format: date */
@@ -3115,10 +4152,40 @@ export interface components {
       /** Format: date */
       startDate: string;
     };
+    /** @description Rollup summary of planting site observations. Null if no observation has been made. */
+    PlantingSiteObservationSummaryPayload: {
+      /**
+       * Format: date-time
+       * @description The earliest time of the observations used in this summary.
+       */
+      earliestObservationTime: string;
+      /**
+       * Format: int32
+       * @description Estimated total number of live plants at the site, based on the estimated planting density and site size. Only present if all the subzones in the site have been marked as having completed planting.
+       */
+      estimatedPlants?: number;
+      /**
+       * Format: date-time
+       * @description The latest time of the observations used in this summary.
+       */
+      latestObservationTime: string;
+      /**
+       * Format: int32
+       * @description Percentage of plants of all species that were dead in this site's permanent monitoring plots.
+       */
+      mortalityRate?: number;
+      /**
+       * Format: int32
+       * @description Estimated planting density for the site, based on the observed planting densities of monitoring plots. Only present if all the subzones in the site have been marked as having completed planting.
+       */
+      plantingDensity?: number;
+      plantingZones: components["schemas"]["PlantingZoneObservationSummaryPayload"][];
+    };
     PlantingSitePayload: {
       /** @description Area of planting site in hectares. Only present if the site has planting zones. */
       areaHa?: number;
       boundary?: components["schemas"]["MultiPolygon"];
+      countryCode?: string;
       description?: string;
       exclusion?: components["schemas"]["MultiPolygon"];
       /** Format: int64 */
@@ -3147,6 +4214,16 @@ export interface components {
       /** Format: int32 */
       totalPlants: number;
     };
+    PlantingSiteValidationProblemPayload: {
+      /** @description If the problem is a conflict between two planting zones or two subzones, the list of the conflicting zone or subzone names. */
+      conflictsWith?: string[];
+      /** @description If the problem relates to a particular subzone, its name. If this is present, plantingZone will also be present and will be the name of the zone that contains this subzone. */
+      plantingSubzone?: string;
+      /** @description If the problem relates to a particular planting zone, its name. */
+      plantingZone?: string;
+      /** @enum {string} */
+      problemType: "CannotRemovePlantedSubzone" | "CannotSplitSubzone" | "CannotSplitZone" | "DuplicateSubzoneName" | "DuplicateZoneName" | "ExclusionWithoutBoundary" | "SiteTooLarge" | "SubzoneBoundaryChanged" | "SubzoneBoundaryOverlaps" | "SubzoneInExclusionArea" | "SubzoneNotInZone" | "ZoneBoundaryChanged" | "ZoneBoundaryOverlaps" | "ZoneHasNoSubzones" | "ZoneNotInSite" | "ZoneTooSmall" | "ZonesWithoutSiteBoundary";
+    };
     PlantingSubzonePayload: {
       /** @description Area of planting subzone in hectares. */
       areaHa: number;
@@ -3162,11 +4239,50 @@ export interface components {
        */
       plantingCompletedTime?: string;
     };
+    PlantingSubzoneReportedPlantsPayload: {
+      /** Format: int64 */
+      id: number;
+      /** Format: int32 */
+      totalPlants: number;
+    };
     PlantingSubzoneSpeciesPayload: {
       commonName?: string;
       /** Format: int64 */
       id: number;
       scientificName: string;
+    };
+    PlantingZoneObservationSummaryPayload: {
+      /** @description Area of this planting zone in hectares. */
+      areaHa: number;
+      /**
+       * Format: date-time
+       * @description The earliest time of the observations used in this summary.
+       */
+      earliestObservationTime: string;
+      /**
+       * Format: int32
+       * @description Estimated number of plants in planting zone based on estimated planting density and planting zone area. Only present if all the subzones in the zone have been marked as having completed planting.
+       */
+      estimatedPlants?: number;
+      /**
+       * Format: date-time
+       * @description The latest time of the observations used in this summary.
+       */
+      latestObservationTime: string;
+      /**
+       * Format: int32
+       * @description Percentage of plants of all species that were dead in this zone's permanent monitoring plots.
+       */
+      mortalityRate: number;
+      /**
+       * Format: int32
+       * @description Estimated planting density for the zone based on the observed planting densities of monitoring plots. Only present if all the subzones in the zone have been marked as having completed planting.
+       */
+      plantingDensity?: number;
+      /** @description List of subzone observations used in this summary. */
+      plantingSubzones: components["schemas"]["ObservationPlantingSubzoneResultsPayload"][];
+      /** Format: int64 */
+      plantingZoneId: number;
     };
     PlantingZonePayload: {
       /** @description Area of planting zone in hectares. */
@@ -3181,6 +4297,7 @@ export interface components {
     PlantingZoneReportedPlantsPayload: {
       /** Format: int64 */
       id: number;
+      plantingSubzones: components["schemas"]["PlantingSubzoneReportedPlantsPayload"][];
       /** Format: int32 */
       plantsSinceLastObservation: number;
       /** Format: int32 */
@@ -3210,8 +4327,9 @@ export interface components {
       type?: "Polygon";
     }, "coordinates" | "type">;
     ProjectAcceleratorDetailsPayload: {
-      abbreviatedName?: string;
+      annualCarbon?: number;
       applicationReforestableLand?: number;
+      carbonCapacity?: number;
       confirmedReforestableLand?: number;
       countryCode?: string;
       dealDescription?: string;
@@ -3222,6 +4340,8 @@ export interface components {
       fileNaming?: string;
       /** Format: uri */
       googleFolderUrl?: string;
+      /** Format: uri */
+      hubSpotUrl?: string;
       investmentThesis?: string;
       landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
       maxCarbonAccumulation?: number;
@@ -3238,6 +4358,7 @@ export interface components {
       projectLead?: string;
       /** @enum {string} */
       region?: "Antarctica" | ("East Asia & Pacific") | ("Europe & Central Asia") | ("Latin America & Caribbean") | ("Middle East & North Africa") | "North America" | "Oceania" | "South Asia" | "Sub-Saharan Africa";
+      totalCarbon?: number;
       totalExpansionPotential?: number;
       whatNeedsToBeTrue?: string;
     };
@@ -3245,7 +4366,7 @@ export interface components {
       /** Format: int64 */
       cohortId?: number;
       /** @enum {string} */
-      cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
       /** Format: int64 */
       createdBy?: number;
       /** Format: date-time */
@@ -3394,6 +4515,27 @@ export interface components {
       removedMonitoringPlotIds: number[];
       status: components["schemas"]["SuccessOrError"];
     };
+    /**
+     * @description Operation that replaces all the values of a variable with new ones. This is an "upsert" operation: it replaces any existing values, or creates new values if there weren't already any.
+     *
+     * This operation may not be used with table variables.
+     *
+     * If the variable is a list and previously had more values than are included in this payload, the existing values with higher-numbered list positions are deleted.
+     *
+     * If the variable is not a list, it is invalid for this payload to include more than one value.
+     */
+    ReplaceValuesOperationPayload: WithRequired<{
+      operation: "Replace";
+    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & {
+      /**
+       * Format: int64
+       * @description If the variable is a table column, the value ID of the row whose values should be replaced.
+       */
+      rowValueId?: number;
+      values?: components["schemas"]["NewValuePayload"][];
+      /** Format: int64 */
+      variableId?: number;
+    }, "values" | "variableId">;
     RescheduleObservationRequestPayload: {
       /**
        * Format: date
@@ -3410,10 +4552,16 @@ export interface components {
       /** @description If true, the data for entries that already exist will be overwritten with the values in the uploaded file. If false, only entries that don't already exist will be imported. */
       overwriteExisting: boolean;
     };
+    ReviewApplicationRequestPayload: {
+      feedback?: string;
+      internalComment?: string;
+      /** @enum {string} */
+      status: "Not Submitted" | "Failed Pre-screen" | "Passed Pre-screen" | "Submitted" | "PL Review" | "Ready for Review" | "Pre-check" | "Needs Follow-up" | "Carbon Eligible" | "Accepted" | "Issue Active" | "Issue Pending" | "Issue Resolved" | "Not Accepted";
+    };
     ScheduleObservationRequestPayload: {
       /**
        * Format: date
-       * @description The end date for this observation, should be limited to 2 months from the start date .
+       * @description The end date for this observation, should be limited to 2 months from the start date.
        */
       endDate: string;
       /**
@@ -3421,6 +4569,8 @@ export interface components {
        * @description Which planting site this observation needs to be scheduled for.
        */
       plantingSiteId: number;
+      /** @description If this observation should only cover specific parts of the planting site, the IDs of the subzones it should include. */
+      requestedSubzoneIds?: number[];
       /**
        * Format: date
        * @description The start date for this observation, can be up to a year from the date this schedule request occurs on.
@@ -3434,7 +4584,7 @@ export interface components {
     };
     Score: {
       /** @enum {string} */
-      category: "Carbon" | "Finance" | "Forestry" | "Legal" | "Community" | "GIS" | "Climate Impact" | "Expansion Potential" | "Experience and Understanding" | "Operational Capacity" | "Responsiveness and Attention to Detail" | "Values Alignment";
+      category: "Carbon" | "Finance" | "Forestry" | "Legal" | "Social Impact" | "GIS" | "Climate Impact" | "Expansion Potential" | "Experience and Understanding" | "Operational Capacity" | "Responsiveness and Attention to Detail" | "Values Alignment";
       /** Format: date-time */
       modifiedTime: string;
       qualitative?: string;
@@ -3492,6 +4642,14 @@ export interface components {
         [key: string]: components["schemas"]["FieldValuesPayload"];
       };
     };
+    SectionVariablePayload: WithRequired<{
+      type: "Section";
+    } & Omit<components["schemas"]["VariablePayload"], "type"> & {
+      children?: components["schemas"]["SectionVariablePayload"][];
+      /** @description IDs of variables that this section recommends. */
+      recommends?: number[];
+      renderHeading?: boolean;
+    }, "children" | "recommends" | "renderHeading">;
     SeedCountSummaryPayload: {
       /**
        * Format: int64
@@ -3523,6 +4681,19 @@ export interface components {
       /** @enum {string} */
       units: "Seeds" | "Grams" | "Milligrams" | "Kilograms" | "Ounces" | "Pounds";
     };
+    SelectOptionPayload: {
+      description?: string;
+      /** Format: int64 */
+      id: number;
+      name: string;
+      renderedText?: string;
+    };
+    SelectVariablePayload: WithRequired<{
+      type: "Select";
+    } & Omit<components["schemas"]["VariablePayload"], "type"> & {
+      isMultiple?: boolean;
+      options?: components["schemas"]["SelectOptionPayload"][];
+    }, "isMultiple" | "options">;
     SendFacilityAlertRequestPayload: {
       /** @description Alert body in plain text. HTML alerts are not supported yet. */
       body: string;
@@ -3534,6 +4705,11 @@ export interface components {
     };
     SimpleSuccessResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
+    };
+    SpeciesForParticipantProjectPayload: {
+      participantProjectSpecies: components["schemas"]["ParticipantProjectSpeciesPayload"];
+      project: components["schemas"]["ProjectPayload"];
+      species: components["schemas"]["SpeciesResponseElement"];
     };
     SpeciesLookupCommonNamePayload: {
       /** @description ISO 639-1 two-letter language code indicating the name's language. Some common names in the server's taxonomic database are not tagged with languages; this value will not be present for those names. */
@@ -3575,44 +4751,72 @@ export interface components {
       type: "Name Misspelled" | "Name Not Found" | "Name Is Synonym";
     };
     SpeciesRequestPayload: {
+      averageWoodDensity?: number;
       commonName?: string;
       /**
        * @description IUCN Red List conservation category code.
        * @enum {string}
        */
       conservationCategory?: "CR" | "DD" | "EN" | "EW" | "EX" | "LC" | "NE" | "NT" | "VU";
+      dbhSource?: string;
+      dbhValue?: number;
+      ecologicalRoleKnown?: string;
       ecosystemTypes?: ("Boreal forests/Taiga" | "Deserts and xeric shrublands" | "Flooded grasslands and savannas" | "Mangroves" | "Mediterranean forests, woodlands and scrubs" | "Montane grasslands and shrublands" | "Temperate broad leaf and mixed forests" | "Temperate coniferous forest" | "Temperate grasslands, savannas and shrublands" | "Tropical and subtropical coniferous forests" | "Tropical and subtropical dry broad leaf forests" | "Tropical and subtropical grasslands, savannas and shrublands" | "Tropical and subtropical moist broad leaf forests" | "Tundra")[];
       familyName?: string;
-      /** @enum {string} */
-      growthForm?: "Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Shrub/Tree" | "Subshrub" | "Multiple Forms";
+      growthForms?: ("Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Shrub/Tree" | "Subshrub" | "Multiple Forms" | "Mangrove" | "Herb")[];
+      heightAtMaturitySource?: string;
+      heightAtMaturityValue?: number;
+      localUsesKnown?: string;
+      nativeEcosystem?: string;
       /**
        * Format: int64
        * @description Which organization's species list to update.
        */
       organizationId: number;
+      otherFacts?: string;
+      plantMaterialSourcingMethods?: (("Seed collection & germination") | ("Seed purchase & germination") | "Mangrove propagules" | "Vegetative propagation" | "Wildling harvest" | "Seedling purchase" | "Other")[];
       rare?: boolean;
       scientificName: string;
       /** @enum {string} */
-      seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate";
+      seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate" | "Intermediate - Cool Temperature Sensitive" | "Intermediate - Partial Desiccation Tolerant" | "Intermediate - Short Lived";
+      successionalGroups?: ("Pioneer" | "Early secondary" | "Late secondary" | "Mature")[];
+      /** @enum {string} */
+      woodDensityLevel?: "Species" | "Genus" | "Family";
     };
     SpeciesResponseElement: {
+      averageWoodDensity?: number;
       commonName?: string;
       /**
        * @description IUCN Red List conservation category code.
        * @enum {string}
        */
       conservationCategory?: "CR" | "DD" | "EN" | "EW" | "EX" | "LC" | "NE" | "NT" | "VU";
+      /** Format: date-time */
+      createdTime: string;
+      dbhSource?: string;
+      dbhValue?: number;
+      ecologicalRoleKnown?: string;
       ecosystemTypes?: ("Boreal forests/Taiga" | "Deserts and xeric shrublands" | "Flooded grasslands and savannas" | "Mangroves" | "Mediterranean forests, woodlands and scrubs" | "Montane grasslands and shrublands" | "Temperate broad leaf and mixed forests" | "Temperate coniferous forest" | "Temperate grasslands, savannas and shrublands" | "Tropical and subtropical coniferous forests" | "Tropical and subtropical dry broad leaf forests" | "Tropical and subtropical grasslands, savannas and shrublands" | "Tropical and subtropical moist broad leaf forests" | "Tundra")[];
       familyName?: string;
-      /** @enum {string} */
-      growthForm?: "Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Shrub/Tree" | "Subshrub" | "Multiple Forms";
+      growthForms?: ("Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Shrub/Tree" | "Subshrub" | "Multiple Forms" | "Mangrove" | "Herb")[];
+      heightAtMaturitySource?: string;
+      heightAtMaturityValue?: number;
       /** Format: int64 */
       id: number;
+      localUsesKnown?: string;
+      /** Format: date-time */
+      modifiedTime: string;
+      nativeEcosystem?: string;
+      otherFacts?: string;
+      plantMaterialSourcingMethods?: (("Seed collection & germination") | ("Seed purchase & germination") | "Mangrove propagules" | "Vegetative propagation" | "Wildling harvest" | "Seedling purchase" | "Other")[];
       problems?: components["schemas"]["SpeciesProblemElement"][];
       rare?: boolean;
       scientificName: string;
       /** @enum {string} */
-      seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate";
+      seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate" | "Intermediate - Cool Temperature Sensitive" | "Intermediate - Partial Desiccation Tolerant" | "Intermediate - Short Lived";
+      successionalGroups?: ("Pioneer" | "Early secondary" | "Late secondary" | "Mature")[];
+      /** @enum {string} */
+      woodDensityLevel?: "Species" | "Genus" | "Family";
     };
     SpeciesSummaryNurseryPayload: {
       /** Format: int64 */
@@ -3674,11 +4878,29 @@ export interface components {
       createdTime: string;
       description?: string;
       /** @enum {string} */
-      documentStore: "Dropbox" | "Google";
+      documentStore: "Dropbox" | "Google" | "External";
       /** Format: int64 */
       id: number;
       name: string;
       originalName?: string;
+    };
+    SubmitApplicationResponsePayload: {
+      application: components["schemas"]["ApplicationPayload"];
+      /** @description If the application failed any of the pre-screening checks, a list of the reasons why. Empty if the application passed pre-screening. */
+      problems: string[];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    SubmitSupportRequestPayload: {
+      attachmentComment?: string;
+      attachmentIds?: string[];
+      description: string;
+      /** @enum {string} */
+      requestType: "Bug Report" | "Feature Request" | "Contact Us";
+      summary: string;
+    };
+    SubmitSupportRequestResponsePayload: {
+      issueKey: string;
+      status: components["schemas"]["SuccessOrError"];
     };
     /**
      * @description Indicates of success or failure of the requested operation.
@@ -3713,6 +4935,34 @@ export interface components {
       species: number;
       status: components["schemas"]["SuccessOrError"];
     };
+    TableColumnPayload: {
+      isHeader: boolean;
+      variable: components["schemas"]["VariablePayload"];
+    };
+    TableVariablePayload: WithRequired<{
+      type: "Table";
+    } & Omit<components["schemas"]["VariablePayload"], "type"> & ({
+      columns?: components["schemas"]["TableColumnPayload"][];
+      /** @enum {string} */
+      tableStyle?: "Horizontal" | "Vertical";
+    }), "columns" | "tableStyle">;
+    TemporaryAttachment: {
+      filename: string;
+      temporaryAttachmentId: string;
+    };
+    TerraformationContactUserPayload: {
+      email: string;
+      firstName?: string;
+      lastName?: string;
+      /** Format: int64 */
+      userId: number;
+    };
+    TextVariablePayload: WithRequired<{
+      type: "Text";
+    } & Omit<components["schemas"]["VariablePayload"], "type"> & ({
+      /** @enum {string} */
+      textType?: "SingleLine" | "MultiLine";
+    }), "textType">;
     TimeZonePayload: {
       /**
        * @description Time zone name in IANA tz database format
@@ -3724,11 +4974,6 @@ export interface components {
        * @example Central European Time - Berlin
        */
       longName: string;
-    };
-    TimeseriesIdPayload: {
-      /** Format: int64 */
-      deviceId: number;
-      timeseriesName: string;
     };
     TimeseriesPayload: {
       /**
@@ -3830,6 +5075,9 @@ export interface components {
       accession: components["schemas"]["AccessionPayloadV2"];
       status: components["schemas"]["SuccessOrError"];
     };
+    UpdateApplicationBoundaryRequestPayload: {
+      boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+    };
     UpdateAutomationRequestPayload: {
       description?: string;
       /** Format: int64 */
@@ -3873,10 +5121,17 @@ export interface components {
       /** Format: int32 */
       version: number;
     };
+    UpdateCohortModuleRequestPayload: {
+      /** Format: date */
+      endDate: string;
+      /** Format: date */
+      startDate: string;
+      title: string;
+    };
     UpdateCohortRequestPayload: {
       name: string;
       /** @enum {string} */
-      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
     };
     UpdateDeviceRequestPayload: {
       /**
@@ -3930,6 +5185,14 @@ export interface components {
        */
       verbosity?: number;
     };
+    UpdateDocumentRequestPayload: {
+      internalComment?: string;
+      name: string;
+      /** Format: int64 */
+      ownedBy: number;
+      /** @enum {string} */
+      status: "Draft" | "Locked" | "Published" | "Ready" | "Submitted";
+    };
     UpdateDraftPlantingSiteRequestPayload: {
       /** @description In-progress state of the draft. This includes map data and other information needed by the client. It is treated as opaque data by the server. */
       data: {
@@ -3981,6 +5244,22 @@ export interface components {
     UpdateGlobalRolesRequestPayload: {
       globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
     };
+    UpdateModuleEventProjectsRequestPayload: {
+      addProjects?: number[];
+      removeProjects?: number[];
+    };
+    UpdateModuleEventRequestPayload: {
+      /** Format: date-time */
+      endTime?: string;
+      /** Format: uri */
+      meetingUrl?: string;
+      /** Format: uri */
+      recordingUrl?: string;
+      /** Format: uri */
+      slidesUrl?: string;
+      /** Format: date-time */
+      startTime: string;
+    };
     UpdateNotificationRequestPayload: {
       read: boolean;
     };
@@ -3988,6 +5267,9 @@ export interface components {
       /** Format: int64 */
       organizationId?: number;
       read: boolean;
+    };
+    UpdateOrganizationInternalTagsRequestPayload: {
+      tagIds: number[];
     };
     UpdateOrganizationRequestPayload: {
       /**
@@ -4016,6 +5298,15 @@ export interface components {
     UpdateOrganizationUserRequestPayload: {
       /** @enum {string} */
       role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
+    };
+    UpdateParticipantProjectSpeciesPayload: {
+      feedback?: string;
+      internalComment?: string;
+      rationale?: string;
+      /** @enum {string} */
+      speciesNativeCategory?: "Native" | "Non-native";
+      /** @enum {string} */
+      submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
     };
     UpdateParticipantRequestPayload: {
       /**
@@ -4049,18 +5340,25 @@ export interface components {
       coordinates: components["schemas"]["ObservationMonitoringPlotCoordinatesPayload"][];
     };
     UpdateProjectAcceleratorDetailsRequestPayload: {
-      abbreviatedName?: string;
+      annualCarbon?: number;
       applicationReforestableLand?: number;
+      carbonCapacity?: number;
       confirmedReforestableLand?: number;
       countryCode?: string;
       dealDescription?: string;
       /** @enum {string} */
       dealStage?: "Phase 0 (Doc Review)" | "Phase 1" | "Phase 2" | "Phase 3" | "Graduated, Finished Planting" | "Non Graduate" | "Application Submitted" | "Project Lead Screening Review" | "Screening Questions Ready for Review" | "Carbon Pre-Check" | "Submission Requires Follow Up" | "Carbon Eligible" | "Closed Lost" | "Issue Active" | "Issue Pending" | "Issue Reesolved";
+      /** @description Path on Dropbox to use for sensitive document storage. Ignored if the user does not have permission to update project document settings. */
       dropboxFolderPath?: string;
       failureRisk?: string;
       fileNaming?: string;
-      /** Format: uri */
+      /**
+       * Format: uri
+       * @description URL of Google Drive folder to use for non-sensitive document storage. Ignored if the user does not have permission to update project document settings.
+       */
       googleFolderUrl?: string;
+      /** Format: uri */
+      hubSpotUrl?: string;
       investmentThesis?: string;
       landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
       maxCarbonAccumulation?: number;
@@ -4073,6 +5371,7 @@ export interface components {
       /** @enum {string} */
       pipeline?: "Accelerator Projects" | "Carbon Supply" | "Carbon Waitlist";
       projectLead?: string;
+      totalCarbon?: number;
       totalExpansionPotential?: number;
       whatNeedsToBeTrue?: string;
     };
@@ -4091,6 +5390,9 @@ export interface components {
       /** @description Per-project report settings. If a project is missing from this list, its settings will revert to the defaults. */
       projects: components["schemas"]["ProjectReportSettingsPayload"][];
     };
+    UpdateSavedDocumentVersionRequestPayload: {
+      isSubmitted: boolean;
+    };
     UpdateSubLocationRequestPayload: {
       name: string;
     };
@@ -4098,7 +5400,15 @@ export interface components {
       feedback?: string;
       internalComment?: string;
       /** @enum {string} */
-      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
+    };
+    UpdateUserCookieConsentRequestPayload: {
+      /** @description If true, the user consents to the use of analytics cookies. If false, they decline. */
+      cookiesConsented: boolean;
+    };
+    UpdateUserInternalInterestsRequestPayload: {
+      /** @description New set of category assignments. Existing assignments that aren't included here will be removed from the user. */
+      internalInterests: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files" | "Sourcing")[];
     };
     UpdateUserPreferencesRequestPayload: {
       /**
@@ -4130,6 +5440,39 @@ export interface components {
        * @example America/New_York
        */
       timeZone?: string;
+    };
+    /**
+     * @description Operation that replaces a single existing value with a new one. The new value will have the same list position as the existing one.
+     *
+     * This operation may not be used with table variables.
+     *
+     * If the variable is a table column, the new value will be contained in the same row as the existing one.
+     */
+    UpdateValueOperationPayload: WithRequired<{
+      operation: "Update";
+    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & {
+      value?: components["schemas"]["NewValuePayload"];
+      /** Format: int64 */
+      valueId?: number;
+    }, "existingValueId" | "value" | "valueId">;
+    UpdateVariableOwnerRequestPayload: {
+      /**
+       * Format: int64
+       * @description New owner of the variable, or null if the variable should have no owner.
+       */
+      ownedBy?: number;
+    };
+    UpdateVariableValuesRequestPayload: {
+      /** @description List of operations to perform on the document's values. The operations are applied in order, and atomically: if any of them fail, none of them will be applied. */
+      operations: (components["schemas"]["AppendValueOperationPayload"] | components["schemas"]["DeleteValueOperationPayload"] | components["schemas"]["ReplaceValuesOperationPayload"] | components["schemas"]["UpdateValueOperationPayload"])[];
+      /** @description Whether to update variable statuses. Defaults to true. Accelerator admins can bypass the status updates by setting the flag to false. */
+      updateStatuses?: boolean;
+    };
+    UpdateVariableWorkflowDetailsRequestPayload: {
+      feedback?: string;
+      internalComment?: string;
+      /** @enum {string} */
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Incomplete" | "Complete";
     };
     UpdateViabilityTestRequestPayload: {
       /** Format: date */
@@ -4183,6 +5526,17 @@ export interface components {
       /** Format: date */
       startDate: string;
     };
+    UpgradeManifestRequestPayload: {
+      /**
+       * Format: int64
+       * @description ID of manifest to upgrade the document to. This must be greater than the document's current manifest ID (downgrades are not supported) and must be for the same document template as the current manifest.
+       */
+      variableManifestId: number;
+    };
+    UploadAttachmentResponsePayload: {
+      attachments: components["schemas"]["TemporaryAttachment"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     UploadDeliverableDocumentResponsePayload: {
       /** Format: int64 */
       documentId: number;
@@ -4195,6 +5549,11 @@ export interface components {
        */
       id: number;
       status: components["schemas"]["SuccessOrError"];
+    };
+    UploadImageFileResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      /** Format: int64 */
+      valueId: number;
     };
     UploadPlotPhotoRequestPayload: {
       gpsCoordinates: components["schemas"]["Point"];
@@ -4229,17 +5588,17 @@ export interface components {
     };
     UpsertProjectScoresRequestPayload: {
       /** @enum {string} */
-      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
       scores: components["schemas"]["UpsertScore"][];
     };
     UpsertProjectVotesRequestPayload: {
       /** @enum {string} */
-      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
       votes: components["schemas"]["UpsertVoteSelection"][];
     };
     UpsertScore: {
       /** @enum {string} */
-      category: "Carbon" | "Finance" | "Forestry" | "Legal" | "Community" | "GIS" | "Climate Impact" | "Expansion Potential" | "Experience and Understanding" | "Operational Capacity" | "Responsiveness and Attention to Detail" | "Values Alignment";
+      category: "Carbon" | "Finance" | "Forestry" | "Legal" | "Social Impact" | "GIS" | "Climate Impact" | "Expansion Potential" | "Experience and Understanding" | "Operational Capacity" | "Responsiveness and Attention to Detail" | "Values Alignment";
       qualitative?: string;
       /**
        * Format: int32
@@ -4258,6 +5617,13 @@ export interface components {
       voteOption?: "No" | "Conditional" | "Yes";
     };
     UserProfilePayload: {
+      /** @description If true, the user has consented to the use of analytics cookies. If false, the user has declined. If null, the user has not made a consent selection yet. */
+      cookiesConsented?: boolean;
+      /**
+       * Format: date-time
+       * @description If the user has selected whether or not to consent to analytics cookies, the date and time of the selection.
+       */
+      cookiesConsentedTime?: string;
       /**
        * @description Two-letter code of the user's country.
        * @example US
@@ -4293,7 +5659,67 @@ export interface components {
       globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
       /** Format: int64 */
       id: number;
+      internalInterests: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files" | "Sourcing")[];
       lastName?: string;
+    };
+    ValidatePlantingSiteResponsePayload: {
+      /** @description True if the request was valid. */
+      isValid: boolean;
+      /** @description List of validation problems found, if any. Empty if the request is valid. */
+      problems: components["schemas"]["PlantingSiteValidationProblemPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    /** @description Supertype of the payloads that describe which operations to perform on a variable's value(s). See the descriptions of the individual operations for details. */
+    ValueOperationPayload: {
+      /** Format: int64 */
+      existingValueId?: number;
+      operation: string;
+    };
+    VariableOwnersResponseElement: {
+      /** Format: int64 */
+      ownedBy: number;
+      /** Format: int64 */
+      variableId: number;
+    };
+    VariablePayload: {
+      /** Format: int64 */
+      deliverableId?: number;
+      deliverableQuestion?: string;
+      /** @enum {string} */
+      dependencyCondition?: "eq" | "gt" | "gte" | "lt" | "lte" | "neq";
+      dependencyValue?: string;
+      dependencyVariableStableId?: string;
+      description?: string;
+      /** Format: int64 */
+      id: number;
+      internalOnly: boolean;
+      isList: boolean;
+      isRequired: boolean;
+      name: string;
+      /** Format: int32 */
+      position?: number;
+      /** @description IDs of sections that recommend this variable. */
+      recommendedBy?: number[];
+      stableId: string;
+      /** @enum {string} */
+      type: "Number" | "Text" | "Date" | "Image" | "Select" | "Table" | "Link" | "Section";
+    };
+    VariableWorkflowHistoryElement: {
+      /** Format: int64 */
+      createdBy: number;
+      /** Format: date-time */
+      createdTime: string;
+      feedback?: string;
+      /** Format: int64 */
+      id: number;
+      internalComment?: string;
+      /** Format: int64 */
+      maxVariableValueId: number;
+      /** Format: int64 */
+      projectId: number;
+      /** @enum {string} */
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Incomplete" | "Complete";
+      variableValues: (components["schemas"]["ExistingDateValuePayload"] | components["schemas"]["ExistingDeletedValuePayload"] | components["schemas"]["ExistingImageValuePayload"] | components["schemas"]["ExistingLinkValuePayload"] | components["schemas"]["ExistingNumberValuePayload"] | components["schemas"]["ExistingSectionTextValuePayload"] | components["schemas"]["ExistingSectionVariableValuePayload"] | components["schemas"]["ExistingSelectValuePayload"] | components["schemas"]["ExistingTableValuePayload"] | components["schemas"]["ExistingTextValuePayload"])[];
     };
     VersionsEntryPayload: {
       appName: string;
@@ -4344,12 +5770,256 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  /**
+   * List all the applications with optional search criteria
+   * @description Only applications visible to the current user are returned.
+   */
+  listApplications: {
+    parameters: {
+      query?: {
+        /** @description If present, only list applications for this organization. */
+        organizationId?: number;
+        /** @description If present, only list applications for this project. A project can only have one application, so this will either return an empty result or a result with a single element. */
+        projectId?: number;
+        /** @description If true, list all applications for all projects. Only allowed for internal users. */
+        listAll?: boolean;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListApplicationsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Create a new application */
+  createApplication: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateApplicationRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateApplicationResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Get information about an application */
+  getApplication: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetApplicationResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Update an application's boundary */
+  updateApplicationBoundary: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateApplicationBoundaryRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Update an application's boundary using an uploaded file */
+  uploadApplicationBoundary: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          /** Format: binary */
+          file: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Get deliverables for an application */
+  getApplicationDeliverables: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetApplicationDeliverablesResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Get GeoJSON for an application */
+  getApplicationGeoJson: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/geo+json": string;
+        };
+      };
+    };
+  };
+  /** Get the history of changes to the metadata of an application */
+  getApplicationHistory: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetApplicationHistoryResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Get modules for an application */
+  getApplicationModules: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetApplicationModulesResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Get deliverables for an application module */
+  getApplicationModuleDeliverables: {
+    parameters: {
+      path: {
+        applicationId: number;
+        moduleId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetApplicationDeliverablesResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Restart a previously-submitted application
+   * @description If the application has not been submitted yet, this is a no-op.
+   */
+  restartApplication: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Update an application's metadata to reflect a review
+   * @description This is an internal-user-only operation.
+   */
+  reviewApplication: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReviewApplicationRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Submit an application for review
+   * @description If the application has already been submitted, this is a no-op.
+   */
+  submitApplication: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SubmitApplicationResponsePayload"];
+        };
+      };
+    };
+  };
   /** Gets the list of cohorts. */
   listCohorts: {
     parameters: {
       query: {
         /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
-        depth: "Cohort" | "Participant";
+        cohortDepth: "Cohort" | "Participant";
       };
     };
     responses: {
@@ -4382,7 +6052,7 @@ export interface operations {
     parameters: {
       query: {
         /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
-        depth: "Cohort" | "Participant";
+        cohortDepth: "Cohort" | "Participant";
       };
       path: {
         cohortId: number;
@@ -4452,6 +6122,105 @@ export interface operations {
       };
     };
   };
+  /** List cohort modules. */
+  listCohortModules: {
+    parameters: {
+      path: {
+        cohortId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListCohortModulesResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets one cohort module. */
+  getCohortModule: {
+    parameters: {
+      path: {
+        cohortId: number;
+        moduleId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetCohortModuleResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Updates the information about a module's use by a cohort.
+   * @description Adds the module to the cohort if it is not already associated.
+   */
+  updateCohortModule: {
+    parameters: {
+      path: {
+        cohortId: number;
+        moduleId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateCohortModuleRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Deletes a module from a cohort if it is currently associated. */
+  deleteCohortModule: {
+    parameters: {
+      path: {
+        cohortId: number;
+        moduleId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   /**
    * Lists the deliverables for accelerator projects
    * @description The list may optionally be filtered based on certain criteria as specified in the query string. If no filter parameters are supplied, lists all the deliverables in all the participants and projects that are visible to the user. For users with accelerator admin privileges, this will be the full list of all deliverables for all accelerator projects.
@@ -4459,6 +6228,8 @@ export interface operations {
   listDeliverables: {
     parameters: {
       query?: {
+        /** @description Filter deliverables by modules. Can be used with other request params. */
+        moduleId?: number;
         /** @description List deliverables for projects belonging to this organization. Ignored if participantId or projectId is specified. */
         organizationId?: number;
         /** @description List deliverables for all projects in this participant. Ignored if projectId is specified. */
@@ -4472,6 +6243,25 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["ListDeliverablesResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Import a list of deliverables metadata. */
+  importDeliverables: {
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          /** Format: binary */
+          file: string;
+        };
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ImportDeliverableResponsePayload"];
         };
       };
     };
@@ -4494,8 +6284,14 @@ export interface operations {
       };
     };
     responses: {
-      /** @description OK */
+      /** @description The requested operation succeeded. */
       200: {
+        content: {
+          "application/json": components["schemas"]["UploadDeliverableDocumentResponsePayload"];
+        };
+      };
+      /** @description The server is unable to store the uploaded file. This response indicates a condition that triggers the system to create a customer support ticket; clients can inform users of that fact. */
+      507: {
         content: {
           "application/json": components["schemas"]["UploadDeliverableDocumentResponsePayload"];
         };
@@ -4577,8 +6373,272 @@ export interface operations {
       };
     };
   };
+  /** Marks a submission from a project as complete. */
+  completeSubmission: {
+    parameters: {
+      path: {
+        deliverableId: number;
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Marks a submission from a project as incomplete. */
+  incompleteSubmission: {
+    parameters: {
+      path: {
+        deliverableId: number;
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Submits a submission from a project. */
+  submitSubmission: {
+    parameters: {
+      path: {
+        deliverableId: number;
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** List events */
+  listEvents: {
+    parameters: {
+      query?: {
+        projectId?: number;
+        moduleId?: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListEventsResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   /**
-   * Lists organizations with the Accelerator internal tag and their projects.
+   * Create a new event on a module.
+   * @description Only accessible by accelerator administrators.
+   */
+  createEvent: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateModuleEventRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateModuleEventResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets one event for a project. */
+  getEvent: {
+    parameters: {
+      path: {
+        eventId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetEventResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Update an event on a module.
+   * @description Only accessible by accelerator administrators.
+   */
+  updateEvent: {
+    parameters: {
+      path: {
+        eventId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateModuleEventRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Delete an event from a module.
+   * @description Only accessible by accelerator administrators.
+   */
+  deleteEvent: {
+    parameters: {
+      path: {
+        eventId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Update the list of projects for a module event.
+   * @description Only accessible by accelerator administrators.
+   */
+  updateEventProjects: {
+    parameters: {
+      path: {
+        eventId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateModuleEventProjectsRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** List modules. */
+  listModules: {
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListModulesResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Import a list of modules. */
+  importModules: {
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          /** Format: binary */
+          file: string;
+        };
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ImportModuleResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets one module. */
+  getModule: {
+    parameters: {
+      path: {
+        moduleId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetModuleResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Lists accelerator related organizations and their projects.
    * @description By default, only lists tagged organizations that have projects that have not been assigned to participants yet.
    */
   listAcceleratorOrganizations: {
@@ -4586,6 +6646,8 @@ export interface operations {
       query?: {
         /** @description Whether to also include projects that have been assigned to participants. */
         includeParticipants?: boolean;
+        /** @description Whether to load all organizations with a project with an application. */
+        hasProjectApplication?: boolean;
       };
     };
     responses: {
@@ -4593,6 +6655,30 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["ListAcceleratorOrganizationsResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Assign a user as the Terraformation contact for an organization.
+   * @description The user will be added to the organization if they are not already a member.
+   */
+  assignTerraformationContact: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AssignTerraformationContactRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -4684,6 +6770,109 @@ export interface operations {
       };
       /** @description There are projects associated with the participant. */
       409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Creates a new participant project species entry. */
+  createParticipantProjectSpecies: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateParticipantProjectSpeciesPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetParticipantProjectSpeciesResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Deletes participant project species entries. */
+  deleteParticipantProjectSpecies: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DeleteParticipantProjectSpeciesPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Creates a new participant project species entry for every project ID and species ID pairing. */
+  assignParticipantProjectSpecies: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AssignParticipantProjectSpeciesPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets information about a participant project species. */
+  getParticipantProjectSpecies: {
+    parameters: {
+      path: {
+        participantProjectSpeciesId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetParticipantProjectSpeciesResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Updates a participant project species entry. */
+  updateParticipantProjectSpecies: {
+    parameters: {
+      path: {
+        participantProjectSpeciesId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateParticipantProjectSpeciesPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
@@ -4790,6 +6979,45 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets all species associated to a participant project. */
+  getSpeciesForProject: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetSpeciesForParticipantProjectsResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Creates a new participant project species entry. */
+  getParticipantProjectSpeciesSnapshot: {
+    parameters: {
+      path: {
+        projectId: number;
+        deliverableId: number;
+      };
+    };
+    responses: {
+      /** @description The file was successfully retrieved. */
+      200: {
+        content: {
+          "*/*": string;
         };
       };
     };
@@ -4915,6 +7143,28 @@ export interface operations {
       };
     };
   };
+  /** Gets all participant projects associated to a species with active deliverable information if applicable. */
+  getProjectsForSpecies: {
+    parameters: {
+      path: {
+        speciesId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetParticipantProjectsForSpeciesResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   /** Gets a list of automations for a device or facility. */
   listAutomations: {
     parameters: {
@@ -5022,6 +7272,22 @@ export interface operations {
       };
     };
   };
+  /** Gets boundary of one country given the 2-letter country code. */
+  getBorder: {
+    parameters: {
+      path: {
+        countryCode: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetCountryBorderResponsePayload"];
+        };
+      };
+    };
+  };
   /** Registers a new device a facility's device manager. */
   createDevice: {
     requestBody: {
@@ -5034,78 +7300,6 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Searches for device managers matching a set of criteria. */
-  getDeviceManagers: {
-    parameters: {
-      query?: {
-        /** @description Search for device managers with this sensor kit ID. Either this or facilityId must be specified. */
-        sensorKitId?: string;
-        /** @description Search for device managers associated with this facility. Either this or sensorKitId must be specified. */
-        facilityId?: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetDeviceManagersResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Gets information about a specific device manager. */
-  getDeviceManager: {
-    parameters: {
-      path: {
-        deviceManagerId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetDeviceManagerResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Connects a device manager to a facility. */
-  connectDeviceManager: {
-    parameters: {
-      path: {
-        deviceManagerId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ConnectDeviceManagerRequestPayload"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Lists the available templates for new devices. */
-  listDeviceTemplates: {
-    parameters: {
-      query?: {
-        category?: "PV" | "Seed Bank Default";
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListDeviceTemplatesResponsePayload"];
         };
       };
     };
@@ -5185,6 +7379,436 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets a list of all the documents. */
+  listDocuments: {
+    parameters: {
+      query?: {
+        /** @description If present, only list documents for this project. */
+        projectId?: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListDocumentsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Creates a new document. */
+  createDocument: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateDocumentRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateDocumentResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Upgrades a document to a newer manifest.
+   * @description The manifest must be for the same document template as the existing manifest.
+   */
+  upgradeManifest: {
+    parameters: {
+      path: {
+        documentId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpgradeManifestRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The document does not exist or the requested manifest does not exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description The requested manifest is for a different document template than the current one. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Saves a version of a document. */
+  createSavedDocumentVersion: {
+    parameters: {
+      path: {
+        documentId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateSavedDocumentVersionRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateSavedDocumentVersionResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description The document has no values to save. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets details of a specific saved version of a document. */
+  getSavedDocumentVersion: {
+    parameters: {
+      path: {
+        documentId: number;
+        versionId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetSavedDocumentVersionResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Updates a saved version of a document. */
+  updateSavedDocumentVersion: {
+    parameters: {
+      path: {
+        documentId: number;
+        versionId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateSavedDocumentVersionRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets a document. */
+  getDocument: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetDocumentResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Updates a document. */
+  updateDocument: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateDocumentRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets the history of a document. This includes both information about document edits and information about saved versions. */
+  getDocumentHistory: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetDocumentHistoryResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Save an image to a new variable value. */
+  uploadProjectImageValue: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": {
+          caption?: string;
+          citation?: string;
+          /** Format: binary */
+          file: string;
+          /**
+           * Format: int32
+           * @description If the variable is a list, which list position to use for the value. If not specified, the server will use the next available list position if the variable is a list, or will replace any existing image if the variable is not a list.
+           */
+          listPosition?: number;
+          /**
+           * Format: int64
+           * @description If the variable is a table column, value ID of the row the value should belong to.
+           */
+          rowValueId?: number;
+          /** Format: int64 */
+          variableId: number;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadImageFileResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Gets the contents of an image variable value.
+   * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
+   */
+  getProjectImageValue: {
+    parameters: {
+      query?: {
+        /** @description Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
+        maxWidth?: string;
+        /** @description Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
+        maxHeight?: string;
+      };
+      path: {
+        projectId: number;
+        valueId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": string;
+          "image/jpeg": string;
+          "image/png": string;
+        };
+      };
+    };
+  };
+  /**
+   * List the owners of a project's variables.
+   * @description Only variables that actually have owners are returned.
+   */
+  listVariableOwners: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListVariableOwnersResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Update or remove the owner of a variable in a project. */
+  updateVariableOwner: {
+    parameters: {
+      path: {
+        projectId: number;
+        variableId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateVariableOwnerRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Get the values of the variables in a project.
+   * @description This may be used to fetch the full set of current values (the default behavior), the values from a saved version (if maxValueId is specified), or to poll for recent edits (if minValueId is specified).
+   */
+  listProjectVariableValues: {
+    parameters: {
+      query?: {
+        /** @description If specified, only return values that belong to variables that are associated to the given ID */
+        deliverableId?: number;
+        /** @description If specified, only return values with this ID or higher. Use this to poll for incremental updates to a document. Incremental results may include values of type 'Deleted' in cases where, e.g., elements have been removed from a list. */
+        minValueId?: number;
+        /** @description If specified, only return values with this ID or lower. Use this to retrieve saved document versions. */
+        maxValueId?: number;
+        /** @description If specified, return the value of the variable with this stable ID. May be specified more than once to return values for multiple variables. Ignored if variableId is specified. */
+        stableId?: string[];
+        /** @description If specified, return the value of this variable. May be specified more than once to return values for multiple variables. */
+        variableId?: number[];
+      };
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListVariableValuesResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Update the values of the variables in a project.
+   * @description Make a list of changes to a project's variable values. The changes are applied in order and are treated as an atomic unit. That is, the changes will either all succeed or all fail; there won't be a case where some of the changes are applied and some aren't. See the payload descriptions for more details about the operations you can perform on values.
+   */
+  updateProjectVariableValues: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateVariableValuesRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Update the workflow details for a variable in a project. */
+  updateVariableWorkflowDetails: {
+    parameters: {
+      path: {
+        projectId: number;
+        variableId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateVariableWorkflowDetailsRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Get the workflow history for a variable in a project. */
+  getVariableWorkflowHistory: {
+    parameters: {
+      path: {
+        projectId: number;
+        variableId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetVariableWorkflowHistoryResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets a list of all the valid document templates. */
+  listDocumentTemplates: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListDocumentTemplatesResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * List the available variables, optionally filtered by a document or deliverable.
+   * @description Variables returned for a document include all section hierarchies and variables injected into section text.
+   */
+  listVariables: {
+    parameters: {
+      query?: {
+        deliverableId?: number;
+        documentId?: number;
+        /** @description If specified, return the definition of a specific variable given its stable ID. May be specified more than once to return multiple variables. deliverableId and documentId are ignored if this is specified. */
+        stableId?: string[];
+        /** @description If specified, return the definition of a specific variable. May be specified more than once to return multiple variables. deliverableId, documentId, and stableId are ignored if this is specified. */
+        variableId?: number[];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListVariablesResponsePayload"];
         };
       };
     };
@@ -5512,6 +8136,68 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["ListTimeZoneNamesResponsePayload"];
+        };
+      };
+    };
+  };
+  /** List all the available internal tags */
+  listAllInternalTags: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListAllInternalTagsResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * List the internal tags assigned to all organizations
+   * @description This includes organizations with no internal tags, whose list of tags will be empty.
+   */
+  listAllOrganizationInternalTags: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListAllOrganizationInternalTagsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** List the internal tags assigned to an organization */
+  listOrganizationInternalTags: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListOrganizationInternalTagsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Replace the list of internal tags assigned to an organization */
+  updateOrganizationInternalTags: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateOrganizationInternalTagsRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -6002,6 +8688,22 @@ export interface operations {
       };
     };
   };
+  /** Get a summary of the numbers of plants in all the nurseries in an organization. */
+  getOrganizationNurserySummary: {
+    parameters: {
+      query: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetOrganizationNurserySummaryResponsePayload"];
+        };
+      };
+    };
+  };
   /** Withdraws seedlings from one or more seedling batches at a nursery. */
   createBatchWithdrawal: {
     requestBody: {
@@ -6114,8 +8816,39 @@ export interface operations {
     };
   };
   /**
+   * Undoes a withdrawal.
+   * @description The withdrawal's plants will be returned to their original batches. Nursery transfers may not be undone. If the withdrawal was an outplanting to a planting site, the plants will be removed from the planting site's plant totals. This does not delete the original withdrawal.
+   */
+  undoBatchWithdrawal: {
+    parameters: {
+      path: {
+        withdrawalId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The withdrawal does not exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description The withdrawal is not eligible for undo, e.g., because it has already been undone or because it is a nursery transfer. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
    * Lists all organizations.
-   * @description Lists all organizations the user can access.
+   * @description Lists all organizations the user can access through organization roles.
    */
   listOrganizations: {
     parameters: {
@@ -7027,6 +9760,29 @@ export interface operations {
       };
     };
   };
+  /** Delete one photo for an accession. */
+  deletePhoto: {
+    parameters: {
+      path: {
+        id: number;
+        photoFilename: string;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The accession does not exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   /**
    * Get the server's current date and time.
    * @description In test environments, the clock can be advanced artificially, which will cause it to differ from the real-world date and time.
@@ -7111,22 +9867,6 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["ListFieldValuesResponsePayload"];
-        };
-      };
-    };
-  };
-  /** List the possible values of a set of search fields. */
-  listAllFieldValues: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ListAllFieldValuesRequestPayload"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListAllFieldValuesResponsePayload"];
         };
       };
     };
@@ -7493,6 +10233,67 @@ export interface operations {
       };
     };
   };
+  /** Lists support request types. */
+  listRequestTypes: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListSupportRequestTypesResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Submit support request types. */
+  submitRequest: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SubmitSupportRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SubmitSupportRequestResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Upload a temporary attachment.
+   * @description Uploads an attachment, which can be assigned to a support request during submission.
+   */
+  uploadAttachment: {
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          /** Format: binary */
+          file: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadAttachmentResponsePayload"];
+        };
+      };
+      /** @description The request was too large. */
+      413: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description The media type is not supported. */
+      415: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   /** Lists the timeseries for one or more devices. */
   listTimeseries: {
     parameters: {
@@ -7524,22 +10325,6 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Returns historical values of timeseries. */
-  getTimeseriesHistory: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["GetTimeseriesHistoryRequestPayload"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetTimeseriesHistoryResponsePayload"];
         };
       };
     };
@@ -7758,6 +10543,22 @@ export interface operations {
       };
     };
   };
+  /** Gets the rollup observation summary of a planting site */
+  getPlantingSiteObservationSummary: {
+    parameters: {
+      query: {
+        plantingSiteId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetPlantingSiteObservationSummaryPayload"];
+        };
+      };
+    };
+  };
   /** Gets information about a single observation. */
   getObservation: {
     parameters: {
@@ -7795,8 +10596,51 @@ export interface operations {
       };
     };
   };
-  /** Gets a list of monitoring plots assigned to an observation. */
-  listAssignedPlots: {
+  /** Abandon the observation. */
+  abandonObservation: {
+    parameters: {
+      path: {
+        observationId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description Observation is already completed or abandoned. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Replaces a user-entered 'Other' species with one of the organization's species in an observation. */
+  mergeOtherSpecies: {
+    parameters: {
+      path: {
+        observationId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MergeOtherSpeciesRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Exports monitoring plots assigned to an observation as a GPX file. */
+  listAssignedPlots_1: {
     parameters: {
       path: {
         observationId: number;
@@ -7806,6 +10650,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
+          "application/gpx+xml": string;
           "application/json": components["schemas"]["ListAssignedPlotsResponsePayload"];
         };
       };
@@ -8063,6 +10908,22 @@ export interface operations {
       };
     };
   };
+  /** Validates the definition of a new planting site. */
+  validatePlantingSite: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreatePlantingSiteRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ValidatePlantingSiteResponsePayload"];
+        };
+      };
+    };
+  };
   /**
    * Gets information about a specific planting site.
    * @description Includes information about the site's planting zones and subzones.
@@ -8251,6 +11112,22 @@ export interface operations {
       };
     };
   };
+  /** Updates the current user's cookie consent selection. */
+  updateCookieConsent: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateUserCookieConsentRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
   /** Gets the current user's preferences. */
   getUserPreferences: {
     parameters: {
@@ -8329,6 +11206,43 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Get the list of internal interests assigned to a user. */
+  getUserDeliverableCategories: {
+    parameters: {
+      path: {
+        userId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetUserInternalInterestsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Update which internal interests are assigned to a user. */
+  updateUserDeliverableCategories: {
+    parameters: {
+      path: {
+        userId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateUserInternalInterestsRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };

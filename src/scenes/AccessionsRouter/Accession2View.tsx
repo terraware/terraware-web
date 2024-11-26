@@ -1,10 +1,8 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Box, Grid, Link as LinkMUI, Tab, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import { Button, DropdownItem, Icon } from '@terraware/web-components';
+import { Box, Grid, Link as LinkMUI, Typography, useTheme } from '@mui/material';
+import { Button, DropdownItem, Icon, Tabs } from '@terraware/web-components';
 import _ from 'lodash';
 import { DateTime } from 'luxon';
 
@@ -28,6 +26,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import useStickyTabs from 'src/utils/useStickyTabs';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import OverviewItemCard from '../../components/common/OverviewItemCard';
@@ -45,49 +44,14 @@ import ViewViabilityTestModal from './viabilityTesting/ViewViabilityTestModal';
 import DetailPanel from './view/DetailPanel';
 import WithdrawModal from './withdraw/WithdrawModal';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  iconStyle: {
-    fill: theme.palette.TwClrIcn,
-  },
-  editIcon: {
-    display: 'none',
-    fill: theme.palette.TwClrIcn,
-  },
-  fullSizeButton: {
-    width: '100%',
-  },
-  actionMenuButton: {
-    marginLeft: theme.spacing(1),
-  },
-  addIconEnabled: {
-    fill: theme.palette.TwClrIcnBrand,
-    height: '20px',
-    width: '20px',
-  },
-  addIconDisabled: {
-    fill: theme.palette.TwClrBaseGray300,
-    height: '20px',
-    width: '20px',
-  },
-  backToAccessions: {
-    marginLeft: 0,
-    marginTop: theme.spacing(2),
-  },
-}));
-
-const TABS = ['detail', 'history', 'viabilityTesting'];
-
 export default function Accession2View(): JSX.Element {
   const { user } = useUser();
   const { selectedOrganization } = useOrganization();
   const { userPreferences } = useUser();
   const query = useQuery();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
-  const tab = (query.get('tab') || '').toLowerCase();
-  const preselectedTab = TABS.indexOf(tab) === -1 ? 'detail' : tab;
   const { accessionId } = useParams<{ accessionId: string }>();
-  const [selectedTab, setSelectedTab] = useState(preselectedTab);
   const [accession, setAccession] = useState<Accession>();
   const [openEditLocationModal, setOpenEditLocationModal] = useState(false);
   const [openEditStateModal, setOpenEditStateModal] = useState(false);
@@ -105,11 +69,27 @@ export default function Accession2View(): JSX.Element {
   const snackbar = useSnackbar();
   const userCanEdit = !isContributor(selectedOrganization);
   const { isMobile, isTablet } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
+  const theme = useTheme();
   const themeObj = useTheme();
   const contentRef = useRef(null);
   const { activeLocale } = useLocalization();
   const locationTimeZone = useLocationTimeZone();
+
+  const fullSizeButtonStyles = {
+    width: '100%',
+  };
+
+  const addIconEnableStyles = {
+    fill: theme.palette.TwClrIcnBrand,
+    height: '20px',
+    width: '20px',
+  };
+
+  const addIconDisabledStyles = {
+    fill: theme.palette.TwClrBaseGray300,
+    height: '20px',
+    width: '20px',
+  };
 
   const seedBankTimeZone = useMemo(() => {
     const facility = accession?.facilityId
@@ -125,16 +105,18 @@ export default function Accession2View(): JSX.Element {
 
   const reloadData = useCallback(() => {
     const populateAccession = async () => {
-      const response = await AccessionService.getAccession(parseInt(accessionId, 10));
-      if (response.requestSucceeded) {
-        if (!_.isEqual(response.accession, accession)) {
-          setAccession(response.accession);
-          setHasPendingTests(
-            response.accession?.viabilityTests?.some((test) => test.testType !== 'Cut' && !test.endDate) || false
-          );
+      if (accessionId) {
+        const response = await AccessionService.getAccession(parseInt(accessionId, 10));
+        if (response.requestSucceeded) {
+          if (!_.isEqual(response.accession, accession)) {
+            setAccession(response.accession);
+            setHasPendingTests(
+              response.accession?.viabilityTests?.some((test) => test.testType !== 'Cut' && !test.endDate) || false
+            );
+          }
+        } else {
+          snackbar.toastError();
         }
-      } else {
-        snackbar.toastError();
       }
     };
 
@@ -195,44 +177,9 @@ export default function Accession2View(): JSX.Element {
     }
   }, [accession, activeLocale, seedBankTimeZone]);
 
-  useEffect(() => {
-    setSelectedTab((query.get('tab') || 'detail') as string);
-  }, [query]);
-
   const handleChange = (newValue: string) => {
     query.set('tab', newValue);
-    history.push(getLocation(location.pathname, location, query.toString()));
-  };
-
-  const tabStyles = {
-    fontSize: '14px',
-    padding: themeObj.spacing(1, 2),
-    minHeight: themeObj.spacing(4.5),
-    textTransform: 'capitalize',
-    '&.Mui-selected': {
-      color: themeObj.palette.TwClrTxtBrand as string,
-      fontWeight: 500,
-    },
-  };
-
-  const viabilityTestingStyle = () => {
-    if (!hasPendingTests) {
-      return tabStyles;
-    }
-
-    return {
-      ...tabStyles,
-      '::after': {
-        background: themeObj.palette.TwClrIcnDanger as string,
-        content: '""',
-        height: '10px',
-        width: '10px',
-        position: 'absolute',
-        right: themeObj.spacing(1),
-        top: themeObj.spacing(1),
-        borderRadius: '5px',
-      },
-    };
+    navigate(getLocation(location.pathname, location, query.toString()));
   };
 
   const linkStyle = {
@@ -344,7 +291,7 @@ export default function Accession2View(): JSX.Element {
           onClick={() => setOpenWithdrawModal(true)}
           label={strings.WITHDRAW}
           size='small'
-          className={fullSize ? classes.fullSizeButton : ''}
+          style={fullSize ? fullSizeButtonStyles : {}}
         />
       );
     }
@@ -363,17 +310,6 @@ export default function Accession2View(): JSX.Element {
     />
   );
 
-  const tabHeaderProps = {
-    borderBottom: 1,
-    borderColor: 'divider',
-    margin: isMobile ? 0 : themeObj.spacing(0, 4),
-  };
-
-  const tabPanelProps = {
-    borderRadius: isMobile ? '0 0 16px 16px' : '32px',
-    backgroundColor: themeObj.palette.TwClrBg,
-  };
-
   const overviewItemCount =
     (accession?.state ? 1 : 0) +
     (accession?.state === 'Awaiting Check-In' && accession?.bagNumbers !== undefined ? 1 : 0) +
@@ -386,6 +322,87 @@ export default function Accession2View(): JSX.Element {
   const quantityEditable = userCanEdit && accession?.state !== 'Used Up';
   const viabilityEditable = userCanEdit && accession?.estimatedCount !== undefined && accession?.state !== 'Used Up';
   const isAwaitingCheckin = accession?.state === 'Awaiting Check-In';
+
+  const tabs = useMemo(() => {
+    if (!activeLocale) {
+      return [];
+    }
+
+    return [
+      {
+        id: 'detail',
+        label: strings.ACCESSION_DETAILS,
+        children: (
+          <Box
+            sx={{
+              backgroundColor: themeObj.palette.TwClrBg,
+              borderRadius: isMobile ? '0 0 16px 16px' : '32px',
+              padding: themeObj.spacing(3),
+            }}
+          >
+            <DetailPanel accession={accession} reload={reloadData} />
+          </Box>
+        ),
+      },
+      {
+        id: 'history',
+        label: strings.HISTORY,
+        children: (
+          <Box
+            sx={{
+              backgroundColor: themeObj.palette.TwClrBg,
+              borderRadius: isMobile ? '0 0 16px 16px' : '32px',
+              padding: themeObj.spacing(3),
+              '::after': hasPendingTests
+                ? {
+                    background: themeObj.palette.TwClrIcnDanger as string,
+                    content: '""',
+                    height: '10px',
+                    width: '10px',
+                    position: 'absolute',
+                    right: themeObj.spacing(1),
+                    top: themeObj.spacing(1),
+                    borderRadius: '5px',
+                  }
+                : {},
+            }}
+          >
+            {accession && <Accession2History accession={accession} />}
+          </Box>
+        ),
+      },
+      {
+        id: 'viabilityTesting',
+        label: strings.VIABILITY_TESTS,
+        children: (
+          <Box
+            sx={{
+              backgroundColor: themeObj.palette.TwClrBg,
+              borderRadius: isMobile ? '0 0 16px 16px' : '32px',
+              padding: themeObj.spacing(3),
+            }}
+          >
+            {accession && (
+              <ViabilityTestingPanel
+                accession={accession}
+                reload={reloadData}
+                canAddTest={viabilityEditable}
+                setNewViabilityTestOpened={setOpenNewViabilityTest}
+                setViewViabilityTestModalOpened={setOpenViewViabilityTestModal}
+                setSelectedTest={setSelectedTest}
+              />
+            )}
+          </Box>
+        ),
+      },
+    ];
+  }, [accession, reloadData, themeObj, viabilityEditable, hasPendingTests]);
+
+  const { activeTab, onTabChange } = useStickyTabs({
+    defaultTab: 'detail',
+    tabs,
+    viewIdentifier: 'accession-view',
+  });
 
   return (
     <TfMain>
@@ -486,8 +503,11 @@ export default function Accession2View(): JSX.Element {
             <BackToLink
               id='back'
               to={APP_PATHS.ACCESSIONS}
-              className={classes.backToAccessions}
               name={strings.ACCESSIONS}
+              style={{
+                marginLeft: 0,
+                marginTop: theme.spacing(2),
+              }}
             />
           </Box>
           <Box padding={isMobile ? themeObj.spacing(3, 0, 4, 0) : themeObj.spacing(3, 3, 4, 3)}>
@@ -520,7 +540,7 @@ export default function Accession2View(): JSX.Element {
                       onClick={() => checkInAccession()}
                       label={strings.CHECK_IN}
                       size='medium'
-                      className={classes.fullSizeButton}
+                      style={fullSizeButtonStyles}
                     />
                   ) : (
                     renderWithdrawalButton(true)
@@ -630,14 +650,14 @@ export default function Accession2View(): JSX.Element {
               ) : quantityEditable ? (
                 <LinkMUI sx={{ ...linkStyle, fontSize: '14px' }} onClick={() => setOpenQuantityModal(true)}>
                   <Box display='flex' alignItems='center'>
-                    <Icon name='iconAdd' className={classes.addIconEnabled} />
+                    <Icon name='iconAdd' style={addIconEnableStyles} />
                     &nbsp;{strings.ADD}
                   </Box>
                 </LinkMUI>
               ) : (
                 <Typography color={themeObj.palette.TwClrTxtTertiary} sx={{ pointerEvents: 'none', fontSize: '14px' }}>
                   <Box display='flex' alignItems='center'>
-                    <Icon name='iconAdd' className={classes.addIconDisabled} />
+                    <Icon name='iconAdd' style={addIconDisabledStyles} />
                     &nbsp;{strings.ADD}
                   </Box>
                 </Typography>
@@ -662,14 +682,14 @@ export default function Accession2View(): JSX.Element {
               ) : viabilityEditable ? (
                 <LinkMUI sx={{ ...linkStyle, fontSize: '14px' }} onClick={() => setOpenViabilityModal(true)}>
                   <Box display='flex' alignItems='center'>
-                    <Icon name='iconAdd' className={classes.addIconEnabled} />
+                    <Icon name='iconAdd' style={addIconEnableStyles} />
                     &nbsp;{strings.ADD}
                   </Box>
                 </LinkMUI>
               ) : (
                 <Typography color={themeObj.palette.TwClrTxtTertiary} sx={{ pointerEvents: 'none', fontSize: '14px' }}>
                   <Box display='flex' alignItems='center'>
-                    <Icon name='iconAdd' className={classes.addIconDisabled} />
+                    <Icon name='iconAdd' style={addIconDisabledStyles} />
                     &nbsp;{strings.ADD}
                   </Box>
                 </Typography>
@@ -679,48 +699,23 @@ export default function Accession2View(): JSX.Element {
         </Grid>
       </Grid>
 
-      <Box sx={{ width: '100%' }}>
-        <TabContext value={selectedTab}>
-          <Box sx={tabHeaderProps}>
-            <TabList
-              sx={{ minHeight: themeObj.spacing(4.5) }}
-              onChange={(unused, value) => handleChange(value)}
-              TabIndicatorProps={{
-                style: {
-                  background: themeObj.palette.TwClrBgBrand,
-                  height: '4px',
-                  borderRadius: '4px 4px 0 0',
-                },
-              }}
-            >
-              <Tab
-                label={isMobile || isTablet ? strings.DETAILS : strings.ACCESSION_DETAILS}
-                value='detail'
-                sx={tabStyles}
-              />
-              <Tab label={strings.HISTORY} value='history' sx={tabStyles} />
-              <Tab label={strings.VIABILITY_TESTS} value='viabilityTesting' sx={viabilityTestingStyle()} />
-            </TabList>
-          </Box>
-          <TabPanel value='detail' sx={tabPanelProps}>
-            <DetailPanel accession={accession} reload={reloadData} />
-          </TabPanel>
-          <TabPanel value='history' sx={tabPanelProps}>
-            {accession && <Accession2History accession={accession} />}
-          </TabPanel>
-          <TabPanel value='viabilityTesting' sx={tabPanelProps}>
-            {accession && (
-              <ViabilityTestingPanel
-                accession={accession}
-                reload={reloadData}
-                canAddTest={viabilityEditable}
-                setNewViabilityTestOpened={setOpenNewViabilityTest}
-                setViewViabilityTestModalOpened={setOpenViewViabilityTestModal}
-                setSelectedTest={setSelectedTest}
-              />
-            )}
-          </TabPanel>
-        </TabContext>
+      <Box
+        sx={{
+          '.MuiTab-root:last-child::after': hasPendingTests
+            ? {
+                background: themeObj.palette.TwClrIcnDanger as string,
+                content: '""',
+                height: '10px',
+                width: '10px',
+                position: 'absolute',
+                right: themeObj.spacing(1),
+                top: themeObj.spacing(1),
+                borderRadius: '5px',
+              }
+            : {},
+        }}
+      >
+        <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
       </Box>
     </TfMain>
   );

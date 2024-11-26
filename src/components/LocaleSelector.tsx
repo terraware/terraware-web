@@ -1,5 +1,6 @@
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import React from 'react';
+
+import { useTheme } from '@mui/material';
 import { Dropdown, DropdownItem, PopoverMenu } from '@terraware/web-components';
 
 import { UserService } from 'src/services';
@@ -16,14 +17,6 @@ type LocaleSelectorProps = {
   fullWidth?: boolean;
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
-  selected: {
-    fontSize: '16px',
-    paddingLeft: '8px',
-    color: theme.palette.TwClrTxt,
-  },
-}));
-
 export default function LocaleSelector({
   transparent,
   onChangeLocale,
@@ -36,7 +29,7 @@ export default function LocaleSelector({
     value: supportedLocale.id,
     label: supportedLocale.name,
   }));
-  const classes = useStyles();
+  const theme = useTheme();
 
   return (
     <LocalizationContext.Consumer>
@@ -64,7 +57,13 @@ export default function LocaleSelector({
             {transparent ? (
               <PopoverMenu
                 anchor={
-                  <span className={classes.selected}>
+                  <span
+                    style={{
+                      fontSize: '16px',
+                      paddingLeft: '8px',
+                      color: theme.palette.TwClrTxt,
+                    }}
+                  >
                     {localeItems.find((iLocale) => iLocale.value === localeDetails.id)?.label}
                   </span>
                 }

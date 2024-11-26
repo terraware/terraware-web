@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { Status, buildReducers } from 'src/redux/features/asyncUtils';
+import { AsyncRequest, buildReducers } from 'src/redux/features/asyncUtils';
 
 import { requestUpdatePlantingCompleted, requestUpdatePlantingsCompleted } from './plantingsAsyncThunks';
 
@@ -39,7 +39,7 @@ export const plantingsSlice = createSlice({
   },
 });
 
-type UpdateData = Record<string, Status>;
+type UpdateData = Record<string, AsyncRequest>;
 
 const initialUpdateState: UpdateData = {};
 
@@ -58,7 +58,11 @@ const updatePlantingsCompletedSlice = createSlice({
 });
 
 export const { setPlantingsAction } = plantingsSlice.actions;
-export const plantingsReducer = plantingsSlice.reducer;
 
-export const updatePlantingCompletedReducer = updatePlantingCompletedSlice.reducer;
-export const updatePlantingsCompletedReducer = updatePlantingsCompletedSlice.reducer;
+const plantingsReducers = {
+  plantings: plantingsSlice.reducer,
+  updatePlantingCompleted: updatePlantingCompletedSlice.reducer,
+  updatePlantingsCompleted: updatePlantingsCompletedSlice.reducer,
+};
+
+export default plantingsReducers;

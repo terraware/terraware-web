@@ -23,8 +23,6 @@ export const globalRolesUsersListSlice = createSlice({
   },
 });
 
-export const globalRolesUsersListReducer = globalRolesUsersListSlice.reducer;
-
 /**
  * Simple OK/response for requests removing all global roles for a list of users, keeps
  * state of user ids that was were modified.
@@ -39,8 +37,6 @@ export const globalRolesUsersRemoveSlice = createSlice({
     buildReducers(requestDeleteGlobalRolesForUsers)(builder);
   },
 });
-
-export const globalRolesUsersRemoveReducer = globalRolesUsersRemoveSlice.reducer;
 
 /**
  * Simple OK/response for requests updating a user's global roles, keeps
@@ -57,4 +53,10 @@ export const globalRolesUserUpdateSlice = createSlice({
   },
 });
 
-export const globalRolesUserUpdateReducer = globalRolesUserUpdateSlice.reducer;
+const globalRolesReducers = {
+  globalRolesUsersList: globalRolesUsersListSlice.reducer,
+  globalRolesUsersRemove: globalRolesUsersRemoveSlice.reducer,
+  globalRolesUserUpdate: globalRolesUserUpdateSlice.reducer,
+};
+
+export default globalRolesReducers;

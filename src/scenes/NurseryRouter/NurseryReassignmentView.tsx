@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box, CircularProgress, Grid, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, CircularProgress, Grid, useTheme } from '@mui/material';
 import { ErrorBox, TableColumnType } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -26,13 +25,6 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import ReassignmentRenderer, { Reassignment, ReassignmentRowType, ZoneInfo } from './ReassignmentRenderer';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  backToWithdrawals: {
-    marginLeft: 0,
-    marginTop: theme.spacing(2),
-  },
-}));
-
 const columns = (): TableColumnType[] => [
   { key: 'species', name: strings.SPECIES, type: 'string' },
   { key: 'siteName', name: strings.PLANTING_SITE, type: 'string' },
@@ -45,13 +37,12 @@ const columns = (): TableColumnType[] => [
 ];
 
 export default function NurseryReassignmentView(): JSX.Element {
-  const classes = useStyles();
   const query = useQuery();
   const { user } = useUser();
   const numberFormatter = useNumberFormatter();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
   const { deliveryId } = useParams<{ deliveryId: string }>();
   const snackbar = useSnackbar();
@@ -67,21 +58,23 @@ export default function NurseryReassignmentView(): JSX.Element {
 
   // populate map of species id to scientific name
   useEffect(() => {
-    const populateSpecies = async () => {
-      const speciesResponse = await SpeciesService.getAllSpecies(selectedOrganization.id);
-      if (speciesResponse.requestSucceeded) {
-        setSpeciesMap(
-          speciesResponse.species?.reduce((acc: any, current: any) => {
-            acc[current.id] = current.scientificName;
-            return acc;
-          }, {})
-        );
-      } else {
-        snackbar.toastError();
-      }
-    };
+    if (selectedOrganization.id !== -1) {
+      const populateSpecies = async () => {
+        const speciesResponse = await SpeciesService.getAllSpecies(selectedOrganization.id);
+        if (speciesResponse.requestSucceeded) {
+          setSpeciesMap(
+            speciesResponse.species?.reduce((acc: any, current: any) => {
+              acc[current.id] = current.scientificName;
+              return acc;
+            }, {})
+          );
+        } else {
+          snackbar.toastError();
+        }
+      };
 
-    populateSpecies();
+      populateSpecies();
+    }
   }, [selectedOrganization, snackbar]);
 
   // populate delivery
@@ -133,7 +126,7 @@ export default function NurseryReassignmentView(): JSX.Element {
 
   const goToWithdrawals = () => {
     const withdrawalId = query.has('fromWithdrawal') ? delivery?.withdrawalId : undefined;
-    history.push({ pathname: APP_PATHS.NURSERY_WITHDRAWALS + (withdrawalId ? `/${withdrawalId}` : '') });
+    navigate({ pathname: APP_PATHS.NURSERY_WITHDRAWALS + (withdrawalId ? `/${withdrawalId}` : '') });
   };
 
   const reassign = async () => {
@@ -200,7 +193,7 @@ export default function NurseryReassignmentView(): JSX.Element {
 
         return {
           numPlants: planting.numPlants,
-          species: speciesMap![planting.speciesId],
+          species: speciesMap[planting.speciesId],
           siteName,
           originalZone,
           originalSubzone,
@@ -232,8 +225,11 @@ export default function NurseryReassignmentView(): JSX.Element {
           <BackToLink
             id='back'
             to={`${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history`}
-            className={classes.backToWithdrawals}
-            name={strings.WITHDRAWAL_LOG}
+            name={strings.WITHDRAWAL_HISTORY}
+            style={{
+              marginLeft: 0,
+              marginTop: theme.spacing(2),
+            }}
           />
         </Box>
         <Box marginTop={theme.spacing(3)}>

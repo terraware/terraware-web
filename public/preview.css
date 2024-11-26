@@ -1,0 +1,371 @@
+@page {
+    size: letter;
+    margin: 1in;
+
+    @top-left {
+        content: element(headerLeft);
+        vertical-align: middle;
+    }
+
+    @top-right {
+        content: element(headerRight);
+    }
+
+    @bottom-right {
+        content: counter(page);
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 24px;
+        text-align: right;
+        color: #000;
+        vertical-align: top;
+        padding-top: 0.25in;
+    }
+
+    @bottom-left {
+        content: element(footerLeft);
+        vertical-align: top;
+        padding-top: 0.25in;
+    }
+
+    @footnote {
+        border-top: 1px solid #B2AB93;
+        padding-top: 0.125in;
+        margin-top: 0.25in;
+        margin-bottom: 0.25in;
+    }
+}
+
+@media screen, pagedjs-ignore {
+    /* Screen styles only--will not apply to print document */
+    body {
+        background-color: #F9F8F7;
+        background-image: linear-gradient(180deg, rgba(226, 246, 236, 0) 0%, rgba(226, 246, 236, 0.4) 100%);
+        background-attachment: fixed;
+    }
+
+    .pagedjs_pages {
+        margin: 0;
+    }
+
+    .pagedjs_page {
+        background-color: white;
+        margin: 1em;
+        border-radius: 8px;
+        width: max-content;
+    }
+}
+
+/* Header content */
+.pagedjs_margin-top-left.hasContent {
+    align-items: flex-end;
+}
+
+.pagedjs_margin-top-right.hasContent {
+    align-items: flex-end;
+}
+
+.pagedjs_margin-top-right p {
+    color: #262626;
+    font-size: 10.5pt;
+    margin: 0;
+    padding: 0;
+}
+
+.pagedjs_margin-top-left img {
+    
+}
+
+.header-left {
+    position: running(headerLeft);
+}
+
+.header-right p {
+    position: running(headerRight);
+}
+
+.footer-left {
+    position: running(footerLeft);
+}
+
+.footer-left p {
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 20px;
+    color: #7F775B;
+    margin: 0;
+    padding: 0;
+}
+
+/* Main Content */
+:root {
+    --pagedjs-padding-top: 0.5in;
+}
+
+body {
+    font-family: "Arial";
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #2C8658;
+    margin: 0 0 0.25in 0;
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 36px;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 32px;
+}
+
+h3 {
+    font-size: 11pt;
+    font-weight: 400;
+}
+
+.section-number {
+    display: inline-block;
+}
+
+.section-body {
+    width: 100%;
+    white-space: pre-wrap;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: left;
+}
+
+p {
+    color: #000;
+    font-size: 10.5pt;
+    font-family: "Arial";
+    line-height: 1.3;
+    margin: 0 0 8pt 0;
+    padding-left: 0.5in;
+}
+
+.footnote {
+    float: footnote;
+    list-style-position: outside;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    text-align: left;
+    margin-left: 15px;
+}
+
+.footnote::marker {
+    vertical-align: super;  
+    font-variant-position: super;
+}
+
+.footnote::after {
+    vertical-align: super;
+    font-variant-position: super;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+}
+
+.image-container {
+    margin-top: 20px;
+    text-align: center;
+    display: block;
+    break-before: auto;
+    break-after: auto;
+    break-inside: avoid;
+}
+
+.caption {
+    padding-left: 0;
+    padding-top: 8pt;
+}
+
+/* Tables */
+table {
+    table-layout: fixed;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+table, th, td {
+    border: 1px solid #B2AB93;
+    border-collapse: collapse;
+}
+
+.table-name {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 16px;
+    text-align: left;
+    margin: 0.25in 0 0.125in 0;
+    padding: 0;
+    color: #2C8658;
+}
+
+th {
+    color: #333025;
+    background-color: #F1F0EC;
+    font-size: 10.5pt;
+    padding: 0.1in;
+}
+
+td {
+    color: #404040;
+    background-color: #fff;
+    font-size: 9.5pt;
+    text-align: left;
+    padding: 0.1in;
+}
+
+/* Title Page */
+#title-page {
+    break-after: page;
+}
+
+#title-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.pagedjs_area [data-split-original] {
+	height: 100%;
+}
+
+#title-page h1 {
+    width: 100%;
+    text-align: center;
+    font-size: 48px;
+    font-weight: bold;
+    line-height: 60px;
+    margin: 1.5in 0 0.5in 0;
+}
+
+#title-page .section-body {
+    font-size: 40px;
+    font-weight: bold;
+    line-height: 52px;
+    color: #2C8658;
+    text-align: center;
+}
+
+#title-page-content-footer {
+    flex-grow: 1;
+    display: flex;
+}
+
+#title-page-content-footer h2 {
+    text-align: center;
+    align-self: flex-end;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 32px;
+}
+
+#title-page .tw-logo-full {
+    width: 112mm;
+}
+
+#title-page .tf-logo {
+    margin-top: 48px;
+    width: 350px;
+}
+
+#title-page table {
+    margin-top: 22pt;
+}
+
+#title-page th {
+    text-align: right;
+    width: 25%;
+}
+
+/* Table of Contents */
+#table-of-contents {
+    break-after: page;
+}
+
+#table-of-contents li a::after {
+    content: target-counter(attr(href), page);
+    float: right;
+}
+
+#table-of-contents h1 {
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 36px;
+    color: #333025;
+    margin: 48px 0;
+}
+
+#table-of-contents ul {
+    padding: 0;
+}
+
+#table-of-contents li {
+    list-style-type: none;
+}
+
+#table-of-contents a {
+    color: #2b3a57;
+    text-decoration: none;
+}
+
+#table-of-contents .toc-major {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+}
+
+#table-of-contents .toc-minor {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    padding-left: 0.25in;
+}
+
+/** @see https://pagedjs.org/posts/build-a-table-of-contents-from-your-html/ */
+/* hack for leaders */
+#list-toc-generated {
+    overflow-x: hidden;
+}
+
+/* fake leading */
+#list-toc-generated .toc-element::after {
+    content: ".............................................."
+        ".............................................."
+        ".............................................." "........";
+    float: left;
+    width: 0;
+    padding-left: 5px;
+    letter-spacing: 2px;
+}
+
+#list-toc-generated .toc-element {
+    display: flex;
+}
+
+#list-toc-generated .toc-element a::after {
+    position: absolute;
+    right: 0;
+    background-color: white;
+    padding-left: 6px;
+}
+
+#list-toc-generated .toc-element a {
+    right: 0;
+}
+/*****************************************************************************/

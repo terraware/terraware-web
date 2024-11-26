@@ -14,6 +14,7 @@ export type PlotObservations = ObservationMonitoringPlotResults & {
 };
 
 export const selectObservationMonitoringPlot = createSelector(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   [selectObservationPlantingZone, (state, params, defaultTimeZone) => params],
   (observationPlantingZone, params) =>
     observationPlantingZone?.plantingSubzones

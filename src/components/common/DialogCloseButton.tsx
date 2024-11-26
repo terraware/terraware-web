@@ -1,28 +1,26 @@
 import React from 'react';
 
 import { Close } from '@mui/icons-material';
-import { IconButton } from '@mui/material';
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { IconButton, SxProps, useTheme } from '@mui/material';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  closeButton: {
+export interface Props {
+  onClick: () => void;
+  sx?: SxProps;
+}
+
+export default function DialogCloseButton({ onClick, sx }: Props): JSX.Element {
+  const theme = useTheme();
+
+  const _sx: SxProps = {
     position: 'absolute',
     right: theme.spacing(1),
     top: theme.spacing(1),
     color: theme.palette.neutral[600],
-  },
-}));
-
-export interface Props {
-  onClick: () => void;
-}
-
-export default function DialogCloseButton({ onClick }: Props): JSX.Element {
-  const classes = useStyles();
+    ...sx,
+  };
 
   return (
-    <IconButton aria-label='close' className={classes.closeButton} onClick={onClick}>
+    <IconButton aria-label='close' onClick={onClick} sx={_sx}>
       <Close />
     </IconButton>
   );

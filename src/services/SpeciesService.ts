@@ -1,7 +1,7 @@
 import { paths } from 'src/api/types/generated-schema';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
 import { FieldNodePayload, SearchRequestPayload, SearchResponseElement } from 'src/types/Search';
-import { Species, SpeciesDetails, SuggestedSpecies } from 'src/types/Species';
+import { MergeOtherSpeciesPayload, Species, SpeciesDetails, SuggestedSpecies } from 'src/types/Species';
 import { parseSearchTerm } from 'src/utils/search';
 
 import HttpService, { Response, ServerData } from './HttpService';
@@ -57,6 +57,7 @@ const SPECIES_UPLOAD_RESOLVE_ENDPOINT = '/api/v1/species/uploads/{uploadId}/reso
 const SPECIES_UPLOAD_PROBLEM = '/api/v1/species/problems/{problemId}';
 const SPECIES_DETAILS_ENDPOINT = '/api/v1/species/lookup/details';
 const SPECIES_NAMES_ENDPOINT = '/api/v1/species/lookup/names';
+const MERGE_OTHER_SPECIES_ENDPOINT = '/api/v1/tracking/observations/{observationId}/mergeOtherSpecies';
 
 type CreateSpeciesRequestPayload = paths[typeof SPECIES_ENDPOINT]['post']['requestBody']['content']['application/json'];
 type UpdateSpeciesRequestPayload =
@@ -73,6 +74,7 @@ const httpSpecies = HttpService.root(SPECIES_ENDPOINT);
 const httpSpeciesId = HttpService.root(SPECIES_ID_ENDPOINT);
 const httpSpeciesDetails = HttpService.root(SPECIES_DETAILS_ENDPOINT);
 const httpSpeciesNames = HttpService.root(SPECIES_NAMES_ENDPOINT);
+const httpMergeOtherSpecies = HttpService.root(MERGE_OTHER_SPECIES_ENDPOINT);
 
 /**
  * create a species
@@ -82,12 +84,18 @@ const createSpecies = async (species: Omit<Species, 'id'>, organizationId: numbe
     ecosystemTypes: species.ecosystemTypes,
     commonName: species.commonName,
     conservationCategory: species.conservationCategory,
+    ecologicalRoleKnown: species.ecologicalRoleKnown,
     familyName: species.familyName,
-    growthForm: species.growthForm,
+    growthForms: species.growthForms,
+    localUsesKnown: species.localUsesKnown,
+    nativeEcosystem: species.nativeEcosystem,
     organizationId,
+    otherFacts: species.otherFacts,
+    plantMaterialSourcingMethods: species.plantMaterialSourcingMethods,
     rare: species.rare,
     scientificName: species.scientificName,
     seedStorageBehavior: species.seedStorageBehavior,
+    successionalGroups: species.successionalGroups,
   };
 
   const serverResponse: Response = await httpSpecies.post({ entity });
@@ -110,7 +118,17 @@ const getSpecies = async (speciesId: number, organizationId: number): Promise<Sp
       params,
       urlReplacements: { '{speciesId}': speciesId.toString() },
     },
-    (data) => ({ species: data?.species })
+    (data) => {
+      if (!data?.species) {
+        return {} as SpeciesIdData;
+      }
+
+      const speciesData: SpeciesIdData = {
+        species: data.species,
+      };
+
+      return speciesData;
+    }
   );
 
   return response;
@@ -121,15 +139,27 @@ const getSpecies = async (speciesId: number, organizationId: number): Promise<Sp
  */
 const updateSpecies = async (species: Species, organizationId: number): Promise<Response> => {
   const entity: UpdateSpeciesRequestPayload = {
+    averageWoodDensity: species.averageWoodDensity,
     ecosystemTypes: species.ecosystemTypes,
     commonName: species.commonName,
     conservationCategory: species.conservationCategory,
+    dbhSource: species.dbhSource,
+    dbhValue: species.dbhValue,
+    ecologicalRoleKnown: species.ecologicalRoleKnown,
     familyName: species.familyName,
-    growthForm: species.growthForm,
+    growthForms: species.growthForms,
+    heightAtMaturitySource: species.heightAtMaturitySource,
+    heightAtMaturityValue: species.heightAtMaturityValue,
+    localUsesKnown: species.localUsesKnown,
+    nativeEcosystem: species.nativeEcosystem,
     organizationId,
+    otherFacts: species.otherFacts,
+    plantMaterialSourcingMethods: species.plantMaterialSourcingMethods,
     rare: species.rare,
     scientificName: species.scientificName,
     seedStorageBehavior: species.seedStorageBehavior,
+    successionalGroups: species.successionalGroups,
+    woodDensityLevel: species.woodDensityLevel,
   };
 
   return await httpSpeciesId.put({
@@ -342,7 +372,7 @@ const suggestSpecies = async (organizationId: number, query: string): Promise<Su
     });
   }
 
-  return (await SearchService.search(params)) as SuggestedSpecies[] | null;
+  return await SearchService.search(params);
 };
 
 const getSpeciesProjects = (
@@ -376,6 +406,19 @@ const getSpeciesProjects = (
   return SearchService.search<SpeciesProjectsSearchResponse>(params);
 };
 
+const mergeOtherSpecies = (
+  mergeOtherSpeciesPayload: MergeOtherSpeciesPayload,
+  observationId: number
+): Promise<Response> => {
+  const urlReplacements = {
+    '{observationId}': `${observationId}`,
+  };
+  return httpMergeOtherSpecies.post({
+    urlReplacements,
+    entity: mergeOtherSpeciesPayload,
+  });
+};
+
 /**
  * Exported functions
  */
@@ -391,6 +434,7 @@ const SpeciesService = {
   getSpeciesProjects,
   getSpeciesUploadStatus,
   ignoreProblemSuggestion,
+  mergeOtherSpecies,
   resolveSpeciesUpload,
   suggestSpecies,
   updateSpecies,

@@ -1,12 +1,11 @@
-import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Typography } from '@mui/material';
 import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
 
 import TextWithLink from 'src/components/common/TextWithLink';
 import { APP_PATHS } from 'src/constants';
-import { useDocLinks } from 'src/docLinks';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import { TrackingService } from 'src/services';
@@ -22,9 +21,8 @@ export type DeletePlantingSiteModalProps = {
 export default function DeletePlantingSiteModal(props: DeletePlantingSiteModalProps): JSX.Element {
   const { onClose, plantingSite } = props;
   const [busy, setBusy] = useState<boolean>(false);
-  const history = useHistory();
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
-  const docLinks = useDocLinks();
   const hasPlantings = useAppSelector((state) => selectPlantingsForSite(state, plantingSite.id)).length > 0;
 
   const deleteHandler = async () => {
@@ -33,7 +31,7 @@ export default function DeletePlantingSiteModal(props: DeletePlantingSiteModalPr
     setBusy(false);
     if (response.requestSucceeded) {
       snackbar.toastSuccess(strings.PLANTING_SITE_DELETED);
-      history.push(APP_PATHS.PLANTING_SITES);
+      navigate(APP_PATHS.PLANTING_SITES);
     } else {
       snackbar.toastError();
     }
@@ -73,7 +71,7 @@ export default function DeletePlantingSiteModal(props: DeletePlantingSiteModalPr
       >
         <Typography sx={{ paddingTop: 3 }}>
           {hasPlantings ? (
-            <TextWithLink href={docLinks.contact_us} text={strings.DELETE_PLANTING_SITE_CONTACT_US} />
+            <TextWithLink href={APP_PATHS.HELP_SUPPORT} text={strings.DELETE_PLANTING_SITE_CONTACT_US} />
           ) : (
             strings.ARE_YOU_SURE
           )}

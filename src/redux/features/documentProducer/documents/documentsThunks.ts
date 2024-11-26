@@ -2,21 +2,19 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import DocumentService from 'src/services/documentProducer/DocumentService';
 import strings from 'src/strings';
+import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import {
   CreateDocumentPayload,
   CreateSavedDocVersionPayload,
-  DocumentHistoryCreatedPayload,
-  DocumentHistoryEditedPayload,
-  DocumentHistorySavedPayload,
   UpdateDocumentPayload,
   UpdateSavedDocVersionPayload,
   UpgradeManifestPayload,
 } from 'src/types/documentProducer/Document';
 
-export const requestGetDocument = createAsyncThunk('getDocument', async (id: number, { rejectWithValue }) => {
-  const response = await DocumentService.getDocument(id);
-  if (response.requestSucceeded && response.data?.pdd) {
-    return response.data.pdd;
+export const requestGetDocument = createAsyncThunk('getDocument', async (documentId: number, { rejectWithValue }) => {
+  const response = await DocumentService.getDocument(documentId);
+  if (response.requestSucceeded && response.data?.document) {
+    return response.data.document;
   }
 
   return rejectWithValue(response.error || strings.GENERIC_ERROR);
@@ -24,19 +22,27 @@ export const requestGetDocument = createAsyncThunk('getDocument', async (id: num
 
 export const requestListDocuments = createAsyncThunk('listDocuments', async (_, { rejectWithValue }) => {
   const response = await DocumentService.getDocuments();
-  if (response.requestSucceeded && response.data?.pdds) {
-    return response.data.pdds;
+  if (response.requestSucceeded && response.data?.documents) {
+    return response.data.documents;
   }
 
   return rejectWithValue(response.error || strings.GENERIC_ERROR);
 });
 
+export const requestSearchDocuments = createAsyncThunk(
+  'searchDocuments',
+  async (request: { locale: string | null; search: SearchNodePayload; searchSortOrder: SearchSortOrder }) => {
+    const response = await DocumentService.searchDocuments(request);
+    return response;
+  }
+);
+
 export const requestCreateDocument = createAsyncThunk(
   'createDocument',
-  async (pdd: CreateDocumentPayload, { rejectWithValue }) => {
-    const response = await DocumentService.createDocument(pdd);
-    if (response.requestSucceeded && response.data?.pdd) {
-      return response.data.pdd;
+  async (document: CreateDocumentPayload, { rejectWithValue }) => {
+    const response = await DocumentService.createDocument(document);
+    if (response.requestSucceeded && response.data?.document) {
+      return response.data.document;
     }
 
     return rejectWithValue(response.error || strings.GENERIC_ERROR);
@@ -80,11 +86,7 @@ export const requestUpgradeManifest = createAsyncThunk(
 export const requestListHistory = createAsyncThunk('listHistory', async (documentId: number, { rejectWithValue }) => {
   const response = await DocumentService.listHistory(documentId);
   if (response.requestSucceeded && response.data?.history) {
-    return response.data.history as (
-      | DocumentHistoryEditedPayload
-      | DocumentHistorySavedPayload
-      | DocumentHistoryCreatedPayload
-    )[];
+    return response.data.history;
   }
 
   return rejectWithValue(response.error || strings.GENERIC_ERROR);

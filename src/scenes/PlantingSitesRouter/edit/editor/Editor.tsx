@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { BusySpinner, Button, Message } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -11,7 +10,6 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TextWithLink from 'src/components/common/TextWithLink';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
-import { useDocLinks } from 'src/docLinks';
 import { useLocalization } from 'src/providers';
 import useDraftPlantingSiteCreate from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteCreate';
 import useDraftPlantingSiteUpdate from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteUpdate';
@@ -35,14 +33,6 @@ import { OnValidate } from './types';
 export type EditorProps = {
   site: DraftPlantingSite;
 };
-
-const useStyles = makeStyles(() => ({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    flexGrow: 1,
-  },
-}));
 
 /**
  * Check if user has already completed certain steps and mark them as completed.
@@ -77,10 +67,8 @@ export default function Editor(props: EditorProps): JSX.Element {
   const { siteEditStep, siteType } = site;
   const { activeLocale } = useLocalization();
   const contentRef = useRef(null);
-  const history = useHistory();
+  const navigate = useNavigate();
   const theme = useTheme();
-  const classes = useStyles();
-  const docLinks = useDocLinks();
   const { isMobile } = useDeviceInfo();
 
   const [showPageMessage, setShowPageMessage] = useState<boolean>(true);
@@ -167,9 +155,9 @@ export default function Editor(props: EditorProps): JSX.Element {
 
   const goToPlantingSites = () => {
     if (plantingSite.id !== -1) {
-      history.push(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${plantingSite.id}`));
+      navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${plantingSite.id}`));
     } else {
-      history.push(APP_PATHS.PLANTING_SITES);
+      navigate(APP_PATHS.PLANTING_SITES);
     }
   };
 
@@ -264,13 +252,13 @@ export default function Editor(props: EditorProps): JSX.Element {
     if (showPageMessage && !isSimpleSite && currentStep === 'details') {
       return (
         <Box>
-          <TextWithLink href={docLinks.contact_us} isExternal text={strings.PLANTING_SITE_CREATE_DETAILED_HELP} />
+          <TextWithLink href={APP_PATHS.HELP_SUPPORT} text={strings.PLANTING_SITE_CREATE_DETAILED_HELP} />
         </Box>
       );
     } else {
       return null;
     }
-  }, [currentStep, docLinks, isSimpleSite, showPageMessage]);
+  }, [currentStep, isSimpleSite, showPageMessage]);
 
   return (
     <TfMain>
@@ -312,7 +300,11 @@ export default function Editor(props: EditorProps): JSX.Element {
           onSaveAndClose={() => onSave(true)}
           onStartOver={() => setShowStartOver(true)}
           steps={steps}
-          className={classes.container}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
+          }}
         >
           {pageMessage && (
             <Box marginTop={theme.spacing(6)}>

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-import { Grid, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Grid, useTheme } from '@mui/material';
 
 import { useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';
@@ -12,16 +11,6 @@ import DialogBox from '../../components/common/DialogBox/DialogBox';
 import Select from '../../components/common/Select/Select';
 import Button from '../../components/common/button/Button';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  spacing: {
-    marginRight: theme.spacing(2),
-  },
-  mainGrid: {
-    textAlign: 'left',
-    marginTop: Number(theme.spacing(2)) / 2,
-  },
-}));
-
 export type SelectSeedBankProps = {
   open: boolean;
   onClose: (facility?: Facility) => void;
@@ -29,7 +18,7 @@ export type SelectSeedBankProps = {
 
 export default function SelectSeedBankModal(props: SelectSeedBankProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const classes = useStyles();
+  const theme = useTheme();
   const { open, onClose } = props;
   const [selectedFacility, setSelectedFacility] = useState<Facility | undefined>();
 
@@ -60,14 +49,21 @@ export default function SelectSeedBankModal(props: SelectSeedBankProps): JSX.Ele
           label={strings.CANCEL}
           priority='secondary'
           type='passive'
-          className={classes.spacing}
           key='button-1'
+          style={{ marginRight: theme.spacing(2) }}
         />,
         <Button onClick={onSelect} id='select-seed-bank' label={strings.SELECT_BUTTON} key='button-2' />,
       ]}
       message={strings.SELECT_SEED_BANK_INFO}
     >
-      <Grid container spacing={4} className={classes.mainGrid}>
+      <Grid
+        container
+        spacing={4}
+        sx={{
+          textAlign: 'left',
+          marginTop: Number(theme.spacing(2)) / 2,
+        }}
+      >
         <Grid item xs={12}>
           <Select
             id='seedBank'
@@ -75,7 +71,7 @@ export default function SelectSeedBankModal(props: SelectSeedBankProps): JSX.Ele
             onChange={onChange}
             options={availableFacilities
               .filter((facility) => !!facility)
-              .map((facility) => facility!.name)
+              .map((facility) => facility.name)
               .sort()}
             label={strings.SEED_BANK}
             aria-label={strings.SELECT_SEED_BANK}

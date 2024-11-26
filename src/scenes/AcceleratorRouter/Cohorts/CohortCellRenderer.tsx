@@ -14,14 +14,14 @@ export default function CohortCellRenderer(props: RendererProps<TableRowType>): 
       <CellRenderer
         index={index}
         column={column}
-        value={<Link to={APP_PATHS.ACCELERATOR_COHORTS_VIEW.replace(':cohortId', row.id)}>{value as string}</Link>}
+        value={
+          <Link fontSize='16px' to={APP_PATHS.ACCELERATOR_COHORTS_VIEW.replace(':cohortId', row.id)}>
+            {value as string}
+          </Link>
+        }
         row={row}
       />
     );
-  }
-
-  if (column.key === 'participantIds') {
-    return <CellRenderer {...props} value={(value as string[])?.length?.toString() || '0'} />;
   }
 
   if (column.key === 'phase') {

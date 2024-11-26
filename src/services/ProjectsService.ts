@@ -16,6 +16,8 @@ const PROJECT_ASSIGN_ENDPOINT = '/api/v1/projects/{id}/assign';
 type ListProjectsResponsePayload =
   paths[typeof PROJECTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
+type CreateProjectResponsePayload =
+  paths[typeof PROJECTS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 type GetProjectResponsePayload = paths[typeof PROJECT_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 export type UpdateProjectResponsePayload =
   paths[typeof PROJECT_ENDPOINT]['put']['responses'][200]['content']['application/json'];
@@ -115,8 +117,8 @@ const searchProjects = async (organizationId: number, query?: string): Promise<P
 /**
  * Create a project
  */
-const createProject = (project: CreateProjectRequest): Promise<Response> =>
-  httpProjects.post({
+const createProject = (project: CreateProjectRequest): Promise<Response2<CreateProjectResponsePayload>> =>
+  httpProjects.post2({
     entity: project,
   });
 

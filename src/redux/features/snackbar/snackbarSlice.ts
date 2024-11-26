@@ -41,4 +41,8 @@ export const snackbarSlice = createSlice({
 
 export const { sendSnackbar, clearSnackbar } = snackbarSlice.actions;
 
-export const snackbarReducer = snackbarSlice.reducer;
+const snackbarReducers = {
+  snackbar: snackbarSlice.reducer,
+};
+
+export default snackbarReducers;

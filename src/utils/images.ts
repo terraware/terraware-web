@@ -1,5 +1,5 @@
-const getImagePath = (pddId: number, imageId: number, maxHeight?: number, maxWidth?: number): string => {
-  let path = `/api/v1/pdds/${pddId}/images/${imageId}`;
+const getImagePath = (projectId: number, imageId: number, maxHeight?: number, maxWidth?: number): string => {
+  let path = `/api/v1/document-producer/projects/${projectId}/images/${imageId}`;
 
   if (maxHeight !== undefined || maxWidth !== undefined) {
     path += '?';
