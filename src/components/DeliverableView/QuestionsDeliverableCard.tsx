@@ -20,6 +20,7 @@ import {
   requestListSpecificVariables,
 } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue } from 'src/types/documentProducer/VariableValue';
 import {
@@ -61,7 +62,7 @@ const QuestionBox = ({
       </Box>
       {hideId !== true && (
         <Typography fontSize={'14px'} fontWeight={'400'} lineHeight={'20px'}>
-          {`ID#: ${variable.stableId}`}
+          {`${strings.ID}#: ${variable.stableId}`}
         </Typography>
       )}
       <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>
