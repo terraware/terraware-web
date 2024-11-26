@@ -1,3 +1,6 @@
+10a7ecd0daa Update dependency react-redux to v9 (#1882)
+9cea0d78e2e Update dependency jwt-decode to v4 (#1758)
+3d062c0a343 Update dependency mapbox-gl to v3 (#1841)
 5d72c99fcf9 Update dependency express to v4.20.0 [SECURITY] (#3211)
 2dd7a08d1e6 SW-6236 - follow up - Fix layering order (#3362)
 49691e2c7b8 SW-6292 Planting sites sorting should not be case sensitive (#3361)
