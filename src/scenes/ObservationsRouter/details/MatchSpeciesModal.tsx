@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import SpeciesSelector from 'src/components/common/SpeciesSelector';
@@ -62,6 +62,9 @@ export default function MatchSpeciesModal(props: MatchSpeciesModalProps): JSX.El
       ]}
       scrolled
     >
+      <Box>
+        <Typography>{strings.MATCH_SPECIES_MODAL_DESCRIPTION} </Typography>
+      </Box>
       <Grid container textAlign={'left'} spacing={1}>
         <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingRight: 1 }}>
           <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' fontWeight={400}>
@@ -134,7 +137,7 @@ function MatchSpeciesRow(props: MatchSpeciesRowProps): JSX.Element {
         paddingBottom={2}
         paddingTop={index === 0 ? 1 : 2}
       >
-        <SpeciesSelector record={record} setRecord={setRecord} hideLabel />
+        <SpeciesSelector record={record} setRecord={setRecord} hideLabel id={`speciesSelector${index}`} />
       </Grid>
     </>
   );
