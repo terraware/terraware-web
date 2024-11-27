@@ -1,3 +1,6 @@
+29448fded24 SW-6300 SW-6301 Select (dropdown) menu doesn't show any values for first match candidate and add clarifying text (#3365)
+5c3a242ad87 SW-6303 Can’t save edits to numbers and dates in document producer (#3366)
+8c235fa0d7b SW-6304 Need to refresh to see section internal comments in document producer (#3367)
 002470d342d SW-6232 Add mapbox token to session storage with 30 minute expiration (#3344)
 361e6bb7bd8 Updated translations from Phrase (#3364)
 adb90ec4cc8 Update dependency fork-ts-checker-webpack-plugin to v9 (#1725)
