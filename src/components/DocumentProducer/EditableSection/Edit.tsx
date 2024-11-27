@@ -15,7 +15,7 @@ import InsertOptionsDropdown from './InsertOptionsDropdown';
 import TextChunk from './TextChunk';
 import TextVariable from './TextVariable';
 import { editorValueFromVariableValue, variableValueFromEditorValue } from './helpers';
-import { SectionElement, isCustomText, isSectionElement, isTextElement, isVariableElement } from './types';
+import { isEmptyDescendant, isSectionElement, isTextElement, isVariableElement } from './types';
 
 type EditableSectionEditProps = {
   section: Section;
@@ -63,59 +63,7 @@ const SectionEdit = ({
     (values: Descendant[]) => {
       const newVariableValues: VariableValueValue[] = [];
 
-      // An "empty" descendant is either a TextElement with no children that have text, or an empty CustomText
-      // A VariableElement is never considered "empty"
-      const isEmptyDescendant = (value: Descendant): boolean => {
-        // If https://tc39.es/proposal-pattern-matching/ ever lands, I can stop using this pattern!
-        switch (true) {
-          case isVariableElement(value):
-            return false;
-
-          case isSectionElement(value):
-          case isTextElement(value):
-            if (value.children.length > 1) {
-              return false;
-            }
-
-            const onlyChild = value.children[0];
-            return isEmptyDescendant(onlyChild);
-
-          case isCustomText(value):
-            return value.text === '';
-
-          default:
-            return true;
-        }
-      };
-
-      // If there are adjacent values, and neither is an "empty" value, we need to insert a line break.
-      // This is because when you add a line break in Slate, the first thing it does is split the text
-      // into multiple values. This causes it to seem like the first line break isn't added.
-      const adjustedValues = values.flatMap((value, index) => {
-        const nextDescendant = values[index + 1];
-
-        // If this is the last descendant, no need to check
-        if (!nextDescendant) {
-          return value;
-        }
-
-        if (!(isEmptyDescendant(value) && isEmptyDescendant(nextDescendant))) {
-          // Since neither of these are empty, this is probably the first line break added, which is
-          // causing Slate to split the value with children into multiple values with multiple children.
-          // In the UI this makes it seem like there is no line break added, so we will explicitly add the
-          // line break ourselves
-          const emptyValue: SectionElement = {
-            type: 'section',
-            children: [{ type: 'text', children: [{ text: '\n' }] }],
-          };
-
-          return [value, emptyValue];
-        }
-
-        return value;
-      });
-
-      adjustedValues.forEach((value: Descendant) => {
+      values.forEach((value: Descendant) => {
         if (!isSectionElement(value)) {
           // We shouldn't ever hit here, we are only using SectionElement as top level elements
           return;

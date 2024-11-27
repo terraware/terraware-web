@@ -1,4 +1,4 @@
-import { BaseEditor, Element as SlateElement } from 'slate';
+import { BaseEditor, Descendant, Element as SlateElement } from 'slate';
 import { ReactEditor } from 'slate-react';
 
 // Required type definitions for slatejs (https://docs.slatejs.org/concepts/12-typescript):
@@ -46,3 +46,28 @@ declare module 'slate' {
     Text: CustomText;
   }
 }
+
+// An "empty" descendant is either a TextElement with no children that have text, or an empty CustomText
+// A VariableElement is never considered "empty"
+export const isEmptyDescendant = (value: Descendant): boolean => {
+  // If https://tc39.es/proposal-pattern-matching/ ever lands, I can stop using this pattern!
+  switch (true) {
+    case isVariableElement(value):
+      return false;
+
+    case isSectionElement(value):
+    case isTextElement(value):
+      if (value.children.length > 1) {
+        return false;
+      }
+
+      const onlyChild = value.children[0];
+      return isEmptyDescendant(onlyChild);
+
+    case isCustomText(value):
+      return value.text === '';
+
+    default:
+      return true;
+  }
+};
