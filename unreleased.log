@@ -1,3 +1,4 @@
+002470d342d SW-6232 Add mapbox token to session storage with 30 minute expiration (#3344)
 361e6bb7bd8 Updated translations from Phrase (#3364)
 adb90ec4cc8 Update dependency fork-ts-checker-webpack-plugin to v9 (#1725)
 6cbf795ffcd Updated translations from Phrase (#3353)

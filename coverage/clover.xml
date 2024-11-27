@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1732721272560" clover="3.2.0">
-  <project timestamp="1732721272560" name="All files">
-    <metrics statements="26650" coveredstatements="1061" conditionals="17929" coveredconditionals="282" methods="8223" coveredmethods="176" elements="52802" coveredelements="1519" complexity="0" loc="26650" ncloc="26650" packages="238" files="1130" classes="1130"/>
+<coverage generated="1732726002622" clover="3.2.0">
+  <project timestamp="1732726002622" name="All files">
+    <metrics statements="26672" coveredstatements="1077" conditionals="17941" coveredconditionals="290" methods="8226" coveredmethods="179" elements="52839" coveredelements="1546" complexity="0" loc="26672" ncloc="26672" packages="239" files="1131" classes="1131"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -29974,7 +29974,7 @@
       </file>
     </package>
     <package name="src.utils">
-      <metrics statements="490" coveredstatements="159" conditionals="262" coveredconditionals="60" methods="160" coveredmethods="33"/>
+      <metrics statements="470" coveredstatements="159" conditionals="258" coveredconditionals="60" methods="155" coveredmethods="33"/>
       <file name="acl.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/acl.ts">
         <metrics statements="32" coveredstatements="28" conditionals="16" coveredconditionals="11" methods="11" coveredmethods="6"/>
         <line num="65" count="1" type="stmt"/>
@@ -30392,29 +30392,6 @@
         <line num="88" count="0" type="stmt"/>
         <line num="98" count="0" type="stmt"/>
       </file>
-      <file name="useMapboxToken.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/useMapboxToken.ts">
-        <metrics statements="20" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="5" coveredmethods="0"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="40" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
-      </file>
       <file name="useNumber.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/useNumber.ts">
         <metrics statements="11" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="5" count="0" type="cond" truecount="0" falsecount="4"/>
@@ -30754,6 +30731,57 @@
         <line num="70" count="0" type="stmt"/>
         <line num="71" count="0" type="stmt"/>
         <line num="74" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.utils.useMapboxToken">
+      <metrics statements="42" coveredstatements="16" conditionals="16" coveredconditionals="8" methods="8" coveredmethods="3"/>
+      <file name="index.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/useMapboxToken/index.ts">
+        <metrics statements="26" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="42" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="57" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+      </file>
+      <file name="storage.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/useMapboxToken/storage.ts">
+        <metrics statements="16" coveredstatements="16" conditionals="8" coveredconditionals="8" methods="3" coveredmethods="3"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="6" type="stmt"/>
+        <line num="14" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="8" type="stmt"/>
+        <line num="20" count="8" type="cond" truecount="2" falsecount="0"/>
+        <line num="22" count="6" type="cond" truecount="4" falsecount="0"/>
+        <line num="23" count="4" type="stmt"/>
+        <line num="26" count="2" type="stmt"/>
+        <line num="28" count="2" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
       </file>
     </package>
   </project>
