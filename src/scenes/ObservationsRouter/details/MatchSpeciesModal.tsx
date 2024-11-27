@@ -134,7 +134,7 @@ function MatchSpeciesRow(props: MatchSpeciesRowProps): JSX.Element {
         paddingBottom={2}
         paddingTop={index === 0 ? 1 : 2}
       >
-        <SpeciesSelector record={record} setRecord={setRecord} hideLabel />
+        <SpeciesSelector record={record} setRecord={setRecord} hideLabel id={`speciesSelector${index}`} />
       </Grid>
     </>
   );
