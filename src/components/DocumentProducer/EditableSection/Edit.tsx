@@ -171,12 +171,11 @@ const SectionEdit = ({
         }
 
         if (isKeyHotkey('cmd+b', nativeEvent)) {
-          // TODO We would need to figure out how to "unbold" the text.
-          // This sets properties onto the text that we need to use when rendering to achieve the desired effect
           const range = Editor.unhangRange(editor, editor.selection, { voids: true });
           event.preventDefault();
           Transforms.setNodes(
             editor,
+            // This property must be considered in rendering or this does nothing
             { bold: !Editor.marks(editor)?.bold },
             {
               at: range,
@@ -189,7 +188,7 @@ const SectionEdit = ({
 
         if (isKeyHotkey('cmd+i', nativeEvent)) {
           event.preventDefault();
-          // TODO
+          // TODO implement italics?
           return;
         }
       }
