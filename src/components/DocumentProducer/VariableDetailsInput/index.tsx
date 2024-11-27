@@ -139,7 +139,7 @@ const VariableDetailsInput = ({
       }
 
       if (variable.type === 'Number') {
-        if (values) {
+        if (values && values.length > 0) {
           const numberValues = values as VariableValueNumberValue[];
           const newValues = numberValues.map((nv) => ({ ...nv }));
           if (id === 'citation') {
@@ -178,7 +178,7 @@ const VariableDetailsInput = ({
         }
       }
       if (variable.type === 'Date') {
-        if (values) {
+        if (values && values.length > 0) {
           const dateValues = values as VariableValueDateValue[];
           const newValues = dateValues.map((dv) => ({ ...dv }));
           if (id === 'citation') {
