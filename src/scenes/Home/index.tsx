@@ -7,6 +7,7 @@ import { OrganizationUserService } from 'src/services';
 import { SpeciesService } from 'src/services';
 import { Species } from 'src/types/Species';
 import { OrganizationUser } from 'src/types/User';
+import { isAdmin } from 'src/utils/organization';
 
 import OnboardingHomeView from './OnboardingHomeView';
 import ParticipantHomeView from './ParticipantHomeView';
@@ -20,9 +21,11 @@ export default function Home(): JSX.Element {
 
   useEffect(() => {
     const populatePeople = async () => {
-      const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
-      if (response.requestSucceeded) {
-        setPeople(response.users);
+      if (isAdmin(selectedOrganization)) {
+        const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
+        if (response.requestSucceeded) {
+          setPeople(response.users);
+        }
       }
     };
     populatePeople();
@@ -40,10 +43,10 @@ export default function Home(): JSX.Element {
   }, [selectedOrganization.id]);
 
   const homeScreen = useMemo((): JSX.Element => {
-    if (orgHasModules === undefined || people === undefined || allSpecies === undefined) {
+    if (orgHasModules === undefined || allSpecies === undefined) {
       return <Page isLoading={true} />;
     }
-    if (people.length === 1 || allSpecies.length === 0) {
+    if (people?.length === 1 || allSpecies.length === 0) {
       return <OnboardingHomeView />;
     } else {
       return orgHasModules ? <ParticipantHomeView /> : <TerrawareHomeView />;

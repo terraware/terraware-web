@@ -6,11 +6,16 @@ import { Icon } from '@terraware/web-components';
 import { Props as ButtonProps } from '@terraware/web-components/components/Button/Button';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import Link from 'src/components/common/Link';
 import Button from 'src/components/common/button/Button';
+import { useKnowledgeBaseLinks } from 'src/knowledgeBaseLinks';
+import { useOrganization } from 'src/providers';
 import strings from 'src/strings';
+import { isAdmin } from 'src/utils/organization';
 
 export type OnboardingCardRow = {
   buttonProps?: ButtonProps;
+  secondaryButtonProps?: ButtonProps;
   icon: IconName;
   title: string;
   subtitle: string;
@@ -23,7 +28,9 @@ type OnboardingCardProps = {
 
 const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
   const { isMobile } = useDeviceInfo();
+  const { selectedOrganization } = useOrganization();
   const theme = useTheme();
+  const knowledgeBaseLinks = useKnowledgeBaseLinks();
 
   return (
     <Box
@@ -40,32 +47,36 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
       <Box sx={{ paddingRight: '48px' }}>
         <img alt={strings.TERRAWARE_MOBILE_APP_IMAGE_ALT} src={'/assets/onboarding.png'} />
       </Box>
-      <Box>
-        <Box>
-          <Typography
-            component='p'
-            variant='h6'
-            sx={{
-              color: theme.palette.TwClrTxt,
-              fontSize: '20px',
-              fontWeight: 600,
-              lineHeight: '28px',
-            }}
-          >
-            {strings.GET_STARTED}
-          </Typography>
-          <Typography
-            component='p'
-            variant='h6'
-            sx={{
-              color: theme.palette.TwClrTxt,
-              fontSize: '16px',
-              fontWeight: 400,
-              lineHeight: '24px',
-            }}
-          >
-            {strings.GET_STARTED_SUBTITLE}
-          </Typography>
+      <Box flexBasis={'100%'} alignSelf={'stretch'}>
+        <Box display={'flex'} flexDirection={'column'} height={'100%'}>
+          {isAdmin(selectedOrganization) && (
+            <Box>
+              <Typography
+                component='p'
+                variant='h6'
+                sx={{
+                  color: theme.palette.TwClrTxt,
+                  fontSize: '20px',
+                  fontWeight: 600,
+                  lineHeight: '28px',
+                }}
+              >
+                {strings.GET_STARTED}
+              </Typography>
+              <Typography
+                component='p'
+                variant='h6'
+                sx={{
+                  color: theme.palette.TwClrTxt,
+                  fontSize: '16px',
+                  fontWeight: 400,
+                  lineHeight: '24px',
+                }}
+              >
+                {strings.GET_STARTED_SUBTITLE}
+              </Typography>
+            </Box>
+          )}
           {rows.map((row, index) => (
             <Box
               key={index}
@@ -97,23 +108,25 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                 }}
               ></Box>
               <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                <Box
-                  sx={{
-                    width: '46px',
-                    height: '46px',
-                    borderRadius: '50%',
-                    backgroundColor: theme.palette.TwClrBgBrand,
-                    color: 'white',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    fontSize: '20px',
-                    fontWeight: '700',
-                    marginLeft: '16px',
-                  }}
-                >
-                  {index}
-                </Box>
+                {isAdmin(selectedOrganization) && (
+                  <Box
+                    sx={{
+                      width: '46px',
+                      height: '46px',
+                      borderRadius: '50%',
+                      backgroundColor: theme.palette.TwClrBgBrand,
+                      color: 'white',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      fontSize: '20px',
+                      fontWeight: '700',
+                      marginLeft: '16px',
+                    }}
+                  >
+                    {index + 1}
+                  </Box>
+                )}
                 <Box
                   sx={{
                     background: theme.palette.TwClrBaseGray025,
@@ -173,24 +186,38 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                   sx={{
                     marginLeft: '24px',
                     marginRight: '24px',
-                    width: '150px',
-                    justifyContent: 'right',
+                    width: '25%',
+                    justifyContent: 'center',
                     display: 'flex',
-                    alignItems: 'right',
+                    alignItems: 'center',
                     height: '100%',
                     flexShrink: '0',
                   }}
                 >
                   {row.buttonProps && row.enabled ? (
-                    <Button
-                      priority='primary'
-                      style={{
-                        margin: 0,
-                        width: isMobile ? '100%' : 'auto',
-                      }}
-                      type='productive'
-                      {...row.buttonProps}
-                    />
+                    <Box display='flex' flexDirection='column' alignItems='center'>
+                      <Button
+                        priority='primary'
+                        style={{
+                          marginBottom: '16px',
+                          width: isMobile ? '100%' : 'fit-content',
+                        }}
+                        type='productive'
+                        size='medium'
+                        {...row.buttonProps}
+                      />
+                      {row.secondaryButtonProps && (
+                        <Button
+                          priority='ghost'
+                          style={{
+                            margin: 0,
+                          }}
+                          type='productive'
+                          size='medium'
+                          {...row.secondaryButtonProps}
+                        />
+                      )}
+                    </Box>
                   ) : (
                     <Typography
                       component='p'
@@ -209,6 +236,41 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
               </Box>
             </Box>
           ))}
+          {!isAdmin(selectedOrganization) && (
+            <Box
+              color={theme.palette.TwClrTxt}
+              height='100%'
+              display='flex'
+              justifyContent='center'
+              flexDirection='column'
+            >
+              <Typography textAlign='center'>{strings.ONBOARDING_NON_ADMINS_MESSAGE}</Typography>
+            </Box>
+          )}
+          {!isAdmin(selectedOrganization) && (
+            <Box
+              border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+              borderRadius={2}
+              padding={2}
+              marginTop={'auto'}
+              marginBottom={2}
+            >
+              <Box display={'flex'} paddingBottom={2} alignItems='center'>
+                <Icon name='iconHelp' size='medium' fillColor={theme.palette.TwClrIcn} />
+                <Typography color={theme.palette.TwClrBaseGray800} fontWeight={600} fontSize={'20px'} paddingLeft={1}>
+                  {strings.KNOWLEDGE_BASE}
+                </Typography>
+              </Box>
+              <Typography>
+                {strings.formatString(
+                  strings.DESCRIPTION_KNOWLEDGE_BASE_WITH_LINK,
+                  <Link to={knowledgeBaseLinks['/home']} fontSize={'16px'}>
+                    {strings.KNOWLEDGE_BASE}
+                  </Link>
+                )}
+              </Typography>
+            </Box>
+          )}
         </Box>
       </Box>
     </Box>

@@ -9,10 +9,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import PageHeader from 'src/components/PageHeader';
 import Link from 'src/components/common/Link';
 import TfMain from 'src/components/common/TfMain';
-import {
-  ACCELERATOR_LINK,
-  APP_PATHS,
-} from 'src/constants';
+import { ACCELERATOR_LINK, APP_PATHS } from 'src/constants';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser } from 'src/providers';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
@@ -25,7 +22,7 @@ import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { OrganizationUser } from 'src/types/User';
-import { isAdmin } from 'src/utils/organization';
+import { isAdmin, isContributor, isManagerOrHigher } from 'src/utils/organization';
 
 const OnboardingHomeView = () => {
   const { user } = useUser();
@@ -39,9 +36,11 @@ const OnboardingHomeView = () => {
 
   useEffect(() => {
     const populatePeople = async () => {
-      const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
-      if (response.requestSucceeded) {
-        setPeople(response.users);
+      if (isAdmin(selectedOrganization)) {
+        const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
+        if (response.requestSucceeded) {
+          setPeople(response.users);
+        }
       }
     };
     populatePeople();
@@ -65,40 +64,65 @@ const OnboardingHomeView = () => {
     dispatch(requestObservationsResults(selectedOrganization.id));
   }, [dispatch, selectedOrganization.id]);
 
-  const isLoadingInitialData = useMemo(() => allSpecies === undefined || people === undefined, [allSpecies, people]);
+  const isLoadingInitialData = useMemo(() => allSpecies === undefined, [allSpecies]);
+
+  const markAsComplete = (step: string) => {
+    if (step) {
+      return true;
+    }
+  };
 
   const onboardingCardRows: OnboardingCardRow[] = useMemo(() => {
-    const rows = [
-      {
-        buttonProps: isAdmin(selectedOrganization)
-          ? {
+    const rows = isAdmin(selectedOrganization)
+      ? [
+          {
+            buttonProps: {
               label: strings.ADD_PEOPLE,
               onClick: () => {
                 navigate(APP_PATHS.PEOPLE_NEW);
               },
-            }
-          : undefined,
-        icon: 'seeds' as IconName,
-        title: strings.ADD_PEOPLE,
-        subtitle:
-          'Invite people to your organization who will use Terraware. You can always add more people in your Settings.',
-        enabled: !isLoadingInitialData && people?.length === 1,
-      },
-      {
-        buttonProps: isAdmin(selectedOrganization)
-          ? {
+            },
+            secondaryButtonProps: {
+              label: strings.I_AM_THE_ONLY_PERSON,
+              onClick: () => {
+                markAsComplete('people');
+              },
+            },
+            icon: 'person' as IconName,
+            title: strings.ADD_PEOPLE,
+            subtitle: strings.ADD_PEOPLE_ONBOARDING_DESCRIPTION,
+            enabled: !isLoadingInitialData && people?.length === 1,
+          },
+          {
+            buttonProps: {
               label: strings.ADD_SPECIES,
               onClick: () => {
                 navigate(APP_PATHS.SPECIES_NEW);
               },
-            }
-          : undefined,
-        icon: 'seeds' as IconName,
-        title: strings.ADD_SPECIES,
-        subtitle: 'Manage species that your organization collects and plants.',
-        enabled: !isLoadingInitialData && allSpecies?.length === 0,
-      },
-    ];
+            },
+
+            icon: 'species' as IconName,
+            title: strings.ADD_SPECIES,
+            subtitle: strings.ADD_SPECIES_ONBOARDING_DESCRIPTION,
+            enabled: !isLoadingInitialData && allSpecies?.length === 0,
+          },
+        ]
+      : isManagerOrHigher(selectedOrganization)
+        ? [
+            {
+              buttonProps: {
+                label: strings.ADD_SPECIES,
+                onClick: () => {
+                  navigate(APP_PATHS.SPECIES_NEW);
+                },
+              },
+              icon: 'species' as IconName,
+              title: strings.ADD_SPECIES,
+              subtitle: strings.ADD_SPECIES_ONBOARDING_DESCRIPTION,
+              enabled: !isLoadingInitialData && allSpecies?.length === 0,
+            },
+          ]
+        : [];
 
     return rows;
   }, [allSpecies, people, selectedOrganization]);
@@ -131,35 +155,36 @@ const OnboardingHomeView = () => {
                   <OnboardingCard rows={onboardingCardRows} />
                 </Grid>
 
-
-                <Grid item xs={12}>
-                  <CTACard
-                    buttonsContainerSx={{
-                      width: isMobile ? '100%' : 'auto',
-                    }}
-                    description={strings.formatString(
-                      strings.FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,
-                      <Link
-                        fontSize='16px'
-                        target='_blank'
-                        onClick={() => {
-                          mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_TF_LINK);
-                          window.open(ACCELERATOR_LINK, '_blank');
-                        }}
-                      >
-                        {strings.HERE}
-                      </Link>
-                    )}
-                    primaryButtonProps={{
-                      label: strings.APPLY_TO_ACCELERATOR,
-                      onClick: () => {
-                        mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_APPLY_BUTTON);
-                        setIsNewApplicationModalOpen(true);
-                      },
-                      type: 'productive',
-                    }}
-                  />
-                </Grid>
+                {!isContributor(selectedOrganization) && (
+                  <Grid item xs={12}>
+                    <CTACard
+                      buttonsContainerSx={{
+                        width: isMobile ? '100%' : 'auto',
+                      }}
+                      description={strings.formatString(
+                        strings.FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,
+                        <Link
+                          fontSize='16px'
+                          target='_blank'
+                          onClick={() => {
+                            mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_TF_LINK);
+                            window.open(ACCELERATOR_LINK, '_blank');
+                          }}
+                        >
+                          {strings.HERE}
+                        </Link>
+                      )}
+                      primaryButtonProps={{
+                        label: strings.APPLY_TO_ACCELERATOR,
+                        onClick: () => {
+                          mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_APPLY_BUTTON);
+                          setIsNewApplicationModalOpen(true);
+                        },
+                        type: 'productive',
+                      }}
+                    />
+                  </Grid>
+                )}
               </Grid>
             </Container>
           </Box>
