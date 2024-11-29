@@ -192,7 +192,6 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
             fontSize: '12px',
             lineHeight: '16px',
             margin: '0 auto',
-            maxWidth: '550px',
             marginTop: '24px',
             marginBottom: '24px',
           }}
