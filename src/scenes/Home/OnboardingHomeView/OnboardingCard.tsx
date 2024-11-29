@@ -41,7 +41,7 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: '16px',
+        padding: isDesktop ? '16px' : 0,
       }}
     >
       {isDesktop && (
@@ -281,7 +281,7 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                       justifyContent: 'center',
                       alignItems: 'center',
                       padding: '8px',
-                      marginLeft: '24px',
+                      marginLeft: isAdmin(selectedOrganization) ? '24px' : 0,
                     }}
                   >
                     <Icon size='large' name={row.icon} />
@@ -522,6 +522,9 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
               display='flex'
               justifyContent='center'
               flexDirection='column'
+              sx={{ background: isDesktop ? 'transparent' : theme.palette.TwClrBg }}
+              marginTop={isDesktop ? 0 : 2}
+              padding={isDesktop ? 0 : 2}
             >
               <Typography textAlign='center'>{strings.ONBOARDING_NON_ADMINS_MESSAGE}</Typography>
             </Box>
@@ -531,8 +534,9 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
               border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
               borderRadius={2}
               padding={2}
-              marginTop={'auto'}
+              marginTop={isDesktop ? 'auto' : 2}
               marginBottom={2}
+              sx={{ background: isDesktop ? 'transparent' : theme.palette.TwClrBg }}
             >
               <Box display={'flex'} paddingBottom={2} alignItems='center'>
                 <Icon name='iconHelp' size='medium' fillColor={theme.palette.TwClrIcn} />
