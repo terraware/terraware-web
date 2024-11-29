@@ -27,7 +27,7 @@ type OnboardingCardProps = {
 };
 
 const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
-  const { isMobile } = useDeviceInfo();
+  const { isMobile, isDesktop } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const knowledgeBaseLinks = useKnowledgeBaseLinks();
@@ -36,7 +36,7 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
     <Box
       sx={{
         alignItems: 'center',
-        background: theme.palette.TwClrBg,
+        background: isDesktop ? theme.palette.TwClrBg : 'transparent',
         borderRadius: '8px',
         display: 'flex',
         flexDirection: 'row',
@@ -44,13 +44,15 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
         padding: '16px',
       }}
     >
-      <Box sx={{ paddingRight: '48px' }}>
-        <img alt={strings.TERRAWARE_MOBILE_APP_IMAGE_ALT} src={'/assets/onboarding.png'} />
-      </Box>
+      {isDesktop && (
+        <Box sx={{ paddingRight: '48px' }}>
+          <img alt={strings.TERRAWARE_MOBILE_APP_IMAGE_ALT} src={'/assets/onboarding.png'} />
+        </Box>
+      )}
       <Box flexBasis={'100%'} alignSelf={'stretch'}>
         <Box display={'flex'} flexDirection={'column'} height={'100%'}>
           {isAdmin(selectedOrganization) && (
-            <Box>
+            <Box paddingBottom={'24px'} sx={{ background: theme.palette.TwClrBg }} padding={2}>
               <Typography
                 component='p'
                 variant='h6'
@@ -77,84 +79,221 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
               </Typography>
             </Box>
           )}
-          {rows.map((row, index) => (
-            <Box
-              key={index}
-              sx={{
-                marginTop: '16px',
-                marginBottom: '16px',
-                marginLeft: '0px',
-                marginRight: '0px',
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                width: '100%',
-                background: row.enabled ? theme.palette.TwClrBgSecondary : theme.palette.TwClrBg,
-                borderRadius: '8px',
-                paddingTop: '24px',
-                paddingBottom: '24px',
-                position: 'relative',
-              }}
-            >
+          {rows.map((row, index) =>
+            isDesktop ? (
               <Box
+                key={index}
                 sx={{
-                  width: '100%',
-                  height: '100%',
-                  background: theme.palette.TwClrBgSecondary,
-                  opacity: row.enabled ? 0 : 0.5,
-                  borderRadius: '8px',
-                  zindex: 1000,
-                  position: 'absolute',
-                }}
-              ></Box>
-              <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                {isAdmin(selectedOrganization) && (
-                  <Box
-                    sx={{
-                      width: '46px',
-                      height: '46px',
-                      borderRadius: '50%',
-                      backgroundColor: theme.palette.TwClrBgBrand,
-                      color: 'white',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      fontSize: '20px',
-                      fontWeight: '700',
-                      marginLeft: '16px',
-                    }}
-                  >
-                    {index + 1}
-                  </Box>
-                )}
-                <Box
-                  sx={{
-                    background: theme.palette.TwClrBaseGray025,
-                    borderRadius: '8px',
-                    display: 'flex',
-                    height: '88px',
-                    width: '88px',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    padding: '8px',
-                    marginLeft: '24px',
-                  }}
-                >
-                  <Icon size='large' name={row.icon} />
-                </Box>
-              </Box>
-              <Box
-                sx={{
+                  marginTop: '16px',
+                  marginBottom: '16px',
+                  marginLeft: '0px',
+                  marginRight: '0px',
                   display: 'flex',
                   flexDirection: 'row',
-                  width: '100%',
                   alignItems: 'center',
-                  justifyContent: 'space-between',
+                  width: '100%',
+                  background: row.enabled ? theme.palette.TwClrBgSecondary : theme.palette.TwClrBg,
+                  borderRadius: '8px',
+                  paddingTop: '24px',
+                  paddingBottom: '24px',
+                  position: 'relative',
                 }}
               >
                 <Box
                   sx={{
-                    marginLeft: '24px',
+                    width: '100%',
+                    height: '100%',
+                    background: theme.palette.TwClrBgSecondary,
+                    opacity: row.enabled ? 0 : 0.5,
+                    borderRadius: '8px',
+                    zindex: 1000,
+                    position: 'absolute',
+                  }}
+                ></Box>
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                  {isAdmin(selectedOrganization) && (
+                    <Box
+                      sx={{
+                        width: '46px',
+                        height: '46px',
+                        borderRadius: '50%',
+                        backgroundColor: theme.palette.TwClrBgBrand,
+                        color: 'white',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        fontSize: '20px',
+                        fontWeight: '700',
+                        marginLeft: '16px',
+                      }}
+                    >
+                      {index + 1}
+                    </Box>
+                  )}
+                  <Box
+                    sx={{
+                      background: theme.palette.TwClrBaseGray025,
+                      borderRadius: '8px',
+                      display: 'flex',
+                      height: '88px',
+                      width: '88px',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      padding: '8px',
+                      marginLeft: '24px',
+                    }}
+                  >
+                    <Icon size='large' name={row.icon} />
+                  </Box>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      marginLeft: '24px',
+                    }}
+                  >
+                    <Typography
+                      component='p'
+                      variant='h6'
+                      sx={{
+                        color: theme.palette.TwClrTxt,
+                        fontSize: '16px',
+                        fontWeight: 600,
+                        lineHeight: '24px',
+                      }}
+                    >
+                      {row.title}
+                    </Typography>
+                    <Typography
+                      component='p'
+                      variant='h6'
+                      sx={{
+                        color: theme.palette.TwClrTxt,
+                        fontSize: '16px',
+                        fontWeight: 400,
+                        lineHeight: '24px',
+                      }}
+                    >
+                      {row.subtitle}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      marginLeft: '24px',
+                      marginRight: '24px',
+                      width: '25%',
+                      justifyContent: 'center',
+                      display: 'flex',
+                      alignItems: 'center',
+                      height: '100%',
+                      flexShrink: '0',
+                    }}
+                  >
+                    {row.buttonProps && row.enabled ? (
+                      <Box display='flex' flexDirection='column' alignItems='center'>
+                        <Button
+                          priority='primary'
+                          style={{
+                            marginBottom: '16px',
+                            width: isMobile ? '100%' : 'fit-content',
+                          }}
+                          type='productive'
+                          size='medium'
+                          {...row.buttonProps}
+                        />
+                        {row.secondaryButtonProps && (
+                          <Button
+                            priority='ghost'
+                            style={{
+                              margin: 0,
+                            }}
+                            type='productive'
+                            size='medium'
+                            {...row.secondaryButtonProps}
+                          />
+                        )}
+                      </Box>
+                    ) : (
+                      <Typography
+                        component='p'
+                        variant='h6'
+                        sx={{
+                          color: theme.palette.TwClrTxt,
+                          fontSize: '16px',
+                          fontWeight: 600,
+                          lineHeight: '24px',
+                        }}
+                      >
+                        {strings.COMPLETE}
+                      </Typography>
+                    )}
+                  </Box>
+                </Box>
+              </Box>
+            ) : isMobile ? (
+              <Box
+                display={'flex'}
+                flexDirection={'column'}
+                sx={{
+                  background: theme.palette.TwClrBgSecondary,
+                  borderRadius: '8px',
+                  opacity: row.enabled ? 1 : 0.5,
+                  alignItems: 'center',
+                  padding: 2,
+                  marginTop: 2,
+                }}
+              >
+                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                  {isAdmin(selectedOrganization) && (
+                    <Box
+                      sx={{
+                        width: '46px',
+                        height: '46px',
+                        borderRadius: '50%',
+                        backgroundColor: theme.palette.TwClrBgBrand,
+                        color: 'white',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        fontSize: '20px',
+                        fontWeight: '700',
+                        marginLeft: '16px',
+                      }}
+                    >
+                      {index + 1}
+                    </Box>
+                  )}
+                  <Box
+                    sx={{
+                      background: theme.palette.TwClrBaseGray025,
+                      borderRadius: '8px',
+                      display: 'flex',
+                      height: '88px',
+                      width: '88px',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      padding: '8px',
+                      marginLeft: '24px',
+                    }}
+                  >
+                    <Icon size='large' name={row.icon} />
+                  </Box>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    padding: 3,
                   }}
                 >
                   <Typography
@@ -177,23 +316,13 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                       fontSize: '16px',
                       fontWeight: 400,
                       lineHeight: '24px',
+                      textAlign: 'center',
                     }}
                   >
                     {row.subtitle}
                   </Typography>
                 </Box>
-                <Box
-                  sx={{
-                    marginLeft: '24px',
-                    marginRight: '24px',
-                    width: '25%',
-                    justifyContent: 'center',
-                    display: 'flex',
-                    alignItems: 'center',
-                    height: '100%',
-                    flexShrink: '0',
-                  }}
-                >
+                <Box width={'100%'}>
                   {row.buttonProps && row.enabled ? (
                     <Box display='flex' flexDirection='column' alignItems='center'>
                       <Button
@@ -227,6 +356,7 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                         fontSize: '16px',
                         fontWeight: 600,
                         lineHeight: '24px',
+                        textAlign: 'center',
                       }}
                     >
                       {strings.COMPLETE}
@@ -234,8 +364,157 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                   )}
                 </Box>
               </Box>
-            </Box>
-          ))}
+            ) : (
+              <Box
+                display={'flex'}
+                flexDirection={'column'}
+                sx={{
+                  background: theme.palette.TwClrBgSecondary,
+                  borderRadius: '8px',
+                  opacity: row.enabled ? 1 : 0.5,
+                  marginTop: 2,
+                }}
+              >
+                <Box
+                  key={index}
+                  sx={{
+                    marginTop: '16px',
+                    marginBottom: '16px',
+                    marginLeft: '0px',
+                    marginRight: '0px',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    width: '100%',
+                    borderRadius: '8px',
+                    paddingTop: '8px',
+                    paddingBottom: '8px',
+                    position: 'relative',
+                  }}
+                >
+                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                    {isAdmin(selectedOrganization) && (
+                      <Box
+                        sx={{
+                          width: '46px',
+                          height: '46px',
+                          borderRadius: '50%',
+                          backgroundColor: theme.palette.TwClrBgBrand,
+                          color: 'white',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          fontSize: '20px',
+                          fontWeight: '700',
+                          marginLeft: '16px',
+                        }}
+                      >
+                        {index + 1}
+                      </Box>
+                    )}
+                    <Box
+                      sx={{
+                        background: theme.palette.TwClrBaseGray025,
+                        borderRadius: '8px',
+                        display: 'flex',
+                        height: '88px',
+                        width: '88px',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        padding: '8px',
+                        marginLeft: '24px',
+                        marginRight: '24px',
+                      }}
+                    >
+                      <Icon size='large' name={row.icon} />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      width: '100%',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        marginLeft: '24px',
+                      }}
+                    >
+                      <Typography
+                        component='p'
+                        variant='h6'
+                        sx={{
+                          color: theme.palette.TwClrTxt,
+                          fontSize: '16px',
+                          fontWeight: 600,
+                          lineHeight: '24px',
+                        }}
+                      >
+                        {row.title}
+                      </Typography>
+                      <Typography
+                        component='p'
+                        variant='h6'
+                        sx={{
+                          color: theme.palette.TwClrTxt,
+                          fontSize: '16px',
+                          fontWeight: 400,
+                          lineHeight: '24px',
+                        }}
+                      >
+                        {row.subtitle}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+                <Box>
+                  {row.buttonProps && row.enabled ? (
+                    <Box display='flex' flexDirection='column' alignItems='center' paddingBottom={'24px'}>
+                      <Button
+                        priority='primary'
+                        style={{
+                          marginBottom: '16px',
+                          width: isMobile ? '100%' : 'fit-content',
+                        }}
+                        type='productive'
+                        size='medium'
+                        {...row.buttonProps}
+                      />
+                      {row.secondaryButtonProps && (
+                        <Button
+                          priority='ghost'
+                          style={{
+                            margin: 0,
+                          }}
+                          type='productive'
+                          size='medium'
+                          {...row.secondaryButtonProps}
+                        />
+                      )}
+                    </Box>
+                  ) : (
+                    <Box display='flex' flexDirection='column' alignItems='center' paddingBottom={'24px'}>
+                      <Typography
+                        component='p'
+                        variant='h6'
+                        sx={{
+                          color: theme.palette.TwClrTxt,
+                          fontSize: '16px',
+                          fontWeight: 600,
+                          lineHeight: '24px',
+                        }}
+                      >
+                        {strings.COMPLETE}
+                      </Typography>
+                    </Box>
+                  )}
+                </Box>
+              </Box>
+            )
+          )}
           {!isAdmin(selectedOrganization) && (
             <Box
               color={theme.palette.TwClrTxt}
