@@ -254,34 +254,36 @@ const TerrawareHomeView = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12}>
-                  <CTACard
-                    buttonsContainerSx={{
-                      width: isMobile ? '100%' : 'auto',
-                    }}
-                    description={strings.formatString(
-                      strings.FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,
-                      <Link
-                        fontSize='16px'
-                        target='_blank'
-                        onClick={() => {
-                          mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_TF_LINK);
-                          window.open(ACCELERATOR_LINK, '_blank');
-                        }}
-                      >
-                        {strings.HERE}
-                      </Link>
-                    )}
-                    primaryButtonProps={{
-                      label: strings.APPLY_TO_ACCELERATOR,
-                      onClick: () => {
-                        mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_APPLY_BUTTON);
-                        setIsNewApplicationModalOpen(true);
-                      },
-                      type: 'productive',
-                    }}
-                  />
-                </Grid>
+                {isAdmin(selectedOrganization) && (
+                  <Grid item xs={12}>
+                    <CTACard
+                      buttonsContainerSx={{
+                        width: isMobile ? '100%' : 'auto',
+                      }}
+                      description={strings.formatString(
+                        strings.FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,
+                        <Link
+                          fontSize='16px'
+                          target='_blank'
+                          onClick={() => {
+                            mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_TF_LINK);
+                            window.open(ACCELERATOR_LINK, '_blank');
+                          }}
+                        >
+                          {strings.HERE}
+                        </Link>
+                      )}
+                      primaryButtonProps={{
+                        label: strings.APPLY_TO_ACCELERATOR,
+                        onClick: () => {
+                          mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_APPLY_BUTTON);
+                          setIsNewApplicationModalOpen(true);
+                        },
+                        type: 'productive',
+                      }}
+                    />
+                  </Grid>
+                )}
               </Grid>
             </Container>
           </Box>
