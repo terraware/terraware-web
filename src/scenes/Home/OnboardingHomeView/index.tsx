@@ -17,7 +17,7 @@ import { useAppDispatch } from 'src/redux/store';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import CTACard from 'src/scenes/Home/CTACard';
 import OnboardingCard, { OnboardingCardRow } from 'src/scenes/Home/OnboardingHomeView/OnboardingCard';
-import { SpeciesService } from 'src/services';
+import { PreferencesService, SpeciesService } from 'src/services';
 import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
@@ -26,7 +26,7 @@ import { isAdmin, isContributor, isManagerOrHigher } from 'src/utils/organizatio
 
 const OnboardingHomeView = () => {
   const { user } = useUser();
-  const { selectedOrganization } = useOrganization();
+  const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const mixpanel = useMixpanel();
   const navigate = useNavigate();
@@ -66,10 +66,11 @@ const OnboardingHomeView = () => {
 
   const isLoadingInitialData = useMemo(() => allSpecies === undefined, [allSpecies]);
 
-  const markAsComplete = (step: string) => {
-    if (step) {
-      return true;
-    }
+  const markAsComplete = async () => {
+    await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
+      ['singlePersonOrg']: true,
+    });
+    reloadOrgPreferences();
   };
 
   const onboardingCardRows: OnboardingCardRow[] = useMemo(() => {
@@ -85,13 +86,13 @@ const OnboardingHomeView = () => {
             secondaryButtonProps: {
               label: strings.I_AM_THE_ONLY_PERSON,
               onClick: () => {
-                markAsComplete('people');
+                markAsComplete();
               },
             },
             icon: 'person' as IconName,
             title: strings.ADD_PEOPLE,
             subtitle: strings.ADD_PEOPLE_ONBOARDING_DESCRIPTION,
-            enabled: !isLoadingInitialData && people?.length === 1,
+            enabled: !isLoadingInitialData && people?.length === 1 && !orgPreferences['singlePersonOrg'],
           },
           {
             buttonProps: {
@@ -125,7 +126,7 @@ const OnboardingHomeView = () => {
         : [];
 
     return rows;
-  }, [allSpecies, people, selectedOrganization]);
+  }, [allSpecies, people, selectedOrganization, orgPreferences]);
 
   return (
     <TfMain>

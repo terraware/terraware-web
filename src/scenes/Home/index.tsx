@@ -15,7 +15,7 @@ import TerrawareHomeView from './TerrawareHomeView';
 
 export default function Home(): JSX.Element {
   const { orgHasModules } = useParticipantData();
-  const { selectedOrganization } = useOrganization();
+  const { selectedOrganization, orgPreferences } = useOrganization();
   const [people, setPeople] = useState<OrganizationUser[]>();
   const [allSpecies, setAllSpecies] = useState<Species[]>();
 
@@ -46,12 +46,12 @@ export default function Home(): JSX.Element {
     if (orgHasModules === undefined || allSpecies === undefined) {
       return <Page isLoading={true} />;
     }
-    if (people?.length === 1 || allSpecies.length === 0) {
+    if ((people?.length === 1 && !orgPreferences['singlePersonOrg']) || allSpecies.length === 0) {
       return <OnboardingHomeView />;
     } else {
       return orgHasModules ? <ParticipantHomeView /> : <TerrawareHomeView />;
     }
-  }, [orgHasModules, people, allSpecies, selectedOrganization]);
+  }, [orgHasModules, people, allSpecies, selectedOrganization, orgPreferences]);
 
   return homeScreen;
 }
