@@ -1,3 +1,4 @@
+b008392c128 Update dependency @testing-library/react to v16 (#3381)
 a44ac75c2d2 Update dependency @dnd-kit/sortable to v9 (#3380)
 ad8b15b813e Update actions/upload-artifact action to v4 (#3379)
 b9f06ad9bf9 Update nginx Docker tag to v1.27 (#3377)
