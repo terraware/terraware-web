@@ -1,5 +1,9 @@
 import { SectionVariableWithValues, VariableUnion, VariableWithValues } from 'src/types/documentProducer/Variable';
-import { CombinedInjectedValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
+import {
+  CombinedInjectedValue,
+  SectionTextVariableValue,
+  VariableValueValue,
+} from 'src/types/documentProducer/VariableValue';
 import { memoize } from 'src/utils/memoize';
 
 export type SectionVariableWithRelevantVariables = SectionVariableWithValues & {
@@ -76,4 +80,84 @@ export const calculateFigures = (
   for (const sectionVariable of sectionVariables) {
     currentFigure = calculateFiguresForSection(sectionVariable, variables, variableType, currentFigure);
   }
+};
+
+// These regexes should be scrutinized, they are well tests but there are always edge cases
+export const isMarkdownTableHeaderSeparatorRow = (input: string | undefined): boolean =>
+  !!/\|\s*\-\-\-+\s*\|/g.exec(input || '');
+
+const MarkdownTableRowRegex = () => /\|\s*([^|]*?)\s*(?=\|)/g;
+export const isMarkdownTableRow = (input: string | undefined): boolean => !!MarkdownTableRowRegex().exec(input || '');
+
+export const getMarkdownTableCellValues = (input: string): string[] => {
+  const values: string[] = [];
+  let match: RegExpMatchArray | null;
+  // To ensure we keep an accurate index
+  const regex = MarkdownTableRowRegex();
+  while ((match = regex.exec(input)) !== null) {
+    values.push(match[1].trim());
+  }
+  return values;
+};
+
+export type VariableValueValueTableDisplay = {
+  headers: string[];
+  rows: string[][];
+};
+export const isTableDisplay = (input: unknown): input is VariableValueValueTableDisplay => {
+  const cast = input as VariableValueValueTableDisplay;
+  return Array.isArray(cast.headers) && Array.isArray(cast.rows);
+};
+
+export type PreviewValueDisplayUnion = VariableValueValue | VariableValueValueTableDisplay;
+
+export const collectTablesForPreview = (inputValues: VariableValueValue[]): PreviewValueDisplayUnion[] => {
+  // Since a table is made up of several values (several lines of text), if we collect any tables
+  // from the values, we will need to ignore lines of text that are part of the already collected table
+  const collectedIndices: Map<number, boolean> = new Map();
+
+  const values: PreviewValueDisplayUnion[] = inputValues
+    .map((value: VariableValueValue, index): PreviewValueDisplayUnion | null => {
+      if (collectedIndices.get(index)) {
+        return null;
+      }
+
+      const headerRow = value as SectionTextVariableValue;
+      if (!headerRow.textValue || !isMarkdownTableRow(headerRow.textValue)) {
+        return value;
+      }
+
+      let nextIndex = inputValues.indexOf(value) + 1;
+
+      // If this is a table row, and the next input value is a separator, then we need to
+      // collect the entire table as a single element
+      const separatorRow = inputValues[nextIndex] as SectionTextVariableValue;
+      if (!separatorRow.textValue || !isMarkdownTableHeaderSeparatorRow(separatorRow.textValue)) {
+        return value;
+      }
+
+      // Since the separator row will be part of the table element, we can ignore it as a top level element
+      collectedIndices.set(nextIndex, true);
+
+      const tableElement: VariableValueValueTableDisplay = {
+        headers: getMarkdownTableCellValues(headerRow.textValue),
+        rows: [],
+      };
+
+      let nextValue: VariableValueValue | undefined = inputValues[++nextIndex] as SectionTextVariableValue;
+
+      while (nextValue && isMarkdownTableRow(nextValue.textValue)) {
+        // Since each row will be part of the table element, we can ignore it as a top level element
+        collectedIndices.set(nextIndex, true);
+        // Push the row and values to the table element
+        tableElement.rows.push(getMarkdownTableCellValues(nextValue.textValue));
+
+        nextValue = inputValues[++nextIndex] as SectionTextVariableValue;
+      }
+
+      return tableElement;
+    })
+    .filter((value: PreviewValueDisplayUnion | null): value is PreviewValueDisplayUnion => !!value);
+
+  return values;
 };
