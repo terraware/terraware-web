@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Typography, styled, useTheme } from '@mui/material';
 import { Autocomplete, Button, DropdownItem } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { isKeyHotkey } from 'is-hotkey';
-import { BaseEditor, Descendant, Element as SlateElement, Transforms, createEditor } from 'slate';
-import { Editable, ReactEditor, Slate, withReact } from 'slate-react';
+import { Descendant, Editor, Transforms, createEditor } from 'slate';
+import { Editable, RenderElementProps, RenderLeafProps, Slate, withReact } from 'slate-react';
 
 import strings from 'src/strings';
 import { Section, VariableWithValues } from 'src/types/documentProducer/Variable';
@@ -14,24 +14,8 @@ import { VariableValueValue } from 'src/types/documentProducer/VariableValue';
 import InsertOptionsDropdown from './InsertOptionsDropdown';
 import TextChunk from './TextChunk';
 import TextVariable from './TextVariable';
-import { editorValueFromVariableValue, variableValueFromEditorValue } from './helpers';
-
-// Required type definitions for slatejs (https://docs.slatejs.org/concepts/12-typescript):
-export type CustomElement = {
-  type?: 'text' | 'variable';
-  children: CustomText[];
-  variableId?: number;
-  docId: number;
-  reference?: boolean;
-};
-export type CustomText = { text: string };
-declare module 'slate' {
-  interface CustomTypes {
-    Editor: BaseEditor & ReactEditor;
-    Element: CustomElement;
-    Text: CustomText;
-  }
-}
+import { decorateMarkdown, editorValueFromVariableValue, scrubMarkdown, variableValueFromEditorValue } from './helpers';
+import { isEmptyDescendant, isSectionElement, isTextElement, isVariableElement } from './types';
 
 type EditableSectionEditProps = {
   section: Section;
@@ -59,27 +43,32 @@ const SectionEdit = ({
   const [variableToBeInserted, setVariableToBeInserted] = useState<VariableWithValues>();
 
   const initialValue: Descendant[] = useMemo(() => {
-    const editorValue =
-      sectionValues !== undefined && sectionValues.length > 0
-        ? [
-            {
-              children: [
-                { text: '' },
-                ...sectionValues.map((value) => editorValueFromVariableValue(value, allVariables)),
-                { text: '' },
-              ],
-            },
-          ]
-        : [{ children: [{ text: '' }] }];
-    return editorValue as Descendant[];
+    const editorValue: Descendant = {
+      type: 'section',
+      children: [],
+    };
+
+    if (sectionValues !== undefined && sectionValues.length > 0) {
+      editorValue.children = sectionValues.map((value) => editorValueFromVariableValue(value, allVariables));
+    }
+
+    return [editorValue];
   }, [sectionValues, allVariables]);
 
   const onChange = useCallback(
-    (value: Descendant[]) => {
+    (values: Descendant[]) => {
       const newVariableValues: VariableValueValue[] = [];
-      value.forEach((v) => {
-        const children = (v as SlateElement).children;
-        if (children.length === 1 && children[0].text === '') {
+
+      values.forEach((value: Descendant) => {
+        if (!isSectionElement(value)) {
+          // We shouldn't ever hit here, for now we are only using SectionElement as top level elements
+          return;
+        }
+
+        const children = value.children;
+
+        // This is an "empty" value
+        if (isEmptyDescendant(value)) {
           newVariableValues.push({
             id: -1,
             listPosition: newVariableValues.length,
@@ -87,9 +76,13 @@ const SectionEdit = ({
             textValue: '\n',
           });
         } else {
-          children.forEach((c) => {
-            if (c.text === undefined || c.text !== '') {
-              newVariableValues.push(variableValueFromEditorValue(c, allVariables, newVariableValues.length));
+          children.forEach((child) => {
+            if (isEmptyDescendant(child)) {
+              return;
+            }
+
+            if (isVariableElement(child) || isTextElement(child)) {
+              newVariableValues.push(variableValueFromEditorValue(child, newVariableValues.length));
             }
           });
         }
@@ -105,26 +98,28 @@ const SectionEdit = ({
   );
 
   const renderElement = useCallback(
-    (props: any) => {
-      switch (props.element.type) {
-        case 'variable':
-          const variable = allVariables.find((v) => v.id === props.element.variableId);
-          return (
-            <TextVariable
-              isEditing
-              icon='iconVariable'
-              onClick={() => onEditVariableValue(variable)}
-              reference={props.element.reference}
-              variable={variable}
-              {...props}
-            />
-          );
-        default:
-          return <TextChunk {...props} />;
+    (props: RenderElementProps) => {
+      const { element } = props;
+      if (isVariableElement(element)) {
+        const variable = allVariables.find((v) => v.id === element.variableId);
+        return (
+          <TextVariable
+            isEditing
+            icon='iconVariable'
+            onClick={() => onEditVariableValue(variable)}
+            reference={element.reference}
+            variable={variable}
+            {...props}
+          />
+        );
       }
+
+      return <TextChunk {...props} />;
     },
     [allVariables]
   );
+
+  const renderLeaf = useCallback((props: RenderLeafProps) => <Leaf {...props} />, []);
 
   const insertVariable = useCallback(
     (variable: VariableWithValues, reference?: boolean) => {
@@ -278,7 +273,9 @@ const SectionEdit = ({
       <Box marginTop={theme.spacing(2)}>
         <Slate editor={editor} initialValue={initialValue} onChange={onChange}>
           <Editable
+            decorate={decorateMarkdown}
             renderElement={renderElement}
+            renderLeaf={renderLeaf}
             onKeyDown={onKeyDown}
             placeholder={strings.PLACEHOLDER}
             renderPlaceholder={({ children, attributes }) => (
@@ -314,5 +311,73 @@ const withInlines = (editor: any) => {
 
   return editor;
 };
+
+const Leaf = styled(({ attributes, children, className, leaf }: RenderLeafProps & { className?: string }) => {
+  // Scrub the markdown for the editor view
+  if (leaf.bold) {
+    leaf.text = scrubMarkdown(leaf.text);
+  }
+
+  return (
+    <span {...attributes} className={className}>
+      {children}
+    </span>
+  );
+})(({ leaf }) => ({
+  ...(leaf.bold
+    ? {
+        fontWeight: 'bold',
+      }
+    : {}),
+  // TODO need to implement these as CustomText properties if we want to use them
+  // ...(leaf.italic
+  //   ? {
+  //       fontStyle: 'italic',
+  //     }
+  //   : {}),
+  // ...(leaf.underlined
+  //   ? {
+  //       textDecoration: 'underline',
+  //     }
+  //   : {}),
+  // ...(leaf.title
+  //   ? {
+  //       display: 'inline-block',
+  //       fontWeight: 'bold',
+  //       fontSize: '20px',
+  //       margin: '20px 0 10px 0',
+  //     }
+  //   : {}),
+  // ...(leaf.list
+  //   ? {
+  //       paddingLeft: '10px',
+  //       fontSize: '20px',
+  //       lineHeight: '10px',
+  //     }
+  //   : {}),
+  // ...(leaf.hr
+  //   ? {
+  //       display: 'block',
+  //       textAlign: 'center',
+  //       borderBottom: '2px solid #ddd',
+  //     }
+  //   : {}),
+  // ...(leaf.blockquote
+  //   ? {
+  //       display: 'inline-block',
+  //       borderLeft: '2px solid #ddd',
+  //       paddingLeft: '10px',
+  //       color: '#aaa',
+  //       fontStyle: 'italic',
+  //     }
+  //   : {}),
+  // ...(leaf.code
+  //   ? {
+  //       fontFamily: 'monospace',
+  //       backgroundColor: '#eee',
+  //       padding: '3px',
+  //     }
+  //   : {}),
+}));
 
 export default SectionEdit;

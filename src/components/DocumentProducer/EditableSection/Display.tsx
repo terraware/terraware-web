@@ -50,6 +50,7 @@ const SectionValue = ({
 }: SectionValueProps): React.ReactElement | null => {
   switch (value.type) {
     case 'SectionText':
+      // Need to implement markdown view here
       return <span style={{ fontSize: '16px', whiteSpace: 'pre-wrap' }}>{value.textValue}</span>;
     case 'SectionVariable':
       const reference = value.usageType === 'Reference';

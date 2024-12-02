@@ -19,7 +19,6 @@ export type VariableElement = {
 export type TextElement = {
   children: CustomText[];
   type: 'text';
-  bold?: boolean;
 };
 
 export type SectionElement = {
