@@ -172,7 +172,7 @@
     "eslint": "^9.6.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jest-react": "^0.1.0",
-    "eslint-plugin-jsdoc": "^48.2.3",
+    "eslint-plugin-jsdoc": "^50.0.0",
     "eslint-plugin-n": "^17.10.3",
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "eslint-plugin-react": "^7.34.1",
