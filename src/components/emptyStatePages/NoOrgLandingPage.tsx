@@ -24,7 +24,7 @@ export default function NoOrgLandingPage(): JSX.Element {
   const [isOrgModalOpen, setIsOrgModalOpen] = useState<boolean>(false);
   const { redirectAndNotify } = useOrganization();
 
-  const listItemContents: ListItemContent[] = [{ icon: 'organization' }];
+  const listItemContents: ListItemContent[] = [{ icon: 'newOrganization' }];
 
   return (
     <Box
