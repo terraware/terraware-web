@@ -287,6 +287,11 @@ export default function InventoryTests() {
     await expect(page.locator('#row1-plantingSubzoneNames')).toContainText('East-North');
     await expect(page.locator('#row1-speciesScientificNames')).toContainText('Coconut');
     await expect(page.locator('#row1-totalWithdrawn')).toContainText('60');
+  });
+
+  test('Plants dashboard after outplanting', async ({ page }, testInfo) => {
+    await page.goto('http://127.0.0.1:3000');
+    await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Plants' }).click();
     await page.getByRole('button', { name: 'Dashboard' }).click();
     await expect(page.getByText('60 Plants')).toBeVisible();
@@ -307,7 +312,13 @@ export default function InventoryTests() {
     });
     await expect(page.getByRole('cell', { name: '60 Plants' })).toBeVisible();
     await page.getByLabel('Close popup').click();
+  });
 
+  test('Withdrawals after outplanting', async ({ page }, testInfo) => {
+    await page.goto('http://127.0.0.1:3000');
+    await waitFor(page, '#home');
+
+    await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Withdrawals' }).click();
     await page.getByText('Map').click();
     await page.waitForTimeout(2000); //Wait for map to load
