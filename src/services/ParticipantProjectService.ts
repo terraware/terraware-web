@@ -5,7 +5,7 @@ import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
 import { ParticipantProject, ParticipantProjectSearchResult } from 'src/types/ParticipantProject';
 import { Project, ProjectMeta } from 'src/types/Project';
-import { PhaseScores } from 'src/types/Score';
+import { Score } from 'src/types/Score';
 import { SearchNodePayload, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { PhaseVotes } from 'src/types/Votes';
 
@@ -68,19 +68,19 @@ const getSearchParams = (search?: SearchNodePayload, sortOrder?: SearchSortOrder
 
 const download = async ({
   participantProject,
-  phase1Scores,
   phaseVotes,
   project,
   projectId,
   projectMeta,
+  projectScore,
   organization,
 }: {
   participantProject?: ParticipantProject;
-  phase1Scores?: PhaseScores;
   phaseVotes?: PhaseVotes;
   project?: Project;
   projectId: number;
   projectMeta?: ProjectMeta;
+  projectScore?: Score;
   organization?: AcceleratorOrg;
   // eslint-disable-next-line @typescript-eslint/require-await
 }): Promise<string | null> => {
@@ -88,7 +88,7 @@ const download = async ({
     [strings.ORGANIZATION_NAME, organization?.name],
     [strings.PROJECT_ID, projectId],
     [strings.PROJECT_NAME, project?.name],
-    [strings.PHASE_1_SCORE, phase1Scores?.totalScore],
+    [strings.PHASE_1_SCORE, projectScore?.overallScore],
     [strings.VOTING_DECISION, phaseVotes?.decision],
     [strings.FILE_NAMING, participantProject?.fileNaming],
     [strings.PROJECT_LEAD, participantProject?.projectLead],

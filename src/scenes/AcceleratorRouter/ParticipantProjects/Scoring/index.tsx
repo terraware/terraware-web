@@ -3,7 +3,7 @@ import React, { Navigate, Route, Routes, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 
 import EditView from './EditView';
-import ScoresView from './ScoresView';
+import ScoresView from './ScoreView';
 
 const ScoringRouter = () => {
   const pathParams = useParams<{ projectId: string }>();

@@ -1,7 +1,7 @@
 import { AcceleratorOrg } from 'src/types/Accelerator';
 import { ParticipantProject } from 'src/types/ParticipantProject';
 import { Project, ProjectMeta } from 'src/types/Project';
-import { PhaseScores } from 'src/types/Score';
+import { Score } from 'src/types/Score';
 import { PhaseVotes } from 'src/types/Votes';
 
 import { ParticipantProjectService } from '..';
@@ -60,23 +60,8 @@ describe('ParticipantProjectService', () => {
       totalExpansionPotential: undefined,
       whatNeedsToBeTrue: undefined,
     };
-    const phase1Scores: PhaseScores = {
-      phase: 'Phase 1 - Feasibility Study',
-      scores: [
-        {
-          category: 'Carbon',
-          modifiedTime: '2024-03-20T15:21:46.208342Z',
-          qualitative: 'Yes, it sequesters carbon',
-          value: 2,
-        },
-        {
-          category: 'Climate Impact',
-          modifiedTime: '2024-03-19T21:20:27.910470Z',
-          qualitative: 'Excellent',
-          value: 2,
-        },
-      ],
-      totalScore: 2,
+    const projectScore: Score = {
+      overallScore: 1.5
     };
     const phaseVotes: PhaseVotes = {
       decision: 'Yes',
@@ -119,17 +104,17 @@ describe('ParticipantProjectService', () => {
 
     const result = await ParticipantProjectService.download({
       participantProject,
-      phase1Scores,
       phaseVotes,
       project,
       projectId,
       projectMeta,
+      projectScore,
       organization,
     });
 
     const expected =
       `Organization Name,Project ID,Project Name,Phase 1 Score,Voting Decision,File Naming,Project Lead,Country,Region,Land Use Model Type,Number of Native Species,Application Restorable Land (ha),Confirmed Restorable Land (ha),Total Expansion Potential (ha),Minimum Carbon Accumulation (CO2/ha/yr),Maximum Carbon Accumulation (CO2/ha/yr),Per Hectare Estimated Budget,Number of Communities Within Project Area,Created on,Created by,Last modified on,Last modified by\r` +
-      `"The tree farm","1","Project ""1234""","2","Yes","PROJ_123","test lead","AF","South Asia","Monoculture, Other Timber","","","","","","","","","2024-03-08T21:30:27.294915Z","Weese Ritherspoon","2024-03-29T17:41:09.530803Z","Donny Jepp"\r`;
+      `"The tree farm","1","Project ""1234""","1.5","Yes","PROJ_123","test lead","AF","South Asia","Monoculture, Other Timber","","","","","","","","","2024-03-08T21:30:27.294915Z","Weese Ritherspoon","2024-03-29T17:41:09.530803Z","Donny Jepp"\r`;
     expect(result).toBe(expected);
   });
 });
