@@ -298,12 +298,7 @@ export default function InventoryTests() {
     await expect(page.getByText('1 Species')).toBeVisible();
     await page.getByText('Total Plants and Species').click();
     await page.mouse.wheel(0, 2000);
-
-    await page.waitForTimeout(2000); //Wait for map to load
-
-    await page.mouse.wheel(0, 2000);
-
-    await page.waitForTimeout(2000); //Wait for map to load
+    await page.waitForTimeout(4000); //Wait for map to load
     await page.getByLabel('Map', { exact: true }).click({
       position: {
         x: 526,
@@ -321,7 +316,8 @@ export default function InventoryTests() {
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Withdrawals' }).click();
     await page.getByText('Map').click();
-    await page.waitForTimeout(2000); //Wait for map to load
+    await page.mouse.down();
+    await page.waitForTimeout(4000); //Wait for map to load
     await page.getByLabel('Map', { exact: true }).click({
       position: {
         x: 526,
