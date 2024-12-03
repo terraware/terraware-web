@@ -22,7 +22,6 @@ export type ParticipantProjectData = ServerData & {
   details: ParticipantProject | undefined;
 };
 
-
 const ENDPOINT_PARTICIPANT_PROJECTS = '/api/v1/accelerator/projects';
 const ENDPOINT_PARTICIPANT_PROJECT = '/api/v1/accelerator/projects/{projectId}';
 
@@ -157,8 +156,7 @@ const list = async (
   return {
     status: response.data.status,
     details: searchAndSort(response.data.details, search, searchOrderConfig),
-  }
-  
+  };
 };
 
 const update = async (participantProject: ParticipantProject): Promise<Response> => {

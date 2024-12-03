@@ -20,7 +20,7 @@ export const requestGetParticipantProject = createAsyncThunk(
 );
 
 export type ListRequest = {
-  locale?: string,
+  locale?: string;
   search: SearchNodePayload;
   sortOrder: SearchSortOrder;
 };

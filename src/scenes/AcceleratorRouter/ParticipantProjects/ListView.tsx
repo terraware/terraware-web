@@ -129,9 +129,7 @@ export default function ListView(): JSX.Element {
               field: 'cohort_id',
               id: 'cohort_id',
               label: strings.COHORT,
-              options: (projects || [])?.map(
-                (project: ParticipantProject) => project.cohortId?.toString() ?? ''
-              ),
+              options: (projects || [])?.map((project: ParticipantProject) => project.cohortId?.toString() ?? ''),
               pillValueRenderer: (values: (string | number | null)[]) =>
                 values.map((value) => cohorts[value || ''] || '').join(', '),
               renderOption: (id: string | number) => cohorts[id] || '',
@@ -140,9 +138,7 @@ export default function ListView(): JSX.Element {
               field: 'cohort_phase',
               id: 'cohort_phase',
               label: strings.PHASE,
-              options: (projects || [])?.map(
-                (project: ParticipantProject) => project.cohortPhase?.toString() ?? ''
-              ),
+              options: (projects || [])?.map((project: ParticipantProject) => project.cohortPhase?.toString() ?? ''),
             },
           ]
         : [],
