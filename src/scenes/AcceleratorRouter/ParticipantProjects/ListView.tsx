@@ -14,7 +14,7 @@ import { selectParticipantProjectsListRequest } from 'src/redux/features/partici
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ParticipantProjectService } from 'src/services';
 import strings from 'src/strings';
-import { ParticipantProjectSearchResult } from 'src/types/ParticipantProject';
+import { ParticipantProject } from 'src/types/ParticipantProject';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -24,56 +24,51 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
   activeLocale
     ? [
         {
-          key: 'name',
-          name: strings.PROJECT,
+          key: 'dealName',
+          name: strings.DEAL_NAME,
           type: 'string',
         },
         {
-          key: 'participant_name',
-          name: strings.PARTICIPANT,
-          type: 'string',
-        },
-        {
-          key: 'participant_cohort_name',
+          key: 'cohortName',
           name: strings.COHORT,
           type: 'string',
         },
         {
-          key: 'participant_cohort_phase',
+          key: 'cohortPhase',
           name: strings.PHASE,
           type: 'string',
         },
         {
-          key: 'acceleratorDetails_fileNaming',
+          key: 'fileNaming',
           name: strings.FILE_NAMING,
           type: 'string',
         },
         {
-          key: 'country_name',
+          key: 'countryCode',
           name: strings.COUNTRY,
           type: 'string',
         },
         {
-          key: 'country_region',
+          key: 'region',
           name: strings.REGION,
           type: 'string',
         },
         {
-          key: 'acceleratorDetails_confirmedReforestableLand',
+          key: 'confirmedReforestableLand',
           name: strings.RESTORABLE_LAND,
-          type: 'string',
+          type: 'number',
         },
         {
-          key: 'landUseModelTypes.landUseModelType',
+          key: 'landUseModelTypes',
           name: strings.LAND_USE_MODEL_TYPE,
           type: 'string',
         },
       ]
     : [];
 
-const fuzzySearchColumns = ['name', 'acceleratorDetails_fileNaming'];
+const fuzzySearchColumns = ['dealName'];
 const defaultSearchOrder: SearchSortOrder = {
-  field: 'name',
+  field: 'dealName',
   direction: 'Ascending',
 };
 
@@ -87,7 +82,7 @@ export default function ListView(): JSX.Element {
   const [openDownload, setOpenDownload] = useState<boolean>(false);
   const [lastSearch, setLastSearch] = useState<SearchNodePayload>();
   const [lastSort, setLastSort] = useState<SearchSortOrder>();
-  const [projects, setProjects] = useState<ParticipantProjectSearchResult[]>([]);
+  const [projects, setProjects] = useState<ParticipantProject[]>([]);
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectParticipantProjectsListRequest(requestId));
 
@@ -105,7 +100,7 @@ export default function ListView(): JSX.Element {
       if (locale) {
         setLastSearch(search);
         setLastSort(sortOrder);
-        const request = dispatch(requestListParticipantProjects({ search, sortOrder }));
+        const request = dispatch(requestListParticipantProjects({ locale, search, sortOrder }));
         setRequestId(request.requestId);
       }
     },
@@ -116,7 +111,9 @@ export default function ListView(): JSX.Element {
     () =>
       (projects || []).reduce(
         (acc, project) => {
-          acc[project.participant_cohort_id] = project.participant_cohort_name;
+          if (project.cohortId && project.cohortName) {
+            acc[project.cohortId] = project.cohortName;
+          }
           return acc;
         },
         {} as Record<string, string>
@@ -129,22 +126,22 @@ export default function ListView(): JSX.Element {
       activeLocale
         ? [
             {
-              field: 'participant_cohort_id',
-              id: 'participant_cohort_id',
+              field: 'cohort_id',
+              id: 'cohort_id',
               label: strings.COHORT,
               options: (projects || [])?.map(
-                (project: ParticipantProjectSearchResult) => `${project.participant_cohort_id}`
+                (project: ParticipantProject) => project.cohortId?.toString() ?? ''
               ),
               pillValueRenderer: (values: (string | number | null)[]) =>
                 values.map((value) => cohorts[value || ''] || '').join(', '),
               renderOption: (id: string | number) => cohorts[id] || '',
             },
             {
-              field: 'participant_cohort_phase',
-              id: 'participant_cohort_phase',
+              field: 'cohort_phase',
+              id: 'cohort_phase',
               label: strings.PHASE,
               options: (projects || [])?.map(
-                (project: ParticipantProjectSearchResult) => `${project.participant_cohort_phase}`
+                (project: ParticipantProject) => project.cohortPhase?.toString() ?? ''
               ),
             },
           ]
