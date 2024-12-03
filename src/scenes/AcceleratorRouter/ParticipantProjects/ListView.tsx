@@ -126,8 +126,8 @@ export default function ListView(): JSX.Element {
       activeLocale
         ? [
             {
-              field: 'cohort_id',
-              id: 'cohort_id',
+              field: 'cohortId',
+              id: 'cohortId',
               label: strings.COHORT,
               options: (projects || [])?.map((project: ParticipantProject) => project.cohortId?.toString() ?? ''),
               pillValueRenderer: (values: (string | number | null)[]) =>
@@ -135,8 +135,8 @@ export default function ListView(): JSX.Element {
               renderOption: (id: string | number) => cohorts[id] || '',
             },
             {
-              field: 'cohort_phase',
-              id: 'cohort_phase',
+              field: 'cohortPhase',
+              id: 'cohortPhase',
               label: strings.PHASE,
               options: (projects || [])?.map((project: ParticipantProject) => project.cohortPhase?.toString() ?? ''),
             },
