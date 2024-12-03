@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1733229050722" clover="3.2.0">
-  <project timestamp="1733229050722" name="All files">
+<coverage generated="1733229579743" clover="3.2.0">
+  <project timestamp="1733229579743" name="All files">
     <metrics statements="26675" coveredstatements="1077" conditionals="17951" coveredconditionals="290" methods="8227" coveredmethods="179" elements="52853" coveredelements="1546" complexity="0" loc="26675" ncloc="26675" packages="239" files="1131" classes="1131"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
@@ -8460,7 +8460,7 @@
         <line num="66" count="0" type="stmt"/>
         <line num="85" count="0" type="stmt"/>
         <line num="112" count="0" type="stmt"/>
-        <line num="201" count="0" type="stmt"/>
+        <line num="200" count="0" type="stmt"/>
       </file>
       <file name="EmptyStatePage.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/emptyStatePages/EmptyStatePage.tsx">
         <metrics statements="58" coveredstatements="0" conditionals="35" coveredconditionals="0" methods="14" coveredmethods="0"/>
@@ -8558,10 +8558,10 @@
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="57" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.seeds.database">

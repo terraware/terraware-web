@@ -1,3 +1,4 @@
+7fb81d7e320 SW-6090 No organization welcome page update (#3371)
 c9de6b9978a SW-6272 Home Dashboard: Remove Accelerator Card for Contributor and Managers, since they can't apply (#3373)
 c459b5b4a2d SW-6309 Plants Dashboard: Description text under Plants and Species Statistics and Mortality Rate should be removed (#3372)
 934c43672ef Bump micromatch from 4.0.5 to 4.0.8 (#3094)
