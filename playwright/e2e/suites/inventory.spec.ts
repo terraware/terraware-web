@@ -299,7 +299,7 @@ export default function InventoryTests() {
     await page.getByText('Total Plants and Species').click();
     await page.mouse.wheel(0, 2000);
     await page.waitForTimeout(4000); //Wait for map to load
-    await page.getByLabel('Map', { exact: true }).click({
+    await page.locator('.mapboxgl-map').click({
       position: {
         x: 526,
         y: 172,
@@ -318,7 +318,7 @@ export default function InventoryTests() {
     await page.getByText('Map').click();
     await page.mouse.down();
     await page.waitForTimeout(4000); //Wait for map to load
-    await page.getByLabel('Map', { exact: true }).click({
+    await page.locator('.mapboxgl-map').click({
       position: {
         x: 526,
         y: 172,
