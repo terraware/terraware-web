@@ -60,10 +60,6 @@ const SectionVariable = ({
     );
   }
 
-  if (combinedInjectedValue.variableId == 713) {
-    debugger;
-  }
-
   return (
     <span>
       {(combinedInjectedValue.values || ([] as ExistingVariableValueUnion[])).map(
