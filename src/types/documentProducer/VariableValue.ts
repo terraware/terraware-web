@@ -21,7 +21,12 @@ export const isNumberVariableValue = (input: unknown): input is NumberVariableVa
   (input as NumberVariableValue).numberValue !== undefined;
 
 export type SectionTextVariableValue = components['schemas']['ExistingSectionTextValuePayload'];
+export const isSectionTextVariableValue = (input: unknown): input is SectionTextVariableValue =>
+  (input as SectionTextVariableValue).type === 'SectionText';
+
 export type SectionVariableVariableValue = components['schemas']['ExistingSectionVariableValuePayload'];
+export const isSectionVariableVariableValue = (input: unknown): input is SectionVariableVariableValue =>
+  (input as SectionVariableVariableValue).type === 'SectionVariable';
 
 export type SelectVariableValue = components['schemas']['ExistingSelectValuePayload'];
 export const isSelectVariableValue = (input: unknown): input is SelectVariableValue =>
