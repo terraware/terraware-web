@@ -3,11 +3,12 @@ import HttpService, { Response, Response2, ServerData } from 'src/services/HttpS
 import SearchService from 'src/services/SearchService';
 import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
-import { ParticipantProject, ParticipantProjectSearchResult } from 'src/types/ParticipantProject';
+import { ParticipantProject } from 'src/types/ParticipantProject';
 import { Project, ProjectMeta } from 'src/types/Project';
 import { Score } from 'src/types/Score';
-import { SearchNodePayload, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 import { PhaseVotes } from 'src/types/Votes';
+import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 
 /**
  * Accelerator "participant project" related services
@@ -21,6 +22,7 @@ export type ParticipantProjectData = ServerData & {
   details: ParticipantProject | undefined;
 };
 
+const ENDPOINT_PARTICIPANT_PROJECTS = '/api/v1/accelerator/projects';
 const ENDPOINT_PARTICIPANT_PROJECT = '/api/v1/accelerator/projects/{projectId}';
 
 type UpdateProjectAcceleratorDetailsRequestPayload =
@@ -28,6 +30,10 @@ type UpdateProjectAcceleratorDetailsRequestPayload =
 type UpdateProjectAcceleratorDetailsResponsePayload =
   paths[typeof ENDPOINT_PARTICIPANT_PROJECT]['put']['responses'][200]['content']['application/json'];
 
+type ListProjectAcceleratorDetailsResponsePayload =
+  paths[typeof ENDPOINT_PARTICIPANT_PROJECTS]['get']['responses'][200]['content']['application/json'];
+
+const httpParticipantProjects = HttpService.root(ENDPOINT_PARTICIPANT_PROJECTS);
 const httpParticipantProject = HttpService.root(ENDPOINT_PARTICIPANT_PROJECT);
 
 const COHORT_ID_EXISTS_PREDICATE: SearchNodePayload = {
@@ -128,47 +134,29 @@ const downloadList = async (search?: SearchNodePayload, sortOrder?: SearchSortOr
   await SearchService.searchCsv(getSearchParams(search, sortOrder));
 
 const list = async (
+  locale?: string,
   search?: SearchNodePayload,
   sortOrder?: SearchSortOrder
-): Promise<ParticipantProjectSearchResult[] | null> => {
-  const response: SearchResponseElement[] | null = await SearchService.search(getSearchParams(search, sortOrder));
-
-  if (!response) {
-    return null;
+): Promise<ListProjectAcceleratorDetailsResponsePayload> => {
+  let searchOrderConfig: SearchOrderConfig | undefined;
+  if (sortOrder) {
+    searchOrderConfig = {
+      locale: locale ?? null,
+      sortOrder: sortOrder,
+      numberFields: ['id'],
+    };
   }
 
-  return response.map((result: SearchResponseElement) => {
-    const {
-      id,
-      name,
-      participant_name,
-      participant_cohort_id,
-      participant_cohort_name,
-      participant_cohort_phase,
-      acceleratorDetails_fileNaming,
-      country_name,
-      country_region,
-      acceleratorDetails_confirmedReforestableLand,
-    } = result;
+  const response = await httpParticipantProjects.get2<ListProjectAcceleratorDetailsResponsePayload>();
 
-    type LandUse = { landUseModelType: string };
+  if (!response || !response.requestSucceeded || !response.data) {
+    return Promise.reject(response);
+  }
 
-    return {
-      acceleratorDetails_confirmedReforestableLand,
-      country_name,
-      country_region,
-      id: Number(id),
-      'landUseModelTypes.landUseModelType': ((result.landUseModelTypes || []) as LandUse[]).map(
-        (type: LandUse) => type.landUseModelType
-      ),
-      name,
-      participant_cohort_id: Number(participant_cohort_id),
-      participant_cohort_name,
-      participant_cohort_phase,
-      acceleratorDetails_fileNaming,
-      participant_name,
-    } as ParticipantProjectSearchResult;
-  });
+  return {
+    status: response.data.status,
+    details: searchAndSort(response.data.details, search, searchOrderConfig),
+  };
 };
 
 const update = async (participantProject: ParticipantProject): Promise<Response> => {

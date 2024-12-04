@@ -205,6 +205,10 @@ export interface paths {
     /** Deletes a participant that has no projects. */
     delete: operations["deleteParticipant"];
   };
+  "/api/v1/accelerator/projects": {
+    /** List accelerator projects with accelerator-related details. */
+    get: operations["listProjectAcceleratorDetails"];
+  };
   "/api/v1/accelerator/projects/species": {
     /** Creates a new participant project species entry. */
     post: operations["createParticipantProjectSpecies"];
@@ -222,10 +226,7 @@ export interface paths {
     put: operations["updateParticipantProjectSpecies"];
   };
   "/api/v1/accelerator/projects/{projectId}": {
-    /**
-     * Gets the accelerator-related details for a project.
-     * @description Does not include information such as project name that's available via the non-accelerator projects API.
-     */
+    /** Gets the accelerator-related details for a project. */
     get: operations["getProjectAcceleratorDetails"];
     /** Updates the accelerator-related details for a project. */
     put: operations["updateProjectAcceleratorDetails"];
@@ -932,9 +933,9 @@ export interface paths {
     /** Gets a list of the results of observations. */
     get: operations["listObservationResults"];
   };
-  "/api/v1/tracking/observations/results/summary": {
-    /** Gets the rollup observation summary of a planting site */
-    get: operations["getPlantingSiteObservationSummary"];
+  "/api/v1/tracking/observations/results/summaries": {
+    /** Gets the rollup observation summaries of a planting site */
+    get: operations["getPlantingSiteObservationSummaries"];
   };
   "/api/v1/tracking/observations/{observationId}": {
     /** Gets information about a single observation. */
@@ -2864,10 +2865,10 @@ export interface components {
       participant: components["schemas"]["ParticipantPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
-    GetPlantingSiteObservationSummaryPayload: {
+    GetPlantingSiteObservationSummariesPayload: {
       status: components["schemas"]["SuccessOrError"];
-      /** @description Rollup summary of planting site observations. Null if no observation has been made. */
-      summary?: components["schemas"]["PlantingSiteObservationSummaryPayload"];
+      /** @description History of rollup summaries of planting site observations in order of observation time, latest first. */
+      summaries: components["schemas"]["PlantingSiteObservationSummaryPayload"][];
     };
     GetPlantingSiteReportedPlantsResponsePayload: {
       site: components["schemas"]["PlantingSiteReportedPlantsPayload"];
@@ -3359,6 +3360,10 @@ export interface components {
     };
     ListPlantingSubzoneSpeciesResponsePayload: {
       species: components["schemas"]["PlantingSubzoneSpeciesPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListProjectAcceleratorDetailsResponsePayload: {
+      details: components["schemas"]["ProjectAcceleratorDetailsPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListProjectsResponsePayload: {
@@ -4162,7 +4167,7 @@ export interface components {
       /** Format: date */
       startDate: string;
     };
-    /** @description Rollup summary of planting site observations. Null if no observation has been made. */
+    /** @description History of rollup summaries of planting site observations in order of observation time, latest first. */
     PlantingSiteObservationSummaryPayload: {
       /**
        * Format: date-time
@@ -4340,9 +4345,15 @@ export interface components {
       annualCarbon?: number;
       applicationReforestableLand?: number;
       carbonCapacity?: number;
+      /** Format: int64 */
+      cohortId?: number;
+      cohortName?: string;
+      /** @enum {string} */
+      cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
       confirmedReforestableLand?: number;
       countryCode?: string;
       dealDescription?: string;
+      dealName?: string;
       /** @enum {string} */
       dealStage?: "Phase 0 (Doc Review)" | "Phase 1" | "Phase 2" | "Phase 3" | "Graduated, Finished Planting" | "Non Graduate" | "Application Submitted" | "Project Lead Screening Review" | "Screening Questions Ready for Review" | "Carbon Pre-Check" | "Submission Requires Follow Up" | "Carbon Eligible" | "Closed Lost" | "Issue Active" | "Issue Pending" | "Issue Reesolved";
       dropboxFolderPath?: string;
@@ -4360,6 +4371,9 @@ export interface components {
       numCommunities?: number;
       /** Format: int32 */
       numNativeSpecies?: number;
+      /** Format: int64 */
+      participantId?: number;
+      participantName?: string;
       perHectareBudget?: number;
       /** @enum {string} */
       pipeline?: "Accelerator Projects" | "Carbon Supply" | "Carbon Waitlist";
@@ -5367,6 +5381,7 @@ export interface components {
       confirmedReforestableLand?: number;
       countryCode?: string;
       dealDescription?: string;
+      dealName?: string;
       /** @enum {string} */
       dealStage?: "Phase 0 (Doc Review)" | "Phase 1" | "Phase 2" | "Phase 3" | "Graduated, Finished Planting" | "Non Graduate" | "Application Submitted" | "Project Lead Screening Review" | "Screening Questions Ready for Review" | "Carbon Pre-Check" | "Submission Requires Follow Up" | "Carbon Eligible" | "Closed Lost" | "Issue Active" | "Issue Pending" | "Issue Reesolved";
       /** @description Path on Dropbox to use for sensitive document storage. Ignored if the user does not have permission to update project document settings. */
@@ -6807,6 +6822,23 @@ export interface operations {
       };
     };
   };
+  /** List accelerator projects with accelerator-related details. */
+  listProjectAcceleratorDetails: {
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListProjectAcceleratorDetailsResponsePayload"];
+        };
+      };
+      /** @description The request was not valid. */
+      400: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   /** Creates a new participant project species entry. */
   createParticipantProjectSpecies: {
     requestBody: {
@@ -6910,10 +6942,7 @@ export interface operations {
       };
     };
   };
-  /**
-   * Gets the accelerator-related details for a project.
-   * @description Does not include information such as project name that's available via the non-accelerator projects API.
-   */
+  /** Gets the accelerator-related details for a project. */
   getProjectAcceleratorDetails: {
     parameters: {
       path: {
@@ -10574,18 +10603,20 @@ export interface operations {
       };
     };
   };
-  /** Gets the rollup observation summary of a planting site */
-  getPlantingSiteObservationSummary: {
+  /** Gets the rollup observation summaries of a planting site */
+  getPlantingSiteObservationSummaries: {
     parameters: {
       query: {
         plantingSiteId: number;
+        /** @description Maximum number of results to return. Results are always returned in order of observations completion time, newest first, so setting this to 1 will return the summaries including the most recently completed observation. */
+        limit?: number;
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["GetPlantingSiteObservationSummaryPayload"];
+          "application/json": components["schemas"]["GetPlantingSiteObservationSummariesPayload"];
         };
       };
     };
