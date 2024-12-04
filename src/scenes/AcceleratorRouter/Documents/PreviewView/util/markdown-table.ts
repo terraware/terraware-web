@@ -12,7 +12,7 @@ export const hasMarkdownTableHeaderSeparatorRow = (input: string | undefined): b
 const MarkdownTableRowRegex = () => /\|\s*([^|]*?)\s*(?=\|)/g;
 export const hasMarkdownTableRow = (input: string | undefined): boolean => !!MarkdownTableRowRegex().exec(input || '');
 
-export const getMarkdownTableCellValues = (input: string): string[] => {
+const getMarkdownTableCellValues = (input: string): string[] => {
   const values: string[] = [];
   let match: RegExpMatchArray | null;
   // To ensure we keep an accurate index
@@ -23,14 +23,14 @@ export const getMarkdownTableCellValues = (input: string): string[] => {
   return values;
 };
 
-export type PreviewValueDisplayUnion = VariableValueValue | TableElement;
+type PreviewValueDisplayUnion = VariableValueValue | TableElement;
 
 type StartingValueId = VariableValueValue['id'];
 type ValueIdsMap = Map<VariableValueValue['id'], VariableValueValue | VariableValueValue[]>;
 
 type TableCell = string | SectionVariableVariableValue;
 
-export type TableElement = {
+type TableElement = {
   startingValueId: StartingValueId;
   headers: string[];
   rows: TableCell[][];
@@ -40,7 +40,7 @@ export const isTableElement = (input: unknown): input is TableElement => {
   return !!(cast.startingValueId && Array.isArray(cast.headers) && Array.isArray(cast.rows));
 };
 
-export type TableElementWithValueIds = TableElement & {
+type TableElementWithValueIds = TableElement & {
   valueIds: ValueIdsMap;
 };
 
@@ -182,6 +182,43 @@ const collectTableElements = (inputValues: VariableValueValue[]): TableElementWi
   return tableElements;
 };
 
+/**
+ * This function attempts to collect Markdown formatted tables from our section variable values. Section variable
+ * values are a list of "section text" and "section variable" values, and a Markdown formatted table may be
+ * made up of a few different combinations of these.
+ *
+ * These tables follow [this syntax](https://www.markdownguide.org/extended-syntax/#tables) for Markdown tables.
+ *
+ * For example, an entire table may be expressed within a single "section text" value, whic may look like:
+ * SectionTextValue: "| Header1 | Header2 |\n|---|---|\n| Row1Cell1 | Row1Cell2 |"
+ *
+ * It can also be expressed over several "section text" values, usually split by the newline:
+ * SectionTextValue: "| Header1 | Header2 |\n"
+ * SectionTextValue: "|---|---|\n"
+ * SectionTextValue: "| Row1Cell1 | Row1Cell2 |"
+ *
+ * It can also be expressed with "section variables" injected into cells, in combination with either aforementioned format:
+ * Example 1 (injected variable is in row 1 cell 1)
+ * SectionTextValue: "| Header1 | Header2 |\n|---|---|\n| "
+ * SectionVariableValue: VariableId 123
+ * SectionTextValue: "| Row1Cell2 |"
+ *
+ *
+ * Example 2 (injected variable is in row 1 cell 1)
+ * SectionTextValue: "| Header1 | Header2 |\n"
+ * SectionTextValue: "|---|---|\n"
+ * SectionTextValue: "| "
+ * SectionVariableValue: VariableId 123
+ * SectionTextValue: "| Row1Cell2 |"
+ *
+ * Please see the tests to see more concrete examples of how this data might be represented on the server side or after hydration in the FE
+ *
+ * This function will remove all section variable values that are part of a markdown table, and replace them with a single
+ * table element which can be easily rendered.
+ *
+ * @param inputValues VariableValueValue[]
+ * @returns PreviewValueDisplayUnion[] - this is just a union of the VariableValueValue and TableElement type
+ */
 export const collectTablesForPreview = (inputValues: VariableValueValue[]): PreviewValueDisplayUnion[] => {
   const tableElements: TableElementWithValueIds[] = collectTableElements(inputValues);
 
