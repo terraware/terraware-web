@@ -57,8 +57,6 @@ export const PlantingSiteStats = () => {
         ],
       } as FeatureCollection;
 
-      console.log('geojson', geojson);
-
       const simplifiedGeojson = simplify(geojson, { tolerance: 0.002, highQuality: false });
       const geojsonString = encodeURIComponent(JSON.stringify(simplifiedGeojson));
       const staticMapUrl = `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/geojson(${geojsonString})/auto/580x360@2x?padding=80&access_token=${token}`;
