@@ -59,6 +59,7 @@
     "@turf/centroid": "^6.5.0",
     "@turf/difference": "^6.5.0",
     "@turf/intersect": "^6.5.0",
+    "@turf/simplify": "^7.1.0",
     "@turf/union": "^6.5.0",
     "axios": "^1.6.3",
     "chart.js": "^4.2.0",

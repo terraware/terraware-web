@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
+import simplify from '@turf/simplify';
+import { FeatureCollection } from 'geojson';
 
 import Link from 'src/components/common/Link';
 import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
@@ -32,27 +34,37 @@ export const PlantingSiteStats = () => {
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const { countries } = useLocalization();
+  const [staticMapURL, setStaticMapURL] = useState<string>();
 
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, selectedPlantingSiteId || -1, defaultTimeZone.get().id)
   );
 
-  const geojson = {
-    type: 'FeatureCollection',
-    features: [
-      {
-        type: 'Feature',
-        geometry: selectedPlantingSite?.boundary,
-        properties: {
-          fill: theme.palette.TwClrBaseGreen300,
-          'fill-opacity': 0.2,
-          stroke: theme.palette.TwClrBaseGreen300,
-        },
-      },
-    ],
-  };
-  const geojsonString = encodeURIComponent(JSON.stringify(geojson));
-  const staticMapURL = `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/geojson(${geojsonString})/auto/580x360@2x?padding=80&access_token=${token}`;
+  useEffect(() => {
+    if (selectedPlantingSite?.boundary) {
+      const geojson = {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            geometry: selectedPlantingSite?.boundary,
+            properties: {
+              fill: theme.palette.TwClrBaseGreen300,
+              'fill-opacity': 0.2,
+              stroke: theme.palette.TwClrBaseGreen300,
+            },
+          },
+        ],
+      } as FeatureCollection;
+
+      console.log('geojson', geojson);
+
+      const simplifiedGeojson = simplify(geojson, { tolerance: 0.002, highQuality: false });
+      const geojsonString = encodeURIComponent(JSON.stringify(simplifiedGeojson));
+      const staticMapUrl = `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/geojson(${geojsonString})/auto/580x360@2x?padding=80&access_token=${token}`;
+      setStaticMapURL(staticMapUrl);
+    }
+  }, [selectedPlantingSite?.boundary]);
 
   const primaryGridSize = useMemo(() => (isDesktop ? 6 : 12), [isDesktop]);
 
