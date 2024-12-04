@@ -70,7 +70,7 @@ const collectTableElement = (
     }
 
     // There must be the same number of cells as headers
-    const cells: TableCell[] = getMarkdownTableCellValues(row.textValue);
+    let cells: TableCell[] = getMarkdownTableCellValues(row.textValue);
     if (cells.length === tableElement.headers.length) {
       // All of the cells for this row are on the same line
       tableElement.valueIds.set(row.id, row);
@@ -102,14 +102,14 @@ const collectTableElement = (
           nextRowPart = 'border';
         } else if (nextRowPart === 'cell' && isSectionTextVariableValue(nextValue)) {
           // Attempt to continue collecting cells
-          cells.concat(getMarkdownTableCellValues(nextValue.textValue));
+          cells = cells.concat(getMarkdownTableCellValues(nextValue.textValue));
         } else if (nextRowPart === 'border' && isSectionTextVariableValue(nextValue)) {
           // If this is a border, it must start with a "|"
           if (nextValue.textValue.trim()[0] !== '|') {
             return tableElement;
           }
           // We can attempt to keep collecting cells
-          cells.concat(getMarkdownTableCellValues(nextValue.textValue));
+          cells = cells.concat(getMarkdownTableCellValues(nextValue.textValue));
 
           // If the cell count is the same as the header count, this row is done.
           if (cells.length === tableElement.headers.length) {
