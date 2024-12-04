@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -122,7 +122,10 @@
 <a name='L57'></a><a href='#L57'>57</a>
 <a name='L58'></a><a href='#L58'>58</a>
 <a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -133,6 +136,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -188,14 +194,17 @@ import TextTruncated from 'src/components/common/TextTruncated';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { CohortPhaseType, getPhaseString } from 'src/types/Cohort';
+import { getCountryByCode } from 'src/utils/country';
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >ParticipantProjectsCellRenderer(</span>props: RendererProps&lt;TableRowType&gt;): JSX.Element {
   const { column, row, value } = <span class="cstat-no" title="statement not covered" >props;</span>
+  const { countries } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
 &nbsp;
   const createLinkToProject = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const to = <span class="cstat-no" title="statement not covered" >APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${row.id}`);</span>
+    const to = <span class="cstat-no" title="statement not covered" >APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${row.projectId}`);</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
       &lt;Link fontSize='16px' to={to}&gt;
         {value as React.ReactNode}
@@ -203,7 +212,7 @@ export default function <span class="fstat-no" title="function not covered" >Par
     );
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (column.key === 'name') {</span>
+<span class="cstat-no" title="statement not covered" >  if (column.key === 'dealName') {</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
       &lt;CellRenderer
         {...props}
@@ -219,15 +228,15 @@ export default function <span class="fstat-no" title="function not covered" >Par
     );
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (column.key === 'participant_cohort_phase') {</span>
+<span class="cstat-no" title="statement not covered" >  if (column.key === 'countryCode') {</span>
+<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer {...props} value={getCountryByCode(countries, value as string)?.name ?? ''} /&gt;;</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (column.key === 'cohortPhase') {</span>
 <span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer {...props} value={getPhaseString(value as CohortPhaseType)} /&gt;;</span>
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (column.key === 'acceleratorDetails_confirmedReforestableLand') {</span>
-<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer {...props} value={row.acceleratorDetails_confirmedReforestableLand} /&gt;;</span>
-  }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (column.key === 'landUseModelTypes.landUseModelType') {</span>
+<span class="cstat-no" title="statement not covered" >  if (column.key === 'landUseModelTypes') {</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
       &lt;CellRenderer
         {...props}
@@ -247,7 +256,7 @@ export default function <span class="fstat-no" title="function not covered" >Par
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-04T13:51:02.674Z
+                at 2024-12-04T23:17:54.007Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

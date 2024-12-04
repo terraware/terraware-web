@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/48</span>
+                <span class='fraction'>0/49</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/47</span>
+                <span class='fraction'>0/48</span>
             </div>
         
             
@@ -255,14 +255,7 @@
 <a name='L190'></a><a href='#L190'>190</a>
 <a name='L191'></a><a href='#L191'>191</a>
 <a name='L192'></a><a href='#L192'>192</a>
-<a name='L193'></a><a href='#L193'>193</a>
-<a name='L194'></a><a href='#L194'>194</a>
-<a name='L195'></a><a href='#L195'>195</a>
-<a name='L196'></a><a href='#L196'>196</a>
-<a name='L197'></a><a href='#L197'>197</a>
-<a name='L198'></a><a href='#L198'>198</a>
-<a name='L199'></a><a href='#L199'>199</a>
-<a name='L200'></a><a href='#L200'>200</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L193'></a><a href='#L193'>193</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -286,11 +279,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -383,13 +371,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -399,6 +380,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -407,9 +395,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -477,7 +463,7 @@ import { selectParticipantProjectsListRequest } from 'src/redux/features/partici
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ParticipantProjectService } from 'src/services';
 import strings from 'src/strings';
-import { ParticipantProjectSearchResult } from 'src/types/ParticipantProject';
+import { ParticipantProject } from 'src/types/ParticipantProject';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
@@ -487,56 +473,51 @@ const columns = <span class="cstat-no" title="statement not covered" ><span clas
 <span class="cstat-no" title="statement not covered" >  activeLocale</span>
     ? [
         {
-          key: 'name',
-          name: strings.PROJECT,
+          key: 'dealName',
+          name: strings.DEAL_NAME,
           type: 'string',
         },
         {
-          key: 'participant_name',
-          name: strings.PARTICIPANT,
-          type: 'string',
-        },
-        {
-          key: 'participant_cohort_name',
+          key: 'cohortName',
           name: strings.COHORT,
           type: 'string',
         },
         {
-          key: 'participant_cohort_phase',
+          key: 'cohortPhase',
           name: strings.PHASE,
           type: 'string',
         },
         {
-          key: 'acceleratorDetails_fileNaming',
+          key: 'fileNaming',
           name: strings.FILE_NAMING,
           type: 'string',
         },
         {
-          key: 'country_name',
+          key: 'countryCode',
           name: strings.COUNTRY,
           type: 'string',
         },
         {
-          key: 'country_region',
+          key: 'region',
           name: strings.REGION,
           type: 'string',
         },
         {
-          key: 'acceleratorDetails_confirmedReforestableLand',
+          key: 'confirmedReforestableLand',
           name: strings.RESTORABLE_LAND,
-          type: 'string',
+          type: 'number',
         },
         {
-          key: 'landUseModelTypes.landUseModelType',
+          key: 'landUseModelTypes',
           name: strings.LAND_USE_MODEL_TYPE,
           type: 'string',
         },
       ]
     : [];
 &nbsp;
-const fuzzySearchColumns = <span class="cstat-no" title="statement not covered" >['name', 'acceleratorDetails_fileNaming'];</span>
+const fuzzySearchColumns = <span class="cstat-no" title="statement not covered" >['dealName'];</span>
 const defaultSearchOrder: SearchSortOrder = <span class="cstat-no" title="statement not covered" >{</span>
-  field: 'name',
+  field: 'dealName',
   direction: 'Ascending',
 };
 &nbsp;
@@ -550,7 +531,7 @@ export default function <span class="fstat-no" title="function not covered" >Lis
   const [openDownload, setOpenDownload] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [lastSearch, setLastSearch] = <span class="cstat-no" title="statement not covered" >useState&lt;SearchNodePayload&gt;();</span>
   const [lastSort, setLastSort] = <span class="cstat-no" title="statement not covered" >useState&lt;SearchSortOrder&gt;();</span>
-  const [projects, setProjects] = <span class="cstat-no" title="statement not covered" >useState&lt;ParticipantProjectSearchResult[]&gt;([]);</span>
+  const [projects, setProjects] = <span class="cstat-no" title="statement not covered" >useState&lt;ParticipantProject[]&gt;([]);</span>
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const result = <span class="cstat-no" title="statement not covered" >useAppSelector(selectParticipantProjectsListRequest(requestId));</span>
 &nbsp;
@@ -568,7 +549,7 @@ export default function <span class="fstat-no" title="function not covered" >Lis
 <span class="cstat-no" title="statement not covered" >      if (locale) {</span>
 <span class="cstat-no" title="statement not covered" >        setLastSearch(search);</span>
 <span class="cstat-no" title="statement not covered" >        setLastSort(sortOrder);</span>
-        const request = <span class="cstat-no" title="statement not covered" >dispatch(requestListParticipantProjects({ search, sortOrder }));</span>
+        const request = <span class="cstat-no" title="statement not covered" >dispatch(requestListParticipantProjects({ locale, search, sortOrder }));</span>
 <span class="cstat-no" title="statement not covered" >        setRequestId(request.requestId);</span>
       }
     },
@@ -579,7 +560,9 @@ export default function <span class="fstat-no" title="function not covered" >Lis
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
 <span class="cstat-no" title="statement not covered" >      (projects || []).reduce(</span>
 <span class="fstat-no" title="function not covered" >        (a</span>cc, project) =&gt; {
-<span class="cstat-no" title="statement not covered" >          acc[project.participant_cohort_id] = project.participant_cohort_name;</span>
+<span class="cstat-no" title="statement not covered" >          if (project.cohortId &amp;&amp; project.cohortName) {</span>
+<span class="cstat-no" title="statement not covered" >            acc[project.cohortId] = project.cohortName;</span>
+          }
 <span class="cstat-no" title="statement not covered" >          return acc;</span>
         },
         {} as Record&lt;string, string&gt;
@@ -592,23 +575,19 @@ export default function <span class="fstat-no" title="function not covered" >Lis
 <span class="cstat-no" title="statement not covered" >      activeLocale</span>
         ? [
             {
-              field: 'participant_cohort_id',
-              id: 'participant_cohort_id',
+              field: 'cohortId',
+              id: 'cohortId',
               label: strings.COHORT,
-              options: (projects || [])?.map(
-<span class="fstat-no" title="function not covered" >                (p</span>roject: ParticipantProjectSearchResult) =&gt; <span class="cstat-no" title="statement not covered" >`${project.participant_cohort_id}`</span>
-              ),
+              options: (projects || [])?.map(<span class="fstat-no" title="function not covered" >(p</span>roject: ParticipantProject) =&gt; <span class="cstat-no" title="statement not covered" >project.cohortId?.toString() ?? '')</span>,
               pillValueRenderer: <span class="fstat-no" title="function not covered" >(v</span>alues: (string | number | null)[]) =&gt;
 <span class="cstat-no" title="statement not covered" >                values.map(<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >cohorts[value || ''] || '')</span>.join(', '),</span>
               renderOption: <span class="fstat-no" title="function not covered" >(i</span>d: string | number) =&gt; <span class="cstat-no" title="statement not covered" >cohorts[id] || '',</span>
             },
             {
-              field: 'participant_cohort_phase',
-              id: 'participant_cohort_phase',
+              field: 'cohortPhase',
+              id: 'cohortPhase',
               label: strings.PHASE,
-              options: (projects || [])?.map(
-<span class="fstat-no" title="function not covered" >                (p</span>roject: ParticipantProjectSearchResult) =&gt; <span class="cstat-no" title="statement not covered" >`${project.participant_cohort_phase}`</span>
-              ),
+              options: (projects || [])?.map(<span class="fstat-no" title="function not covered" >(p</span>roject: ParticipantProject) =&gt; <span class="cstat-no" title="statement not covered" >project.cohortPhase?.toString() ?? '')</span>,
             },
           ]
         : [],
@@ -667,7 +646,7 @@ export default function <span class="fstat-no" title="function not covered" >Lis
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-04T13:51:02.674Z
+                at 2024-12-04T23:17:54.007Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

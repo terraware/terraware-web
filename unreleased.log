@@ -1,3 +1,4 @@
+56c37183f2f SW-6307 Used deal name in participant project table (#3393)
 06caca05064 Bump webpack from 5.91.0 to 5.94.0 (#3118)
 7e563efb4f1 SW-6253 Implemented new scorecard views using V2 API (#3368)
 4aa4d929ff5 Bump start-server-and-test from 2.0.3 to 2.0.8 (#3233)
