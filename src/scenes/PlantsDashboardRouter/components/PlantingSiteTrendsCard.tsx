@@ -1,14 +1,19 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import React, { Box, Typography, useTheme } from '@mui/material';
-import { Icon, Tooltip } from '@terraware/web-components';
+import { Icon, Select, Tooltip } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import Chart from 'src/components/common/Chart/Chart';
-import { selectObservationsResults } from 'src/redux/features/observations/observationsSelectors';
+import {
+  selectObservationsResults,
+  selectPlantingSiteObservationsSummaries,
+} from 'src/redux/features/observations/observationsSelectors';
+import { requestGetPlantingSiteObservationsSummaries } from 'src/redux/features/observations/observationsThunks';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { ObservationSummary } from 'src/types/Observations';
 
 type PlantingSiteTrendsCardProps = {
   plantingSiteId: number;
@@ -18,8 +23,34 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
   const theme = useTheme();
   const allObservationsResults = useAppSelector(selectObservationsResults);
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
+  const [requestId, setRequestId] = useState<string>('');
+  const plantingObservationsSummaryResponse = useAppSelector((state) =>
+    selectPlantingSiteObservationsSummaries(state, requestId)
+  );
 
   const totalArea = plantingSite?.areaHa ?? 1;
+
+  const zonesOptions = plantingSite?.plantingZones?.map((pzone) => pzone.name);
+  const [selectedPlantsPerHaZone, setSelectedPlantsPerHaZone] = useState<string>();
+  const dispatch = useAppDispatch();
+  const [summaries, setSummaries] = useState<ObservationSummary[]>();
+
+  useEffect(() => {
+    if (plantingSite?.id) {
+      const request = dispatch(requestGetPlantingSiteObservationsSummaries(plantingSite.id));
+      setRequestId(request.requestId);
+    }
+  }, [plantingSite]);
+
+  useEffect(() => {
+    if (plantingObservationsSummaryResponse?.status === 'success') {
+      setSummaries(plantingObservationsSummaryResponse.data);
+    }
+  }, [plantingObservationsSummaryResponse]);
+
+  useEffect(() => {
+    console.log('summaries', summaries);
+  }, [summaries]);
 
   const siteObservations = useMemo(() => {
     if (!allObservationsResults || !plantingSiteId) {
@@ -88,6 +119,12 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
           </Tooltip>
         </Box>
         <Box marginTop={2}>
+          <Select
+            placeholder={strings.SELECT}
+            options={zonesOptions}
+            onChange={(newValue) => setSelectedPlantsPerHaZone(newValue)}
+            selectedValue={selectedPlantsPerHaZone}
+          />
           <Chart
             chartId='plantsPerHaChart'
             chartData={plantsChartData}

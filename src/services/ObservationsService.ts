@@ -8,7 +8,7 @@ import {
   ScheduleObservationRequestPayload,
 } from 'src/types/Observations';
 
-import HttpService, { Response } from './HttpService';
+import HttpService, { Response, Response2 } from './HttpService';
 import SearchService from './SearchService';
 
 /**
@@ -20,12 +20,16 @@ const OBSERVATIONS_ENDPOINT = '/api/v1/tracking/observations';
 const OBSERVATION_ENDPOINT = '/api/v1/tracking/observations/{observationId}';
 const OBSERVATION_EXPORT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots';
 const REPLACE_OBSERVATION_PLOT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/replace';
+const PLANTING_SITE_OBSERVATIONS_SUMMARIES_ENDOINT = '/api/v1/tracking/observations/results/summaries';
 
 type ObservationsResultsResponsePayload =
   paths[typeof OBSERVATIONS_RESULTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 type ObservationsResponsePayload =
   paths[typeof OBSERVATIONS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+export type GetPlantingSiteObservationSummariesPayload =
+  paths[typeof PLANTING_SITE_OBSERVATIONS_SUMMARIES_ENDOINT]['get']['responses'][200]['content']['application/json'];
 
 /**
  * exported response type
@@ -167,6 +171,18 @@ const replaceObservationPlot = async (
   };
 };
 
+const getPlantingSiteObservationsSummaries = async (
+  plantingSiteId: number
+): Promise<Response2<GetPlantingSiteObservationSummariesPayload>> => {
+  return HttpService.root(
+    PLANTING_SITE_OBSERVATIONS_SUMMARIES_ENDOINT
+  ).get2<GetPlantingSiteObservationSummariesPayload>({
+    params: {
+      plantingSiteId: plantingSiteId.toString(),
+    },
+  });
+};
+
 /**
  * Exported functions
  */
@@ -178,6 +194,7 @@ const ObservationsService = {
   replaceObservationPlot,
   rescheduleObservation,
   scheduleObservation,
+  getPlantingSiteObservationsSummaries,
 };
 
 export default ObservationsService;
