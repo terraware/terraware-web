@@ -27,7 +27,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const isApplicationRoute = useMatch({ path: APP_PATHS.ACCELERATOR_APPLICATIONS, end: false });
   const isDocumentsRoute = useMatch({ path: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS, end: false });
   const isDeliverablesRoute = useMatch({ path: APP_PATHS.ACCELERATOR_DELIVERABLES, end: false });
-  const isModuleContentRoute = useMatch({ path: APP_PATHS.ACCELERATOR_MODULE_CONTENT, end: false });
+  const isModuleContentRoute = useMatch({ path: APP_PATHS.ACCELERATOR_MODULES, end: false });
   const isOrganizationRoute = useMatch({ path: APP_PATHS.ACCELERATOR_ORGANIZATIONS, end: false });
   const isOverviewRoute = useMatch({ path: APP_PATHS.ACCELERATOR_OVERVIEW, end: false });
   const isParticipantsRoute = useMatch({ path: APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW, end: false });
