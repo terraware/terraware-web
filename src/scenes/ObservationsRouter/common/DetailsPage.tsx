@@ -17,6 +17,7 @@ type DetailsPageProps = {
   plantingZoneId?: number | string;
   title: string;
   children: React.ReactNode;
+  rightComponent?: React.ReactNode;
 };
 
 export default function DetailsPage({
@@ -25,6 +26,7 @@ export default function DetailsPage({
   plantingZoneId,
   title,
   children,
+  rightComponent,
 }: DetailsPageProps): JSX.Element {
   const { activeLocale } = useLocalization();
   const defaultTimeZone = useDefaultTimeZone();
@@ -84,7 +86,7 @@ export default function DetailsPage({
   }, [activeLocale, plantingSiteId, observationId, plantingZoneId, plantingZone, details]);
 
   return (
-    <Page crumbs={crumbs} title={title}>
+    <Page crumbs={crumbs} title={title} rightComponent={rightComponent}>
       {children}
     </Page>
   );

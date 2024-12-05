@@ -28,19 +28,21 @@ const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEd
   const [isBusy, setIsBusy] = useState<boolean>(false);
 
   const onSave = useCallback(async () => {
-    setIsBusy(true);
-    const result = await ReportSettingsService.updateSettings({
-      organizationId: selectedOrganization.id,
-      ...localReportsSettings,
-    });
+    if (selectedOrganization.id !== -1) {
+      setIsBusy(true);
+      const result = await ReportSettingsService.updateSettings({
+        organizationId: selectedOrganization.id,
+        ...localReportsSettings,
+      });
 
-    setIsBusy(false);
-    if (!result.requestSucceeded) {
-      snackbar.toastError();
-      return;
+      setIsBusy(false);
+      if (!result.requestSucceeded) {
+        snackbar.toastError();
+        return;
+      }
+
+      navigate(APP_PATHS.REPORTS_SETTINGS);
     }
-
-    navigate(APP_PATHS.REPORTS_SETTINGS);
   }, [navigate, localReportsSettings, selectedOrganization.id, snackbar]);
 
   const onChange = useCallback(

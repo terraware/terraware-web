@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Grid, useTheme } from '@mui/material';
@@ -9,14 +9,14 @@ import ProjectFieldDisplay from 'src/components/ProjectField/Display';
 import Card from 'src/components/common/Card';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import useListCohortModules from 'src/hooks/useListCohortModules';
 import useListModules from 'src/hooks/useListModules';
 import { useLocalization, useUser } from 'src/providers';
 import { requestCohort } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import CohortModulesTable from 'src/scenes/AcceleratorRouter/Modules/CohortModulesTable';
+import CohortModulesTable from 'src/scenes/AcceleratorRouter/Cohorts/CohortModulesTable';
 import strings from 'src/strings';
-import { CohortModule } from 'src/types/Module';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 const CohortView = () => {
@@ -30,26 +30,16 @@ const CohortView = () => {
   const pathParams = useParams<{ cohortId: string }>();
   const cohortId = Number(pathParams.cohortId);
   const cohort = useAppSelector(selectCohort(cohortId));
-  const { modules, listModules, listDeliverables, deliverablesByModuleId } = useListModules();
-  const [modulesWithDeliverablesQuantity, setModulesWithDeliverablesQuantity] = useState<CohortModule[]>();
+  const { cohortModules, listCohortModules } = useListCohortModules();
+  const { modules, listModules } = useListModules();
 
   useEffect(() => {
     if (cohortId) {
-      void listDeliverables();
       void dispatch(requestCohort({ cohortId }));
-      void listModules({ cohortId });
+      void listCohortModules(cohortId);
+      void listModules();
     }
-  }, [cohortId, dispatch]);
-
-  useEffect(() => {
-    if (deliverablesByModuleId) {
-      const newModules = modules?.map((md) => {
-        return { ...md, deliverablesQuantity: deliverablesByModuleId[md.id]?.length || 0 };
-      });
-
-      setModulesWithDeliverablesQuantity(newModules);
-    }
-  }, [modules, deliverablesByModuleId]);
+  }, [cohortId, dispatch, listCohortModules, listModules]);
 
   const goToEditCohort = useCallback(() => {
     if (pathParams.cohortId) {
@@ -96,11 +86,7 @@ const CohortView = () => {
           <ProjectFieldDisplay label={strings.PHASE} value={cohort.phase} rightBorder={true} />
         </Grid>
         <Box paddingLeft={2} paddingRight={2}>
-          <CohortModulesTable
-            modules={modulesWithDeliverablesQuantity}
-            deliverablesByModuleId={deliverablesByModuleId}
-            cohortId={cohortId}
-          />
+          <CohortModulesTable cohortModules={cohortModules} modules={modules} />
         </Box>
       </Card>
     </Page>

@@ -1,157 +1,66 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useCallback, useEffect } from 'react';
 
-import { Box, Grid, useTheme } from '@mui/material';
-import { Button } from '@terraware/web-components';
-
-import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
-import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
-import { APP_PATHS } from 'src/constants';
-import useListModules from 'src/hooks/useListModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import strings from 'src/strings';
-import { Score, ScoreCategory, ScoreValue } from 'src/types/Score';
+import useProjectScore from 'src/hooks/useProjectScore';
+import { Score } from 'src/types/Score';
+import useForm from 'src/utils/useForm';
 
-import PhaseScores from './PhaseScores';
-import { useScoringData } from './ScoringContext';
-import useScoresUpdate from './useScoresUpdate';
+import { useParticipantProjectData } from '../ParticipantProjectContext';
+import ScoreCard from './ScoreCard';
+import ScoringWrapper from './ScoringWrapper';
 
 const ScorecardEditView = () => {
-  const theme = useTheme();
-  const navigate = useNavigate();
-  const { crumbs, hasData, phase0Scores, phase1Scores, project, status } = useScoringData();
-  const { update, status: updateStatus } = useScoresUpdate(project?.id);
-  const { goToParticipantProject } = useNavigateTo();
+  const { goToAcceleratorProjectScore } = useNavigateTo();
 
-  const [scores, setScores] = useState<Score[]>([]);
-  const [updatedScores, setUpdatedScores] = useState<Score[]>([]);
-
-  const { modules, listModules } = useListModules();
+  const { project, projectId } = useParticipantProjectData();
+  const { projectScore, updateProjectScore, updateStatus, getStatus } = useProjectScore(projectId);
+  const [score, setScore, onChange] = useForm<Score>({});
 
   useEffect(() => {
+    if (getStatus === 'success' && projectScore) {
+      setScore(projectScore);
+    }
+  }, [getStatus, projectScore]);
+
+  const onExit = useCallback(() => {
     if (project) {
-      void listModules({ projectId: project.id });
+      goToAcceleratorProjectScore(project.id);
     }
-  }, [project, listModules]);
-
-  const goToVoting = useCallback(() => {
-    if (project) {
-      navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${project.id}`) });
-    }
-  }, [navigate, project]);
-
-  const goToScorecardView = useCallback(() => {
-    if (project) {
-      navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`) });
-    }
-  }, [navigate, project]);
-
-  const onCancel = useCallback(() => {
-    if (project) {
-      if (hasData === false) {
-        goToParticipantProject(project.id);
-      } else {
-        goToScorecardView();
-      }
-    }
-  }, [hasData, goToParticipantProject, goToScorecardView, project]);
-
-  const handleOnChange = (key: 'value' | 'qualitative', category: ScoreCategory, value: ScoreValue | string) => {
-    const originalScore = scores.find((score: Score) => score.category === category);
-    if (originalScore) {
-      setUpdatedScores((prev) => [
-        ...prev.filter((score: Score) => score.category !== category),
-        {
-          ...(prev.find((score: Score) => score.category === category) || originalScore),
-          [key]: value,
-        },
-      ]);
-    }
-  };
-
-  const handleOnChangeValue = (category: ScoreCategory, value: ScoreValue) => handleOnChange('value', category, value);
-
-  const handleOnChangeQualitative = (category: ScoreCategory, value: string) =>
-    handleOnChange('qualitative', category, value);
+  }, [goToAcceleratorProjectScore, project]);
 
   const onSave = useCallback(() => {
-    if (updatedScores.length === 0) {
-      goToScorecardView();
+    if (
+      score.detailsUrl === projectScore?.detailsUrl &&
+      score.overallScore === projectScore?.overallScore &&
+      score.summary === projectScore?.summary
+    ) {
+      onExit();
       return;
     }
-    if (project?.cohortPhase) {
-      const phaseToSend =
-        project.cohortPhase === 'Application' || project.cohortPhase === 'Pre-Screen'
-          ? 'Phase 0 - Due Diligence'
-          : project.cohortPhase;
-      update(phaseToSend, updatedScores);
-    }
-  }, [goToScorecardView, update, updatedScores, project]);
 
-  useEffect(() => {
-    const localPhase1Scores = [...(phase1Scores?.scores || [])];
-    setScores(localPhase1Scores);
-  }, [phase1Scores]);
+    updateProjectScore(score);
+  }, [onExit, score, projectScore, updateProjectScore]);
 
   useEffect(() => {
     if (updateStatus === 'success') {
-      goToScorecardView();
+      onExit();
     }
-  }, [updateStatus, goToScorecardView]);
+  }, [updateStatus, onExit]);
 
   return (
-    <PageWithModuleTimeline
-      title={`${project?.name ?? ''} ${strings.SCORES}`}
-      crumbs={crumbs}
-      hierarchicalCrumbs={false}
-      modules={modules ?? []}
-      cohortPhase={project?.cohortPhase}
-    >
+    <ScoringWrapper isForm isLoading={updateStatus === 'pending'}>
       <PageForm
-        busy={status === 'pending'}
+        busy={updateStatus === 'pending'}
         cancelID='cancelEditScorecard'
-        onCancel={onCancel}
+        onCancel={onExit}
         onSave={onSave}
         saveID='saveEditScorecard'
         style={{ width: '100%' }}
       >
-        <Card style={{ width: '100%' }}>
-          <Box display='flex' flexDirection='row' flexGrow={0} margin={theme.spacing(3)} justifyContent='right'>
-            <Button
-              id='goToVotes'
-              label={strings.SEE_IC_VOTES}
-              priority='secondary'
-              onClick={goToVoting}
-              size='medium'
-              type='productive'
-            />
-          </Box>
-
-          <Grid container spacing={theme.spacing(2)}>
-            <Grid item xs={6}>
-              <PhaseScores
-                phaseScores={phase0Scores}
-                onChangeValue={handleOnChangeValue}
-                onChangeQualitative={handleOnChangeQualitative}
-                editable={
-                  project?.cohortPhase &&
-                  ['Pre-Screen', 'Application', 'Phase 0 - Due Diligence'].includes(project.cohortPhase)
-                }
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <PhaseScores
-                phaseScores={phase1Scores}
-                onChangeValue={handleOnChangeValue}
-                onChangeQualitative={handleOnChangeQualitative}
-                editable={project?.cohortPhase === 'Phase 1 - Feasibility Study'}
-              />
-            </Grid>
-          </Grid>
-        </Card>
+        {projectScore && <ScoreCard score={score} isEditing onChange={onChange} />}
       </PageForm>
-    </PageWithModuleTimeline>
+    </ScoringWrapper>
   );
 };
 

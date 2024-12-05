@@ -12,7 +12,7 @@ export const useOrgNurserySummary = () => {
   const [orgNurserySummary, setOrgNurserySummary] = useState<OrganizationNurserySummaryResponse>();
 
   useEffect(() => {
-    if (selectedOrganization) {
+    if (selectedOrganization && selectedOrganization.id !== -1) {
       const populateSummary = async () => {
         const response = await NurserySummaryService.getOrganizationNurserySummary(selectedOrganization.id);
         setOrgNurserySummary(response);

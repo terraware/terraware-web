@@ -74,42 +74,44 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
   };
 
   const onApplyFilters = useCallback(async () => {
-    const requestId = Math.random().toString();
-    setRequestId('searchInventory', requestId);
+    if (selectedOrganization.id !== -1) {
+      const requestId = Math.random().toString();
+      setRequestId('searchInventory', requestId);
 
-    setReportData({
-      organizationId: selectedOrganization.id,
-      query: debouncedSearchTerm,
-      facilityIds: filters.facilityIds,
-      speciesIds: filters.speciesIds,
-      searchSortOrder,
-    });
+      setReportData({
+        organizationId: selectedOrganization.id,
+        query: debouncedSearchTerm,
+        facilityIds: filters.facilityIds,
+        speciesIds: filters.speciesIds,
+        searchSortOrder,
+      });
 
-    const apiSearchResults = await NurseryInventoryService.searchInventoryByNursery({
-      organizationId: selectedOrganization.id,
-      query: debouncedSearchTerm,
-      facilityIds: filters.facilityIds,
-      speciesIds: filters.speciesIds,
-      searchSortOrder,
-    });
+      const apiSearchResults = await NurseryInventoryService.searchInventoryByNursery({
+        organizationId: selectedOrganization.id,
+        query: debouncedSearchTerm,
+        facilityIds: filters.facilityIds,
+        speciesIds: filters.speciesIds,
+        searchSortOrder,
+      });
 
-    const updatedResult = apiSearchResults?.map((result) => {
-      const resultTyped = result as FacilitySpeciesInventoryResult;
-      const speciesNames = resultTyped.facilityInventories
-        .filter((fi) => fi.species_id)
-        .map((inv) => inv.species_scientificName);
-      const batchIds = resultTyped.facilityInventories
-        .filter((fi) => fi.species_id)
-        .flatMap((inv) => inv.batches.map((batch) => batch.id));
-      return { ...resultTyped, facilityInventories: speciesNames.join('\r'), batchIds };
-    });
+      const updatedResult = apiSearchResults?.map((result) => {
+        const resultTyped = result as FacilitySpeciesInventoryResult;
+        const speciesNames = resultTyped.facilityInventories
+          .filter((fi) => fi.species_id)
+          .map((inv) => inv.species_scientificName);
+        const batchIds = resultTyped.facilityInventories
+          .filter((fi) => fi.species_id)
+          .flatMap((inv) => inv.batches.map((batch) => batch.id));
+        return { ...resultTyped, facilityInventories: speciesNames.join('\r'), batchIds };
+      });
 
-    if (updatedResult) {
-      if (!debouncedSearchTerm && !filters.facilityIds?.length && !filters.speciesIds?.length) {
-        setShowResults(updatedResult.length > 0);
-      }
-      if (getRequestId('searchInventory') === requestId) {
-        setSearchResults(updatedResult);
+      if (updatedResult) {
+        if (!debouncedSearchTerm && !filters.facilityIds?.length && !filters.speciesIds?.length) {
+          setShowResults(updatedResult.length > 0);
+        }
+        if (getRequestId('searchInventory') === requestId) {
+          setSearchResults(updatedResult);
+        }
       }
     }
   }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, setReportData]);

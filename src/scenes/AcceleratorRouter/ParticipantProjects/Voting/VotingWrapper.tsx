@@ -7,7 +7,7 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import Card from 'src/components/common/Card';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
-import useListModules from 'src/hooks/useListModules';
+import useListCohortModules from 'src/hooks/useListCohortModules';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
@@ -26,13 +26,13 @@ const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element
   const theme = useTheme();
   const { phaseVotes, project, status } = useVotingData();
 
-  const { modules, listModules } = useListModules();
+  const { cohortModules, listCohortModules } = useListCohortModules();
 
   useEffect(() => {
-    if (project) {
-      void listModules({ projectId: project.id });
+    if (project && project.cohortId) {
+      void listCohortModules(project.cohortId);
     }
-  }, [project, listModules]);
+  }, [project, listCohortModules]);
 
   // construct the bread crumbs back to originating context
   const crumbs: Crumb[] = useMemo(
@@ -46,10 +46,6 @@ const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element
             {
               name: project?.name ?? '--',
               to: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${project?.id}`),
-            },
-            {
-              name: strings.SCORES,
-              to: APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project?.id}`),
             },
           ]
         : [],
@@ -66,7 +62,7 @@ const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element
       rightComponent={rightComponent}
       title={strings.INVESTMENT_COMMITTEE_VOTES}
       cohortPhase={project?.cohortPhase}
-      modules={modules ?? []}
+      modules={cohortModules ?? []}
     >
       {phaseVotes && phaseVotes.votes.length > 0 ? (
         <Card

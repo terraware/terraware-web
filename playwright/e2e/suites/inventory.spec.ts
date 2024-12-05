@@ -14,7 +14,7 @@ export default function InventoryTests() {
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory' }).click();
-    await page.getByRole('button', { name: 'Add Inventory' }).click();
+    await page.locator('#new-inventory').click();
     await page.getByPlaceholder('Search or Select...').click();
     await page.locator('li').filter({ hasText: 'Banana' }).locator('div').click();
     await page.locator('div:nth-child(2) > .select > .textfield-container').click();
@@ -49,7 +49,7 @@ export default function InventoryTests() {
     await page.locator('textarea').fill('Adding some notes');
     await page.getByRole('button', { name: 'Save' }).click();
 
-    await expect(page.getByText('Banana')).toBeVisible();
+    await expect(page.getByText('Banana', { exact: true })).toBeVisible();
     await expect(page.getByText('Garage')).toBeVisible();
     await expect(page.getByText('-02-01')).toBeVisible();
     await expect(page.getByText('Germinating Quantity 500')).toBeVisible();
@@ -71,7 +71,7 @@ export default function InventoryTests() {
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Inventory' }).click();
-    await page.getByRole('button', { name: 'Add Inventory' }).click();
+    await page.locator('#new-inventory').click();
     await page.getByPlaceholder('Search or Select...').click();
     await page.locator('li').filter({ hasText: 'Coconut' }).locator('div').click();
 
@@ -109,7 +109,7 @@ export default function InventoryTests() {
     await page.locator('textarea').fill('Adding some notes');
     await page.getByRole('button', { name: 'Save' }).click();
 
-    await expect(page.getByText('Coconut')).toBeVisible();
+    await expect(page.getByText('Coconut', { exact: true })).toBeVisible();
     await expect(page.getByText('Garage')).toBeVisible();
     await expect(page.getByText('Germinating Quantity 25')).toBeVisible();
     await expect(page.getByText('Not Ready Quantity 25')).toBeVisible();
@@ -287,19 +287,20 @@ export default function InventoryTests() {
     await expect(page.locator('#row1-plantingSubzoneNames')).toContainText('East-North');
     await expect(page.locator('#row1-speciesScientificNames')).toContainText('Coconut');
     await expect(page.locator('#row1-totalWithdrawn')).toContainText('60');
+  });
+
+  test('Plants dashboard after outplanting', async ({ page }, testInfo) => {
+    await page.goto('http://127.0.0.1:3000');
+    await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Plants' }).click();
     await page.getByRole('button', { name: 'Dashboard' }).click();
     await expect(page.getByText('60 Plants')).toBeVisible();
     await expect(page.getByText('1 Species')).toBeVisible();
     await page.getByText('Total Plants and Species').click();
     await page.mouse.wheel(0, 2000);
-
-    await page.waitForTimeout(2000); //Wait for map to load
-
-    await page.mouse.wheel(0, 2000);
-
-    await page.waitForTimeout(2000); //Wait for map to load
-    await page.getByLabel('Map', { exact: true }).click({
+    await page.waitForTimeout(4000); //Wait for map to load
+    await expect(page.locator('.mapboxgl-canvas')).toBeVisible({ timeout: 5000 });
+    await page.locator('.mapboxgl-map').click({
       position: {
         x: 526,
         y: 172,
@@ -307,11 +308,19 @@ export default function InventoryTests() {
     });
     await expect(page.getByRole('cell', { name: '60 Plants' })).toBeVisible();
     await page.getByLabel('Close popup').click();
+  });
 
+  test('Withdrawals after outplanting', async ({ page }, testInfo) => {
+    await page.goto('http://127.0.0.1:3000');
+    await waitFor(page, '#home');
+
+    await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Withdrawals' }).click();
     await page.getByText('Map').click();
-    await page.waitForTimeout(2000); //Wait for map to load
-    await page.getByLabel('Map', { exact: true }).click({
+    await page.mouse.down();
+    await page.waitForTimeout(4000); //Wait for map to load
+    await expect(page.locator('.mapboxgl-canvas')).toBeVisible({ timeout: 5000 });
+    await page.locator('.mapboxgl-map').click({
       position: {
         x: 526,
         y: 172,

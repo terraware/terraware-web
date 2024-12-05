@@ -31,7 +31,7 @@ export default function SpeciesBulkWithdrawView(props: SpeciesBulkWithdrawViewCo
 
   useEffect(() => {
     const populateResults = async () => {
-      if (speciesIds) {
+      if (speciesIds && selectedOrganization.id !== -1) {
         const searchResponse = await NurseryBatchService.getBatchIdsForSpecies(
           selectedOrganization.id,
           speciesIds.map((id) => Number(id))

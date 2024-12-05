@@ -118,7 +118,7 @@ const QuestionBox = ({
   const rejectCallback = useCallback(() => {
     setUpdatePendingId(variable.id);
     waitAndReload();
-    snackbar.toastSuccess(strings.ANSWER_REJECTED);
+    snackbar.toastSuccess(strings.UPDATE_REQUESTED);
   }, [waitAndReload, snackbar]);
 
   const updateCallback = useCallback(() => {
@@ -242,9 +242,22 @@ const QuestionBox = ({
             width: '100%',
           }}
         >
-          <Typography
-            sx={{ fontWeight: '600' }}
-          >{`${variable.deliverableQuestion ?? variable.name} ${variable.isRequired ? '*' : ''}`}</Typography>
+          <Box
+            sx={{
+              alignItems: 'start',
+              display: 'flex',
+              flexGrow: 1,
+              justifyContent: 'flex-start',
+              flexDirection: 'column',
+            }}
+          >
+            <Typography fontSize={'14px'} fontWeight={'400'} lineHeight={'20px'}>
+              {`ID#: ${variable.stableId}`}
+            </Typography>
+            <Typography
+              sx={{ fontWeight: '600' }}
+            >{`${variable.deliverableQuestion ?? variable.name} ${variable.isRequired ? '*' : ''}`}</Typography>
+          </Box>
 
           <Box
             sx={{
@@ -273,7 +286,7 @@ const QuestionBox = ({
                 {!isAcceleratorApplicationRoute && (
                   <>
                     <Button
-                      label={strings.REJECT_ACTION}
+                      label={strings.REQUEST_UPDATE_ACTION}
                       onClick={() => setShowRejectDialog(true)}
                       priority='secondary'
                       sx={{ '&.button': { margin: '4px' } }}

@@ -28,7 +28,7 @@ import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModa
 import CTACard from 'src/scenes/Home/CTACard';
 import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import strings from 'src/strings';
-import { isAdmin } from 'src/utils/organization';
+import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
 
 import OrganizationStatsCard, { OrganizationStatsCardRow } from './OrganizationStatsCard';
 
@@ -49,8 +49,10 @@ const TerrawareHomeView = () => {
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    dispatch(requestObservations(selectedOrganization.id));
-    dispatch(requestObservationsResults(selectedOrganization.id));
+    if (selectedOrganization.id !== -1) {
+      dispatch(requestObservations(selectedOrganization.id));
+      dispatch(requestObservationsResults(selectedOrganization.id));
+    }
   }, [dispatch, selectedOrganization.id]);
 
   const isLoadingInitialData = useMemo(
@@ -98,16 +100,21 @@ const TerrawareHomeView = () => {
       return [];
     }
 
-    const rows = [
+    const rows: OrganizationStatsCardRow[] = [
       {
-        buttonProps: isAdmin(selectedOrganization)
+        buttonProps: isManagerOrHigher(selectedOrganization)
           ? {
               label: strings.ADD_SPECIES,
               onClick: () => {
                 navigate(APP_PATHS.SPECIES_NEW);
               },
             }
-          : undefined,
+          : {
+              label: strings.VIEW_SPECIES_LIST,
+              onClick: () => {
+                navigate(APP_PATHS.SPECIES);
+              },
+            },
         icon: 'seeds' as IconName,
         statsCardItems: [
           { label: strings.TOTAL_SPECIES, value: availableSpecies?.length.toString() },
@@ -172,7 +179,7 @@ const TerrawareHomeView = () => {
       },
     ];
 
-    if (!plantingSites?.length) {
+    if (!plantingSites?.length && isAdmin(selectedOrganization)) {
       rows.push({
         buttonProps: {
           label: strings.ADD_PLANTING_SITE,
@@ -209,7 +216,7 @@ const TerrawareHomeView = () => {
         }}
       >
         {isLoadingInitialData ? null : showHomePageOnboardingImprovements ? (
-          <Box paddingRight={'24px'} paddingLeft={isMobile ? '24px' : 0}>
+          <Box>
             <PageHeader
               title={
                 user?.firstName
@@ -247,39 +254,41 @@ const TerrawareHomeView = () => {
                   />
                 </Grid>
 
-                <Grid item xs={12}>
-                  <CTACard
-                    buttonsContainerSx={{
-                      width: isMobile ? '100%' : 'auto',
-                    }}
-                    description={strings.formatString(
-                      strings.FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,
-                      <Link
-                        fontSize='16px'
-                        target='_blank'
-                        onClick={() => {
-                          mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_TF_LINK);
-                          window.open(ACCELERATOR_LINK, '_blank');
-                        }}
-                      >
-                        {strings.HERE}
-                      </Link>
-                    )}
-                    primaryButtonProps={{
-                      label: strings.APPLY_TO_ACCELERATOR,
-                      onClick: () => {
-                        mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_APPLY_BUTTON);
-                        setIsNewApplicationModalOpen(true);
-                      },
-                      type: 'productive',
-                    }}
-                  />
-                </Grid>
+                {isAdmin(selectedOrganization) && (
+                  <Grid item xs={12}>
+                    <CTACard
+                      buttonsContainerSx={{
+                        width: isMobile ? '100%' : 'auto',
+                      }}
+                      description={strings.formatString(
+                        strings.FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,
+                        <Link
+                          fontSize='16px'
+                          target='_blank'
+                          onClick={() => {
+                            mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_TF_LINK);
+                            window.open(ACCELERATOR_LINK, '_blank');
+                          }}
+                        >
+                          {strings.HERE}
+                        </Link>
+                      )}
+                      primaryButtonProps={{
+                        label: strings.APPLY_TO_ACCELERATOR,
+                        onClick: () => {
+                          mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_APPLY_BUTTON);
+                          setIsNewApplicationModalOpen(true);
+                        },
+                        type: 'productive',
+                      }}
+                    />
+                  </Grid>
+                )}
               </Grid>
             </Container>
           </Box>
         ) : (
-          <Box paddingRight={'24px'} paddingLeft={isMobile ? '24px' : 0}>
+          <Box>
             <PageHeader
               title={user?.firstName ? strings.formatString(strings.WELCOME_PERSON, user.firstName) : strings.WELCOME}
               subtitle=''

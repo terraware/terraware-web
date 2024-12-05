@@ -16,7 +16,11 @@ export default function CohortModulesCellRenderer(props: RendererProps<TableRowT
           index={index}
           column={column}
           value={
-            <Link fontSize='16px' target='_blank' to={APP_PATHS.ADMIN_MODULE.replace(':moduleId', row.id)}>
+            <Link
+              fontSize='16px'
+              target='_blank'
+              to={APP_PATHS.ACCELERATOR_MODULE_CONTENT.replace(':moduleId', row.id)}
+            >
               {value as React.ReactNode}
             </Link>
           }

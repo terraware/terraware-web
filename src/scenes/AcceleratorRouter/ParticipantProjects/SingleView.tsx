@@ -17,8 +17,9 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
-import useListModules from 'src/hooks/useListModules';
+import useListCohortModules from 'src/hooks/useListCohortModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import useProjectScore from 'src/hooks/useProjectScore';
 import { useLocalization, useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
@@ -29,7 +30,6 @@ import strings from 'src/strings';
 import { getCountryByCode } from 'src/utils/country';
 
 import { useParticipantProjectData } from './ParticipantProjectContext';
-import { useScoringData } from './Scoring/ScoringContext';
 import { useVotingData } from './Voting/VotingContext';
 
 const SingleView = () => {
@@ -39,20 +39,20 @@ const SingleView = () => {
   const { isMobile } = useDeviceInfo();
   const { crumbs, participant, participantProject, project, projectId, projectMeta, organization, status } =
     useParticipantProjectData();
-  const { phase0Scores, phase1Scores } = useScoringData();
   const { phaseVotes } = useVotingData();
+  const { projectScore } = useProjectScore(projectId);
   const { goToParticipantProjectEdit } = useNavigateTo();
   const dispatch = useAppDispatch();
-  const { modules, listModules } = useListModules();
+  const { cohortModules, listCohortModules } = useListCohortModules();
   const [searchDeliverablesRequestId, setSearchDeliverablesRequestId] = useState('');
   const deliverablesResponse = useAppSelector(selectDeliverablesSearchRequest(searchDeliverablesRequestId));
   const [hasDeliverables, setHasDeliverables] = useState(false);
 
   useEffect(() => {
-    if (project) {
-      void listModules({ projectId: project.id });
+    if (project && project.cohortId) {
+      void listCohortModules(project.cohortId);
     }
-  }, [project, listModules]);
+  }, [project, listCohortModules]);
 
   useEffect(() => {
     const request = dispatch(requestListDeliverables({ locale: activeLocale, listRequest: { projectId } }));
@@ -116,22 +116,6 @@ const SingleView = () => {
     [goToParticipantProjectEdit, isAllowedEdit, isAllowedExport, projectId, onOptionItemClick, theme]
   );
 
-  const activeScores = useMemo(() => {
-    switch (project?.cohortPhase) {
-      case 'Pre-Screen':
-      case 'Application':
-      case 'Phase 0 - Due Diligence':
-        return phase0Scores;
-      case 'Phase 1 - Feasibility Study':
-      case 'Phase 2 - Plan and Scale':
-      case 'Phase 3 - Implement and Monitor':
-        return phase1Scores;
-    }
-
-    // Default to phase 1 when data is missing
-    return phase1Scores;
-  }, [project?.cohortPhase, phase0Scores, phase1Scores]);
-
   const projectViewTitle = (
     <Box paddingLeft={1}>
       <Typography fontSize={'24px'} fontWeight={600}>
@@ -148,7 +132,7 @@ const SingleView = () => {
       rightComponent={rightComponent}
       titleContainerStyle={{ marginBottom: 0 }}
       cohortPhase={project?.cohortPhase}
-      modules={modules ?? []}
+      modules={cohortModules ?? []}
     >
       {status === 'pending' && <BusySpinner />}
 
@@ -186,7 +170,7 @@ const SingleView = () => {
                   <PhaseScoreCard
                     linkTo={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
                     md={!projectApplication?.id ? 6 : undefined}
-                    phaseScores={activeScores}
+                    score={projectScore}
                   />
                   <VotingDecisionCard
                     linkTo={APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`)}
@@ -330,11 +314,11 @@ const SingleView = () => {
         onExport={() =>
           ParticipantProjectService.download({
             participantProject,
-            phase1Scores,
             phaseVotes,
             project,
             projectId,
             projectMeta,
+            projectScore,
             organization,
           })
         }

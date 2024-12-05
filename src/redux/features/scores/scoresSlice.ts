@@ -1,40 +1,40 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { requestListScores, requestUpdateScores } from 'src/redux/features/scores/scoresAsyncThunks';
-import { ScoresData } from 'src/types/Score';
+import { requestProjectScore, requestUpdateProjectScore } from 'src/redux/features/scores/scoresAsyncThunks';
+import { Score } from 'src/types/Score';
 
 /**
- * Score list
+ * Score Get
  */
-const initialStateScoreList: { [key: string]: StatusT<ScoresData> } = {};
+const initialStateScore: { [key: string]: StatusT<Score> } = {};
 
 export const scoreListSlice = createSlice({
-  name: 'scoreListSlice',
-  initialState: initialStateScoreList,
+  name: 'scoreSlice',
+  initialState: initialStateScore,
   reducers: {},
   extraReducers: (builder) => {
-    buildReducers(requestListScores, true)(builder);
+    buildReducers(requestProjectScore, true)(builder);
   },
 });
 
 /**
- * Simple response to know if the scores of the project were updated
+ * Score Update
  */
 const initialStateScoresUpdate: { [key: number | string]: StatusT<number> } = {};
 
-export const scoresUpdateSlice = createSlice({
-  name: 'scoresUpdateSlice',
+export const scoreUpdateSlice = createSlice({
+  name: 'scoreUpdateSlice',
   initialState: initialStateScoresUpdate,
   reducers: {},
   extraReducers: (builder) => {
-    buildReducers(requestUpdateScores)(builder);
+    buildReducers(requestUpdateProjectScore)(builder);
   },
 });
 
 const scoresReducers = {
-  scoreList: scoreListSlice.reducer,
-  scoresUpdate: scoresUpdateSlice.reducer,
+  score: scoreListSlice.reducer,
+  scoreUpdate: scoreUpdateSlice.reducer,
 };
 
 export default scoresReducers;

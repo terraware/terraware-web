@@ -33,12 +33,18 @@ export const useParticipant = (participantId: number) => {
     }
   }, [result, snackbar]);
 
+  const participant = useMemo(() => {
+    if (result?.status === 'success') {
+      return result.data;
+    }
+  }, [result]);
+
   return useMemo(
     () => ({
       isError: result?.status === 'error',
       isBusy: result?.status === 'pending',
-      participant: result?.data,
+      participant,
     }),
-    [result]
+    [result, participant]
   );
 };

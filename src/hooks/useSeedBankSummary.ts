@@ -12,7 +12,7 @@ export const useSeedBankSummary = () => {
   const [seedBankSummary, setSeedBankSummary] = useState<SummaryResponse>();
 
   useEffect(() => {
-    if (selectedOrganization) {
+    if (selectedOrganization && selectedOrganization.id !== -1) {
       const populateSummary = async () => {
         const response = await SeedBankService.getSummary(selectedOrganization.id);
         setSeedBankSummary(response);

@@ -87,7 +87,7 @@ export default function ScheduleObservationForm({
       if (start < today.toMillis() || start > oneYearFromToday) {
         // start should be between today and one year from today
         startError = strings.INVALID_DATE;
-      } else if (end < start || end > twoMonthsFromStart) {
+      } else if (end <= start || end > twoMonthsFromStart) {
         // end should be between start and two months from start
         endError = strings.INVALID_DATE;
       }

@@ -82,7 +82,13 @@ export interface paths {
     /** Deletes a single cohort. */
     delete: operations["deleteCohort"];
   };
+  "/api/v1/accelerator/cohorts/{cohortId}/modules": {
+    /** List cohort modules. */
+    get: operations["listCohortModules"];
+  };
   "/api/v1/accelerator/cohorts/{cohortId}/modules/{moduleId}": {
+    /** Gets one cohort module. */
+    get: operations["getCohortModule"];
     /**
      * Updates the information about a module's use by a cohort.
      * @description Adds the module to the cohort if it is not already associated.
@@ -173,13 +179,9 @@ export interface paths {
     /** Gets one module. */
     get: operations["getModule"];
   };
-  "/api/v1/accelerator/modules/{moduleId}/deliverables": {
-    /** List module deliverables. */
-    get: operations["listModuleDeliverables"];
-  };
   "/api/v1/accelerator/organizations": {
     /**
-     * Lists organizations with the Accelerator internal tag and their projects.
+     * Lists accelerator related organizations and their projects.
      * @description By default, only lists tagged organizations that have projects that have not been assigned to participants yet.
      */
     get: operations["listAcceleratorOrganizations"];
@@ -203,6 +205,10 @@ export interface paths {
     /** Deletes a participant that has no projects. */
     delete: operations["deleteParticipant"];
   };
+  "/api/v1/accelerator/projects": {
+    /** List accelerator projects with accelerator-related details. */
+    get: operations["listProjectAcceleratorDetails"];
+  };
   "/api/v1/accelerator/projects/species": {
     /** Creates a new participant project species entry. */
     post: operations["createParticipantProjectSpecies"];
@@ -220,10 +226,7 @@ export interface paths {
     put: operations["updateParticipantProjectSpecies"];
   };
   "/api/v1/accelerator/projects/{projectId}": {
-    /**
-     * Gets the accelerator-related details for a project.
-     * @description Does not include information such as project name that's available via the non-accelerator projects API.
-     */
+    /** Gets the accelerator-related details for a project. */
     get: operations["getProjectAcceleratorDetails"];
     /** Updates the accelerator-related details for a project. */
     put: operations["updateProjectAcceleratorDetails"];
@@ -235,7 +238,7 @@ export interface paths {
      * Upserts score selections for a single project.
      * @description Update the scores for the project phase. If the (project, phase, category) does not exist, a new entry is created. Setting a `score` to `null` removes the score.
      */
-    put: operations["upsertProjectScores"];
+    put: operations["upsertProjectScores_1"];
   };
   "/api/v1/accelerator/projects/{projectId}/species": {
     /** Gets all species associated to a participant project. */
@@ -598,7 +601,7 @@ export interface paths {
   "/api/v1/organizations": {
     /**
      * Lists all organizations.
-     * @description Lists all organizations the user can access.
+     * @description Lists all organizations the user can access through organization roles.
      */
     get: operations["listOrganizations"];
     /** Creates a new organization. */
@@ -930,11 +933,23 @@ export interface paths {
     /** Gets a list of the results of observations. */
     get: operations["listObservationResults"];
   };
+  "/api/v1/tracking/observations/results/summaries": {
+    /** Gets the rollup observation summaries of a planting site */
+    get: operations["getPlantingSiteObservationSummaries"];
+  };
   "/api/v1/tracking/observations/{observationId}": {
     /** Gets information about a single observation. */
     get: operations["getObservation"];
     /** Reschedules an existing observation. */
     put: operations["rescheduleObservation"];
+  };
+  "/api/v1/tracking/observations/{observationId}/abandon": {
+    /** Abandon the observation. */
+    post: operations["abandonObservation"];
+  };
+  "/api/v1/tracking/observations/{observationId}/mergeOtherSpecies": {
+    /** Replaces a user-entered 'Other' species with one of the organization's species in an observation. */
+    post: operations["mergeOtherSpecies"];
   };
   "/api/v1/tracking/observations/{observationId}/plots": {
     /** Exports monitoring plots assigned to an observation as a GPX file. */
@@ -1069,6 +1084,12 @@ export interface paths {
   "/api/v1/versions": {
     /** Gets the minimum and recommended versions for Terraware's client applications. */
     get: operations["getVersions"];
+  };
+  "/api/v2/accelerator/projects/{projectId}/scores": {
+    /** Gets overall score for a single project. */
+    get: operations["getProjectOverallScore"];
+    /** Updates overall score for a single project. */
+    put: operations["upsertProjectScores"];
   };
   "/api/v2/seedbank/accessions": {
     /** Creates a new accession. */
@@ -1698,6 +1719,23 @@ export interface components {
     CohortListResponsePayload: {
       cohorts: components["schemas"]["CohortPayload"][];
       status: components["schemas"]["SuccessOrError"];
+    };
+    CohortModulePayload: {
+      additionalResources?: string;
+      /** Format: date */
+      endDate: string;
+      eventDescriptions: {
+        [key: string]: string;
+      };
+      /** Format: int64 */
+      id: number;
+      isActive: boolean;
+      name: string;
+      overview?: string;
+      preparationMaterials?: string;
+      /** Format: date */
+      startDate: string;
+      title: string;
     };
     CohortPayload: {
       /** Format: int64 */
@@ -2693,6 +2731,10 @@ export interface components {
       history: components["schemas"]["BatchHistoryPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetCohortModuleResponsePayload: {
+      module: components["schemas"]["CohortModulePayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetCountryBorderResponsePayload: {
       border: components["schemas"]["MultiPolygon"];
       status: components["schemas"]["SuccessOrError"];
@@ -2823,6 +2865,11 @@ export interface components {
       participant: components["schemas"]["ParticipantPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetPlantingSiteObservationSummariesPayload: {
+      status: components["schemas"]["SuccessOrError"];
+      /** @description History of rollup summaries of planting site observations in order of observation time, latest first. */
+      summaries: components["schemas"]["PlantingSiteObservationSummaryPayload"][];
+    };
     GetPlantingSiteReportedPlantsResponsePayload: {
       site: components["schemas"]["PlantingSiteReportedPlantsPayload"];
       status: components["schemas"]["SuccessOrError"];
@@ -2860,6 +2907,10 @@ export interface components {
     };
     GetProjectAcceleratorDetailsResponsePayload: {
       details: components["schemas"]["ProjectAcceleratorDetailsPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetProjectOverallScoreResponsePayload: {
+      score: components["schemas"]["ProjectOverallScorePayload"];
       status: components["schemas"]["SuccessOrError"];
     };
     GetProjectResponsePayload: {
@@ -3177,6 +3228,10 @@ export interface components {
       photos: components["schemas"]["BatchPhotoPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    ListCohortModulesResponsePayload: {
+      modules: components["schemas"]["CohortModulePayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     ListDeliverablesElement: {
       /** @enum {string} */
       category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
@@ -3252,9 +3307,6 @@ export interface components {
       };
       status: components["schemas"]["SuccessOrError"];
     };
-    ListModuleDeliverablesResponsePayload: {
-      deliverables: components["schemas"]["ModuleDeliverablePayload"][];
-    };
     ListModulesResponsePayload: {
       modules: components["schemas"]["ModulePayload"][];
       status: components["schemas"]["SuccessOrError"];
@@ -3308,6 +3360,10 @@ export interface components {
     };
     ListPlantingSubzoneSpeciesResponsePayload: {
       species: components["schemas"]["PlantingSubzoneSpeciesPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListProjectAcceleratorDetailsResponsePayload: {
+      details: components["schemas"]["ProjectAcceleratorDetailsPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListProjectsResponsePayload: {
@@ -3411,6 +3467,15 @@ export interface components {
       photos: components["schemas"]["NurseryWithdrawalPhotoPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    MergeOtherSpeciesRequestPayload: {
+      /** @description Name of the species of certainty Other whose recorded plants should be updated to refer to the known species. */
+      otherSpeciesName: string;
+      /**
+       * Format: int64
+       * @description ID of the existing species that the Other species' recorded plants should be merged into.
+       */
+      speciesId: number;
+    };
     ModuleDeliverablePayload: {
       /** @enum {string} */
       category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
@@ -3462,20 +3527,15 @@ export interface components {
     };
     ModulePayload: {
       additionalResources?: string;
-      /** Format: date */
-      endDate: string;
+      deliverables: components["schemas"]["ModuleDeliverablePayload"][];
       eventDescriptions: {
         [key: string]: string;
       };
       /** Format: int64 */
       id: number;
-      isActive: boolean;
       name: string;
       overview?: string;
       preparationMaterials?: string;
-      /** Format: date */
-      startDate: string;
-      title: string;
     };
     MultiLineString: WithRequired<{
       type: "MultiLineString";
@@ -3699,6 +3759,7 @@ export interface components {
       /** @enum {string} */
       position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
     };
+    /** @description Percentage of plants of all species that were dead in this subzone's permanent monitoring plots. */
     ObservationMonitoringPlotResultsPayload: {
       boundary: components["schemas"]["Polygon"];
       claimedByName?: string;
@@ -3720,6 +3781,10 @@ export interface components {
        */
       mortalityRate?: number;
       notes?: string;
+      /** @description IDs of any newer monitoring plots that overlap with this one. */
+      overlappedByPlotIds: number[];
+      /** @description IDs of any older monitoring plots this one overlaps with. */
+      overlapsWithPlotIds: number[];
       photos: components["schemas"]["ObservationMonitoringPlotPhotoPayload"][];
       /**
        * Format: int32
@@ -3733,7 +3798,7 @@ export interface components {
       sizeMeters: number;
       species: components["schemas"]["ObservationSpeciesResultsPayload"][];
       /** @enum {string} */
-      status: "Outstanding" | "InProgress" | "Completed";
+      status: "Unclaimed" | "Claimed" | "Completed" | "Not Observed";
       /**
        * Format: int32
        * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
@@ -3779,12 +3844,31 @@ export interface components {
        */
       startDate: string;
       /** @enum {string} */
-      state: "Upcoming" | "InProgress" | "Completed" | "Overdue";
+      state: "Upcoming" | "InProgress" | "Completed" | "Overdue" | "Abandoned";
     };
     ObservationPlantingSubzoneResultsPayload: {
+      /** @description Area of this planting subzone in hectares. */
+      areaHa: number;
+      /** Format: date-time */
+      completedTime?: string;
+      /**
+       * Format: int32
+       * @description Estimated number of plants in planting subzone based on estimated planting density and subzone area. Only present if the subzone has completed planting.
+       */
+      estimatedPlants?: number;
+      /** @description Percentage of plants of all species that were dead in this subzone's permanent monitoring plots. */
       monitoringPlots: components["schemas"]["ObservationMonitoringPlotResultsPayload"][];
+      /** Format: int32 */
+      mortalityRate: number;
+      /**
+       * Format: int32
+       * @description Estimated planting density for the subzone based on the observed planting densities of monitoring plots. Only present if the subzone has completed planting.
+       */
+      plantingDensity?: number;
       /** Format: int64 */
       plantingSubzoneId: number;
+      /** Format: int32 */
+      totalPlants: number;
     };
     ObservationPlantingZoneResultsPayload: {
       /** @description Area of this planting zone in hectares. */
@@ -3848,7 +3932,7 @@ export interface components {
       /** Format: date */
       startDate: string;
       /** @enum {string} */
-      state: "Upcoming" | "InProgress" | "Completed" | "Overdue";
+      state: "Upcoming" | "InProgress" | "Completed" | "Overdue" | "Abandoned";
       /** Format: int32 */
       totalSpecies: number;
     };
@@ -3955,6 +4039,7 @@ export interface components {
        * @enum {string}
        */
       role?: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
+      tfContactUser?: components["schemas"]["TerraformationContactUserPayload"];
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
@@ -4082,10 +4167,40 @@ export interface components {
       /** Format: date */
       startDate: string;
     };
+    /** @description History of rollup summaries of planting site observations in order of observation time, latest first. */
+    PlantingSiteObservationSummaryPayload: {
+      /**
+       * Format: date-time
+       * @description The earliest time of the observations used in this summary.
+       */
+      earliestObservationTime: string;
+      /**
+       * Format: int32
+       * @description Estimated total number of live plants at the site, based on the estimated planting density and site size. Only present if all the subzones in the site have been marked as having completed planting.
+       */
+      estimatedPlants?: number;
+      /**
+       * Format: date-time
+       * @description The latest time of the observations used in this summary.
+       */
+      latestObservationTime: string;
+      /**
+       * Format: int32
+       * @description Percentage of plants of all species that were dead in this site's permanent monitoring plots.
+       */
+      mortalityRate?: number;
+      /**
+       * Format: int32
+       * @description Estimated planting density for the site, based on the observed planting densities of monitoring plots. Only present if all the subzones in the site have been marked as having completed planting.
+       */
+      plantingDensity?: number;
+      plantingZones: components["schemas"]["PlantingZoneObservationSummaryPayload"][];
+    };
     PlantingSitePayload: {
       /** @description Area of planting site in hectares. Only present if the site has planting zones. */
       areaHa?: number;
       boundary?: components["schemas"]["MultiPolygon"];
+      countryCode?: string;
       description?: string;
       exclusion?: components["schemas"]["MultiPolygon"];
       /** Format: int64 */
@@ -4151,6 +4266,39 @@ export interface components {
       id: number;
       scientificName: string;
     };
+    PlantingZoneObservationSummaryPayload: {
+      /** @description Area of this planting zone in hectares. */
+      areaHa: number;
+      /**
+       * Format: date-time
+       * @description The earliest time of the observations used in this summary.
+       */
+      earliestObservationTime: string;
+      /**
+       * Format: int32
+       * @description Estimated number of plants in planting zone based on estimated planting density and planting zone area. Only present if all the subzones in the zone have been marked as having completed planting.
+       */
+      estimatedPlants?: number;
+      /**
+       * Format: date-time
+       * @description The latest time of the observations used in this summary.
+       */
+      latestObservationTime: string;
+      /**
+       * Format: int32
+       * @description Percentage of plants of all species that were dead in this zone's permanent monitoring plots.
+       */
+      mortalityRate: number;
+      /**
+       * Format: int32
+       * @description Estimated planting density for the zone based on the observed planting densities of monitoring plots. Only present if all the subzones in the zone have been marked as having completed planting.
+       */
+      plantingDensity?: number;
+      /** @description List of subzone observations used in this summary. */
+      plantingSubzones: components["schemas"]["ObservationPlantingSubzoneResultsPayload"][];
+      /** Format: int64 */
+      plantingZoneId: number;
+    };
     PlantingZonePayload: {
       /** @description Area of planting zone in hectares. */
       areaHa: number;
@@ -4197,9 +4345,15 @@ export interface components {
       annualCarbon?: number;
       applicationReforestableLand?: number;
       carbonCapacity?: number;
+      /** Format: int64 */
+      cohortId?: number;
+      cohortName?: string;
+      /** @enum {string} */
+      cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
       confirmedReforestableLand?: number;
       countryCode?: string;
       dealDescription?: string;
+      dealName?: string;
       /** @enum {string} */
       dealStage?: "Phase 0 (Doc Review)" | "Phase 1" | "Phase 2" | "Phase 3" | "Graduated, Finished Planting" | "Non Graduate" | "Application Submitted" | "Project Lead Screening Review" | "Screening Questions Ready for Review" | "Carbon Pre-Check" | "Submission Requires Follow Up" | "Carbon Eligible" | "Closed Lost" | "Issue Active" | "Issue Pending" | "Issue Reesolved";
       dropboxFolderPath?: string;
@@ -4217,6 +4371,9 @@ export interface components {
       numCommunities?: number;
       /** Format: int32 */
       numNativeSpecies?: number;
+      /** Format: int64 */
+      participantId?: number;
+      participantName?: string;
       perHectareBudget?: number;
       /** @enum {string} */
       pipeline?: "Accelerator Projects" | "Carbon Supply" | "Carbon Waitlist";
@@ -4228,6 +4385,17 @@ export interface components {
       totalCarbon?: number;
       totalExpansionPotential?: number;
       whatNeedsToBeTrue?: string;
+    };
+    ProjectOverallScorePayload: {
+      /** Format: uri */
+      detailsUrl?: string;
+      /** Format: int64 */
+      modifiedBy?: number;
+      /** Format: date-time */
+      modifiedTime?: string;
+      /** Format: double */
+      overallScore?: number;
+      summary?: string;
     };
     ProjectPayload: {
       /** Format: int64 */
@@ -5213,6 +5381,7 @@ export interface components {
       confirmedReforestableLand?: number;
       countryCode?: string;
       dealDescription?: string;
+      dealName?: string;
       /** @enum {string} */
       dealStage?: "Phase 0 (Doc Review)" | "Phase 1" | "Phase 2" | "Phase 3" | "Graduated, Finished Planting" | "Non Graduate" | "Application Submitted" | "Project Lead Screening Review" | "Screening Questions Ready for Review" | "Carbon Pre-Check" | "Submission Requires Follow Up" | "Carbon Eligible" | "Closed Lost" | "Issue Active" | "Issue Pending" | "Issue Reesolved";
       /** @description Path on Dropbox to use for sensitive document storage. Ignored if the user does not have permission to update project document settings. */
@@ -5241,6 +5410,16 @@ export interface components {
       totalCarbon?: number;
       totalExpansionPotential?: number;
       whatNeedsToBeTrue?: string;
+    };
+    UpdateProjectOverallScorePayload: {
+      /** Format: uri */
+      detailsUrl?: string;
+      /** Format: double */
+      overallScore?: number;
+      summary?: string;
+    };
+    UpdateProjectOverallScoreRequestPayload: {
+      score: components["schemas"]["UpdateProjectOverallScorePayload"];
     };
     UpdateProjectRequestPayload: {
       description?: string;
@@ -5989,6 +6168,51 @@ export interface operations {
       };
     };
   };
+  /** List cohort modules. */
+  listCohortModules: {
+    parameters: {
+      path: {
+        cohortId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListCohortModulesResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets one cohort module. */
+  getCohortModule: {
+    parameters: {
+      path: {
+        cohortId: number;
+        moduleId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetCohortModuleResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   /**
    * Updates the information about a module's use by a cohort.
    * @description Adds the module to the cohort if it is not already associated.
@@ -6403,13 +6627,6 @@ export interface operations {
   };
   /** List modules. */
   listModules: {
-    parameters: {
-      query?: {
-        projectId?: number;
-        participantId?: number;
-        cohortId?: number;
-      };
-    };
     responses: {
       /** @description The requested operation succeeded. */
       200: {
@@ -6447,11 +6664,6 @@ export interface operations {
   /** Gets one module. */
   getModule: {
     parameters: {
-      query?: {
-        projectId?: number;
-        participantId?: number;
-        cohortId?: number;
-      };
       path: {
         moduleId: number;
       };
@@ -6471,30 +6683,8 @@ export interface operations {
       };
     };
   };
-  /** List module deliverables. */
-  listModuleDeliverables: {
-    parameters: {
-      path: {
-        moduleId: number;
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListModuleDeliverablesResponsePayload"];
-        };
-      };
-      /** @description The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
   /**
-   * Lists organizations with the Accelerator internal tag and their projects.
+   * Lists accelerator related organizations and their projects.
    * @description By default, only lists tagged organizations that have projects that have not been assigned to participants yet.
    */
   listAcceleratorOrganizations: {
@@ -6502,6 +6692,8 @@ export interface operations {
       query?: {
         /** @description Whether to also include projects that have been assigned to participants. */
         includeParticipants?: boolean;
+        /** @description Whether to load all organizations with a project with an application. */
+        hasProjectApplication?: boolean;
       };
     };
     responses: {
@@ -6630,6 +6822,23 @@ export interface operations {
       };
     };
   };
+  /** List accelerator projects with accelerator-related details. */
+  listProjectAcceleratorDetails: {
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListProjectAcceleratorDetailsResponsePayload"];
+        };
+      };
+      /** @description The request was not valid. */
+      400: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   /** Creates a new participant project species entry. */
   createParticipantProjectSpecies: {
     requestBody: {
@@ -6733,10 +6942,7 @@ export interface operations {
       };
     };
   };
-  /**
-   * Gets the accelerator-related details for a project.
-   * @description Does not include information such as project name that's available via the non-accelerator projects API.
-   */
+  /** Gets the accelerator-related details for a project. */
   getProjectAcceleratorDetails: {
     parameters: {
       path: {
@@ -6811,7 +7017,7 @@ export interface operations {
    * Upserts score selections for a single project.
    * @description Update the scores for the project phase. If the (project, phase, category) does not exist, a new entry is created. Setting a `score` to `null` removes the score.
    */
-  upsertProjectScores: {
+  upsertProjectScores_1: {
     parameters: {
       path: {
         projectId: number;
@@ -8702,7 +8908,7 @@ export interface operations {
   };
   /**
    * Lists all organizations.
-   * @description Lists all organizations the user can access.
+   * @description Lists all organizations the user can access through organization roles.
    */
   listOrganizations: {
     parameters: {
@@ -10397,6 +10603,24 @@ export interface operations {
       };
     };
   };
+  /** Gets the rollup observation summaries of a planting site */
+  getPlantingSiteObservationSummaries: {
+    parameters: {
+      query: {
+        plantingSiteId: number;
+        /** @description Maximum number of results to return. Results are always returned in order of observations completion time, newest first, so setting this to 1 will return the summaries including the most recently completed observation. */
+        limit?: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetPlantingSiteObservationSummariesPayload"];
+        };
+      };
+    };
+  };
   /** Gets information about a single observation. */
   getObservation: {
     parameters: {
@@ -10423,6 +10647,49 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["RescheduleObservationRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Abandon the observation. */
+  abandonObservation: {
+    parameters: {
+      path: {
+        observationId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description Observation is already completed or abandoned. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Replaces a user-entered 'Other' species with one of the organization's species in an observation. */
+  mergeOtherSpecies: {
+    parameters: {
+      path: {
+        observationId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MergeOtherSpeciesRequestPayload"];
       };
     };
     responses: {
@@ -11049,6 +11316,55 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["VersionsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets overall score for a single project. */
+  getProjectOverallScore: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetProjectOverallScoreResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Updates overall score for a single project. */
+  upsertProjectScores: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateProjectOverallScoreRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };

@@ -31,13 +31,20 @@ export default function DocumentView(): JSX.Element {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [outlinePanelOpen, setOutlinePanelOpen] = useState(true);
 
-  const latestManifestId = useMemo(() => documentTemplate?.variableManifestId ?? -1, [documentTemplate]);
+  const currentManifestId = document?.variableManifestId;
+  const latestManifestId = documentTemplate?.variableManifestId;
 
   useEffect(() => {
-    if (document?.variableManifestId && document.variableManifestId < latestManifestId) {
-      setShowUpgradeModal(true);
+    if (!currentManifestId || !latestManifestId) {
+      return;
     }
-  }, [document, documentTemplate, latestManifestId]);
+
+    if (currentManifestId < latestManifestId) {
+      setShowUpgradeModal(true);
+    } else if (currentManifestId === latestManifestId) {
+      setShowUpgradeModal(false);
+    }
+  }, [currentManifestId, latestManifestId]);
 
   const onUpgradeManifest = useCallback(async () => {
     if (documentId && latestManifestId) {
@@ -46,6 +53,7 @@ export default function DocumentView(): JSX.Element {
       );
       reload();
     }
+
     setShowUpgradeModal(false);
   }, [dispatch, documentId, latestManifestId, reload]);
 

@@ -75,7 +75,7 @@ export class DeliverableToDoItem implements ToDoItem {
     this.type = item.type;
   }
 
-  isCompleted = (): boolean => this.status == 'Approved' || this.status == 'Not Needed';
+  isCompleted = (): boolean => this.status === 'Approved' || this.status === 'Not Needed';
 
   getDate = (): DateTime => this.dueDate;
 
@@ -141,7 +141,7 @@ export class EventToDoItem implements ToDoItem {
     this.type = event.type;
   }
 
-  isCompleted = (): boolean => this.status == 'Ended';
+  isCompleted = (): boolean => this.status === 'Ended';
 
   getDate = (): DateTime => this.startTime;
 

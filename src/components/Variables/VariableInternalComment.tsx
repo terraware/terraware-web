@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, Grid, SxProps, useTheme } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
@@ -31,6 +31,12 @@ function VariableInternalComment({ variable, update, editing, sx }: VariableInte
 
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [internalComment, setInternalComment] = useState(variableValue?.internalComment || '');
+
+  useEffect(() => {
+    if (variableValue?.internalComment) {
+      setInternalComment(variableValue?.internalComment);
+    }
+  }, [variableValue?.internalComment]);
 
   const toggleDialog = useCallback(() => {
     setIsDialogOpen((prev) => !prev);

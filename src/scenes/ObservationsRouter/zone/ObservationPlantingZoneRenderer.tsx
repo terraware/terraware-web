@@ -29,6 +29,7 @@ const ObservationPlantingZoneRenderer =
       return (
         <Link fontSize='16px' to={url}>
           {name as React.ReactNode}
+          {row.sizeMeters.toString() === '25' ? '*' : ''}
         </Link>
       );
     };
@@ -49,12 +50,7 @@ const ObservationPlantingZoneRenderer =
     }
 
     if (column.key === 'mortalityRate') {
-      return (
-        <CellRenderer
-          {...props}
-          value={value !== undefined && value !== null && row.hasObservedPermanentPlots ? `${value}%` : ''}
-        />
-      );
+      return <CellRenderer {...props} value={value !== undefined && value !== null ? `${value}%` : ''} />;
     }
 
     if (column.key === 'status') {

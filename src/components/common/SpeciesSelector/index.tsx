@@ -17,13 +17,15 @@ interface SpeciesSelectorProps<T extends { speciesId?: number } | undefined> {
   disabled?: boolean;
   validate?: boolean;
   tooltipTitle?: string;
+  hideLabel?: boolean;
+  id?: string;
 }
 
 export default function SpeciesSelector<T extends { speciesId?: number } | undefined>(
   props: SpeciesSelectorProps<T>
 ): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const { speciesId, record, setRecord, disabled, validate, tooltipTitle } = props;
+  const { speciesId, record, setRecord, disabled, validate, tooltipTitle, hideLabel, id } = props;
   const [speciesList, setSpeciesList] = useState<SuggestedSpecies[]>([]);
   const [selectedValue, setSelectedValue] = useState<SuggestedSpecies>();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
@@ -32,12 +34,12 @@ export default function SpeciesSelector<T extends { speciesId?: number } | undef
   const populateSpecies = useCallback(
     async (searchTerm: string) => {
       const requestId = Math.random().toString();
-      setRequestId('speciesSelectorSearch', requestId);
+      setRequestId(`speciesSelectorSearch${id}`, requestId);
       const response: SuggestedSpecies[] | null = await SpeciesService.suggestSpecies(
         selectedOrganization.id,
         searchTerm
       );
-      if (response && getRequestId('speciesSelectorSearch') === requestId) {
+      if (response && getRequestId(`speciesSelectorSearch${id}`) === requestId) {
         setSpeciesList(response.sort((a, b) => a.scientificName.localeCompare(b.scientificName)));
       }
     },
@@ -45,7 +47,9 @@ export default function SpeciesSelector<T extends { speciesId?: number } | undef
   );
 
   useEffect(() => {
-    populateSpecies(debouncedSearchTerm);
+    if (selectedOrganization.id !== -1) {
+      populateSpecies(debouncedSearchTerm);
+    }
   }, [populateSpecies, debouncedSearchTerm]);
 
   useEffect(() => {
@@ -99,8 +103,8 @@ export default function SpeciesSelector<T extends { speciesId?: number } | undef
     <>
       <Grid item xs={12}>
         <SelectT<SuggestedSpecies>
-          id='speciesSelector'
-          label={strings.SPECIES_REQUIRED}
+          id={id ?? 'speciesSelector'}
+          label={hideLabel ? '' : strings.SPECIES_REQUIRED}
           disabled={disabled}
           placeholder={strings.SEARCH_OR_SELECT}
           options={speciesList}

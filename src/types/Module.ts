@@ -1,9 +1,17 @@
 import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
 
+export type CohortModule = components['schemas']['CohortModulePayload'];
 export type Module = components['schemas']['ModulePayload'];
 
+export type ModuleDeliverable = components['schemas']['ModuleDeliverablePayload'];
+
 export type ModuleEvent = components['schemas']['ModuleEvent'];
+export type ModuleEventPartial = Omit<Partial<components['schemas']['ModuleEvent']>, 'projects'> & {
+  projects?: ModuleEventProject[];
+  feId?: symbol;
+};
+export type ModuleEventProject = Partial<NonNullable<components['schemas']['ModuleEvent']['projects']>[0]>;
 export type ModuleEventWithStartTime = Omit<ModuleEvent, 'startTime'> & { startTime: string };
 
 export type ModuleEventStatus = components['schemas']['ModuleEvent']['status'];
@@ -45,9 +53,19 @@ export type ModuleCohortsSearchResult = {
     cohort: {
       id: number;
       name: string;
+      participants: {
+        id: number;
+        name: string;
+        projects: {
+          id: number;
+          name: string;
+        }[];
+      }[];
     };
   }[];
 };
+
+export type CohortModuleWithProject = Partial<NonNullable<ModuleCohortsSearchResult['cohortModules']>[0]['cohort']>;
 
 export const getEventStatus = (status: ModuleEventStatus) => {
   switch (status) {
@@ -71,8 +89,6 @@ export const getEventStatus = (status: ModuleEventStatus) => {
 export type ModuleContentType = keyof Pick<Module, 'additionalResources' | 'preparationMaterials'>;
 
 export type UpdateCohortModuleRequest = components['schemas']['UpdateCohortModuleRequestPayload'];
-
-export type CohortModule = Partial<Module> & { deliverablesQuantity?: number };
 
 export type ModuleSearchResult = {
   id: number;

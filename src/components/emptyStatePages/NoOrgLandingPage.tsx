@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Box, Container, useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 
 import AddNewOrganizationModal from 'src/components/AddNewOrganizationModal';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -26,13 +26,7 @@ export default function NoOrgLandingPage(): JSX.Element {
   const { redirectAndNotify } = useOrganization();
   const homePageOnboardingImprovementsEnabled = isEnabled('Home Page Onboarding Improvements');
 
-  const listItemContents: ListItemContent[] = homePageOnboardingImprovementsEnabled
-    ? [{ icon: 'organization' }]
-    : [
-        { icon: 'organization', title: strings.ORGANIZATION, description: strings.DESCRIPTION_ORGANIZATION },
-        { icon: 'people', title: strings.PEOPLE, description: strings.DESCRIPTION_PEOPLE },
-        { icon: 'species2', title: strings.SPECIES, description: strings.DESCRIPTION_SPECIES },
-      ];
+  const listItemContents: ListItemContent[] = [{ icon: 'newOrganization' }];
 
   return (
     <Box
@@ -46,14 +40,14 @@ export default function NoOrgLandingPage(): JSX.Element {
         padding: '115px 24px 24px',
       }}
     >
-      <Container
+      <Box
         sx={{
           background: theme.palette.TwClrBg,
-          borderRadius: homePageOnboardingImprovementsEnabled ? '8px' : '24px',
+          borderRadius: '8px',
           margin: '0 auto',
           maxWidth: '900px',
           padding: isMobile ? '24px 26px' : '40px 26px',
-          boxShadow: homePageOnboardingImprovementsEnabled ? '0px 4px 8px 0px #3A444533' : 'none',
+          boxShadow: '0px 4px 8px #3A444533',
         }}
       >
         <PageSnackbar />
@@ -71,7 +65,7 @@ export default function NoOrgLandingPage(): JSX.Element {
           footnote={[strings.FOOTNOTE_WAIT_FOR_INVITATION_1, strings.FOOTNOTE_WAIT_FOR_INVITATION_2]}
           styles={EMPTY_STATE_CONTENT_STYLES}
         />
-      </Container>
+      </Box>
     </Box>
   );
 }

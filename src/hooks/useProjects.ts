@@ -31,7 +31,7 @@ export const useProjects = (record?: { projectId?: number }) => {
   }, [availableProjects, record?.projectId]);
 
   useEffect(() => {
-    if (!availableProjects) {
+    if (!availableProjects && selectedOrganization.id !== -1) {
       void dispatch(requestProjects(selectedOrganization.id));
     }
   }, [availableProjects, dispatch, selectedOrganization.id]);

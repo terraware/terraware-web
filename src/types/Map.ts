@@ -60,10 +60,7 @@ export type MapAnnotation = {
   textColor: string;
 };
 
-export type MapPatternFill = {
-  imageName: string;
-  opacityExpression?: Expression;
-};
+export type MapPatternFill = Expression | string;
 
 /**
  * A renderable map entity
@@ -82,13 +79,14 @@ export type MapSourceBaseData = {
 
 export type MapSourceRenderProperties = {
   annotation?: MapAnnotation;
-  fillColor: string;
+  fillColor: string | Expression;
   highlightFillColor?: string;
   hoverFillColor?: string;
   isInteractive?: boolean;
   lineColor: string;
   lineWidth: number;
   patternFill?: MapPatternFill;
+  opacity?: number | Expression;
   selectFillColor?: string;
   selectLineColor?: string;
   selectLineWidth?: number;

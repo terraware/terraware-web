@@ -80,7 +80,9 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
   );
 
   useEffect(() => {
-    void dispatch(requestObservationsResults(selectedOrganization.id));
+    if (selectedOrganization.id !== -1) {
+      void dispatch(requestObservationsResults(selectedOrganization.id));
+    }
   }, [dispatch, selectedOrganization.id]);
 
   const filterColumns = useMemo<FilterField[]>(
@@ -109,8 +111,10 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
   );
 
   const reloadTrackingAndObservations = useCallback(() => {
-    reloadTracking();
-    void dispatch(requestObservationsResults(selectedOrganization.id));
+    if (selectedOrganization.id !== -1) {
+      reloadTracking();
+      void dispatch(requestObservationsResults(selectedOrganization.id));
+    }
   }, [selectedOrganization.id, dispatch, reloadTracking]);
 
   const plantingSitesNames = useAppSelector((state) => selectPlantingSitesNames(state));

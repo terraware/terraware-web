@@ -106,17 +106,19 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
 
   const handleBatchValidation = useCallback(
     (savableRecord: SavableFormRecord) => {
-      if (hasErrors()) {
-        setValidateFields(true);
-        onBatchValidated(false);
-        return;
-      }
+      if (selectedOrganization.id !== -1) {
+        if (hasErrors()) {
+          setValidateFields(true);
+          onBatchValidated(false);
+          return;
+        }
 
-      onBatchValidated({
-        batch: savableRecord as SavableBatch,
-        organizationId: selectedOrganization.id,
-        timezone: timeZone,
-      });
+        onBatchValidated({
+          batch: savableRecord as SavableBatch,
+          organizationId: selectedOrganization.id,
+          timezone: timeZone,
+        });
+      }
     },
     [hasErrors, onBatchValidated, selectedOrganization.id, timeZone]
   );

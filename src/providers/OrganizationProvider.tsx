@@ -8,6 +8,7 @@ import { OrganizationService, PreferencesService } from 'src/services';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useEnvironment from 'src/utils/useEnvironment';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -42,6 +43,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const location = useStateLocation();
   const { userPreferences, updateUserPreferences, bootstrapped: userBootstrapped } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { isDev, isStaging } = useEnvironment();
 
   const reloadOrganizations = useCallback(async (selectedOrgId?: number) => {
     const populateOrganizations = async () => {
@@ -73,7 +75,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
 
   const reloadOrgPreferences = useCallback(() => {
     const getOrgPreferences = async () => {
-      if (selectedOrganization) {
+      if (selectedOrganization && selectedOrganization.id !== -1) {
         const response = await PreferencesService.getUserOrgPreferences(selectedOrganization.id);
         if (response.requestSucceeded && response.preferences) {
           setOrgPreferences(response.preferences);
@@ -180,9 +182,17 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     store.dispatch({ type: 'RESET_APP' });
   }, [selectedOrganization?.id]);
 
-  if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
-    navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
-  }
+  useEffect(() => {
+    if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
+      if (isDev || isStaging) {
+        if (confirm(strings.DEV_SERVER_ERROR)) {
+          window.location.reload();
+        }
+      } else {
+        navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
+      }
+    }
+  }, [orgAPIRequestStatus]);
 
   const [organizationData, setOrganizationData] = useState<ProvidedOrganizationData>({
     selectedOrganization: selectedOrganization || defaultSelectedOrg,
