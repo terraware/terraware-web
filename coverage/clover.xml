@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1733404617194" clover="3.2.0">
-  <project timestamp="1733404617194" name="All files">
-    <metrics statements="26519" coveredstatements="1079" conditionals="17846" coveredconditionals="290" methods="8187" coveredmethods="179" elements="52552" coveredelements="1548" complexity="0" loc="26519" ncloc="26519" packages="237" files="1125" classes="1125"/>
+<coverage generated="1733409275413" clover="3.2.0">
+  <project timestamp="1733409275413" name="All files">
+    <metrics statements="26519" coveredstatements="1079" conditionals="17850" coveredconditionals="290" methods="8187" coveredmethods="179" elements="52556" coveredelements="1548" complexity="0" loc="26519" ncloc="26519" packages="237" files="1125" classes="1125"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -15044,8 +15044,8 @@
         <line num="61" count="0" type="stmt"/>
         <line num="64" count="0" type="stmt"/>
         <line num="72" count="0" type="stmt"/>
-        <line num="82" count="0" type="stmt"/>
-        <line num="84" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="85" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Organizations">
@@ -19350,7 +19350,7 @@
       </file>
     </package>
     <package name="src.scenes.Home.TerrawareHomeView">
-      <metrics statements="103" coveredstatements="0" conditionals="152" coveredconditionals="0" methods="38" coveredmethods="0"/>
+      <metrics statements="103" coveredstatements="0" conditionals="156" coveredconditionals="0" methods="38" coveredmethods="0"/>
       <file name="CTACard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/TerrawareHomeView/CTACard.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="31" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="20" count="0" type="stmt"/>
@@ -19405,7 +19405,7 @@
         <line num="28" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/TerrawareHomeView/index.tsx">
-        <metrics statements="62" coveredstatements="0" conditionals="44" coveredconditionals="0" methods="24" coveredmethods="0"/>
+        <metrics statements="62" coveredstatements="0" conditionals="48" coveredconditionals="0" methods="24" coveredmethods="0"/>
         <line num="35" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
@@ -19448,26 +19448,26 @@
         <line num="109" count="0" type="stmt"/>
         <line num="115" count="0" type="stmt"/>
         <line num="133" count="0" type="stmt"/>
-        <line num="139" count="0" type="stmt"/>
-        <line num="151" count="0" type="stmt"/>
-        <line num="164" count="0" type="stmt"/>
-        <line num="170" count="0" type="stmt"/>
-        <line num="182" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="183" count="0" type="stmt"/>
+        <line num="139" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="153" count="0" type="stmt"/>
+        <line num="166" count="0" type="stmt"/>
+        <line num="172" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="186" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="187" count="0" type="stmt"/>
-        <line num="196" count="0" type="stmt"/>
-        <line num="206" count="0" type="stmt"/>
-        <line num="208" count="0" type="stmt"/>
-        <line num="243" count="0" type="stmt"/>
-        <line num="250" count="0" type="stmt"/>
-        <line num="269" count="0" type="stmt"/>
-        <line num="270" count="0" type="stmt"/>
-        <line num="279" count="0" type="stmt"/>
-        <line num="280" count="0" type="stmt"/>
-        <line num="359" count="0" type="stmt"/>
-        <line num="360" count="0" type="stmt"/>
-        <line num="370" count="0" type="stmt"/>
-        <line num="371" count="0" type="stmt"/>
+        <line num="191" count="0" type="stmt"/>
+        <line num="200" count="0" type="stmt"/>
+        <line num="210" count="0" type="stmt"/>
+        <line num="212" count="0" type="stmt"/>
+        <line num="247" count="0" type="stmt"/>
+        <line num="254" count="0" type="stmt"/>
+        <line num="273" count="0" type="stmt"/>
+        <line num="274" count="0" type="stmt"/>
+        <line num="283" count="0" type="stmt"/>
+        <line num="284" count="0" type="stmt"/>
+        <line num="363" count="0" type="stmt"/>
+        <line num="364" count="0" type="stmt"/>
+        <line num="374" count="0" type="stmt"/>
+        <line num="375" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.InventoryRouter">
