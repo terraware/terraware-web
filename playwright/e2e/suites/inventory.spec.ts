@@ -287,19 +287,20 @@ export default function InventoryTests() {
     await expect(page.locator('#row1-plantingSubzoneNames')).toContainText('East-North');
     await expect(page.locator('#row1-speciesScientificNames')).toContainText('Coconut');
     await expect(page.locator('#row1-totalWithdrawn')).toContainText('60');
+  });
+
+  test('Plants dashboard after outplanting', async ({ page }, testInfo) => {
+    await page.goto('http://127.0.0.1:3000');
+    await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Plants' }).click();
     await page.getByRole('button', { name: 'Dashboard' }).click();
     await expect(page.getByText('60 Plants')).toBeVisible();
     await expect(page.getByText('1 Species')).toBeVisible();
     await page.getByText('Total Plants and Species').click();
     await page.mouse.wheel(0, 2000);
-
-    await page.waitForTimeout(2000); //Wait for map to load
-
-    await page.mouse.wheel(0, 2000);
-
-    await page.waitForTimeout(2000); //Wait for map to load
-    await page.getByLabel('Map', { exact: true }).click({
+    await page.waitForTimeout(4000); //Wait for map to load
+    await expect(page.locator('.mapboxgl-canvas')).toBeVisible({ timeout: 5000 });
+    await page.locator('.mapboxgl-map').click({
       position: {
         x: 526,
         y: 172,
@@ -307,11 +308,19 @@ export default function InventoryTests() {
     });
     await expect(page.getByRole('cell', { name: '60 Plants' })).toBeVisible();
     await page.getByLabel('Close popup').click();
+  });
 
+  test('Withdrawals after outplanting', async ({ page }, testInfo) => {
+    await page.goto('http://127.0.0.1:3000');
+    await waitFor(page, '#home');
+
+    await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Withdrawals' }).click();
     await page.getByText('Map').click();
-    await page.waitForTimeout(2000); //Wait for map to load
-    await page.getByLabel('Map', { exact: true }).click({
+    await page.mouse.down();
+    await page.waitForTimeout(4000); //Wait for map to load
+    await expect(page.locator('.mapboxgl-canvas')).toBeVisible({ timeout: 5000 });
+    await page.locator('.mapboxgl-map').click({
       position: {
         x: 526,
         y: 172,

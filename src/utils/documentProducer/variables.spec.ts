@@ -279,18 +279,18 @@ describe('variableDependencyMet - number variables', () => {
   });
 
   it('should correctly identify whether or not a number variable dependency is met - eq', () => {
-    const variableWithNumberVariableDependencyEQ0: VariableWithValues = {
+    const variableWithNumberVariableDependencyNEQ0: VariableWithValues = {
       ...variableWithNumberVariableDependencyGT0,
       dependencyCondition: 'neq',
     };
 
-    // Checking for "equal to 0"
+    // Checking for "not equal to 0"
     expect(
-      variableDependencyMet(variableWithNumberVariableDependencyEQ0, [dependedOnNumberVariableWith0Value])
+      variableDependencyMet(variableWithNumberVariableDependencyNEQ0, [dependedOnNumberVariableWith0Value])
     ).toBeFalsy();
 
     expect(
-      variableDependencyMet(variableWithNumberVariableDependencyEQ0, [dependedOnNumberVariableWith1Value])
+      variableDependencyMet(variableWithNumberVariableDependencyNEQ0, [dependedOnNumberVariableWith1Value])
     ).toBeTruthy();
   });
 });

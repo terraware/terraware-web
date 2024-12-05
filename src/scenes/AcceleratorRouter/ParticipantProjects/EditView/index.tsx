@@ -19,6 +19,7 @@ import PageForm from 'src/components/common/PageForm';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import useListCohortModules from 'src/hooks/useListCohortModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import useProjectScore from 'src/hooks/useProjectScore';
 import { useLocalization, useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import { requestAssignTerraformationContact } from 'src/redux/features/accelerator/acceleratorAsyncThunks';
@@ -38,7 +39,6 @@ import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useParticipantProjectData } from '../ParticipantProjectContext';
-import { useScoringData } from '../Scoring/ScoringContext';
 import { useVotingData } from '../Voting/VotingContext';
 import EditNameConfirm from './EditNameConfirm';
 
@@ -48,7 +48,7 @@ const EditView = () => {
   const snackbar = useSnackbar();
   const { crumbs, participant, participantProject, project, projectId, projectMeta, organization, reload } =
     useParticipantProjectData();
-  const { phase1Scores } = useScoringData();
+  const { projectScore } = useProjectScore(projectId);
   const { phaseVotes } = useVotingData();
   const { goToParticipantProject } = useNavigateTo();
   const { isAllowed } = useUser();
@@ -285,7 +285,7 @@ const EditView = () => {
             )}
             {isAllowedEditScoreAndVoting && (
               <>
-                <PhaseScoreCard md={!projectApplication?.id ? 6 : undefined} phaseScores={phase1Scores} />
+                <PhaseScoreCard md={!projectApplication?.id ? 6 : undefined} score={projectScore} />
                 <VotingDecisionCard md={!projectApplication?.id ? 6 : undefined} phaseVotes={phaseVotes} />
               </>
             )}

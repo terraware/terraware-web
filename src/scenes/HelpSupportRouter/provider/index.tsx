@@ -36,7 +36,7 @@ const SupportProvider = ({ children }: Props) => {
   useEffect(() => {
     if (
       listSupportRequestTypesRequest &&
-      listSupportRequestTypesRequest.status == 'success' &&
+      listSupportRequestTypesRequest.status === 'success' &&
       listSupportRequestTypesRequest.data
     ) {
       setSupportRequestTypes(listSupportRequestTypesRequest.data);

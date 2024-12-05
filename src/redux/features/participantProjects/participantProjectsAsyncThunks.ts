@@ -3,7 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Response2 } from 'src/services/HttpService';
 import ParticipantProjectService, { ParticipantProjectData } from 'src/services/ParticipantProjectService';
 import strings from 'src/strings';
-import { ParticipantProject, ParticipantProjectSearchResult } from 'src/types/ParticipantProject';
+import { ParticipantProject } from 'src/types/ParticipantProject';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 
 export const requestGetParticipantProject = createAsyncThunk(
@@ -20,17 +20,18 @@ export const requestGetParticipantProject = createAsyncThunk(
 );
 
 export type ListRequest = {
+  locale?: string;
   search: SearchNodePayload;
   sortOrder: SearchSortOrder;
 };
 
 export const requestListParticipantProjects = createAsyncThunk(
   'participantProjects/list',
-  async ({ search, sortOrder }: ListRequest, { rejectWithValue }) => {
-    const response: ParticipantProjectSearchResult[] | null = await ParticipantProjectService.list(search, sortOrder);
+  async ({ locale, search, sortOrder }: ListRequest, { rejectWithValue }) => {
+    const response = await ParticipantProjectService.list(locale, search, sortOrder);
 
-    if (response) {
-      return response;
+    if (response && response.status === 'ok') {
+      return response.details;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

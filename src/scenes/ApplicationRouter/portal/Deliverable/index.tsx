@@ -20,11 +20,23 @@ const SectionDeliverableView = () => {
 
   const deliverable = applicationDeliverables.find((deliverable) => deliverable.id === Number(deliverableId));
 
+  const hideId = useMemo(() => {
+    if (!selectedApplication || !deliverable || deliverable.type !== 'Questions') {
+      return undefined;
+    }
+
+    return (
+      selectedApplication.status === 'Not Submitted' ||
+      selectedApplication.status === 'Failed Pre-screen' ||
+      selectedApplication.status === 'Passed Pre-screen'
+    );
+  }, [deliverable, selectedApplication]);
+
   if (!selectedApplication || !deliverable) {
     return null;
   }
 
-  return <DeliverableViewCard deliverable={{ ...deliverable }} hideStatusBadge />;
+  return <DeliverableViewCard deliverable={{ ...deliverable }} hideId={hideId} hideStatusBadge />;
 };
 
 const SectionDeliverableWrapper = () => {

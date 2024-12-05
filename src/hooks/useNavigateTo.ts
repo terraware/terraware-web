@@ -31,6 +31,26 @@ export default function useNavigateTo() {
         navigate({ pathname: APP_PATHS.ACCELERATOR_APPLICATION_MAP.replace(':applicationId', `${applicationId}`) });
       },
 
+      goToAcceleratorProject: (projectId: number) => {
+        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`) });
+      },
+
+      goToAcceleratorProjectScore: (projectId: number) => {
+        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${projectId}`) });
+      },
+
+      goToAcceleratorProjectScoreEdit: (projectId: number) => {
+        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_SCORES_EDIT.replace(':projectId', `${projectId}`) });
+      },
+
+      goToAcceleratorProjectVote: (projectId: number) => {
+        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`) });
+      },
+
+      goToAcceleratorProjectVoteEdit: (projectId: number) => {
+        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES_EDIT.replace(':projectId', `${projectId}`) });
+      },
+
       goToApplication: (applicationId: number) => {
         navigate({ pathname: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${applicationId}`) });
       },

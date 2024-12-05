@@ -1,27 +1,26 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { Response } from 'src/services/HttpService';
 import ScoreService from 'src/services/ScoreService';
 import strings from 'src/strings';
-import { Phase, Score } from 'src/types/Score';
+import { Score } from 'src/types/Score';
 
-export const requestListScores = createAsyncThunk('scores/list', async (projectId: number, { rejectWithValue }) => {
+export const requestProjectScore = createAsyncThunk('score/get', async (projectId: number, { rejectWithValue }) => {
   const response = await ScoreService.get(projectId);
-  if (response) {
-    return response;
+  if (response && response.data) {
+    return response.data.score;
   }
 
   return rejectWithValue(strings.GENERIC_ERROR);
 });
 
-export const requestUpdateScores = createAsyncThunk(
-  'scores/update',
-  async (request: { phase: Phase; projectId: number; scores: Score[] }, { rejectWithValue }) => {
-    const { phase, projectId, scores } = request;
+export const requestUpdateProjectScore = createAsyncThunk(
+  'score/update',
+  async (request: { projectId: number; score: Score }, { rejectWithValue }) => {
+    const { projectId, score } = request;
 
-    const response: Response = await ScoreService.update(projectId, phase, scores);
+    const response = await ScoreService.update(projectId, score);
     if (response && response.requestSucceeded) {
-      return projectId;
+      return;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

@@ -4,6 +4,7 @@ import { Box, useTheme } from '@mui/material';
 import { Message } from '@terraware/web-components';
 
 import { ViewProps } from 'src/components/DeliverableView/types';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { SpeciesForParticipantProject } from 'src/types/ParticipantProjectSpecies';
@@ -15,6 +16,7 @@ type Props = ViewProps & {
 const SpeciesDeliverableStatusMessage = ({ deliverable, species }: Props): JSX.Element | null => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const rejectedSpecies = species?.filter((s) => s.participantProjectSpecies.submissionStatus === 'Rejected');
 
@@ -36,7 +38,11 @@ const SpeciesDeliverableStatusMessage = ({ deliverable, species }: Props): JSX.E
           <Message
             body={deliverable?.feedback || ''}
             priority='critical'
-            title={strings.PRELIMINARY_SPECIES_USAGE_LIST_NOT_ACCEPTED}
+            title={
+              isAcceleratorRoute
+                ? strings.PRELIMINARY_SPECIES_USAGE_LIST_UPDATE_REQUESTED
+                : strings.PRELIMINARY_SPECIES_USAGE_LIST_UPDATE_NEEDED
+            }
             type='page'
           />
         </Box>
