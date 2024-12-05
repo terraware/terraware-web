@@ -76,6 +76,7 @@ export default function ModuleContentView() {
       id: 'modules-list',
       rows: modules,
       Renderer: ModulesCellRenderer,
+      clientSortedFields: ['cohortsQuantity', 'deliverablesQuantity'],
     },
   };
 
