@@ -5,7 +5,6 @@ import { Box, useTheme } from '@mui/material';
 import AddNewOrganizationModal from 'src/components/AddNewOrganizationModal';
 import PageSnackbar from 'src/components/PageSnackbar';
 import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
-import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
@@ -24,7 +23,6 @@ export default function NoOrgLandingPage(): JSX.Element {
   const theme = useTheme();
   const [isOrgModalOpen, setIsOrgModalOpen] = useState<boolean>(false);
   const { redirectAndNotify } = useOrganization();
-  const homePageOnboardingImprovementsEnabled = isEnabled('Home Page Onboarding Improvements');
 
   const listItemContents: ListItemContent[] = [{ icon: 'newOrganization' }];
 
