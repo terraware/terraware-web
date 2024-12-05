@@ -1629,9 +1629,7 @@ SITE_SUBZONE_BOUNDARY_TOO_SMALL,Les limites de la sous-zone sont inférieures à
 SITE_WITH_NAME_EXISTS,Un site portant ce nom existe déjà.,
 SITE_ZONE_BOUNDARIES,Limites de la zone,
 SITE_ZONE_BOUNDARIES_DESCRIPTION_0,"Une zone est une strate (couche de végétation) du site de plantation où les conditions de plantation et de croissance sont similaires. Chaque site de plantation doit comporter au moins une zone et généralement pas plus de cinq. Un exemple de zone est la pente d'une colline orientée vers l'est, où les conditions d'ensoleillement et de sol sont similaires.",
-SITE_ZONE_BOUNDARIES_DESCRIPTION_1,"Dessinez ci-dessous les zones de votre site de plantation. Utilisez l'outil de découpage {0} pour créer des polygones à l'intérieur des limites du site pour les zones. [Regardez un tutoriel] sur l'ajouter les limites des zones
-
-.",
+SITE_ZONE_BOUNDARIES_DESCRIPTION_1,Dessinez ci-dessous les zones de votre site de plantation. Utilisez l'outil de découpage {0} pour créer des polygones à l'intérieur des limites du site pour les zones. [Regardez un tutoriel] sur l'ajouter les limites des zones.,
 SITE_ZONE_BOUNDARIES_SIZE,Les zones doivent avoir une taille minimale de 100 m x 100 m.,
 SITE_ZONE_BOUNDARIES_TOO_SMALL,Une ou plusieurs zones ont des limites inférieures à 100 m x 100 m.,
 SITE_ZONE_BOUNDARY_TOO_SMALL,Limite de la zone inférieure à 100 m x 100 m,
