@@ -1,3 +1,4 @@
+5187a8560d1 SW-6328 Replace static map image with regular map (#3399)
 563a0a85f61 SW-6220 Home Dashboard: Don't direct Managers & Contributors to "Add" screens if Seed Banks or Nurseries aren't set up yet (#3396)
 345d2b9464c SW-6336 Modules nav item is not highlighted when selected (#3397)
 36d483ab53c SW-6335 Server error: Unknown field name cohortsQuantity & deliverablesQuantity (#3398)
