@@ -84,6 +84,7 @@ export default function Map(props: MapProps): JSX.Element {
     hideFullScreen,
     topRightMapControl,
     bottomLeftMapControl,
+    hideAllControls,
   } = props;
   const theme = useTheme();
   const [geoData, setGeoData] = useState<any[]>();
@@ -384,6 +385,8 @@ export default function Map(props: MapProps): JSX.Element {
       } else {
         drawFocusTo(entityOptions?.focus);
       }
+    } else {
+      zoomToFit();
     }
   }, [drawFocusTo, entityOptions?.focus, geoData]);
 
@@ -439,11 +442,15 @@ export default function Map(props: MapProps): JSX.Element {
           }}
         >
           {mapSources}
-          <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />
-          {!hideFullScreen && <FullscreenControl position='top-left' />}
-          <AttributionControl compact={true} style={{ marginRight: '5px' }} position='top-left' />
-          <ZoomToFitControl onClick={zoomToFit} />
-          <MapViewStyleControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
+          {!hideAllControls && (
+            <NavigationControl showCompass={false} style={navControlStyle} position='bottom-right' />
+          )}
+          {!hideFullScreen && !hideAllControls && <FullscreenControl position='top-left' />}
+          {!hideAllControls && <AttributionControl compact={true} style={{ marginRight: '5px' }} position='top-left' />}
+          {!hideAllControls && <ZoomToFitControl onClick={zoomToFit} />}
+          {!hideAllControls && (
+            <MapViewStyleControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
+          )}
           {popupInfo && popupRenderer && renderedPopup && (
             <Popup
               key={popupInfo.lat + popupInfo.lng}
@@ -463,7 +470,7 @@ export default function Map(props: MapProps): JSX.Element {
               {renderedPopup}
             </Popup>
           )}
-          {topRightMapControl && (
+          {topRightMapControl && !hideAllControls && (
             <div
               style={{
                 height: 'max-content',
@@ -477,7 +484,7 @@ export default function Map(props: MapProps): JSX.Element {
               {topRightMapControl}
             </div>
           )}
-          {bottomLeftMapControl && (
+          {bottomLeftMapControl && !hideAllControls && (
             <div
               style={{
                 height: 'max-content',

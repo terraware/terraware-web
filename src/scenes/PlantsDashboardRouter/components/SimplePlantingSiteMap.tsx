@@ -9,9 +9,13 @@ import { MapService } from 'src/services';
 
 type SimplePlantingSiteMapProps = {
   plantingSiteId: number;
+  hideAllControls?: boolean;
 };
 
-export default function SimplePlantingSiteMap({ plantingSiteId }: SimplePlantingSiteMapProps): JSX.Element {
+export default function SimplePlantingSiteMap({
+  plantingSiteId,
+  hideAllControls,
+}: SimplePlantingSiteMapProps): JSX.Element {
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
 
   const mapData = useMemo(() => {
@@ -24,7 +28,12 @@ export default function SimplePlantingSiteMap({ plantingSiteId }: SimplePlanting
 
   if (plantingSite?.boundary) {
     return (
-      <PlantingSiteMap mapData={mapData!} style={{ width: '100%', borderRadius: '24px' }} layers={['Planting Site']} />
+      <PlantingSiteMap
+        mapData={mapData!}
+        style={{ width: '100%', borderRadius: '24px' }}
+        layers={['Planting Site']}
+        hideAllControls={hideAllControls}
+      />
     );
   } else {
     return (
