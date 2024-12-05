@@ -1803,7 +1803,7 @@ TOOLTIP_COUNTRY_MY_ACCOUNT,Votre pays influence la façon dont nous affichons le
 TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"Ce numéro représente toutes les accessions dont le statut est « En attente d'enregistrement », « En attente de traitement », « En cours de traitement », « En cours de séchage » et « En cours de stockage ».",
 TOOLTIP_ECOSYSTEM_TYPE,"Unités relativement grandes de terre ou d'eau contenant un assemblage distinct de communautés naturelles partageant une grande majorité d'espèces, de dynamiques et de conditions environnementales.",
 TOOLTIP_GERMINATING_QUANTITY,La germination indique que les semis ne sont pas encore sortis des semences. La quantité en germination ne compte pas dans la quantité totale.,
-TOOLTIP_INVENTORY_ADD_ACCESSION_ID,L'identifiant de l'accession utilisée pour créer ce lot.  Pas disponible pour les espèces qui n'ont pas d'accès.,
+TOOLTIP_INVENTORY_ADD_ACCESSION_ID,L'identifiant de l'accession utilisée pour créer ce lot. Pas disponible pour les espèces qui n'ont pas d'accès.,
 TOOLTIP_NOT_READY_QUANTITY,"Ce qui détermine qu'une plante « n'est pas prête » dépend de votre équipe et est souvent spécifique à l'espèce. Par exemple, la taille de la plante ou la durée d'acclimatation.",
 TOOLTIP_READY_QUANTITY,Ce qui détermine qu'une plante est « prête » dépend de votre équipe et est souvent spécifique à l'espèce. Par exemple : la taille de la plante ou le temps d'acclimatation.,
 TOOLTIP_SCIENTIFIC_NAME,Le nom latin binomial (genre + espèce) actuellement accepté dans la littérature botanique.,
