@@ -106,7 +106,7 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                     background: theme.palette.TwClrBgSecondary,
                     opacity: row.enabled ? 0 : 0.5,
                     borderRadius: '8px',
-                    zindex: 1000,
+                    zIndex: 1000,
                     position: 'absolute',
                   }}
                 ></Box>
