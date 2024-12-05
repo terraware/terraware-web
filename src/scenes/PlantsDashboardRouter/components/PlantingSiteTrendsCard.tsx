@@ -30,7 +30,7 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
 
   const totalArea = plantingSite?.areaHa ?? 1;
 
-  const zonesOptions = plantingSite?.plantingZones?.map((pzone) => pzone.name);
+  const [zonesOptions, setZoneOptions] = useState<string[]>();
   const [selectedPlantsPerHaZone, setSelectedPlantsPerHaZone] = useState<string>();
   const dispatch = useAppDispatch();
   const [summaries, setSummaries] = useState<ObservationSummary[]>();
@@ -39,6 +39,14 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
     if (plantingSite?.id) {
       const request = dispatch(requestGetPlantingSiteObservationsSummaries(plantingSite.id));
       setRequestId(request.requestId);
+    }
+  }, [plantingSite]);
+
+  useEffect(() => {
+    const zoneNames = plantingSite?.plantingZones?.map((pzone) => pzone.name);
+    if (zoneNames) {
+      setZoneOptions(zoneNames);
+      setSelectedPlantsPerHaZone(zoneNames[0]);
     }
   }, [plantingSite]);
 
@@ -118,13 +126,15 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
             </Box>
           </Tooltip>
         </Box>
-        <Box marginTop={2}>
+        <Box>
           <Select
             placeholder={strings.SELECT}
             options={zonesOptions}
             onChange={(newValue) => setSelectedPlantsPerHaZone(newValue)}
             selectedValue={selectedPlantsPerHaZone}
           />
+        </Box>
+        <Box marginTop={2}>
           <Chart
             chartId='plantsPerHaChart'
             chartData={plantsChartData}
