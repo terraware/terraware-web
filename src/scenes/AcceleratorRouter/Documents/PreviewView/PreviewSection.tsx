@@ -1,10 +1,11 @@
 import React, { ReactElement } from 'react';
 
 import { SectionVariableWithValues } from 'src/types/documentProducer/Variable';
-import { VariableValueValue } from 'src/types/documentProducer/VariableValue';
+import { isSectionVariableVariableValue } from 'src/types/documentProducer/VariableValue';
 
 import SectionVariable from './SectionVariable';
 import { SectionVariableWithRelevantVariables } from './util';
+import { collectTablesForPreview, isTableElement } from './util/markdown-table';
 
 interface PreviewSectionProps {
   isTopLevel: boolean;
@@ -29,9 +30,50 @@ const PreviewSection = ({
       return null;
     }
 
+    const values = sectionVariableWithRelevantVariables.values;
+    const valuesWithTables = collectTablesForPreview(values);
+
     return (
       <div className='section-body'>
-        {sectionVariableWithRelevantVariables.values.map((value: VariableValueValue, index: number) => {
+        {valuesWithTables.map((value, index) => {
+          if (isTableElement(value)) {
+            return (
+              <table key={index}>
+                <thead>
+                  <tr>
+                    {value.headers.map((header, headerIndex) => (
+                      <th scope='col' key={headerIndex}>
+                        {header}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {value.rows.map((row, rowIndex) => (
+                    <tr key={rowIndex}>
+                      {row.map((cell, cellIndex) => {
+                        if (isSectionVariableVariableValue(cell)) {
+                          return (
+                            <td key={cellIndex}>
+                              <SectionVariable
+                                sectionVariable={sectionVariableWithRelevantVariables}
+                                sectionVariableValue={cell}
+                                projectId={projectId}
+                                suppressCaptions={suppressCaptions}
+                              />
+                            </td>
+                          );
+                        }
+
+                        return <td key={cellIndex}>{cell}</td>;
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            );
+          }
+
           switch (value.type) {
             case 'SectionText':
               return (

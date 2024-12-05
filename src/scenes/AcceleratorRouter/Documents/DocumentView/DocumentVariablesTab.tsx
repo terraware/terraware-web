@@ -98,9 +98,6 @@ const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.E
     setVariables(
       (allVariables || [])
         .filter((d: VariableWithValues) => {
-          if (!d) {
-            debugger;
-          }
           return d.type !== 'Section' && d.type !== 'Image' && d.type !== 'Table';
         })
         .filter(filterSearch(searchValue))
