@@ -47,6 +47,13 @@ export type ExistingVariableValueUnion =
   | TableVariableValue
   | TextVariableValue;
 
+export type NewNonSectionValuePayloadUnion =
+  | NewDateValuePayload
+  | NewLinkValuePayload
+  | NewNumberValuePayload
+  | NewSelectValuePayload
+  | NewTextValuePayload;
+
 // This is supposed to be SectionVariableWithValues & VariableValueValue but the types don't exactly line up
 export type CombinedInjectedValue = {
   rowValueId?: number;
@@ -139,8 +146,6 @@ export type NewValuePayload = components['schemas']['NewValuePayload'];
 
 export type UpdateVariableValuesRequestPayload = components['schemas']['UpdateVariableValuesRequestPayload'];
 
-export type AppendVariableValueOperation = components['schemas']['AppendValueOperationPayload'];
-
 export type AppendVariableRequestWithDocId = components['schemas']['UpdateValueOperationPayload'] & {
   docId: number;
 };
@@ -170,17 +175,12 @@ export type UploadImageValueRequestPayloadWithProjectId = UploadImageValueReques
   projectId: number;
 };
 
-export type AppendVariableValueRequestWithDocId = Omit<
-  components['schemas']['AppendValueOperationPayload'],
-  'value'
-> & {
+export type AppendVariableValueOperation = Omit<components['schemas']['AppendValueOperationPayload'], 'value'> & {
+  value: NewNonSectionValuePayloadUnion;
+};
+
+export type AppendVariableValueRequestWithDocId = AppendVariableValueOperation & {
   docId: number;
-  value:
-    | NewTextValuePayload
-    | NewNumberValuePayload
-    | NewSelectValuePayload
-    | NewDateValuePayload
-    | NewLinkValuePayload;
 };
 
 export type NewSectionTextValuePayload = components['schemas']['NewSectionTextValuePayload'];

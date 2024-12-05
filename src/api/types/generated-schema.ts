@@ -745,7 +745,7 @@ export interface paths {
      * Exports selected fields from data matching a set of search criteria.
      * @description If a sublist field has multiple values, they are separated with line breaks in the exported file.
      */
-    post: operations["search_1"];
+    post: operations["search"];
   };
   "/api/v1/search/values": {
     /** Search for distinct values from data matching a set of search criteria. */
@@ -953,7 +953,7 @@ export interface paths {
   };
   "/api/v1/tracking/observations/{observationId}/plots": {
     /** Exports monitoring plots assigned to an observation as a GPX file. */
-    get: operations["listAssignedPlots_1"];
+    get: operations["listAssignedPlots"];
   };
   "/api/v1/tracking/observations/{observationId}/plots/{plotId}": {
     /** Updates information about the observation of a plot. */
@@ -1350,16 +1350,16 @@ export interface components {
      */
     AppendValueOperationPayload: WithRequired<{
       operation: "Append";
-    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & {
+    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & ({
       /**
        * Format: int64
        * @description If the variable is a table column and the new value should be appended to an existing row, the existing row's value ID.
        */
       rowValueId?: number;
-      value?: components["schemas"]["NewValuePayload"];
+      value?: components["schemas"]["NewDateValuePayload"] | components["schemas"]["NewImageValuePayload"] | components["schemas"]["NewLinkValuePayload"] | components["schemas"]["NewNumberValuePayload"] | components["schemas"]["NewSectionTextValuePayload"] | components["schemas"]["NewSectionVariableValuePayload"] | components["schemas"]["NewSelectValuePayload"] | components["schemas"]["NewTableValuePayload"] | components["schemas"]["NewTextValuePayload"];
       /** Format: int64 */
       variableId?: number;
-    }, "value" | "variableId">;
+    }), "value" | "variableId">;
     ApplicationDeliverablePayload: {
       /** @enum {string} */
       category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
@@ -2692,11 +2692,11 @@ export interface components {
     };
     GeometryCollection: WithRequired<{
       type: "GeometryCollection";
-    } & Omit<components["schemas"]["Geometry"], "type"> & {
-      geometries?: components["schemas"]["Geometry"][];
+    } & Omit<components["schemas"]["Geometry"], "type"> & ({
+      geometries?: (components["schemas"]["GeometryCollection"] | components["schemas"]["LineString"] | components["schemas"]["MultiLineString"] | components["schemas"]["MultiPoint"] | components["schemas"]["MultiPolygon"] | components["schemas"]["Point"] | components["schemas"]["Polygon"])[];
       /** @enum {string} */
       type?: "GeometryCollection";
-    }, "geometries" | "type">;
+    }), "geometries" | "type">;
     GetAccessionHistoryResponsePayload: {
       /** @description History of changes in descending time order (newest first.) */
       history: components["schemas"]["AccessionHistoryEntryPayload"][];
@@ -3299,7 +3299,7 @@ export interface components {
       fields: string[];
       /** Format: int64 */
       organizationId?: number;
-      search?: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
+      search?: components["schemas"]["SearchNodePayload"];
     };
     ListFieldValuesResponsePayload: {
       results: {
@@ -4561,16 +4561,16 @@ export interface components {
      */
     ReplaceValuesOperationPayload: WithRequired<{
       operation: "Replace";
-    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & {
+    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & ({
       /**
        * Format: int64
        * @description If the variable is a table column, the value ID of the row whose values should be replaced.
        */
       rowValueId?: number;
-      values?: components["schemas"]["NewValuePayload"][];
+      values?: (components["schemas"]["NewDateValuePayload"] | components["schemas"]["NewImageValuePayload"] | components["schemas"]["NewLinkValuePayload"] | components["schemas"]["NewNumberValuePayload"] | components["schemas"]["NewSectionTextValuePayload"] | components["schemas"]["NewSectionVariableValuePayload"] | components["schemas"]["NewSelectValuePayload"] | components["schemas"]["NewTableValuePayload"] | components["schemas"]["NewTextValuePayload"])[];
       /** Format: int64 */
       variableId?: number;
-    }, "values" | "variableId">;
+    }), "values" | "variableId">;
     RescheduleObservationRequestPayload: {
       /**
        * Format: date
@@ -4631,33 +4631,7 @@ export interface components {
     };
     /** @description A search criterion. The search will return results that match this criterion. The criterion can be composed of other search criteria to form arbitrary Boolean search expressions. TYPESCRIPT-OVERRIDE-TYPE-WITH-ANY */
     SearchNodePayload: {operation: "and" | "field" | "not" | "or"; [key: string]: any;};
-    SearchRequestPayload: {
-      /**
-       * Format: int32
-       * @description Maximum number of top-level search results to return. The system may impose a limit on this value. A separate system-imposed limit may also be applied to lists of child objects inside the top-level results. Use a value of 0 to return the maximum number of allowed results.
-       * @default 25
-       */
-      count?: number;
-      /** @description Starting point for search results. If present, a previous search will be continued from where it left off. This should be the value of the cursor that was returned in the response to a previous search. */
-      cursor?: string;
-      /**
-       * @description List of fields to return. Field names should be relative to the prefix. They may navigate the data hierarchy using '.' or '_' as delimiters.
-       * @example [
-       *   "processingStartDate",
-       *   "viabilityTests.seedsTested",
-       *   "facility_name"
-       * ]
-       */
-      fields: string[];
-      /**
-       * @description Prefix for field names. This determines how field names are interpreted, and also how results are structured. Each element in the "results" array in the response will be an instance of whatever entity the prefix points to. Always evaluated starting from the "organizations" level. If not present, the search will return a list of organizations.
-       * @example facilities.accessions
-       */
-      prefix?: string;
-      search?: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
-      /** @description How to sort the search results. This controls both the order of the top-level results and the order of any lists of child objects. */
-      sortOrder?: components["schemas"]["SearchSortOrderElement"][];
-    };
+    SearchRequestPayload: { count?: number; cursor?: string; fields: string[]; prefix?: string; search?: components["schemas"]["SearchNodePayload"]; sortOrder?: components["schemas"]["SearchSortOrderElement"][];};
     SearchResponsePayload: {
       cursor?: string;
       results: {
@@ -4946,7 +4920,7 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     SummarizeAccessionSearchRequestPayload: {
-      search?: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
+      search?: components["schemas"]["SearchNodePayload"];
     };
     SummarizeAccessionSearchResponsePayload: {
       /** Format: int32 */
@@ -5496,11 +5470,11 @@ export interface components {
      */
     UpdateValueOperationPayload: WithRequired<{
       operation: "Update";
-    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & {
-      value?: components["schemas"]["NewValuePayload"];
+    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & ({
+      value?: components["schemas"]["NewDateValuePayload"] | components["schemas"]["NewImageValuePayload"] | components["schemas"]["NewLinkValuePayload"] | components["schemas"]["NewNumberValuePayload"] | components["schemas"]["NewSectionTextValuePayload"] | components["schemas"]["NewSectionVariableValuePayload"] | components["schemas"]["NewSelectValuePayload"] | components["schemas"]["NewTableValuePayload"] | components["schemas"]["NewTextValuePayload"];
       /** Format: int64 */
       valueId?: number;
-    }, "existingValueId" | "value" | "valueId">;
+    }), "existingValueId" | "value" | "valueId">;
     UpdateVariableOwnerRequestPayload: {
       /**
        * Format: int64
@@ -7683,9 +7657,9 @@ export interface operations {
     parameters: {
       query?: {
         /** @description Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
-        maxWidth?: string;
+        maxWidth?: number;
         /** @description Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
-        maxHeight?: string;
+        maxHeight?: number;
       };
       path: {
         projectId: number;
@@ -8285,7 +8259,7 @@ export interface operations {
     parameters: {
       query?: {
         /** @description If set, return notifications relevant to that organization. */
-        organizationId?: string;
+        organizationId?: number;
       };
     };
     responses: {
@@ -8525,9 +8499,9 @@ export interface operations {
     parameters: {
       query?: {
         /** @description Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
-        maxWidth?: string;
+        maxWidth?: number;
         /** @description Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
-        maxHeight?: string;
+        maxHeight?: number;
       };
       path: {
         batchId: number;
@@ -8850,9 +8824,9 @@ export interface operations {
     parameters: {
       query?: {
         /** @description Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
-        maxWidth?: string;
+        maxWidth?: number;
         /** @description Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
-        maxHeight?: string;
+        maxHeight?: number;
       };
       path: {
         withdrawalId: number;
@@ -8914,7 +8888,7 @@ export interface operations {
     parameters: {
       query?: {
         /** @description Return this level of information about the organization's contents. */
-        depth?: string;
+        depth?: "Organization" | "Facility";
       };
     };
     responses: {
@@ -8947,11 +8921,11 @@ export interface operations {
     parameters: {
       query?: {
         /** @description Return this level of information about the organization's contents. */
-        depth?: string;
+        depth?: "Organization" | "Facility";
       };
       path: {
         /** @description ID of organization to get. User must be a member of the organization. */
-        organizationId: string;
+        organizationId: number;
       };
     };
     responses: {
@@ -9571,9 +9545,9 @@ export interface operations {
     parameters: {
       query?: {
         /** @description Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
-        maxWidth?: string;
+        maxWidth?: number;
         /** @description Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
-        maxHeight?: string;
+        maxHeight?: number;
       };
       path: {
         reportId: number;
@@ -9633,7 +9607,7 @@ export interface operations {
    * Exports selected fields from data matching a set of search criteria.
    * @description If a sublist field has multiple values, they are separated with line breaks in the exported file.
    */
-  search_1: {
+  search: {
     requestBody: {
       content: {
         "application/json": components["schemas"]["SearchRequestPayload"];
@@ -9761,9 +9735,9 @@ export interface operations {
     parameters: {
       query?: {
         /** @description Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
-        maxWidth?: string;
+        maxWidth?: number;
         /** @description Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
-        maxHeight?: string;
+        maxHeight?: number;
       };
       path: {
         id: number;
@@ -9870,7 +9844,9 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": string;
+        "application/json": {
+          [key: string]: Record<string, never>;
+        };
       };
     };
     responses: {
@@ -9885,9 +9861,9 @@ export interface operations {
     parameters: {
       query?: {
         /** @description If set, return summary on all seedbanks for that organization. */
-        organizationId?: string;
+        organizationId?: number;
         /** @description If set, return summary on that specific seedbank. */
-        facilityId?: string;
+        facilityId?: number;
       };
     };
     responses: {
@@ -9936,9 +9912,9 @@ export interface operations {
     parameters: {
       query: {
         /** @description Organization whose species should be listed. */
-        organizationId: string;
+        organizationId: number;
         /** @description Only list species that are currently used in the organization's inventory, accessions or planting sites. */
-        inUse?: string;
+        inUse?: boolean;
       };
     };
     responses: {
@@ -10010,7 +9986,7 @@ export interface operations {
          */
         search: string;
         /** @description Maximum number of results to return. */
-        maxResults?: string;
+        maxResults?: number;
       };
     };
     responses: {
@@ -10214,7 +10190,7 @@ export interface operations {
     parameters: {
       query: {
         /** @description Organization whose information about the species should be returned. */
-        organizationId: string;
+        organizationId: number;
       };
       path: {
         speciesId: number;
@@ -10554,9 +10530,9 @@ export interface operations {
     parameters: {
       query?: {
         /** @description Limit results to observations of planting sites in a specific organization. Ignored if plantingSiteId is specified. */
-        organizationId?: string;
+        organizationId?: number;
         /** @description Limit results to observations of a specific planting site. Required if organizationId is not specified. */
-        plantingSiteId?: string;
+        plantingSiteId?: number;
       };
     };
     responses: {
@@ -10702,7 +10678,7 @@ export interface operations {
     };
   };
   /** Exports monitoring plots assigned to an observation as a GPX file. */
-  listAssignedPlots_1: {
+  listAssignedPlots: {
     parameters: {
       path: {
         observationId: number;
@@ -10942,7 +10918,7 @@ export interface operations {
       query: {
         organizationId: number;
         /** @description If true, include planting zones and subzones for each site. */
-        full?: string;
+        full?: boolean;
       };
     };
     responses: {
@@ -11195,7 +11171,7 @@ export interface operations {
     parameters: {
       query?: {
         /** @description If present, get the user's per-organization preferences for this organization. If not present, get the user's global preferences. */
-        organizationId?: string;
+        organizationId?: number;
       };
     };
     responses: {
@@ -11749,7 +11725,7 @@ export interface operations {
     parameters: {
       query?: {
         /** @description If true, do not actually save the accession; just return the result that would have been returned if it had been saved. */
-        simulate?: string;
+        simulate?: boolean;
       };
       path: {
         id: number;
