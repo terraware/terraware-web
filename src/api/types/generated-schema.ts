@@ -194,6 +194,8 @@ export interface paths {
     put: operations["assignTerraformationContact"];
   };
   "/api/v1/accelerator/participants": {
+    /** List participants and their assigned projects. */
+    get: operations["listParticipants"];
     /** Creates a new participant. */
     post: operations["createParticipant"];
   };
@@ -2329,6 +2331,7 @@ export interface components {
       participantName?: string;
       /** Format: int32 */
       position: number;
+      projectDealName?: string;
       /** Format: int64 */
       projectId: number;
       projectName: string;
@@ -3275,6 +3278,7 @@ export interface components {
       participantName?: string;
       /** Format: int32 */
       position: number;
+      projectDealName?: string;
       /** Format: int64 */
       projectId: number;
       projectName: string;
@@ -3359,6 +3363,10 @@ export interface components {
     };
     ListOrganizationsResponsePayload: {
       organizations: components["schemas"]["OrganizationPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListParticipantsResponsePayload: {
+      participants: components["schemas"]["ParticipantPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListPhotosResponseElement: {
@@ -4137,6 +4145,7 @@ export interface components {
       /** Format: int64 */
       organizationId: number;
       organizationName: string;
+      projectDealName?: string;
       /** Format: int64 */
       projectId: number;
       projectName: string;
@@ -6759,6 +6768,23 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** List participants and their assigned projects. */
+  listParticipants: {
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListParticipantsResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };

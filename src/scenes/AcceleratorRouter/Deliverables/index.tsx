@@ -5,6 +5,7 @@ import DeliverableProvider from 'src/providers/Deliverable/DeliverableProvider';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
 import ProjectProvider from 'src/providers/Project/ProjectProvider';
 
+import ParticipantProjectProvider from '../ParticipantProjects/ParticipantProjectProvider';
 import DeliverableRouter from './DeliverableRouter';
 import DeliverablesList from './DeliverablesList';
 
@@ -16,9 +17,11 @@ const DeliverablesRouter = () => {
         element={
           <ProjectProvider>
             <ParticipantProvider>
-              <DeliverableProvider>
-                <DeliverableRouter />
-              </DeliverableProvider>
+              <ParticipantProjectProvider>
+                <DeliverableProvider>
+                  <DeliverableRouter />
+                </DeliverableProvider>
+              </ParticipantProjectProvider>
             </ParticipantProvider>
           </ProjectProvider>
         }
