@@ -6,12 +6,17 @@ import {
 import { TableVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
   AppendVariableValueOperation,
+  DeletedVariableValue,
+  ImageVariableValue,
   NewDateValuePayload,
   NewLinkValuePayload,
   NewNumberValuePayload,
   NewSelectValuePayload,
   NewTextValuePayload,
   Operation,
+  SectionTextVariableValue,
+  SectionVariableVariableValue,
+  TableVariableValue,
   VariableValueDateValue,
   VariableValueLinkValue,
   VariableValueNumberValue,
@@ -20,6 +25,16 @@ import {
   VariableValueValue,
 } from 'src/types/documentProducer/VariableValue';
 import { isValueEmpty } from 'src/utils/documentProducer/variables';
+
+export type NonSelectTableCellValue = Exclude<
+  VariableValueValue,
+  | DeletedVariableValue
+  | VariableValueSelectValue
+  | ImageVariableValue
+  | SectionTextVariableValue
+  | SectionVariableVariableValue
+  | TableVariableValue
+>;
 
 // TODO this was taken from the pdd-web code, but there is no test, it definitely seems test-worthy
 export const makeVariableValueOperations = ({
@@ -132,7 +147,7 @@ export const makeVariableValueOperations = ({
                         optionIds: (foundCell.values[0] as VariableValueSelectValue).optionValues,
                       } as NewSelectValuePayload,
                     ]
-                  : foundCell.values;
+                  : foundCell.values?.filter((v): v is NonSelectTableCellValue => v.type !== 'Deleted');
 
               if (foundCell.values && foundCell.values.length > 0 && cellValue(foundCell.values[0]).toString() !== '') {
                 operations.push({
@@ -182,7 +197,7 @@ export const makeVariableValueOperations = ({
               : {
                   operation: 'Append',
                   variableId: newCell.colId,
-                  value: newCell.values[0],
+                  value: newCell.values[0] as NonSelectTableCellValue,
                 };
           operations.push(newOp);
         }

@@ -6,6 +6,7 @@ import { Button, DatePicker, Dropdown, DropdownItem, Textfield } from '@terrawar
 import PageDialog from 'src/components/DocumentProducer/PageDialog';
 import VariableWorkflowDetails from 'src/components/DocumentProducer/VariableWorkflowDetails';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import { NonSelectTableCellValue } from 'src/hooks/useProjectVariablesUpdate/util';
 import { useLocalization } from 'src/providers';
 import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
 import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
@@ -126,11 +127,11 @@ const EditableTableEdit = ({
                 foundCell.values && foundCell.type === 'Select'
                   ? [
                       {
-                        ...foundCell.values[0],
+                        ...(foundCell.values[0] as VariableValueSelectValue),
                         optionIds: (foundCell.values[0] as VariableValueSelectValue).optionValues,
                       } as NewSelectValuePayload,
                     ]
-                  : foundCell.values;
+                  : foundCell.values?.filter((v): v is NonSelectTableCellValue => v.type !== 'Deleted');
               update.operations.push({
                 operation: 'Replace',
                 rowValueId: rowId,
@@ -171,7 +172,7 @@ const EditableTableEdit = ({
               : {
                   operation: 'Append',
                   variableId: newCell.colId,
-                  value: newCell.values[0],
+                  value: newCell.values[0] as NonSelectTableCellValue,
                 };
           update.operations.push(newOp);
         }

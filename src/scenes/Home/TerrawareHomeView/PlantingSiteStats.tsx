@@ -12,6 +12,7 @@ import { useLocalization, useOrganization } from 'src/providers';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
+import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { isAdmin } from 'src/utils/organization';
@@ -36,23 +37,6 @@ export const PlantingSiteStats = () => {
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, selectedPlantingSiteId || -1, defaultTimeZone.get().id)
   );
-
-  const geojson = {
-    type: 'FeatureCollection',
-    features: [
-      {
-        type: 'Feature',
-        geometry: selectedPlantingSite?.boundary,
-        properties: {
-          fill: theme.palette.TwClrBaseGreen300,
-          'fill-opacity': 0.2,
-          stroke: theme.palette.TwClrBaseGreen300,
-        },
-      },
-    ],
-  };
-  const geojsonString = encodeURIComponent(JSON.stringify(geojson));
-  const staticMapURL = `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/geojson(${geojsonString})/auto/580x360@2x?padding=80&access_token=${token}`;
 
   const primaryGridSize = useMemo(() => (isDesktop ? 6 : 12), [isDesktop]);
 
@@ -236,19 +220,8 @@ export const PlantingSiteStats = () => {
             width: '100%',
           }}
         >
-          {token && (
-            <img
-              alt='Mapbox Static Map with Boundaries'
-              src={staticMapURL}
-              style={{
-                height: '100%',
-                left: 0,
-                objectFit: 'cover',
-                position: 'absolute',
-                top: 0,
-                width: '100%',
-              }}
-            />
+          {token && selectedPlantingSiteId && (
+            <SimplePlantingSiteMap plantingSiteId={selectedPlantingSiteId} hideAllControls={true} />
           )}
         </Box>
       </Box>

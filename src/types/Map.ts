@@ -152,6 +152,7 @@ export type MapControl = {
   // custom map controls
   topRightMapControl?: React.ReactNode;
   bottomLeftMapControl?: React.ReactNode;
+  hideAllControls?: boolean;
 };
 
 /**

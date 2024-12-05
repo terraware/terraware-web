@@ -13,6 +13,18 @@ import url from 'url';
       if (metadata.path.endsWith('/SearchNodePayload')) {
         return '{operation: "and" | "field" | "not" | "or"; [key: string]: any;}';
       }
+      if (metadata.path.endsWith('/SearchRequestPayload')) {
+        return (
+          '{' +
+          ' count?: number;' +
+          ' cursor?: string;' +
+          ' fields: string[];' +
+          ' prefix?: string;' +
+          ' search?: components["schemas"]["SearchNodePayload"];' +
+          ' sortOrder?: components["schemas"]["SearchSortOrderElement"][];' +
+          '}'
+        );
+      }
     },
   });
 
