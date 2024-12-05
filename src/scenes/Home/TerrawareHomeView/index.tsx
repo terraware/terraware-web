@@ -27,7 +27,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import strings from 'src/strings';
-import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
+import { isAdmin, isManagerOrHigher, selectedOrgHasFacilityType } from 'src/utils/organization';
 
 import CTACard from './CTACard';
 import OrganizationStatsCard, { OrganizationStatsCardRow } from './OrganizationStatsCard';
@@ -136,7 +136,9 @@ const TerrawareHomeView = () => {
           : {
               label: strings.ADD_AN_ACCESSION,
               onClick: () => {
-                navigate(APP_PATHS.ACCESSIONS2_NEW);
+                selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')
+                  ? navigate(APP_PATHS.ACCESSIONS2_NEW)
+                  : navigate(APP_PATHS.ACCESSIONS);
               },
             },
         icon: 'seeds' as IconName,
@@ -167,7 +169,9 @@ const TerrawareHomeView = () => {
           : {
               label: strings.ADD_INVENTORY,
               onClick: () => {
-                navigate(APP_PATHS.INVENTORY_NEW);
+                selectedOrgHasFacilityType(selectedOrganization, 'Nursery')
+                  ? navigate(APP_PATHS.INVENTORY_NEW)
+                  : navigate(APP_PATHS.INVENTORY);
               },
             },
         icon: 'iconSeedling' as IconName,
