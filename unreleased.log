@@ -1,1 +1,2 @@
+516e51ad6d7 Make deploy script fail if any step fails (#3404)
 d49cf312ce4 SW-6302 Add document preview code for tables that are inserted into a document template (#3388)
