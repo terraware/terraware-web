@@ -1,14 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import React, { Box, Typography, useTheme } from '@mui/material';
-import { Icon, Select, Tooltip } from '@terraware/web-components';
+import { Dropdown, DropdownItem, Icon, Tooltip } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import Chart from 'src/components/common/Chart/Chart';
-import {
-  selectObservationsResults,
-  selectPlantingSiteObservationsSummaries,
-} from 'src/redux/features/observations/observationsSelectors';
+import { selectPlantingSiteObservationsSummaries } from 'src/redux/features/observations/observationsSelectors';
 import { requestGetPlantingSiteObservationsSummaries } from 'src/redux/features/observations/observationsThunks';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -21,17 +18,15 @@ type PlantingSiteTrendsCardProps = {
 
 export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteTrendsCardProps): JSX.Element {
   const theme = useTheme();
-  const allObservationsResults = useAppSelector(selectObservationsResults);
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const [requestId, setRequestId] = useState<string>('');
   const plantingObservationsSummaryResponse = useAppSelector((state) =>
     selectPlantingSiteObservationsSummaries(state, requestId)
   );
 
-  const totalArea = plantingSite?.areaHa ?? 1;
-
-  const [zonesOptions, setZoneOptions] = useState<string[]>();
-  const [selectedPlantsPerHaZone, setSelectedPlantsPerHaZone] = useState<string>();
+  const [zonesOptions, setZoneOptions] = useState<DropdownItem[]>();
+  const [selectedPlantsPerHaZone, setSelectedPlantsPerHaZone] = useState<number>();
+  const [selectedMortalityZone, setSelectedMortalityZone] = useState<number>();
   const dispatch = useAppDispatch();
   const [summaries, setSummaries] = useState<ObservationSummary[]>();
 
@@ -43,10 +38,11 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
   }, [plantingSite]);
 
   useEffect(() => {
-    const zoneNames = plantingSite?.plantingZones?.map((pzone) => pzone.name);
-    if (zoneNames) {
-      setZoneOptions(zoneNames);
-      setSelectedPlantsPerHaZone(zoneNames[0]);
+    const zoneOpts = plantingSite?.plantingZones?.map((pzone) => ({ label: pzone.name, value: pzone.id }));
+    if (zoneOpts) {
+      setZoneOptions(zoneOpts);
+      setSelectedPlantsPerHaZone(zoneOpts[0].value);
+      setSelectedMortalityZone(zoneOpts[0].value);
     }
   }, [plantingSite]);
 
@@ -55,25 +51,6 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
       setSummaries(plantingObservationsSummaryResponse.data);
     }
   }, [plantingObservationsSummaryResponse]);
-
-  useEffect(() => {
-    console.log('summaries', summaries);
-  }, [summaries]);
-
-  const siteObservations = useMemo(() => {
-    if (!allObservationsResults || !plantingSiteId) {
-      return [];
-    }
-    return allObservationsResults?.filter((observationResult) => {
-      const matchesSite = observationResult.plantingSiteId === plantingSiteId;
-      return matchesSite;
-    });
-  }, [allObservationsResults, plantingSiteId]);
-
-  const sortedObservations = useMemo(
-    () => siteObservations.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime()),
-    [siteObservations]
-  );
 
   const separatorStyles = {
     width: '1px',
@@ -84,10 +61,11 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
   };
 
   const plantsChartData = useMemo(() => {
-    const labels = sortedObservations.map((ob) => ob.startDate);
-    const values = sortedObservations.map(
-      (ob) => ob.plantingZones.flatMap((zone) => zone.totalPlants).reduce((acc, curr) => acc + curr, 0) / totalArea
-    );
+    const labels = summaries?.map((sm) => sm.latestObservationTime);
+    const values = summaries?.map((sm) => {
+      const zone = sm.plantingZones.find((pz) => pz.plantingZoneId === selectedPlantsPerHaZone);
+      return zone?.estimatedPlants || 0;
+    });
 
     return {
       labels: labels ?? [],
@@ -97,11 +75,14 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
         },
       ],
     };
-  }, [sortedObservations]);
+  }, [summaries, selectedPlantsPerHaZone]);
 
   const mortalityChartData = useMemo(() => {
-    const labels = sortedObservations.map((ob) => ob.startDate);
-    const values = sortedObservations.map((ob) => ob.mortalityRate);
+    const labels = summaries?.map((sm) => sm.latestObservationTime);
+    const values = summaries?.map((sm) => {
+      const zone = sm.plantingZones.find((pz) => pz.plantingZoneId === selectedMortalityZone);
+      return zone?.mortalityRate || 0;
+    });
 
     return {
       labels: labels ?? [],
@@ -111,7 +92,7 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
         },
       ],
     };
-  }, [sortedObservations]);
+  }, [summaries, selectedMortalityZone]);
 
   return (
     <Card radius='8px' style={{ display: 'flex', 'justify-content': 'space-between' }}>
@@ -121,16 +102,14 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
             {strings.PLANTS_PER_HA}
           </Typography>
           <Tooltip title={strings.PLANTS_PER_HA_TOOLTIP}>
-            <Box display='flex'>
+            <Box display='flex' marginRight={1}>
               <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
             </Box>
           </Tooltip>
-        </Box>
-        <Box>
-          <Select
+          <Dropdown
             placeholder={strings.SELECT}
             options={zonesOptions}
-            onChange={(newValue) => setSelectedPlantsPerHaZone(newValue)}
+            onChange={(newValue) => setSelectedPlantsPerHaZone(Number(newValue))}
             selectedValue={selectedPlantsPerHaZone}
           />
         </Box>
@@ -154,10 +133,17 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
             {strings.MORTALITY_RATE}
           </Typography>
           <Tooltip title={strings.MORTALITY_RATE_TREND_TOOLTIP}>
-            <Box display='flex'>
+            <Box display='flex' marginRight={1}>
               <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
             </Box>
           </Tooltip>
+
+          <Dropdown
+            placeholder={strings.SELECT}
+            options={zonesOptions}
+            onChange={(newValue) => setSelectedMortalityZone(Number(newValue))}
+            selectedValue={selectedMortalityZone}
+          />
         </Box>
         <Box paddingTop={2}>
           <Chart
