@@ -16,17 +16,17 @@ import { useLocalization } from 'src/providers';
 import { selectDocumentSearch } from 'src/redux/features/documentProducer/documents/documentsSelector';
 import { requestSearchDocuments } from 'src/redux/features/documentProducer/documents/documentsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { DocumentsSearchResponseElement } from 'src/services/documentProducer/DocumentService';
 import strings from 'src/strings';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { Document } from 'src/types/documentProducer/Document';
 import useSnackbar from 'src/utils/useSnackbar';
 
 const columns = (activeLocale: string | null): TableColumnType[] =>
   activeLocale
     ? [
         { key: 'name', name: strings.NAME, type: 'string' },
-        { key: 'project_name', name: strings.PROJECT, type: 'string' },
-        { key: 'documentTemplate_name', name: strings.DOCUMENT_TEMPLATE, type: 'string' },
+        { key: 'projectDealName', name: strings.DEAL_NAME, type: 'string' },
+        { key: 'documentTemplateName', name: strings.DOCUMENT_TEMPLATE, type: 'string' },
         { key: 'lastSavedVersionId', name: strings.VERSION, type: 'number' },
         { key: 'createdTime', name: strings.CREATED, type: 'date' },
         { key: 'modifiedTime', name: strings.LAST_EDITED, type: 'date' },
@@ -48,7 +48,7 @@ export default function DocumentsView(): JSX.Element | null {
   const theme = useTheme();
   const { availableProjects } = useProjects();
 
-  const [tableRows, setTableRows] = useState<DocumentsSearchResponseElement[]>([]);
+  const [tableRows, setTableRows] = useState<Document[]>([]);
   const [tableSelectedRows, tableSetSelectedRows] = useState<TableRowType[]>([]);
   const [requestId, setRequestId] = useState('');
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({ projectId: '' });
@@ -140,7 +140,7 @@ export default function DocumentsView(): JSX.Element | null {
     }
 
     if (documentsResponse?.status === 'success' && documentsResponse?.data) {
-      setTableRows(documentsResponse.data);
+      setTableRows(documentsResponse.data ?? []);
     } else if (documentsResponse?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }

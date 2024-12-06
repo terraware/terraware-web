@@ -1,11 +1,11 @@
+import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response2 } from 'src/services/HttpService';
-import { SearchNodePayload, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import {
   CreateDocumentPayload,
   CreateDocumentResponse,
   CreateSavedDocVersionPayload,
   CreateSavedDocVersionResponsePayload,
-  Document,
   DocumentGetResponse,
   DocumentHistoryGetResponse,
   DocumentListResponse,
@@ -15,8 +15,7 @@ import {
   UpgradeManifestPayload,
   UpgradeManifestResponse,
 } from 'src/types/documentProducer/Document';
-
-import SearchService from '../SearchService';
+import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 
 const DOCUMENTS_ENDPOINT = '/api/v1/document-producer/documents';
 const DOCUMENT_ENDPOINT = '/api/v1/document-producer/documents/{id}';
@@ -25,31 +24,8 @@ const DOCUMENT_VERSIONS_ENDPOINT = '/api/v1/document-producer/documents/{docId}/
 const DOCUMENT_VERSION_ENDPOINT = '/api/v1/document-producer/documents/{docId}/versions/{versionId}';
 const DOCUMENT_UPGRADE_ENDPOINT = '/api/v1/document-producer/documents/{id}/upgrade';
 
-const DOCUMENTS_SEARCH_FIELDS = [
-  'createdTime',
-  'documentTemplate_id',
-  'documentTemplate_name',
-  'id',
-  'lastSavedVersionId',
-  'modifiedTime',
-  'name',
-  'project_id',
-  'project_name',
-  'status',
-];
-
-export type DocumentsSearchResponseElement = {
-  createdTime: string;
-  documentTemplate_id: number;
-  documentTemplate_name: string;
-  id: number;
-  lastSavedVersionId?: number;
-  modifiedTime: string;
-  name: string;
-  project_id: number;
-  project_name: string;
-  status: Document['status'];
-};
+type ListDocumentsResponsePayload =
+  paths[typeof DOCUMENTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 const createDocument = (payload: CreateDocumentPayload): Promise<Response2<CreateDocumentResponse>> =>
   HttpService.root(DOCUMENTS_ENDPOINT).post({ entity: payload });
@@ -60,21 +36,6 @@ const getDocument = (id: number): Promise<Response2<DocumentGetResponse>> =>
   });
 
 const getDocuments = (): Promise<Response2<DocumentListResponse>> => HttpService.root(DOCUMENTS_ENDPOINT).get2({});
-
-const getSearchParams = (search?: SearchNodePayload, sortOrder?: SearchSortOrder): SearchRequestPayload => {
-  const searchParams: SearchRequestPayload = {
-    prefix: 'projects.documents',
-    fields: DOCUMENTS_SEARCH_FIELDS,
-    search: {
-      operation: 'and',
-      children: search ? [search] : [],
-    },
-    sortOrder: [sortOrder ?? { field: 'name' }],
-    count: 1000,
-  };
-
-  return searchParams;
-};
 
 const listHistory = (id: number): Promise<Response2<DocumentHistoryGetResponse>> =>
   HttpService.root(DOCUMENT_HISTORY_ENDPOINT).get2({
@@ -104,22 +65,27 @@ const searchDocuments = async (request: {
   locale: string | null;
   search: SearchNodePayload;
   searchSortOrder: SearchSortOrder;
-}): Promise<DocumentsSearchResponseElement[]> => {
-  const response = await SearchService.search(getSearchParams(request.search, request.searchSortOrder));
-  return (response || []).map(
-    (value: SearchResponseElement): DocumentsSearchResponseElement => ({
-      createdTime: `${value.createdTime}`,
-      documentTemplate_id: Number(value.documentTemplate_id),
-      documentTemplate_name: `${value.documentTemplate_name}`,
-      id: Number(value.id),
-      lastSavedVersionId: value.lastSavedVersionId ? Number(value.lastSavedVersionId) : undefined,
-      modifiedTime: `${value.modifiedTime}`,
-      name: `${value.name}`,
-      project_id: Number(value.project_id),
-      project_name: `${value.project_name}`,
-      status: `${value.status}` as Document['status'],
-    })
-  );
+}): Promise<ListDocumentsResponsePayload> => {
+  const { locale, search, searchSortOrder } = request;
+  let searchOrderConfig: SearchOrderConfig | undefined;
+  if (searchSortOrder) {
+    searchOrderConfig = {
+      locale: locale ?? null,
+      sortOrder: searchSortOrder,
+      numberFields: ['cohortId', 'id'],
+    };
+  }
+
+  const response = await HttpService.root(DOCUMENTS_ENDPOINT).get2<ListDocumentsResponsePayload>();
+
+  if (!response || !response.requestSucceeded || !response.data) {
+    return Promise.reject(response);
+  }
+
+  return {
+    status: response.data.status,
+    documents: searchAndSort(response.data.documents, search, searchOrderConfig),
+  };
 };
 
 const updateDocument = (id: number, payload: UpdateDocumentPayload): Promise<Response2<UpdateDocumentResponse>> =>
