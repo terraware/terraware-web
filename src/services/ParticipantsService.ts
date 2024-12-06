@@ -79,7 +79,7 @@ const list = async (
     };
   }
 
-  const response = await HttpService.root(PARTICIPANT_ENDPOINT).get2<ListParticipantsResponsePayload>();
+  const response = await HttpService.root(PARTICIPANTS_ENDPOINT).get2<ListParticipantsResponsePayload>();
 
   if (!response || !response.requestSucceeded || !response.data) {
     return Promise.reject(response);
