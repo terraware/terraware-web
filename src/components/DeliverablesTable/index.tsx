@@ -126,7 +126,7 @@ const DeliverablesTable = ({
     (projectId: number | string) => {
       return (
         (participantId
-          ? selectedParticipant?.projects?.find((p) => p.id === Number(projectId))?.name
+          ? selectedParticipant?.projects?.find((p) => p.projectId === Number(projectId))?.projectId
           : projectsFilterOptions?.find((p) => p.id === Number(projectId))?.name) || ''
       );
     },
@@ -173,7 +173,13 @@ const DeliverablesTable = ({
 
     // show the project filter only in the accelerator route
     // the participant view already has a projects filter above the table
-    const availableProjects = selectedParticipant?.projects || projectsFilterOptions || [];
+    const availableProjects =
+      selectedParticipant?.projects.map((project) => ({
+        id: project.projectId,
+        name: project.projectName,
+      })) ||
+      projectsFilterOptions ||
+      [];
     if (isAcceleratorRoute && availableProjects && availableProjects.length > 0) {
       let projectFromParam: ParticipantProjectSearchResult | undefined;
       if (projectParam) {
@@ -182,7 +188,7 @@ const DeliverablesTable = ({
       filters.unshift({
         field: 'projectName',
         options: availableProjects
-          .map((project: Project | AcceleratorOrgProject) => `${project.name}`)
+          .map((project) => project.name)
           .sort((a, b) => a.localeCompare(b, activeLocale || undefined)),
         label: strings.PROJECTS,
         values: projectFromParam ? [projectFromParam.name] : [],
