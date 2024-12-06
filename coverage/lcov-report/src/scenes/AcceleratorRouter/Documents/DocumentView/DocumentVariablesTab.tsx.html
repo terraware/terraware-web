@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/72</span>
+                <span class='fraction'>0/75</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/70</span>
+                <span class='fraction'>0/73</span>
             </div>
         
             
@@ -263,7 +263,12 @@
 <a name='L198'></a><a href='#L198'>198</a>
 <a name='L199'></a><a href='#L199'>199</a>
 <a name='L200'></a><a href='#L200'>200</a>
-<a name='L201'></a><a href='#L201'>201</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L201'></a><a href='#L201'>201</a>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a>
+<a name='L205'></a><a href='#L205'>205</a>
+<a name='L206'></a><a href='#L206'>206</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -277,14 +282,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -294,6 +291,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -311,6 +317,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -477,6 +487,7 @@ import strings from 'src/strings';
 import { SelectOptionPayload, VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
   VariableValueDateValue,
+  VariableValueEmailValue,
   VariableValueLinkValue,
   VariableValueNumberValue,
   VariableValueSelectValue,
@@ -526,6 +537,10 @@ const tableCellRenderer = <span class="cstat-no" title="statement not covered" >
 <span class="cstat-no" title="statement not covered" >      if (row.type === 'Date') {</span>
         const variableDateValue = <span class="cstat-no" title="statement not covered" >props.value[0] as VariableValueDateValue;</span>
 <span class="cstat-no" title="statement not covered" >        return &lt;CellRenderer {...props} value={variableDateValue.dateValue} /&gt;;</span>
+      }
+<span class="cstat-no" title="statement not covered" >      if (row.type === 'Email') {</span>
+        const variableEmailValue = <span class="cstat-no" title="statement not covered" >props.value[0] as VariableValueEmailValue;</span>
+<span class="cstat-no" title="statement not covered" >        return &lt;CellRenderer {...props} value={variableEmailValue.emailValue} /&gt;;</span>
       }
 <span class="cstat-no" title="statement not covered" >      if (row.type === 'Link') {</span>
         const variableLinkValue = <span class="cstat-no" title="statement not covered" >props.value[0] as VariableValueLinkValue;</span>
@@ -670,7 +685,7 @@ export default DocumentVariablesTab;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-06T19:53:00.196Z
+                at 2024-12-06T22:59:57.211Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

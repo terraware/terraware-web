@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/93</span>
+                <span class='fraction'>0/97</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/52</span>
+                <span class='fraction'>0/54</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/92</span>
+                <span class='fraction'>0/96</span>
             </div>
         
             
@@ -392,7 +392,15 @@
 <a name='L327'></a><a href='#L327'>327</a>
 <a name='L328'></a><a href='#L328'>328</a>
 <a name='L329'></a><a href='#L329'>329</a>
-<a name='L330'></a><a href='#L330'>330</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L330'></a><a href='#L330'>330</a>
+<a name='L331'></a><a href='#L331'>331</a>
+<a name='L332'></a><a href='#L332'>332</a>
+<a name='L333'></a><a href='#L333'>333</a>
+<a name='L334'></a><a href='#L334'>334</a>
+<a name='L335'></a><a href='#L335'>335</a>
+<a name='L336'></a><a href='#L336'>336</a>
+<a name='L337'></a><a href='#L337'>337</a>
+<a name='L338'></a><a href='#L338'>338</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -426,6 +434,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -437,16 +457,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -510,6 +520,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -522,6 +533,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -739,6 +755,7 @@ import strings from 'src/strings';
 import { UpdateVariableWorkflowDetailsPayload, VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
   NewDateValuePayload,
+  NewEmailValuePayload,
   NewLinkValuePayload,
   NewNumberValuePayload,
   NewSelectValuePayload,
@@ -746,6 +763,7 @@ import {
   Operation,
   VariableValue,
   VariableValueDateValue,
+  VariableValueEmailValue,
   VariableValueLinkValue,
   VariableValueNumberValue,
   VariableValueSelectValue,
@@ -834,6 +852,7 @@ const EditVariable = <span class="cstat-no" title="statement not covered" ><span
 <span class="cstat-no" title="statement not covered" >    if (values.length) {</span>
       let newValue:
         | NewDateValuePayload
+        | NewEmailValuePayload
         | NewTextValuePayload
         | NewNumberValuePayload
         | NewSelectValuePayload
@@ -866,6 +885,11 @@ const EditVariable = <span class="cstat-no" title="statement not covered" ><span
         const firstValue = <span class="cstat-no" title="statement not covered" >values[0] as VariableValueDateValue;</span>
 <span class="cstat-no" title="statement not covered" >        valueIdToUpdate = firstValue.id;</span>
 <span class="cstat-no" title="statement not covered" >        newValue = { type: 'Date', dateValue: firstValue.dateValue, citation: firstValue.citation };</span>
+      }
+<span class="cstat-no" title="statement not covered" >      if (variable.type === 'Email') {</span>
+        const firstValue = <span class="cstat-no" title="statement not covered" >values[0] as VariableValueEmailValue;</span>
+<span class="cstat-no" title="statement not covered" >        valueIdToUpdate = firstValue.id;</span>
+<span class="cstat-no" title="statement not covered" >        newValue = { type: 'Email', emailValue: firstValue.emailValue, citation: firstValue.citation };</span>
       }
 <span class="cstat-no" title="statement not covered" >      if (variable.type === 'Link') {</span>
         const firstValue = <span class="cstat-no" title="statement not covered" >values[0] as VariableValueLinkValue;</span>
@@ -1057,7 +1081,7 @@ export default EditVariable;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-06T19:53:00.196Z
+                at 2024-12-06T22:59:57.211Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
