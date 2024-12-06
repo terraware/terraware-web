@@ -1024,6 +1024,10 @@ export interface paths {
      */
     delete: operations["deletePlantingSite"];
   };
+  "/api/v1/tracking/sites/{id}/history/{historyId}": {
+    /** Gets information about an older version of a planting site. */
+    get: operations["getPlantingSiteHistory"];
+  };
   "/api/v1/tracking/sites/{id}/reportedPlants": {
     /**
      * Gets the total number of plants planted at a planting site and in each planting zone.
@@ -1356,7 +1360,7 @@ export interface components {
        * @description If the variable is a table column and the new value should be appended to an existing row, the existing row's value ID.
        */
       rowValueId?: number;
-      value?: components["schemas"]["NewDateValuePayload"] | components["schemas"]["NewImageValuePayload"] | components["schemas"]["NewLinkValuePayload"] | components["schemas"]["NewNumberValuePayload"] | components["schemas"]["NewSectionTextValuePayload"] | components["schemas"]["NewSectionVariableValuePayload"] | components["schemas"]["NewSelectValuePayload"] | components["schemas"]["NewTableValuePayload"] | components["schemas"]["NewTextValuePayload"];
+      value?: components["schemas"]["NewDateValuePayload"] | components["schemas"]["NewEmailValuePayload"] | components["schemas"]["NewImageValuePayload"] | components["schemas"]["NewLinkValuePayload"] | components["schemas"]["NewNumberValuePayload"] | components["schemas"]["NewSectionTextValuePayload"] | components["schemas"]["NewSectionVariableValuePayload"] | components["schemas"]["NewSelectValuePayload"] | components["schemas"]["NewTableValuePayload"] | components["schemas"]["NewTextValuePayload"];
       /** Format: int64 */
       variableId?: number;
     }), "value" | "variableId">;
@@ -2540,6 +2544,9 @@ export interface components {
        */
       timeZone?: string;
     };
+    EmailVariablePayload: {
+      type: "Email";
+    } & Omit<components["schemas"]["VariablePayload"], "type">;
     ErrorDetails: {
       message: string;
     };
@@ -2553,6 +2560,11 @@ export interface components {
     ExistingDeletedValuePayload: WithRequired<{
       type: "Deleted";
     } & Omit<components["schemas"]["ExistingValuePayload"], "type">, "id" | "listPosition" | "type">;
+    ExistingEmailValuePayload: WithRequired<{
+      type: "Email";
+    } & Omit<components["schemas"]["ExistingValuePayload"], "type"> & {
+      emailValue?: string;
+    }, "emailValue" | "id" | "listPosition" | "type">;
     /** @description Metadata about an image. The actual image data (e.g., the JPEG or PNG file) must be retrieved in a separate request using the value ID in this payload. */
     ExistingImageValuePayload: WithRequired<{
       type: "Image";
@@ -2607,7 +2619,7 @@ export interface components {
       /** Format: int32 */
       listPosition: number;
       /** @enum {string} */
-      type: "Date" | "Deleted" | "Image" | "Link" | "Number" | "SectionText" | "SectionVariable" | "Select" | "Table" | "Text";
+      type: "Date" | "Deleted" | "Email" | "Image" | "Link" | "Number" | "SectionText" | "SectionVariable" | "Select" | "Table" | "Text";
     };
     ExistingVariableValuesPayload: {
       /** @description User-visible feedback from reviewer. Not populated for table cell values. */
@@ -2625,7 +2637,7 @@ export interface components {
        */
       status?: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Incomplete" | "Complete";
       /** @description Values of this variable or this table cell. When getting the full set of values for a document, this will be the complete list of this variable's values in order of list position. When getting incremental changes to a document, this is only the items that have changed, and existing items won't be present. For example, if a variable is a list and has 3 values, and a fourth value is added, the incremental list of values in this payload will have one item and its list position will be 3 (since lists are 0-indexed). */
-      values: (components["schemas"]["ExistingDateValuePayload"] | components["schemas"]["ExistingDeletedValuePayload"] | components["schemas"]["ExistingImageValuePayload"] | components["schemas"]["ExistingLinkValuePayload"] | components["schemas"]["ExistingNumberValuePayload"] | components["schemas"]["ExistingSectionTextValuePayload"] | components["schemas"]["ExistingSectionVariableValuePayload"] | components["schemas"]["ExistingSelectValuePayload"] | components["schemas"]["ExistingTableValuePayload"] | components["schemas"]["ExistingTextValuePayload"])[];
+      values: (components["schemas"]["ExistingDateValuePayload"] | components["schemas"]["ExistingDeletedValuePayload"] | components["schemas"]["ExistingEmailValuePayload"] | components["schemas"]["ExistingImageValuePayload"] | components["schemas"]["ExistingLinkValuePayload"] | components["schemas"]["ExistingNumberValuePayload"] | components["schemas"]["ExistingSectionTextValuePayload"] | components["schemas"]["ExistingSectionVariableValuePayload"] | components["schemas"]["ExistingSelectValuePayload"] | components["schemas"]["ExistingTableValuePayload"] | components["schemas"]["ExistingTextValuePayload"])[];
       /** Format: int64 */
       variableId: number;
     };
@@ -2865,6 +2877,10 @@ export interface components {
       participant: components["schemas"]["ParticipantPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetPlantingSiteHistoryResponsePayload: {
+      site: components["schemas"]["PlantingSiteHistoryPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetPlantingSiteObservationSummariesPayload: {
       status: components["schemas"]["SuccessOrError"];
       /** @description History of rollup summaries of planting site observations in order of observation time, latest first. */
@@ -3062,7 +3078,7 @@ export interface components {
     GetVariableWorkflowHistoryResponsePayload: {
       history: components["schemas"]["VariableWorkflowHistoryElement"][];
       status: components["schemas"]["SuccessOrError"];
-      variable: components["schemas"]["DateVariablePayload"] | components["schemas"]["ImageVariablePayload"] | components["schemas"]["LinkVariablePayload"] | components["schemas"]["NumberVariablePayload"] | components["schemas"]["SectionVariablePayload"] | components["schemas"]["SelectVariablePayload"] | components["schemas"]["TableVariablePayload"] | components["schemas"]["TextVariablePayload"];
+      variable: components["schemas"]["DateVariablePayload"] | components["schemas"]["EmailVariablePayload"] | components["schemas"]["ImageVariablePayload"] | components["schemas"]["LinkVariablePayload"] | components["schemas"]["NumberVariablePayload"] | components["schemas"]["SectionVariablePayload"] | components["schemas"]["SelectVariablePayload"] | components["schemas"]["TableVariablePayload"] | components["schemas"]["TextVariablePayload"];
     };
     GetViabilityTestPayload: {
       /** Format: int64 */
@@ -3457,7 +3473,7 @@ export interface components {
     };
     ListVariablesResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
-      variables: (components["schemas"]["DateVariablePayload"] | components["schemas"]["ImageVariablePayload"] | components["schemas"]["LinkVariablePayload"] | components["schemas"]["NumberVariablePayload"] | components["schemas"]["SectionVariablePayload"] | components["schemas"]["SelectVariablePayload"] | components["schemas"]["TableVariablePayload"] | components["schemas"]["TextVariablePayload"])[];
+      variables: (components["schemas"]["DateVariablePayload"] | components["schemas"]["EmailVariablePayload"] | components["schemas"]["ImageVariablePayload"] | components["schemas"]["LinkVariablePayload"] | components["schemas"]["NumberVariablePayload"] | components["schemas"]["SectionVariablePayload"] | components["schemas"]["SelectVariablePayload"] | components["schemas"]["TableVariablePayload"] | components["schemas"]["TextVariablePayload"])[];
     };
     ListViabilityTestsResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
@@ -3565,6 +3581,12 @@ export interface components {
       /** Format: date */
       dateValue?: string;
     }, "dateValue">;
+    NewEmailValuePayload: WithRequired<{
+      type: "Email";
+    } & Omit<components["schemas"]["NewValuePayload"], "type"> & {
+      citation?: string;
+      emailValue?: string;
+    }, "emailValue">;
     /** @description Updated metadata about an image value. May only be used in Update operations, and cannot be used to replace the actual image data. */
     NewImageValuePayload: {
       type: "Image";
@@ -3833,6 +3855,11 @@ export interface components {
        * @description Total number of monitoring plots that haven't been claimed yet.
        */
       numUnclaimedPlots: number;
+      /**
+       * Format: int64
+       * @description If this observation has already started, the version of the planting site that was used to place its monitoring plots.
+       */
+      plantingSiteHistoryId?: number;
       /** Format: int64 */
       plantingSiteId: number;
       plantingSiteName: string;
@@ -4167,6 +4194,15 @@ export interface components {
       /** Format: date */
       startDate: string;
     };
+    PlantingSiteHistoryPayload: {
+      boundary: components["schemas"]["MultiPolygon"];
+      exclusion?: components["schemas"]["MultiPolygon"];
+      /** Format: int64 */
+      id: number;
+      /** Format: int64 */
+      plantingSiteId: number;
+      plantingZones: components["schemas"]["PlantingZoneHistoryPayload"][];
+    };
     /** @description History of rollup summaries of planting site observations in order of observation time, latest first. */
     PlantingSiteObservationSummaryPayload: {
       /**
@@ -4239,6 +4275,18 @@ export interface components {
       /** @enum {string} */
       problemType: "CannotRemovePlantedSubzone" | "CannotSplitSubzone" | "CannotSplitZone" | "DuplicateSubzoneName" | "DuplicateZoneName" | "ExclusionWithoutBoundary" | "SiteTooLarge" | "SubzoneBoundaryChanged" | "SubzoneBoundaryOverlaps" | "SubzoneInExclusionArea" | "SubzoneNotInZone" | "ZoneBoundaryChanged" | "ZoneBoundaryOverlaps" | "ZoneHasNoSubzones" | "ZoneNotInSite" | "ZoneTooSmall" | "ZonesWithoutSiteBoundary";
     };
+    PlantingSubzoneHistoryPayload: {
+      boundary: components["schemas"]["MultiPolygon"];
+      fullName: string;
+      /** Format: int64 */
+      id: number;
+      name: string;
+      /**
+       * Format: int64
+       * @description ID of planting subzone if it exists in the current version of the site.
+       */
+      plantingSubzoneId?: number;
+    };
     PlantingSubzonePayload: {
       /** @description Area of planting subzone in hectares. */
       areaHa: number;
@@ -4265,6 +4313,18 @@ export interface components {
       /** Format: int64 */
       id: number;
       scientificName: string;
+    };
+    PlantingZoneHistoryPayload: {
+      boundary: components["schemas"]["MultiPolygon"];
+      /** Format: int64 */
+      id: number;
+      name: string;
+      plantingSubzones: components["schemas"]["PlantingSubzoneHistoryPayload"][];
+      /**
+       * Format: int64
+       * @description ID of planting zone if it exists in the current version of the site.
+       */
+      plantingZoneId?: number;
     };
     PlantingZoneObservationSummaryPayload: {
       /** @description Area of this planting zone in hectares. */
@@ -4567,7 +4627,7 @@ export interface components {
        * @description If the variable is a table column, the value ID of the row whose values should be replaced.
        */
       rowValueId?: number;
-      values?: (components["schemas"]["NewDateValuePayload"] | components["schemas"]["NewImageValuePayload"] | components["schemas"]["NewLinkValuePayload"] | components["schemas"]["NewNumberValuePayload"] | components["schemas"]["NewSectionTextValuePayload"] | components["schemas"]["NewSectionVariableValuePayload"] | components["schemas"]["NewSelectValuePayload"] | components["schemas"]["NewTableValuePayload"] | components["schemas"]["NewTextValuePayload"])[];
+      values?: (components["schemas"]["NewDateValuePayload"] | components["schemas"]["NewEmailValuePayload"] | components["schemas"]["NewImageValuePayload"] | components["schemas"]["NewLinkValuePayload"] | components["schemas"]["NewNumberValuePayload"] | components["schemas"]["NewSectionTextValuePayload"] | components["schemas"]["NewSectionVariableValuePayload"] | components["schemas"]["NewSelectValuePayload"] | components["schemas"]["NewTableValuePayload"] | components["schemas"]["NewTextValuePayload"])[];
       /** Format: int64 */
       variableId?: number;
     }), "values" | "variableId">;
@@ -5471,7 +5531,7 @@ export interface components {
     UpdateValueOperationPayload: WithRequired<{
       operation: "Update";
     } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & ({
-      value?: components["schemas"]["NewDateValuePayload"] | components["schemas"]["NewImageValuePayload"] | components["schemas"]["NewLinkValuePayload"] | components["schemas"]["NewNumberValuePayload"] | components["schemas"]["NewSectionTextValuePayload"] | components["schemas"]["NewSectionVariableValuePayload"] | components["schemas"]["NewSelectValuePayload"] | components["schemas"]["NewTableValuePayload"] | components["schemas"]["NewTextValuePayload"];
+      value?: components["schemas"]["NewDateValuePayload"] | components["schemas"]["NewEmailValuePayload"] | components["schemas"]["NewImageValuePayload"] | components["schemas"]["NewLinkValuePayload"] | components["schemas"]["NewNumberValuePayload"] | components["schemas"]["NewSectionTextValuePayload"] | components["schemas"]["NewSectionVariableValuePayload"] | components["schemas"]["NewSelectValuePayload"] | components["schemas"]["NewTableValuePayload"] | components["schemas"]["NewTextValuePayload"];
       /** Format: int64 */
       valueId?: number;
     }), "existingValueId" | "value" | "valueId">;
@@ -5722,7 +5782,7 @@ export interface components {
       recommendedBy?: number[];
       stableId: string;
       /** @enum {string} */
-      type: "Number" | "Text" | "Date" | "Image" | "Select" | "Table" | "Link" | "Section";
+      type: "Number" | "Text" | "Date" | "Image" | "Select" | "Table" | "Link" | "Section" | "Email";
     };
     VariableWorkflowHistoryElement: {
       /** Format: int64 */
@@ -5739,7 +5799,7 @@ export interface components {
       projectId: number;
       /** @enum {string} */
       status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Incomplete" | "Complete";
-      variableValues: (components["schemas"]["ExistingDateValuePayload"] | components["schemas"]["ExistingDeletedValuePayload"] | components["schemas"]["ExistingImageValuePayload"] | components["schemas"]["ExistingLinkValuePayload"] | components["schemas"]["ExistingNumberValuePayload"] | components["schemas"]["ExistingSectionTextValuePayload"] | components["schemas"]["ExistingSectionVariableValuePayload"] | components["schemas"]["ExistingSelectValuePayload"] | components["schemas"]["ExistingTableValuePayload"] | components["schemas"]["ExistingTextValuePayload"])[];
+      variableValues: (components["schemas"]["ExistingDateValuePayload"] | components["schemas"]["ExistingDeletedValuePayload"] | components["schemas"]["ExistingEmailValuePayload"] | components["schemas"]["ExistingImageValuePayload"] | components["schemas"]["ExistingLinkValuePayload"] | components["schemas"]["ExistingNumberValuePayload"] | components["schemas"]["ExistingSectionTextValuePayload"] | components["schemas"]["ExistingSectionVariableValuePayload"] | components["schemas"]["ExistingSelectValuePayload"] | components["schemas"]["ExistingTableValuePayload"] | components["schemas"]["ExistingTextValuePayload"])[];
     };
     VersionsEntryPayload: {
       appName: string;
@@ -11023,6 +11083,23 @@ export interface operations {
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets information about an older version of a planting site. */
+  getPlantingSiteHistory: {
+    parameters: {
+      path: {
+        id: number;
+        historyId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetPlantingSiteHistoryResponsePayload"];
         };
       };
     };

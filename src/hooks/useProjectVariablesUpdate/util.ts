@@ -9,6 +9,7 @@ import {
   DeletedVariableValue,
   ImageVariableValue,
   NewDateValuePayload,
+  NewEmailValuePayload,
   NewLinkValuePayload,
   NewNumberValuePayload,
   NewSelectValuePayload,
@@ -18,6 +19,7 @@ import {
   SectionVariableVariableValue,
   TableVariableValue,
   VariableValueDateValue,
+  VariableValueEmailValue,
   VariableValueLinkValue,
   VariableValueNumberValue,
   VariableValueSelectValue,
@@ -50,7 +52,13 @@ export const makeVariableValueOperations = ({
 }) => {
   const operations: Operation[] = [];
 
-  let newValue: NewDateValuePayload | NewNumberValuePayload | NewSelectValuePayload | NewLinkValuePayload | undefined;
+  let newValue:
+    | NewDateValuePayload
+    | NewEmailValuePayload
+    | NewNumberValuePayload
+    | NewSelectValuePayload
+    | NewLinkValuePayload
+    | undefined;
 
   let newTextValues: NewTextValuePayload[] = [];
   let valueIdToUpdate = -1;
@@ -83,6 +91,12 @@ export const makeVariableValueOperations = ({
     const firstValue = pendingValues[0] as VariableValueDateValue;
     valueIdToUpdate = firstValue.id;
     newValue = { type: 'Date', dateValue: firstValue.dateValue, citation: firstValue.citation };
+  }
+
+  if (variable.type === 'Email') {
+    const firstValue = pendingValues[0] as VariableValueEmailValue;
+    valueIdToUpdate = firstValue.id;
+    newValue = { type: 'Email', emailValue: firstValue.emailValue, citation: firstValue.citation };
   }
 
   if (variable.type === 'Link') {

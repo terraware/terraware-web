@@ -33,6 +33,7 @@ export default function DeliverableDisplayVariableValue({
     case 'Text':
     case 'Number':
     case 'Date':
+    case 'Email':
     case 'Link':
       return (
         <span style={variableStyles}>

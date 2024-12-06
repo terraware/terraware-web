@@ -17,6 +17,7 @@ export const editorDisplayVariableWithValues = (
     case 'Number':
     case 'Link':
     case 'Date':
+    case 'Email':
       result = variable.values.map((v) => displayValue(v, placeholder)).join(separator);
       break;
     case 'Image':
@@ -49,6 +50,8 @@ export const displayValue = (value: VariableValueValue, placeholder?: string): s
       return value.title ?? value.url;
     case 'Date':
       return value.dateValue;
+    case 'Email':
+      return value.emailValue;
     default:
       return placeholder ?? '';
   }

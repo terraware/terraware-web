@@ -55,6 +55,7 @@ export default function EditVariableModal({
         />
       );
     case 'Date':
+    case 'Email':
     case 'Link':
     case 'Select':
     case 'Number':

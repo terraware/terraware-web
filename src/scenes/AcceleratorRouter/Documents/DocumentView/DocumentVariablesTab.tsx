@@ -12,6 +12,7 @@ import strings from 'src/strings';
 import { SelectOptionPayload, VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
   VariableValueDateValue,
+  VariableValueEmailValue,
   VariableValueLinkValue,
   VariableValueNumberValue,
   VariableValueSelectValue,
@@ -61,6 +62,10 @@ const tableCellRenderer = (props: RendererProps<any>): JSX.Element => {
       if (row.type === 'Date') {
         const variableDateValue = props.value[0] as VariableValueDateValue;
         return <CellRenderer {...props} value={variableDateValue.dateValue} />;
+      }
+      if (row.type === 'Email') {
+        const variableEmailValue = props.value[0] as VariableValueEmailValue;
+        return <CellRenderer {...props} value={variableEmailValue.emailValue} />;
       }
       if (row.type === 'Link') {
         const variableLinkValue = props.value[0] as VariableValueLinkValue;

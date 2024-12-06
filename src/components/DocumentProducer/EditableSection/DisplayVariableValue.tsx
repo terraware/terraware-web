@@ -37,6 +37,7 @@ export default function DisplayVariableValue({
     case 'Text':
     case 'Number':
     case 'Date':
+    case 'Email':
     case 'Link':
     case 'Select':
       return (
