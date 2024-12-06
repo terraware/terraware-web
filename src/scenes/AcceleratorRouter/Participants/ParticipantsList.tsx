@@ -48,7 +48,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
       ]
     : [];
 
-const fuzzySearchColumns = ['name', 'project.dealName', 'cohortName'];
+const fuzzySearchColumns = ['name', 'projects.dealName', 'cohortName'];
 const defaultSearchOrder: SearchSortOrder = {
   field: 'name',
   direction: 'Ascending',
