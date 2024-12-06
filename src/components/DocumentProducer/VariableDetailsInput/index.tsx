@@ -14,6 +14,7 @@ import {
 } from 'src/types/documentProducer/Variable';
 import {
   VariableValueDateValue,
+  VariableValueEmailValue,
   VariableValueLinkValue,
   VariableValueNumberValue,
   VariableValueSelectValue,
@@ -75,15 +76,20 @@ const VariableDetailsInput = ({
         setCitation(selectValues[0].citation);
       }
       if (variable.type === 'Date') {
-        const selectValues = values as VariableValueDateValue[];
-        setValue(selectValues[0].dateValue);
-        setCitation(selectValues[0].citation);
+        const dateValues = values as VariableValueDateValue[];
+        setValue(dateValues[0].dateValue);
+        setCitation(dateValues[0].citation);
+      }
+      if (variable.type === 'Email') {
+        const emailValues = values as VariableValueEmailValue[];
+        setValue(emailValues[0].emailValue);
+        setCitation(emailValues[0].citation);
       }
       if (variable.type === 'Link') {
-        const selectValues = values as VariableValueLinkValue[];
-        setValue(selectValues[0].url);
-        setCitation(selectValues[0].citation);
-        setTitle(selectValues[0].title);
+        const linkValues = values as VariableValueLinkValue[];
+        setValue(linkValues[0].url);
+        setCitation(linkValues[0].citation);
+        setTitle(linkValues[0].title);
       }
     }
   }, [variable, values]);
@@ -189,6 +195,20 @@ const VariableDetailsInput = ({
           setValues(newValues);
         } else {
           setValues([{ id: -1, listPosition: 0, dateValue: newValue, type: 'Date' }]);
+        }
+      }
+      if (variable.type === 'Email') {
+        if (values && values.length > 0) {
+          const emailValues = values as VariableValueEmailValue[];
+          const newValues = emailValues.map((ev) => ({ ...ev }));
+          if (id === 'citation') {
+            newValues[0].citation = newValue;
+          } else {
+            newValues[0].emailValue = newValue;
+          }
+          setValues(newValues);
+        } else {
+          setValues([{ id: -1, listPosition: 0, emailValue: newValue, type: 'Email' }]);
         }
       }
       if (variable.type === 'Link') {
@@ -347,7 +367,7 @@ const VariableDetailsInput = ({
         </>
       )}
 
-      {(variable.type === 'Number' || variable.type === 'Link') && (
+      {(variable.type === 'Number' || variable.type === 'Link' || variable.type === 'Email') && (
         <Textfield
           display={display}
           id='value'

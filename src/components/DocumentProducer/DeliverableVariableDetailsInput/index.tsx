@@ -14,6 +14,7 @@ import {
 } from 'src/types/documentProducer/Variable';
 import {
   VariableValueDateValue,
+  VariableValueEmailValue,
   VariableValueImageValue,
   VariableValueLinkValue,
   VariableValueNumberValue,
@@ -21,6 +22,7 @@ import {
   VariableValueTextValue,
   VariableValueValue,
 } from 'src/types/documentProducer/VariableValue';
+import { isEmailAddress } from 'src/utils/email';
 
 import DeliverableEditImages from '../DeliverableEditImages';
 import DeliverableEditTable from '../DeliverableEditTable';
@@ -86,13 +88,17 @@ const DeliverableVariableDetailsInput = ({
         setValue(selectValues[0].optionValues);
       }
       if (variable.type === 'Date') {
-        const selectValues = values as VariableValueDateValue[];
-        setValue(selectValues[0].dateValue);
+        const dateValues = values as VariableValueDateValue[];
+        setValue(dateValues[0].dateValue);
+      }
+      if (variable.type === 'Email') {
+        const emailValues = values as VariableValueEmailValue[];
+        setValue(emailValues[0].emailValue);
       }
       if (variable.type === 'Link') {
-        const selectValues = values as VariableValueLinkValue[];
-        setValue(selectValues[0].url);
-        setTitle(selectValues[0].title);
+        const linkValues = values as VariableValueLinkValue[];
+        setValue(linkValues[0].url);
+        setTitle(linkValues[0].title);
       }
     }
   }, [variable, values]);
@@ -158,6 +164,19 @@ const DeliverableVariableDetailsInput = ({
           setValues(newValues);
         } else {
           setValues([{ id: -1, listPosition: 0, dateValue: newValue, type: 'Date' }]);
+        }
+      }
+
+      if (variable.type === 'Email') {
+        if (values.length > 0) {
+          const emailValues = values as VariableValueEmailValue[];
+          const newValues = emailValues.map((ev) => ({ ...ev }));
+
+          newValues[0].emailValue = newValue;
+
+          setValues(newValues);
+        } else {
+          setValues([{ id: -1, listPosition: 0, emailValue: newValue, type: 'Email' }]);
         }
       }
 
@@ -254,6 +273,14 @@ const DeliverableVariableDetailsInput = ({
             return strings
               .formatString(strings.VARIABLE_ERROR_NUMBER_DECIMAL_PLACES, variable.decimalPlaces)
               .toString();
+          }
+        }
+        return '';
+      case 'Email':
+        if (value !== undefined) {
+          const stringValue = String(value);
+          if (stringValue !== '' && !isEmailAddress(stringValue)) {
+            return strings.INCORRECT_EMAIL_FORMAT;
           }
         }
         return '';
@@ -354,7 +381,7 @@ const DeliverableVariableDetailsInput = ({
         </>
       )}
 
-      {(variable.type === 'Number' || variable.type === 'Link') && (
+      {(variable.type === 'Number' || variable.type === 'Link' || variable.type === 'Email') && (
         <Textfield
           id='value'
           label=''
