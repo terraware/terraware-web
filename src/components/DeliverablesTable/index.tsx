@@ -13,7 +13,6 @@ import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ListDeliverablesRequestParams } from 'src/services/DeliverablesService';
 import strings from 'src/strings';
-import { AcceleratorOrgProject } from 'src/types/Accelerator';
 import {
   DeliverableCategories,
   DeliverableStatusesWithOverdue,
@@ -21,7 +20,6 @@ import {
   ListDeliverablesElementWithOverdue,
 } from 'src/types/Deliverables';
 import { ParticipantProjectSearchResult } from 'src/types/Participant';
-import { Project } from 'src/types/Project';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchAndSortFn } from 'src/utils/searchAndSort';
 import useQuery from 'src/utils/useQuery';
