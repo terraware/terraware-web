@@ -338,11 +338,6 @@ td {
 }
 
 /** @see https://pagedjs.org/posts/build-a-table-of-contents-from-your-html/ */
-/* hack for leaders */
-#list-toc-generated {
-    overflow-x: hidden;
-}
-
 /* fake leading */
 #list-toc-generated .toc-element::after {
     content: ".............................................."
@@ -356,6 +351,7 @@ td {
 
 #list-toc-generated .toc-element {
     display: flex;
+    overflow-x: hidden;
 }
 
 #list-toc-generated .toc-element a::after {
