@@ -2461,6 +2461,7 @@ export interface components {
       createdTime: string;
       /** Format: int64 */
       documentTemplateId: number;
+      documentTemplateName: string;
       /** Format: int64 */
       id: number;
       internalComment?: string;
@@ -2473,6 +2474,7 @@ export interface components {
       name: string;
       /** Format: int64 */
       ownedBy: number;
+      projectDealName?: string;
       /** Format: int64 */
       projectId: number;
       projectName: string;

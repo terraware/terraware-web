@@ -11,7 +11,6 @@ import {
   requestSearchDocuments,
   requestUpdateDocument,
 } from 'src/redux/features/documentProducer/documents/documentsThunks';
-import { DocumentsSearchResponseElement } from 'src/services/documentProducer/DocumentService';
 import {
   DocumentHistoryCreatedPayload,
   DocumentHistoryEditedPayload,
@@ -88,7 +87,7 @@ const documentRequestsSlice = createSlice({
 /**
  * Search Documents
  */
-type DocumentSearchState = Record<string, StatusT<DocumentsSearchResponseElement[]>>;
+type DocumentSearchState = Record<string, StatusT<Document[]>>;
 const initialDocumentSearchState: DocumentSearchState = {};
 
 const documentSearchSlice = createSlice({
