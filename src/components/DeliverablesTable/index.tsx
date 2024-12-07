@@ -201,7 +201,7 @@ const DeliverablesTable = ({
           .map((project) => project.dealName)
           .filter((dealName): dealName is string => dealName !== undefined)
           .sort((a, b) => a.localeCompare(b, activeLocale || undefined)),
-        label: strings.PROJECTS,
+        label: strings.DEAL_NAME,
         values: paramValue && paramValue.dealName ? [paramValue.dealName] : [],
       });
       removeParam();
