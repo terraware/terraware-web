@@ -151,3 +151,5 @@ export type ZoneAggregation = Omit<PlantingZone, 'plantingSubzones'> & {
 export type PlantingSiteAggregation = Omit<MinimalPlantingSite, 'plantingZones'> & {
   plantingZones: ZoneAggregation[];
 };
+
+export type ObservationSummary = components['schemas']['PlantingSiteObservationSummaryPayload'];
