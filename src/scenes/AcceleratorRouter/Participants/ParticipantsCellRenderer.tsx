@@ -35,7 +35,7 @@ export default function ParticipantsCellRenderer(props: RendererProps<TableRowTy
     );
   }
 
-  if (column.key === 'projects.name') {
+  if (column.key === 'projects.dealName') {
     return (
       <CellRenderer
         {...props}
