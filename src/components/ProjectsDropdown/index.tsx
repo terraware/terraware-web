@@ -67,7 +67,7 @@ function ProjectsDropdown<T extends { projectId?: number | string } | undefined>
     <Dropdown
       autocomplete={autoComplete}
       id='projectId'
-      label={label === '' ? label : strings.PROJECT}
+      label={label ?? strings.PROJECT}
       selectedValue={record?.projectId}
       options={projectOptions}
       onChange={(projectId: string) => {

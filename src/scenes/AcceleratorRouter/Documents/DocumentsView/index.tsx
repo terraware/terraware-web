@@ -11,7 +11,7 @@ import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useProjects } from 'src/hooks/useProjects';
+import { useParticipants } from 'src/hooks/useParticipants';
 import { useLocalization } from 'src/providers';
 import { selectDocumentSearch } from 'src/redux/features/documentProducer/documents/documentsSelector';
 import { requestSearchDocuments } from 'src/redux/features/documentProducer/documents/documentsThunks';
@@ -46,7 +46,7 @@ export default function DocumentsView(): JSX.Element | null {
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { availableProjects } = useProjects();
+  const { availableParticipants } = useParticipants();
 
   const [tableRows, setTableRows] = useState<Document[]>([]);
   const [tableSelectedRows, tableSetSelectedRows] = useState<TableRowType[]>([]);
@@ -89,6 +89,16 @@ export default function DocumentsView(): JSX.Element | null {
     [dispatch]
   );
 
+  const availableProjects = useMemo(() => {
+    return availableParticipants.flatMap((participant) =>
+      participant.projects.map((project) => ({
+        id: project.projectId,
+        name: project.projectName,
+        dealName: project.projectDealName,
+      }))
+    );
+  }, [availableParticipants]);
+
   const PageHeaderLeftComponent = useMemo(
     () =>
       activeLocale ? (
@@ -99,7 +109,7 @@ export default function DocumentsView(): JSX.Element | null {
             </Grid>
             <Grid item>
               <Typography sx={{ lineHeight: '40px' }} component={'span'}>
-                {strings.PROJECT}
+                {strings.DEAL_NAME}
               </Typography>
             </Grid>
             <Grid item sx={{ marginLeft: theme.spacing(1.5) }}>
@@ -108,7 +118,7 @@ export default function DocumentsView(): JSX.Element | null {
                 availableProjects={availableProjects}
                 record={projectFilter}
                 setRecord={setProjectFilter}
-                label={strings.DEAL_NAME}
+                label={''}
                 unselectLabel={strings.ALL}
                 unselectValue={''}
                 useDealName
