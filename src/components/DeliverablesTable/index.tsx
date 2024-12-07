@@ -19,7 +19,6 @@ import {
   DeliverableTypes,
   ListDeliverablesElementWithOverdue,
 } from 'src/types/Deliverables';
-import { ParticipantProjectSearchResult } from 'src/types/Participant';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchAndSortFn } from 'src/utils/searchAndSort';
 import useQuery from 'src/utils/useQuery';
@@ -38,48 +37,55 @@ interface DeliverablesTableProps {
   tableId: string;
 }
 
-const columns = (activeLocale: string | null): TableColumnType[] =>
-  activeLocale
-    ? [
-        {
-          key: 'name',
-          name: strings.DELIVERABLE_NAME,
-          type: 'string',
-        },
-        {
-          key: 'dueDate',
-          name: strings.DUE_DATE,
-          type: 'date',
-        },
-        {
-          key: 'status',
-          name: strings.STATUS,
-          type: 'string',
-        },
-        {
-          key: 'projectName',
-          name: strings.PROJECT,
-          type: 'string',
-        },
-        {
-          key: 'module',
-          name: strings.MODULE,
-          type: 'string',
-        },
-        {
-          key: 'category',
-          name: strings.CATEGORY,
-          type: 'string',
-        },
-        {
-          key: 'type',
-          name: strings.TYPE,
-          type: 'string',
-        },
-      ]
-    : [];
+const columns =
+  (isAcceleratorRoute: boolean) =>
+  (activeLocale: string | null): TableColumnType[] =>
+    activeLocale
+      ? [
+          {
+            key: 'name',
+            name: strings.DELIVERABLE_NAME,
+            type: 'string',
+          },
+          {
+            key: 'dueDate',
+            name: strings.DUE_DATE,
+            type: 'date',
+          },
+          {
+            key: 'status',
+            name: strings.STATUS,
+            type: 'string',
+          },
+          isAcceleratorRoute
+            ? {
+                key: 'projectDealName',
+                name: strings.DEAL_NAME,
+                type: 'string',
+              }
+            : {
+                key: 'projectName',
+                name: strings.PROJECT,
+                type: 'string',
+              },
+          {
+            key: 'module',
+            name: strings.MODULE,
+            type: 'string',
+          },
+          {
+            key: 'category',
+            name: strings.CATEGORY,
+            type: 'string',
+          },
+          {
+            key: 'type',
+            name: strings.TYPE,
+            type: 'string',
+          },
+        ]
+      : [];
 
-const fuzzySearchColumns = ['name', 'projectName'];
 const defaultSearchOrder: SearchSortOrder = {
   field: 'status',
   direction: 'Ascending',
@@ -109,11 +115,17 @@ const DeliverablesTable = ({
   const location = useStateLocation();
   const mixpanel = useMixpanel();
 
+  const fuzzySearchColumns = useMemo(
+    () => (isAcceleratorRoute ? ['name', 'projectDealName'] : ['name', 'projectName']),
+    [isAcceleratorRoute]
+  );
+
   const projectsFilterOptions = useMemo(
     () =>
       deliverables.map((deliverable) => ({
         id: deliverable.projectId,
         name: deliverable.projectName,
+        dealName: deliverable.projectDealName,
       })),
     [deliverables]
   );
@@ -175,21 +187,22 @@ const DeliverablesTable = ({
       selectedParticipant?.projects.map((project) => ({
         id: project.projectId,
         name: project.projectName,
+        dealName: project.projectDealName,
       })) ||
       projectsFilterOptions ||
       [];
     if (isAcceleratorRoute && availableProjects && availableProjects.length > 0) {
-      let projectFromParam: ParticipantProjectSearchResult | undefined;
-      if (projectParam) {
-        projectFromParam = availableProjects.find((proj) => proj.id.toString() === projectParam);
-      }
+      const paramValue = projectParam
+        ? availableProjects.find((project) => project.id.toString() === projectParam)
+        : undefined;
       filters.unshift({
-        field: 'projectName',
+        field: 'projectDealName',
         options: availableProjects
-          .map((project) => project.name)
+          .map((project) => project.dealName)
+          .filter((dealName): dealName is string => dealName !== undefined)
           .sort((a, b) => a.localeCompare(b, activeLocale || undefined)),
-        label: strings.PROJECTS,
-        values: projectFromParam ? [projectFromParam.name] : [],
+        label: strings.DEAL_NAME,
+        values: paramValue && paramValue.dealName ? [paramValue.dealName] : [],
       });
       removeParam();
     }
@@ -262,7 +275,7 @@ const DeliverablesTable = ({
 
   return (
     <TableWithSearchFilters
-      columns={columns}
+      columns={columns(isAcceleratorRoute ?? false)}
       defaultSearchOrder={defaultSearchOrder}
       dispatchSearchRequest={dispatchSearchRequest}
       extraTableFilters={extraTableFilters}

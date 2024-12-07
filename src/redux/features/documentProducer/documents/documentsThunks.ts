@@ -31,9 +31,16 @@ export const requestListDocuments = createAsyncThunk('listDocuments', async (_, 
 
 export const requestSearchDocuments = createAsyncThunk(
   'searchDocuments',
-  async (request: { locale: string | null; search: SearchNodePayload; searchSortOrder: SearchSortOrder }) => {
+  async (
+    request: { locale: string | null; search: SearchNodePayload; searchSortOrder: SearchSortOrder },
+    { rejectWithValue }
+  ) => {
     const response = await DocumentService.searchDocuments(request);
-    return response;
+    if (response && response.status === 'ok') {
+      return response.documents;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
 
