@@ -34,7 +34,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
       ]
     : [];
 
-const fuzzySearchColumns = ['name', 'project_name'];
+const fuzzySearchColumns = ['name', 'projectDealName'];
 const defaultSearchOrder: SearchSortOrder = {
   field: 'name',
   direction: 'Ascending',
@@ -136,7 +136,7 @@ export default function DocumentsView(): JSX.Element | null {
         ? [
             {
               operation: 'field',
-              field: 'project_id',
+              field: 'projectId',
               type: 'Exact',
               values: [`${projectFilter.projectId}`],
             },
