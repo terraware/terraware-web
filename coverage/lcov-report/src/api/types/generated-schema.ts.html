@@ -11900,7 +11900,59 @@
 <a name='L11835'></a><a href='#L11835'>11835</a>
 <a name='L11836'></a><a href='#L11836'>11836</a>
 <a name='L11837'></a><a href='#L11837'>11837</a>
-<a name='L11838'></a><a href='#L11838'>11838</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L11838'></a><a href='#L11838'>11838</a>
+<a name='L11839'></a><a href='#L11839'>11839</a>
+<a name='L11840'></a><a href='#L11840'>11840</a>
+<a name='L11841'></a><a href='#L11841'>11841</a>
+<a name='L11842'></a><a href='#L11842'>11842</a>
+<a name='L11843'></a><a href='#L11843'>11843</a>
+<a name='L11844'></a><a href='#L11844'>11844</a>
+<a name='L11845'></a><a href='#L11845'>11845</a>
+<a name='L11846'></a><a href='#L11846'>11846</a>
+<a name='L11847'></a><a href='#L11847'>11847</a>
+<a name='L11848'></a><a href='#L11848'>11848</a>
+<a name='L11849'></a><a href='#L11849'>11849</a>
+<a name='L11850'></a><a href='#L11850'>11850</a>
+<a name='L11851'></a><a href='#L11851'>11851</a>
+<a name='L11852'></a><a href='#L11852'>11852</a>
+<a name='L11853'></a><a href='#L11853'>11853</a>
+<a name='L11854'></a><a href='#L11854'>11854</a>
+<a name='L11855'></a><a href='#L11855'>11855</a>
+<a name='L11856'></a><a href='#L11856'>11856</a>
+<a name='L11857'></a><a href='#L11857'>11857</a>
+<a name='L11858'></a><a href='#L11858'>11858</a>
+<a name='L11859'></a><a href='#L11859'>11859</a>
+<a name='L11860'></a><a href='#L11860'>11860</a>
+<a name='L11861'></a><a href='#L11861'>11861</a>
+<a name='L11862'></a><a href='#L11862'>11862</a>
+<a name='L11863'></a><a href='#L11863'>11863</a>
+<a name='L11864'></a><a href='#L11864'>11864</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -23933,6 +23985,8 @@ export interface paths {
     put: operations["assignTerraformationContact"];
   };
   "/api/v1/accelerator/participants": {
+    /** List participants and their assigned projects. */
+    get: operations["listParticipants"];
     /** Creates a new participant. */
     post: operations["createParticipant"];
   };
@@ -26068,6 +26122,7 @@ export interface components {
       participantName?: string;
       /** Format: int32 */
       position: number;
+      projectDealName?: string;
       /** Format: int64 */
       projectId: number;
       projectName: string;
@@ -27014,6 +27069,7 @@ export interface components {
       participantName?: string;
       /** Format: int32 */
       position: number;
+      projectDealName?: string;
       /** Format: int64 */
       projectId: number;
       projectName: string;
@@ -27098,6 +27154,10 @@ export interface components {
     };
     ListOrganizationsResponsePayload: {
       organizations: components["schemas"]["OrganizationPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListParticipantsResponsePayload: {
+      participants: components["schemas"]["ParticipantPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListPhotosResponseElement: {
@@ -27876,6 +27936,7 @@ export interface components {
       /** Format: int64 */
       organizationId: number;
       organizationName: string;
+      projectDealName?: string;
       /** Format: int64 */
       projectId: number;
       projectName: string;
@@ -30498,6 +30559,23 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** List participants and their assigned projects. */
+  listParticipants: {
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListParticipantsResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -35581,7 +35659,7 @@ export interface operations {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-06T22:59:57.211Z
+                at 2024-12-07T00:09:03.148Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
