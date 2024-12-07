@@ -1,6 +1,7 @@
 import React from '@mui/material';
 
 import CommonTitleBar from 'src/components/common/TitleBar';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import strings from 'src/strings';
 import { categoryLabel } from 'src/types/Deliverables';
 
@@ -8,9 +9,14 @@ import { ViewProps } from './types';
 
 const TitleBar = ({ deliverable }: ViewProps): JSX.Element => {
   const { category, name } = deliverable;
+  const { isAcceleratorRoute } = useAcceleratorConsole();
   return (
     <CommonTitleBar
-      header={strings.formatString(strings.DEAL_NAME, deliverable.projectDealName ?? '').toString()}
+      header={
+        isAcceleratorRoute
+          ? strings.formatString(strings.DELIVERABLE_PROJECT, deliverable.projectName ?? '').toString()
+          : `${strings.DEAL_NAME}: ${deliverable.projectDealName ?? ''}`
+      }
       title={name}
       subtitle={strings.formatString(strings.DELIVERABLE_CATEGORY, categoryLabel(category)).toString()}
     />
