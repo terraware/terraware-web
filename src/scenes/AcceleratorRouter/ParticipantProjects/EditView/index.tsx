@@ -30,8 +30,6 @@ import { requestListOrganizationUsers } from 'src/redux/features/organizationUse
 import { selectOrganizationUsers } from 'src/redux/features/organizationUser/organizationUsersSelectors';
 import { requestUpdateParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectUpdateRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
-import { requestProjectUpdate } from 'src/redux/features/projects/projectsAsyncThunks';
-import { selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { OrganizationUser } from 'src/types/User';
@@ -40,13 +38,12 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import { useParticipantProjectData } from '../ParticipantProjectContext';
 import { useVotingData } from '../Voting/VotingContext';
-import EditNameConfirm from './EditNameConfirm';
 
 const EditView = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const { crumbs, participant, participantProject, project, projectId, projectMeta, organization, reload } =
+  const { crumbs, participantProject, project, projectId, projectMeta, organization, reload } =
     useParticipantProjectData();
   const { projectScore } = useProjectScore(projectId);
   const { phaseVotes } = useVotingData();
@@ -72,13 +69,7 @@ const EditView = () => {
   const [participantProjectRecord, setParticipantProjectRecord, onChangeParticipantProject] =
     useForm(participantProject);
 
-  // Project (terraware data) form record and update request
-  const [projectRequestId, setProjectRequestId] = useState<string>('');
   const [organizationUsersRequestId, setOrganizationUsersRequestId] = useState<string>('');
-  const projectUpdateRequest = useAppSelector((state) => selectProjectRequest(state, projectRequestId));
-  const [projectRecord, setProjectRecord, onChangeProject] = useForm(project);
-
-  const [confirmProjectNameModalOpen, setConfirmProjectNameModalOpen] = useState(false);
   const [listUsersRequestId, setListUsersRequestId] = useState('');
   const listUsersRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(listUsersRequestId));
   const [assignTfContactRequestId, setAssignTfContactRequestId] = useState('');
@@ -146,13 +137,6 @@ const EditView = () => {
     }
   }, [participantProjectRecord, dispatch]);
 
-  const saveProject = useCallback(() => {
-    if (projectRecord) {
-      const dispatched = dispatch(requestProjectUpdate({ projectId, project: projectRecord }));
-      setProjectRequestId(dispatched.requestId);
-    }
-  }, [projectId, projectRecord, dispatch]);
-
   const saveTFContact = () => {
     if (organization && tfContact) {
       const assignRequest = dispatch(
@@ -165,16 +149,7 @@ const EditView = () => {
     }
   };
 
-  const handleOnSave = useCallback(() => {
-    if (projectRecord?.name !== project?.name) {
-      setConfirmProjectNameModalOpen(true);
-      return;
-    }
-    saveParticipantProject();
-  }, [project, projectRecord, saveParticipantProject]);
-
   const handleOnCancel = useCallback(() => goToParticipantProject(projectId), [goToParticipantProject, projectId]);
-  const handleOnCloseModal = useCallback(() => setConfirmProjectNameModalOpen(false), []);
 
   useEffect(() => {
     if (response?.status === 'success') {
@@ -197,26 +172,6 @@ const EditView = () => {
       }
     }
   }, [participantProjectUpdateRequest, snackbar]);
-
-  useEffect(() => {
-    if (!projectUpdateRequest) {
-      return;
-    }
-
-    if (projectUpdateRequest.status === 'error') {
-      snackbar.toastError();
-    } else if (projectUpdateRequest.status === 'success') {
-      snackbar.toastSuccess(strings.CHANGES_SAVED, strings.SAVED);
-      reload();
-      goToParticipantProject(projectId);
-    }
-  }, [goToParticipantProject, projectUpdateRequest, projectId, snackbar, reload]);
-
-  useEffect(() => {
-    if (project) {
-      setProjectRecord(project);
-    }
-  }, [project, setProjectRecord]);
 
   useEffect(() => {
     if (participantProject) {
@@ -244,7 +199,7 @@ const EditView = () => {
 
   return (
     <PageWithModuleTimeline
-      title={`${participant?.name || ''} / ${project?.name || ''}`}
+      title={participantProject?.dealName}
       crumbs={crumbs}
       hierarchicalCrumbs={false}
       cohortPhase={project?.cohortPhase}
@@ -254,7 +209,7 @@ const EditView = () => {
         busy={participantProjectUpdateRequest?.status === 'pending'}
         cancelID='cancelNewParticipantProject'
         onCancel={handleOnCancel}
-        onSave={handleOnSave}
+        onSave={saveParticipantProject}
         saveID='createNewParticipantProject'
       >
         <Card
@@ -270,11 +225,11 @@ const EditView = () => {
             <Grid item xs={12}>
               <ProjectFieldTextfield
                 height='auto'
-                id={'name'}
+                id={'dealName'}
                 md={12}
-                label={strings.PROJECT_NAME}
-                onChange={onChangeProject}
-                value={projectRecord?.name}
+                label={strings.DEAL_NAME}
+                onChange={onChangeParticipantProject}
+                value={participantProjectRecord?.dealName}
               />
             </Grid>
             {projectApplication && (
@@ -455,13 +410,6 @@ const EditView = () => {
           </Grid>
         </Card>
       </PageForm>
-      {confirmProjectNameModalOpen && (
-        <EditNameConfirm
-          onClose={handleOnCloseModal}
-          onConfirm={saveProject}
-          organizationName={organization?.name || ''}
-        />
-      )}
     </PageWithModuleTimeline>
   );
 };
