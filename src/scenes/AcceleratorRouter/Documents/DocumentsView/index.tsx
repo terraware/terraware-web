@@ -108,9 +108,10 @@ export default function DocumentsView(): JSX.Element | null {
                 availableProjects={availableProjects}
                 record={projectFilter}
                 setRecord={setProjectFilter}
-                label={''}
+                label={strings.DEAL_NAME}
                 unselectLabel={strings.ALL}
                 unselectValue={''}
+                useDealName
               />
             </Grid>
           </Grid>
