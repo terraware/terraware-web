@@ -37,7 +37,7 @@ const SingleView = () => {
   const theme = useTheme();
   const { isAllowed } = useUser();
   const { isMobile } = useDeviceInfo();
-  const { crumbs, participant, participantProject, project, projectId, projectMeta, organization, status } =
+  const { crumbs, participantProject, project, projectId, projectMeta, organization, status } =
     useParticipantProjectData();
   const { phaseVotes } = useVotingData();
   const { projectScore } = useProjectScore(projectId);
@@ -119,7 +119,7 @@ const SingleView = () => {
   const projectViewTitle = (
     <Box paddingLeft={1}>
       <Typography fontSize={'24px'} fontWeight={600}>
-        {participant?.name || ''} / {project?.name || ''}
+        {participantProject?.dealName}
       </Typography>
     </Box>
   );
@@ -155,7 +155,7 @@ const SingleView = () => {
               marginTop: 4,
             }}
           >
-            <ProjectFieldDisplay label={strings.PROJECT_NAME} value={project?.name} md={12} />
+            <ProjectFieldDisplay label={strings.NAME_USED_BY_PROJECT} value={project?.name} md={12} />
 
             <Grid container>
               {!!projectApplication?.id && (
