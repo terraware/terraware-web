@@ -6,6 +6,7 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
+import { purposeLabel } from 'src/types/Batch';
 
 import CellRenderer, { TableRowType } from '../../components/common/table/TableCellRenderer';
 import { RendererProps } from '../../components/common/table/types';
@@ -23,7 +24,7 @@ export const getEventType = (batchHistoryItem: BatchHistoryItemForTable) => {
     return strings.NURSERY_TRANSFER;
   }
   if (batchHistoryItem.type === 'OutgoingWithdrawal') {
-    return `${strings.WITHDRAWAL} - ${batchHistoryItem.purpose}`;
+    return `${strings.WITHDRAWAL} - ${purposeLabel(batchHistoryItem.purpose)}`;
   }
   return batchHistoryItem.type;
 };
