@@ -150,7 +150,7 @@
     "@storybook/react": "^7.0.12",
     "@storybook/react-webpack5": "^7.0.12",
     "@storybook/testing-library": "^0.2.0",
-    "@stylistic/eslint-plugin-js": "^2.8.0",
+    "@stylistic/eslint-plugin-js": "^2.11.0",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/user-event": "^14.4.3",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
