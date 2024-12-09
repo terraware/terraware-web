@@ -3,9 +3,10 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Page from 'src/components/Page';
 import { useOrganization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
+import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
+import { requestSpecies } from 'src/redux/features/species/speciesThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { OrganizationUserService } from 'src/services';
-import { SpeciesService } from 'src/services';
-import { Species } from 'src/types/Species';
 import { OrganizationUser } from 'src/types/User';
 import { isManagerOrHigher } from 'src/utils/organization';
 import { isAdmin } from 'src/utils/organization';
@@ -18,7 +19,8 @@ export default function Home(): JSX.Element {
   const { orgHasModules } = useParticipantData();
   const { selectedOrganization, orgPreferences } = useOrganization();
   const [people, setPeople] = useState<OrganizationUser[]>();
-  const [allSpecies, setAllSpecies] = useState<Species[]>();
+  const allSpecies = useAppSelector(selectSpecies);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const populatePeople = async () => {
@@ -33,15 +35,10 @@ export default function Home(): JSX.Element {
   }, [selectedOrganization]);
 
   useEffect(() => {
-    const populateSpecies = async () => {
-      const response = await SpeciesService.getAllSpecies(selectedOrganization.id);
-      if (response.requestSucceeded) {
-        setAllSpecies(response.species);
-      }
-    };
-
-    void populateSpecies();
-  }, [selectedOrganization.id]);
+    if (!allSpecies && selectedOrganization.id !== -1) {
+      dispatch(requestSpecies(selectedOrganization.id));
+    }
+  }, [allSpecies, selectedOrganization]);
 
   const homeScreen = useMemo((): JSX.Element => {
     if (orgHasModules === undefined || allSpecies === undefined) {
