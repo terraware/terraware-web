@@ -920,6 +920,7 @@ MY_ACCOUNT_NOTIFICATIONS_DESC,Notifications alert you when there are important u
 NAME,Name,
 NAME_REQUIRED,Name *,
 NAME_UNKNOWN,(name unknown),
+NAME_USED_BY_PROJECT,Name used by Project,
 NATIVE,Native,
 NATIVE_ECOSYSTEM,Native Ecosystem,
 NATIVE_ECOSYSTEM_TOOLTIP,"List the ecosystem type where this species is found naturally, may include details such as elevation range, rainfall, etc",
