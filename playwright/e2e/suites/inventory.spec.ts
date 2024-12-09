@@ -274,7 +274,7 @@ export default function InventoryTests() {
     await page.getByRole('button', { name: 'Got It!' }).click();
     await expect(page.getByText('1 batch for a total of 60')).toBeVisible();
     await page.getByRole('tab', { name: 'History' }).click();
-    await expect(page.getByRole('cell', { name: 'Withdrawal - Out Plant' }).nth(0)).toBeVisible();
+    await expect(page.getByRole('cell', { name: 'Withdrawal - Outplanting' }).nth(0)).toBeVisible();
     await page.getByRole('button', { name: 'Withdrawals' }).click();
     await expect(page.getByRole('cell', { name: 'Planting Site' })).toBeVisible();
     await expect(page.getByRole('cell', { name: '60' })).toBeVisible();
