@@ -186,7 +186,7 @@
     "jest-mock-extended": "^3.0.1",
     "license-report": "^6.0.0",
     "nyc": "^17.0.0",
-    "openapi-typescript": "^6.7.3",
+    "openapi-typescript": "^7.0.0",
     "playwright": "^1.40.1",
     "prettier": "^3.0.3",
     "prop-types": "^15.8.1",
