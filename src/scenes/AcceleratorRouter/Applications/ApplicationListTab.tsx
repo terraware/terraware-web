@@ -31,7 +31,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
     ? [
         {
           key: 'internalName',
-          name: strings.APPLICATION_INTERNAL_NAME,
+          name: strings.DEAL_NAME,
           type: 'string',
         },
         {
