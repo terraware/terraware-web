@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/69</span>
+                <span class='fraction'>0/70</span>
             </div>
         
             
@@ -39,7 +39,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -340,9 +340,11 @@
 <a name='L275'></a><a href='#L275'>275</a>
 <a name='L276'></a><a href='#L276'>276</a>
 <a name='L277'></a><a href='#L277'>277</a>
-<a name='L278'></a><a href='#L278'>278</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a>
+<a name='L281'></a><a href='#L281'>281</a>
+<a name='L282'></a><a href='#L282'>282</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -515,7 +517,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -632,7 +640,6 @@ import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ListDeliverablesRequestParams } from 'src/services/DeliverablesService';
 import strings from 'src/strings';
-import { AcceleratorOrgProject } from 'src/types/Accelerator';
 import {
   DeliverableCategories,
   DeliverableStatusesWithOverdue,
@@ -640,7 +647,6 @@ import {
   ListDeliverablesElementWithOverdue,
 } from 'src/types/Deliverables';
 import { ParticipantProjectSearchResult } from 'src/types/Participant';
-import { Project } from 'src/types/Project';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchAndSortFn } from 'src/utils/searchAndSort';
 import useQuery from 'src/utils/useQuery';
@@ -745,7 +751,7 @@ const DeliverablesTable = <span class="cstat-no" title="statement not covered" >
 <span class="fstat-no" title="function not covered" >    (p</span>rojectId: number | string) =&gt; {
 <span class="cstat-no" title="statement not covered" >      return (</span>
         (participantId
-          ? selectedParticipant?.projects?.find(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; <span class="cstat-no" title="statement not covered" >p.id === Number(projectId))</span>?.name
+          ? selectedParticipant?.projects?.find(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; <span class="cstat-no" title="statement not covered" >p.projectId === Number(projectId))</span>?.projectId
           : projectsFilterOptions?.find(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; <span class="cstat-no" title="statement not covered" >p.id === Number(projectId))</span>?.name) || ''
       );
     },
@@ -792,7 +798,13 @@ const DeliverablesTable = <span class="cstat-no" title="statement not covered" >
 &nbsp;
     // show the project filter only in the accelerator route
     // the participant view already has a projects filter above the table
-    const availableProjects = <span class="cstat-no" title="statement not covered" >selectedParticipant?.projects || projectsFilterOptions || [];</span>
+    const availableProjects =
+<span class="cstat-no" title="statement not covered" >      selectedParticipant?.projects.map(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+        id: project.projectId,
+        name: project.projectName,
+      })) ||
+      projectsFilterOptions ||
+      [];
 <span class="cstat-no" title="statement not covered" >    if (isAcceleratorRoute &amp;&amp; availableProjects &amp;&amp; availableProjects.length &gt; 0) {</span>
       let projectFromParam: ParticipantProjectSearchResult | undefined;
 <span class="cstat-no" title="statement not covered" >      if (projectParam) {</span>
@@ -801,7 +813,7 @@ const DeliverablesTable = <span class="cstat-no" title="statement not covered" >
 <span class="cstat-no" title="statement not covered" >      filters.unshift({</span>
         field: 'projectName',
         options: availableProjects
-          .map(<span class="fstat-no" title="function not covered" >(p</span>roject: Project | AcceleratorOrgProject) =&gt; <span class="cstat-no" title="statement not covered" >`${project.name}`)</span>
+          .map(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; <span class="cstat-no" title="statement not covered" >project.name)</span>
           .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.localeCompare(b, activeLocale || undefined))</span>,
         label: strings.PROJECTS,
         values: projectFromParam ? [projectFromParam.name] : [],
@@ -901,7 +913,7 @@ export default DeliverablesTable;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-09T17:19:07.985Z
+                at 2024-12-09T19:13:26.330Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/62</span>
+                <span class='fraction'>0/64</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/48</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/61</span>
+                <span class='fraction'>0/63</span>
             </div>
         
             
@@ -301,7 +301,11 @@
 <a name='L236'></a><a href='#L236'>236</a>
 <a name='L237'></a><a href='#L237'>237</a>
 <a name='L238'></a><a href='#L238'>238</a>
-<a name='L239'></a><a href='#L239'>239</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -388,36 +392,40 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -557,15 +565,15 @@ import { selectParticipantListRequest } from 'src/redux/features/participants/pa
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ParticipantsService } from 'src/services';
 import strings from 'src/strings';
-import { ParticipantSearchResult } from 'src/types/Participant';
+import { Participant } from 'src/types/Participant';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
 import ParticipantsCellRenderer from './ParticipantsCellRenderer';
 &nbsp;
-type ParticipantType = Omit&lt;ParticipantSearchResult, 'projects'&gt; &amp; {
-  'projects.name': string[];
+type ParticipantType = Omit&lt;Participant, 'projects'&gt; &amp; {
+  'projects.dealName': string[];
 };
 &nbsp;
 const columns = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(a</span>ctiveLocale: string | null): TableColumnType[] =&gt;</span>
@@ -577,19 +585,19 @@ const columns = <span class="cstat-no" title="statement not covered" ><span clas
           type: 'string',
         },
         {
-          key: 'projects.name',
-          name: strings.PROJECT,
+          key: 'projects.dealName',
+          name: strings.DEAL_NAME,
           type: 'string',
         },
         {
-          key: 'cohort_name',
+          key: 'cohortName',
           name: strings.COHORT,
           type: 'string',
         },
       ]
     : [];
 &nbsp;
-const fuzzySearchColumns = <span class="cstat-no" title="statement not covered" >['name', 'projects.name', 'cohort_name'];</span>
+const fuzzySearchColumns = <span class="cstat-no" title="statement not covered" >['name', 'projects.dealName', 'cohortName'];</span>
 const defaultSearchOrder: SearchSortOrder = <span class="cstat-no" title="statement not covered" >{</span>
   field: 'name',
   direction: 'Ascending',
@@ -624,9 +632,11 @@ export default function <span class="fstat-no" title="function not covered" >Par
 <span class="cstat-no" title="statement not covered" >    if (participantsResult?.data) {</span>
 <span class="cstat-no" title="statement not covered" >      setParticipants(</span>
         participantsResult.data.map(
-<span class="fstat-no" title="function not covered" >          (p</span>articipant: ParticipantSearchResult): ParticipantType =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+<span class="fstat-no" title="function not covered" >          (p</span>articipant: Participant): ParticipantType =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
             ...participant,
-            'projects.name': participant.projects.flatMap(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; <span class="cstat-no" title="statement not covered" >project.name)</span>,
+            'projects.dealName': participant.projects
+              .flatMap(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; <span class="cstat-no" title="statement not covered" >project.projectDealName)</span>
+              .filter(<span class="fstat-no" title="function not covered" >(d</span>ealName): dealName is string =&gt; <span class="cstat-no" title="statement not covered" >dealName !== undefined)</span>,
           })
         )
       );
@@ -655,7 +665,9 @@ export default function <span class="fstat-no" title="function not covered" >Par
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
 <span class="cstat-no" title="statement not covered" >      (participants || []).reduce(</span>
 <span class="fstat-no" title="function not covered" >        (a</span>cc, participant) =&gt; {
-<span class="cstat-no" title="statement not covered" >          acc[participant.cohort_id] = participant.cohort_name;</span>
+<span class="cstat-no" title="statement not covered" >          if (participant.cohortId &amp;&amp; participant.cohortName) {</span>
+<span class="cstat-no" title="statement not covered" >            acc[participant.cohortId] = participant.cohortName;</span>
+          }
 <span class="cstat-no" title="statement not covered" >          return acc;</span>
         },
         {} as Record&lt;string, string&gt;
@@ -670,7 +682,7 @@ export default function <span class="fstat-no" title="function not covered" >Par
             {
               field: 'cohort_id',
               label: strings.COHORT,
-              options: (participants || [])?.map(<span class="fstat-no" title="function not covered" >(p</span>articipant: ParticipantType) =&gt; <span class="cstat-no" title="statement not covered" >`${participant.cohort_id}`)</span>,
+              options: (participants || [])?.map(<span class="fstat-no" title="function not covered" >(p</span>articipant: ParticipantType) =&gt; <span class="cstat-no" title="statement not covered" >`${participant.cohortId}`)</span>,
               pillValueRenderer: <span class="fstat-no" title="function not covered" >(v</span>alues: (string | number | null)[]) =&gt;
 <span class="cstat-no" title="statement not covered" >                values.map(<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >cohorts[value || ''] || '')</span>.join(', '),</span>
               renderOption: <span class="fstat-no" title="function not covered" >(i</span>d: string | number) =&gt; <span class="cstat-no" title="statement not covered" >cohorts[id] || '',</span>
@@ -784,7 +796,7 @@ const EmptyState = <span class="cstat-no" title="statement not covered" ><span c
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-09T17:19:07.985Z
+                at 2024-12-09T19:13:26.330Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
