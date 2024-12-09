@@ -1,3 +1,5 @@
+b1a95e10b2f Update dependency nyc to v17 (#3414)
+2e1f12a0777 Update JamesIves/github-pages-deploy-action action to v4.7.2 (#3411)
 fa3af575f62 SW-6326 Used deal name for deliverable view (#3400)
 8d9934c8ece SW-6339 Add email variable type (#3407)
 516e51ad6d7 Make deploy script fail if any step fails (#3404)
