@@ -98,7 +98,6 @@ const createToc = async (config) => {
       tocElement: '#table-of-contents',
       titleElements: ['.toc-major', '.toc-minor'],
     });
-    debugger;
   } catch (error) {
     console.error(error);
   }
