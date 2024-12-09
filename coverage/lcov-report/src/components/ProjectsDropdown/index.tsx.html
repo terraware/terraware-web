@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -146,7 +146,12 @@
 <a name='L81'></a><a href='#L81'>81</a>
 <a name='L82'></a><a href='#L82'>82</a>
 <a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -179,19 +184,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -200,9 +192,27 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -238,6 +248,7 @@ import strings from 'src/strings';
 &nbsp;
 type ProjectDropdownOption = {
   name: string;
+  dealName?: string;
   id: number;
 };
 &nbsp;
@@ -251,6 +262,7 @@ type ProjectsDropdownProps&lt;T extends { projectId?: number | string } | undefi
   setRecord: (setFn: (previousValue: T) =&gt; T) =&gt; void;
   unselectLabel?: string;
   unselectValue?: string;
+  useDealName?: boolean;
 };
 &nbsp;
 function <span class="fstat-no" title="function not covered" >ProjectsDropdown&lt;</span>T extends { projectId?: number | string } | undefined&gt;({
@@ -263,6 +275,7 @@ function <span class="fstat-no" title="function not covered" >ProjectsDropdown&l
   setRecord,
   unselectLabel,
   unselectValue,
+  useDealName,
 }: ProjectsDropdownProps&lt;T&gt;) {
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
 &nbsp;
@@ -282,10 +295,12 @@ function <span class="fstat-no" title="function not covered" >ProjectsDropdown&l
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return [</span>
       ...options,
-      ...(availableProjects || []).map(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-        label: project.name,
-        value: project.id,
-      })),
+      ...(availableProjects || [])
+        .map(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+          label: useDealName ? project.dealName : project.name,
+          value: project.id,
+        }))
+        .filter(<span class="fstat-no" title="function not covered" >(i</span>tem): item is DropdownItem =&gt; <span class="cstat-no" title="statement not covered" >item.label !== undefined)</span>,
     ];
   }, [activeLocale, allowUnselect, availableProjects]);
 &nbsp;
@@ -293,7 +308,7 @@ function <span class="fstat-no" title="function not covered" >ProjectsDropdown&l
     &lt;Dropdown
       autocomplete={autoComplete}
       id='projectId'
-      label={label === '' ? label : strings.PROJECT}
+      label={label ?? strings.PROJECT}
       selectedValue={record?.projectId}
       options={projectOptions}
       onChange={<span class="fstat-no" title="function not covered" >(p</span>rojectId: string) =&gt; {
@@ -319,7 +334,7 @@ export default ProjectsDropdown;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-09T19:13:26.330Z
+                at 2024-12-09T19:40:21.582Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

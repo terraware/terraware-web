@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/43</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
@@ -239,7 +239,18 @@
 <a name='L174'></a><a href='#L174'>174</a>
 <a name='L175'></a><a href='#L175'>175</a>
 <a name='L176'></a><a href='#L176'>176</a>
-<a name='L177'></a><a href='#L177'>177</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -331,8 +342,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -428,22 +450,22 @@ import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useProjects } from 'src/hooks/useProjects';
+import { useParticipants } from 'src/hooks/useParticipants';
 import { useLocalization } from 'src/providers';
 import { selectDocumentSearch } from 'src/redux/features/documentProducer/documents/documentsSelector';
 import { requestSearchDocuments } from 'src/redux/features/documentProducer/documents/documentsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { DocumentsSearchResponseElement } from 'src/services/documentProducer/DocumentService';
 import strings from 'src/strings';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { Document } from 'src/types/documentProducer/Document';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
 const columns = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(a</span>ctiveLocale: string | null): TableColumnType[] =&gt;</span>
 <span class="cstat-no" title="statement not covered" >  activeLocale</span>
     ? [
         { key: 'name', name: strings.NAME, type: 'string' },
-        { key: 'project_name', name: strings.PROJECT, type: 'string' },
-        { key: 'documentTemplate_name', name: strings.DOCUMENT_TEMPLATE, type: 'string' },
+        { key: 'projectDealName', name: strings.DEAL_NAME, type: 'string' },
+        { key: 'documentTemplateName', name: strings.DOCUMENT_TEMPLATE, type: 'string' },
         { key: 'lastSavedVersionId', name: strings.VERSION, type: 'number' },
         { key: 'createdTime', name: strings.CREATED, type: 'date' },
         { key: 'modifiedTime', name: strings.LAST_EDITED, type: 'date' },
@@ -451,7 +473,7 @@ const columns = <span class="cstat-no" title="statement not covered" ><span clas
       ]
     : [];
 &nbsp;
-const fuzzySearchColumns = <span class="cstat-no" title="statement not covered" >['name', 'project_name'];</span>
+const fuzzySearchColumns = <span class="cstat-no" title="statement not covered" >['name', 'projectDealName'];</span>
 const defaultSearchOrder: SearchSortOrder = <span class="cstat-no" title="statement not covered" >{</span>
   field: 'name',
   direction: 'Ascending',
@@ -463,9 +485,9 @@ export default function <span class="fstat-no" title="function not covered" >Doc
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const { availableProjects } = <span class="cstat-no" title="statement not covered" >useProjects();</span>
+  const { availableParticipants } = <span class="cstat-no" title="statement not covered" >useParticipants();</span>
 &nbsp;
-  const [tableRows, setTableRows] = <span class="cstat-no" title="statement not covered" >useState&lt;DocumentsSearchResponseElement[]&gt;([]);</span>
+  const [tableRows, setTableRows] = <span class="cstat-no" title="statement not covered" >useState&lt;Document[]&gt;([]);</span>
   const [tableSelectedRows, tableSetSelectedRows] = <span class="cstat-no" title="statement not covered" >useState&lt;TableRowType[]&gt;([]);</span>
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const [projectFilter, setProjectFilter] = <span class="cstat-no" title="statement not covered" >useState&lt;{ projectId?: number | string }&gt;({ projectId: '' });</span>
@@ -506,6 +528,16 @@ export default function <span class="fstat-no" title="function not covered" >Doc
     [dispatch]
   );
 &nbsp;
+  const availableProjects = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    return availableParticipants.flatMap(<span class="fstat-no" title="function not covered" >(p</span>articipant) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >      participant.projects.map(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+        id: project.projectId,
+        name: project.projectName,
+        dealName: project.projectDealName,
+      }))
+    );
+  }, [availableParticipants]);
+&nbsp;
   const PageHeaderLeftComponent = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
 <span class="cstat-no" title="statement not covered" >      activeLocale ? (</span>
@@ -516,7 +548,7 @@ export default function <span class="fstat-no" title="function not covered" >Doc
             &lt;/Grid&gt;
             &lt;Grid item&gt;
               &lt;Typography sx={{ lineHeight: '40px' }} component={'span'}&gt;
-                {strings.PROJECT}
+                {strings.DEAL_NAME}
               &lt;/Typography&gt;
             &lt;/Grid&gt;
             &lt;Grid item sx={{ marginLeft: theme.spacing(1.5) }}&gt;
@@ -528,6 +560,7 @@ export default function <span class="fstat-no" title="function not covered" >Doc
                 label={''}
                 unselectLabel={strings.ALL}
                 unselectValue={''}
+                useDealName
               /&gt;
             &lt;/Grid&gt;
           &lt;/Grid&gt;
@@ -542,7 +575,7 @@ export default function <span class="fstat-no" title="function not covered" >Doc
         ? [
             {
               operation: 'field',
-              field: 'project_id',
+              field: 'projectId',
               type: 'Exact',
               values: [`${projectFilter.projectId}`],
             },
@@ -557,7 +590,7 @@ export default function <span class="fstat-no" title="function not covered" >Doc
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (documentsResponse?.status === 'success' &amp;&amp; documentsResponse?.data) {</span>
-<span class="cstat-no" title="statement not covered" >      setTableRows(documentsResponse.data);</span>
+<span class="cstat-no" title="statement not covered" >      setTableRows(documentsResponse.data ?? []);</span>
     } else <span class="cstat-no" title="statement not covered" >if (documentsResponse?.status === 'error') {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR);</span>
     }
@@ -598,7 +631,7 @@ export default function <span class="fstat-no" title="function not covered" >Doc
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-09T19:13:26.330Z
+                at 2024-12-09T19:40:21.582Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
