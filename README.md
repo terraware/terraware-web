@@ -95,6 +95,7 @@ To run the end-to-end tests:
 yarn server:reset   # start server and reset database state
 yarn start:dev      # start the frontend
 yarn playwright:run # run the tests on the command line and generate a report
+yarn playwright:run --debug # run the tests on the command line and generate a report in debug mode
 yarn docker:stop    # don't forget to stop the server when you're done
 ```
 
