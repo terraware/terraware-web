@@ -4,11 +4,11 @@ import { Dropdown, DropdownItem } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { ParticipantSearchResult } from 'src/types/Participant';
+import { Participant } from 'src/types/Participant';
 
 type ParticipantsDropdownProps<T extends { id?: number } | undefined> = {
   allowUnselect?: boolean;
-  availableParticipants: ParticipantSearchResult[] | undefined;
+  availableParticipants: Participant[] | undefined;
   label?: string | undefined;
   record: T;
   required?: boolean;

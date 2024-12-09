@@ -41,7 +41,7 @@ const DocumentMetadata = ({ document, documentTemplate }: DocumentMetadataProps)
   const modifiedByName = useMemo(() => getUserDisplayName(modifiedByUser), [modifiedByUser]);
   const modifiedTimeDisplay = useMemo(() => getDateTimeDisplayValue(new Date(modifiedTime).getTime()), [modifiedTime]);
 
-  const participant = availableParticipants?.find((part) => part.projects.find((proj) => proj.id === projectId));
+  const participant = availableParticipants?.find((part) => part.projects.find((proj) => proj.projectId === projectId));
 
   return (
     <Box display='flex' flexDirection='column' marginTop={3}>

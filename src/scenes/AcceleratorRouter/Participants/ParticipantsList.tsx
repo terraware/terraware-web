@@ -16,15 +16,15 @@ import { selectParticipantListRequest } from 'src/redux/features/participants/pa
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ParticipantsService } from 'src/services';
 import strings from 'src/strings';
-import { ParticipantSearchResult } from 'src/types/Participant';
+import { Participant } from 'src/types/Participant';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ParticipantsCellRenderer from './ParticipantsCellRenderer';
 
-type ParticipantType = Omit<ParticipantSearchResult, 'projects'> & {
-  'projects.name': string[];
+type ParticipantType = Omit<Participant, 'projects'> & {
+  'projects.dealName': string[];
 };
 
 const columns = (activeLocale: string | null): TableColumnType[] =>
@@ -36,19 +36,19 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
-          key: 'projects.name',
-          name: strings.PROJECT,
+          key: 'projects.dealName',
+          name: strings.DEAL_NAME,
           type: 'string',
         },
         {
-          key: 'cohort_name',
+          key: 'cohortName',
           name: strings.COHORT,
           type: 'string',
         },
       ]
     : [];
 
-const fuzzySearchColumns = ['name', 'projects.name', 'cohort_name'];
+const fuzzySearchColumns = ['name', 'projects.dealName', 'cohortName'];
 const defaultSearchOrder: SearchSortOrder = {
   field: 'name',
   direction: 'Ascending',
@@ -83,9 +83,11 @@ export default function ParticipantList(): JSX.Element {
     if (participantsResult?.data) {
       setParticipants(
         participantsResult.data.map(
-          (participant: ParticipantSearchResult): ParticipantType => ({
+          (participant: Participant): ParticipantType => ({
             ...participant,
-            'projects.name': participant.projects.flatMap((project) => project.name),
+            'projects.dealName': participant.projects
+              .flatMap((project) => project.projectDealName)
+              .filter((dealName): dealName is string => dealName !== undefined),
           })
         )
       );
@@ -114,7 +116,9 @@ export default function ParticipantList(): JSX.Element {
     () =>
       (participants || []).reduce(
         (acc, participant) => {
-          acc[participant.cohort_id] = participant.cohort_name;
+          if (participant.cohortId && participant.cohortName) {
+            acc[participant.cohortId] = participant.cohortName;
+          }
           return acc;
         },
         {} as Record<string, string>
@@ -129,7 +133,7 @@ export default function ParticipantList(): JSX.Element {
             {
               field: 'cohort_id',
               label: strings.COHORT,
-              options: (participants || [])?.map((participant: ParticipantType) => `${participant.cohort_id}`),
+              options: (participants || [])?.map((participant: ParticipantType) => `${participant.cohortId}`),
               pillValueRenderer: (values: (string | number | null)[]) =>
                 values.map((value) => cohorts[value || ''] || '').join(', '),
               renderOption: (id: string | number) => cohorts[id] || '',
