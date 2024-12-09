@@ -920,6 +920,7 @@ MY_ACCOUNT_NOTIFICATIONS_DESC,Las notificaciones le avisan cuando hay actualizac
 NAME,Nombre,
 NAME_REQUIRED,Nombre *,
 NAME_UNKNOWN,(nombre desconocido),
+NAME_USED_BY_PROJECT,Nombre usado por el proyecto,
 NATIVE,Nativo,
 NATIVE_ECOSYSTEM,Ecosistema autóctono,
 NATIVE_ECOSYSTEM_TOOLTIP,"Indique el tipo de ecosistema en el cual se encuentra esta especie de forma natural; podría incluir detalles tales como el rango de elevación, pluviometría, etc.",
