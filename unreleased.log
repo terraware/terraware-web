@@ -1,3 +1,4 @@
+d9b2ed4f30f SW-6318 Fix the CSS that was hiding the TOC contents (#3405)
 550297563ea SW-6308 Updated project view to include deal name (#3413)
 c2623513f0e SW-6329 Translate batch history type purpose when displaying in history (#3406)
 b38f2771b9e SW-6326 Used deal name for deliverable list and documents list (#3410)
