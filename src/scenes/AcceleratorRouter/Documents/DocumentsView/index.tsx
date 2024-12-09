@@ -11,22 +11,22 @@ import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useProjects } from 'src/hooks/useProjects';
+import { useParticipants } from 'src/hooks/useParticipants';
 import { useLocalization } from 'src/providers';
 import { selectDocumentSearch } from 'src/redux/features/documentProducer/documents/documentsSelector';
 import { requestSearchDocuments } from 'src/redux/features/documentProducer/documents/documentsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { DocumentsSearchResponseElement } from 'src/services/documentProducer/DocumentService';
 import strings from 'src/strings';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { Document } from 'src/types/documentProducer/Document';
 import useSnackbar from 'src/utils/useSnackbar';
 
 const columns = (activeLocale: string | null): TableColumnType[] =>
   activeLocale
     ? [
         { key: 'name', name: strings.NAME, type: 'string' },
-        { key: 'project_name', name: strings.PROJECT, type: 'string' },
-        { key: 'documentTemplate_name', name: strings.DOCUMENT_TEMPLATE, type: 'string' },
+        { key: 'projectDealName', name: strings.DEAL_NAME, type: 'string' },
+        { key: 'documentTemplateName', name: strings.DOCUMENT_TEMPLATE, type: 'string' },
         { key: 'lastSavedVersionId', name: strings.VERSION, type: 'number' },
         { key: 'createdTime', name: strings.CREATED, type: 'date' },
         { key: 'modifiedTime', name: strings.LAST_EDITED, type: 'date' },
@@ -34,7 +34,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
       ]
     : [];
 
-const fuzzySearchColumns = ['name', 'project_name'];
+const fuzzySearchColumns = ['name', 'projectDealName'];
 const defaultSearchOrder: SearchSortOrder = {
   field: 'name',
   direction: 'Ascending',
@@ -46,9 +46,9 @@ export default function DocumentsView(): JSX.Element | null {
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { availableProjects } = useProjects();
+  const { availableParticipants } = useParticipants();
 
-  const [tableRows, setTableRows] = useState<DocumentsSearchResponseElement[]>([]);
+  const [tableRows, setTableRows] = useState<Document[]>([]);
   const [tableSelectedRows, tableSetSelectedRows] = useState<TableRowType[]>([]);
   const [requestId, setRequestId] = useState('');
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({ projectId: '' });
@@ -89,6 +89,16 @@ export default function DocumentsView(): JSX.Element | null {
     [dispatch]
   );
 
+  const availableProjects = useMemo(() => {
+    return availableParticipants.flatMap((participant) =>
+      participant.projects.map((project) => ({
+        id: project.projectId,
+        name: project.projectName,
+        dealName: project.projectDealName,
+      }))
+    );
+  }, [availableParticipants]);
+
   const PageHeaderLeftComponent = useMemo(
     () =>
       activeLocale ? (
@@ -99,7 +109,7 @@ export default function DocumentsView(): JSX.Element | null {
             </Grid>
             <Grid item>
               <Typography sx={{ lineHeight: '40px' }} component={'span'}>
-                {strings.PROJECT}
+                {strings.DEAL_NAME}
               </Typography>
             </Grid>
             <Grid item sx={{ marginLeft: theme.spacing(1.5) }}>
@@ -111,6 +121,7 @@ export default function DocumentsView(): JSX.Element | null {
                 label={''}
                 unselectLabel={strings.ALL}
                 unselectValue={''}
+                useDealName
               />
             </Grid>
           </Grid>
@@ -125,7 +136,7 @@ export default function DocumentsView(): JSX.Element | null {
         ? [
             {
               operation: 'field',
-              field: 'project_id',
+              field: 'projectId',
               type: 'Exact',
               values: [`${projectFilter.projectId}`],
             },
@@ -140,7 +151,7 @@ export default function DocumentsView(): JSX.Element | null {
     }
 
     if (documentsResponse?.status === 'success' && documentsResponse?.data) {
-      setTableRows(documentsResponse.data);
+      setTableRows(documentsResponse.data ?? []);
     } else if (documentsResponse?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
