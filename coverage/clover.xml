@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1733773222340" clover="3.2.0">
-  <project timestamp="1733773222340" name="All files">
+<coverage generated="1733776500909" clover="3.2.0">
+  <project timestamp="1733776500909" name="All files">
     <metrics statements="26673" coveredstatements="1152" conditionals="17984" coveredconditionals="319" methods="8216" coveredmethods="194" elements="52873" coveredelements="1665" complexity="0" loc="26673" ncloc="26673" packages="238" files="1127" classes="1127"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
@@ -19841,27 +19841,27 @@
       </file>
       <file name="BatchHistoryRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/InventoryRouter/BatchHistoryRenderer.tsx">
         <metrics statements="21" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="15" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="22" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="49" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="64" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="23" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="50" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="51" count="0" type="stmt"/>
         <line num="65" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="66" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
-        <line num="88" count="0" type="stmt"/>
+        <line num="66" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
       </file>
       <file name="BatchSummary.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/InventoryRouter/BatchSummary.tsx">
         <metrics statements="13" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="3" coveredmethods="0"/>
