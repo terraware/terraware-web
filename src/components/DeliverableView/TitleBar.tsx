@@ -14,8 +14,8 @@ const TitleBar = ({ deliverable }: ViewProps): JSX.Element => {
     <CommonTitleBar
       header={
         isAcceleratorRoute
-          ? strings.formatString(strings.DELIVERABLE_PROJECT, deliverable.projectName ?? '').toString()
-          : `${strings.DEAL_NAME}: ${deliverable.projectDealName ?? ''}`
+          ? `${strings.DEAL_NAME}: ${deliverable.projectDealName ?? ''}`
+          : strings.formatString(strings.DELIVERABLE_PROJECT, deliverable.projectName ?? '').toString()
       }
       title={name}
       subtitle={strings.formatString(strings.DELIVERABLE_CATEGORY, categoryLabel(category)).toString()}
