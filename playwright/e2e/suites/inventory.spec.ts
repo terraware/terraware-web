@@ -298,7 +298,8 @@ export default function InventoryTests() {
     await expect(page.getByText('1 Species')).toBeVisible();
     await page.getByText('Total Plants and Species').click();
     await page.mouse.wheel(0, 2000);
-    await page.waitForTimeout(4000); //Wait for map to load
+    await expect(page.getByText('Zone Level Data')).toBeVisible();
+    await page.waitForTimeout(6000); //Wait for map to load
     await expect(page.locator('.mapboxgl-canvas')).toBeVisible({ timeout: 5000 });
     await page.locator('.mapboxgl-map').click({
       position: {
@@ -318,7 +319,8 @@ export default function InventoryTests() {
     await page.getByRole('button', { name: 'Withdrawals' }).click();
     await page.getByText('Map').click();
     await page.mouse.down();
-    await page.waitForTimeout(4000); //Wait for map to load
+    await expect(page.getByLabel('Planting Progress').getByText('Planting Progress')).toBeVisible();
+    await page.waitForTimeout(6000); //Wait for map to load
     await expect(page.locator('.mapboxgl-canvas')).toBeVisible({ timeout: 5000 });
     await page.locator('.mapboxgl-map').click({
       position: {
