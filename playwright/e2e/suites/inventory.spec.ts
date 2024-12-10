@@ -300,7 +300,7 @@ export default function InventoryTests() {
     await page.mouse.wheel(0, 2000);
     await expect(page.getByText('Zone Level Data')).toBeVisible();
     await page.waitForTimeout(6000); //Wait for map to load
-    await expect(page.locator('.mapboxgl-canvas')).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('.mapboxgl-canvas')).toBeVisible();
     await page.locator('.mapboxgl-map').click({
       position: {
         x: 526,
@@ -321,7 +321,7 @@ export default function InventoryTests() {
     await page.mouse.down();
     await expect(page.getByLabel('Planting Progress').getByText('Planting Progress')).toBeVisible();
     await page.waitForTimeout(6000); //Wait for map to load
-    await expect(page.locator('.mapboxgl-canvas')).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('.mapboxgl-canvas')).toBeVisible();
     await page.locator('.mapboxgl-map').click({
       position: {
         x: 526,
