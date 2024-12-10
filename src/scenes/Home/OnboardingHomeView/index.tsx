@@ -64,7 +64,10 @@ const OnboardingHomeView = () => {
     dispatch(requestObservationsResults(selectedOrganization.id));
   }, [dispatch, selectedOrganization.id]);
 
-  const isLoadingInitialData = useMemo(() => allSpecies === undefined, [allSpecies]);
+  const isLoadingInitialData = useMemo(
+    () => allSpecies === undefined || (isAdmin(selectedOrganization) && people === undefined),
+    [allSpecies, people, selectedOrganization]
+  );
 
   const markAsComplete = async () => {
     await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
