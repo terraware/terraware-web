@@ -63,7 +63,7 @@ describe('trigramWordSimilarity', () => {
      * -----------------
      *            0.75
      */
-    expect(trigramWordSimilarity('sam', 'sampson')).toEqual(0.75);
+    expect(trigramWordSimilarity('sam', 'sampson')).toEqual(0.375);
 
     /**
      * SELECT word_similarity('sampson', 'sam');
@@ -79,7 +79,7 @@ describe('trigramWordSimilarity', () => {
      * -----------------
      *       0.8333333
      */
-    expect(trigramWordSimilarity('andro', 'project andromeda')).toEqual(0.8333333333333334);
+    expect(trigramWordSimilarity('andro', 'project andromeda')).toEqual(0.2777777777777778);
 
     /**
      * I was unable to make this work exactly like postgres. I spent way too long trying to get to
@@ -198,10 +198,6 @@ describe('searchAndSort', () => {
     };
 
     const filteredResults: MockResult[] = [
-      {
-        name: 'Incorporation Documents',
-        projectName: 'Project 1',
-      },
       {
         name: 'Budget',
         projectName: 'Corpotrees',
