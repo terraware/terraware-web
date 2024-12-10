@@ -139,7 +139,8 @@ describe('collectTablesForPreview', () => {
         type: 'SectionText',
         id: 371554,
         listPosition: 3,
-        textValue: '| Name | Role     | City           |\n| --- | -------- | -------------- |\n| John | PM       | New York       |\n| Jane || Paris |\n| Mike |Engineer| |',
+        textValue:
+          '| Name | Role     | City           |\n| --- | -------- | -------------- |\n| John | PM       | New York       |\n| Jane || Paris |\n| Mike |Engineer| |',
       },
       ...filler2,
     ];
@@ -204,7 +205,8 @@ describe('collectTablesForPreview', () => {
         type: 'SectionText',
         id: 371554,
         listPosition: 3,
-        textValue: '| Name | Role     | City           |\n| --- | -------- | -------------- |\n| John | PM       | New York       |\n| Jane ||',
+        textValue:
+          '| Name | Role     | City           |\n| --- | -------- | -------------- |\n| John | PM       | New York       |\n| Jane ||',
       },
       {
         type: 'SectionVariable',
@@ -230,18 +232,283 @@ describe('collectTablesForPreview', () => {
         headers: ['Name', 'Role', 'City'],
         rows: [
           ['John', 'PM', 'New York'],
-          ['Jane', '', {
-            type: 'SectionVariable',
-            id: 371555,
-            listPosition: 4,
-            variableId: 916,
-            usageType: 'Injection',
-            displayStyle: 'Inline',
-          }],
+          [
+            'Jane',
+            '',
+            {
+              type: 'SectionVariable',
+              id: 371555,
+              listPosition: 4,
+              variableId: 916,
+              usageType: 'Injection',
+              displayStyle: 'Inline',
+            },
+          ],
           ['Mike', 'Engineer', ''],
         ],
       },
       ...filler2,
+    ]);
+  });
+
+  it('collects the tables for use in document preview, section texts with a variable injection within other text within a cell', () => {
+    const inputValues: VariableValueValue[] = [
+      {
+        type: 'SectionText',
+        id: 687,
+        listPosition: 0,
+        textValue:
+          '| Document | Requirement | Applicability|\n| --- | --- | --- |\n| VCS Standard v4.7 (3.1.2) | Projects shall apply methodologies eligible under the VCS Program. | Project is eligible under ',
+      },
+      {
+        type: 'SectionVariable',
+        id: 688,
+        listPosition: 1,
+        variableId: 240,
+        usageType: 'Injection',
+        displayStyle: 'Inline',
+      },
+      {
+        type: 'SectionText',
+        id: 689,
+        listPosition: 2,
+        textValue: '. |\n',
+      },
+    ];
+
+    expect(collectTablesForPreview(inputValues)).toEqual([
+      {
+        startingValueId: 687,
+        headers: ['Document', 'Requirement', 'Applicability'],
+        rows: [
+          [
+            'VCS Standard v4.7 (3.1.2)',
+            'Projects shall apply methodologies eligible under the VCS Program.',
+            [
+              'Project is eligible under ',
+              {
+                type: 'SectionVariable',
+                id: 688,
+                listPosition: 1,
+                variableId: 240,
+                usageType: 'Injection',
+                displayStyle: 'Inline',
+              },
+              '. ',
+            ],
+          ],
+        ],
+      },
+    ]);
+  });
+
+  it('collects the tables for use in document preview, section texts with multiple variable injections within other text within a cell', () => {
+    const inputValues: VariableValueValue[] = [
+      {
+        type: 'SectionText',
+        id: 687,
+        listPosition: 0,
+        textValue:
+          '| Document | Requirement | Applicability|\n| --- | --- | --- |\n| VCS Standard v4.7 (3.1.4) | Projects and the implementation of project activities shall not lead to the violation of any applicable law, regardless of whether or not the law is enforced. | The project ',
+      },
+      {
+        type: 'SectionVariable',
+        id: 690,
+        listPosition: 3,
+        variableId: 245,
+        usageType: 'Injection',
+        displayStyle: 'Inline',
+      },
+      {
+        type: 'SectionText',
+        id: 691,
+        listPosition: 4,
+        textValue: ' complies with local and national laws and regulations, and ',
+      },
+      {
+        type: 'SectionVariable',
+        id: 692,
+        listPosition: 5,
+        variableId: 246,
+        usageType: 'Injection',
+        displayStyle: 'Inline',
+      },
+      {
+        type: 'SectionText',
+        id: 693,
+        listPosition: 6,
+        textValue: ' lead to the violation of any laws. |\n',
+      },
+    ];
+
+    expect(collectTablesForPreview(inputValues)).toEqual([
+      {
+        startingValueId: 687,
+        headers: ['Document', 'Requirement', 'Applicability'],
+        rows: [
+          [
+            'VCS Standard v4.7 (3.1.4)',
+            'Projects and the implementation of project activities shall not lead to the violation of any applicable law, regardless of whether or not the law is enforced.',
+            [
+              'The project ',
+              {
+                type: 'SectionVariable',
+                id: 690,
+                listPosition: 3,
+                variableId: 245,
+                usageType: 'Injection',
+                displayStyle: 'Inline',
+              },
+              ' complies with local and national laws and regulations, and ',
+              {
+                type: 'SectionVariable',
+                id: 692,
+                listPosition: 5,
+                variableId: 246,
+                usageType: 'Injection',
+                displayStyle: 'Inline',
+              },
+              ' lead to the violation of any laws. ',
+            ],
+          ],
+        ],
+      },
+    ]);
+  });
+
+  it('collects the tables for use in document preview, section texts with multiple variable injections within other text within multiple cells', () => {
+    const inputValues: VariableValueValue[] = [
+      {
+        type: 'SectionText',
+        id: 687,
+        listPosition: 0,
+        textValue:
+          '| Document | Requirement | Applicability|\n| --- | --- | --- |\n| VCS Standard v4.7 (3.1.2) | Projects shall apply methodologies eligible under the VCS Program. | Project is eligible under ',
+      },
+      {
+        type: 'SectionVariable',
+        id: 688,
+        listPosition: 1,
+        variableId: 240,
+        usageType: 'Injection',
+        displayStyle: 'Inline',
+      },
+      {
+        type: 'SectionText',
+        id: 689,
+        listPosition: 2,
+        textValue:
+          '. |\n| VCS Standard v4.7 (3.1.4) | Projects and the implementation of project activities shall not lead to the violation of any applicable law, regardless of whether or not the law is enforced. | The project ',
+      },
+      {
+        type: 'SectionVariable',
+        id: 690,
+        listPosition: 3,
+        variableId: 245,
+        usageType: 'Injection',
+        displayStyle: 'Inline',
+      },
+      {
+        type: 'SectionText',
+        id: 691,
+        listPosition: 4,
+        textValue: ' complies with local and national laws and regulations, and ',
+      },
+      {
+        type: 'SectionVariable',
+        id: 692,
+        listPosition: 5,
+        variableId: 246,
+        usageType: 'Injection',
+        displayStyle: 'Inline',
+      },
+      {
+        type: 'SectionText',
+        id: 693,
+        listPosition: 6,
+        textValue:
+          ' lead to the violation of any laws. |\n| VCS Standard v4.7 (3.2.1) | There are currently six AFOLU project categories eligible under the VCS Program: ARR, ALM, IFM, REDD+, ACoGS, and WRC. | The project is ',
+      },
+      {
+        type: 'SectionVariable',
+        id: 694,
+        listPosition: 7,
+        variableId: 218,
+        usageType: 'Injection',
+        displayStyle: 'Inline',
+      },
+      {
+        type: 'SectionText',
+        id: 695,
+        listPosition: 8,
+        textValue: ' and is therefore eligible under the VCS program. |',
+      },
+    ];
+
+    expect(collectTablesForPreview(inputValues)).toEqual([
+      {
+        startingValueId: 687,
+        headers: ['Document', 'Requirement', 'Applicability'],
+        rows: [
+          [
+            'VCS Standard v4.7 (3.1.2)',
+            'Projects shall apply methodologies eligible under the VCS Program.',
+            [
+              'Project is eligible under ',
+              {
+                type: 'SectionVariable',
+                id: 688,
+                listPosition: 1,
+                variableId: 240,
+                usageType: 'Injection',
+                displayStyle: 'Inline',
+              },
+              '. ',
+            ],
+          ],
+          [
+            'VCS Standard v4.7 (3.1.4)',
+            'Projects and the implementation of project activities shall not lead to the violation of any applicable law, regardless of whether or not the law is enforced.',
+            [
+              'The project ',
+              {
+                type: 'SectionVariable',
+                id: 690,
+                listPosition: 3,
+                variableId: 245,
+                usageType: 'Injection',
+                displayStyle: 'Inline',
+              },
+              ' complies with local and national laws and regulations, and ',
+              {
+                type: 'SectionVariable',
+                id: 692,
+                listPosition: 5,
+                variableId: 246,
+                usageType: 'Injection',
+                displayStyle: 'Inline',
+              },
+              ' lead to the violation of any laws. ',
+            ],
+          ],
+          [
+            'VCS Standard v4.7 (3.2.1)',
+            'There are currently six AFOLU project categories eligible under the VCS Program: ARR, ALM, IFM, REDD+, ACoGS, and WRC.',
+            [
+              'The project is ',
+              {
+                type: 'SectionVariable',
+                id: 694,
+                listPosition: 7,
+                variableId: 218,
+                usageType: 'Injection',
+                displayStyle: 'Inline',
+              },
+              ' and is therefore eligible under the VCS program. ',
+            ],
+          ],
+        ],
+      },
     ]);
   });
 });

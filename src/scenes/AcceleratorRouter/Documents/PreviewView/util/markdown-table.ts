@@ -28,7 +28,7 @@ type PreviewValueDisplayUnion = VariableValueValue | TableElement;
 type StartingValueId = VariableValueValue['id'];
 type ValueIdsMap = Map<VariableValueValue['id'], VariableValueValue | VariableValueValue[]>;
 
-type TableCell = string | SectionVariableVariableValue;
+type TableCell = string | SectionVariableVariableValue | (string | SectionVariableVariableValue)[];
 
 type TableElement = {
   startingValueId: StartingValueId;
@@ -76,19 +76,36 @@ const collectTableElement = (
       tableElement.valueIds.set(row.id, row);
       tableElement.rows.push(cells);
     } else if (cells.length < tableElement.headers.length) {
-      // This indicates a partial row, which means a variable reference must immediately follow
-      let nextRowPart: 'cell' | 'border' = 'cell';
+      // This indicates a partial row, which means we need to collect the remaining cells, which likely contain variables
       let nextValue: VariableValueValue | undefined;
+      let partialCell: TableCell = [];
+
+      // Before we continue looping through input values, we need to check if this row has any unfinished cells
+      let textValue = row.textValue.replaceAll('|', '');
+      for (const cell of cells) {
+        if (typeof cell !== 'string') {
+          continue;
+        }
+        textValue = textValue.replace(cell, '').trimStart();
+      }
+      if (textValue !== '') {
+        // This means there is a partial cell at the end of the row's text value
+        partialCell.push(textValue);
+      }
 
       while (cells.length < tableElement.headers.length && (nextValue = _inputValues.shift()) !== undefined) {
-        // The next value must be a variable reference
-        if (nextRowPart === 'cell' && isSectionVariableVariableValue(nextValue)) {
-          // This row is considered a table token
+        // A cell can contain a variable reference on its own or embedded within text
+        if (isSectionVariableVariableValue(nextValue)) {
+          // Keep track of table related values
           tableElement.valueIds.set(row.id, row);
+          tableElement.valueIds.set(nextValue.id, nextValue);
 
           // Here is where we add the variable reference value, for now we just use the ID
-          cells.push(nextValue);
-          tableElement.valueIds.set(nextValue.id, nextValue);
+          if (partialCell.length > 0) {
+            partialCell.push(nextValue);
+          } else {
+            cells.push(nextValue);
+          }
 
           // If the cell count is the same as the header count, this row is done.
           if (cells.length === tableElement.headers.length) {
@@ -97,17 +114,34 @@ const collectTableElement = (
             _inputValues.shift();
             continue;
           }
+        } else if (isSectionTextVariableValue(nextValue)) {
+          // Make sure we indicate this value is part of the table
+          tableElement.valueIds.set(nextValue.id, nextValue);
 
-          // Since the cell count still does not match, we must continue looking for tokens for this row
-          nextRowPart = 'border';
-        } else if (nextRowPart === 'cell' && isSectionTextVariableValue(nextValue)) {
-          // Attempt to continue collecting cells
-          cells = cells.concat(getMarkdownTableCellValues(nextValue.textValue));
-        } else if (nextRowPart === 'border' && isSectionTextVariableValue(nextValue)) {
-          // If this is a border, it must start with a "|"
-          if (nextValue.textValue.trim()[0] !== '|') {
-            return tableElement;
+          // If we are currently collecting a partial cell, the next value may or may not contain the border
+          if (partialCell.length > 0) {
+            const textValues = nextValue.textValue.split('|');
+
+            // There may be more cells after, so we only want the first split value added to the partial cell
+            partialCell.push(textValues[0]);
+            // If the next split value is an empty string, then we have reached the end of this cell
+            if (textValues[1] === '') {
+              // Push this partial cell and continue the loop
+              cells.push(partialCell);
+              partialCell = [];
+
+              // If the cell count is the same as the header count, this row is done.
+              if (cells.length === tableElement.headers.length) {
+                tableElement.rows.push(cells);
+              }
+
+              continue;
+            } else {
+              // If the next value does not contain the border, then this may be a multi-injection cell
+              continue;
+            }
           }
+
           // We can attempt to keep collecting cells
           cells = cells.concat(getMarkdownTableCellValues(nextValue.textValue));
 
@@ -117,12 +151,9 @@ const collectTableElement = (
           }
         } else {
           // This is not a properly formatted table
-          return tableElement;
+          break;
         }
       }
-    } else {
-      // The cell count is greater than the header count, this is not a correctly formatted table
-      return tableElement;
     }
   }
 
