@@ -55,7 +55,7 @@ export default function NoOrgLandingPage(): JSX.Element {
           onSuccess={(organization: Organization) => redirectAndNotify(organization)}
         />
         <EmptyStateContent
-          title={strings.TITLE_WELCOME}
+          title={strings.TITLE_WELCOME_EXCLAIM}
           subtitle={strings.SUBTITLE_GET_STARTED}
           listItems={listItemContents}
           buttonText={strings.CREATE_ORGANIZATION}
