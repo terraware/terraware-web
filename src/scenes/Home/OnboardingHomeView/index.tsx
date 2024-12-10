@@ -22,7 +22,7 @@ import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { OrganizationUser } from 'src/types/User';
-import { isAdmin, isContributor, isManagerOrHigher } from 'src/utils/organization';
+import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
 
 const OnboardingHomeView = () => {
   const { user } = useUser();
@@ -156,7 +156,7 @@ const OnboardingHomeView = () => {
                   <OnboardingCard rows={onboardingCardRows} />
                 </Grid>
 
-                {!isContributor(selectedOrganization) && (
+                {isAdmin(selectedOrganization) && (
                   <Grid item xs={12}>
                     <CTACard
                       buttonsContainerSx={{
