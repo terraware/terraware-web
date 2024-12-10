@@ -32,6 +32,32 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
   const theme = useTheme();
   const knowledgeBaseLinks = useKnowledgeBaseLinks();
 
+  const adminTaskNumberStyle = {
+    width: '46px',
+    height: '46px',
+    borderRadius: '50%',
+    backgroundColor: theme.palette.TwClrBgBrand,
+    color: 'white',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: '20px',
+    fontWeight: '700',
+    marginLeft: '16px',
+  };
+
+  const iconContainerStyle = {
+    background: theme.palette.TwClrBaseGray025,
+    borderRadius: '8px',
+    display: 'flex',
+    height: '88px',
+    width: '88px',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '8px',
+    marginLeft: '24px',
+  };
+
   return (
     <Box
       sx={{
@@ -111,38 +137,8 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                   }}
                 ></Box>
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                  {isAdmin(selectedOrganization) && (
-                    <Box
-                      sx={{
-                        width: '46px',
-                        height: '46px',
-                        borderRadius: '50%',
-                        backgroundColor: theme.palette.TwClrBgBrand,
-                        color: 'white',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        fontSize: '20px',
-                        fontWeight: '700',
-                        marginLeft: '16px',
-                      }}
-                    >
-                      {index + 1}
-                    </Box>
-                  )}
-                  <Box
-                    sx={{
-                      background: theme.palette.TwClrBaseGray025,
-                      borderRadius: '8px',
-                      display: 'flex',
-                      height: '88px',
-                      width: '88px',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      padding: '8px',
-                      marginLeft: '24px',
-                    }}
-                  >
+                  {isAdmin(selectedOrganization) && <Box sx={adminTaskNumberStyle}>{index + 1}</Box>}
+                  <Box sx={iconContainerStyle}>
                     <Icon size='large' name={row.icon} />
                   </Box>
                 </Box>
@@ -252,35 +248,10 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                 }}
               >
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                  {isAdmin(selectedOrganization) && (
-                    <Box
-                      sx={{
-                        width: '46px',
-                        height: '46px',
-                        borderRadius: '50%',
-                        backgroundColor: theme.palette.TwClrBgBrand,
-                        color: 'white',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        fontSize: '20px',
-                        fontWeight: '700',
-                        marginLeft: '16px',
-                      }}
-                    >
-                      {index + 1}
-                    </Box>
-                  )}
+                  {isAdmin(selectedOrganization) && <Box sx={adminTaskNumberStyle}>{index + 1}</Box>}
                   <Box
                     sx={{
-                      background: theme.palette.TwClrBaseGray025,
-                      borderRadius: '8px',
-                      display: 'flex',
-                      height: '88px',
-                      width: '88px',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      padding: '8px',
+                      ...iconContainerStyle,
                       marginLeft: isAdmin(selectedOrganization) ? '24px' : 0,
                     }}
                   >
@@ -393,36 +364,10 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                   }}
                 >
                   <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                    {isAdmin(selectedOrganization) && (
-                      <Box
-                        sx={{
-                          width: '46px',
-                          height: '46px',
-                          borderRadius: '50%',
-                          backgroundColor: theme.palette.TwClrBgBrand,
-                          color: 'white',
-                          display: 'flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          fontSize: '20px',
-                          fontWeight: '700',
-                          marginLeft: '16px',
-                        }}
-                      >
-                        {index + 1}
-                      </Box>
-                    )}
+                    {isAdmin(selectedOrganization) && <Box sx={adminTaskNumberStyle}>{index + 1}</Box>}
                     <Box
                       sx={{
-                        background: theme.palette.TwClrBaseGray025,
-                        borderRadius: '8px',
-                        display: 'flex',
-                        height: '88px',
-                        width: '88px',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        padding: '8px',
-                        marginLeft: '24px',
+                        ...iconContainerStyle,
                         marginRight: '24px',
                       }}
                     >
