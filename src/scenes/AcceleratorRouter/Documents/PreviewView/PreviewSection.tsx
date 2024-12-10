@@ -52,6 +52,28 @@ const PreviewSection = ({
                   {value.rows.map((row, rowIndex) => (
                     <tr key={rowIndex}>
                       {row.map((cell, cellIndex) => {
+                        if (Array.isArray(cell)) {
+                          return (
+                            <td key={cellIndex}>
+                              {cell.map((cellPart, cellPartIndex) => {
+                                if (isSectionVariableVariableValue(cellPart)) {
+                                  return (
+                                    <SectionVariable
+                                      key={cellPartIndex}
+                                      sectionVariable={sectionVariableWithRelevantVariables}
+                                      sectionVariableValue={cellPart}
+                                      projectId={projectId}
+                                      suppressCaptions={suppressCaptions}
+                                    />
+                                  );
+                                } else {
+                                  return cellPart;
+                                }
+                              })}
+                            </td>
+                          );
+                        }
+
                         if (isSectionVariableVariableValue(cell)) {
                           return (
                             <td key={cellIndex}>
