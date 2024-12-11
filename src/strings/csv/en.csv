@@ -79,7 +79,7 @@ ADD_SEED_BANK_SUBTITLE,How do you process and store your seeds? Set up your seed
 ADD_SEED_BANKS,Add Seed Banks,
 ADD_SPECIES,Add Species,
 ADD_SPECIES_MANUALLY_DESCRIPTION,"Enter scientific name and other optional fields manually, one species at a time.",
-ADD_SPECIES_ONBOARDING_DESCRIPTION,Manage species that your organization collects and plants.
+ADD_SPECIES_ONBOARDING_DESCRIPTION,Manage species that your organization collects and plants.,
 ADD_SPECIES_TO_PROJECT,Add Species to Project,
 ADD_SUB_LOCATION,Add Sub-Location,
 ADD_SUBSET_WEIGHT_AND_COUNT,Add Subset Weight And Count,
@@ -646,7 +646,7 @@ GERMINATION_QUANTITY_AFTER,Germination Quantity (After),
 GERMINATION_QUANTITY_BEFORE,Germination Quantity (Before),
 GERMINATION_RATE,Germination Rate,
 GET_STARTED,Get Started,
-GET_STARTED_SUBTITLE,"To get started, add people to your organization and add the species of the seeds and plants that your organization manages."
+GET_STARTED_SUBTITLE,"To get started, add people to your organization and add the species of the seeds and plants that your organization manages.",
 GIS,GIS,
 GLOBAL_ROLE_ACCELERATOR_ADMIN,Accelerator Admin,
 GLOBAL_ROLE_READ_ONLY,Read Only,
