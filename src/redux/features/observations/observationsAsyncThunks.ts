@@ -60,3 +60,15 @@ export const requestReplaceObservationPlot = createAsyncThunk(
     return rejectWithValue(response.error || strings.GENERIC_ERROR);
   }
 );
+
+export const requestAbandonObservation = createAsyncThunk(
+  'abandonObservation',
+  async ({ observationId }: { observationId: number }, { rejectWithValue }) => {
+    const response: Response = await ObservationsService.abandonObservation(observationId);
+    if (response.requestSucceeded) {
+      return response;
+    }
+
+    return rejectWithValue(response.error || strings.GENERIC_ERROR);
+  }
+);

@@ -20,6 +20,7 @@ const OBSERVATIONS_ENDPOINT = '/api/v1/tracking/observations';
 const OBSERVATION_ENDPOINT = '/api/v1/tracking/observations/{observationId}';
 const OBSERVATION_EXPORT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots';
 const REPLACE_OBSERVATION_PLOT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/replace';
+const ABANDON_OBSERVATION_ENDPOINT = '/api/v1/tracking/observations/{observationId}/abandon';
 
 type ObservationsResultsResponsePayload =
   paths[typeof OBSERVATIONS_RESULTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -167,6 +168,13 @@ const replaceObservationPlot = async (
   };
 };
 
+const abandonObservation = async (observationId: number): Promise<Response> => {
+  return await HttpService.root(ABANDON_OBSERVATION_ENDPOINT).post({
+    urlReplacements: {
+      '{observationId}': observationId.toString(),
+    },
+  });
+};
 /**
  * Exported functions
  */
@@ -178,6 +186,7 @@ const ObservationsService = {
   replaceObservationPlot,
   rescheduleObservation,
   scheduleObservation,
+  abandonObservation,
 };
 
 export default ObservationsService;

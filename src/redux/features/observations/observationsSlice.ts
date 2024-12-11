@@ -4,6 +4,7 @@ import { AsyncRequest, StatusT, buildReducers } from 'src/redux/features/asyncUt
 import { Observation, ObservationResultsPayload, ReplaceObservationPlotResponsePayload } from 'src/types/Observations';
 
 import {
+  requestAbandonObservation,
   requestReplaceObservationPlot,
   requestRescheduleObservation,
   requestScheduleObservation,
@@ -110,6 +111,19 @@ const replaceObservationPlotSlice = createSlice({
   extraReducers: buildReducers<ReplaceObservationPlotResponsePayload>(requestReplaceObservationPlot),
 });
 
+// Abandon observation
+
+type AbandonObservationState = Record<string, AsyncRequest>;
+
+const initialAbandonObservationState: AbandonObservationState = {};
+
+const abandonObservationSlice = createSlice({
+  name: 'abandonObservation',
+  initialState: initialAbandonObservationState,
+  reducers: {},
+  extraReducers: buildReducers(requestAbandonObservation),
+});
+
 const observationsReducers = {
   observationsResults: observationsResultsSlice.reducer,
   observations: observationsSlice.reducer,
@@ -117,6 +131,7 @@ const observationsReducers = {
   scheduleObservation: scheduleObservationSlice.reducer,
   rescheduleObservation: rescheduleObservationSlice.reducer,
   replaceObservationPlot: replaceObservationPlotSlice.reducer,
+  abandonObservation: abandonObservationSlice.reducer,
 };
 
 export default observationsReducers;
