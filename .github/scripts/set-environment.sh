@@ -14,6 +14,7 @@ if [[ "$GITHUB_REF" =~ refs/tags/(v[0-9]+\.[0-9.]+) ]]; then
 elif [[ "$GITHUB_REF" == refs/heads/main ]]; then
   export TIER=STAGING
   export IS_CD=true
+  APP_VERSION=x$APP_VERSION
 elif [[ "$GITHUB_REF" == refs/heads/qa ]]; then
   export TIER=QA
   export IS_CD=true
