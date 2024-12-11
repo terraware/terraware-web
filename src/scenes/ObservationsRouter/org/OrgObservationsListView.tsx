@@ -15,6 +15,7 @@ import strings from 'src/strings';
 import { Observation, ObservationPlantingZoneResults, ObservationResults } from 'src/types/Observations';
 import { isAdmin } from 'src/utils/organization';
 
+import EndObservationModal from './EndObservationModal';
 import OrgObservationsRenderer from './OrgObservationsRenderer';
 
 const defaultColumns = (): TableColumnType[] => [
@@ -88,6 +89,8 @@ export default function OrgObservationsListView({
   const theme = useTheme();
   const navigate = useNavigate();
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
+  const [endObservationModalOpened, setEndObservationModalOpened] = useState(false);
+  const [selectedObservation, setSelectedObservation] = useState<Observation>();
 
   const observations: Observation[] | undefined = useAppSelector((state) =>
     selectPlantingSiteObservations(state, plantingSiteId)
@@ -162,8 +165,25 @@ export default function OrgObservationsListView({
     );
   }, [endDates, observationsResults]);
 
+  const endObservation = (observation: Observation) => {
+    setEndObservationModalOpened(true);
+    setSelectedObservation(observation);
+  };
+
+  const onCloseModal = () => {
+    setEndObservationModalOpened(false);
+    setSelectedObservation(undefined);
+  };
+
+  const onEndObservation = () => {
+    return true;
+  };
+
   return (
     <Box>
+      {endObservationModalOpened && selectedObservation && (
+        <EndObservationModal observation={selectedObservation} onClose={onCloseModal} onSave={onEndObservation} />
+      )}
       <Table
         id='org-observations-table'
         columns={columns}
@@ -174,7 +194,10 @@ export default function OrgObservationsListView({
           activeLocale,
           goToRescheduleObservation,
           (observationId: number) => exportObservation(observationId, 'csv'),
-          (observationId: number) => exportObservation(observationId, 'gpx')
+          (observationId: number) => exportObservation(observationId, 'gpx'),
+          (observation: Observation) => {
+            endObservation(observation);
+          }
         )}
       />
     </Box>
