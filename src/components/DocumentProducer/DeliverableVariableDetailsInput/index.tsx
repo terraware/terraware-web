@@ -37,6 +37,7 @@ export type DeliverableVariableDetailsInputProps = {
   setImages: (values: VariableValueImageValue[]) => void;
   setNewImages: (values: PhotoWithAttributes[]) => void;
   setValues: (values: VariableValueValue[]) => void;
+  setVariableHasError: (variableId: number, value: boolean) => void;
   variable: Variable;
   addRemovedValue: (value: VariableValueValue) => void;
   projectId: number;
@@ -51,6 +52,7 @@ const DeliverableVariableDetailsInput = ({
   setImages,
   setNewImages,
   setValues,
+  setVariableHasError,
   variable,
   addRemovedValue,
   projectId,
@@ -294,6 +296,14 @@ const DeliverableVariableDetailsInput = ({
         return '';
     }
   }, [activeLocale, validateFields, variable, value]);
+
+  useEffect(() => {
+    if (errorMessage) {
+      setVariableHasError(variable.id, true);
+    } else {
+      setVariableHasError(variable.id, false);
+    }
+  }, [errorMessage]);
 
   return (
     <>

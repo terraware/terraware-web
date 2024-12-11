@@ -49,6 +49,7 @@ type QuestionBoxProps = {
   setImages: (values: VariableValueImageValue[]) => void;
   setNewImages: (values: PhotoWithAttributes[]) => void;
   setValues: (values: VariableValueValue[]) => void;
+  setVariableHasError: (variableId: number, value: boolean) => void;
   variable: VariableWithValues;
   validateFields: boolean;
 };
@@ -65,6 +66,7 @@ const QuestionBox = ({
   setImages,
   setNewImages,
   setValues,
+  setVariableHasError,
   variable,
   validateFields,
 }: QuestionBoxProps): JSX.Element => {
@@ -134,6 +136,7 @@ const QuestionBox = ({
             setDeletedImages={setDeletedImages}
             setImages={setImages}
             setNewImages={setNewImages}
+            setVariableHasError={setVariableHasError}
             setValues={setValues}
             variable={variable}
             addRemovedValue={addRemovedValue}
@@ -195,6 +198,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   }, [filteredVariablesWithValues]);
 
   const {
+    hasVariableError,
     pendingVariableValues,
     setCellValues,
     setDeletedImages,
@@ -202,6 +206,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     setNewImages,
     setRemovedValue,
     setValues,
+    setVariableHasError,
     stagedVariableWithValues,
     update,
     updateSuccess,
@@ -280,6 +285,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
       onCancel={exit}
       onSave={handleOnSave}
       saveID={'saveEditQuestionsDeliverable'}
+      saveDisabled={hasVariableError}
     >
       <Box display='flex' flexDirection='column' flexGrow={1}>
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
@@ -309,6 +315,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
                   setImages={(newValues: VariableValueImageValue[]) => setImages(variableWithValues.id, newValues)}
                   setNewImages={(newValues: PhotoWithAttributes[]) => setNewImages(variableWithValues.id, newValues)}
                   setValues={(newValues: VariableValueValue[]) => setValues(variableWithValues.id, newValues)}
+                  setVariableHasError={setVariableHasError}
                   variable={variableWithValues}
                   validateFields={false}
                 />
