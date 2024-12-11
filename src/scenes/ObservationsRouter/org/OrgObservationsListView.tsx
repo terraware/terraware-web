@@ -8,12 +8,18 @@ import sanitize from 'sanitize-filename';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
-import { selectPlantingSiteObservations } from 'src/redux/features/observations/observationsSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { requestAbandonObservation } from 'src/redux/features/observations/observationsAsyncThunks';
+import {
+  selectAbandonObservation,
+  selectPlantingSiteObservations,
+} from 'src/redux/features/observations/observationsSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ObservationsService } from 'src/services';
 import strings from 'src/strings';
 import { Observation, ObservationPlantingZoneResults, ObservationResults } from 'src/types/Observations';
+import { getShortDate } from 'src/utils/dateFormatter';
 import { isAdmin } from 'src/utils/organization';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import EndObservationModal from './EndObservationModal';
 import OrgObservationsRenderer from './OrgObservationsRenderer';
@@ -90,7 +96,28 @@ export default function OrgObservationsListView({
   const navigate = useNavigate();
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
   const [endObservationModalOpened, setEndObservationModalOpened] = useState(false);
-  const [selectedObservation, setSelectedObservation] = useState<Observation>();
+  const [selectedObservation, setSelectedObservation] = useState<any>();
+  const dispatch = useAppDispatch();
+  const [requestId, setRequestId] = useState('');
+  const abandonObservationResponse = useAppSelector((state) => selectAbandonObservation(state, requestId));
+  const snackbar = useSnackbar();
+
+  useEffect(() => {
+    if (abandonObservationResponse?.status === 'success' && selectedObservation) {
+      snackbar.toastSuccess(
+        strings.formatString(
+          strings.OBSERVATION_ENDED_MESSAGE,
+          getShortDate(selectedObservation.endDate, activeLocale),
+          strings.OBSERVATION_ENDED
+        )
+      );
+      setSelectedObservation(undefined);
+    }
+    if (abandonObservationResponse?.status === 'error') {
+      snackbar.toastError();
+      setSelectedObservation(undefined);
+    }
+  }, [abandonObservationResponse]);
 
   const observations: Observation[] | undefined = useAppSelector((state) =>
     selectPlantingSiteObservations(state, plantingSiteId)
@@ -176,7 +203,11 @@ export default function OrgObservationsListView({
   };
 
   const onEndObservation = () => {
-    return true;
+    if (selectedObservation) {
+      const request = dispatch(requestAbandonObservation({ observationId: selectedObservation.observationId }));
+      setRequestId(request.requestId);
+      setEndObservationModalOpened(false);
+    }
   };
 
   return (
@@ -195,7 +226,7 @@ export default function OrgObservationsListView({
           goToRescheduleObservation,
           (observationId: number) => exportObservation(observationId, 'csv'),
           (observationId: number) => exportObservation(observationId, 'gpx'),
-          (observation: Observation) => {
+          (observation: any) => {
             endObservation(observation);
           }
         )}
