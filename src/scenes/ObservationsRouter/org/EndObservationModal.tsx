@@ -6,7 +6,6 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { Observation } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 
 export interface EndObservationModalProps {
