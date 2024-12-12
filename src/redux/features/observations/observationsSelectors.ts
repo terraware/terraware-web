@@ -13,7 +13,7 @@ import {
 
 import { mergeObservations, searchZones } from './utils';
 
-export const ALL_STATES: ObservationState[] = ['Completed', 'Overdue', 'InProgress'];
+export const ALL_STATES: ObservationState[] = ['Abandoned', 'Completed', 'Overdue', 'InProgress'];
 
 /**
  * Observations results selectors below
