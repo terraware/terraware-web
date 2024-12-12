@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Dispatch } from 'redux';
 
 import { RootState } from 'src/redux/rootReducer';
 import { ObservationsService } from 'src/services';
+import strings from 'src/strings';
 
 import {
   setObservationsAction,
@@ -75,3 +77,16 @@ export const requestObservations = (organizationId: number) => {
     }
   };
 };
+
+export const requestGetPlantingSiteObservationsSummaries = createAsyncThunk(
+  'observations/summaries',
+  async (plantingSiteId: number, { rejectWithValue }) => {
+    const response = await ObservationsService.getPlantingSiteObservationsSummaries(plantingSiteId);
+
+    if (response !== null && response.requestSucceeded && response?.data?.summaries !== undefined) {
+      return response.data.summaries;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import { useTheme } from '@mui/material';
-import { Chart as ChartJS, ChartTypeRegistry } from 'chart.js';
+import { Chart as ChartJS, ChartTypeRegistry, ScaleType } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { AnnotationPluginOptions } from 'chartjs-plugin-annotation/types/options';
 
@@ -44,6 +44,8 @@ export type BaseChartProps = {
   xAxisLabel?: string;
   yAxisLabel?: string;
   yStepSize?: number;
+  xAxisType?: ScaleType;
+  lineColor?: string;
 };
 
 export type ChartProps = BaseChartProps & {
@@ -84,9 +86,9 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     barAnnotations,
     yLimits,
     showLegend,
-    xAxisLabel,
-    yAxisLabel,
     yStepSize,
+    xAxisType,
+    lineColor,
   } = props;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [chart, setChart] = useState<ChartJS | null>(null);
@@ -99,16 +101,13 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     // used to prevent double render on dev scope (react 18)
     if (!initialized.current) {
       initialized.current = true;
-      const getAxisLabelProps = (label?: string) => {
-        if (!label) {
+
+      const getAxisType = () => {
+        if (!xAxisType) {
           return {};
         }
         return {
-          title: {
-            display: true,
-            align: 'center',
-            text: label,
-          },
+          type: xAxisType,
         };
       };
 
@@ -127,6 +126,14 @@ function ChartContent(props: ChartContentProps): JSX.Element {
                 datasets: [],
               },
               options: {
+                elements: {
+                  point: {
+                    radius: 0,
+                  },
+                  line: {
+                    borderColor: lineColor,
+                  },
+                },
                 maintainAspectRatio: false,
                 layout: {
                   padding: {
@@ -138,9 +145,10 @@ function ChartContent(props: ChartContentProps): JSX.Element {
                 scales: {
                   x: {
                     display: type === 'pie' ? false : undefined,
-                    ...getAxisLabelProps(xAxisLabel),
+                    ...getAxisType(),
                   },
                   y: {
+                    grace: '5%',
                     ticks: {
                       precision: 0,
                       stepSize: yStepSize,
@@ -148,7 +156,6 @@ function ChartContent(props: ChartContentProps): JSX.Element {
                     min: yLimits?.min,
                     max: yLimits?.max,
                     display: type === 'pie' ? false : undefined,
-                    ...getAxisLabelProps(yAxisLabel),
                   },
                 },
               },
