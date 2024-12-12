@@ -1,3 +1,4 @@
+0b085091eaa SW-6342 Keep track of variable errors in the useProjectVariablesUpdate hook (#3436)
 6739669725e Prefix staging build app version with "x" (#3437)
 8774464e947 Home Update: Initial Onboarding (#3395)
 d5aa4886f43 SW-6302 Make it possible to have cells with any number of section text and variable values (#3433)

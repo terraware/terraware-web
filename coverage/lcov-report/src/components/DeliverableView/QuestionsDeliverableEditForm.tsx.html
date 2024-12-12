@@ -387,7 +387,14 @@
 <a name='L322'></a><a href='#L322'>322</a>
 <a name='L323'></a><a href='#L323'>323</a>
 <a name='L324'></a><a href='#L324'>324</a>
-<a name='L325'></a><a href='#L325'>325</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a>
+<a name='L327'></a><a href='#L327'>327</a>
+<a name='L328'></a><a href='#L328'>328</a>
+<a name='L329'></a><a href='#L329'>329</a>
+<a name='L330'></a><a href='#L330'>330</a>
+<a name='L331'></a><a href='#L331'>331</a>
+<a name='L332'></a><a href='#L332'>332</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -442,6 +449,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -457,6 +465,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -466,6 +475,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -596,6 +606,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -681,6 +693,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -698,6 +711,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -762,6 +776,7 @@ type QuestionBoxProps = {
   setImages: (values: VariableValueImageValue[]) =&gt; void;
   setNewImages: (values: PhotoWithAttributes[]) =&gt; void;
   setValues: (values: VariableValueValue[]) =&gt; void;
+  setVariableHasError: (variableId: number, value: boolean) =&gt; void;
   variable: VariableWithValues;
   validateFields: boolean;
 };
@@ -778,6 +793,7 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
   setImages,
   setNewImages,
   setValues,
+  setVariableHasError,
   variable,
   validateFields,
 }: QuestionBoxProps): JSX.Element =&gt; {
@@ -847,6 +863,7 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
             setDeletedImages={setDeletedImages}
             setImages={setImages}
             setNewImages={setNewImages}
+            setVariableHasError={setVariableHasError}
             setValues={setValues}
             variable={variable}
             addRemovedValue={addRemovedValue}
@@ -908,6 +925,7 @@ const QuestionsDeliverableEditForm = <span class="cstat-no" title="statement not
   }, [filteredVariablesWithValues]);
 &nbsp;
   const {
+    hasVariableError,
     pendingVariableValues,
     setCellValues,
     setDeletedImages,
@@ -915,6 +933,7 @@ const QuestionsDeliverableEditForm = <span class="cstat-no" title="statement not
     setNewImages,
     setRemovedValue,
     setValues,
+    setVariableHasError,
     stagedVariableWithValues,
     update,
     updateSuccess,
@@ -993,6 +1012,7 @@ const QuestionsDeliverableEditForm = <span class="cstat-no" title="statement not
       onCancel={exit}
       onSave={handleOnSave}
       saveID={'saveEditQuestionsDeliverable'}
+      saveDisabled={hasVariableError}
     &gt;
       &lt;Box display='flex' flexDirection='column' flexGrow={1}&gt;
         &lt;Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}&gt;
@@ -1022,6 +1042,7 @@ const QuestionsDeliverableEditForm = <span class="cstat-no" title="statement not
                   setImages={<span class="fstat-no" title="function not covered" >(n</span>ewValues: VariableValueImageValue[]) =&gt; <span class="cstat-no" title="statement not covered" >setImages(variableWithValues.id, newValues)}</span>
                   setNewImages={<span class="fstat-no" title="function not covered" >(n</span>ewValues: PhotoWithAttributes[]) =&gt; <span class="cstat-no" title="statement not covered" >setNewImages(variableWithValues.id, newValues)}</span>
                   setValues={<span class="fstat-no" title="function not covered" >(n</span>ewValues: VariableValueValue[]) =&gt; <span class="cstat-no" title="statement not covered" >setValues(variableWithValues.id, newValues)}</span>
+                  setVariableHasError={setVariableHasError}
                   variable={variableWithValues}
                   validateFields={false}
                 /&gt;
@@ -1042,7 +1063,7 @@ export default QuestionsDeliverableEditForm;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-11T22:39:29.290Z
+                at 2024-12-12T18:27:58.917Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
