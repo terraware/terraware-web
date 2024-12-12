@@ -1,3 +1,4 @@
+8b55923fae2 Allow for "Abandoned" observations to be selected from state (#3439)
 4e3fbf25dd9 SW-6333 Ability to End Observation without all plots observed (#3438)
 666e8ad620c Updated translations from Phrase (#3435)
 0b085091eaa SW-6342 Keep track of variable errors in the useProjectVariablesUpdate hook (#3436)
