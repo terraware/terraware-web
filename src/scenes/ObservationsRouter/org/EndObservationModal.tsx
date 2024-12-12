@@ -12,7 +12,7 @@ import { getShortDate } from 'src/utils/dateFormatter';
 export interface EndObservationModalProps {
   onClose: () => void;
   onSave: () => void;
-  observation: Observation;
+  observation: any;
 }
 
 export default function EndObservationModal(props: EndObservationModalProps): JSX.Element {
@@ -44,7 +44,7 @@ export default function EndObservationModal(props: EndObservationModalProps): JS
       <Typography marginTop={3} color={theme.palette.TwClrTxt}>
         {strings.formatString(
           strings.END_OBSERVATION_MODAL_QUESTION,
-          getShortDate(observation.endDate, selectedLocale)
+          getShortDate(observation.observationDate, selectedLocale)
         )}
       </Typography>
     </DialogBox>

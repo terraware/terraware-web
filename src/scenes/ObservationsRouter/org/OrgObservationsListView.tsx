@@ -83,11 +83,13 @@ const scheduleObservationsColumn = (): TableColumnType[] => [
 export type OrgObservationsListViewProps = {
   plantingSiteId: number;
   observationsResults?: ObservationResults[];
+  reload: () => void;
 };
 
 export default function OrgObservationsListView({
   observationsResults,
   plantingSiteId,
+  reload,
 }: OrgObservationsListViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
@@ -107,11 +109,12 @@ export default function OrgObservationsListView({
       snackbar.toastSuccess(
         strings.formatString(
           strings.OBSERVATION_ENDED_MESSAGE,
-          getShortDate(selectedObservation.endDate, activeLocale),
+          getShortDate(selectedObservation.observationDate, activeLocale),
           strings.OBSERVATION_ENDED
         )
       );
       setSelectedObservation(undefined);
+      reload();
     }
     if (abandonObservationResponse?.status === 'error') {
       snackbar.toastError();

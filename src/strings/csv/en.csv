@@ -1,4 +1,5 @@
 key_name,en,comment
+ABANDONED,Abandoned,
 ACCELERATOR,Accelerator,
 ACCELERATOR_ADMIN,Accelerator Admin,
 ACCELERATOR_CONSOLE,Accelerator Console,
@@ -303,6 +304,7 @@ COOKIES_ACCEPT,Accept Cookies,
 COOKIES_DECLINE,Decline Cookies,
 COOKIES_DESCRIPTION,Terraware uses performance cookies to analyze and improve the quality of the site and enhance your user experience.,
 COOKIES_LEARN_MORE,Learn more about our cookie policy.,
+COMPLETED_ENDED,Completed (Ended),
 COUNT,Count,
 COUNTRY,Country,
 COUNTRY_REQUIRED,Country *,

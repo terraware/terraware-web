@@ -101,6 +101,8 @@ export const getStatus = (state: ObservationState): string => {
       return strings.IN_PROGRESS;
     case 'Overdue':
       return strings.OVERDUE;
+    case 'Abandoned':
+      return strings.COMPLETED_ENDED;
     default:
       return strings.UPCOMING;
   }
