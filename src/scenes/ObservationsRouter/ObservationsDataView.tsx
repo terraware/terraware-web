@@ -23,10 +23,11 @@ export type ObservationsDataViewProps = SearchProps & {
   selectedPlantingSite?: PlantingSite;
   setView: (view: View) => void;
   view?: View;
+  reload: () => void;
 };
 
 export default function ObservationsDataView(props: ObservationsDataViewProps): JSX.Element {
-  const { selectedPlantingSiteId, selectedPlantingSite, setFilterOptions, setView, view } = props;
+  const { selectedPlantingSiteId, selectedPlantingSite, setFilterOptions, setView, view, reload } = props;
   const { ...searchProps }: SearchProps = props;
   const defaultTimeZone = useDefaultTimeZone();
   const { activeLocale } = useLocalization();
@@ -70,6 +71,8 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
         mappedValue = 'InProgress';
       } else if (curr === strings.OVERDUE) {
         mappedValue = 'Overdue';
+      } else if (curr === strings.ABANDONED) {
+        mappedValue = 'Abandoned';
       }
       return mappedValue ? [...acc, mappedValue] : acc;
     }, [] as ObservationState[]);
@@ -78,7 +81,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
       setStatus(mappedValues);
     } else {
       // if user clears filter, get specific statuses, we don't want to see Upcoming
-      setStatus(['Completed', 'InProgress', 'Overdue']);
+      setStatus(['Completed', 'InProgress', 'Overdue', 'Abandoned']);
     }
   }, [searchProps.filtersProps?.filters.status]);
 
@@ -86,7 +89,11 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
     <ListMapView
       initialView='list'
       list={
-        <OrgObservationsListView observationsResults={observationsResults} plantingSiteId={selectedPlantingSiteId} />
+        <OrgObservationsListView
+          observationsResults={observationsResults}
+          plantingSiteId={selectedPlantingSiteId}
+          reload={reload}
+        />
       }
       map={
         selectedPlantingSite && selectedPlantingSiteId !== -1 ? (

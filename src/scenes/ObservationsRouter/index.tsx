@@ -145,9 +145,12 @@ const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Elemen
       />
       <Route
         path={'/:plantingSiteId'}
-        element={<ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />}
+        element={<ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} reload={reload} />}
       />
-      <Route path={'/*'} element={<ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />} />
+      <Route
+        path={'/*'}
+        element={<ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} reload={reload} />}
+      />
     </Routes>
   );
 };

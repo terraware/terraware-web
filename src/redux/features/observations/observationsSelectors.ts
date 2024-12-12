@@ -205,3 +205,5 @@ export const selectNextObservation = createCachedSelector(
     searchObservations(state, plantingSiteId, defaultTimeZoneId, '', [], ['Upcoming']),
   (observationsResults: ObservationResults[] | undefined) => observationsResults?.[0]
 )((state: RootState, plantingSiteId: number, defaultTimeZoneId: string) => `${plantingSiteId}-${defaultTimeZoneId}`);
+
+export const selectAbandonObservation = (state: RootState, requestId: string) => state.abandonObservation[requestId];
