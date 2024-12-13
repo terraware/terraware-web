@@ -39,7 +39,7 @@ export default function PlantingSiteSelectTypeModal(props: PlantingSiteSelectTyp
     <DialogBox
       scrolled
       onClose={handleClose}
-      open={open}
+      open={true}
       title={strings.SELECT_PLANTING_SITE_TYPE}
       size={'medium'}
       middleButtons={[

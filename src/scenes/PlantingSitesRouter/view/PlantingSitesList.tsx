@@ -19,6 +19,7 @@ import { PlantingSiteSearchResult } from 'src/types/Tracking';
 import { sortResults } from 'src/utils/searchAndSort';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
+import useQuery from 'src/utils/useQuery';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import PlantingSitesTable from './PlantingSitesTable';
@@ -28,6 +29,7 @@ export default function PlantingSitesList(): JSX.Element {
   const timeZones = useTimeZones();
   const defaultTimeZone = useDefaultTimeZone().get();
   const contentRef = useRef(null);
+  const query = useQuery();
   const { activeLocale } = useLocalization();
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
   const [plantingSites, setPlantingSites] = useState<SearchResponseElement[] | null>();
@@ -41,6 +43,11 @@ export default function PlantingSitesList(): JSX.Element {
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const { isMobile } = useDeviceInfo();
 
+  useEffect(() => {
+    if (query.get('new')) {
+      setPlantingSiteTypeSelectOpen(true);
+    }
+  }, [query]);
   const filtersEmpty = useCallback(() => !filters.projectIds || filters.projectIds.length === 0, [filters]);
 
   /**
@@ -137,7 +144,7 @@ export default function PlantingSitesList(): JSX.Element {
 
   return (
     <TfMain>
-      <PlantingSiteTypeSelect open={plantingSiteTypeSelectOpen} onClose={() => setPlantingSiteTypeSelectOpen(false)} />
+      {plantingSiteTypeSelectOpen && <PlantingSiteTypeSelect onClose={() => setPlantingSiteTypeSelectOpen(false)} />}
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Box sx={{ padding: theme.spacing(0, 0, 4, 3), display: 'flex', justifyContent: 'space-between' }}>
           <Grid item xs={6}>
