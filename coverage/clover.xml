@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1734120816472" clover="3.2.0">
-  <project timestamp="1734120816472" name="All files">
-    <metrics statements="26812" coveredstatements="1192" conditionals="18112" coveredconditionals="336" methods="8248" coveredmethods="195" elements="53172" coveredelements="1723" complexity="0" loc="26812" ncloc="26812" packages="239" files="1130" classes="1130"/>
+<coverage generated="1734121101561" clover="3.2.0">
+  <project timestamp="1734121101561" name="All files">
+    <metrics statements="26814" coveredstatements="1192" conditionals="18119" coveredconditionals="336" methods="8249" coveredmethods="195" elements="53182" coveredelements="1723" complexity="0" loc="26814" ncloc="26814" packages="239" files="1130" classes="1130"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -19331,7 +19331,7 @@
       </file>
     </package>
     <package name="src.scenes.Home.OnboardingHomeView">
-      <metrics statements="53" coveredstatements="0" conditionals="96" coveredconditionals="0" methods="18" coveredmethods="0"/>
+      <metrics statements="55" coveredstatements="0" conditionals="103" coveredconditionals="0" methods="19" coveredmethods="0"/>
       <file name="OnboardingCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/OnboardingHomeView/OnboardingCard.tsx">
         <metrics statements="9" coveredstatements="0" conditionals="66" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="29" count="0" type="stmt"/>
@@ -19345,7 +19345,7 @@
         <line num="109" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/OnboardingHomeView/index.tsx">
-        <metrics statements="44" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="16" coveredmethods="0"/>
+        <metrics statements="46" coveredstatements="0" conditionals="37" coveredconditionals="0" methods="17" coveredmethods="0"/>
         <line num="27" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
@@ -19355,41 +19355,43 @@
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
-        <line num="39" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="40" count="0" type="stmt"/>
-        <line num="41" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="42" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
-        <line num="52" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="57" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
-        <line num="62" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
         <line num="63" count="0" type="stmt"/>
         <line num="64" count="0" type="stmt"/>
-        <line num="67" count="0" type="stmt"/>
-        <line num="68" count="0" type="cond" truecount="0" falsecount="3"/>
-        <line num="72" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="69" count="0" type="cond" truecount="0" falsecount="3"/>
         <line num="73" count="0" type="stmt"/>
-        <line num="76" count="0" type="stmt"/>
-        <line num="79" count="0" type="stmt"/>
-        <line num="80" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="86" count="0" type="stmt"/>
-        <line num="92" count="0" type="stmt"/>
-        <line num="104" count="0" type="stmt"/>
-        <line num="120" count="0" type="stmt"/>
-        <line num="131" count="0" type="stmt"/>
-        <line num="134" count="0" type="stmt"/>
-        <line num="136" count="0" type="stmt"/>
-        <line num="174" count="0" type="stmt"/>
-        <line num="175" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="81" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="93" count="0" type="stmt"/>
+        <line num="105" count="0" type="stmt"/>
+        <line num="121" count="0" type="stmt"/>
+        <line num="132" count="0" type="stmt"/>
+        <line num="135" count="0" type="stmt"/>
+        <line num="137" count="0" type="stmt"/>
+        <line num="183" count="0" type="stmt"/>
         <line num="184" count="0" type="stmt"/>
-        <line num="185" count="0" type="stmt"/>
+        <line num="193" count="0" type="stmt"/>
+        <line num="201" count="0" type="stmt"/>
+        <line num="202" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.Home.ParticipantHomeView">
