@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Container, Grid } from '@mui/material';
+import { Box, Container, Grid, Typography } from '@mui/material';
 import { IconName } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -27,12 +27,13 @@ import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
 const OnboardingHomeView = () => {
   const { user } = useUser();
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
-  const { isMobile } = useDeviceInfo();
+  const { isMobile, isDesktop } = useDeviceInfo();
   const mixpanel = useMixpanel();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [people, setPeople] = useState<OrganizationUser[]>();
   const [allSpecies, setAllSpecies] = useState<Species[]>();
+  const [showAcceleratorCard, setShowAcceleratorCard] = useState(true);
 
   useEffect(() => {
     const populatePeople = async () => {
@@ -159,25 +160,41 @@ const OnboardingHomeView = () => {
                   <OnboardingCard rows={onboardingCardRows} />
                 </Grid>
 
-                {isAdmin(selectedOrganization) && (
+                {isAdmin(selectedOrganization) && showAcceleratorCard && (
                   <Grid item xs={12}>
                     <CTACard
                       buttonsContainerSx={{
                         width: isMobile ? '100%' : 'auto',
                       }}
-                      description={strings.formatString(
-                        strings.FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,
-                        <Link
-                          fontSize='16px'
-                          target='_blank'
-                          onClick={() => {
-                            mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_TF_LINK);
-                            window.open(ACCELERATOR_LINK, '_blank');
-                          }}
-                        >
-                          {strings.HERE}
-                        </Link>
-                      )}
+                      description={[
+                        <Box key={'element-1'} sx={{ display: 'flex', flexDirection: isDesktop ? 'row' : 'column' }}>
+                          <Typography
+                            paddingRight={2}
+                            textAlign={isDesktop ? 'left' : 'center'}
+                            marginBottom={isDesktop ? 0 : 2}
+                          >
+                            {strings.formatString(
+                              strings.FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,
+                              <Link
+                                fontSize='16px'
+                                fontWeight={400}
+                                target='_blank'
+                                onClick={() => {
+                                  mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_TF_LINK);
+                                  window.open(ACCELERATOR_LINK, '_blank');
+                                }}
+                                style={{ verticalAlign: 'baseline' }}
+                              >
+                                {strings.HERE}
+                              </Link>
+                            )}
+                          </Typography>
+
+                          <Link fontSize='16px' fontWeight={400} onClick={() => setShowAcceleratorCard(false)}>
+                            {strings.DISMISS}
+                          </Link>
+                        </Box>,
+                      ]}
                       primaryButtonProps={{
                         label: strings.APPLY_TO_ACCELERATOR,
                         onClick: () => {
