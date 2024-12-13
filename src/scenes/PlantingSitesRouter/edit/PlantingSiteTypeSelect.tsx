@@ -24,7 +24,7 @@ export default function PlantingSiteTypeSelect(props: PlantingSiteTypeSelectProp
 
   return (
     <PlantingSiteSelectTypeModal2
-      open={true}
+      open
       onNext={(siteType: SiteType) =>
         void goTo(APP_PATHS.PLANTING_SITES_DRAFT_NEW, siteType === 'detailed' ? '?detailed' : '')
       }
