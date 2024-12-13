@@ -188,7 +188,7 @@ const TerrawareHomeView = () => {
         buttonProps: {
           label: strings.ADD_PLANTING_SITE,
           onClick: () => {
-            navigate(APP_PATHS.PLANTING_SITES_NEW);
+            navigate(`${APP_PATHS.PLANTING_SITES}?new=true`);
           },
         },
         icon: 'iconRestorationSite' as IconName,
