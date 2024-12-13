@@ -119,23 +119,13 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                   alignItems: 'center',
                   width: '100%',
                   background: row.enabled ? theme.palette.TwClrBgSecondary : theme.palette.TwClrBg,
+                  opacity: row.enabled ? 1 : 0.5,
                   borderRadius: '8px',
                   paddingTop: '24px',
                   paddingBottom: '24px',
                   position: 'relative',
                 }}
               >
-                <Box
-                  sx={{
-                    width: '100%',
-                    height: '100%',
-                    background: theme.palette.TwClrBgSecondary,
-                    opacity: row.enabled ? 0 : 0.5,
-                    borderRadius: '8px',
-                    zIndex: 1000,
-                    position: 'absolute',
-                  }}
-                ></Box>
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                   {isAdmin(selectedOrganization) && <Box sx={adminTaskNumberStyle}>{index + 1}</Box>}
                   <Box sx={iconContainerStyle}>
