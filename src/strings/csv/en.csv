@@ -1094,7 +1094,7 @@ ORGANIZATION_CREATED_MSG,You can access the organizations you’re in by clickin
 ORGANIZATION_CREATED_MSG_DESKTOP,You can access the organizations you’re in by clicking the arrow in the top left corner next to the logo.,
 ORGANIZATION_CREATED_TITLE,You have created {0}!,
 ORGANIZATION_DESC,Manage your organization.,
-ORGANIZATION_ID,Organiation ID,
+ORGANIZATION_ID,Organization ID,
 ORGANIZATION_NAME,Organization Name,
 ORGANIZATION_NAME_REQUIRED,Organization Name *,
 ORGANIZATION_TYPE,Organization Type,
