@@ -17,6 +17,7 @@ import {
   TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK,
 } from 'src/constants';
 import isEnabled from 'src/features';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useOrgNurserySummary } from 'src/hooks/useOrgNurserySummary';
 import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
@@ -40,6 +41,7 @@ const TerrawareHomeView = () => {
   const mixpanel = useMixpanel();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { goToNewAccession } = useNavigateTo();
   const plantingSites = useAppSelector(selectPlantingSites);
   const { availableSpecies } = useSpecies();
   const seedBankSummary = useSeedBankSummary();
@@ -137,7 +139,7 @@ const TerrawareHomeView = () => {
               label: strings.ADD_AN_ACCESSION,
               onClick: () => {
                 selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')
-                  ? navigate(APP_PATHS.ACCESSIONS2_NEW)
+                  ? goToNewAccession()
                   : navigate(APP_PATHS.ACCESSIONS);
               },
             },

@@ -18,6 +18,7 @@ import Button from 'src/components/common/button/Button';
 import { BaseTable as Table } from 'src/components/common/table';
 import { SortOrder as Order } from 'src/components/common/table/sort';
 import { APP_PATHS } from 'src/constants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import { selectMessage } from 'src/redux/features/message/messageSelectors';
 import { sendMessage } from 'src/redux/features/message/messageSlice';
@@ -98,6 +99,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const query = useQuery();
   const location = useStateLocation();
   const { sessionFilters, setSessionFilters } = useSessionFilters('accessions');
+  const { goToNewAccession } = useNavigateTo();
 
   const messageStyles = {
     margin: '0 auto',
@@ -524,11 +526,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
       pathname: appPath,
     };
     navigate(appPathLocation);
-  };
-
-  const goToNewAccession = () => {
-    const newAccessionLocation = getLocation(APP_PATHS.ACCESSIONS2_NEW, location);
-    navigate(newAccessionLocation);
   };
 
   const onSeedBankForImportSelected = (selectedFacilityOnModal: Facility | undefined) => {

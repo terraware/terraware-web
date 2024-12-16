@@ -198,6 +198,13 @@ export default function useNavigateTo() {
           pathname: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`),
         }),
 
+      goToNewAccession: () => {
+        navigate({
+          pathname: APP_PATHS.ACCESSIONS2_NEW,
+        });
+        window.scrollTo(0, 0);
+      },
+
       goToParticipant: (participantId: number) =>
         navigate({
           pathname: APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW.replace(':participantId', `${participantId}`),
