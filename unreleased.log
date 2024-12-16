@@ -1,3 +1,4 @@
+f740ce1f406 Update dependency slate to ^0.112.0 (#3450)
 6df378138ad Update postgis/postgis Docker tag to v15 (#3458)
 969e3639687 Update dependency webpack-dev-middleware to v7 (#3454)
 33ed8bd6bc3 Updated translations from Phrase (#3447)
