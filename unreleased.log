@@ -1,3 +1,4 @@
+93d64a17873 Remove Dependabot config (#3473)
 8c89066cb76 Move Renovate config to .github (#3472)
 235eb54e6a8 SW-6343 Replace accelerator welcome banner image (#3448)
 2d26eea92af SW-6366 Don't let non-admins try to create a planting site (#3449)
