@@ -1,3 +1,5 @@
+6df378138ad Update postgis/postgis Docker tag to v15 (#3458)
+969e3639687 Update dependency webpack-dev-middleware to v7 (#3454)
 33ed8bd6bc3 Updated translations from Phrase (#3447)
 b76db8ebe7e Update docker/build-push-action action to v6 (#3456)
 0f29af7889a SW-6357 Home Dashboard: "Add Planting Site" links directs to incorrect creation flow (#3446)
