@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/241</span>
+                <span class='fraction'>0/239</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/62</span>
+                <span class='fraction'>0/61</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/238</span>
+                <span class='fraction'>0/236</span>
             </div>
         
             
@@ -838,10 +838,7 @@
 <a name='L773'></a><a href='#L773'>773</a>
 <a name='L774'></a><a href='#L774'>774</a>
 <a name='L775'></a><a href='#L775'>775</a>
-<a name='L776'></a><a href='#L776'>776</a>
-<a name='L777'></a><a href='#L777'>777</a>
-<a name='L778'></a><a href='#L778'>778</a>
-<a name='L779'></a><a href='#L779'>779</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L776'></a><a href='#L776'>776</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -890,6 +887,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -941,6 +939,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1362,15 +1361,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1639,6 +1633,7 @@ import Button from 'src/components/common/button/Button';
 import { BaseTable as Table } from 'src/components/common/table';
 import { SortOrder as Order } from 'src/components/common/table/sort';
 import { APP_PATHS } from 'src/constants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import { selectMessage } from 'src/redux/features/message/messageSelectors';
 import { sendMessage } from 'src/redux/features/message/messageSlice';
@@ -1719,6 +1714,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
   const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
   const location = <span class="cstat-no" title="statement not covered" >useStateLocation();</span>
   const { sessionFilters, setSessionFilters } = <span class="cstat-no" title="statement not covered" >useSessionFilters('accessions');</span>
+  const { goToNewAccession } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
 &nbsp;
   const messageStyles = <span class="cstat-no" title="statement not covered" >{</span>
     margin: '0 auto',
@@ -2147,11 +2143,6 @@ export default function <span class="fstat-no" title="function not covered" >Dat
 <span class="cstat-no" title="statement not covered" >    navigate(appPathLocation);</span>
   };
 &nbsp;
-  const goToNewAccession = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const newAccessionLocation = <span class="cstat-no" title="statement not covered" >getLocation(APP_PATHS.ACCESSIONS2_NEW, location);</span>
-<span class="cstat-no" title="statement not covered" >    navigate(newAccessionLocation);</span>
-  };
-&nbsp;
   const onSeedBankForImportSelected = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>electedFacilityOnModal: Facility | undefined) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setSelectSeedBankForImportModalOpen(false);</span>
 <span class="cstat-no" title="statement not covered" >    if (selectedFacilityOnModal) {</span>
@@ -2310,9 +2301,9 @@ export default function <span class="fstat-no" title="function not covered" >Dat
         &lt;/PageHeaderWrapper&gt;
         &lt;Container ref={contentRef} maxWidth={false} sx={{ padding: 0 }}&gt;
           {selectedOrganization &amp;&amp; unfilteredResults ? (
-            &lt;Card&gt;
+            &lt;&gt;
               {isOnboarded ? (
-                &lt;&gt;
+                &lt;Card&gt;
                   &lt;Box
                     sx={{
                       backgroundColor: theme.palette.TwClrBg,
@@ -2364,23 +2355,23 @@ export default function <span class="fstat-no" title="function not covered" >Dat
                     {searchResults === undefined &amp;&amp; &lt;CircularProgress /&gt;}
                     {searchResults === null &amp;&amp; strings.GENERIC_ERROR}
                   &lt;/Box&gt;
-                &lt;/&gt;
+                &lt;/Card&gt;
               ) : isAdmin(selectedOrganization) ? (
-                &lt;&gt;
+                &lt;Container maxWidth={false} sx={{ padding: '32px 0' }}&gt;
                   {!isMobile &amp;&amp; emptyStateSpacer()}
                   &lt;EmptyMessage title={strings.ONBOARDING_ADMIN_TITLE} rowItems={getEmptyState()} sx={messageStyles} /&gt;
-                &lt;/&gt;
+                &lt;/Container&gt;
               ) : (
-                &lt;&gt;
+                &lt;Container maxWidth={false} sx={{ padding: '32px 0' }}&gt;
                   {!isMobile &amp;&amp; emptyStateSpacer()}
                   &lt;EmptyMessage
                     title={strings.REACH_OUT_TO_ADMIN_TITLE}
                     text={strings.NO_SEEDBANKS_NON_ADMIN_MSG}
                     sx={messageStyles}
                   /&gt;
-                &lt;/&gt;
+                &lt;/Container&gt;
               )}
-            &lt;/Card&gt;
+            &lt;/&gt;
           ) : (
             &lt;Box
               sx={{
@@ -2404,7 +2395,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-16T19:18:26.344Z
+                at 2024-12-16T19:27:02.458Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
