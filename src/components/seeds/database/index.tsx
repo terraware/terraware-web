@@ -689,9 +689,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
         </PageHeaderWrapper>
         <Container ref={contentRef} maxWidth={false} sx={{ padding: 0 }}>
           {selectedOrganization && unfilteredResults ? (
-            <Card>
+            <>
               {isOnboarded ? (
-                <>
+                <Card>
                   <Box
                     sx={{
                       backgroundColor: theme.palette.TwClrBg,
@@ -743,23 +743,23 @@ export default function Database(props: DatabaseProps): JSX.Element {
                     {searchResults === undefined && <CircularProgress />}
                     {searchResults === null && strings.GENERIC_ERROR}
                   </Box>
-                </>
+                </Card>
               ) : isAdmin(selectedOrganization) ? (
-                <>
+                <Container maxWidth={false} sx={{ padding: '32px 0' }}>
                   {!isMobile && emptyStateSpacer()}
                   <EmptyMessage title={strings.ONBOARDING_ADMIN_TITLE} rowItems={getEmptyState()} sx={messageStyles} />
-                </>
+                </Container>
               ) : (
-                <>
+                <Container maxWidth={false} sx={{ padding: '32px 0' }}>
                   {!isMobile && emptyStateSpacer()}
                   <EmptyMessage
                     title={strings.REACH_OUT_TO_ADMIN_TITLE}
                     text={strings.NO_SEEDBANKS_NON_ADMIN_MSG}
                     sx={messageStyles}
                   />
-                </>
+                </Container>
               )}
-            </Card>
+            </>
           ) : (
             <Box
               sx={{
