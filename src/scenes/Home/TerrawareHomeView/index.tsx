@@ -128,9 +128,13 @@ const TerrawareHomeView = () => {
       {
         buttonProps: isAdmin(selectedOrganization)
           ? {
-              label: strings.SET_UP_SEED_BANK,
+              label: selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')
+                ? strings.ADD_AN_ACCESSION
+                : strings.SET_UP_SEED_BANK,
               onClick: () => {
-                navigate(APP_PATHS.SEED_BANKS_NEW);
+                selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')
+                  ? navigate(APP_PATHS.ACCESSIONS2_NEW)
+                  : navigate(APP_PATHS.SEED_BANKS_NEW);
               },
             }
           : {
@@ -161,9 +165,13 @@ const TerrawareHomeView = () => {
       {
         buttonProps: isAdmin(selectedOrganization)
           ? {
-              label: strings.SET_UP_NURSERY,
+              label: selectedOrgHasFacilityType(selectedOrganization, 'Nursery')
+                ? strings.ADD_INVENTORY
+                : strings.SET_UP_NURSERY,
               onClick: () => {
-                navigate(APP_PATHS.NURSERIES_NEW);
+                selectedOrgHasFacilityType(selectedOrganization, 'Nursery')
+                  ? navigate(APP_PATHS.INVENTORY_NEW)
+                  : navigate(APP_PATHS.NURSERIES_NEW);
               },
             }
           : {
