@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -109,7 +109,16 @@
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
 <a name='L46'></a><a href='#L46'>46</a>
-<a name='L47'></a><a href='#L47'>47</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -120,22 +129,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -143,6 +136,31 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -159,6 +177,7 @@
 &nbsp;
 import { Dropdown } from '@terraware/web-components';
 &nbsp;
+import { useUser } from 'src/providers';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -171,6 +190,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
   // assume `requestPlantingSites` thunk has been dispatched by consumer
   const plantingSites = <span class="cstat-no" title="statement not covered" >useAppSelector(selectPlantingSites);</span>
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = <span class="cstat-no" title="statement not covered" >useState&lt;number | undefined&gt;();</span>
+  const { userPreferences, updateUserPreferences } = <span class="cstat-no" title="statement not covered" >useUser();</span>
 &nbsp;
   const options = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >plantingSites?.map(<span class="fstat-no" title="function not covered" >(s</span>ite) =&gt; (<span class="cstat-no" title="statement not covered" >{ label: site.name, value: site.id })</span>) ?? [],</span>
@@ -182,13 +202,20 @@ export default function <span class="fstat-no" title="function not covered" >Pla
       const id = <span class="cstat-no" title="statement not covered" >Number(newValue);</span>
 <span class="cstat-no" title="statement not covered" >      setSelectedPlantingSiteId(isNaN(id) ? -1 : id);</span>
 <span class="cstat-no" title="statement not covered" >      onChange(isNaN(id) ? -1 : id);</span>
+<span class="cstat-no" title="statement not covered" >      if (!isNaN(id) &amp;&amp; id !== userPreferences.lastPlantingSiteSelected) {</span>
+<span class="cstat-no" title="statement not covered" >        updateUserPreferences({ lastPlantingSiteSelected: id });</span>
+      }
     },
     [onChange]
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (plantingSites &amp;&amp; (selectedPlantingSiteId === undefined || selectedPlantingSiteId === -1)) {</span>
-<span class="cstat-no" title="statement not covered" >      updateSelection(plantingSites[0]?.id);</span>
+<span class="cstat-no" title="statement not covered" >      if (userPreferences.lastPlantingSiteSelected) {</span>
+<span class="cstat-no" title="statement not covered" >        updateSelection(userPreferences.lastPlantingSiteSelected);</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        updateSelection(plantingSites[0]?.id);</span>
+      }
     }
   }, [plantingSites, selectedPlantingSiteId, updateSelection]);
 &nbsp;
@@ -208,7 +235,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-16T19:27:02.458Z
+                at 2024-12-16T19:36:19.081Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
