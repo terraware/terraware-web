@@ -181,7 +181,7 @@ export const PlantingSiteStats = () => {
               {isAdmin(selectedOrganization) ? (
                 <Link
                   onClick={() => {
-                    navigate(APP_PATHS.PLANTING_SITES_NEW);
+                    navigate(`${APP_PATHS.PLANTING_SITES}?new=true`);
                   }}
                 >
                   {strings.ADD_PLANTING_SITE}
