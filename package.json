@@ -89,7 +89,7 @@
     "sanitize-filename": "^1.6.3",
     "slate": "^0.112.0",
     "slate-dom": "^0.111.0",
-    "slate-react": "^0.111.0",
+    "slate-react": "^0.112.0",
     "styled-components": "^6.0.0",
     "utm": "^1.1.1",
     "web-vitals": "^4.0.0",
