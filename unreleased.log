@@ -1,3 +1,4 @@
+df9a80d38a6 Update dependency @dnd-kit/sortable to v10 (#3452)
 8d3f5032bf9 Update dependency slate-react to ^0.112.0 (#3451)
 f740ce1f406 Update dependency slate to ^0.112.0 (#3450)
 6df378138ad Update postgis/postgis Docker tag to v15 (#3458)
