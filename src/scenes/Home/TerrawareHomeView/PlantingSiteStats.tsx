@@ -155,7 +155,7 @@ export const PlantingSiteStats = () => {
               label={strings.MORTALITY_RATE}
               showBorder={!isDesktop}
               showLink={false}
-              value={observation?.mortalityRate?.toString()}
+              value={observation?.mortalityRate ? `${observation.mortalityRate.toString()}%` : ''}
             />
           </Grid>
 
