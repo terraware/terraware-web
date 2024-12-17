@@ -131,22 +131,22 @@ export const PlantingSiteStats = () => {
 
           <Grid item xs={primaryGridSize}>
             <StatsCardItem
-              label={strings.LAST_OBSERVED}
-              showBorder={!isDesktop}
-              showLink={false}
-              value={observation?.completedDate}
-            />
-          </Grid>
-
-          <Grid item xs={primaryGridSize}>
-            <StatsCardItem
               label='Area'
               showLink={false}
+              showBorder={!isDesktop}
               value={
                 selectedPlantingSite?.areaHa
                   ? strings.formatString(strings.X_HA, selectedPlantingSite.areaHa.toString())?.toString()
                   : undefined
               }
+            />
+          </Grid>
+
+          <Grid item xs={primaryGridSize}>
+            <StatsCardItem
+              label={strings.DATE_OF_LAST_OBSERVATION}
+              showLink={false}
+              value={observation?.completedDate}
             />
           </Grid>
 
