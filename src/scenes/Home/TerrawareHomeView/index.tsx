@@ -188,7 +188,14 @@ const TerrawareHomeView = () => {
         icon: 'iconSeedling' as IconName,
         statsCardItems: [
           { label: strings.TOTAL_SEEDLINGS_COUNT, value: orgNurserySummary?.totalQuantity?.toString() },
-          { label: strings.TOTAL_SEEDLINGS_SENT, value: orgNurserySummary?.totalWithdrawn?.toString() },
+          {
+            label: strings.TOTAL_WITHDRAWN_FOR_PLANTING,
+            value: orgNurserySummary?.totalWithdrawn?.toString(),
+            linkOnClick: () => {
+              navigate(APP_PATHS.NURSERY_WITHDRAWALS);
+            },
+            linkText: strings.VIEW_PLANTING_PROGRESS,
+          },
         ],
         title: strings.SEEDLINGS,
       },
