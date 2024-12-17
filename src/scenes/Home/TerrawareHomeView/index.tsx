@@ -28,6 +28,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import CTACard from 'src/scenes/Home/CTACard';
 import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
+import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
 import { isAdmin, isManagerOrHigher, selectedOrgHasFacilityType } from 'src/utils/organization';
 
@@ -36,7 +37,7 @@ import OrganizationStatsCard, { OrganizationStatsCardRow } from './OrganizationS
 const TerrawareHomeView = () => {
   const { activeLocale } = useLocalization();
   const { user } = useUser();
-  const { selectedOrganization } = useOrganization();
+  const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
   const { isTablet, isMobile, isDesktop } = useDeviceInfo();
   const mixpanel = useMixpanel();
   const navigate = useNavigate();
@@ -50,6 +51,12 @@ const TerrawareHomeView = () => {
   const [showAcceleratorCard, setShowAcceleratorCard] = useState(true);
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (orgPreferences.showAcceleratorCard === false && showAcceleratorCard) {
+      setShowAcceleratorCard(false);
+    }
+  }, [orgPreferences]);
 
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
@@ -97,6 +104,13 @@ const TerrawareHomeView = () => {
     }
     return 4;
   }, [isMobile, isTablet]);
+
+  const dismissAcceleratorCard = async () => {
+    await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
+      ['showAcceleratorCard']: false,
+    });
+    reloadOrgPreferences();
+  };
 
   const organizationStatsCardRows: OrganizationStatsCardRow[] = useMemo(() => {
     if (!activeLocale) {
@@ -306,7 +320,7 @@ const TerrawareHomeView = () => {
                             )}
                           </Typography>
 
-                          <Link fontSize='16px' fontWeight={400} onClick={() => setShowAcceleratorCard(false)}>
+                          <Link fontSize='16px' fontWeight={400} onClick={dismissAcceleratorCard}>
                             {strings.DISMISS}
                           </Link>
                         </Box>,
