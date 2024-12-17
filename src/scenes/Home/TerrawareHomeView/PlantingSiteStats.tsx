@@ -55,7 +55,7 @@ export const PlantingSiteStats = () => {
     <Box
       sx={{
         border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-        borderRadius: '8px',
+        borderRadius: '9px',
         boxShadow: isDesktop ? 'rgba(58, 68, 69, 0.2) 0px 4px 8px' : 'none',
         display: 'flex',
         flexDirection: isDesktop ? 'row' : 'column',
@@ -221,7 +221,11 @@ export const PlantingSiteStats = () => {
           }}
         >
           {token && selectedPlantingSiteId && (
-            <SimplePlantingSiteMap plantingSiteId={selectedPlantingSiteId} hideAllControls={true} />
+            <SimplePlantingSiteMap
+              plantingSiteId={selectedPlantingSiteId}
+              hideAllControls={true}
+              style={{ borderRadius: '0 8px 8px 0' }}
+            />
           )}
         </Box>
       </Box>

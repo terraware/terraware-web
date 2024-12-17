@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { CSSProperties, useMemo } from 'react';
 
 import { Box, CircularProgress } from '@mui/material';
 
@@ -10,11 +10,13 @@ import { MapService } from 'src/services';
 type SimplePlantingSiteMapProps = {
   plantingSiteId: number;
   hideAllControls?: boolean;
+  style?: CSSProperties;
 };
 
 export default function SimplePlantingSiteMap({
   plantingSiteId,
   hideAllControls,
+  style,
 }: SimplePlantingSiteMapProps): JSX.Element {
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
 
@@ -30,7 +32,7 @@ export default function SimplePlantingSiteMap({
     return (
       <PlantingSiteMap
         mapData={mapData!}
-        style={{ width: '100%', borderRadius: '24px' }}
+        style={{ width: '100%', borderRadius: '24px', ...style }}
         layers={['Planting Site']}
         hideAllControls={hideAllControls}
       />
