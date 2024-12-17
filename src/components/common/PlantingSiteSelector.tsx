@@ -41,7 +41,6 @@ export default function PlantingSiteSelector({ onChange }: PlantingSiteSelectorP
   useEffect(() => {
     if (plantingSites && (selectedPlantingSiteId === undefined || selectedPlantingSiteId === -1)) {
       if (orgPreferences.lastPlantingSiteSelected) {
-        console.log('entra', orgPreferences.lastPlantingSiteSelected);
         updateSelection(orgPreferences.lastPlantingSiteSelected);
       } else {
         updateSelection(plantingSites[0]?.id);
