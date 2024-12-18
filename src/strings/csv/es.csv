@@ -347,6 +347,7 @@ DATE_ADDED,Fecha en la que se añadió,
 DATE_ADDED_REQUIRED,Fecha de adición *,
 DATE_MUST_BE_FUTURE,La fecha debe estar en el futuro,
 DATE_OBSERVATION,{0} Observación,
+DATE_OF_LAST_OBSERVATION,Fecha de la última observación,
 DATE_RANGE,{0} - {1},"{0} is the start date and {1} is the end date, both in YYYY-MM-DD format."
 DATE_SUBMITTED,Fecha de envío,
 DATE_UPDATED,Fecha de actualización,

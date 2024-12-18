@@ -347,6 +347,7 @@ DATE_ADDED,Date Ajouté,
 DATE_ADDED_REQUIRED,Date Ajouté *,
 DATE_MUST_BE_FUTURE,La date doit se situer dans le futur,
 DATE_OBSERVATION,{0} observation,
+DATE_OF_LAST_OBSERVATION,Date de la dernière observation,
 DATE_RANGE,{0} - {1},"{0} is the start date and {1} is the end date, both in YYYY-MM-DD format."
 DATE_SUBMITTED,Date de soumission,
 DATE_UPDATED,Date de mise à jour,
