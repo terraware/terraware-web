@@ -193,7 +193,7 @@ export const PlantingSiteStats = () => {
           <Grid item xs={primaryGridSize} sx={{ textAlign: isDesktop ? 'right' : 'center' }}>
             <Link
               onClick={() => {
-                navigate(APP_PATHS.PLANTS_DASHBOARD);
+                navigate(`${APP_PATHS.PLANTS_DASHBOARD}/${selectedPlantingSiteId}`);
               }}
             >
               {strings.VIEW_FULL_DASHBOARD}
