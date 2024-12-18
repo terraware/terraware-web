@@ -356,27 +356,29 @@ export default function NavBar({
         </SubNavbar>
       </NavItem>
 
+      <NavSection title={strings.SETTINGS.toUpperCase()} />
+      {isAdmin(selectedOrganization) && (
+        <NavItem
+          label={strings.ORGANIZATION}
+          icon='organizationNav'
+          selected={!!isOrganizationRoute}
+          onClick={() => {
+            closeAndNavigateTo(isOrganizationRoute ? '' : APP_PATHS.ORGANIZATION);
+          }}
+          id='organization'
+        />
+      )}
+      <NavItem
+        label={strings.PEOPLE}
+        icon='peopleNav'
+        selected={!!isPeopleRoute}
+        onClick={() => {
+          closeAndNavigateTo(APP_PATHS.PEOPLE);
+        }}
+        id='people'
+      />
       {isAdmin(selectedOrganization) && (
         <>
-          <NavSection title={strings.SETTINGS.toUpperCase()} />
-          <NavItem
-            label={strings.ORGANIZATION}
-            icon='organizationNav'
-            selected={!!isOrganizationRoute}
-            onClick={() => {
-              closeAndNavigateTo(isOrganizationRoute ? '' : APP_PATHS.ORGANIZATION);
-            }}
-            id='organization'
-          />
-          <NavItem
-            label={strings.PEOPLE}
-            icon='peopleNav'
-            selected={!!isPeopleRoute}
-            onClick={() => {
-              closeAndNavigateTo(APP_PATHS.PEOPLE);
-            }}
-            id='people'
-          />
           <NavItem
             label={strings.PROJECTS}
             icon='iconFolder'
