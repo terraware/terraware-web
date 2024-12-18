@@ -36,6 +36,12 @@ const OnboardingHomeView = () => {
   const [showAcceleratorCard, setShowAcceleratorCard] = useState(true);
 
   useEffect(() => {
+    if (orgPreferences.showAcceleratorCard === false && showAcceleratorCard) {
+      setShowAcceleratorCard(false);
+    }
+  }, [orgPreferences]);
+
+  useEffect(() => {
     const populatePeople = async () => {
       if (isAdmin(selectedOrganization)) {
         const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
@@ -69,6 +75,13 @@ const OnboardingHomeView = () => {
     () => allSpecies === undefined || (isAdmin(selectedOrganization) && people === undefined),
     [allSpecies, people, selectedOrganization]
   );
+
+  const dismissAcceleratorCard = async () => {
+    await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
+      ['showAcceleratorCard']: false,
+    });
+    reloadOrgPreferences();
+  };
 
   const markAsComplete = async () => {
     await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
@@ -190,7 +203,7 @@ const OnboardingHomeView = () => {
                             )}
                           </Typography>
 
-                          <Link fontSize='16px' fontWeight={400} onClick={() => setShowAcceleratorCard(false)}>
+                          <Link fontSize='16px' fontWeight={400} onClick={dismissAcceleratorCard}>
                             {strings.DISMISS}
                           </Link>
                         </Box>,
