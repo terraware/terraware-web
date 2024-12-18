@@ -183,6 +183,7 @@ export const PlantingSiteStats = () => {
                   onClick={() => {
                     navigate(`${APP_PATHS.PLANTING_SITES}?new=true`);
                   }}
+                  style={{ textWrap: 'wrap', textAlign: 'left' }}
                 >
                   {strings.ADD_PLANTING_SITE}
                 </Link>
@@ -195,6 +196,7 @@ export const PlantingSiteStats = () => {
               onClick={() => {
                 navigate(`${APP_PATHS.PLANTS_DASHBOARD}/${selectedPlantingSiteId}`);
               }}
+              style={{ textWrap: 'wrap', textAlign: 'left' }}
             >
               {strings.VIEW_FULL_DASHBOARD}
             </Link>
