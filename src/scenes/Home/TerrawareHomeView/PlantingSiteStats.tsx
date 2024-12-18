@@ -60,7 +60,7 @@ export const PlantingSiteStats = () => {
         display: 'flex',
         flexDirection: isDesktop ? 'row' : 'column',
         justifyContent: 'space-evenly',
-        marginBottom: '16px',
+        marginBottom: '24px',
         width: '100%',
       }}
     >
