@@ -45,6 +45,7 @@ export const StatsCardItem = ({
           fontWeight: 600,
           lineHeight: '24px',
           marginBottom: showLink ? '8px' : 0,
+          textWrap: 'wrap',
         }}
         title={label}
       >
@@ -56,6 +57,7 @@ export const StatsCardItem = ({
           fontWeight: 600,
           lineHeight: '32px',
           marginBottom: !isDesktop || showLink ? '8px' : 0,
+          textWrap: 'wrap',
         }}
         title={value}
       >
@@ -63,7 +65,11 @@ export const StatsCardItem = ({
       </Typography>
       {showLink && (
         <Box sx={{ marginBottom: isDesktop ? 0 : '8px', minHeight: !isDesktop ? 0 : '24px' }}>
-          {linkText && linkOnClick && <Link onClick={linkOnClick}>{linkText}</Link>}
+          {linkText && linkOnClick && (
+            <Link onClick={linkOnClick} style={{ textWrap: 'wrap', textAlign: 'left' }}>
+              {linkText}
+            </Link>
+          )}
         </Box>
       )}
     </Box>
