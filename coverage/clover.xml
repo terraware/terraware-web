@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1734558038018" clover="3.2.0">
-  <project timestamp="1734558038018" name="All files">
+<coverage generated="1734632724765" clover="3.2.0">
+  <project timestamp="1734632724765" name="All files">
     <metrics statements="26841" coveredstatements="1192" conditionals="18172" coveredconditionals="336" methods="8254" coveredmethods="195" elements="53267" coveredelements="1723" complexity="0" loc="26841" ncloc="26841" packages="239" files="1130" classes="1130"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
@@ -19658,7 +19658,7 @@
         <line num="119" count="0" type="stmt"/>
         <line num="128" count="0" type="stmt"/>
         <line num="184" count="0" type="stmt"/>
-        <line num="196" count="0" type="stmt"/>
+        <line num="197" count="0" type="stmt"/>
       </file>
       <file name="StatsCardItem.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/TerrawareHomeView/StatsCardItem.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="25" coveredconditionals="0" methods="1" coveredmethods="0"/>
