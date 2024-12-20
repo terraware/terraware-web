@@ -198,7 +198,6 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
     (optionItem: DropdownItem) => {
       switch (optionItem.value) {
         case 'view_history': {
-          onCancel();
           showVariableHistory();
           break;
         }

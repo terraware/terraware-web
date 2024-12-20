@@ -244,7 +244,6 @@ const EditableTableEdit = ({
     (optionItem: DropdownItem) => {
       switch (optionItem.value) {
         case 'view_history': {
-          onCancel();
           showVariableHistory();
           break;
         }
