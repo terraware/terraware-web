@@ -106,6 +106,7 @@ const OrganizationStatsCard = ({ rows }: OrganizationStatsCardProps): JSX.Elemen
                   style={{
                     marginLeft: isMobile ? 0 : undefined,
                     width: isMobile ? '100%' : 'auto',
+                    textWrap: 'wrap',
                   }}
                   type='productive'
                   {...row.buttonProps}
