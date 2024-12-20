@@ -71,7 +71,7 @@ export default function DeliverableDisplayVariableValue({
           {`${
             variable.options
               .filter((o) => selectedValues?.includes(o.id))
-              .map((o) => o.renderedText ?? o.name)
+              .map((o) => o.name)
               .join(', ') || strings.UNSPECIFIED
           }`}
         </span>
