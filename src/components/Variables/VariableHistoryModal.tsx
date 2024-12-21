@@ -25,6 +25,7 @@ const VariableHistoryModal = ({ open, projectId, setOpen, variableId }: Variable
       title={strings.VARIABLE_HISTORY}
       size='x-large'
       middleButtons={[<Button label={strings.CLOSE} onClick={onClose} key={'close-button'} />]}
+      style={{ zIndex: 1301 }}
     >
       <VariableHistoryTable projectId={projectId} variableId={variableId} />
     </DialogBox>

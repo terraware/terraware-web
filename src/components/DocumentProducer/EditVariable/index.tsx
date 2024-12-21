@@ -251,7 +251,6 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
     (optionItem: DropdownItem) => {
       switch (optionItem.value) {
         case 'view_history': {
-          onCancel();
           showVariableHistory();
           break;
         }
