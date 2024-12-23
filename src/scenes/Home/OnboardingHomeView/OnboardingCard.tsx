@@ -11,7 +11,7 @@ import Button from 'src/components/common/button/Button';
 import { useKnowledgeBaseLinks } from 'src/knowledgeBaseLinks';
 import { useOrganization } from 'src/providers';
 import strings from 'src/strings';
-import { isAdmin } from 'src/utils/organization';
+import { isOwner } from 'src/utils/organization';
 
 export type OnboardingCardRow = {
   buttonProps?: ButtonProps;
@@ -77,7 +77,7 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
       )}
       <Box flexBasis={'100%'} alignSelf={'stretch'}>
         <Box display={'flex'} flexDirection={'column'} height={'100%'}>
-          {isAdmin(selectedOrganization) && (
+          {isOwner(selectedOrganization) && (
             <Box paddingBottom={'24px'} sx={{ background: theme.palette.TwClrBg }} padding={2}>
               <Typography
                 component='p'
@@ -127,7 +127,7 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                 }}
               >
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                  {isAdmin(selectedOrganization) && <Box sx={adminTaskNumberStyle}>{index + 1}</Box>}
+                  {isOwner(selectedOrganization) && <Box sx={adminTaskNumberStyle}>{index + 1}</Box>}
                   <Box sx={iconContainerStyle}>
                     <Icon size='large' name={row.icon} />
                   </Box>
@@ -238,11 +238,11 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                 }}
               >
                 <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                  {isAdmin(selectedOrganization) && <Box sx={adminTaskNumberStyle}>{index + 1}</Box>}
+                  {isOwner(selectedOrganization) && <Box sx={adminTaskNumberStyle}>{index + 1}</Box>}
                   <Box
                     sx={{
                       ...iconContainerStyle,
-                      marginLeft: isAdmin(selectedOrganization) ? '24px' : 0,
+                      marginLeft: isOwner(selectedOrganization) ? '24px' : 0,
                     }}
                   >
                     <Icon size='large' name={row.icon} />
@@ -354,7 +354,7 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
                   }}
                 >
                   <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                    {isAdmin(selectedOrganization) && <Box sx={adminTaskNumberStyle}>{index + 1}</Box>}
+                    {isOwner(selectedOrganization) && <Box sx={adminTaskNumberStyle}>{index + 1}</Box>}
                     <Box
                       sx={{
                         ...iconContainerStyle,
@@ -450,7 +450,7 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
               </Box>
             )
           )}
-          {!isAdmin(selectedOrganization) && (
+          {!isOwner(selectedOrganization) && (
             <Box
               color={theme.palette.TwClrTxt}
               height='100%'
@@ -464,7 +464,7 @@ const OnboardingCard = ({ rows }: OnboardingCardProps): JSX.Element => {
               <Typography textAlign='center'>{strings.ONBOARDING_NON_ADMINS_MESSAGE}</Typography>
             </Box>
           )}
-          {!isAdmin(selectedOrganization) && (
+          {!isOwner(selectedOrganization) && (
             <Box
               border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
               borderRadius={2}

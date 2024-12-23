@@ -21,6 +21,10 @@ export const getSeedBank = (organization: Organization, facilityId: number): Fac
   return getAllSeedBanks(organization).find((sb) => sb?.id === facilityId);
 };
 
+export const isOwner = (organization: Organization | undefined) => {
+  return organization?.role === 'Owner';
+};
+
 export const isAdmin = (organization: Organization | undefined) => {
   return HighOrganizationRolesValues.includes(organization?.role || '');
 };
