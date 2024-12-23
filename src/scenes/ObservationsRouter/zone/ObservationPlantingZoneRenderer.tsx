@@ -39,7 +39,7 @@ const ObservationPlantingZoneRenderer =
       return <CellRenderer {...props} value={''} />;
     }
 
-    if (column.key === 'monitoringPlotName') {
+    if (column.key === 'monitoringPlotNumber') {
       return (
         <CellRenderer
           {...props}

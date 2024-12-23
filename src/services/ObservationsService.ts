@@ -53,7 +53,7 @@ const exportCsv = async (observationId: number): Promise<any> => {
       'observationPlots_isPermanent',
       'observationPlots_monitoringPlot_plantingSubzone_plantingZone_name',
       'observationPlots_monitoringPlot_plantingSubzone_name',
-      'observationPlots_monitoringPlot_fullName',
+      'observationPlots_monitoringPlot_plotNumber',
       'observationPlots_monitoringPlot_southwestLatitude',
       'observationPlots_monitoringPlot_southwestLongitude',
       'observationPlots_monitoringPlot_northwestLatitude',

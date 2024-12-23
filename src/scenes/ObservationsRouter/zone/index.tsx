@@ -26,7 +26,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import ObservationPlantingZoneRenderer from './ObservationPlantingZoneRenderer';
 
 const defaultColumns = (): TableColumnType[] => [
-  { key: 'monitoringPlotName', name: strings.MONITORING_PLOT, type: 'string' },
+  { key: 'monitoringPlotNumber', name: strings.MONITORING_PLOT, type: 'string' },
   { key: 'subzoneName', name: strings.SUBZONE, type: 'string' },
   { key: 'completedDate', name: strings.DATE, type: 'string' },
   { key: 'status', name: strings.STATUS, type: 'string' },

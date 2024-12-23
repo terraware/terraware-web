@@ -206,7 +206,7 @@ const contextRenderer =
         .flatMap((z) => z.plantingSubzones)
         .flatMap((sz) => sz.monitoringPlots)
         .find((mp) => mp.monitoringPlotId === entity.id);
-      title = plot?.monitoringPlotName;
+      title = plot?.monitoringPlotNumber.toString();
       properties = [
         { key: strings.PLOT_TYPE, value: plot ? (plot.isPermanent ? strings.PERMANENT : strings.TEMPORARY) : '' },
         {

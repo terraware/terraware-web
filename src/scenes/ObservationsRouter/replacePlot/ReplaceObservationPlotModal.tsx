@@ -101,8 +101,8 @@ export default function ReplaceObservationPlotModal(props: ReplaceObservationPlo
     }
     if (plots && plots.status === 'success') {
       // show page message of status
-      const addedPlotsNames = addedPlotIds.map((id) => plots.data[Number(id)]?.fullName).join(', ');
-      const removedPlotsNames = removedPlotIds.map((id) => plots.data[Number(id)]?.fullName).join(', ');
+      const addedPlotNumbers = addedPlotIds.map((id) => plots.data![Number(id)]?.plotNumber).join(', ');
+      const removedPlotNumbers = removedPlotIds.map((id) => plots.data![Number(id)]?.plotNumber).join(', ');
 
       // we don't add new plots for a permanent plot if the site has completed observations
       const noReplacedPlotsFound = !addedPlotIds.length && (!monitoringPlot.isPermanent || !hasCompletedObservations);
@@ -110,7 +110,7 @@ export default function ReplaceObservationPlotModal(props: ReplaceObservationPlo
       if (noReplacedPlotsFound) {
         snackbar.pageWarning(
           [
-            strings.formatString(strings.REASSIGNMENT_REQUEST_PLOTS_REMOVED, removedPlotsNames) as string,
+            strings.formatString(strings.REASSIGNMENT_REQUEST_PLOTS_REMOVED, removedPlotNumbers) as string,
             <br key='warn' />,
             strings.REASSIGNMENT_REQUEST_NO_PLOTS_ADDED_WARNING,
           ],
@@ -120,10 +120,10 @@ export default function ReplaceObservationPlotModal(props: ReplaceObservationPlo
       } else {
         snackbar.pageInfo(
           [
-            strings.formatString(strings.REASSIGNMENT_REQUEST_PLOTS_REMOVED, removedPlotsNames) as string,
+            strings.formatString(strings.REASSIGNMENT_REQUEST_PLOTS_REMOVED, removedPlotNumbers) as string,
             <br key='info' />,
             addedPlotIds.length
-              ? (strings.formatString(strings.REASSIGNMENT_REQUEST_PLOTS_ADDED, addedPlotsNames) as string)
+              ? (strings.formatString(strings.REASSIGNMENT_REQUEST_PLOTS_ADDED, addedPlotNumbers) as string)
               : strings.REASSIGNMENT_REQUEST_NO_PLOTS_ADDED,
           ],
           strings.REASSIGNMENT_REQUEST_STATUS,
@@ -175,7 +175,7 @@ export default function ReplaceObservationPlotModal(props: ReplaceObservationPlo
           <Grid item xs={12}>
             <Textfield
               id='monitoringPlot'
-              value={monitoringPlot.monitoringPlotName}
+              value={monitoringPlot.monitoringPlotNumber}
               type='text'
               label={strings.MONITORING_PLOT}
               display={true}
