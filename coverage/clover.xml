@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1734986263029" clover="3.2.0">
-  <project timestamp="1734986263029" name="All files">
-    <metrics statements="26839" coveredstatements="1192" conditionals="18170" coveredconditionals="336" methods="8254" coveredmethods="195" elements="53263" coveredelements="1723" complexity="0" loc="26839" ncloc="26839" packages="239" files="1130" classes="1130"/>
+<coverage generated="1734986985520" clover="3.2.0">
+  <project timestamp="1734986985520" name="All files">
+    <metrics statements="26841" coveredstatements="1193" conditionals="18170" coveredconditionals="336" methods="8255" coveredmethods="195" elements="53266" coveredelements="1724" complexity="0" loc="26841" ncloc="26841" packages="239" files="1130" classes="1130"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -30114,7 +30114,7 @@
       </file>
     </package>
     <package name="src.utils">
-      <metrics statements="490" coveredstatements="177" conditionals="266" coveredconditionals="67" methods="157" coveredmethods="34"/>
+      <metrics statements="492" coveredstatements="178" conditionals="266" coveredconditionals="67" methods="158" coveredmethods="34"/>
       <file name="acl.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/acl.ts">
         <metrics statements="32" coveredstatements="28" conditionals="16" coveredconditionals="11" methods="11" coveredmethods="6"/>
         <line num="65" count="1" type="stmt"/>
@@ -30273,7 +30273,7 @@
         <line num="7" count="0" type="stmt"/>
       </file>
       <file name="organization.tsx" path="/home/runner/work/terraware-web/terraware-web/src/utils/organization.tsx">
-        <metrics statements="32" coveredstatements="12" conditionals="14" coveredconditionals="0" methods="17" coveredmethods="0"/>
+        <metrics statements="34" coveredstatements="13" conditionals="14" coveredconditionals="0" methods="18" coveredmethods="0"/>
         <line num="6" count="3" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
         <line num="8" count="0" type="cond" truecount="0" falsecount="4"/>
@@ -30286,26 +30286,28 @@
         <line num="20" count="3" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="24" count="3" type="stmt"/>
-        <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="25" count="0" type="stmt"/>
         <line num="28" count="3" type="stmt"/>
         <line num="29" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="32" count="3" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
+        <line num="33" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="36" count="3" type="stmt"/>
-        <line num="38" count="3" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="40" count="3" type="stmt"/>
         <line num="42" count="3" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
         <line num="46" count="3" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
-        <line num="48" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
-        <line num="52" count="3" type="cond" truecount="0" falsecount="2"/>
-        <line num="54" count="3" type="stmt"/>
-        <line num="55" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="57" count="0" type="stmt"/>
+        <line num="50" count="3" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="56" count="3" type="cond" truecount="0" falsecount="2"/>
+        <line num="58" count="3" type="stmt"/>
+        <line num="59" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
       </file>
       <file name="preventDefaultEvent.tsx" path="/home/runner/work/terraware-web/terraware-web/src/utils/preventDefaultEvent.tsx">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
