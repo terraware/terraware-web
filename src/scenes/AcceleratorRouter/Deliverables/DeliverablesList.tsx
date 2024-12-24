@@ -6,12 +6,15 @@ import { Separator } from '@terraware/web-components';
 import DeliverablesTable from 'src/components/DeliverablesTable';
 import PageHeader from 'src/components/PageHeader';
 import ParticipantsDropdown from 'src/components/ParticipantsDropdown';
+import { FilterField } from 'src/components/common/FilterGroup';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import { useParticipants } from 'src/hooks/useParticipants';
 import { useLocalization } from 'src/providers';
 import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
 import strings from 'src/strings';
 import theme from 'src/theme';
+import { DeliverableTypes } from 'src/types/Deliverables';
 import { SearchNodePayload } from 'src/types/Search';
 
 const DeliverablesList = () => {
@@ -65,6 +68,36 @@ const DeliverablesList = () => {
     [activeLocale, availableParticipants, participantFilter]
   );
 
+  const iconFilters: FilterConfig[] = useMemo(() => {
+    const _filters = [
+      {
+        field: 'participantId',
+        label: strings.PARTICIPANT,
+        type: 'multiple_selection' as FilterField['type'],
+        options: availableParticipants?.map((pp) => pp.id),
+        pillValueRenderer: (values: (string | number | null)[]) =>
+          values
+            ?.map((value) => availableParticipants.find((pp) => pp.id.toString() === value?.toString())?.name || '')
+            .join(', '),
+        renderOption: (value: string | number) => {
+          return availableParticipants.find((pp) => pp.id.toString() === value.toString())?.name || '';
+        },
+      },
+      {
+        field: 'type',
+        label: strings.TYPE,
+        type: 'multiple_selection' as FilterField['type'],
+        options: DeliverableTypes,
+        pillValueRenderer: (values: (string | number | null)[]) =>
+          values?.map((value) => (value === 'Questions' ? 'Questionnaire' : value)).join(', '),
+        renderOption: (value: string | number) =>
+          value.toString() === 'Questions' ? 'Questionnaire' : value.toString(),
+      },
+    ];
+
+    return activeLocale ? _filters : [];
+  }, [activeLocale, availableParticipants]);
+
   return (
     <AcceleratorMain>
       <PageHeaderWrapper nextElement={contentRef.current}>
@@ -78,6 +111,7 @@ const DeliverablesList = () => {
         organizationId={-1}
         participantId={participantFilter.id}
         tableId={'acceleratorDeliverablesTable'}
+        iconFilters={iconFilters}
       />
     </AcceleratorMain>
   );

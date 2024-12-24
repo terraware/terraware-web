@@ -12,6 +12,7 @@ interface Props {
   onChange: (filter: FieldNodePayload) => void;
   options: Option[];
   values: (string | null)[];
+  pillValueRenderer?: (values: (string | number | null)[]) => string | undefined;
 }
 
 export default function MultipleSelection(props: Props): JSX.Element {
@@ -78,7 +79,7 @@ export default function MultipleSelection(props: Props): JSX.Element {
         onAdd={onAdd}
         onRemove={onRemove}
         options={optionsMap}
-        valueRenderer={(v) => v}
+        valueRenderer={(v) => (props.pillValueRenderer ? props.pillValueRenderer([v]) || '' : v)}
         selectedOptions={selections}
         disabled={options.length === 0}
       />

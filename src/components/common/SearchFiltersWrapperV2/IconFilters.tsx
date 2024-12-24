@@ -36,6 +36,7 @@ const IconFilters = ({ filters, setCurrentFilters, currentFilters }: IconFilters
           label: filter.label,
           showLabel: filter.showLabel,
           type: filter.type || 'multiple_selection',
+          pillValueRenderer: filter.pillValueRenderer,
         })
       ),
     [filters]
