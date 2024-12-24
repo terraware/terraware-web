@@ -16,7 +16,6 @@ import {
   TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK,
   TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK,
 } from 'src/constants';
-import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useOrgNurserySummary } from 'src/hooks/useOrgNurserySummary';
 import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
@@ -47,7 +46,6 @@ const TerrawareHomeView = () => {
   const { availableSpecies } = useSpecies();
   const seedBankSummary = useSeedBankSummary();
   const orgNurserySummary = useOrgNurserySummary();
-  const homePageOnboardingImprovementsEnabled = isEnabled('Home Page Onboarding Improvements');
   const [showAcceleratorCard, setShowAcceleratorCard] = useState(true);
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
@@ -74,11 +72,8 @@ const TerrawareHomeView = () => {
   );
 
   const showHomePageOnboardingImprovements = useMemo(
-    () =>
-      homePageOnboardingImprovementsEnabled &&
-      typeof availableSpecies?.length === 'number' &&
-      availableSpecies?.length > 0,
-    [availableSpecies, homePageOnboardingImprovementsEnabled]
+    () => typeof availableSpecies?.length === 'number' && availableSpecies?.length > 0,
+    [availableSpecies]
   );
 
   const speciesLastModifiedDate = useMemo(() => {
