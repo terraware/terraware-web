@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/72</span>
+                <span class='fraction'>0/71</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/67</span>
+                <span class='fraction'>0/66</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/71</span>
+                <span class='fraction'>0/70</span>
             </div>
         
             
@@ -495,13 +495,7 @@
 <a name='L430'></a><a href='#L430'>430</a>
 <a name='L431'></a><a href='#L431'>431</a>
 <a name='L432'></a><a href='#L432'>432</a>
-<a name='L433'></a><a href='#L433'>433</a>
-<a name='L434'></a><a href='#L434'>434</a>
-<a name='L435'></a><a href='#L435'>435</a>
-<a name='L436'></a><a href='#L436'>436</a>
-<a name='L437'></a><a href='#L437'>437</a>
-<a name='L438'></a><a href='#L438'>438</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L433'></a><a href='#L433'>433</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -550,7 +544,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -576,10 +569,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -955,7 +945,6 @@ import {
   TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK,
   TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK,
 } from 'src/constants';
-import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useOrgNurserySummary } from 'src/hooks/useOrgNurserySummary';
 import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
@@ -986,7 +975,6 @@ const TerrawareHomeView = <span class="cstat-no" title="statement not covered" >
   const { availableSpecies } = <span class="cstat-no" title="statement not covered" >useSpecies();</span>
   const seedBankSummary = <span class="cstat-no" title="statement not covered" >useSeedBankSummary();</span>
   const orgNurserySummary = <span class="cstat-no" title="statement not covered" >useOrgNurserySummary();</span>
-  const homePageOnboardingImprovementsEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Home Page Onboarding Improvements');</span>
   const [showAcceleratorCard, setShowAcceleratorCard] = <span class="cstat-no" title="statement not covered" >useState(true);</span>
 &nbsp;
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
@@ -1013,11 +1001,8 @@ const TerrawareHomeView = <span class="cstat-no" title="statement not covered" >
   );
 &nbsp;
   const showHomePageOnboardingImprovements = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >      homePageOnboardingImprovementsEnabled &amp;&amp;</span>
-      typeof availableSpecies?.length === 'number' &amp;&amp;
-      availableSpecies?.length &gt; 0,
-    [availableSpecies, homePageOnboardingImprovementsEnabled]
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >typeof availableSpecies?.length === 'number' &amp;&amp; availableSpecies?.length &gt; 0,</span>
+    [availableSpecies]
   );
 &nbsp;
   const speciesLastModifiedDate = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -1381,7 +1366,7 @@ export default TerrawareHomeView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-12-23T20:49:44.709Z
+                at 2024-12-26T19:29:59.178Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
