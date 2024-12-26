@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import Page from 'src/components/Page';
-import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
@@ -22,7 +21,6 @@ export default function Home(): JSX.Element {
   const [people, setPeople] = useState<OrganizationUser[]>();
   const allSpecies = useAppSelector(selectSpecies);
   const dispatch = useAppDispatch();
-  const homePageOnboardingImprovementsEnabled = isEnabled('Home Page Onboarding Improvements');
 
   useEffect(() => {
     const populatePeople = async () => {
@@ -47,10 +45,7 @@ export default function Home(): JSX.Element {
       return <Page isLoading={true} />;
     }
 
-    if (
-      homePageOnboardingImprovementsEnabled &&
-      ((people?.length === 1 && !orgPreferences['singlePersonOrg']) || allSpecies.length === 0)
-    ) {
+    if ((people?.length === 1 && !orgPreferences['singlePersonOrg']) || allSpecies.length === 0) {
       return <OnboardingHomeView />;
     } else {
       return orgHasModules && isManagerOrHigher(selectedOrganization) ? <ParticipantHomeView /> : <TerrawareHomeView />;
