@@ -78,6 +78,14 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
     );
   }, [record.remainingQuantity, accession.remainingQuantity]);
 
+  useEffect(() => {
+    if (quantityChanged && isByWeight) {
+      setIsSubsetOpen(true);
+    } else {
+      setIsSubsetOpen(false);
+    }
+  }, [quantityChanged, isByWeight]);
+
   const validate = () => {
     let hasErrors = false;
 
@@ -94,6 +102,19 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
       hasErrors = true;
     } else {
       setRemainingQuantityNotesError(false);
+    }
+
+    if (quantityChanged && isByWeight && !record.subsetCount) {
+      setSubsetWeightError(strings.REQUIRED_FIELD);
+      hasErrors = true;
+    } else {
+      setSubsetWeightError('');
+    }
+
+    if (quantityChanged && isByWeight && !record.subsetCount) {
+      setSubsetCountError(strings.REQUIRED_FIELD);
+    } else {
+      setSubsetCountError('');
     }
 
     return !hasErrors;
