@@ -3,12 +3,13 @@ import React, { useMemo, useRef, useState } from 'react';
 import { Grid, Typography } from '@mui/material';
 import { Separator } from '@terraware/web-components';
 
+import CohortsDropdown from 'src/components/CohortsDropdown';
 import DeliverablesTable from 'src/components/DeliverablesTable';
 import PageHeader from 'src/components/PageHeader';
-import ParticipantsDropdown from 'src/components/ParticipantsDropdown';
 import { FilterField } from 'src/components/common/FilterGroup';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
+import { useCohorts } from 'src/hooks/useCohorts';
 import { useParticipants } from 'src/hooks/useParticipants';
 import { useLocalization } from 'src/providers';
 import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
@@ -20,23 +21,24 @@ import { SearchNodePayload } from 'src/types/Search';
 const DeliverablesList = () => {
   const { activeLocale } = useLocalization();
   const { availableParticipants } = useParticipants();
+  const { availableCohorts } = useCohorts();
   const contentRef = useRef(null);
 
-  const [participantFilter, setParticipantFilter] = useState<{ id?: number }>({ id: undefined });
+  const [cohortFilter, setCohortFilter] = useState<{ id?: number }>({ id: undefined });
 
   const extraTableFilters: SearchNodePayload[] = useMemo(
     () =>
-      participantFilter.id
+      cohortFilter.id
         ? [
             {
               operation: 'field',
-              field: 'participantId',
+              field: 'cohortId',
               type: 'Exact',
-              values: [`${participantFilter.id}`],
+              values: [`${cohortFilter.id}`],
             },
           ]
         : [],
-    [participantFilter]
+    [cohortFilter]
   );
 
   const PageHeaderLeftComponent = useMemo(
@@ -49,15 +51,15 @@ const DeliverablesList = () => {
             </Grid>
             <Grid item>
               <Typography sx={{ lineHeight: '40px' }} component={'span'}>
-                {strings.PARTICIPANT}
+                {strings.COHORT}
               </Typography>
             </Grid>
             <Grid item sx={{ marginLeft: theme.spacing(1.5) }}>
-              <ParticipantsDropdown
+              <CohortsDropdown
                 allowUnselect
-                availableParticipants={availableParticipants}
-                record={participantFilter}
-                setRecord={setParticipantFilter}
+                availableCohorts={availableCohorts}
+                record={cohortFilter}
+                setRecord={setCohortFilter}
                 label={''}
                 unselectLabel={strings.ALL}
               />
@@ -65,7 +67,7 @@ const DeliverablesList = () => {
           </Grid>
         </>
       ) : null,
-    [activeLocale, availableParticipants, participantFilter]
+    [activeLocale, availableCohorts, cohortFilter]
   );
 
   const iconFilters: FilterConfig[] = useMemo(() => {
@@ -109,7 +111,6 @@ const DeliverablesList = () => {
         extraTableFilters={extraTableFilters}
         isAcceleratorRoute={true}
         organizationId={-1}
-        participantId={participantFilter.id}
         tableId={'acceleratorDeliverablesTable'}
         iconFilters={iconFilters}
       />
