@@ -21,7 +21,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const columns = (): TableColumnType[] => [
   {
-    key: 'monitoringPlotName',
+    key: 'monitoringPlotNumber',
     name: strings.MONITORING_PLOT,
     type: 'string',
   },
@@ -102,7 +102,7 @@ export default function PlantingSiteZoneView(): JSX.Element {
             id='planting-site-subzone-details-table'
             columns={columns}
             rows={plantingZone?.plantingSubzones[0]?.monitoringPlots ?? []}
-            orderBy='monitoringPlotName'
+            orderBy='monitoringPlotNumber'
             Renderer={DetailsRenderer(timeZone)}
           />
         </Box>

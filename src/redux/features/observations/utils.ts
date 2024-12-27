@@ -30,7 +30,8 @@ export const searchResultPlots = (search: string, plotType?: boolean, zone?: Obs
         ...subzone,
         monitoringPlots: subzone.monitoringPlots.filter(
           (plot: ObservationMonitoringPlotResults) =>
-            regexMatch(plot.monitoringPlotName, search) && (plotType === undefined || plot.isPermanent === plotType)
+            regexMatch(`${plot.monitoringPlotNumber}`, search) &&
+            (plotType === undefined || plot.isPermanent === plotType)
         ),
       }))
       .filter((subzone: ObservationPlantingSubzoneResults) => subzone.monitoringPlots.length > 0),

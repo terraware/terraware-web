@@ -329,7 +329,7 @@ async function searchMonitoringPlots(
   } as SearchSortOrder;
 
   const params: SearchRequestPayload = {
-    fields: ['id', 'fullName'],
+    fields: ['id', 'plotNumber'],
     prefix: 'plantingSites.plantingZones.plantingSubzones.monitoringPlots',
     sortOrder: [defaultSortOrder],
     search: {
