@@ -268,6 +268,7 @@ export const collectTablesForPreview = (inputValues: VariableValueValue[]): Prev
   const outputValues: PreviewValueDisplayUnion[] = [];
   const _inputValues = [...inputValues];
 
+  let index = 0;
   for (const inputValue of _inputValues) {
     const tableElementStartingAtThisValue = tableElements.find(
       (tableElement) => tableElement.startingValueId === inputValue.id
@@ -286,17 +287,28 @@ export const collectTablesForPreview = (inputValues: VariableValueValue[]): Prev
         rows,
         startingValueId,
       });
-      if (inputValue.type === 'SectionText' && textAfterTable(inputValue.textValue)) {
-        const inputValueCopy = { ...inputValue, textValue: textAfterTable(inputValue.textValue) };
-        outputValues.push(inputValueCopy as PreviewValueDisplayUnion);
+      if (index === _inputValues.length - 1) {
+        if (inputValue.type === 'SectionText' && textAfterTable(inputValue.textValue)) {
+          const inputValueCopy = { ...inputValue, textValue: textAfterTable(inputValue.textValue) };
+          outputValues.push(inputValueCopy as PreviewValueDisplayUnion);
+        }
       }
+      index++;
       continue;
     } else if (valueIsTableToken(tableElements, inputValue)) {
+      if (index === _inputValues.length - 1) {
+        if (inputValue.type === 'SectionText' && textAfterTable(inputValue.textValue)) {
+          const inputValueCopy = { ...inputValue, textValue: textAfterTable(inputValue.textValue) };
+          outputValues.push(inputValueCopy as PreviewValueDisplayUnion);
+        }
+      }
       // This input value is part of an already collected table, we can ignore it
+      index++;
       continue;
     }
 
     // Otherwise, this is just a regular, non table input value
+    index++;
     outputValues.push(inputValue as PreviewValueDisplayUnion);
   }
 
