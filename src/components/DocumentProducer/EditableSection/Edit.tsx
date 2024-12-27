@@ -232,12 +232,7 @@ const SectionEdit = ({
               }
 
               const variable = (value as DropdownItem).value as VariableWithValues;
-              if (variable.type === 'Image' || variable.type === 'Table') {
-                setInsertOptionsDropdownAnchor(variableDropdownRef.current);
-                setVariableToBeInserted(variable);
-              } else {
-                insertVariable(variable);
-              }
+              insertVariable(variable);
             }}
             options={allVariables.map((v) => ({
               label: v.name,
