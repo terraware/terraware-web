@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1735326114563" clover="3.2.0">
-  <project timestamp="1735326114563" name="All files">
-    <metrics statements="26876" coveredstatements="1193" conditionals="18192" coveredconditionals="336" methods="8267" coveredmethods="195" elements="53335" coveredelements="1724" complexity="0" loc="26876" ncloc="26876" packages="239" files="1130" classes="1130"/>
+<coverage generated="1735584227486" clover="3.2.0">
+  <project timestamp="1735584227487" name="All files">
+    <metrics statements="26896" coveredstatements="1209" conditionals="18204" coveredconditionals="345" methods="8269" coveredmethods="197" elements="53369" coveredelements="1751" complexity="0" loc="26896" ncloc="26896" packages="239" files="1130" classes="1130"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -2686,7 +2686,7 @@
       </file>
     </package>
     <package name="src.components.DocumentProducer.EditableSection">
-      <metrics statements="234" coveredstatements="0" conditionals="189" coveredconditionals="0" methods="68" coveredmethods="0"/>
+      <metrics statements="231" coveredstatements="0" conditionals="185" coveredconditionals="0" methods="68" coveredmethods="0"/>
       <file name="Container.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DocumentProducer/EditableSection/Container.tsx">
         <metrics statements="80" coveredstatements="0" conditionals="47" coveredconditionals="0" methods="21" coveredmethods="0"/>
         <line num="49" count="0" type="stmt"/>
@@ -2796,7 +2796,7 @@
         <line num="100" count="0" type="stmt"/>
       </file>
       <file name="Edit.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DocumentProducer/EditableSection/Edit.tsx">
-        <metrics statements="71" coveredstatements="0" conditionals="49" coveredconditionals="0" methods="24" coveredmethods="0"/>
+        <metrics statements="68" coveredstatements="0" conditionals="45" coveredconditionals="0" methods="24" coveredmethods="0"/>
         <line num="45" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
@@ -2856,18 +2856,15 @@
         <line num="230" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="231" count="0" type="stmt"/>
         <line num="234" count="0" type="stmt"/>
-        <line num="235" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="236" count="0" type="stmt"/>
+        <line num="235" count="0" type="stmt"/>
         <line num="237" count="0" type="stmt"/>
-        <line num="239" count="0" type="stmt"/>
-        <line num="242" count="0" type="stmt"/>
-        <line num="261" count="0" type="stmt"/>
-        <line num="282" count="0" type="stmt"/>
-        <line num="283" count="0" type="stmt"/>
-        <line num="285" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="287" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="289" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="291" count="0" type="stmt"/>
+        <line num="256" count="0" type="stmt"/>
+        <line num="277" count="0" type="stmt"/>
+        <line num="278" count="0" type="stmt"/>
+        <line num="280" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="282" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="284" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="286" count="0" type="stmt"/>
       </file>
       <file name="EditVariableModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DocumentProducer/EditableSection/EditVariableModal.tsx">
         <metrics statements="6" coveredstatements="0" conditionals="9" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -14688,7 +14685,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Documents.PreviewView.util">
-      <metrics statements="124" coveredstatements="88" conditionals="69" coveredconditionals="39" methods="23" coveredmethods="13"/>
+      <metrics statements="147" coveredstatements="104" conditionals="85" coveredconditionals="48" methods="25" coveredmethods="15"/>
       <file name="index.ts" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Documents/PreviewView/util/index.ts">
         <metrics statements="26" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="9" coveredmethods="0"/>
         <line num="9" count="0" type="stmt"/>
@@ -14719,7 +14716,7 @@
         <line num="77" count="0" type="stmt"/>
       </file>
       <file name="markdown-table.ts" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Documents/PreviewView/util/markdown-table.ts">
-        <metrics statements="98" coveredstatements="88" conditionals="51" coveredconditionals="39" methods="14" coveredmethods="13"/>
+        <metrics statements="121" coveredstatements="104" conditionals="67" coveredconditionals="48" methods="16" coveredmethods="15"/>
         <line num="9" count="1" type="stmt"/>
         <line num="10" count="12" type="cond" truecount="2" falsecount="0"/>
         <line num="12" count="44" type="stmt"/>
@@ -14803,21 +14800,44 @@
         <line num="206" count="0" type="stmt"/>
         <line num="210" count="6" type="stmt"/>
         <line num="213" count="6" type="stmt"/>
-        <line num="253" count="1" type="stmt"/>
-        <line num="254" count="6" type="stmt"/>
-        <line num="256" count="6" type="stmt"/>
-        <line num="257" count="6" type="stmt"/>
-        <line num="259" count="6" type="stmt"/>
-        <line num="260" count="41" type="stmt"/>
-        <line num="261" count="41" type="stmt"/>
-        <line num="264" count="41" type="cond" truecount="2" falsecount="0"/>
-        <line num="267" count="6" type="stmt"/>
+        <line num="216" count="1" type="stmt"/>
+        <line num="217" count="6" type="stmt"/>
+        <line num="218" count="6" type="stmt"/>
+        <line num="219" count="6" type="stmt"/>
+        <line num="222" count="1" type="stmt"/>
+        <line num="223" count="3" type="stmt"/>
+        <line num="224" count="3" type="stmt"/>
+        <line num="225" count="3" type="stmt"/>
+        <line num="265" count="1" type="stmt"/>
+        <line num="266" count="6" type="stmt"/>
         <line num="268" count="6" type="stmt"/>
-        <line num="273" count="6" type="stmt"/>
-        <line num="274" count="35" type="cond" truecount="2" falsecount="0"/>
-        <line num="276" count="20" type="stmt"/>
-        <line num="280" count="15" type="stmt"/>
-        <line num="283" count="6" type="stmt"/>
+        <line num="269" count="6" type="stmt"/>
+        <line num="271" count="6" type="stmt"/>
+        <line num="272" count="6" type="stmt"/>
+        <line num="273" count="41" type="stmt"/>
+        <line num="274" count="41" type="stmt"/>
+        <line num="277" count="41" type="cond" truecount="2" falsecount="0"/>
+        <line num="278" count="6" type="cond" truecount="3" falsecount="1"/>
+        <line num="279" count="0" type="stmt"/>
+        <line num="280" count="0" type="stmt"/>
+        <line num="284" count="6" type="stmt"/>
+        <line num="285" count="6" type="stmt"/>
+        <line num="290" count="6" type="cond" truecount="1" falsecount="1"/>
+        <line num="291" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="292" count="0" type="stmt"/>
+        <line num="293" count="0" type="stmt"/>
+        <line num="296" count="6" type="stmt"/>
+        <line num="297" count="6" type="stmt"/>
+        <line num="298" count="35" type="cond" truecount="2" falsecount="0"/>
+        <line num="299" count="20" type="cond" truecount="2" falsecount="0"/>
+        <line num="300" count="3" type="cond" truecount="3" falsecount="1"/>
+        <line num="301" count="0" type="stmt"/>
+        <line num="302" count="0" type="stmt"/>
+        <line num="306" count="20" type="stmt"/>
+        <line num="307" count="20" type="stmt"/>
+        <line num="311" count="15" type="stmt"/>
+        <line num="312" count="15" type="stmt"/>
+        <line num="315" count="6" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Modules">
