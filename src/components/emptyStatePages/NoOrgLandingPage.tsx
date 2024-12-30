@@ -22,7 +22,7 @@ export default function NoOrgLandingPage(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const [isOrgModalOpen, setIsOrgModalOpen] = useState<boolean>(false);
-  const { redirectAndNotify } = useOrganization();
+  const { redirectAndNotify, reloadOrganizations } = useOrganization();
 
   const listItemContents: ListItemContent[] = [{ icon: 'newOrganization' }];
 
@@ -52,7 +52,10 @@ export default function NoOrgLandingPage(): JSX.Element {
         <AddNewOrganizationModal
           open={isOrgModalOpen}
           onCancel={() => setIsOrgModalOpen(false)}
-          onSuccess={(organization: Organization) => redirectAndNotify(organization)}
+          onSuccess={(organization: Organization) => {
+            reloadOrganizations();
+            redirectAndNotify(organization);
+          }}
         />
         <EmptyStateContent
           title={strings.TITLE_WELCOME_EXCLAIM}
