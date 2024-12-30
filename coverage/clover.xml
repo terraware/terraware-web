@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1735584227486" clover="3.2.0">
-  <project timestamp="1735584227487" name="All files">
+<coverage generated="1735584641850" clover="3.2.0">
+  <project timestamp="1735584641850" name="All files">
     <metrics statements="26896" coveredstatements="1209" conditionals="18204" coveredconditionals="345" methods="8269" coveredmethods="197" elements="53369" coveredelements="1751" complexity="0" loc="26896" ncloc="26896" packages="239" files="1130" classes="1130"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
@@ -3066,7 +3066,7 @@
         <line num="462" count="0" type="stmt"/>
         <line num="463" count="0" type="stmt"/>
         <line num="466" count="0" type="stmt"/>
-        <line num="475" count="0" type="stmt"/>
+        <line num="476" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.DocumentProducer.ErrorMessage">
