@@ -168,6 +168,8 @@ export default function SpeciesEditView(): JSX.Element {
         ) {
           goToSpecies(record.id);
         }
+      } else if (response.statusCode === 409) {
+        snackbar.toastError(strings.formatString(strings.EXISTING_SPECIES_MSG, record.scientificName));
       } else {
         snackbar.toastError();
       }
