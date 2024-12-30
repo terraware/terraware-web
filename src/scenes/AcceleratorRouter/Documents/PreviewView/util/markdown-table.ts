@@ -213,6 +213,18 @@ const collectTableElements = (inputValues: VariableValueValue[]): TableElementWi
   return tableElements;
 };
 
+const textBeforeTable = (inputValue: string) => {
+  const tableStartIndex = inputValue.indexOf('|');
+  const initialText = inputValue.substring(0, tableStartIndex).trim();
+  return initialText;
+};
+
+const textAfterTable = (inputValue: string) => {
+  const tableEndIndex = inputValue.lastIndexOf('|') + 1;
+  const endText = inputValue.substring(tableEndIndex).trim();
+  return endText;
+};
+
 /**
  * This function attempts to collect Markdown formatted tables from our section variable values. Section variable
  * values are a list of "section text" and "section variable" values, and a Markdown formatted table may be
@@ -256,12 +268,17 @@ export const collectTablesForPreview = (inputValues: VariableValueValue[]): Prev
   const outputValues: PreviewValueDisplayUnion[] = [];
   const _inputValues = [...inputValues];
 
+  let index = 0;
   for (const inputValue of _inputValues) {
     const tableElementStartingAtThisValue = tableElements.find(
       (tableElement) => tableElement.startingValueId === inputValue.id
     );
 
     if (tableElementStartingAtThisValue) {
+      if (inputValue.type === 'SectionText' && textBeforeTable(inputValue.textValue)) {
+        const inputValueCopy = { ...inputValue, textValue: textBeforeTable(inputValue.textValue) };
+        outputValues.push(inputValueCopy as PreviewValueDisplayUnion);
+      }
       // This is the starting point of a table element, we want to add our custom table element object to the output
       // We can remove the valueIds since they are only using for the tokenization, not display
       const { headers, rows, startingValueId } = tableElementStartingAtThisValue;
@@ -270,13 +287,28 @@ export const collectTablesForPreview = (inputValues: VariableValueValue[]): Prev
         rows,
         startingValueId,
       });
+      if (index === _inputValues.length - 1) {
+        if (inputValue.type === 'SectionText' && textAfterTable(inputValue.textValue)) {
+          const inputValueCopy = { ...inputValue, textValue: textAfterTable(inputValue.textValue) };
+          outputValues.push(inputValueCopy as PreviewValueDisplayUnion);
+        }
+      }
+      index++;
       continue;
     } else if (valueIsTableToken(tableElements, inputValue)) {
+      if (index === _inputValues.length - 1) {
+        if (inputValue.type === 'SectionText' && textAfterTable(inputValue.textValue)) {
+          const inputValueCopy = { ...inputValue, textValue: textAfterTable(inputValue.textValue) };
+          outputValues.push(inputValueCopy as PreviewValueDisplayUnion);
+        }
+      }
       // This input value is part of an already collected table, we can ignore it
+      index++;
       continue;
     }
 
     // Otherwise, this is just a regular, non table input value
+    index++;
     outputValues.push(inputValue as PreviewValueDisplayUnion);
   }
 
