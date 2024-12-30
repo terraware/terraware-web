@@ -1,3 +1,4 @@
+2b907ea28ca SW-6402 Better error on species rename conflict (#3515)
 0b2671f233a SW-6397 Dropdowns in table variable (edit) are cut off (#3512)
 b434e4b54ed SW-6383 Doc Producer: text before or after default text table does not show up in Preview (#3508)
 1d128f40bfa SW-6398 Can't add table variable to Document Producer section text (#3511)

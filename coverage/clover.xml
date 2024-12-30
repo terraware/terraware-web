@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1735584641850" clover="3.2.0">
-  <project timestamp="1735584641850" name="All files">
-    <metrics statements="26896" coveredstatements="1209" conditionals="18204" coveredconditionals="345" methods="8269" coveredmethods="197" elements="53369" coveredelements="1751" complexity="0" loc="26896" ncloc="26896" packages="239" files="1130" classes="1130"/>
+<coverage generated="1735596046978" clover="3.2.0">
+  <project timestamp="1735596046978" name="All files">
+    <metrics statements="26898" coveredstatements="1209" conditionals="18206" coveredconditionals="345" methods="8269" coveredmethods="197" elements="53373" coveredelements="1751" complexity="0" loc="26898" ncloc="26898" packages="239" files="1130" classes="1130"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -26555,7 +26555,7 @@
       </file>
     </package>
     <package name="src.scenes.Species">
-      <metrics statements="745" coveredstatements="0" conditionals="458" coveredconditionals="0" methods="213" coveredmethods="0"/>
+      <metrics statements="747" coveredstatements="0" conditionals="460" coveredconditionals="0" methods="213" coveredmethods="0"/>
       <file name="AddToProjectConfirmModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Species/AddToProjectConfirmModal.tsx">
         <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="17" count="0" type="stmt"/>
@@ -26948,7 +26948,7 @@
         <line num="421" count="0" type="stmt"/>
       </file>
       <file name="SpeciesEditView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Species/SpeciesEditView.tsx">
-        <metrics statements="74" coveredstatements="0" conditionals="47" coveredconditionals="0" methods="17" coveredmethods="0"/>
+        <metrics statements="76" coveredstatements="0" conditionals="49" coveredconditionals="0" methods="17" coveredmethods="0"/>
         <line num="34" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
@@ -27020,9 +27020,11 @@
         <line num="163" count="0" type="stmt"/>
         <line num="165" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="169" count="0" type="stmt"/>
+        <line num="171" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="172" count="0" type="stmt"/>
-        <line num="177" count="0" type="stmt"/>
-        <line num="183" count="0" type="stmt"/>
+        <line num="174" count="0" type="stmt"/>
+        <line num="179" count="0" type="stmt"/>
+        <line num="185" count="0" type="stmt"/>
       </file>
       <file name="SpeciesListView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Species/SpeciesListView.tsx">
         <metrics statements="184" coveredstatements="0" conditionals="94" coveredconditionals="0" methods="44" coveredmethods="0"/>
