@@ -399,7 +399,7 @@ export default function PeopleListView(): JSX.Element {
                       rows={results}
                       orderBy='name'
                       Renderer={TableCellRenderer}
-                      showCheckbox={true}
+                      showCheckbox={isAdmin(selectedOrganization)}
                       selectedRows={selectedPeopleRows}
                       setSelectedRows={setSelectedPeopleRows}
                       showTopBar={true}
