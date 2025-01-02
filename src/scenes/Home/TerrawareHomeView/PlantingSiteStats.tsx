@@ -262,7 +262,7 @@ export const PlantingSiteStats = () => {
             width: '100%',
           }}
         >
-          {token && selectedPlantingSiteId && (
+          {token && selectedPlantingSiteId && selectedPlantingSite?.boundary && (
             <SimplePlantingSiteMap
               plantingSiteId={selectedPlantingSiteId}
               hideAllControls={true}
