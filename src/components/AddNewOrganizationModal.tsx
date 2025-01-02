@@ -6,7 +6,7 @@ import { Checkbox, Dropdown } from '@terraware/web-components';
 import RegionSelector from 'src/components/RegionSelector';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import Button from 'src/components/common/button/Button';
-import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { useLocalization } from 'src/providers/hooks';
 import { OrganizationService } from 'src/services';
 import strings from 'src/strings';
 import {
@@ -35,7 +35,6 @@ export type AddNewOrganizationModalProps = {
 };
 
 export default function AddNewOrganizationModal(props: AddNewOrganizationModalProps): JSX.Element {
-  const { reloadOrganizations } = useOrganization();
   const { activeLocale } = useLocalization();
   const { isApplication, onCancel, onSuccess, open } = props;
   const theme = useTheme();
@@ -139,7 +138,6 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       ManagedLocationTypes.filter((locationType: ManagedLocationType) => locationTypes[locationType])
     );
     if (response.requestSucceeded && response.organization) {
-      reloadOrganizations();
       onSuccess(response.organization);
     } else {
       snackbar.toastError(strings.GENERIC_ERROR, strings.ORGANIZATION_CREATE_FAILED);
