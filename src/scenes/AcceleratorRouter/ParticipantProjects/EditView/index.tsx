@@ -265,6 +265,7 @@ const EditView = () => {
                   hideClearIcon={true}
                   label={strings.PROJECT_LEAD}
                   fullWidth
+                  autocomplete
                 />
               </Box>
             </GridEntryWrapper>
