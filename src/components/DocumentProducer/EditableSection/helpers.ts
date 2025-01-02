@@ -31,7 +31,7 @@ export const editorDisplayVariableWithValues = (
       result =
         variable.options
           .filter((o) => selectedValues?.includes(o.id))
-          .map((o) => o.name)
+          .map((o) => o.renderedText ?? o.name)
           .join(', ') ||
         (placeholder ?? '');
       break;
