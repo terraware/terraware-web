@@ -6,7 +6,7 @@ type State = {
 type StateLocation = Location<State>;
 
 export default function useStateLocation(): StateLocation {
-  const location = useLocation();
+  const location = useLocation() as StateLocation;
 
   return location;
 }

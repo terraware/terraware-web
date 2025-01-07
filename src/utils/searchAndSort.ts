@@ -78,8 +78,10 @@ export const trigramWordSimilarity = (a: string, b: string) => {
   const aTrigrams = splitTrigrams(a);
   const bTrigrams = splitTrigrams(b);
 
-  if (aTrigrams.size === 0 || bTrigrams.size === 0) return 0;
-
+  if (aTrigrams.size === 0 || bTrigrams.size === 0) {
+    return 0;
+  }
+  
   // Convert Set to Array
   const aTrigramArray = Array.from(aTrigrams);
   const matches = aTrigramArray.filter((trigram) => bTrigrams.has(trigram));

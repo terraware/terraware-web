@@ -1,5 +1,3 @@
-import { DateTime } from 'luxon';
-
 import { components } from 'src/api/types/generated-schema';
 
 export type Score = components['schemas']['ProjectOverallScorePayload'];
