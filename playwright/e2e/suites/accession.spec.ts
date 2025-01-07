@@ -39,7 +39,7 @@ export default function AccessionTests() {
     await page.getByText('garage').click();
     await page.getByRole('button', { name: 'Save' }).click();
 
-    await expect(page.getByRole('main')).toContainText('24-1-2-00');
+    await expect(page.getByRole('main')).toContainText('25-1-2-00');
     await expect(page.getByRole('main')).toContainText('Coconut');
     await expect(page.getByRole('main')).toContainText('Status Awaiting Check-In');
     await expect(page.getByRole('main')).toContainText('Location garage');
@@ -105,7 +105,7 @@ export default function AccessionTests() {
     await expect(page.getByRole('main')).toContainText('~495 ct');
 
     await page.getByRole('button', { name: 'Accessions' }).click();
-    await expect(page.locator('#row1-accessionNumber')).toContainText('24-1-2-001');
+    await expect(page.locator('#row1-accessionNumber')).toContainText('25-1-2-001');
     await page.getByText('-1-2-001').click();
     await expect(page.getByRole('main')).toContainText('Coconut');
   });
@@ -117,7 +117,7 @@ export default function AccessionTests() {
 
     await page.getByRole('button', { name: 'Seeds' }).click();
     await page.getByRole('button', { name: 'Accessions' }).click();
-    await page.locator('#row1-accessionNumber').getByText('24-1-2-001').click();
+    await page.locator('#row1-accessionNumber').getByText('25-1-2-001').click();
     await page.getByRole('button', { name: 'Withdraw' }).click();
     await page.locator('#destinationFacilityId').getByRole('textbox').click();
     await page
@@ -152,7 +152,7 @@ export default function AccessionTests() {
 
     await page.getByRole('button', { name: 'Seeds' }).click();
     await page.getByRole('button', { name: 'Accessions' }).click();
-    await page.locator('#row1-accessionNumber').getByText('24-1-2-001').click();
+    await page.locator('#row1-accessionNumber').getByText('25-1-2-001').click();
     await page.getByRole('button', { name: 'Withdraw' }).click();
 
     await page.getByPlaceholder('Select...').first().click();
