@@ -18,7 +18,7 @@ export type PopupInfo = {
 
 export type MapGeometry = number[][][][];
 
-/* eslint-disable jsdoc/check-indentation */
+/* eslint-disable @jsdoc/check-indentation */
 /**
  * Example of a boundary:
  * [
@@ -52,7 +52,7 @@ export type MapGeometry = number[][][][];
  *   ]
  * ]
  */
-/* eslint-enable jsdoc/check-indentation */
+/* eslint-enable @jsdoc/check-indentation */
 
 export type MapSourceProperties = { [key: string]: any };
 
