@@ -18,7 +18,7 @@ export const ParticipantProjectSpeciesContext = createContext<ParticipantProject
   participantProjectSpeciesId: -1,
   // eslint-disable-next-line no-empty
   reload: () => {},
-  // eslint:disable-next-line no-empty
+  // eslint-disable-next-line no-empty
   update: () => {},
 });
 

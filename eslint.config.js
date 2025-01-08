@@ -23,7 +23,7 @@ module.exports = {
     'prettier',
   ],
   files: ['**/*.ts', '**/*.tsx'],
-  ignores: ["**/*.test.ts"],
+  ignores: ['**/*.test.ts'],
   languageOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',

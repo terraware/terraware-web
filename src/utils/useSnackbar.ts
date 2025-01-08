@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
 
+import { Dispatch } from 'redux';
+
 import { sendSnackbar } from 'src/redux/features/snackbar/snackbarSlice';
 import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
 import { Message, OnCloseMessage, Priority, Title, Type } from 'src/types/Snackbar';
-import { Dispatch } from 'redux';
 
 /**
  * The snackbar will send a message to the message feature when an action is taken on a page message. The message key
