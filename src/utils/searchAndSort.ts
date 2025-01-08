@@ -120,7 +120,7 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
   } else if (isFieldNodePayload(condition)) {
     // Only 'Exact' and 'Fuzzy' condition types are supported
     // `null` values (XYZ field contains no value) are also not supported
-    const resultValue = `${result[condition.field]}`.toLowerCase();
+    const resultValue = `${result[condition.field] as string}`.toLowerCase();
     const searchValues = condition.values
       .filter((value: string | null): value is string => value !== null)
       .map((value) => value.toLowerCase());

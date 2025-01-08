@@ -74,7 +74,7 @@ const list = async (
   if (sortOrder) {
     searchOrderConfig = {
       locale: locale ?? null,
-      sortOrder: sortOrder,
+      sortOrder,
       numberFields: ['cohortId', 'id'],
     };
   }
