@@ -116,10 +116,10 @@ const MobileAppCard = ({
                 component='p'
                 variant='h6'
                 sx={{
-                  color: theme.palette.TwClrTxt,
+                  color: theme.palette.TwClrTxtSecondary,
                   fontSize: '14px',
                   fontWeight: 500,
-                  lineHeight: '24px',
+                  lineHeight: '20px',
                 }}
               >
                 {strings.DOWNLOAD_FOR_ANDROID}
@@ -137,10 +137,10 @@ const MobileAppCard = ({
                 component='p'
                 variant='h6'
                 sx={{
-                  color: theme.palette.TwClrTxt,
+                  color: theme.palette.TwClrTxtSecondary,
                   fontSize: '14px',
                   fontWeight: 500,
-                  lineHeight: '24px',
+                  lineHeight: '20px',
                 }}
               >
                 {strings.DOWNLOAD_FOR_IOS}
