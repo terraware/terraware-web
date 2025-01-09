@@ -239,7 +239,7 @@ export function getGrowthFormsString(species?: Species): string {
         case 'Vine':
           return strings.VINE;
         default:
-          return `${growthForm}`;
+          return `${growthForm as string}`;
       }
     })
     .join(', ');

@@ -57,7 +57,7 @@ const regexMatch = (input: string, stringToMatch: string): boolean => {
 };
 
 /**
- *   Return inner string if a string is double-quoted, otherwsie null
+ * Return inner string if a string is double-quoted, otherwsie null
  */
 const removeDoubleQuotes = (str: string): string | null => {
   const pattern = /^"([^"]*)"$/;

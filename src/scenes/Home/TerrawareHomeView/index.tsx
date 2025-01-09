@@ -229,6 +229,7 @@ const TerrawareHomeView = () => {
     activeLocale,
     availableSpecies,
     orgNurserySummary,
+    plantingSites,
     seedBankSummary,
     selectedOrganization,
     speciesLastModifiedDate,
