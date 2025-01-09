@@ -78,7 +78,9 @@ export const trigramWordSimilarity = (a: string, b: string) => {
   const aTrigrams = splitTrigrams(a);
   const bTrigrams = splitTrigrams(b);
 
-  if (aTrigrams.size === 0 || bTrigrams.size === 0) return 0;
+  if (aTrigrams.size === 0 || bTrigrams.size === 0) {
+    return 0;
+  }
 
   // Convert Set to Array
   const aTrigramArray = Array.from(aTrigrams);
@@ -118,7 +120,7 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
   } else if (isFieldNodePayload(condition)) {
     // Only 'Exact' and 'Fuzzy' condition types are supported
     // `null` values (XYZ field contains no value) are also not supported
-    const resultValue = `${result[condition.field]}`.toLowerCase();
+    const resultValue = `${result[condition.field] as string}`.toLowerCase();
     const searchValues = condition.values
       .filter((value: string | null): value is string => value !== null)
       .map((value) => value.toLowerCase());

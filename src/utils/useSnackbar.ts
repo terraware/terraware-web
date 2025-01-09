@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 
+import { Dispatch } from 'redux';
+
 import { sendSnackbar } from 'src/redux/features/snackbar/snackbarSlice';
 import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
@@ -14,7 +16,7 @@ import { Message, OnCloseMessage, Priority, Title, Type } from 'src/types/Snackb
  */
 export const SNACKBAR_PAGE_CLOSE_KEY = 'snackbarPageMessageClose';
 
-function snackbarFns(dispatch: any) {
+function snackbarFns(dispatch: Dispatch) {
   const snack = (msg: Message, title: Title, priority: Priority, type: Type, onCloseMessage?: OnCloseMessage) => {
     dispatch(sendSnackbar({ msg, title, priority, type, onCloseMessage }));
   };

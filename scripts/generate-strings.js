@@ -13,7 +13,7 @@ async function convertAll() {
   const files = await fs.readdir(csvDir);
   const conversions = files.map(async (filename) => {
     if (filename.endsWith('.csv')) {
-      // tslint:disable:no-console
+      // eslint-disable no-console
       console.log(`Converting ${filename} to JavaScript`);
       await convertCsvFile(`${csvDir}/${filename}`, stringsDir);
     }

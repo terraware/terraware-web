@@ -50,7 +50,7 @@ export const getGlobalRole = (globalRole: UserGlobalRole): string => {
     }
 
     default: {
-      return `${globalRole}`;
+      return `${globalRole as string}`;
     }
   }
 };
