@@ -36,7 +36,7 @@ function ProjectAssignModal<T extends ProjectAssignableEntity>(props: ProjectAss
   const projectRequest = useAppSelector((state) => selectProjectRequest(state, requestId));
 
   const handleSave = useCallback(() => {
-    if (onUnAssign && entity.projectId === null) {
+    if (onUnAssign && !entity.projectId) {
       onUnAssign();
     }
 
