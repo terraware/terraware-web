@@ -42,7 +42,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import SelectSeedBankModal from '../../../scenes/SeedBanksRouter/SelectSeedBankModal';
 import DownloadReportModal from './DownloadReportModal';
-import EditColumns from './EditColumns';
+import EditColumns from 'src/components/seeds/database/EditColumns';
 import Filters from './Filters';
 import ImportAccessionsModal from './ImportAccessionsModal';
 import SearchCellRenderer from './TableCellRenderer';

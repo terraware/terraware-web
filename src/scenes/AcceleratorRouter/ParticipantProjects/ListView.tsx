@@ -8,7 +8,7 @@ import ExportCsvModal from 'src/components/common/ExportCsvModal';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
-import { useLocalization, useOrganization, useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { requestListParticipantProjects } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectsListRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -18,6 +18,7 @@ import { ParticipantProject } from 'src/types/ParticipantProject';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useSnackbar from 'src/utils/useSnackbar';
 import { PreferencesService } from 'src/services';
+import EditColumns from 'src/scenes/AcceleratorRouter/ParticipantProjects/EditColumns';
 
 import { defaultPreset as DefaultColumns, columns as AllColumns } from 'src/scenes/AcceleratorRouter/ParticipantProjects/columns';
 import CellRenderer from './CellRenderer';
@@ -34,6 +35,7 @@ export default function ListView(): JSX.Element {
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const mixpanel = useMixpanel();
+  const [editColumnsModalOpen, setEditColumnsModalOpen] = useState(false);
 
   const [openDownload, setOpenDownload] = useState<boolean>(false);
   const [lastSearch, setLastSearch] = useState<SearchNodePayload>();
@@ -42,7 +44,11 @@ export default function ListView(): JSX.Element {
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectParticipantProjectsListRequest(requestId));
   const [columns, setColumns] = useState<TableColumnType[]>(
-    AllColumns().filter(column => DefaultColumns().fields.includes(column.key))
+    AllColumns().filter(column => {
+      console.log(`column = ${column}`);
+      DefaultColumns().fields.includes(column.key)
+      console.log("Or no?");
+    })
   );
 
   const setDefaults = useCallback(() => {
@@ -76,7 +82,7 @@ export default function ListView(): JSX.Element {
     [dispatch]
   );
 
-  const saveSearchColumns = useCallback(
+  const saveUpdateColumns = useCallback(
     async (columnNames?: string[]) => {
         await PreferencesService.updateUserPreferences({ projectColumns: columnNames });
         // eslint-disable-next-line @typescript-eslint/await-thenable
@@ -84,6 +90,17 @@ export default function ListView(): JSX.Element {
     },
     [reloadUserPreferences]
   );
+
+  const onOpenEditColumnsModal = () => {
+    setEditColumnsModalOpen(true);
+  };
+
+  const onCloseEditColumnsModal = (columnNames?: string[]) => {
+    if (columnNames) {
+      void saveUpdateColumns(columnNames);
+    }
+    setEditColumnsModalOpen(false);
+  };
 
   const cohorts = useMemo<Record<string, string>>(
     () =>
@@ -138,8 +155,11 @@ export default function ListView(): JSX.Element {
             mixpanel?.track(MIXPANEL_EVENTS.CONSOLE_PROJECTS_EXPORT);
             setOpenDownload(true);
           }
+          else if( item.value === 'customize') {
+            onOpenEditColumnsModal();
+          }
         }}
-        optionItems={[{ label: strings.EXPORT, value: 'export' }]}
+        optionItems={[{ label: strings.CUSTOMIZE_COLUMNS, value: 'customize' }, { label: strings.EXPORT, value: 'export' }]}
       />
     );
   }, [activeLocale, isAllowed]);
@@ -151,6 +171,7 @@ export default function ListView(): JSX.Element {
         onExport={() => ParticipantProjectService.downloadList(lastSearch, lastSort)}
         open={openDownload}
       />
+      <EditColumns open={editColumnsModalOpen} value={DefaultColumns().fields} onClose={onCloseEditColumnsModal} />
       <TableWithSearchFilters
         busy={result?.status === 'pending'}
         columns={(activeLocale: string | null): TableColumnType[] => columns}
