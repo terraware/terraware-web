@@ -5,7 +5,6 @@ import { IconTooltip } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
-import { useUser } from 'src/providers';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -24,7 +23,6 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
   const { onClose, open } = props;
   const [preset, setPreset] = React.useState<Preset>();
   const { isMobile } = useDeviceInfo();
-  const { userPreferences } = useUser();
 
   const [value, setValue] = React.useState(props.value);
 
@@ -64,8 +62,6 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
     }
     return 4;
   };
-
-  const userSections = sections(userPreferences.preferredWeightSystem as string);
 
   return (
     <DialogBox
@@ -109,7 +105,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
           </Grid>
         </Grid>
 
-        {userSections.map(({ name, tooltip, options }) => (
+        {sections().map(({ name, tooltip, options }) => (
           <React.Fragment key={name}>
             <Divisor />
             <Typography component='p'>
@@ -117,7 +113,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
               {tooltip && <IconTooltip title={tooltip} />}
             </Typography>
             <Grid container spacing={isMobile ? 1 : 4} sx={{ marginTop: '-15px' }}>
-              {options.map((optionsColumn, index) => (
+              {options.map((optionsColumn, index) => ( 
                 <Grid key={index} item xs={gridSize()}>
                   <Grid container>
                     {optionsColumn.map(({ key, disabled, name: oName }) => (
@@ -155,84 +151,29 @@ interface Section {
   options: Option[][];
 }
 
-function sections(system?: string): Section[] {
+function sections(): Section[] {
   const columns = columnsIndexed();
-
-  const totalWithdrawnSection = () => {
-    if (system === 'imperial') {
-      return [
-        [columns.totalWithdrawnCount],
-        [columns.totalWithdrawnWeightOunces, columns.totalWithdrawnWeightPounds],
-        [
-          columns.totalWithdrawnWeightMilligrams,
-          columns.totalWithdrawnWeightGrams,
-          columns.totalWithdrawnWeightKilograms,
-        ],
-      ];
-    } else {
-      return [
-        [columns.totalWithdrawnCount],
-        [
-          columns.totalWithdrawnWeightMilligrams,
-          columns.totalWithdrawnWeightGrams,
-          columns.totalWithdrawnWeightKilograms,
-        ],
-        [columns.totalWithdrawnWeightOunces, columns.totalWithdrawnWeightPounds],
-      ];
-    }
-  };
 
   const columnsSections = [
     {
       name: strings.GENERAL,
       options: [
-        [{ ...columns.accessionNumber, disabled: true }],
-        [{ ...columns.state, disabled: true }],
-        [{ ...columns.project_name, disabled: true }],
+        [columns.dealName],
+        [columns.cohortName],
+        [columns.cohortPhase],
       ],
     },
     {
       name: strings.STORING,
-      options: [[columns.facility_name], [columns.subLocation_name]],
+      options: [[columns.region], [columns.countryCode]],
     },
     {
       name: strings.SEED_COLLECTION,
       options: [
-        [columns.speciesName, columns.species_commonName, columns.species_familyName, columns.plantId],
-        [
-          columns.collectedDate,
-          columns.collectionSiteName,
-          columns.collectionSiteLandowner,
-          columns.collectionSiteNotes,
-          columns['geolocations.coordinates'],
-        ],
-        [columns.ageYears, columns.ageMonths],
+        [columns.confirmedReforestabeLand, columns.landUseModelTypes],
       ],
     },
-    {
-      name: strings.WITHDRAWAL,
-      options: totalWithdrawnSection(),
-    },
-    {
-      name: strings.VIABILITY,
-      options: [[columns.totalViabilityPercent]],
-    },
-    {
-      name: strings.QUANTITY,
-      options:
-        system === 'imperial'
-          ? [
-              [columns.estimatedWeightOunces, columns.estimatedWeightPounds],
-              [columns.estimatedWeightMilligrams, columns.estimatedWeightGrams, columns.estimatedWeightKilograms],
-              [columns.estimatedCount],
-            ]
-          : [
-              [columns.estimatedWeightMilligrams, columns.estimatedWeightGrams, columns.estimatedWeightKilograms],
-              [columns.estimatedWeightOunces, columns.estimatedWeightPounds],
-              [columns.estimatedCount],
-            ],
-    },
   ];
-
+  console.log(columnsSections);
   return columnsSections;
 }

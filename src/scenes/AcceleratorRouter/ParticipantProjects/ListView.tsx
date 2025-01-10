@@ -45,9 +45,8 @@ export default function ListView(): JSX.Element {
   const result = useAppSelector(selectParticipantProjectsListRequest(requestId));
   const [columns, setColumns] = useState<TableColumnType[]>(
     AllColumns().filter(column => {
-      console.log(`column = ${column}`);
       DefaultColumns().fields.includes(column.key)
-      console.log("Or no?");
+      //console.log(`column.key = ${column.key}`);
     })
   );
 
@@ -84,6 +83,8 @@ export default function ListView(): JSX.Element {
 
   const saveUpdateColumns = useCallback(
     async (columnNames?: string[]) => {
+
+    console.log("UPDATING!!!!");
         await PreferencesService.updateUserPreferences({ projectColumns: columnNames });
         // eslint-disable-next-line @typescript-eslint/await-thenable
         await reloadUserPreferences();
@@ -93,6 +94,10 @@ export default function ListView(): JSX.Element {
 
   const onOpenEditColumnsModal = () => {
     setEditColumnsModalOpen(true);
+  };
+  const columsnWithLocale = (activeLocale: string | null) => {
+    console.log(`columns = ${columns}`);
+    return(columns);
   };
 
   const onCloseEditColumnsModal = (columnNames?: string[]) => {
@@ -171,10 +176,10 @@ export default function ListView(): JSX.Element {
         onExport={() => ParticipantProjectService.downloadList(lastSearch, lastSort)}
         open={openDownload}
       />
-      <EditColumns open={editColumnsModalOpen} value={DefaultColumns().fields} onClose={onCloseEditColumnsModal} />
+      
       <TableWithSearchFilters
         busy={result?.status === 'pending'}
-        columns={(activeLocale: string | null): TableColumnType[] => columns}
+        columns={() => columsnWithLocale(activeLocale)}
         defaultSearchOrder={defaultSearchOrder}
         dispatchSearchRequest={dispatchSearchRequest}
         featuredFilters={featuredFilters}

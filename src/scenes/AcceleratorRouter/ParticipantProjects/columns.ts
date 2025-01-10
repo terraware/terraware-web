@@ -54,6 +54,7 @@ export function orderedColumnNames(): string[] {
 export function columnsIndexed(): Record<string, TableColumnType> {
   return columns().reduce(
     (acum, value) => {
+      //console.log(`value.key = ${value.key}`);
       acum[value.key] = value;
 
       return acum;
