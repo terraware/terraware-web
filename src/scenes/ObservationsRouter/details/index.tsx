@@ -1,22 +1,21 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Button, Message, TableColumnType } from '@terraware/web-components';
+import { Box, Grid, Typography } from '@mui/material';
+import { Button, Message } from '@terraware/web-components';
 import _ from 'lodash';
 
-import Card from 'src/components/common/Card';
+import ListMapView from 'src/components/ListMapView';
+import { View } from 'src/components/common/ListMapSelector';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
   searchObservationDetails,
   selectDetailsZoneNames,
 } from 'src/redux/features/observations/observationDetailsSelectors';
-import { selectObservation } from 'src/redux/features/observations/observationsSelectors';
-import { has25mPlots } from 'src/redux/features/observations/utils';
+import { searchObservations, selectObservation } from 'src/redux/features/observations/observationsSelectors';
 import { selectMergeOtherSpecies, selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import {
   MergeOtherSpeciesRequestData,
@@ -28,33 +27,16 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
 import strings from 'src/strings';
-import { Observation } from 'src/types/Observations';
+import { ObservationState } from 'src/types/Observations';
 import { FieldOptionsMap } from 'src/types/Search';
-import { PlantingSite } from 'src/types/Tracking';
 import { getLongDate, getShortDate } from 'src/utils/dateFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
+import ObservationMapView from '../map/ObservationMapView';
 import MatchSpeciesModal, { MergeOtherSpeciesPayloadPartial } from './MatchSpeciesModal';
-import ObservationDetailsRenderer from './ObservationDetailsRenderer';
-
-const columns = (): TableColumnType[] => [
-  { key: 'plantingZoneName', name: strings.ZONE, type: 'string' },
-  { key: 'completedDate', name: strings.DATE, type: 'string' },
-  { key: 'status', name: strings.STATUS, type: 'string' },
-  { key: 'totalPlants', name: strings.PLANTS, type: 'number' },
-  { key: 'totalSpecies', name: strings.SPECIES, type: 'number' },
-  { key: 'plantingDensity', name: strings.PLANTING_DENSITY, type: 'number' },
-  { key: 'mortalityRate', name: strings.MORTALITY_RATE, type: 'number' },
-];
-
-type ObservationStatusSummary = {
-  endDate: string;
-  pendingPlots: number;
-  totalPlots: number;
-  observedPlots: number;
-  observedPlotsPercentage: number;
-};
+import ObservationDetailsList from './ObservationDetailsList';
+import ObservationStatusSummaryMessage, { ObservationStatusSummary } from './ObservationStatusSummaryMessage';
 
 export type ObservationDetailsProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;
@@ -86,11 +68,33 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
 
   const plantingSiteId = Number(params.plantingSiteId || -1);
   const observationId = Number(params.observationId || -1);
+
+  const [view, setView] = useState<View>('list');
   const [unrecognizedSpecies, setUnrecognizedSpecies] = useState<string[]>();
   const [showPageMessage, setShowPageMessage] = useState(false);
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
   const [mergeRequestId, setMergeRequestId] = useState<string>('');
+  const [status, setStatus] = useState<ObservationState[]>([]);
   const dispatch = useAppDispatch();
+
+  const observationsResults = useAppSelector((state) =>
+    searchObservations(
+      state,
+      plantingSiteId,
+      defaultTimeZone.get().id,
+      searchProps.search,
+      searchProps.filtersProps?.filters?.zone?.values ?? [],
+      status
+    )
+  );
+
+  const selectedObservationResults = useMemo(() => {
+    if (!observationsResults) {
+      return [];
+    }
+
+    return observationsResults.filter((result) => result.observationId == observationId);
+  }, [observationsResults, observationId]);
 
   const details = useAppSelector((state) =>
     searchObservationDetails(
@@ -104,6 +108,30 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
       defaultTimeZone.get().id
     )
   );
+
+  useEffect(() => {
+    const values = searchProps.filtersProps?.filters.status?.values ?? [];
+    const mappedValues = values.reduce((acc: ObservationState[], curr: string) => {
+      let mappedValue;
+      if (curr === strings.COMPLETED) {
+        mappedValue = 'Completed';
+      } else if (curr === strings.IN_PROGRESS) {
+        mappedValue = 'InProgress';
+      } else if (curr === strings.OVERDUE) {
+        mappedValue = 'Overdue';
+      } else if (curr === strings.ABANDONED) {
+        mappedValue = 'Abandoned';
+      }
+      return mappedValue ? [...acc, mappedValue] : acc;
+    }, [] as ObservationState[]);
+
+    if (mappedValues.length) {
+      setStatus(mappedValues);
+    } else {
+      // if user clears filter, get specific statuses, we don't want to see Upcoming
+      setStatus(['Completed', 'InProgress', 'Overdue', 'Abandoned']);
+    }
+  }, [searchProps.filtersProps?.filters.status]);
 
   const allSpecies = useAppSelector(selectSpecies);
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
@@ -204,13 +232,6 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     }
   }, [matchResponse]);
 
-  const has25mPlotsZones = () => {
-    const allSubzones = details?.plantingZones.flatMap((zone) => zone.plantingSubzones.flatMap((subzone) => subzone));
-    if (allSubzones) {
-      return has25mPlots(allSubzones);
-    }
-  };
-
   const onSaveMergedSpecies = (mergedSpeciesPayloads: MergeOtherSpeciesPayloadPartial[]) => {
     const mergeOtherSpeciesRequestData: MergeOtherSpeciesRequestData[] = mergedSpeciesPayloads
       .filter((sp) => !!sp.otherSpeciesName && !!sp.speciesId)
@@ -292,106 +313,25 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
           <AggregatedPlantsStats {...(details ?? {})} />
         </Grid>
         <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Card flushMobile>
-            <Search {...searchProps} />
-            <Box marginTop={2}>
-              <Table
-                id='observation-details-table'
-                columns={columns}
-                rows={details?.plantingZones ?? []}
-                orderBy='plantingZoneName'
-                Renderer={ObservationDetailsRenderer(plantingSiteId, observationId)}
-                tableComments={has25mPlotsZones() ? strings.PLOTS_SIZE_NOTE : undefined}
-              />
-            </Box>
-          </Card>
+          {plantingSite && selectedObservationResults && (
+            <ListMapView
+              initialView='list'
+              list={<ObservationDetailsList {...searchProps} />}
+              map={
+                <ObservationMapView
+                  hideDate
+                  observationsResults={selectedObservationResults}
+                  selectedPlantingSite={plantingSite}
+                  {...searchProps}
+                />
+              }
+              onView={setView}
+              search={<Search {...searchProps} />}
+              style={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}
+            />
+          )}
         </Grid>
       </Grid>
     </DetailsPage>
   );
 }
-
-type ObservationStatusSummaryMessageProps = {
-  plantingZones?: PlantingSite['plantingZones'];
-  requestedSubzoneIds?: Observation['requestedSubzoneIds'];
-  statusSummary?: ObservationStatusSummary;
-};
-
-const ObservationStatusSummaryMessage = ({
-  plantingZones,
-  requestedSubzoneIds,
-  statusSummary,
-}: ObservationStatusSummaryMessageProps): JSX.Element | null => {
-  const theme = useTheme();
-
-  const subzoneMessageBody = useMemo(() => {
-    if (!requestedSubzoneIds || requestedSubzoneIds.length === 0 || !plantingZones || plantingZones.length === 0) {
-      return undefined;
-    }
-
-    const zoneListItems: JSX.Element[] = plantingZones
-      .map((zone, index): JSX.Element | null => {
-        const subzoneNames = zone.plantingSubzones
-          .filter((subzone) => requestedSubzoneIds.includes(subzone.id))
-          .map((subzone) => subzone.name);
-
-        if (subzoneNames.length === 0) {
-          return null;
-        }
-
-        return <li key={index}>{`${zone.name}: ${subzoneNames.join(', ')}`}</li>;
-      })
-      .filter((element: JSX.Element | null): element is JSX.Element => element !== null);
-
-    if (zoneListItems.length === 0) {
-      return null;
-    }
-
-    return (
-      <Box marginTop={3}>
-        {strings.THIS_OBSERVATION_INCLUDES}
-        <ul style={{ margin: 0, padding: `0 ${theme.spacing(3)}` }}>{zoneListItems}</ul>
-      </Box>
-    );
-  }, [plantingZones, requestedSubzoneIds, theme]);
-
-  if (!statusSummary) {
-    return null;
-  }
-
-  return (
-    <Box marginBottom={3} display='flex' flexGrow={1}>
-      <Message
-        type='page'
-        priority='info'
-        title={strings.OBSERVATION_STATUS}
-        body={
-          <>
-            <Box>
-              {
-                strings.formatString(
-                  strings.OBSERVATIONS_REQUIRED_BY_DATE,
-                  statusSummary.pendingPlots.toString(),
-                  statusSummary.endDate
-                ) as string
-              }
-            </Box>
-
-            <Box>
-              {
-                strings.formatString(
-                  strings.OBSERVATIONS_COMPLETION_PERCENTAGE,
-                  statusSummary.observedPlots,
-                  statusSummary.totalPlots,
-                  statusSummary.observedPlotsPercentage
-                ) as string
-              }
-            </Box>
-
-            {subzoneMessageBody}
-          </>
-        }
-      />
-    </Box>
-  );
-};

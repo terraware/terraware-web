@@ -16,11 +16,13 @@ import { PlantingSite } from 'src/types/Tracking';
 import { regexMatch } from 'src/utils/search';
 
 type ObservationMapViewProps = SearchProps & {
+  hideDate?: boolean;
   observationsResults?: ObservationResults[];
   selectedPlantingSite: PlantingSite;
 };
 
 export default function ObservationMapView({
+  hideDate,
   observationsResults,
   search,
   filtersProps,
@@ -159,6 +161,7 @@ export default function ObservationMapView({
               />
             }
             bottomLeftMapControl={
+              hideDate !== true &&
               observationsDates &&
               observationsDates.length > 0 && (
                 <MapDateSelect
