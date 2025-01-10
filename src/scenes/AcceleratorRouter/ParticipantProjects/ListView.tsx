@@ -8,7 +8,7 @@ import ExportCsvModal from 'src/components/common/ExportCsvModal';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
-import { useLocalization, useUser } from 'src/providers';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { requestListParticipantProjects } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectsListRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -17,54 +17,10 @@ import strings from 'src/strings';
 import { ParticipantProject } from 'src/types/ParticipantProject';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useSnackbar from 'src/utils/useSnackbar';
+import { PreferencesService } from 'src/services';
 
+import { defaultPreset as DefaultColumns, columns as AllColumns } from 'src/scenes/AcceleratorRouter/ParticipantProjects/columns';
 import CellRenderer from './CellRenderer';
-
-const columns = (activeLocale: string | null): TableColumnType[] =>
-  activeLocale
-    ? [
-        {
-          key: 'dealName',
-          name: strings.DEAL_NAME,
-          type: 'string',
-        },
-        {
-          key: 'cohortName',
-          name: strings.COHORT,
-          type: 'string',
-        },
-        {
-          key: 'cohortPhase',
-          name: strings.PHASE,
-          type: 'string',
-        },
-        {
-          key: 'fileNaming',
-          name: strings.FILE_NAMING,
-          type: 'string',
-        },
-        {
-          key: 'countryCode',
-          name: strings.COUNTRY,
-          type: 'string',
-        },
-        {
-          key: 'region',
-          name: strings.REGION,
-          type: 'string',
-        },
-        {
-          key: 'confirmedReforestableLand',
-          name: strings.RESTORABLE_LAND,
-          type: 'number',
-        },
-        {
-          key: 'landUseModelTypes',
-          name: strings.LAND_USE_MODEL_TYPE,
-          type: 'string',
-        },
-      ]
-    : [];
 
 const fuzzySearchColumns = ['dealName'];
 const defaultSearchOrder: SearchSortOrder = {
@@ -74,7 +30,7 @@ const defaultSearchOrder: SearchSortOrder = {
 
 export default function ListView(): JSX.Element {
   const { activeLocale } = useLocalization();
-  const { isAllowed } = useUser();
+  const { isAllowed, userPreferences, reloadUserPreferences } = useUser();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const mixpanel = useMixpanel();
@@ -85,6 +41,19 @@ export default function ListView(): JSX.Element {
   const [projects, setProjects] = useState<ParticipantProject[]>([]);
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectParticipantProjectsListRequest(requestId));
+  const [columns, setColumns] = useState<TableColumnType[]>(
+    AllColumns().filter(column => DefaultColumns().fields.includes(column.key))
+  );
+
+  const setDefaults = useCallback(() => {
+      const savedColumns = userPreferences.projectsColumns ? (userPreferences.projectsColumns as string[]) : [];
+      const defaultColumns = savedColumns.length ? savedColumns : DefaultColumns().fields;
+      setColumns(AllColumns().filter(column => defaultColumns.includes(column.key)));
+  }, [userPreferences.projectsColumns]);
+
+  useEffect(() => {
+    setDefaults();
+  }, [setDefaults]);
 
   useEffect(() => {
     if (result?.status === 'error') {
@@ -105,6 +74,15 @@ export default function ListView(): JSX.Element {
       }
     },
     [dispatch]
+  );
+
+  const saveSearchColumns = useCallback(
+    async (columnNames?: string[]) => {
+        await PreferencesService.updateUserPreferences({ projectColumns: columnNames });
+        // eslint-disable-next-line @typescript-eslint/await-thenable
+        await reloadUserPreferences();
+    },
+    [reloadUserPreferences]
   );
 
   const cohorts = useMemo<Record<string, string>>(
@@ -175,7 +153,7 @@ export default function ListView(): JSX.Element {
       />
       <TableWithSearchFilters
         busy={result?.status === 'pending'}
-        columns={columns}
+        columns={(activeLocale: string | null): TableColumnType[] => columns}
         defaultSearchOrder={defaultSearchOrder}
         dispatchSearchRequest={dispatchSearchRequest}
         featuredFilters={featuredFilters}
