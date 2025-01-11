@@ -12,15 +12,18 @@ import { useLocalization, useUser } from 'src/providers';
 import { requestListParticipantProjects } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectsListRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import EditColumns from 'src/scenes/AcceleratorRouter/ParticipantProjects/EditColumns';
+import {
+  columns as AllColumns,
+  defaultPreset as DefaultColumns,
+} from 'src/scenes/AcceleratorRouter/ParticipantProjects/columns';
 import { ParticipantProjectService } from 'src/services';
+import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
 import { ParticipantProject } from 'src/types/ParticipantProject';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useSnackbar from 'src/utils/useSnackbar';
-import { PreferencesService } from 'src/services';
-import EditColumns from 'src/scenes/AcceleratorRouter/ParticipantProjects/EditColumns';
 
-import { defaultPreset as DefaultColumns, columns as AllColumns } from 'src/scenes/AcceleratorRouter/ParticipantProjects/columns';
 import CellRenderer from './CellRenderer';
 
 const fuzzySearchColumns = ['dealName'];
@@ -44,14 +47,14 @@ export default function ListView(): JSX.Element {
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectParticipantProjectsListRequest(requestId));
   const [columns, setColumns] = useState<TableColumnType[]>(
-    AllColumns().filter(column => DefaultColumns().fields.includes(column.key))
+    AllColumns().filter((column) => DefaultColumns().fields.includes(column.key))
   );
 
   const setDefaults = useCallback(() => {
-      const savedColumns = userPreferences.projectColumns ? (userPreferences.projectColumns as string[]) : [];
-      const defaultColumns = savedColumns.length ? savedColumns : DefaultColumns().fields;
-      setColumns(AllColumns().filter(column => defaultColumns.includes(column.key)));
-      //console.log(`new columns = ${AllColumns().filter(column => defaultColumns.includes(column.key))}`);
+    const savedColumns = userPreferences.projectColumns ? (userPreferences.projectColumns as string[]) : [];
+    const defaultColumns = savedColumns.length ? savedColumns : DefaultColumns().fields;
+    setColumns(AllColumns().filter((column) => defaultColumns.includes(column.key)));
+    //console.log(`new columns = ${AllColumns().filter(column => defaultColumns.includes(column.key))}`);
   }, [userPreferences]);
 
   useEffect(() => {
@@ -81,14 +84,13 @@ export default function ListView(): JSX.Element {
 
   const saveUpdateColumns = useCallback(
     async (savedColumns: string[]) => {
-
       const defaultColumns = savedColumns.length ? savedColumns : DefaultColumns().fields;
-      setColumns(AllColumns().filter(column => defaultColumns.includes(column.key)));
+      setColumns(AllColumns().filter((column) => defaultColumns.includes(column.key)));
 
-    console.log("UPDATING!!!!");
-        await PreferencesService.updateUserPreferences({ projectColumns: savedColumns });
-        // eslint-disable-next-line @typescript-eslint/await-thenable
-        await reloadUserPreferences();
+      console.log('UPDATING!!!!');
+      await PreferencesService.updateUserPreferences({ projectColumns: savedColumns });
+      // eslint-disable-next-line @typescript-eslint/await-thenable
+      await reloadUserPreferences();
     },
     [reloadUserPreferences]
   );
@@ -96,10 +98,6 @@ export default function ListView(): JSX.Element {
   const onOpenEditColumnsModal = () => {
     setEditColumnsModalOpen(true);
   };
-  const columnsWithLocale = (activeLocale: string | null, columns: TableColumnType[]) => 
-    activeLocale
-      ? columns : []
-  ;
 
   const onCloseEditColumnsModal = (columnNames?: string[]) => {
     if (columnNames) {
@@ -160,12 +158,14 @@ export default function ListView(): JSX.Element {
           if (item.value === 'export') {
             mixpanel?.track(MIXPANEL_EVENTS.CONSOLE_PROJECTS_EXPORT);
             setOpenDownload(true);
-          }
-          else if( item.value === 'customize') {
+          } else if (item.value === 'customize') {
             onOpenEditColumnsModal();
           }
         }}
-        optionItems={[{ label: strings.CUSTOMIZE_COLUMNS, value: 'customize' }, { label: strings.EXPORT, value: 'export' }]}
+        optionItems={[
+          { label: strings.CUSTOMIZE_COLUMNS, value: 'customize' },
+          { label: strings.EXPORT, value: 'export' },
+        ]}
       />
     );
   }, [activeLocale, isAllowed]);
@@ -181,7 +181,7 @@ export default function ListView(): JSX.Element {
 
       <TableWithSearchFilters
         busy={result?.status === 'pending'}
-        columns={() => columnsWithLocale(activeLocale, columns)}
+        columns={() => columns}
         defaultSearchOrder={defaultSearchOrder}
         dispatchSearchRequest={dispatchSearchRequest}
         featuredFilters={featuredFilters}

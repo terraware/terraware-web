@@ -17,6 +17,7 @@ import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import { BaseTable as Table } from 'src/components/common/table';
 import { SortOrder as Order } from 'src/components/common/table/sort';
+import EditColumns from 'src/components/seeds/database/EditColumns';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
@@ -42,7 +43,6 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import SelectSeedBankModal from '../../../scenes/SeedBanksRouter/SelectSeedBankModal';
 import DownloadReportModal from './DownloadReportModal';
-import EditColumns from 'src/components/seeds/database/EditColumns';
 import Filters from './Filters';
 import ImportAccessionsModal from './ImportAccessionsModal';
 import SearchCellRenderer from './TableCellRenderer';

@@ -3,49 +3,49 @@ import { TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
 
 export function columns(): TableColumnType[] {
-   return [
-        {
-          key: 'dealName',
-          name: strings.DEAL_NAME,
-          type: 'string',
-        },
-        {
-          key: 'cohortName',
-          name: strings.COHORT,
-          type: 'string',
-        },
-        {
-          key: 'cohortPhase',
-          name: strings.PHASE,
-          type: 'string',
-        },
-        {
-          key: 'fileNaming',
-          name: strings.FILE_NAMING,
-          type: 'string',
-        },
-        {
-          key: 'countryCode',
-          name: strings.COUNTRY,
-          type: 'string',
-        },
-        {
-          key: 'region',
-          name: strings.REGION,
-          type: 'string',
-        },
-        {
-          key: 'confirmedReforestableLand',
-          name: strings.RESTORABLE_LAND,
-          type: 'number',
-        },
-        {
-          key: 'landUseModelTypes',
-          name: strings.LAND_USE_MODEL_TYPE,
-          type: 'string',
-        },
-      ];
-    }
+  return [
+    {
+      key: 'dealName',
+      name: strings.DEAL_NAME,
+      type: 'string',
+    },
+    {
+      key: 'cohortName',
+      name: strings.COHORT,
+      type: 'string',
+    },
+    {
+      key: 'cohortPhase',
+      name: strings.PHASE,
+      type: 'string',
+    },
+    {
+      key: 'fileNaming',
+      name: strings.FILE_NAMING,
+      type: 'string',
+    },
+    {
+      key: 'countryCode',
+      name: strings.COUNTRY,
+      type: 'string',
+    },
+    {
+      key: 'region',
+      name: strings.REGION,
+      type: 'string',
+    },
+    {
+      key: 'confirmedReforestableLand',
+      name: strings.RESTORABLE_LAND,
+      type: 'number',
+    },
+    {
+      key: 'landUseModelTypes',
+      name: strings.LAND_USE_MODEL_TYPE,
+      type: 'string',
+    },
+  ];
+}
 
 export function orderedColumnNames(): string[] {
   return columns().map((column) => column.key);

@@ -3,15 +3,19 @@ import React from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import { IconTooltip } from '@terraware/web-components';
 
-import DialogBox from 'src/components/common/DialogBox/DialogBox';
-import Button from 'src/components/common/button/Button';
-import strings from 'src/strings';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-
 import Checkbox from 'src/components/common/Checkbox';
+import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Divisor from 'src/components/common/Divisor';
 import RadioButton from 'src/components/common/RadioButton';
-import { Preset, columnsIndexed, orderedColumnNames, searchPresets } from 'src/scenes/AcceleratorRouter/ParticipantProjects/columns';
+import Button from 'src/components/common/button/Button';
+import {
+  Preset,
+  columnsIndexed,
+  orderedColumnNames,
+  searchPresets,
+} from 'src/scenes/AcceleratorRouter/ParticipantProjects/columns';
+import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 export interface Props {
   open: boolean;
@@ -113,7 +117,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
               {tooltip && <IconTooltip title={tooltip} />}
             </Typography>
             <Grid container spacing={isMobile ? 1 : 4} sx={{ marginTop: '-15px' }}>
-              {options.map((optionsColumn, index) => ( 
+              {options.map((optionsColumn, index) => (
                 <Grid key={index} item xs={gridSize()}>
                   <Grid container>
                     {optionsColumn.map(({ key, disabled, name: oName }) => (
@@ -158,8 +162,8 @@ function sections(): Section[] {
     {
       name: strings.GENERAL,
       options: [
-        [{...columns.dealName, disabled: true}],
-        [{...columns.cohortName, disabled: true}],
+        [{ ...columns.dealName, disabled: true }],
+        [{ ...columns.cohortName, disabled: true }],
         [columns.cohortPhase],
       ],
     },
@@ -169,9 +173,7 @@ function sections(): Section[] {
     },
     {
       name: strings.CONFIRMED_RESTORABLE_LAND,
-      options: [
-        [columns.confirmedReforestableLand, columns.landUseModelTypes],
-      ],
+      options: [[columns.confirmedReforestableLand, columns.landUseModelTypes]],
     },
   ];
   return columnsSections;
