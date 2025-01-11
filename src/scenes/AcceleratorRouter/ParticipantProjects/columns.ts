@@ -2,8 +2,8 @@ import { TableColumnType } from '@terraware/web-components';
 
 import strings from 'src/strings';
 
-export function columns(): TableColumnType[] {
-  return [
+export const columns : TableColumnType[] =
+[
     {
       key: 'dealName',
       name: strings.DEAL_NAME,
@@ -45,14 +45,14 @@ export function columns(): TableColumnType[] {
       type: 'string',
     },
   ];
-}
+
 
 export function orderedColumnNames(): string[] {
-  return columns().map((column) => column.key);
+  return columns.map((column) => column.key);
 }
 
 export function columnsIndexed(): Record<string, TableColumnType> {
-  return columns().reduce(
+  return columns.reduce(
     (acum, value) => {
       //console.log(`value.key = ${value.key}`);
       acum[value.key] = value;

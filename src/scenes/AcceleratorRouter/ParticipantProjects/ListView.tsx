@@ -47,13 +47,13 @@ export default function ListView(): JSX.Element {
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectParticipantProjectsListRequest(requestId));
   const [columns, setColumns] = useState<TableColumnType[]>(
-    AllColumns().filter((column) => DefaultColumns().fields.includes(column.key))
+    AllColumns.filter((column) => DefaultColumns().fields.includes(column.key))
   );
 
   const setDefaults = useCallback(() => {
     const savedColumns = userPreferences.projectColumns ? (userPreferences.projectColumns as string[]) : [];
     const defaultColumns = savedColumns.length ? savedColumns : DefaultColumns().fields;
-    setColumns(AllColumns().filter((column) => defaultColumns.includes(column.key)));
+    setColumns(AllColumns.filter((column) => defaultColumns.includes(column.key)));
     //console.log(`new columns = ${AllColumns().filter(column => defaultColumns.includes(column.key))}`);
   }, [userPreferences]);
 
@@ -85,8 +85,9 @@ export default function ListView(): JSX.Element {
   const saveUpdateColumns = useCallback(
     async (savedColumns: string[]) => {
       const defaultColumns = savedColumns.length ? savedColumns : DefaultColumns().fields;
-      setColumns(AllColumns().filter((column) => defaultColumns.includes(column.key)));
+      setColumns(AllColumns.filter((column) => defaultColumns.includes(column.key)));
 
+      console.log(`AllColumns().filter((column) => defaultColumns.includes(column.key)) = ${AllColumns.filter((column) => defaultColumns.includes(column.key))}`)
       console.log('UPDATING!!!!');
       await PreferencesService.updateUserPreferences({ projectColumns: savedColumns });
       // eslint-disable-next-line @typescript-eslint/await-thenable
@@ -170,6 +171,11 @@ export default function ListView(): JSX.Element {
     );
   }, [activeLocale, isAllowed]);
 
+  const columnsWithLocale = (activeLocale: string | null): TableColumnType[] =>
+    activeLocale
+      ? columns
+      : [];
+
   return (
     <>
       <ExportCsvModal
@@ -181,7 +187,7 @@ export default function ListView(): JSX.Element {
 
       <TableWithSearchFilters
         busy={result?.status === 'pending'}
-        columns={() => columns}
+        columns={columnsWithLocale}
         defaultSearchOrder={defaultSearchOrder}
         dispatchSearchRequest={dispatchSearchRequest}
         featuredFilters={featuredFilters}
