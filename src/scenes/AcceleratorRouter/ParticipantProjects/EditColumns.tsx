@@ -158,22 +158,21 @@ function sections(): Section[] {
     {
       name: strings.GENERAL,
       options: [
-        [columns.dealName],
-        [columns.cohortName],
+        [{...columns.dealName, disabled: true}],
+        [{...columns.cohortName, disabled: true}],
         [columns.cohortPhase],
       ],
     },
     {
-      name: strings.STORING,
+      name: strings.LOCATION,
       options: [[columns.region], [columns.countryCode]],
     },
     {
-      name: strings.SEED_COLLECTION,
+      name: strings.CONFIRMED_RESTORABLE_LAND,
       options: [
-        [columns.confirmedReforestabeLand, columns.landUseModelTypes],
+        [columns.confirmedReforestableLand, columns.landUseModelTypes],
       ],
     },
   ];
-  console.log(columnsSections);
   return columnsSections;
 }

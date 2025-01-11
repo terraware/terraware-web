@@ -44,17 +44,15 @@ export default function ListView(): JSX.Element {
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectParticipantProjectsListRequest(requestId));
   const [columns, setColumns] = useState<TableColumnType[]>(
-    AllColumns().filter(column => {
-      DefaultColumns().fields.includes(column.key)
-      //console.log(`column.key = ${column.key}`);
-    })
+    AllColumns().filter(column => DefaultColumns().fields.includes(column.key))
   );
 
   const setDefaults = useCallback(() => {
-      const savedColumns = userPreferences.projectsColumns ? (userPreferences.projectsColumns as string[]) : [];
+      const savedColumns = userPreferences.projectColumns ? (userPreferences.projectColumns as string[]) : [];
       const defaultColumns = savedColumns.length ? savedColumns : DefaultColumns().fields;
       setColumns(AllColumns().filter(column => defaultColumns.includes(column.key)));
-  }, [userPreferences.projectsColumns]);
+      //console.log(`new columns = ${AllColumns().filter(column => defaultColumns.includes(column.key))}`);
+  }, [userPreferences]);
 
   useEffect(() => {
     setDefaults();
@@ -82,10 +80,13 @@ export default function ListView(): JSX.Element {
   );
 
   const saveUpdateColumns = useCallback(
-    async (columnNames?: string[]) => {
+    async (savedColumns: string[]) => {
+
+      const defaultColumns = savedColumns.length ? savedColumns : DefaultColumns().fields;
+      setColumns(AllColumns().filter(column => defaultColumns.includes(column.key)));
 
     console.log("UPDATING!!!!");
-        await PreferencesService.updateUserPreferences({ projectColumns: columnNames });
+        await PreferencesService.updateUserPreferences({ projectColumns: savedColumns });
         // eslint-disable-next-line @typescript-eslint/await-thenable
         await reloadUserPreferences();
     },
@@ -95,10 +96,10 @@ export default function ListView(): JSX.Element {
   const onOpenEditColumnsModal = () => {
     setEditColumnsModalOpen(true);
   };
-  const columsnWithLocale = (activeLocale: string | null) => {
-    console.log(`columns = ${columns}`);
-    return(columns);
-  };
+  const columnsWithLocale = (activeLocale: string | null, columns: TableColumnType[]) => 
+    activeLocale
+      ? columns : []
+  ;
 
   const onCloseEditColumnsModal = (columnNames?: string[]) => {
     if (columnNames) {
@@ -176,10 +177,11 @@ export default function ListView(): JSX.Element {
         onExport={() => ParticipantProjectService.downloadList(lastSearch, lastSort)}
         open={openDownload}
       />
-      
+      <EditColumns open={editColumnsModalOpen} value={DefaultColumns().fields} onClose={onCloseEditColumnsModal} />
+
       <TableWithSearchFilters
         busy={result?.status === 'pending'}
-        columns={() => columsnWithLocale(activeLocale)}
+        columns={() => columnsWithLocale(activeLocale, columns)}
         defaultSearchOrder={defaultSearchOrder}
         dispatchSearchRequest={dispatchSearchRequest}
         featuredFilters={featuredFilters}
