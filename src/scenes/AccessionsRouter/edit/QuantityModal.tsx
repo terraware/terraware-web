@@ -79,12 +79,12 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   }, [record.remainingQuantity, accession.remainingQuantity]);
 
   useEffect(() => {
-    if (quantityChanged && isByWeight) {
+    if (isByWeight) {
       setIsSubsetOpen(true);
     } else {
       setIsSubsetOpen(false);
     }
-  }, [quantityChanged, isByWeight]);
+  }, [isByWeight]);
 
   const validate = () => {
     let hasErrors = false;
@@ -350,20 +350,20 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
                 />
               </Grid>
             )}
-          {quantityChanged && (
-            <Grid item xs={12} textAlign='left'>
-              <Textfield
-                id='notes'
-                value={remainingQuantityNotes}
-                onChange={(value) => onChangeRemainingQuantityNotes(value as string)}
-                type='textarea'
-                label={strings.NOTES}
-                errorText={remainingQuantityNotesError ? strings.REQUIRED_FIELD : ''}
-                placeholder={strings.REMAINING_QUANTITY_NOTES_PLACEHOLDER}
-                required
-              />
-            </Grid>
-          )}
+
+          <Grid item xs={12} textAlign='left'>
+            <Textfield
+              id='notes'
+              value={remainingQuantityNotes}
+              onChange={(value) => onChangeRemainingQuantityNotes(value as string)}
+              type='textarea'
+              label={strings.NOTES}
+              errorText={remainingQuantityNotesError ? strings.REQUIRED_FIELD : ''}
+              placeholder={strings.REMAINING_QUANTITY_NOTES_PLACEHOLDER}
+              required
+            />
+          </Grid>
+
           <Grid item xs={12}>
             {!isSubsetOpen ? (
               <Box display='flex' justifyContent='flex-start'>
