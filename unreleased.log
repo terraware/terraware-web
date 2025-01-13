@@ -1,3 +1,4 @@
+746f50d9057 Attempt to increase vercel memory to fix builds (#3526)
 f12e0c3084d SW-6201 Added map tab to observation (#3523)
 408eafed5f0 SW-6347 follow-up Display “display option” in the Document Producer (#3498)
 f545df90c92 Update dependency react-error-boundary to v5 (#3514)
