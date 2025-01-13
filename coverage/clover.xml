@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1736770790006" clover="3.2.0">
-  <project timestamp="1736770790006" name="All files">
-    <metrics statements="26902" coveredstatements="1209" conditionals="18207" coveredconditionals="345" methods="8269" coveredmethods="197" elements="53378" coveredelements="1751" complexity="0" loc="26902" ncloc="26902" packages="239" files="1130" classes="1130"/>
+<coverage generated="1736771113171" clover="3.2.0">
+  <project timestamp="1736771113171" name="All files">
+    <metrics statements="26902" coveredstatements="1209" conditionals="18209" coveredconditionals="345" methods="8269" coveredmethods="197" elements="53380" coveredelements="1751" complexity="0" loc="26902" ncloc="26902" packages="239" files="1130" classes="1130"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -2686,7 +2686,7 @@
       </file>
     </package>
     <package name="src.components.DocumentProducer.EditableSection">
-      <metrics statements="231" coveredstatements="0" conditionals="185" coveredconditionals="0" methods="68" coveredmethods="0"/>
+      <metrics statements="231" coveredstatements="0" conditionals="187" coveredconditionals="0" methods="68" coveredmethods="0"/>
       <file name="Container.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DocumentProducer/EditableSection/Container.tsx">
         <metrics statements="80" coveredstatements="0" conditionals="47" coveredconditionals="0" methods="21" coveredmethods="0"/>
         <line num="49" count="0" type="stmt"/>
@@ -2910,7 +2910,7 @@
         <line num="67" count="0" type="stmt"/>
       </file>
       <file name="helpers.ts" path="/home/runner/work/terraware-web/terraware-web/src/components/DocumentProducer/EditableSection/helpers.ts">
-        <metrics statements="33" coveredstatements="0" conditionals="37" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <metrics statements="33" coveredstatements="0" conditionals="39" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
         <line num="15" count="0" type="cond" truecount="0" falsecount="8"/>
@@ -2923,7 +2923,7 @@
         <line num="30" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
+        <line num="34" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="37" count="0" type="stmt"/>
         <line num="40" count="0" type="cond" truecount="0" falsecount="5"/>
         <line num="43" count="0" type="stmt"/>
