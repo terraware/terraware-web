@@ -182,7 +182,7 @@ export default function ListView(): JSX.Element {
         onExport={() => ParticipantProjectService.downloadList(lastSearch, lastSort)}
         open={openDownload}
       />
-      <EditColumns open={editColumnsModalOpen} value={DefaultColumns().fields} onClose={onCloseEditColumnsModal} />
+      <EditColumns open={editColumnsModalOpen} value={columns.map((c) => c.key)} onClose={onCloseEditColumnsModal} />
 
       <TableWithSearchFilters
         busy={result?.status === 'pending'}
