@@ -87,7 +87,9 @@ export default function ListView(): JSX.Element {
       const defaultColumns = savedColumns.length ? savedColumns : DefaultColumns().fields;
       setColumns(AllColumns.filter((column) => defaultColumns.includes(column.key)));
 
-      console.log(`AllColumns().filter((column) => defaultColumns.includes(column.key)) = ${AllColumns.filter((column) => defaultColumns.includes(column.key))}`)
+      console.log(
+        `AllColumns().filter((column) => defaultColumns.includes(column.key)) = ${AllColumns.filter((column) => defaultColumns.includes(column.key))}`
+      );
       console.log('UPDATING!!!!');
       await PreferencesService.updateUserPreferences({ projectColumns: savedColumns });
       // eslint-disable-next-line @typescript-eslint/await-thenable
@@ -171,10 +173,7 @@ export default function ListView(): JSX.Element {
     );
   }, [activeLocale, isAllowed]);
 
-  const columnsWithLocale = (activeLocale: string | null): TableColumnType[] =>
-    activeLocale
-      ? columns
-      : [];
+  const columnsWithLocale = (activeLocale: string | null): TableColumnType[] => (activeLocale ? columns : []);
 
   return (
     <>
