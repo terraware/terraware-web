@@ -10,12 +10,7 @@ import PageHeader from 'src/components/PageHeader';
 import Link from 'src/components/common/Link';
 import PageCard from 'src/components/common/PageCard';
 import TfMain from 'src/components/common/TfMain';
-import {
-  ACCELERATOR_LINK,
-  APP_PATHS,
-  TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK,
-  TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK,
-} from 'src/constants';
+import { ACCELERATOR_LINK, APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useOrgNurserySummary } from 'src/hooks/useOrgNurserySummary';
 import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
@@ -26,6 +21,7 @@ import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelecto
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import CTACard from 'src/scenes/Home/CTACard';
+import MobileAppCard from 'src/scenes/Home/MobileAppCard';
 import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
@@ -264,24 +260,11 @@ const TerrawareHomeView = () => {
                 </Grid>
 
                 <Grid item xs={12}>
-                  <CTACard
+                  <MobileAppCard
                     description={strings.DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION}
                     imageAlt={strings.TERRAWARE_MOBILE_APP_IMAGE_ALT}
                     imageSource='/assets/terraware-mobile-app.svg'
                     padding='32px'
-                    primaryButtonProps={{
-                      label: strings.DOWNLOAD_FOR_ANDROID,
-                      onClick: () => {
-                        window.open(TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK, '_blank');
-                      },
-                      type: 'passive',
-                    }}
-                    secondaryButtonProps={{
-                      label: strings.DOWNLOAD_FOR_IOS,
-                      onClick: () => {
-                        window.open(TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK, '_blank');
-                      },
-                    }}
                     title={strings.DOWNLOAD_THE_TERRAWARE_MOBILE_APP}
                   />
                 </Grid>
