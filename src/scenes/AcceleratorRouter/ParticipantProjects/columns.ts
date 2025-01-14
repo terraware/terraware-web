@@ -43,6 +43,31 @@ export const columns: TableColumnType[] = [
     name: strings.LAND_USE_MODEL_TYPE,
     type: 'string',
   },
+  {
+    key: 'totalExpansionPotential',
+    name: strings.TOTAL_EXPANSION_POTENTIAL,
+    type: 'number',
+  },
+  {
+    key: 'minCarbonAccumulation',
+    name: strings.MINIMUM_CARBON_ACCUMULATION,
+    type: 'number',
+  },
+  {
+    key: 'maxCarbonAccumulation',
+    name: strings.MAXIMUM_CARBON_ACCUMULATION,
+    type: 'number',
+  },
+  {
+    key: 'numNativeSpecies',
+    name: strings.NUMBER_OF_NATIVE_SPECIES,
+    type: 'number',
+  },
+  {
+    key: 'totalCarbon',
+    name: strings.TOTAL_CARBON_T,
+    type: 'number',
+  },
 ];
 
 export function orderedColumnNames(): string[] {
@@ -52,7 +77,6 @@ export function orderedColumnNames(): string[] {
 export function columnsIndexed(): Record<string, TableColumnType> {
   return columns.reduce(
     (acum, value) => {
-      //console.log(`value.key = ${value.key}`);
       acum[value.key] = value;
 
       return acum;

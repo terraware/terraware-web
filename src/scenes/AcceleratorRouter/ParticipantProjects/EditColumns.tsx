@@ -173,7 +173,15 @@ function sections(): Section[] {
     },
     {
       name: strings.CONFIRMED_RESTORABLE_LAND,
-      options: [[columns.confirmedReforestableLand, columns.landUseModelTypes]],
+      options: [[
+        columns.confirmedReforestableLand, 
+        columns.landUseModelTypes, 
+        columns.totalExpansionPotential, 
+        columns.minCarbonAccumulation, 
+        columns.maxCarbonAccumulation, 
+        columns.totalCarbon, 
+        columns.numNativeSpecies
+      ]],
     },
   ];
   return columnsSections;

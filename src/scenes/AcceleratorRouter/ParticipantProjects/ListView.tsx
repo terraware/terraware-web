@@ -54,7 +54,6 @@ export default function ListView(): JSX.Element {
     const savedColumns = userPreferences.projectColumns ? (userPreferences.projectColumns as string[]) : [];
     const defaultColumns = savedColumns.length ? savedColumns : DefaultColumns().fields;
     setColumns(AllColumns.filter((column) => defaultColumns.includes(column.key)));
-    //console.log(`new columns = ${AllColumns().filter(column => defaultColumns.includes(column.key))}`);
   }, [userPreferences]);
 
   useEffect(() => {
