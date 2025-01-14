@@ -67,9 +67,8 @@ export default function AccessionTests() {
     await page.waitForTimeout(1000); //Wait for modal to close
     await expect(page.getByRole('main')).toContainText('2034-01-31');
     await page.locator('a').filter({ hasText: 'Add' }).click();
-    await page.getByRole('spinbutton').click();
-    await page.getByRole('spinbutton').fill('500');
-    await page.getByRole('button', { name: 'Add Subset Weight And Count' }).click();
+    await page.locator('#remainingQuantity').getByRole('spinbutton').click();
+    await page.locator('#remainingQuantity').getByRole('spinbutton').fill('500');
     await page.locator('#subsetWeight').getByRole('spinbutton').click();
     await page.locator('#subsetWeight').getByRole('spinbutton').fill('10');
     await page.locator('#subsetCount').getByRole('spinbutton').click();
