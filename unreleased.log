@@ -1,3 +1,4 @@
+290509710d3 SW-5166 Show notes, subset weight and subset count (#3524)
 746f50d9057 Attempt to increase vercel memory to fix builds (#3526)
 f12e0c3084d SW-6201 Added map tab to observation (#3523)
 408eafed5f0 SW-6347 follow-up Display “display option” in the Document Producer (#3498)
