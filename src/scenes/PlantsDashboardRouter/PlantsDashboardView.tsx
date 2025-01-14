@@ -29,6 +29,7 @@ import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { isAfter } from 'src/utils/dateUtils';
+import { isAdmin } from 'src/utils/organization';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import EmptyMessage from '../../components/common/EmptyMessage';
@@ -60,6 +61,13 @@ export default function PlantsDashboardView(): JSX.Element {
   const navigate = useNavigate();
   const theme = useTheme();
   const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
+
+  const messageStyles = {
+    margin: '0 auto',
+    maxWidth: '800px',
+    padding: '48px',
+    width: isMobile ? 'auto' : '800px',
+  };
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSiteId(site.id), [setSelectedPlantingSiteId]);
   const onPreferences = useCallback(
@@ -414,12 +422,20 @@ export default function PlantsDashboardView(): JSX.Element {
         </Grid>
       ) : (
         <Box sx={{ margin: '0 auto', maxWidth: '800px', padding: '48px', width: isMobile ? 'auto' : '800px' }}>
-          <EmptyMessage
-            title={strings.NO_PLANTING_SITES_TITLE}
-            text={strings.NO_PLANTING_SITES_DESCRIPTION}
-            buttonText={strings.GO_TO_PLANTING_SITES}
-            onClick={() => navigate(APP_PATHS.PLANTING_SITES)}
-          />
+          {isAdmin(org.selectedOrganization) ? (
+            <EmptyMessage
+              title={strings.NO_PLANTING_SITES_TITLE}
+              text={strings.NO_PLANTING_SITES_DESCRIPTION}
+              buttonText={strings.GO_TO_PLANTING_SITES}
+              onClick={() => navigate(APP_PATHS.PLANTING_SITES)}
+            />
+          ) : (
+            <EmptyMessage
+              title={strings.REACH_OUT_TO_ADMIN_TITLE}
+              text={strings.NO_PLANTING_SITES_CONTRIBUTOR_MSG}
+              sx={messageStyles}
+            />
+          )}
         </Box>
       )}
     </PlantsPrimaryPage>

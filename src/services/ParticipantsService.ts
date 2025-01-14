@@ -1,17 +1,17 @@
+import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response, Response2, ServerData } from 'src/services/HttpService';
-import {
-  Participant,
-  ParticipantCreateRequest,
-  ParticipantProjectSearchResult,
-  ParticipantSearchResult,
-  ParticipantUpdateRequest,
-} from 'src/types/Participant';
-import { SearchNodePayload, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { Participant, ParticipantCreateRequest, ParticipantUpdateRequest } from 'src/types/Participant';
+import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
+import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 
 import SearchService from './SearchService';
 
+const PARTICIPANTS_ENDPOINT = '/api/v1/accelerator/participants';
 const PARTICIPANT_ENDPOINT = '/api/v1/accelerator/participants/{participantId}';
 const CREATE_ENDPOINT = '/api/v1/accelerator/participants';
+
+type ListParticipantsResponsePayload =
+  paths[typeof PARTICIPANTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 /**
  * Accelerator "participant" related services
@@ -66,29 +66,29 @@ const get = async (participantId: number): Promise<Response2<ParticipantData>> =
 };
 
 const list = async (
+  locale?: string,
   search?: SearchNodePayload,
   sortOrder?: SearchSortOrder
-): Promise<ParticipantSearchResult[] | null> => {
-  const response: SearchResponseElement[] | null = await SearchService.search(getSearchParams(search, sortOrder));
-
-  if (!response) {
-    return null;
+): Promise<ListParticipantsResponsePayload> => {
+  let searchOrderConfig: SearchOrderConfig | undefined;
+  if (sortOrder) {
+    searchOrderConfig = {
+      locale: locale ?? null,
+      sortOrder,
+      numberFields: ['cohortId', 'id'],
+    };
   }
 
-  return response.map((result: SearchResponseElement) => {
-    const { cohort_id, cohort_name, id, name, projects } = result;
+  const response = await HttpService.root(PARTICIPANTS_ENDPOINT).get2<ListParticipantsResponsePayload>();
 
-    return {
-      cohort_id: cohort_id ? Number(cohort_id) : null,
-      cohort_name,
-      id: Number(id),
-      name,
-      projects: ((projects || []) as ParticipantProjectSearchResult[]).map((project) => ({
-        ...project,
-        id: Number(project.id),
-      })),
-    } as ParticipantSearchResult;
-  });
+  if (!response || !response.requestSucceeded || !response.data) {
+    return Promise.reject(response);
+  }
+
+  return {
+    status: response.data.status,
+    participants: searchAndSort(response.data.participants, search, searchOrderConfig),
+  };
 };
 
 const update = async (participantId: number, entity: ParticipantUpdateRequest): Promise<Response> =>

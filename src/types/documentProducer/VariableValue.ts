@@ -11,6 +11,9 @@ export const isDateVariableValue = (input: unknown): input is DateVariableValue 
   !!(input as DateVariableValue).dateValue;
 
 export type DeletedVariableValue = components['schemas']['ExistingDeletedValuePayload'];
+
+export type EmailVariableValue = components['schemas']['ExistingEmailValuePayload'];
+
 export type ImageVariableValue = components['schemas']['ExistingImageValuePayload'];
 
 export type LinkVariableValue = components['schemas']['ExistingLinkValuePayload'];
@@ -21,7 +24,12 @@ export const isNumberVariableValue = (input: unknown): input is NumberVariableVa
   (input as NumberVariableValue).numberValue !== undefined;
 
 export type SectionTextVariableValue = components['schemas']['ExistingSectionTextValuePayload'];
+export const isSectionTextVariableValue = (input: unknown): input is SectionTextVariableValue =>
+  (input as SectionTextVariableValue).type === 'SectionText';
+
 export type SectionVariableVariableValue = components['schemas']['ExistingSectionVariableValuePayload'];
+export const isSectionVariableVariableValue = (input: unknown): input is SectionVariableVariableValue =>
+  (input as SectionVariableVariableValue).type === 'SectionVariable';
 
 export type SelectVariableValue = components['schemas']['ExistingSelectValuePayload'];
 export const isSelectVariableValue = (input: unknown): input is SelectVariableValue =>
@@ -38,6 +46,7 @@ export const isTextVariableValue = (input: unknown): input is TextVariableValue 
 export type ExistingVariableValueUnion =
   | DateVariableValue
   | DeletedVariableValue
+  | EmailVariableValue
   | ImageVariableValue
   | LinkVariableValue
   | NumberVariableValue
@@ -49,6 +58,7 @@ export type ExistingVariableValueUnion =
 
 export type NewNonSectionValuePayloadUnion =
   | NewDateValuePayload
+  | NewEmailValuePayload
   | NewLinkValuePayload
   | NewNumberValuePayload
   | NewSelectValuePayload
@@ -64,6 +74,7 @@ export type CombinedInjectedValue = {
   type:
     | 'Deleted'
     | 'Date'
+    | 'Email'
     | 'Image'
     | 'Link'
     | 'Number'
@@ -90,6 +101,8 @@ export type VariableValueSelectValue = components['schemas']['ExistingSelectValu
 
 export type VariableValueDateValue = components['schemas']['ExistingDateValuePayload'];
 
+export type VariableValueEmailValue = components['schemas']['ExistingEmailValuePayload'];
+
 export type VariableValueLinkValue = components['schemas']['ExistingLinkValuePayload'];
 
 export type UpdateVariableValueRequestWithDocId = components['schemas']['UpdateValueOperationPayload'] & {
@@ -103,6 +116,8 @@ export type NewNumberValuePayload = components['schemas']['NewNumberValuePayload
 export type NewSelectValuePayload = components['schemas']['NewSelectValuePayload'];
 
 export type NewDateValuePayload = components['schemas']['NewDateValuePayload'];
+
+export type NewEmailValuePayload = components['schemas']['NewEmailValuePayload'];
 
 export type NewLinkValuePayload = components['schemas']['NewLinkValuePayload'];
 

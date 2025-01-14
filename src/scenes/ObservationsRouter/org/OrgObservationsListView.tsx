@@ -8,13 +8,20 @@ import sanitize from 'sanitize-filename';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
-import { selectPlantingSiteObservations } from 'src/redux/features/observations/observationsSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { requestAbandonObservation } from 'src/redux/features/observations/observationsAsyncThunks';
+import {
+  selectAbandonObservation,
+  selectPlantingSiteObservations,
+} from 'src/redux/features/observations/observationsSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ObservationsService } from 'src/services';
 import strings from 'src/strings';
 import { Observation, ObservationPlantingZoneResults, ObservationResults } from 'src/types/Observations';
+import { getShortDate } from 'src/utils/dateFormatter';
 import { isAdmin } from 'src/utils/organization';
+import useSnackbar from 'src/utils/useSnackbar';
 
+import EndObservationModal from './EndObservationModal';
 import OrgObservationsRenderer from './OrgObservationsRenderer';
 
 const defaultColumns = (): TableColumnType[] => [
@@ -76,11 +83,13 @@ const scheduleObservationsColumn = (): TableColumnType[] => [
 export type OrgObservationsListViewProps = {
   plantingSiteId: number;
   observationsResults?: ObservationResults[];
+  reload: () => void;
 };
 
 export default function OrgObservationsListView({
   observationsResults,
   plantingSiteId,
+  reload,
 }: OrgObservationsListViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
@@ -88,6 +97,30 @@ export default function OrgObservationsListView({
   const theme = useTheme();
   const navigate = useNavigate();
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
+  const [endObservationModalOpened, setEndObservationModalOpened] = useState(false);
+  const [selectedObservation, setSelectedObservation] = useState<any>();
+  const dispatch = useAppDispatch();
+  const [requestId, setRequestId] = useState('');
+  const abandonObservationResponse = useAppSelector((state) => selectAbandonObservation(state, requestId));
+  const snackbar = useSnackbar();
+
+  useEffect(() => {
+    if (abandonObservationResponse?.status === 'success' && selectedObservation) {
+      snackbar.toastSuccess(
+        strings.formatString(
+          strings.OBSERVATION_ENDED_MESSAGE,
+          getShortDate(selectedObservation.observationDate, activeLocale),
+          strings.OBSERVATION_ENDED
+        )
+      );
+      setSelectedObservation(undefined);
+      reload();
+    }
+    if (abandonObservationResponse?.status === 'error') {
+      snackbar.toastError();
+      setSelectedObservation(undefined);
+    }
+  }, [abandonObservationResponse]);
 
   const observations: Observation[] | undefined = useAppSelector((state) =>
     selectPlantingSiteObservations(state, plantingSiteId)
@@ -162,8 +195,29 @@ export default function OrgObservationsListView({
     );
   }, [endDates, observationsResults]);
 
+  const endObservation = (observation: Observation) => {
+    setEndObservationModalOpened(true);
+    setSelectedObservation(observation);
+  };
+
+  const onCloseModal = () => {
+    setEndObservationModalOpened(false);
+    setSelectedObservation(undefined);
+  };
+
+  const onEndObservation = () => {
+    if (selectedObservation) {
+      const request = dispatch(requestAbandonObservation({ observationId: selectedObservation.observationId }));
+      setRequestId(request.requestId);
+      setEndObservationModalOpened(false);
+    }
+  };
+
   return (
     <Box>
+      {endObservationModalOpened && selectedObservation && (
+        <EndObservationModal observation={selectedObservation} onClose={onCloseModal} onSave={onEndObservation} />
+      )}
       <Table
         id='org-observations-table'
         columns={columns}
@@ -174,7 +228,10 @@ export default function OrgObservationsListView({
           activeLocale,
           goToRescheduleObservation,
           (observationId: number) => exportObservation(observationId, 'csv'),
-          (observationId: number) => exportObservation(observationId, 'gpx')
+          (observationId: number) => exportObservation(observationId, 'gpx'),
+          (observation: any) => {
+            endObservation(observation);
+          }
         )}
       />
     </Box>

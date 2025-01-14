@@ -38,9 +38,8 @@ import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
 import { getMapDrawingLayer } from './utils';
 
 const mapboxImpl: any = mapboxgl;
-// @tslint
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-mapboxImpl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default; /* tslint:disable-line */
+mapboxImpl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default; /* eslint-disable-line */
 
 type FeatureStateId = Record<string, Record<string, number | undefined>>;
 
@@ -136,7 +135,7 @@ export default function Map(props: MapProps): JSX.Element {
   const onMapError = useCallback(
     (event: any) => {
       if (event?.error?.status === 401) {
-        // tslint:disable-next-line: no-console
+        // eslint-disable-next-line no-console
         console.error('Mapbox token expired');
         if (onTokenExpired) {
           onTokenExpired();

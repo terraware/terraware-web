@@ -2,8 +2,10 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Dropdown } from '@terraware/web-components';
 
+import { useOrganization } from 'src/providers';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
+import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
 
 type PlantingSiteSelectorProps = {
@@ -14,6 +16,7 @@ export default function PlantingSiteSelector({ onChange }: PlantingSiteSelectorP
   // assume `requestPlantingSites` thunk has been dispatched by consumer
   const plantingSites = useAppSelector(selectPlantingSites);
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number | undefined>();
+  const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
 
   const options = useMemo(
     () => plantingSites?.map((site) => ({ label: site.name, value: site.id })) ?? [],
@@ -21,17 +24,27 @@ export default function PlantingSiteSelector({ onChange }: PlantingSiteSelectorP
   );
 
   const updateSelection = useCallback(
-    (newValue: any) => {
+    async (newValue: any) => {
       const id = Number(newValue);
       setSelectedPlantingSiteId(isNaN(id) ? -1 : id);
       onChange(isNaN(id) ? -1 : id);
+      if (!isNaN(id) && id !== orgPreferences.lastPlantingSiteSelected) {
+        await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
+          ['lastPlantingSiteSelected']: id,
+        });
+        reloadOrgPreferences();
+      }
     },
     [onChange]
   );
 
   useEffect(() => {
     if (plantingSites && (selectedPlantingSiteId === undefined || selectedPlantingSiteId === -1)) {
-      updateSelection(plantingSites[0]?.id);
+      if (orgPreferences.lastPlantingSiteSelected) {
+        updateSelection(orgPreferences.lastPlantingSiteSelected);
+      } else {
+        updateSelection(plantingSites[0]?.id);
+      }
     }
   }, [plantingSites, selectedPlantingSiteId, updateSelection]);
 

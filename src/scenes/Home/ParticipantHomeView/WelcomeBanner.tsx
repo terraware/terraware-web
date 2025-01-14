@@ -25,13 +25,13 @@ const WelcomeBanner = ({ onClose }: WelcomeBannerProps) => {
       <Grid container columnSpacing={theme.spacing(2)} paddingRight={0} justifyContent={'flex-start'}>
         <Grid item xs={2}>
           <img
-            src='/assets/accelerator-welcome@2x.png'
+            src='/assets/accelerator-trees.svg'
             // TODO this might change
             alt={strings.ACCELERATOR_WELCOME_ALT}
             width='100%'
             height='100px'
             style={{
-              objectFit: 'cover',
+              objectFit: 'scale-down',
               objectPosition: '0% 50%',
             }}
           />

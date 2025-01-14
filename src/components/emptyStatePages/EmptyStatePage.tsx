@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Container, useTheme } from '@mui/material';
@@ -14,6 +14,7 @@ import PlantingSiteTypeSelect from 'src/scenes/PlantingSitesRouter/edit/Planting
 import strings from 'src/strings';
 import { isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ImportSpeciesModal, { downloadCsvTemplate } from '../../scenes/Species/ImportSpeciesModal';
@@ -59,6 +60,13 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
   const [importSpeciesModalOpened, setImportSpeciesModalOpened] = useState(false);
   const [importInventoryModalOpened, setImportInventoryModalOpened] = useState(false);
   const [plantingSiteTypeSelectOpen, setPlantingSiteTypeSelectOpen] = useState(false);
+  const query = useQuery();
+
+  useEffect(() => {
+    if (query.get('new')) {
+      setPlantingSiteTypeSelectOpen(true);
+    }
+  }, [query]);
 
   const NO_SPECIES_CONTENT: PageContent = {
     title1: strings.SPECIES,
@@ -247,7 +255,7 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
           <ImportInventoryModal open={importInventoryModalOpened} onClose={onCloseImportInventoryModal} />
         </>
       )}
-      <PlantingSiteTypeSelect open={plantingSiteTypeSelectOpen} onClose={() => setPlantingSiteTypeSelectOpen(false)} />
+      {plantingSiteTypeSelectOpen && <PlantingSiteTypeSelect onClose={() => setPlantingSiteTypeSelectOpen(false)} />}
       {content.title1 && (
         <>
           <PageHeader title={content.title1} subtitle='' />

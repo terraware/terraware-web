@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { Participant, ParticipantSearchResult } from 'src/types/Participant';
+import { Participant } from 'src/types/Participant';
 
 import {
   requestCreateParticipant,
@@ -56,7 +56,7 @@ export const participantSlice = createSlice({
 /**
  * Participant list
  */
-const initialStateParticipantList: { [key: string]: StatusT<ParticipantSearchResult[]> } = {};
+const initialStateParticipantList: { [key: string]: StatusT<Participant[]> } = {};
 
 export const participantListSlice = createSlice({
   name: 'participantListSlice',

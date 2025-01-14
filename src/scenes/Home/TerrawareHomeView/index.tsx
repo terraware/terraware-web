@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Container, Grid } from '@mui/material';
+import { Box, Container, Grid, Typography } from '@mui/material';
 import { IconName } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -10,13 +10,8 @@ import PageHeader from 'src/components/PageHeader';
 import Link from 'src/components/common/Link';
 import PageCard from 'src/components/common/PageCard';
 import TfMain from 'src/components/common/TfMain';
-import {
-  ACCELERATOR_LINK,
-  APP_PATHS,
-  TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK,
-  TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK,
-} from 'src/constants';
-import isEnabled from 'src/features';
+import { ACCELERATOR_LINK, APP_PATHS } from 'src/constants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useOrgNurserySummary } from 'src/hooks/useOrgNurserySummary';
 import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
@@ -25,28 +20,37 @@ import { requestObservations, requestObservationsResults } from 'src/redux/featu
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
+import CTACard from 'src/scenes/Home/CTACard';
+import MobileAppCard from 'src/scenes/Home/MobileAppCard';
 import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
+import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
 import { isAdmin, isManagerOrHigher, selectedOrgHasFacilityType } from 'src/utils/organization';
 
-import CTACard from './CTACard';
 import OrganizationStatsCard, { OrganizationStatsCardRow } from './OrganizationStatsCard';
 
 const TerrawareHomeView = () => {
   const { activeLocale } = useLocalization();
   const { user } = useUser();
-  const { selectedOrganization } = useOrganization();
-  const { isTablet, isMobile } = useDeviceInfo();
+  const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
+  const { isTablet, isMobile, isDesktop } = useDeviceInfo();
   const mixpanel = useMixpanel();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { goToNewAccession } = useNavigateTo();
   const plantingSites = useAppSelector(selectPlantingSites);
   const { availableSpecies } = useSpecies();
   const seedBankSummary = useSeedBankSummary();
   const orgNurserySummary = useOrgNurserySummary();
-  const homePageOnboardingImprovementsEnabled = isEnabled('Home Page Onboarding Improvements');
+  const [showAcceleratorCard, setShowAcceleratorCard] = useState(true);
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (orgPreferences.showAcceleratorCard === false && showAcceleratorCard) {
+      setShowAcceleratorCard(false);
+    }
+  }, [orgPreferences]);
 
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
@@ -64,11 +68,8 @@ const TerrawareHomeView = () => {
   );
 
   const showHomePageOnboardingImprovements = useMemo(
-    () =>
-      homePageOnboardingImprovementsEnabled &&
-      typeof availableSpecies?.length === 'number' &&
-      availableSpecies?.length > 0,
-    [availableSpecies, homePageOnboardingImprovementsEnabled]
+    () => typeof availableSpecies?.length === 'number' && availableSpecies?.length > 0,
+    [availableSpecies]
   );
 
   const speciesLastModifiedDate = useMemo(() => {
@@ -94,6 +95,13 @@ const TerrawareHomeView = () => {
     }
     return 4;
   }, [isMobile, isTablet]);
+
+  const dismissAcceleratorCard = async () => {
+    await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
+      ['showAcceleratorCard']: false,
+    });
+    reloadOrgPreferences();
+  };
 
   const organizationStatsCardRows: OrganizationStatsCardRow[] = useMemo(() => {
     if (!activeLocale) {
@@ -128,16 +136,20 @@ const TerrawareHomeView = () => {
       {
         buttonProps: isAdmin(selectedOrganization)
           ? {
-              label: strings.SET_UP_SEED_BANK,
+              label: selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')
+                ? strings.ADD_AN_ACCESSION
+                : strings.SET_UP_SEED_BANK,
               onClick: () => {
-                navigate(APP_PATHS.SEED_BANKS_NEW);
+                selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')
+                  ? navigate(APP_PATHS.ACCESSIONS2_NEW)
+                  : navigate(APP_PATHS.SEED_BANKS_NEW);
               },
             }
           : {
               label: strings.ADD_AN_ACCESSION,
               onClick: () => {
                 selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')
-                  ? navigate(APP_PATHS.ACCESSIONS2_NEW)
+                  ? goToNewAccession()
                   : navigate(APP_PATHS.ACCESSIONS);
               },
             },
@@ -161,9 +173,13 @@ const TerrawareHomeView = () => {
       {
         buttonProps: isAdmin(selectedOrganization)
           ? {
-              label: strings.SET_UP_NURSERY,
+              label: selectedOrgHasFacilityType(selectedOrganization, 'Nursery')
+                ? strings.ADD_INVENTORY
+                : strings.SET_UP_NURSERY,
               onClick: () => {
-                navigate(APP_PATHS.NURSERIES_NEW);
+                selectedOrgHasFacilityType(selectedOrganization, 'Nursery')
+                  ? navigate(APP_PATHS.INVENTORY_NEW)
+                  : navigate(APP_PATHS.NURSERIES_NEW);
               },
             }
           : {
@@ -177,7 +193,14 @@ const TerrawareHomeView = () => {
         icon: 'iconSeedling' as IconName,
         statsCardItems: [
           { label: strings.TOTAL_SEEDLINGS_COUNT, value: orgNurserySummary?.totalQuantity?.toString() },
-          { label: strings.TOTAL_SEEDLINGS_SENT, value: orgNurserySummary?.totalWithdrawn?.toString() },
+          {
+            label: strings.TOTAL_WITHDRAWN_FOR_PLANTING,
+            value: orgNurserySummary?.totalWithdrawn?.toString(),
+            linkOnClick: () => {
+              navigate(APP_PATHS.NURSERY_WITHDRAWALS);
+            },
+            linkText: strings.VIEW_PLANTING_PROGRESS,
+          },
         ],
         title: strings.SEEDLINGS,
       },
@@ -188,7 +211,7 @@ const TerrawareHomeView = () => {
         buttonProps: {
           label: strings.ADD_PLANTING_SITE,
           onClick: () => {
-            navigate(APP_PATHS.PLANTING_SITES_NEW);
+            navigate(`${APP_PATHS.PLANTING_SITES}?new=true`);
           },
         },
         icon: 'iconRestorationSite' as IconName,
@@ -202,6 +225,7 @@ const TerrawareHomeView = () => {
     activeLocale,
     availableSpecies,
     orgNurserySummary,
+    plantingSites,
     seedBankSummary,
     selectedOrganization,
     speciesLastModifiedDate,
@@ -236,47 +260,50 @@ const TerrawareHomeView = () => {
                 </Grid>
 
                 <Grid item xs={12}>
-                  <CTACard
+                  <MobileAppCard
                     description={strings.DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION}
                     imageAlt={strings.TERRAWARE_MOBILE_APP_IMAGE_ALT}
                     imageSource='/assets/terraware-mobile-app.svg'
                     padding='32px'
-                    primaryButtonProps={{
-                      label: strings.DOWNLOAD_FOR_ANDROID,
-                      onClick: () => {
-                        window.open(TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK, '_blank');
-                      },
-                      type: 'passive',
-                    }}
-                    secondaryButtonProps={{
-                      label: strings.DOWNLOAD_FOR_IOS,
-                      onClick: () => {
-                        window.open(TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK, '_blank');
-                      },
-                    }}
                     title={strings.DOWNLOAD_THE_TERRAWARE_MOBILE_APP}
                   />
                 </Grid>
 
-                {isAdmin(selectedOrganization) && (
+                {isAdmin(selectedOrganization) && showAcceleratorCard && (
                   <Grid item xs={12}>
                     <CTACard
                       buttonsContainerSx={{
                         width: isMobile ? '100%' : 'auto',
                       }}
-                      description={strings.formatString(
-                        strings.FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,
-                        <Link
-                          fontSize='16px'
-                          target='_blank'
-                          onClick={() => {
-                            mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_TF_LINK);
-                            window.open(ACCELERATOR_LINK, '_blank');
-                          }}
-                        >
-                          {strings.HERE}
-                        </Link>
-                      )}
+                      description={[
+                        <Box key={'element-1'} sx={{ display: 'flex', flexDirection: isDesktop ? 'row' : 'column' }}>
+                          <Typography
+                            paddingRight={2}
+                            textAlign={isDesktop ? 'left' : 'center'}
+                            marginBottom={isDesktop ? 0 : 2}
+                          >
+                            {strings.formatString(
+                              strings.FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,
+                              <Link
+                                fontSize='16px'
+                                fontWeight={400}
+                                target='_blank'
+                                onClick={() => {
+                                  mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_TF_LINK);
+                                  window.open(ACCELERATOR_LINK, '_blank');
+                                }}
+                                style={{ verticalAlign: 'baseline' }}
+                              >
+                                {strings.HERE}
+                              </Link>
+                            )}
+                          </Typography>
+
+                          <Link fontSize='16px' fontWeight={400} onClick={dismissAcceleratorCard}>
+                            {strings.DISMISS}
+                          </Link>
+                        </Box>,
+                      ]}
                       primaryButtonProps={{
                         label: strings.APPLY_TO_ACCELERATOR,
                         onClick: () => {

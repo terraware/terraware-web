@@ -7,6 +7,7 @@ import {
 } from 'src/types/documentProducer/Variable';
 import {
   NewDateValuePayload,
+  NewEmailValuePayload,
   NewLinkValuePayload,
   NewNumberValuePayload,
   NewSelectValuePayload,
@@ -110,11 +111,19 @@ export const getRawValue = (variable: VariableWithValues): number | number[] | s
  * Check if a new varaible value is empty. This is useful for determining between append/update/delete operations
  */
 export const isValueEmpty = (
-  value: NewDateValuePayload | NewNumberValuePayload | NewSelectValuePayload | NewLinkValuePayload | NewTextValuePayload
+  value:
+    | NewDateValuePayload
+    | NewEmailValuePayload
+    | NewNumberValuePayload
+    | NewSelectValuePayload
+    | NewLinkValuePayload
+    | NewTextValuePayload
 ): boolean => {
   switch (value.type) {
     case 'Date':
       return value.dateValue === '';
+    case 'Email':
+      return value.emailValue === '';
     case 'Link':
       return value.url === '';
     case 'Text':

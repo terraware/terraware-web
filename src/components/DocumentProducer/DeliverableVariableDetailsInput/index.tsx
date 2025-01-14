@@ -14,6 +14,7 @@ import {
 } from 'src/types/documentProducer/Variable';
 import {
   VariableValueDateValue,
+  VariableValueEmailValue,
   VariableValueImageValue,
   VariableValueLinkValue,
   VariableValueNumberValue,
@@ -21,6 +22,7 @@ import {
   VariableValueTextValue,
   VariableValueValue,
 } from 'src/types/documentProducer/VariableValue';
+import { isEmailAddress } from 'src/utils/email';
 
 import DeliverableEditImages from '../DeliverableEditImages';
 import DeliverableEditTable from '../DeliverableEditTable';
@@ -35,6 +37,7 @@ export type DeliverableVariableDetailsInputProps = {
   setImages: (values: VariableValueImageValue[]) => void;
   setNewImages: (values: PhotoWithAttributes[]) => void;
   setValues: (values: VariableValueValue[]) => void;
+  setVariableHasError: (variableId: number, value: boolean) => void;
   variable: Variable;
   addRemovedValue: (value: VariableValueValue) => void;
   projectId: number;
@@ -49,6 +52,7 @@ const DeliverableVariableDetailsInput = ({
   setImages,
   setNewImages,
   setValues,
+  setVariableHasError,
   variable,
   addRemovedValue,
   projectId,
@@ -86,13 +90,17 @@ const DeliverableVariableDetailsInput = ({
         setValue(selectValues[0].optionValues);
       }
       if (variable.type === 'Date') {
-        const selectValues = values as VariableValueDateValue[];
-        setValue(selectValues[0].dateValue);
+        const dateValues = values as VariableValueDateValue[];
+        setValue(dateValues[0].dateValue);
+      }
+      if (variable.type === 'Email') {
+        const emailValues = values as VariableValueEmailValue[];
+        setValue(emailValues[0].emailValue);
       }
       if (variable.type === 'Link') {
-        const selectValues = values as VariableValueLinkValue[];
-        setValue(selectValues[0].url);
-        setTitle(selectValues[0].title);
+        const linkValues = values as VariableValueLinkValue[];
+        setValue(linkValues[0].url);
+        setTitle(linkValues[0].title);
       }
     }
   }, [variable, values]);
@@ -158,6 +166,19 @@ const DeliverableVariableDetailsInput = ({
           setValues(newValues);
         } else {
           setValues([{ id: -1, listPosition: 0, dateValue: newValue, type: 'Date' }]);
+        }
+      }
+
+      if (variable.type === 'Email') {
+        if (values.length > 0) {
+          const emailValues = values as VariableValueEmailValue[];
+          const newValues = emailValues.map((ev) => ({ ...ev }));
+
+          newValues[0].emailValue = newValue;
+
+          setValues(newValues);
+        } else {
+          setValues([{ id: -1, listPosition: 0, emailValue: newValue, type: 'Email' }]);
         }
       }
 
@@ -257,6 +278,14 @@ const DeliverableVariableDetailsInput = ({
           }
         }
         return '';
+      case 'Email':
+        if (value !== undefined) {
+          const stringValue = String(value);
+          if (stringValue !== '' && !isEmailAddress(stringValue)) {
+            return strings.INCORRECT_EMAIL_FORMAT;
+          }
+        }
+        return '';
       case 'Date':
       case 'Image':
       case 'Link':
@@ -267,6 +296,14 @@ const DeliverableVariableDetailsInput = ({
         return '';
     }
   }, [activeLocale, validateFields, variable, value]);
+
+  useEffect(() => {
+    if (errorMessage) {
+      setVariableHasError(variable.id, true);
+    } else {
+      setVariableHasError(variable.id, false);
+    }
+  }, [errorMessage]);
 
   return (
     <>
@@ -354,7 +391,7 @@ const DeliverableVariableDetailsInput = ({
         </>
       )}
 
-      {(variable.type === 'Number' || variable.type === 'Link') && (
+      {(variable.type === 'Number' || variable.type === 'Link' || variable.type === 'Email') && (
         <Textfield
           id='value'
           label=''

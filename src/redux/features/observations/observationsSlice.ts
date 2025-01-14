@@ -9,6 +9,7 @@ import {
 } from 'src/types/Observations';
 
 import {
+  requestAbandonObservation,
   requestReplaceObservationPlot,
   requestRescheduleObservation,
   requestScheduleObservation,
@@ -127,6 +128,18 @@ export const plantingSiteObservationsSummariesSlice = createSlice({
   },
 });
 
+// Abandon observation
+type AbandonObservationState = Record<string, AsyncRequest>;
+
+const initialAbandonObservationState: AbandonObservationState = {};
+
+const abandonObservationSlice = createSlice({
+  name: 'abandonObservation',
+  initialState: initialAbandonObservationState,
+  reducers: {},
+  extraReducers: buildReducers(requestAbandonObservation),
+});
+
 const observationsReducers = {
   observationsResults: observationsResultsSlice.reducer,
   observations: observationsSlice.reducer,
@@ -135,6 +148,7 @@ const observationsReducers = {
   rescheduleObservation: rescheduleObservationSlice.reducer,
   replaceObservationPlot: replaceObservationPlotSlice.reducer,
   plantingSiteObservationsSummaries: plantingSiteObservationsSummariesSlice.reducer,
+  abandonObservation: abandonObservationSlice.reducer,
 };
 
 export default observationsReducers;

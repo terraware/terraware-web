@@ -55,6 +55,25 @@ const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
     knowledge_base_stratification:
       'https://knowledge.terraformation.com/hc/en-us/articles/27884386873364-Strata-vs-Zones-Subzones',
   },
+  fr: {
+    cookie_policy: 'https://www.terraformation.com/cookie-policy',
+    planting_site_create_boundary_instructions_video:
+      'https://player.vimeo.com/video/911493236?h=b8b5555693&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479',
+    planting_site_create_exclusions_boundary_instructions_video:
+      'https://player.vimeo.com/video/911493377?h=f4362af8d2&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479',
+    planting_site_create_subzone_boundary_instructions_video:
+      'https://player.vimeo.com/video/911493615?h=f252d5f359&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479',
+    planting_site_create_zone_boundary_instructions_video:
+      'https://player.vimeo.com/video/911493480?h=788ba11fe4&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479',
+    privacy_policy: 'https://www.terraformation.com/politique-de-confidentialite',
+    terraformation: 'https://www.terraformation.com',
+    terraformation_software_solutions: 'https://www.terraformation.com/solutions/software',
+    knowledge_base: 'https://knowledge.terraformation.com/',
+    knowledge_base_add_species:
+      'https://knowledge.terraformation.com/hc/en-us/articles/19699832923796-Adding-Species-To-Your-List',
+    knowledge_base_stratification:
+      'https://knowledge.terraformation.com/hc/en-us/articles/27884386873364-Strata-vs-Zones-Subzones',
+  },
 };
 
 export const useDocLinks = () => {

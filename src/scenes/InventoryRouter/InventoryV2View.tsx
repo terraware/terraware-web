@@ -248,6 +248,16 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
               <Typography fontSize='24px' fontWeight={600}>
                 {strings.INVENTORY}
               </Typography>
+              <Typography
+                sx={{
+                  fontWeight: 400,
+                  paddingTop: theme.spacing(1.5),
+                  fontSize: '14px',
+                  lineHeight: '20px',
+                }}
+              >
+                {strings.INVENTORY_PAGE_DESCRIPTION}
+              </Typography>
             </Grid>
             {isOnboarded ? (
               <Grid item xs={6} sx={{ textAlign: 'right' }}>
@@ -324,6 +334,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
           />
         ) : (
           <Container maxWidth={false} sx={{ padding: '32px 0' }}>
+            {!isMobile && <Grid item xs={12} padding={theme.spacing(3)} />}
             {isAdmin(selectedOrganization) ? (
               <EmptyMessage title={strings.ONBOARDING_ADMIN_TITLE} rowItems={getEmptyState()} sx={messageStyles} />
             ) : (

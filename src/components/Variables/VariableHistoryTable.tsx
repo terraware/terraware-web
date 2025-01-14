@@ -12,6 +12,7 @@ import strings from 'src/strings';
 import { SelectOptionPayload } from 'src/types/documentProducer/Variable';
 import {
   VariableValueDateValue,
+  VariableValueEmailValue,
   VariableValueImageValue,
   VariableValueLinkValue,
   VariableValueNumberValue,
@@ -156,6 +157,21 @@ export const VariableHistoryTable = ({ projectId, variableId }: VariableHistoryT
                 field: 'value',
                 previous: previousValue?.dateValue ?? '',
                 current: currentValue?.dateValue ?? '',
+              },
+            });
+          }
+        } else if (variable.type === 'Email') {
+          const currentValue = history.variableValues[0] as VariableValueEmailValue | undefined;
+          const previousValue = previous?.variableValues[0] as VariableValueEmailValue | undefined;
+
+          if (previousValue?.emailValue !== currentValue?.emailValue) {
+            newRows.push({
+              date: history.createdTime,
+              editedBy: history.createdBy,
+              change: {
+                field: 'value',
+                previous: previousValue?.emailValue ?? '',
+                current: currentValue?.emailValue ?? '',
               },
             });
           }

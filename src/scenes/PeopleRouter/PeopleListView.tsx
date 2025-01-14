@@ -23,6 +23,7 @@ import { OrganizationRole } from 'src/types/Organization';
 import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
 import { OrganizationUser } from 'src/types/User';
 import { isTfContact } from 'src/utils/organization';
+import { isAdmin } from 'src/utils/organization';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import { parseSearchTerm } from 'src/utils/search';
 import useDebounce from 'src/utils/useDebounce';
@@ -352,11 +353,12 @@ export default function PeopleListView(): JSX.Element {
               marginBottom: '32px',
             }}
           >
-            {isMobile ? (
-              <Button id='new-person' icon='plus' onClick={goToNewPerson} size='medium' />
-            ) : (
-              <Button id='new-person' label={strings.ADD_PERSON} icon='plus' onClick={goToNewPerson} size='medium' />
-            )}
+            {isAdmin(selectedOrganization) &&
+              (isMobile ? (
+                <Button id='new-person' icon='plus' onClick={goToNewPerson} size='medium' />
+              ) : (
+                <Button id='new-person' label={strings.ADD_PERSON} icon='plus' onClick={goToNewPerson} size='medium' />
+              ))}
           </Grid>
           <PageSnackbar />
         </Grid>
@@ -397,7 +399,7 @@ export default function PeopleListView(): JSX.Element {
                       rows={results}
                       orderBy='name'
                       Renderer={TableCellRenderer}
-                      showCheckbox={true}
+                      showCheckbox={isAdmin(selectedOrganization)}
                       selectedRows={selectedPeopleRows}
                       setSelectedRows={setSelectedPeopleRows}
                       showTopBar={true}

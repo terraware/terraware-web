@@ -12,7 +12,7 @@ import {
 } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { TableVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';
+import { TableVariableWithValues, Variable, VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
   Operation,
   UploadImageValueRequestPayloadWithProjectId,
@@ -25,6 +25,8 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { makeVariableValueOperations } from './util';
 
 type ProjectVariablesUpdate = {
+  hasVariableError: boolean;
+  missingFields: boolean;
   pendingVariableValues: Map<number, VariableValueValue[]>;
   setCellValues: (variableId: number, values: VariableTableCell[][]) => void;
   setDeletedImages: (variableId: number, values: VariableValueImageValue[]) => void;
@@ -32,11 +34,11 @@ type ProjectVariablesUpdate = {
   setNewImages: (variableId: number, values: PhotoWithAttributes[]) => void;
   setRemovedValue: (variableId: number, value: VariableValueValue) => void;
   setValues: (variableId: number, values: VariableValueValue[]) => void;
+  setVariableHasError: (variableId: number, value: boolean) => void;
   stagedVariableWithValues: VariableWithValues[];
   updateSuccess: boolean;
   uploadSuccess: boolean;
   update: (updateStatuses?: boolean) => boolean;
-  missingFields: boolean;
 };
 
 export const useProjectVariablesUpdate = (
@@ -52,6 +54,7 @@ export const useProjectVariablesUpdate = (
   const [pendingNewImages, setPendingNewImages] = useState<Map<number, PhotoWithAttributes[]>>(new Map());
   const [pendingVariableValues, setPendingVariableValues] = useState<Map<number, VariableValueValue[]>>(new Map());
   const [removedVariableValues, setRemovedVariableValues] = useState<Map<number, VariableValueValue>>(new Map());
+  const [variableHasErrorMap, setVariableHasErrorMap] = useState<Map<Variable['id'], boolean>>(new Map());
 
   const [updateVariableRequestId, setUpdateVariableRequestId] = useState<string>('');
   const [uploadRequestId, setUploadRequestId] = useState<string>('');
@@ -256,8 +259,28 @@ export const useProjectVariablesUpdate = (
     [pendingNewImages, uploadResult]
   );
 
+  // Is there at least one variable with an error
+  const hasVariableError = useMemo(() => {
+    let hasError = false;
+    // With es2015 this becomes a one-liner
+    variableHasErrorMap.forEach((_hasError: boolean) => {
+      hasError = hasError || _hasError;
+    });
+    return hasError;
+  }, [variableHasErrorMap]);
+
+  const setVariableHasError = useCallback(
+    (variableId: number, hasError: boolean) => {
+      // Consider using es2015 or above so we can spread iterators and interact with Map a bit better
+      const nextVariableHasErrorMap = new Map(variableHasErrorMap).set(variableId, hasError);
+      setVariableHasErrorMap(nextVariableHasErrorMap);
+    },
+    [variableHasErrorMap]
+  );
+
   return useMemo(
     () => ({
+      hasVariableError,
       pendingVariableValues,
       setCellValues,
       setDeletedImages,
@@ -265,6 +288,7 @@ export const useProjectVariablesUpdate = (
       setNewImages,
       setRemovedValue,
       setValues,
+      setVariableHasError,
       stagedVariableWithValues,
       updateSuccess,
       uploadSuccess,
@@ -272,6 +296,7 @@ export const useProjectVariablesUpdate = (
       missingFields,
     }),
     [
+      hasVariableError,
       pendingVariableValues,
       setCellValues,
       setDeletedImages,
@@ -279,6 +304,7 @@ export const useProjectVariablesUpdate = (
       setNewImages,
       setRemovedValue,
       setValues,
+      setVariableHasError,
       stagedVariableWithValues,
       updateSuccess,
       uploadSuccess,

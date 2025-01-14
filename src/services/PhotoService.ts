@@ -38,7 +38,7 @@ const uploadPhotos = async (
     const promiseResponses = await Promise.allSettled(uploadPhotoPromises);
     return promiseResponses.map((response) => {
       if (response.status === 'rejected') {
-        // tslint:disable-next-line: no-console
+        // eslint-disable-next-line no-console
         console.error(response.reason);
         return response.reason;
       } else {

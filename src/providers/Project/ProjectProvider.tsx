@@ -25,7 +25,7 @@ const ProjectProvider = ({ children }: Props) => {
 
   const [projectData, setProjectData] = useState<ProjectData>({
     projectId,
-    // tslint:disable-next-line:no-empty
+    // eslint-disable-next-line no-empty
     reload: () => {},
   });
 

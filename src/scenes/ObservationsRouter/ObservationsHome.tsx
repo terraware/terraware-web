@@ -29,6 +29,7 @@ import ObservationsEventsNotification from './ObservationsEventsNotification';
 
 export type ObservationsHomeProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;
+  reload: () => void;
 };
 
 export default function ObservationsHome(props: ObservationsHomeProps): JSX.Element {

@@ -9,7 +9,7 @@ import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { ObservationState, getStatus } from 'src/types/Observations';
+import { Observation, ObservationState, getStatus } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 
 const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'mortalityRate'];
@@ -20,7 +20,8 @@ const OrgObservationsRenderer =
     locale: string | undefined | null,
     goToRescheduleObservation: (observationId: number) => void,
     exportObservationCsv: (observationId: number) => void,
-    exportObservationGpx: (observationId: number) => void
+    exportObservationGpx: (observationId: number) => void,
+    openEndObservationModal: (observationId: Observation) => void
   ) =>
   // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
@@ -101,6 +102,13 @@ const OrgObservationsRenderer =
               label: strings.RESCHEDULE,
               onClick: () => {
                 goToRescheduleObservation(row.observationId);
+              },
+            },
+            {
+              disabled: row.state === 'Completed',
+              label: strings.END_OBSERVATION,
+              onClick: () => {
+                openEndObservationModal(row as Observation);
               },
             },
           ]}

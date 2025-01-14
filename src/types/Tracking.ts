@@ -57,7 +57,7 @@ export type PlantingSiteSubzoneWithReportedPlants = PlantingSubzone &
 // monitoring plots
 export type MonitoringPlotSearchResult = {
   id: number;
-  fullName: string;
+  plotNumber: number;
 };
 
 // planting seasons

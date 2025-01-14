@@ -244,7 +244,6 @@ const EditableTableEdit = ({
     (optionItem: DropdownItem) => {
       switch (optionItem.value) {
         case 'view_history': {
-          onCancel();
           showVariableHistory();
           break;
         }
@@ -470,6 +469,7 @@ export const EditableCell = ({ display, id, column, onChange, value }: EditableC
           }))}
           selectedValue={value}
           fullWidth={true}
+          selectStyles={{ optionsContainer: { width: 'auto' } }}
         />
       );
     default:

@@ -96,7 +96,7 @@ const CTACard = ({
             display: 'flex',
             flexDirection: isMobile ? 'column' : 'row',
             marginLeft: isDesktop ? '27px' : 0,
-            marginTop: isMobile || isTablet ? '32px' : 0,
+            marginTop: isMobile || isTablet ? '24px' : 0,
             whiteSpace: 'nowrap',
           },
           ...(Array.isArray(buttonsContainerSx) ? buttonsContainerSx : [buttonsContainerSx]),

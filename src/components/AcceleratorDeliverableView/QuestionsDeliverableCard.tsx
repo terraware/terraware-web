@@ -66,6 +66,7 @@ const QuestionBox = ({
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const {
+    hasVariableError,
     pendingVariableValues,
     setCellValues,
     setDeletedImages,
@@ -73,6 +74,7 @@ const QuestionBox = ({
     setNewImages,
     setRemovedValue,
     setValues,
+    setVariableHasError,
     update,
   } = useProjectVariablesUpdate(projectId, [variable]);
   const { isAcceleratorApplicationRoute } = useAcceleratorConsole();
@@ -342,6 +344,7 @@ const QuestionBox = ({
                 setDeletedImages={(newValues: VariableValueImageValue[]) => setDeletedImages(variable.id, newValues)}
                 setImages={(newValues: VariableValueImageValue[]) => setImages(variable.id, newValues)}
                 setNewImages={(newValues: PhotoWithAttributes[]) => setNewImages(variable.id, newValues)}
+                setVariableHasError={setVariableHasError}
                 projectId={projectId}
                 validateFields={false}
               />
@@ -411,7 +414,14 @@ const QuestionBox = ({
               priority='secondary'
               key='button-1'
             />
-            <Button id={'save'} onClick={onSave} label={strings.SAVE} key='button-2' priority='secondary' />
+            <Button
+              id={'save'}
+              onClick={onSave}
+              label={strings.SAVE}
+              disabled={hasVariableError}
+              key='button-2'
+              priority='secondary'
+            />
           </Box>
         )}
       </Box>

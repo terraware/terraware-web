@@ -274,7 +274,7 @@ export default function InventoryTests() {
     await page.getByRole('button', { name: 'Got It!' }).click();
     await expect(page.getByText('1 batch for a total of 60')).toBeVisible();
     await page.getByRole('tab', { name: 'History' }).click();
-    await expect(page.getByRole('cell', { name: 'Withdrawal - Out Plant' }).nth(0)).toBeVisible();
+    await expect(page.getByRole('cell', { name: 'Withdrawal - Planting' }).nth(0)).toBeVisible();
     await page.getByRole('button', { name: 'Withdrawals' }).click();
     await expect(page.getByRole('cell', { name: 'Planting Site' })).toBeVisible();
     await expect(page.getByRole('cell', { name: '60' })).toBeVisible();
@@ -298,8 +298,9 @@ export default function InventoryTests() {
     await expect(page.getByText('1 Species')).toBeVisible();
     await page.getByText('Total Plants and Species').click();
     await page.mouse.wheel(0, 2000);
-    await page.waitForTimeout(4000); //Wait for map to load
-    await expect(page.locator('.mapboxgl-canvas')).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText('Zone Level Data')).toBeVisible();
+    await page.waitForTimeout(6000); //Wait for map to load
+    await expect(page.locator('.mapboxgl-canvas')).toBeVisible();
     await page.locator('.mapboxgl-map').click({
       position: {
         x: 526,
@@ -318,8 +319,9 @@ export default function InventoryTests() {
     await page.getByRole('button', { name: 'Withdrawals' }).click();
     await page.getByText('Map').click();
     await page.mouse.down();
-    await page.waitForTimeout(4000); //Wait for map to load
-    await expect(page.locator('.mapboxgl-canvas')).toBeVisible({ timeout: 5000 });
+    await expect(page.getByLabel('Planting Progress').getByText('Planting Progress')).toBeVisible();
+    await page.waitForTimeout(6000); //Wait for map to load
+    await expect(page.locator('.mapboxgl-canvas')).toBeVisible();
     await page.locator('.mapboxgl-map').click({
       position: {
         x: 526,

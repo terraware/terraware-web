@@ -53,7 +53,7 @@ PageWithCrumbsAndRightComponent.args = {
         label={'Click this button'}
         icon='iconEdit'
         onClick={() => {
-          // tslint:disable-next-line:no-console
+          // eslint-disable-next-line no-console
           console.log('Thank you for clicking me');
         }}
         size='medium'
@@ -61,7 +61,7 @@ PageWithCrumbsAndRightComponent.args = {
       />
       <OptionsMenu
         onOptionItemClick={(item) => {
-          // tslint:disable-next-line:no-console
+          // eslint-disable-next-line no-console
           console.log('You clicked on ', item);
         }}
         optionItems={[{ label: 'Click this option', value: 'click' }]}

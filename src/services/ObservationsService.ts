@@ -21,6 +21,7 @@ const OBSERVATION_ENDPOINT = '/api/v1/tracking/observations/{observationId}';
 const OBSERVATION_EXPORT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots';
 const REPLACE_OBSERVATION_PLOT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/replace';
 const PLANTING_SITE_OBSERVATIONS_SUMMARIES_ENDPOINT = '/api/v1/tracking/observations/results/summaries';
+const ABANDON_OBSERVATION_ENDPOINT = '/api/v1/tracking/observations/{observationId}/abandon';
 
 type ObservationsResultsResponsePayload =
   paths[typeof OBSERVATIONS_RESULTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -56,7 +57,7 @@ const exportCsv = async (observationId: number): Promise<any> => {
       'observationPlots_isPermanent',
       'observationPlots_monitoringPlot_plantingSubzone_plantingZone_name',
       'observationPlots_monitoringPlot_plantingSubzone_name',
-      'observationPlots_monitoringPlot_fullName',
+      'observationPlots_monitoringPlot_plotNumber',
       'observationPlots_monitoringPlot_southwestLatitude',
       'observationPlots_monitoringPlot_southwestLongitude',
       'observationPlots_monitoringPlot_northwestLatitude',
@@ -183,6 +184,13 @@ const getPlantingSiteObservationsSummaries = async (
   });
 };
 
+const abandonObservation = async (observationId: number): Promise<Response> => {
+  return await HttpService.root(ABANDON_OBSERVATION_ENDPOINT).post({
+    urlReplacements: {
+      '{observationId}': observationId.toString(),
+    },
+  });
+};
 /**
  * Exported functions
  */
@@ -195,6 +203,7 @@ const ObservationsService = {
   rescheduleObservation,
   scheduleObservation,
   getPlantingSiteObservationsSummaries,
+  abandonObservation,
 };
 
 export default ObservationsService;

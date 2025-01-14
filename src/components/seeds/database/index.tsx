@@ -18,6 +18,7 @@ import Button from 'src/components/common/button/Button';
 import { BaseTable as Table } from 'src/components/common/table';
 import { SortOrder as Order } from 'src/components/common/table/sort';
 import { APP_PATHS } from 'src/constants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import { selectMessage } from 'src/redux/features/message/messageSelectors';
 import { sendMessage } from 'src/redux/features/message/messageSlice';
@@ -98,6 +99,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const query = useQuery();
   const location = useStateLocation();
   const { sessionFilters, setSessionFilters } = useSessionFilters('accessions');
+  const { goToNewAccession } = useNavigateTo();
 
   const messageStyles = {
     margin: '0 auto',
@@ -526,11 +528,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
     navigate(appPathLocation);
   };
 
-  const goToNewAccession = () => {
-    const newAccessionLocation = getLocation(APP_PATHS.ACCESSIONS2_NEW, location);
-    navigate(newAccessionLocation);
-  };
-
   const onSeedBankForImportSelected = (selectedFacilityOnModal: Facility | undefined) => {
     setSelectSeedBankForImportModalOpen(false);
     if (selectedFacilityOnModal) {
@@ -689,9 +686,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
         </PageHeaderWrapper>
         <Container ref={contentRef} maxWidth={false} sx={{ padding: 0 }}>
           {selectedOrganization && unfilteredResults ? (
-            <Card>
+            <>
               {isOnboarded ? (
-                <>
+                <Card>
                   <Box
                     sx={{
                       backgroundColor: theme.palette.TwClrBg,
@@ -743,23 +740,23 @@ export default function Database(props: DatabaseProps): JSX.Element {
                     {searchResults === undefined && <CircularProgress />}
                     {searchResults === null && strings.GENERIC_ERROR}
                   </Box>
-                </>
+                </Card>
               ) : isAdmin(selectedOrganization) ? (
-                <>
+                <Container maxWidth={false} sx={{ padding: '32px 0' }}>
                   {!isMobile && emptyStateSpacer()}
                   <EmptyMessage title={strings.ONBOARDING_ADMIN_TITLE} rowItems={getEmptyState()} sx={messageStyles} />
-                </>
+                </Container>
               ) : (
-                <>
+                <Container maxWidth={false} sx={{ padding: '32px 0' }}>
                   {!isMobile && emptyStateSpacer()}
                   <EmptyMessage
                     title={strings.REACH_OUT_TO_ADMIN_TITLE}
                     text={strings.NO_SEEDBANKS_NON_ADMIN_MSG}
                     sx={messageStyles}
                   />
-                </>
+                </Container>
               )}
-            </Card>
+            </>
           ) : (
             <Box
               sx={{

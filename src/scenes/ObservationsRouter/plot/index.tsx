@@ -143,7 +143,7 @@ export default function ObservationMonitoringPlot(): JSX.Element {
                 .replace(':plantingZoneId', Number(plantingZoneId).toString())
                 .replace(':monitoringPlotId', found.monitoringPlotId.toString())}
             >
-              {found.monitoringPlotName}
+              {found.monitoringPlotNumber}
             </Link>
           );
         }
@@ -156,7 +156,7 @@ export default function ObservationMonitoringPlot(): JSX.Element {
 
   return (
     <DetailsPage
-      title={monitoringPlot?.monitoringPlotName ?? ''}
+      title={monitoringPlot?.monitoringPlotNumber.toString() ?? ''}
       plantingSiteId={plantingSiteId}
       observationId={observationId}
       plantingZoneId={plantingZoneId}

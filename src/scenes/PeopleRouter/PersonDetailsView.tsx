@@ -7,16 +7,16 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 import PageSnackbar from 'src/components/PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
 import TextField from 'src/components/common/Textfield/Textfield';
+import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import { useOrganization } from 'src/providers/hooks';
 import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
+import { roleName } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
+import { isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-
-import TfMain from '../../components/common/TfMain';
-import { useOrganization } from '../../providers/hooks';
-import { roleName } from '../../types/Organization';
 
 export default function PersonDetailsView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
@@ -100,24 +100,25 @@ export default function PersonDetailsView(): JSX.Element {
             </Typography>
           </Grid>
           <Grid item xs={3}>
-            {isMobile ? (
-              <Button
-                icon='iconEdit'
-                priority='primary'
-                size='medium'
-                onClick={goToEditPerson}
-                style={{ float: 'right' }}
-              />
-            ) : (
-              <Button
-                label={strings.EDIT_PERSON}
-                icon='iconEdit'
-                priority='primary'
-                size='medium'
-                onClick={goToEditPerson}
-                style={{ float: 'right' }}
-              />
-            )}
+            {isAdmin(selectedOrganization) &&
+              (isMobile ? (
+                <Button
+                  icon='iconEdit'
+                  priority='primary'
+                  size='medium'
+                  onClick={goToEditPerson}
+                  style={{ float: 'right' }}
+                />
+              ) : (
+                <Button
+                  label={strings.EDIT_PERSON}
+                  icon='iconEdit'
+                  priority='primary'
+                  size='medium'
+                  onClick={goToEditPerson}
+                  style={{ float: 'right' }}
+                />
+              ))}
           </Grid>
         </Grid>
         <Grid item xs={12}>

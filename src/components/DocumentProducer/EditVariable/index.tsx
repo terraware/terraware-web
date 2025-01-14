@@ -16,6 +16,7 @@ import strings from 'src/strings';
 import { UpdateVariableWorkflowDetailsPayload, VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
   NewDateValuePayload,
+  NewEmailValuePayload,
   NewLinkValuePayload,
   NewNumberValuePayload,
   NewSelectValuePayload,
@@ -23,6 +24,7 @@ import {
   Operation,
   VariableValue,
   VariableValueDateValue,
+  VariableValueEmailValue,
   VariableValueLinkValue,
   VariableValueNumberValue,
   VariableValueSelectValue,
@@ -111,6 +113,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
     if (values.length) {
       let newValue:
         | NewDateValuePayload
+        | NewEmailValuePayload
         | NewTextValuePayload
         | NewNumberValuePayload
         | NewSelectValuePayload
@@ -143,6 +146,11 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
         const firstValue = values[0] as VariableValueDateValue;
         valueIdToUpdate = firstValue.id;
         newValue = { type: 'Date', dateValue: firstValue.dateValue, citation: firstValue.citation };
+      }
+      if (variable.type === 'Email') {
+        const firstValue = values[0] as VariableValueEmailValue;
+        valueIdToUpdate = firstValue.id;
+        newValue = { type: 'Email', emailValue: firstValue.emailValue, citation: firstValue.citation };
       }
       if (variable.type === 'Link') {
         const firstValue = values[0] as VariableValueLinkValue;
@@ -243,7 +251,6 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
     (optionItem: DropdownItem) => {
       switch (optionItem.value) {
         case 'view_history': {
-          onCancel();
           showVariableHistory();
           break;
         }

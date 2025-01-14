@@ -5,19 +5,19 @@ import { Box, Grid, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
+import ErrorBox from 'src/components/common/ErrorBox/ErrorBox';
+import PageForm from 'src/components/common/PageForm';
+import TextField from 'src/components/common/Textfield/Textfield';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useOrganization } from 'src/providers/hooks';
 import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
 import { OrganizationUser } from 'src/types/User';
+import { isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
-
-import ErrorBox from '../../components/common/ErrorBox/ErrorBox';
-import PageForm from '../../components/common/PageForm';
-import TextField from '../../components/common/Textfield/Textfield';
-import { useOrganization } from '../../providers/hooks';
 
 export default function PersonView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
@@ -173,6 +173,12 @@ export default function PersonView(): JSX.Element {
   if (newPerson.role === 'Owner') {
     roleOptions.push({ label: strings.OWNER, value: 'Owner' });
   }
+
+  useEffect(() => {
+    if (!isAdmin(selectedOrganization)) {
+      goToPeople();
+    }
+  }, [selectedOrganization, goToPeople]);
 
   // TODO: Handle the case where we cannot find the requested person to edit in the list of people.
   return (

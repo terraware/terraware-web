@@ -21,6 +21,10 @@ export const getSeedBank = (organization: Organization, facilityId: number): Fac
   return getAllSeedBanks(organization).find((sb) => sb?.id === facilityId);
 };
 
+export const isOwner = (organization: Organization | undefined) => {
+  return organization?.role === 'Owner';
+};
+
 export const isAdmin = (organization: Organization | undefined) => {
   return HighOrganizationRolesValues.includes(organization?.role || '');
 };
@@ -53,7 +57,7 @@ export const isPlaceholderOrg = (id: number | undefined) => !id || id === defaul
 
 export const selectedOrgHasFacilityType = (organization: Organization, facilityType: FacilityType): boolean => {
   if (!isPlaceholderOrg(organization?.id) && organization?.facilities) {
-    return organization.facilities.some((facility: any) => {
+    return organization.facilities.some((facility: Facility) => {
       return facility.type === facilityType;
     });
   } else {

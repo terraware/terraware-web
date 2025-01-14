@@ -360,7 +360,7 @@ const getMonitoringPlotMapData = (
       id: plot.monitoringPlotId,
       properties: {
         id: plot.monitoringPlotId,
-        name: plot.monitoringPlotName,
+        name: plot.monitoringPlotNumber,
         type: permanent ? 'permanentPlot' : 'temporaryPlot',
       },
       boundary: [plot.boundary.coordinates],

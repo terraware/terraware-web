@@ -33,6 +33,7 @@ export default function DeliverableDisplayVariableValue({
     case 'Text':
     case 'Number':
     case 'Date':
+    case 'Email':
     case 'Link':
       return (
         <span style={variableStyles}>
@@ -70,7 +71,7 @@ export default function DeliverableDisplayVariableValue({
           {`${
             variable.options
               .filter((o) => selectedValues?.includes(o.id))
-              .map((o) => o.renderedText ?? o.name)
+              .map((o) => o.name)
               .join(', ') || strings.UNSPECIFIED
           }`}
         </span>

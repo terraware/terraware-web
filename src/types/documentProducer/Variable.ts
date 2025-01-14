@@ -18,6 +18,8 @@ export type SectionVariable = components['schemas']['SectionVariablePayload'];
 
 export type DateVariable = components['schemas']['DateVariablePayload'];
 
+export type EmailVariable = components['schemas']['EmailVariablePayload'];
+
 export type TextVariable = components['schemas']['TextVariablePayload'];
 export const isTextVariable = (input: unknown): input is TableVariable => (input as TextVariable).type === 'Text';
 
@@ -42,6 +44,7 @@ export type VariableUnion =
   | NumberVariable
   | SelectVariable
   | DateVariable
+  | EmailVariable
   | LinkVariable
   | SectionVariable;
 
