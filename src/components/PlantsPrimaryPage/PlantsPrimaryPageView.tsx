@@ -74,7 +74,7 @@ export default function PlantsPrimaryPageView({
 
   return (
     <TfMain>
-      {newHeader ? (
+      {newHeader && plantingSites.length > 0 ? (
         <Card radius={'8px'} style={{ 'margin-bottom': '32px' }}>
           <Grid container alignItems={'center'} spacing={4}>
             <Grid item xs={4}>
