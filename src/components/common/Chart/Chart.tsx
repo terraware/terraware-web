@@ -6,6 +6,7 @@ import annotationPlugin from 'chartjs-plugin-annotation';
 import { AnnotationPluginOptions } from 'chartjs-plugin-annotation/types/options';
 
 import { useLocalization } from 'src/providers';
+import { htmlLegendPlugin } from 'src/scenes/PlantsDashboardRouter/components/htmlLegendPlugin';
 import { WithRequired } from 'src/types/utils';
 import { generateTerrawareRandomColors } from 'src/utils/generateRandomColor';
 
@@ -18,6 +19,10 @@ type ChartDataset = {
   values: (number | null)[];
   // Dataset label which will appear in legends and tooltips
   label?: string;
+  showLine?: boolean;
+  fill?: any;
+  pointRadius?: number;
+  borderWidth?: number;
 };
 
 export type ChartData = {
@@ -50,6 +55,7 @@ export type BaseChartProps = {
 
 export type ChartProps = BaseChartProps & {
   type: keyof ChartTypeRegistry;
+  customLegend?: boolean;
 };
 
 export default function Chart(props: ChartProps): JSX.Element | null {
@@ -89,6 +95,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     yStepSize,
     xAxisType,
     lineColor,
+    customLegend,
   } = props;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [chart, setChart] = useState<ChartJS | null>(null);
@@ -159,6 +166,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
                   },
                 },
               },
+              plugins: customLegend ? [htmlLegendPlugin] : undefined,
             })
           );
           // when component unmounts
@@ -178,14 +186,21 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     const newDatasets = chartData.datasets.map((ds) => ({
       label: ds.label,
       data: ds.values,
+      showLine: ds.showLine,
       barThickness,
       backgroundColor: ds.color ?? colors,
       minBarLength: 3,
+      fill: ds.fill,
+      pointRadius: ds.pointRadius,
+      borderWidth: ds.borderWidth,
     }));
     const newPlugins = {
       annotation: barAnnotations,
       legend: {
-        display: !!showLegend,
+        display: customLegend ? false : !!showLegend,
+      },
+      htmlLegend: {
+        containerID: customLegend ? 'legend-container-th' : undefined,
       },
       tooltip: {
         displayColors: false,
