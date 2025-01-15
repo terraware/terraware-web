@@ -6,6 +6,7 @@ import annotationPlugin from 'chartjs-plugin-annotation';
 import { AnnotationPluginOptions } from 'chartjs-plugin-annotation/types/options';
 
 import { useLocalization } from 'src/providers';
+import { htmlLegendPlugin } from 'src/scenes/PlantsDashboardRouter/components/htmlLegendPlugin';
 import { WithRequired } from 'src/types/utils';
 import { generateTerrawareRandomColors } from 'src/utils/generateRandomColor';
 
@@ -54,6 +55,7 @@ export type BaseChartProps = {
 
 export type ChartProps = BaseChartProps & {
   type: keyof ChartTypeRegistry;
+  customLegend?: boolean;
 };
 
 export default function Chart(props: ChartProps): JSX.Element | null {
@@ -93,6 +95,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     yStepSize,
     xAxisType,
     lineColor,
+    customLegend,
   } = props;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [chart, setChart] = useState<ChartJS | null>(null);
@@ -163,6 +166,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
                   },
                 },
               },
+              plugins: customLegend ? [htmlLegendPlugin] : undefined,
             })
           );
           // when component unmounts
@@ -193,7 +197,10 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     const newPlugins = {
       annotation: barAnnotations,
       legend: {
-        display: !!showLegend,
+        display: customLegend ? false : !!showLegend,
+      },
+      htmlLegend: {
+        containerID: customLegend ? 'legend-container-th' : undefined,
       },
       tooltip: {
         displayColors: false,

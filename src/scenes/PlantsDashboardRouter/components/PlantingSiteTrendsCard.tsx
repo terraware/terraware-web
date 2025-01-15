@@ -79,10 +79,8 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
       labels: labels ?? [],
       datasets: [
         {
-          values: values ?? [],
-        },
-        {
           values: minValues ?? [],
+          label: strings.STANDARD_DEVIATION,
           pointRadius: 0,
           borderWidth: 0,
         },
@@ -91,9 +89,13 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
           pointRadius: 0,
           borderWidth: 0,
           fill: {
-            target: 1, // fill to dataset 1
+            target: 0, // fill to dataset 0
             above: '#B8A0D64D',
           },
+        },
+        {
+          values: values ?? [],
+          label: strings.ACTUAL,
         },
       ],
     };
@@ -141,6 +143,7 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
             selectedValue={selectedPlantsPerHaZone}
           />
         </Box>
+        <Box id='legend-container-th' sx={{ marginTop: 3 }} />
         <Box marginTop={2}>
           <Chart
             chartId='plantsPerHaChart'
@@ -151,6 +154,7 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
             type={'line'}
             xAxisType='time'
             lineColor='#B8A0D6'
+            customLegend
           />
         </Box>
       </Box>
