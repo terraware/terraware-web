@@ -3,7 +3,7 @@ export async function getPromisesResponse<T>(promises: Promise<T>[]): Promise<(T
     const promiseResponses = await Promise.allSettled(promises);
     return promiseResponses.map((response) => {
       if (response.status === 'rejected') {
-        // tslint:disable-next-line: no-console
+        // eslint-disable-next-line no-console
         console.error(response.reason);
         return null;
       } else {
@@ -22,7 +22,7 @@ export async function handlePromises<T>(promises: Promise<T>[]): Promise<boolean
     const promiseResponses = await Promise.allSettled(promises);
     return promiseResponses.every((response) => response.status !== 'rejected');
   } catch (e) {
-    // tslint:disable-next-line: no-console
+    // eslint-disable-next-line no-console
     console.error(e);
     return false;
   }

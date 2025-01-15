@@ -98,6 +98,7 @@ export default function TextVariable(props: TextVariableProps): React.ReactEleme
         component='span'
         sx={{
           lineHeight: '16px',
+          whiteSpace: 'pre-wrap',
         }}
       >
         {isEditing ? `${variable?.name}: ` : ''}

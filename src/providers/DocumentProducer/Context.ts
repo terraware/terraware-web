@@ -26,7 +26,7 @@ export const DocumentProducerContext = createContext<DocumentProducerData>({
   getUsedSections: () => [],
   isLoading: false,
   projectId: -1,
-  // tslint:disable-next-line:no-empty
+  // eslint-disable-next-line no-empty
   reload: () => {},
   reloadVariables: () => {},
   reloadDocument: () => {},

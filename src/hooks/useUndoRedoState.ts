@@ -13,10 +13,10 @@ export type RedoFn<T> = (() => T | undefined) | undefined;
  *
  * Returns array of [data, setData, undoFunction, redoFunction]
  * where,
- *  data is the current state of data
- *  setData allows updating data, thereby adding to the stack of changes that can be undone/redone
- *  undo is a callback function to undo last change, if function is 'undefined', undo is no longer possible (beginning of stack)
- *  redo is a callback function to redo last change, if function is 'undefined', redo is no longer possible (end of stack)
+ * - data is the current state of data
+ * - setData allows updating data, thereby adding to the stack of changes that can be undone/redone
+ * - undo is a callback function to undo last change, if function is 'undefined', undo is no longer possible (beginning of stack)
+ * - redo is a callback function to redo last change, if function is 'undefined', redo is no longer possible (end of stack)
  */
 export default function useUndoRedoState<T>(initialValue?: T): [T | undefined, SetFn<T>, UndoFn<T>, RedoFn<T>] {
   const [stack, setStack] = useState<(T | undefined)[]>([initialValue]);

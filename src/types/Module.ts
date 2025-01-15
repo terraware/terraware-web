@@ -30,7 +30,7 @@ export const getEventType = (input: ModuleEventType): string => {
     case 'Workshop':
       return strings.WORKSHOP;
     default:
-      return `${input}`;
+      return `${input as string}`;
   }
 };
 
@@ -82,7 +82,7 @@ export const getEventStatus = (status: ModuleEventStatus) => {
       return strings.SESSION_HAS_ENDED;
     }
     default:
-      return `${status}`;
+      return `${status as string}`;
   }
 };
 

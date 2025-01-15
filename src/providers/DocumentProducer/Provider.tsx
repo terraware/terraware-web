@@ -130,7 +130,7 @@ const DocumentProducerProvider = ({ children }: Props) => {
     getUsedSections,
     isLoading: true,
     projectId,
-    // tslint:disable-next-line:no-empty
+    // eslint-disable-next-line no-empty
     reload: () => {},
     variablesOwners,
     reloadVariables: () => {},
