@@ -1,3 +1,4 @@
+f120f65c921 Add max memory increase to build-with-version script (#3531)
 6c06eea1a86 SW-6429 Don't show new plants dashboard header in empty state (#3530)
 e2079bc6e1d SW-6279 Add standard deviation to Observed Density trend chart (#3528)
 90b5f2482cb Updated translations from Phrase (#3529)
