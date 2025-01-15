@@ -16,6 +16,13 @@ type PlantingSiteTrendsCardProps = {
   plantingSiteId: number;
 };
 
+type ChartData = {
+  labels: string[];
+  datasets: {
+    values: number[];
+  }[];
+};
+
 export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteTrendsCardProps): JSX.Element {
   const theme = useTheme();
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
@@ -52,17 +59,15 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
     }
   }, [plantingObservationsSummaryResponse]);
 
-  const separatorStyles = {
-    width: '1px',
-    height: 'auto',
-    backgroundColor: theme.palette.TwClrBrdrTertiary,
-    marginRight: '24px',
-    marginLeft: '24px',
-  };
-
-  const plantsChartData = useMemo(() => {
-    const labels = summaries?.map((sm) => sm.latestObservationTime);
-    const values = summaries?.map((sm) => {
+  const plantsChartData: ChartData = useMemo(() => {
+    const filteredSummaries = summaries?.filter((sc) => {
+      const zone = sc.plantingZones.find((pz) => pz.plantingZoneId === selectedPlantsPerHaZone);
+      if (zone?.estimatedPlants !== undefined) {
+        return true;
+      }
+    });
+    const labels = filteredSummaries?.map((sm) => sm.latestObservationTime);
+    const values = filteredSummaries?.map((sm) => {
       const zone = sm.plantingZones.find((pz) => pz.plantingZoneId === selectedPlantsPerHaZone);
       return zone?.estimatedPlants || 0;
     });
@@ -77,9 +82,15 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
     };
   }, [summaries, selectedPlantsPerHaZone]);
 
-  const mortalityChartData = useMemo(() => {
-    const labels = summaries?.map((sm) => sm.latestObservationTime);
-    const values = summaries?.map((sm) => {
+  const mortalityChartData: ChartData = useMemo(() => {
+    const filteredSummaries = summaries?.filter((sc) => {
+      const zone = sc.plantingZones.find((pz) => pz.plantingZoneId === selectedPlantsPerHaZone);
+      if (zone?.mortalityRate !== undefined) {
+        return true;
+      }
+    });
+    const labels = filteredSummaries?.map((sm) => sm.latestObservationTime);
+    const values = filteredSummaries?.map((sm) => {
       const zone = sm.plantingZones.find((pz) => pz.plantingZoneId === selectedMortalityZone);
       return zone?.mortalityRate || 0;
     });
@@ -126,7 +137,15 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
           />
         </Box>
       </Box>
-      <div style={separatorStyles} />
+      <Box
+        sx={{
+          width: '1px',
+          height: 'auto',
+          backgroundColor: theme.palette.TwClrBrdrTertiary,
+          marginRight: '24px',
+          marginLeft: '24px',
+        }}
+      />
       <Box flexBasis='100%'>
         <Box display={'flex'} alignItems={'center'}>
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
