@@ -8,7 +8,7 @@ import {
   ScheduleObservationRequestPayload,
 } from 'src/types/Observations';
 
-import HttpService, { Response } from './HttpService';
+import HttpService, { Response, Response2 } from './HttpService';
 import SearchService from './SearchService';
 
 /**
@@ -20,6 +20,7 @@ const OBSERVATIONS_ENDPOINT = '/api/v1/tracking/observations';
 const OBSERVATION_ENDPOINT = '/api/v1/tracking/observations/{observationId}';
 const OBSERVATION_EXPORT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots';
 const REPLACE_OBSERVATION_PLOT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/replace';
+const PLANTING_SITE_OBSERVATIONS_SUMMARIES_ENDPOINT = '/api/v1/tracking/observations/results/summaries';
 const ABANDON_OBSERVATION_ENDPOINT = '/api/v1/tracking/observations/{observationId}/abandon';
 
 type ObservationsResultsResponsePayload =
@@ -27,6 +28,9 @@ type ObservationsResultsResponsePayload =
 
 type ObservationsResponsePayload =
   paths[typeof OBSERVATIONS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+export type GetPlantingSiteObservationSummariesPayload =
+  paths[typeof PLANTING_SITE_OBSERVATIONS_SUMMARIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 /**
  * exported response type
@@ -168,6 +172,18 @@ const replaceObservationPlot = async (
   };
 };
 
+const getPlantingSiteObservationsSummaries = async (
+  plantingSiteId: number
+): Promise<Response2<GetPlantingSiteObservationSummariesPayload>> => {
+  return HttpService.root(
+    PLANTING_SITE_OBSERVATIONS_SUMMARIES_ENDPOINT
+  ).get2<GetPlantingSiteObservationSummariesPayload>({
+    params: {
+      plantingSiteId: plantingSiteId.toString(),
+    },
+  });
+};
+
 const abandonObservation = async (observationId: number): Promise<Response> => {
   return await HttpService.root(ABANDON_OBSERVATION_ENDPOINT).post({
     urlReplacements: {
@@ -186,6 +202,7 @@ const ObservationsService = {
   replaceObservationPlot,
   rescheduleObservation,
   scheduleObservation,
+  getPlantingSiteObservationsSummaries,
   abandonObservation,
 };
 
