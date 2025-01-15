@@ -4,7 +4,7 @@ import React, { Box, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem, Icon, Tooltip } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
-import Chart from 'src/components/common/Chart/Chart';
+import Chart, { ChartData } from 'src/components/common/Chart/Chart';
 import { selectPlantingSiteObservationsSummaries } from 'src/redux/features/observations/observationsSelectors';
 import { requestGetPlantingSiteObservationsSummaries } from 'src/redux/features/observations/observationsThunks';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
@@ -14,13 +14,6 @@ import { ObservationSummary } from 'src/types/Observations';
 
 type PlantingSiteTrendsCardProps = {
   plantingSiteId: number;
-};
-
-type ChartData = {
-  labels: string[];
-  datasets: {
-    values: number[];
-  }[];
 };
 
 export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteTrendsCardProps): JSX.Element {
@@ -62,14 +55,24 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
   const plantsChartData: ChartData = useMemo(() => {
     const filteredSummaries = summaries?.filter((sc) => {
       const zone = sc.plantingZones.find((pz) => pz.plantingZoneId === selectedPlantsPerHaZone);
-      if (zone?.estimatedPlants !== undefined) {
+      if (zone?.plantingDensity !== undefined) {
         return true;
       }
     });
     const labels = filteredSummaries?.map((sm) => sm.latestObservationTime);
     const values = filteredSummaries?.map((sm) => {
       const zone = sm.plantingZones.find((pz) => pz.plantingZoneId === selectedPlantsPerHaZone);
-      return zone?.estimatedPlants || 0;
+      return zone?.plantingDensity || 0;
+    });
+
+    const minValues = filteredSummaries?.map((sm) => {
+      const zone = sm.plantingZones.find((pz) => pz.plantingZoneId === selectedPlantsPerHaZone);
+      return (zone?.plantingDensity || 0) - (zone?.plantingDensityStdDev || 0);
+    });
+
+    const maxValues = filteredSummaries?.map((sm) => {
+      const zone = sm.plantingZones.find((pz) => pz.plantingZoneId === selectedPlantsPerHaZone);
+      return (zone?.plantingDensity || 0) + (zone?.plantingDensityStdDev || 0);
     });
 
     return {
@@ -77,6 +80,20 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
       datasets: [
         {
           values: values ?? [],
+        },
+        {
+          values: minValues ?? [],
+          pointRadius: 0,
+          borderWidth: 0,
+        },
+        {
+          values: maxValues ?? [],
+          pointRadius: 0,
+          borderWidth: 0,
+          fill: {
+            target: 1, // fill to dataset 1
+            above: '#B8A0D64D',
+          },
         },
       ],
     };

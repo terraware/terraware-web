@@ -18,6 +18,10 @@ type ChartDataset = {
   values: (number | null)[];
   // Dataset label which will appear in legends and tooltips
   label?: string;
+  showLine?: boolean;
+  fill?: any;
+  pointRadius?: number;
+  borderWidth?: number;
 };
 
 export type ChartData = {
@@ -178,9 +182,13 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     const newDatasets = chartData.datasets.map((ds) => ({
       label: ds.label,
       data: ds.values,
+      showLine: ds.showLine,
       barThickness,
       backgroundColor: ds.color ?? colors,
       minBarLength: 3,
+      fill: ds.fill,
+      pointRadius: ds.pointRadius,
+      borderWidth: ds.borderWidth,
     }));
     const newPlugins = {
       annotation: barAnnotations,
