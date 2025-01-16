@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -108,21 +108,7 @@
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
-<a name='L46'></a><a href='#L46'>46</a>
-<a name='L47'></a><a href='#L47'>47</a>
-<a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L46'></a><a href='#L46'>46</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -140,8 +126,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -153,12 +137,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -180,9 +158,6 @@
 import Page from 'src/components/Page';
 import { useOrganization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { OrganizationUserService } from 'src/services';
 import { OrganizationUser } from 'src/types/User';
 import { isManagerOrHigher } from 'src/utils/organization';
@@ -192,12 +167,10 @@ import OnboardingHomeView from './OnboardingHomeView';
 import ParticipantHomeView from './ParticipantHomeView';
 import TerrawareHomeView from './TerrawareHomeView';
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >Home(</span>): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >Home(</span>{ selectedOrgHasSpecies }: { selectedOrgHasSpecies: () =&gt; boolean }): JSX.Element {
   const { orgHasModules } = <span class="cstat-no" title="statement not covered" >useParticipantData();</span>
   const { selectedOrganization, orgPreferences } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const [people, setPeople] = <span class="cstat-no" title="statement not covered" >useState&lt;OrganizationUser[]&gt;();</span>
-  const allSpecies = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSpecies);</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const populatePeople = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
@@ -211,23 +184,17 @@ export default function <span class="fstat-no" title="function not covered" >Hom
 <span class="cstat-no" title="statement not covered" >    populatePeople();</span>
   }, [selectedOrganization]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!allSpecies &amp;&amp; selectedOrganization.id !== -1) {</span>
-<span class="cstat-no" title="statement not covered" >      dispatch(requestSpecies(selectedOrganization.id));</span>
-    }
-  }, [allSpecies, selectedOrganization]);
-&nbsp;
   const homeScreen = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span>: JSX.Element =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (orgHasModules === undefined || allSpecies === undefined) {</span>
+<span class="cstat-no" title="statement not covered" >    if (orgHasModules === undefined) {</span>
 <span class="cstat-no" title="statement not covered" >      return &lt;Page isLoading={true} /&gt;;</span>
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if ((people?.length === 1 &amp;&amp; !orgPreferences['singlePersonOrg']) || allSpecies.length === 0) {</span>
+<span class="cstat-no" title="statement not covered" >    if ((people?.length === 1 &amp;&amp; !orgPreferences['singlePersonOrg']) || !selectedOrgHasSpecies()) {</span>
 <span class="cstat-no" title="statement not covered" >      return &lt;OnboardingHomeView /&gt;;</span>
     } else {
 <span class="cstat-no" title="statement not covered" >      return orgHasModules &amp;&amp; isManagerOrHigher(selectedOrganization) ? &lt;ParticipantHomeView /&gt; : &lt;TerrawareHomeView /&gt;;</span>
     }
-  }, [orgHasModules, people, allSpecies, selectedOrganization, orgPreferences]);
+  }, [orgHasModules, people, selectedOrgHasSpecies, selectedOrganization, orgPreferences]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return homeScreen;</span>
 }
@@ -238,7 +205,7 @@ export default function <span class="fstat-no" title="function not covered" >Hom
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-01-16T12:41:51.858Z
+                at 2025-01-16T17:47:06.952Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
