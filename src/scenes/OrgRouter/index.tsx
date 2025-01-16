@@ -211,7 +211,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
           <ErrorBoundary setShowNavBar={setShowNavBar}>
             <Routes>
               {/* Routes, in order of their appearance down the side NavBar */}
-              <Route path={APP_PATHS.HOME} element={<Home />} />
+              <Route path={APP_PATHS.HOME} element={<Home selectedOrgHasSpecies={selectedOrgHasSpecies} />} />
               <Route path={APP_PATHS.SEEDS_DASHBOARD} element={<SeedsDashboard />} />
               <Route path={APP_PATHS.CHECKIN} element={<CheckIn />} />
               <Route
