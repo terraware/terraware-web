@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/118</span>
+                <span class='fraction'>0/124</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/114</span>
+                <span class='fraction'>0/120</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/111</span>
+                <span class='fraction'>0/117</span>
             </div>
         
             
@@ -530,7 +530,19 @@
 <a name='L465'></a><a href='#L465'>465</a>
 <a name='L466'></a><a href='#L466'>466</a>
 <a name='L467'></a><a href='#L467'>467</a>
-<a name='L468'></a><a href='#L468'>468</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L468'></a><a href='#L468'>468</a>
+<a name='L469'></a><a href='#L469'>469</a>
+<a name='L470'></a><a href='#L470'>470</a>
+<a name='L471'></a><a href='#L471'>471</a>
+<a name='L472'></a><a href='#L472'>472</a>
+<a name='L473'></a><a href='#L473'>473</a>
+<a name='L474'></a><a href='#L474'>474</a>
+<a name='L475'></a><a href='#L475'>475</a>
+<a name='L476'></a><a href='#L476'>476</a>
+<a name='L477'></a><a href='#L477'>477</a>
+<a name='L478'></a><a href='#L478'>478</a>
+<a name='L479'></a><a href='#L479'>479</a>
+<a name='L480'></a><a href='#L480'>480</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -781,6 +793,17 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -794,6 +817,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1245,10 +1269,21 @@ export default function <span class="fstat-no" title="function not covered" >Bat
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const invalid = <span class="cstat-no" title="statement not covered" >{ germinating: '', notReady: '', ready: '' };</span>
+    const germinatingQuantity = <span class="cstat-no" title="statement not covered" >Number(record?.germinatingQuantity ?? 0);</span>
+    const notReadyQuantity = <span class="cstat-no" title="statement not covered" >Number(record?.notReadyQuantity ?? 0);</span>
+    const readyQuantity = <span class="cstat-no" title="statement not covered" >Number(record?.readyQuantity ?? 0);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (germinatingQuantity &lt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >      invalid.germinating = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    if (notReadyQuantity &lt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >      invalid.notReady = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;</span>
+    }
+<span class="cstat-no" title="statement not covered" >    if (readyQuantity &lt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >      invalid.ready = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;</span>
+    }
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    if (selectedAccession) {</span>
-      const germinatingQuantity = <span class="cstat-no" title="statement not covered" >Number(record?.germinatingQuantity ?? 0);</span>
-      const notReadyQuantity = <span class="cstat-no" title="statement not covered" >Number(record?.notReadyQuantity ?? 0);</span>
-      const readyQuantity = <span class="cstat-no" title="statement not covered" >Number(record?.readyQuantity ?? 0);</span>
       const remainingSeeds = <span class="cstat-no" title="statement not covered" >accessionQuantity?.value ?? 0;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (germinatingQuantity + totalQuantity &gt; remainingSeeds) {</span>
@@ -1264,6 +1299,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
         }
       }
     }
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    setInvalidFields(invalid);</span>
   }, [
     accessionQuantity,
@@ -1471,7 +1507,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-01-16T17:47:06.952Z
+                at 2025-01-17T18:57:07.276Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
