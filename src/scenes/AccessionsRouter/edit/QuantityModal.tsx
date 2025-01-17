@@ -104,9 +104,16 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
       setRemainingQuantityNotesError(false);
     }
 
-    if (quantityChanged && isByWeight && !record.subsetCount) {
-      setSubsetWeightError(strings.REQUIRED_FIELD);
-      hasErrors = true;
+    if (quantityChanged && isByWeight) {
+      if (!record.subsetWeight) {
+        setSubsetWeightError(strings.REQUIRED_FIELD);
+        hasErrors = true;
+      } else if (record.subsetWeight.quantity <= 0) {
+        setSubsetWeightError(strings.SUBSET_WEIGHT_POSTIVE);
+        hasErrors = true;
+      } else {
+        setSubsetWeightError('');
+      }
     } else {
       setSubsetWeightError('');
     }
