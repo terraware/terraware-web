@@ -13,7 +13,14 @@ export const useAccessions = (record?: { accessionId?: number }, speciesId?: num
 
   const accessionsResponseData = useAppSelector(selectAccessions(selectedOrganization.id, speciesId));
   const availableAccessions = useMemo(
-    () => (accessionsResponseData && accessionsResponseData.accessions?.filter(accession => ((accession.remainingUnits === 'Seeds' && Number(accession['remainingQuantity(raw)']) > 0 ) || Number(accession['estimatedCount(raw)']) > 0))) || [],
+    () =>
+      (accessionsResponseData &&
+        accessionsResponseData.accessions?.filter(
+          (accession) =>
+            (accession.remainingUnits === 'Seeds' && Number(accession['remainingQuantity(raw)']) > 0) ||
+            Number(accession['estimatedCount(raw)']) > 0
+        )) ||
+      [],
     [accessionsResponseData]
   );
   const [selectedAccession, setSelectedAccession] = useState<SearchResponseAccession>();
