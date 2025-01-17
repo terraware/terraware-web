@@ -1,3 +1,4 @@
+2f1b2489e1a SW-6396 Disable clickable rows in people table (#3535)
 e93d25b5871 SW-6426 Prevent negative or zero subset weight in accessions (#3534)
 a442af4f1b8 SW-6441 Don't allow negative numbers during batch creation (#3536)
 f15dcdcbb72 SW-6454 Limit batch creation via accession to accessions with quantity or estimated quantity (#3537)
