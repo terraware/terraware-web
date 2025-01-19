@@ -170,7 +170,7 @@
     "btoa": "^1.2.1",
     "csv": "^6.2.8",
     "eslint": "^9.6.0",
-    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-prettier": "^10.0.0",
     "eslint-plugin-jest-react": "^0.1.0",
     "eslint-plugin-jsdoc": "^50.0.0",
     "eslint-plugin-n": "^17.15.0",
