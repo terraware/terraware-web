@@ -7,6 +7,7 @@ import { ObservationsService } from 'src/services';
 import strings from 'src/strings';
 
 import {
+  setAdHocObservationsResultsAction,
   setObservationsAction,
   setObservationsResultsAction,
   setPlantingSiteObservationsResultsAction,
@@ -90,3 +91,25 @@ export const requestGetPlantingSiteObservationsSummaries = createAsyncThunk(
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
+
+/**
+ * Fetch observation results
+ */
+export const requestAdHocObservationsResults = (organizationId: number) => {
+  return async (dispatch: Dispatch, _getState: () => RootState) => {
+    try {
+      const response = await ObservationsService.listAdHocObservationsResults(organizationId);
+      const { error, observations } = response;
+      dispatch(
+        setAdHocObservationsResultsAction({
+          error,
+          observations,
+        })
+      );
+    } catch (e) {
+      // should not happen, the response above captures any http request errors
+      // tslint:disable-next-line: no-console
+      console.error('Error dispatching observations results', e);
+    }
+  };
+};

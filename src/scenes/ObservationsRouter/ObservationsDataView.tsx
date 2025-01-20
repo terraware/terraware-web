@@ -6,7 +6,11 @@ import ListMapView from 'src/components/ListMapView';
 import { View } from 'src/components/common/ListMapSelector';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { useLocalization } from 'src/providers';
-import { searchObservations, selectObservationsZoneNames } from 'src/redux/features/observations/observationsSelectors';
+import {
+  searchAdHocObservations,
+  searchObservations,
+  selectObservationsZoneNames,
+} from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { ObservationState } from 'src/types/Observations';
@@ -24,10 +28,19 @@ export type ObservationsDataViewProps = SearchProps & {
   setView: (view: View) => void;
   view?: View;
   reload: () => void;
+  selectedPlotSelection: string;
 };
 
 export default function ObservationsDataView(props: ObservationsDataViewProps): JSX.Element {
-  const { selectedPlantingSiteId, selectedPlantingSite, setFilterOptions, setView, view, reload } = props;
+  const {
+    selectedPlantingSiteId,
+    selectedPlantingSite,
+    setFilterOptions,
+    setView,
+    view,
+    reload,
+    selectedPlotSelection,
+  } = props;
   const { ...searchProps }: SearchProps = props;
   const defaultTimeZone = useDefaultTimeZone();
   const { activeLocale } = useLocalization();
@@ -42,6 +55,10 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
       searchProps.filtersProps?.filters.zone?.values ?? [],
       status
     )
+  );
+
+  const adHocObservationsResults = useAppSelector((state) =>
+    searchAdHocObservations(state, selectedPlantingSiteId, defaultTimeZone.get().id, searchProps.search)
   );
 
   const zoneNames = useAppSelector((state) => selectObservationsZoneNames(state, selectedPlantingSiteId, status));
@@ -91,8 +108,10 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
       list={
         <OrgObservationsListView
           observationsResults={observationsResults}
+          adHocObservationsResults={adHocObservationsResults}
           plantingSiteId={selectedPlantingSiteId}
           reload={reload}
+          selectedPlotSelection={selectedPlotSelection}
         />
       }
       map={
