@@ -1318,7 +1318,7 @@ PV_SYSTEM,PV system,
 QUALITATIVE,Qualitative,
 QUALITATIVE_INFO,Qualitative Info,
 QUANTITY,Quantity,
-QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO,Quantity must be greater than or equal to 0
+QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO,Quantity must be greater than or equal to 0,
 RARE,Rare,
 RATIONALE,Rationale,
 REACH_OUT_TO_ADMIN_TITLE,Please reach out to an administrator from your organization.,
