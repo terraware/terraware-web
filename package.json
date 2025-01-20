@@ -79,7 +79,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-error-boundary": "^5.0.0",
-    "react-localization": "^1.0.17",
+    "react-localization": "^2.0.0",
     "react-map-gl": "^7.0.21",
     "react-mixpanel-browser": "^4.1.0",
     "react-multi-carousel": "^2.8.2",

@@ -11252,10 +11252,10 @@ loader-utils@^3.2.0:
   resolved "https://registry.yarnpkg.com/loader-utils/-/loader-utils-3.2.1.tgz#4fb104b599daafd82ef3e1a41fb9265f87e1f576"
   integrity sha512-ZvFw1KWS3GVyYBYb7qkmRM/WwL2TQQBxgCK62rlvm4WpVQ23Nb4tYjApUlfjrEGvOs7KHEsmyUn75OHZrJMWPw==
 
-localized-strings@^0.2.0:
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/localized-strings/-/localized-strings-0.2.4.tgz#9d61c06b60cc7b5edf7c46e6c7f2d1ecb84aeb2c"
-  integrity sha512-TKDhqFPkIIN/if2FSvVVZTaM/GP9TzfgdQ2uY65mr32xgFu5nqkKXprXbzy5rfx32DF5LDvS/y1UqYF/mAscYA==
+localized-strings@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/localized-strings/-/localized-strings-2.0.3.tgz#93478eca4d8a3d3dc8732a85efb6e3be23b93204"
+  integrity sha512-eCSC9qK+dRrU9f9xA2glwooQCM5alK//Zj0DyKswZCBAbeefyrdplp6KQiKFeeuFu9K3QbfCQ+0Kdo0cABP6Ww==
 
 locate-path@^3.0.0:
   version "3.0.0"
@@ -13497,12 +13497,12 @@ react-is@^19.0.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-19.0.0.tgz#d6669fd389ff022a9684f708cf6fa4962d1fea7a"
   integrity sha512-H91OHcwjZsbq3ClIDHMzBShc1rotbfACdWENsmEf0IFvZ3FgGPtdHMcsv45bQ1hAbgdfiA8SnxTKfDS+x/8m2g==
 
-react-localization@^1.0.17:
-  version "1.0.19"
-  resolved "https://registry.yarnpkg.com/react-localization/-/react-localization-1.0.19.tgz#b65a7fa58096cff6aa38bc3a0c4817ec97469ef0"
-  integrity sha512-f4E6T8xRis19K8qMOnnhjGV2quy1YH2lrSsnAiytvgt7uOSp6WgDhrZH6XZEaEFqupTOCFSf8uagIoIAkjl4JA==
+react-localization@^2.0.0:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/react-localization/-/react-localization-2.0.5.tgz#e665e42af562a836a6ab3e8dacae2f7fd735f11d"
+  integrity sha512-ecXj+xVaQb2kN7apJrf1Y3mxmbTHllBovggYFUwH1cdkkPQg6Glx0Qyrx7nMSlfRXV7J+ulD3nmJr2CPTx3gxw==
   dependencies:
-    localized-strings "^0.2.0"
+    localized-strings "^2.0.3"
 
 react-map-gl@^7.0.21:
   version "7.1.7"
