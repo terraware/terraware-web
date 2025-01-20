@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { CircularProgress, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
+import { Dropdown } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import { View } from 'src/components/common/ListMapSelector';
@@ -29,6 +30,7 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
   const [view, setView] = useState<View>();
   const theme = useTheme();
 
+  const [selectedPlotSelection, setSelectedPlotSelection] = useState('assigned');
   const allObservationsResults = useAppSelector(selectObservationsResults);
   const observationsResults = useMemo(() => {
     if (!allObservationsResults || !selectedPlantingSite?.id) {
@@ -51,16 +53,39 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
 
   return (
     <Card>
-      <Typography
-        sx={{
-          fontSize: '20px',
-          fontWeight: 600,
-          color: theme.palette.TwClrTxt,
-          marginBottom: theme.spacing(2),
-        }}
-      >
-        {strings.PLANT_MONITORING}
-      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography
+          sx={{
+            fontSize: '20px',
+            fontWeight: 600,
+            color: theme.palette.TwClrTxt,
+          }}
+        >
+          {strings.PLANT_MONITORING}
+        </Typography>
+        <Box
+          sx={{
+            margin: theme.spacing(0, 2),
+            width: '1px',
+            height: '32px',
+            backgroundColor: theme.palette.TwClrBgTertiary,
+          }}
+        />
+        <Box display='flex' alignItems='center' padding={theme.spacing(2, 0)}>
+          <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>{strings.PLOT_SELECTION}</Typography>
+          <Dropdown
+            placeholder={strings.SELECT}
+            id='plot-selection-selector'
+            onChange={(newValue) => setSelectedPlotSelection(newValue)}
+            options={[
+              { label: strings.ASSIGNED, value: 'assigned' },
+              { label: strings.AD_HOC, value: 'adHoc' },
+            ]}
+            selectedValue={selectedPlotSelection}
+            selectStyles={{ inputContainer: { maxWidth: '160px' }, optionsContainer: { maxWidth: '160px' } }}
+          />
+        </Box>
+      </Box>
       {observationsResults === undefined ? (
         <CircularProgress sx={{ margin: 'auto' }} />
       ) : selectedPlantingSite && observationsResults?.length ? (
