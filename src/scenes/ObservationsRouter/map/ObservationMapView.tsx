@@ -11,19 +11,21 @@ import TooltipContents from 'src/scenes/ObservationsRouter/map/TooltipContents';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapEntityId, MapObject, MapSourceBaseData, MapSourceProperties } from 'src/types/Map';
-import { ObservationResults } from 'src/types/Observations';
+import { AdHocObservationResults, ObservationResults } from 'src/types/Observations';
 import { PlantingSite } from 'src/types/Tracking';
 import { regexMatch } from 'src/utils/search';
 
 type ObservationMapViewProps = SearchProps & {
   hideDate?: boolean;
   observationsResults?: ObservationResults[];
+  adHocObservationsResults?: AdHocObservationResults[];
   selectedPlantingSite: PlantingSite;
 };
 
 export default function ObservationMapView({
   hideDate,
   observationsResults,
+  adHocObservationsResults,
   search,
   filtersProps,
   selectedPlantingSite,
@@ -37,7 +39,17 @@ export default function ObservationMapView({
       ?.sort((a, b) => (Date.parse(a) > Date.parse(b) ? 1 : -1));
   }, [observationsResults]);
 
+  const adHocObservationsDates = useMemo(() => {
+    const uniqueDates = new Set(adHocObservationsResults?.map((obs) => obs.startDate));
+
+    return Array.from(uniqueDates)
+      ?.filter((time) => time)
+      ?.map((time) => time)
+      ?.sort((a, b) => (Date.parse(a) > Date.parse(b) ? 1 : -1));
+  }, [adHocObservationsResults]);
+
   const [selectedObservationDate, setSelectedObservationDate] = useState<string | undefined>();
+  const [selectedAdHocObservationDate, setSelectedAdHocObservationDate] = useState<string | undefined>();
   useEffect(() => {
     if (observationsDates) {
       setSelectedObservationDate((currentDate) => {
@@ -51,6 +63,20 @@ export default function ObservationMapView({
       setSelectedObservationDate('');
     }
   }, [observationsDates]);
+
+  useEffect(() => {
+    if (adHocObservationsDates) {
+      setSelectedAdHocObservationDate((currentDate) => {
+        if ((!currentDate || !adHocObservationsDates.includes(currentDate)) && adHocObservationsDates.length > 0) {
+          return adHocObservationsDates[adHocObservationsDates.length - 1];
+        } else {
+          return currentDate;
+        }
+      });
+    } else {
+      setSelectedObservationDate('');
+    }
+  }, [adHocObservationsDates]);
 
   const selectedObservation = useMemo(
     () =>
