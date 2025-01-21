@@ -70,7 +70,7 @@ export type Location = {
 
 export type MinimalPlantingSubzone = Omit<PlantingSubzone, 'areaHa'>;
 
-export type MinimalPlantingZone = Omit<PlantingZone, 'areaHa' | 'plantingSubzones'> & {
+export type MinimalPlantingZone = Omit<PlantingZone, 'areaHa' | 'plantingSubzones' | 'boundaryModifiedTime'> & {
   plantingSubzones: MinimalPlantingSubzone[];
 };
 
