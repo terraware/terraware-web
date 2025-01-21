@@ -11,7 +11,8 @@ import { Organization } from 'src/types/Organization';
 import AddNewOrganizationModal from './AddNewOrganizationModal';
 
 export default function OrganizationsDropdown(): JSX.Element {
-  const { selectedOrganization, setSelectedOrganization, organizations, redirectAndNotify } = useOrganization();
+  const { selectedOrganization, setSelectedOrganization, organizations, redirectAndNotify, reloadOrganizations } =
+    useOrganization();
   const navigate = useNavigate();
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
 
@@ -48,7 +49,10 @@ export default function OrganizationsDropdown(): JSX.Element {
       <AddNewOrganizationModal
         open={newOrganizationModalOpened}
         onCancel={onCloseCreateOrganizationModal}
-        onSuccess={(organization: Organization) => redirectAndNotify(organization)}
+        onSuccess={(organization: Organization) => {
+          reloadOrganizations();
+          redirectAndNotify(organization);
+        }}
       />
       <PopoverMenu
         anchor={<p style={{ fontSize: '16px' }}>{selectedOrganization.name}</p>}

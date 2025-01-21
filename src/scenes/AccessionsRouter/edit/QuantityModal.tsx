@@ -78,6 +78,14 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
     );
   }, [record.remainingQuantity, accession.remainingQuantity]);
 
+  useEffect(() => {
+    if (isByWeight) {
+      setIsSubsetOpen(true);
+    } else {
+      setIsSubsetOpen(false);
+    }
+  }, [isByWeight]);
+
   const validate = () => {
     let hasErrors = false;
 
@@ -94,6 +102,26 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
       hasErrors = true;
     } else {
       setRemainingQuantityNotesError(false);
+    }
+
+    if (quantityChanged && isByWeight) {
+      if (!record.subsetWeight) {
+        setSubsetWeightError(strings.REQUIRED_FIELD);
+        hasErrors = true;
+      } else if (record.subsetWeight.quantity <= 0) {
+        setSubsetWeightError(strings.SUBSET_WEIGHT_POSITIVE);
+        hasErrors = true;
+      } else {
+        setSubsetWeightError('');
+      }
+    } else {
+      setSubsetWeightError('');
+    }
+
+    if (quantityChanged && isByWeight && !record.subsetCount) {
+      setSubsetCountError(strings.REQUIRED_FIELD);
+    } else {
+      setSubsetCountError('');
     }
 
     return !hasErrors;
@@ -329,20 +357,20 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
                 />
               </Grid>
             )}
-          {quantityChanged && (
-            <Grid item xs={12} textAlign='left'>
-              <Textfield
-                id='notes'
-                value={remainingQuantityNotes}
-                onChange={(value) => onChangeRemainingQuantityNotes(value as string)}
-                type='textarea'
-                label={strings.NOTES}
-                errorText={remainingQuantityNotesError ? strings.REQUIRED_FIELD : ''}
-                placeholder={strings.REMAINING_QUANTITY_NOTES_PLACEHOLDER}
-                required
-              />
-            </Grid>
-          )}
+
+          <Grid item xs={12} textAlign='left'>
+            <Textfield
+              id='notes'
+              value={remainingQuantityNotes}
+              onChange={(value) => onChangeRemainingQuantityNotes(value as string)}
+              type='textarea'
+              label={strings.NOTES}
+              errorText={remainingQuantityNotesError ? strings.REQUIRED_FIELD : ''}
+              placeholder={strings.REMAINING_QUANTITY_NOTES_PLACEHOLDER}
+              required
+            />
+          </Grid>
+
           <Grid item xs={12}>
             {!isSubsetOpen ? (
               <Box display='flex' justifyContent='flex-start'>

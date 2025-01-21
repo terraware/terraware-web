@@ -10,8 +10,12 @@ import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
+import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
+import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
+import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
@@ -32,13 +36,30 @@ export const PlantingSiteStats = () => {
 
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
+  const [totalPlants, setTotalPlants] = useState(0);
+  const [totalSpecies, setTotalSpecies] = useState<number>();
   const { countries } = useLocalization();
+  const dispatch = useAppDispatch();
 
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, selectedPlantingSiteId || -1, defaultTimeZone.get().id)
   );
+  const plantings = useAppSelector((state) => selectPlantingsForSite(state, selectedPlantingSiteId || -1));
+  const populationSelector = useAppSelector((state) => selectSitePopulationZones(state));
 
   const primaryGridSize = useMemo(() => (isDesktop ? 6 : 12), [isDesktop]);
+
+  useEffect(() => {
+    if (selectedOrganization.id !== -1) {
+      dispatch(requestPlantings(selectedOrganization.id));
+    }
+  }, [dispatch, selectedOrganization.id]);
+
+  useEffect(() => {
+    if (selectedPlantingSiteId && selectedOrganization.id !== -1) {
+      dispatch(requestSitePopulation(selectedOrganization.id, selectedPlantingSiteId));
+    }
+  }, [selectedPlantingSiteId, dispatch]);
 
   // auto-select planting site when selectedPlantingSiteId is set
   useEffect(() => {
@@ -46,6 +67,29 @@ export const PlantingSiteStats = () => {
       setSelectedPlantingSite(plantingSites?.find((site) => site.id === selectedPlantingSiteId));
     }
   }, [plantingSites, selectedPlantingSiteId]);
+
+  useEffect(() => {
+    if (populationSelector) {
+      const populations = populationSelector
+        .flatMap((zone) => zone.plantingSubzones)
+        .flatMap((sz) => sz.populations)
+        .filter((pop) => pop !== undefined);
+      const sum = populations.reduce((acc, pop) => +pop['totalPlants(raw)'] + acc, 0);
+      setTotalPlants(sum);
+    }
+  }, [populationSelector]);
+
+  useEffect(() => {
+    const speciesNames: Set<string> = new Set();
+
+    plantings.forEach((planting) => {
+      const { scientificName } = planting.species;
+      speciesNames.add(scientificName);
+    });
+
+    const speciesCount = speciesNames.size;
+    setTotalSpecies(speciesCount);
+  }, [plantings]);
 
   if (!plantingSites?.length) {
     return <></>;
@@ -160,19 +204,15 @@ export const PlantingSiteStats = () => {
           </Grid>
 
           <Grid item xs={primaryGridSize}>
-            <StatsCardItem
-              label={strings.OBSERVED_PLANTS}
-              showLink={false}
-              value={observation?.totalPlants?.toString()}
-            />
+            <StatsCardItem label={strings.TOTAL_PLANTS_PLANTED} showLink={false} value={totalPlants.toString()} />
           </Grid>
 
           <Grid item xs={primaryGridSize}>
             <StatsCardItem
-              label={strings.OBSERVED_SPECIES}
+              label={strings.TOTAL_SPECIES_PLANTED}
               showBorder={!isDesktop}
               showLink={false}
-              value={observation?.species?.length?.toString()}
+              value={totalSpecies?.toString()}
             />
           </Grid>
 
@@ -222,7 +262,7 @@ export const PlantingSiteStats = () => {
             width: '100%',
           }}
         >
-          {token && selectedPlantingSiteId && (
+          {token && selectedPlantingSiteId && selectedPlantingSite?.boundary && (
             <SimplePlantingSiteMap
               plantingSiteId={selectedPlantingSiteId}
               hideAllControls={true}

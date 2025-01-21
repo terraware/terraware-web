@@ -1,7 +1,12 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { AsyncRequest, StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { Observation, ObservationResultsPayload, ReplaceObservationPlotResponsePayload } from 'src/types/Observations';
+import {
+  Observation,
+  ObservationResultsPayload,
+  ObservationSummary,
+  ReplaceObservationPlotResponsePayload,
+} from 'src/types/Observations';
 
 import {
   requestAbandonObservation,
@@ -9,6 +14,7 @@ import {
   requestRescheduleObservation,
   requestScheduleObservation,
 } from './observationsAsyncThunks';
+import { requestGetPlantingSiteObservationsSummaries } from './observationsThunks';
 
 // Define a type for the slice state
 type ResultsData = {
@@ -111,8 +117,18 @@ const replaceObservationPlotSlice = createSlice({
   extraReducers: buildReducers<ReplaceObservationPlotResponsePayload>(requestReplaceObservationPlot),
 });
 
-// Abandon observation
+const initialStatePlantingSiteObservationsSummaries: { [key: string]: StatusT<ObservationSummary[]> } = {};
 
+export const plantingSiteObservationsSummariesSlice = createSlice({
+  name: 'plantingSiteObservationsSummariesSlice',
+  initialState: initialStatePlantingSiteObservationsSummaries,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestGetPlantingSiteObservationsSummaries)(builder);
+  },
+});
+
+// Abandon observation
 type AbandonObservationState = Record<string, AsyncRequest>;
 
 const initialAbandonObservationState: AbandonObservationState = {};
@@ -131,6 +147,7 @@ const observationsReducers = {
   scheduleObservation: scheduleObservationSlice.reducer,
   rescheduleObservation: rescheduleObservationSlice.reducer,
   replaceObservationPlot: replaceObservationPlotSlice.reducer,
+  plantingSiteObservationsSummaries: plantingSiteObservationsSummariesSlice.reducer,
   abandonObservation: abandonObservationSlice.reducer,
 };
 

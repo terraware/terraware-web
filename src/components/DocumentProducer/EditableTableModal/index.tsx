@@ -469,6 +469,7 @@ export const EditableCell = ({ display, id, column, onChange, value }: EditableC
           }))}
           selectedValue={value}
           fullWidth={true}
+          selectStyles={{ optionsContainer: { width: 'auto' } }}
         />
       );
     default:

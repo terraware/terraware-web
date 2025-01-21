@@ -1,11 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import { useTheme } from '@mui/material';
-import { Chart as ChartJS, ChartTypeRegistry } from 'chart.js';
+import {
+  CartesianScaleTypeRegistry,
+  Chart as ChartJS,
+  ChartTypeRegistry,
+  ScaleOptionsByType,
+  ScaleType,
+  TooltipItem,
+  TooltipModel,
+} from 'chart.js';
+import { _DeepPartialObject } from 'chart.js/dist/types/utils';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { AnnotationPluginOptions } from 'chartjs-plugin-annotation/types/options';
 
 import { useLocalization } from 'src/providers';
+import { htmlLegendPlugin } from 'src/scenes/PlantsDashboardRouter/components/htmlLegendPlugin';
 import { WithRequired } from 'src/types/utils';
 import { generateTerrawareRandomColors } from 'src/utils/generateRandomColor';
 
@@ -15,9 +25,15 @@ ChartJS.register(annotationPlugin);
 
 type ChartDataset = {
   color?: string;
-  values: (number | null)[];
+  values: (number | null)[] | [number, number][];
   // Dataset label which will appear in legends and tooltips
   label?: string;
+  showLine?: boolean;
+  fill?: any;
+  pointRadius?: number;
+  borderWidth?: number;
+  xAxisID?: string;
+  minBarLength?: number;
 };
 
 export type ChartData = {
@@ -44,6 +60,17 @@ export type BaseChartProps = {
   xAxisLabel?: string;
   yAxisLabel?: string;
   yStepSize?: number;
+  xAxisType?: ScaleType;
+  lineColor?: string;
+  customScales?: _DeepPartialObject<{
+    [key: string]: ScaleOptionsByType<'radialLinear' | keyof CartesianScaleTypeRegistry>;
+  }>;
+  customTooltipLabel?: (
+    this: TooltipModel<keyof ChartTypeRegistry>,
+    tooltipItem: TooltipItem<keyof ChartTypeRegistry>
+  ) => string | void | string[];
+  customLegend?: boolean;
+  customLegendContainerId?: string;
 };
 
 export type ChartProps = BaseChartProps & {
@@ -84,9 +111,13 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     barAnnotations,
     yLimits,
     showLegend,
-    xAxisLabel,
-    yAxisLabel,
     yStepSize,
+    xAxisType,
+    lineColor,
+    customLegend,
+    customScales,
+    customTooltipLabel,
+    customLegendContainerId,
   } = props;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [chart, setChart] = useState<ChartJS | null>(null);
@@ -99,16 +130,13 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     // used to prevent double render on dev scope (react 18)
     if (!initialized.current) {
       initialized.current = true;
-      const getAxisLabelProps = (label?: string) => {
-        if (!label) {
+
+      const getAxisType = () => {
+        if (!xAxisType) {
           return {};
         }
         return {
-          title: {
-            display: true,
-            align: 'center',
-            text: label,
-          },
+          type: xAxisType,
         };
       };
 
@@ -127,6 +155,14 @@ function ChartContent(props: ChartContentProps): JSX.Element {
                 datasets: [],
               },
               options: {
+                elements: {
+                  point: {
+                    radius: 0,
+                  },
+                  line: {
+                    borderColor: lineColor,
+                  },
+                },
                 maintainAspectRatio: false,
                 layout: {
                   padding: {
@@ -135,12 +171,13 @@ function ChartContent(props: ChartContentProps): JSX.Element {
                     top: 10,
                   },
                 },
-                scales: {
+                scales: customScales ?? {
                   x: {
                     display: type === 'pie' ? false : undefined,
-                    ...getAxisLabelProps(xAxisLabel),
+                    ...getAxisType(),
                   },
                   y: {
+                    grace: '5%',
                     ticks: {
                       precision: 0,
                       stepSize: yStepSize,
@@ -148,10 +185,10 @@ function ChartContent(props: ChartContentProps): JSX.Element {
                     min: yLimits?.min,
                     max: yLimits?.max,
                     display: type === 'pie' ? false : undefined,
-                    ...getAxisLabelProps(yAxisLabel),
                   },
                 },
               },
+              plugins: customLegend ? [htmlLegendPlugin] : undefined,
             })
           );
           // when component unmounts
@@ -171,14 +208,22 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     const newDatasets = chartData.datasets.map((ds) => ({
       label: ds.label,
       data: ds.values,
+      showLine: ds.showLine,
       barThickness,
       backgroundColor: ds.color ?? colors,
-      minBarLength: 3,
+      minBarLength: ds.minBarLength || 3,
+      fill: ds.fill,
+      pointRadius: ds.pointRadius,
+      borderWidth: ds.borderWidth,
+      xAxisID: ds.xAxisID,
     }));
     const newPlugins = {
       annotation: barAnnotations,
       legend: {
-        display: !!showLegend,
+        display: customLegend ? false : !!showLegend,
+      },
+      htmlLegend: {
+        containerID: customLegendContainerId ? customLegendContainerId : undefined,
       },
       tooltip: {
         displayColors: false,
@@ -188,6 +233,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
                 return customTooltipTitles[context.dataIndex];
               }
             : undefined,
+          label: customTooltipLabel,
         },
       },
     };

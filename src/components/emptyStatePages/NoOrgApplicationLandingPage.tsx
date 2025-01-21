@@ -8,6 +8,7 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
+import { useOrganization } from 'src/providers/hooks';
 import { requestCreateProjectApplication } from 'src/redux/features/application/applicationAsyncThunks';
 import { selectApplicationCreateProject } from 'src/redux/features/application/applicationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -34,6 +35,8 @@ export default function NoOrgApplicationLandingPage(): JSX.Element {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { toastSuccess } = useSnackbar();
 
+  const { reloadOrganizations } = useOrganization();
+
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectApplicationCreateProject(requestId));
 
@@ -54,6 +57,7 @@ export default function NoOrgApplicationLandingPage(): JSX.Element {
         toastSuccess(strings.SUCCESS);
       }
       goToApplication(result.data);
+      reloadOrganizations();
     }
   }, [activeLocale, result, goToApplication]);
 

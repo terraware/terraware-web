@@ -22,7 +22,7 @@ import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { OrganizationUser } from 'src/types/User';
-import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
+import { isAdmin, isManagerOrHigher, isOwner } from 'src/utils/organization';
 
 const OnboardingHomeView = () => {
   const { user } = useUser();
@@ -43,7 +43,7 @@ const OnboardingHomeView = () => {
 
   useEffect(() => {
     const populatePeople = async () => {
-      if (isAdmin(selectedOrganization)) {
+      if (isOwner(selectedOrganization)) {
         const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
         if (response.requestSucceeded) {
           setPeople(response.users);
@@ -72,7 +72,7 @@ const OnboardingHomeView = () => {
   }, [dispatch, selectedOrganization.id]);
 
   const isLoadingInitialData = useMemo(
-    () => allSpecies === undefined || (isAdmin(selectedOrganization) && people === undefined),
+    () => allSpecies === undefined || (isOwner(selectedOrganization) && people === undefined),
     [allSpecies, people, selectedOrganization]
   );
 
@@ -91,7 +91,7 @@ const OnboardingHomeView = () => {
   };
 
   const onboardingCardRows: OnboardingCardRow[] = useMemo(() => {
-    const rows = isAdmin(selectedOrganization)
+    const rows = isOwner(selectedOrganization)
       ? [
           {
             buttonProps: {

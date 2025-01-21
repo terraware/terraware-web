@@ -186,7 +186,7 @@ export const searchPlantingSiteMonitoringPlots = createCachedSelector(
       plantingSubzones: [
         {
           ...subzone,
-          monitoringPlots: subzone.monitoringPlots.filter((plot) => regexMatch(plot.monitoringPlotName, query)),
+          monitoringPlots: subzone.monitoringPlots.filter((plot) => regexMatch(`${plot.monitoringPlotNumber}`, query)),
         },
       ],
     } as ZoneAggregation;

@@ -4186,6 +4186,63 @@ export interface components {
             /** Format: int32 */
             readyQuantityWithdrawn: number;
         };
+        BiomassAdditionalSpeciesPayload: {
+            isInvasive: boolean;
+            isThreatened: boolean;
+            /** Format: int64 */
+            speciesId?: number;
+            speciesName?: string;
+        };
+        /** @description Biomass Measurements. Required for biomass measurement observations */
+        BiomassMeasurementPayload: {
+            additionalSpecies: components["schemas"]["BiomassAdditionalSpeciesPayload"][];
+            description?: string;
+            /** @enum {string} */
+            forestType: "Terrestrial" | "Mangrove";
+            /** Format: int32 */
+            herbaceousCoverPercent: number;
+            /** @description Required for Mangrove forest. */
+            ph?: number;
+            quadrats: components["schemas"]["BiomassQuadratPayload"][];
+            /** @description Measured in ppt Required for Mangrove forest. */
+            salinity?: number;
+            /** Format: int32 */
+            smallTreeCountHigh: number;
+            /** Format: int32 */
+            smallTreeCountLow: number;
+            soilAssessment: string;
+            /**
+             * @description Low or high tide. Required for Mangrove forest.
+             * @enum {string}
+             */
+            tide?: "Low" | "High";
+            /**
+             * Format: date-time
+             * @description Time when ide is observed. Required for Mangrove forest.
+             */
+            tideTime?: string;
+            trees: components["schemas"]["RecordedTreePayload"][];
+            /**
+             * Format: int32
+             * @description Measured in centimeters. Required for Mangrove forest.
+             */
+            waterDepth?: number;
+        };
+        BiomassQuadratPayload: {
+            description?: string;
+            /** @enum {string} */
+            position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
+            species: components["schemas"]["BiomassQuadratSpeciesPayload"][];
+        };
+        BiomassQuadratSpeciesPayload: {
+            /** Format: int32 */
+            abundancePercent: number;
+            isInvasive: boolean;
+            isThreatened: boolean;
+            /** Format: int64 */
+            speciesId?: number;
+            speciesName?: string;
+        };
         /** @description Coordinate reference system used for X and Y coordinates in this geometry. By default, coordinates are in WGS 84, with longitude and latitude in degrees. In that case, this element is not present. Otherwise, it specifies which coordinate system to use. */
         CRS: {
             properties: components["schemas"]["CRSProperties"];
@@ -4253,6 +4310,8 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
         };
         CompleteAdHocObservationRequestPayload: {
+            /** @description Biomass Measurements. Required for biomass measurement observations */
+            biomassMeasurements?: components["schemas"]["BiomassMeasurementPayload"];
             conditions: ("AnimalDamage" | "FastGrowth" | "FavorableWeather" | "Fungus" | "Pests" | "SeedProduction" | "UnfavorableWeather")[];
             notes?: string;
             /**
@@ -4270,7 +4329,8 @@ export interface components {
              * @description Which planting site this observation needs to be scheduled for.
              */
             plantingSiteId: number;
-            plants: components["schemas"]["RecordedPlantPayload"][];
+            /** @description Recorded plants. Required for monitoring observations. */
+            plants?: components["schemas"]["RecordedPlantPayload"][];
             /** @description GPS coordinates for the South West corner of the ad-hoc plot. */
             swCorner: Omit<components["schemas"]["Point"], "type">;
         };
@@ -6477,6 +6537,8 @@ export interface components {
             gpsCoordinates: components["schemas"]["Point"];
             /** @enum {string} */
             position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
+            /** @enum {string} */
+            type: "Plot" | "Quadrant" | "Soil";
         };
         /** @description Percentage of plants of all species that were dead in this subzone's permanent monitoring plots. */
         ObservationMonitoringPlotResultsPayload: {
@@ -6591,15 +6653,28 @@ export interface components {
             monitoringPlots: components["schemas"]["ObservationMonitoringPlotResultsPayload"][];
             /** Format: int32 */
             mortalityRate: number;
+            /** Format: int32 */
+            mortalityRateStdDev?: number;
             /**
              * Format: int32
              * @description Estimated planting density for the subzone based on the observed planting densities of monitoring plots. Only present if the subzone has completed planting.
              */
             plantingDensity?: number;
+            /** Format: int32 */
+            plantingDensityStdDev?: number;
             /** Format: int64 */
             plantingSubzoneId: number;
-            /** Format: int32 */
+            species: components["schemas"]["ObservationSpeciesResultsPayload"][];
+            /**
+             * Format: int32
+             * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
+             */
             totalPlants: number;
+            /**
+             * Format: int32
+             * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
+             */
+            totalSpecies: number;
         };
         ObservationPlantingZoneResultsPayload: {
             /** @description Area of this planting zone in hectares. */
@@ -6616,11 +6691,15 @@ export interface components {
              * @description Percentage of plants of all species that were dead in this zone's permanent monitoring plots.
              */
             mortalityRate: number;
+            /** Format: int32 */
+            mortalityRateStdDev?: number;
             /**
              * Format: int32
              * @description Estimated planting density for the zone based on the observed planting densities of monitoring plots. Only present if all the subzones in the zone have been marked as having completed planting.
              */
             plantingDensity?: number;
+            /** Format: int32 */
+            plantingDensityStdDev?: number;
             plantingSubzones: components["schemas"]["ObservationPlantingSubzoneResultsPayload"][];
             /** Format: int64 */
             plantingZoneId: number;
@@ -6649,6 +6728,8 @@ export interface components {
             isAdHoc: boolean;
             /** Format: int32 */
             mortalityRate: number;
+            /** Format: int32 */
+            mortalityRateStdDev?: number;
             /** Format: int64 */
             observationId: number;
             /**
@@ -6656,6 +6737,8 @@ export interface components {
              * @description Estimated planting density for the site, based on the observed planting densities of monitoring plots. Only present if all the subzones in the site have been marked as having completed planting.
              */
             plantingDensity?: number;
+            /** Format: int32 */
+            plantingDensityStdDev?: number;
             /** Format: int64 */
             plantingSiteId: number;
             plantingZones: components["schemas"]["ObservationPlantingZoneResultsPayload"][];
@@ -6940,12 +7023,28 @@ export interface components {
              * @description Percentage of plants of all species that were dead in this site's permanent monitoring plots.
              */
             mortalityRate?: number;
+            /** Format: int32 */
+            mortalityRateStdDev?: number;
             /**
              * Format: int32
              * @description Estimated planting density for the site, based on the observed planting densities of monitoring plots. Only present if all the subzones in the site have been marked as having completed planting.
              */
             plantingDensity?: number;
+            /** Format: int32 */
+            plantingDensityStdDev?: number;
             plantingZones: components["schemas"]["PlantingZoneObservationSummaryPayload"][];
+            /** @description Combined list of observed species and their statuses from the latest observation of each subzone within each zone. */
+            species: components["schemas"]["ObservationSpeciesResultsPayload"][];
+            /**
+             * Format: int32
+             * @description Total number of plants recorded from the latest observations of each subzone within each zone. Includes all plants, regardless of live/dead status or species.
+             */
+            totalPlants: number;
+            /**
+             * Format: int32
+             * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
+             */
+            totalSpecies: number;
         };
         PlantingSitePayload: {
             /** @description Area of planting site in hectares. Only present if the site has planting zones. */
@@ -7064,15 +7163,31 @@ export interface components {
              * @description Percentage of plants of all species that were dead in this zone's permanent monitoring plots.
              */
             mortalityRate: number;
+            /** Format: int32 */
+            mortalityRateStdDev?: number;
             /**
              * Format: int32
              * @description Estimated planting density for the zone based on the observed planting densities of monitoring plots. Only present if all the subzones in the zone have been marked as having completed planting.
              */
             plantingDensity?: number;
+            /** Format: int32 */
+            plantingDensityStdDev?: number;
             /** @description List of subzone observations used in this summary. */
             plantingSubzones: components["schemas"]["ObservationPlantingSubzoneResultsPayload"][];
             /** Format: int64 */
             plantingZoneId: number;
+            /** @description Combined list of observed species and their statuses from the latest observation of each subzone. */
+            species: components["schemas"]["ObservationSpeciesResultsPayload"][];
+            /**
+             * Format: int32
+             * @description Total number of plants recorded from the latest observations of each subzone. Includes all plants, regardless of live/dead status or species.
+             */
+            totalPlants: number;
+            /**
+             * Format: int32
+             * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
+             */
+            totalSpecies: number;
         };
         PlantingZonePayload: {
             /** @description Area of planting zone in hectares. */
@@ -7310,6 +7425,14 @@ export interface components {
             failures?: components["schemas"]["TimeseriesValuesErrorPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
+        RecordedBranchPayload: {
+            description?: string;
+            /** @description Measured in centimeters. */
+            diameterAtBreastHeight: number;
+            isDead: boolean;
+            /** @description Measured in meters. */
+            pointOfMeasurement: number;
+        };
         RecordedPlantPayload: {
             /** @enum {string} */
             certainty: "Known" | "Other" | "Unknown";
@@ -7324,6 +7447,29 @@ export interface components {
             speciesName?: string;
             /** @enum {string} */
             status: "Live" | "Dead" | "Existing";
+        };
+        RecordedTreePayload: {
+            branches: components["schemas"]["RecordedBranchPayload"][];
+            description?: string;
+            /** @description Measured in centimeters, required if growth form is Tree. */
+            diameterAtBreastHeight?: number;
+            /** @description Measured in meters, required if diameter at breast height is above 5cm. */
+            height?: number;
+            isDead: boolean;
+            /** @description Required if growth form is Tree. */
+            isTrunk?: boolean;
+            /** @description Measured in meters, required if growth form is Tree. */
+            pointOfMeasurement?: number;
+            /**
+             * Format: int32
+             * @description Measured in centimeters, required if growth form is Tree.
+             */
+            shrubDiameter?: number;
+            /** Format: int64 */
+            speciesId?: number;
+            speciesName?: string;
+            /** @enum {string} */
+            treeGrowthForm: "Tree" | "Shrub";
         };
         ReplaceObservationPlotRequestPayload: {
             /** @enum {string} */
@@ -8392,6 +8538,12 @@ export interface components {
             gpsCoordinates: components["schemas"]["Point"];
             /** @enum {string} */
             position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
+            /**
+             * @description Type of observation plot photo.
+             * @default Plot
+             * @enum {string}
+             */
+            type: "Plot" | "Quadrant" | "Soil";
         };
         UploadPlotPhotoResponsePayload: {
             /** Format: int64 */
@@ -14443,6 +14595,15 @@ export interface operations {
             };
             /** @description The requested resource was not found. */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description A species with the requested name already exists. */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };

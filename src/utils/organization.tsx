@@ -57,7 +57,7 @@ export const isPlaceholderOrg = (id: number | undefined) => !id || id === defaul
 
 export const selectedOrgHasFacilityType = (organization: Organization, facilityType: FacilityType): boolean => {
   if (!isPlaceholderOrg(organization?.id) && organization?.facilities) {
-    return organization.facilities.some((facility: any) => {
+    return organization.facilities.some((facility: Facility) => {
       return facility.type === facilityType;
     });
   } else {
