@@ -109,6 +109,7 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
               offset: true,
               stacked: true,
             },
+            y: { grace: '20%' },
           }}
           customTooltipLabel={(tooltipItem) => {
             const v = tooltipItem.dataset.data[tooltipItem.dataIndex];
