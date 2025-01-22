@@ -47,7 +47,8 @@ export default function TotalMortalityRateCard({
       zone.hasObservedPermanentPlots &&
       zone.mortalityRate !== undefined &&
       zone.mortalityRate !== null &&
-      zone.mortalityRate <= lowestMortalityRate
+      zone.mortalityRate <= lowestMortalityRate &&
+      zone.plantingZoneId !== highestZoneId
     ) {
       lowestMortalityRate = zone.mortalityRate;
       lowestZoneId = zone.plantingZoneId;
