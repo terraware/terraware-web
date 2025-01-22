@@ -1,14 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Box } from '@mui/material';
+import { Box, Card, CircularProgress } from '@mui/material';
 import { Tabs } from '@terraware/web-components';
 
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import { ButtonProps } from 'src/components/PlantsPrimaryPage/PlantsPrimaryPageView';
 import { View } from 'src/components/common/ListMapSelector';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
+import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import {
@@ -26,6 +28,7 @@ import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import BiomassMeasurement from './BiomassMeasurement';
+import ObservationsDataView from './ObservationsDataView';
 import ObservationsEventsNotification from './ObservationsEventsNotification';
 import PlantMonitoring from './PlantMonitoring';
 
@@ -45,8 +48,9 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   const query = useQuery();
   const tab = query.get('tab') || 'plantMonitoring';
   const [activeTab, setActiveTab] = useState<string>(tab);
-  const [view] = useState<View>();
+  const [view, setView] = useState<View>();
   const plantingSites = useAppSelector(selectPlantingSites);
+  const adHocObservationSupportEnabled = isEnabled('Ad Hoc Observation Support');
 
   useEffect(() => {
     setActiveTab(tab);
@@ -125,22 +129,45 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
     >
       <Box display='flex' flexGrow={1} flexDirection='column'>
         <ObservationsEventsNotification events={upcomingObservations} />
-        <Tabs
-          activeTab={activeTab}
-          onTabChange={onTabChange}
-          tabs={[
-            {
-              id: 'plantMonitoring',
-              label: strings.PLANT_MONITORING,
-              children: <PlantMonitoring {...props} selectedPlantingSite={selectedPlantingSite} />,
-            },
-            {
-              id: 'biomassMeasurements',
-              label: strings.BIOMASS_MEASUREMENT,
-              children: <BiomassMeasurement />,
-            },
-          ]}
-        />
+        {adHocObservationSupportEnabled ? (
+          <Tabs
+            activeTab={activeTab}
+            onTabChange={onTabChange}
+            tabs={[
+              {
+                id: 'plantMonitoring',
+                label: strings.PLANT_MONITORING,
+                children: <PlantMonitoring {...props} selectedPlantingSite={selectedPlantingSite} />,
+              },
+              {
+                id: 'biomassMeasurements',
+                label: strings.BIOMASS_MEASUREMENT,
+                children: <BiomassMeasurement />,
+              },
+            ]}
+          />
+        ) : (
+          <>
+            {observationsResults === undefined ? (
+              <CircularProgress sx={{ margin: 'auto' }} />
+            ) : selectedPlantingSite && observationsResults?.length ? (
+              <ObservationsDataView
+                selectedPlantingSiteId={selectedPlantingSite.id}
+                selectedPlantingSite={selectedPlantingSite}
+                setView={setView}
+                view={view}
+                {...props}
+              />
+            ) : (
+              <Card style={{ margin: '56px auto 0', borderRadius: '24px', height: 'fit-content' }}>
+                <EmptyStateContent
+                  title={strings.OBSERVATIONS_EMPTY_STATE_TITLE}
+                  subtitle={[strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_2]}
+                />
+              </Card>
+            )}
+          </>
+        )}
       </Box>
     </PlantsPrimaryPage>
   );
