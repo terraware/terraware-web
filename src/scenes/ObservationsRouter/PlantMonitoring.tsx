@@ -17,6 +17,8 @@ import { PlantingSite } from 'src/types/Tracking';
 
 import ObservationsDataView from './ObservationsDataView';
 
+export type PlotSelectionType = 'assigned' | 'adHoc';
+
 export type PlantMonitoringProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;
   reload: () => void;
@@ -30,7 +32,7 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
   const [view, setView] = useState<View>();
   const theme = useTheme();
 
-  const [selectedPlotSelection, setSelectedPlotSelection] = useState('assigned');
+  const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
   const allObservationsResults = useAppSelector(selectObservationsResults);
   const observationsResults = useMemo(() => {
     if (!allObservationsResults || !selectedPlantingSite?.id) {
@@ -76,7 +78,7 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
           <Dropdown
             placeholder={strings.SELECT}
             id='plot-selection-selector'
-            onChange={(newValue) => setSelectedPlotSelection(newValue)}
+            onChange={(newValue) => setSelectedPlotSelection(newValue as PlotSelectionType)}
             options={[
               { label: strings.ASSIGNED, value: 'assigned' },
               { label: strings.AD_HOC, value: 'adHoc' },
