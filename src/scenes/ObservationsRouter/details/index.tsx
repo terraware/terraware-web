@@ -30,6 +30,7 @@ import strings from 'src/strings';
 import { ObservationState } from 'src/types/Observations';
 import { FieldOptionsMap } from 'src/types/Search';
 import { getLongDate, getShortDate } from 'src/utils/dateFormatter';
+import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -70,12 +71,21 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const observationId = Number(params.observationId || -1);
 
   const [view, setView] = useState<View>('list');
+  const [initialView, setInitialView] = useState<View>('list');
   const [unrecognizedSpecies, setUnrecognizedSpecies] = useState<string[]>();
   const [showPageMessage, setShowPageMessage] = useState(false);
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
   const [mergeRequestId, setMergeRequestId] = useState<string>('');
   const [status, setStatus] = useState<ObservationState[]>([]);
   const dispatch = useAppDispatch();
+  const query = useQuery();
+
+  useEffect(() => {
+    const mapView = query.get('map');
+    if (mapView) {
+      setInitialView('map');
+    }
+  }, [query]);
 
   const observationsResults = useAppSelector((state) =>
     searchObservations(
@@ -315,7 +325,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
         <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
           {plantingSite && selectedObservationResults && (
             <ListMapView
-              initialView='list'
+              initialView={initialView}
               list={<ObservationDetailsList {...searchProps} />}
               map={
                 <ObservationMapView

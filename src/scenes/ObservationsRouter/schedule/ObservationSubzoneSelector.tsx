@@ -1,8 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Checkbox } from '@terraware/web-components';
+import { Checkbox, Icon } from '@terraware/web-components';
+import { DateTime } from 'luxon';
 
+import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
 import { selectObservations, selectObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -149,7 +152,27 @@ const ObservationSubzoneSelector = ({
                 ? strings.formatString(strings.LAST_OBSERVATION, lastZoneOb.startDate || '')
                 : strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED}
             </Typography>
-
+            {lastZoneOb && isAfter(zone.boundaryModifiedTime, lastZoneOb.startDate) && (
+              <Box display='flex' alignItems='center' marginTop={2} marginBottom={1}>
+                <Icon name='warning' fillColor={theme.palette.TwClrTxtSecondary} size='medium' />
+                <Typography color={theme.palette.TwClrTxtSecondary} paddingLeft={1} paddingRight={1}>
+                  {strings.formatString(
+                    strings.ZONE_GEOMETRY_CHANGED,
+                    zone.name,
+                    DateTime.fromISO(zone.boundaryModifiedTime).toFormat('yyyy-MM-dd')
+                  )}
+                </Typography>
+                <Link
+                  fontSize={'16px'}
+                  to={`${APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', plantingSite.id.toString()).replace(
+                    ':observationId',
+                    lastZoneOb?.observationId.toString()
+                  )}?map=true`}
+                >
+                  {strings.VIEW_MAP}
+                </Link>
+              </Box>
+            )}
             <Box sx={{ columnGap: theme.spacing(3), paddingLeft: `${theme.spacing(4)}` }}>
               {zone.plantingSubzones.map((subzone, _index) => {
                 const lastSubzoneOb = lastSubZoneObservation(zone.id, subzone.id);
