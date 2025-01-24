@@ -152,7 +152,7 @@ const ObservationSubzoneSelector = ({
                 ? strings.formatString(strings.LAST_OBSERVATION, lastZoneOb.startDate || '')
                 : strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED}
             </Typography>
-            {lastZoneOb && isAfter(zone.boundaryModifiedTime, lastZoneOb.startDate) && (
+            {(!lastZoneOb || isAfter(zone.boundaryModifiedTime, lastZoneOb.startDate)) && (
               <Box display='flex' alignItems='center' marginTop={2} marginBottom={1}>
                 <Icon name='warning' fillColor={theme.palette.TwClrTxtSecondary} size='medium' />
                 <Typography color={theme.palette.TwClrTxtSecondary} paddingLeft={1} paddingRight={1}>
@@ -164,10 +164,7 @@ const ObservationSubzoneSelector = ({
                 </Typography>
                 <Link
                   fontSize={'16px'}
-                  to={`${APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', plantingSite.id.toString()).replace(
-                    ':observationId',
-                    lastZoneOb?.observationId.toString()
-                  )}?map=true`}
+                  to={APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSite.id.toString())}
                 >
                   {strings.VIEW_MAP}
                 </Link>
