@@ -16761,7 +16761,43 @@
 <a name='L16696'></a><a href='#L16696'>16696</a>
 <a name='L16697'></a><a href='#L16697'>16697</a>
 <a name='L16698'></a><a href='#L16698'>16698</a>
-<a name='L16699'></a><a href='#L16699'>16699</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L16699'></a><a href='#L16699'>16699</a>
+<a name='L16700'></a><a href='#L16700'>16700</a>
+<a name='L16701'></a><a href='#L16701'>16701</a>
+<a name='L16702'></a><a href='#L16702'>16702</a>
+<a name='L16703'></a><a href='#L16703'>16703</a>
+<a name='L16704'></a><a href='#L16704'>16704</a>
+<a name='L16705'></a><a href='#L16705'>16705</a>
+<a name='L16706'></a><a href='#L16706'>16706</a>
+<a name='L16707'></a><a href='#L16707'>16707</a>
+<a name='L16708'></a><a href='#L16708'>16708</a>
+<a name='L16709'></a><a href='#L16709'>16709</a>
+<a name='L16710'></a><a href='#L16710'>16710</a>
+<a name='L16711'></a><a href='#L16711'>16711</a>
+<a name='L16712'></a><a href='#L16712'>16712</a>
+<a name='L16713'></a><a href='#L16713'>16713</a>
+<a name='L16714'></a><a href='#L16714'>16714</a>
+<a name='L16715'></a><a href='#L16715'>16715</a>
+<a name='L16716'></a><a href='#L16716'>16716</a>
+<a name='L16717'></a><a href='#L16717'>16717</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -39393,6 +39429,9 @@ export interface components {
         ListDeliverablesElement: {
             /** @enum {string} */
             category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
+            /** Format: int64 */
+            cohortId?: number;
+            cohortName?: string;
             /** @description Optional description of the deliverable in HTML form. */
             descriptionHtml?: string;
             /** Format: date */
@@ -40099,6 +40138,8 @@ export interface components {
             startDate: string;
             /** @enum {string} */
             state: "Upcoming" | "InProgress" | "Completed" | "Overdue" | "Abandoned";
+            /** @enum {string} */
+            type: "Monitoring" | "Biomass Measurements";
         };
         ObservationPlantingSubzoneResultsPayload: {
             /** @description Area of this planting subzone in hectares. */
@@ -40178,6 +40219,7 @@ export interface components {
         };
         ObservationResultsPayload: {
             adHocPlot?: components["schemas"]["ObservationMonitoringPlotResultsPayload"];
+            biomassMeasurements?: components["schemas"]["BiomassMeasurementPayload"];
             /** Format: date-time */
             completedTime?: string;
             /**
@@ -40210,6 +40252,8 @@ export interface components {
             state: "Upcoming" | "InProgress" | "Completed" | "Overdue" | "Abandoned";
             /** Format: int32 */
             totalSpecies: number;
+            /** @enum {string} */
+            type: "Monitoring" | "Biomass Measurements";
         };
         ObservationSpeciesResultsPayload: {
             /** @enum {string} */
@@ -40570,6 +40614,11 @@ export interface components {
             /** Format: int64 */
             id: number;
             name: string;
+            /**
+             * Format: date-time
+             * @description When any monitoring plot in the planting subzone was most recently observed.
+             */
+            observedTime?: string;
             plantingCompleted: boolean;
             /**
              * Format: date-time
@@ -40654,6 +40703,11 @@ export interface components {
             /** @description Area of planting zone in hectares. */
             areaHa: number;
             boundary: components["schemas"]["MultiPolygon"];
+            /**
+             * Format: date-time
+             * @description When the boundary of this planting zone was last modified. Modifications of other attributes of the planting zone do not cause this timestamp to change.
+             */
+            boundaryModifiedTime: string;
             /** Format: int64 */
             id: number;
             name: string;
@@ -50164,7 +50218,7 @@ type WithRequired&lt;T, K extends keyof T&gt; = T &amp; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-01-24T14:20:20.807Z
+                at 2025-01-24T18:41:11.053Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
