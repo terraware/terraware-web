@@ -6,13 +6,12 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
+import Link from 'src/components/common/Link';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
-
-import Link from '../common/Link';
 
 export type ButtonProps = {
   title: string;
@@ -32,7 +31,7 @@ export type PlantsPrimaryPageViewProps = {
   title: string;
   newHeader?: boolean;
   showGeometryNote?: boolean;
-  previousObservationId?: number;
+  latestObservationId?: number;
 };
 
 export default function PlantsPrimaryPageView({
@@ -46,7 +45,7 @@ export default function PlantsPrimaryPageView({
   title,
   newHeader,
   showGeometryNote,
-  previousObservationId,
+  latestObservationId,
 }: PlantsPrimaryPageViewProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
@@ -83,7 +82,7 @@ export default function PlantsPrimaryPageView({
     <TfMain>
       {newHeader && plantingSites.length > 0 ? (
         <>
-          {showGeometryNote && selectedPlantingSiteId && previousObservationId && (
+          {showGeometryNote && selectedPlantingSiteId && latestObservationId && (
             <Box marginBottom={theme.spacing(4)}>
               <Message
                 body={
@@ -93,10 +92,11 @@ export default function PlantsPrimaryPageView({
                       strings.GEOMETRY_CHANGED_WARNING_MESSAGE,
                       <Link
                         fontSize={'16px'}
-                        to={APP_PATHS.OBSERVATION_DETAILS.replace(
+                        to={`${APP_PATHS.OBSERVATION_DETAILS.replace(
                           ':plantingSiteId',
                           selectedPlantingSiteId.toString()
-                        ).replace(':observationId', previousObservationId.toString())}
+                        ).replace(':observationId', latestObservationId.toString())}?map=true`}
+                        target='_blank'
                       >
                         {strings.HAS_CHANGED}
                       </Link>

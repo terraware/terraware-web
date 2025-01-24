@@ -10,17 +10,13 @@ import Link from 'src/components/common/Link';
 import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
 import isEnabled from 'src/features';
 import { useLocalization, useOrganization } from 'src/providers';
-import {
-  selectLatestObservation,
-  selectPlantingSiteObservations,
-} from 'src/redux/features/observations/observationsSelectors';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
-import { selectPlantingSite, selectPlantingSiteHistory } from 'src/redux/features/tracking/trackingSelectors';
+import { selectPlantingSite, selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import {
-  requestGetPlantingSiteHistory,
   requestPlantingSitesSearchResults,
   requestSitePopulation,
   requestSiteReportedPlants,
@@ -30,7 +26,6 @@ import ObservedNumberOfSpeciesCard from 'src/scenes/PlantsDashboardRouter/compon
 import PlantingSiteDensityCard from 'src/scenes/PlantsDashboardRouter/components/PlantingSiteDensityCard';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
-import { Observation } from 'src/types/Observations';
 import { PlantingSite } from 'src/types/Tracking';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { isAfter } from 'src/utils/dateUtils';
@@ -67,13 +62,8 @@ export default function PlantsDashboardView(): JSX.Element {
   const theme = useTheme();
   const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
   const [showGeometryChangedNote, setShowGeometryChangedNote] = useState(false);
-  const [lastObservationRequestId, setLastObservationRequestId] = useState('');
-  const [previousObservationRequestId, setPreviousObservationRequestId] = useState('');
-  const [previousObservationId, setPreviousObservationId] = useState<number>();
-  const lastObservationHistory = useAppSelector((state) => selectPlantingSiteHistory(state, lastObservationRequestId));
-  const previousObservationHistory = useAppSelector((state) =>
-    selectPlantingSiteHistory(state, previousObservationRequestId)
-  );
+  const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
+  const [latestObservationId, setLatestObservationId] = useState<number>();
 
   const messageStyles = {
     margin: '0 auto',
@@ -93,40 +83,28 @@ export default function PlantsDashboardView(): JSX.Element {
     selectLatestObservation(state, selectedPlantingSiteId, defaultTimeZone.get().id)
   );
 
-  const observations: Observation[] | undefined = useAppSelector((state) =>
-    selectPlantingSiteObservations(state, selectedPlantingSiteId)
-  );
-
   useEffect(() => {
-    if (selectedPlantingSiteId !== -1 && observations && observations.length > 2) {
-      const latestObservationHistoryId = observations[observations.length - 1].plantingSiteHistoryId;
-      const previousObservationHistoryId = observations[observations.length - 2].plantingSiteHistoryId;
-      const previousId = observations[observations.length - 2].id;
-      if (
-        latestObservationHistoryId &&
-        previousObservationHistoryId &&
-        latestObservationHistoryId !== previousObservationHistoryId
-      ) {
-        setPreviousObservationId(previousId);
-        setShowGeometryChangedNote(true);
-        const requestLatestHistory = dispatch(
-          requestGetPlantingSiteHistory({
-            plantingSiteId: selectedPlantingSiteId,
-            historyId: latestObservationHistoryId,
-          })
-        );
-        setLastObservationRequestId(requestLatestHistory.requestId);
+    if (selectedPlantingSiteId !== -1 && latestObservation) {
+      setLatestObservationId(latestObservation?.observationId);
+      const pSite = plantingSites?.find((ps) => ps.id === selectedPlantingSiteId);
+      if (pSite?.plantingZones?.length && pSite?.plantingZones?.length > 0) {
+        let maxModifiedTime = pSite.plantingZones[0].boundaryModifiedTime;
+        pSite.plantingZones.forEach((zone) => {
+          if (isAfter(zone.boundaryModifiedTime, maxModifiedTime)) {
+            maxModifiedTime = zone.boundaryModifiedTime;
+          }
+        });
 
-        const requestPreviousHistory = dispatch(
-          requestGetPlantingSiteHistory({
-            plantingSiteId: selectedPlantingSiteId,
-            historyId: previousObservationHistoryId,
-          })
-        );
-        setPreviousObservationRequestId(requestPreviousHistory.requestId);
+        if (isAfter(maxModifiedTime, latestObservation.startDate)) {
+          setShowGeometryChangedNote(true);
+        } else {
+          setShowGeometryChangedNote(false);
+        }
       }
+    } else {
+      setShowGeometryChangedNote(false);
     }
-  }, [observations, selectedPlantingSiteId]);
+  }, [latestObservation, plantingSites, selectedPlantingSiteId]);
 
   useEffect(() => {
     dispatch(requestObservations(org.selectedOrganization.id));
@@ -142,14 +120,6 @@ export default function PlantsDashboardView(): JSX.Element {
       dispatch(requestSiteReportedPlants(selectedPlantingSiteId));
     }
   }, [dispatch, org.selectedOrganization.id, selectedPlantingSiteId]);
-
-  useEffect(() => {
-    if (
-      lastObservationHistory?.data?.boundary?.coordinates !== previousObservationHistory?.data?.boundary?.coordinates
-    ) {
-      // verify if we need to do this validation
-    }
-  }, [lastObservationHistory, previousObservationHistory]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>
@@ -459,7 +429,7 @@ export default function PlantsDashboardView(): JSX.Element {
       setPlantsSitePreferences={onPreferences}
       newHeader={newPlantsDashboardEnabled}
       showGeometryNote={showGeometryChangedNote}
-      previousObservationId={previousObservationId}
+      latestObservationId={latestObservationId}
     >
       {selectedPlantingSiteId !== -1 ? (
         <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
