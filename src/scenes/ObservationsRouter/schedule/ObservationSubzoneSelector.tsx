@@ -163,6 +163,7 @@ const ObservationSubzoneSelector = ({
                   )}
                 </Typography>
                 <Link
+                  target='_blank'
                   fontSize={'16px'}
                   to={APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSite.id.toString())}
                 >
