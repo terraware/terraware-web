@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Box, Divider, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import isEnabled from 'src/features';
-import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
-import { useAppSelector } from 'src/redux/store';
+import {
+  selectLatestObservation,
+  selectPlantingSiteObservationsSummaries,
+} from 'src/redux/features/observations/observationsSelectors';
+import { requestGetPlantingSiteObservationsSummaries } from 'src/redux/features/observations/observationsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import strings from 'src/strings';
+import { ObservationSpeciesResultsPayload, ObservationSummary } from 'src/types/Observations';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type HighestAndLowestMortalityRateSpeciesCardProps = {
@@ -22,27 +28,67 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
   );
+  const dispatch = useAppDispatch();
+  const [requestId, setRequestId] = useState<string>('');
+  const plantingObservationsSummaryResponse = useAppSelector((state) =>
+    selectPlantingSiteObservationsSummaries(state, requestId)
+  );
+
   const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
+  const [summaries, setSummaries] = useState<ObservationSummary[]>();
+
+  const { availableSpecies } = useSpecies();
+
+  useEffect(() => {
+    if (plantingSiteId) {
+      const request = dispatch(requestGetPlantingSiteObservationsSummaries(plantingSiteId));
+      setRequestId(request.requestId);
+    }
+  }, [plantingSiteId]);
+
+  useEffect(() => {
+    if (plantingObservationsSummaryResponse?.status === 'success') {
+      setSummaries(plantingObservationsSummaryResponse.data);
+    }
+  }, [plantingObservationsSummaryResponse]);
 
   let highestMortalityRate = 0;
   let highestSpecies = '';
 
-  observation?.species.forEach((sp) => {
-    if (sp.mortalityRate !== undefined && sp.mortalityRate !== null && sp.mortalityRate >= highestMortalityRate) {
-      highestMortalityRate = sp.mortalityRate;
-      highestSpecies = sp.speciesScientificName || sp.speciesName || '';
-    }
-  });
-
   let lowestMortalityRate = 100;
   let lowestSpecies = '';
 
-  observation?.species.forEach((sp) => {
-    if (sp.mortalityRate !== undefined && sp.mortalityRate !== null && sp.mortalityRate <= lowestMortalityRate) {
-      lowestMortalityRate = sp.mortalityRate;
-      lowestSpecies = sp.speciesScientificName || sp.speciesName || '';
-    }
-  });
+  if (newPlantsDashboardEnabled) {
+    summaries?.[0]?.species.forEach((sp: ObservationSpeciesResultsPayload) => {
+      if (sp.mortalityRate !== undefined && sp.mortalityRate !== null && sp.mortalityRate >= highestMortalityRate) {
+        highestMortalityRate = sp.mortalityRate;
+        highestSpecies =
+          availableSpecies?.find((spec) => spec.id === sp.speciesId)?.scientificName || sp.speciesName || '';
+      }
+    });
+
+    summaries?.[0]?.species.forEach((sp: ObservationSpeciesResultsPayload) => {
+      if (sp.mortalityRate !== undefined && sp.mortalityRate !== null && sp.mortalityRate <= lowestMortalityRate) {
+        lowestMortalityRate = sp.mortalityRate;
+        lowestSpecies =
+          availableSpecies?.find((spec) => spec.id === sp.speciesId)?.scientificName || sp.speciesName || '';
+      }
+    });
+  } else {
+    observation?.species.forEach((sp) => {
+      if (sp.mortalityRate !== undefined && sp.mortalityRate !== null && sp.mortalityRate >= highestMortalityRate) {
+        highestMortalityRate = sp.mortalityRate;
+        highestSpecies = sp.speciesScientificName || sp.speciesName || '';
+      }
+    });
+
+    observation?.species.forEach((sp) => {
+      if (sp.mortalityRate !== undefined && sp.mortalityRate !== null && sp.mortalityRate <= lowestMortalityRate) {
+        lowestMortalityRate = sp.mortalityRate;
+        lowestSpecies = sp.speciesScientificName || sp.speciesName || '';
+      }
+    });
+  }
 
   return newPlantsDashboardEnabled ? (
     <Box>
