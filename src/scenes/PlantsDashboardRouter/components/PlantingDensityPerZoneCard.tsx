@@ -64,16 +64,20 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
     const datasets = [
       {
         label: newPlantsDashboardEnabled ? strings.TARGET_DENSITY : strings.TARGET_PLANTING_DENSITY,
-        values: targets,
-        color: theme.palette.TwClrBaseBlue500,
+        values: newPlantsDashboardEnabled ? targets.map((v) => [v, v] as [number, number]) : targets,
+        color: newPlantsDashboardEnabled ? theme.palette.TwClrBaseBlack : theme.palette.TwClrBaseBlue500,
+        minBarLength: newPlantsDashboardEnabled ? 1 : undefined,
+        xAxisID: newPlantsDashboardEnabled ? 'xAxisTarget' : undefined,
       },
     ];
 
     if (observation && actuals?.length && !actuals?.every((val) => val === null)) {
-      datasets.push({
+      datasets.unshift({
         label: newPlantsDashboardEnabled ? strings.OBSERVED_DENSITY : strings.PLANTING_DENSITY,
         values: actuals,
-        color: theme.palette.TwClrBaseBlue700,
+        color: newPlantsDashboardEnabled ? theme.palette.TwClrBaseLightGreen200 : theme.palette.TwClrBaseBlue700,
+        xAxisID: newPlantsDashboardEnabled ? 'xAxisActual' : undefined,
+        minBarLength: newPlantsDashboardEnabled ? 1 : undefined,
       });
     }
 
@@ -84,17 +88,37 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
   }, [observation, labels, targets, actuals, theme.palette.TwClrBaseBlue500, theme.palette.TwClrBaseBlue700]);
 
   return newPlantsDashboardEnabled ? (
-    <Box marginBottom={theme.spacing(1.5)}>
-      <BarChart
-        showLegend={true}
-        elementColor={theme.palette.TwClrBgBrand}
-        barWidth={observation && actuals?.length ? 0 : undefined}
-        chartId='plantingDensityByZone'
-        chartData={chartData}
-        customTooltipTitles={tooltipTitles}
-        maxWidth='100%'
-        yAxisLabel={strings.PLANTS_PER_HECTARE}
-      />
+    <Box>
+      <Box id='legend-container-density' sx={{ marginTop: 3, marginBottom: 2 }} />
+      <Box marginBottom={theme.spacing(1.5)}>
+        <BarChart
+          showLegend={true}
+          elementColor={theme.palette.TwClrBgBrand}
+          barWidth={observation && actuals?.length ? 0 : undefined}
+          chartId='plantingDensityByZone'
+          chartData={chartData}
+          customTooltipTitles={tooltipTitles}
+          maxWidth='100%'
+          yAxisLabel={strings.PLANTS_PER_HECTARE}
+          customScales={{
+            xAxisTarget: {
+              stacked: true,
+            },
+            xAxisActual: {
+              display: false,
+              offset: true,
+              stacked: true,
+            },
+            y: { grace: '20%' },
+          }}
+          customTooltipLabel={(tooltipItem) => {
+            const v = tooltipItem.dataset.data[tooltipItem.dataIndex];
+            return Array.isArray(v) ? v[0].toString() : v ? v.toString() : '';
+          }}
+          customLegend
+          customLegendContainerId='legend-container-density'
+        />
+      </Box>
     </Box>
   ) : (
     <OverviewItemCard

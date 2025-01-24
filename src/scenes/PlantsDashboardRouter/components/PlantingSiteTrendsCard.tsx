@@ -155,6 +155,7 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
             xAxisType='time'
             lineColor='#B8A0D6'
             customLegend
+            customLegendContainerId='legend-container-th'
           />
         </Box>
       </Box>

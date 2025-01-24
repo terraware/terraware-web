@@ -111,7 +111,7 @@ export default function PlantingDensityCard({
       <Box flexBasis='100%'>
         <Box display={'flex'} alignItems={'center'}>
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-            {sitePlantingComplete ? strings.TARGET_VS_OBSERVED_DENSITY : strings.TARGET_DENSITY}
+            {sitePlantingComplete ? strings.TARGET_VS_OBSERVED_DENSITY : strings.OBSERVED_DENSITY_PER_ZONE}
           </Typography>
           <Tooltip title={strings.OBSERVED_DENSITY_TOOLTIP}>
             <Box display='flex'>

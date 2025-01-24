@@ -5932,6 +5932,9 @@ export interface components {
         ListDeliverablesElement: {
             /** @enum {string} */
             category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
+            /** Format: int64 */
+            cohortId?: number;
+            cohortName?: string;
             /** @description Optional description of the deliverable in HTML form. */
             descriptionHtml?: string;
             /** Format: date */
@@ -6638,6 +6641,8 @@ export interface components {
             startDate: string;
             /** @enum {string} */
             state: "Upcoming" | "InProgress" | "Completed" | "Overdue" | "Abandoned";
+            /** @enum {string} */
+            type: "Monitoring" | "Biomass Measurements";
         };
         ObservationPlantingSubzoneResultsPayload: {
             /** @description Area of this planting subzone in hectares. */
@@ -6717,6 +6722,7 @@ export interface components {
         };
         ObservationResultsPayload: {
             adHocPlot?: components["schemas"]["ObservationMonitoringPlotResultsPayload"];
+            biomassMeasurements?: components["schemas"]["BiomassMeasurementPayload"];
             /** Format: date-time */
             completedTime?: string;
             /**
@@ -6749,6 +6755,8 @@ export interface components {
             state: "Upcoming" | "InProgress" | "Completed" | "Overdue" | "Abandoned";
             /** Format: int32 */
             totalSpecies: number;
+            /** @enum {string} */
+            type: "Monitoring" | "Biomass Measurements";
         };
         ObservationSpeciesResultsPayload: {
             /** @enum {string} */
@@ -7109,6 +7117,11 @@ export interface components {
             /** Format: int64 */
             id: number;
             name: string;
+            /**
+             * Format: date-time
+             * @description When any monitoring plot in the planting subzone was most recently observed.
+             */
+            observedTime?: string;
             plantingCompleted: boolean;
             /**
              * Format: date-time
@@ -7193,6 +7206,11 @@ export interface components {
             /** @description Area of planting zone in hectares. */
             areaHa: number;
             boundary: components["schemas"]["MultiPolygon"];
+            /**
+             * Format: date-time
+             * @description When the boundary of this planting zone was last modified. Modifications of other attributes of the planting zone do not cause this timestamp to change.
+             */
+            boundaryModifiedTime: string;
             /** Format: int64 */
             id: number;
             name: string;

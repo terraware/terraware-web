@@ -246,10 +246,21 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
 
   useEffect(() => {
     const invalid = { germinating: '', notReady: '', ready: '' };
+    const germinatingQuantity = Number(record?.germinatingQuantity ?? 0);
+    const notReadyQuantity = Number(record?.notReadyQuantity ?? 0);
+    const readyQuantity = Number(record?.readyQuantity ?? 0);
+
+    if (germinatingQuantity < 0) {
+      invalid.germinating = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;
+    }
+    if (notReadyQuantity < 0) {
+      invalid.notReady = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;
+    }
+    if (readyQuantity < 0) {
+      invalid.ready = strings.QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO;
+    }
+
     if (selectedAccession) {
-      const germinatingQuantity = Number(record?.germinatingQuantity ?? 0);
-      const notReadyQuantity = Number(record?.notReadyQuantity ?? 0);
-      const readyQuantity = Number(record?.readyQuantity ?? 0);
       const remainingSeeds = accessionQuantity?.value ?? 0;
 
       if (germinatingQuantity + totalQuantity > remainingSeeds) {
@@ -265,6 +276,7 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
         }
       }
     }
+
     setInvalidFields(invalid);
   }, [
     accessionQuantity,

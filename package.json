@@ -79,7 +79,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-error-boundary": "^5.0.0",
-    "react-localization": "^1.0.17",
+    "react-localization": "^2.0.0",
     "react-map-gl": "^7.0.21",
     "react-mixpanel-browser": "^4.1.0",
     "react-multi-carousel": "^2.8.2",
@@ -170,7 +170,7 @@
     "btoa": "^1.2.1",
     "csv": "^6.2.8",
     "eslint": "^9.6.0",
-    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-prettier": "^10.0.0",
     "eslint-plugin-jest-react": "^0.1.0",
     "eslint-plugin-jsdoc": "^50.0.0",
     "eslint-plugin-n": "^17.15.0",
@@ -200,7 +200,7 @@
     "webpack-dev-middleware": "^7.0.0"
   },
   "resolutions": {
-    "@babel/traverse": "7.26.4",
+    "@babel/traverse": "7.26.5",
     "fork-ts-checker-webpack-plugin": "^9.0.0",
     "wrap-ansi": "7.0.0",
     "string-width": "4.2.3",
