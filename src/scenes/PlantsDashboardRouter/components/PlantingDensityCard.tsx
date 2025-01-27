@@ -20,10 +20,7 @@ type PlantingDensityCardProps = {
   sitePlantingComplete: boolean;
 };
 
-export default function PlantingDensityCard({
-  plantingSiteId,
-  sitePlantingComplete,
-}: PlantingDensityCardProps): JSX.Element {
+export default function PlantingDensityCard({ plantingSiteId }: PlantingDensityCardProps): JSX.Element {
   const theme = useTheme();
 
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
@@ -88,30 +85,26 @@ export default function PlantingDensityCard({
         </Box>
       </Box>
       <div style={separatorStyles} />
-      {sitePlantingComplete && (
-        <>
-          <Box flexBasis='100%'>
-            <Box display={'flex'} alignItems={'center'}>
-              <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-                {strings.OBSERVED_DENSITY}
-              </Typography>
-              <Tooltip title={strings.OBSERVED_DENSITY_TOOLTIP}>
-                <Box display='flex'>
-                  <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
-                </Box>
-              </Tooltip>
-            </Box>
-            <Box paddingTop={2}>
-              <PlantingSiteDensityCard plantingSiteId={plantingSiteId} />
-            </Box>
-          </Box>
-          <div style={separatorStyles} />
-        </>
-      )}
       <Box flexBasis='100%'>
         <Box display={'flex'} alignItems={'center'}>
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-            {sitePlantingComplete ? strings.TARGET_VS_OBSERVED_DENSITY : strings.OBSERVED_DENSITY_PER_ZONE}
+            {strings.OBSERVED_DENSITY}
+          </Typography>
+          <Tooltip title={strings.OBSERVED_DENSITY_TOOLTIP}>
+            <Box display='flex'>
+              <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+            </Box>
+          </Tooltip>
+        </Box>
+        <Box paddingTop={2}>
+          <PlantingSiteDensityCard plantingSiteId={plantingSiteId} />
+        </Box>
+      </Box>
+      <div style={separatorStyles} />
+      <Box flexBasis='100%'>
+        <Box display={'flex'} alignItems={'center'}>
+          <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
+            {strings.OBSERVED_DENSITY_PER_ZONE}
           </Typography>
           <Tooltip title={strings.OBSERVED_DENSITY_TOOLTIP}>
             <Box display='flex'>
