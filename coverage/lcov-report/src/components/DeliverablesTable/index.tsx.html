@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/72</span>
+                <span class='fraction'>0/74</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/65</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/67</span>
+                <span class='fraction'>0/69</span>
             </div>
         
             
@@ -357,7 +357,13 @@
 <a name='L292'></a><a href='#L292'>292</a>
 <a name='L293'></a><a href='#L293'>293</a>
 <a name='L294'></a><a href='#L294'>294</a>
-<a name='L295'></a><a href='#L295'>295</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L295'></a><a href='#L295'>295</a>
+<a name='L296'></a><a href='#L296'>296</a>
+<a name='L297'></a><a href='#L297'>297</a>
+<a name='L298'></a><a href='#L298'>298</a>
+<a name='L299'></a><a href='#L299'>299</a>
+<a name='L300'></a><a href='#L300'>300</a>
+<a name='L301'></a><a href='#L301'>301</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -397,6 +403,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -459,6 +466,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -522,6 +530,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -530,6 +539,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -633,6 +644,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -688,6 +700,7 @@ interface DeliverablesTableProps {
   participantId?: number;
   searchAndSort?: SearchAndSortFn&lt;ListDeliverablesElementWithOverdue&gt;;
   tableId: string;
+  iconFilters?: FilterConfig[];
 }
 &nbsp;
 const columns =
@@ -752,6 +765,7 @@ const DeliverablesTable = <span class="cstat-no" title="statement not covered" >
   participantId,
   searchAndSort,
   tableId,
+  iconFilters,
 }: DeliverablesTableProps) =&gt; {
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
@@ -823,7 +837,10 @@ const DeliverablesTable = <span class="cstat-no" title="statement not covered" >
         options: DeliverableCategories,
         label: strings.CATEGORY,
       },
-      {
+    ];
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (!iconFilters) {</span>
+<span class="cstat-no" title="statement not covered" >      filters.push({</span>
         field: 'type',
         options: DeliverableTypes,
         label: strings.TYPE,
@@ -831,8 +848,8 @@ const DeliverablesTable = <span class="cstat-no" title="statement not covered" >
 <span class="cstat-no" title="statement not covered" >          values.map(<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; (<span class="cstat-no" title="statement not covered" >value === 'Questions' ? 'Questionnaire' : value)</span>).join(', '),</span>
         renderOption: <span class="fstat-no" title="function not covered" >(v</span>alue: string | number) =&gt;
 <span class="cstat-no" title="statement not covered" >          value.toString() === 'Questions' ? 'Questionnaire' : value.toString(),</span>
-      },
-    ];
+      });
+    }
 &nbsp;
     // show the project filter only in the accelerator route
     // the participant view already has a projects filter above the table
@@ -940,6 +957,7 @@ const DeliverablesTable = <span class="cstat-no" title="statement not covered" >
       rows={_deliverables}
       onFilterApplied={ofFilterAppliedHandler}
       stickyFilters
+      iconFilters={iconFilters}
     /&gt;
   );
 };
@@ -952,7 +970,7 @@ export default DeliverablesTable;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-01-24T18:41:11.053Z
+                at 2025-01-27T12:26:51.210Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
