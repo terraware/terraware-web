@@ -4186,16 +4186,8 @@ export interface components {
             /** Format: int32 */
             readyQuantityWithdrawn: number;
         };
-        BiomassAdditionalSpeciesPayload: {
-            isInvasive: boolean;
-            isThreatened: boolean;
-            /** Format: int64 */
-            speciesId?: number;
-            speciesName?: string;
-        };
         /** @description Biomass Measurements. Required for biomass measurement observations */
         BiomassMeasurementPayload: {
-            additionalSpecies: components["schemas"]["BiomassAdditionalSpeciesPayload"][];
             description?: string;
             /** @enum {string} */
             forestType: "Terrestrial" | "Mangrove";
@@ -4211,6 +4203,8 @@ export interface components {
             /** Format: int32 */
             smallTreeCountLow: number;
             soilAssessment: string;
+            /** @description List of herbaceous and tree species. Includes all recorded quadrat and additional herbaceous species and recorded tree species. Species not assigned to a quadrat or recorded trees will be saved as an additional herbaceous species. */
+            species: components["schemas"]["BiomassSpeciesPayload"][];
             /**
              * @description Low or high tide. Required for Mangrove forest.
              * @enum {string}
@@ -4237,11 +4231,18 @@ export interface components {
         BiomassQuadratSpeciesPayload: {
             /** Format: int32 */
             abundancePercent: number;
-            isInvasive: boolean;
-            isThreatened: boolean;
             /** Format: int64 */
             speciesId?: number;
             speciesName?: string;
+        };
+        /** @description List of herbaceous and tree species. Includes all recorded quadrat and additional herbaceous species and recorded tree species. Species not assigned to a quadrat or recorded trees will be saved as an additional herbaceous species. */
+        BiomassSpeciesPayload: {
+            commonName?: string;
+            isInvasive: boolean;
+            isThreatened: boolean;
+            scientificName?: string;
+            /** Format: int64 */
+            speciesId?: number;
         };
         /** @description Coordinate reference system used for X and Y coordinates in this geometry. By default, coordinates are in WGS 84, with longitude and latitude in degrees. In that case, this element is not present. Otherwise, it specifies which coordinate system to use. */
         CRS: {
@@ -6539,9 +6540,9 @@ export interface components {
             fileId: number;
             gpsCoordinates: components["schemas"]["Point"];
             /** @enum {string} */
-            position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
+            position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
             /** @enum {string} */
-            type: "Plot" | "Quadrant" | "Soil";
+            type: "Plot" | "Quadrat" | "Soil";
         };
         /** @description Percentage of plants of all species that were dead in this subzone's permanent monitoring plots. */
         ObservationMonitoringPlotResultsPayload: {
@@ -6662,9 +6663,9 @@ export interface components {
             mortalityRateStdDev?: number;
             /**
              * Format: int32
-             * @description Estimated planting density for the subzone based on the observed planting densities of monitoring plots. Only present if the subzone has completed planting.
+             * @description Estimated planting density for the subzone based on the observed planting densities of monitoring plots.
              */
-            plantingDensity?: number;
+            plantingDensity: number;
             /** Format: int32 */
             plantingDensityStdDev?: number;
             /** Format: int64 */
@@ -6700,9 +6701,9 @@ export interface components {
             mortalityRateStdDev?: number;
             /**
              * Format: int32
-             * @description Estimated planting density for the zone based on the observed planting densities of monitoring plots. Only present if all the subzones in the zone have been marked as having completed planting.
+             * @description Estimated planting density for the zone based on the observed planting densities of monitoring plots.
              */
-            plantingDensity?: number;
+            plantingDensity: number;
             /** Format: int32 */
             plantingDensityStdDev?: number;
             plantingSubzones: components["schemas"]["ObservationPlantingSubzoneResultsPayload"][];
@@ -6740,9 +6741,9 @@ export interface components {
             observationId: number;
             /**
              * Format: int32
-             * @description Estimated planting density for the site, based on the observed planting densities of monitoring plots. Only present if all the subzones in the site have been marked as having completed planting.
+             * @description Estimated planting density for the site, based on the observed planting densities of monitoring plots.
              */
-            plantingDensity?: number;
+            plantingDensity: number;
             /** Format: int32 */
             plantingDensityStdDev?: number;
             /** Format: int64 */
@@ -7035,9 +7036,9 @@ export interface components {
             mortalityRateStdDev?: number;
             /**
              * Format: int32
-             * @description Estimated planting density for the site, based on the observed planting densities of monitoring plots. Only present if all the subzones in the site have been marked as having completed planting.
+             * @description Estimated planting density for the site, based on the observed planting densities of monitoring plots.
              */
-            plantingDensity?: number;
+            plantingDensity: number;
             /** Format: int32 */
             plantingDensityStdDev?: number;
             plantingZones: components["schemas"]["PlantingZoneObservationSummaryPayload"][];
@@ -7180,9 +7181,9 @@ export interface components {
             mortalityRateStdDev?: number;
             /**
              * Format: int32
-             * @description Estimated planting density for the zone based on the observed planting densities of monitoring plots. Only present if all the subzones in the zone have been marked as having completed planting.
+             * @description Estimated planting density for the zone based on the observed planting densities of monitoring plots.
              */
-            plantingDensity?: number;
+            plantingDensity: number;
             /** Format: int32 */
             plantingDensityStdDev?: number;
             /** @description List of subzone observations used in this summary. */
@@ -7480,7 +7481,7 @@ export interface components {
             pointOfMeasurement?: number;
             /**
              * Format: int32
-             * @description Measured in centimeters, required if growth form is Tree.
+             * @description Measured in centimeters, required if growth form is Shrub.
              */
             shrubDiameter?: number;
             /** Format: int64 */
@@ -8555,13 +8556,13 @@ export interface components {
         UploadPlotPhotoRequestPayload: {
             gpsCoordinates: components["schemas"]["Point"];
             /** @enum {string} */
-            position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
+            position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
             /**
              * @description Type of observation plot photo.
              * @default Plot
              * @enum {string}
              */
-            type: "Plot" | "Quadrant" | "Soil";
+            type: "Plot" | "Quadrat" | "Soil";
         };
         UploadPlotPhotoResponsePayload: {
             /** Format: int64 */
