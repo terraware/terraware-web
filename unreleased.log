@@ -1,3 +1,5 @@
+6bce142595d SW-6466 Lowest zone mortality is not shown when it should be (#3554)
+0739ee6010a SW-6465 Show Observed Density always (#3562)
 a8e39dc1fdc SW-6467 Display point when there is just one observation (#3561)
 bbbcfc2f2df Bump store2 from 2.14.3 to 2.14.4 (#3559)
 020b45b4faf Updated translations from Phrase (#3558)
