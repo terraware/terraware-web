@@ -62,6 +62,7 @@ export type BaseChartProps = {
   yStepSize?: number;
   xAxisType?: ScaleType;
   lineColor?: string;
+  pointRadius?: number;
   customScales?: _DeepPartialObject<{
     [key: string]: ScaleOptionsByType<'radialLinear' | keyof CartesianScaleTypeRegistry>;
   }>;
@@ -118,6 +119,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     customScales,
     customTooltipLabel,
     customLegendContainerId,
+    pointRadius,
   } = props;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [chart, setChart] = useState<ChartJS | null>(null);
@@ -157,7 +159,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
               options: {
                 elements: {
                   point: {
-                    radius: 0,
+                    radius: pointRadius || 0,
                   },
                   line: {
                     borderColor: lineColor,
