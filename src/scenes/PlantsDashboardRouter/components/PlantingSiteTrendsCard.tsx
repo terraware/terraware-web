@@ -119,6 +119,7 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
       datasets: [
         {
           values: values ?? [],
+          pointRadius: values?.length === 1 ? 4 : 0,
         },
       ],
     };
