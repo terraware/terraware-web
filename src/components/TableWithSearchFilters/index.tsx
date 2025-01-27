@@ -33,6 +33,7 @@ export interface TableWithSearchFiltersProps
   clientSortedFields?: string[];
   onFilterApplied?: (filter: string, values: (string | number | null)[]) => void;
   stickyFilters?: boolean;
+  iconFilters?: FilterConfig[];
 }
 
 const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
@@ -51,6 +52,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
     clientSortedFields,
     onFilterApplied,
     stickyFilters,
+    iconFilters,
     ...tableProps
   } = props;
 
@@ -199,6 +201,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
             rightComponent={<TableSettingsButton />}
             onFilterApplied={onFilterApplied}
             stickyFilters={stickyFilters}
+            iconFilters={iconFilters}
           />
         </Grid>
 
