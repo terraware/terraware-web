@@ -28,7 +28,7 @@ export type ObservationsDataViewProps = SearchProps & {
   setView: (view: View) => void;
   view?: View;
   reload: () => void;
-  selectedPlotSelection: string;
+  selectedPlotSelection?: string;
 };
 
 export default function ObservationsDataView(props: ObservationsDataViewProps): JSX.Element {
