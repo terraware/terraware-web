@@ -146,9 +146,6 @@ export default function PlantsDashboardView(): JSX.Element {
             <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
               {strings.PLANTS_AND_SPECIES_STATISTICS}
             </Typography>
-            {hasObservations && (
-              <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
-            )}
           </Box>
         </Grid>
         <Grid item xs={12}>

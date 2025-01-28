@@ -5,11 +5,10 @@ import { Icon, Tooltip } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
+import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
 import { selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import NumberOfSpeciesPlantedCard from './NumberOfSpeciesPlantedCard';
 import PlantsReportedPerSpeciesCard from './PlantsReportedPerSpeciesCard';
@@ -25,14 +24,20 @@ export default function PlantsAndSpeciesCard({
 }: PlantsAndSpeciesCardProps): JSX.Element {
   const siteReportedPlants = useAppSelector((state) => selectSiteReportedPlants(state, plantingSiteId));
   const theme = useTheme();
-  const defaultTimeZone = useDefaultTimeZone();
-  const observation = useAppSelector((state) =>
-    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
-  );
-  const [numObservedSpecies, setNumObservedSpecies] = useState(0);
+  const plantings = useAppSelector((state) => selectPlantingsForSite(state, plantingSiteId));
+  const [totalSpecies, setTotalSpecies] = useState<number>();
+
   useEffect(() => {
-    setNumObservedSpecies(observation?.species?.length ?? 0);
-  }, [observation]);
+    const speciesNames: Set<string> = new Set();
+
+    plantings.forEach((planting) => {
+      const { scientificName } = planting.species;
+      speciesNames.add(scientificName);
+    });
+
+    const speciesCount = speciesNames.size;
+    setTotalSpecies(speciesCount);
+  }, [plantings]);
 
   const separatorStyles = {
     width: '1px',
@@ -72,7 +77,7 @@ export default function PlantsAndSpeciesCard({
             </Tooltip>
           </Box>
           <Typography fontSize={'48px'} fontWeight={600} marginTop={1}>
-            <FormattedNumber value={numObservedSpecies} />
+            <FormattedNumber value={totalSpecies || 0} />
           </Typography>
         </Box>
       </Box>
