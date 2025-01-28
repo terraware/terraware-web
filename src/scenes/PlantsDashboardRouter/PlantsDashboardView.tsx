@@ -61,9 +61,7 @@ export default function PlantsDashboardView(): JSX.Element {
   const navigate = useNavigate();
   const theme = useTheme();
   const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
-  const [showGeometryChangedNote, setShowGeometryChangedNote] = useState(false);
   const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
-  const [latestObservationId, setLatestObservationId] = useState<number>();
 
   const messageStyles = {
     margin: '0 auto',
@@ -83,26 +81,27 @@ export default function PlantsDashboardView(): JSX.Element {
     selectLatestObservation(state, selectedPlantingSiteId, defaultTimeZone.get().id)
   );
 
-  useEffect(() => {
+  const latestObservationId = useMemo(() => {
+    return latestObservation?.observationId;
+  }, [latestObservation]);
+
+  const geometryChangedNote = useMemo(() => {
     if (selectedPlantingSiteId !== -1 && latestObservation) {
-      setLatestObservationId(latestObservation?.observationId);
       const pSite = plantingSites?.find((ps) => ps.id === selectedPlantingSiteId);
       if (pSite?.plantingZones?.length && pSite?.plantingZones?.length > 0) {
-        let maxModifiedTime = pSite.plantingZones[0].boundaryModifiedTime;
-        pSite.plantingZones.forEach((zone) => {
-          if (isAfter(zone.boundaryModifiedTime, maxModifiedTime)) {
-            maxModifiedTime = zone.boundaryModifiedTime;
-          }
-        });
+        const maxModifiedTime = pSite.plantingZones.reduce(
+          (acc, zone) => (isAfter(zone.boundaryModifiedTime, acc) ? zone.boundaryModifiedTime : acc),
+          pSite.plantingZones[0].boundaryModifiedTime
+        );
 
         if (isAfter(maxModifiedTime, latestObservation.startDate)) {
-          setShowGeometryChangedNote(true);
+          return true;
         } else {
-          setShowGeometryChangedNote(false);
+          return false;
         }
       }
     } else {
-      setShowGeometryChangedNote(false);
+      return false;
     }
   }, [latestObservation, plantingSites, selectedPlantingSiteId]);
 
@@ -428,7 +427,7 @@ export default function PlantsDashboardView(): JSX.Element {
       plantsSitePreferences={plantsDashboardPreferences}
       setPlantsSitePreferences={onPreferences}
       newHeader={newPlantsDashboardEnabled}
-      showGeometryNote={showGeometryChangedNote}
+      showGeometryNote={geometryChangedNote}
       latestObservationId={latestObservationId}
     >
       {selectedPlantingSiteId !== -1 ? (
