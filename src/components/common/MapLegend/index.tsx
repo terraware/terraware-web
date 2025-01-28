@@ -19,9 +19,9 @@ export type MapLegendGroup = {
   title: string;
   items: MapLegendItem[];
   switch?: boolean;
-  // is the legend turned off
-  disabled?: boolean;
-  // the whole legend is disabled
+  // is the legend turned on
+  checked?: boolean;
+  // the legend is disabled (can't be turned on/off)
   isDisabled?: boolean;
 };
 
@@ -64,14 +64,14 @@ export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.
               <Box>
                 <Switch
                   disabled={legend.isDisabled}
-                  checked={!legend.isDisabled && !legend.disabled}
-                  onChange={(event, checked) => {
+                  checked={!legend.isDisabled && legend.checked}
+                  onChange={(event, isChecked) => {
                     if (setLegends) {
                       setLegends((prev) => {
                         const newLegends = [...prev];
                         const found = newLegends.find((l) => l.title === legend.title);
                         if (found) {
-                          found.disabled = !checked;
+                          found.checked = isChecked;
                         }
                         return newLegends;
                       });
@@ -126,7 +126,7 @@ export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.
           </Grid>
           {legend.items.map((item) => (
             <Grid item xs={isMobile ? 4 : 1} key={`${legend.title}-${item.label}`}>
-              <LabeledSwatch {...item} isDisabled={legend.disabled} />
+              <LabeledSwatch {...item} isDisabled={!legend.checked} />
             </Grid>
           ))}
         </Grid>

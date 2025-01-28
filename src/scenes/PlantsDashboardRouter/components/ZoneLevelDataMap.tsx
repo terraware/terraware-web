@@ -138,6 +138,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
         ],
         switch: newPlantsDashboardEnabled,
         isDisabled: !observation,
+        checked: true,
       });
 
       if (newPlantsDashboardEnabled) {
@@ -154,6 +155,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
           ],
           switch: true,
           isDisabled: !observation,
+          checked: true,
         });
       }
     }
@@ -320,9 +322,9 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
           mapData={mapData!}
           style={{ borderRadius: newPlantsDashboardEnabled ? '8px' : '24px' }}
           layers={['Planting Site', 'Zones']}
-          showMortalityRateFill={!!observation && !legends.find((l) => l.title === strings.MORTALITY_RATE)?.disabled}
+          showMortalityRateFill={!!observation && legends.find((l) => l.title === strings.MORTALITY_RATE)?.checked}
           showRecencyFill={
-            newPlantsDashboardEnabled && !legends.find((l) => l.title === strings.OBSERVATION_RECENCY)?.disabled
+            newPlantsDashboardEnabled && legends.find((l) => l.title === strings.OBSERVATION_RECENCY)?.checked
           }
           focusEntities={focusEntities}
           contextRenderer={{
