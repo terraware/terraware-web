@@ -1,8 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Checkbox } from '@terraware/web-components';
+import { Checkbox, Icon } from '@terraware/web-components';
+import { DateTime } from 'luxon';
 
+import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
 import { selectObservations, selectObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -13,9 +16,14 @@ import { isAfter } from 'src/utils/dateUtils';
 interface ObservationSubzoneSelectorProps {
   onChangeSelectedSubzones: (requestedSubzoneIds: number[]) => void;
   plantingSite: PlantingSiteWithReportedPlants;
+  selectAll: boolean;
 }
 
-const ObservationSubzoneSelector = ({ onChangeSelectedSubzones, plantingSite }: ObservationSubzoneSelectorProps) => {
+const ObservationSubzoneSelector = ({
+  onChangeSelectedSubzones,
+  plantingSite,
+  selectAll,
+}: ObservationSubzoneSelectorProps) => {
   const theme = useTheme();
 
   const [selectedSubzones, setSelectedSubzones] = useState(new Map<number, boolean>());
@@ -73,14 +81,14 @@ const ObservationSubzoneSelector = ({ onChangeSelectedSubzones, plantingSite }: 
   );
 
   useEffect(() => {
-    // Initialize all subzone selections with subzoneId -> false unless they have totalPlants > 0
+    // Initialize all subzone selections
     const initialSelectedSubzones = new Map(
       plantingSite.plantingZones?.flatMap((zone) =>
-        zone.plantingSubzones.map((subzone) => [subzone.id, (subzone.totalPlants || 0) > 0])
+        zone.plantingSubzones.map((subzone) => [subzone.id, selectAll ? true : false])
       )
     );
     handleOnChangeSelectedSubzones(initialSelectedSubzones);
-  }, [plantingSite]);
+  }, [plantingSite, selectAll]);
 
   const handleOnChangeSelectedSubzones = (nextSelectedSubzones: Map<number, boolean>) => {
     setSelectedSubzones(nextSelectedSubzones);
@@ -144,7 +152,25 @@ const ObservationSubzoneSelector = ({ onChangeSelectedSubzones, plantingSite }: 
                 ? strings.formatString(strings.LAST_OBSERVATION, lastZoneOb.startDate || '')
                 : strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED}
             </Typography>
-
+            {(!lastZoneOb || isAfter(zone.boundaryModifiedTime, lastZoneOb.startDate)) && (
+              <Box display='flex' alignItems='center' marginTop={2} marginBottom={1}>
+                <Icon name='warning' fillColor={theme.palette.TwClrTxtSecondary} size='medium' />
+                <Typography color={theme.palette.TwClrTxtSecondary} paddingLeft={1} paddingRight={1}>
+                  {strings.formatString(
+                    strings.ZONE_GEOMETRY_CHANGED,
+                    zone.name,
+                    DateTime.fromISO(zone.boundaryModifiedTime).toFormat('yyyy-MM-dd')
+                  )}
+                </Typography>
+                <Link
+                  target='_blank'
+                  fontSize={'16px'}
+                  to={APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSite.id.toString())}
+                >
+                  {strings.VIEW_MAP}
+                </Link>
+              </Box>
+            )}
             <Box sx={{ columnGap: theme.spacing(3), paddingLeft: `${theme.spacing(4)}` }}>
               {zone.plantingSubzones.map((subzone, _index) => {
                 const lastSubzoneOb = lastSubZoneObservation(zone.id, subzone.id);
@@ -152,7 +178,7 @@ const ObservationSubzoneSelector = ({ onChangeSelectedSubzones, plantingSite }: 
                   <Box sx={{ display: 'inline-block', width: '100%' }} key={_index}>
                     <Checkbox
                       id={`observation-subzone-${zone.id}`}
-                      label={subzone.totalPlants ? subzone.name : <Box>⚠️ {subzone.name}</Box>}
+                      label={subzone.name}
                       name='Limit Observation to Subzone'
                       onChange={(value) => onChangeSubzoneCheckbox(subzone.id, value)}
                       value={selectedSubzones.get(subzone.id)}
@@ -179,9 +205,6 @@ const ObservationSubzoneSelector = ({ onChangeSelectedSubzones, plantingSite }: 
           </Grid>
         );
       })}
-      <Grid item xs={12}>
-        <Box>⚠️: {strings.NO_PLANTS}</Box>
-      </Grid>
     </Grid>
   );
 };

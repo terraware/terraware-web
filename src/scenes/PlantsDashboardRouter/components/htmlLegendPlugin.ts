@@ -60,11 +60,16 @@ export const htmlLegendPlugin = {
           boxSpan.style.marginRight = '10px';
           boxSpan.style.width = '30px';
         } else {
-          boxSpan.style.background = '#B8A0D64D';
+          boxSpan.style.background =
+            item.text === strings.STANDARD_DEVIATION ? '#B8A0D64D' : item.fillStyle?.toString() || '';
           boxSpan.style.display = 'inline-block';
           boxSpan.style.height = '12px';
           boxSpan.style.marginRight = '10px';
           boxSpan.style.width = '40px';
+        }
+
+        if (item.text === strings.TARGET_DENSITY) {
+          boxSpan.style.height = '1px';
         }
 
         // Text

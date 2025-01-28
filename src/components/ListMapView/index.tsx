@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 
@@ -29,6 +29,10 @@ export default function ListMapView({ search, list, map, onView, style, initialV
       onView(nextView);
     }
   };
+
+  useEffect(() => {
+    updateView(initialView);
+  }, [initialView]);
 
   return (
     <Card

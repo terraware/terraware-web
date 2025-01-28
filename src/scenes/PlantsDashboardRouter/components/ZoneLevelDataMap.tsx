@@ -300,7 +300,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     >
       {newPlantsDashboardEnabled ? (
         <Typography fontSize='20px' fontWeight={600}>
-          {strings.formatString(strings.X_HA_TOTAL_IN_PLANTING_SITE, plantingSite?.areaHa?.toString() || '')}{' '}
+          {strings.formatString(strings.X_HA_IN_TOTAL_PLANTING_AREA, plantingSite?.areaHa?.toString() || '')}{' '}
         </Typography>
       ) : (
         <Typography fontSize='16px' fontWeight={600}>
