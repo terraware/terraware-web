@@ -114,7 +114,7 @@ const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Elemen
             return;
           }
 
-          return fieldValues[filterName].values.map(
+          return fieldValues[filterName]?.values.map(
             (value): Option => ({
               label: getStatus(value as ObservationState),
               value,
