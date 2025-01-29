@@ -28,7 +28,7 @@ type MapLegendProps = {
 
 export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.Element {
   const theme = useTheme();
-  const { isMobile } = useDeviceInfo();
+  const { isMobile, isDesktop } = useDeviceInfo();
   const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
 
   const separatorStyles = {
@@ -46,6 +46,7 @@ export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.
       border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
       borderRadius='8px'
       padding={theme.spacing(2)}
+      flexDirection={isMobile ? 'column' : 'row'}
     >
       {legends.map((legend) => (
         <Fragment key={legend.title}>
@@ -55,6 +56,7 @@ export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.
             padding={2}
             borderRadius={1}
             marginRight={2}
+            flexDirection={isDesktop ? 'row' : 'column'}
           >
             {legend.switch && (
               <Box>
