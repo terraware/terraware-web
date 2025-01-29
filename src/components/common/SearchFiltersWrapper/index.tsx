@@ -96,6 +96,14 @@ export default function SearchFiltersWrapper({
             let pillValue: string | undefined = filtersProps.filters[key]?.values.join(', ');
             let label = filtersProps.filterColumns.find((f) => key === f.name)?.label ?? '';
 
+            // If the filter has an option renderer, use the label as pill value
+            if (filtersProps.optionsRenderer !== undefined) {
+              const options = filtersProps.optionsRenderer(key, filtersProps.filters[key]?.values ?? []);
+              if (options) {
+                pillValue = options.map((option) => option.label).join(', ');
+              }
+            }
+
             // If the filter is coming from a featured filter, the pill value and label will come from featuredFilters
             if (featuredFilters) {
               const featuredFilter = featuredFilters.find((ff) => ff.field === key);
