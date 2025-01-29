@@ -55,7 +55,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
         },
         status: {
           partial: false,
-          values: [strings.ABANDONED, strings.COMPLETED, strings.IN_PROGRESS, strings.OVERDUE],
+          values: [strings.COMPLETED_ENDED, strings.COMPLETED, strings.IN_PROGRESS, strings.OVERDUE],
         },
       });
     }
@@ -71,7 +71,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
         mappedValue = 'InProgress';
       } else if (curr === strings.OVERDUE) {
         mappedValue = 'Overdue';
-      } else if (curr === strings.ABANDONED) {
+      } else if (curr === strings.COMPLETED_ENDED) {
         mappedValue = 'Abandoned';
       }
       return mappedValue ? [...acc, mappedValue] : acc;
