@@ -1076,7 +1076,7 @@ OBSERVATIONS_REQUIRED_BY_DATE,{0} monitoring plots require observation by {1}.,"
 OBSERVATIONS_WITH_THE_TERRAWARE_APP,Observations with the Terraware App,
 OBSERVED_DENSITY,Observed Density,
 OBSERVED_DENSITY_PER_ZONE,Observed Density Per Zone,
-OBSERVED_DENSITY_TOOLTIP,Observed density is based on the number of plants observed within all of the zones that are marked as “Planting Complete” and have been observed at least once.,
+OBSERVED_DENSITY_TOOLTIP,Observed density is based on the number of plants observed within all of the zones that have been observed at least once.,
 OBSERVED_PLANTS,Observed Plants,
 OBSERVED_PLANTS_CARD_DESCRIPTION_1,This is the total number of species found in your latest observations.,
 OBSERVED_PLANTS_CARD_DESCRIPTION_2,"You have reported planting {0} species total. The difference in these numbers may be because not all the species you planted were found in the monitoring plots, or because you have planted more species since your last observations.",
