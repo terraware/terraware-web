@@ -407,7 +407,7 @@ export default function PlantsDashboardView(): JSX.Element {
         <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
           {(!hasObservations || newPlantsDashboardEnabled) && renderTotalPlantsAndSpecies()}
           {newPlantsDashboardEnabled && hasObservations && renderMortalityRate()}
-          {newPlantsDashboardEnabled && renderPlantingProgressAndDensity()}
+          {newPlantsDashboardEnabled && hasObservations && renderPlantingProgressAndDensity()}
 
           {hasReportedPlants && !newPlantsDashboardEnabled && (
             <>
