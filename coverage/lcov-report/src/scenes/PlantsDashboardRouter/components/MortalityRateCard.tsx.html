@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
@@ -154,7 +154,12 @@
 <a name='L89'></a><a href='#L89'>89</a>
 <a name='L90'></a><a href='#L90'>90</a>
 <a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -167,19 +172,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -188,6 +180,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -247,6 +257,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 &nbsp;
 import Card from 'src/components/common/Card';
 import FormattedNumber from 'src/components/common/FormattedNumber';
@@ -269,6 +280,7 @@ export default function <span class="fstat-no" title="function not covered" >Mor
   const observation = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)</span>
   );
+  const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
 &nbsp;
   const separatorStyles = <span class="cstat-no" title="statement not covered" >{</span>
     width: '1px',
@@ -279,7 +291,10 @@ export default function <span class="fstat-no" title="function not covered" >Mor
   };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Card radius='8px' style={{ display: 'flex', 'justify-content': 'space-between' }}&gt;
+    &lt;Card
+      radius='8px'
+      style={{ display: 'flex', 'justify-content': 'space-between', flexDirection: isDesktop ? 'row' : 'column' }}
+    &gt;
       &lt;Box flexBasis='100%'&gt;
         &lt;Box display={'flex'} alignItems={'center'}&gt;
           &lt;Typography fontSize={'20px'} fontWeight={600} marginRight={1}&gt;
@@ -301,7 +316,7 @@ export default function <span class="fstat-no" title="function not covered" >Mor
         &lt;/Box&gt;
       &lt;/Box&gt;
       &lt;div style={separatorStyles} /&gt;
-      &lt;Box flexBasis='100%'&gt;
+      &lt;Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}&gt;
         &lt;Box display={'flex'} alignItems={'center'}&gt;
           &lt;Typography fontSize={'20px'} fontWeight={600} marginRight={1}&gt;
             {strings.ZONE_MORTALITY}
@@ -312,7 +327,7 @@ export default function <span class="fstat-no" title="function not covered" >Mor
         &lt;/Box&gt;
       &lt;/Box&gt;
       &lt;div style={separatorStyles} /&gt;
-      &lt;Box flexBasis='100%'&gt;
+      &lt;Box flexBasis='100%' marginTop={isDesktop ? 0 : 6}&gt;
         &lt;Box display={'flex'} alignItems={'center'}&gt;
           &lt;Typography fontSize={'20px'} fontWeight={600} marginRight={1}&gt;
             {strings.SPECIES_MORTALITY}
@@ -323,7 +338,7 @@ export default function <span class="fstat-no" title="function not covered" >Mor
         &lt;/Box&gt;
       &lt;/Box&gt;
       &lt;div style={separatorStyles} /&gt;
-      &lt;Box flexBasis='100%'&gt;
+      &lt;Box flexBasis='100%' marginTop={isDesktop ? 0 : 6}&gt;
         &lt;Box display={'flex'} alignItems={'center'}&gt;
           &lt;Typography fontSize={'20px'} fontWeight={600} marginRight={1}&gt;
             {strings.MORTALITY_BREAKDOWN}
@@ -343,7 +358,7 @@ export default function <span class="fstat-no" title="function not covered" >Mor
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-01-29T19:44:47.203Z
+                at 2025-01-29T20:38:07.867Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
