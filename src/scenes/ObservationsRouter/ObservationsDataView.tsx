@@ -55,7 +55,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
         },
         status: {
           partial: false,
-          values: [strings.COMPLETED, strings.IN_PROGRESS, strings.OVERDUE],
+          values: [strings.ABANDONED, strings.COMPLETED, strings.IN_PROGRESS, strings.OVERDUE],
         },
       });
     }
