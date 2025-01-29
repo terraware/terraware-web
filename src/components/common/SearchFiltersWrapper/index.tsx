@@ -68,6 +68,7 @@ export type SearchFiltersProps = {
   filterColumns: FilterField[];
   optionsRenderer?: (filterName: string, values: FieldValuesPayload) => Option[] | undefined;
   noScroll?: boolean;
+  pillValuesRenderer?: (filterName: string, values: unknown[]) => string | undefined;
 };
 
 export type SearchProps = SearchInputProps & {
@@ -93,14 +94,15 @@ export default function SearchFiltersWrapper({
               filtersProps.setFilters(result);
             };
 
-            let pillValue: string | undefined = filtersProps.filters[key]?.values.join(', ');
+            const values = filtersProps.filters[key]?.values ?? [];
+            let pillValue: string | undefined = values.join(', ');
             let label = filtersProps.filterColumns.find((f) => key === f.name)?.label ?? '';
 
-            // If the filter has an option renderer, use the label as pill value
-            if (filtersProps.optionsRenderer !== undefined) {
-              const options = filtersProps.optionsRenderer(key, filtersProps.filters[key]?.values ?? []);
-              if (options) {
-                pillValue = options.map((option) => option.label).join(', ');
+            // If the filter props provide a pillValuesRenderer, use that instead.
+            if (filtersProps.pillValuesRenderer) {
+              const renderedValue = filtersProps.pillValuesRenderer(key, values);
+              if (renderedValue) {
+                pillValue = renderedValue;
               }
             }
 
@@ -108,7 +110,7 @@ export default function SearchFiltersWrapper({
             if (featuredFilters) {
               const featuredFilter = featuredFilters.find((ff) => ff.field === key);
               if (featuredFilter) {
-                pillValue = featuredFilter.pillValuesRenderer(filtersProps.filters[key].values);
+                pillValue = featuredFilter.pillValuesRenderer(values);
                 label = featuredFilter.label;
               }
             }
