@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1738100193921" clover="3.2.0">
-  <project timestamp="1738100193921" name="All files">
-    <metrics statements="27202" coveredstatements="1211" conditionals="18464" coveredconditionals="345" methods="8360" coveredmethods="197" elements="54026" coveredelements="1753" complexity="0" loc="27202" ncloc="27202" packages="240" files="1138" classes="1138"/>
+<coverage generated="1738179887808" clover="3.2.0">
+  <project timestamp="1738179887808" name="All files">
+    <metrics statements="27202" coveredstatements="1211" conditionals="18465" coveredconditionals="345" methods="8360" coveredmethods="197" elements="54027" coveredelements="1753" complexity="0" loc="27202" ncloc="27202" packages="240" files="1138" classes="1138"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -25861,9 +25861,9 @@
       </file>
     </package>
     <package name="src.scenes.PlantsDashboardRouter">
-      <metrics statements="76" coveredstatements="0" conditionals="124" coveredconditionals="0" methods="35" coveredmethods="0"/>
+      <metrics statements="76" coveredstatements="0" conditionals="125" coveredconditionals="0" methods="35" coveredmethods="0"/>
       <file name="PlantsDashboardView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/PlantsDashboardView.tsx">
-        <metrics statements="74" coveredstatements="0" conditionals="124" coveredconditionals="0" methods="34" coveredmethods="0"/>
+        <metrics statements="74" coveredstatements="0" conditionals="125" coveredconditionals="0" methods="34" coveredmethods="0"/>
         <line num="55" count="0" type="stmt"/>
         <line num="56" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
