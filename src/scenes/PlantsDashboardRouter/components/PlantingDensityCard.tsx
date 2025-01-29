@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 
 import React, { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
@@ -22,6 +23,7 @@ type PlantingDensityCardProps = {
 
 export default function PlantingDensityCard({ plantingSiteId }: PlantingDensityCardProps): JSX.Element {
   const theme = useTheme();
+  const { isDesktop } = useDeviceInfo();
 
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
 
@@ -44,7 +46,10 @@ export default function PlantingDensityCard({ plantingSiteId }: PlantingDensityC
   };
 
   return (
-    <Card radius='8px' style={{ display: 'flex', 'justify-content': 'space-between' }}>
+    <Card
+      radius='8px'
+      style={{ display: 'flex', 'justify-content': 'space-between', flexDirection: isDesktop ? 'row' : 'column' }}
+    >
       <Box flexBasis='100%'>
         <Box display={'flex'} alignItems={'center'}>
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
@@ -85,7 +90,7 @@ export default function PlantingDensityCard({ plantingSiteId }: PlantingDensityC
         </Box>
       </Box>
       <div style={separatorStyles} />
-      <Box flexBasis='100%'>
+      <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
         <Box display={'flex'} alignItems={'center'}>
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
             {strings.OBSERVED_DENSITY}
@@ -101,7 +106,7 @@ export default function PlantingDensityCard({ plantingSiteId }: PlantingDensityC
         </Box>
       </Box>
       <div style={separatorStyles} />
-      <Box flexBasis='100%'>
+      <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
         <Box display={'flex'} alignItems={'center'}>
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
             {strings.OBSERVED_DENSITY_PER_ZONE}

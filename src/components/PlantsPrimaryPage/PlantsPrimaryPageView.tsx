@@ -42,7 +42,7 @@ export default function PlantsPrimaryPageView({
   newHeader,
 }: PlantsPrimaryPageViewProps): JSX.Element {
   const theme = useTheme();
-  const { isMobile } = useDeviceInfo();
+  const { isMobile, isDesktop } = useDeviceInfo();
   const contentRef = useRef(null);
 
   const onChangePlantingSite = (selectedSite: DropdownItem) => {
@@ -77,7 +77,7 @@ export default function PlantsPrimaryPageView({
       {newHeader && plantingSites.length > 0 ? (
         <Card radius={'8px'} style={{ 'margin-bottom': '32px' }}>
           <Grid container alignItems={'center'} spacing={4}>
-            <Grid item xs={4}>
+            <Grid item xs={isDesktop ? 4 : 12}>
               <PopoverMenu
                 anchor={
                   <p style={{ fontSize: '24px', fontWeight: 600, color: theme.palette.TwClrTxt }}>
@@ -93,7 +93,7 @@ export default function PlantsPrimaryPageView({
                 onClick={onChangePlantingSite}
               />
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={isDesktop ? 2 : 12}>
               <Box>
                 <Typography fontWeight={600}>{strings.TOTAL_PLANTING_AREA}</Typography>
                 <Typography fontSize='28px' fontWeight={600}>
@@ -104,7 +104,7 @@ export default function PlantsPrimaryPageView({
                 </Typography>
               </Box>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={isDesktop ? 6 : 12}>
               <Typography fontSize='16px' marginTop={theme.spacing(1)}>
                 {text}
               </Typography>

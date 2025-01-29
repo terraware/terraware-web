@@ -107,7 +107,13 @@ export default function PlantsDashboardView(): JSX.Element {
     newPlantsDashboardEnabled ? (
       <>
         <Grid item xs={12}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: isMobile ? 'flex-start' : 'center',
+              flexDirection: isMobile ? 'column' : 'row',
+            }}
+          >
             <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
               {strings.MORTALITY_RATE}
             </Typography>
@@ -142,7 +148,13 @@ export default function PlantsDashboardView(): JSX.Element {
     newPlantsDashboardEnabled ? (
       <>
         <Grid item xs={12}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: isMobile ? 'flex-start' : 'center',
+              flexDirection: isMobile ? 'column' : 'row',
+            }}
+          >
             <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
               {strings.PLANTS_AND_SPECIES_STATISTICS}
             </Typography>
@@ -211,7 +223,13 @@ export default function PlantsDashboardView(): JSX.Element {
     newPlantsDashboardEnabled ? (
       <>
         <Grid item xs={12}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: isMobile ? 'flex-start' : 'center',
+              flexDirection: isMobile ? 'column' : 'row',
+            }}
+          >
             <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
               {strings.PLANTING_DENSITY}
             </Typography>
@@ -299,7 +317,13 @@ export default function PlantsDashboardView(): JSX.Element {
     <>
       {newPlantsDashboardEnabled ? (
         <Grid item xs={12}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: isMobile ? 'flex-start' : 'center',
+              flexDirection: isMobile ? 'column' : 'row',
+            }}
+          >
             <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
               {strings.PLANTING_SITE_PROGRESS}
             </Typography>
