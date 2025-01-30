@@ -19,9 +19,13 @@ import PlantingSiteDensityCard from './PlantingSiteDensityCard';
 type PlantingDensityCardProps = {
   plantingSiteId: number;
   sitePlantingComplete: boolean;
+  hasObservations: boolean;
 };
 
-export default function PlantingDensityCard({ plantingSiteId }: PlantingDensityCardProps): JSX.Element {
+export default function PlantingDensityCard({
+  plantingSiteId,
+  hasObservations,
+}: PlantingDensityCardProps): JSX.Element {
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
 
@@ -90,22 +94,26 @@ export default function PlantingDensityCard({ plantingSiteId }: PlantingDensityC
         </Box>
       </Box>
       <div style={separatorStyles} />
-      <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
-        <Box display={'flex'} alignItems={'center'}>
-          <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-            {strings.OBSERVED_DENSITY}
-          </Typography>
-          <Tooltip title={strings.OBSERVED_DENSITY_TOOLTIP}>
-            <Box display='flex'>
-              <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+      {hasObservations && (
+        <>
+          <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
+            <Box display={'flex'} alignItems={'center'}>
+              <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
+                {strings.OBSERVED_DENSITY}
+              </Typography>
+              <Tooltip title={strings.OBSERVED_DENSITY_TOOLTIP}>
+                <Box display='flex'>
+                  <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+                </Box>
+              </Tooltip>
             </Box>
-          </Tooltip>
-        </Box>
-        <Box paddingTop={2}>
-          <PlantingSiteDensityCard plantingSiteId={plantingSiteId} />
-        </Box>
-      </Box>
-      <div style={separatorStyles} />
+            <Box paddingTop={2}>
+              <PlantingSiteDensityCard plantingSiteId={plantingSiteId} />
+            </Box>
+          </Box>
+          <div style={separatorStyles} />
+        </>
+      )}
       <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
         <Box display={'flex'} alignItems={'center'}>
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
