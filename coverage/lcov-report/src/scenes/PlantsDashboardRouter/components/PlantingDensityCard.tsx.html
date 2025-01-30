@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -189,7 +189,15 @@
 <a name='L124'></a><a href='#L124'>124</a>
 <a name='L125'></a><a href='#L125'>125</a>
 <a name='L126'></a><a href='#L126'>126</a>
-<a name='L127'></a><a href='#L127'>127</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -210,25 +218,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -237,6 +226,33 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -336,9 +352,13 @@ import PlantingSiteDensityCard from './PlantingSiteDensityCard';
 type PlantingDensityCardProps = {
   plantingSiteId: number;
   sitePlantingComplete: boolean;
+  hasObservations: boolean;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >PlantingDensityCard(</span>{ plantingSiteId }: PlantingDensityCardProps): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >PlantingDensityCard(</span>{
+  plantingSiteId,
+  hasObservations,
+}: PlantingDensityCardProps): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
 &nbsp;
@@ -407,22 +427,26 @@ export default function <span class="fstat-no" title="function not covered" >Pla
         &lt;/Box&gt;
       &lt;/Box&gt;
       &lt;div style={separatorStyles} /&gt;
-      &lt;Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}&gt;
-        &lt;Box display={'flex'} alignItems={'center'}&gt;
-          &lt;Typography fontSize={'20px'} fontWeight={600} marginRight={1}&gt;
-            {strings.OBSERVED_DENSITY}
-          &lt;/Typography&gt;
-          &lt;Tooltip title={strings.OBSERVED_DENSITY_TOOLTIP}&gt;
-            &lt;Box display='flex'&gt;
-              &lt;Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' /&gt;
+      {hasObservations &amp;&amp; (
+        &lt;&gt;
+          &lt;Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}&gt;
+            &lt;Box display={'flex'} alignItems={'center'}&gt;
+              &lt;Typography fontSize={'20px'} fontWeight={600} marginRight={1}&gt;
+                {strings.OBSERVED_DENSITY}
+              &lt;/Typography&gt;
+              &lt;Tooltip title={strings.OBSERVED_DENSITY_TOOLTIP}&gt;
+                &lt;Box display='flex'&gt;
+                  &lt;Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' /&gt;
+                &lt;/Box&gt;
+              &lt;/Tooltip&gt;
             &lt;/Box&gt;
-          &lt;/Tooltip&gt;
-        &lt;/Box&gt;
-        &lt;Box paddingTop={2}&gt;
-          &lt;PlantingSiteDensityCard plantingSiteId={plantingSiteId} /&gt;
-        &lt;/Box&gt;
-      &lt;/Box&gt;
-      &lt;div style={separatorStyles} /&gt;
+            &lt;Box paddingTop={2}&gt;
+              &lt;PlantingSiteDensityCard plantingSiteId={plantingSiteId} /&gt;
+            &lt;/Box&gt;
+          &lt;/Box&gt;
+          &lt;div style={separatorStyles} /&gt;
+        &lt;/&gt;
+      )}
       &lt;Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}&gt;
         &lt;Box display={'flex'} alignItems={'center'}&gt;
           &lt;Typography fontSize={'20px'} fontWeight={600} marginRight={1}&gt;
@@ -448,7 +472,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-01-30T12:56:08.096Z
+                at 2025-01-30T18:52:26.042Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
