@@ -137,7 +137,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
           },
         ],
         switch: newPlantsDashboardEnabled,
-        isDisabled: !observation,
+        disabled: !observation,
         checked: true,
       });
 
@@ -154,7 +154,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
             },
           ],
           switch: true,
-          isDisabled: !observation,
+          disabled: !observation,
           checked: true,
         });
       }

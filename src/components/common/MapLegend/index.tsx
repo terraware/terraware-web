@@ -22,7 +22,7 @@ export type MapLegendGroup = {
   // is the legend turned on
   checked?: boolean;
   // the legend is disabled (can't be turned on/off)
-  isDisabled?: boolean;
+  disabled?: boolean;
 };
 
 type MapLegendProps = {
@@ -52,7 +52,7 @@ export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.
       padding={theme.spacing(2)}
     >
       {legends.map((legend) => (
-        <Box key={legend.title} sx={{ opacity: legend.isDisabled ? 0.7 : 1 }}>
+        <Box key={legend.title} sx={{ opacity: legend.disabled ? 0.7 : 1 }}>
           <Box
             border={legend.switch ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : 'none'}
             display='flex'
@@ -63,8 +63,8 @@ export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.
             {legend.switch && (
               <Box>
                 <Switch
-                  disabled={legend.isDisabled}
-                  checked={!legend.isDisabled && legend.checked}
+                  disabled={legend.disabled}
+                  checked={!legend.disabled && legend.checked}
                   onChange={(event, isChecked) => {
                     if (setLegends) {
                       setLegends((prev) => {
@@ -113,7 +113,7 @@ export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.
       rowGap={theme.spacing(3)}
     >
       {legends.map((legend) => (
-        <Grid container key={legend.title} spacing={2} columns={8} sx={{ opacity: legend.isDisabled ? 0.7 : 1 }}>
+        <Grid container key={legend.title} spacing={2} columns={8} sx={{ opacity: legend.disabled ? 0.7 : 1 }}>
           <Grid item xs={isMobile ? 8 : 1}>
             <Typography
               fontSize='14px'
