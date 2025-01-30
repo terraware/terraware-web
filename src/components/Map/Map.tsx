@@ -110,19 +110,22 @@ export default function Map(props: MapProps): JSX.Element {
     setFirstVisible((fv) => fv || visible);
   }, [visible]);
 
-  const loadImages = (map: MapRef) => {
-    mapImages?.forEach(({ name, url }) => {
-      if (!map.hasImage(name)) {
-        map.loadImage(url, (error, image) => {
-          if (error || !image) {
-            snackbar.toastError(error?.message ?? 'Error loading map image.');
-          } else {
-            map.addImage(name, image, { sdf: true });
-          }
-        });
-      }
-    });
-  };
+  const loadImages = useCallback(
+    (map: MapRef) => {
+      mapImages?.forEach(({ name, url }) => {
+        if (!map.hasImage(name)) {
+          map.loadImage(url, (error, image) => {
+            if (error || !image) {
+              snackbar.toastError(error?.message ?? 'Error loading map image.');
+            } else {
+              map.addImage(name, image, { sdf: true });
+            }
+          });
+        }
+      });
+    },
+    [mapImages, snackbar]
+  );
 
   const mapRefCb = useCallback(
     (map: MapRef | null) => {
