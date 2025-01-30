@@ -116,8 +116,9 @@ export default function Map(props: MapProps): JSX.Element {
         map.loadImage(url, (error, image) => {
           if (error || !image) {
             snackbar.toastError(error?.message ?? 'Error loading map image.');
+          } else {
+            map.addImage(name, image, { sdf: true });
           }
-          map.addImage(name, image!, { sdf: true });
         });
       }
     });
