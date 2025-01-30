@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/83</span>
+                <span class='fraction'>0/84</span>
             </div>
         
             
@@ -416,7 +416,9 @@
 <a name='L351'></a><a href='#L351'>351</a>
 <a name='L352'></a><a href='#L352'>352</a>
 <a name='L353'></a><a href='#L353'>353</a>
-<a name='L354'></a><a href='#L354'>354</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L354'></a><a href='#L354'>354</a>
+<a name='L355'></a><a href='#L355'>355</a>
+<a name='L356'></a><a href='#L356'>356</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -557,8 +559,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -573,6 +578,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -737,8 +743,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -872,7 +876,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
         ],
       },
     ];
-<span class="cstat-no" title="statement not covered" >    if (observation) {</span>
+<span class="cstat-no" title="statement not covered" >    if (observation || newPlantsDashboardEnabled) {</span>
 <span class="cstat-no" title="statement not covered" >      result.push({</span>
         title: strings.MORTALITY_RATE,
         items: [
@@ -908,6 +912,8 @@ export default function <span class="fstat-no" title="function not covered" >Zon
           },
         ],
         switch: newPlantsDashboardEnabled,
+        disabled: !observation,
+        checked: true,
       });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (newPlantsDashboardEnabled) {</span>
@@ -923,6 +929,8 @@ export default function <span class="fstat-no" title="function not covered" >Zon
             },
           ],
           switch: true,
+          disabled: !observation,
+          checked: true,
         });
       }
     }
@@ -1089,11 +1097,9 @@ export default function <span class="fstat-no" title="function not covered" >Zon
           mapData={mapData!}
           style={{ borderRadius: newPlantsDashboardEnabled ? '8px' : '24px' }}
           layers={['Planting Site', 'Zones']}
-          showMortalityRateFill={!!observation &amp;&amp; !legends.find(<span class="fstat-no" title="function not covered" >(l</span>) =&gt; <span class="cstat-no" title="statement not covered" >l.title === strings.MORTALITY_RATE)</span>?.disabled}
+          showMortalityRateFill={!!observation &amp;&amp; legends.find(<span class="fstat-no" title="function not covered" >(l</span>) =&gt; <span class="cstat-no" title="statement not covered" >l.title === strings.MORTALITY_RATE)</span>?.checked}
           showRecencyFill={
-            newPlantsDashboardEnabled &amp;&amp;
-            !!observation &amp;&amp;
-            !legends.find(<span class="fstat-no" title="function not covered" >(l</span>) =&gt; <span class="cstat-no" title="statement not covered" >l.title === strings.OBSERVATION_RECENCY)</span>?.disabled
+            newPlantsDashboardEnabled &amp;&amp; legends.find(<span class="fstat-no" title="function not covered" >(l</span>) =&gt; <span class="cstat-no" title="statement not covered" >l.title === strings.OBSERVATION_RECENCY)</span>?.checked
           }
           focusEntities={focusEntities}
           contextRenderer={{
@@ -1129,7 +1135,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-01-30T12:44:29.790Z
+                at 2025-01-30T12:56:08.096Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
