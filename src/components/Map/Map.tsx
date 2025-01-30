@@ -99,6 +99,7 @@ export default function Map(props: MapProps): JSX.Element {
   const [firstVisible, setFirstVisible] = useState<boolean>(false);
   const [resized, setResized] = useState<boolean>(false);
   const [mapViewStyle, onChangeMapViewStyle] = useMapViewStyle();
+  const [reloadSources, setReloadSources] = useState(false);
   const visible = useIsVisible(containerRef);
   const snackbar = useSnackbar();
 
@@ -109,6 +110,19 @@ export default function Map(props: MapProps): JSX.Element {
     setFirstVisible((fv) => fv || visible);
   }, [visible]);
 
+  const loadImages = (map: MapRef) => {
+    mapImages?.forEach(({ name, url }) => {
+      if (!map.hasImage(name)) {
+        map.loadImage(url, (error, image) => {
+          if (error || !image) {
+            snackbar.toastError(error?.message ?? 'Error loading map image.');
+          }
+          map.addImage(name, image!, { sdf: true });
+        });
+      }
+    });
+  };
+
   const mapRefCb = useCallback(
     (map: MapRef | null) => {
       if (map !== null) {
@@ -117,16 +131,7 @@ export default function Map(props: MapProps): JSX.Element {
         // Load all needed map images here
         // It is done in the callbackRef to ensure the images are available quickly enough for the map layers to use
         // See https://github.com/visgl/react-map-gl/issues/1118#issuecomment-1139976172
-        mapImages?.forEach(({ name, url }) => {
-          if (!map.hasImage(name)) {
-            map.loadImage(url, (error, image) => {
-              if (error || !image) {
-                snackbar.toastError(error?.message ?? 'Error loading map image.');
-              }
-              map.addImage(name, image!, { sdf: true });
-            });
-          }
-        });
+        loadImages(map);
       }
     },
     [mapImages, snackbar]
@@ -352,6 +357,9 @@ export default function Map(props: MapProps): JSX.Element {
   }, [options, setGeoData, token, popupRenderer]);
 
   const mapSources = useMemo(() => {
+    if (mapImages && mapRef.current !== null && !mapRef.current?.hasImage(mapImages[0].name)) {
+      loadImages(mapRef.current);
+    }
     if (!geoData) {
       return null;
     }
@@ -365,7 +373,7 @@ export default function Map(props: MapProps): JSX.Element {
     ));
 
     return sources;
-  }, [geoData]);
+  }, [geoData, reloadSources]);
 
   useEffect(() => {
     if (entityOptions?.highlight) {
@@ -403,6 +411,10 @@ export default function Map(props: MapProps): JSX.Element {
   // keep track of map being destroyed, this is not bound by react event loop
   let destroying = false;
 
+  const onStyleDataHandler = () => {
+    setReloadSources(!reloadSources);
+  };
+
   return (
     <Box
       ref={containerRef}
@@ -427,6 +439,7 @@ export default function Map(props: MapProps): JSX.Element {
           onError={onMapError}
           onClick={onMapClick}
           style={style}
+          onStyleData={onStyleDataHandler}
           attributionControl={false}
           onLoad={onLoad}
           onRemove={() => {
