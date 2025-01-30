@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { Icon, Tooltip } from '@terraware/web-components';
 
 import BarChart from 'src/components/common/Chart/BarChart';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
@@ -185,9 +186,16 @@ const ChartData = ({ labels, values, totalSpecies, newVersion }: ChartDataProps)
 
   return newVersion ? (
     <Box marginRight={2}>
-      <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-        {strings.formatString(strings.SPECIES_CATEGORIES_NUMBER, totalSpecies?.toString() || '')}
-      </Typography>
+      <Box display={'flex'} alignItems={'center'}>
+        <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
+          {strings.SPECIES_CATEGORIES}
+        </Typography>
+        <Tooltip title={strings.SPECIES_CATEGORIES_TOOLTIP}>
+          <Box display='flex'>
+            <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+          </Box>
+        </Tooltip>
+      </Box>
 
       <Box height={'220px'} marginTop={6}>
         <BarChart
