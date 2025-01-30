@@ -239,7 +239,11 @@ export default function PlantsDashboardView(): JSX.Element {
           </Box>
         </Grid>
         <Grid item xs={12}>
-          <PlantingDensityCard plantingSiteId={selectedPlantingSiteId} sitePlantingComplete={sitePlantingComplete} />
+          <PlantingDensityCard
+            plantingSiteId={selectedPlantingSiteId}
+            sitePlantingComplete={sitePlantingComplete}
+            hasObservations={hasObservations}
+          />
         </Grid>
       </>
     ) : (
@@ -431,7 +435,7 @@ export default function PlantsDashboardView(): JSX.Element {
         <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
           {(!hasObservations || newPlantsDashboardEnabled) && renderTotalPlantsAndSpecies()}
           {newPlantsDashboardEnabled && hasObservations && renderMortalityRate()}
-          {newPlantsDashboardEnabled && hasObservations && renderPlantingProgressAndDensity()}
+          {newPlantsDashboardEnabled && renderPlantingProgressAndDensity()}
 
           {hasReportedPlants && !newPlantsDashboardEnabled && (
             <>
