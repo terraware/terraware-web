@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -219,7 +219,18 @@
 <a name='L154'></a><a href='#L154'>154</a>
 <a name='L155'></a><a href='#L155'>155</a>
 <a name='L156'></a><a href='#L156'>156</a>
-<a name='L157'></a><a href='#L157'>157</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -316,6 +327,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -445,6 +465,7 @@ export type SearchFiltersProps = {
   filterColumns: FilterField[];
   optionsRenderer?: (filterName: string, values: FieldValuesPayload) =&gt; Option[] | undefined;
   noScroll?: boolean;
+  pillValuesRenderer?: (filterName: string, values: unknown[]) =&gt; string | undefined;
 };
 &nbsp;
 export type SearchProps = SearchInputProps &amp; {
@@ -470,14 +491,23 @@ export default function <span class="fstat-no" title="function not covered" >Sea
 <span class="cstat-no" title="statement not covered" >              filtersProps.setFilters(result);</span>
             };
 &nbsp;
-            let pillValue: string | undefined = <span class="cstat-no" title="statement not covered" >filtersProps.filters[key]?.values.join(', ');</span>
+            const values = <span class="cstat-no" title="statement not covered" >filtersProps.filters[key]?.values ?? [];</span>
+            let pillValue: string | undefined = <span class="cstat-no" title="statement not covered" >values.join(', ');</span>
             let label = <span class="cstat-no" title="statement not covered" >filtersProps.filterColumns.find(<span class="fstat-no" title="function not covered" >(f</span>) =&gt; <span class="cstat-no" title="statement not covered" >key === f.name)</span>?.label ?? '';</span>
+&nbsp;
+            // If the filter props provide a pillValuesRenderer, use that instead.
+<span class="cstat-no" title="statement not covered" >            if (filtersProps.pillValuesRenderer) {</span>
+              const renderedValue = <span class="cstat-no" title="statement not covered" >filtersProps.pillValuesRenderer(key, values);</span>
+<span class="cstat-no" title="statement not covered" >              if (renderedValue) {</span>
+<span class="cstat-no" title="statement not covered" >                pillValue = renderedValue;</span>
+              }
+            }
 &nbsp;
             // If the filter is coming from a featured filter, the pill value and label will come from featuredFilters
 <span class="cstat-no" title="statement not covered" >            if (featuredFilters) {</span>
               const featuredFilter = <span class="cstat-no" title="statement not covered" >featuredFilters.find(<span class="fstat-no" title="function not covered" >(f</span>f) =&gt; <span class="cstat-no" title="statement not covered" >ff.field === key)</span>;</span>
 <span class="cstat-no" title="statement not covered" >              if (featuredFilter) {</span>
-<span class="cstat-no" title="statement not covered" >                pillValue = featuredFilter.pillValuesRenderer(filtersProps.filters[key].values);</span>
+<span class="cstat-no" title="statement not covered" >                pillValue = featuredFilter.pillValuesRenderer(values);</span>
 <span class="cstat-no" title="statement not covered" >                label = featuredFilter.label;</span>
               }
             }
@@ -538,7 +568,7 @@ export default function <span class="fstat-no" title="function not covered" >Sea
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-01-30T18:52:26.042Z
+                at 2025-01-30T19:52:08.662Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
