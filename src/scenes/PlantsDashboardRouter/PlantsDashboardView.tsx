@@ -164,7 +164,7 @@ export default function PlantsDashboardView(): JSX.Element {
           </Box>
         </Grid>
         <Grid item xs={12}>
-          <PlantsAndSpeciesCard plantingSiteId={selectedPlantingSiteId} hasObservations={hasObservations} />
+          <PlantsAndSpeciesCard plantingSiteId={selectedPlantingSiteId} hasReportedPlants={hasReportedPlants} />
         </Grid>
       </>
     ) : (
