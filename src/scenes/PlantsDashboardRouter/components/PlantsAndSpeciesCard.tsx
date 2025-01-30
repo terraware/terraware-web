@@ -17,12 +17,12 @@ import PlantsReportedPerSpeciesCard from './PlantsReportedPerSpeciesCard';
 
 type PlantsAndSpeciesCardProps = {
   plantingSiteId: number;
-  hasObservations: boolean;
+  hasReportedPlants: boolean;
 };
 
 export default function PlantsAndSpeciesCard({
   plantingSiteId,
-  hasObservations,
+  hasReportedPlants,
 }: PlantsAndSpeciesCardProps): JSX.Element {
   const siteReportedPlants = useAppSelector((state) => selectSiteReportedPlants(state, plantingSiteId));
   const theme = useTheme();
@@ -79,7 +79,7 @@ export default function PlantsAndSpeciesCard({
         </Box>
       </Box>
       <div style={separatorStyles} />
-      {hasObservations && (
+      {hasReportedPlants && (
         <>
           <Box flexBasis='100%'>
             <PlantsReportedPerSpeciesCard plantingSiteId={plantingSiteId} newVersion />
