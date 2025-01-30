@@ -7,12 +7,17 @@ import ListMapView from 'src/components/ListMapView';
 import { PlantingSiteMap } from 'src/components/Map';
 import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
 import { View } from 'src/components/common/ListMapSelector';
+import MapDateSelect from 'src/components/common/MapDateSelect';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
+import { useOrganization } from 'src/providers';
+import { searchObservations } from 'src/redux/features/observations/observationsSelectors';
+import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
-import { MapEntityId, MapSourceProperties } from 'src/types/Map';
+import { MapEntityId, MapObject, MapSourceBaseData, MapSourceProperties } from 'src/types/Map';
 import { ZoneAggregation } from 'src/types/Observations';
 import { MinimalPlantingSite, MinimalPlantingZone } from 'src/types/Tracking';
 import { regexMatch } from 'src/utils/search';
@@ -24,7 +29,7 @@ import PlantingSiteDetailsTable from './PlantingSiteDetailsTable';
 type BoundariesAndZonesProps = {
   data: ZoneAggregation[];
   plantingSite: MinimalPlantingSite;
-  search: string;
+  search?: string;
   setSearch: (query: string) => void;
   setView?: (view: View) => void;
   view?: View;
@@ -45,7 +50,7 @@ export default function BoundariesAndZones({
 
   const searchProps = useMemo<SearchProps>(
     () => ({
-      search,
+      search: search || '',
       onSearch: (value: string) => setSearch(value),
     }),
     [search, setSearch]
@@ -68,7 +73,7 @@ export default function BoundariesAndZones({
           onView={(newView) => setView?.(newView)}
           search={<Search {...searchProps} />}
           list={<PlantingSiteDetailsTable data={data} plantingSite={plantingSite} zoneViewUrl={zoneViewUrl} />}
-          map={<PlantingSiteMapView plantingSite={plantingSite} data={data} search={search.trim()} />}
+          map={<PlantingSiteMapView plantingSite={plantingSite} data={data} search={search ? search.trim() : ''} />}
         />
       )}
     </Box>
@@ -78,14 +83,62 @@ export default function BoundariesAndZones({
 type PlantingSiteMapViewProps = {
   plantingSite: MinimalPlantingSite;
   data: ZoneAggregation[];
-  search: string;
+  search?: string;
 };
 
 function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapViewProps): JSX.Element | null {
   const [searchZoneEntities, setSearchZoneEntities] = useState<MapEntityId[]>([]);
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site', 'Zones', 'Monitoring Plots']);
+  const [selectedObservationDate, setSelectedObservationDate] = useState<string | undefined>();
   const defaultTimeZone = useDefaultTimeZone();
   const timeZone = plantingSite.timeZone ?? defaultTimeZone.get().id;
+  const { selectedOrganization } = useOrganization();
+  const dispatch = useAppDispatch();
+
+  const status = useMemo(() => {
+    return ['Completed', 'InProgress', 'Overdue', 'Abandoned'];
+  }, []);
+
+  useEffect(() => {
+    dispatch(requestObservationsResults(selectedOrganization.id));
+    dispatch(requestObservations(selectedOrganization.id));
+  }, [dispatch, selectedOrganization.id]);
+
+  const observationsResults = useAppSelector((state) =>
+    searchObservations(state, plantingSite.id, defaultTimeZone.get().id, '', [], status)
+  );
+
+  const observationsDates = useMemo(() => {
+    const uniqueDates = new Set(observationsResults?.map((obs) => obs.completedDate || obs.startDate));
+
+    return Array.from(uniqueDates)
+      ?.filter((time) => time)
+      ?.map((time) => time)
+      ?.sort((a, b) => (Date.parse(a) > Date.parse(b) ? 1 : -1));
+  }, [observationsResults]);
+
+  useEffect(() => {
+    if (observationsDates) {
+      setSelectedObservationDate((currentDate) => {
+        if ((!currentDate || !observationsDates.includes(currentDate)) && observationsDates.length > 0) {
+          return observationsDates[observationsDates.length - 1];
+        } else {
+          return currentDate;
+        }
+      });
+    } else {
+      setSelectedObservationDate('');
+    }
+  }, [observationsDates]);
+
+  const selectedObservation = useMemo(
+    () =>
+      observationsResults?.find((obs) => {
+        const dateToCheck = obs.state === 'Completed' || obs.state === 'Abandoned' ? obs.completedDate : obs.startDate;
+        return dateToCheck === selectedObservationDate;
+      }),
+    [observationsResults, selectedObservationDate]
+  );
 
   const layerOptionLabels: Record<MapLayer, string> = {
     'Planting Site': strings.PLANTING_SITE,
@@ -105,9 +158,23 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
     }
   }, [data, search]);
 
-  const mapData = useMemo(() => {
-    return MapService.getMapDataFromAggregation({ ...plantingSite, plantingZones: data });
+  const plantingSiteMapData = useMemo(() => {
+    return MapService.getMapDataFromAggregation({ ...plantingSite, plantingZones: data }).site;
   }, [plantingSite, data]);
+
+  const mapData: Record<MapObject, MapSourceBaseData | undefined> = useMemo(() => {
+    if (!selectedObservationDate || !selectedObservation) {
+      return {
+        site: plantingSiteMapData,
+        zone: undefined,
+        subzone: undefined,
+        permanentPlot: undefined,
+        temporaryPlot: undefined,
+      };
+    }
+
+    return MapService.getMapDataFromObservation(selectedObservation);
+  }, [selectedObservation, selectedObservationDate, plantingSiteMapData]);
 
   const layerOptions: MapLayer[] = useMemo(() => {
     const result: MapLayer[] = ['Planting Site', 'Zones', 'Sub-Zones'];
@@ -155,6 +222,16 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
               })),
             ]}
           />
+        }
+        bottomLeftMapControl={
+          observationsDates &&
+          observationsDates.length > 0 && (
+            <MapDateSelect
+              dates={observationsDates}
+              selectedDate={selectedObservationDate ?? ''}
+              onChange={setSelectedObservationDate}
+            />
+          )
         }
       />
     </Box>
