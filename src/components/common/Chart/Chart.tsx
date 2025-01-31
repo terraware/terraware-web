@@ -7,6 +7,8 @@ import {
   ChartTypeRegistry,
   ScaleOptionsByType,
   ScaleType,
+  TimeScaleTickOptions,
+  TimeUnit,
   TooltipItem,
   TooltipModel,
 } from 'chart.js';
@@ -128,6 +130,8 @@ function ChartContent(props: ChartContentProps): JSX.Element {
 
   const barThickness: number | 'flex' | undefined = barWidth === undefined ? 50 : barWidth === 0 ? 'flex' : barWidth;
 
+  type TimeScaleTickOptionsSource = TimeScaleTickOptions['source'];
+
   useEffect(() => {
     // used to prevent double render on dev scope (react 18)
     if (!initialized.current) {
@@ -136,6 +140,17 @@ function ChartContent(props: ChartContentProps): JSX.Element {
       const getAxisType = () => {
         if (!xAxisType) {
           return {};
+        }
+        if (xAxisType === 'time') {
+          return {
+            type: xAxisType,
+            time: {
+              unit: 'month' as TimeUnit,
+            },
+            ticks: {
+              source: 'data' as TimeScaleTickOptionsSource,
+            },
+          };
         }
         return {
           type: xAxisType,
