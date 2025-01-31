@@ -21,7 +21,7 @@ You may see references to some private repositories in the documentation. We're 
 ## How to Run the App in Development Mode
 
 1. Copy `.env.sample` from the root directory of this repo to the same directory, with the filename `.env`
-   1. Set up the secrets using the notes in the [Frontend Onboard page](https://terraformation.atlassian.net/wiki/spaces/SW/pages/567541907/Onboarding+Plan+for+Frontend+WebApp+Developers)
+   1. If you work for Terraformation and are using existing Keycloak setup, refer to the secrets in the "Onboarding Plan for Frontend WebApp Developers" confluence page
 2. Login to Docker hub
 
 ```shell
