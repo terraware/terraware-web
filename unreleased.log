@@ -1,2 +1,4 @@
+7a5f2fd09d6 SW-6276 Add note to top of dashboard when geometry has changed since the last observation (#3538)
+58352cf138c SW-6461 Get total species number from plantings and not from observation (#3565)
 59a928b0b6a SW-6507 Mortality rate overlay disappears after switching between satellite and outdoor map styles (#3576)
 119c80fc7d1 SW-6492 Added Abandoned as an option to observation list filer (#3566)
