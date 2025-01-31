@@ -542,7 +542,8 @@
 <a name='L477'></a><a href='#L477'>477</a>
 <a name='L478'></a><a href='#L478'>478</a>
 <a name='L479'></a><a href='#L479'>479</a>
-<a name='L480'></a><a href='#L480'>480</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L480'></a><a href='#L480'>480</a>
+<a name='L481'></a><a href='#L481'>481</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -589,6 +590,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -616,7 +619,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -715,6 +717,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -756,7 +759,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1068,6 +1070,8 @@ type QuantityField = (typeof QUANTITY_FIELDS)[number];
 &nbsp;
 const MANDATORY_FIELDS = <span class="cstat-no" title="statement not covered" >['addedDate', 'facilityId', ...QUANTITY_FIELDS, 'speciesId'] as const;</span>
 &nbsp;
+const DEFAULT_DATE = <span class="cstat-no" title="statement not covered" >getTodaysDateFormatted();</span>
+&nbsp;
 type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >BatchDetailsForm(</span>props: BatchDetailsFormProps): JSX.Element {
@@ -1092,7 +1096,6 @@ export default function <span class="fstat-no" title="function not covered" >Bat
   const { availableProjects } = <span class="cstat-no" title="statement not covered" >useProjects(record);</span>
 &nbsp;
   const [totalQuantity, setTotalQuantity] = <span class="cstat-no" title="statement not covered" >useState(0);</span>
-  const [addedDateChanged, setAddedDateChanged] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const [validateFields, setValidateFields] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [timeZone, setTimeZone] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const numericFormatter = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >numberFormatter(user?.locale),</span> [numberFormatter, user?.locale]);</span>
@@ -1193,12 +1196,13 @@ export default function <span class="fstat-no" title="function not covered" >Bat
 <span class="cstat-no" title="statement not covered" >        return previousRecord;</span>
       }
 &nbsp;
+      const addedDateChanged = <span class="cstat-no" title="statement not covered" >previousRecord.addedDate !== DEFAULT_DATE;</span>
 <span class="cstat-no" title="statement not covered" >      return {</span>
         ...previousRecord,
         addedDate: addedDateChanged ? previousRecord.addedDate : getTodaysDateFormatted(timeZone),
       };
     });
-  }, [timeZone, setRecord, addedDateChanged]);
+  }, [timeZone, setRecord]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (record) {</span>
@@ -1206,7 +1210,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
     }
 &nbsp;
     const newBatch: Partial&lt;CreateBatchRequestPayload&gt; = <span class="cstat-no" title="statement not covered" >{</span>
-      addedDate: getTodaysDateFormatted(),
+      addedDate: DEFAULT_DATE,
       germinatingQuantity: 0,
       notReadyQuantity: 0,
       readyQuantity: 0,
@@ -1236,7 +1240,6 @@ export default function <span class="fstat-no" title="function not covered" >Bat
   const paddingSeparator = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >isMobile ? 0 : 1.5)</span>;</span>
 &nbsp;
   const changeDate = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>d: string, value?: any) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setAddedDateChanged(id === 'addedDate');</span>
     const date = <span class="cstat-no" title="statement not covered" >value ? getDateDisplayValue(value.getTime(), timeZone) : null;</span>
 <span class="cstat-no" title="statement not covered" >    onChange(id, date);</span>
   };
@@ -1507,7 +1510,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-01-31T13:43:37.139Z
+                at 2025-01-31T16:08:22.762Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
