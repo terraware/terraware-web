@@ -8,7 +8,7 @@ import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import isEnabled from 'src/features';
 import useObservationSummaries from 'src/hooks/useObservationSummaries';
 import { useLocalization } from 'src/providers';
-import { selectLatestObservation, selectObservations } from 'src/redux/features/observations/observationsSelectors';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSite, selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -29,8 +29,6 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingSite
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const locale = useLocalization();
   const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
-  const observationsData = useAppSelector(selectObservations);
-  const observationData = observationsData?.find((obs) => obs.id === observation?.observationId);
 
   const targetPlantingDensity = useMemo(() => {
     const weightedSum =
