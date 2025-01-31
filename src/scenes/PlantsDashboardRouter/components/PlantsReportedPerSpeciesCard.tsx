@@ -53,7 +53,22 @@ const SiteWithoutZonesCard = ({
 
       if (newVersion) {
         if (!speciesQuantities[scientificName] && Object.keys(speciesQuantities).length >= 4) {
-          speciesQuantities['Others'] = speciesQuantities['Others'] ? speciesQuantities['Others'] + plants : plants;
+          const minSpecies = Object.keys(speciesQuantities).reduce((minSpecies, sp) => {
+            if (speciesQuantities[sp] < speciesQuantities[minSpecies]) {
+              return sp;
+            }
+            return minSpecies;
+          }, Object.keys(speciesQuantities)[0]);
+
+          if (plants > speciesQuantities[minSpecies]) {
+            speciesQuantities[scientificName] = plants;
+            speciesQuantities['Others'] = speciesQuantities['Others']
+              ? speciesQuantities['Others'] + speciesQuantities[minSpecies]
+              : speciesQuantities[minSpecies];
+            delete speciesQuantities[minSpecies];
+          } else {
+            speciesQuantities['Others'] = speciesQuantities['Others'] ? speciesQuantities['Others'] + plants : plants;
+          }
         } else {
           if (!speciesQuantities[scientificName]) {
             speciesQuantities[scientificName] = plants;
@@ -110,9 +125,24 @@ const SiteWithZonesCard = ({
             }
             if (newVersion) {
               if (!speciesQuantities[population.species_scientificName] && Object.keys(speciesQuantities).length >= 4) {
-                speciesQuantities['Others'] = speciesQuantities['Others']
-                  ? speciesQuantities['Others'] + numPlants
-                  : numPlants;
+                const minSpecies = Object.keys(speciesQuantities).reduce((minSpecies, sp) => {
+                  if (speciesQuantities[sp] < speciesQuantities[minSpecies]) {
+                    return sp;
+                  }
+                  return minSpecies;
+                }, Object.keys(speciesQuantities)[0]);
+
+                if (numPlants > speciesQuantities[minSpecies]) {
+                  speciesQuantities[population.species_scientificName] = numPlants;
+                  speciesQuantities['Others'] = speciesQuantities['Others']
+                    ? speciesQuantities['Others'] + speciesQuantities[minSpecies]
+                    : speciesQuantities[minSpecies];
+                  delete speciesQuantities[minSpecies];
+                } else {
+                  speciesQuantities['Others'] = speciesQuantities['Others']
+                    ? speciesQuantities['Others'] + numPlants
+                    : numPlants;
+                }
               } else {
                 if (!speciesQuantities[population.species_scientificName]) {
                   speciesQuantities[population.species_scientificName] = numPlants;
