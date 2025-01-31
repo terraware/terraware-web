@@ -930,7 +930,7 @@ MORTALITY_RATE_INFO,El índice de mortalidad se basa en el número de plantas qu
 MORTALITY_RATE_PER_SPECIES,Tasa de mortalidad por especie,
 MORTALITY_RATE_PERCENT,Tasa de mortalidad (%),
 MORTALITY_RATE_PERCENT_REQUIRED,Tasa de mortalidad (%) *,
-MORTALITY_RATE_TOOLTIP,El índice de mortalidad se basa en el número de plantas que se observaron muertas en todas las zonas completamente plantadas.,
+MORTALITY_RATE_TOOLTIP,La tasa de mortandad se basa en la cantidad de plantas que se ven muertas en todas las zonas observadas.,
 MORTALITY_RATE_TREND_TOOLTIP,La tasa de mortalidad representa el porcentaje de plantaciones que han muerto en las diferentes especies y zonas como tendencia a lo largo del tiempo a partir de todas las observaciones.,
 MOSS,Musgo,
 MOST_RECENT_OBSERVATION,Observación más reciente,

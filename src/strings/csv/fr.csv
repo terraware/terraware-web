@@ -930,7 +930,7 @@ MORTALITY_RATE_INFO,Le taux de mortalité est basé sur le nombre de plantes obs
 MORTALITY_RATE_PER_SPECIES,Taux de mortalité par espèce,
 MORTALITY_RATE_PERCENT,Taux de mortalité (%),
 MORTALITY_RATE_PERCENT_REQUIRED,Taux de mortalité (%) *,
-MORTALITY_RATE_TOOLTIP,Le taux de mortalité est basé sur le nombre de plantes observées comme étant mortes dans toutes les zones entièrement cultivées.,
+MORTALITY_RATE_TOOLTIP,Le taux de mortalité est basé sur le nombre de plantes identifiées comme mortes dans toutes les zones observées.,
 MORTALITY_RATE_TREND_TOOLTIP,"Le taux de mortalité représente le pourcentage de plantations mortes pour l'ensemble des espèces et des zones, en tant que tendance au fil du temps pour l'ensemble des observations.",
 MOSS,Mousse,
 MOST_RECENT_OBSERVATION,Observation la plus récente,
