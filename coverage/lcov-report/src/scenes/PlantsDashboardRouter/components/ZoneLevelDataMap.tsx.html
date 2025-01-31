@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/80</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
-                <span class="quiet">Branches</span>
                 <span class='fraction'>0/84</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/87</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/76</span>
+                <span class='fraction'>0/79</span>
             </div>
         
             
@@ -418,7 +418,14 @@
 <a name='L353'></a><a href='#L353'>353</a>
 <a name='L354'></a><a href='#L354'>354</a>
 <a name='L355'></a><a href='#L355'>355</a>
-<a name='L356'></a><a href='#L356'>356</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L356'></a><a href='#L356'>356</a>
+<a name='L357'></a><a href='#L357'>357</a>
+<a name='L358'></a><a href='#L358'>358</a>
+<a name='L359'></a><a href='#L359'>359</a>
+<a name='L360'></a><a href='#L360'>360</a>
+<a name='L361'></a><a href='#L361'>361</a>
+<a name='L362'></a><a href='#L362'>362</a>
+<a name='L363'></a><a href='#L363'>363</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -628,7 +635,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -640,6 +652,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -982,6 +996,11 @@ export default function <span class="fstat-no" title="function not covered" >Zon
 <span class="cstat-no" title="statement not covered" >    return [{ sourceId: 'sites', id: plantingSiteId }];</span>
   }, [plantingSiteId]);
 &nbsp;
+  const findZoneArea = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(z</span>oneId: number) =&gt; {</span>
+    const selectedZone = <span class="cstat-no" title="statement not covered" >plantingSite?.plantingZones?.find(<span class="fstat-no" title="function not covered" >(p</span>Zone) =&gt; <span class="cstat-no" title="statement not covered" >pZone.id === zoneId)</span>;</span>
+<span class="cstat-no" title="statement not covered" >    return selectedZone?.areaHa;</span>
+  };
+&nbsp;
   const getContextRenderer = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
       // eslint-disable-next-line react/display-name
@@ -997,7 +1016,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
 <span class="cstat-no" title="statement not covered" >            properties = [</span>
               {
                 key: strings.AREA_HA,
-                value: zoneObservation?.areaHa ?? 0,
+                value: zoneObservation?.areaHa ?? (findZoneArea(entity.id) || 0),
               },
               {
                 key: strings.MORTALITY_RATE,
@@ -1007,7 +1026,9 @@ export default function <span class="fstat-no" title="function not covered" >Zon
               },
               {
                 key: strings.PLANTING_DENSITY,
-                value: `${zoneObservation?.plantingDensity} ${strings.PLANTS_PER_HECTARE}`,
+                value: zoneObservation?.plantingDensity
+                  ? `${zoneObservation?.plantingDensity} ${strings.PLANTS_PER_HECTARE}`
+                  : strings.UNKNOWN,
               },
               { key: strings.PLANTED_PLANTS, value: `${zoneStats[entity.id].reportedPlants}` },
               { key: strings.OBSERVED_PLANTS, value: `${zoneObservation?.totalPlants || '0'}` },
@@ -1135,7 +1156,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-01-31T22:59:45.506Z
+                at 2025-01-31T23:14:10.635Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -1,3 +1,7 @@
+22aca5fc810 SW-6518 Section title copy for "as of [date of Observation]" is not appearing consistently (#3584)
+798a785985e SW-6515 Plants per Ha chart not representing the number for a single observation (#3583)
+05e0c0ddf4e Add a new tool-tip for Mortality Breakdown (#3588)
+2abca52a66e Fix Map popup for unobserved zones (#3590)
 892ce20acf2 SW-6492 Defaults selectors to only hide upcoming (#3591)
 70dd270cbb8 Updates to readme for first-time setup (#3586)
 f3b4f868dc8 SW-5880 use planting density from observation summaries (#3577)
