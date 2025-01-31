@@ -213,7 +213,16 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     };
 
     fetchPlantingSite();
-  }, [mapData, snackbar, mapOptions, layers, theme.palette.TwClrBaseWhite, getRenderAttributes, showMortalityRateFill]);
+  }, [
+    mapData,
+    snackbar,
+    mapOptions,
+    layers,
+    theme.palette.TwClrBaseWhite,
+    getRenderAttributes,
+    showMortalityRateFill,
+    showRecencyFill,
+  ]);
 
   const entityOptions: MapEntityOptions = useMemo(
     () => ({
