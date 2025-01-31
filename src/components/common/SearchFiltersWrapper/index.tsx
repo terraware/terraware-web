@@ -68,6 +68,7 @@ export type SearchFiltersProps = {
   filterColumns: FilterField[];
   optionsRenderer?: (filterName: string, values: FieldValuesPayload) => Option[] | undefined;
   noScroll?: boolean;
+  pillValuesRenderer?: (filterName: string, values: unknown[]) => string | undefined;
 };
 
 export type SearchProps = SearchInputProps & {
@@ -93,14 +94,23 @@ export default function SearchFiltersWrapper({
               filtersProps.setFilters(result);
             };
 
-            let pillValue: string | undefined = filtersProps.filters[key]?.values.join(', ');
+            const values = filtersProps.filters[key]?.values ?? [];
+            let pillValue: string | undefined = values.join(', ');
             let label = filtersProps.filterColumns.find((f) => key === f.name)?.label ?? '';
+
+            // If the filter props provide a pillValuesRenderer, use that instead.
+            if (filtersProps.pillValuesRenderer) {
+              const renderedValue = filtersProps.pillValuesRenderer(key, values);
+              if (renderedValue) {
+                pillValue = renderedValue;
+              }
+            }
 
             // If the filter is coming from a featured filter, the pill value and label will come from featuredFilters
             if (featuredFilters) {
               const featuredFilter = featuredFilters.find((ff) => ff.field === key);
               if (featuredFilter) {
-                pillValue = featuredFilter.pillValuesRenderer(filtersProps.filters[key].values);
+                pillValue = featuredFilter.pillValuesRenderer(values);
                 label = featuredFilter.label;
               }
             }

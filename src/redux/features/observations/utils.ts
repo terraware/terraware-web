@@ -52,7 +52,7 @@ export const searchResultZones = (search: string, zoneNames: string[], observati
 };
 
 export const searchZones = (search: string, zoneNames: string[], observations?: ObservationResults[]) => {
-  if (!search.trim() && !zoneNames.length) {
+  if (!search?.trim() && !zoneNames?.length) {
     return observations;
   }
   return observations?.filter(

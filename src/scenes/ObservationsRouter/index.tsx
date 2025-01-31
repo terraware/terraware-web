@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { CircularProgress } from '@mui/material';
+import { Option } from '@terraware/web-components/components/table/types';
 
 import { FilterField } from 'src/components/common/FilterGroup';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
@@ -16,7 +17,8 @@ import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { selectPlantingSites, selectPlantingSitesError } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { FieldOptionsMap } from 'src/types/Search';
+import { ObservationState, getStatus } from 'src/types/Observations';
+import { FieldOptionsMap, FieldValuesPayload } from 'src/types/Search';
 import { isAdmin } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -107,6 +109,26 @@ const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Elemen
         setFilters: (value: Record<string, any>) => setFilters(value),
         filterColumns,
         filterOptions,
+        optionsRenderer: (filterName: string, fieldValues: FieldValuesPayload): Option[] | undefined => {
+          if (filterName !== 'status') {
+            return;
+          }
+
+          return fieldValues[filterName]?.values.map(
+            (value): Option => ({
+              label: getStatus(value as ObservationState),
+              value,
+              disabled: false,
+            })
+          );
+        },
+        pillValuesRenderer: (filterName: string, values: unknown[]): string | undefined => {
+          if (filterName !== 'status') {
+            return;
+          }
+
+          return values.map((value) => getStatus(value as ObservationState)).join(', ');
+        },
       },
     }),
     [filters, filterColumns, filterOptions, search]
