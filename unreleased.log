@@ -1,3 +1,4 @@
+892ce20acf2 SW-6492 Defaults selectors to only hide upcoming (#3591)
 70dd270cbb8 Updates to readme for first-time setup (#3586)
 f3b4f868dc8 SW-5880 use planting density from observation summaries (#3577)
 527f1d2a9ab SW-6476 Plants per Ha chart: Change default minimum scale from hours to months (#3585)
