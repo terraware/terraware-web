@@ -222,7 +222,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
             properties = [
               {
                 key: strings.AREA_HA,
-                value: plantingSite?.areaHa ?? 0,
+                value: zoneObservation?.areaHa ?? 0,
               },
               {
                 key: strings.MORTALITY_RATE,
