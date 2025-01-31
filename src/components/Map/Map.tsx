@@ -124,7 +124,7 @@ export default function Map(props: MapProps): JSX.Element {
         }
       });
     },
-    [mapImages, snackbar]
+    [mapImages, snackbar, mapImages]
   );
 
   const mapRefCb = useCallback(
@@ -138,7 +138,7 @@ export default function Map(props: MapProps): JSX.Element {
         loadImages(map);
       }
     },
-    [mapImages, snackbar]
+    [mapImages, snackbar, mapImages]
   );
 
   const onMapError = useCallback(
@@ -377,7 +377,7 @@ export default function Map(props: MapProps): JSX.Element {
     ));
 
     return sources;
-  }, [geoData, reloadSources]);
+  }, [geoData, reloadSources, mapImages]);
 
   useEffect(() => {
     if (entityOptions?.highlight) {
