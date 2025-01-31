@@ -5,6 +5,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import BarChart from 'src/components/common/Chart/BarChart';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import isEnabled from 'src/features';
+import useObservationSummaries from 'src/hooks/useObservationSummaries';
 import { useLocalization } from 'src/providers';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
@@ -22,12 +23,13 @@ type PlantingDensityPerZoneCardProps = {
 
 export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingDensityPerZoneCardProps): JSX.Element {
   const theme = useTheme();
-  const locale = useLocalization();
+  const { activeLocale } = useLocalization();
   const defaultTimeZone = useDefaultTimeZone();
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
   );
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
+  const summaries = useObservationSummaries(plantingSiteId);
   const [labels, setLabels] = useState<string[]>();
   const [targets, setTargets] = useState<(number | null)[]>();
   const [actuals, setActuals] = useState<(number | null)[]>();
@@ -39,9 +41,16 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
       const zoneDensities: Record<string, (number | null)[]> = {};
       plantingSite.plantingZones?.forEach((zone) => {
         zoneDensities[zone.name] = [zone.targetPlantingDensity];
-        if (observation) {
-          const zoneFromObs = observation.plantingZones.find((obsZone) => obsZone.plantingZoneId === zone.id);
-          zoneDensities[zone.name].push(zoneFromObs?.plantingDensity ?? null);
+        if (newPlantsDashboardEnabled) {
+          if (summaries && summaries.length > 0) {
+            const zoneFromObs = summaries[0].plantingZones.find((obsZone) => obsZone.plantingZoneId === zone.id);
+            zoneDensities[zone.name].push(zoneFromObs?.plantingDensity ?? null);
+          }
+        } else {
+          if (observation) {
+            const zoneFromObs = observation.plantingZones.find((obsZone) => obsZone.plantingZoneId === zone.id);
+            zoneDensities[zone.name].push(zoneFromObs?.plantingDensity ?? null);
+          }
         }
       });
       setLabels(Object.keys(zoneDensities).map((name) => truncate(name, MAX_ZONE_NAME_LENGTH)));
@@ -54,7 +63,7 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
       setActuals([]);
       setTooltipTitles([]);
     }
-  }, [plantingSite, observation]);
+  }, [plantingSite, observation, summaries]);
 
   const chartData = useMemo(() => {
     if (!labels?.length || !targets?.length) {
@@ -71,7 +80,7 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
       },
     ];
 
-    if (observation && actuals?.length && !actuals?.every((val) => val === null)) {
+    if (actuals && actuals?.length && !actuals?.every((val) => val === null)) {
       datasets.unshift({
         label: newPlantsDashboardEnabled ? strings.OBSERVED_DENSITY : strings.PLANTING_DENSITY,
         values: actuals,
@@ -85,7 +94,7 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
       labels,
       datasets,
     };
-  }, [observation, labels, targets, actuals, theme.palette.TwClrBaseBlue500, theme.palette.TwClrBaseBlue700]);
+  }, [actuals, labels, targets]);
 
   return newPlantsDashboardEnabled ? (
     <Box>
@@ -94,7 +103,7 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
         <BarChart
           showLegend={true}
           elementColor={theme.palette.TwClrBgBrand}
-          barWidth={observation && actuals?.length ? 0 : undefined}
+          barWidth={actuals && actuals?.length ? 0 : undefined}
           chartId='plantingDensityByZone'
           chartData={chartData}
           customTooltipTitles={tooltipTitles}
@@ -130,7 +139,7 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
               ? strings.formatString(
                   strings.PLANTING_DENSITY_PER_ZONE_W_OBS_CARD_TITLE,
                   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-                  getShortDate(observation?.completedTime!, locale.activeLocale)
+                  getShortDate(observation?.completedTime!, activeLocale)
                 )
               : strings.PLANTING_DENSITY_PER_ZONE_CARD_TITLE}
           </Typography>

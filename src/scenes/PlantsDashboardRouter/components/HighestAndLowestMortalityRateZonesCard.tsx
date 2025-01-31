@@ -1,24 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { Box, Divider, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import isEnabled from 'src/features';
+import useObservationSummaries from 'src/hooks/useObservationSummaries';
 import { selectObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
-import {
-  selectLatestObservation,
-  selectPlantingSiteObservationsSummaries,
-} from 'src/redux/features/observations/observationsSelectors';
-import { requestGetPlantingSiteObservationsSummaries } from 'src/redux/features/observations/observationsThunks';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingZone } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import {
-  ObservationPlantingZoneResults,
-  ObservationSummary,
-  PlantingZoneObservationSummary,
-} from 'src/types/Observations';
+import { ObservationPlantingZoneResults, PlantingZoneObservationSummary } from 'src/types/Observations';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type HighestAndLowestMortalityRateCardProps = {
@@ -33,27 +26,8 @@ export default function TotalMortalityRateCard({
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
   );
-  const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState<string>('');
-  const plantingObservationsSummaryResponse = useAppSelector((state) =>
-    selectPlantingSiteObservationsSummaries(state, requestId)
-  );
-
   const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
-  const [summaries, setSummaries] = useState<ObservationSummary[]>();
-
-  useEffect(() => {
-    if (plantingSiteId) {
-      const request = dispatch(requestGetPlantingSiteObservationsSummaries(plantingSiteId));
-      setRequestId(request.requestId);
-    }
-  }, [plantingSiteId]);
-
-  useEffect(() => {
-    if (plantingObservationsSummaryResponse?.status === 'success') {
-      setSummaries(plantingObservationsSummaryResponse.data);
-    }
-  }, [plantingObservationsSummaryResponse]);
+  const summaries = useObservationSummaries(plantingSiteId);
 
   let highestMortalityRate = 0;
   let highestZoneId: number;
