@@ -15,7 +15,7 @@ import { requestObservations, requestObservationsResults } from 'src/redux/featu
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { selectPlantingSite, selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import {
   requestPlantingSitesSearchResults,
   requestSitePopulation,
@@ -61,6 +61,7 @@ export default function PlantsDashboardView(): JSX.Element {
   const navigate = useNavigate();
   const theme = useTheme();
   const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
+  const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
 
   const messageStyles = {
     margin: '0 auto',
@@ -79,6 +80,30 @@ export default function PlantsDashboardView(): JSX.Element {
   const latestObservation = useAppSelector((state) =>
     selectLatestObservation(state, selectedPlantingSiteId, defaultTimeZone.get().id)
   );
+
+  const latestObservationId = useMemo(() => {
+    return latestObservation?.observationId;
+  }, [latestObservation]);
+
+  const geometryChangedNote = useMemo(() => {
+    if (selectedPlantingSiteId !== -1 && latestObservation) {
+      const pSite = plantingSites?.find((ps) => ps.id === selectedPlantingSiteId);
+      if (pSite?.plantingZones?.length && pSite?.plantingZones?.length > 0) {
+        const maxModifiedTime = pSite.plantingZones.reduce(
+          (acc, zone) => (isAfter(zone.boundaryModifiedTime, acc) ? zone.boundaryModifiedTime : acc),
+          pSite.plantingZones[0].boundaryModifiedTime
+        );
+
+        if (isAfter(maxModifiedTime, latestObservation.startDate)) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    } else {
+      return false;
+    }
+  }, [latestObservation, plantingSites, selectedPlantingSiteId]);
 
   useEffect(() => {
     dispatch(requestObservations(org.selectedOrganization.id));
@@ -427,6 +452,8 @@ export default function PlantsDashboardView(): JSX.Element {
       plantsSitePreferences={plantsDashboardPreferences}
       setPlantsSitePreferences={onPreferences}
       newHeader={newPlantsDashboardEnabled}
+      showGeometryNote={geometryChangedNote}
+      latestObservationId={latestObservationId}
     >
       {selectedPlantingSiteId !== -1 ? (
         <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
