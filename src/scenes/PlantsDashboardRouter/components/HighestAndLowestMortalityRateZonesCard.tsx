@@ -55,7 +55,7 @@ export default function TotalMortalityRateCard({
     }
   }, [plantingObservationsSummaryResponse]);
 
-  let highestMortalityRate = 0;
+  let highestMortalityRate: number | undefined = undefined;
   let highestZoneId: number;
 
   let lowestMortalityRate = 100;
@@ -63,10 +63,11 @@ export default function TotalMortalityRateCard({
 
   if (newPlantsDashboardEnabled) {
     summaries?.[0]?.plantingZones.forEach((zone: PlantingZoneObservationSummary) => {
+      console.log(zone.mortalityRate);
       if (
         zone.mortalityRate !== undefined &&
         zone.mortalityRate !== null &&
-        zone.mortalityRate >= highestMortalityRate
+        zone.mortalityRate >= (highestMortalityRate || 0)
       ) {
         highestMortalityRate = zone.mortalityRate;
         highestZoneId = zone.plantingZoneId;
@@ -95,7 +96,7 @@ export default function TotalMortalityRateCard({
 
     return (
       <Box>
-        {highestPlantingZone && (
+        {highestPlantingZone && highestMortalityRate !== undefined && (
           <>
             <Box sx={{ backgroundColor: '#CB4D4533', padding: 1, borderRadius: 1, marginBottom: 1 }}>
               <Typography fontSize='16px' fontWeight={400}>
@@ -105,7 +106,7 @@ export default function TotalMortalityRateCard({
                 {highestPlantingZone.name}
               </Typography>
               <Typography fontSize='24px' fontWeight={600}>
-                <FormattedNumber value={highestMortalityRate || 0} />%
+                <FormattedNumber value={highestMortalityRate} />%
               </Typography>
             </Box>
             {(!lowestPlantingZone || lowestPlantingZone.id === highestPlantingZone.id) && (
@@ -128,6 +129,19 @@ export default function TotalMortalityRateCard({
             </Typography>
           </Box>
         )}
+        {highestMortalityRate === undefined && (
+          <Box sx={{ backgroundColor: theme.palette.TwClrBgSecondary, padding: 1, borderRadius: 1, marginBottom: 1 }}>
+            <Typography fontSize='16px' fontWeight={400}>
+              {strings.INSUFFICIENT_DATA}
+            </Typography>
+            <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}>
+              {highestPlantingZone?.name || ''}
+            </Typography>
+            <Typography fontSize='24px' fontWeight={600}>
+              -
+            </Typography>
+          </Box>
+        )}
       </Box>
     );
   } else {
@@ -136,7 +150,7 @@ export default function TotalMortalityRateCard({
         zone.hasObservedPermanentPlots &&
         zone.mortalityRate !== undefined &&
         zone.mortalityRate !== null &&
-        zone.mortalityRate >= highestMortalityRate
+        zone.mortalityRate >= (highestMortalityRate || 0)
       ) {
         highestMortalityRate = zone.mortalityRate;
         highestZoneId = zone.plantingZoneId;
