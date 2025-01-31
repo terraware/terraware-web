@@ -1,3 +1,6 @@
+c5c3c7a84a6 SW-6511 Mortality Rate tool-tip: update outdated/incorrect copy (#3580)
+e45cb2abab9 SW-6512 Map: Zone popup shows Target Density for "Planting Density" instead of Observed Density (#3581)
+9a7ccd204af SW-6509 Map: Zone popup shows total Ha of Planting Site instead of Ha of Zone (#3579)
 3b908fdef27 SW-6486 - Fix added date reset when changing estimated ready date (#3578)
 7a5f2fd09d6 SW-6276 Add note to top of dashboard when geometry has changed since the last observation (#3538)
 58352cf138c SW-6461 Get total species number from plantings and not from observation (#3565)
