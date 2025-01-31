@@ -93,8 +93,9 @@ export default function PlantsDashboardView(): JSX.Element {
           (acc, zone) => (isAfter(zone.boundaryModifiedTime, acc) ? zone.boundaryModifiedTime : acc),
           pSite.plantingZones[0].boundaryModifiedTime
         );
+        const maxModifiedDate = DateTime.fromISO(maxModifiedTime).toFormat('yyyy-MM-dd');
 
-        if (isAfter(maxModifiedTime, latestObservation.startDate)) {
+        if (isAfter(maxModifiedDate, latestObservation.startDate)) {
           return true;
         } else {
           return false;
