@@ -931,7 +931,7 @@ MORTALITY_RATE_INFO,Mortality rate is based on the number of plants that were ob
 MORTALITY_RATE_PER_SPECIES,Mortality Rate per Species,
 MORTALITY_RATE_PERCENT,Mortality Rate (%),
 MORTALITY_RATE_PERCENT_REQUIRED,Mortality Rate (%) *,
-MORTALITY_RATE_TOOLTIP,Mortality rate is based on the number of plants that were observed as dead within all of the zones that are fully planted.,
+MORTALITY_RATE_TOOLTIP,Mortality rate is based on the number of plants that were observed as dead within all of the zones that were observed.,
 MORTALITY_RATE_TREND_TOOLTIP,Mortality Rate represents the percentage of plantings that have died across species and zones as a trend over time from all observations.,
 MOSS,Moss,
 MOST_RECENT_OBSERVATION,Most Recent Observation,

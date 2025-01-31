@@ -222,7 +222,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
             properties = [
               {
                 key: strings.AREA_HA,
-                value: plantingSite?.areaHa ?? 0,
+                value: zoneObservation?.areaHa ?? 0,
               },
               {
                 key: strings.MORTALITY_RATE,
@@ -232,7 +232,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
               },
               {
                 key: strings.PLANTING_DENSITY,
-                value: `${zoneProgress[entity.id].targetDensity} ${strings.PLANTS_PER_HECTARE}`,
+                value: `${zoneObservation?.plantingDensity} ${strings.PLANTS_PER_HECTARE}`,
               },
               { key: strings.PLANTED_PLANTS, value: `${zoneStats[entity.id].reportedPlants}` },
               { key: strings.OBSERVED_PLANTS, value: `${zoneObservation?.totalPlants || '0'}` },

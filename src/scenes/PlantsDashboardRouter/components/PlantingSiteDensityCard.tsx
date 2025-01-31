@@ -6,8 +6,9 @@ import { Icon } from '@terraware/web-components';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import isEnabled from 'src/features';
+import useObservationSummaries from 'src/hooks/useObservationSummaries';
 import { useLocalization } from 'src/providers';
-import { selectLatestObservation, selectObservations } from 'src/redux/features/observations/observationsSelectors';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSite, selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -24,11 +25,10 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingSite
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
   );
+  const summaries = useObservationSummaries(plantingSiteId);
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const locale = useLocalization();
   const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
-  const observationsData = useAppSelector(selectObservations);
-  const observationData = observationsData?.find((obs) => obs.id === observation?.observationId);
 
   const targetPlantingDensity = useMemo(() => {
     const weightedSum =
@@ -46,15 +46,25 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingSite
     ? plantingDensity + numPlantedSinceObs / plantingSite.areaHa
     : plantingDensity;
 
+  const everySubzoneHasObservation = useMemo(() => {
+    if (!summaries || summaries.length === 0) {
+      return true;
+    }
+
+    // Check that each subzone has at least one completed monitoring plot
+    const allSubzones = summaries[0].plantingZones.flatMap((zone) => zone.plantingSubzones);
+    return allSubzones.every((subzone) => subzone.monitoringPlots.length > 0);
+  }, [summaries]);
+
   return newPlantsDashboardEnabled ? (
     <Box>
       <Typography fontSize='48px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)}>
-        {Math.round(plantingDensity)}
+        {summaries?.[0]?.plantingDensity ?? 0}
       </Typography>
       <Typography fontSize='16px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)}>
         {`${strings.PLANTS_PER_HECTARE.charAt(0).toUpperCase()}${strings.PLANTS_PER_HECTARE.slice(1)}`}
       </Typography>
-      {observationData?.requestedSubzoneIds && (
+      {!everySubzoneHasObservation && (
         <Box display={'flex'}>
           <Box paddingRight={0.5}>
             <Icon name='warning' fillColor={theme.palette.TwClrIcnWarning} size='medium' />
