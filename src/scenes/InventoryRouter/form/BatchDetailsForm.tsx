@@ -45,7 +45,7 @@ type QuantityField = (typeof QUANTITY_FIELDS)[number];
 
 const MANDATORY_FIELDS = ['addedDate', 'facilityId', ...QUANTITY_FIELDS, 'speciesId'] as const;
 
-const DEFAULT_DATE = getTodaysDateFormatted()
+const DEFAULT_DATE = getTodaysDateFormatted();
 
 type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 
@@ -171,7 +171,7 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
         return previousRecord;
       }
 
-      const addedDateChanged = previousRecord.addedDate !== DEFAULT_DATE
+      const addedDateChanged = previousRecord.addedDate !== DEFAULT_DATE;
       return {
         ...previousRecord,
         addedDate: addedDateChanged ? previousRecord.addedDate : getTodaysDateFormatted(timeZone),
