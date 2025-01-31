@@ -64,7 +64,7 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingSite
       <Typography fontSize='16px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)}>
         {`${strings.PLANTS_PER_HECTARE.charAt(0).toUpperCase()}${strings.PLANTS_PER_HECTARE.slice(1)}`}
       </Typography>
-      {everySubzoneHasObservation && (
+      {!everySubzoneHasObservation && (
         <Box display={'flex'}>
           <Box paddingRight={0.5}>
             <Icon name='warning' fillColor={theme.palette.TwClrIcnWarning} size='medium' />
