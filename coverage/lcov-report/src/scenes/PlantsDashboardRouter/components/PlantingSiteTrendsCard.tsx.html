@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/63</span>
+                <span class='fraction'>0/52</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/48</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/53</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
@@ -264,30 +264,7 @@
 <a name='L199'></a><a href='#L199'>199</a>
 <a name='L200'></a><a href='#L200'>200</a>
 <a name='L201'></a><a href='#L201'>201</a>
-<a name='L202'></a><a href='#L202'>202</a>
-<a name='L203'></a><a href='#L203'>203</a>
-<a name='L204'></a><a href='#L204'>204</a>
-<a name='L205'></a><a href='#L205'>205</a>
-<a name='L206'></a><a href='#L206'>206</a>
-<a name='L207'></a><a href='#L207'>207</a>
-<a name='L208'></a><a href='#L208'>208</a>
-<a name='L209'></a><a href='#L209'>209</a>
-<a name='L210'></a><a href='#L210'>210</a>
-<a name='L211'></a><a href='#L211'>211</a>
-<a name='L212'></a><a href='#L212'>212</a>
-<a name='L213'></a><a href='#L213'>213</a>
-<a name='L214'></a><a href='#L214'>214</a>
-<a name='L215'></a><a href='#L215'>215</a>
-<a name='L216'></a><a href='#L216'>216</a>
-<a name='L217'></a><a href='#L217'>217</a>
-<a name='L218'></a><a href='#L218'>218</a>
-<a name='L219'></a><a href='#L219'>219</a>
-<a name='L220'></a><a href='#L220'>220</a>
-<a name='L221'></a><a href='#L221'>221</a>
-<a name='L222'></a><a href='#L222'>222</a>
-<a name='L223'></a><a href='#L223'>223</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L202'></a><a href='#L202'>202</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -310,31 +287,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -507,20 +465,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect, useMemo, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useMemo, useState } from 'react';
 &nbsp;
-import React, { Box, Typography, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem, Icon, Tooltip } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 &nbsp;
 import Card from 'src/components/common/Card';
 import Chart, { ChartData } from 'src/components/common/Chart/Chart';
-import { selectPlantingSiteObservationsSummaries } from 'src/redux/features/observations/observationsSelectors';
-import { requestGetPlantingSiteObservationsSummaries } from 'src/redux/features/observations/observationsThunks';
+import useObservationSummaries from 'src/hooks/useObservationSummaries';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ObservationSummary } from 'src/types/Observations';
 &nbsp;
 type PlantingSiteTrendsCardProps = {
   plantingSiteId: number;
@@ -529,24 +485,11 @@ type PlantingSiteTrendsCardProps = {
 export default function <span class="fstat-no" title="function not covered" >PlantingSiteTrendsCard(</span>{ plantingSiteId }: PlantingSiteTrendsCardProps): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const plantingSite = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectPlantingSite(state, plantingSiteId))</span>;</span>
-  const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
-  const plantingObservationsSummaryResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    selectPlantingSiteObservationsSummaries(state, requestId)</span>
-  );
-&nbsp;
   const [zonesOptions, setZoneOptions] = <span class="cstat-no" title="statement not covered" >useState&lt;DropdownItem[]&gt;();</span>
   const [selectedPlantsPerHaZone, setSelectedPlantsPerHaZone] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;();</span>
   const [selectedMortalityZone, setSelectedMortalityZone] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;();</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-  const [summaries, setSummaries] = <span class="cstat-no" title="statement not covered" >useState&lt;ObservationSummary[]&gt;();</span>
+  const summaries = <span class="cstat-no" title="statement not covered" >useObservationSummaries(plantingSiteId);</span>
   const { isDesktop, isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (plantingSite?.id) {</span>
-      const request = <span class="cstat-no" title="statement not covered" >dispatch(requestGetPlantingSiteObservationsSummaries(plantingSite.id));</span>
-<span class="cstat-no" title="statement not covered" >      setRequestId(request.requestId);</span>
-    }
-  }, [plantingSite]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const zoneOpts = <span class="cstat-no" title="statement not covered" >plantingSite?.plantingZones?.map(<span class="fstat-no" title="function not covered" >(p</span>zone) =&gt; (<span class="cstat-no" title="statement not covered" >{ label: pzone.name, value: pzone.id })</span>);</span>
@@ -556,12 +499,6 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 <span class="cstat-no" title="statement not covered" >      setSelectedMortalityZone(zoneOpts[0].value);</span>
     }
   }, [plantingSite]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (plantingObservationsSummaryResponse?.status === 'success') {</span>
-<span class="cstat-no" title="statement not covered" >      setSummaries(plantingObservationsSummaryResponse.data);</span>
-    }
-  }, [plantingObservationsSummaryResponse]);
 &nbsp;
   const plantsChartData: ChartData = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const filteredSummaries = <span class="cstat-no" title="statement not covered" >summaries?.filter(<span class="fstat-no" title="function not covered" >(s</span>c) =&gt; {</span>
@@ -736,7 +673,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-01-31T18:45:04.855Z
+                at 2025-01-31T18:56:02.853Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

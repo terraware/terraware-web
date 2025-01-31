@@ -1,3 +1,4 @@
+f3b4f868dc8 SW-5880 use planting density from observation summaries (#3577)
 527f1d2a9ab SW-6476 Plants per Ha chart: Change default minimum scale from hours to months (#3585)
 c5c3c7a84a6 SW-6511 Mortality Rate tool-tip: update outdated/incorrect copy (#3580)
 e45cb2abab9 SW-6512 Map: Zone popup shows Target Density for "Planting Density" instead of Observed Density (#3581)

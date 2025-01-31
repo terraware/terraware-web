@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/45</span>
+                <span class='fraction'>0/51</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/49</span>
+                <span class='fraction'>0/57</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
@@ -219,7 +219,16 @@
 <a name='L154'></a><a href='#L154'>154</a>
 <a name='L155'></a><a href='#L155'>155</a>
 <a name='L156'></a><a href='#L156'>156</a>
-<a name='L157'></a><a href='#L157'>157</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -229,6 +238,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -236,18 +253,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -263,6 +274,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -382,6 +400,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import BarChart from 'src/components/common/Chart/BarChart';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import isEnabled from 'src/features';
+import useObservationSummaries from 'src/hooks/useObservationSummaries';
 import { useLocalization } from 'src/providers';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
@@ -399,12 +418,13 @@ type PlantingDensityPerZoneCardProps = {
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >PlantingDensityPerZoneCard(</span>{ plantingSiteId }: PlantingDensityPerZoneCardProps): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const locale = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
+  const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const defaultTimeZone = <span class="cstat-no" title="statement not covered" >useDefaultTimeZone();</span>
   const observation = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)</span>
   );
   const plantingSite = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectPlantingSite(state, plantingSiteId))</span>;</span>
+  const summaries = <span class="cstat-no" title="statement not covered" >useObservationSummaries(plantingSiteId);</span>
   const [labels, setLabels] = <span class="cstat-no" title="statement not covered" >useState&lt;string[]&gt;();</span>
   const [targets, setTargets] = <span class="cstat-no" title="statement not covered" >useState&lt;(number | null)[]&gt;();</span>
   const [actuals, setActuals] = <span class="cstat-no" title="statement not covered" >useState&lt;(number | null)[]&gt;();</span>
@@ -416,9 +436,16 @@ export default function <span class="fstat-no" title="function not covered" >Pla
       const zoneDensities: Record&lt;string, (number | null)[]&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
 <span class="cstat-no" title="statement not covered" >      plantingSite.plantingZones?.forEach(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        zoneDensities[zone.name] = [zone.targetPlantingDensity];</span>
-<span class="cstat-no" title="statement not covered" >        if (observation) {</span>
-          const zoneFromObs = <span class="cstat-no" title="statement not covered" >observation.plantingZones.find(<span class="fstat-no" title="function not covered" >(o</span>bsZone) =&gt; <span class="cstat-no" title="statement not covered" >obsZone.plantingZoneId === zone.id)</span>;</span>
-<span class="cstat-no" title="statement not covered" >          zoneDensities[zone.name].push(zoneFromObs?.plantingDensity ?? null);</span>
+<span class="cstat-no" title="statement not covered" >        if (newPlantsDashboardEnabled) {</span>
+<span class="cstat-no" title="statement not covered" >          if (summaries &amp;&amp; summaries.length &gt; 0) {</span>
+            const zoneFromObs = <span class="cstat-no" title="statement not covered" >summaries[0].plantingZones.find(<span class="fstat-no" title="function not covered" >(o</span>bsZone) =&gt; <span class="cstat-no" title="statement not covered" >obsZone.plantingZoneId === zone.id)</span>;</span>
+<span class="cstat-no" title="statement not covered" >            zoneDensities[zone.name].push(zoneFromObs?.plantingDensity ?? null);</span>
+          }
+        } else {
+<span class="cstat-no" title="statement not covered" >          if (observation) {</span>
+            const zoneFromObs = <span class="cstat-no" title="statement not covered" >observation.plantingZones.find(<span class="fstat-no" title="function not covered" >(o</span>bsZone) =&gt; <span class="cstat-no" title="statement not covered" >obsZone.plantingZoneId === zone.id)</span>;</span>
+<span class="cstat-no" title="statement not covered" >            zoneDensities[zone.name].push(zoneFromObs?.plantingDensity ?? null);</span>
+          }
         }
       });
 <span class="cstat-no" title="statement not covered" >      setLabels(Object.keys(zoneDensities).map(<span class="fstat-no" title="function not covered" >(n</span>ame) =&gt; <span class="cstat-no" title="statement not covered" >truncate(name, MAX_ZONE_NAME_LENGTH))</span>);</span>
@@ -431,7 +458,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 <span class="cstat-no" title="statement not covered" >      setActuals([]);</span>
 <span class="cstat-no" title="statement not covered" >      setTooltipTitles([]);</span>
     }
-  }, [plantingSite, observation]);
+  }, [plantingSite, observation, summaries]);
 &nbsp;
   const chartData = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!labels?.length || !targets?.length) {</span>
@@ -448,7 +475,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
       },
     ];
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (observation &amp;&amp; actuals?.length &amp;&amp; !actuals?.every(<span class="fstat-no" title="function not covered" >(v</span>al) =&gt; <span class="cstat-no" title="statement not covered" >val === null)</span>) {</span>
+<span class="cstat-no" title="statement not covered" >    if (actuals &amp;&amp; actuals?.length &amp;&amp; !actuals?.every(<span class="fstat-no" title="function not covered" >(v</span>al) =&gt; <span class="cstat-no" title="statement not covered" >val === null)</span>) {</span>
 <span class="cstat-no" title="statement not covered" >      datasets.unshift({</span>
         label: newPlantsDashboardEnabled ? strings.OBSERVED_DENSITY : strings.PLANTING_DENSITY,
         values: actuals,
@@ -462,7 +489,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
       labels,
       datasets,
     };
-  }, [observation, labels, targets, actuals, theme.palette.TwClrBaseBlue500, theme.palette.TwClrBaseBlue700]);
+  }, [actuals, labels, targets]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return newPlantsDashboardEnabled ? (</span>
     &lt;Box&gt;
@@ -471,7 +498,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
         &lt;BarChart
           showLegend={true}
           elementColor={theme.palette.TwClrBgBrand}
-          barWidth={observation &amp;&amp; actuals?.length ? 0 : undefined}
+          barWidth={actuals &amp;&amp; actuals?.length ? 0 : undefined}
           chartId='plantingDensityByZone'
           chartData={chartData}
           customTooltipTitles={tooltipTitles}
@@ -507,7 +534,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
               ? strings.formatString(
                   strings.PLANTING_DENSITY_PER_ZONE_W_OBS_CARD_TITLE,
                   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-                  getShortDate(observation?.completedTime!, locale.activeLocale)
+                  getShortDate(observation?.completedTime!, activeLocale)
                 )
               : strings.PLANTING_DENSITY_PER_ZONE_CARD_TITLE}
           &lt;/Typography&gt;
@@ -538,7 +565,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-01-31T18:45:04.855Z
+                at 2025-01-31T18:56:02.853Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
