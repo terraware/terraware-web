@@ -63,7 +63,6 @@ export default function TotalMortalityRateCard({
 
   if (newPlantsDashboardEnabled) {
     summaries?.[0]?.plantingZones.forEach((zone: PlantingZoneObservationSummary) => {
-      console.log(zone.mortalityRate);
       if (
         zone.mortalityRate !== undefined &&
         zone.mortalityRate !== null &&
