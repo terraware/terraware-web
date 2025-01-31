@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import React, { Box, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem, Icon, Tooltip } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
 import Chart, { ChartData } from 'src/components/common/Chart/Chart';
@@ -29,6 +30,7 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
   const [selectedMortalityZone, setSelectedMortalityZone] = useState<number>();
   const dispatch = useAppDispatch();
   const [summaries, setSummaries] = useState<ObservationSummary[]>();
+  const { isDesktop, isMobile } = useDeviceInfo();
 
   useEffect(() => {
     if (plantingSite?.id) {
@@ -119,23 +121,33 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
       datasets: [
         {
           values: values ?? [],
+          pointRadius: values?.length === 1 ? 4 : 0,
         },
       ],
     };
   }, [summaries, selectedMortalityZone]);
 
   return (
-    <Card radius='8px' style={{ display: 'flex', 'justify-content': 'space-between' }}>
+    <Card
+      radius='8px'
+      style={{ display: 'flex', 'justify-content': 'space-between', flexDirection: isDesktop ? 'row' : 'column' }}
+    >
       <Box flexBasis='100%'>
-        <Box display={'flex'} alignItems={'center'}>
-          <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-            {strings.PLANTS_PER_HA}
-          </Typography>
-          <Tooltip title={strings.PLANTS_PER_HA_TOOLTIP}>
-            <Box display='flex' marginRight={1}>
-              <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
-            </Box>
-          </Tooltip>
+        <Box
+          display={'flex'}
+          flexDirection={isMobile ? 'column' : 'row'}
+          alignItems={isMobile ? 'flex-start' : 'center'}
+        >
+          <Box display={'flex'} alignItems={'center'}>
+            <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
+              {strings.PLANTS_PER_HA}
+            </Typography>
+            <Tooltip title={strings.PLANTS_PER_HA_TOOLTIP}>
+              <Box display='flex' marginRight={1}>
+                <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+              </Box>
+            </Tooltip>
+          </Box>
           <Dropdown
             placeholder={strings.SELECT}
             options={zonesOptions}
@@ -168,16 +180,22 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
           marginLeft: '24px',
         }}
       />
-      <Box flexBasis='100%'>
-        <Box display={'flex'} alignItems={'center'}>
-          <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-            {strings.MORTALITY_RATE}
-          </Typography>
-          <Tooltip title={strings.MORTALITY_RATE_TREND_TOOLTIP}>
-            <Box display='flex' marginRight={1}>
-              <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
-            </Box>
-          </Tooltip>
+      <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
+        <Box
+          display={'flex'}
+          flexDirection={isMobile ? 'column' : 'row'}
+          alignItems={isMobile ? 'flex-start' : 'center'}
+        >
+          <Box display={'flex'} alignItems={'center'}>
+            <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
+              {strings.MORTALITY_RATE}
+            </Typography>
+            <Tooltip title={strings.MORTALITY_RATE_TREND_TOOLTIP}>
+              <Box display='flex' marginRight={1}>
+                <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+              </Box>
+            </Tooltip>
+          </Box>
 
           <Dropdown
             placeholder={strings.SELECT}

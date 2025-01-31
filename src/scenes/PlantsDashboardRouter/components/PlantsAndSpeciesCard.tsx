@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
 import FormattedNumber from 'src/components/common/FormattedNumber';
@@ -16,12 +17,12 @@ import PlantsReportedPerSpeciesCard from './PlantsReportedPerSpeciesCard';
 
 type PlantsAndSpeciesCardProps = {
   plantingSiteId: number;
-  hasObservations: boolean;
+  hasReportedPlants: boolean;
 };
 
 export default function PlantsAndSpeciesCard({
   plantingSiteId,
-  hasObservations,
+  hasReportedPlants,
 }: PlantsAndSpeciesCardProps): JSX.Element {
   const siteReportedPlants = useAppSelector((state) => selectSiteReportedPlants(state, plantingSiteId));
   const theme = useTheme();
@@ -30,6 +31,7 @@ export default function PlantsAndSpeciesCard({
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
   );
   const [numObservedSpecies, setNumObservedSpecies] = useState(0);
+  const { isDesktop } = useDeviceInfo();
   useEffect(() => {
     setNumObservedSpecies(observation?.species?.length ?? 0);
   }, [observation]);
@@ -43,7 +45,7 @@ export default function PlantsAndSpeciesCard({
   };
 
   return (
-    <Card radius='8px' style={{ display: 'flex' }}>
+    <Card radius='8px' style={{ display: 'flex', flexDirection: isDesktop ? 'row' : 'column' }}>
       <Box flexBasis='100%'>
         <Box>
           <Box display={'flex'} alignItems={'center'}>
@@ -77,7 +79,7 @@ export default function PlantsAndSpeciesCard({
         </Box>
       </Box>
       <div style={separatorStyles} />
-      {hasObservations && (
+      {hasReportedPlants && (
         <>
           <Box flexBasis='100%'>
             <PlantsReportedPerSpeciesCard plantingSiteId={plantingSiteId} newVersion />
