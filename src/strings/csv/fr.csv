@@ -921,6 +921,7 @@ MONTH_12,Décembre,
 MORE_INFO,Plus d'informations,
 MORE_OPTIONS,Autres options,
 MORTALITY_BREAKDOWN,Répartition de la mortalité,
+MORTALITY_BREAKDOWN_TOOLTIP,La répartition de la mortalité montre le nombre de plantes par espèce qui ont été enregistrées comme vivantes et mortes dans toutes les zones observées.,
 MORTALITY_RATE,Taux de mortalité,
 MORTALITY_RATE_CARD_TITLE,Quel est le taux de mortalité de mes plantes en date du {0} ?,
 MORTALITY_RATE_CLARIFICATION,"Il s'agit du pourcentage total de vos plantations qui sont mortes, toutes espèces et zones confondues", calculated from your latest observations.

@@ -921,6 +921,7 @@ MONTH_12,December,
 MORE_INFO,More Info,
 MORE_OPTIONS,More Options,
 MORTALITY_BREAKDOWN,Mortality Breakdown,
+MORTALITY_BREAKDOWN_TOOLTIP,Mortality breakdown shows the numbers of plants per species that were recorded as live and dead within all of the zones that were observed.,
 MORTALITY_RATE,Mortality Rate,
 MORTALITY_RATE_CARD_TITLE,What is my plant mortality rate as of {0}?,
 MORTALITY_RATE_CLARIFICATION,This is the total percentage of your plantings that have died across all species and zones, calculated from your latest observations.

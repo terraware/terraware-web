@@ -921,6 +921,7 @@ MONTH_12,Diciembre,
 MORE_INFO,Más información,
 MORE_OPTIONS,Más opciones,
 MORTALITY_BREAKDOWN,Desglose de la mortalidad,
+MORTALITY_BREAKDOWN_TOOLTIP,El análisis de mortalidad muestra la cantidad de plantas por especie registradas como vivas o muertas en todas las zonas observadas.,
 MORTALITY_RATE,Tasa de mortalidad,
 MORTALITY_RATE_CARD_TITLE,¿Cuál es la tasa de mortalidad de mi planta desde el {0}?,
 MORTALITY_RATE_CLARIFICATION,Este es el porcentaje total de sus plantaciones que han muerto en todas las especies y zonas., calculated from your latest observations.
