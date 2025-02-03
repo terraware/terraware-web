@@ -395,7 +395,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
             <OverviewItemCard
               isEditable={false}
               title={strings.MORTALITY_RATE_PERCENT}
-              contents={latestObservation.mortalityRate}
+              contents={latestObservation.mortalityRate ?? null}
               sx={infoCardStyles}
             />
           </Grid>
