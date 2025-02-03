@@ -84,21 +84,31 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
+    const boundariesLegendItems = [
+      {
+        label: strings.PLANTING_SITE,
+        borderColor: theme.palette.TwClrBaseGreen300 as string,
+        fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.2),
+      },
+      {
+        label: strings.ZONES,
+        borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+        fillColor: 'transparent',
+      },
+    ];
     const result: MapLegendGroup[] = [
       {
         title: strings.BOUNDARIES,
-        items: [
-          {
-            label: strings.PLANTING_SITE,
-            borderColor: theme.palette.TwClrBaseGreen300 as string,
-            fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.2),
-          },
-          {
-            label: strings.ZONES,
-            borderColor: theme.palette.TwClrBaseLightGreen300 as string,
-            fillColor: 'transparent',
-          },
-        ],
+        items: newPlantsDashboardEnabled
+          ? [
+              ...boundariesLegendItems,
+              {
+                label: strings.SUBZONES,
+                borderColor: theme.palette.TwClrBaseBlue300 as string,
+                fillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.2),
+              },
+            ]
+          : boundariesLegendItems,
       },
     ];
     if (observation || newPlantsDashboardEnabled) {
@@ -328,7 +338,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
         <PlantingSiteMap
           mapData={mapData!}
           style={{ borderRadius: newPlantsDashboardEnabled ? '8px' : '24px' }}
-          layers={['Planting Site', 'Zones']}
+          layers={newPlantsDashboardEnabled ? ['Planting Site', 'Zones', 'Sub-Zones'] : ['Planting Site', 'Zones']}
           showMortalityRateFill={!!observation && legends.find((l) => l.title === strings.MORTALITY_RATE)?.checked}
           showRecencyFill={
             newPlantsDashboardEnabled && legends.find((l) => l.title === strings.OBSERVATION_RECENCY)?.checked

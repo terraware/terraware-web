@@ -370,7 +370,9 @@ export default function Map(props: MapProps): JSX.Element {
     const sources = geoData.map((geo: any) => (
       <Source type='geojson' key={geo.id} data={geo.data} id={geo.id}>
         {geo.layer && <Layer {...geo.layer} />}
-        {geo.patternFill && <Layer {...geo.patternFill} beforeId={geo.textAnnotation.id} />}
+        {geo.patternFill && (
+          <Layer {...geo.patternFill} beforeId={geo.textAnnotation ? geo.textAnnotation.id : undefined} />
+        )}
         {geo.textAnnotation && <Layer {...geo.textAnnotation} beforeId={geo.layerOutline.id} />}
         {geo.layerOutline && <Layer {...geo.layerOutline} />}
       </Source>
