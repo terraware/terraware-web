@@ -1,3 +1,4 @@
+193560c2ed2 Updated translations from Phrase (#3575)
 64506c63498 Update dependency @stylistic/eslint-plugin-js to v3 (#3593)
 ab7f5cfeffa Update dependency @babel/traverse to v7.26.7 (#3592)
 4cb2bda6e97 SW-6510 For Observation with no permanent plot data, update UI and message in Mortality Rate section (#3587)
