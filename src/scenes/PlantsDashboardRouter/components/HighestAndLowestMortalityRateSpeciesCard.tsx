@@ -31,7 +31,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
 
   const { availableSpecies } = useSpecies();
 
-  let highestMortalityRate = 0;
+  let highestMortalityRate: number | undefined = undefined;
   let highestSpecies = '';
 
   let lowestMortalityRate = 100;
@@ -39,7 +39,11 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
 
   if (newPlantsDashboardEnabled) {
     summaries?.[0]?.species.forEach((sp: ObservationSpeciesResultsPayload) => {
-      if (sp.mortalityRate !== undefined && sp.mortalityRate !== null && sp.mortalityRate >= highestMortalityRate) {
+      if (
+        sp.mortalityRate !== undefined &&
+        sp.mortalityRate !== null &&
+        sp.mortalityRate >= (highestMortalityRate || 0)
+      ) {
         highestMortalityRate = sp.mortalityRate;
         highestSpecies =
           availableSpecies?.find((spec) => spec.id === sp.speciesId)?.scientificName || sp.speciesName || '';
@@ -55,7 +59,11 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
     });
   } else {
     observation?.species.forEach((sp) => {
-      if (sp.mortalityRate !== undefined && sp.mortalityRate !== null && sp.mortalityRate >= highestMortalityRate) {
+      if (
+        sp.mortalityRate !== undefined &&
+        sp.mortalityRate !== null &&
+        sp.mortalityRate >= (highestMortalityRate || 0)
+      ) {
         highestMortalityRate = sp.mortalityRate;
         highestSpecies = sp.speciesScientificName || sp.speciesName || '';
       }
@@ -71,7 +79,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
 
   return newPlantsDashboardEnabled ? (
     <Box>
-      {highestSpecies && (
+      {highestSpecies && highestMortalityRate !== undefined && (
         <>
           <Box sx={{ backgroundColor: '#CB4D4533', padding: 1, borderRadius: 1, marginBottom: 1 }}>
             <Typography fontSize='16px' fontWeight={400}>
@@ -81,7 +89,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
               {highestSpecies}
             </Typography>
             <Typography fontSize='24px' fontWeight={600}>
-              <FormattedNumber value={highestMortalityRate || 0} />%
+              <FormattedNumber value={highestMortalityRate} />%
             </Typography>
           </Box>
           {(!lowestSpecies || lowestSpecies === highestSpecies) && (
@@ -101,6 +109,19 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
           </Typography>
           <Typography fontSize='24px' fontWeight={600}>
             <FormattedNumber value={lowestMortalityRate || 0} />%
+          </Typography>
+        </Box>
+      )}
+      {highestMortalityRate === undefined && (
+        <Box sx={{ backgroundColor: theme.palette.TwClrBgSecondary, padding: 1, borderRadius: 1, marginBottom: 1 }}>
+          <Typography fontSize='16px' fontWeight={400}>
+            {strings.INSUFFICIENT_DATA}
+          </Typography>
+          <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}>
+            {strings.NO_SPECIES}
+          </Typography>
+          <Typography fontSize='24px' fontWeight={600}>
+            -
           </Typography>
         </Box>
       )}

@@ -51,12 +51,24 @@ export default function MortalityRateCard({ plantingSiteId }: MortalityRateCardP
         </Box>
         <Box display='flex' sx={{ flexFlow: 'row wrap' }} marginTop={1}>
           <Typography fontSize='84px' fontWeight={600} lineHeight={1}>
-            <FormattedNumber value={observation?.mortalityRate || 0} />
+            {observation?.mortalityRate !== undefined ? <FormattedNumber value={observation.mortalityRate} /> : '-'}
           </Typography>
-          <Typography fontSize='84px' fontWeight={600} lineHeight={1}>
-            %
-          </Typography>
+          {observation?.mortalityRate !== undefined && (
+            <Typography fontSize='84px' fontWeight={600} lineHeight={1}>
+              %
+            </Typography>
+          )}
         </Box>
+        {observation?.mortalityRate === undefined && (
+          <Box display={'flex'}>
+            <Box paddingRight={0.5}>
+              <Icon name='warning' fillColor={theme.palette.TwClrIcnWarning} size='medium' />
+            </Box>
+            <Typography color={theme.palette.TwClrTxtWarning} fontSize='14px' fontWeight={400}>
+              {strings.NO_MORTALITY_RATE_WARNING}
+            </Typography>
+          </Box>
+        )}
       </Box>
       <div style={separatorStyles} />
       <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
