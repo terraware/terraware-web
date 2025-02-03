@@ -1,3 +1,4 @@
+365a63f1877 SW-5639 - fixing reports missing several required fields (#3596)
 8618e34d038 Updated translations from Phrase (#3595)
 193560c2ed2 Updated translations from Phrase (#3575)
 64506c63498 Update dependency @stylistic/eslint-plugin-js to v3 (#3593)
