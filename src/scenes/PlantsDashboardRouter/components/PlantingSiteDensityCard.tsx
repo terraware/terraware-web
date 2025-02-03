@@ -54,7 +54,9 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingSite
     const allSubzones = plantingSite.plantingZones?.flatMap((zone) => zone.plantingSubzones);
     const allSubzonesObserved = summaries[0].plantingZones.flatMap((zone) => zone.plantingSubzones);
     return allSubzones?.every((subzone) =>
-      allSubzonesObserved.find((subzoneObv) => subzoneObv.plantingSubzoneId === subzone.id)
+      allSubzonesObserved.find(
+        (subzoneObv) => subzoneObv.plantingSubzoneId === subzone.id && subzoneObv.monitoringPlots.length > 0
+      )
     );
   }, [summaries]);
 
