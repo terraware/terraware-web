@@ -53,7 +53,9 @@ const SiteWithoutZonesCard = ({
 
       if (newVersion) {
         if (!speciesQuantities[scientificName] && Object.keys(speciesQuantities).length >= 4) {
-          speciesQuantities['Others'] = speciesQuantities['Others'] ? speciesQuantities['Others'] + plants : plants;
+          speciesQuantities[strings.OTHER_SPECIES] = speciesQuantities[strings.OTHER_SPECIES]
+            ? speciesQuantities[strings.OTHER_SPECIES] + plants
+            : plants;
         } else {
           if (!speciesQuantities[scientificName]) {
             speciesQuantities[scientificName] = plants;
@@ -110,8 +112,8 @@ const SiteWithZonesCard = ({
             }
             if (newVersion) {
               if (!speciesQuantities[population.species_scientificName] && Object.keys(speciesQuantities).length >= 4) {
-                speciesQuantities['Others'] = speciesQuantities['Others']
-                  ? speciesQuantities['Others'] + numPlants
+                speciesQuantities[strings.OTHER_SPECIES] = speciesQuantities[strings.OTHER_SPECIES]
+                  ? speciesQuantities[strings.OTHER_SPECIES] + numPlants
                   : numPlants;
               } else {
                 if (!speciesQuantities[population.species_scientificName]) {
