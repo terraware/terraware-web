@@ -47,13 +47,17 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingSite
     : plantingDensity;
 
   const everySubzoneHasObservation = useMemo(() => {
-    if (!summaries || summaries.length === 0) {
+    if (!summaries || summaries.length === 0 || !plantingSite) {
       return true;
     }
 
-    // Check that each subzone has at least one completed monitoring plot
-    const allSubzones = summaries[0].plantingZones.flatMap((zone) => zone.plantingSubzones);
-    return allSubzones.every((subzone) => subzone.monitoringPlots.length > 0);
+    const allSubzones = plantingSite.plantingZones?.flatMap((zone) => zone.plantingSubzones);
+    const allSubzonesObserved = summaries[0].plantingZones.flatMap((zone) => zone.plantingSubzones);
+    return allSubzones?.every((subzone) =>
+      allSubzonesObserved.find(
+        (subzoneObv) => subzoneObv.plantingSubzoneId === subzone.id && subzoneObv.monitoringPlots.length > 0
+      )
+    );
   }, [summaries]);
 
   return newPlantsDashboardEnabled ? (
