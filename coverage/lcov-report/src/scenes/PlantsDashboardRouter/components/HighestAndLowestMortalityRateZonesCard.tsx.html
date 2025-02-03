@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/50</span>
+                <span class='fraction'>0/57</span>
             </div>
         
             
@@ -271,7 +271,20 @@
 <a name='L206'></a><a href='#L206'>206</a>
 <a name='L207'></a><a href='#L207'>207</a>
 <a name='L208'></a><a href='#L208'>208</a>
-<a name='L209'></a><a href='#L209'>209</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L209'></a><a href='#L209'>209</a>
+<a name='L210'></a><a href='#L210'>210</a>
+<a name='L211'></a><a href='#L211'>211</a>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -341,6 +354,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -510,7 +536,7 @@ export default function <span class="fstat-no" title="function not covered" >Tot
   const newPlantsDashboardEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('New Plants Dashboard');</span>
   const summaries = <span class="cstat-no" title="statement not covered" >useObservationSummaries(plantingSiteId);</span>
 &nbsp;
-  let highestMortalityRate = <span class="cstat-no" title="statement not covered" >0;</span>
+  let highestMortalityRate: number | undefined = <span class="cstat-no" title="statement not covered" >undefined;</span>
   let highestZoneId: number;
 &nbsp;
   let lowestMortalityRate = <span class="cstat-no" title="statement not covered" >100;</span>
@@ -521,7 +547,7 @@ export default function <span class="fstat-no" title="function not covered" >Tot
 <span class="cstat-no" title="statement not covered" >      if (</span>
         zone.mortalityRate !== undefined &amp;&amp;
         zone.mortalityRate !== null &amp;&amp;
-        zone.mortalityRate &gt;= highestMortalityRate
+        zone.mortalityRate &gt;= (highestMortalityRate || 0)
       ) {
 <span class="cstat-no" title="statement not covered" >        highestMortalityRate = zone.mortalityRate;</span>
 <span class="cstat-no" title="statement not covered" >        highestZoneId = zone.plantingZoneId;</span>
@@ -550,7 +576,7 @@ export default function <span class="fstat-no" title="function not covered" >Tot
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return (</span>
       &lt;Box&gt;
-        {highestPlantingZone &amp;&amp; (
+        {highestPlantingZone &amp;&amp; highestMortalityRate !== undefined &amp;&amp; (
           &lt;&gt;
             &lt;Box sx={{ backgroundColor: '#CB4D4533', padding: 1, borderRadius: 1, marginBottom: 1 }}&gt;
               &lt;Typography fontSize='16px' fontWeight={400}&gt;
@@ -560,7 +586,7 @@ export default function <span class="fstat-no" title="function not covered" >Tot
                 {highestPlantingZone.name}
               &lt;/Typography&gt;
               &lt;Typography fontSize='24px' fontWeight={600}&gt;
-                &lt;FormattedNumber value={highestMortalityRate || 0} /&gt;%
+                &lt;FormattedNumber value={highestMortalityRate} /&gt;%
               &lt;/Typography&gt;
             &lt;/Box&gt;
             {(!lowestPlantingZone || lowestPlantingZone.id === highestPlantingZone.id) &amp;&amp; (
@@ -583,6 +609,19 @@ export default function <span class="fstat-no" title="function not covered" >Tot
             &lt;/Typography&gt;
           &lt;/Box&gt;
         )}
+        {highestMortalityRate === undefined &amp;&amp; (
+          &lt;Box sx={{ backgroundColor: theme.palette.TwClrBgSecondary, padding: 1, borderRadius: 1, marginBottom: 1 }}&gt;
+            &lt;Typography fontSize='16px' fontWeight={400}&gt;
+              {strings.INSUFFICIENT_DATA}
+            &lt;/Typography&gt;
+            &lt;Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}&gt;
+              {highestPlantingZone?.name || ''}
+            &lt;/Typography&gt;
+            &lt;Typography fontSize='24px' fontWeight={600}&gt;
+              -
+            &lt;/Typography&gt;
+          &lt;/Box&gt;
+        )}
       &lt;/Box&gt;
     );
   } else {
@@ -591,7 +630,7 @@ export default function <span class="fstat-no" title="function not covered" >Tot
         zone.hasObservedPermanentPlots &amp;&amp;
         zone.mortalityRate !== undefined &amp;&amp;
         zone.mortalityRate !== null &amp;&amp;
-        zone.mortalityRate &gt;= highestMortalityRate
+        zone.mortalityRate &gt;= (highestMortalityRate || 0)
       ) {
 <span class="cstat-no" title="statement not covered" >        highestMortalityRate = zone.mortalityRate;</span>
 <span class="cstat-no" title="statement not covered" >        highestZoneId = zone.plantingZoneId;</span>
@@ -694,7 +733,7 @@ export default function <span class="fstat-no" title="function not covered" >Tot
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-01-31T23:14:10.635Z
+                at 2025-02-03T13:13:16.236Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
