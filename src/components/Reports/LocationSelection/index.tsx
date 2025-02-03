@@ -151,7 +151,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           }}
           type='text'
           tooltipTitle={strings.REPORT_TOTAL_PAID_WORKERS_INFO}
-          errorText={validate && location.workers.paidWorkers === null ? strings.REQUIRED_FIELD : ''}
+          errorText={validate && location.workers.paidWorkers == null ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
 
@@ -169,7 +169,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           }}
           type='text'
           tooltipTitle={strings.REPORT_TOTAL_WOMEN_PAID_WORKERS_INFO}
-          errorText={validate && location.workers.femalePaidWorkers === null ? strings.REQUIRED_FIELD : ''}
+          errorText={validate && location.workers.femalePaidWorkers == null ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
 
@@ -187,7 +187,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           }}
           type='text'
           tooltipTitle={strings.REPORT_TOTAL_VOLUNTEERS_INFO}
-          errorText={validate && location.workers.volunteers === null ? strings.REQUIRED_FIELD : ''}
+          errorText={validate && location.workers.volunteers == null ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
 
