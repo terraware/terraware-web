@@ -77,6 +77,8 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
         {
           values: values ?? [],
           label: strings.ACTUAL,
+          pointRadius: values?.length === 1 ? 4 : 0,
+          color: '#B8A0D6',
         },
       ],
     };
@@ -101,6 +103,7 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
         {
           values: values ?? [],
           pointRadius: values?.length === 1 ? 4 : 0,
+          color: '#D29AB4',
         },
       ],
     };

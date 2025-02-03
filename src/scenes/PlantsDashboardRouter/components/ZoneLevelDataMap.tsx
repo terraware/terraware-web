@@ -207,6 +207,11 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     return [{ sourceId: 'sites', id: plantingSiteId }];
   }, [plantingSiteId]);
 
+  const findZoneArea = (zoneId: number) => {
+    const selectedZone = plantingSite?.plantingZones?.find((pZone) => pZone.id === zoneId);
+    return selectedZone?.areaHa;
+  };
+
   const getContextRenderer = useCallback(
     () =>
       // eslint-disable-next-line react/display-name
@@ -222,7 +227,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
             properties = [
               {
                 key: strings.AREA_HA,
-                value: zoneObservation?.areaHa ?? 0,
+                value: zoneObservation?.areaHa ?? (findZoneArea(entity.id) || 0),
               },
               {
                 key: strings.MORTALITY_RATE,
@@ -232,7 +237,9 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
               },
               {
                 key: strings.PLANTING_DENSITY,
-                value: `${zoneObservation?.plantingDensity} ${strings.PLANTS_PER_HECTARE}`,
+                value: zoneObservation?.plantingDensity
+                  ? `${zoneObservation?.plantingDensity} ${strings.PLANTS_PER_HECTARE}`
+                  : strings.UNKNOWN,
               },
               { key: strings.PLANTED_PLANTS, value: `${zoneStats[entity.id].reportedPlants}` },
               { key: strings.OBSERVED_PLANTS, value: `${zoneObservation?.totalPlants || '0'}` },

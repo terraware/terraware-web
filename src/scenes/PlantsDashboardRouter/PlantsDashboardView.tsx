@@ -144,7 +144,7 @@ export default function PlantsDashboardView(): JSX.Element {
               {strings.MORTALITY_RATE}
             </Typography>
             {hasObservations && (
-              <Typography>{strings.formatString(strings.FROM_X, getLatestObservationLink())}</Typography>
+              <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
             )}
           </Box>
         </Grid>
@@ -257,7 +257,7 @@ export default function PlantsDashboardView(): JSX.Element {
               {strings.PLANTING_DENSITY}
             </Typography>
             {hasObservations && (
-              <Typography>{strings.formatString(strings.FROM_X, getLatestObservationLink())}</Typography>
+              <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
             )}
           </Box>
         </Grid>
