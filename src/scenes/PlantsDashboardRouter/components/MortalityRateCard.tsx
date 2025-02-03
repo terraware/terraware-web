@@ -86,6 +86,11 @@ export default function MortalityRateCard({ plantingSiteId }: MortalityRateCardP
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
             {strings.MORTALITY_BREAKDOWN}
           </Typography>
+          <Tooltip title={strings.MORTALITY_BREAKDOWN_TOOLTIP}>
+            <Box display='flex'>
+              <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+            </Box>
+          </Tooltip>
         </Box>
         <Box paddingTop={2}>
           <LiveDeadPlantsPerSpeciesCard plantingSiteId={plantingSiteId} />

@@ -45,6 +45,8 @@ type QuantityField = (typeof QUANTITY_FIELDS)[number];
 
 const MANDATORY_FIELDS = ['addedDate', 'facilityId', ...QUANTITY_FIELDS, 'speciesId'] as const;
 
+const DEFAULT_DATE = getTodaysDateFormatted();
+
 type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 
 export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Element {
@@ -69,7 +71,6 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
   const { availableProjects } = useProjects(record);
 
   const [totalQuantity, setTotalQuantity] = useState(0);
-  const [addedDateChanged, setAddedDateChanged] = useState(false);
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [timeZone, setTimeZone] = useState('');
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
@@ -170,12 +171,13 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
         return previousRecord;
       }
 
+      const addedDateChanged = previousRecord.addedDate !== DEFAULT_DATE;
       return {
         ...previousRecord,
         addedDate: addedDateChanged ? previousRecord.addedDate : getTodaysDateFormatted(timeZone),
       };
     });
-  }, [timeZone, setRecord, addedDateChanged]);
+  }, [timeZone, setRecord]);
 
   useEffect(() => {
     if (record) {
@@ -183,7 +185,7 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
     }
 
     const newBatch: Partial<CreateBatchRequestPayload> = {
-      addedDate: getTodaysDateFormatted(),
+      addedDate: DEFAULT_DATE,
       germinatingQuantity: 0,
       notReadyQuantity: 0,
       readyQuantity: 0,
@@ -213,7 +215,6 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
   const paddingSeparator = () => (isMobile ? 0 : 1.5);
 
   const changeDate = (id: string, value?: any) => {
-    setAddedDateChanged(id === 'addedDate');
     const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
     onChange(id, date);
   };
