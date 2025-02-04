@@ -7760,7 +7760,7 @@ export interface components {
             rare?: boolean;
             scientificName: string;
             /** @enum {string} */
-            seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate" | "Intermediate - Cool Temperature Sensitive" | "Intermediate - Partial Desiccation Tolerant" | "Intermediate - Short Lived";
+            seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate" | "Intermediate - Cool Temperature Sensitive" | "Intermediate - Partial Desiccation Tolerant" | "Intermediate - Short Lived" | "Likely Intermediate - Cool Temperature Sensitive" | "Likely Intermediate - Partial Desiccation Tolerant" | "Likely Intermediate - Short Lived";
             successionalGroups?: ("Pioneer" | "Early secondary" | "Late secondary" | "Mature")[];
             /** @enum {string} */
             woodDensityLevel?: "Species" | "Genus" | "Family";
@@ -7795,7 +7795,7 @@ export interface components {
             rare?: boolean;
             scientificName: string;
             /** @enum {string} */
-            seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate" | "Intermediate - Cool Temperature Sensitive" | "Intermediate - Partial Desiccation Tolerant" | "Intermediate - Short Lived";
+            seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate" | "Intermediate - Cool Temperature Sensitive" | "Intermediate - Partial Desiccation Tolerant" | "Intermediate - Short Lived" | "Likely Intermediate - Cool Temperature Sensitive" | "Likely Intermediate - Partial Desiccation Tolerant" | "Likely Intermediate - Short Lived";
             successionalGroups?: ("Pioneer" | "Early secondary" | "Late secondary" | "Mature")[];
             /** @enum {string} */
             woodDensityLevel?: "Species" | "Genus" | "Family";
