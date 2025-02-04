@@ -6,6 +6,7 @@ import { PlantingSiteMap } from 'src/components/Map';
 import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
 import MapLegend, { MapLegendGroup } from 'src/components/common/MapLegend';
 import isEnabled from 'src/features';
+import useObservationSummaries from 'src/hooks/useObservationSummaries';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
   selectLatestObservation,
@@ -24,6 +25,7 @@ import {
   ObservationResults,
   ObservationResultsPayload,
   ObservationResultsWithLastObv,
+  ObservationSummary,
 } from 'src/types/Observations';
 import { getRgbaFromHex } from 'src/utils/color';
 import { getShortDate } from 'src/utils/dateFormatter';
@@ -46,6 +48,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
   const observation: ObservationResults | undefined = useAppSelector((state) =>
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
   );
+  const summaries = useObservationSummaries(plantingSiteId);
   const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
   const allObservationsResults = useAppSelector(selectObservationsResults);
   const plantingSiteObservations = allObservationsResults?.filter(
@@ -63,6 +66,13 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     });
     return iZoneObservations;
   }, [plantingSiteObservations]);
+  const [lastSummary, setLastSummary] = useState<ObservationSummary>();
+
+  useEffect(() => {
+    if (summaries?.[0]) {
+      setLastSummary(summaries[0]);
+    }
+  }, [summaries]);
 
   const lastZoneObservation = useCallback((observationsList: ObservationResultsPayload[]) => {
     const observationsToProcess = observationsList;
@@ -242,6 +252,8 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
             { key: strings.NO_PLANTS, value: '' },
           ];
         } else if (zoneProgress[entity.id] && zoneStats[entity.id]) {
+          const lastZoneOb = lastZoneObservation(zoneObservations?.[entity.id]);
+          const lastZoneSummary = lastSummary?.plantingZones.find((pz) => pz.plantingZoneId === entity.id);
           if (newPlantsDashboardEnabled) {
             properties = [
               {
@@ -250,20 +262,31 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
               },
               {
                 key: strings.MORTALITY_RATE,
-                value: zoneObservation?.hasObservedPermanentPlots
-                  ? `${zoneObservation.mortalityRate}%`
-                  : strings.UNKNOWN,
+                value:
+                  zoneObservation && zoneObservation.hasObservedPermanentPlots
+                    ? `${zoneObservation.mortalityRate}%`
+                    : lastZoneOb
+                      ? `${lastZoneOb.mortalityRate}%`
+                      : strings.UNKNOWN,
               },
               {
                 key: strings.PLANTING_DENSITY,
                 value: zoneObservation?.plantingDensity
                   ? `${zoneObservation?.plantingDensity} ${strings.PLANTS_PER_HECTARE}`
-                  : strings.UNKNOWN,
+                  : lastZoneOb
+                    ? `${lastZoneOb?.plantingDensity} ${strings.PLANTS_PER_HECTARE}`
+                    : strings.UNKNOWN,
               },
               { key: strings.PLANTED_PLANTS, value: `${zoneStats[entity.id].reportedPlants}` },
-              { key: strings.OBSERVED_PLANTS, value: `${zoneObservation?.totalPlants || '0'}` },
+              {
+                key: strings.OBSERVED_PLANTS,
+                value: `${zoneObservation?.totalPlants ?? lastZoneSummary?.totalPlants ?? 0}`,
+              },
               { key: strings.PLANTED_SPECIES, value: `${zoneStats[entity.id].reportedSpecies}` },
-              { key: strings.OBSERVED_SPECIES, value: `${zoneObservation?.totalSpecies || '0'}` },
+              {
+                key: strings.OBSERVED_SPECIES,
+                value: `${zoneObservation?.totalSpecies ?? lastZoneOb?.totalSpecies ?? 0}`,
+              },
             ];
           } else {
             if (zoneObservation) {
@@ -318,7 +341,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
           />
         );
       },
-    [observation, zoneProgress, zoneStats]
+    [observation, zoneProgress, zoneStats, lastSummary]
   );
 
   return (
