@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1738707573035" clover="3.2.0">
-  <project timestamp="1738707573035" name="All files">
-    <metrics statements="27268" coveredstatements="1213" conditionals="18631" coveredconditionals="345" methods="8397" coveredmethods="197" elements="54296" coveredelements="1755" complexity="0" loc="27268" ncloc="27268" packages="240" files="1139" classes="1139"/>
+<coverage generated="1738709183979" clover="3.2.0">
+  <project timestamp="1738709183979" name="All files">
+    <metrics statements="27268" coveredstatements="1213" conditionals="18633" coveredconditionals="345" methods="8397" coveredmethods="197" elements="54298" coveredelements="1755" complexity="0" loc="27268" ncloc="27268" packages="240" files="1139" classes="1139"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -26027,7 +26027,7 @@
       </file>
     </package>
     <package name="src.scenes.PlantsDashboardRouter.components">
-      <metrics statements="637" coveredstatements="0" conditionals="616" coveredconditionals="0" methods="203" coveredmethods="0"/>
+      <metrics statements="637" coveredstatements="0" conditionals="618" coveredconditionals="0" methods="203" coveredmethods="0"/>
       <file name="HectaresPlantedCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/HectaresPlantedCard.tsx">
         <metrics statements="13" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="19" count="0" type="stmt"/>
@@ -26446,7 +26446,7 @@
         <line num="52" count="0" type="stmt"/>
       </file>
       <file name="PlantsReportedPerSpeciesCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/components/PlantsReportedPerSpeciesCard.tsx">
-        <metrics statements="65" coveredstatements="0" conditionals="38" coveredconditionals="0" methods="20" coveredmethods="0"/>
+        <metrics statements="65" coveredstatements="0" conditionals="40" coveredconditionals="0" methods="20" coveredmethods="0"/>
         <line num="16" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
         <line num="29" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -26459,7 +26459,7 @@
         <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="41" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="42" count="0" type="stmt"/>
-        <line num="43" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="43" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="44" count="0" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
         <line num="49" count="0" type="cond" truecount="0" falsecount="2"/>
