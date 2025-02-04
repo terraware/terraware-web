@@ -1,3 +1,4 @@
+6cd1a257068 SW-6508 Make zones clikable, but not subzones (#3604)
 5321f275a52 Updated translations from Phrase (#3601)
 61343f9d699 Handle mortality rate nullable (#3599)
 e21100b76d6 SW-6506 Density based on observation of less than a full zone warning is not shown when it should be (#3594)
