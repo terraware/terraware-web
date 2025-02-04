@@ -361,6 +361,8 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
               },
             },
           }}
+          zoneInteractive={newPlantsDashboardEnabled ? true : undefined}
+          subzoneInteractive={newPlantsDashboardEnabled ? false : undefined}
         />
       ) : (
         <Box sx={{ position: 'fixed', top: '50%', left: '50%' }}>
