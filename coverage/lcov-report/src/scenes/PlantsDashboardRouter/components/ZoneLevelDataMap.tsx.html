@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/95</span>
+                <span class='fraction'>0/99</span>
             </div>
         
             
@@ -437,7 +437,20 @@
 <a name='L372'></a><a href='#L372'>372</a>
 <a name='L373'></a><a href='#L373'>373</a>
 <a name='L374'></a><a href='#L374'>374</a>
-<a name='L375'></a><a href='#L375'>375</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L375'></a><a href='#L375'>375</a>
+<a name='L376'></a><a href='#L376'>376</a>
+<a name='L377'></a><a href='#L377'>377</a>
+<a name='L378'></a><a href='#L378'>378</a>
+<a name='L379'></a><a href='#L379'>379</a>
+<a name='L380'></a><a href='#L380'>380</a>
+<a name='L381'></a><a href='#L381'>381</a>
+<a name='L382'></a><a href='#L382'>382</a>
+<a name='L383'></a><a href='#L383'>383</a>
+<a name='L384'></a><a href='#L384'>384</a>
+<a name='L385'></a><a href='#L385'>385</a>
+<a name='L386'></a><a href='#L386'>386</a>
+<a name='L387'></a><a href='#L387'>387</a>
+<a name='L388'></a><a href='#L388'>388</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -657,8 +670,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -671,6 +687,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -732,6 +754,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1030,10 +1056,13 @@ export default function <span class="fstat-no" title="function not covered" >Zon
 <span class="cstat-no" title="statement not covered" >    return [{ sourceId: 'sites', id: plantingSiteId }];</span>
   }, [plantingSiteId]);
 &nbsp;
-  const findZoneArea = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(z</span>oneId: number) =&gt; {</span>
-    const selectedZone = <span class="cstat-no" title="statement not covered" >plantingSite?.plantingZones?.find(<span class="fstat-no" title="function not covered" >(p</span>Zone) =&gt; <span class="cstat-no" title="statement not covered" >pZone.id === zoneId)</span>;</span>
-<span class="cstat-no" title="statement not covered" >    return selectedZone?.areaHa;</span>
-  };
+  const findZoneArea = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (z</span>oneId: number) =&gt; {
+      const selectedZone = <span class="cstat-no" title="statement not covered" >plantingSite?.plantingZones?.find(<span class="fstat-no" title="function not covered" >(p</span>Zone) =&gt; <span class="cstat-no" title="statement not covered" >pZone.id === zoneId)</span>;</span>
+<span class="cstat-no" title="statement not covered" >      return selectedZone?.areaHa;</span>
+    },
+    [plantingSite]
+  );
 &nbsp;
   const getContextRenderer = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
@@ -1044,7 +1073,13 @@ export default function <span class="fstat-no" title="function not covered" >Zon
 <span class="fstat-no" title="function not covered" >          (z</span>: ObservationPlantingZoneResults) =&gt; <span class="cstat-no" title="statement not covered" >z.plantingZoneId === entity.id</span>
         );
 <span class="cstat-no" title="statement not covered" >        if (!zoneStats[entity.id]?.reportedPlants) {</span>
-<span class="cstat-no" title="statement not covered" >          properties = [{ key: strings.NO_PLANTS, value: '' }];</span>
+<span class="cstat-no" title="statement not covered" >          properties = [</span>
+            {
+              key: strings.AREA_HA,
+              value: findZoneArea(entity.id) || 0,
+            },
+            { key: strings.NO_PLANTS, value: '' },
+          ];
         } else <span class="cstat-no" title="statement not covered" >if (zoneProgress[entity.id] &amp;&amp; zoneStats[entity.id]) {</span>
 <span class="cstat-no" title="statement not covered" >          if (newPlantsDashboardEnabled) {</span>
 <span class="cstat-no" title="statement not covered" >            properties = [</span>
@@ -1108,12 +1143,16 @@ export default function <span class="fstat-no" title="function not covered" >Zon
 <span class="cstat-no" title="statement not covered" >        return (</span>
           &lt;MapTooltip
             title={entity.name}
-            subtitle={strings
-              .formatString(
-                strings.DATE_OBSERVATION,
-                lastZoneObservation(zoneObservations?.[entity.id])?.startDate || ''
-              )
-              .toString()}
+            subtitle={
+              zoneObservations?.[entity.id]
+                ? strings
+                    .formatString(
+                      strings.DATE_OBSERVATION,
+                      lastZoneObservation(zoneObservations?.[entity.id])?.startDate || ''
+                    )
+                    .toString()
+                : ''
+            }
             properties={properties}
           /&gt;
         );
@@ -1192,7 +1231,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-04T19:41:15.687Z
+                at 2025-02-04T21:09:03.494Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
