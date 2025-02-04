@@ -40,7 +40,7 @@ const calculateSpeciesQuantities = (plantings: { plants: number; scientificName:
     if (newVersion) {
       if (!speciesQuantities[scientificName] && Object.keys(speciesQuantities).length >= 4) {
         const minSpecies = Object.keys(speciesQuantities).reduce((minSpecies, sp) => {
-          if (speciesQuantities[sp] < speciesQuantities[minSpecies]) {
+          if (sp !== strings.OTHER_SPECIES && speciesQuantities[sp] < speciesQuantities[minSpecies]) {
             return sp;
           }
           return minSpecies;
