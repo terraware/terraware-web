@@ -217,10 +217,13 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     return [{ sourceId: 'sites', id: plantingSiteId }];
   }, [plantingSiteId]);
 
-  const findZoneArea = (zoneId: number) => {
-    const selectedZone = plantingSite?.plantingZones?.find((pZone) => pZone.id === zoneId);
-    return selectedZone?.areaHa;
-  };
+  const findZoneArea = useCallback(
+    (zoneId: number) => {
+      const selectedZone = plantingSite?.plantingZones?.find((pZone) => pZone.id === zoneId);
+      return selectedZone?.areaHa;
+    },
+    [plantingSite]
+  );
 
   const getContextRenderer = useCallback(
     () =>
@@ -231,7 +234,13 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
           (z: ObservationPlantingZoneResults) => z.plantingZoneId === entity.id
         );
         if (!zoneStats[entity.id]?.reportedPlants) {
-          properties = [{ key: strings.NO_PLANTS, value: '' }];
+          properties = [
+            {
+              key: strings.AREA_HA,
+              value: findZoneArea(entity.id) || 0,
+            },
+            { key: strings.NO_PLANTS, value: '' },
+          ];
         } else if (zoneProgress[entity.id] && zoneStats[entity.id]) {
           if (newPlantsDashboardEnabled) {
             properties = [
@@ -295,12 +304,16 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
         return (
           <MapTooltip
             title={entity.name}
-            subtitle={strings
-              .formatString(
-                strings.DATE_OBSERVATION,
-                lastZoneObservation(zoneObservations?.[entity.id])?.startDate || ''
-              )
-              .toString()}
+            subtitle={
+              zoneObservations?.[entity.id]
+                ? strings
+                    .formatString(
+                      strings.DATE_OBSERVATION,
+                      lastZoneObservation(zoneObservations?.[entity.id])?.startDate || ''
+                    )
+                    .toString()
+                : ''
+            }
             properties={properties}
           />
         );
