@@ -76,6 +76,11 @@ export default function MortalityRateCard({ plantingSiteId }: MortalityRateCardP
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
             {strings.ZONE_MORTALITY}
           </Typography>
+          <Tooltip title={strings.ZONE_MORTALITY_TOOLTIP}>
+            <Box display='flex'>
+              <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+            </Box>
+          </Tooltip>
         </Box>
         <Box paddingTop={2}>
           <HighestAndLowestMortalityRateZonesCard plantingSiteId={plantingSiteId} />
@@ -87,6 +92,11 @@ export default function MortalityRateCard({ plantingSiteId }: MortalityRateCardP
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
             {strings.SPECIES_MORTALITY}
           </Typography>
+          <Tooltip title={strings.SPECIES_MORTALITY_TOOLTIP}>
+            <Box display='flex'>
+              <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+            </Box>
+          </Tooltip>
         </Box>
         <Box paddingTop={2}>
           <HighestAndLowestMortalityRateSpeciesCard plantingSiteId={plantingSiteId} />

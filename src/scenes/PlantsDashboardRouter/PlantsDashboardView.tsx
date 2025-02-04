@@ -328,7 +328,7 @@ export default function PlantsDashboardView(): JSX.Element {
       <Grid item xs={12}>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
-            {strings.PLANTING_SITE_TRENDS}
+            {strings.ZONE_TRENDS}
           </Typography>
 
           <Typography>{strings.ALL_OBSERVATIONS}</Typography>
@@ -352,7 +352,7 @@ export default function PlantsDashboardView(): JSX.Element {
             }}
           >
             <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
-              {strings.PLANTING_SITE_PROGRESS}
+              {strings.SITE_MAP}
             </Typography>
             {hasObservations && (
               <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
