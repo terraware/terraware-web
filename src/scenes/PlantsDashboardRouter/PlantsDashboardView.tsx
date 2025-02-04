@@ -2,13 +2,14 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { useDeviceInfo } from '@terraware/web-components/utils';
+import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';
 
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import Link from 'src/components/common/Link';
 import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
 import isEnabled from 'src/features';
+import useObservationSummaries from 'src/hooks/useObservationSummaries';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
@@ -62,6 +63,7 @@ export default function PlantsDashboardView(): JSX.Element {
   const theme = useTheme();
   const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
   const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
+  const summaries = useObservationSummaries(selectedPlantingSiteId);
 
   const messageStyles = {
     margin: '0 auto',
@@ -403,6 +405,17 @@ export default function PlantsDashboardView(): JSX.Element {
     return totalSquareMeters * SQ_M_TO_HECTARES;
   };
 
+  const getSummariesHectares = useCallback(() => {
+    const totalSquareMeters =
+      summaries?.[0]?.plantingZones
+        .flatMap((pz) =>
+          pz.plantingSubzones.flatMap((psz) => psz.monitoringPlots.map((mp) => mp.sizeMeters * mp.sizeMeters))
+        )
+        .reduce((acc, area) => acc + area, 0) ?? 0;
+
+    return totalSquareMeters * SQ_M_TO_HECTARES;
+  }, [summaries]);
+
   const getLatestObservationLink = () => {
     return latestObservation?.completedTime ? (
       <Link
@@ -430,8 +443,13 @@ export default function PlantsDashboardView(): JSX.Element {
       return newPlantsDashboardEnabled
         ? (strings.formatString(
             strings.DASHBOARD_HEADER_TEXT_V2,
-            <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={getObservationHectares()} />)}</b>,
-            <b>{getLatestObservationLink()}</b>
+            <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={getSummariesHectares()} />)}</b>,
+            <b>
+              {summaries?.[0]?.earliestObservationTime ? getDateDisplayValue(summaries[0].earliestObservationTime) : ''}
+            </b>,
+            <b>
+              {summaries?.[0]?.latestObservationTime ? getDateDisplayValue(summaries[0].latestObservationTime) : ''}
+            </b>
           ) as string)
         : (strings.formatString(
             strings.DASHBOARD_HEADER_TEXT,
