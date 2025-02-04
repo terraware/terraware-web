@@ -2974,7 +2974,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** Gets one assigned observation monitoring plot */
+        get: operations["getOneAssignedPlot"];
         /** Updates information about the observation of a plot. */
         put: operations["updatePlotObservation"];
         /** Stores the results of a completed observation of a plot. */
@@ -5516,6 +5517,10 @@ export interface components {
             observation: components["schemas"]["ObservationResultsPayload"];
             status: components["schemas"]["SuccessOrError"];
         };
+        GetOneAssignedPlotResponsePayload: {
+            plot: components["schemas"]["AssignedPlotPayload"];
+            status: components["schemas"]["SuccessOrError"];
+        };
         GetOrganizationNurserySummaryResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
             summary: components["schemas"]["OrganizationNurserySummaryPayload"];
@@ -6658,7 +6663,7 @@ export interface components {
             /** @description Percentage of plants of all species that were dead in this subzone's permanent monitoring plots. */
             monitoringPlots: components["schemas"]["ObservationMonitoringPlotResultsPayload"][];
             /** Format: int32 */
-            mortalityRate: number;
+            mortalityRate?: number;
             /** Format: int32 */
             mortalityRateStdDev?: number;
             /**
@@ -6696,7 +6701,7 @@ export interface components {
              * Format: int32
              * @description Percentage of plants of all species that were dead in this zone's permanent monitoring plots.
              */
-            mortalityRate: number;
+            mortalityRate?: number;
             /** Format: int32 */
             mortalityRateStdDev?: number;
             /**
@@ -6734,7 +6739,7 @@ export interface components {
             /** @description Percentage of plants of all species that were dead in this site's permanent monitoring plots. */
             isAdHoc: boolean;
             /** Format: int32 */
-            mortalityRate: number;
+            mortalityRate?: number;
             /** Format: int32 */
             mortalityRateStdDev?: number;
             /** Format: int64 */
@@ -7176,7 +7181,7 @@ export interface components {
              * Format: int32
              * @description Percentage of plants of all species that were dead in this zone's permanent monitoring plots.
              */
-            mortalityRate: number;
+            mortalityRate?: number;
             /** Format: int32 */
             mortalityRateStdDev?: number;
             /**
@@ -15325,6 +15330,29 @@ export interface operations {
                 content: {
                     "application/gpx+xml": string;
                     "application/json": components["schemas"]["ListAssignedPlotsResponsePayload"];
+                };
+            };
+        };
+    };
+    getOneAssignedPlot: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                observationId: number;
+                plotId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetOneAssignedPlotResponsePayload"];
                 };
             };
         };

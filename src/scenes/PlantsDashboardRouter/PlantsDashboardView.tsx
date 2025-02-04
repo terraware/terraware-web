@@ -93,8 +93,9 @@ export default function PlantsDashboardView(): JSX.Element {
           (acc, zone) => (isAfter(zone.boundaryModifiedTime, acc) ? zone.boundaryModifiedTime : acc),
           pSite.plantingZones[0].boundaryModifiedTime
         );
+        const maxModifiedDate = DateTime.fromISO(maxModifiedTime).toFormat('yyyy-MM-dd');
 
-        if (isAfter(maxModifiedTime, latestObservation.startDate)) {
+        if (isAfter(maxModifiedDate, latestObservation.startDate)) {
           return true;
         } else {
           return false;
@@ -143,7 +144,7 @@ export default function PlantsDashboardView(): JSX.Element {
               {strings.MORTALITY_RATE}
             </Typography>
             {hasObservations && (
-              <Typography>{strings.formatString(strings.FROM_X, getLatestObservationLink())}</Typography>
+              <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
             )}
           </Box>
         </Grid>
@@ -256,7 +257,7 @@ export default function PlantsDashboardView(): JSX.Element {
               {strings.PLANTING_DENSITY}
             </Typography>
             {hasObservations && (
-              <Typography>{strings.formatString(strings.FROM_X, getLatestObservationLink())}</Typography>
+              <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
             )}
           </Box>
         </Grid>

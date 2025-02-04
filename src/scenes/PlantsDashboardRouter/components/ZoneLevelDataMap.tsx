@@ -84,21 +84,31 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
+    const boundariesLegendItems = [
+      {
+        label: strings.PLANTING_SITE,
+        borderColor: theme.palette.TwClrBaseGreen300 as string,
+        fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.2),
+      },
+      {
+        label: strings.ZONES,
+        borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+        fillColor: 'transparent',
+      },
+    ];
     const result: MapLegendGroup[] = [
       {
         title: strings.BOUNDARIES,
-        items: [
-          {
-            label: strings.PLANTING_SITE,
-            borderColor: theme.palette.TwClrBaseGreen300 as string,
-            fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.2),
-          },
-          {
-            label: strings.ZONES,
-            borderColor: theme.palette.TwClrBaseLightGreen300 as string,
-            fillColor: 'transparent',
-          },
-        ],
+        items: newPlantsDashboardEnabled
+          ? [
+              ...boundariesLegendItems,
+              {
+                label: strings.SUBZONES,
+                borderColor: theme.palette.TwClrBaseBlue300 as string,
+                fillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.2),
+              },
+            ]
+          : boundariesLegendItems,
       },
     ];
     if (observation || newPlantsDashboardEnabled) {
@@ -207,6 +217,11 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     return [{ sourceId: 'sites', id: plantingSiteId }];
   }, [plantingSiteId]);
 
+  const findZoneArea = (zoneId: number) => {
+    const selectedZone = plantingSite?.plantingZones?.find((pZone) => pZone.id === zoneId);
+    return selectedZone?.areaHa;
+  };
+
   const getContextRenderer = useCallback(
     () =>
       // eslint-disable-next-line react/display-name
@@ -222,7 +237,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
             properties = [
               {
                 key: strings.AREA_HA,
-                value: plantingSite?.areaHa ?? 0,
+                value: zoneObservation?.areaHa ?? (findZoneArea(entity.id) || 0),
               },
               {
                 key: strings.MORTALITY_RATE,
@@ -232,7 +247,9 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
               },
               {
                 key: strings.PLANTING_DENSITY,
-                value: `${zoneProgress[entity.id].targetDensity} ${strings.PLANTS_PER_HECTARE}`,
+                value: zoneObservation?.plantingDensity
+                  ? `${zoneObservation?.plantingDensity} ${strings.PLANTS_PER_HECTARE}`
+                  : strings.UNKNOWN,
               },
               { key: strings.PLANTED_PLANTS, value: `${zoneStats[entity.id].reportedPlants}` },
               { key: strings.OBSERVED_PLANTS, value: `${zoneObservation?.totalPlants || '0'}` },
@@ -321,7 +338,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
         <PlantingSiteMap
           mapData={mapData!}
           style={{ borderRadius: newPlantsDashboardEnabled ? '8px' : '24px' }}
-          layers={['Planting Site', 'Zones']}
+          layers={newPlantsDashboardEnabled ? ['Planting Site', 'Zones', 'Sub-Zones'] : ['Planting Site', 'Zones']}
           showMortalityRateFill={!!observation && legends.find((l) => l.title === strings.MORTALITY_RATE)?.checked}
           showRecencyFill={
             newPlantsDashboardEnabled && legends.find((l) => l.title === strings.OBSERVATION_RECENCY)?.checked

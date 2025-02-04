@@ -1,24 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { Box, Divider, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import isEnabled from 'src/features';
+import useObservationSummaries from 'src/hooks/useObservationSummaries';
 import { selectObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
-import {
-  selectLatestObservation,
-  selectPlantingSiteObservationsSummaries,
-} from 'src/redux/features/observations/observationsSelectors';
-import { requestGetPlantingSiteObservationsSummaries } from 'src/redux/features/observations/observationsThunks';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingZone } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import {
-  ObservationPlantingZoneResults,
-  ObservationSummary,
-  PlantingZoneObservationSummary,
-} from 'src/types/Observations';
+import { ObservationPlantingZoneResults, PlantingZoneObservationSummary } from 'src/types/Observations';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type HighestAndLowestMortalityRateCardProps = {
@@ -33,29 +26,10 @@ export default function TotalMortalityRateCard({
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
   );
-  const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState<string>('');
-  const plantingObservationsSummaryResponse = useAppSelector((state) =>
-    selectPlantingSiteObservationsSummaries(state, requestId)
-  );
-
   const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
-  const [summaries, setSummaries] = useState<ObservationSummary[]>();
+  const summaries = useObservationSummaries(plantingSiteId);
 
-  useEffect(() => {
-    if (plantingSiteId) {
-      const request = dispatch(requestGetPlantingSiteObservationsSummaries(plantingSiteId));
-      setRequestId(request.requestId);
-    }
-  }, [plantingSiteId]);
-
-  useEffect(() => {
-    if (plantingObservationsSummaryResponse?.status === 'success') {
-      setSummaries(plantingObservationsSummaryResponse.data);
-    }
-  }, [plantingObservationsSummaryResponse]);
-
-  let highestMortalityRate = 0;
+  let highestMortalityRate: number | undefined = undefined;
   let highestZoneId: number;
 
   let lowestMortalityRate = 100;
@@ -66,7 +40,7 @@ export default function TotalMortalityRateCard({
       if (
         zone.mortalityRate !== undefined &&
         zone.mortalityRate !== null &&
-        zone.mortalityRate >= highestMortalityRate
+        zone.mortalityRate >= (highestMortalityRate || 0)
       ) {
         highestMortalityRate = zone.mortalityRate;
         highestZoneId = zone.plantingZoneId;
@@ -95,7 +69,7 @@ export default function TotalMortalityRateCard({
 
     return (
       <Box>
-        {highestPlantingZone && (
+        {highestPlantingZone && highestMortalityRate !== undefined && (
           <>
             <Box sx={{ backgroundColor: '#CB4D4533', padding: 1, borderRadius: 1, marginBottom: 1 }}>
               <Typography fontSize='16px' fontWeight={400}>
@@ -105,7 +79,7 @@ export default function TotalMortalityRateCard({
                 {highestPlantingZone.name}
               </Typography>
               <Typography fontSize='24px' fontWeight={600}>
-                <FormattedNumber value={highestMortalityRate || 0} />%
+                <FormattedNumber value={highestMortalityRate} />%
               </Typography>
             </Box>
             {(!lowestPlantingZone || lowestPlantingZone.id === highestPlantingZone.id) && (
@@ -128,6 +102,19 @@ export default function TotalMortalityRateCard({
             </Typography>
           </Box>
         )}
+        {highestMortalityRate === undefined && (
+          <Box sx={{ backgroundColor: theme.palette.TwClrBgSecondary, padding: 1, borderRadius: 1, marginBottom: 1 }}>
+            <Typography fontSize='16px' fontWeight={400}>
+              {strings.INSUFFICIENT_DATA}
+            </Typography>
+            <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}>
+              {highestPlantingZone?.name || ''}
+            </Typography>
+            <Typography fontSize='24px' fontWeight={600}>
+              -
+            </Typography>
+          </Box>
+        )}
       </Box>
     );
   } else {
@@ -136,7 +123,7 @@ export default function TotalMortalityRateCard({
         zone.hasObservedPermanentPlots &&
         zone.mortalityRate !== undefined &&
         zone.mortalityRate !== null &&
-        zone.mortalityRate >= highestMortalityRate
+        zone.mortalityRate >= (highestMortalityRate || 0)
       ) {
         highestMortalityRate = zone.mortalityRate;
         highestZoneId = zone.plantingZoneId;

@@ -62,12 +62,14 @@ const SiteWithoutZonesCard = ({
 
           if (plants > speciesQuantities[minSpecies]) {
             speciesQuantities[scientificName] = plants;
-            speciesQuantities['Others'] = speciesQuantities['Others']
-              ? speciesQuantities['Others'] + speciesQuantities[minSpecies]
+            speciesQuantities[strings.OTHER_SPECIES] = speciesQuantities[strings.OTHER_SPECIES]
+              ? speciesQuantities[strings.OTHER_SPECIES] + speciesQuantities[minSpecies]
               : speciesQuantities[minSpecies];
             delete speciesQuantities[minSpecies];
           } else {
-            speciesQuantities['Others'] = speciesQuantities['Others'] ? speciesQuantities['Others'] + plants : plants;
+            speciesQuantities[strings.OTHER_SPECIES] = speciesQuantities[strings.OTHER_SPECIES]
+              ? speciesQuantities[strings.OTHER_SPECIES] + plants
+              : plants;
           }
         } else {
           if (!speciesQuantities[scientificName]) {
@@ -134,13 +136,13 @@ const SiteWithZonesCard = ({
 
                 if (numPlants > speciesQuantities[minSpecies]) {
                   speciesQuantities[population.species_scientificName] = numPlants;
-                  speciesQuantities['Others'] = speciesQuantities['Others']
-                    ? speciesQuantities['Others'] + speciesQuantities[minSpecies]
+                  speciesQuantities[strings.OTHER_SPECIES] = speciesQuantities[strings.OTHER_SPECIES]
+                    ? speciesQuantities[strings.OTHER_SPECIES] + speciesQuantities[minSpecies]
                     : speciesQuantities[minSpecies];
                   delete speciesQuantities[minSpecies];
                 } else {
-                  speciesQuantities['Others'] = speciesQuantities['Others']
-                    ? speciesQuantities['Others'] + numPlants
+                  speciesQuantities[strings.OTHER_SPECIES] = speciesQuantities[strings.OTHER_SPECIES]
+                    ? speciesQuantities[strings.OTHER_SPECIES] + numPlants
                     : numPlants;
                 }
               } else {

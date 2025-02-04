@@ -1,19 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { Box, Divider, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import isEnabled from 'src/features';
-import {
-  selectLatestObservation,
-  selectPlantingSiteObservationsSummaries,
-} from 'src/redux/features/observations/observationsSelectors';
-import { requestGetPlantingSiteObservationsSummaries } from 'src/redux/features/observations/observationsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import useObservationSummaries from 'src/hooks/useObservationSummaries';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
+import { useAppSelector } from 'src/redux/store';
 import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import strings from 'src/strings';
-import { ObservationSpeciesResultsPayload, ObservationSummary } from 'src/types/Observations';
+import { ObservationSpeciesResultsPayload } from 'src/types/Observations';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type HighestAndLowestMortalityRateSpeciesCardProps = {
@@ -28,31 +25,13 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
   );
-  const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState<string>('');
-  const plantingObservationsSummaryResponse = useAppSelector((state) =>
-    selectPlantingSiteObservationsSummaries(state, requestId)
-  );
 
   const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
-  const [summaries, setSummaries] = useState<ObservationSummary[]>();
+  const summaries = useObservationSummaries(plantingSiteId);
 
   const { availableSpecies } = useSpecies();
 
-  useEffect(() => {
-    if (plantingSiteId) {
-      const request = dispatch(requestGetPlantingSiteObservationsSummaries(plantingSiteId));
-      setRequestId(request.requestId);
-    }
-  }, [plantingSiteId]);
-
-  useEffect(() => {
-    if (plantingObservationsSummaryResponse?.status === 'success') {
-      setSummaries(plantingObservationsSummaryResponse.data);
-    }
-  }, [plantingObservationsSummaryResponse]);
-
-  let highestMortalityRate = 0;
+  let highestMortalityRate: number | undefined = undefined;
   let highestSpecies = '';
 
   let lowestMortalityRate = 100;
@@ -60,7 +39,11 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
 
   if (newPlantsDashboardEnabled) {
     summaries?.[0]?.species.forEach((sp: ObservationSpeciesResultsPayload) => {
-      if (sp.mortalityRate !== undefined && sp.mortalityRate !== null && sp.mortalityRate >= highestMortalityRate) {
+      if (
+        sp.mortalityRate !== undefined &&
+        sp.mortalityRate !== null &&
+        sp.mortalityRate >= (highestMortalityRate || 0)
+      ) {
         highestMortalityRate = sp.mortalityRate;
         highestSpecies =
           availableSpecies?.find((spec) => spec.id === sp.speciesId)?.scientificName || sp.speciesName || '';
@@ -76,7 +59,11 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
     });
   } else {
     observation?.species.forEach((sp) => {
-      if (sp.mortalityRate !== undefined && sp.mortalityRate !== null && sp.mortalityRate >= highestMortalityRate) {
+      if (
+        sp.mortalityRate !== undefined &&
+        sp.mortalityRate !== null &&
+        sp.mortalityRate >= (highestMortalityRate || 0)
+      ) {
         highestMortalityRate = sp.mortalityRate;
         highestSpecies = sp.speciesScientificName || sp.speciesName || '';
       }
@@ -92,7 +79,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
 
   return newPlantsDashboardEnabled ? (
     <Box>
-      {highestSpecies && (
+      {highestSpecies && highestMortalityRate !== undefined && (
         <>
           <Box sx={{ backgroundColor: '#CB4D4533', padding: 1, borderRadius: 1, marginBottom: 1 }}>
             <Typography fontSize='16px' fontWeight={400}>
@@ -102,7 +89,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
               {highestSpecies}
             </Typography>
             <Typography fontSize='24px' fontWeight={600}>
-              <FormattedNumber value={highestMortalityRate || 0} />%
+              <FormattedNumber value={highestMortalityRate} />%
             </Typography>
           </Box>
           {(!lowestSpecies || lowestSpecies === highestSpecies) && (
@@ -122,6 +109,19 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
           </Typography>
           <Typography fontSize='24px' fontWeight={600}>
             <FormattedNumber value={lowestMortalityRate || 0} />%
+          </Typography>
+        </Box>
+      )}
+      {highestMortalityRate === undefined && (
+        <Box sx={{ backgroundColor: theme.palette.TwClrBgSecondary, padding: 1, borderRadius: 1, marginBottom: 1 }}>
+          <Typography fontSize='16px' fontWeight={400}>
+            {strings.INSUFFICIENT_DATA}
+          </Typography>
+          <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}>
+            {strings.NO_SPECIES}
+          </Typography>
+          <Typography fontSize='24px' fontWeight={600}>
+            -
           </Typography>
         </Box>
       )}
