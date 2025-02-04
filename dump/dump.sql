@@ -190,14 +190,22 @@ COMMENT ON EXTENSION unaccent IS 'text search dictionary that removes accents';
 
 CREATE FUNCTION public.column_exists(ptable text, pcolumn text) RETURNS boolean
     LANGUAGE sql STABLE STRICT
-    AS $$
-    -- does the requested table.column exist in schema?
-SELECT EXISTS
-           (SELECT NULL
-            FROM information_schema.columns
-            WHERE table_name = ptable
-              AND column_name = pcolumn
-           );
+    AS $$
+
+    -- does the requested table.column exist in schema?
+
+SELECT EXISTS
+
+           (SELECT NULL
+
+            FROM information_schema.columns
+
+            WHERE table_name = ptable
+
+              AND column_name = pcolumn
+
+           );
+
 $$;
 
 
@@ -207,14 +215,22 @@ $$;
 
 CREATE FUNCTION public.rename_column_if_exists(ptable text, pcolumn text, new_name text) RETURNS void
     LANGUAGE plpgsql
-    AS $$
-BEGIN
-    -- Rename the column if it exists.
-    IF column_exists(ptable, pcolumn) THEN
-        EXECUTE FORMAT('ALTER TABLE %I RENAME COLUMN %I TO %I;',
-                       ptable, pcolumn, new_name);
-    END IF;
-END
+    AS $$
+
+BEGIN
+
+    -- Rename the column if it exists.
+
+    IF column_exists(ptable, pcolumn) THEN
+
+        EXECUTE FORMAT('ALTER TABLE %I RENAME COLUMN %I TO %I;',
+
+                       ptable, pcolumn, new_name);
+
+    END IF;
+
+END
+
 $$;
 
 
@@ -8030,6 +8046,9 @@ COPY public.seed_storage_behaviors (id, name) FROM stdin;
 8	Intermediate - Cool Temperature Sensitive
 9	Intermediate - Partial Desiccation Tolerant
 10	Intermediate - Short Lived
+11	Likely Intermediate - Cool Temperature Sensitive
+12	Likely Intermediate - Partial Desiccation Tolerant
+13	Likely Intermediate - Short Lived
 \.
 
 

@@ -123,6 +123,22 @@ export function storageBehaviors(useLocalizedValues = false) {
       label: strings.LIKELY_INTERMEDIATE,
       value: useLocalizedValues ? strings.LIKELY_INTERMEDIATE : 'Likely Intermediate',
     },
+    {
+      label: strings.LIKELY_INTERMEDIATE_COOL_TEMPERATURE_SENSITIVE,
+      value: useLocalizedValues
+        ? strings.LIKELY_INTERMEDIATE_COOL_TEMPERATURE_SENSITIVE
+        : 'Likely Intermediate - Cool Temperature Sensitive',
+    },
+    {
+      label: strings.LIKELY_INTERMEDIATE_PARTIAL_DESICCATION_TOLERANT,
+      value: useLocalizedValues
+        ? strings.LIKELY_INTERMEDIATE_PARTIAL_DESICCATION_TOLERANT
+        : 'Likely Intermediate - Partial Desiccation Tolerant',
+    },
+    {
+      label: strings.LIKELY_INTERMEDIATE_SHORT_LIVED,
+      value: useLocalizedValues ? strings.LIKELY_INTERMEDIATE_SHORT_LIVED : 'Likely Intermediate - Short Lived',
+    },
     { label: strings.UNKNOWN, value: useLocalizedValues ? strings.UNKNOWN : 'Unknown' },
   ];
 }
@@ -280,6 +296,12 @@ export function getSeedStorageBehaviorString(species?: Species): string {
       return strings.INTERMEDIATE_SHORT_LIVED;
     case 'Likely Intermediate':
       return strings.LIKELY_INTERMEDIATE;
+    case 'Likely Intermediate - Cool Temperature Sensitive':
+      return strings.LIKELY_INTERMEDIATE_COOL_TEMPERATURE_SENSITIVE;
+    case 'Likely Intermediate - Partial Desiccation Tolerant':
+      return strings.LIKELY_INTERMEDIATE_PARTIAL_DESICCATION_TOLERANT;
+    case 'Likely Intermediate - Short Lived':
+      return strings.LIKELY_INTERMEDIATE_SHORT_LIVED;
     case 'Likely Orthodox':
       return strings.LIKELY_ORTHODOX;
     case 'Likely Recalcitrant':

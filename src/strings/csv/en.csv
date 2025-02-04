@@ -822,6 +822,9 @@ LIANA,Liana,A type of plant.
 LICHEN,Lichen,
 LIGHT,Light,
 LIKELY_INTERMEDIATE,Likely Intermediate,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Intermediate.
+LIKELY_INTERMEDIATE_COOL_TEMPERATURE_SENSITIVE,Likely Intermediate - Cool Temperature Sensitive,
+LIKELY_INTERMEDIATE_PARTIAL_DESICCATION_TOLERANT,Likely Intermediate - Partial Desiccation Tolerant,
+LIKELY_INTERMEDIATE_SHORT_LIVED,Likely Intermediate - Short Lived,
 LIKELY_ORTHODOX,Likely Orthodox,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Orthodox.
 LIKELY_RECALCITRANT,Likely Recalcitrant,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Recalcitrant.
 LIMIT_OBSERVATION_LABEL,Limit observation to selected subzones,
