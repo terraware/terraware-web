@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { Icon, Tooltip } from '@terraware/web-components';
 
 import BarChart from 'src/components/common/Chart/BarChart';
 import PieChart from 'src/components/common/Chart/PieChart';
@@ -32,6 +33,49 @@ export default function PlantsReportedPerSpeciesCard({
   }
 }
 
+const calculateSpeciesQuantities = (plantings: { plants: number; scientificName: string }[], newVersion?: boolean) => {
+  const speciesQuantities: Record<string, number> = {};
+  plantings?.forEach((planting) => {
+    const { scientificName, plants } = planting;
+    if (newVersion) {
+      if (!speciesQuantities[scientificName] && Object.keys(speciesQuantities).length >= 4) {
+        const minSpecies = Object.keys(speciesQuantities).reduce((minSpecies, sp) => {
+          if (speciesQuantities[sp] < speciesQuantities[minSpecies]) {
+            return sp;
+          }
+          return minSpecies;
+        }, Object.keys(speciesQuantities)[0]);
+
+        if (plants > speciesQuantities[minSpecies]) {
+          speciesQuantities[scientificName] = plants;
+          speciesQuantities[strings.OTHER_SPECIES] = speciesQuantities[strings.OTHER_SPECIES]
+            ? speciesQuantities[strings.OTHER_SPECIES] + speciesQuantities[minSpecies]
+            : speciesQuantities[minSpecies];
+          delete speciesQuantities[minSpecies];
+        } else {
+          speciesQuantities[strings.OTHER_SPECIES] = speciesQuantities[strings.OTHER_SPECIES]
+            ? speciesQuantities[strings.OTHER_SPECIES] + plants
+            : plants;
+        }
+      } else {
+        if (!speciesQuantities[scientificName]) {
+          speciesQuantities[scientificName] = plants;
+        } else {
+          speciesQuantities[scientificName] += plants;
+        }
+      }
+    } else {
+      if (!speciesQuantities[scientificName]) {
+        speciesQuantities[scientificName] = plants;
+      } else {
+        speciesQuantities[scientificName] += plants;
+      }
+    }
+  });
+
+  return speciesQuantities;
+};
+
 const SiteWithoutZonesCard = ({
   plantingSiteId,
   newVersion,
@@ -46,32 +90,11 @@ const SiteWithoutZonesCard = ({
   const plantings = useAppSelector((state) => selectPlantingsForSite(state, plantingSiteId));
 
   useEffect(() => {
-    const speciesQuantities: Record<string, number> = {};
-    plantings.forEach((planting) => {
-      const plants = Number(planting['numPlants(raw)']);
-      const { scientificName } = planting.species;
-
-      if (newVersion) {
-        if (!speciesQuantities[scientificName] && Object.keys(speciesQuantities).length >= 4) {
-          speciesQuantities[strings.OTHER_SPECIES] = speciesQuantities[strings.OTHER_SPECIES]
-            ? speciesQuantities[strings.OTHER_SPECIES] + plants
-            : plants;
-        } else {
-          if (!speciesQuantities[scientificName]) {
-            speciesQuantities[scientificName] = plants;
-          } else {
-            speciesQuantities[scientificName] += plants;
-          }
-        }
-      } else {
-        if (!speciesQuantities[scientificName]) {
-          speciesQuantities[scientificName] = plants;
-        } else {
-          speciesQuantities[scientificName] += plants;
-        }
-      }
-    });
-
+    const transformedPlantings = plantings?.map((planting) => ({
+      plants: Number(planting['numPlants(raw)']),
+      scientificName: planting.species.scientificName,
+    }));
+    const speciesQuantities: Record<string, number> = calculateSpeciesQuantities(transformedPlantings, newVersion);
     setLabels(Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)));
     setValues(Object.values(speciesQuantities));
     setTooltipTitles(Object.keys(speciesQuantities));
@@ -102,36 +125,17 @@ const SiteWithZonesCard = ({
 
   useEffect(() => {
     if (populationSelector) {
-      const speciesQuantities: Record<string, number> = {};
-      populationSelector?.forEach((zone) =>
-        zone.plantingSubzones?.forEach((subzone) =>
-          subzone.populations?.forEach((population) => {
-            const numPlants = +population['totalPlants(raw)'];
-            if (isNaN(numPlants)) {
-              return;
-            }
-            if (newVersion) {
-              if (!speciesQuantities[population.species_scientificName] && Object.keys(speciesQuantities).length >= 4) {
-                speciesQuantities[strings.OTHER_SPECIES] = speciesQuantities[strings.OTHER_SPECIES]
-                  ? speciesQuantities[strings.OTHER_SPECIES] + numPlants
-                  : numPlants;
-              } else {
-                if (!speciesQuantities[population.species_scientificName]) {
-                  speciesQuantities[population.species_scientificName] = numPlants;
-                } else {
-                  speciesQuantities[population.species_scientificName] += numPlants;
-                }
-              }
-            } else {
-              if (speciesQuantities[population.species_scientificName]) {
-                speciesQuantities[population.species_scientificName] += numPlants;
-              } else {
-                speciesQuantities[population.species_scientificName] = numPlants;
-              }
-            }
-          })
+      const transformedPlantings = populationSelector
+        .flatMap((zone) =>
+          zone.plantingSubzones?.flatMap((subZone) =>
+            subZone.populations?.map((population) => ({
+              plants: +population['totalPlants(raw)'],
+              scientificName: population.species_scientificName,
+            }))
+          )
         )
-      );
+        .filter((tp) => tp !== undefined);
+      const speciesQuantities: Record<string, number> = calculateSpeciesQuantities(transformedPlantings, newVersion);
       setLabels(Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)));
       setValues(Object.values(speciesQuantities));
       setTooltipTitles(Object.keys(speciesQuantities));
@@ -188,9 +192,16 @@ const ChartData = ({ plantingSiteId, tooltipTitles, labels, values, newVersion }
 
   return newVersion ? (
     <Box>
-      <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-        {strings.PLANTED_SPECIES}
-      </Typography>
+      <Box display={'flex'} alignItems={'center'}>
+        <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
+          {strings.PLANTED_SPECIES}
+        </Typography>
+        <Tooltip title={strings.PLANTED_SPECIES_TOOLTIP}>
+          <Box display='flex'>
+            <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+          </Box>
+        </Tooltip>
+      </Box>
       <Box height={'250px'} marginTop={3} marginBottom={6}>
         <PieChart
           key={`${plantingSiteId}_${values?.length}`}
