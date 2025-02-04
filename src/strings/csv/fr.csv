@@ -342,7 +342,7 @@ CUSTOMIZE_TABLE_COLUMNS_DESCRIPTION,Cochez les colonnes que vous souhaitez ajout
 CUT_TEST,Test de coupe,
 DASHBOARD,Tableau de bord,
 DASHBOARD_HEADER_TEXT,Les données de ce tableau de bord sont basées sur un échantillon de {0} hectares de l'observation {1}., {1} date of the last observation in short format (e.g. July 2023)
-DASHBOARD_HEADER_TEXT_V2,Les données d'observation de ce tableau de bord sont basées sur un échantillon de {0} parmi les {1} de ce site de plantation.,
+DASHBOARD_HEADER_TEXT_V2,Les données d’observation de ce tableau de bord sont basées sur un échantillon {0} d’observations entre {1} et {2}.,
 DASHBOARD_MESSAGE,Votre tableau de bord des semences se remplira automatiquement de données lorsque vous ajouterez des accessions.,
 DASHBOARD_MESSAGE_TITLE,Ajoutez des accessions pour afficher les données,
 DATA_CHECK_COMPLETED,Vérification de la base de données terminée. Aucune erreur n'a été trouvée !,
@@ -822,6 +822,9 @@ LIANA,Liane,A type of plant.
 LICHEN,Lichen,
 LIGHT,Lumière,
 LIKELY_INTERMEDIATE,Probablement intermédiaire,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Intermediate.
+LIKELY_INTERMEDIATE_COOL_TEMPERATURE_SENSITIVE,Probablement intermédiaire  -  Sensible aux températures fraîches,
+LIKELY_INTERMEDIATE_PARTIAL_DESICCATION_TOLERANT,Probablement intermédiaire  -  Tolérance partielle à la dessiccation,
+LIKELY_INTERMEDIATE_SHORT_LIVED,Probablement intermédiaire  -  Courte durée de vie,
 LIKELY_ORTHODOX,Probablement orthodoxe,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Orthodox.
 LIKELY_RECALCITRANT,Probablement récalcitrant,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Recalcitrant.
 LIMIT_OBSERVATION_LABEL,Limiter l’observation aux sous-zones sélectionnées,
