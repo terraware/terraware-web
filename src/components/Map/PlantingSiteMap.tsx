@@ -51,6 +51,8 @@ export type PlantingSiteMapProps = {
   layers?: MapLayer[];
   showMortalityRateFill?: boolean;
   showRecencyFill?: boolean;
+  zoneInteractive?: boolean;
+  subzoneInteractive?: boolean;
 } & MapControl;
 
 export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Element | null {
@@ -63,6 +65,8 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
     layers,
     showMortalityRateFill,
     showRecencyFill,
+    zoneInteractive,
+    subzoneInteractive,
   } = props;
   const { ...controlProps }: MapControl = props;
   const theme = useTheme();
@@ -113,7 +117,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       if (mapData.subzone && (layers === undefined || layers?.includes('Sub-Zones'))) {
         sources.push({
           ...mapData.subzone,
-          isInteractive: isFirstLayerAdded(),
+          isInteractive: subzoneInteractive !== undefined ? subzoneInteractive : isFirstLayerAdded(),
           annotation: isFirstLayerAdded()
             ? {
                 textField: 'fullName',
@@ -128,7 +132,7 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
         sources.push({
           ...mapData.zone,
           ...getRenderAttributes('zone'),
-          isInteractive: isFirstLayerAdded(),
+          isInteractive: zoneInteractive !== undefined ? zoneInteractive : isFirstLayerAdded(),
           annotation: isFirstLayerAdded()
             ? {
                 textField: 'name',
