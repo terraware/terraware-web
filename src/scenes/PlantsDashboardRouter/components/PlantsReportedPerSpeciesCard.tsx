@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { Icon, Tooltip } from '@terraware/web-components';
 
 import BarChart from 'src/components/common/Chart/BarChart';
 import PieChart from 'src/components/common/Chart/PieChart';
@@ -191,9 +192,16 @@ const ChartData = ({ plantingSiteId, tooltipTitles, labels, values, newVersion }
 
   return newVersion ? (
     <Box>
-      <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-        {strings.PLANTED_SPECIES}
-      </Typography>
+      <Box display={'flex'} alignItems={'center'}>
+        <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
+          {strings.PLANTED_SPECIES}
+        </Typography>
+        <Tooltip title={strings.PLANTED_SPECIES_TOOLTIP}>
+          <Box display='flex'>
+            <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+          </Box>
+        </Tooltip>
+      </Box>
       <Box height={'250px'} marginTop={3} marginBottom={6}>
         <PieChart
           key={`${plantingSiteId}_${values?.length}`}
