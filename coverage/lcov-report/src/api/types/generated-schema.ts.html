@@ -16780,7 +16780,63 @@
 <a name='L16715'></a><a href='#L16715'>16715</a>
 <a name='L16716'></a><a href='#L16716'>16716</a>
 <a name='L16717'></a><a href='#L16717'>16717</a>
-<a name='L16718'></a><a href='#L16718'>16718</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L16718'></a><a href='#L16718'>16718</a>
+<a name='L16719'></a><a href='#L16719'>16719</a>
+<a name='L16720'></a><a href='#L16720'>16720</a>
+<a name='L16721'></a><a href='#L16721'>16721</a>
+<a name='L16722'></a><a href='#L16722'>16722</a>
+<a name='L16723'></a><a href='#L16723'>16723</a>
+<a name='L16724'></a><a href='#L16724'>16724</a>
+<a name='L16725'></a><a href='#L16725'>16725</a>
+<a name='L16726'></a><a href='#L16726'>16726</a>
+<a name='L16727'></a><a href='#L16727'>16727</a>
+<a name='L16728'></a><a href='#L16728'>16728</a>
+<a name='L16729'></a><a href='#L16729'>16729</a>
+<a name='L16730'></a><a href='#L16730'>16730</a>
+<a name='L16731'></a><a href='#L16731'>16731</a>
+<a name='L16732'></a><a href='#L16732'>16732</a>
+<a name='L16733'></a><a href='#L16733'>16733</a>
+<a name='L16734'></a><a href='#L16734'>16734</a>
+<a name='L16735'></a><a href='#L16735'>16735</a>
+<a name='L16736'></a><a href='#L16736'>16736</a>
+<a name='L16737'></a><a href='#L16737'>16737</a>
+<a name='L16738'></a><a href='#L16738'>16738</a>
+<a name='L16739'></a><a href='#L16739'>16739</a>
+<a name='L16740'></a><a href='#L16740'>16740</a>
+<a name='L16741'></a><a href='#L16741'>16741</a>
+<a name='L16742'></a><a href='#L16742'>16742</a>
+<a name='L16743'></a><a href='#L16743'>16743</a>
+<a name='L16744'></a><a href='#L16744'>16744</a>
+<a name='L16745'></a><a href='#L16745'>16745</a>
+<a name='L16746'></a><a href='#L16746'>16746</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -36473,7 +36529,8 @@
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** Gets one assigned observation monitoring plot */
+        get: operations["getOneAssignedPlot"];
         /** Updates information about the observation of a plot. */
         put: operations["updatePlotObservation"];
         /** Stores the results of a completed observation of a plot. */
@@ -39015,6 +39072,10 @@ export interface components {
             observation: components["schemas"]["ObservationResultsPayload"];
             status: components["schemas"]["SuccessOrError"];
         };
+        GetOneAssignedPlotResponsePayload: {
+            plot: components["schemas"]["AssignedPlotPayload"];
+            status: components["schemas"]["SuccessOrError"];
+        };
         GetOrganizationNurserySummaryResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
             summary: components["schemas"]["OrganizationNurserySummaryPayload"];
@@ -40157,7 +40218,7 @@ export interface components {
             /** @description Percentage of plants of all species that were dead in this subzone's permanent monitoring plots. */
             monitoringPlots: components["schemas"]["ObservationMonitoringPlotResultsPayload"][];
             /** Format: int32 */
-            mortalityRate: number;
+            mortalityRate?: number;
             /** Format: int32 */
             mortalityRateStdDev?: number;
             /**
@@ -40195,7 +40256,7 @@ export interface components {
              * Format: int32
              * @description Percentage of plants of all species that were dead in this zone's permanent monitoring plots.
              */
-            mortalityRate: number;
+            mortalityRate?: number;
             /** Format: int32 */
             mortalityRateStdDev?: number;
             /**
@@ -40233,7 +40294,7 @@ export interface components {
             /** @description Percentage of plants of all species that were dead in this site's permanent monitoring plots. */
             isAdHoc: boolean;
             /** Format: int32 */
-            mortalityRate: number;
+            mortalityRate?: number;
             /** Format: int32 */
             mortalityRateStdDev?: number;
             /** Format: int64 */
@@ -40675,7 +40736,7 @@ export interface components {
              * Format: int32
              * @description Percentage of plants of all species that were dead in this zone's permanent monitoring plots.
              */
-            mortalityRate: number;
+            mortalityRate?: number;
             /** Format: int32 */
             mortalityRateStdDev?: number;
             /**
@@ -48828,6 +48889,29 @@ export interface operations {
             };
         };
     };
+    getOneAssignedPlot: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                observationId: number;
+                plotId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetOneAssignedPlotResponsePayload"];
+                };
+            };
+        };
+    };
     updatePlotObservation: {
         parameters: {
             query?: never;
@@ -50221,7 +50305,7 @@ type WithRequired&lt;T, K extends keyof T&gt; = T &amp; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-03T23:05:37.113Z
+                at 2025-02-04T00:16:21.406Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
