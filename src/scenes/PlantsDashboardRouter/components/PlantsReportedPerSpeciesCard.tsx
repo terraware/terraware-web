@@ -34,7 +34,7 @@ export default function PlantsReportedPerSpeciesCard({
 
 const calculateSpeciesQuantities = (plantings: { plants: number; scientificName: string }[], newVersion?: boolean) => {
   const speciesQuantities: Record<string, number> = {};
-  plantings.forEach((planting) => {
+  plantings?.forEach((planting) => {
     const { scientificName, plants } = planting;
     if (newVersion) {
       if (!speciesQuantities[scientificName] && Object.keys(speciesQuantities).length >= 4) {
@@ -89,7 +89,7 @@ const SiteWithoutZonesCard = ({
   const plantings = useAppSelector((state) => selectPlantingsForSite(state, plantingSiteId));
 
   useEffect(() => {
-    const transformedPlantings = plantings.map((planting) => ({
+    const transformedPlantings = plantings?.map((planting) => ({
       plants: Number(planting['numPlants(raw)']),
       scientificName: planting.species.scientificName,
     }));
@@ -124,14 +124,16 @@ const SiteWithZonesCard = ({
 
   useEffect(() => {
     if (populationSelector) {
-      const transformedPlantings = populationSelector.flatMap((zone) =>
-        zone.plantingSubzones.flatMap((subZone) =>
-          subZone.populations.map((population) => ({
-            plants: +population['totalPlants(raw)'],
-            scientificName: population.species_scientificName,
-          }))
+      const transformedPlantings = populationSelector
+        .flatMap((zone) =>
+          zone.plantingSubzones?.flatMap((subZone) =>
+            subZone.populations?.map((population) => ({
+              plants: +population['totalPlants(raw)'],
+              scientificName: population.species_scientificName,
+            }))
+          )
         )
-      );
+        .filter((tp) => tp !== undefined);
       const speciesQuantities: Record<string, number> = calculateSpeciesQuantities(transformedPlantings, newVersion);
       setLabels(Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)));
       setValues(Object.values(speciesQuantities));
