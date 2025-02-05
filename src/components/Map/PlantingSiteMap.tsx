@@ -117,15 +117,49 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
       if (mapData.subzone && (layers === undefined || layers?.includes('Sub-Zones'))) {
         sources.push({
           ...mapData.subzone,
+          ...getRenderAttributes('subzone'),
           isInteractive: subzoneInteractive !== undefined ? subzoneInteractive : isFirstLayerAdded(),
           annotation: isFirstLayerAdded()
             ? {
-                textField: 'fullName',
+                textField: 'name',
                 textColor: theme.palette.TwClrBaseWhite as string,
                 textSize: 16,
               }
             : undefined,
-          ...getRenderAttributes('subzone'),
+          fillColor: showRecencyFill
+            ? [
+                'case',
+                ['==', ['number', ['get', 'recency']], 0],
+                getRenderAttributes('subzone').fillColor,
+                theme.palette.TwClrBasePink200,
+              ]
+            : getRenderAttributes('subzone').fillColor,
+          patternFill: newPlantsDashboardEnabled
+            ? showMortalityRateFill
+              ? [
+                  'case',
+                  ['>', ['number', ['get', 'mortalityRate']], 50],
+                  'mortality-rate-more-50',
+                  ['>', ['number', ['get', 'mortalityRate']], 25],
+                  'mortality-rate-less-50',
+                  'mortality-rate-less-25',
+                ]
+              : undefined
+            : undefined,
+          opacity: newPlantsDashboardEnabled
+            ? showRecencyFill
+              ? [
+                  'case',
+                  ['==', ['get', 'recency'], 1],
+                  0.9,
+                  ['==', ['get', 'recency'], 2],
+                  0.7,
+                  ['==', ['get', 'recency'], 3],
+                  0.5,
+                  0.3,
+                ]
+              : undefined
+            : getRenderAttributes('subzone').opacity,
         });
       }
       if (mapData.zone && (layers === undefined || layers?.includes('Zones'))) {
@@ -140,41 +174,13 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
                 textSize: 16,
               }
             : undefined,
-          fillColor: showRecencyFill
-            ? [
-                'case',
-                ['==', ['number', ['get', 'recency']], 0],
-                getRenderAttributes('zone').fillColor,
-                theme.palette.TwClrBasePink200,
-              ]
-            : getRenderAttributes('zone').fillColor,
           patternFill: newPlantsDashboardEnabled
-            ? showMortalityRateFill
-              ? [
-                  'case',
-                  ['>', ['number', ['get', 'mortalityRate']], 50],
-                  'mortality-rate-more-50',
-                  ['>', ['number', ['get', 'mortalityRate']], 25],
-                  'mortality-rate-less-50',
-                  'mortality-rate-less-25',
-                ]
-              : undefined
+            ? undefined
             : showMortalityRateFill
               ? 'mortality-rate-indicator'
               : undefined,
           opacity: newPlantsDashboardEnabled
-            ? showRecencyFill
-              ? [
-                  'case',
-                  ['==', ['get', 'recency'], 1],
-                  0.9,
-                  ['==', ['get', 'recency'], 2],
-                  0.7,
-                  ['==', ['get', 'recency'], 3],
-                  0.5,
-                  0.3,
-                ]
-              : undefined
+            ? undefined
             : showMortalityRateFill
               ? [
                   'case',
