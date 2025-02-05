@@ -64,7 +64,10 @@ export type ObservationPlantingZoneResults = ObservationPlantingZoneResultsPaylo
     hasObservedTemporaryPlots: boolean;
   };
 
-export type ObservationPlantingZoneResultsWithLastObv = ObservationPlantingZoneResults & { lastObv?: string };
+export type ObservationPlantingZoneResultsWithLastObv = Omit<ObservationPlantingZoneResults, 'plantingSubzones'> & {
+  lastObv?: string;
+  plantingSubzones: ObservationPlantingSubzoneResultsWithLastObv[];
+};
 
 // subzone level results -> contains lists of both species level results and monitoring plot level results
 export type ObservationPlantingSubzoneResultsPayload =
@@ -74,7 +77,9 @@ export type ObservationPlantingSubzoneResults = ObservationPlantingSubzoneResult
     plantingSubzoneName: string;
     monitoringPlots: ObservationMonitoringPlotResults[];
   };
-
+export type ObservationPlantingSubzoneResultsWithLastObv = ObservationPlantingSubzoneResults & {
+  lastObv?: string;
+};
 // monitoring plot level results
 export type ObservationMonitoringPlotResultsPayload = components['schemas']['ObservationMonitoringPlotResultsPayload'];
 export type MonitoringPlotStatus = ObservationMonitoringPlotResultsPayload['status'];

@@ -87,6 +87,19 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     }
   }, []);
 
+  const lastSubZoneObservation = useCallback(
+    (observationsList: ObservationResultsPayload[], zoneId: number, subzoneId: number) => {
+      const orderedObservations = observationsList.sort((a, b) => (isAfter(b.startDate, a.startDate) ? 1 : -1));
+      for (const observation of orderedObservations) {
+        const zone = observation.plantingZones.find((pz) => pz.plantingZoneId === zoneId);
+        if (zone && zone.plantingSubzones.find((sz) => sz.plantingSubzoneId === subzoneId)) {
+          return observation;
+        }
+      }
+    },
+    []
+  );
+
   const [legends, setLegends] = useState<MapLegendGroup[]>([]);
 
   useEffect(() => {
@@ -195,8 +208,19 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     const oldPlantingZones: ObservationPlantingZoneResults[] = observation.plantingZones;
 
     const plantingZonesWithLastObservation: ObservationPlantingZoneResultsWithLastObv[] = oldPlantingZones.map(
-      (pz: ObservationPlantingZoneResults) => {
-        return { ...pz, lastObv: lastZoneObservation(zoneObservations?.[pz.plantingZoneId])?.startDate };
+      (pz: ObservationPlantingZoneResultsWithLastObv) => {
+        return {
+          ...pz,
+          lastObv: lastZoneObservation(zoneObservations?.[pz.plantingZoneId])?.startDate,
+          plantingSubzones: pz.plantingSubzones.map((oldSubzone) => ({
+            ...oldSubzone,
+            lastObv: lastSubZoneObservation(
+              zoneObservations?.[pz.plantingZoneId],
+              pz.plantingZoneId,
+              oldSubzone.plantingSubzoneId
+            )?.startDate,
+          })),
+        };
       }
     );
     const observationWithLastObv: ObservationResultsWithLastObv = {
@@ -220,6 +244,26 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
       }
     });
 
+    if (baseMap.subzone?.entities) {
+      baseMap.subzone.entities = baseMap.subzone.entities.map((entity) => ({
+        ...entity,
+        properties: { ...entity.properties, recency: 0 },
+      }));
+    }
+    observationMapData.subzone?.entities?.forEach((subzoneEntity) => {
+      const subzoneReplaceIndex = baseMap.subzone?.entities?.findIndex((e) => e.id === subzoneEntity.id) ?? -1;
+      if (baseMap.subzone && subzoneReplaceIndex >= 0) {
+        baseMap.subzone.entities[subzoneReplaceIndex] = subzoneEntity;
+      } else {
+        if (!baseMap.subzone) {
+          baseMap.subzone = {
+            id: 'subzones',
+            entities: [],
+          };
+        }
+        baseMap.subzone.entities.push(subzoneEntity);
+      }
+    });
     return baseMap;
   }, [plantingSite, observation]);
 
