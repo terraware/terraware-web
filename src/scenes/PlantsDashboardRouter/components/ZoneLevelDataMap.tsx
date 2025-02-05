@@ -243,6 +243,13 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
         baseMap.zone.entities.push(zoneEntity);
       }
     });
+
+    if (baseMap.subzone?.entities) {
+      baseMap.subzone.entities = baseMap.subzone.entities.map((entity) => ({
+        ...entity,
+        properties: { ...entity.properties, recency: 0 },
+      }));
+    }
     observationMapData.subzone?.entities?.forEach((subzoneEntity) => {
       const subzoneReplaceIndex = baseMap.subzone?.entities?.findIndex((e) => e.id === subzoneEntity.id) ?? -1;
       if (baseMap.subzone && subzoneReplaceIndex >= 0) {
