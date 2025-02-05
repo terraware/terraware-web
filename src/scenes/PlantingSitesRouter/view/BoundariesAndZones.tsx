@@ -158,14 +158,14 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
     }
   }, [data, search]);
 
-  const mapDataFromAggregarion = useMemo(() => {
+  const mapDataFromAggregation = useMemo(() => {
     return MapService.getMapDataFromAggregation({ ...plantingSite, plantingZones: data });
   }, [plantingSite, data]);
 
   const mapData: Record<MapObject, MapSourceBaseData | undefined> = useMemo(() => {
     if (!selectedObservationDate || !selectedObservation) {
       return {
-        site: mapDataFromAggregarion.site,
+        site: mapDataFromAggregation.site,
         zone: undefined,
         subzone: undefined,
         permanentPlot: undefined,
@@ -173,10 +173,10 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
       };
     }
     const newMapData = MapService.getMapDataFromObservation(selectedObservation);
-    newMapData.zone = mapDataFromAggregarion.zone;
-    newMapData.subzone = mapDataFromAggregarion.subzone;
+    newMapData.zone = mapDataFromAggregation.zone;
+    newMapData.subzone = mapDataFromAggregation.subzone;
     return newMapData;
-  }, [selectedObservation, selectedObservationDate, mapDataFromAggregarion]);
+  }, [selectedObservation, selectedObservationDate, mapDataFromAggregation]);
 
   const layerOptions: MapLayer[] = useMemo(() => {
     const result: MapLayer[] = ['Planting Site', 'Zones', 'Sub-Zones'];
