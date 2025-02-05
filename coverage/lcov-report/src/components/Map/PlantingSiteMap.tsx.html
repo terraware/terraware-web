@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>0/63</span>
             </div>
         
             
@@ -322,7 +322,13 @@
 <a name='L257'></a><a href='#L257'>257</a>
 <a name='L258'></a><a href='#L258'>258</a>
 <a name='L259'></a><a href='#L259'>259</a>
-<a name='L260'></a><a href='#L260'>260</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L260'></a><a href='#L260'>260</a>
+<a name='L261'></a><a href='#L261'>261</a>
+<a name='L262'></a><a href='#L262'>262</a>
+<a name='L263'></a><a href='#L263'>263</a>
+<a name='L264'></a><a href='#L264'>264</a>
+<a name='L265'></a><a href='#L265'>265</a>
+<a name='L266'></a><a href='#L266'>266</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -452,36 +458,42 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -700,15 +712,49 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 <span class="cstat-no" title="statement not covered" >      if (mapData.subzone &amp;&amp; (layers === undefined || layers?.includes('Sub-Zones'))) {</span>
 <span class="cstat-no" title="statement not covered" >        sources.push({</span>
           ...mapData.subzone,
+          ...getRenderAttributes('subzone'),
           isInteractive: subzoneInteractive !== undefined ? subzoneInteractive : isFirstLayerAdded(),
           annotation: isFirstLayerAdded()
             ? {
-                textField: 'fullName',
+                textField: 'name',
                 textColor: theme.palette.TwClrBaseWhite as string,
                 textSize: 16,
               }
             : undefined,
-          ...getRenderAttributes('subzone'),
+          fillColor: showRecencyFill
+            ? [
+                'case',
+                ['==', ['number', ['get', 'recency']], 0],
+                getRenderAttributes('subzone').fillColor,
+                theme.palette.TwClrBasePink200,
+              ]
+            : getRenderAttributes('subzone').fillColor,
+          patternFill: newPlantsDashboardEnabled
+            ? showMortalityRateFill
+              ? [
+                  'case',
+                  ['&gt;', ['number', ['get', 'mortalityRate']], 50],
+                  'mortality-rate-more-50',
+                  ['&gt;', ['number', ['get', 'mortalityRate']], 25],
+                  'mortality-rate-less-50',
+                  'mortality-rate-less-25',
+                ]
+              : undefined
+            : undefined,
+          opacity: newPlantsDashboardEnabled
+            ? showRecencyFill
+              ? [
+                  'case',
+                  ['==', ['get', 'recency'], 1],
+                  0.9,
+                  ['==', ['get', 'recency'], 2],
+                  0.7,
+                  ['==', ['get', 'recency'], 3],
+                  0.5,
+                  0.3,
+                ]
+              : undefined
+            : getRenderAttributes('subzone').opacity,
         });
       }
 <span class="cstat-no" title="statement not covered" >      if (mapData.zone &amp;&amp; (layers === undefined || layers?.includes('Zones'))) {</span>
@@ -723,41 +769,13 @@ export default function <span class="fstat-no" title="function not covered" >Pla
                 textSize: 16,
               }
             : undefined,
-          fillColor: showRecencyFill
-            ? [
-                'case',
-                ['==', ['number', ['get', 'recency']], 0],
-                getRenderAttributes('zone').fillColor,
-                theme.palette.TwClrBasePink200,
-              ]
-            : getRenderAttributes('zone').fillColor,
           patternFill: newPlantsDashboardEnabled
-            ? showMortalityRateFill
-              ? [
-                  'case',
-                  ['&gt;', ['number', ['get', 'mortalityRate']], 50],
-                  'mortality-rate-more-50',
-                  ['&gt;', ['number', ['get', 'mortalityRate']], 25],
-                  'mortality-rate-less-50',
-                  'mortality-rate-less-25',
-                ]
-              : undefined
+            ? undefined
             : showMortalityRateFill
               ? 'mortality-rate-indicator'
               : undefined,
           opacity: newPlantsDashboardEnabled
-            ? showRecencyFill
-              ? [
-                  'case',
-                  ['==', ['get', 'recency'], 1],
-                  0.9,
-                  ['==', ['get', 'recency'], 2],
-                  0.7,
-                  ['==', ['get', 'recency'], 3],
-                  0.5,
-                  0.3,
-                ]
-              : undefined
+            ? undefined
             : showMortalityRateFill
               ? [
                   'case',
@@ -847,7 +865,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-05T19:35:01.116Z
+                at 2025-02-05T19:51:10.709Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
