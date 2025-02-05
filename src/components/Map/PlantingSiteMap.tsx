@@ -15,6 +15,7 @@ import {
   MapPopupRenderer,
   MapSource,
 } from 'src/types/Map';
+import { getRgbaFromHex } from 'src/utils/color';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import GenericMap from './GenericMap';
@@ -129,9 +130,15 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
           fillColor: showRecencyFill
             ? [
                 'case',
-                ['==', ['number', ['get', 'recency']], 0],
+                ['==', ['get', 'recency'], 0],
                 getRenderAttributes('subzone').fillColor,
-                theme.palette.TwClrBasePink200,
+                ['==', ['get', 'recency'], 1],
+                getRgbaFromHex(theme.palette.TwClrBasePink200 as string, 0.9),
+                ['==', ['get', 'recency'], 2],
+                getRgbaFromHex(theme.palette.TwClrBasePink200 as string, 0.7),
+                ['==', ['get', 'recency'], 3],
+                getRgbaFromHex(theme.palette.TwClrBasePink200 as string, 0.5),
+                getRgbaFromHex(theme.palette.TwClrBasePink200 as string, 0.3),
               ]
             : getRenderAttributes('subzone').fillColor,
           patternFill: newPlantsDashboardEnabled
@@ -146,20 +153,6 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
                 ]
               : undefined
             : undefined,
-          opacity: newPlantsDashboardEnabled
-            ? showRecencyFill
-              ? [
-                  'case',
-                  ['==', ['get', 'recency'], 1],
-                  0.9,
-                  ['==', ['get', 'recency'], 2],
-                  0.7,
-                  ['==', ['get', 'recency'], 3],
-                  0.5,
-                  0.3,
-                ]
-              : undefined
-            : getRenderAttributes('subzone').opacity,
         });
       }
       if (mapData.zone && (layers === undefined || layers?.includes('Zones'))) {

@@ -190,7 +190,7 @@ const extractSubzones = (site: MinimalPlantingSite): MapSourceBaseData => {
       return plantingSubzones.map((subzone) => {
         const { id, name, fullName, boundary } = subzone;
         return {
-          properties: { id, name, fullName, type: 'subzone' },
+          properties: { id, name, fullName, type: 'subzone', zoneId: zone.id },
           boundary: getPolygons(boundary),
           id,
         };
