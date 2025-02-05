@@ -274,7 +274,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
                 value: zoneObservation?.plantingDensity
                   ? `${zoneObservation?.plantingDensity} ${strings.PLANTS_PER_HECTARE}`
                   : lastZoneOb
-                    ? `${lastZoneOb?.plantingDensity} ${strings.PLANTS_PER_HECTARE}`
+                    ? `${lastZoneOb.plantingZones.find((pz) => pz.plantingZoneId === entity.id)?.plantingDensity} ${strings.PLANTS_PER_HECTARE}`
                     : strings.UNKNOWN,
               },
               { key: strings.PLANTED_PLANTS, value: `${zoneStats[entity.id].reportedPlants}` },
