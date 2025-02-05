@@ -1,3 +1,4 @@
+a2fee608552 SW-6531 Map: Zones not included in latest Observation showing Observation in popup (#3607)
 25d5ee113a3 SW-6513 Fix error with Other Species group in Planted Species chart (#3608)
 917f7cdc49c Updated translations from Phrase (#3605)
 91c4f630b77 SW-6517 When Zone has no plants planted, don't show "Observation" but show "Area (ha)" (#3606)
