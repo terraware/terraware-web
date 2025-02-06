@@ -342,6 +342,7 @@ CUSTOMIZE_TABLE_COLUMNS_DESCRIPTION,Seleccione las columnas que desee añadir. D
 CUT_TEST,Prueba de corte,
 DASHBOARD,Panel de control,
 DASHBOARD_HEADER_TEXT,Los datos de este cuadro de mando se basan en una muestra de {0} hectáreas de la{1} observación., {1} date of the last observation in short format (e.g. July 2023)
+DASHBOARD_HEADER_TEXT_SINGLE_OBSERVATION,Los datos de observación en este tablero se basan en una muestra de {0} de la/el {1} para este sitio de plantación.,
 DASHBOARD_HEADER_TEXT_V2,Los datos de observación de este panel se basan en una muestra de {0} a partir de observaciones comprendidas entre {1} y {2}.,
 DASHBOARD_MESSAGE,Su panel de semillas se llenará automáticamente de datos a medida que añada accesiones.,
 DASHBOARD_MESSAGE_TITLE,Añada accesiones para ver los datos,

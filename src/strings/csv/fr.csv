@@ -342,6 +342,7 @@ CUSTOMIZE_TABLE_COLUMNS_DESCRIPTION,Cochez les colonnes que vous souhaitez ajout
 CUT_TEST,Test de coupe,
 DASHBOARD,Tableau de bord,
 DASHBOARD_HEADER_TEXT,Les données de ce tableau de bord sont basées sur un échantillon de {0} hectares de l'observation {1}., {1} date of the last observation in short format (e.g. July 2023)
+DASHBOARD_HEADER_TEXT_SINGLE_OBSERVATION,Les données d'observation sur ce tableau de bord sont fondées sur un échantillon de {0} parmi les {1} pour ce site de plantation.,
 DASHBOARD_HEADER_TEXT_V2,Les données d’observation de ce tableau de bord sont basées sur un échantillon {0} d’observations entre {1} et {2}.,
 DASHBOARD_MESSAGE,Votre tableau de bord des semences se remplira automatiquement de données lorsque vous ajouterez des accessions.,
 DASHBOARD_MESSAGE_TITLE,Ajoutez des accessions pour afficher les données,
