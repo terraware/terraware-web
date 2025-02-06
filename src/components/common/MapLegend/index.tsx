@@ -1,9 +1,7 @@
 import React from 'react';
 
-import { Box, Grid, Switch, Typography, useTheme } from '@mui/material';
+import { Box, Switch, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-
-import isEnabled from 'src/features';
 
 type MapLegendItem = {
   borderColor: string;
@@ -33,7 +31,6 @@ type MapLegendProps = {
 export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.Element {
   const theme = useTheme();
   const { isMobile, isDesktop } = useDeviceInfo();
-  const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
 
   const separatorStyles = {
     width: '1px',
@@ -43,7 +40,7 @@ export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.
     marginLeft: '24px',
   };
 
-  return newPlantsDashboardEnabled ? (
+  return (
     <Box
       display='flex'
       justifyItems='flex-start'
@@ -102,36 +99,6 @@ export default function MapLegend({ legends, setLegends }: MapLegendProps): JSX.
           </Box>
           {!legend.switch && <div style={separatorStyles} />}
         </Box>
-      ))}
-    </Box>
-  ) : (
-    <Box
-      display='flex'
-      justifyItems='flex-start'
-      flexDirection='column'
-      border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
-      borderRadius='8px'
-      padding={theme.spacing(2)}
-      rowGap={theme.spacing(3)}
-    >
-      {legends.map((legend) => (
-        <Grid container key={legend.title} spacing={2} columns={8} sx={{ opacity: legend.disabled ? 0.7 : 1 }}>
-          <Grid item xs={isMobile ? 8 : 1}>
-            <Typography
-              fontSize='14px'
-              fontWeight={600}
-              width={isMobile ? '100%' : undefined}
-              marginRight={isMobile ? 0 : theme.spacing(4)}
-            >
-              {legend.title}
-            </Typography>
-          </Grid>
-          {legend.items.map((item) => (
-            <Grid item xs={isMobile ? 4 : 1} key={`${legend.title}-${item.label}`}>
-              <LabeledSwatch {...item} isDisabled={!legend.checked} />
-            </Grid>
-          ))}
-        </Grid>
       ))}
     </Box>
   );

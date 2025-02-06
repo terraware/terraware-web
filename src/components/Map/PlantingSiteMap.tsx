@@ -4,7 +4,6 @@ import { Box, CircularProgress, useTheme } from '@mui/material';
 import _ from 'lodash';
 
 import { MapLayer } from 'src/components/common/MapLayerSelect';
-import isEnabled from 'src/features';
 import { MapService } from 'src/services';
 import {
   MapControl,
@@ -74,7 +73,6 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
   const snackbar = useSnackbar();
   const [mapOptions, setMapOptions] = useState<MapOptions>();
   const getRenderAttributes = useRenderAttributes();
-  const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
 
   // fetch polygons and boundaries
   useEffect(() => {
@@ -141,17 +139,15 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
                 getRgbaFromHex(theme.palette.TwClrBasePink200 as string, 0.3),
               ]
             : getRenderAttributes('subzone').fillColor,
-          patternFill: newPlantsDashboardEnabled
-            ? showMortalityRateFill
-              ? [
-                  'case',
-                  ['>', ['number', ['get', 'mortalityRate']], 50],
-                  'mortality-rate-more-50',
-                  ['>', ['number', ['get', 'mortalityRate']], 25],
-                  'mortality-rate-less-50',
-                  'mortality-rate-less-25',
-                ]
-              : undefined
+          patternFill: showMortalityRateFill
+            ? [
+                'case',
+                ['>', ['number', ['get', 'mortalityRate']], 50],
+                'mortality-rate-more-50',
+                ['>', ['number', ['get', 'mortalityRate']], 25],
+                'mortality-rate-less-50',
+                'mortality-rate-less-25',
+              ]
             : undefined,
         });
       }
@@ -167,27 +163,6 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
                 textSize: 16,
               }
             : undefined,
-          patternFill: newPlantsDashboardEnabled
-            ? undefined
-            : showMortalityRateFill
-              ? 'mortality-rate-indicator'
-              : undefined,
-          opacity: newPlantsDashboardEnabled
-            ? undefined
-            : showMortalityRateFill
-              ? [
-                  'case',
-                  ['==', ['get', 'mortalityRate'], null],
-                  0.0,
-                  ['==', ['get', 'hasObservedPermanentPlots'], false],
-                  0.0,
-                  ['>', ['get', 'mortalityRate'], 50],
-                  0.7,
-                  ['>', ['get', 'mortalityRate'], 25],
-                  0.5,
-                  0.3,
-                ]
-              : undefined,
         });
       }
       if (mapData.site && (layers === undefined || layers?.includes('Planting Site'))) {

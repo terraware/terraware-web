@@ -5,9 +5,8 @@ import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { PlantingSiteMap } from 'src/components/Map';
 import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
 import MapLegend, { MapLegendGroup } from 'src/components/common/MapLegend';
-import isEnabled from 'src/features';
 import useObservationSummaries from 'src/hooks/useObservationSummaries';
-import { useLocalization, useOrganization } from 'src/providers';
+import { useOrganization } from 'src/providers';
 import {
   selectLatestObservation,
   selectObservationsResults,
@@ -28,7 +27,6 @@ import {
   ObservationSummary,
 } from 'src/types/Observations';
 import { getRgbaFromHex } from 'src/utils/color';
-import { getShortDate } from 'src/utils/dateFormatter';
 import { isAfter } from 'src/utils/dateUtils';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -38,7 +36,6 @@ type ZoneLevelDataMapProps = {
 
 export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapProps): JSX.Element {
   const theme = useTheme();
-  const locale = useLocalization();
   const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
   const defaultTimeZone = useDefaultTimeZone();
@@ -49,10 +46,9 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
   );
   const summaries = useObservationSummaries(plantingSiteId);
-  const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
   const allObservationsResults = useAppSelector(selectObservationsResults);
   const plantingSiteObservations = allObservationsResults?.filter(
-    (observation) => observation.plantingSiteId === plantingSiteId
+    (observation) => observation.plantingSiteId === plantingSiteId && observation.completedTime
   );
 
   const zoneObservations = useMemo(() => {
@@ -124,76 +120,63 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     const result: MapLegendGroup[] = [
       {
         title: strings.BOUNDARIES,
-        items: newPlantsDashboardEnabled
-          ? [
-              ...boundariesLegendItems,
-              {
-                label: strings.SUBZONES,
-                borderColor: theme.palette.TwClrBaseBlue300 as string,
-                fillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.2),
-              },
-            ]
-          : boundariesLegendItems,
-      },
-    ];
-    if (observation || newPlantsDashboardEnabled) {
-      result.push({
-        title: strings.MORTALITY_RATE,
         items: [
+          ...boundariesLegendItems,
           {
-            label: strings.LESS_THAN_TWENTY_FIVE_PERCENT,
-            borderColor: theme.palette.TwClrBaseLightGreen300 as string,
-            fillColor: 'transparent',
-            fillPatternUrl: newPlantsDashboardEnabled
-              ? '/assets/mortality-rate-less-25.png'
-              : '/assets/mortality-rate-indicator-legend.png',
-            opacity: newPlantsDashboardEnabled ? undefined : 0.3,
-            height: '16px',
-          },
-          {
-            label: strings.TWENTY_FIVE_TO_FIFTY_PERCENT,
-            borderColor: theme.palette.TwClrBaseLightGreen300 as string,
-            fillColor: 'transparent',
-            fillPatternUrl: newPlantsDashboardEnabled
-              ? '/assets/mortality-rate-less-50.png'
-              : '/assets/mortality-rate-indicator-legend.png',
-            opacity: newPlantsDashboardEnabled ? undefined : 0.5,
-            height: '16px',
-          },
-          {
-            label: strings.GREATER_THAN_FIFTY_PERCENT,
-            borderColor: theme.palette.TwClrBaseLightGreen300 as string,
-            fillColor: 'transparent',
-            fillPatternUrl: newPlantsDashboardEnabled
-              ? '/assets/mortality-rate-more-50.png'
-              : '/assets/mortality-rate-indicator-legend.png',
-            opacity: newPlantsDashboardEnabled ? undefined : 0.7,
-            height: '16px',
+            label: strings.SUBZONES,
+            borderColor: theme.palette.TwClrBaseBlue300 as string,
+            fillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.2),
           },
         ],
-        switch: newPlantsDashboardEnabled,
-        disabled: !observation,
-        checked: true,
-      });
+      },
+    ];
 
-      if (newPlantsDashboardEnabled) {
-        result.push({
-          title: strings.OBSERVATION_RECENCY,
-          items: [
-            {
-              label: strings.LATEST_OBSERVATION,
-              borderColor: theme.palette.TwClrBaseLightGreen300 as string,
-              fillColor: theme.palette.TwClrBasePink200 as string,
-              opacity: 0.9,
-              height: '16px',
-            },
-          ],
-          switch: true,
-          disabled: !observation,
-          checked: true,
-        });
-      }
-    }
+    result.push({
+      title: strings.MORTALITY_RATE,
+      items: [
+        {
+          label: strings.LESS_THAN_TWENTY_FIVE_PERCENT,
+          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+          fillColor: 'transparent',
+          fillPatternUrl: '/assets/mortality-rate-less-25.png',
+          height: '16px',
+        },
+        {
+          label: strings.TWENTY_FIVE_TO_FIFTY_PERCENT,
+          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+          fillColor: 'transparent',
+          fillPatternUrl: '/assets/mortality-rate-less-50.png',
+          height: '16px',
+        },
+        {
+          label: strings.GREATER_THAN_FIFTY_PERCENT,
+          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+          fillColor: 'transparent',
+          fillPatternUrl: '/assets/mortality-rate-more-50.png',
+          height: '16px',
+        },
+      ],
+      switch: true,
+      disabled: !observation,
+      checked: true,
+    });
+
+    result.push({
+      title: strings.OBSERVATION_RECENCY,
+      items: [
+        {
+          label: strings.LATEST_OBSERVATION,
+          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+          fillColor: theme.palette.TwClrBasePink200 as string,
+          opacity: 0.9,
+          height: '16px',
+        },
+      ],
+      switch: true,
+      disabled: !observation,
+      checked: true,
+    });
+
     setLegends(result);
   }, [observation, theme.palette.TwClrBaseGreen300, theme.palette.TwClrBaseLightGreen300]);
 
@@ -349,74 +332,39 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
         } else if (zoneProgress[entity.id] && zoneStats[entity.id]) {
           const lastZoneOb = lastZoneObservation(zoneObservations?.[entity.id]);
           const lastZoneSummary = lastSummary?.plantingZones.find((pz) => pz.plantingZoneId === entity.id);
-          if (newPlantsDashboardEnabled) {
-            properties = [
-              {
-                key: strings.AREA_HA,
-                value: zoneObservation?.areaHa ?? (findZoneArea(entity.id) || 0),
-              },
-              {
-                key: strings.MORTALITY_RATE,
-                value:
-                  zoneObservation && zoneObservation.hasObservedPermanentPlots
-                    ? `${zoneObservation.mortalityRate}%`
-                    : lastZoneOb
-                      ? `${lastZoneOb.mortalityRate}%`
-                      : strings.UNKNOWN,
-              },
-              {
-                key: strings.PLANTING_DENSITY,
-                value: zoneObservation?.plantingDensity
-                  ? `${zoneObservation?.plantingDensity} ${strings.PLANTS_PER_HECTARE}`
+          properties = [
+            {
+              key: strings.AREA_HA,
+              value: zoneObservation?.areaHa ?? (findZoneArea(entity.id) || 0),
+            },
+            {
+              key: strings.MORTALITY_RATE,
+              value:
+                zoneObservation && zoneObservation.hasObservedPermanentPlots
+                  ? `${zoneObservation.mortalityRate}%`
                   : lastZoneOb
-                    ? `${lastZoneOb.plantingZones.find((pz) => pz.plantingZoneId === entity.id)?.plantingDensity} ${strings.PLANTS_PER_HECTARE}`
+                    ? `${lastZoneOb.mortalityRate}%`
                     : strings.UNKNOWN,
-              },
-              { key: strings.PLANTED_PLANTS, value: `${zoneStats[entity.id].reportedPlants}` },
-              {
-                key: strings.OBSERVED_PLANTS,
-                value: `${zoneObservation?.totalPlants ?? lastZoneSummary?.totalPlants ?? 0}`,
-              },
-              { key: strings.PLANTED_SPECIES, value: `${zoneStats[entity.id].reportedSpecies}` },
-              {
-                key: strings.OBSERVED_SPECIES,
-                value: `${zoneObservation?.totalSpecies ?? lastZoneOb?.totalSpecies ?? 0}`,
-              },
-            ];
-          } else {
-            if (zoneObservation) {
-              properties = [
-                {
-                  key: strings.MORTALITY_RATE,
-                  value: zoneObservation.hasObservedPermanentPlots
-                    ? `${zoneObservation.mortalityRate}%`
-                    : strings.UNKNOWN,
-                },
-                {
-                  key: strings.TARGET_PLANTING_DENSITY,
-                  value: `${zoneProgress[entity.id].targetDensity} ${strings.PLANTS_PER_HECTARE}`,
-                },
-                { key: strings.PLANTING_PROGRESS, value: `${zoneProgress[entity.id].progress}%` },
-                { key: strings.RECORDED_PLANTS, value: `${zoneStats[entity.id].reportedPlants} ${strings.PLANTS}` },
-                { key: strings.OBSERVED_PLANTS, value: `${zoneObservation.totalPlants} ${strings.PLANTS}` },
-                {
-                  key: strings.RECORDED_SPECIES,
-                  value: `${zoneStats[entity.id].reportedSpecies} ${strings.SPECIES}`,
-                },
-                { key: strings.OBSERVED_SPECIES, value: `${zoneObservation.totalSpecies} ${strings.SPECIES}` },
-              ];
-            } else {
-              properties = [
-                {
-                  key: strings.TARGET_PLANTING_DENSITY,
-                  value: `${zoneProgress[entity.id].targetDensity} ${strings.PLANTS_PER_HECTARE}`,
-                },
-                { key: strings.PLANTING_PROGRESS, value: `${zoneProgress[entity.id].progress}%` },
-                { key: strings.RECORDED_PLANTS, value: `${zoneStats[entity.id].reportedPlants} ${strings.PLANTS}` },
-                { key: strings.RECORDED_SPECIES, value: `${zoneStats[entity.id].reportedSpecies} ${strings.SPECIES}` },
-              ];
-            }
-          }
+            },
+            {
+              key: strings.PLANTING_DENSITY,
+              value: zoneObservation?.plantingDensity
+                ? `${zoneObservation?.plantingDensity} ${strings.PLANTS_PER_HECTARE}`
+                : lastZoneOb
+                  ? `${lastZoneOb.plantingZones.find((pz) => pz.plantingZoneId === entity.id)?.plantingDensity} ${strings.PLANTS_PER_HECTARE}`
+                  : strings.UNKNOWN,
+            },
+            { key: strings.PLANTED_PLANTS, value: `${zoneStats[entity.id].reportedPlants}` },
+            {
+              key: strings.OBSERVED_PLANTS,
+              value: `${zoneObservation?.totalPlants ?? lastZoneSummary?.totalPlants ?? 0}`,
+            },
+            { key: strings.PLANTED_SPECIES, value: `${zoneStats[entity.id].reportedSpecies}` },
+            {
+              key: strings.OBSERVED_SPECIES,
+              value: `${zoneObservation?.totalSpecies ?? lastZoneOb?.totalSpecies ?? 0}`,
+            },
+          ];
         }
 
         return (
@@ -445,55 +393,42 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
         display: 'flex',
         flexDirection: 'column',
         background: theme.palette.TwClrBg,
-        borderRadius: newPlantsDashboardEnabled ? '8px' : '24px',
+        borderRadius: '8px',
         padding: theme.spacing(3),
         gap: theme.spacing(3),
       }}
     >
-      {newPlantsDashboardEnabled ? (
-        <Typography fontSize='20px' fontWeight={600}>
-          {strings.formatString(strings.X_HA_IN_TOTAL_PLANTING_AREA, plantingSite?.areaHa?.toString() || '')}{' '}
-        </Typography>
-      ) : (
-        <Typography fontSize='16px' fontWeight={600}>
-          {observation?.completedTime
-            ? strings.formatString(
-                strings.ZONE_LEVEL_DATA_MAP_TITLE_WITH_OBSERVATION,
-                getShortDate(observation.completedTime, locale.activeLocale)
-              )
-            : strings.ZONE_LEVEL_DATA_MAP_TITLE}
-        </Typography>
-      )}
+      <Typography fontSize='20px' fontWeight={600}>
+        {strings.formatString(strings.X_HA_IN_TOTAL_PLANTING_AREA, plantingSite?.areaHa?.toString() || '')}{' '}
+      </Typography>
       <MapLegend legends={legends} setLegends={setLegends} />
       {plantingSite?.boundary ? (
         <PlantingSiteMap
           mapData={mapData!}
-          style={{ borderRadius: newPlantsDashboardEnabled ? '8px' : '24px' }}
-          layers={newPlantsDashboardEnabled ? ['Planting Site', 'Zones', 'Sub-Zones'] : ['Planting Site', 'Zones']}
+          style={{ borderRadius: '8px' }}
+          layers={['Planting Site', 'Zones', 'Sub-Zones']}
           showMortalityRateFill={!!observation && legends.find((l) => l.title === strings.MORTALITY_RATE)?.checked}
-          showRecencyFill={
-            newPlantsDashboardEnabled && legends.find((l) => l.title === strings.OBSERVATION_RECENCY)?.checked
-          }
+          showRecencyFill={legends.find((l) => l.title === strings.OBSERVATION_RECENCY)?.checked}
           focusEntities={focusEntities}
           contextRenderer={{
             render: getContextRenderer(),
             sx: {
               '.mapboxgl-popup .mapboxgl-popup-content': {
                 borderRadius: '8px',
-                padding: newPlantsDashboardEnabled ? '0' : '10px',
+                padding: '0',
                 width: 'fit-content',
                 maxWidth: '350px',
               },
               '.mapboxgl-popup .mapboxgl-popup-content .mapboxgl-popup-close-button': {
-                display: newPlantsDashboardEnabled ? 'none' : 'block',
+                display: 'none',
               },
               '.mapboxgl-popup-anchor-top .mapboxgl-popup-tip': {
-                borderBottomColor: newPlantsDashboardEnabled ? theme.palette.TwClrBgSecondary : '#fff',
+                borderBottomColor: theme.palette.TwClrBgSecondary,
               },
             },
           }}
-          zoneInteractive={newPlantsDashboardEnabled ? true : undefined}
-          subzoneInteractive={newPlantsDashboardEnabled ? false : undefined}
+          zoneInteractive={true}
+          subzoneInteractive={false}
         />
       ) : (
         <Box sx={{ position: 'fixed', top: '50%', left: '50%' }}>

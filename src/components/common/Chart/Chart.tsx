@@ -25,7 +25,7 @@ import { newChart } from '.';
 
 ChartJS.register(annotationPlugin);
 
-type ChartDataset = {
+export type ChartDataset = {
   color?: string;
   values: (number | null)[] | [number, number][];
   // Dataset label which will appear in legends and tooltips

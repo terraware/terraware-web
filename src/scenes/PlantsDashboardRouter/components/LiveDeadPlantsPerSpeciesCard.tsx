@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 
 import PieChart from 'src/components/common/Chart/PieChart';
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import isEnabled from 'src/features';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -18,12 +16,10 @@ type LiveDeadPlantsPerSpeciesCardProps = {
 export default function LiveDeadPlantsPerSpeciesCard({
   plantingSiteId,
 }: LiveDeadPlantsPerSpeciesCardProps): JSX.Element {
-  const theme = useTheme();
   const defaultTimeZone = useDefaultTimeZone();
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
   );
-  const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
 
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
@@ -69,7 +65,7 @@ export default function LiveDeadPlantsPerSpeciesCard({
     }
   }, [selectedSpecies, observation]);
 
-  return newPlantsDashboardEnabled ? (
+  return (
     <Box display='flex' flexDirection='column'>
       <Dropdown
         onChange={(newValue) => setSelectedSpecies(newValue)}
@@ -101,44 +97,5 @@ export default function LiveDeadPlantsPerSpeciesCard({
         </Box>
       )}
     </Box>
-  ) : (
-    <OverviewItemCard
-      isEditable={false}
-      contents={
-        <Box display='flex' flexDirection='column'>
-          <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)}>
-            {strings.LIVE_DEAD_PLANTS_PER_SPECIES_CARD_TITLE}
-          </Typography>
-          <Dropdown
-            onChange={(newValue) => setSelectedSpecies(newValue)}
-            label=''
-            options={allSpecies}
-            selectedValue={selectedSpecies}
-            fullWidth={true}
-            selectStyles={{
-              inputContainer: {
-                maxWidth: '228px',
-              },
-            }}
-          />
-          {showChart && (
-            <Box marginTop={theme.spacing(3)}>
-              <PieChart
-                chartId='liveDeadplantsBySpecies'
-                chartData={{
-                  labels: labels ?? [],
-                  datasets: [
-                    {
-                      values: values ?? [],
-                    },
-                  ],
-                }}
-                maxWidth='100%'
-              />
-            </Box>
-          )}
-        </Box>
-      }
-    />
   );
 }
