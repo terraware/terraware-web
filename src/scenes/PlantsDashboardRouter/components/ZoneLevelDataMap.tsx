@@ -48,7 +48,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
   const summaries = useObservationSummaries(plantingSiteId);
   const allObservationsResults = useAppSelector(selectObservationsResults);
   const plantingSiteObservations = allObservationsResults?.filter(
-    (observation) => observation.plantingSiteId === plantingSiteId
+    (observation) => observation.plantingSiteId === plantingSiteId && observation.completedTime
   );
 
   const zoneObservations = useMemo(() => {
