@@ -304,20 +304,42 @@ export default function PlantsDashboardView(): JSX.Element {
     );
   };
 
+  const getObservationHectares = () => {
+    const totalSquareMeters =
+      latestObservation?.plantingZones
+        .flatMap((pz) =>
+          pz.plantingSubzones.flatMap((psz) => psz.monitoringPlots.map((mp) => mp.sizeMeters * mp.sizeMeters))
+        )
+        .reduce((acc, area) => acc + area, 0) ?? 0;
+
+    return totalSquareMeters * SQ_M_TO_HECTARES;
+  };
+
   const getDashboardSubhead = () => {
     if (selectedPlantingSiteId === -1) {
       return strings.FIRST_ADD_PLANTING_SITE;
     }
-    if (latestObservation?.completedTime) {
-      return strings.formatString(
-        strings.DASHBOARD_HEADER_TEXT_V2,
-        <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={getSummariesHectares()} />)}</b>,
-        <b>
-          {summaries?.[0]?.earliestObservationTime ? getDateDisplayValue(summaries[0].earliestObservationTime) : ''}
-        </b>,
-        <b>{summaries?.[0]?.latestObservationTime ? getDateDisplayValue(summaries[0].latestObservationTime) : ''}</b>
-      ) as string;
-    }
+
+    const earliestDate = summaries?.[0]?.earliestObservationTime
+      ? getDateDisplayValue(summaries[0].earliestObservationTime)
+      : undefined;
+    const latestDate = summaries?.[0]?.latestObservationTime
+      ? getDateDisplayValue(summaries[0].latestObservationTime)
+      : undefined;
+    return !earliestDate || !latestDate || earliestDate === latestDate
+      ? (strings.formatString(
+          strings.DASHBOARD_HEADER_TEXT_SINGLE_OBSERVATION,
+          <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={getObservationHectares()} />)}</b>,
+          <b>{getLatestObservationLink()}</b>
+        ) as string)
+      : (strings.formatString(
+          strings.DASHBOARD_HEADER_TEXT_V2,
+          <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={getSummariesHectares()} />)}</b>,
+          <b>
+            {summaries?.[0]?.earliestObservationTime ? getDateDisplayValue(summaries[0].earliestObservationTime) : ''}
+          </b>,
+          <b>{summaries?.[0]?.latestObservationTime ? getDateDisplayValue(summaries[0].latestObservationTime) : ''}</b>
+        ) as string);
   };
 
   return (

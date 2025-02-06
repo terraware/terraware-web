@@ -230,7 +230,7 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
           observationsDates.length > 0 && (
             <MapDateSelect
               dates={observationsDates}
-              selectedDate={selectedObservationDate ?? ''}
+              selectedDate={selectedObservationDate ?? observationsDates[0]}
               onChange={setSelectedObservationDate}
             />
           )
