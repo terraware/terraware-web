@@ -1,3 +1,4 @@
+ef9160d0388 Add timezone to completed time (#3620)
 75b59dac99c SW-6539 Use completedTime instead of start date for lastObservation on map (#3616)
 236f643f4ea SW-6536 Remove plants dashboard feature flag (#3617)
 825f3dff37e SW-6545 Message at the top of the observation should be different if only one observation's data is used (#3618)
