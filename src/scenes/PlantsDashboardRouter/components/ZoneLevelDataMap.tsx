@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import { PlantingSiteMap } from 'src/components/Map';
 import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
@@ -213,15 +214,22 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
       (pz: ObservationPlantingZoneResultsWithLastObv) => {
         return {
           ...pz,
-          lastObv: lastZoneObservation(zoneObservations?.[pz.plantingZoneId])?.startDate,
-          plantingSubzones: pz.plantingSubzones.map((oldSubzone) => ({
-            ...oldSubzone,
-            lastObv: lastSubZoneObservation(
+          lastObv:
+            lastZoneObservation(zoneObservations?.[pz.plantingZoneId])?.completedTime ||
+            lastZoneObservation(zoneObservations?.[pz.plantingZoneId])?.startDate,
+          plantingSubzones: pz.plantingSubzones.map((oldSubzone) => {
+            const lastSubZoneOb = lastSubZoneObservation(
               zoneObservations?.[pz.plantingZoneId],
               pz.plantingZoneId,
               oldSubzone.plantingSubzoneId
-            )?.startDate,
-          })),
+            );
+            return {
+              ...oldSubzone,
+              lastObv: lastSubZoneOb?.completedTime
+                ? getDateDisplayValue(lastSubZoneOb?.completedTime || '')
+                : lastSubZoneOb?.startDate || '',
+            };
+          }),
         };
       }
     );
@@ -248,15 +256,18 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
 
     if (baseMap.subzone?.entities) {
       baseMap.subzone.entities = baseMap.subzone.entities.map((entity) => {
+        const lastSubZoneOb = lastSubZoneObservation(
+          zoneObservations?.[entity.properties.zoneId],
+          entity.properties.zoneId,
+          entity.properties.id
+        );
         return {
           ...entity,
           properties: {
             ...entity.properties,
-            lastObv: lastSubZoneObservation(
-              zoneObservations?.[entity.properties.zoneId],
-              entity.properties.zoneId,
-              entity.properties.id
-            )?.startDate,
+            lastObv: lastSubZoneOb?.completedTime
+              ? getDateDisplayValue(lastSubZoneOb.completedTime || '')
+              : lastSubZoneOb?.startDate || '',
           },
         };
       });
@@ -419,6 +430,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
           }
         }
 
+        const lastZoneOb = lastZoneObservation(zoneObservations?.[entity.id]);
         return (
           <MapTooltip
             title={entity.name}
@@ -427,8 +439,11 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
                 ? strings
                     .formatString(
                       strings.DATE_OBSERVATION,
-                      lastZoneObservation(zoneObservations?.[entity.id])?.startDate || ''
+                      lastZoneOb?.completedTime
+                        ? getDateDisplayValue(lastZoneOb?.completedTime || '')
+                        : lastZoneOb?.startDate || ''
                     )
+
                     .toString()
                 : ''
             }
