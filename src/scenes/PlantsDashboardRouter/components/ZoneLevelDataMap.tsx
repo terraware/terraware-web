@@ -53,7 +53,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
   const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
   const allObservationsResults = useAppSelector(selectObservationsResults);
   const plantingSiteObservations = allObservationsResults?.filter(
-    (observation) => observation.plantingSiteId === plantingSiteId
+    (observation) => observation.plantingSiteId === plantingSiteId && observation.completedTime
   );
 
   const zoneObservations = useMemo(() => {
