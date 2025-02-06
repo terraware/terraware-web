@@ -182,6 +182,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
   }, [observation, theme.palette.TwClrBaseGreen300, theme.palette.TwClrBaseLightGreen300]);
 
   const mapData = useMemo(() => {
+    const timeZone = plantingSite?.timeZone ?? defaultTimeZone.get().id;
     if (!plantingSite?.boundary) {
       return undefined;
     }
@@ -209,7 +210,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
             return {
               ...oldSubzone,
               lastObv: lastSubZoneOb?.completedTime
-                ? getDateDisplayValue(lastSubZoneOb?.completedTime || '')
+                ? getDateDisplayValue(lastSubZoneOb?.completedTime || '', timeZone)
                 : lastSubZoneOb?.startDate || '',
             };
           }),
@@ -249,7 +250,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
           properties: {
             ...entity.properties,
             lastObv: lastSubZoneOb?.completedTime
-              ? getDateDisplayValue(lastSubZoneOb.completedTime || '')
+              ? getDateDisplayValue(lastSubZoneOb.completedTime || '', timeZone)
               : lastSubZoneOb?.startDate || '',
           },
         };
@@ -332,6 +333,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
         const zoneObservation: ObservationPlantingZoneResults | undefined = observation?.plantingZones?.find(
           (z: ObservationPlantingZoneResults) => z.plantingZoneId === entity.id
         );
+        const timeZone = plantingSite?.timeZone ?? defaultTimeZone.get().id;
         if (!zoneStats[entity.id]?.reportedPlants) {
           properties = [
             {
@@ -388,7 +390,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
                     .formatString(
                       strings.DATE_OBSERVATION,
                       lastZoneOb?.completedTime
-                        ? getDateDisplayValue(lastZoneOb?.completedTime || '')
+                        ? getDateDisplayValue(lastZoneOb?.completedTime || '', timeZone)
                         : lastZoneOb?.startDate || ''
                     )
 
