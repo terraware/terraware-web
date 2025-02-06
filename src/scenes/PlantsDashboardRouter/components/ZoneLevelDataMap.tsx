@@ -18,7 +18,7 @@ import { selectPlantingSite, selectZoneProgress } from 'src/redux/features/track
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
-import { MapSourceProperties } from 'src/types/Map';
+import { MapGeometry, MapSourceProperties } from 'src/types/Map';
 import {
   ObservationPlantingZoneResults,
   ObservationPlantingZoneResultsWithLastObv,
@@ -89,11 +89,13 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
 
   const lastSubZoneObservation = useCallback(
     (observationsList: ObservationResultsPayload[], zoneId: number, subzoneId: number) => {
-      const orderedObservations = observationsList.sort((a, b) => (isAfter(b.startDate, a.startDate) ? 1 : -1));
-      for (const observation of orderedObservations) {
-        const zone = observation.plantingZones.find((pz) => pz.plantingZoneId === zoneId);
-        if (zone && zone.plantingSubzones.find((sz) => sz.plantingSubzoneId === subzoneId)) {
-          return observation;
+      const orderedObservations = observationsList?.sort((a, b) => (isAfter(b.startDate, a.startDate) ? 1 : -1));
+      if (orderedObservations) {
+        for (const observation of orderedObservations) {
+          const zone = observation.plantingZones.find((pz) => pz.plantingZoneId === zoneId);
+          if (zone && zone.plantingSubzones.find((sz) => sz.plantingSubzoneId === subzoneId)) {
+            return observation;
+          }
         }
       }
     },
@@ -245,15 +247,63 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     });
 
     if (baseMap.subzone?.entities) {
-      baseMap.subzone.entities = baseMap.subzone.entities.map((entity) => ({
-        ...entity,
-        properties: { ...entity.properties, recency: 0 },
-      }));
+      baseMap.subzone.entities = baseMap.subzone.entities.map((entity) => {
+        return {
+          ...entity,
+          properties: {
+            ...entity.properties,
+            lastObv: lastSubZoneObservation(
+              zoneObservations?.[entity.properties.zoneId],
+              entity.properties.zoneId,
+              entity.properties.id
+            )?.startDate,
+          },
+        };
+      });
+
+      const orderedSubzoneEntities = baseMap.subzone.entities.sort((a, b) => {
+        if (a.properties.lastObv && b.properties.lastObv) {
+          return isAfter(b.properties.lastObv, a.properties.lastObv) ? 1 : -1;
+        }
+        return 0;
+      });
+
+      const entitiesToReturn: {
+        properties: { recency: number; id: number; name: string; type: string };
+        id: number;
+        boundary: MapGeometry;
+      }[] = [];
+      let lastProcecedDate = orderedSubzoneEntities[0].properties.lastObv;
+      let recencyToSet = 1;
+
+      orderedSubzoneEntities.forEach((entity) => {
+        if (entity.properties.lastObv && entity.properties.lastObv !== lastProcecedDate) {
+          recencyToSet = recencyToSet + 1;
+          lastProcecedDate = entity.properties.lastObv;
+        }
+
+        entitiesToReturn.push({
+          ...entity,
+          properties: {
+            ...entity.properties,
+            recency: entity.properties.lastObv ? recencyToSet : 0,
+            id: entity.properties.id,
+            name: entity.properties.name,
+            type: entity.properties.type,
+          },
+        });
+      });
+
+      baseMap.subzone.entities = entitiesToReturn;
     }
     observationMapData.subzone?.entities?.forEach((subzoneEntity) => {
       const subzoneReplaceIndex = baseMap.subzone?.entities?.findIndex((e) => e.id === subzoneEntity.id) ?? -1;
       if (baseMap.subzone && subzoneReplaceIndex >= 0) {
-        baseMap.subzone.entities[subzoneReplaceIndex] = subzoneEntity;
+        const oldEntity = baseMap.subzone.entities[subzoneReplaceIndex];
+        baseMap.subzone.entities[subzoneReplaceIndex] = {
+          ...subzoneEntity,
+          properties: { ...subzoneEntity.properties, recency: oldEntity.properties.recency },
+        };
       } else {
         if (!baseMap.subzone) {
           baseMap.subzone = {
@@ -264,6 +314,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
         baseMap.subzone.entities.push(subzoneEntity);
       }
     });
+
     return baseMap;
   }, [plantingSite, observation]);
 
