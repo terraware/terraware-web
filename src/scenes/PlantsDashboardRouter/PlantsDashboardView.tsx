@@ -439,9 +439,21 @@ export default function PlantsDashboardView(): JSX.Element {
     if (selectedPlantingSiteId === -1) {
       return strings.FIRST_ADD_PLANTING_SITE;
     }
-    if (latestObservation?.completedTime) {
-      return newPlantsDashboardEnabled
+
+    const earliestDate = summaries?.[0]?.earliestObservationTime
+      ? getDateDisplayValue(summaries[0].earliestObservationTime)
+      : undefined;
+    const latestDate = summaries?.[0]?.latestObservationTime
+      ? getDateDisplayValue(summaries[0].latestObservationTime)
+      : undefined;
+    return newPlantsDashboardEnabled
+      ? !earliestDate || !latestDate || earliestDate === latestDate
         ? (strings.formatString(
+            strings.DASHBOARD_HEADER_TEXT_SINGLE_OBSERVATION,
+            <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={getObservationHectares()} />)}</b>,
+            <b>{getLatestObservationLink()}</b>
+          ) as string)
+        : (strings.formatString(
             strings.DASHBOARD_HEADER_TEXT_V2,
             <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={getSummariesHectares()} />)}</b>,
             <b>
@@ -451,14 +463,15 @@ export default function PlantsDashboardView(): JSX.Element {
               {summaries?.[0]?.latestObservationTime ? getDateDisplayValue(summaries[0].latestObservationTime) : ''}
             </b>
           ) as string)
-        : (strings.formatString(
+      : latestObservation?.completedTime
+        ? (strings.formatString(
             strings.DASHBOARD_HEADER_TEXT,
             <b>
               <FormattedNumber value={getObservationHectares()} />
             </b>,
             <>{getShortDate(latestObservation.completedTime, locale.activeLocale)}</>
-          ) as string);
-    }
+          ) as string)
+        : '';
   };
 
   return (
