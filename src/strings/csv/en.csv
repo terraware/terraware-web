@@ -342,7 +342,7 @@ CUSTOMIZE_TABLE_COLUMNS_DESCRIPTION,Select columns you want to add. Deselect col
 CUT_TEST,Cut Test,
 DASHBOARD,Dashboard,
 DASHBOARD_HEADER_TEXT,The data on this dashboard is based on a sample of {0} hectares from the {1} observation., {1} date of the last observation in short format (e.g. July 2023)
-DASHBOARD_HEADER_TEXT_SINGLE_OBVSERVATION,Observation data on this dashboard is based on a sample of {0} from the {1} for this planting site.,
+DASHBOARD_HEADER_TEXT_SINGLE_OBSERVATION,Observation data on this dashboard is based on a sample of {0} from the {1} for this planting site.,
 DASHBOARD_HEADER_TEXT_V2,Observation data on this dashboard is based on a sample of {0} from observations between {1} through {2}.,
 DASHBOARD_MESSAGE,Your seeds dashboard will automatically populate with data as you add accessions.,
 DASHBOARD_MESSAGE_TITLE,Add Accessions to See Data,

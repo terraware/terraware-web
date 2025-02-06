@@ -449,7 +449,7 @@ export default function PlantsDashboardView(): JSX.Element {
     return newPlantsDashboardEnabled
       ? !earliestDate || !latestDate || earliestDate === latestDate
         ? (strings.formatString(
-            strings.DASHBOARD_HEADER_TEXT_SINGLE_OBVSERVATION,
+            strings.DASHBOARD_HEADER_TEXT_SINGLE_OBSERVATION,
             <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={getObservationHectares()} />)}</b>,
             <b>{getLatestObservationLink()}</b>
           ) as string)
