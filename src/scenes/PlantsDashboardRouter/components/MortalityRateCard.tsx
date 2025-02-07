@@ -50,11 +50,11 @@ export default function MortalityRateCard({ plantingSiteId }: MortalityRateCardP
           </Tooltip>
         </Box>
         <Box display='flex' sx={{ flexFlow: 'row wrap' }} marginTop={1}>
-          <Typography fontSize='84px' fontWeight={600} lineHeight={1}>
+          <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
             {observation?.mortalityRate !== undefined ? <FormattedNumber value={observation.mortalityRate} /> : '-'}
           </Typography>
           {observation?.mortalityRate !== undefined && (
-            <Typography fontSize='84px' fontWeight={600} lineHeight={1}>
+            <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
               %
             </Typography>
           )}
