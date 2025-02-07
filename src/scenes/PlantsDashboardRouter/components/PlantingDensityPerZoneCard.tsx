@@ -1,16 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 
 import BarChart from 'src/components/common/Chart/BarChart';
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import isEnabled from 'src/features';
-import { useLocalization } from 'src/providers';
+import { ChartDataset } from 'src/components/common/Chart/Chart';
+import useObservationSummaries from 'src/hooks/useObservationSummaries';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { getShortDate } from 'src/utils/dateFormatter';
 import { truncate } from 'src/utils/text';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -22,25 +20,25 @@ type PlantingDensityPerZoneCardProps = {
 
 export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingDensityPerZoneCardProps): JSX.Element {
   const theme = useTheme();
-  const locale = useLocalization();
   const defaultTimeZone = useDefaultTimeZone();
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
   );
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
+  const summaries = useObservationSummaries(plantingSiteId);
   const [labels, setLabels] = useState<string[]>();
   const [targets, setTargets] = useState<(number | null)[]>();
   const [actuals, setActuals] = useState<(number | null)[]>();
   const [tooltipTitles, setTooltipTitles] = useState<string[]>();
-  const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
 
   useEffect(() => {
     if (plantingSite) {
       const zoneDensities: Record<string, (number | null)[]> = {};
       plantingSite.plantingZones?.forEach((zone) => {
         zoneDensities[zone.name] = [zone.targetPlantingDensity];
-        if (observation) {
-          const zoneFromObs = observation.plantingZones.find((obsZone) => obsZone.plantingZoneId === zone.id);
+
+        if (summaries && summaries.length > 0) {
+          const zoneFromObs = summaries[0].plantingZones.find((obsZone) => obsZone.plantingZoneId === zone.id);
           zoneDensities[zone.name].push(zoneFromObs?.plantingDensity ?? null);
         }
       });
@@ -54,30 +52,30 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
       setActuals([]);
       setTooltipTitles([]);
     }
-  }, [plantingSite, observation]);
+  }, [plantingSite, observation, summaries]);
 
   const chartData = useMemo(() => {
     if (!labels?.length || !targets?.length) {
       return undefined;
     }
 
-    const datasets = [
+    const datasets: ChartDataset[] = [
       {
-        label: newPlantsDashboardEnabled ? strings.TARGET_DENSITY : strings.TARGET_PLANTING_DENSITY,
-        values: newPlantsDashboardEnabled ? targets.map((v) => [v, v] as [number, number]) : targets,
-        color: newPlantsDashboardEnabled ? theme.palette.TwClrBaseBlack : theme.palette.TwClrBaseBlue500,
-        minBarLength: newPlantsDashboardEnabled ? 1 : undefined,
-        xAxisID: newPlantsDashboardEnabled ? 'xAxisTarget' : undefined,
+        label: strings.TARGET_DENSITY,
+        values: targets.map((v) => [v, v] as [number, number]),
+        color: theme.palette.TwClrBaseBlack,
+        minBarLength: 1,
+        xAxisID: 'xAxisTarget',
       },
     ];
 
-    if (observation && actuals?.length && !actuals?.every((val) => val === null)) {
+    if (actuals && actuals?.length && !actuals?.every((val) => val === null)) {
       datasets.unshift({
-        label: newPlantsDashboardEnabled ? strings.OBSERVED_DENSITY : strings.PLANTING_DENSITY,
+        label: strings.OBSERVED_DENSITY,
         values: actuals,
-        color: newPlantsDashboardEnabled ? theme.palette.TwClrBaseLightGreen200 : theme.palette.TwClrBaseBlue700,
-        xAxisID: newPlantsDashboardEnabled ? 'xAxisActual' : undefined,
-        minBarLength: newPlantsDashboardEnabled ? 1 : undefined,
+        color: theme.palette.TwClrBaseLightGreen200,
+        xAxisID: 'xAxisActual',
+        minBarLength: 1,
       });
     }
 
@@ -85,16 +83,16 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
       labels,
       datasets,
     };
-  }, [observation, labels, targets, actuals, theme.palette.TwClrBaseBlue500, theme.palette.TwClrBaseBlue700]);
+  }, [actuals, labels, targets]);
 
-  return newPlantsDashboardEnabled ? (
+  return (
     <Box>
       <Box id='legend-container-density' sx={{ marginTop: 3, marginBottom: 2 }} />
       <Box marginBottom={theme.spacing(1.5)}>
         <BarChart
           showLegend={true}
           elementColor={theme.palette.TwClrBgBrand}
-          barWidth={observation && actuals?.length ? 0 : undefined}
+          barWidth={actuals && actuals?.length ? 0 : undefined}
           chartId='plantingDensityByZone'
           chartData={chartData}
           customTooltipTitles={tooltipTitles}
@@ -120,37 +118,5 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
         />
       </Box>
     </Box>
-  ) : (
-    <OverviewItemCard
-      isEditable={false}
-      contents={
-        <Box display='flex' flexDirection='column'>
-          <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(3)}>
-            {observation
-              ? strings.formatString(
-                  strings.PLANTING_DENSITY_PER_ZONE_W_OBS_CARD_TITLE,
-                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-                  getShortDate(observation?.completedTime!, locale.activeLocale)
-                )
-              : strings.PLANTING_DENSITY_PER_ZONE_CARD_TITLE}
-          </Typography>
-          <Box marginBottom={theme.spacing(1.5)}>
-            <BarChart
-              showLegend={!!observation}
-              elementColor={theme.palette.TwClrBgBrand}
-              barWidth={observation && actuals?.length ? 0 : undefined}
-              chartId='plantingDensityByZone'
-              chartData={chartData}
-              customTooltipTitles={tooltipTitles}
-              maxWidth='100%'
-              yAxisLabel={strings.PLANTS_PER_HECTARE}
-            />
-          </Box>
-          <Typography fontSize='12px' fontWeight={400}>
-            {strings.PLANTING_DENSITY_PER_ZONE_DESCRIPTION}
-          </Typography>
-        </Box>
-      }
-    />
   );
 }

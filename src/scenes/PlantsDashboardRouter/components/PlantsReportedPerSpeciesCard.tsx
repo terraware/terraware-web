@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { Icon, Tooltip } from '@terraware/web-components';
 
 import BarChart from 'src/components/common/Chart/BarChart';
 import PieChart from 'src/components/common/Chart/PieChart';
@@ -32,6 +33,49 @@ export default function PlantsReportedPerSpeciesCard({
   }
 }
 
+const calculateSpeciesQuantities = (plantings: { plants: number; scientificName: string }[], newVersion?: boolean) => {
+  const speciesQuantities: Record<string, number> = {};
+  plantings?.forEach((planting) => {
+    const { scientificName, plants } = planting;
+    if (newVersion) {
+      if (!speciesQuantities[scientificName] && Object.keys(speciesQuantities).length >= 4) {
+        const minSpecies = Object.keys(speciesQuantities).reduce((minSpecies, sp) => {
+          if (sp !== strings.OTHER_SPECIES && speciesQuantities[sp] < speciesQuantities[minSpecies]) {
+            return sp;
+          }
+          return minSpecies;
+        }, Object.keys(speciesQuantities)[0]);
+
+        if (plants > speciesQuantities[minSpecies]) {
+          speciesQuantities[scientificName] = plants;
+          speciesQuantities[strings.OTHER_SPECIES] = speciesQuantities[strings.OTHER_SPECIES]
+            ? speciesQuantities[strings.OTHER_SPECIES] + speciesQuantities[minSpecies]
+            : speciesQuantities[minSpecies];
+          delete speciesQuantities[minSpecies];
+        } else {
+          speciesQuantities[strings.OTHER_SPECIES] = speciesQuantities[strings.OTHER_SPECIES]
+            ? speciesQuantities[strings.OTHER_SPECIES] + plants
+            : plants;
+        }
+      } else {
+        if (!speciesQuantities[scientificName]) {
+          speciesQuantities[scientificName] = plants;
+        } else {
+          speciesQuantities[scientificName] += plants;
+        }
+      }
+    } else {
+      if (!speciesQuantities[scientificName]) {
+        speciesQuantities[scientificName] = plants;
+      } else {
+        speciesQuantities[scientificName] += plants;
+      }
+    }
+  });
+
+  return speciesQuantities;
+};
+
 const SiteWithoutZonesCard = ({
   plantingSiteId,
   newVersion,
@@ -42,41 +86,18 @@ const SiteWithoutZonesCard = ({
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
   const [tooltipTitles, setTooltipTitles] = useState<string[]>();
-  const [speciesNamesList, setSpeciesNamesList] = useState<Set<string>>();
 
   const plantings = useAppSelector((state) => selectPlantingsForSite(state, plantingSiteId));
 
   useEffect(() => {
-    const speciesQuantities: Record<string, number> = {};
-    const allSpeciesNames = new Set<string>();
-    plantings.forEach((planting) => {
-      const plants = Number(planting['numPlants(raw)']);
-      const { scientificName } = planting.species;
-
-      if (newVersion) {
-        allSpeciesNames.add(scientificName);
-        if (!speciesQuantities[scientificName] && Object.keys(speciesQuantities).length >= 4) {
-          speciesQuantities['Others'] = speciesQuantities['Others'] ? speciesQuantities['Others'] + plants : plants;
-        } else {
-          if (!speciesQuantities[scientificName]) {
-            speciesQuantities[scientificName] = plants;
-          } else {
-            speciesQuantities[scientificName] += plants;
-          }
-        }
-      } else {
-        if (!speciesQuantities[scientificName]) {
-          speciesQuantities[scientificName] = plants;
-        } else {
-          speciesQuantities[scientificName] += plants;
-        }
-      }
-    });
-
+    const transformedPlantings = plantings?.map((planting) => ({
+      plants: Number(planting['numPlants(raw)']),
+      scientificName: planting.species.scientificName,
+    }));
+    const speciesQuantities: Record<string, number> = calculateSpeciesQuantities(transformedPlantings, newVersion);
     setLabels(Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)));
     setValues(Object.values(speciesQuantities));
     setTooltipTitles(Object.keys(speciesQuantities));
-    setSpeciesNamesList(allSpeciesNames);
   }, [plantings]);
 
   return (
@@ -86,7 +107,6 @@ const SiteWithoutZonesCard = ({
       labels={labels}
       values={values}
       newVersion={newVersion}
-      speciesList={speciesNamesList}
     />
   );
 };
@@ -102,46 +122,23 @@ const SiteWithZonesCard = ({
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
   const [tooltipTitles, setTooltipTitles] = useState<string[]>();
-  const [speciesNamesList, setSpeciesNamesList] = useState<Set<string>>();
 
   useEffect(() => {
     if (populationSelector) {
-      const speciesQuantities: Record<string, number> = {};
-      const allSpeciesNames = new Set<string>();
-      populationSelector?.forEach((zone) =>
-        zone.plantingSubzones?.forEach((subzone) =>
-          subzone.populations?.forEach((population) => {
-            const numPlants = +population['totalPlants(raw)'];
-            if (isNaN(numPlants)) {
-              return;
-            }
-            if (newVersion) {
-              allSpeciesNames.add(population.species_scientificName);
-              if (!speciesQuantities[population.species_scientificName] && Object.keys(speciesQuantities).length >= 4) {
-                speciesQuantities['Others'] = speciesQuantities['Others']
-                  ? speciesQuantities['Others'] + numPlants
-                  : numPlants;
-              } else {
-                if (!speciesQuantities[population.species_scientificName]) {
-                  speciesQuantities[population.species_scientificName] = numPlants;
-                } else {
-                  speciesQuantities[population.species_scientificName] += numPlants;
-                }
-              }
-            } else {
-              if (speciesQuantities[population.species_scientificName]) {
-                speciesQuantities[population.species_scientificName] += numPlants;
-              } else {
-                speciesQuantities[population.species_scientificName] = numPlants;
-              }
-            }
-          })
+      const transformedPlantings = populationSelector
+        .flatMap((zone) =>
+          zone.plantingSubzones?.flatMap((subZone) =>
+            subZone.populations?.map((population) => ({
+              plants: +population['totalPlants(raw)'],
+              scientificName: population.species_scientificName,
+            }))
+          )
         )
-      );
+        .filter((tp) => tp !== undefined);
+      const speciesQuantities: Record<string, number> = calculateSpeciesQuantities(transformedPlantings, newVersion);
       setLabels(Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)));
       setValues(Object.values(speciesQuantities));
       setTooltipTitles(Object.keys(speciesQuantities));
-      setSpeciesNamesList(allSpeciesNames);
     } else {
       setLabels([]);
       setValues([]);
@@ -156,7 +153,6 @@ const SiteWithZonesCard = ({
       labels={labels}
       values={values}
       newVersion={newVersion}
-      speciesList={speciesNamesList}
     />
   );
 };
@@ -167,17 +163,9 @@ type ChartDataProps = {
   labels?: string[];
   values?: number[];
   newVersion?: boolean;
-  speciesList?: Set<string>;
 };
 
-const ChartData = ({
-  plantingSiteId,
-  tooltipTitles,
-  labels,
-  values,
-  newVersion,
-  speciesList,
-}: ChartDataProps): JSX.Element => {
+const ChartData = ({ plantingSiteId, tooltipTitles, labels, values, newVersion }: ChartDataProps): JSX.Element => {
   const theme = useTheme();
 
   const chartData = useMemo(() => {
@@ -204,9 +192,16 @@ const ChartData = ({
 
   return newVersion ? (
     <Box>
-      <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-        {strings.formatString(strings.PLANTED_SPECIES_NUMBER, speciesList?.size || '')}
-      </Typography>
+      <Box display={'flex'} alignItems={'center'}>
+        <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
+          {strings.PLANTED_SPECIES}
+        </Typography>
+        <Tooltip title={strings.PLANTED_SPECIES_TOOLTIP}>
+          <Box display='flex'>
+            <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+          </Box>
+        </Tooltip>
+      </Box>
       <Box height={'250px'} marginTop={3} marginBottom={6}>
         <PieChart
           key={`${plantingSiteId}_${values?.length}`}

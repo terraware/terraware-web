@@ -1,7 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'New Plants Dashboard' | 'Ad Hoc Observation Support';
+export type FeatureName = 'Show Production View' | 'Ad Hoc Observation Support';
 
 export type Feature = {
   name: FeatureName;
@@ -34,15 +34,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     ],
     get: env().isForcedProductionView,
     set: env().forceProductionView,
-  },
-  {
-    name: 'New Plants Dashboard',
-    preferenceName: 'enableNewPlantsDashboard',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['New plants dashboard'],
-    disclosure: ['This is a WIP'],
   },
   {
     name: 'Ad Hoc Observation Support',

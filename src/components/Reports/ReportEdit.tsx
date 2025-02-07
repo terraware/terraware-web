@@ -225,9 +225,9 @@ export default function ReportEdit(): JSX.Element {
 
     const emptyWorkerField = (location: any) => {
       return (
-        location.workers.paidWorkers === null ||
-        location.workers.femalePaidWorkers === null ||
-        location.workers.volunteers === null
+        location.workers.paidWorkers == null ||
+        location.workers.femalePaidWorkers == null ||
+        location.workers.volunteers == null
       );
     };
     const emptySeedbankFields = iReport.seedBanks?.findIndex((sb) => {
@@ -252,7 +252,7 @@ export default function ReportEdit(): JSX.Element {
         (!nursery.buildStartedDate ||
           !nursery.buildCompletedDate ||
           !nursery.operationStartedDate ||
-          nursery.capacity === null ||
+          nursery.capacity == null ||
           !buildStartedDateValid(nursery) ||
           !buildCompletedDateValid(nursery) ||
           !operationStartedDateValid(nursery) ||
@@ -265,14 +265,14 @@ export default function ReportEdit(): JSX.Element {
 
     const emptyPlantingSitesFields = iReport.plantingSites?.findIndex((plantingSite) => {
       const speciesDataMissing =
-        plantingSite.species?.some((sp) => sp.totalPlanted === null || sp.mortalityRateInField === null) ?? false;
+        plantingSite.species?.some((sp) => sp.totalPlanted == null || sp.mortalityRateInField == null) ?? false;
       return (
         plantingSite.selected &&
-        (plantingSite.totalPlantingSiteArea === null ||
-          plantingSite.totalPlantedArea === null ||
-          plantingSite.totalTreesPlanted === null ||
-          plantingSite.totalPlantsPlanted === null ||
-          plantingSite.mortalityRate === null ||
+        (plantingSite.totalPlantingSiteArea == null ||
+          plantingSite.totalPlantedArea == null ||
+          plantingSite.totalTreesPlanted == null ||
+          plantingSite.totalPlantsPlanted == null ||
+          plantingSite.mortalityRate == null ||
           speciesDataMissing ||
           emptyWorkerField(plantingSite))
       );

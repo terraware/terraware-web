@@ -1,16 +1,15 @@
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
-import React, { Box, Typography, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem, Icon, Tooltip } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
 import Chart, { ChartData } from 'src/components/common/Chart/Chart';
-import { selectPlantingSiteObservationsSummaries } from 'src/redux/features/observations/observationsSelectors';
-import { requestGetPlantingSiteObservationsSummaries } from 'src/redux/features/observations/observationsThunks';
+import useObservationSummaries from 'src/hooks/useObservationSummaries';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ObservationSummary } from 'src/types/Observations';
 
 type PlantingSiteTrendsCardProps = {
   plantingSiteId: number;
@@ -19,23 +18,11 @@ type PlantingSiteTrendsCardProps = {
 export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteTrendsCardProps): JSX.Element {
   const theme = useTheme();
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
-  const [requestId, setRequestId] = useState<string>('');
-  const plantingObservationsSummaryResponse = useAppSelector((state) =>
-    selectPlantingSiteObservationsSummaries(state, requestId)
-  );
-
   const [zonesOptions, setZoneOptions] = useState<DropdownItem[]>();
   const [selectedPlantsPerHaZone, setSelectedPlantsPerHaZone] = useState<number>();
   const [selectedMortalityZone, setSelectedMortalityZone] = useState<number>();
-  const dispatch = useAppDispatch();
-  const [summaries, setSummaries] = useState<ObservationSummary[]>();
-
-  useEffect(() => {
-    if (plantingSite?.id) {
-      const request = dispatch(requestGetPlantingSiteObservationsSummaries(plantingSite.id));
-      setRequestId(request.requestId);
-    }
-  }, [plantingSite]);
+  const summaries = useObservationSummaries(plantingSiteId);
+  const { isDesktop, isMobile } = useDeviceInfo();
 
   useEffect(() => {
     const zoneOpts = plantingSite?.plantingZones?.map((pzone) => ({ label: pzone.name, value: pzone.id }));
@@ -45,12 +32,6 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
       setSelectedMortalityZone(zoneOpts[0].value);
     }
   }, [plantingSite]);
-
-  useEffect(() => {
-    if (plantingObservationsSummaryResponse?.status === 'success') {
-      setSummaries(plantingObservationsSummaryResponse.data);
-    }
-  }, [plantingObservationsSummaryResponse]);
 
   const plantsChartData: ChartData = useMemo(() => {
     const filteredSummaries = summaries?.filter((sc) => {
@@ -96,6 +77,8 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
         {
           values: values ?? [],
           label: strings.ACTUAL,
+          pointRadius: values?.length === 1 ? 4 : 0,
+          color: '#B8A0D6',
         },
       ],
     };
@@ -120,23 +103,33 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
         {
           values: values ?? [],
           pointRadius: values?.length === 1 ? 4 : 0,
+          color: '#D29AB4',
         },
       ],
     };
   }, [summaries, selectedMortalityZone]);
 
   return (
-    <Card radius='8px' style={{ display: 'flex', 'justify-content': 'space-between' }}>
+    <Card
+      radius='8px'
+      style={{ display: 'flex', 'justify-content': 'space-between', flexDirection: isDesktop ? 'row' : 'column' }}
+    >
       <Box flexBasis='100%'>
-        <Box display={'flex'} alignItems={'center'}>
-          <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-            {strings.PLANTS_PER_HA}
-          </Typography>
-          <Tooltip title={strings.PLANTS_PER_HA_TOOLTIP}>
-            <Box display='flex' marginRight={1}>
-              <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
-            </Box>
-          </Tooltip>
+        <Box
+          display={'flex'}
+          flexDirection={isMobile ? 'column' : 'row'}
+          alignItems={isMobile ? 'flex-start' : 'center'}
+        >
+          <Box display={'flex'} alignItems={'center'}>
+            <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
+              {strings.PLANTS_PER_HA}
+            </Typography>
+            <Tooltip title={strings.PLANTS_PER_HA_TOOLTIP}>
+              <Box display='flex' marginRight={1}>
+                <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+              </Box>
+            </Tooltip>
+          </Box>
           <Dropdown
             placeholder={strings.SELECT}
             options={zonesOptions}
@@ -169,16 +162,22 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
           marginLeft: '24px',
         }}
       />
-      <Box flexBasis='100%'>
-        <Box display={'flex'} alignItems={'center'}>
-          <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-            {strings.MORTALITY_RATE}
-          </Typography>
-          <Tooltip title={strings.MORTALITY_RATE_TREND_TOOLTIP}>
-            <Box display='flex' marginRight={1}>
-              <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
-            </Box>
-          </Tooltip>
+      <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
+        <Box
+          display={'flex'}
+          flexDirection={isMobile ? 'column' : 'row'}
+          alignItems={isMobile ? 'flex-start' : 'center'}
+        >
+          <Box display={'flex'} alignItems={'center'}>
+            <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
+              {strings.MORTALITY_RATE}
+            </Typography>
+            <Tooltip title={strings.MORTALITY_RATE_TREND_TOOLTIP}>
+              <Box display='flex' marginRight={1}>
+                <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+              </Box>
+            </Tooltip>
+          </Box>
 
           <Dropdown
             placeholder={strings.SELECT}
