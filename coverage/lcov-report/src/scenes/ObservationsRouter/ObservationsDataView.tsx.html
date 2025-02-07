@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
@@ -161,7 +161,39 @@
 <a name='L96'></a><a href='#L96'>96</a>
 <a name='L97'></a><a href='#L97'>97</a>
 <a name='L98'></a><a href='#L98'>98</a>
-<a name='L99'></a><a href='#L99'>99</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -211,6 +243,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -221,6 +257,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -266,7 +304,11 @@ import { Box, Typography, useTheme } from '@mui/material';
 import ListMapView from 'src/components/ListMapView';
 import { View } from 'src/components/common/ListMapSelector';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import { searchObservations, selectObservationsZoneNames } from 'src/redux/features/observations/observationsSelectors';
+import {
+  searchAdHocObservations,
+  searchObservations,
+  selectObservationsZoneNames,
+} from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
@@ -283,10 +325,19 @@ export type ObservationsDataViewProps = SearchProps &amp; {
   setView: (view: View) =&gt; void;
   view?: View;
   reload: () =&gt; void;
+  selectedPlotSelection?: string;
 };
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >ObservationsDataView(</span>props: ObservationsDataViewProps): JSX.Element {
-  const { selectedPlantingSiteId, selectedPlantingSite, setFilterOptions, setView, view, reload } = <span class="cstat-no" title="statement not covered" >props;</span>
+  const {
+    selectedPlantingSiteId,
+    selectedPlantingSite,
+    setFilterOptions,
+    setView,
+    view,
+    reload,
+    selectedPlotSelection,
+  } = <span class="cstat-no" title="statement not covered" >props;</span>
   const { ...searchProps }: SearchProps = <span class="cstat-no" title="statement not covered" >props;</span>
   const defaultTimeZone = <span class="cstat-no" title="statement not covered" >useDefaultTimeZone();</span>
 &nbsp;
@@ -299,6 +350,10 @@ export default function <span class="fstat-no" title="function not covered" >Obs
       searchProps.filtersProps?.filters.zone?.values ?? [],
       searchProps.filtersProps?.filters.status?.values ?? []
     )
+  );
+&nbsp;
+  const adHocObservationsResults = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >    searchAdHocObservations(state, selectedPlantingSiteId, defaultTimeZone.get().id, searchProps.search)</span>
   );
 &nbsp;
   const zoneNames = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
@@ -324,8 +379,10 @@ export default function <span class="fstat-no" title="function not covered" >Obs
       list={
         &lt;OrgObservationsListView
           observationsResults={observationsResults}
+          adHocObservationsResults={adHocObservationsResults}
           plantingSiteId={selectedPlantingSiteId}
           reload={reload}
+          selectedPlotSelection={selectedPlotSelection}
         /&gt;
       }
       map={
@@ -364,7 +421,7 @@ const AllPlantingSitesMapView = <span class="cstat-no" title="statement not cove
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-06T21:06:59.214Z
+                at 2025-02-07T13:25:03.820Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
