@@ -1276,6 +1276,7 @@ PLANTS_PER_HA_TOOLTIP,"La ""Tendencia de plantas por hectárea"" representa la c
 PLANTS_PER_HECTARE,plantas/ha,
 PLEASE_NOTE,Tenga en cuenta lo siguiente:,
 PLEASE_TRY_AGAIN,"Por favor, inténtelo de nuevo.",
+PLOT,Terreno,
 PLOT_REPLACES_THIS_25M_PLOT,La parcela sustituye a esta parcela de 25 m x 25 m:,
 PLOT_SELECTION,Selección de parcela,
 PLOT_TYPE,Tipo de terreno,

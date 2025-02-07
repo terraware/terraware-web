@@ -1276,6 +1276,7 @@ PLANTS_PER_HA_TOOLTIP,"La rubrique « Tendance des plantes par hectare » repré
 PLANTS_PER_HECTARE,plantes/ha,
 PLEASE_NOTE,Veuillez noter que :,
 PLEASE_TRY_AGAIN,Veuillez réessayer,
+PLOT,Terrain,
 PLOT_REPLACES_THIS_25M_PLOT,La parcelle remplace cette parcelle de 25 × 25m :,
 PLOT_SELECTION,Sélection de parcelles,
 PLOT_TYPE,Type de parcelle,

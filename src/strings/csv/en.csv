@@ -1276,6 +1276,7 @@ PLANTS_PER_HA_TOOLTIP,"Plants per Ha trend represents the numbers of plants per 
 PLANTS_PER_HECTARE,plants/ha,
 PLEASE_NOTE,Please Note:,
 PLEASE_TRY_AGAIN,Please try again.,
+PLOT,Plot,
 PLOT_REPLACES_THIS_25M_PLOT,Plot replaces this 25x25m plot:,
 PLOT_SELECTION,Plot Selection,
 PLOT_TYPE,Plot Type,
