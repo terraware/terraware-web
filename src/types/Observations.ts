@@ -168,3 +168,5 @@ export type PlantingSiteAggregation = Omit<MinimalPlantingSite, 'plantingZones'>
 export type ObservationSummary = components['schemas']['PlantingSiteObservationSummaryPayload'];
 
 export type PlantingZoneObservationSummary = components['schemas']['PlantingZoneObservationSummaryPayload'];
+
+export type BiomassMeasurementType = components['schemas']['BiomassMeasurementPayload'];

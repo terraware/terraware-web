@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -6,8 +6,10 @@ import { TableColumnType } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
+import { useOrganization } from 'src/providers';
 import { selectAdHocObservationsResults } from 'src/redux/features/observations/observationsSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
@@ -17,9 +19,12 @@ export type BiomassMeasurementProps = {
 
 export default function BiomassMeasurement({ selectedPlantingSite }: BiomassMeasurementProps): JSX.Element {
   const theme = useTheme();
+  const { selectedOrganization } = useOrganization();
+  const dispatch = useAppDispatch();
 
   const allAdHocObservationsResults = useAppSelector(selectAdHocObservationsResults);
   const adHocObservationsResults = useMemo(() => {
+    console.log('allAdHocObservationsResults', allAdHocObservationsResults);
     if (!allAdHocObservationsResults || !selectedPlantingSite?.id) {
       return [];
     }
@@ -31,6 +36,12 @@ export default function BiomassMeasurement({ selectedPlantingSite }: BiomassMeas
       return matchesSite && isBiomassMeasurement;
     });
   }, [allAdHocObservationsResults, selectedPlantingSite]);
+
+  useEffect(() => {
+    if (selectedOrganization.id !== -1) {
+      dispatch(requestPlantings(selectedOrganization.id));
+    }
+  }, [dispatch, selectedOrganization.id]);
 
   const columns = (): TableColumnType[] => {
     return [
