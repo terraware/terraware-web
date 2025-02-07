@@ -16,7 +16,12 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ObservationsService } from 'src/services';
 import strings from 'src/strings';
-import { Observation, ObservationPlantingZoneResults, ObservationResults } from 'src/types/Observations';
+import {
+  AdHocObservationResults,
+  Observation,
+  ObservationPlantingZoneResults,
+  ObservationResults,
+} from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { isAdmin } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -83,13 +88,17 @@ const scheduleObservationsColumn = (): TableColumnType[] => [
 export type OrgObservationsListViewProps = {
   plantingSiteId: number;
   observationsResults?: ObservationResults[];
+  adHocObservationsResults?: AdHocObservationResults[];
   reload: () => void;
+  selectedPlotSelection?: string;
 };
 
 export default function OrgObservationsListView({
   observationsResults,
+  adHocObservationsResults,
   plantingSiteId,
   reload,
+  selectedPlotSelection,
 }: OrgObservationsListViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
@@ -133,6 +142,36 @@ export default function OrgObservationsListView({
 
     return [...defaultColumns(), ...(scheduleObservationsEnabled ? scheduleObservationsColumn() : [])];
   }, [activeLocale, scheduleObservationsEnabled]);
+
+  const adHocColumns = useCallback((): TableColumnType[] => {
+    return [
+      {
+        key: 'plotName',
+        name: strings.PLOT,
+        type: 'string',
+      },
+      {
+        key: 'plantingSiteName',
+        name: strings.PLANTING_SITE,
+        type: 'string',
+      },
+      {
+        key: 'startDate',
+        name: strings.DATE,
+        type: 'date',
+      },
+      {
+        key: 'totalPlants',
+        name: strings.PLANTS,
+        type: 'number',
+      },
+      {
+        key: 'totalSpecies',
+        name: strings.SPECIES,
+        type: 'number',
+      },
+    ];
+  }, [activeLocale]);
 
   const exportObservation = useCallback(
     async (observationId: number, gpxOrCsv: 'gpx' | 'csv') => {
@@ -218,22 +257,31 @@ export default function OrgObservationsListView({
       {endObservationModalOpened && selectedObservation && (
         <EndObservationModal observation={selectedObservation} onClose={onCloseModal} onSave={onEndObservation} />
       )}
-      <Table
-        id='org-observations-table'
-        columns={columns}
-        rows={results}
-        orderBy='completedDate'
-        Renderer={OrgObservationsRenderer(
-          theme,
-          activeLocale,
-          goToRescheduleObservation,
-          (observationId: number) => exportObservation(observationId, 'csv'),
-          (observationId: number) => exportObservation(observationId, 'gpx'),
-          (observation: any) => {
-            endObservation(observation);
-          }
-        )}
-      />
+      {selectedPlotSelection === 'adHoc' ? (
+        <Table
+          id='org-ad-hoc-observations-table'
+          columns={adHocColumns}
+          rows={adHocObservationsResults || []}
+          orderBy='completedDate'
+        />
+      ) : (
+        <Table
+          id='org-observations-table'
+          columns={columns}
+          rows={results}
+          orderBy='completedDate'
+          Renderer={OrgObservationsRenderer(
+            theme,
+            activeLocale,
+            goToRescheduleObservation,
+            (observationId: number) => exportObservation(observationId, 'csv'),
+            (observationId: number) => exportObservation(observationId, 'gpx'),
+            (observation: any) => {
+              endObservation(observation);
+            }
+          )}
+        />
+      )}
     </Box>
   );
 }

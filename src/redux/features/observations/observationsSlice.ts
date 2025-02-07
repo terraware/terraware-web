@@ -140,6 +140,29 @@ const abandonObservationSlice = createSlice({
   extraReducers: buildReducers(requestAbandonObservation),
 });
 
+// Define a type for the slice state
+type AdHocResultsData = {
+  error?: string;
+  observations?: ObservationResultsPayload[];
+};
+
+// Define the initial state
+const initialAdHocResultsState: AdHocResultsData = {};
+
+export const adHocObservationsResultsSlice = createSlice({
+  name: 'adHocobservationsResultsSlice',
+  initialState: initialAdHocResultsState,
+  reducers: {
+    setAdHocObservationsResultsAction: (state, action: PayloadAction<AdHocResultsData>) => {
+      const data: AdHocResultsData = action.payload;
+      state.error = data.error;
+      state.observations = data.observations;
+    },
+  },
+});
+
+export const { setAdHocObservationsResultsAction } = adHocObservationsResultsSlice.actions;
+
 const observationsReducers = {
   observationsResults: observationsResultsSlice.reducer,
   observations: observationsSlice.reducer,
@@ -149,6 +172,7 @@ const observationsReducers = {
   replaceObservationPlot: replaceObservationPlotSlice.reducer,
   plantingSiteObservationsSummaries: plantingSiteObservationsSummariesSlice.reducer,
   abandonObservation: abandonObservationSlice.reducer,
+  adHocObservationsResults: adHocObservationsResultsSlice.reducer,
 };
 
 export default observationsReducers;

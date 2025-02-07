@@ -11,7 +11,11 @@ import {
   selectObservationsResults,
   selectObservationsResultsError,
 } from 'src/redux/features/observations/observationsSelectors';
-import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import {
+  requestAdHocObservationsResults,
+  requestObservations,
+  requestObservationsResults,
+} from 'src/redux/features/observations/observationsThunks';
 import { selectSpecies, selectSpeciesError } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { selectPlantingSites, selectPlantingSitesError } from 'src/redux/features/tracking/trackingSelectors';
@@ -58,6 +62,7 @@ export default function ObservationsRouter(): JSX.Element {
     if (species !== undefined && plantingSites !== undefined && !dispatched && selectedOrganization.id !== -1) {
       setDispatched(true);
       dispatch(requestObservationsResults(selectedOrganization.id));
+      dispatch(requestAdHocObservationsResults(selectedOrganization.id));
       dispatch(requestObservations(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization.id, species, plantingSites, dispatched]);

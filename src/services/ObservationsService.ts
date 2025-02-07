@@ -22,6 +22,7 @@ const OBSERVATION_EXPORT_ENDPOINT = '/api/v1/tracking/observations/{observationI
 const REPLACE_OBSERVATION_PLOT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/replace';
 const PLANTING_SITE_OBSERVATIONS_SUMMARIES_ENDPOINT = '/api/v1/tracking/observations/results/summaries';
 const ABANDON_OBSERVATION_ENDPOINT = '/api/v1/tracking/observations/{observationId}/abandon';
+const AD_HOC_OBSERVATIONS_RESULTS_ENDPOINT = '/api/v1/tracking/observations/adHoc/results';
 
 type ObservationsResultsResponsePayload =
   paths[typeof OBSERVATIONS_RESULTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -47,6 +48,7 @@ const httpObservationsResults = HttpService.root(OBSERVATIONS_RESULTS_ENDPOINT);
 const httpObservations = HttpService.root(OBSERVATIONS_ENDPOINT);
 const httpObservation = HttpService.root(OBSERVATION_ENDPOINT);
 const httpObservationExport = HttpService.root(OBSERVATION_EXPORT_ENDPOINT);
+const httpAdHocObservationsResults = HttpService.root(AD_HOC_OBSERVATIONS_RESULTS_ENDPOINT);
 
 const exportCsv = async (observationId: number): Promise<any> => {
   return SearchService.searchCsv({
@@ -191,6 +193,28 @@ const abandonObservation = async (observationId: number): Promise<Response> => {
     },
   });
 };
+
+const listAdHocObservationsResults = async (
+  organizationId: number,
+  plantingSiteId?: number
+): Promise<ObservationsResultsData & Response> => {
+  const params: Record<string, string> = plantingSiteId ? { plantingSiteId: plantingSiteId.toString() } : {};
+  const response: ObservationsResultsData & Response = await httpAdHocObservationsResults.get<
+    ObservationsResultsResponsePayload,
+    ObservationsResultsData
+  >(
+    {
+      params: {
+        organizationId: organizationId.toString(),
+        ...params,
+      },
+    },
+    (data) => ({ observations: data?.observations ?? [] })
+  );
+
+  return response;
+};
+
 /**
  * Exported functions
  */
@@ -204,6 +228,7 @@ const ObservationsService = {
   scheduleObservation,
   getPlantingSiteObservationsSummaries,
   abandonObservation,
+  listAdHocObservationsResults,
 };
 
 export default ObservationsService;

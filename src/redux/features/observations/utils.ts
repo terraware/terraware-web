@@ -1,6 +1,7 @@
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 
 import {
+  AdHocObservationResults,
   MonitoringPlotStatus,
   ObservationMonitoringPlotResults,
   ObservationMonitoringPlotResultsPayload,
@@ -279,4 +280,26 @@ export const has25mPlots = (
   return subzones
     ?.flatMap((subzone: { monitoringPlots: any[] }) => subzone.monitoringPlots.flatMap((plot) => plot.sizeMeters))
     .some((size: number) => size.toString() === '25');
+};
+
+export const mergeAdHocObservations = (
+  observations: ObservationResultsPayload[],
+  _defaultTimeZone: string,
+  plantingSites?: PlantingSite[]
+): AdHocObservationResults[] => {
+  const sites = reverseMap(plantingSites ?? [], 'site');
+
+  return observations
+    .filter((observation) => sites[observation.plantingSiteId])
+    .map((observation: ObservationResultsPayload): AdHocObservationResults => {
+      const { plantingSiteId } = observation;
+      const site = sites[plantingSiteId];
+
+      return {
+        ...observation,
+        plantingSiteName: site.name,
+        plotName: observation?.adHocPlot?.monitoringPlotName,
+        totalPlants: observation.plantingZones.reduce((acc, curr) => acc + curr.totalPlants, 0),
+      };
+    });
 };

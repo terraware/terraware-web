@@ -8,14 +8,16 @@ import { View } from 'src/components/common/ListMapSelector';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { useOrganization } from 'src/providers';
-import { selectObservationsResults } from 'src/redux/features/observations/observationsSelectors';
+import {
+  selectAdHocObservationsResults,
+  selectObservationsResults,
+} from 'src/redux/features/observations/observationsSelectors';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import ObservationsDataView from 'src/scenes/ObservationsRouter/ObservationsDataView';
 import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
 import { PlantingSite } from 'src/types/Tracking';
-
-import ObservationsDataView from './ObservationsDataView';
 
 export type PlotSelectionType = 'assigned' | 'adHoc';
 
@@ -29,7 +31,7 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
   const dispatch = useAppDispatch();
   const { selectedPlantingSite } = props;
   const { selectedOrganization } = useOrganization();
-  const [view, setView] = useState<View>();
+  const [view, setView] = useState<View>('list');
   const theme = useTheme();
 
   const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
@@ -47,6 +49,19 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
     });
   }, [allObservationsResults, selectedPlantingSite]);
 
+  const allAdHocObservationsResults = useAppSelector(selectAdHocObservationsResults);
+  const adHocObservationsResults = useMemo(() => {
+    if (!allAdHocObservationsResults || !selectedPlantingSite?.id) {
+      return [];
+    }
+
+    return allAdHocObservationsResults?.filter((observationResult) => {
+      const matchesSite =
+        selectedPlantingSite.id !== -1 ? observationResult.plantingSiteId === selectedPlantingSite.id : true;
+      return matchesSite;
+    });
+  }, [allAdHocObservationsResults, selectedPlantingSite]);
+
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
       dispatch(requestPlantings(selectedOrganization.id));
@@ -61,41 +76,52 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
             fontSize: '20px',
             fontWeight: 600,
             color: theme.palette.TwClrTxt,
+            paddingTop: '5px',
+            paddingBottom: '5px',
           }}
         >
           {strings.PLANT_MONITORING}
         </Typography>
-        <Box
-          sx={{
-            margin: theme.spacing(0, 2),
-            width: '1px',
-            height: '32px',
-            backgroundColor: theme.palette.TwClrBgTertiary,
-          }}
-        />
-        <Box display='flex' alignItems='center' padding={theme.spacing(2, 0)}>
-          <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>{strings.PLOT_SELECTION}</Typography>
-          <Dropdown
-            placeholder={strings.SELECT}
-            id='plot-selection-selector'
-            onChange={(newValue) => setSelectedPlotSelection(newValue as PlotSelectionType)}
-            options={[
-              { label: strings.ASSIGNED, value: 'assigned' },
-              { label: strings.AD_HOC, value: 'adHoc' },
-            ]}
-            selectedValue={selectedPlotSelection}
-            selectStyles={{ inputContainer: { maxWidth: '160px' }, optionsContainer: { maxWidth: '160px' } }}
-          />
-        </Box>
+        {view === 'list' && (
+          <>
+            <Box
+              sx={{
+                margin: theme.spacing(0, 2),
+                width: '1px',
+                height: '32px',
+                backgroundColor: theme.palette.TwClrBgTertiary,
+              }}
+            />
+            <Box display='flex' alignItems='center'>
+              <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>
+                {strings.PLOT_SELECTION}
+              </Typography>
+              <Dropdown
+                placeholder={strings.SELECT}
+                id='plot-selection-selector'
+                onChange={(newValue) => setSelectedPlotSelection(newValue as PlotSelectionType)}
+                options={[
+                  { label: strings.ASSIGNED, value: 'assigned' },
+                  { label: strings.AD_HOC, value: 'adHoc' },
+                ]}
+                selectedValue={selectedPlotSelection}
+                selectStyles={{ inputContainer: { maxWidth: '160px' }, optionsContainer: { maxWidth: '160px' } }}
+              />
+            </Box>
+          </>
+        )}
       </Box>
-      {observationsResults === undefined ? (
+      {(selectedPlotSelection === 'assigned' && observationsResults === undefined) ||
+      (selectedPlotSelection === 'adHoc' && adHocObservationsResults === undefined) ? (
         <CircularProgress sx={{ margin: 'auto' }} />
-      ) : selectedPlantingSite && observationsResults?.length ? (
+      ) : selectedPlantingSite &&
+        ((selectedPlotSelection === 'assigned' && observationsResults?.length) ||
+          (selectedPlotSelection === 'adHoc' && adHocObservationsResults?.length)) ? (
         <ObservationsDataView
           selectedPlantingSiteId={selectedPlantingSite.id}
-          selectedPlantingSite={selectedPlantingSite}
           setView={setView}
           view={view}
+          selectedPlotSelection={selectedPlotSelection}
           {...props}
         />
       ) : (
