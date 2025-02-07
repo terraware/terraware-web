@@ -230,7 +230,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
           onChange={(value) => onUpdateLocation('totalPlantingSiteArea', transformNumericValue(value, { min: 0 }))}
           type='text'
           errorText={
-            validate && (location as ReportPlantingSite).totalPlantingSiteArea === null ? strings.REQUIRED_FIELD : ''
+            validate && (location as ReportPlantingSite).totalPlantingSiteArea == null ? strings.REQUIRED_FIELD : ''
           }
           tooltipTitle={strings.REPORT_TOTAL_PLANTING_SITE_AREA_INFO}
         />
@@ -246,7 +246,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
           onChange={(value) => onUpdateLocation('totalPlantedArea', transformNumericValue(value, { min: 0 }))}
           type='text'
           errorText={
-            validate && (location as ReportPlantingSite).totalPlantedArea === null ? strings.REQUIRED_FIELD : ''
+            validate && (location as ReportPlantingSite).totalPlantedArea == null ? strings.REQUIRED_FIELD : ''
           }
           tooltipTitle={strings.REPORT_TOTAL_PLANTED_AREA_INFO}
         />
@@ -265,7 +265,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
           type='text'
           helper={strings.TOTAL_TREES_PLANTED_HELPER_TEXT}
           errorText={
-            validate && (location as ReportPlantingSite).totalTreesPlanted === null ? strings.REQUIRED_FIELD : ''
+            validate && (location as ReportPlantingSite).totalTreesPlanted == null ? strings.REQUIRED_FIELD : ''
           }
           tooltipTitle={strings.REPORT_TOTAL_TREES_PLANTED_INFO}
         />
@@ -282,7 +282,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
           type='text'
           helper={strings.TOTAL_PLANTS_PLANTED_HELPER_TEXT}
           errorText={
-            validate && (location as ReportPlantingSite).totalPlantsPlanted === null ? strings.REQUIRED_FIELD : ''
+            validate && (location as ReportPlantingSite).totalPlantsPlanted == null ? strings.REQUIRED_FIELD : ''
           }
           tooltipTitle={strings.REPORT_TOTAL_NON_TREES_PLANTED_INFO}
         />
@@ -304,7 +304,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
           editable={editable}
           onChange={(value) => onUpdateLocation('mortalityRate', transformNumericValue(value, { min: 0, max: 100 }))}
           type='text'
-          errorText={validate && (location as ReportPlantingSite).mortalityRate === null ? strings.REQUIRED_FIELD : ''}
+          errorText={validate && (location as ReportPlantingSite).mortalityRate == null ? strings.REQUIRED_FIELD : ''}
           tooltipTitle={strings.REPORT_MORTALITY_RATE_INFO}
         />
       </Grid>
@@ -395,7 +395,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
             <OverviewItemCard
               isEditable={false}
               title={strings.MORTALITY_RATE_PERCENT}
-              contents={latestObservation.mortalityRate}
+              contents={latestObservation.mortalityRate ?? null}
               sx={infoCardStyles}
             />
           </Grid>

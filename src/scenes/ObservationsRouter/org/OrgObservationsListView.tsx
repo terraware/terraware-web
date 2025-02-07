@@ -90,7 +90,7 @@ export type OrgObservationsListViewProps = {
   observationsResults?: ObservationResults[];
   adHocObservationsResults?: AdHocObservationResults[];
   reload: () => void;
-  selectedPlotSelection: string;
+  selectedPlotSelection?: string;
 };
 
 export default function OrgObservationsListView({

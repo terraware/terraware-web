@@ -1,13 +1,15 @@
 import React, { useMemo, useRef } from 'react';
 
 import { Box, CircularProgress, Grid, Typography, useTheme } from '@mui/material';
-import { Button, Dropdown, DropdownItem, IconName, PopoverMenu } from '@terraware/web-components';
+import { Button, Dropdown, DropdownItem, IconName, Message, PopoverMenu } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
+import Link from 'src/components/common/Link';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
@@ -28,6 +30,8 @@ export type PlantsPrimaryPageViewProps = {
   text?: string; // optional text to show at the bottom of the header
   title: string;
   newHeader?: boolean;
+  showGeometryNote?: boolean;
+  latestObservationId?: number;
 };
 
 export default function PlantsPrimaryPageView({
@@ -40,9 +44,11 @@ export default function PlantsPrimaryPageView({
   text,
   title,
   newHeader,
+  showGeometryNote,
+  latestObservationId,
 }: PlantsPrimaryPageViewProps): JSX.Element {
   const theme = useTheme();
-  const { isMobile } = useDeviceInfo();
+  const { isMobile, isDesktop } = useDeviceInfo();
   const contentRef = useRef(null);
 
   const onChangePlantingSite = (selectedSite: DropdownItem) => {
@@ -75,42 +81,70 @@ export default function PlantsPrimaryPageView({
   return (
     <TfMain>
       {newHeader && plantingSites.length > 0 ? (
-        <Card radius={'8px'} style={{ 'margin-bottom': '32px' }}>
-          <Grid container alignItems={'center'} spacing={4}>
-            <Grid item xs={4}>
-              <PopoverMenu
-                anchor={
-                  <p style={{ fontSize: '24px', fontWeight: 600, color: theme.palette.TwClrTxt }}>
-                    {plantingSites.find((ps) => ps.id === selectedPlantingSiteId)?.name || strings.SELECT}
-                  </p>
+        <>
+          {showGeometryNote && selectedPlantingSiteId && latestObservationId && (
+            <Box marginBottom={theme.spacing(4)}>
+              <Message
+                body={
+                  <span>
+                    <b>{strings.PLEASE_NOTE}</b>{' '}
+                    {strings.formatString(
+                      strings.GEOMETRY_CHANGED_WARNING_MESSAGE,
+                      <Link
+                        fontSize={'16px'}
+                        to={`${APP_PATHS.OBSERVATION_DETAILS.replace(
+                          ':plantingSiteId',
+                          selectedPlantingSiteId.toString()
+                        ).replace(':observationId', latestObservationId.toString())}?map=true`}
+                        target='_blank'
+                      >
+                        {strings.HAS_CHANGED}
+                      </Link>
+                    )}
+                  </span>
                 }
-                menuSections={[
-                  options?.map((opt) => ({
-                    label: opt.label,
-                    value: opt.value,
-                  })),
-                ]}
-                onClick={onChangePlantingSite}
+                priority='info'
+                type='page'
               />
-            </Grid>
-            <Grid item xs={2}>
-              <Box>
-                <Typography fontWeight={600}>{strings.TOTAL_PLANTING_AREA}</Typography>
-                <Typography fontSize='28px' fontWeight={600}>
-                  {strings.formatString(
-                    strings.X_HA,
-                    plantingSites.find((ps) => ps.id === selectedPlantingSiteId)?.areaHa?.toString() || ''
-                  )}
+            </Box>
+          )}
+          <Card radius={'8px'} style={{ 'margin-bottom': '32px' }}>
+            <Grid container alignItems={'center'} spacing={4}>
+              <Grid item xs={isDesktop ? 4 : 12}>
+                <PopoverMenu
+                  anchor={
+                    <p style={{ fontSize: '24px', fontWeight: 600, color: theme.palette.TwClrTxt }}>
+                      {plantingSites.find((ps) => ps.id === selectedPlantingSiteId)?.name || strings.SELECT}
+                    </p>
+                  }
+                  menuSections={[
+                    options?.map((opt) => ({
+                      label: opt.label,
+                      value: opt.value,
+                    })),
+                  ]}
+                  onClick={onChangePlantingSite}
+                />
+              </Grid>
+              <Grid item xs={isDesktop ? 2 : 12}>
+                <Box>
+                  <Typography fontWeight={600}>{strings.TOTAL_PLANTING_AREA}</Typography>
+                  <Typography fontSize='28px' fontWeight={600}>
+                    {strings.formatString(
+                      strings.X_HA,
+                      plantingSites.find((ps) => ps.id === selectedPlantingSiteId)?.areaHa?.toString() || ''
+                    )}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={isDesktop ? 6 : 12}>
+                <Typography fontSize='16px' marginTop={theme.spacing(1)}>
+                  {text}
                 </Typography>
-              </Box>
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              <Typography fontSize='16px' marginTop={theme.spacing(1)}>
-                {text}
-              </Typography>
-            </Grid>
-          </Grid>
-        </Card>
+          </Card>
+        </>
       ) : (
         <PageHeaderWrapper nextElement={contentRef.current}>
           <Grid item xs={12} paddingLeft={theme.spacing(3)} marginBottom={theme.spacing(4)}>

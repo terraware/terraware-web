@@ -14,11 +14,12 @@ import {
 } from 'src/redux/features/observations/observationsSelectors';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import ObservationsDataView from 'src/scenes/ObservationsRouter/ObservationsDataView';
 import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
 import { PlantingSite } from 'src/types/Tracking';
 
-import ObservationsDataView from './ObservationsDataView';
+export type PlotSelectionType = 'assigned' | 'adHoc';
 
 export type PlantMonitoringProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;
@@ -33,7 +34,7 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
   const [view, setView] = useState<View>('list');
   const theme = useTheme();
 
-  const [selectedPlotSelection, setSelectedPlotSelection] = useState('assigned');
+  const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
   const allObservationsResults = useAppSelector(selectObservationsResults);
   const observationsResults = useMemo(() => {
     if (!allObservationsResults || !selectedPlantingSite?.id) {
@@ -98,7 +99,7 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
               <Dropdown
                 placeholder={strings.SELECT}
                 id='plot-selection-selector'
-                onChange={(newValue) => setSelectedPlotSelection(newValue)}
+                onChange={(newValue) => setSelectedPlotSelection(newValue as PlotSelectionType)}
                 options={[
                   { label: strings.ASSIGNED, value: 'assigned' },
                   { label: strings.AD_HOC, value: 'adHoc' },

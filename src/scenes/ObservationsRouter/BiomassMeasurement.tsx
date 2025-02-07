@@ -35,7 +35,7 @@ export default function BiomassMeasurement({ selectedPlantingSite }: BiomassMeas
   const columns = (): TableColumnType[] => {
     return [
       {
-        key: 'plotName',
+        key: 'plotNumber',
         name: strings.PLOT,
         type: 'string',
       },
