@@ -177,14 +177,9 @@ export default function OrderPreservedTable<T extends TableRowType>(
 
   useEffect(() => {
     const sourceColumns = activeLocale ? columns() : [];
-    const refreshedColumns: TableColumnType[] = tableColumns
-      .map((tableColumn: TableColumnType) =>
-        sourceColumns.find((sourceColumn: TableColumnType) => sourceColumn.key === tableColumn.key)
-      )
-      .filter((tableColumn?: TableColumnType) => !!tableColumn) as TableColumnType[];
 
-    if (!_.isEqual(tableColumns, refreshedColumns)) {
-      setTableColumns(refreshedColumns);
+    if (!_.isEqual(tableColumns, sourceColumns)) {
+      setTableColumns(sourceColumns);
     }
   }, [activeLocale, columns, tableColumns]);
 

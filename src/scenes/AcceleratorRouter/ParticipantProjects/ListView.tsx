@@ -12,59 +12,19 @@ import { useLocalization, useUser } from 'src/providers';
 import { requestListParticipantProjects } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectsListRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import EditColumns from 'src/scenes/AcceleratorRouter/ParticipantProjects/EditColumns';
+import {
+  columns as AllColumns,
+  defaultPreset as DefaultColumns,
+} from 'src/scenes/AcceleratorRouter/ParticipantProjects/columns';
 import { ParticipantProjectService } from 'src/services';
+import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
 import { ParticipantProject } from 'src/types/ParticipantProject';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import CellRenderer from './CellRenderer';
-
-const columns = (activeLocale: string | null): TableColumnType[] =>
-  activeLocale
-    ? [
-        {
-          key: 'dealName',
-          name: strings.DEAL_NAME,
-          type: 'string',
-        },
-        {
-          key: 'cohortName',
-          name: strings.COHORT,
-          type: 'string',
-        },
-        {
-          key: 'cohortPhase',
-          name: strings.PHASE,
-          type: 'string',
-        },
-        {
-          key: 'fileNaming',
-          name: strings.FILE_NAMING,
-          type: 'string',
-        },
-        {
-          key: 'countryCode',
-          name: strings.COUNTRY,
-          type: 'string',
-        },
-        {
-          key: 'region',
-          name: strings.REGION,
-          type: 'string',
-        },
-        {
-          key: 'confirmedReforestableLand',
-          name: strings.RESTORABLE_LAND,
-          type: 'number',
-        },
-        {
-          key: 'landUseModelTypes',
-          name: strings.LAND_USE_MODEL_TYPE,
-          type: 'string',
-        },
-      ]
-    : [];
 
 const fuzzySearchColumns = ['dealName'];
 const defaultSearchOrder: SearchSortOrder = {
@@ -74,10 +34,11 @@ const defaultSearchOrder: SearchSortOrder = {
 
 export default function ListView(): JSX.Element {
   const { activeLocale } = useLocalization();
-  const { isAllowed } = useUser();
+  const { isAllowed, userPreferences, reloadUserPreferences } = useUser();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const mixpanel = useMixpanel();
+  const [editColumnsModalOpen, setEditColumnsModalOpen] = useState(false);
 
   const [openDownload, setOpenDownload] = useState<boolean>(false);
   const [lastSearch, setLastSearch] = useState<SearchNodePayload>();
@@ -85,6 +46,19 @@ export default function ListView(): JSX.Element {
   const [projects, setProjects] = useState<ParticipantProject[]>([]);
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectParticipantProjectsListRequest(requestId));
+  const [columns, setColumns] = useState<TableColumnType[]>(
+    AllColumns.filter((column) => DefaultColumns().fields.includes(column.key))
+  );
+
+  const setDefaults = useCallback(() => {
+    const savedColumns = userPreferences.projectColumns ? (userPreferences.projectColumns as string[]) : [];
+    const defaultColumns = savedColumns.length ? savedColumns : DefaultColumns().fields;
+    setColumns(AllColumns.filter((column) => defaultColumns.includes(column.key)));
+  }, [userPreferences]);
+
+  useEffect(() => {
+    setDefaults();
+  }, [setDefaults]);
 
   useEffect(() => {
     if (result?.status === 'error') {
@@ -106,6 +80,33 @@ export default function ListView(): JSX.Element {
     },
     [dispatch]
   );
+
+  const saveUpdateColumns = useCallback(
+    async (savedColumns: string[]) => {
+      const defaultColumns = savedColumns.length ? savedColumns : DefaultColumns().fields;
+      setColumns(AllColumns.filter((column) => defaultColumns.includes(column.key)));
+
+      console.log(
+        `AllColumns().filter((column) => defaultColumns.includes(column.key)) = ${AllColumns.filter((column) => defaultColumns.includes(column.key))}`
+      );
+      console.log('UPDATING!!!!');
+      await PreferencesService.updateUserPreferences({ projectColumns: savedColumns });
+      // eslint-disable-next-line @typescript-eslint/await-thenable
+      await reloadUserPreferences();
+    },
+    [reloadUserPreferences]
+  );
+
+  const onOpenEditColumnsModal = () => {
+    setEditColumnsModalOpen(true);
+  };
+
+  const onCloseEditColumnsModal = (columnNames?: string[]) => {
+    if (columnNames) {
+      void saveUpdateColumns(columnNames);
+    }
+    setEditColumnsModalOpen(false);
+  };
 
   const cohorts = useMemo<Record<string, string>>(
     () =>
@@ -159,12 +160,19 @@ export default function ListView(): JSX.Element {
           if (item.value === 'export') {
             mixpanel?.track(MIXPANEL_EVENTS.CONSOLE_PROJECTS_EXPORT);
             setOpenDownload(true);
+          } else if (item.value === 'customize') {
+            onOpenEditColumnsModal();
           }
         }}
-        optionItems={[{ label: strings.EXPORT, value: 'export' }]}
+        optionItems={[
+          { label: strings.CUSTOMIZE_COLUMNS, value: 'customize' },
+          { label: strings.EXPORT, value: 'export' },
+        ]}
       />
     );
   }, [activeLocale, isAllowed]);
+
+  const columnsWithLocale = (activeLocale: string | null): TableColumnType[] => (activeLocale ? columns : []);
 
   return (
     <>
@@ -173,9 +181,11 @@ export default function ListView(): JSX.Element {
         onExport={() => ParticipantProjectService.downloadList(lastSearch, lastSort)}
         open={openDownload}
       />
+      <EditColumns open={editColumnsModalOpen} value={columns.map((c) => c.key)} onClose={onCloseEditColumnsModal} />
+
       <TableWithSearchFilters
         busy={result?.status === 'pending'}
-        columns={columns}
+        columns={columnsWithLocale}
         defaultSearchOrder={defaultSearchOrder}
         dispatchSearchRequest={dispatchSearchRequest}
         featuredFilters={featuredFilters}
