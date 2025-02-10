@@ -156,7 +156,9 @@ export default function ObservationMapView({
       if (properties.type === 'site') {
         entity = selectedObservation;
       } else if (properties.type === 'zone') {
-        entity = selectedObservation?.plantingZones?.find((z) => z.plantingZoneId === properties.id);
+        entity =
+          selectedObservation?.plantingZones?.find((z) => z.plantingZoneId === properties.id) ||
+          plantingSiteHistory?.plantingZones.find((z) => z.plantingZoneId === properties.id);
       } else {
         // monitoring plot
         entity = selectedObservation?.plantingZones
@@ -179,7 +181,7 @@ export default function ObservationMapView({
         />
       );
     },
-    [selectedObservation, selectedPlantingSite]
+    [selectedObservation, selectedPlantingSite, plantingSiteHistory]
   );
 
   return (
@@ -214,6 +216,7 @@ export default function ObservationMapView({
                 />
               )
             }
+            zoneInteractive={true}
             contextRenderer={{
               render: contextRenderer,
               sx: {
