@@ -83,8 +83,11 @@ export default function ObservationMapView({
     [observationsResults, selectedObservationDate]
   );
 
+  const observationData = useMemo(() => {
+    return observations.find((obv) => obv.id === selectedObservation?.observationId);
+  }, [observations, selectedObservation]);
+
   useEffect(() => {
-    const observationData = observations.find((obv) => obv.id === selectedObservation?.observationId);
     if (observationData) {
       const historyId = observationData.plantingSiteHistoryId;
       if (historyId) {
@@ -96,8 +99,10 @@ export default function ObservationMapView({
         );
         setRequestId(requestObservationHistory.requestId);
       }
+    } else {
+      setRequestId('');
     }
-  }, [selectedObservation]);
+  }, [observationData]);
 
   const plantingSiteMapData: MapSourceBaseData | undefined = useMemo(
     () => MapService.getMapDataFromPlantingSite(selectedPlantingSite)?.site,
