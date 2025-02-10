@@ -89,3 +89,4 @@ export type MinimalPlantingSite = Location & {
 };
 
 export type PlantingSiteHistory = components['schemas']['PlantingSiteHistoryPayload'];
+export type PlantingZoneHistory = components['schemas']['PlantingZoneHistoryPayload'];
