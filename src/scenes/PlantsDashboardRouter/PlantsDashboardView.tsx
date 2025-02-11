@@ -345,7 +345,7 @@ export default function PlantsDashboardView(): JSX.Element {
   return (
     <PlantsPrimaryPage
       title={strings.DASHBOARD}
-      text={getDashboardSubhead()}
+      text={latestObservationId ? getDashboardSubhead() : undefined}
       onSelect={onSelect}
       pagePath={APP_PATHS.PLANTING_SITE_DASHBOARD}
       lastVisitedPreferenceName='plants.dashboard.lastVisitedPlantingSite'
