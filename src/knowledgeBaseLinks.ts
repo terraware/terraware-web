@@ -30,7 +30,8 @@ export type TerrawarePath =
   | '/contactus'
   | '/modules'
   | '/deliverables'
-  | '/applications';
+  | '/applications'
+  | '/plants/dashboard';
 
 type KnowledgeBaseLink = Record<TerrawarePath, string>;
 
@@ -73,6 +74,7 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/modules': 'https://knowledge.terraformation.com/hc/en-us/articles/29551087572500-Modules',
     '/deliverables': 'https://knowledge.terraformation.com/hc/en-us/articles/29426531812116-Deliverables',
     '/applications': 'https://knowledge.terraformation.com/hc/en-us/articles/29426659306516-Application',
+    '/plants/dashboard': 'https://knowledge.terraformation.com/hc/en-us/articles/32283415407252-Plants-Dashboard',
   },
   es: {
     '/home': 'https://knowledge.terraformation.com/hc/en-us/categories/19696828903700-Terraware',
@@ -112,6 +114,7 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/modules': 'https://knowledge.terraformation.com/hc/en-us/articles/29551087572500-Modules',
     '/deliverables': 'https://knowledge.terraformation.com/hc/en-us/articles/29426531812116-Deliverables',
     '/applications': 'https://knowledge.terraformation.com/hc/en-us/articles/29426659306516-Application',
+    '/plants/dashboard': 'https://knowledge.terraformation.com/hc/en-us/articles/32283415407252-Plants-Dashboard',
   },
   fr: {
     '/home': 'https://knowledge.terraformation.com/hc/en-us/categories/19696828903700-Terraware',
@@ -151,6 +154,7 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/modules': 'https://knowledge.terraformation.com/hc/en-us/articles/29551087572500-Modules',
     '/deliverables': 'https://knowledge.terraformation.com/hc/en-us/articles/29426531812116-Deliverables',
     '/applications': 'https://knowledge.terraformation.com/hc/en-us/articles/29426659306516-Application',
+    '/plants/dashboard': 'https://knowledge.terraformation.com/hc/en-us/articles/32283415407252-Plants-Dashboard',
   },
 };
 
