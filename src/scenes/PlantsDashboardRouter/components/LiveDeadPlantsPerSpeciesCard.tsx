@@ -4,10 +4,9 @@ import { Box } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 
 import PieChart from 'src/components/common/Chart/PieChart';
-import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
-import { useAppSelector } from 'src/redux/store';
+import useObservationSummaries from 'src/hooks/useObservationSummaries';
+import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import strings from 'src/strings';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type LiveDeadPlantsPerSpeciesCardProps = {
   plantingSiteId: number;
@@ -16,14 +15,11 @@ type LiveDeadPlantsPerSpeciesCardProps = {
 export default function LiveDeadPlantsPerSpeciesCard({
   plantingSiteId,
 }: LiveDeadPlantsPerSpeciesCardProps): JSX.Element {
-  const defaultTimeZone = useDefaultTimeZone();
-  const observation = useAppSelector((state) =>
-    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
-  );
-
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
   const [selectedSpecies, setSelectedSpecies] = useState<string>();
+
+  const { availableSpecies } = useSpecies();
   const [allSpecies, setAllSpecies] = useState<
     {
       label: string;
@@ -31,29 +27,33 @@ export default function LiveDeadPlantsPerSpeciesCard({
     }[]
   >();
   const [showChart, setShowChart] = useState(false);
+  const summaries = useObservationSummaries(plantingSiteId);
   useEffect(() => {
-    if (observation) {
-      const speciesNames = observation.species.map((sp) => ({
-        label: sp.speciesScientificName || '',
-        value: sp.speciesId?.toString() || '',
-      }));
+    if (availableSpecies && summaries?.[0]) {
+      const speciesNames = summaries[0].species
+        .filter((sp) => sp.cumulativeDead !== 0 || sp.permanentLive !== 0)
+        .map((sp) => ({
+          label:
+            availableSpecies.find((availableS) => availableS.id === sp.speciesId)?.scientificName ||
+            sp.speciesName ||
+            '',
+          value: sp.speciesId?.toString() || '',
+        }));
       setAllSpecies(speciesNames);
       if (speciesNames.length > 0) {
         setSelectedSpecies(speciesNames[0].value);
       }
     }
-  }, [observation]);
+  }, [summaries, availableSpecies]);
 
   useEffect(() => {
     if (selectedSpecies) {
       setLabels([strings.LIVE, strings.DEAD]);
-      const selectedObservationSpecies = observation?.species.find(
+      const selectedObservationSpecies = summaries?.[0]?.species.find(
         (sp) => sp.speciesId?.toString() === selectedSpecies
       );
-      if (
-        selectedObservationSpecies &&
-        (selectedObservationSpecies.cumulativeDead !== 0 || selectedObservationSpecies.permanentLive !== 0)
-      ) {
+
+      if (selectedObservationSpecies) {
         setShowChart(true);
         const dead = selectedObservationSpecies.cumulativeDead;
         const live = selectedObservationSpecies.permanentLive;
@@ -63,7 +63,7 @@ export default function LiveDeadPlantsPerSpeciesCard({
       setLabels([]);
       setValues([]);
     }
-  }, [selectedSpecies, observation]);
+  }, [selectedSpecies, summaries]);
 
   return (
     <Box display='flex' flexDirection='column'>
