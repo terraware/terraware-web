@@ -1225,7 +1225,7 @@ PLANTING_COMPLETE_TOOLTIP,Diríjase a Plántulas > Retiros para actualizar el es
 PLANTING_DENSITY,Densidad de siembra,
 PLANTING_DENSITY_CARD_TITLE,¿Cuál es mi densidad de plantación desde el {0}?,
 PLANTING_DENSITY_DESCRIPTION,Esta es la densidad de su plantación calculada a partir de sus últimas observaciones.,
-PLANTING_DENSITY_MISSING_TOOLTIP,"Una vez que hayas marcado tu sitio de plantación como terminado y completado tus observaciones, podrás visualizar la densidad de la plantación.",
+PLANTING_DENSITY_MISSING_TOOLTIP,"Cuando se complete una observación, la densidad de plantación calculada aparecerá aquí.",
 PLANTING_DENSITY_OF_PLANTED_ZONES,Densidad de plantación (de zonas plantadas),
 PLANTING_DENSITY_PER_ZONE_CARD_TITLE,¿Cuál es mi densidad de plantación objetivo por zona?,
 PLANTING_DENSITY_PER_ZONE_DESCRIPTION,"Esta es su densidad de plantación objetivo para la zona que ha proporcionado. Si desea modificar esta densidad, póngase en contacto con Terraformation.",

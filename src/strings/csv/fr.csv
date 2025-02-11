@@ -1225,7 +1225,7 @@ PLANTING_COMPLETE_TOOLTIP,Avez-vous terminé toutes vos plantations dans cette s
 PLANTING_DENSITY,Densité de plantation,
 PLANTING_DENSITY_CARD_TITLE,Quelle est ma densité de plantation en date du {0} ?,
 PLANTING_DENSITY_DESCRIPTION,Il s'agit de la densité de plantation calculée à partir de vos dernières observations.,
-PLANTING_DENSITY_MISSING_TOOLTIP,"Une fois que votre site de plantation a été marqué comme complet pour la plantation et que vous avez terminé vos observations, vous serez en mesure de visualiser la densité de plantation.",
+PLANTING_DENSITY_MISSING_TOOLTIP,"Lorsqu'une observation est terminée, la densité de plantation calculée apparaît ici.",
 PLANTING_DENSITY_OF_PLANTED_ZONES,Densité de plantation (de zones plantées),
 PLANTING_DENSITY_PER_ZONE_CARD_TITLE,Quelle est ma densité de plantation cible par zone ?,
 PLANTING_DENSITY_PER_ZONE_DESCRIPTION,"Il s'agit de la densité de plantation cible de votre zone que vous avez fournie. Si vous souhaitez modifier les densités de plantation cibles, veuillez contacter Terraformation.",
