@@ -170,6 +170,7 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
         subzone: undefined,
         permanentPlot: undefined,
         temporaryPlot: undefined,
+        adHocPlot: undefined,
       };
     }
     const newMapData = MapService.getMapDataFromObservation(selectedObservation);

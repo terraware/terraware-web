@@ -7,6 +7,7 @@ import { ObservationsService } from 'src/services';
 import strings from 'src/strings';
 
 import {
+  setAdHocObservationsAction,
   setAdHocObservationsResultsAction,
   setObservationsAction,
   setObservationsResultsAction,
@@ -38,10 +39,16 @@ export const requestObservationsResults = (organizationId: number) => {
 /**
  * Fetch planting site observation results
  */
-export const requestPlantingSiteObservationsResults = (organizationId: number, plantingSiteId: number) => {
+export const requestPlantingSiteObservationsResults = (
+  organizationId: number,
+  plantingSiteId: number,
+  adHoc?: boolean
+) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
-      const response = await ObservationsService.listObservationsResults(organizationId, plantingSiteId);
+      const response = adHoc
+        ? await ObservationsService.listAdHocObservationsResults(organizationId, plantingSiteId)
+        : await ObservationsService.listObservationsResults(organizationId, plantingSiteId);
       const { error, observations } = response;
       dispatch(
         setPlantingSiteObservationsResultsAction({
@@ -60,16 +67,23 @@ export const requestPlantingSiteObservationsResults = (organizationId: number, p
 /**
  * Fetch observations
  */
-export const requestObservations = (organizationId: number) => {
+export const requestObservations = (organizationId: number, adHoc?: boolean) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
-      const response = await ObservationsService.listObservations(organizationId);
+      const response = adHoc
+        ? await ObservationsService.listAdHocObservations(organizationId)
+        : await ObservationsService.listObservations(organizationId);
       const { error, observations } = response;
       dispatch(
-        setObservationsAction({
-          error,
-          observations,
-        })
+        adHoc
+          ? setAdHocObservationsAction({
+              error,
+              observations,
+            })
+          : setObservationsAction({
+              error,
+              observations,
+            })
       );
     } catch (e) {
       // should not happen, the response above captures any http request errors

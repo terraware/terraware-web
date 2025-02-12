@@ -222,7 +222,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
       plantingZones: plantingZonesWithLastObservation,
     };
 
-    const observationMapData = MapService.getMapDataFromObservation(observationWithLastObv);
+    const observationMapData = MapService.getMapDataFromObservation(observationWithLastObv, undefined);
     observationMapData.zone?.entities?.forEach((zoneEntity) => {
       const zoneReplaceIndex = baseMap.zone?.entities?.findIndex((e) => e.id === zoneEntity.id) ?? -1;
       if (baseMap.zone && zoneReplaceIndex >= 0) {

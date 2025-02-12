@@ -176,7 +176,8 @@ export const selectObservationsZoneNames = createCachedSelector(
  * Add Observations related selectors below
  */
 
-export const selectObservations = (state: RootState) => state.observations?.observations;
+export const selectObservations = (state: RootState, adHoc?: boolean) =>
+  adHoc ? state.adHocObservations?.observations : state.observations?.observations;
 export const selectObservationsError = (state: RootState) => state.observations?.error;
 
 // get an observation by id
@@ -188,6 +189,22 @@ export const selectObservation = (state: RootState, plantingSiteId: number, obse
 // get observations specific to a planting site, by optional status
 export const selectPlantingSiteObservations = createCachedSelector(
   (state: RootState, plantingSiteId: number, status?: ObservationState) => selectObservations(state),
+  (state: RootState, plantingSiteId: number, status?: ObservationState) => plantingSiteId,
+  (state: RootState, plantingSiteId: number, status?: ObservationState) => status,
+  (observations: Observation[] | undefined, plantingSiteId: number, status?: ObservationState) => {
+    const data =
+      plantingSiteId === -1
+        ? observations
+        : observations?.filter((observation: Observation) => observation.plantingSiteId === plantingSiteId);
+    const byStatus = status ? data?.filter((observation: Observation) => observation.state === status) : data;
+
+    return byStatus ?? [];
+  }
+)((state: RootState, plantingSiteId: number, status?: ObservationState) => `${plantingSiteId.toString()}_${status}}`);
+
+// get ad hoc observations specific to a planting site, by optional status
+export const selectPlantingSiteAdHocObservations = createCachedSelector(
+  (state: RootState, plantingSiteId: number, status?: ObservationState) => selectObservations(state, true),
   (state: RootState, plantingSiteId: number, status?: ObservationState) => plantingSiteId,
   (state: RootState, plantingSiteId: number, status?: ObservationState) => status,
   (observations: Observation[] | undefined, plantingSiteId: number, status?: ObservationState) => {

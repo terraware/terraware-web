@@ -1,6 +1,7 @@
 import { paths } from 'src/api/types/generated-schema';
 import { MapBoundingBox, MapData, MapEntity, MapGeometry, MapSourceBaseData } from 'src/types/Map';
 import {
+  AdHocObservationResults,
   ObservationMonitoringPlotResults,
   ObservationMonitoringPlotResultsPayload,
   ObservationPlantingSubzoneResults,
@@ -120,6 +121,7 @@ const getPlantingSiteBoundingBox = (mapData: MapData): MapBoundingBox => {
   const subzones: MapSourceBaseData = mapData.subzone ?? { id: 'subzone', entities: [] };
   const permanentPlots: MapSourceBaseData = mapData.permanentPlot ?? { id: 'permanentPlot', entities: [] };
   const temporaryPlots: MapSourceBaseData = mapData.temporaryPlot ?? { id: 'temporaryPlot', entities: [] };
+  const adHocPlots: MapSourceBaseData = mapData.adHocPlot ?? { id: 'adHocPlot', entities: [] };
 
   const geometries: MapGeometry[] = [
     site.entities[0]?.boundary,
@@ -127,6 +129,7 @@ const getPlantingSiteBoundingBox = (mapData: MapData): MapBoundingBox => {
     ...(subzones?.entities.map((s) => s.boundary) || []),
     ...(permanentPlots?.entities.map((s) => s.boundary) || []),
     ...(temporaryPlots?.entities.map((s) => s.boundary) || []),
+    ...(adHocPlots?.entities.map((s) => s.boundary) || []),
   ].filter((g) => g);
 
   return getBoundingBox(geometries);
@@ -233,6 +236,7 @@ const getMapDataFromPlantingSite = (plantingSite: PlantingSite): MapData => {
     subzone: extractSubzones(plantingSite),
     permanentPlot: undefined,
     temporaryPlot: undefined,
+    adHocPlot: undefined,
   };
 };
 
@@ -240,7 +244,7 @@ const getMapDataFromPlantingSite = (plantingSite: PlantingSite): MapData => {
  * Extract Planting Site, Zones, Subzones, and Plots from an ObservationResult
  */
 const getMapDataFromObservation = (
-  observation: ObservationResultsWithLastObv,
+  observation: ObservationResultsWithLastObv | AdHocObservationResults,
   plantingSiteHistory?: PlantingSiteHistory
 ): MapData => {
   const plantingSiteEntities = [
@@ -361,7 +365,7 @@ const getMapDataFromObservation = (
       boundary: MapGeometry;
       lastObv: string | undefined;
     }[] = [];
-    let lastProcecedDate = orderedSubzoneEntities?.[0].lastObv;
+    let lastProcecedDate = orderedSubzoneEntities?.[0]?.lastObv;
     let recencyToSet = 1;
 
     orderedSubzoneEntities?.forEach((entity) => {
@@ -391,12 +395,28 @@ const getMapDataFromObservation = (
     )
   );
 
+  const adHocPlot = observation.adHocPlot;
+  const addHocPlotEntities = adHocPlot
+    ? [
+        {
+          id: adHocPlot.monitoringPlotId,
+          properties: {
+            id: adHocPlot.monitoringPlotId,
+            name: adHocPlot.monitoringPlotNumber,
+            type: 'adHocPlot',
+          },
+          boundary: [adHocPlot.boundary.coordinates],
+        },
+      ]
+    : [];
+
   return {
     site: { id: 'sites', entities: plantingSiteEntities },
     zone: { id: 'zones', entities: zoneEntities || [] },
     subzone: { id: 'subzones', entities: subzoneEntitiesWithRecency() },
     permanentPlot: { id: 'permanentPlots', entities: permanentPlotEntities },
     temporaryPlot: { id: 'temporaryPlots', entities: temporaryPlotEntities },
+    adHocPlot: { id: 'adHocPlots', entities: addHocPlotEntities },
   };
 };
 
@@ -419,6 +439,7 @@ const getMapDataFromAggregation = (plantingSite: PlantingSiteAggregation): MapDa
     subzone: extractSubzones(plantingSite),
     permanentPlot: { id: 'permanentPlots', entities: permanentPlotEntities },
     temporaryPlot: { id: 'temporaryPlots', entities: temporaryPlotEntities },
+    adHocPlot: { id: 'adHocPlots', entities: [] },
   };
 };
 
