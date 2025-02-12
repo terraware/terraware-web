@@ -1,3 +1,4 @@
+34ffcce809c Fix planting site geometry on planting site view (#3629)
 0a10b76a3a2 SW-6551 Observation detail map issues (#3624)
 e664d922c70 Updated translations from Phrase (#3619)
 675e04d039d 6559 "Observation data on this dashboard is based on..." message should not show up before an observation is completed (#3627)
