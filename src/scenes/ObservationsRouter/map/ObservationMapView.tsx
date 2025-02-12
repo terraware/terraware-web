@@ -7,12 +7,16 @@ import MapDateSelect from 'src/components/common/MapDateSelect';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
+import { selectPlantingSiteObservations } from 'src/redux/features/observations/observationsSelectors';
+import { selectPlantingSiteHistory } from 'src/redux/features/tracking/trackingSelectors';
+import { requestGetPlantingSiteHistory } from 'src/redux/features/tracking/trackingThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import TooltipContents from 'src/scenes/ObservationsRouter/map/TooltipContents';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapEntityId, MapObject, MapSourceBaseData, MapSourceProperties } from 'src/types/Map';
-import { AdHocObservationResults, ObservationResults } from 'src/types/Observations';
-import { PlantingSite } from 'src/types/Tracking';
+import { AdHocObservationResults, Observation, ObservationResults } from 'src/types/Observations';
+import { PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
 import { regexMatch } from 'src/utils/search';
 
 type ObservationMapViewProps = SearchProps & {
@@ -30,6 +34,17 @@ export default function ObservationMapView({
   filtersProps,
   selectedPlantingSite,
 }: ObservationMapViewProps): JSX.Element {
+  const dispatch = useAppDispatch();
+  const [requestId, setRequestId] = useState<string>('');
+
+  const observationHistory = useAppSelector((state) => selectPlantingSiteHistory(state, requestId));
+
+  const [plantingSiteHistory, setPlantingSiteHistory] = useState<PlantingSiteHistory>();
+
+  const observations: Observation[] | undefined = useAppSelector((state) =>
+    selectPlantingSiteObservations(state, selectedPlantingSite.id)
+  );
+
   const observationsDates = useMemo(() => {
     const uniqueDates = new Set(observationsResults?.map((obs) => obs.completedDate || obs.startDate));
 
@@ -39,17 +54,14 @@ export default function ObservationMapView({
       ?.sort((a, b) => (Date.parse(a) > Date.parse(b) ? 1 : -1));
   }, [observationsResults]);
 
-  const adHocObservationsDates = useMemo(() => {
-    const uniqueDates = new Set(adHocObservationsResults?.map((obs) => obs.startDate));
-
-    return Array.from(uniqueDates)
-      ?.filter((time) => time)
-      ?.map((time) => time)
-      ?.sort((a, b) => (Date.parse(a) > Date.parse(b) ? 1 : -1));
-  }, [adHocObservationsResults]);
-
   const [selectedObservationDate, setSelectedObservationDate] = useState<string | undefined>();
-  const [selectedAdHocObservationDate, setSelectedAdHocObservationDate] = useState<string | undefined>();
+
+  useEffect(() => {
+    if (observationHistory?.status === 'success') {
+      setPlantingSiteHistory(observationHistory.data);
+    }
+  }, [observationHistory]);
+
   useEffect(() => {
     if (observationsDates) {
       setSelectedObservationDate((currentDate) => {
@@ -64,20 +76,6 @@ export default function ObservationMapView({
     }
   }, [observationsDates]);
 
-  useEffect(() => {
-    if (adHocObservationsDates) {
-      setSelectedAdHocObservationDate((currentDate) => {
-        if ((!currentDate || !adHocObservationsDates.includes(currentDate)) && adHocObservationsDates.length > 0) {
-          return adHocObservationsDates[adHocObservationsDates.length - 1];
-        } else {
-          return currentDate;
-        }
-      });
-    } else {
-      setSelectedObservationDate('');
-    }
-  }, [adHocObservationsDates]);
-
   const selectedObservation = useMemo(
     () =>
       observationsResults?.find((obs) => {
@@ -86,6 +84,27 @@ export default function ObservationMapView({
       }),
     [observationsResults, selectedObservationDate]
   );
+
+  const observationData = useMemo(() => {
+    return observations.find((obv) => obv.id === selectedObservation?.observationId);
+  }, [observations, selectedObservation]);
+
+  useEffect(() => {
+    if (observationData) {
+      const historyId = observationData.plantingSiteHistoryId;
+      if (historyId) {
+        const requestObservationHistory = dispatch(
+          requestGetPlantingSiteHistory({
+            plantingSiteId: selectedPlantingSite.id,
+            historyId: historyId,
+          })
+        );
+        setRequestId(requestObservationHistory.requestId);
+      }
+    } else {
+      setRequestId('');
+    }
+  }, [observationData]);
 
   const plantingSiteMapData: MapSourceBaseData | undefined = useMemo(
     () => MapService.getMapDataFromPlantingSite(selectedPlantingSite)?.site,
@@ -103,8 +122,8 @@ export default function ObservationMapView({
       };
     }
 
-    return MapService.getMapDataFromObservation(selectedObservation);
-  }, [selectedObservation, selectedObservationDate, plantingSiteMapData]);
+    return MapService.getMapDataFromObservation(selectedObservation, plantingSiteHistory);
+  }, [selectedObservation, selectedObservationDate, plantingSiteMapData, plantingSiteHistory]);
 
   const filterZoneNames = useMemo(() => filtersProps?.filters.zone?.values ?? [], [filtersProps?.filters.zone?.values]);
 
@@ -139,7 +158,9 @@ export default function ObservationMapView({
       if (properties.type === 'site') {
         entity = selectedObservation;
       } else if (properties.type === 'zone') {
-        entity = selectedObservation?.plantingZones?.find((z) => z.plantingZoneId === properties.id);
+        entity =
+          selectedObservation?.plantingZones?.find((z) => z.plantingZoneId === properties.id) ||
+          plantingSiteHistory?.plantingZones.find((z) => z.plantingZoneId === properties.id);
       } else {
         // monitoring plot
         entity = selectedObservation?.plantingZones
@@ -162,7 +183,7 @@ export default function ObservationMapView({
         />
       );
     },
-    [selectedObservation, selectedPlantingSite]
+    [selectedObservation, selectedPlantingSite, plantingSiteHistory]
   );
 
   return (
@@ -197,6 +218,7 @@ export default function ObservationMapView({
                 />
               )
             }
+            zoneInteractive={true}
             contextRenderer={{
               render: contextRenderer,
               sx: {

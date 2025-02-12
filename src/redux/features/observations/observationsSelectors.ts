@@ -42,13 +42,13 @@ export const selectPlantingSiteObservationsResults = createCachedSelector(
   (state: RootState, plantingSiteId: number, status?: ObservationState[]) => status,
   (observationsResults, plantingSiteId, status) => {
     if (plantingSiteId === -1 && !status?.length) {
-      // default to completed if no status is selected
-      return observationsResults?.filter((result) => result.state === 'Completed');
+      // default to hide Upcoming if no status is selected
+      return observationsResults?.filter((result) => result.state !== 'Upcoming');
     }
     return observationsResults?.filter((observationResults) => {
       const matchesSite = plantingSiteId === -1 || observationResults.plantingSiteId === plantingSiteId;
       const matchesState =
-        (!status?.length && observationResults.state === 'Completed') ||
+        (!status?.length && observationResults.state !== 'Upcoming') ||
         (status && status.indexOf(observationResults.state) !== -1);
       return matchesSite && matchesState;
     });

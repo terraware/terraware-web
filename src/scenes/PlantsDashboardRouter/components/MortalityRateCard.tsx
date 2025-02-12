@@ -1,5 +1,6 @@
 import React, { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
 import FormattedNumber from 'src/components/common/FormattedNumber';
@@ -22,6 +23,7 @@ export default function MortalityRateCard({ plantingSiteId }: MortalityRateCardP
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
   );
+  const { isDesktop } = useDeviceInfo();
 
   const separatorStyles = {
     width: '1px',
@@ -32,7 +34,10 @@ export default function MortalityRateCard({ plantingSiteId }: MortalityRateCardP
   };
 
   return (
-    <Card radius='8px' style={{ display: 'flex', 'justify-content': 'space-between' }}>
+    <Card
+      radius='8px'
+      style={{ display: 'flex', 'justify-content': 'space-between', flexDirection: isDesktop ? 'row' : 'column' }}
+    >
       <Box flexBasis='100%'>
         <Box display={'flex'} alignItems={'center'}>
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
@@ -45,42 +50,69 @@ export default function MortalityRateCard({ plantingSiteId }: MortalityRateCardP
           </Tooltip>
         </Box>
         <Box display='flex' sx={{ flexFlow: 'row wrap' }} marginTop={1}>
-          <Typography fontSize='84px' fontWeight={600} lineHeight={1}>
-            <FormattedNumber value={observation?.mortalityRate || 0} />
+          <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
+            {observation?.mortalityRate !== undefined ? <FormattedNumber value={observation.mortalityRate} /> : '-'}
           </Typography>
-          <Typography fontSize='84px' fontWeight={600} lineHeight={1}>
-            %
-          </Typography>
+          {observation?.mortalityRate !== undefined && (
+            <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
+              %
+            </Typography>
+          )}
         </Box>
+        {observation?.mortalityRate === undefined && (
+          <Box display={'flex'}>
+            <Box paddingRight={0.5}>
+              <Icon name='warning' fillColor={theme.palette.TwClrIcnWarning} size='medium' />
+            </Box>
+            <Typography color={theme.palette.TwClrTxtWarning} fontSize='14px' fontWeight={400}>
+              {strings.NO_MORTALITY_RATE_WARNING}
+            </Typography>
+          </Box>
+        )}
       </Box>
       <div style={separatorStyles} />
-      <Box flexBasis='100%'>
+      <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
         <Box display={'flex'} alignItems={'center'}>
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
             {strings.ZONE_MORTALITY}
           </Typography>
+          <Tooltip title={strings.ZONE_MORTALITY_TOOLTIP}>
+            <Box display='flex'>
+              <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+            </Box>
+          </Tooltip>
         </Box>
         <Box paddingTop={2}>
           <HighestAndLowestMortalityRateZonesCard plantingSiteId={plantingSiteId} />
         </Box>
       </Box>
       <div style={separatorStyles} />
-      <Box flexBasis='100%'>
+      <Box flexBasis='100%' marginTop={isDesktop ? 0 : 6}>
         <Box display={'flex'} alignItems={'center'}>
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
             {strings.SPECIES_MORTALITY}
           </Typography>
+          <Tooltip title={strings.SPECIES_MORTALITY_TOOLTIP}>
+            <Box display='flex'>
+              <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+            </Box>
+          </Tooltip>
         </Box>
         <Box paddingTop={2}>
           <HighestAndLowestMortalityRateSpeciesCard plantingSiteId={plantingSiteId} />
         </Box>
       </Box>
       <div style={separatorStyles} />
-      <Box flexBasis='100%'>
+      <Box flexBasis='100%' marginTop={isDesktop ? 0 : 6}>
         <Box display={'flex'} alignItems={'center'}>
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
             {strings.MORTALITY_BREAKDOWN}
           </Typography>
+          <Tooltip title={strings.MORTALITY_BREAKDOWN_TOOLTIP}>
+            <Box display='flex'>
+              <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+            </Box>
+          </Tooltip>
         </Box>
         <Box paddingTop={2}>
           <LiveDeadPlantsPerSpeciesCard plantingSiteId={plantingSiteId} />

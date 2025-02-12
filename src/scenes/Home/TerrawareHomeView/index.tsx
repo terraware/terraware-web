@@ -127,7 +127,7 @@ const TerrawareHomeView = () => {
         statsCardItems: [
           { label: strings.TOTAL_SPECIES, value: availableSpecies?.length.toString() },
           {
-            label: strings.LAST_UPDATED,
+            label: strings.SPECIES_LAST_UPDATED,
             value: speciesLastModifiedDate,
           },
         ],
