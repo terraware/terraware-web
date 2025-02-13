@@ -289,6 +289,13 @@ export default function PlantsDashboardView(): JSX.Element {
   }, [summaries]);
 
   const getLatestObservationLink = () => {
+    const allMonitoringPlots = latestObservation?.plantingZones.flatMap((pz) =>
+      pz.plantingSubzones.flatMap((sz) => sz.monitoringPlots)
+    );
+    const maxCompletedTime = allMonitoringPlots?.reduce(
+      (acc, plot) => (isAfter(plot.completedTime, acc) ? plot.completedTime : acc),
+      allMonitoringPlots[0].completedTime
+    );
     return latestObservation?.completedTime ? (
       <Link
         fontSize={'16px'}
@@ -299,7 +306,7 @@ export default function PlantsDashboardView(): JSX.Element {
       >
         {strings.formatString(
           strings.DATE_OBSERVATION,
-          DateTime.fromISO(latestObservation.completedTime).toFormat('yyyy-MM-dd')
+          DateTime.fromISO(maxCompletedTime || latestObservation.completedTime).toFormat('yyyy-MM-dd')
         )}
       </Link>
     ) : (
