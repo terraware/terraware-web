@@ -80,7 +80,10 @@ export default function PlantsDashboardView(): JSX.Element {
         );
         const maxModifiedDate = DateTime.fromISO(maxModifiedTime).toFormat('yyyy-MM-dd');
 
-        if (isAfter(maxModifiedDate, latestObservation.startDate)) {
+        if (
+          (latestObservation.completedTime && isAfter(maxModifiedTime, latestObservation.completedTime)) ||
+          (!latestObservation.completedTime && isAfter(maxModifiedDate, latestObservation.startDate))
+        ) {
           return true;
         } else {
           return false;

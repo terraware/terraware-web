@@ -11,15 +11,22 @@ import { useOrganization } from 'src/providers';
 import {
   selectLatestObservation,
   selectObservationsResults,
+  selectPlantingSiteObservations,
 } from 'src/redux/features/observations/observationsSelectors';
 import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { selectZonePopulationStats } from 'src/redux/features/tracking/sitePopulationSelector';
-import { selectPlantingSite, selectZoneProgress } from 'src/redux/features/tracking/trackingSelectors';
+import {
+  selectPlantingSite,
+  selectPlantingSiteHistory,
+  selectZoneProgress,
+} from 'src/redux/features/tracking/trackingSelectors';
+import { requestGetPlantingSiteHistory } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapGeometry, MapSourceProperties } from 'src/types/Map';
 import {
+  Observation,
   ObservationPlantingZoneResults,
   ObservationPlantingZoneResultsWithLastObv,
   ObservationResults,
@@ -27,6 +34,7 @@ import {
   ObservationResultsWithLastObv,
   ObservationSummary,
 } from 'src/types/Observations';
+import { PlantingSiteHistory } from 'src/types/Tracking';
 import { getRgbaFromHex } from 'src/utils/color';
 import { isAfter } from 'src/utils/dateUtils';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -48,6 +56,15 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
   );
   const summaries = useObservationSummaries(plantingSiteId);
   const allObservationsResults = useAppSelector(selectObservationsResults);
+  const [requestId, setRequestId] = useState<string>('');
+
+  const observationHistory = useAppSelector((state) => selectPlantingSiteHistory(state, requestId));
+
+  const [plantingSiteHistory, setPlantingSiteHistory] = useState<PlantingSiteHistory>();
+
+  const observations: Observation[] | undefined = useAppSelector((state) =>
+    selectPlantingSiteObservations(state, plantingSite?.id || -1)
+  );
   const plantingSiteObservations = allObservationsResults?.filter(
     (observation) => observation.plantingSiteId === plantingSiteId && observation.completedTime
   );
@@ -70,6 +87,33 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
       setLastSummary(summaries[0]);
     }
   }, [summaries]);
+
+  useEffect(() => {
+    if (observationHistory?.status === 'success') {
+      setPlantingSiteHistory(observationHistory.data);
+    }
+  }, [observationHistory]);
+
+  const observationData = useMemo(() => {
+    return observations.find((obv) => obv.id === observation?.observationId);
+  }, [observations, observation]);
+
+  useEffect(() => {
+    if (observationData && plantingSite) {
+      const historyId = observationData.plantingSiteHistoryId;
+      if (historyId) {
+        const requestObservationHistory = dispatch(
+          requestGetPlantingSiteHistory({
+            plantingSiteId: plantingSite.id,
+            historyId: historyId,
+          })
+        );
+        setRequestId(requestObservationHistory.requestId);
+      }
+    } else {
+      setRequestId('');
+    }
+  }, [observationData]);
 
   const lastZoneObservation = useCallback((observationsList: ObservationResultsPayload[]) => {
     const observationsToProcess = observationsList;
@@ -221,8 +265,8 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
       ...observation,
       plantingZones: plantingZonesWithLastObservation,
     };
-
-    const observationMapData = MapService.getMapDataFromObservation(observationWithLastObv);
+    const observationMapData = MapService.getMapDataFromObservation(observationWithLastObv, plantingSiteHistory);
+    baseMap.site = observationMapData.site;
     observationMapData.zone?.entities?.forEach((zoneEntity) => {
       const zoneReplaceIndex = baseMap.zone?.entities?.findIndex((e) => e.id === zoneEntity.id) ?? -1;
       if (baseMap.zone && zoneReplaceIndex >= 0) {
@@ -354,7 +398,9 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
               key: strings.MORTALITY_RATE,
               value:
                 zoneObservation && zoneObservation.hasObservedPermanentPlots
-                  ? `${zoneObservation.mortalityRate}%`
+                  ? zoneObservation.mortalityRate
+                    ? `${zoneObservation.mortalityRate}%`
+                    : strings.UNKNOWN
                   : lastZoneOb?.mortalityRate
                     ? `${lastZoneOb.mortalityRate}%`
                     : strings.UNKNOWN,
