@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import getDateDisplayValue from '@terraware/web-components/utils/date';
+import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 
 import ListMapView from 'src/components/ListMapView';
 import { PlantingSiteMap } from 'src/components/Map';
@@ -131,6 +131,7 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
 
   const observationsDates = useMemo(() => {
     const uniqueDates = new Set(observationsResults?.map((obs) => obs.completedDate || obs.startDate));
+    uniqueDates.add(getTodaysDateFormatted());
 
     return Array.from(uniqueDates)
       ?.filter((time) => time)
@@ -208,8 +209,8 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
     if (!selectedObservationDate || !selectedObservation) {
       return {
         site: mapDataFromAggregation.site,
-        zone: undefined,
-        subzone: undefined,
+        zone: mapDataFromAggregation.zone,
+        subzone: mapDataFromAggregation.subzone,
         permanentPlot: undefined,
         temporaryPlot: undefined,
       };
