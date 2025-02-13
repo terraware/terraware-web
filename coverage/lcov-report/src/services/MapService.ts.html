@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">51.97% </span>
+                <span class="strong">51.29% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>79/152</span>
+                <span class='fraction'>79/154</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">37.28% </span>
+                <span class="strong">36.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>22/59</span>
+                <span class='fraction'>22/60</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">56.02% </span>
+                <span class="strong">55.63% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>79/141</span>
+                <span class='fraction'>79/142</span>
             </div>
         
             
@@ -521,7 +521,8 @@
 <a name='L456'></a><a href='#L456'>456</a>
 <a name='L457'></a><a href='#L457'>457</a>
 <a name='L458'></a><a href='#L458'>458</a>
-<a name='L459'></a><a href='#L459'>459</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L459'></a><a href='#L459'>459</a>
+<a name='L460'></a><a href='#L460'>460</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -838,6 +839,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1292,10 +1294,11 @@ const getMapDataFromObservation = <span class="fstat-no" title="function not cov
     : [...zonesWithObservationsEntities, ...zoneWithNoObservationsEntities];
 &nbsp;
   const plantingSiteHistorySubZones = <span class="cstat-no" title="statement not covered" >plantingSiteHistoryZones</span>
-    ?.flatMap(<span class="fstat-no" title="function not covered" >(z</span>) =&gt; <span class="cstat-no" title="statement not covered" >z.plantingSubzones.flatMap(<span class="fstat-no" title="function not covered" >(s</span>ubz) =&gt; <span class="cstat-no" title="statement not covered" >subz)</span>)</span>
+    ?.flatMap(<span class="fstat-no" title="function not covered" >(z</span>) =&gt; <span class="cstat-no" title="statement not covered" >z.plantingSubzones.flatMap(<span class="fstat-no" title="function not covered" >(s</span>ubz) =&gt; (<span class="cstat-no" title="statement not covered" >{ ...subz, zoneId: z.plantingZoneId })</span>))</span>
     .filter(<span class="fstat-no" title="function not covered" >(s</span>ubz) =&gt; <span class="cstat-no" title="statement not covered" >subz.plantingSubzoneId !== undefined)</span>;
   const subzoneEntities = <span class="cstat-no" title="statement not covered" >plantingSiteHistory</span>
     ? plantingSiteHistorySubZones?.map(<span class="fstat-no" title="function not covered" >(s</span>ubzone) =&gt; {
+        const zoneFromObservation = <span class="cstat-no" title="statement not covered" >observation.plantingZones.find(<span class="fstat-no" title="function not covered" >(p</span>z) =&gt; <span class="cstat-no" title="statement not covered" >pz.plantingZoneId === subzone.zoneId)</span>;</span>
         const allObservationSubzones = <span class="cstat-no" title="statement not covered" >observation.plantingZones.flatMap(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >          zone.plantingSubzones.flatMap(<span class="fstat-no" title="function not covered" >(s</span>z) =&gt; <span class="cstat-no" title="statement not covered" >sz)</span></span>
         );
@@ -1306,11 +1309,11 @@ const getMapDataFromObservation = <span class="fstat-no" title="function not cov
           properties: {
             id: subzone.plantingSubzoneId || -1,
             name: subzoneFromObservation?.plantingSubzoneName || '',
-            mortalityRate: subzoneFromObservation?.mortalityRate,
+            mortalityRate: zoneFromObservation?.mortalityRate,
             type: 'subzone',
           },
           boundary: getPolygons(subzone.boundary),
-          lastObv: undefined,
+          lastObv: subzoneFromObservation?.lastObv,
         };
       })
     : observation.plantingZones.flatMap(<span class="fstat-no" title="function not covered" >(z</span>one: ObservationPlantingZoneResultsWithLastObv) =&gt;
@@ -1444,7 +1447,7 @@ export default MapService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-12T20:40:33.835Z
+                at 2025-02-13T19:33:02.618Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
