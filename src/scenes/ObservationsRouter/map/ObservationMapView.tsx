@@ -77,7 +77,7 @@ export default function ObservationMapView({
   const selectedObservation = useMemo(
     () =>
       observationsResults?.find((obs) => {
-        const dateToCheck = obs.state === 'Completed' ? obs.completedDate : obs.startDate;
+        const dateToCheck = obs.state === 'Completed' || obs.state === 'Abandoned' ? obs.completedDate : obs.startDate;
         return dateToCheck === selectedObservationDate;
       }),
     [observationsResults, selectedObservationDate]
