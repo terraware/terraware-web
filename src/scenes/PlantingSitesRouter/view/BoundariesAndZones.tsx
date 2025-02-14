@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import getDateDisplayValue from '@terraware/web-components/utils/date';
+import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 
 import ListMapView from 'src/components/ListMapView';
 import { PlantingSiteMap } from 'src/components/Map';
@@ -12,14 +12,19 @@ import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { useOrganization } from 'src/providers';
-import { searchObservations } from 'src/redux/features/observations/observationsSelectors';
+import {
+  searchObservations,
+  selectPlantingSiteObservations,
+} from 'src/redux/features/observations/observationsSelectors';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { selectPlantingSiteHistory } from 'src/redux/features/tracking/trackingSelectors';
+import { requestGetPlantingSiteHistory } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapEntityId, MapObject, MapSourceBaseData, MapSourceProperties } from 'src/types/Map';
-import { ZoneAggregation } from 'src/types/Observations';
-import { MinimalPlantingSite, MinimalPlantingZone } from 'src/types/Tracking';
+import { Observation, ZoneAggregation } from 'src/types/Observations';
+import { MinimalPlantingSite, MinimalPlantingZone, PlantingSiteHistory } from 'src/types/Tracking';
 import { regexMatch } from 'src/utils/search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -95,6 +100,16 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
   const { selectedOrganization } = useOrganization();
   const dispatch = useAppDispatch();
 
+  const [requestId, setRequestId] = useState<string>('');
+
+  const observationHistory = useAppSelector((state) => selectPlantingSiteHistory(state, requestId));
+
+  const [plantingSiteHistory, setPlantingSiteHistory] = useState<PlantingSiteHistory>();
+
+  const observations: Observation[] | undefined = useAppSelector((state) =>
+    selectPlantingSiteObservations(state, plantingSite.id)
+  );
+
   const status = useMemo(() => {
     return ['Completed', 'InProgress', 'Overdue', 'Abandoned'];
   }, []);
@@ -104,12 +119,19 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
     dispatch(requestObservations(selectedOrganization.id));
   }, [dispatch, selectedOrganization.id]);
 
+  useEffect(() => {
+    if (observationHistory?.status === 'success') {
+      setPlantingSiteHistory(observationHistory.data);
+    }
+  }, [observationHistory]);
+
   const observationsResults = useAppSelector((state) =>
     searchObservations(state, plantingSite.id, defaultTimeZone.get().id, '', [], status)
   );
 
   const observationsDates = useMemo(() => {
     const uniqueDates = new Set(observationsResults?.map((obs) => obs.completedDate || obs.startDate));
+    uniqueDates.add(getTodaysDateFormatted());
 
     return Array.from(uniqueDates)
       ?.filter((time) => time)
@@ -147,6 +169,27 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
     'Monitoring Plots': strings.MONITORING_PLOTS,
   };
 
+  const observationData = useMemo(() => {
+    return observations.find((obv) => obv.id === selectedObservation?.observationId);
+  }, [observations, selectedObservation]);
+
+  useEffect(() => {
+    if (observationData) {
+      const historyId = observationData.plantingSiteHistoryId;
+      if (historyId) {
+        const requestObservationHistory = dispatch(
+          requestGetPlantingSiteHistory({
+            plantingSiteId: plantingSite.id,
+            historyId: historyId,
+          })
+        );
+        setRequestId(requestObservationHistory.requestId);
+      }
+    } else {
+      setRequestId('');
+    }
+  }, [observationData]);
+
   useEffect(() => {
     if (!search) {
       setSearchZoneEntities([]);
@@ -166,18 +209,16 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
     if (!selectedObservationDate || !selectedObservation) {
       return {
         site: mapDataFromAggregation.site,
-        zone: undefined,
-        subzone: undefined,
+        zone: mapDataFromAggregation.zone,
+        subzone: mapDataFromAggregation.subzone,
         permanentPlot: undefined,
         temporaryPlot: undefined,
         adHocPlot: undefined,
       };
     }
-    const newMapData = MapService.getMapDataFromObservation(selectedObservation);
-    newMapData.zone = mapDataFromAggregation.zone;
-    newMapData.subzone = mapDataFromAggregation.subzone;
+    const newMapData = MapService.getMapDataFromObservation(selectedObservation, plantingSiteHistory);
     return newMapData;
-  }, [selectedObservation, selectedObservationDate, mapDataFromAggregation]);
+  }, [selectedObservation, selectedObservationDate, mapDataFromAggregation, plantingSiteHistory]);
 
   const layerOptions: MapLayer[] = useMemo(() => {
     const result: MapLayer[] = ['Planting Site', 'Zones', 'Sub-Zones'];

@@ -315,10 +315,11 @@ const getMapDataFromObservation = (
     : [...zonesWithObservationsEntities, ...zoneWithNoObservationsEntities];
 
   const plantingSiteHistorySubZones = plantingSiteHistoryZones
-    ?.flatMap((z) => z.plantingSubzones.flatMap((subz) => subz))
+    ?.flatMap((z) => z.plantingSubzones.flatMap((subz) => ({ ...subz, zoneId: z.plantingZoneId })))
     .filter((subz) => subz.plantingSubzoneId !== undefined);
   const subzoneEntities = plantingSiteHistory
     ? plantingSiteHistorySubZones?.map((subzone) => {
+        const zoneFromObservation = observation.plantingZones.find((pz) => pz.plantingZoneId === subzone.zoneId);
         const allObservationSubzones = observation.plantingZones.flatMap((zone) =>
           zone.plantingSubzones.flatMap((sz) => sz)
         );
@@ -329,11 +330,11 @@ const getMapDataFromObservation = (
           properties: {
             id: subzone.plantingSubzoneId || -1,
             name: subzoneFromObservation?.plantingSubzoneName || '',
-            mortalityRate: subzoneFromObservation?.mortalityRate,
+            mortalityRate: zoneFromObservation?.mortalityRate,
             type: 'subzone',
           },
           boundary: getPolygons(subzone.boundary),
-          lastObv: undefined,
+          lastObv: subzoneFromObservation?.lastObv,
         };
       })
     : observation.plantingZones.flatMap((zone: ObservationPlantingZoneResultsWithLastObv) =>
