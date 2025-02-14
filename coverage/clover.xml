@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1739476861124" clover="3.2.0">
-  <project timestamp="1739476861124" name="All files">
-    <metrics statements="27299" coveredstatements="1216" conditionals="18460" coveredconditionals="345" methods="8413" coveredmethods="197" elements="54172" coveredelements="1758" complexity="0" loc="27299" ncloc="27299" packages="240" files="1134" classes="1134"/>
+<coverage generated="1739537083256" clover="3.2.0">
+  <project timestamp="1739537083256" name="All files">
+    <metrics statements="27303" coveredstatements="1216" conditionals="18464" coveredconditionals="345" methods="8416" coveredmethods="197" elements="54183" coveredelements="1758" complexity="0" loc="27303" ncloc="27303" packages="240" files="1134" classes="1134"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -26024,9 +26024,9 @@
       </file>
     </package>
     <package name="src.scenes.PlantsDashboardRouter">
-      <metrics statements="91" coveredstatements="0" conditionals="90" coveredconditionals="0" methods="41" coveredmethods="0"/>
+      <metrics statements="95" coveredstatements="0" conditionals="94" coveredconditionals="0" methods="44" coveredmethods="0"/>
       <file name="PlantsDashboardView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/PlantsDashboardView.tsx">
-        <metrics statements="89" coveredstatements="0" conditionals="90" coveredconditionals="0" methods="40" coveredmethods="0"/>
+        <metrics statements="93" coveredstatements="0" conditionals="94" coveredconditionals="0" methods="43" coveredmethods="0"/>
         <line num="41" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
@@ -26102,20 +26102,24 @@
         <line num="286" count="0" type="stmt"/>
         <line num="288" count="0" type="stmt"/>
         <line num="291" count="0" type="stmt"/>
-        <line num="292" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="310" count="0" type="stmt"/>
-        <line num="312" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="314" count="0" type="stmt"/>
-        <line num="316" count="0" type="stmt"/>
-        <line num="318" count="0" type="stmt"/>
+        <line num="292" count="0" type="stmt"/>
+        <line num="293" count="0" type="stmt"/>
+        <line num="295" count="0" type="stmt"/>
+        <line num="296" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="299" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="317" count="0" type="stmt"/>
+        <line num="319" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="321" count="0" type="stmt"/>
-        <line num="322" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="323" count="0" type="stmt"/>
-        <line num="326" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="325" count="0" type="stmt"/>
+        <line num="328" count="0" type="stmt"/>
         <line num="329" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="332" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="348" count="0" type="stmt"/>
-        <line num="377" count="0" type="stmt"/>
+        <line num="330" count="0" type="stmt"/>
+        <line num="333" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="336" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="339" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="355" count="0" type="stmt"/>
+        <line num="384" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantsDashboardRouter/index.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
