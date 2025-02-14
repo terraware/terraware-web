@@ -50,11 +50,6 @@ export default function ObservationMapView({
   const [selectedAdHocObservation, setSelectedAdHocObservation] = useState<AdHocObservationResults>();
   const defaultTimeZone = useDefaultTimeZone();
 
-  useEffect(() => {
-    console.log('observationsResults', observationsResults);
-    console.log('adHocObservationsResults', adHocObservationsResults);
-  }, [observationsResults, adHocObservationsResults]);
-
   const observations: Observation[] | undefined = useAppSelector((state) =>
     selectPlantingSiteObservations(state, selectedPlantingSite.id)
   );
@@ -86,7 +81,6 @@ export default function ObservationMapView({
   }, [observationHistory]);
 
   useEffect(() => {
-    console.log('observationsDates', observationsDates);
     if (observationsDates) {
       setSelectedObservationDate((currentDate) => {
         if ((!currentDate || !observationsDates.includes(currentDate)) && observationsDates.length > 0) {
@@ -102,7 +96,7 @@ export default function ObservationMapView({
 
   useEffect(() => {
     const selObservation = observationsResults?.find((obs) => {
-      const dateToCheck = obs.state === 'Completed' ? obs.completedDate : obs.startDate;
+      const dateToCheck = obs.state === 'Completed' || obs.state === 'Abandoned' ? obs.completedDate : obs.startDate;
       return dateToCheck === selectedObservationDate;
     });
 
@@ -118,8 +112,6 @@ export default function ObservationMapView({
   }, [observationsResults, adHocObservationsResults, selectedPlantingSite, selectedObservationDate]);
 
   const observationData = useMemo(() => {
-    console.log('observations', observations);
-    console.log('adHocObservations', adHocObservations);
     let observationToUse = selectedObservation || selectedAdHocObservation;
     if (selectedObservation && selectedAdHocObservation) {
       if (isAfter(selectedAdHocObservation.completedTime, selectedObservation.completedTime)) {
@@ -135,7 +127,6 @@ export default function ObservationMapView({
 
   useEffect(() => {
     if (observationData) {
-      console.log('observationData', observationData);
       const historyId = observationData.plantingSiteHistoryId;
       if (historyId) {
         const requestObservationHistory = dispatch(
@@ -157,8 +148,6 @@ export default function ObservationMapView({
   );
 
   const mapData: Record<MapObject, MapSourceBaseData | undefined> = useMemo(() => {
-    console.log('selectedObservation', selectedObservation);
-    console.log('selectedAdHocObservation', selectedAdHocObservation);
     let observationToUse = selectedObservation || selectedAdHocObservation;
     if (selectedObservation && selectedAdHocObservation) {
       if (isAfter(selectedAdHocObservation.completedTime, selectedObservation.completedTime)) {
@@ -176,8 +165,6 @@ export default function ObservationMapView({
         adHocPlot: undefined,
       };
     }
-
-    console.log('observationToUse', observationToUse);
 
     return MapService.getMapDataFromObservation(observationToUse, plantingSiteHistory);
   }, [
