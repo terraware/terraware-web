@@ -200,7 +200,7 @@ export const selectPlantingSiteObservations = createCachedSelector(
 
     return byStatus ?? [];
   }
-)((state: RootState, plantingSiteId: number, status?: ObservationState) => `${plantingSiteId.toString()}_${status}}`);
+)((state: RootState, plantingSiteId: number, status?: ObservationState) => `${plantingSiteId.toString()}_${status}`);
 
 // get ad hoc observations specific to a planting site, by optional status
 export const selectPlantingSiteAdHocObservations = createCachedSelector(

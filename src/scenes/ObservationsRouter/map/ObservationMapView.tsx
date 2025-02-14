@@ -173,7 +173,6 @@ export default function ObservationMapView({
     plantingSiteMapData,
     plantingSiteHistory,
     selectedAdHocObservation,
-    selectedObservationDate,
   ]);
 
   const filterZoneNames = useMemo(() => filtersProps?.filters.zone?.values ?? [], [filtersProps?.filters.zone?.values]);
