@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1739537083256" clover="3.2.0">
-  <project timestamp="1739537083256" name="All files">
-    <metrics statements="27303" coveredstatements="1216" conditionals="18464" coveredconditionals="345" methods="8416" coveredmethods="197" elements="54183" coveredelements="1758" complexity="0" loc="27303" ncloc="27303" packages="240" files="1134" classes="1134"/>
+<coverage generated="1739551677318" clover="3.2.0">
+  <project timestamp="1739551677318" name="All files">
+    <metrics statements="27303" coveredstatements="1216" conditionals="18466" coveredconditionals="345" methods="8416" coveredmethods="197" elements="54185" coveredelements="1758" complexity="0" loc="27303" ncloc="27303" packages="240" files="1134" classes="1134"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -23295,9 +23295,9 @@
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter.map">
-      <metrics statements="86" coveredstatements="0" conditionals="75" coveredconditionals="0" methods="34" coveredmethods="0"/>
+      <metrics statements="86" coveredstatements="0" conditionals="77" coveredconditionals="0" methods="34" coveredmethods="0"/>
       <file name="ObservationMapView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/map/ObservationMapView.tsx">
-        <metrics statements="71" coveredstatements="0" conditionals="56" coveredconditionals="0" methods="31" coveredmethods="0"/>
+        <metrics statements="71" coveredstatements="0" conditionals="58" coveredconditionals="0" methods="31" coveredmethods="0"/>
         <line num="35" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
@@ -23323,7 +23323,7 @@
         <line num="73" count="0" type="stmt"/>
         <line num="77" count="0" type="stmt"/>
         <line num="79" count="0" type="stmt"/>
-        <line num="80" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="80" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="81" count="0" type="stmt"/>
         <line num="86" count="0" type="stmt"/>
         <line num="87" count="0" type="stmt"/>
