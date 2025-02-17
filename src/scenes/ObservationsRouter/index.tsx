@@ -26,6 +26,7 @@ import { FieldOptionsMap, FieldValuesPayload } from 'src/types/Search';
 import { isAdmin } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import BiomassMeasurementsDetails from './BiomassMeasurementsDetails';
 import ObservationsHome from './ObservationsHome';
 import ObservationDetails from './details';
 import ObservationMonitoringPlotDetails from './plot';
@@ -158,6 +159,10 @@ const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Elemen
     <Routes>
       {scheduleObservationsEnabled && <Route path={'schedule/:observationId'} element={<RescheduleObservation />} />}
       {scheduleObservationsEnabled && <Route path={'/schedule'} element={<ScheduleObservation />} />}
+      <Route
+        path={'/:plantingSiteId/results/:observationId/biomassMeassurements/:monitoringPlotId'}
+        element={<BiomassMeasurementsDetails />}
+      />
       <Route
         path={'/:plantingSiteId/results/:observationId/zone/:plantingZoneId/plot/:monitoringPlotId'}
         element={<ObservationMonitoringPlotDetails />}

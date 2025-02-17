@@ -11,6 +11,8 @@ import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
+import BiomassMeasurementRenderer from './BiomassMeasurementRenderer';
+
 export type BiomassMeasurementProps = {
   selectedPlantingSite?: PlantingSite;
 };
@@ -35,7 +37,7 @@ export default function BiomassMeasurement({ selectedPlantingSite }: BiomassMeas
   const columns = (): TableColumnType[] => {
     return [
       {
-        key: 'plotNumber',
+        key: 'monitoringPlotNumber',
         name: strings.PLOT,
         type: 'string',
       },
@@ -81,6 +83,7 @@ export default function BiomassMeasurement({ selectedPlantingSite }: BiomassMeas
             columns={columns}
             rows={adHocObservationsResults || []}
             orderBy='startDate'
+            Renderer={BiomassMeasurementRenderer}
           />
         ) : (
           <EmptyStateContent
