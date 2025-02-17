@@ -18,8 +18,6 @@ export default function BiomassMeasurementRenderer(props: RendererProps<TableRow
   const createLinkToPlot = (iValue: React.ReactNode | unknown[]) => {
     const biomassPlotUrl = APP_PATHS.OBSERVATION_BIOMASS_MEASSUREMENTS_DETAILS;
 
-    console.log('row', row);
-
     const to = biomassPlotUrl
       .replace(':monitoringPlotId', row.adHocPlot?.monitoringPlotId?.toString())
       .replace(':observationId', row.observationId?.toString())
