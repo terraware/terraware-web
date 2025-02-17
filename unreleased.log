@@ -1,2 +1,2 @@
-e242eadacf0 SW-6572 Abandoned observations do not show up on observation details map (#3633)
-8f4c3956696 SW-6552 Use max of monitoring plots completed date in Plants Dashbord "As of..." text (#3632)
+21ee3a906c6 Update Node.js to v20.18.3 (#3635)
+81ff721a048 Update dependency @babel/traverse to v7.26.8 (#3636)
