@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -17,6 +17,12 @@ import strings from 'src/strings';
 import { getShortTime } from 'src/utils/dateFormatter';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
+import { useSpecies } from '../InventoryRouter/form/useSpecies';
+import QuadratSpeciesTable from './QuadratSepciesTable';
+import TreesAndShrubsTable from './TreesAndShrubsTable';
+import SpeciesTotalPlantsChart from './common/SpeciesMortalityRateChart';
+import MonitoringPlotPhotos from './plot/MonitoringPlotPhotos';
+
 export default function BiomassMeasurementsDetails(): JSX.Element {
   const { plantingSiteId, observationId } = useParams<{
     plantingSiteId: string;
@@ -27,6 +33,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
   const allAdHocObservationsResults = useAppSelector(selectAdHocObservationsResults);
   const defaultTimeZone = useDefaultTimeZone();
   const { isMobile } = useDeviceInfo();
+  const { availableSpecies } = useSpecies();
 
   const observation = allAdHocObservationsResults?.find(
     (obsResult) => obsResult?.observationId.toString() === observationId?.toString()
@@ -83,6 +90,10 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
       { label: strings.OBSERVER, value: monitoringPlot?.claimedByName },
       { label: strings.ADDITIONAL_OBSERVATIONS, value: '' },
       { label: strings.FIELD_NOTES, value: monitoringPlot?.notes },
+      {
+        label: '',
+        value: undefined,
+      },
     ];
   }, [activeLocale, defaultTimeZone, plantingSite]);
 
@@ -110,7 +121,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
   }, [activeLocale, plantingSiteId, observationId]);
 
   return (
-    <Page crumbs={crumbs} title={title}>
+    <Page crumbs={crumbs} title={title} titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}>
       <Grid container>
         <Grid item xs={12}>
           <Card flushMobile>
@@ -130,7 +141,224 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
                   />
                 </Grid>
               ))}
+              <Grid container spacing={2} marginTop={2}>
+                <Grid item xs={6}>
+                  <Grid item xs={12}>
+                    <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
+                      {strings.PLOT_PHOTO}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} display={'flex'}>
+                    <Grid item xs={6}>
+                      <MonitoringPlotPhotos
+                        observationId={Number(observationId)}
+                        monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
+                        photos={monitoringPlot?.photos.filter(
+                          (photo) => photo.type === 'Plot' && photo.position === undefined
+                        )}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography
+                        fontSize='14px'
+                        lineHeight='28px'
+                        fontWeight={400}
+                        color={theme.palette.TwClrTxtSecondary}
+                      >
+                        {strings.DESCRIPTION_NOTES}
+                      </Typography>
+                      <Typography fontSize='16px' lineHeight='24px' fontWeight={500} color={theme.palette.TwClrTxt}>
+                        test
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
+                    {strings.SOIL_PHOTO}
+                  </Typography>
+                  <Grid item xs={12} display={'flex'}>
+                    <Grid item xs={6}>
+                      <MonitoringPlotPhotos
+                        observationId={Number(observationId)}
+                        monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
+                        photos={monitoringPlot?.photos.filter((photo) => photo.type === 'Soil')}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography fontSize='14px' lineHeight='28px' fontWeight={400} color={theme.palette.TwClrTxt}>
+                        {strings.DESCRIPTION_NOTES}
+                      </Typography>
+                      <Typography fontSize='16px' lineHeight='24px' fontWeight={500} color={theme.palette.TwClrTxt}>
+                        test
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
+                    {strings.PHOTO_NORTHWEST_QUADRAT}
+                  </Typography>
+                  <Grid item xs={12} display={'flex'}>
+                    <Grid item xs={6}>
+                      <MonitoringPlotPhotos
+                        observationId={Number(observationId)}
+                        monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
+                        photos={monitoringPlot?.photos.filter(
+                          (photo) => photo.type === 'Plot' && photo.position === 'NorthwestCorner'
+                        )}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography fontSize='14px' lineHeight='28px' fontWeight={400} color={theme.palette.TwClrTxt}>
+                        {strings.DESCRIPTION_NOTES}
+                      </Typography>
+                      <Typography fontSize='16px' lineHeight='24px' fontWeight={500} color={theme.palette.TwClrTxt}>
+                        {biomassMeasurements?.quadrats.find((quad) => quad.position === 'NorthwestCorner')?.description}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <QuadratSpeciesTable
+                      species={
+                        biomassMeasurements?.quadrats.find((quad) => quad.position === 'NorthwestCorner')?.species
+                      }
+                      quadrat='NorthwestCorner'
+                      allSpecies={biomassMeasurements?.species}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
+                    {strings.PHOTO_NORTHEAST_QUADRAT}
+                  </Typography>
+                  <Grid item xs={12} display={'flex'}>
+                    <Grid item xs={6}>
+                      <MonitoringPlotPhotos
+                        observationId={Number(observationId)}
+                        monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
+                        photos={monitoringPlot?.photos.filter(
+                          (photo) => photo.type === 'Plot' && photo.position === 'NortheastCorner'
+                        )}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography fontSize='14px' lineHeight='28px' fontWeight={400} color={theme.palette.TwClrTxt}>
+                        {strings.DESCRIPTION_NOTES}
+                      </Typography>
+                      <Typography fontSize='16px' lineHeight='24px' fontWeight={500} color={theme.palette.TwClrTxt}>
+                        {biomassMeasurements?.quadrats.find((quad) => quad.position === 'NortheastCorner')?.description}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <QuadratSpeciesTable
+                      species={
+                        biomassMeasurements?.quadrats.find((quad) => quad.position === 'NortheastCorner')?.species
+                      }
+                      quadrat='NortheastCorner'
+                      allSpecies={biomassMeasurements?.species}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
+                    {strings.PHOTO_SOUTHWEST_QUADRAT}
+                  </Typography>
+                  <Grid item xs={12} display={'flex'}>
+                    <Grid item xs={6}>
+                      <MonitoringPlotPhotos
+                        observationId={Number(observationId)}
+                        monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
+                        photos={monitoringPlot?.photos.filter(
+                          (photo) => photo.type === 'Plot' && photo.position === 'SouthwestCorner'
+                        )}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography fontSize='14px' lineHeight='28px' fontWeight={400} color={theme.palette.TwClrTxt}>
+                        {strings.DESCRIPTION_NOTES}
+                      </Typography>
+                      <Typography fontSize='16px' lineHeight='24px' fontWeight={500} color={theme.palette.TwClrTxt}>
+                        {biomassMeasurements?.quadrats.find((quad) => quad.position === 'SouthwestCorner')?.description}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <QuadratSpeciesTable
+                      species={
+                        biomassMeasurements?.quadrats.find((quad) => quad.position === 'SouthwestCorner')?.species
+                      }
+                      quadrat='SouthwestCorner'
+                      allSpecies={biomassMeasurements?.species}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
+                    {strings.PHOTO_SOUTHEAST_QUADRAT}
+                  </Typography>
+                  <Grid item xs={12} display={'flex'}>
+                    <Grid item xs={6}>
+                      <MonitoringPlotPhotos
+                        observationId={Number(observationId)}
+                        monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
+                        photos={monitoringPlot?.photos.filter(
+                          (photo) => photo.type === 'Plot' && photo.position === 'SoutheastCorner'
+                        )}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography fontSize='14px' lineHeight='28px' fontWeight={400} color={theme.palette.TwClrTxt}>
+                        {strings.DESCRIPTION_NOTES}
+                      </Typography>
+                      <Typography fontSize='16px' lineHeight='24px' fontWeight={500} color={theme.palette.TwClrTxt}>
+                        {biomassMeasurements?.quadrats.find((quad) => quad.position === 'SoutheastCorner')?.description}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <QuadratSpeciesTable
+                      species={
+                        biomassMeasurements?.quadrats.find((quad) => quad.position === 'SoutheastCorner')?.species
+                      }
+                      quadrat='SoutheastCorner'
+                      allSpecies={biomassMeasurements?.species}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
             </Grid>
+            <Typography
+              fontSize='20px'
+              lineHeight='28px'
+              fontWeight={600}
+              color={theme.palette.TwClrTxt}
+              paddingBottom={2}
+              paddingTop={3}
+            >
+              {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
+            </Typography>
+            <Box height='360px'>
+              <SpeciesTotalPlantsChart
+                minHeight='360px'
+                species={monitoringPlot?.species.map((sp) => ({
+                  ...sp,
+                  speciesScientificName: availableSpecies?.find((s) => s.id === sp.speciesId)?.scientificName || '',
+                }))}
+              />
+            </Box>
+            <Typography
+              fontSize='20px'
+              lineHeight='28px'
+              fontWeight={600}
+              color={theme.palette.TwClrTxt}
+              paddingBottom={2}
+              paddingTop={3}
+            >
+              {strings.TREES_AND_SHRUBS}
+            </Typography>
+            <TreesAndShrubsTable trees={biomassMeasurements?.trees} allSpecies={biomassMeasurements?.species} />
           </Card>
         </Grid>
       </Grid>
