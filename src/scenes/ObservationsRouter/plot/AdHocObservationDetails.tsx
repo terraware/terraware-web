@@ -71,11 +71,6 @@ export default function AdHocObservationDetails(): JSX.Element {
       },
       { label: strings.OBSERVER, value: monitoringPlot?.claimedByName },
       { label: strings.PLOT_SELECTION, value: strings.AD_HOC },
-      { label: strings.TYPE_OF_FOREST, value: biomassMeasurements?.forestType },
-      {
-        label: strings.NUMBER_OF_SMALL_TREES,
-        value: `${biomassMeasurements?.smallTreeCountLow}-${biomassMeasurements?.smallTreeCountHigh}`,
-      },
       { label: strings.PLANTS, value: handleMissingData(monitoringPlot?.totalPlants) },
       { label: strings.SPECIES, value: handleMissingData(monitoringPlot?.totalSpecies) },
       { label: strings.PLANTING_DENSITY, value: handleMissingData(monitoringPlot?.plantingDensity) },
