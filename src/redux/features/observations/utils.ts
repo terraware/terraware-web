@@ -312,6 +312,7 @@ export const mergeAdHocObservations = (
         plantingSiteName: site.name,
         plantingZones: mergedZones,
         plotName: observation?.adHocPlot?.monitoringPlotName,
+        plotNumber: observation?.adHocPlot?.monitoringPlotNumber,
         totalPlants: observation.plantingZones.reduce((acc, curr) => acc + curr.totalPlants, 0),
       };
     });

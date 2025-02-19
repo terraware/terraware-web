@@ -43,6 +43,7 @@ export type AdHocObservationResults = Omit<
       plantingSiteName: string;
       totalPlants: number;
       plotName?: string;
+      plotNumber?: number;
       plantingZones: ObservationPlantingZoneResultsWithLastObv[];
     },
   'plantingZones'
