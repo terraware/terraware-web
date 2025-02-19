@@ -883,7 +883,7 @@ MATCH_SPECIES_MODAL_DESCRIPTION,"Select matches for the unrecognized species. On
 MATCH_UNRECOGNIZED_SPECIES,Match Unrecognized Species,
 MAX,Max,
 MAXIMUM_CARBON_ACCUMULATION,Maximum Carbon Accumulation (tCO2/ha/yr),
-MEASUREMENT_TIME, Meassurement Time,
+MEASUREMENT_TIME, Measurement Time,
 MEDIA,Media,
 MEDIA_MIX,Media Mix,
 MEETING_URL,Meeting URL,
