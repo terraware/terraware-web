@@ -1,3 +1,4 @@
+adac5a068f3 SW-6577 Limit organization type details to 100 characters (#3640)
 57a255c4d1e SW-6448 Add Ad Hoc plots to standard observation map view (#3634)
 21ee3a906c6 Update Node.js to v20.18.3 (#3635)
 81ff721a048 Update dependency @babel/traverse to v7.26.8 (#3636)
