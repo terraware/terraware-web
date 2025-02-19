@@ -17,6 +17,7 @@ import SearchService from './SearchService';
 
 const OBSERVATIONS_RESULTS_ENDPOINT = '/api/v1/tracking/observations/results';
 const OBSERVATIONS_ENDPOINT = '/api/v1/tracking/observations';
+const AD_HOC_OBSERVATIONS_ENDPOINT = '/api/v1/tracking/observations/adHoc';
 const OBSERVATION_ENDPOINT = '/api/v1/tracking/observations/{observationId}';
 const OBSERVATION_EXPORT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots';
 const REPLACE_OBSERVATION_PLOT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/replace';
@@ -46,6 +47,7 @@ export type ObservationsData = {
 
 const httpObservationsResults = HttpService.root(OBSERVATIONS_RESULTS_ENDPOINT);
 const httpObservations = HttpService.root(OBSERVATIONS_ENDPOINT);
+const httpAdHocObservations = HttpService.root(AD_HOC_OBSERVATIONS_ENDPOINT);
 const httpObservation = HttpService.root(OBSERVATION_ENDPOINT);
 const httpObservationExport = HttpService.root(OBSERVATION_EXPORT_ENDPOINT);
 const httpAdHocObservationsResults = HttpService.root(AD_HOC_OBSERVATIONS_RESULTS_ENDPOINT);
@@ -126,6 +128,22 @@ const listObservationsResults = async (
 
 const listObservations = async (organizationId: number): Promise<ObservationsData & Response> => {
   const response: ObservationsData & Response = await httpObservations.get<
+    ObservationsResponsePayload,
+    ObservationsData
+  >(
+    {
+      params: {
+        organizationId: organizationId.toString(),
+      },
+    },
+    (data) => ({ observations: data?.observations ?? [] })
+  );
+
+  return response;
+};
+
+const listAdHocObservations = async (organizationId: number): Promise<ObservationsData & Response> => {
+  const response: ObservationsData & Response = await httpAdHocObservations.get<
     ObservationsResponsePayload,
     ObservationsData
   >(
@@ -223,6 +241,7 @@ const ObservationsService = {
   exportGpx,
   listObservationsResults,
   listObservations,
+  listAdHocObservations,
   replaceObservationPlot,
   rescheduleObservation,
   scheduleObservation,

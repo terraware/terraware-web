@@ -112,6 +112,20 @@ export default function PlantingSiteMap(props: PlantingSiteMapProps): JSX.Elemen
             ...getRenderAttributes('permanentPlot'),
           });
         }
+        if (mapData.adHocPlot && mapData.adHocPlot.entities.length > 0) {
+          sources.push({
+            ...mapData.adHocPlot,
+            isInteractive: monitoringPlotsFirst,
+            annotation: monitoringPlotsFirst
+              ? {
+                  textField: 'name',
+                  textColor: theme.palette.TwClrBaseWhite as string,
+                  textSize: 12,
+                }
+              : undefined,
+            ...getRenderAttributes('adHocPlot'),
+          });
+        }
       }
       if (mapData.subzone && (layers === undefined || layers?.includes('Sub-Zones'))) {
         sources.push({

@@ -62,6 +62,20 @@ export const observationsSlice = createSlice({
 
 export const { setObservationsAction } = observationsSlice.actions;
 
+export const adHocObservationsSlice = createSlice({
+  name: 'adHocObservationsSlice',
+  initialState,
+  reducers: {
+    setAdHocObservationsAction: (state, action: PayloadAction<Data>) => {
+      const data: Data = action.payload;
+      state.error = data.error;
+      state.observations = data.observations;
+    },
+  },
+});
+
+export const { setAdHocObservationsAction } = adHocObservationsSlice.actions;
+
 type PlantingSitePayload = {
   plantingSiteId: number;
   data: ResultsData;
@@ -166,6 +180,7 @@ export const { setAdHocObservationsResultsAction } = adHocObservationsResultsSli
 const observationsReducers = {
   observationsResults: observationsResultsSlice.reducer,
   observations: observationsSlice.reducer,
+  adHocObservations: adHocObservationsSlice.reducer,
   plantingSiteObservationsResults: plantingSiteObservationsResultsSlice.reducer,
   scheduleObservation: scheduleObservationSlice.reducer,
   rescheduleObservation: rescheduleObservationSlice.reducer,

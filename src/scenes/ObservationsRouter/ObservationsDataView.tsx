@@ -90,6 +90,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
         selectedPlantingSite && selectedPlantingSiteId !== -1 ? (
           <ObservationMapView
             observationsResults={observationsResults}
+            adHocObservationsResults={adHocObservationsResults}
             selectedPlantingSite={selectedPlantingSite}
             {...searchProps}
           />

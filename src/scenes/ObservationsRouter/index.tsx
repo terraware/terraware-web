@@ -64,6 +64,7 @@ export default function ObservationsRouter(): JSX.Element {
       dispatch(requestObservationsResults(selectedOrganization.id));
       dispatch(requestAdHocObservationsResults(selectedOrganization.id));
       dispatch(requestObservations(selectedOrganization.id));
+      dispatch(requestObservations(selectedOrganization.id, true));
     }
   }, [dispatch, selectedOrganization.id, species, plantingSites, dispatched]);
 

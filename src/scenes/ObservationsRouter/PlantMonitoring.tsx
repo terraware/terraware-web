@@ -44,7 +44,7 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
     return allObservationsResults?.filter((observationResult) => {
       const matchesSite =
         selectedPlantingSite.id !== -1 ? observationResult.plantingSiteId === selectedPlantingSite.id : true;
-      const matchesState = ['Completed', 'Overdue', 'InProgress'].indexOf(observationResult.state) !== -1;
+      const matchesState = ['Completed', 'Overdue', 'InProgress', 'Abandoned'].indexOf(observationResult.state) !== -1;
       return matchesSite && matchesState;
     });
   }, [allObservationsResults, selectedPlantingSite]);
