@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
@@ -153,7 +153,16 @@
 <a name='L88'></a><a href='#L88'>88</a>
 <a name='L89'></a><a href='#L89'>89</a>
 <a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -174,9 +183,18 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -251,7 +269,7 @@ import MapLegend from 'src/components/common/MapLegend';
 import strings from 'src/strings';
 import { getRgbaFromHex } from 'src/utils/color';
 &nbsp;
-export type PlantingSiteMapLegendOption = 'site' | 'zone' | 'subzone' | 'permanentPlot' | 'temporaryPlot';
+export type PlantingSiteMapLegendOption = 'site' | 'zone' | 'subzone' | 'permanentPlot' | 'temporaryPlot' | 'adHocPlot';
 &nbsp;
 export type PlantingSiteMapLegendProps = {
   options: PlantingSiteMapLegendOption[];
@@ -264,6 +282,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
   const hasSubzone = <span class="cstat-no" title="statement not covered" >!!options.find(<span class="fstat-no" title="function not covered" >(o</span>pt) =&gt; <span class="cstat-no" title="statement not covered" >opt === 'subzone')</span>;</span>
   const hasPermanentPlot = <span class="cstat-no" title="statement not covered" >!!options.find(<span class="fstat-no" title="function not covered" >(o</span>pt) =&gt; <span class="cstat-no" title="statement not covered" >opt === 'permanentPlot')</span>;</span>
   const hasTemporaryPlot = <span class="cstat-no" title="statement not covered" >!!options.find(<span class="fstat-no" title="function not covered" >(o</span>pt) =&gt; <span class="cstat-no" title="statement not covered" >opt === 'temporaryPlot')</span>;</span>
+  const hasAdHocPlot = <span class="cstat-no" title="statement not covered" >!!options.find(<span class="fstat-no" title="function not covered" >(o</span>pt) =&gt; <span class="cstat-no" title="statement not covered" >opt === 'adHocPlot')</span>;</span>
 &nbsp;
   const legends = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const items = <span class="cstat-no" title="statement not covered" >[];</span>
@@ -308,6 +327,14 @@ export default function <span class="fstat-no" title="function not covered" >Pla
       });
     }
 &nbsp;
+<span class="cstat-no" title="statement not covered" >    if (hasAdHocPlot) {</span>
+<span class="cstat-no" title="statement not covered" >      items.push({</span>
+        label: strings.PLOTS_AD_HOC,
+        borderColor: theme.palette.TwClrBaseOrange300 as string,
+        fillColor: getRgbaFromHex(theme.palette.TwClrBaseOrange300 as string, 0.2),
+      });
+    }
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return [</span>
       {
         title: strings.BOUNDARIES,
@@ -340,7 +367,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-17T12:43:44.177Z
+                at 2025-02-19T20:49:34.933Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
