@@ -267,6 +267,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
               label={strings.DESCRIBE_ORGANIZATION_TYPE_DETAILS}
               id='create-org-question-website'
               display={false}
+              maxLength={100}
               onChange={(value) => {
                 onChange('organizationTypeDetails', value);
                 setOrganizationTypeDetailsError('');
