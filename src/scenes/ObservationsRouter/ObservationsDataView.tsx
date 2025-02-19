@@ -104,7 +104,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
   );
 }
 
-const AllPlantingSitesMapView = (): JSX.Element => {
+export const AllPlantingSitesMapView = (): JSX.Element => {
   const theme = useTheme();
 
   return (

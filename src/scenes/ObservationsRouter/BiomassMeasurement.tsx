@@ -1,17 +1,20 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { Typography, useTheme } from '@mui/material';
-import { TableColumnType } from '@terraware/web-components';
 
+import ListMapView from 'src/components/ListMapView';
 import Card from 'src/components/common/Card';
-import Table from 'src/components/common/table';
+import { View } from 'src/components/common/ListMapSelector';
+import Search from 'src/components/common/SearchFiltersWrapper';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { selectAdHocObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
-import BiomassMeasurementRenderer from './BiomassMeasurementRenderer';
+import BiomassMeasurementList from './BiomassMeasurementListView';
+import BiomassMeasurementMapView from './BiomassMeasurementMapView';
+import { AllPlantingSitesMapView } from './ObservationsDataView';
 
 export type BiomassMeasurementProps = {
   selectedPlantingSite?: PlantingSite;
@@ -19,6 +22,7 @@ export type BiomassMeasurementProps = {
 
 export default function BiomassMeasurement({ selectedPlantingSite }: BiomassMeasurementProps): JSX.Element {
   const theme = useTheme();
+  const [view, setView] = useState<View>();
 
   const allAdHocObservationsResults = useAppSelector(selectAdHocObservationsResults);
   const adHocObservationsResults = useMemo(() => {
@@ -34,36 +38,6 @@ export default function BiomassMeasurement({ selectedPlantingSite }: BiomassMeas
     });
   }, [allAdHocObservationsResults, selectedPlantingSite]);
 
-  const columns = (): TableColumnType[] => {
-    return [
-      {
-        key: 'monitoringPlotNumber',
-        name: strings.PLOT,
-        type: 'string',
-      },
-      {
-        key: 'plantingSiteName',
-        name: strings.PLANTING_SITE,
-        type: 'string',
-      },
-      {
-        key: 'startDate',
-        name: strings.DATE,
-        type: 'date',
-      },
-      {
-        key: 'totalPlants',
-        name: strings.PLANTS,
-        type: 'number',
-      },
-      {
-        key: 'totalSpecies',
-        name: strings.SPECIES,
-        type: 'number',
-      },
-    ];
-  };
-
   return (
     <Card>
       <Typography
@@ -78,12 +52,22 @@ export default function BiomassMeasurement({ selectedPlantingSite }: BiomassMeas
       </Typography>
       <Card style={{ margin: '56px auto 0', borderRadius: '24px', height: 'fit-content' }}>
         {adHocObservationsResults ? (
-          <Table
-            id='biomass-measurement-table'
-            columns={columns}
-            rows={adHocObservationsResults || []}
-            orderBy='startDate'
-            Renderer={BiomassMeasurementRenderer}
+          <ListMapView
+            initialView='list'
+            list={<BiomassMeasurementList adHocObservationsResults={adHocObservationsResults} />}
+            map={
+              selectedPlantingSite && selectedPlantingSite.id !== -1 ? (
+                <BiomassMeasurementMapView
+                  observationsResults={adHocObservationsResults}
+                  selectedPlantingSite={selectedPlantingSite}
+                />
+              ) : (
+                <AllPlantingSitesMapView />
+              )
+            }
+            onView={setView}
+            search={<Search search={''} onSearch={() => true} />}
+            style={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}
           />
         ) : (
           <EmptyStateContent
