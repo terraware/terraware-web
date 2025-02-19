@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import { PlantingSiteMap } from 'src/components/Map';
 import MapDateSelect from 'src/components/common/MapDateSelect';
@@ -14,12 +15,13 @@ import TooltipContents from 'src/scenes/ObservationsRouter/map/TooltipContents';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapObject, MapSourceBaseData, MapSourceProperties } from 'src/types/Map';
-import { Observation, ObservationResultsPayload } from 'src/types/Observations';
+import { AdHocObservationResults, Observation } from 'src/types/Observations';
 import { PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type BiomassMeasurementMapViewProps = {
   hideDate?: boolean;
-  observationsResults?: ObservationResultsPayload[];
+  observationsResults?: AdHocObservationResults[];
   selectedPlantingSite: PlantingSite;
 };
 
@@ -30,6 +32,7 @@ export default function BiomassMeasurementMapView({
 }: BiomassMeasurementMapViewProps): JSX.Element {
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
+  const defaultTimeZone = useDefaultTimeZone();
 
   const observationHistory = useAppSelector((state) => selectPlantingSiteHistory(state, requestId));
 
@@ -40,7 +43,12 @@ export default function BiomassMeasurementMapView({
   );
 
   const observationsDates = useMemo(() => {
-    const uniqueDates = new Set(observationsResults?.map((obs) => obs.completedDate || obs.startDate));
+    const uniqueDates: Set<string> = new Set();
+    observationsResults?.forEach((obs) => {
+      const timeZone = selectedPlantingSite?.timeZone ?? defaultTimeZone.get().id;
+      const dateToUse = obs.completedTime ? getDateDisplayValue(obs.completedTime, timeZone) : obs.startDate;
+      uniqueDates.add(dateToUse);
+    });
 
     return Array.from(uniqueDates)
       ?.filter((time) => time)
@@ -73,7 +81,8 @@ export default function BiomassMeasurementMapView({
   const selectedObservation = useMemo(
     () =>
       observationsResults?.find((obs) => {
-        const dateToCheck = obs.state === 'Completed' || obs.state === 'Abandoned' ? obs.completedDate : obs.startDate;
+        const timeZone = selectedPlantingSite?.timeZone ?? defaultTimeZone.get().id;
+        const dateToCheck = obs.completedTime ? getDateDisplayValue(obs.completedTime, timeZone) : obs.startDate;
         return dateToCheck === selectedObservationDate;
       }),
     [observationsResults, selectedObservationDate]
@@ -113,6 +122,7 @@ export default function BiomassMeasurementMapView({
         subzone: undefined,
         permanentPlot: undefined,
         temporaryPlot: undefined,
+        adHocPlot: undefined,
       };
     }
 

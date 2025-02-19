@@ -7,10 +7,11 @@ import Card from 'src/components/common/Card';
 import { View } from 'src/components/common/ListMapSelector';
 import Search from 'src/components/common/SearchFiltersWrapper';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
-import { selectAdHocObservationsResults } from 'src/redux/features/observations/observationsSelectors';
+import { searchAdHocObservations } from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import BiomassMeasurementList from './BiomassMeasurementListView';
 import BiomassMeasurementMapView from './BiomassMeasurementMapView';
@@ -23,8 +24,10 @@ export type BiomassMeasurementProps = {
 export default function BiomassMeasurement({ selectedPlantingSite }: BiomassMeasurementProps): JSX.Element {
   const theme = useTheme();
   const [view, setView] = useState<View>();
-
-  const allAdHocObservationsResults = useAppSelector(selectAdHocObservationsResults);
+  const defaultTimeZone = useDefaultTimeZone();
+  const allAdHocObservationsResults = useAppSelector((state) =>
+    searchAdHocObservations(state, selectedPlantingSite?.id || -1, defaultTimeZone.get().id, '')
+  );
   const adHocObservationsResults = useMemo(() => {
     if (!allAdHocObservationsResults || !selectedPlantingSite?.id) {
       return [];
@@ -50,32 +53,31 @@ export default function BiomassMeasurement({ selectedPlantingSite }: BiomassMeas
       >
         {strings.BIOMASS_MEASUREMENT}
       </Typography>
-      <Card style={{ margin: '56px auto 0', borderRadius: '24px', height: 'fit-content' }}>
-        {adHocObservationsResults ? (
-          <ListMapView
-            initialView='list'
-            list={<BiomassMeasurementList adHocObservationsResults={adHocObservationsResults} />}
-            map={
-              selectedPlantingSite && selectedPlantingSite.id !== -1 ? (
-                <BiomassMeasurementMapView
-                  observationsResults={adHocObservationsResults}
-                  selectedPlantingSite={selectedPlantingSite}
-                />
-              ) : (
-                <AllPlantingSitesMapView />
-              )
-            }
-            onView={setView}
-            search={<Search search={''} onSearch={() => true} />}
-            style={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}
-          />
-        ) : (
-          <EmptyStateContent
-            title={''}
-            subtitle={[strings.BIOMASS_EMPTY_STATE_MESSAGE_1, strings.BIOMASS_EMPTY_STATE_MESSAGE_2]}
-          />
-        )}
-      </Card>
+
+      {adHocObservationsResults && adHocObservationsResults.length > 0 ? (
+        <ListMapView
+          initialView='list'
+          list={<BiomassMeasurementList adHocObservationsResults={adHocObservationsResults} />}
+          map={
+            selectedPlantingSite && selectedPlantingSite.id !== -1 ? (
+              <BiomassMeasurementMapView
+                observationsResults={adHocObservationsResults}
+                selectedPlantingSite={selectedPlantingSite}
+              />
+            ) : (
+              <AllPlantingSitesMapView />
+            )
+          }
+          onView={setView}
+          search={<Search search={''} onSearch={() => true} />}
+          style={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}
+        />
+      ) : (
+        <EmptyStateContent
+          title={''}
+          subtitle={[strings.BIOMASS_EMPTY_STATE_MESSAGE_1, strings.BIOMASS_EMPTY_STATE_MESSAGE_2]}
+        />
+      )}
     </Card>
   );
 }

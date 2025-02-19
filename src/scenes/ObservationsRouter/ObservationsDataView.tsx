@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
@@ -53,9 +53,20 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
     )
   );
 
-  const adHocObservationsResults = useAppSelector((state) =>
+  const allAdHocObservationsResults = useAppSelector((state) =>
     searchAdHocObservations(state, selectedPlantingSiteId, defaultTimeZone.get().id, searchProps.search)
   );
+
+  const adHocObservationsResults = useMemo(() => {
+    if (!allAdHocObservationsResults || !selectedPlantingSite?.id) {
+      return [];
+    }
+
+    return allAdHocObservationsResults?.filter((observationResult) => {
+      const isMonitoring = observationResult.type === 'Monitoring';
+      return isMonitoring;
+    });
+  }, [allAdHocObservationsResults, selectedPlantingSite]);
 
   const zoneNames = useAppSelector((state) =>
     selectObservationsZoneNames(state, selectedPlantingSiteId, searchProps.filtersProps?.filters.status?.values)
