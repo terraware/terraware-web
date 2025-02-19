@@ -37,11 +37,16 @@ export type ObservationResults = Omit<ObservationResultsPayload, 'species'> &
     hasObservedTemporaryPlots: boolean;
   };
 
-export type AdHocObservationResults = ObservationResultsPayload & {
-  plantingSiteName: string;
-  totalPlants: number;
-  plotName?: string;
-};
+export type AdHocObservationResults = Omit<
+  ObservationResultsPayload &
+    Boundary & {
+      plantingSiteName: string;
+      totalPlants: number;
+      plotName?: string;
+      plantingZones: ObservationPlantingZoneResultsWithLastObv[];
+    },
+  'plantingZones'
+> & { plantingZones: ObservationPlantingZoneResultsWithLastObv[] };
 
 export type ObservationResultsWithLastObv = Omit<
   Omit<ObservationResultsPayload, 'species'> &

@@ -284,7 +284,7 @@ export const has25mPlots = (
 
 export const mergeAdHocObservations = (
   observations: ObservationResultsPayload[],
-  _defaultTimeZone: string,
+  defaultTimeZone: string,
   plantingSites?: PlantingSite[]
 ): AdHocObservationResults[] => {
   const sites = reverseMap(plantingSites ?? [], 'site');
@@ -294,10 +294,23 @@ export const mergeAdHocObservations = (
     .map((observation: ObservationResultsPayload): AdHocObservationResults => {
       const { plantingSiteId } = observation;
       const site = sites[plantingSiteId];
+      const zones = zonesReverseMap(plantingSites ?? []);
+      const subzones = subzonesReverseMap(plantingSites ?? []);
+      const species = speciesReverseMap([]);
+
+      const mergedZones = mergeZones(
+        observation.plantingZones,
+        zones,
+        subzones,
+        species,
+        site.timeZone ?? defaultTimeZone
+      );
 
       return {
         ...observation,
+        boundary: site.boundary,
         plantingSiteName: site.name,
+        plantingZones: mergedZones,
         plotName: observation?.adHocPlot?.monitoringPlotName,
         totalPlants: observation.plantingZones.reduce((acc, curr) => acc + curr.totalPlants, 0),
       };
