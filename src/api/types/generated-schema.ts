@@ -701,6 +701,98 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/accelerator/projects/{projectId}/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List project accelerator reports.
+         * @description By default, reports more than 30 days in the future, or marked as Not Needed will be omitted. Optionally query by year, or include metrics.
+         */
+        get: operations["listAcceleratorReports"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/configs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List accelerator report configurations. */
+        get: operations["listAcceleratorReportConfig"];
+        /**
+         * Insert accelerator report configuration.
+         * @description Set up an accelerator report configuration for a project. This will createall the reports within the reporting period.
+         */
+        put: operations["createAcceleratorReportConfig"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/{reportId}/metrics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update metric entries for a report */
+        post: operations["updateAcceleratorReportMetrics"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/{reportId}/metrics/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Review metric entries for a report */
+        post: operations["reviewAcceleratorReport_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/{reportId}/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Review a report */
+        post: operations["reviewAcceleratorReport"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/accelerator/projects/{projectId}/scores": {
         parameters: {
             query?: never;
@@ -779,6 +871,41 @@ export interface paths {
          * @description Remove the voters from the project phase, making them ineligible from voting. This is different from undoing a vote (by setting the `voteOption` to `null`). To remove voters from the entire project phase, set `userId` to `null`, and set `phaseDelete` to `true`
          */
         delete: operations["deleteProjectVotes"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/reports/standardMetrics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List all standard metric. */
+        get: operations["listStandardMetric"];
+        /** Insert standard metric, that projects will report on all future reports. */
+        put: operations["createStandardMetric"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/reports/standardMetrics/{metricId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update one standard metric by ID. */
+        post: operations["updateStandardMetric"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -3641,6 +3768,29 @@ export interface components {
             /** Format: int64 */
             participantId?: number;
         };
+        AcceleratorReportPayload: {
+            /** Format: date */
+            endDate: string;
+            feedback?: string;
+            /** Format: int64 */
+            id: number;
+            internalComment?: string;
+            /** Format: int64 */
+            modifiedBy: number;
+            /** Format: date-time */
+            modifiedTime: string;
+            /** Format: int64 */
+            projectId: number;
+            standardMetrics: components["schemas"]["ReportStandardMetricPayload"][];
+            /** Format: date */
+            startDate: string;
+            /** @enum {string} */
+            status: "Not Submitted" | "Submitted" | "Approved" | "Needs Update" | "Not Needed";
+            /** Format: int64 */
+            submittedBy?: number;
+            /** Format: date-time */
+            submittedTime?: string;
+        };
         AccessionHistoryEntryPayload: {
             /** Format: int64 */
             batchId?: number;
@@ -4187,42 +4337,6 @@ export interface components {
             /** Format: int32 */
             readyQuantityWithdrawn: number;
         };
-        /** @description Biomass Measurements. Required for biomass measurement observations */
-        BiomassMeasurementPayload: {
-            description?: string;
-            /** @enum {string} */
-            forestType: "Terrestrial" | "Mangrove";
-            /** Format: int32 */
-            herbaceousCoverPercent: number;
-            /** @description Required for Mangrove forest. */
-            ph?: number;
-            quadrats: components["schemas"]["BiomassQuadratPayload"][];
-            /** @description Measured in ppt Required for Mangrove forest. */
-            salinity?: number;
-            /** Format: int32 */
-            smallTreeCountHigh: number;
-            /** Format: int32 */
-            smallTreeCountLow: number;
-            soilAssessment: string;
-            /** @description List of herbaceous and tree species. Includes all recorded quadrat and additional herbaceous species and recorded tree species. Species not assigned to a quadrat or recorded trees will be saved as an additional herbaceous species. */
-            species: components["schemas"]["BiomassSpeciesPayload"][];
-            /**
-             * @description Low or high tide. Required for Mangrove forest.
-             * @enum {string}
-             */
-            tide?: "Low" | "High";
-            /**
-             * Format: date-time
-             * @description Time when ide is observed. Required for Mangrove forest.
-             */
-            tideTime?: string;
-            trees: components["schemas"]["RecordedTreePayload"][];
-            /**
-             * Format: int32
-             * @description Measured in centimeters. Required for Mangrove forest.
-             */
-            waterDepth?: number;
-        };
         BiomassQuadratPayload: {
             description?: string;
             /** @enum {string} */
@@ -4313,7 +4427,7 @@ export interface components {
         };
         CompleteAdHocObservationRequestPayload: {
             /** @description Biomass Measurements. Required for biomass measurement observations */
-            biomassMeasurements?: components["schemas"]["BiomassMeasurementPayload"];
+            biomassMeasurements?: components["schemas"]["NewBiomassMeasurementPayload"];
             conditions: ("AnimalDamage" | "FastGrowth" | "FavorableWeather" | "Fungus" | "Pests" | "SeedProduction" | "UnfavorableWeather")[];
             notes?: string;
             /**
@@ -4352,6 +4466,9 @@ export interface components {
              */
             observedTime: string;
             plants: components["schemas"]["RecordedPlantPayload"][];
+        };
+        CreateAcceleratorReportConfigRequestPayload: {
+            config: components["schemas"]["NewAcceleratorReportConfigPayload"];
         };
         CreateAccessionRequestPayloadV2: {
             bagNumbers?: string[];
@@ -4782,6 +4899,9 @@ export interface components {
             id: number;
             status: components["schemas"]["SuccessOrError"];
         };
+        CreateStandardMetricRequestPayload: {
+            metric: components["schemas"]["NewStandardMetricPayload"];
+        };
         CreateSubLocationRequestPayload: {
             name: string;
         };
@@ -5156,6 +5276,51 @@ export interface components {
         ErrorDetails: {
             message: string;
         };
+        ExistingAcceleratorReportConfigPayload: {
+            /** Format: int64 */
+            configId: number;
+            /** @enum {string} */
+            frequency: "Quarterly" | "Annual";
+            /** Format: int64 */
+            projectId: number;
+            /** Format: date */
+            reportingEndDate: string;
+            /** Format: date */
+            reportingStartDate: string;
+        };
+        ExistingBiomassMeasurementPayload: {
+            description?: string;
+            /** @enum {string} */
+            forestType: "Terrestrial" | "Mangrove";
+            /** Format: int32 */
+            herbaceousCoverPercent: number;
+            ph?: number;
+            quadrats: components["schemas"]["BiomassQuadratPayload"][];
+            /** @description Measured in ppt */
+            salinity?: number;
+            /** Format: int32 */
+            smallTreeCountHigh: number;
+            /** Format: int32 */
+            smallTreeCountLow: number;
+            soilAssessment: string;
+            species: components["schemas"]["BiomassSpeciesPayload"][];
+            /**
+             * @description Low or high tide.
+             * @enum {string}
+             */
+            tide?: "Low" | "High";
+            /**
+             * Format: date-time
+             * @description Time when ide is observed.
+             */
+            tideTime?: string;
+            trees: components["schemas"]["ExistingTreePayload"][];
+            /**
+             * Format: int32
+             * @description Measured in centimeters.
+             */
+            waterDepth?: number;
+        };
         ExistingDateValuePayload: Omit<WithRequired<components["schemas"]["ExistingValuePayload"], "id" | "listPosition" | "type">, "type"> & {
             /** Format: date */
             dateValue: string;
@@ -5245,6 +5410,17 @@ export interface components {
              */
             type: "Select";
         };
+        ExistingStandardMetricPayload: {
+            /** @enum {string} */
+            component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            description?: string;
+            /** Format: int64 */
+            id: number;
+            name: string;
+            reference: string;
+            /** @enum {string} */
+            type: "Activity" | "Output" | "Outcome" | "Impact";
+        };
         /** @description A row in a table. Each row has its own value ID. ExistingVariableValuesPayload includes this ID for values of variables that are defined as columns of a table. */
         ExistingTableValuePayload: Omit<WithRequired<components["schemas"]["ExistingValuePayload"], "id" | "listPosition" | "type">, "type"> & {
             /**
@@ -5261,6 +5437,27 @@ export interface components {
              * @enum {string}
              */
             type: "Text";
+        };
+        ExistingTreePayload: {
+            description?: string;
+            /** @description Measured in centimeters. */
+            diameterAtBreastHeight?: number;
+            /** @description Measured in meters. */
+            height?: number;
+            isDead: boolean;
+            /** @description Measured in meters. */
+            pointOfMeasurement?: number;
+            /** Format: int32 */
+            shrubDiameter?: number;
+            /** Format: int64 */
+            speciesId?: number;
+            speciesName?: string;
+            /** @enum {string} */
+            treeGrowthForm: "Tree" | "Shrub" | "Trunk";
+            /** Format: int32 */
+            treeNumber: number;
+            /** Format: int32 */
+            trunkNumber: number;
         };
         ExistingValuePayload: {
             citation?: string;
@@ -5899,6 +6096,14 @@ export interface components {
             organizations: components["schemas"]["AcceleratorOrganizationPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
+        ListAcceleratorReportConfigResponsePayload: {
+            configs: components["schemas"]["ExistingAcceleratorReportConfigPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        ListAcceleratorReportsResponsePayload: {
+            reports: components["schemas"]["AcceleratorReportPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
         ListAdHocObservationResultsResponsePayload: {
             observations: components["schemas"]["ObservationResultsPayload"][];
             status: components["schemas"]["SuccessOrError"];
@@ -6141,6 +6346,10 @@ export interface components {
             species: components["schemas"]["SpeciesResponseElement"][];
             status: components["schemas"]["SuccessOrError"];
         };
+        ListStandardMetricsResponsePayload: {
+            metrics: components["schemas"]["ExistingStandardMetricPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
         ListSubLocationsResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
             subLocations: components["schemas"]["SubLocationPayload"][];
@@ -6286,6 +6495,50 @@ export interface components {
              */
             type: "MultiPolygon";
         };
+        NewAcceleratorReportConfigPayload: {
+            /** @enum {string} */
+            frequency: "Quarterly" | "Annual";
+            /** Format: date */
+            reportingEndDate: string;
+            /** Format: date */
+            reportingStartDate: string;
+        };
+        /** @description Biomass Measurements. Required for biomass measurement observations */
+        NewBiomassMeasurementPayload: {
+            description?: string;
+            /** @enum {string} */
+            forestType: "Terrestrial" | "Mangrove";
+            /** Format: int32 */
+            herbaceousCoverPercent: number;
+            /** @description Required for Mangrove forest. */
+            ph?: number;
+            quadrats: components["schemas"]["BiomassQuadratPayload"][];
+            /** @description Measured in ppt. Required for Mangrove forest. */
+            salinity?: number;
+            /** Format: int32 */
+            smallTreeCountHigh: number;
+            /** Format: int32 */
+            smallTreeCountLow: number;
+            soilAssessment: string;
+            /** @description List of herbaceous and tree species. Includes all recorded quadrat and additional herbaceous species and recorded tree species. Species not assigned to a quadrat or recorded trees will be saved as an additional herbaceous species. */
+            species: components["schemas"]["BiomassSpeciesPayload"][];
+            /**
+             * @description Low or high tide. Required for Mangrove forest.
+             * @enum {string}
+             */
+            tide?: "Low" | "High";
+            /**
+             * Format: date-time
+             * @description Time when ide is observed. Required for Mangrove forest.
+             */
+            tideTime?: string;
+            trees: (components["schemas"]["NewShrubPayload"] | components["schemas"]["NewTreeWithTrunksPayload"])[];
+            /**
+             * Format: int32
+             * @description Measured in centimeters. Required for Mangrove forest.
+             */
+            waterDepth?: number;
+        };
         NewDateValuePayload: Omit<components["schemas"]["NewValuePayload"], "type"> & {
             citation?: string;
             /** Format: date */
@@ -6394,6 +6647,30 @@ export interface components {
              */
             type: "Select";
         };
+        NewShrubPayload: Omit<components["schemas"]["NewTreePayload"], "growthForm"> & {
+            description?: string;
+            isDead: boolean;
+            /**
+             * Format: int32
+             * @description Measured in centimeters.
+             */
+            shrubDiameter: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            growthForm: "shrub";
+        };
+        NewStandardMetricPayload: {
+            /** @enum {string} */
+            component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            description?: string;
+            name: string;
+            reference: string;
+            /** @enum {string} */
+            type: "Activity" | "Output" | "Outcome" | "Impact";
+        };
         NewTableValuePayload: Omit<components["schemas"]["NewValuePayload"], "type"> & {
             /** @description Citations on table values can be used if you want a citation that is associated with the table as a whole rather than with individual cells, or if you want a citation on an empty table: append a row with no column values but with a citation. */
             citation?: string;
@@ -6413,6 +6690,31 @@ export interface components {
              * @enum {string}
              */
             type: "Text";
+        };
+        NewTreePayload: {
+            growthForm: string;
+            /** Format: int64 */
+            speciesId?: number;
+            speciesName?: string;
+        };
+        NewTreeWithTrunksPayload: Omit<components["schemas"]["NewTreePayload"], "growthForm"> & {
+            trunks: components["schemas"]["NewTrunkPayload"][];
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            growthForm: "tree";
+        };
+        NewTrunkPayload: {
+            description?: string;
+            /** @description Measured in centimeters. */
+            diameterAtBreastHeight: number;
+            /** @description Measured in meters. */
+            height?: number;
+            isDead: boolean;
+            /** @description Measured in meters. */
+            pointOfMeasurement: number;
         };
         /** @description Supertype for payloads that represent new variable values. See the descriptions of individual payload types for more details. */
         NewValuePayload: {
@@ -6728,7 +7030,7 @@ export interface components {
         };
         ObservationResultsPayload: {
             adHocPlot?: components["schemas"]["ObservationMonitoringPlotResultsPayload"];
-            biomassMeasurements?: components["schemas"]["BiomassMeasurementPayload"];
+            biomassMeasurements?: components["schemas"]["ExistingBiomassMeasurementPayload"];
             /** Format: date-time */
             completedTime?: string;
             /**
@@ -7449,14 +7751,6 @@ export interface components {
             failures?: components["schemas"]["TimeseriesValuesErrorPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
-        RecordedBranchPayload: {
-            description?: string;
-            /** @description Measured in centimeters. */
-            diameterAtBreastHeight: number;
-            isDead: boolean;
-            /** @description Measured in meters. */
-            pointOfMeasurement: number;
-        };
         RecordedPlantPayload: {
             /** @enum {string} */
             certainty: "Known" | "Other" | "Unknown";
@@ -7471,29 +7765,6 @@ export interface components {
             speciesName?: string;
             /** @enum {string} */
             status: "Live" | "Dead" | "Existing";
-        };
-        RecordedTreePayload: {
-            branches: components["schemas"]["RecordedBranchPayload"][];
-            description?: string;
-            /** @description Measured in centimeters, required if growth form is Tree. */
-            diameterAtBreastHeight?: number;
-            /** @description Measured in meters, required if diameter at breast height is above 5cm. */
-            height?: number;
-            isDead: boolean;
-            /** @description Required if growth form is Tree. */
-            isTrunk?: boolean;
-            /** @description Measured in meters, required if growth form is Tree. */
-            pointOfMeasurement?: number;
-            /**
-             * Format: int32
-             * @description Measured in centimeters, required if growth form is Shrub.
-             */
-            shrubDiameter?: number;
-            /** Format: int64 */
-            speciesId?: number;
-            speciesName?: string;
-            /** @enum {string} */
-            treeGrowthForm: "Tree" | "Shrub";
         };
         ReplaceObservationPlotRequestPayload: {
             /** @enum {string} */
@@ -7530,6 +7801,42 @@ export interface components {
              */
             operation: "Replace";
         };
+        ReportReviewPayload: {
+            feedback?: string;
+            internalComment?: string;
+            /**
+             * @description Must be unchanged if a report has not been submitted yet.
+             * @enum {string}
+             */
+            status: "Not Submitted" | "Submitted" | "Approved" | "Needs Update" | "Not Needed";
+        };
+        ReportStandardMetricEntriesPayload: {
+            /** Format: int64 */
+            id: number;
+            internalComment?: string;
+            notes?: string;
+            /** Format: int32 */
+            target?: number;
+            /** Format: int32 */
+            value?: number;
+        };
+        ReportStandardMetricPayload: {
+            /** @enum {string} */
+            component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            description?: string;
+            /** Format: int64 */
+            id: number;
+            internalComment?: string;
+            name: string;
+            notes?: string;
+            reference: string;
+            /** Format: int32 */
+            target?: number;
+            /** @enum {string} */
+            type: "Activity" | "Output" | "Outcome" | "Impact";
+            /** Format: int32 */
+            value?: number;
+        };
         RescheduleObservationRequestPayload: {
             /**
              * Format: date
@@ -7545,6 +7852,12 @@ export interface components {
         ResolveUploadRequestPayload: {
             /** @description If true, the data for entries that already exist will be overwritten with the values in the uploaded file. If false, only entries that don't already exist will be imported. */
             overwriteExisting: boolean;
+        };
+        ReviewAcceleratorReportMetricsRequestPayload: {
+            standardMetrics: components["schemas"]["ReportStandardMetricEntriesPayload"][];
+        };
+        ReviewAcceleratorReportRequestPayload: {
+            review: components["schemas"]["ReportReviewPayload"];
         };
         ReviewApplicationRequestPayload: {
             feedback?: string;
@@ -7563,8 +7876,8 @@ export interface components {
              * @description Which planting site this observation needs to be scheduled for.
              */
             plantingSiteId: number;
-            /** @description If this observation should only cover specific parts of the planting site, the IDs of the subzones it should include. */
-            requestedSubzoneIds?: number[];
+            /** @description The IDs of the subzones this observation should cover. */
+            requestedSubzoneIds: number[];
             /**
              * Format: date
              * @description The start date for this observation, can be up to a year from the date this schedule request occurs on.
@@ -8016,6 +8329,9 @@ export interface components {
             timeseriesName: string;
             values: components["schemas"]["TimeseriesValuePayload"][];
         };
+        UpdateAcceleratorReportMetricsRequestPayload: {
+            standardMetrics: components["schemas"]["ReportStandardMetricEntriesPayload"][];
+        };
         UpdateAccessionRequestPayloadV2: {
             bagNumbers?: string[];
             /** Format: date */
@@ -8393,6 +8709,9 @@ export interface components {
         };
         UpdateSavedDocumentVersionRequestPayload: {
             isSubmitted: boolean;
+        };
+        UpdateStandardMetricRequestPayload: {
+            metric: components["schemas"]["ExistingStandardMetricPayload"];
         };
         UpdateSubLocationRequestPayload: {
             name: string;
@@ -10355,6 +10674,252 @@ export interface operations {
             };
         };
     };
+    listAcceleratorReports: {
+        parameters: {
+            query?: {
+                year?: number;
+                includeArchived?: boolean;
+                includeFuture?: boolean;
+                includeMetrics?: boolean;
+            };
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListAcceleratorReportsResponsePayload"];
+                };
+            };
+        };
+    };
+    listAcceleratorReportConfig: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListAcceleratorReportConfigResponsePayload"];
+                };
+            };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    createAcceleratorReportConfig: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateAcceleratorReportConfigRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    updateAcceleratorReportMetrics: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+                reportId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateAcceleratorReportMetricsRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    reviewAcceleratorReport_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+                reportId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReviewAcceleratorReportMetricsRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    reviewAcceleratorReport: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+                reportId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReviewAcceleratorReportRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
     getProjectScores: {
         parameters: {
             query?: never;
@@ -10626,6 +11191,76 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    listStandardMetric: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListStandardMetricsResponsePayload"];
+                };
+            };
+        };
+    };
+    createStandardMetric: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateStandardMetricRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    updateStandardMetric: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                metricId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateStandardMetricRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
                 };
             };
         };
