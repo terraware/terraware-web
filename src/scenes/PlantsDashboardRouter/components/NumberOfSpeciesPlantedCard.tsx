@@ -4,6 +4,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
 
 import BarChart from 'src/components/common/Chart/BarChart';
+import FormattedNumber from 'src/components/common/FormattedNumber';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useUser } from 'src/providers';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
@@ -219,7 +220,7 @@ const ChartData = ({ labels, values, totalSpecies, newVersion }: ChartDataProps)
           </Typography>
           <Box display='flex' alignItems='flex-end' flexWrap='wrap' marginBottom={theme.spacing(3)}>
             <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
-              {totalSpecies}
+              {totalSpecies !== undefined && <FormattedNumber value={totalSpecies} />}
             </Typography>
             &nbsp;
             <Typography fontSize='24px' fontWeight={600}>

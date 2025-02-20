@@ -15,6 +15,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import BiomassMeasurementList from './BiomassMeasurementListView';
 import BiomassMeasurementMapView from './BiomassMeasurementMapView';
+import BiomassMeasurementRenderer from './BiomassMeasurementRenderer';
 import { AllPlantingSitesMapView } from './ObservationsDataView';
 
 export type BiomassMeasurementProps = {

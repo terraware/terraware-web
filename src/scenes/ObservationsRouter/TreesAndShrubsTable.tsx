@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Box } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -61,16 +61,18 @@ export default function TreesAndShrubsTable({ trees, allSpecies }: TreesAndShrub
     },
   ];
 
-  const treessWithData = trees?.map((tree) => {
-    const foundSpecies = availableSpecies?.find((avSpecies) => avSpecies.id === tree.speciesId);
-    const biomassSpecies = allSpecies?.find((bmSpecies) => bmSpecies.speciesId === tree.speciesId);
-    return {
-      ...tree,
-      speciesName: foundSpecies?.scientificName || tree.speciesName,
-      invasive: biomassSpecies?.isInvasive,
-      threatened: biomassSpecies?.isThreatened,
-    };
-  });
+  const treessWithData = useMemo(() => {
+    return trees?.map((tree) => {
+      const foundSpecies = availableSpecies?.find((avSpecies) => avSpecies.id === tree.speciesId);
+      const biomassSpecies = allSpecies?.find((bmSpecies) => bmSpecies.speciesId === tree.speciesId);
+      return {
+        ...tree,
+        speciesName: foundSpecies?.scientificName || tree.speciesName,
+        invasive: biomassSpecies?.isInvasive,
+        threatened: biomassSpecies?.isThreatened,
+      };
+    });
+  }, [availableSpecies, allSpecies]);
 
   return (
     <Box>
