@@ -48,7 +48,7 @@ export default function QuadratSpeciesTable({ species, quadrat, allSpecies }: Qu
   });
 
   return (
-    <Box height={'160px'} padding={2}>
+    <Box minHeight={'160px'} padding={2}>
       <Table id={`quadrat-species-${quadrat}`} orderBy={'speciesName'} rows={speciesWithData || []} columns={columns} />
     </Box>
   );
