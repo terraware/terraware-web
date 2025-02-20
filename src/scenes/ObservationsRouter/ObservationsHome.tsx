@@ -24,8 +24,7 @@ import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
 import { PlantingSite } from 'src/types/Tracking';
 import { isAdmin } from 'src/utils/organization';
-import useQuery from 'src/utils/useQuery';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import useStickyTabs from 'src/utils/useStickyTabs';
 
 import BiomassMeasurement from './BiomassMeasurement';
 import ObservationsDataView from './ObservationsDataView';
@@ -43,27 +42,35 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
-  const location = useStateLocation();
   const [plantsSitePreferences, setPlantsSitePreferences] = useState<Record<string, unknown>>();
-  const query = useQuery();
-  const tab = query.get('tab') || 'plantMonitoring';
-  const [activeTab, setActiveTab] = useState<string>(tab);
   const [view, setView] = useState<View>();
   const plantingSites = useAppSelector(selectPlantingSites);
   const adHocObservationSupportEnabled = isEnabled('Ad Hoc Observation Support');
 
-  useEffect(() => {
-    setActiveTab(tab);
-  }, [tab]);
+  const tabs = useMemo(() => {
+    if (!activeLocale) {
+      return [];
+    }
+    return [
+      {
+        id: 'plantMonitoring',
+        label: strings.PLANT_MONITORING,
+        children: <PlantMonitoring {...props} selectedPlantingSite={selectedPlantingSite} />,
+      },
+      {
+        id: 'biomassMeasurements',
+        label: strings.BIOMASS_MEASUREMENT,
+        children: <BiomassMeasurement selectedPlantingSite={selectedPlantingSite} />,
+      },
+    ];
+  }, [activeLocale, selectedPlantingSite]);
 
-  const onTabChange = useCallback(
-    (newTab: string) => {
-      query.set('tab', newTab);
-      navigate(getLocation(location.pathname, location, query.toString()));
-    },
-    [query, navigate, location]
-  );
-
+  const { activeTab, onTabChange } = useStickyTabs({
+    defaultTab: 'plantMonitoring',
+    tabs,
+    viewIdentifier: 'accelerator-overview',
+    keepQuery: false,
+  });
   const allObservationsResults = useAppSelector(selectObservationsResults);
   const observationsResults = useMemo(() => {
     if (!allObservationsResults || !selectedPlantingSite?.id) {
@@ -130,22 +137,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
       <Box display='flex' flexGrow={1} flexDirection='column'>
         <ObservationsEventsNotification events={upcomingObservations} />
         {adHocObservationSupportEnabled ? (
-          <Tabs
-            activeTab={activeTab}
-            onTabChange={onTabChange}
-            tabs={[
-              {
-                id: 'plantMonitoring',
-                label: strings.PLANT_MONITORING,
-                children: <PlantMonitoring {...props} selectedPlantingSite={selectedPlantingSite} />,
-              },
-              {
-                id: 'biomassMeasurements',
-                label: strings.BIOMASS_MEASUREMENT,
-                children: <BiomassMeasurement selectedPlantingSite={selectedPlantingSite} />,
-              },
-            ]}
-          />
+          <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
         ) : (
           <>
             {observationsResults === undefined ? (
