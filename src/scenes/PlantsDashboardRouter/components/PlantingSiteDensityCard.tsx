@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 
+import FormattedNumber from 'src/components/common/FormattedNumber';
 import useObservationSummaries from 'src/hooks/useObservationSummaries';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
@@ -34,7 +35,7 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingSite
   return (
     <Box>
       <Typography fontSize='48px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)}>
-        {summaries?.[0]?.plantingDensity ?? 0}
+        <FormattedNumber value={summaries?.[0]?.plantingDensity ?? 0} />
       </Typography>
       <Typography fontSize='16px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)}>
         {`${strings.PLANTS_PER_HECTARE.charAt(0).toUpperCase()}${strings.PLANTS_PER_HECTARE.slice(1)}`}

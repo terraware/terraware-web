@@ -64,7 +64,7 @@ export default function PlantsAndSpeciesCard({
             </Tooltip>
           </Box>
           <Typography fontSize={'48px'} fontWeight={600} marginTop={1}>
-            {siteReportedPlants?.totalPlants}
+            {siteReportedPlants && <FormattedNumber value={siteReportedPlants.totalPlants} />}
           </Typography>
         </Box>
         <Box marginTop={3}>
