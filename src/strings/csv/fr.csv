@@ -883,7 +883,7 @@ MATCH_SPECIES_MODAL_DESCRIPTION,"Sélectionnez les correspondances pour les esp�
 MATCH_UNRECOGNIZED_SPECIES,Associez les espèces non reconnues,
 MAX,Max,
 MAXIMUM_CARBON_ACCUMULATION,Accumulation maximale de carbone (tCO2/ha/an),
-MEASUREMENT_TIME, Période de mesure,
+MEASUREMENT_TIME,Période de mesure,
 MEDIA,Médias,
 MEDIA_MIX,Mix média,
 MEETING_URL,URL de la réunion,
