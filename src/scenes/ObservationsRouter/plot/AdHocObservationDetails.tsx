@@ -50,7 +50,6 @@ export default function AdHocObservationDetails(): JSX.Element {
 
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
   const timeZone = plantingSite?.timeZone ?? defaultTimeZone.get().id;
-  const biomassMeasurements = observation?.biomassMeasurements;
 
   const gridSize = isMobile ? 12 : 4;
 

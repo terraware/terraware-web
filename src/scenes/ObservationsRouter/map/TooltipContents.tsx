@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Portal } from '@mui/base';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import { useMapPortalContainer } from 'src/components/Map/MapRenderUtils';
 import { useOrganization } from 'src/providers';
@@ -60,17 +61,24 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
           ) : (
             <>
               <Typography fontSize='16px' fontWeight={400}>
-                {`${strings.PLANTS}: ${numPlants ?? strings.UNKNOWN}`}
+                {`${monitoringPlot.isAdHoc ? strings.TREES_TRUNKS : strings.PLANTS}: ${numPlants ?? strings.UNKNOWN}`}
               </Typography>
               <Typography fontSize='16px' fontWeight={400}>
                 {`${strings.SPECIES}: ${numSpecies ?? strings.UNKNOWN}`}
               </Typography>
-              <Typography fontSize='16px' fontWeight={400}>
-                {`${strings.PLANTING_DENSITY}: ${plantingDensity ? `${plantingDensity} ${strings.PLANTS_PER_HECTARE}` : strings.UNKNOWN} `}
-              </Typography>
-              <Typography fontSize='16px' fontWeight={400}>
-                {`${strings.MORTALITY_RATE}: ${percentMortality ? `${percentMortality} %` : strings.UNKNOWN} `}
-              </Typography>
+
+              {monitoringPlot.isAdHoc ? (
+                <Typography>{`${strings.DATE}: ${getDateDisplayValue(monitoringPlot?.completedTime || '')} `}</Typography>
+              ) : (
+                <>
+                  <Typography fontSize='16px' fontWeight={400}>
+                    {`${strings.PLANTING_DENSITY}: ${plantingDensity ? `${plantingDensity} ${strings.PLANTS_PER_HECTARE}` : strings.UNKNOWN} `}
+                  </Typography>
+                  <Typography fontSize='16px' fontWeight={400}>
+                    {`${strings.MORTALITY_RATE}: ${percentMortality ? `${percentMortality} %` : strings.UNKNOWN} `}
+                  </Typography>
+                </>
+              )}
             </>
           )}
         </Box>

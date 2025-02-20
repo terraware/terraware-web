@@ -142,6 +142,8 @@ export default function BiomassMeasurementMapView({
   const contextRenderer = useCallback(
     (properties: MapSourceProperties): JSX.Element | null => {
       let entity: any;
+
+      console.log('selectedObservation', selectedObservation);
       if (properties.type === 'site') {
         entity = selectedObservation;
       } else if (properties.type === 'zone') {
@@ -150,10 +152,13 @@ export default function BiomassMeasurementMapView({
           plantingSiteHistory?.plantingZones.find((z) => z.plantingZoneId === properties.id);
       } else {
         // monitoring plot
-        entity = selectedObservation?.plantingZones
-          ?.flatMap((z) => z.plantingSubzones)
-          ?.flatMap((sz) => sz.monitoringPlots)
-          ?.find((p) => p.monitoringPlotId === properties.id);
+        const adHocPlotCopy = {
+          ...selectedObservation?.adHocPlot,
+          totalSpecies: selectedObservation?.biomassMeasurements?.species.length,
+          totalPlants: selectedObservation?.biomassMeasurements?.trees.length,
+        };
+
+        entity = adHocPlotCopy;
       }
 
       if (!entity) {
@@ -166,7 +171,7 @@ export default function BiomassMeasurementMapView({
           observationId={selectedObservation?.observationId}
           observationState={selectedObservation?.state}
           plantingSiteId={selectedPlantingSite.id}
-          title={`${properties.name}${properties.type === 'temporaryPlot' ? ` (${strings.TEMPORARY})` : ''}`}
+          title={`${properties.name}${properties.type === 'temporaryPlot' ? ` (${strings.TEMPORARY})` : properties.type === 'adHocPlot' ? ` (${strings.AD_HOC})` : properties.type === 'permanentPlot' ? ` (${strings.PERMANENT})` : ''}`}
         />
       );
     },

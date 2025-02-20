@@ -204,9 +204,9 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
                       <MonitoringPlotPhotos
                         observationId={Number(observationId)}
                         monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
-                        photos={monitoringPlot?.photos.filter(
-                          (photo) => photo.type === 'Plot' && photo.position === 'NorthwestCorner'
-                        )}
+                        photos={monitoringPlot?.photos
+                          .filter((photo) => photo.type === 'Plot' && photo.position === 'NorthwestCorner')
+                          .filter((pic, index) => index === 0)}
                       />
                     </Grid>
                     <Grid item xs={6}>
@@ -237,9 +237,9 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
                       <MonitoringPlotPhotos
                         observationId={Number(observationId)}
                         monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
-                        photos={monitoringPlot?.photos.filter(
-                          (photo) => photo.type === 'Plot' && photo.position === 'NortheastCorner'
-                        )}
+                        photos={monitoringPlot?.photos
+                          .filter((photo) => photo.type === 'Plot' && photo.position === 'NortheastCorner')
+                          .filter((pic, index) => index === 0)}
                       />
                     </Grid>
                     <Grid item xs={6}>
@@ -270,9 +270,9 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
                       <MonitoringPlotPhotos
                         observationId={Number(observationId)}
                         monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
-                        photos={monitoringPlot?.photos.filter(
-                          (photo) => photo.type === 'Plot' && photo.position === 'SouthwestCorner'
-                        )}
+                        photos={monitoringPlot?.photos
+                          .filter((photo) => photo.type === 'Plot' && photo.position === 'SouthwestCorner')
+                          .filter((pic, index) => index === 0)}
                       />
                     </Grid>
                     <Grid item xs={6}>
@@ -303,9 +303,9 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
                       <MonitoringPlotPhotos
                         observationId={Number(observationId)}
                         monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
-                        photos={monitoringPlot?.photos.filter(
-                          (photo) => photo.type === 'Plot' && photo.position === 'SoutheastCorner'
-                        )}
+                        photos={monitoringPlot?.photos
+                          .filter((photo) => photo.type === 'Plot' && photo.position === 'SoutheastCorner')
+                          .filter((pic, index) => index === 0)}
                       />
                     </Grid>
                     <Grid item xs={6}>

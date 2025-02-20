@@ -121,7 +121,6 @@ const getPlantingSiteBoundingBox = (mapData: MapData): MapBoundingBox => {
   const subzones: MapSourceBaseData = mapData.subzone ?? { id: 'subzone', entities: [] };
   const permanentPlots: MapSourceBaseData = mapData.permanentPlot ?? { id: 'permanentPlot', entities: [] };
   const temporaryPlots: MapSourceBaseData = mapData.temporaryPlot ?? { id: 'temporaryPlot', entities: [] };
-  const adHocPlots: MapSourceBaseData = mapData.adHocPlot ?? { id: 'adHocPlot', entities: [] };
 
   const geometries: MapGeometry[] = [
     site.entities[0]?.boundary,
@@ -129,7 +128,6 @@ const getPlantingSiteBoundingBox = (mapData: MapData): MapBoundingBox => {
     ...(subzones?.entities.map((s) => s.boundary) || []),
     ...(permanentPlots?.entities.map((s) => s.boundary) || []),
     ...(temporaryPlots?.entities.map((s) => s.boundary) || []),
-    ...(adHocPlots?.entities.map((s) => s.boundary) || []),
   ].filter((g) => g);
 
   return getBoundingBox(geometries);

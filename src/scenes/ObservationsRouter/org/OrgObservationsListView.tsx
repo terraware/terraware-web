@@ -92,6 +92,7 @@ export type OrgObservationsListViewProps = {
   adHocObservationsResults?: AdHocObservationResults[];
   reload: () => void;
   selectedPlotSelection?: string;
+  timeZone: string;
 };
 
 export default function OrgObservationsListView({
@@ -100,6 +101,7 @@ export default function OrgObservationsListView({
   plantingSiteId,
   reload,
   selectedPlotSelection,
+  timeZone,
 }: OrgObservationsListViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
@@ -264,7 +266,7 @@ export default function OrgObservationsListView({
           columns={adHocColumns}
           rows={adHocObservationsResults || []}
           orderBy='observationDate'
-          Renderer={AdHocObservationsRenderer}
+          Renderer={AdHocObservationsRenderer(timeZone)}
         />
       )}
       {selectedPlotSelection === 'assigned' && (
