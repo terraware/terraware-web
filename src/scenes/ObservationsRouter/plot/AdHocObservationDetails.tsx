@@ -76,7 +76,7 @@ export default function AdHocObservationDetails(): JSX.Element {
       { label: strings.PLANTING_DENSITY, value: handleMissingData(monitoringPlot?.plantingDensity) },
       { label: strings.NUMBER_OF_PHOTOS, value: handleMissingData(monitoringPlot?.photos?.length) },
       {
-        label: strings.ADDITIONAL_INFORMATION,
+        label: strings.PLOT_CONDITIONS,
         value: monitoringPlot?.conditions?.map((condition) => getConditionString(condition)).join(','),
       },
       { label: strings.FIELD_NOTES, value: monitoringPlot?.notes, text: true },
