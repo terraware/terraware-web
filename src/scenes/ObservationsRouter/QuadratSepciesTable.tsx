@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Box } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -36,16 +36,18 @@ export default function QuadratSpeciesTable({ species, quadrat, allSpecies }: Qu
     },
   ];
 
-  const speciesWithData = species?.map((sp) => {
-    const foundSpecies = availableSpecies?.find((avSpecies) => avSpecies.id === sp.speciesId);
-    const foundBiomassSpecies = allSpecies?.find((bmSpecies) => bmSpecies.speciesId === sp.speciesId);
-    return {
-      ...sp,
-      speciesName: foundSpecies?.scientificName || sp.speciesName,
-      invasive: foundBiomassSpecies?.isInvasive,
-      threatened: foundBiomassSpecies?.isThreatened,
-    };
-  });
+  const speciesWithData = useMemo(() => {
+    return species?.map((sp) => {
+      const foundSpecies = availableSpecies?.find((avSpecies) => avSpecies.id === sp.speciesId);
+      const foundBiomassSpecies = allSpecies?.find((bmSpecies) => bmSpecies.speciesId === sp.speciesId);
+      return {
+        ...sp,
+        speciesName: foundSpecies?.scientificName || sp.speciesName,
+        invasive: foundBiomassSpecies?.isInvasive,
+        threatened: foundBiomassSpecies?.isThreatened,
+      };
+    });
+  }, [availableSpecies, allSpecies]);
 
   return (
     <Box minHeight={'160px'} padding={2}>

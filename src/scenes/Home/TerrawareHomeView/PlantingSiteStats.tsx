@@ -18,14 +18,19 @@ import { requestSitePopulation } from 'src/redux/features/tracking/trackingThunk
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
+import { useSupportedLocales } from 'src/strings/locales';
 import { PlantingSite } from 'src/types/Tracking';
 import { isAdmin } from 'src/utils/organization';
 import useMapboxToken from 'src/utils/useMapboxToken';
+import { useNumberFormatter } from 'src/utils/useNumber';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import StatsCardItem from './StatsCardItem';
 
 export const PlantingSiteStats = () => {
+  const { activeLocale } = useLocalization();
+  const supportedLocales = useSupportedLocales();
+  const numberFormatter = useNumberFormatter();
   const { isDesktop } = useDeviceInfo();
   const theme = useTheme();
   const navigate = useNavigate();
@@ -40,6 +45,11 @@ export const PlantingSiteStats = () => {
   const [totalSpecies, setTotalSpecies] = useState<number>();
   const { countries } = useLocalization();
   const dispatch = useAppDispatch();
+
+  const numericFormatter = useMemo(
+    () => numberFormatter(activeLocale, supportedLocales),
+    [activeLocale, numberFormatter, supportedLocales]
+  );
 
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, selectedPlantingSiteId || -1, defaultTimeZone.get().id)
@@ -180,7 +190,7 @@ export const PlantingSiteStats = () => {
               showBorder={!isDesktop}
               value={
                 selectedPlantingSite?.areaHa
-                  ? strings.formatString(strings.X_HA, selectedPlantingSite.areaHa.toString())?.toString()
+                  ? strings.formatString(strings.X_HA, numericFormatter.format(selectedPlantingSite.areaHa))?.toString()
                   : undefined
               }
             />
@@ -204,7 +214,11 @@ export const PlantingSiteStats = () => {
           </Grid>
 
           <Grid item xs={primaryGridSize}>
-            <StatsCardItem label={strings.TOTAL_PLANTS_PLANTED} showLink={false} value={totalPlants.toString()} />
+            <StatsCardItem
+              label={strings.TOTAL_PLANTS_PLANTED}
+              showLink={false}
+              value={numericFormatter.format(totalPlants)}
+            />
           </Grid>
 
           <Grid item xs={primaryGridSize}>
@@ -212,7 +226,7 @@ export const PlantingSiteStats = () => {
               label={strings.TOTAL_SPECIES_PLANTED}
               showBorder={!isDesktop}
               showLink={false}
-              value={totalSpecies?.toString()}
+              value={numericFormatter.format(totalSpecies ?? 0)}
             />
           </Grid>
 
