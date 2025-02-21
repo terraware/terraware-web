@@ -91,7 +91,7 @@ export enum APP_PATHS {
   OBSERVATION_PLANTING_ZONE_DETAILS = '/observations/:plantingSiteId/results/:observationId/zone/:plantingZoneId',
   OBSERVATION_MONITORING_PLOT_DETAILS = '/observations/:plantingSiteId/results/:observationId/zone/:plantingZoneId/plot/:monitoringPlotId',
   OBSERVATION_AD_HOC_PLOT_DETAILS = '/observations/:plantingSiteId/results/:observationId/plot/:monitoringPlotId',
-  OBSERVATION_BIOMASS_MEASSUREMENTS_DETAILS = '/observations/:plantingSiteId/results/:observationId/biomassMeassurements/:monitoringPlotId',
+  OBSERVATION_BIOMASS_MEASUREMENT_DETAILS = '/observations/:plantingSiteId/results/:observationId/biomassMeasurement/:monitoringPlotId',
   OPT_IN = '/opt-in',
   ORGANIZATION_EDIT = '/organization/edit',
   ORGANIZATION = '/organization',
