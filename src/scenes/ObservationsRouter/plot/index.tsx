@@ -10,6 +10,7 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { selectObservationMonitoringPlot } from 'src/redux/features/observations/observationMonitoringPlotSelectors';
 import { selectObservationsResults } from 'src/redux/features/observations/observationsSelectors';
+import { getConditionString } from 'src/redux/features/observations/utils';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
@@ -92,6 +93,10 @@ export default function ObservationMonitoringPlot(): JSX.Element {
         ? [{ label: strings.MORTALITY_RATE, value: handleMissingData(monitoringPlot?.mortalityRate) }]
         : []),
       { label: strings.NUMBER_OF_PHOTOS, value: handleMissingData(monitoringPlot?.photos.length) },
+      {
+        label: strings.ADDITIONAL_INFORMATION,
+        value: monitoringPlot?.conditions.map((condition) => getConditionString(condition)).join(','),
+      },
       { label: strings.FIELD_NOTES, value: monitoringPlot?.notes, text: true },
     ];
   }, [activeLocale, defaultTimeZone, monitoringPlot, plantingSite]);

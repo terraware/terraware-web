@@ -9,6 +9,7 @@ import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { selectAdHocObservationsResults } from 'src/redux/features/observations/observationsSelectors';
+import { getConditionString } from 'src/redux/features/observations/utils';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
@@ -74,6 +75,10 @@ export default function AdHocObservationDetails(): JSX.Element {
       { label: strings.SPECIES, value: handleMissingData(monitoringPlot?.totalSpecies) },
       { label: strings.PLANTING_DENSITY, value: handleMissingData(monitoringPlot?.plantingDensity) },
       { label: strings.NUMBER_OF_PHOTOS, value: handleMissingData(monitoringPlot?.photos?.length) },
+      {
+        label: strings.ADDITIONAL_INFORMATION,
+        value: monitoringPlot?.conditions?.map((condition) => getConditionString(condition)).join(','),
+      },
       { label: strings.FIELD_NOTES, value: monitoringPlot?.notes, text: true },
     ];
   }, [activeLocale, defaultTimeZone, monitoringPlot, plantingSite]);
