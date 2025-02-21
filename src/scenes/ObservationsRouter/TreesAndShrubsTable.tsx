@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -8,6 +8,8 @@ import strings from 'src/strings';
 import { BiomassSpeciesPayload, ExistingTreePayload } from 'src/types/Observations';
 
 import { useSpecies } from '../InventoryRouter/form/useSpecies';
+import DescriptionModal from './DescriptionModal';
+import TreesAndShrubsRenderer from './TreesAndShrubsRenderer';
 
 type TreesAndShrubsTableProps = {
   trees?: ExistingTreePayload[];
@@ -16,6 +18,9 @@ type TreesAndShrubsTableProps = {
 
 export default function TreesAndShrubsTable({ trees, allSpecies }: TreesAndShrubsTableProps): JSX.Element {
   const { availableSpecies } = useSpecies();
+  const [selectedRows, setSelectedRows] = useState<ExistingTreePayload[]>([]);
+  const [selectedTree, setSelectedTree] = useState<ExistingTreePayload | undefined>();
+
   const columns = (): TableColumnType[] => [
     { key: 'treeNumber', name: strings.ID, type: 'string' },
     { key: 'speciesName', name: strings.SPECIES, type: 'string' },
@@ -59,6 +64,11 @@ export default function TreesAndShrubsTable({ trees, allSpecies }: TreesAndShrub
       name: strings.DEAD,
       type: 'boolean',
     },
+    {
+      key: 'description',
+      name: '',
+      type: 'string',
+    },
   ];
 
   const treessWithData = useMemo(() => {
@@ -74,9 +84,30 @@ export default function TreesAndShrubsTable({ trees, allSpecies }: TreesAndShrub
     });
   }, [availableSpecies, allSpecies]);
 
+  const [openDescriptionModal, setOpenDescriptionModal] = useState(false);
+
+  const onRowClick = (tree: ExistingTreePayload) => {
+    setSelectedTree(tree);
+    setOpenDescriptionModal(true);
+  };
+
   return (
     <Box>
-      <Table id={'trees-and-shrubs-table'} orderBy={'speciesName'} rows={treessWithData || []} columns={columns} />
+      {openDescriptionModal && (
+        <DescriptionModal description={selectedTree?.description} onClose={() => setOpenDescriptionModal(false)} />
+      )}
+      <Table
+        id={'trees-and-shrubs-table'}
+        orderBy={'speciesName'}
+        rows={treessWithData || []}
+        columns={columns}
+        Renderer={TreesAndShrubsRenderer}
+        selectedRows={selectedRows}
+        setSelectedRows={setSelectedRows}
+        onSelect={onRowClick}
+        controlledOnSelect={true}
+        isClickable={() => false}
+      />
     </Box>
   );
 }
