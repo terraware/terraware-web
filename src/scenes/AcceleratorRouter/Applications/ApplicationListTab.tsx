@@ -75,22 +75,26 @@ const ApplicationListTab = ({ isPrescreen }: ApplicationListTabProps) => {
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectApplicationList(requestId));
   const [applications, setApplications] = useState<ApplicationRow[]>([]);
-
-  const allFilterValues: ApplicationStatus[] = isPrescreen
-    ? ['Failed Pre-screen', 'Passed Pre-screen']
-    : [
-        'Accepted',
-        'Carbon Eligible',
-        'Issue Active',
-        'Issue Pending',
-        'Issue Resolved',
-        'Needs Follow-up',
-        'Not Accepted',
-        'PL Review',
-        'Pre-check',
-        'Ready for Review',
-        'Submitted',
-      ];
+  const allFilterValues = useMemo(() => {
+    if(isPrescreen){
+      return(['Failed Pre-screen', 'Passed Pre-screen']);
+   }
+   else{
+     return([
+       'Accepted',
+       'Carbon Eligible',
+       'Issue Active',
+       'Issue Pending',
+       'Issue Resolved',
+       'Needs Follow-up',
+       'Not Accepted',
+       'PL Review',
+       'Pre-check',
+       'Ready for Review',
+       'Submitted',
+     ])
+   }
+  }, [isPrescreen]);
 
   const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
     if (!activeLocale || !countries) {
@@ -114,13 +118,14 @@ const ApplicationListTab = ({ isPrescreen }: ApplicationListTabProps) => {
     ];
 
     return filters;
-  }, [activeLocale, countries]);
+  }, [activeLocale, countries, allFilterValues]);
 
   useEffect(() => {
     if (result?.status === 'error') {
       snackbar.toastError();
       return;
     }
+    console.log("USE EFFECT!!!");
     if (result?.data) {
       setApplications(
         result.data
