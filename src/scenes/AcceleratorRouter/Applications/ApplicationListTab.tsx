@@ -76,24 +76,23 @@ const ApplicationListTab = ({ isPrescreen }: ApplicationListTabProps) => {
   const result = useAppSelector(selectApplicationList(requestId));
   const [applications, setApplications] = useState<ApplicationRow[]>([]);
   const allFilterValues = useMemo(() => {
-    if(isPrescreen){
-      return(['Failed Pre-screen', 'Passed Pre-screen']);
-   }
-   else{
-     return([
-       'Accepted',
-       'Carbon Eligible',
-       'Issue Active',
-       'Issue Pending',
-       'Issue Resolved',
-       'Needs Follow-up',
-       'Not Accepted',
-       'PL Review',
-       'Pre-check',
-       'Ready for Review',
-       'Submitted',
-     ])
-   }
+    if (isPrescreen) {
+      return ['Failed Pre-screen', 'Passed Pre-screen'];
+    } else {
+      return [
+        'Accepted',
+        'Carbon Eligible',
+        'Issue Active',
+        'Issue Pending',
+        'Issue Resolved',
+        'Needs Follow-up',
+        'Not Accepted',
+        'PL Review',
+        'Pre-check',
+        'Ready for Review',
+        'Submitted',
+      ];
+    }
   }, [isPrescreen]);
 
   const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
