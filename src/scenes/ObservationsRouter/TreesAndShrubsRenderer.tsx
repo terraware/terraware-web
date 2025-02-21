@@ -18,7 +18,7 @@ export default function TreesAndShrubsRenderer(props: RendererProps<TableRowType
         value={
           value ? (
             <IconButton onClick={() => onRowClick()}>
-              <Icon name='info' style={{ fill: theme.palette.TwClrIcn }} />
+              <Icon name='note' style={{ fill: theme.palette.TwClrIcn }} size='medium' />
             </IconButton>
           ) : (
             ''

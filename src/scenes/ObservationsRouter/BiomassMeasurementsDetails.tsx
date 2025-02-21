@@ -11,6 +11,7 @@ import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { selectAdHocObservationsResults } from 'src/redux/features/observations/observationsSelectors';
+import { getConditionString } from 'src/redux/features/observations/utils';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -95,7 +96,10 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
         value: biomassMeasurements?.species.length,
       },
       { label: strings.OBSERVER, value: monitoringPlot?.claimedByName },
-      { label: strings.ADDITIONAL_INFORMATION, value: '' },
+      {
+        label: strings.ADDITIONAL_INFORMATION,
+        value: monitoringPlot?.conditions.map((condition) => getConditionString(condition)).join(','),
+      },
       { label: strings.FIELD_NOTES, value: monitoringPlot?.notes || '- -' },
       {
         label: '',
