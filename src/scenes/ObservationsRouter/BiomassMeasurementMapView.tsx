@@ -143,7 +143,6 @@ export default function BiomassMeasurementMapView({
     (properties: MapSourceProperties): JSX.Element | null => {
       let entity: any;
 
-      console.log('selectedObservation', selectedObservation);
       if (properties.type === 'site') {
         entity = selectedObservation;
       } else if (properties.type === 'zone') {

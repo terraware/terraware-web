@@ -71,7 +71,7 @@ export default function TreesAndShrubsTable({ trees, allSpecies }: TreesAndShrub
     },
   ];
 
-  const treessWithData = useMemo(() => {
+  const treesWithData = useMemo(() => {
     return trees?.map((tree) => {
       const foundSpecies = availableSpecies?.find((avSpecies) => avSpecies.id === tree.speciesId);
       const biomassSpecies = allSpecies?.find((bmSpecies) => bmSpecies.speciesId === tree.speciesId);
@@ -99,7 +99,7 @@ export default function TreesAndShrubsTable({ trees, allSpecies }: TreesAndShrub
       <Table
         id={'trees-and-shrubs-table'}
         orderBy={'speciesName'}
-        rows={treessWithData || []}
+        rows={treesWithData || []}
         columns={columns}
         Renderer={TreesAndShrubsRenderer}
         selectedRows={selectedRows}
