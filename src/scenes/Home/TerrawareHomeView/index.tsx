@@ -132,7 +132,7 @@ const TerrawareHomeView = () => {
                 navigate(APP_PATHS.SPECIES);
               },
             },
-        icon: 'seeds' as IconName,
+        icon: 'species' as IconName,
         statsCardItems: [
           { label: strings.TOTAL_SPECIES, value: numericFormatter.format(availableSpecies?.length ?? 0) },
           {
