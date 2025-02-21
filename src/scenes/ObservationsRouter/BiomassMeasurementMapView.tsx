@@ -153,8 +153,12 @@ export default function BiomassMeasurementMapView({
         // monitoring plot
         const adHocPlotCopy = {
           ...selectedObservation?.adHocPlot,
+          isBiomassMeasurement: true,
           totalSpecies: selectedObservation?.biomassMeasurements?.species.length,
-          totalPlants: selectedObservation?.biomassMeasurements?.trees.length,
+          totalPlants: selectedObservation?.biomassMeasurements?.trees.filter((tree) => tree.treeGrowthForm !== 'Shrub')
+            .length,
+          totalShrubs: selectedObservation?.biomassMeasurements?.trees.filter((tree) => tree.treeGrowthForm === 'Shrub')
+            .length,
         };
 
         entity = adHocPlotCopy;
