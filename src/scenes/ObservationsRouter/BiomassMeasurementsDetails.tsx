@@ -72,7 +72,16 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
       { label: strings.SALINITY_PPT, value: biomassMeasurements?.salinity || '- -' },
       { label: strings.PH, value: biomassMeasurements?.ph || '- -' },
       { label: strings.TIDE, value: biomassMeasurements?.tide || '- -' },
-      { label: strings.MEASUREMENT_TIME, value: '' },
+      {
+        label: strings.MEASUREMENT_TIME,
+        value: biomassMeasurements?.tideTime
+          ? getShortTime(
+              biomassMeasurements?.tideTime,
+              activeLocale,
+              plantingSite?.timeZone || defaultTimeZone.get().id
+            )
+          : '- -',
+      },
       {
         label: '',
         value: undefined,
@@ -87,7 +96,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
       },
       { label: strings.OBSERVER, value: monitoringPlot?.claimedByName },
       { label: strings.ADDITIONAL_INFORMATION, value: '' },
-      { label: strings.FIELD_NOTES, value: monitoringPlot?.notes },
+      { label: strings.FIELD_NOTES, value: monitoringPlot?.notes || '- -' },
       {
         label: '',
         value: undefined,
