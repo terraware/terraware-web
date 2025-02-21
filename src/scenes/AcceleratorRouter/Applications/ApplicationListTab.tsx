@@ -125,7 +125,6 @@ const ApplicationListTab = ({ isPrescreen }: ApplicationListTabProps) => {
       snackbar.toastError();
       return;
     }
-    console.log("USE EFFECT!!!");
     if (result?.data) {
       setApplications(
         result.data
