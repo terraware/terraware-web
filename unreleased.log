@@ -1,7 +1,1 @@
-a3d71d59a3b SW-6580 Use localized numbers on home dashboard (#3643)
-f35c2d36fc6 SW-6579 Format numbers on plants dashboard (#3642)
-470253e2e5c SW-6450 Add biomass observation detail view (#3637)
-adac5a068f3 SW-6577 Limit organization type details to 100 characters (#3640)
-57a255c4d1e SW-6448 Add Ad Hoc plots to standard observation map view (#3634)
-21ee3a906c6 Update Node.js to v20.18.3 (#3635)
-81ff721a048 Update dependency @babel/traverse to v7.26.8 (#3636)
+6129f7ff31d SW-6585 Memoize filter values to prevent infinite loop (#3645)

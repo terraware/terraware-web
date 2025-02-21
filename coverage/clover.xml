@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1740074564604" clover="3.2.0">
-  <project timestamp="1740074564604" name="All files">
-    <metrics statements="27435" coveredstatements="1220" conditionals="18582" coveredconditionals="348" methods="8469" coveredmethods="197" elements="54486" coveredelements="1765" complexity="0" loc="27435" ncloc="27435" packages="240" files="1138" classes="1138"/>
+<coverage generated="1740155132023" clover="3.2.0">
+  <project timestamp="1740155132023" name="All files">
+    <metrics statements="27438" coveredstatements="1220" conditionals="18582" coveredconditionals="348" methods="8470" coveredmethods="197" elements="54490" coveredelements="1765" complexity="0" loc="27438" ncloc="27438" packages="240" files="1138" classes="1138"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -13484,7 +13484,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Applications">
-      <metrics statements="212" coveredstatements="0" conditionals="155" coveredconditionals="0" methods="69" coveredmethods="0"/>
+      <metrics statements="215" coveredstatements="0" conditionals="155" coveredconditionals="0" methods="70" coveredmethods="0"/>
       <file name="ApplicationCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Applications/ApplicationCellRenderer.tsx">
         <metrics statements="10" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="12" count="0" type="stmt"/>
@@ -13525,7 +13525,7 @@
         <line num="17" count="0" type="stmt"/>
       </file>
       <file name="ApplicationListTab.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Applications/ApplicationListTab.tsx">
-        <metrics statements="45" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="13" coveredmethods="0"/>
+        <metrics statements="48" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="14" coveredmethods="0"/>
         <line num="29" count="0" type="stmt"/>
         <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="60" count="0" type="stmt"/>
@@ -13537,40 +13537,43 @@
         <line num="75" count="0" type="stmt"/>
         <line num="76" count="0" type="stmt"/>
         <line num="77" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
         <line num="79" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="95" count="0" type="stmt"/>
-        <line num="96" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="97" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="99" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="100" count="0" type="stmt"/>
-        <line num="103" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="105" count="0" type="stmt"/>
-        <line num="107" count="0" type="stmt"/>
-        <line num="116" count="0" type="stmt"/>
+        <line num="103" count="0" type="stmt"/>
+        <line num="106" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="108" count="0" type="stmt"/>
+        <line num="110" count="0" type="stmt"/>
         <line num="119" count="0" type="stmt"/>
-        <line num="120" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="121" count="0" type="stmt"/>
         <line num="122" count="0" type="stmt"/>
-        <line num="124" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="123" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="124" count="0" type="stmt"/>
         <line num="125" count="0" type="stmt"/>
-        <line num="127" count="0" type="stmt"/>
+        <line num="127" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="128" count="0" type="stmt"/>
-        <line num="143" count="0" type="stmt"/>
-        <line num="145" count="0" type="stmt"/>
-        <line num="146" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="147" count="0" type="stmt"/>
+        <line num="130" count="0" type="stmt"/>
+        <line num="131" count="0" type="stmt"/>
+        <line num="146" count="0" type="stmt"/>
         <line num="148" count="0" type="stmt"/>
         <line num="149" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="150" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="150" count="0" type="stmt"/>
         <line num="151" count="0" type="stmt"/>
-        <line num="153" count="0" type="stmt"/>
+        <line num="152" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="153" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="154" count="0" type="stmt"/>
         <line num="156" count="0" type="stmt"/>
-        <line num="160" count="0" type="stmt"/>
-        <line num="166" count="0" type="stmt"/>
-        <line num="168" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="159" count="0" type="stmt"/>
+        <line num="163" count="0" type="stmt"/>
         <line num="169" count="0" type="stmt"/>
-        <line num="171" count="0" type="stmt"/>
+        <line num="171" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="172" count="0" type="stmt"/>
-        <line num="177" count="0" type="stmt"/>
+        <line num="174" count="0" type="stmt"/>
+        <line num="175" count="0" type="stmt"/>
+        <line num="180" count="0" type="stmt"/>
       </file>
       <file name="ApplicationListView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Applications/ApplicationListView.tsx">
         <metrics statements="8" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
