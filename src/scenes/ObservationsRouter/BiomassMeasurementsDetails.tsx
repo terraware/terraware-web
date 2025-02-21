@@ -17,10 +17,9 @@ import strings from 'src/strings';
 import { getShortTime } from 'src/utils/dateFormatter';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-import { useSpecies } from '../InventoryRouter/form/useSpecies';
+import LiveTreesPerSpecies from './LiveTreesPerSpecies';
 import QuadratSpeciesTable from './QuadratSepciesTable';
 import TreesAndShrubsTable from './TreesAndShrubsTable';
-import SpeciesTotalPlantsChart from './common/SpeciesMortalityRateChart';
 import MonitoringPlotPhotos from './plot/MonitoringPlotPhotos';
 
 export default function BiomassMeasurementsDetails(): JSX.Element {
@@ -33,7 +32,6 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
   const allAdHocObservationsResults = useAppSelector(selectAdHocObservationsResults);
   const defaultTimeZone = useDefaultTimeZone();
   const { isMobile } = useDeviceInfo();
-  const { availableSpecies } = useSpecies();
 
   const observation = allAdHocObservationsResults?.find(
     (obsResult) => obsResult?.observationId.toString() === observationId?.toString()
@@ -70,10 +68,10 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
         label: '',
         value: undefined,
       },
-      { label: strings.WATER_DEPTH_M, value: biomassMeasurements?.waterDepth },
-      { label: strings.SALINITY_PPT, value: biomassMeasurements?.salinity },
-      { label: strings.PH, value: biomassMeasurements?.ph },
-      { label: strings.TIDE, value: biomassMeasurements?.tide },
+      { label: strings.WATER_DEPTH_M, value: biomassMeasurements?.waterDepth || '- -' },
+      { label: strings.SALINITY_PPT, value: biomassMeasurements?.salinity || '- -' },
+      { label: strings.PH, value: biomassMeasurements?.ph || '- -' },
+      { label: strings.TIDE, value: biomassMeasurements?.tide || '- -' },
       { label: strings.MEASUREMENT_TIME, value: '' },
       {
         label: '',
@@ -88,7 +86,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
         value: biomassMeasurements?.species.length,
       },
       { label: strings.OBSERVER, value: monitoringPlot?.claimedByName },
-      { label: strings.ADDITIONAL_OBSERVATIONS, value: '' },
+      { label: strings.ADDITIONAL_INFORMATION, value: '' },
       { label: strings.FIELD_NOTES, value: monitoringPlot?.notes },
       {
         label: '',
@@ -142,6 +140,18 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
                 </Grid>
               ))}
               <Grid container spacing={2} marginTop={2}>
+                <Grid item xs={12}>
+                  <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
+                    {strings.PHOTOS}
+                  </Typography>
+                  <MonitoringPlotPhotos
+                    observationId={Number(observationId)}
+                    monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
+                    photos={monitoringPlot?.photos.filter(
+                      (photo) => photo.type === 'Plot' && photo.position !== undefined
+                    )}
+                  />
+                </Grid>
                 <Grid item xs={6}>
                   <Grid item xs={12}>
                     <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
@@ -168,7 +178,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
                         {strings.DESCRIPTION_NOTES}
                       </Typography>
                       <Typography fontSize='16px' lineHeight='24px' fontWeight={500} color={theme.palette.TwClrTxt}>
-                        test
+                        {biomassMeasurements?.description}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -190,7 +200,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
                         {strings.DESCRIPTION_NOTES}
                       </Typography>
                       <Typography fontSize='16px' lineHeight='24px' fontWeight={500} color={theme.palette.TwClrTxt}>
-                        test
+                        {biomassMeasurements?.soilAssessment}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -205,7 +215,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
                         observationId={Number(observationId)}
                         monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
                         photos={monitoringPlot?.photos
-                          .filter((photo) => photo.type === 'Plot' && photo.position === 'NorthwestCorner')
+                          .filter((photo) => photo.type === 'Quadrat' && photo.position === 'NorthwestCorner')
                           .filter((pic, index) => index === 0)}
                       />
                     </Grid>
@@ -238,7 +248,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
                         observationId={Number(observationId)}
                         monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
                         photos={monitoringPlot?.photos
-                          .filter((photo) => photo.type === 'Plot' && photo.position === 'NortheastCorner')
+                          .filter((photo) => photo.type === 'Quadrat' && photo.position === 'NortheastCorner')
                           .filter((pic, index) => index === 0)}
                       />
                     </Grid>
@@ -271,7 +281,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
                         observationId={Number(observationId)}
                         monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
                         photos={monitoringPlot?.photos
-                          .filter((photo) => photo.type === 'Plot' && photo.position === 'SouthwestCorner')
+                          .filter((photo) => photo.type === 'Quadrat' && photo.position === 'SouthwestCorner')
                           .filter((pic, index) => index === 0)}
                       />
                     </Grid>
@@ -304,7 +314,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
                         observationId={Number(observationId)}
                         monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
                         photos={monitoringPlot?.photos
-                          .filter((photo) => photo.type === 'Plot' && photo.position === 'SoutheastCorner')
+                          .filter((photo) => photo.type === 'Quadrat' && photo.position === 'SoutheastCorner')
                           .filter((pic, index) => index === 0)}
                       />
                     </Grid>
@@ -340,13 +350,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
               {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
             </Typography>
             <Box height='360px'>
-              <SpeciesTotalPlantsChart
-                minHeight='360px'
-                species={monitoringPlot?.species.map((sp) => ({
-                  ...sp,
-                  speciesScientificName: availableSpecies?.find((s) => s.id === sp.speciesId)?.scientificName || '',
-                }))}
-              />
+              <LiveTreesPerSpecies trees={biomassMeasurements?.trees} />
             </Box>
             <Typography
               fontSize='20px'
