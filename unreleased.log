@@ -1,3 +1,5 @@
+6975fcfcc4d Update dependency globals to v16 (#3652)
+f50a05cc723 Update JamesIves/github-pages-deploy-action action to v4.7.3 (#3651)
 b9e1c8aa377 Update dependency @types/node to v22 (#3650)
 4208b8187a9 Update Node.js to v22 (#3648)
 5f946331f3b Update dependency @stylistic/eslint-plugin-js to v4 (#3649)
