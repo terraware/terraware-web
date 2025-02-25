@@ -98,7 +98,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
       { label: strings.OBSERVER, value: monitoringPlot?.claimedByName },
       {
         label: strings.PLOT_CONDITIONS,
-        value: monitoringPlot?.conditions.map((condition) => getConditionString(condition)).join(','),
+        value: monitoringPlot?.conditions.map((condition) => getConditionString(condition)).join(', '),
       },
       { label: strings.FIELD_NOTES, value: monitoringPlot?.notes || '- -' },
       {
