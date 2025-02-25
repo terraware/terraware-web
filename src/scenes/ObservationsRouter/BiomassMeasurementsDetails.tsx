@@ -59,7 +59,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
             )
           : undefined,
       },
-      { label: strings.ELEVATION, value: 106.1 },
+      { label: strings.ELEVATION_M, value: 106.1 },
       { label: strings.TYPE_OF_FOREST, value: biomassMeasurements?.forestType },
       {
         label: strings.NUMBER_OF_SMALL_TREES,
