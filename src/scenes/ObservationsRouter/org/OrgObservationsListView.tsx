@@ -269,7 +269,7 @@ export default function OrgObservationsListView({
           Renderer={AdHocObservationsRenderer(timeZone)}
         />
       )}
-      {selectedPlotSelection === 'assigned' && (
+      {(!selectedPlotSelection || selectedPlotSelection === 'assigned') && (
         <Table
           id='org-observations-table'
           columns={columns}
