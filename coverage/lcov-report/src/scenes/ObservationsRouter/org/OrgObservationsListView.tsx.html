@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/37</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
@@ -350,7 +350,12 @@
 <a name='L285'></a><a href='#L285'>285</a>
 <a name='L286'></a><a href='#L286'>286</a>
 <a name='L287'></a><a href='#L287'>287</a>
-<a name='L288'></a><a href='#L288'>288</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a>
+<a name='L290'></a><a href='#L290'>290</a>
+<a name='L291'></a><a href='#L291'>291</a>
+<a name='L292'></a><a href='#L292'>292</a>
+<a name='L293'></a><a href='#L293'>293</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -381,6 +386,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -430,6 +436,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -452,6 +459,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -605,6 +613,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -665,6 +675,7 @@ import { getShortDate } from 'src/utils/dateFormatter';
 import { isAdmin } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
+import AdHocObservationsRenderer from '../AdHocObservationsRenderer';
 import EndObservationModal from './EndObservationModal';
 import OrgObservationsRenderer from './OrgObservationsRenderer';
 &nbsp;
@@ -730,6 +741,7 @@ export type OrgObservationsListViewProps = {
   adHocObservationsResults?: AdHocObservationResults[];
   reload: () =&gt; void;
   selectedPlotSelection?: string;
+  timeZone: string;
 };
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >OrgObservationsListView(</span>{
@@ -738,6 +750,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
   plantingSiteId,
   reload,
   selectedPlotSelection,
+  timeZone,
 }: OrgObservationsListViewProps): JSX.Element {
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
@@ -780,12 +793,12 @@ export default function <span class="fstat-no" title="function not covered" >Org
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return [...defaultColumns(), ...(scheduleObservationsEnabled ? scheduleObservationsColumn() : [])];</span>
-  }, [activeLocale, scheduleObservationsEnabled]);
+  }, [activeLocale, scheduleObservationsEnabled, selectedPlotSelection]);
 &nbsp;
   const adHocColumns = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span>: TableColumnType[] =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return [</span>
       {
-        key: 'plotName',
+        key: 'plotNumber',
         name: strings.PLOT,
         type: 'string',
       },
@@ -795,9 +808,9 @@ export default function <span class="fstat-no" title="function not covered" >Org
         type: 'string',
       },
       {
-        key: 'startDate',
+        key: 'observationDate',
         name: strings.DATE,
-        type: 'date',
+        type: 'string',
       },
       {
         key: 'totalPlants',
@@ -896,19 +909,21 @@ export default function <span class="fstat-no" title="function not covered" >Org
       {endObservationModalOpened &amp;&amp; selectedObservation &amp;&amp; (
         &lt;EndObservationModal observation={selectedObservation} onClose={onCloseModal} onSave={onEndObservation} /&gt;
       )}
-      {selectedPlotSelection === 'adHoc' ? (
+      {selectedPlotSelection === 'adHoc' &amp;&amp; (
         &lt;Table
           id='org-ad-hoc-observations-table'
           columns={adHocColumns}
           rows={adHocObservationsResults || []}
-          orderBy='completedDate'
+          orderBy='observationDate'
+          Renderer={AdHocObservationsRenderer(timeZone)}
         /&gt;
-      ) : (
+      )}
+      {selectedPlotSelection === 'assigned' &amp;&amp; (
         &lt;Table
           id='org-observations-table'
           columns={columns}
           rows={results}
-          orderBy='completedDate'
+          orderBy='observationDate'
           Renderer={OrgObservationsRenderer(
             theme,
             activeLocale,
@@ -931,7 +946,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-24T21:35:39.209Z
+                at 2025-02-25T17:35:42.296Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
