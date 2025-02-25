@@ -182,7 +182,7 @@ export default function BiomassMeasurementMapView({
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
-      <PlantingSiteMapLegend options={['site', 'zone', 'permanentPlot', 'temporaryPlot']} />
+      <PlantingSiteMapLegend options={['site', 'zone', 'permanentPlot', 'temporaryPlot', 'adHocPlot']} />
       <Box display='flex' sx={{ flexGrow: 1 }}>
         {mapData.site && (
           <PlantingSiteMap
@@ -207,7 +207,7 @@ export default function BiomassMeasurementMapView({
               observationsDates.length > 0 && (
                 <MapDateSelect
                   dates={observationsDates}
-                  selectedDate={selectedObservationDate ?? ''}
+                  selectedDate={selectedObservationDate ?? observationsDates[0]}
                   onChange={setSelectedObservationDate}
                 />
               )
