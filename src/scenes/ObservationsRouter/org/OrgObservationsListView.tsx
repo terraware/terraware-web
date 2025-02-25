@@ -26,6 +26,7 @@ import { getShortDate } from 'src/utils/dateFormatter';
 import { isAdmin } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import AdHocObservationsRenderer from '../AdHocObservationsRenderer';
 import EndObservationModal from './EndObservationModal';
 import OrgObservationsRenderer from './OrgObservationsRenderer';
 
@@ -91,6 +92,7 @@ export type OrgObservationsListViewProps = {
   adHocObservationsResults?: AdHocObservationResults[];
   reload: () => void;
   selectedPlotSelection?: string;
+  timeZone: string;
 };
 
 export default function OrgObservationsListView({
@@ -99,6 +101,7 @@ export default function OrgObservationsListView({
   plantingSiteId,
   reload,
   selectedPlotSelection,
+  timeZone,
 }: OrgObservationsListViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
@@ -141,12 +144,12 @@ export default function OrgObservationsListView({
     }
 
     return [...defaultColumns(), ...(scheduleObservationsEnabled ? scheduleObservationsColumn() : [])];
-  }, [activeLocale, scheduleObservationsEnabled]);
+  }, [activeLocale, scheduleObservationsEnabled, selectedPlotSelection]);
 
   const adHocColumns = useCallback((): TableColumnType[] => {
     return [
       {
-        key: 'plotName',
+        key: 'plotNumber',
         name: strings.PLOT,
         type: 'string',
       },
@@ -156,9 +159,9 @@ export default function OrgObservationsListView({
         type: 'string',
       },
       {
-        key: 'startDate',
+        key: 'observationDate',
         name: strings.DATE,
-        type: 'date',
+        type: 'string',
       },
       {
         key: 'totalPlants',
@@ -257,19 +260,21 @@ export default function OrgObservationsListView({
       {endObservationModalOpened && selectedObservation && (
         <EndObservationModal observation={selectedObservation} onClose={onCloseModal} onSave={onEndObservation} />
       )}
-      {selectedPlotSelection === 'adHoc' ? (
+      {selectedPlotSelection === 'adHoc' && (
         <Table
           id='org-ad-hoc-observations-table'
           columns={adHocColumns}
           rows={adHocObservationsResults || []}
-          orderBy='completedDate'
+          orderBy='observationDate'
+          Renderer={AdHocObservationsRenderer(timeZone)}
         />
-      ) : (
+      )}
+      {selectedPlotSelection === 'assigned' && (
         <Table
           id='org-observations-table'
           columns={columns}
           rows={results}
-          orderBy='completedDate'
+          orderBy='observationDate'
           Renderer={OrgObservationsRenderer(
             theme,
             activeLocale,

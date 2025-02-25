@@ -66,12 +66,21 @@ export default function DetailsPage({
       if (observationId) {
         const plantingSiteName = details?.plantingSiteName ?? '';
         const completionDate = details?.completedDate ? getShortDate(details.completedDate, activeLocale) : '';
-        const name = `${completionDate} (${plantingSiteName})`;
+        const name = completionDate ? `${completionDate} (${plantingSiteName})` : undefined;
 
-        data.push({
-          name,
-          to: `/results/${observationId}`,
-        });
+        if (observationId && name) {
+          data.push({
+            name,
+            to: `/results/${observationId}`,
+          });
+        }
+
+        if (!name) {
+          data.push({
+            name: strings.PLANT_MONITORING,
+            to: APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', plantingSiteId?.toString()),
+          });
+        }
 
         if (plantingZoneId) {
           data.push({

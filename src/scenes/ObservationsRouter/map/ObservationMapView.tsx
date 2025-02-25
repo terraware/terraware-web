@@ -213,10 +213,12 @@ export default function ObservationMapView({
           plantingSiteHistory?.plantingZones.find((z) => z.plantingZoneId === properties.id);
       } else {
         // monitoring plot
-        entity = selectedObservation?.plantingZones
-          ?.flatMap((z) => z.plantingSubzones)
-          ?.flatMap((sz) => sz.monitoringPlots)
-          ?.find((p) => p.monitoringPlotId === properties.id);
+        entity =
+          selectedAdHocObservation?.adHocPlot ||
+          selectedObservation?.plantingZones
+            ?.flatMap((z) => z.plantingSubzones)
+            ?.flatMap((sz) => sz.monitoringPlots)
+            ?.find((p) => p.monitoringPlotId === properties.id);
       }
 
       if (!entity) {
@@ -229,7 +231,7 @@ export default function ObservationMapView({
           observationId={selectedObservation?.observationId}
           observationState={selectedObservation?.state}
           plantingSiteId={selectedPlantingSite.id}
-          title={`${properties.name}${properties.type === 'temporaryPlot' ? ` (${strings.TEMPORARY})` : ''}`}
+          title={`${properties.name}${properties.type === 'temporaryPlot' ? ` (${strings.TEMPORARY})` : properties.type === 'adHocPlot' ? ` (${strings.AD_HOC})` : properties.type === 'permanentPlot' ? ` (${strings.PERMANENT})` : ''}`}
         />
       );
     },

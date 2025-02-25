@@ -41,6 +41,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
   } = props;
   const { ...searchProps }: SearchProps = props;
   const defaultTimeZone = useDefaultTimeZone();
+  const timeZone = selectedPlantingSite?.timeZone || defaultTimeZone.get().id;
 
   const observationsResults = useAppSelector((state) =>
     searchObservations(
@@ -95,6 +96,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
           plantingSiteId={selectedPlantingSiteId}
           reload={reload}
           selectedPlotSelection={selectedPlotSelection}
+          timeZone={timeZone}
         />
       }
       map={

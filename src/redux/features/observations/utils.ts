@@ -1,5 +1,6 @@
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 
+import strings from 'src/strings';
 import {
   AdHocObservationResults,
   MonitoringPlotStatus,
@@ -312,7 +313,46 @@ export const mergeAdHocObservations = (
         plantingSiteName: site.name,
         plantingZones: mergedZones,
         plotName: observation?.adHocPlot?.monitoringPlotName,
+        plotNumber: observation?.adHocPlot?.monitoringPlotNumber,
         totalPlants: observation.plantingZones.reduce((acc, curr) => acc + curr.totalPlants, 0),
       };
     });
+};
+
+export const getConditionString = (
+  condition:
+    | 'AnimalDamage'
+    | 'FastGrowth'
+    | 'FavorableWeather'
+    | 'Fungus'
+    | 'Pests'
+    | 'SeedProduction'
+    | 'UnfavorableWeather'
+) => {
+  switch (condition) {
+    case 'AnimalDamage': {
+      return strings.ANIMAL_DAMAGE;
+    }
+    case 'FastGrowth': {
+      return strings.FAST_GROWTH;
+    }
+    case 'FavorableWeather': {
+      return strings.FAVORABLE_WEATHER;
+    }
+    case 'Fungus': {
+      return strings.FUNGUS;
+    }
+    case 'Pests': {
+      return strings.PESTS;
+    }
+    case 'SeedProduction': {
+      return strings.SEED_PRODUCTION;
+    }
+    case 'UnfavorableWeather': {
+      return strings.UNFAVORABLE_WEATHER;
+    }
+    default: {
+      return '';
+    }
+  }
 };

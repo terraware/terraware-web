@@ -30,6 +30,7 @@ import BiomassMeasurementsDetails from './BiomassMeasurementsDetails';
 import ObservationsHome from './ObservationsHome';
 import ObservationDetails from './details';
 import ObservationMonitoringPlotDetails from './plot';
+import AdHocObservationDetails from './plot/AdHocObservationDetails';
 import { RescheduleObservation, ScheduleObservation } from './schedule';
 import ObservationPlantingZoneDetails from './zone';
 
@@ -171,6 +172,10 @@ const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Elemen
       <Route
         path={'/:plantingSiteId/results/:observationId/zone/:plantingZoneId'}
         element={<ObservationPlantingZoneDetails />}
+      />
+      <Route
+        path={'/:plantingSiteId/results/:observationId/plot/:monitoringPlotId'}
+        element={<AdHocObservationDetails />}
       />
       <Route
         path={'/:plantingSiteId/results/:observationId'}

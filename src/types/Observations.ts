@@ -43,6 +43,7 @@ export type AdHocObservationResults = Omit<
       plantingSiteName: string;
       totalPlants: number;
       plotName?: string;
+      plotNumber?: number;
       plantingZones: ObservationPlantingZoneResultsWithLastObv[];
     },
   'plantingZones'
@@ -93,6 +94,10 @@ export type ObservationPlantingSubzoneResultsWithLastObv = ObservationPlantingSu
 };
 // monitoring plot level results
 export type ObservationMonitoringPlotResultsPayload = components['schemas']['ObservationMonitoringPlotResultsPayload'];
+export type ObservationMonitoringPlotForMap = ObservationMonitoringPlotResultsPayload & {
+  isBiomassMeasurement?: boolean;
+  totalShrubs?: number;
+};
 export type MonitoringPlotStatus = ObservationMonitoringPlotResultsPayload['status'];
 export type ObservationMonitoringPlotResults = ObservationMonitoringPlotResultsPayload & {
   completedDate?: string;

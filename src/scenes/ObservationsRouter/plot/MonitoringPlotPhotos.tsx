@@ -27,5 +27,5 @@ export default function MonitoringPlotPhotos({
     );
   }, [observationId, monitoringPlotId, photos]);
 
-  return <PhotosList photoUrls={photoUrls} />;
+  return <PhotosList photoUrls={photoUrls} fillSpace />;
 }

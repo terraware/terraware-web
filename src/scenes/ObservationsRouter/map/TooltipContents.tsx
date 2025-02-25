@@ -3,16 +3,17 @@ import React, { useState } from 'react';
 import { Portal } from '@mui/base';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import { useMapPortalContainer } from 'src/components/Map/MapRenderUtils';
 import { useOrganization } from 'src/providers';
 import ReplaceObservationPlotModal from 'src/scenes/ObservationsRouter/replacePlot/ReplaceObservationPlotModal';
 import strings from 'src/strings';
-import { ObservationMonitoringPlotResultsPayload, ObservationState } from 'src/types/Observations';
+import { ObservationMonitoringPlotForMap, ObservationState } from 'src/types/Observations';
 import { isManagerOrHigher } from 'src/utils/organization';
 
 type TooltipContentsProps = {
-  monitoringPlot: ObservationMonitoringPlotResultsPayload;
+  monitoringPlot: ObservationMonitoringPlotForMap;
   observationId?: number;
   observationState?: ObservationState;
   plantingSiteId: number;
@@ -32,6 +33,7 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
   const observationOverdue = observationState === 'Overdue';
 
   const numPlants = monitoringPlot?.totalPlants;
+  const numShrubs = monitoringPlot?.totalShrubs;
   const numSpecies = monitoringPlot?.totalSpecies;
   const plantingDensity = monitoringPlot?.plantingDensity;
   const percentMortality = monitoringPlot?.mortalityRate;
@@ -60,17 +62,26 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
           ) : (
             <>
               <Typography fontSize='16px' fontWeight={400}>
-                {`${strings.PLANTS}: ${numPlants ?? strings.UNKNOWN}`}
+                {monitoringPlot.isBiomassMeasurement
+                  ? `${strings.TREES_TRUNKS}: ${numPlants} ${strings.OR_SHRUBS}: ${numShrubs}`
+                  : `${strings.PLANTS}: ${numPlants ?? strings.UNKNOWN}`}
               </Typography>
               <Typography fontSize='16px' fontWeight={400}>
                 {`${strings.SPECIES}: ${numSpecies ?? strings.UNKNOWN}`}
               </Typography>
-              <Typography fontSize='16px' fontWeight={400}>
-                {`${strings.PLANTING_DENSITY}: ${plantingDensity ? `${plantingDensity} ${strings.PLANTS_PER_HECTARE}` : strings.UNKNOWN} `}
-              </Typography>
-              <Typography fontSize='16px' fontWeight={400}>
-                {`${strings.MORTALITY_RATE}: ${percentMortality ? `${percentMortality} %` : strings.UNKNOWN} `}
-              </Typography>
+
+              {monitoringPlot.isBiomassMeasurement ? (
+                <Typography>{`${strings.DATE}: ${getDateDisplayValue(monitoringPlot?.completedTime || '')} `}</Typography>
+              ) : (
+                <>
+                  <Typography fontSize='16px' fontWeight={400}>
+                    {`${strings.PLANTING_DENSITY}: ${plantingDensity ? `${plantingDensity} ${strings.PLANTS_PER_HECTARE}` : strings.UNKNOWN} `}
+                  </Typography>
+                  <Typography fontSize='16px' fontWeight={400}>
+                    {`${strings.MORTALITY_RATE}: ${percentMortality ? `${percentMortality} %` : strings.UNKNOWN} `}
+                  </Typography>
+                </>
+              )}
             </>
           )}
         </Box>
