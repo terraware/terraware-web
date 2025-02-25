@@ -1088,6 +1088,7 @@ OBSERVATION_SCHEDULED,Observation programmée !,
 OBSERVATION_START_DATE,Date de début de l'observation,
 OBSERVATION_STATUS,Statut de l'observation,
 OBSERVATION_STATUS_OUTSTANDING,Remarquable,Remaining to be done
+OBSERVATION_TYPE,Type d'observation,
 OBSERVATIONS,Observations,
 OBSERVATIONS_COMPLETION_PERCENTAGE,Les observations pour {0} des {1} parcelles de surveillance ({2}%) ont été achevées.,Example: Observations for 5 of 10 monitoring plots (50%) have been completed.
 OBSERVATIONS_DOWNLOAD_APP,"Pour compléter les observations, téléchargez l'application Terraware sur l'App Store ou Google Play.",
@@ -1097,6 +1098,7 @@ OBSERVATIONS_EMPTY_STATE_TITLE,Aucune observation pour le moment,
 OBSERVATIONS_MAP_VIEW_PROMPT,"Pour accéder à la vue cartographique, veuillez sélectionner un seul site de plantation.",
 OBSERVATIONS_REQUIRED_BY_DATE,{0} placettes de surveillance doivent être observées par {1}.,"Example: 5 monitoring plots require observation by June 30, 2023"
 OBSERVATIONS_WITH_THE_TERRAWARE_APP,Observations avec l'application Terraware,
+OBSERVED_DATE,Date d'observation,
 OBSERVED_DENSITY,Densité observée,
 OBSERVED_DENSITY_PER_ZONE,Densité observée par zone,
 OBSERVED_DENSITY_PER_ZONE_TOOLTIP,La densité observée est basée sur le nombre de plantes observées dans les zones qui ont été observées au moins une fois au cours de cette observation.,
@@ -1668,6 +1670,7 @@ SET_UP_YOUR_SENSOR_KIT_MSG,"Si votre banque de semences a été construite par T
 SETTINGS,Paramètres,
 SHRUB,Arbuste,
 SHRUB_TREE,Arbuste ou arbre,
+SHRUBS,Arbustes,
 SILVOPASTURE,Sylviculture,
 SIMPLE_SITE,Site simple,
 SINGLE_SPECIES_MORTALITY_RATE_MESSAGE,"Vous n'avez qu'une seule espèce avec un taux de mortalité pour le moment. Lorsqu'il y en aura plus, l'espèce ayant le taux de mortalité le plus bas apparaîtra.",

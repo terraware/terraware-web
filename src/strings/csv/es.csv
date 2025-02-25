@@ -1088,6 +1088,7 @@ OBSERVATION_SCHEDULED,Observación programada,
 OBSERVATION_START_DATE,Fecha de inicio de la observación,
 OBSERVATION_STATUS,Estado de la observación,
 OBSERVATION_STATUS_OUTSTANDING,Pendiente,Remaining to be done
+OBSERVATION_TYPE,Tipo de observación,
 OBSERVATIONS,Observaciones,
 OBSERVATIONS_COMPLETION_PERCENTAGE,Las observaciones para {0} de {1} parcelas de monitoreo ({2}%) se han completado.,Example: Observations for 5 of 10 monitoring plots (50%) have been completed.
 OBSERVATIONS_DOWNLOAD_APP,"Para completar las observaciones, descargue la aplicación de Terraware en App Store o Google Play",
@@ -1097,6 +1098,7 @@ OBSERVATIONS_EMPTY_STATE_TITLE,Aún no hay observaciones,
 OBSERVATIONS_MAP_VIEW_PROMPT,"Para acceder a la vista del mapa, por favor selecciona un solo sitio de plantación.",
 OBSERVATIONS_REQUIRED_BY_DATE,Los parcelas de monitoreo de {0} requieren observación por {1}.,"Example: 5 monitoring plots require observation by June 30, 2023"
 OBSERVATIONS_WITH_THE_TERRAWARE_APP,Observaciones con la aplicación Terraware,
+OBSERVED_DATE,Fecha de observación,
 OBSERVED_DENSITY,Densidad constatada,
 OBSERVED_DENSITY_PER_ZONE,Densidad observada por zona,
 OBSERVED_DENSITY_PER_ZONE_TOOLTIP,La densidad observada se determina con base en el número de plantas detectadas en las zonas que han sido evaluadas al menos una vez en esta observación.,
@@ -1668,6 +1670,7 @@ SET_UP_YOUR_SENSOR_KIT_MSG,"Si su banco de semillas fue construido por Terraform
 SETTINGS,Ajustes,
 SHRUB,Arbusto,
 SHRUB_TREE,Arbusto o árbol,
+SHRUBS,Arbustos,
 SILVOPASTURE,Sistema selvopastoril,
 SIMPLE_SITE,Terreno sencillo,
 SINGLE_SPECIES_MORTALITY_RATE_MESSAGE,"Ahora mismo sólo tiene 1 especie con tasa de mortalidad. Cuando haya más, aparecerá la especie con la tasa de mortalidad más baja.",
