@@ -132,7 +132,15 @@ export default function BoundariesAndZones({
           initialView={'map'}
           onView={(newView) => setView?.(newView)}
           search={<Search {...searchProps} />}
-          list={<PlantingSiteDetailsTable data={data} plantingSite={plantingSite} zoneViewUrl={zoneViewUrl} />}
+          list={
+            <PlantingSiteDetailsTable
+              data={data}
+              plantingSite={plantingSite}
+              zoneViewUrl={zoneViewUrl}
+              plotSelection={selectedPlotSelection}
+              observationType={selectedObservationType}
+            />
+          }
           map={<PlantingSiteMapView plantingSite={plantingSite} data={data} search={search ? search.trim() : ''} />}
         />
       )}
