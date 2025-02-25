@@ -192,7 +192,7 @@ export default function Map(props: MapProps): JSX.Element {
   const onMapClick = useCallback(
     (event: any) => {
       const { lat, lng } = event.lngLat;
-      if (event?.features[0]?.properties) {
+      if (event?.features?.[0]?.properties) {
         const { id, properties, layer } = event.features[0];
         const sourceId = layer.id.replace(/-fill$/, '');
         setPopupInfo({
