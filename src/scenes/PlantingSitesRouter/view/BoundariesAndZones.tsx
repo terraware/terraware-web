@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { Dropdown } from '@terraware/web-components';
 import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 
 import ListMapView from 'src/components/ListMapView';
@@ -11,6 +12,7 @@ import MapDateSelect from 'src/components/common/MapDateSelect';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
+import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import {
   searchObservations,
@@ -20,6 +22,7 @@ import { requestObservations, requestObservationsResults } from 'src/redux/featu
 import { selectPlantingSiteHistory } from 'src/redux/features/tracking/trackingSelectors';
 import { requestGetPlantingSiteHistory } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { PlotSelectionType } from 'src/scenes/ObservationsRouter/PlantMonitoring';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapEntityId, MapObject, MapSourceBaseData, MapSourceProperties } from 'src/types/Map';
@@ -30,6 +33,8 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import PlantingSiteDetailsTable from './PlantingSiteDetailsTable';
+
+export type ObservationType = 'plantMonitoring' | 'biomassMeasurements';
 
 type BoundariesAndZonesProps = {
   data: ZoneAggregation[];
@@ -52,6 +57,9 @@ export default function BoundariesAndZones({
 }: BoundariesAndZonesProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
+  const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
+  const [selectedObservationType, setSelectedObservationType] = useState<ObservationType>('plantMonitoring');
+  const adHocObservationSupportEnabled = isEnabled('Ad Hoc Observation Support');
 
   const searchProps = useMemo<SearchProps>(
     () => ({
@@ -63,10 +71,57 @@ export default function BoundariesAndZones({
 
   return (
     <Box sx={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}>
-      <Box display='flex' flexGrow={0}>
+      <Box display='flex' flexGrow={0} alignItems='center'>
         <Typography fontSize='16px' fontWeight={600} margin={theme.spacing(3, 0)}>
           {strings.BOUNDARIES_AND_ZONES}
         </Typography>
+        {adHocObservationSupportEnabled && view === 'list' && (
+          <Box display={'flex'} alignItems='center'>
+            <Box
+              sx={{
+                margin: theme.spacing(0, 2),
+                width: '1px',
+                height: '32px',
+                backgroundColor: theme.palette.TwClrBgTertiary,
+              }}
+            />
+            <Box display='flex' alignItems='center'>
+              <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>
+                {strings.PLOT_SELECTION}
+              </Typography>
+              <Box width='160px' marginRight={3}>
+                <Dropdown
+                  placeholder={strings.SELECT}
+                  id='plot-selection-selector'
+                  onChange={(newValue) => setSelectedPlotSelection(newValue as PlotSelectionType)}
+                  options={[
+                    { label: strings.ASSIGNED, value: 'assigned' },
+                    { label: strings.AD_HOC, value: 'adHoc' },
+                  ]}
+                  selectedValue={selectedPlotSelection}
+                  selectStyles={{ inputContainer: { maxWidth: '160px' }, optionsContainer: { maxWidth: '160px' } }}
+                  fullWidth
+                />
+              </Box>
+            </Box>
+            <Box display='flex' alignItems='center'>
+              <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>
+                {strings.OBSERVATION_TYPE}
+              </Typography>
+              <Dropdown
+                placeholder={strings.SELECT}
+                id='observation-type-selector'
+                onChange={(newValue) => setSelectedObservationType(newValue as ObservationType)}
+                options={[
+                  { label: strings.PLANT_MONITORING, value: 'plantMonitoring' },
+                  { label: strings.BIOMASS_MEASUREMENTS, value: 'biomassMeasurements' },
+                ]}
+                selectedValue={selectedObservationType}
+                fullWidth
+              />
+            </Box>
+          </Box>
+        )}
       </Box>
       {plantingSite.boundary && (
         <ListMapView

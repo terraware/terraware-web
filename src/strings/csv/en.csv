@@ -1088,6 +1088,7 @@ OBSERVATION_SCHEDULED,Observation scheduled!,
 OBSERVATION_START_DATE,Observation Start Date,
 OBSERVATION_STATUS,Observation Status,
 OBSERVATION_STATUS_OUTSTANDING,Outstanding,Remaining to be done
+OBSERVATION_TYPE,Observation Type,
 OBSERVATIONS,Observations,
 OBSERVATIONS_COMPLETION_PERCENTAGE,Observations for {0} of {1} monitoring plots ({2}%) have been completed.,Example: Observations for 5 of 10 monitoring plots (50%) have been completed.
 OBSERVATIONS_DOWNLOAD_APP,"To complete observations, download the Terraware app on the App Store or Google Play.",
