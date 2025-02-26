@@ -6,7 +6,7 @@ import { Button, DropdownItem } from '@terraware/web-components';
 import PageDialog from 'src/components/DocumentProducer/PageDialog';
 import VariableDetailsInput from 'src/components/DocumentProducer/VariableDetailsInput';
 import OptionsMenu from 'src/components/common/OptionsMenu';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
 import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { selectUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesSelector';
@@ -74,6 +74,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
   });
 
   const { activeLocale } = useLocalization();
+  const { isAllowed } = useUser();
   const [display, setDisplay] = useState<boolean>(displayProp);
   const [validate, setValidate] = useState<boolean>(false);
   const [hasErrors, setHasErrors] = useState<boolean>(false);
@@ -299,7 +300,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
               sx={{ float: 'right' }}
               type='passive'
             />
-            {display && (
+            {display && isAllowed('UPDATE_DELIVERABLE') && (
               <Button
                 icon='iconEdit'
                 id='edit-variable'

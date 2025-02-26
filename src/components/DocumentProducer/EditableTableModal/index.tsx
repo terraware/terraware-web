@@ -7,7 +7,7 @@ import PageDialog from 'src/components/DocumentProducer/PageDialog';
 import VariableWorkflowDetails from 'src/components/DocumentProducer/VariableWorkflowDetails';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { NonSelectTableCellValue } from 'src/hooks/useProjectVariablesUpdate/util';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
 import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { selectUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesSelector';
@@ -54,6 +54,7 @@ const EditableTableEdit = ({
   const columns = useMemo<TableColumn[]>(() => variable.columns, [variable]);
   const initialCellValues = useMemo<VariableTableCell[][]>(() => getInitialCellValues(variable), [variable]);
   const [cellValues, setCellValues] = useState<VariableTableCell[][]>(initialCellValues);
+  const { isAllowed } = useUser();
   const [display, setDisplay] = useState<boolean>(displayProp);
 
   const dispatch = useAppDispatch();
@@ -290,7 +291,7 @@ const EditableTableEdit = ({
           sx={{ float: 'right' }}
           type='passive'
         />
-        {display && (
+        {display && isAllowed('UPDATE_DELIVERABLE') && (
           <Button
             icon='iconEdit'
             id='edit-variable'

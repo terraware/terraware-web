@@ -6,7 +6,7 @@ import { Button, DropdownItem, Textfield } from '@terraware/web-components';
 import PageDialog from 'src/components/DocumentProducer/PageDialog';
 import VariableWorkflowDetails from 'src/components/DocumentProducer/VariableWorkflowDetails';
 import OptionsMenu from 'src/components/common/OptionsMenu';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import {
   selectUpdateVariableValues,
   selectUploadImageValue,
@@ -59,6 +59,7 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const [updateVariableValueRequestId, setUpdateVariableValueRequestId] = useState<string>('');
   const [uploadImageRequestId, setUploadImageRequestId] = useState<string>('');
+  const { isAllowed } = useUser();
   const [display, setDisplay] = useState<boolean>(displayProp);
 
   const updateVariableValuesRequest = useAppSelector(selectUpdateVariableValues(updateVariableValueRequestId));
@@ -248,7 +249,7 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
               sx={{ float: 'right' }}
               type='passive'
             />
-            {display && (
+            {display && isAllowed('UPDATE_DELIVERABLE') && (
               <Button
                 icon='iconEdit'
                 id='edit-variable'

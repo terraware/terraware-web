@@ -7,6 +7,7 @@ import PageContent from 'src/components/DocumentProducer/PageContent';
 import TableContent from 'src/components/DocumentProducer/TableContent';
 import VariableHistoryModal from 'src/components/Variables/VariableHistoryModal';
 import Link from 'src/components/common/Link';
+import { useUser } from 'src/providers';
 import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
 import strings from 'src/strings';
 import { SelectOptionPayload, VariableWithValues } from 'src/types/documentProducer/Variable';
@@ -98,6 +99,7 @@ const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.E
   const [openEditVariableModal, setOpenEditVariableModal] = useState<boolean>(false);
   const [selectedVariable, setSelectedVariable] = useState<VariableWithValues>();
   const [sectionsUsed, setSectionsUsed] = useState<string[]>([]);
+  const { isAllowed } = useUser();
 
   useEffect(() => {
     setVariables(
@@ -157,8 +159,10 @@ const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.E
       tableCellRenderer,
       tableReloadData: reload,
       tableOnSelect: (selected: VariableWithValues) => {
-        setSelectedVariable(selected);
-        setOpenEditVariableModal(true);
+        if (isAllowed('UPDATE_DELIVERABLE')) {
+          setSelectedVariable(selected);
+          setOpenEditVariableModal(true);
+        }
       },
     },
   };
