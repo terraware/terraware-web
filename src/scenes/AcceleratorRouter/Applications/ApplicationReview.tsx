@@ -10,28 +10,28 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import strings from 'src/strings';
-import { Application, ApplicationStatus, getApplicationStatusLabel } from 'src/types/Application';
+import { Application, ApplicationStatus } from 'src/types/Application';
 
 import ApplicationReviewModal from './ApplicationReviewModal';
 
 const getApplicationStatusColor = (status: ApplicationStatus, theme: Theme): Property.Color | string | undefined => {
   switch (status) {
     case 'Accepted':
-    case 'Carbon Eligible':
-    case 'Issue Resolved':
       return theme.palette.TwClrTxtSuccess;
     case 'In Review':
-    case 'Issue Active':
-    case 'Needs Follow-up':
+    case 'Issue Reassessment':
     case 'Waitlist':
       return theme.palette.TwClrTxtWarning;
-    case 'Not Accepted':
+    case 'Not Eligible':
       return theme.palette.TwClrTxtDanger;
-    case 'Issue Pending':
-    case 'PL Review':
-    case 'Pre-check':
-    case 'Ready for Review':
+    case 'Passed Pre-screen':
     case 'Submitted':
+    case 'Sourcing Team Review':
+    case 'GIS Assessment':
+    case 'Carbon Assessment':
+    case 'Expert Review':
+    case 'P0 Eligible':
+    case 'In Review':
       return theme.palette.TwClrTxtInfo;
     case 'Not Submitted':
     case 'Failed Pre-screen':
@@ -102,7 +102,7 @@ const ApplicationReview = ({ application }: ApplicationReviewProps) => {
             color={color || 'black'}
             marginLeft={theme.spacing(2)}
           >
-            {getApplicationStatusLabel(application.status)}
+            {application.status}
           </Typography>
           <Button
             // if a user lacks permission to update internal comments,

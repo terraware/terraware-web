@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material';
 import { Badge } from '@terraware/web-components';
 import { BadgeProps } from '@terraware/web-components/components/Badge';
 
-import { ApplicationStatus, getApplicationStatusLabel } from 'src/types/Application';
+import { ApplicationStatus } from 'src/types/Application';
 
 type ApplicationStatusBadgeProps = {
   status: ApplicationStatus;
@@ -22,12 +22,14 @@ const ApplicationStatusBadge = (props: ApplicationStatusBadgeProps): JSX.Element
           borderColor: theme.palette.TwClrBrdrDanger,
           labelColor: theme.palette.TwClrTxtDanger,
         };
-      case 'Not Submitted':
       case 'Passed Pre-screen':
-      case 'PL Review':
-      case 'Pre-check':
-      case 'Ready for Review':
+      case 'Not Submitted':
       case 'Submitted':
+      case 'Sourcing Team Review':
+      case 'GIS Assessment':
+      case 'Carbon Assessment':
+      case 'Expert Review':
+      case 'P0 Eligible':
       case 'In Review':
         return {
           backgroundColor: theme.palette.TwClrBgInfoTertiary,
@@ -35,18 +37,14 @@ const ApplicationStatusBadge = (props: ApplicationStatusBadgeProps): JSX.Element
           labelColor: theme.palette.TwClrTxtInfo,
         };
       case 'Waitlist':
-      case 'Issue Active':
-      case 'Issue Pending':
-      case 'Needs Follow-up':
-      case 'Not Accepted':
+      case 'Issue Reassessment':
+      case 'Not Eligible':
         return {
           backgroundColor: theme.palette.TwClrBgWarningTertiary,
           borderColor: theme.palette.TwClrBrdrWarning,
           labelColor: theme.palette.TwClrTxtWarning,
         };
       case 'Accepted':
-      case 'Carbon Eligible':
-      case 'Issue Resolved':
         return {
           backgroundColor: theme.palette.TwClrBgSuccessTertiary,
           borderColor: theme.palette.TwClrBrdrSuccess,
@@ -57,7 +55,7 @@ const ApplicationStatusBadge = (props: ApplicationStatusBadgeProps): JSX.Element
     }
   }, [status, theme]);
 
-  return <>{<Badge {...badgeColors} label={getApplicationStatusLabel(status)} />}</>;
+  return <>{<Badge {...badgeColors} label={status} />}</>;
 };
 
 export default ApplicationStatusBadge;
