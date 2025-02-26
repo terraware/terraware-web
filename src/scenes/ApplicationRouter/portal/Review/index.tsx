@@ -92,19 +92,17 @@ const ReviewView = () => {
 
   const renderContent = (application: Application | undefined) => {
     switch (application?.status) {
-      case 'Accepted':
-      case 'Carbon Eligible':
-      case 'In Review':
-      case 'Needs Follow-up':
-      case 'PL Review':
-      case 'Pre-check':
-      case 'Ready for Review':
       case 'Submitted':
-      case 'Issue Active':
-      case 'Issue Pending':
-      case 'Issue Resolved':
+      case 'Sourcing Team Review':
+      case 'GIS Assessment':
+      case 'Carbon Assessment':
+      case 'Expert Review':
+      case 'P0 Eligible':
+      case 'In Review':
       case 'Waitlist':
-      case 'Not Accepted':
+      case 'Issue Reassessment':
+      case 'Not Eligible':
+      case 'Accepted':
         return <ApplicationStatusInReview />;
       default:
         return <ReviewCard requestId={requestId} sections={nonPrescreenSections} setRequestId={setRequestId} />;
