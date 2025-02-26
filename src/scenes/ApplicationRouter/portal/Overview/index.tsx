@@ -44,19 +44,17 @@ const OverviewView = () => {
         case 'Passed Pre-screen':
           return 1;
         case 'Submitted':
+        case 'Sourcing Team Review':
+        case 'GIS Assessment':
+        case 'Carbon Assessment':
+        case 'Expert Review':
+        case 'P0 Eligible':
         case 'In Review':
-        case 'PL Review':
-        case 'Ready for Review':
-        case 'Pre-check':
-        case 'Needs Follow-up':
-        case 'Carbon Eligible':
           return 2;
         case 'Accepted':
         case 'Waitlist':
-        case 'Issue Active':
-        case 'Issue Pending':
-        case 'Issue Resolved':
-        case 'Not Accepted':
+        case 'Issue Reassessment':
+        case 'Not Eligible':
           return 2; // TODO do we need a result timeline?
       }
     } else {

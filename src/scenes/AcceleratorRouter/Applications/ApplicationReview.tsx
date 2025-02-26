@@ -3,43 +3,15 @@ import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
-import { Property } from 'csstype';
 
 import ProjectFieldTextAreaDisplay from 'src/components/ProjectField/TextAreaDisplay';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import strings from 'src/strings';
-import { Application, ApplicationStatus } from 'src/types/Application';
+import { Application, ApplicationStatus, getApplicationStatusColor } from 'src/types/Application';
 
 import ApplicationReviewModal from './ApplicationReviewModal';
-
-const getApplicationStatusColor = (status: ApplicationStatus, theme: Theme): Property.Color | string | undefined => {
-  switch (status) {
-    case 'Accepted':
-      return theme.palette.TwClrTxtSuccess;
-    case 'In Review':
-    case 'Issue Reassessment':
-    case 'Waitlist':
-      return theme.palette.TwClrTxtWarning;
-    case 'Not Eligible':
-      return theme.palette.TwClrTxtDanger;
-    case 'Passed Pre-screen':
-    case 'Submitted':
-    case 'Sourcing Team Review':
-    case 'GIS Assessment':
-    case 'Carbon Assessment':
-    case 'Expert Review':
-    case 'P0 Eligible':
-    case 'In Review':
-      return theme.palette.TwClrTxtInfo;
-    case 'Not Submitted':
-    case 'Failed Pre-screen':
-    case 'Passed Pre-screen':
-    default:
-      return theme.palette.TwClrTxtWarning;
-  }
-};
 
 type ApplicationReviewProps = {
   application: Application;

@@ -1,3 +1,6 @@
+import { Theme } from '@mui/material';
+import { Property } from 'csstype';
+
 import { components } from 'src/api/types/generated-schema';
 
 export type Application = components['schemas']['ApplicationPayload'];
@@ -37,4 +40,34 @@ export const ApplicationStatusOrder: { [key in ApplicationStatus]: number } = {
   'Not Eligible': 12,
   Accepted: 13,
   Waitlist: 14,
+};
+
+export const getApplicationStatusColor = (
+  status: ApplicationStatus,
+  theme: Theme
+): Property.Color | string | undefined => {
+  switch (status) {
+    case 'Accepted':
+      return theme.palette.TwClrTxtSuccess;
+    case 'In Review':
+    case 'Issue Reassessment':
+    case 'Waitlist':
+      return theme.palette.TwClrTxtWarning;
+    case 'Not Eligible':
+      return theme.palette.TwClrTxtDanger;
+    case 'Passed Pre-screen':
+    case 'Submitted':
+    case 'Sourcing Team Review':
+    case 'GIS Assessment':
+    case 'Carbon Assessment':
+    case 'Expert Review':
+    case 'P0 Eligible':
+    case 'In Review':
+      return theme.palette.TwClrTxtInfo;
+    case 'Not Submitted':
+    case 'Failed Pre-screen':
+    case 'Passed Pre-screen':
+    default:
+      return theme.palette.TwClrTxtWarning;
+  }
 };
