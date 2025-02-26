@@ -10,6 +10,13 @@ export default function TreesAndShrubsRenderer(props: RendererProps<TableRowType
   const { column, row, value, index, onRowClick } = props;
   const theme = useTheme();
 
+  const getTreeNumber = () => {
+    if (row.treeGrowthForm === 'Trunk') {
+      return `${row.treeNumber}_${row.trunkNumber}`;
+    }
+    return row.treeNumber;
+  };
+
   if (column.key === 'description' && onRowClick) {
     return (
       <CellRenderer
@@ -28,6 +35,10 @@ export default function TreesAndShrubsRenderer(props: RendererProps<TableRowType
         title={value as string}
       />
     );
+  }
+
+  if (column.key === 'treeNumber') {
+    return <CellRenderer index={index} column={column} value={getTreeNumber()} row={row} title={value as string} />;
   }
 
   return <CellRenderer {...props} />;
