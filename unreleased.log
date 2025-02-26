@@ -1,3 +1,8 @@
+8cd6074d4b2 SW-6633 Include dashes "--" for all fields that have no data (#3664)
+9c60cef3dd0 SW-6630 Plant ID for Trunks not appearing correctly (#3662)
+2f74e8d02f3 SW-6635 Fix "0" value for Number of Small Trees is appearing as "0-0" (#3661)
+ffa6fda0715 SW-6627 Measurement Time field should include Date (#3659)
+cc103254d80 SW-6433 Read Only users should not be able to edit document sections/variables (#3658)
 5a315eed5a8 Updated translations from Phrase (#3660)
 88380080e2e SW-4252 Add space between plots conditions (#3656)
 74f0a3e664a Updated translations from Phrase (#3657)
