@@ -59,7 +59,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
             )
           : undefined,
       },
-      { label: strings.ELEVATION, value: 106.1 },
+      { label: strings.ELEVATION_M, value: 106.1 },
       { label: strings.TYPE_OF_FOREST, value: biomassMeasurements?.forestType },
       {
         label: strings.NUMBER_OF_SMALL_TREES,
@@ -98,7 +98,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
       { label: strings.OBSERVER, value: monitoringPlot?.claimedByName },
       {
         label: strings.PLOT_CONDITIONS,
-        value: monitoringPlot?.conditions.map((condition) => getConditionString(condition)).join(','),
+        value: monitoringPlot?.conditions.map((condition) => getConditionString(condition)).join(', '),
       },
       { label: strings.FIELD_NOTES, value: monitoringPlot?.notes || '- -' },
       {

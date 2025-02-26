@@ -77,7 +77,7 @@ export default function AdHocObservationDetails(): JSX.Element {
       { label: strings.NUMBER_OF_PHOTOS, value: handleMissingData(monitoringPlot?.photos?.length) },
       {
         label: strings.PLOT_CONDITIONS,
-        value: monitoringPlot?.conditions?.map((condition) => getConditionString(condition)).join(','),
+        value: monitoringPlot?.conditions?.map((condition) => getConditionString(condition)).join(', '),
       },
       { label: strings.FIELD_NOTES, value: monitoringPlot?.notes, text: true },
     ];
