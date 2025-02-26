@@ -63,7 +63,10 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
       { label: strings.TYPE_OF_FOREST, value: biomassMeasurements?.forestType },
       {
         label: strings.NUMBER_OF_SMALL_TREES,
-        value: `${biomassMeasurements?.smallTreeCountLow}-${biomassMeasurements?.smallTreeCountHigh}`,
+        value:
+          biomassMeasurements?.smallTreeCountLow || biomassMeasurements?.smallTreeCountHigh
+            ? `${biomassMeasurements?.smallTreeCountLow}-${biomassMeasurements?.smallTreeCountHigh}`
+            : '0',
       },
       {
         label: '',
