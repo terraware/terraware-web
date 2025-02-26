@@ -15,7 +15,7 @@ import { getConditionString } from 'src/redux/features/observations/utils';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { getShortTime } from 'src/utils/dateFormatter';
+import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import LiveTreesPerSpecies from './LiveTreesPerSpecies';
@@ -76,11 +76,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
       {
         label: strings.MEASUREMENT_TIME,
         value: biomassMeasurements?.tideTime
-          ? getShortTime(
-              biomassMeasurements?.tideTime,
-              activeLocale,
-              plantingSite?.timeZone || defaultTimeZone.get().id
-            )
+          ? getDateTimeDisplayValue(new Date(biomassMeasurements?.tideTime).getTime())
           : '- -',
       },
       {
