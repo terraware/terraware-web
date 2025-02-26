@@ -130,6 +130,15 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
 
     return data;
   }, [activeLocale, plantingSiteId, observationId]);
+  const southwestCornerPhoto = monitoringPlot?.photos
+    .filter((photo) => photo.type === 'Plot' && photo.position === 'SouthwestCorner')
+    .at(0);
+
+  const allPlotPhotos = monitoringPlot?.photos.filter((photo) => photo.type === 'Plot' && photo.position === undefined);
+
+  const positionPhotosExceptSW = monitoringPlot?.photos.filter(
+    (photo) => photo.type === 'Plot' && photo.position !== undefined && photo.position !== 'SouthwestCorner'
+  );
 
   return (
     <Page crumbs={crumbs} title={title} titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}>
@@ -160,9 +169,10 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
                   <MonitoringPlotPhotos
                     observationId={Number(observationId)}
                     monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
-                    photos={monitoringPlot?.photos.filter(
-                      (photo) => photo.type === 'Plot' && photo.position !== undefined
-                    )}
+                    photos={[
+                      ...(southwestCornerPhoto ? [southwestCornerPhoto] : []),
+                      ...(positionPhotosExceptSW || []),
+                    ]}
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -176,9 +186,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
                       <MonitoringPlotPhotos
                         observationId={Number(observationId)}
                         monitoringPlotId={Number(monitoringPlot?.monitoringPlotId)}
-                        photos={monitoringPlot?.photos.filter(
-                          (photo) => photo.type === 'Plot' && photo.position === undefined
-                        )}
+                        photos={[...(southwestCornerPhoto ? [southwestCornerPhoto] : []), ...(allPlotPhotos || [])]}
                       />
                     </Grid>
                     <Grid item xs={6}>
