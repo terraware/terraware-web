@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import ProjectFieldTextAreaDisplay from 'src/components/ProjectField/TextAreaDisplay';
@@ -9,7 +9,7 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import strings from 'src/strings';
-import { Application, ApplicationStatus, getApplicationStatusColor } from 'src/types/Application';
+import { Application, getApplicationStatusColor } from 'src/types/Application';
 
 import ApplicationReviewModal from './ApplicationReviewModal';
 
