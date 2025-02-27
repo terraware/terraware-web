@@ -11,7 +11,7 @@ import {
   ObservationState,
 } from 'src/types/Observations';
 
-import { mergeAdHocObservations, mergeObservations, searchZones } from './utils';
+import { mergeAdHocObservations, mergeObservations, searchPlots, searchZones } from './utils';
 
 export const ALL_STATES: ObservationState[] = ['Abandoned', 'Completed', 'Overdue', 'InProgress'];
 
@@ -266,7 +266,7 @@ export const searchAdHocObservations = createCachedSelector(
   (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string) => plantingSiteId,
   (state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string) =>
     selectMergedPlantingSiteAdHocObservations(state, plantingSiteId, defaultTimeZone),
-  (search, plantingSiteId, observations) => observations
+  (search, plantingSiteId, observations) => searchPlots(search, observations)
 )(
   (_state: RootState, plantingSiteId: number, defaultTimeZone: string, search: string) =>
     `${plantingSiteId}_${defaultTimeZone}_${search}`
