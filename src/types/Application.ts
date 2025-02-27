@@ -54,6 +54,7 @@ export const getApplicationStatusColor = (
       return theme.palette.TwClrTxtWarning;
     case 'Not Eligible':
       return theme.palette.TwClrTxtDanger;
+    case 'Not Submitted':
     case 'Passed Pre-screen':
     case 'Submitted':
     case 'Sourcing Team Review':
@@ -63,9 +64,7 @@ export const getApplicationStatusColor = (
     case 'P0 Eligible':
     case 'In Review':
       return theme.palette.TwClrTxtInfo;
-    case 'Not Submitted':
     case 'Failed Pre-screen':
-    case 'Passed Pre-screen':
     default:
       return theme.palette.TwClrTxtWarning;
   }
