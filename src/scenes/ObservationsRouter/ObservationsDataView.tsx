@@ -112,7 +112,12 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
         )
       }
       onView={setView}
-      search={<Search {...searchProps} />}
+      search={
+        <Search
+          {...searchProps}
+          filtersProps={selectedPlotSelection === 'adHoc' ? undefined : searchProps.filtersProps}
+        />
+      }
       style={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}
     />
   );
