@@ -5,9 +5,12 @@ import { Typography, useTheme } from '@mui/material';
 import ListMapView from 'src/components/ListMapView';
 import Card from 'src/components/common/Card';
 import { View } from 'src/components/common/ListMapSelector';
-import Search from 'src/components/common/SearchFiltersWrapper';
+import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
-import { searchAdHocObservations } from 'src/redux/features/observations/observationsSelectors';
+import {
+  searchAdHocObservations,
+  selectAdHocObservationsResults,
+} from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
@@ -17,16 +20,32 @@ import BiomassMeasurementList from './BiomassMeasurementListView';
 import BiomassMeasurementMapView from './BiomassMeasurementMapView';
 import { AllPlantingSitesMapView } from './ObservationsDataView';
 
-export type BiomassMeasurementProps = {
+export type BiomassMeasurementProps = SearchProps & {
   selectedPlantingSite?: PlantingSite;
 };
 
-export default function BiomassMeasurement({ selectedPlantingSite }: BiomassMeasurementProps): JSX.Element {
+export default function BiomassMeasurement(props: BiomassMeasurementProps): JSX.Element {
   const theme = useTheme();
   const [view, setView] = useState<View>();
   const defaultTimeZone = useDefaultTimeZone();
+  const { selectedPlantingSite } = props;
+  const { ...searchProps }: SearchProps = props;
+  const unfilteredResults = useAppSelector(selectAdHocObservationsResults);
+  const unfilteredObservationsResults = useMemo(() => {
+    if (!unfilteredResults || !selectedPlantingSite?.id) {
+      return [];
+    }
+
+    return unfilteredResults?.filter((observationResult) => {
+      const matchesSite =
+        selectedPlantingSite.id !== -1 ? observationResult.plantingSiteId === selectedPlantingSite.id : true;
+      const isBiomassMeasurement = observationResult.type === 'Biomass Measurements';
+      return matchesSite && isBiomassMeasurement;
+    });
+  }, [unfilteredResults, selectedPlantingSite]);
+
   const allAdHocObservationsResults = useAppSelector((state) =>
-    searchAdHocObservations(state, selectedPlantingSite?.id || -1, defaultTimeZone.get().id, '')
+    searchAdHocObservations(state, selectedPlantingSite?.id || -1, defaultTimeZone.get().id, searchProps.search)
   );
   const adHocObservationsResults = useMemo(() => {
     if (!allAdHocObservationsResults || !selectedPlantingSite?.id) {
@@ -54,7 +73,7 @@ export default function BiomassMeasurement({ selectedPlantingSite }: BiomassMeas
         {strings.BIOMASS_MEASUREMENT}
       </Typography>
 
-      {adHocObservationsResults && adHocObservationsResults.length > 0 ? (
+      {unfilteredObservationsResults && unfilteredObservationsResults.length > 0 ? (
         <ListMapView
           initialView='list'
           list={<BiomassMeasurementList adHocObservationsResults={adHocObservationsResults} />}
@@ -69,7 +88,7 @@ export default function BiomassMeasurement({ selectedPlantingSite }: BiomassMeas
             )
           }
           onView={setView}
-          search={<Search search={''} onSearch={() => true} />}
+          search={<Search {...searchProps} />}
           style={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}
         />
       ) : (

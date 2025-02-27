@@ -60,10 +60,10 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
       {
         id: 'biomassMeasurements',
         label: strings.BIOMASS_MEASUREMENT,
-        children: <BiomassMeasurement selectedPlantingSite={selectedPlantingSite} />,
+        children: <BiomassMeasurement {...props} selectedPlantingSite={selectedPlantingSite} />,
       },
     ];
-  }, [activeLocale, selectedPlantingSite]);
+  }, [activeLocale, selectedPlantingSite, props]);
 
   const { activeTab, onTabChange } = useStickyTabs({
     defaultTab: 'plantMonitoring',

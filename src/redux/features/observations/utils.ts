@@ -69,6 +69,15 @@ export const searchZones = (search: string, zoneNames: string[], observations?: 
 
 const matchZone = (zone: ObservationPlantingZoneResults, search: string) => regexMatch(zone.plantingZoneName, search);
 
+export const searchPlots = (search: string, observations?: AdHocObservationResults[]) => {
+  if (!search?.trim()) {
+    return observations;
+  }
+  return observations?.filter((observation: AdHocObservationResults) =>
+    observation.adHocPlot ? regexMatch(observation.adHocPlot.monitoringPlotNumber.toString(), search) : true
+  );
+};
+
 type SpeciesValue = {
   commonName?: string;
   scientificName: string;
