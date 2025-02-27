@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1740679804911" clover="3.2.0">
-  <project timestamp="1740679804911" name="All files">
-    <metrics statements="27728" coveredstatements="1220" conditionals="18879" coveredconditionals="348" methods="8557" coveredmethods="197" elements="55164" coveredelements="1765" complexity="0" loc="27728" ncloc="27728" packages="240" files="1145" classes="1145"/>
+<coverage generated="1740686890811" clover="3.2.0">
+  <project timestamp="1740686890811" name="All files">
+    <metrics statements="27728" coveredstatements="1220" conditionals="18881" coveredconditionals="348" methods="8557" coveredmethods="197" elements="55166" coveredelements="1765" complexity="0" loc="27728" ncloc="27728" packages="240" files="1145" classes="1145"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -22882,7 +22882,7 @@
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter">
-      <metrics statements="385" coveredstatements="0" conditionals="300" coveredconditionals="0" methods="141" coveredmethods="0"/>
+      <metrics statements="385" coveredstatements="0" conditionals="302" coveredconditionals="0" methods="141" coveredmethods="0"/>
       <file name="AdHocObservationsRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/AdHocObservationsRenderer.tsx">
         <metrics statements="17" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="11" count="0" type="stmt"/>
@@ -23094,7 +23094,7 @@
         <line num="41" count="0" type="stmt"/>
       </file>
       <file name="ObservationsDataView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/ObservationsDataView.tsx">
-        <metrics statements="22" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <metrics statements="22" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="41" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
@@ -23114,9 +23114,9 @@
         <line num="76" count="0" type="stmt"/>
         <line num="77" count="0" type="stmt"/>
         <line num="89" count="0" type="stmt"/>
-        <line num="121" count="0" type="stmt"/>
-        <line num="122" count="0" type="stmt"/>
-        <line num="124" count="0" type="stmt"/>
+        <line num="126" count="0" type="stmt"/>
+        <line num="127" count="0" type="stmt"/>
+        <line num="129" count="0" type="stmt"/>
       </file>
       <file name="ObservationsEventsNotification.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/ObservationsEventsNotification.tsx">
         <metrics statements="16" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="10" coveredmethods="0"/>
