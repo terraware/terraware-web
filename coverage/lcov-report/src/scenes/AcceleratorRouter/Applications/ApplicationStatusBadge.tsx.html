@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
@@ -124,9 +124,7 @@
 <a name='L59'></a><a href='#L59'>59</a>
 <a name='L60'></a><a href='#L60'>60</a>
 <a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -157,19 +155,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -195,7 +191,7 @@ import { useTheme } from '@mui/material';
 import { Badge } from '@terraware/web-components';
 import { BadgeProps } from '@terraware/web-components/components/Badge';
 &nbsp;
-import { ApplicationStatus, getApplicationStatusLabel } from 'src/types/Application';
+import { ApplicationStatus } from 'src/types/Application';
 &nbsp;
 type ApplicationStatusBadgeProps = {
   status: ApplicationStatus;
@@ -213,12 +209,14 @@ const ApplicationStatusBadge = <span class="cstat-no" title="statement not cover
           borderColor: theme.palette.TwClrBrdrDanger,
           labelColor: theme.palette.TwClrTxtDanger,
         };
-      case 'Not Submitted':
       case 'Passed Pre-screen':
-      case 'PL Review':
-      case 'Pre-check':
-      case 'Ready for Review':
+      case 'Not Submitted':
       case 'Submitted':
+      case 'Sourcing Team Review':
+      case 'GIS Assessment':
+      case 'Carbon Assessment':
+      case 'Expert Review':
+      case 'P0 Eligible':
       case 'In Review':
 <span class="cstat-no" title="statement not covered" >        return {</span>
           backgroundColor: theme.palette.TwClrBgInfoTertiary,
@@ -226,18 +224,14 @@ const ApplicationStatusBadge = <span class="cstat-no" title="statement not cover
           labelColor: theme.palette.TwClrTxtInfo,
         };
       case 'Waitlist':
-      case 'Issue Active':
-      case 'Issue Pending':
-      case 'Needs Follow-up':
-      case 'Not Accepted':
+      case 'Issue Reassessment':
+      case 'Not Eligible':
 <span class="cstat-no" title="statement not covered" >        return {</span>
           backgroundColor: theme.palette.TwClrBgWarningTertiary,
           borderColor: theme.palette.TwClrBrdrWarning,
           labelColor: theme.palette.TwClrTxtWarning,
         };
       case 'Accepted':
-      case 'Carbon Eligible':
-      case 'Issue Resolved':
 <span class="cstat-no" title="statement not covered" >        return {</span>
           backgroundColor: theme.palette.TwClrBgSuccessTertiary,
           borderColor: theme.palette.TwClrBrdrSuccess,
@@ -248,7 +242,7 @@ const ApplicationStatusBadge = <span class="cstat-no" title="statement not cover
     }
   }, [status, theme]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return &lt;&gt;{&lt;Badge {...badgeColors} label={getApplicationStatusLabel(status)} /&gt;}&lt;/&gt;;</span>
+<span class="cstat-no" title="statement not covered" >  return &lt;&gt;{&lt;Badge {...badgeColors} label={status} /&gt;}&lt;/&gt;;</span>
 };
 &nbsp;
 export default ApplicationStatusBadge;
@@ -259,7 +253,7 @@ export default ApplicationStatusBadge;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-27T20:08:10.186Z
+                at 2025-02-27T20:51:52.038Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
