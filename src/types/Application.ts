@@ -49,7 +49,6 @@ export const getApplicationStatusColor = (
   switch (status) {
     case 'Accepted':
       return theme.palette.TwClrTxtSuccess;
-    case 'In Review':
     case 'Issue Reassessment':
     case 'Waitlist':
       return theme.palette.TwClrTxtWarning;
