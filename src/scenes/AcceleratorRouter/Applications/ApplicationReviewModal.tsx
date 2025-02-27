@@ -17,7 +17,6 @@ import {
   ApplicationReviewStatus,
   ApplicationReviewStatuses,
   ApplicationStatus,
-  getApplicationStatusLabel,
 } from 'src/types/Application';
 import useForm from 'src/utils/useForm';
 
@@ -43,7 +42,7 @@ const ApplicationReviewModal = ({
   const result = useAppSelector(selectApplicationReview(requestId));
 
   const dropdownOptions: DropdownItem[] = ApplicationReviewStatuses.map((status) => ({
-    label: getApplicationStatusLabel(status),
+    label: status,
     value: status,
   }));
 
@@ -52,7 +51,7 @@ const ApplicationReviewModal = ({
       case 'In Review':
         return 'Submitted';
       case 'Waitlist':
-        return 'Issue Pending';
+        return 'Issue Reassessment';
       default:
         return status;
     }

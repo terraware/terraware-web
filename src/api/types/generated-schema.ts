@@ -742,6 +742,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/accelerator/projects/{projectId}/reports/metrics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List all project metrics for one project. */
+        get: operations["listProjectMetrics"];
+        /** Insert project metric, that the project will report on all future reports. */
+        put: operations["createProjectMetric"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/projects/{projectId}/reports/metrics/{metricId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update one project metric by ID. */
+        post: operations["updateProjectMetric"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/accelerator/projects/{projectId}/reports/{reportId}/metrics": {
         parameters: {
             query?: never;
@@ -900,7 +935,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List all standard metric. */
+        /** List all standard metrics. */
         get: operations["listStandardMetric"];
         /** Insert standard metric, that projects will report on all future reports. */
         put: operations["createStandardMetric"];
@@ -4016,7 +4051,7 @@ export interface components {
             /** Format: date-time */
             modifiedTime: string;
             /** @enum {string} */
-            status: "Accepted" | "Carbon Eligible" | "Failed Pre-screen" | "Issue Active" | "Issue Pending" | "Issue Resolved" | "Needs Follow-up" | "Not Accepted" | "Not Submitted" | "Passed Pre-screen" | "PL Review" | "Pre-check" | "Ready for Review" | "Submitted" | "In Review" | "Waitlist";
+            status: "Accepted" | "Carbon Assessment" | "Expert Review" | "Failed Pre-screen" | "Issue Reassessment" | "Not Eligible" | "Not Submitted" | "P0 Eligible" | "Passed Pre-screen" | "Sourcing Team Review" | "GIS Assessment" | "Submitted" | "In Review" | "Waitlist";
         };
         ApplicationModulePayload: {
             /** Format: int64 */
@@ -4051,7 +4086,7 @@ export interface components {
             projectId: number;
             projectName: string;
             /** @enum {string} */
-            status: "Accepted" | "Carbon Eligible" | "Failed Pre-screen" | "Issue Active" | "Issue Pending" | "Issue Resolved" | "Needs Follow-up" | "Not Accepted" | "Not Submitted" | "Passed Pre-screen" | "PL Review" | "Pre-check" | "Ready for Review" | "Submitted" | "In Review" | "Waitlist";
+            status: "Accepted" | "Carbon Assessment" | "Expert Review" | "Failed Pre-screen" | "Issue Reassessment" | "Not Eligible" | "Not Submitted" | "P0 Eligible" | "Passed Pre-screen" | "Sourcing Team Review" | "GIS Assessment" | "Submitted" | "In Review" | "Waitlist";
         };
         AssignParticipantProjectSpeciesPayload: {
             projectIds: number[];
@@ -4892,6 +4927,9 @@ export interface components {
             id: number;
             status: components["schemas"]["SuccessOrError"];
         };
+        CreateProjectMetricRequestPayload: {
+            metric: components["schemas"]["NewMetricPayload"];
+        };
         CreateProjectRequestPayload: {
             description?: string;
             name: string;
@@ -4917,7 +4955,7 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
         };
         CreateStandardMetricRequestPayload: {
-            metric: components["schemas"]["NewStandardMetricPayload"];
+            metric: components["schemas"]["NewMetricPayload"];
         };
         CreateSubLocationRequestPayload: {
             name: string;
@@ -5394,6 +5432,19 @@ export interface components {
              * @enum {string}
              */
             type: "Number";
+        };
+        ExistingProjectMetricPayload: {
+            /** @enum {string} */
+            component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            description?: string;
+            /** Format: int64 */
+            id: number;
+            name: string;
+            /** Format: int64 */
+            projectId: number;
+            reference: string;
+            /** @enum {string} */
+            type: "Activity" | "Output" | "Outcome" | "Impact";
         };
         ExistingSectionTextValuePayload: Omit<WithRequired<components["schemas"]["ExistingValuePayload"], "id" | "listPosition" | "type">, "type"> & {
             textValue: string;
@@ -6304,6 +6355,10 @@ export interface components {
             details: components["schemas"]["ProjectAcceleratorDetailsPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
+        ListProjectMetricsResponsePayload: {
+            metrics: components["schemas"]["ExistingProjectMetricPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
         ListProjectsResponsePayload: {
             projects: components["schemas"]["ProjectPayload"][];
             status: components["schemas"]["SuccessOrError"];
@@ -6600,6 +6655,15 @@ export interface components {
              */
             type: "Link";
         };
+        NewMetricPayload: {
+            /** @enum {string} */
+            component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            description?: string;
+            name: string;
+            reference: string;
+            /** @enum {string} */
+            type: "Activity" | "Output" | "Outcome" | "Impact";
+        };
         NewNumberValuePayload: Omit<components["schemas"]["NewValuePayload"], "type"> & {
             citation?: string;
             numberValue: number;
@@ -6678,15 +6742,6 @@ export interface components {
              * @enum {string}
              */
             growthForm: "shrub";
-        };
-        NewStandardMetricPayload: {
-            /** @enum {string} */
-            component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
-            description?: string;
-            name: string;
-            reference: string;
-            /** @enum {string} */
-            type: "Activity" | "Output" | "Outcome" | "Impact";
         };
         NewTableValuePayload: Omit<components["schemas"]["NewValuePayload"], "type"> & {
             /** @description Citations on table values can be used if you want a citation that is associated with the table as a whole rather than with individual cells, or if you want a citation on an empty table: append a row with no column values but with a citation. */
@@ -7819,6 +7874,16 @@ export interface components {
              */
             operation: "Replace";
         };
+        ReportProjectMetricEntriesPayload: {
+            /** Format: int64 */
+            id: number;
+            internalComment?: string;
+            notes?: string;
+            /** Format: int32 */
+            target?: number;
+            /** Format: int32 */
+            value?: number;
+        };
         ReportReviewPayload: {
             feedback?: string;
             internalComment?: string;
@@ -7872,6 +7937,7 @@ export interface components {
             overwriteExisting: boolean;
         };
         ReviewAcceleratorReportMetricsRequestPayload: {
+            projectMetrics: components["schemas"]["ReportProjectMetricEntriesPayload"][];
             standardMetrics: components["schemas"]["ReportStandardMetricEntriesPayload"][];
         };
         ReviewAcceleratorReportRequestPayload: {
@@ -7881,7 +7947,7 @@ export interface components {
             feedback?: string;
             internalComment?: string;
             /** @enum {string} */
-            status: "Not Submitted" | "Failed Pre-screen" | "Passed Pre-screen" | "Submitted" | "PL Review" | "Ready for Review" | "Pre-check" | "Needs Follow-up" | "Carbon Eligible" | "Accepted" | "Issue Active" | "Issue Pending" | "Issue Resolved" | "Not Accepted";
+            status: "Not Submitted" | "Failed Pre-screen" | "Passed Pre-screen" | "Submitted" | "Sourcing Team Review" | "GIS Assessment" | "Expert Review" | "Carbon Assessment" | "P0 Eligible" | "Accepted" | "Issue Reassessment" | "Not Eligible";
         };
         ScheduleObservationRequestPayload: {
             /**
@@ -8348,6 +8414,7 @@ export interface components {
             values: components["schemas"]["TimeseriesValuePayload"][];
         };
         UpdateAcceleratorReportMetricsRequestPayload: {
+            projectMetrics: components["schemas"]["ReportProjectMetricEntriesPayload"][];
             standardMetrics: components["schemas"]["ReportStandardMetricEntriesPayload"][];
         };
         UpdateAccessionRequestPayloadV2: {
@@ -8699,6 +8766,9 @@ export interface components {
             totalCarbon?: number;
             totalExpansionPotential?: number;
             whatNeedsToBeTrue?: string;
+        };
+        UpdateProjectMetricRequestPayload: {
+            metric: components["schemas"]["ExistingProjectMetricPayload"];
         };
         UpdateProjectOverallScorePayload: {
             /** Format: uri */
@@ -10799,6 +10869,81 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    listProjectMetrics: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListProjectMetricsResponsePayload"];
+                };
+            };
+        };
+    };
+    createProjectMetric: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateProjectMetricRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    updateProjectMetric: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                metricId: number;
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateProjectMetricRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
                 };
             };
         };
