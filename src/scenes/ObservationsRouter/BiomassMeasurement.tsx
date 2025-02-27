@@ -88,7 +88,7 @@ export default function BiomassMeasurement(props: BiomassMeasurementProps): JSX.
             )
           }
           onView={setView}
-          search={<Search {...searchProps} />}
+          search={<Search {...searchProps} filtersProps={undefined} />}
           style={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}
         />
       ) : (
