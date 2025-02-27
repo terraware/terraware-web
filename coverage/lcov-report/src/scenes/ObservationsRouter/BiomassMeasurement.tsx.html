@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
@@ -146,7 +146,29 @@
 <a name='L81'></a><a href='#L81'>81</a>
 <a name='L82'></a><a href='#L82'>82</a>
 <a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -175,6 +197,22 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -217,7 +255,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -236,9 +274,12 @@ import { Typography, useTheme } from '@mui/material';
 import ListMapView from 'src/components/ListMapView';
 import Card from 'src/components/common/Card';
 import { View } from 'src/components/common/ListMapSelector';
-import Search from 'src/components/common/SearchFiltersWrapper';
+import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
-import { searchAdHocObservations } from 'src/redux/features/observations/observationsSelectors';
+import {
+  searchAdHocObservations,
+  selectAdHocObservationsResults,
+} from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
@@ -248,16 +289,32 @@ import BiomassMeasurementList from './BiomassMeasurementListView';
 import BiomassMeasurementMapView from './BiomassMeasurementMapView';
 import { AllPlantingSitesMapView } from './ObservationsDataView';
 &nbsp;
-export type BiomassMeasurementProps = {
+export type BiomassMeasurementProps = SearchProps &amp; {
   selectedPlantingSite?: PlantingSite;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >BiomassMeasurement(</span>{ selectedPlantingSite }: BiomassMeasurementProps): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >BiomassMeasurement(</span>props: BiomassMeasurementProps): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const [view, setView] = <span class="cstat-no" title="statement not covered" >useState&lt;View&gt;();</span>
   const defaultTimeZone = <span class="cstat-no" title="statement not covered" >useDefaultTimeZone();</span>
+  const { selectedPlantingSite } = <span class="cstat-no" title="statement not covered" >props;</span>
+  const { ...searchProps }: SearchProps = <span class="cstat-no" title="statement not covered" >props;</span>
+  const unfilteredResults = <span class="cstat-no" title="statement not covered" >useAppSelector(selectAdHocObservationsResults);</span>
+  const unfilteredObservationsResults = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (!unfilteredResults || !selectedPlantingSite?.id) {</span>
+<span class="cstat-no" title="statement not covered" >      return [];</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return unfilteredResults?.filter(<span class="fstat-no" title="function not covered" >(o</span>bservationResult) =&gt; {</span>
+      const matchesSite =
+<span class="cstat-no" title="statement not covered" >        selectedPlantingSite.id !== -1 ? observationResult.plantingSiteId === selectedPlantingSite.id : true;</span>
+      const isBiomassMeasurement = <span class="cstat-no" title="statement not covered" >observationResult.type === 'Biomass Measurements';</span>
+<span class="cstat-no" title="statement not covered" >      return matchesSite &amp;&amp; isBiomassMeasurement;</span>
+    });
+  }, [unfilteredResults, selectedPlantingSite]);
+&nbsp;
   const allAdHocObservationsResults = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    searchAdHocObservations(state, selectedPlantingSite?.id || -1, defaultTimeZone.get().id, '')</span>
+<span class="cstat-no" title="statement not covered" >    searchAdHocObservations(state, selectedPlantingSite?.id || -1, defaultTimeZone.get().id, searchProps.search)</span>
   );
   const adHocObservationsResults = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!allAdHocObservationsResults || !selectedPlantingSite?.id) {</span>
@@ -285,7 +342,7 @@ export default function <span class="fstat-no" title="function not covered" >Bio
         {strings.BIOMASS_MEASUREMENT}
       &lt;/Typography&gt;
 &nbsp;
-      {adHocObservationsResults &amp;&amp; adHocObservationsResults.length &gt; 0 ? (
+      {unfilteredObservationsResults &amp;&amp; unfilteredObservationsResults.length &gt; 0 ? (
         &lt;ListMapView
           initialView='list'
           list={&lt;BiomassMeasurementList adHocObservationsResults={adHocObservationsResults} /&gt;}
@@ -300,7 +357,7 @@ export default function <span class="fstat-no" title="function not covered" >Bio
             )
           }
           onView={setView}
-          search={&lt;Search search={''} onSearch={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >true}</span> /&gt;}
+          search={&lt;Search {...searchProps} /&gt;}
           style={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}
         /&gt;
       ) : (
@@ -319,7 +376,7 @@ export default function <span class="fstat-no" title="function not covered" >Bio
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-26T18:24:38.161Z
+                at 2025-02-27T18:10:04.286Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

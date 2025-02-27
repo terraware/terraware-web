@@ -1,3 +1,6 @@
+4f681559ea6 SW-6433 Disable editing Document’s Internal Comments for read-only users (#3668)
+0abc234ae4c SW-6627 follow up - Remove lowercase from time period (#3667)
+84c0d63b3d4 SW-6626 Observations Search field does not work because there are no Zones (#3666)
 6fd7fae46d2 SW-6628 SW Plot Photo appearing twice in Photos, and not showing once for the Plot Photo (#3663)
 8cd6074d4b2 SW-6633 Include dashes "--" for all fields that have no data (#3664)
 9c60cef3dd0 SW-6630 Plant ID for Trunks not appearing correctly (#3662)
