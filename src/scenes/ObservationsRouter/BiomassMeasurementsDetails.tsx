@@ -92,7 +92,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
       },
       {
         label: strings.SPECIES,
-        value: biomassMeasurements?.species.length,
+        value: biomassMeasurements?.treeSpeciesCount,
       },
       { label: strings.OBSERVER, value: monitoringPlot?.claimedByName },
       {
@@ -254,7 +254,6 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
                         biomassMeasurements?.quadrats.find((quad) => quad.position === 'NorthwestCorner')?.species
                       }
                       quadrat='NorthwestCorner'
-                      allSpecies={biomassMeasurements?.species}
                     />
                   </Grid>
                 </Grid>
@@ -287,7 +286,6 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
                         biomassMeasurements?.quadrats.find((quad) => quad.position === 'NortheastCorner')?.species
                       }
                       quadrat='NortheastCorner'
-                      allSpecies={biomassMeasurements?.species}
                     />
                   </Grid>
                 </Grid>
@@ -320,7 +318,6 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
                         biomassMeasurements?.quadrats.find((quad) => quad.position === 'SouthwestCorner')?.species
                       }
                       quadrat='SouthwestCorner'
-                      allSpecies={biomassMeasurements?.species}
                     />
                   </Grid>
                 </Grid>
@@ -353,7 +350,6 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
                         biomassMeasurements?.quadrats.find((quad) => quad.position === 'SoutheastCorner')?.species
                       }
                       quadrat='SoutheastCorner'
-                      allSpecies={biomassMeasurements?.species}
                     />
                   </Grid>
                 </Grid>
@@ -382,7 +378,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
             >
               {strings.TREES_AND_SHRUBS}
             </Typography>
-            <TreesAndShrubsTable trees={biomassMeasurements?.trees} allSpecies={biomassMeasurements?.species} />
+            <TreesAndShrubsTable trees={biomassMeasurements?.trees} />
           </Card>
         </Grid>
       </Grid>

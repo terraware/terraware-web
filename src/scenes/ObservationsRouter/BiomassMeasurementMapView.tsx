@@ -153,7 +153,7 @@ export default function BiomassMeasurementMapView({
         const adHocPlotCopy = {
           ...selectedObservation?.adHocPlot,
           isBiomassMeasurement: true,
-          totalSpecies: selectedObservation?.biomassMeasurements?.species.length,
+          totalSpecies: selectedObservation?.biomassMeasurements?.treeSpeciesCount,
           totalPlants: selectedObservation?.biomassMeasurements?.trees.filter((tree) => tree.treeGrowthForm !== 'Shrub')
             .length,
           totalShrubs: selectedObservation?.biomassMeasurements?.trees.filter((tree) => tree.treeGrowthForm === 'Shrub')

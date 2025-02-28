@@ -5,7 +5,7 @@ import { TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
 import strings from 'src/strings';
-import { BiomassSpeciesPayload, ExistingTreePayload } from 'src/types/Observations';
+import { ExistingTreePayload } from 'src/types/Observations';
 
 import { useSpecies } from '../InventoryRouter/form/useSpecies';
 import DescriptionModal from './DescriptionModal';
@@ -13,10 +13,9 @@ import TreesAndShrubsRenderer from './TreesAndShrubsRenderer';
 
 type TreesAndShrubsTableProps = {
   trees?: ExistingTreePayload[];
-  allSpecies?: BiomassSpeciesPayload[];
 };
 
-export default function TreesAndShrubsTable({ trees, allSpecies }: TreesAndShrubsTableProps): JSX.Element {
+export default function TreesAndShrubsTable({ trees }: TreesAndShrubsTableProps): JSX.Element {
   const { availableSpecies } = useSpecies();
   const [selectedRows, setSelectedRows] = useState<ExistingTreePayload[]>([]);
   const [selectedTree, setSelectedTree] = useState<ExistingTreePayload | undefined>();
@@ -50,12 +49,12 @@ export default function TreesAndShrubsTable({ trees, allSpecies }: TreesAndShrub
       type: 'string',
     },
     {
-      key: 'invasive',
+      key: 'isInvasive',
       name: strings.INVASIVE,
       type: 'boolean',
     },
     {
-      key: 'threatened',
+      key: 'isThreatened',
       name: strings.THREATENED,
       type: 'boolean',
     },
@@ -74,15 +73,12 @@ export default function TreesAndShrubsTable({ trees, allSpecies }: TreesAndShrub
   const treesWithData = useMemo(() => {
     return trees?.map((tree) => {
       const foundSpecies = availableSpecies?.find((avSpecies) => avSpecies.id === tree.speciesId);
-      const biomassSpecies = allSpecies?.find((bmSpecies) => bmSpecies.speciesId === tree.speciesId);
       return {
         ...tree,
         speciesName: tree.speciesName || foundSpecies?.scientificName,
-        invasive: biomassSpecies?.isInvasive,
-        threatened: biomassSpecies?.isThreatened,
       };
     });
-  }, [availableSpecies, allSpecies]);
+  }, [availableSpecies]);
 
   const [openDescriptionModal, setOpenDescriptionModal] = useState(false);
 

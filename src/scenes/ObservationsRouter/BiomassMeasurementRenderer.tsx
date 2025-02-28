@@ -61,7 +61,7 @@ export default function BiomassMeasurementRenderer(props: RendererProps<TableRow
       <CellRenderer
         index={index}
         column={column}
-        value={row.biomassMeasurements?.species?.length}
+        value={row.biomassMeasurements?.treeSpeciesCount}
         row={row}
         sx={textStyles}
         title={value as string}

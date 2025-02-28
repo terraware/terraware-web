@@ -5,7 +5,6 @@ import { TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
 import strings from 'src/strings';
-import { BiomassSpeciesPayload } from 'src/types/Observations';
 
 import { useSpecies } from '../InventoryRouter/form/useSpecies';
 
@@ -16,21 +15,20 @@ type QuadratSpeciesTableProps = {
     speciesName?: string;
   }[];
   quadrat: string;
-  allSpecies?: BiomassSpeciesPayload[];
 };
 
-export default function QuadratSpeciesTable({ species, quadrat, allSpecies }: QuadratSpeciesTableProps): JSX.Element {
+export default function QuadratSpeciesTable({ species, quadrat }: QuadratSpeciesTableProps): JSX.Element {
   const { availableSpecies } = useSpecies();
   const columns = (): TableColumnType[] => [
     { key: 'speciesName', name: strings.SPECIES, type: 'string' },
     { key: 'abundancePercent', name: strings.HERBACEOUS_ABUNDANCE_PERCENT, type: 'string' },
     {
-      key: 'invasive',
+      key: 'isInvasive',
       name: strings.INVASIVE,
       type: 'boolean',
     },
     {
-      key: 'threatened',
+      key: 'isThreatened',
       name: strings.THREATENED,
       type: 'boolean',
     },
@@ -39,15 +37,12 @@ export default function QuadratSpeciesTable({ species, quadrat, allSpecies }: Qu
   const speciesWithData = useMemo(() => {
     return species?.map((sp) => {
       const foundSpecies = availableSpecies?.find((avSpecies) => avSpecies.id === sp.speciesId);
-      const foundBiomassSpecies = allSpecies?.find((bmSpecies) => bmSpecies.speciesId === sp.speciesId);
       return {
         ...sp,
         speciesName: foundSpecies?.scientificName || sp.speciesName,
-        invasive: foundBiomassSpecies?.isInvasive,
-        threatened: foundBiomassSpecies?.isThreatened,
       };
     });
-  }, [availableSpecies, allSpecies]);
+  }, [availableSpecies]);
 
   return (
     <Box minHeight={'160px'} padding={2}>
