@@ -53,6 +53,7 @@ const OverviewView = () => {
           return 2;
         case 'Accepted':
         case 'Waitlist':
+        case 'Issue Active':
         case 'Issue Reassessment':
         case 'Not Eligible':
           return 2; // TODO do we need a result timeline?

@@ -100,6 +100,7 @@ const ReviewView = () => {
       case 'P0 Eligible':
       case 'In Review':
       case 'Waitlist':
+      case 'Issue Active':
       case 'Issue Reassessment':
       case 'Not Eligible':
       case 'Accepted':

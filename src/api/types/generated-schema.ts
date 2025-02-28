@@ -4051,7 +4051,7 @@ export interface components {
             /** Format: date-time */
             modifiedTime: string;
             /** @enum {string} */
-            status: "Accepted" | "Carbon Assessment" | "Expert Review" | "Failed Pre-screen" | "Issue Reassessment" | "Not Eligible" | "Not Submitted" | "P0 Eligible" | "Passed Pre-screen" | "Sourcing Team Review" | "GIS Assessment" | "Submitted" | "In Review" | "Waitlist";
+            status: "Accepted" | "Carbon Assessment" | "Expert Review" | "Failed Pre-screen" | "Issue Active" | "Issue Reassessment" | "Not Eligible" | "Not Submitted" | "P0 Eligible" | "Passed Pre-screen" | "Sourcing Team Review" | "GIS Assessment" | "Submitted" | "In Review" | "Waitlist";
         };
         ApplicationModulePayload: {
             /** Format: int64 */
@@ -4086,7 +4086,7 @@ export interface components {
             projectId: number;
             projectName: string;
             /** @enum {string} */
-            status: "Accepted" | "Carbon Assessment" | "Expert Review" | "Failed Pre-screen" | "Issue Reassessment" | "Not Eligible" | "Not Submitted" | "P0 Eligible" | "Passed Pre-screen" | "Sourcing Team Review" | "GIS Assessment" | "Submitted" | "In Review" | "Waitlist";
+            status: "Accepted" | "Carbon Assessment" | "Expert Review" | "Failed Pre-screen" | "Issue Active" | "Issue Reassessment" | "Not Eligible" | "Not Submitted" | "P0 Eligible" | "Passed Pre-screen" | "Sourcing Team Review" | "GIS Assessment" | "Submitted" | "In Review" | "Waitlist";
         };
         AssignParticipantProjectSpeciesPayload: {
             projectIds: number[];
@@ -7947,7 +7947,7 @@ export interface components {
             feedback?: string;
             internalComment?: string;
             /** @enum {string} */
-            status: "Not Submitted" | "Failed Pre-screen" | "Passed Pre-screen" | "Submitted" | "Sourcing Team Review" | "GIS Assessment" | "Expert Review" | "Carbon Assessment" | "P0 Eligible" | "Accepted" | "Issue Reassessment" | "Not Eligible";
+            status: "Not Submitted" | "Failed Pre-screen" | "Passed Pre-screen" | "Submitted" | "Sourcing Team Review" | "GIS Assessment" | "Expert Review" | "Carbon Assessment" | "P0 Eligible" | "Accepted" | "Issue Active" | "Issue Reassessment" | "Not Eligible";
         };
         ScheduleObservationRequestPayload: {
             /**
