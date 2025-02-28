@@ -353,6 +353,14 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
                     />
                   </Grid>
                 </Grid>
+                {biomassMeasurements?.additionalSpecies && biomassMeasurements?.additionalSpecies.length > 0 && (
+                  <Grid item xs={6}>
+                    <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
+                      {strings.ADDITIONAL_INVASIVE_THREATENED_SPECIES}
+                    </Typography>
+                    <QuadratSpeciesTable species={biomassMeasurements?.additionalSpecies} />
+                  </Grid>
+                )}
               </Grid>
             </Grid>
             <Typography
