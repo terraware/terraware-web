@@ -10,43 +10,64 @@ import { useSpecies } from '../InventoryRouter/form/useSpecies';
 
 type QuadratSpeciesTableProps = {
   species?: {
-    abundancePercent: number;
+    abundancePercent?: number;
     speciesId?: number;
     speciesName?: string;
+    scientificName?: string;
   }[];
-  quadrat: string;
+  quadrat?: string;
 };
 
 export default function QuadratSpeciesTable({ species, quadrat }: QuadratSpeciesTableProps): JSX.Element {
   const { availableSpecies } = useSpecies();
-  const columns = (): TableColumnType[] => [
-    { key: 'speciesName', name: strings.SPECIES, type: 'string' },
-    { key: 'abundancePercent', name: strings.HERBACEOUS_ABUNDANCE_PERCENT, type: 'string' },
-    {
-      key: 'isInvasive',
-      name: strings.INVASIVE,
-      type: 'boolean',
-    },
-    {
-      key: 'isThreatened',
-      name: strings.THREATENED,
-      type: 'boolean',
-    },
-  ];
+  const columns = (): TableColumnType[] =>
+    quadrat
+      ? [
+          { key: 'speciesName', name: strings.SPECIES, type: 'string' },
+          { key: 'abundancePercent', name: strings.HERBACEOUS_ABUNDANCE_PERCENT, type: 'string' },
+          {
+            key: 'isInvasive',
+            name: strings.INVASIVE,
+            type: 'boolean',
+          },
+          {
+            key: 'isThreatened',
+            name: strings.THREATENED,
+            type: 'boolean',
+          },
+        ]
+      : [
+          { key: 'speciesName', name: strings.SPECIES, type: 'string' },
+          {
+            key: 'isInvasive',
+            name: strings.INVASIVE,
+            type: 'boolean',
+          },
+          {
+            key: 'isThreatened',
+            name: strings.THREATENED,
+            type: 'boolean',
+          },
+        ];
 
   const speciesWithData = useMemo(() => {
     return species?.map((sp) => {
       const foundSpecies = availableSpecies?.find((avSpecies) => avSpecies.id === sp.speciesId);
       return {
         ...sp,
-        speciesName: foundSpecies?.scientificName || sp.speciesName,
+        speciesName: foundSpecies?.scientificName || sp.scientificName || sp.speciesName,
       };
     });
   }, [availableSpecies]);
 
   return (
     <Box minHeight={'160px'} padding={2}>
-      <Table id={`quadrat-species-${quadrat}`} orderBy={'speciesName'} rows={speciesWithData || []} columns={columns} />
+      <Table
+        id={quadrat ? `quadrat-species-${quadrat}` : 'additional-species'}
+        orderBy={'speciesName'}
+        rows={speciesWithData || []}
+        columns={columns}
+      />
     </Box>
   );
 }
