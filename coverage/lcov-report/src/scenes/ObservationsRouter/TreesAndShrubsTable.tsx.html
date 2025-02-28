@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
@@ -172,12 +172,7 @@
 <a name='L107'></a><a href='#L107'>107</a>
 <a name='L108'></a><a href='#L108'>108</a>
 <a name='L109'></a><a href='#L109'>109</a>
-<a name='L110'></a><a href='#L110'>110</a>
-<a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a>
-<a name='L114'></a><a href='#L114'>114</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L110'></a><a href='#L110'>110</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -253,9 +248,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -296,7 +288,7 @@ import { TableColumnType } from '@terraware/web-components';
 &nbsp;
 import Table from 'src/components/common/table';
 import strings from 'src/strings';
-import { BiomassSpeciesPayload, ExistingTreePayload } from 'src/types/Observations';
+import { ExistingTreePayload } from 'src/types/Observations';
 &nbsp;
 import { useSpecies } from '../InventoryRouter/form/useSpecies';
 import DescriptionModal from './DescriptionModal';
@@ -304,10 +296,9 @@ import TreesAndShrubsRenderer from './TreesAndShrubsRenderer';
 &nbsp;
 type TreesAndShrubsTableProps = {
   trees?: ExistingTreePayload[];
-  allSpecies?: BiomassSpeciesPayload[];
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >TreesAndShrubsTable(</span>{ trees, allSpecies }: TreesAndShrubsTableProps): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >TreesAndShrubsTable(</span>{ trees }: TreesAndShrubsTableProps): JSX.Element {
   const { availableSpecies } = <span class="cstat-no" title="statement not covered" >useSpecies();</span>
   const [selectedRows, setSelectedRows] = <span class="cstat-no" title="statement not covered" >useState&lt;ExistingTreePayload[]&gt;([]);</span>
   const [selectedTree, setSelectedTree] = <span class="cstat-no" title="statement not covered" >useState&lt;ExistingTreePayload | undefined&gt;();</span>
@@ -341,12 +332,12 @@ export default function <span class="fstat-no" title="function not covered" >Tre
       type: 'string',
     },
     {
-      key: 'invasive',
+      key: 'isInvasive',
       name: strings.INVASIVE,
       type: 'boolean',
     },
     {
-      key: 'threatened',
+      key: 'isThreatened',
       name: strings.THREATENED,
       type: 'boolean',
     },
@@ -365,15 +356,12 @@ export default function <span class="fstat-no" title="function not covered" >Tre
   const treesWithData = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return trees?.map(<span class="fstat-no" title="function not covered" >(t</span>ree) =&gt; {</span>
       const foundSpecies = <span class="cstat-no" title="statement not covered" >availableSpecies?.find(<span class="fstat-no" title="function not covered" >(a</span>vSpecies) =&gt; <span class="cstat-no" title="statement not covered" >avSpecies.id === tree.speciesId)</span>;</span>
-      const biomassSpecies = <span class="cstat-no" title="statement not covered" >allSpecies?.find(<span class="fstat-no" title="function not covered" >(b</span>mSpecies) =&gt; <span class="cstat-no" title="statement not covered" >bmSpecies.speciesId === tree.speciesId)</span>;</span>
 <span class="cstat-no" title="statement not covered" >      return {</span>
         ...tree,
         speciesName: tree.speciesName || foundSpecies?.scientificName,
-        invasive: biomassSpecies?.isInvasive,
-        threatened: biomassSpecies?.isThreatened,
       };
     });
-  }, [availableSpecies, allSpecies]);
+  }, [availableSpecies]);
 &nbsp;
   const [openDescriptionModal, setOpenDescriptionModal] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
 &nbsp;
@@ -409,7 +397,7 @@ export default function <span class="fstat-no" title="function not covered" >Tre
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-28T02:46:51.071Z
+                at 2025-02-28T17:13:05.527Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

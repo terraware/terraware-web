@@ -17647,7 +17647,45 @@
 <a name='L17582'></a><a href='#L17582'>17582</a>
 <a name='L17583'></a><a href='#L17583'>17583</a>
 <a name='L17584'></a><a href='#L17584'>17584</a>
-<a name='L17585'></a><a href='#L17585'>17585</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L17585'></a><a href='#L17585'>17585</a>
+<a name='L17586'></a><a href='#L17586'>17586</a>
+<a name='L17587'></a><a href='#L17587'>17587</a>
+<a name='L17588'></a><a href='#L17588'>17588</a>
+<a name='L17589'></a><a href='#L17589'>17589</a>
+<a name='L17590'></a><a href='#L17590'>17590</a>
+<a name='L17591'></a><a href='#L17591'>17591</a>
+<a name='L17592'></a><a href='#L17592'>17592</a>
+<a name='L17593'></a><a href='#L17593'>17593</a>
+<a name='L17594'></a><a href='#L17594'>17594</a>
+<a name='L17595'></a><a href='#L17595'>17595</a>
+<a name='L17596'></a><a href='#L17596'>17596</a>
+<a name='L17597'></a><a href='#L17597'>17597</a>
+<a name='L17598'></a><a href='#L17598'>17598</a>
+<a name='L17599'></a><a href='#L17599'>17599</a>
+<a name='L17600'></a><a href='#L17600'>17600</a>
+<a name='L17601'></a><a href='#L17601'>17601</a>
+<a name='L17602'></a><a href='#L17602'>17602</a>
+<a name='L17603'></a><a href='#L17603'>17603</a>
+<a name='L17604'></a><a href='#L17604'>17604</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -39622,19 +39660,6 @@ export interface components {
             /** Format: int32 */
             readyQuantityWithdrawn: number;
         };
-        BiomassQuadratPayload: {
-            description?: string;
-            /** @enum {string} */
-            position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
-            species: components["schemas"]["BiomassQuadratSpeciesPayload"][];
-        };
-        BiomassQuadratSpeciesPayload: {
-            /** Format: int32 */
-            abundancePercent: number;
-            /** Format: int64 */
-            speciesId?: number;
-            speciesName?: string;
-        };
         /** @description List of herbaceous and tree species. Includes all recorded quadrat and additional herbaceous species and recorded tree species. Species not assigned to a quadrat or recorded trees will be saved as an additional herbaceous species. */
         BiomassSpeciesPayload: {
             commonName?: string;
@@ -40577,13 +40602,14 @@ export interface components {
             reportingStartDate: string;
         };
         ExistingBiomassMeasurementPayload: {
+            additionalSpecies: components["schemas"]["BiomassSpeciesPayload"][];
             description?: string;
             /** @enum {string} */
             forestType: "Terrestrial" | "Mangrove";
             /** Format: int32 */
             herbaceousCoverPercent: number;
             ph?: number;
-            quadrats: components["schemas"]["BiomassQuadratPayload"][];
+            quadrats: components["schemas"]["ExistingBiomassQuadratPayload"][];
             /** @description Measured in ppt */
             salinity?: number;
             /** Format: int32 */
@@ -40591,7 +40617,6 @@ export interface components {
             /** Format: int32 */
             smallTreeCountLow: number;
             soilAssessment: string;
-            species: components["schemas"]["BiomassSpeciesPayload"][];
             /**
              * @description Low or high tide.
              * @enum {string}
@@ -40602,12 +40627,29 @@ export interface components {
              * @description Time when ide is observed.
              */
             tideTime?: string;
+            /** Format: int32 */
+            treeSpeciesCount: number;
             trees: components["schemas"]["ExistingTreePayload"][];
             /**
              * Format: int32
              * @description Measured in centimeters.
              */
             waterDepth?: number;
+        };
+        ExistingBiomassQuadratPayload: {
+            description?: string;
+            /** @enum {string} */
+            position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
+            species: components["schemas"]["ExistingBiomassQuadratSpeciesPayload"][];
+        };
+        ExistingBiomassQuadratSpeciesPayload: {
+            /** Format: int32 */
+            abundancePercent: number;
+            isInvasive: boolean;
+            isThreatened: boolean;
+            /** Format: int64 */
+            speciesId?: number;
+            speciesName?: string;
         };
         ExistingDateValuePayload: Omit&lt;WithRequired&lt;components["schemas"]["ExistingValuePayload"], "id" | "listPosition" | "type"&gt;, "type"&gt; &amp; {
             /** Format: date */
@@ -40746,6 +40788,8 @@ export interface components {
             /** @description Measured in meters. */
             height?: number;
             isDead: boolean;
+            isInvasive: boolean;
+            isThreatened: boolean;
             /** @description Measured in meters. */
             pointOfMeasurement?: number;
             /** Format: int32 */
@@ -41817,7 +41861,7 @@ export interface components {
             herbaceousCoverPercent: number;
             /** @description Required for Mangrove forest. */
             ph?: number;
-            quadrats: components["schemas"]["BiomassQuadratPayload"][];
+            quadrats: components["schemas"]["NewBiomassQuadratPayload"][];
             /** @description Measured in ppt. Required for Mangrove forest. */
             salinity?: number;
             /** Format: int32 */
@@ -41843,6 +41887,19 @@ export interface components {
              * @description Measured in centimeters. Required for Mangrove forest.
              */
             waterDepth?: number;
+        };
+        NewBiomassQuadratPayload: {
+            description?: string;
+            /** @enum {string} */
+            position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
+            species: components["schemas"]["NewBiomassQuadratSpeciesPayload"][];
+        };
+        NewBiomassQuadratSpeciesPayload: {
+            /** Format: int32 */
+            abundancePercent: number;
+            /** Format: int64 */
+            speciesId?: number;
+            speciesName?: string;
         };
         NewDateValuePayload: Omit&lt;components["schemas"]["NewValuePayload"], "type"&gt; &amp; {
             citation?: string;
@@ -52822,7 +52879,7 @@ type WithRequired&lt;T, K extends keyof T&gt; = T &amp; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-28T02:46:51.071Z
+                at 2025-02-28T17:13:05.527Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
