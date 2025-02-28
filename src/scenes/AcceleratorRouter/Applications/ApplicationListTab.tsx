@@ -81,16 +81,16 @@ const ApplicationListTab = ({ isPrescreen }: ApplicationListTabProps) => {
       return ['Failed Pre-screen', 'Passed Pre-screen'];
     } else {
       return [
-        'Accepted',
+        'Submitted',
+        'Sourcing Team Review',
+        'GIS Assessment',
         'Carbon Assessment',
         'Expert Review',
-        'GIS Assessment',
+        'P0 Eligible',
         'Issue Active',
         'Issue Reassessment',
         'Not Eligible',
-        'P0 Eligible',
-        'Sourcing Team Review',
-        'Submitted',
+        'Accepted',
       ];
     }
   }, [isPrescreen]);
