@@ -4389,19 +4389,6 @@ export interface components {
             /** Format: int32 */
             readyQuantityWithdrawn: number;
         };
-        BiomassQuadratPayload: {
-            description?: string;
-            /** @enum {string} */
-            position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
-            species: components["schemas"]["BiomassQuadratSpeciesPayload"][];
-        };
-        BiomassQuadratSpeciesPayload: {
-            /** Format: int32 */
-            abundancePercent: number;
-            /** Format: int64 */
-            speciesId?: number;
-            speciesName?: string;
-        };
         /** @description List of herbaceous and tree species. Includes all recorded quadrat and additional herbaceous species and recorded tree species. Species not assigned to a quadrat or recorded trees will be saved as an additional herbaceous species. */
         BiomassSpeciesPayload: {
             commonName?: string;
@@ -5344,13 +5331,14 @@ export interface components {
             reportingStartDate: string;
         };
         ExistingBiomassMeasurementPayload: {
+            additionalSpecies: components["schemas"]["BiomassSpeciesPayload"][];
             description?: string;
             /** @enum {string} */
             forestType: "Terrestrial" | "Mangrove";
             /** Format: int32 */
             herbaceousCoverPercent: number;
             ph?: number;
-            quadrats: components["schemas"]["BiomassQuadratPayload"][];
+            quadrats: components["schemas"]["ExistingBiomassQuadratPayload"][];
             /** @description Measured in ppt */
             salinity?: number;
             /** Format: int32 */
@@ -5358,7 +5346,6 @@ export interface components {
             /** Format: int32 */
             smallTreeCountLow: number;
             soilAssessment: string;
-            species: components["schemas"]["BiomassSpeciesPayload"][];
             /**
              * @description Low or high tide.
              * @enum {string}
@@ -5369,12 +5356,29 @@ export interface components {
              * @description Time when ide is observed.
              */
             tideTime?: string;
+            /** Format: int32 */
+            treeSpeciesCount: number;
             trees: components["schemas"]["ExistingTreePayload"][];
             /**
              * Format: int32
              * @description Measured in centimeters.
              */
             waterDepth?: number;
+        };
+        ExistingBiomassQuadratPayload: {
+            description?: string;
+            /** @enum {string} */
+            position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
+            species: components["schemas"]["ExistingBiomassQuadratSpeciesPayload"][];
+        };
+        ExistingBiomassQuadratSpeciesPayload: {
+            /** Format: int32 */
+            abundancePercent: number;
+            isInvasive: boolean;
+            isThreatened: boolean;
+            /** Format: int64 */
+            speciesId?: number;
+            speciesName?: string;
         };
         ExistingDateValuePayload: Omit<WithRequired<components["schemas"]["ExistingValuePayload"], "id" | "listPosition" | "type">, "type"> & {
             /** Format: date */
@@ -5513,6 +5517,8 @@ export interface components {
             /** @description Measured in meters. */
             height?: number;
             isDead: boolean;
+            isInvasive: boolean;
+            isThreatened: boolean;
             /** @description Measured in meters. */
             pointOfMeasurement?: number;
             /** Format: int32 */
@@ -6584,7 +6590,7 @@ export interface components {
             herbaceousCoverPercent: number;
             /** @description Required for Mangrove forest. */
             ph?: number;
-            quadrats: components["schemas"]["BiomassQuadratPayload"][];
+            quadrats: components["schemas"]["NewBiomassQuadratPayload"][];
             /** @description Measured in ppt. Required for Mangrove forest. */
             salinity?: number;
             /** Format: int32 */
@@ -6610,6 +6616,19 @@ export interface components {
              * @description Measured in centimeters. Required for Mangrove forest.
              */
             waterDepth?: number;
+        };
+        NewBiomassQuadratPayload: {
+            description?: string;
+            /** @enum {string} */
+            position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
+            species: components["schemas"]["NewBiomassQuadratSpeciesPayload"][];
+        };
+        NewBiomassQuadratSpeciesPayload: {
+            /** Format: int32 */
+            abundancePercent: number;
+            /** Format: int64 */
+            speciesId?: number;
+            speciesName?: string;
         };
         NewDateValuePayload: Omit<components["schemas"]["NewValuePayload"], "type"> & {
             citation?: string;
