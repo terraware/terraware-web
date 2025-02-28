@@ -85,6 +85,7 @@ const ApplicationListTab = ({ isPrescreen }: ApplicationListTabProps) => {
         'Carbon Assessment',
         'Expert Review',
         'GIS Assessment',
+        'Issue Active',
         'Issue Reassessment',
         'Not Eligible',
         'P0 Eligible',

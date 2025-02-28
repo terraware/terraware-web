@@ -37,6 +37,7 @@ const ApplicationStatusBadge = (props: ApplicationStatusBadgeProps): JSX.Element
           labelColor: theme.palette.TwClrTxtInfo,
         };
       case 'Waitlist':
+      case 'Issue Active':
       case 'Issue Reassessment':
       case 'Not Eligible':
         return {

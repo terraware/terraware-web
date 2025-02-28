@@ -18,6 +18,7 @@ export const ApplicationReviewStatuses: ApplicationReviewStatus[] = [
   'Carbon Assessment',
   'Expert Review',
   'GIS Assessment',
+  'Issue Active',
   'Issue Reassessment',
   'Not Eligible',
   'P0 Eligible',
@@ -36,10 +37,11 @@ export const ApplicationStatusOrder: { [key in ApplicationStatus]: number } = {
   'Carbon Assessment': 8,
   'Expert Review': 9,
   'P0 Eligible': 10,
-  'Issue Reassessment': 11,
-  'Not Eligible': 12,
-  Accepted: 13,
-  Waitlist: 14,
+  'Issue Active': 11,
+  'Issue Reassessment': 12,
+  'Not Eligible': 13,
+  Accepted: 14,
+  Waitlist: 15,
 };
 
 export const getApplicationStatusColor = (
@@ -49,6 +51,7 @@ export const getApplicationStatusColor = (
   switch (status) {
     case 'Accepted':
       return theme.palette.TwClrTxtSuccess;
+    case 'Issue Active':
     case 'Issue Reassessment':
     case 'Waitlist':
       return theme.palette.TwClrTxtWarning;

@@ -54,6 +54,7 @@ export default function ApplicationCard({
         case 'In Review':
           return strings.IN_REVIEW;
         case 'Waitlist':
+        case 'Issue Active':
         case 'Issue Reassessment':
           return strings.IN_REVIEW;
         case 'Accepted':
