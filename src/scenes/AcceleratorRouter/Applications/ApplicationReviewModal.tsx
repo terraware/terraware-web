@@ -17,6 +17,7 @@ import {
   ApplicationReviewStatus,
   ApplicationReviewStatuses,
   ApplicationStatus,
+  ApplicationStatusOrder,
 } from 'src/types/Application';
 import useForm from 'src/utils/useForm';
 
@@ -41,7 +42,9 @@ const ApplicationReviewModal = ({
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectApplicationReview(requestId));
 
-  const dropdownOptions: DropdownItem[] = ApplicationReviewStatuses.map((status) => ({
+  const dropdownOptions: DropdownItem[] = ApplicationReviewStatuses.sort((a, b) => {
+    return ApplicationStatusOrder[a] - ApplicationStatusOrder[b];
+  }).map((status) => ({
     label: status,
     value: status,
   }));
