@@ -133,7 +133,7 @@ export const PlantingSiteStats = () => {
                 padding: '18px',
               }}
             >
-              <Icon name='iconSeedling' size='medium' style={{ fill: theme.palette.TwClrIcnSecondary }} />
+              <Icon name='iconRestorationSite' size='medium' style={{ fill: theme.palette.TwClrIcnSecondary }} />
               <Typography
                 sx={{
                   color: theme.palette.TwClrTxt,
