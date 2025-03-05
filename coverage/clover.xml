@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1741195597606" clover="3.2.0">
-  <project timestamp="1741195597606" name="All files">
-    <metrics statements="27735" coveredstatements="1220" conditionals="18882" coveredconditionals="348" methods="8555" coveredmethods="197" elements="55172" coveredelements="1765" complexity="0" loc="27735" ncloc="27735" packages="240" files="1145" classes="1145"/>
+<coverage generated="1741197414009" clover="3.2.0">
+  <project timestamp="1741197414009" name="All files">
+    <metrics statements="27736" coveredstatements="1221" conditionals="18884" coveredconditionals="348" methods="8555" coveredmethods="197" elements="55175" coveredelements="1766" complexity="0" loc="27736" ncloc="27736" packages="240" files="1145" classes="1145"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -3500,9 +3500,9 @@
       </file>
     </package>
     <package name="src.components.DocumentProducer.VariableWorkflowDetails">
-      <metrics statements="8" coveredstatements="0" conditionals="5" coveredconditionals="0" methods="5" coveredmethods="0"/>
+      <metrics statements="8" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="5" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DocumentProducer/VariableWorkflowDetails/index.tsx">
-        <metrics statements="8" coveredstatements="0" conditionals="5" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <metrics statements="8" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="20" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
@@ -31014,7 +31014,7 @@
       </file>
     </package>
     <package name="src.types.documentProducer">
-      <metrics statements="26" coveredstatements="22" conditionals="3" coveredconditionals="0" methods="14" coveredmethods="7"/>
+      <metrics statements="27" coveredstatements="23" conditionals="3" coveredconditionals="0" methods="14" coveredmethods="7"/>
       <file name="Document.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/documentProducer/Document.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
@@ -31022,7 +31022,7 @@
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
       <file name="Variable.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/documentProducer/Variable.ts">
-        <metrics statements="11" coveredstatements="9" conditionals="3" coveredconditionals="0" methods="6" coveredmethods="2"/>
+        <metrics statements="12" coveredstatements="10" conditionals="3" coveredconditionals="0" methods="6" coveredmethods="2"/>
         <line num="24" count="8" type="stmt"/>
         <line num="27" count="1" type="stmt"/>
         <line num="30" count="1" type="stmt"/>
@@ -31033,7 +31033,8 @@
         <line num="85" count="1" type="stmt"/>
         <line num="86" count="0" type="stmt"/>
         <line num="109" count="1" type="stmt"/>
-        <line num="125" count="1" type="stmt"/>
+        <line num="120" count="1" type="stmt"/>
+        <line num="134" count="1" type="stmt"/>
       </file>
       <file name="VariableValue.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/documentProducer/VariableValue.ts">
         <metrics statements="15" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="5"/>
