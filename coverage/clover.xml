@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1741198931915" clover="3.2.0">
-  <project timestamp="1741198931915" name="All files">
-    <metrics statements="27736" coveredstatements="1221" conditionals="18884" coveredconditionals="348" methods="8555" coveredmethods="197" elements="55175" coveredelements="1766" complexity="0" loc="27736" ncloc="27736" packages="240" files="1145" classes="1145"/>
+<coverage generated="1741199835907" clover="3.2.0">
+  <project timestamp="1741199835907" name="All files">
+    <metrics statements="27742" coveredstatements="1221" conditionals="18884" coveredconditionals="348" methods="8557" coveredmethods="197" elements="55183" coveredelements="1766" complexity="0" loc="27742" ncloc="27742" packages="241" files="1147" classes="1147"/>
     <package name="src">
       <metrics statements="176" coveredstatements="7" conditionals="124" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -15736,8 +15736,8 @@
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/index.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="13" count="0" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.ParticipantProjects.EditView">
@@ -15841,6 +15841,21 @@
         <line num="200" count="0" type="stmt"/>
         <line num="261" count="0" type="stmt"/>
         <line num="262" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.scenes.AcceleratorRouter.ParticipantProjects.Reports">
+      <metrics statements="6" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+      <file name="ReportsView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/Reports/ReportsView.tsx">
+        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+      </file>
+      <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/Reports/index.tsx">
+        <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.ParticipantProjects.Scoring">
