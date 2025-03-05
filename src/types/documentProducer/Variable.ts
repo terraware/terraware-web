@@ -117,6 +117,15 @@ export const VariableStatuses: VariableStatusType[] = [
   'Rejected',
 ];
 
+export const NonSectionVariableStatuses: VariableStatusType[] = [
+  'Approved',
+  'In Review',
+  'Needs Translation',
+  'Not Needed',
+  'Not Submitted',
+  'Rejected',
+];
+
 export type VariableOwnersListResponse = components['schemas']['ListVariableOwnersResponsePayload'];
 
 export type VariableOwners = components['schemas']['ListVariableOwnersResponsePayload']['variables'][0];

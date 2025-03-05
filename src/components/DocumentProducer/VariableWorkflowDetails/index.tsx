@@ -58,7 +58,7 @@ const VariableWorkflowDetails = ({
                 });
               }}
               options={VariableStatuses.map((status) => ({
-                label: status,
+                label: status === 'Rejected' ? strings.UPDATE_REQUESTED : status,
                 value: status,
               }))}
               selectedValue={variableWorkflowDetails?.status}
