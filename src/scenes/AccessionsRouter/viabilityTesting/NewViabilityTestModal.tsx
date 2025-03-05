@@ -174,6 +174,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   };
 
   const validateTotalSeedsTested = (value: any): boolean => {
+    setIndividualError('totalSeedsTested', '');
     if (value) {
       if (isNaN(value)) {
         setIndividualError('totalSeedsTested', strings.INVALID_VALUE);
@@ -188,12 +189,11 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
         setIndividualError('totalSeedsTested', strings.MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST);
         return false;
       }
+      return true;
     } else {
       setIndividualError('totalSeedsTested', strings.REQUIRED_FIELD);
       return false;
     }
-    setIndividualError('totalSeedsTested', '');
-    return true;
   };
 
   const validateSeedsGerminated = () => {
