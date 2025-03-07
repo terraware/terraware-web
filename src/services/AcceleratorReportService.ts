@@ -14,13 +14,13 @@ const ACCELERATOR_REPORT_CONFIG_ENDPOINT = '/api/v1/accelerator/projects/{projec
 type ListAcceleratorReportConfigResponsePayload =
   paths[typeof ACCELERATOR_REPORT_CONFIG_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
-const httpAcceleratorReportsCondif = HttpService.root(ACCELERATOR_REPORT_CONFIG_ENDPOINT);
+const httpAcceleratorReportsConfig = HttpService.root(ACCELERATOR_REPORT_CONFIG_ENDPOINT);
 
 /**
  * Get project reports config
  */
 const getAcceleratorReportConfig = async (projectId: number): Promise<ReportsConfigResponse> => {
-  const response: ReportsConfigResponse = await httpAcceleratorReportsCondif.get<
+  const response: ReportsConfigResponse = await httpAcceleratorReportsConfig.get<
     ListAcceleratorReportConfigResponsePayload,
     ReportsConfigData
   >(
