@@ -1,15 +1,29 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
+import { selectProjectReportConfig } from 'src/redux/features/reports/reportsSelectors';
+import { requestProjectReportConfig } from 'src/redux/features/reports/reportsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 
 export default function ReportsSettings(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
+  const pathParams = useParams<{ projectId: string }>();
+  const projectId = Number(pathParams.projectId);
+  const projectReportConfig = useAppSelector((state) => selectProjectReportConfig(state));
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (projectId) {
+      dispatch(requestProjectReportConfig(projectId));
+    }
+  }, [projectId]);
 
   const gridSize = isMobile ? 12 : 4;
 
@@ -21,11 +35,11 @@ export default function ReportsSettings(): JSX.Element {
 
   const data: Record<string, any>[] = useMemo(() => {
     return [
-      { label: strings.START_DATE, value: '' },
-      { label: strings.END_DATE, value: '' },
+      { label: strings.START_DATE, value: projectReportConfig.config?.reportingStartDate },
+      { label: strings.END_DATE, value: projectReportConfig.config?.reportingEndDate },
       { label: strings.LOG_FRAME_AND_ME_PLAN_URL, value: '' },
     ];
-  }, []);
+  }, [projectReportConfig]);
 
   const title = (text: string, marginTop?: number, marginBottom?: number) => (
     <Typography
