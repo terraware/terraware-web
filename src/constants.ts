@@ -69,6 +69,8 @@ export enum APP_PATHS {
   ERROR = '/error',
   ERROR_MOBILE_NOT_SUPPORTED = '/error/mobile-not-supported',
   ERROR_FAILED_TO_FETCH_ORG_DATA = '/error/cannot-fetch-org-data',
+  FUNDER = '/funder',
+  FUNDER_HOME = '/funder/home',
   HELP_SUPPORT = '/help-support',
   HELP_SUPPORT_FORM = '/help-support/:requestType',
   HOME = '/home',
