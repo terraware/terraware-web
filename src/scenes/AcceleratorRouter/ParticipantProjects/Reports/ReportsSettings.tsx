@@ -6,6 +6,7 @@ import { Button, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { selectProjectReportConfig } from 'src/redux/features/reports/reportsSelectors';
 import { requestProjectReportConfig } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -18,6 +19,7 @@ export default function ReportsSettings(): JSX.Element {
   const projectId = Number(pathParams.projectId);
   const projectReportConfig = useAppSelector((state) => selectProjectReportConfig(state));
   const dispatch = useAppDispatch();
+  const { goToAcceleratorEditReportSettings } = useNavigateTo();
 
   useEffect(() => {
     if (projectId) {
@@ -53,13 +55,17 @@ export default function ReportsSettings(): JSX.Element {
     </Typography>
   );
 
+  const goToEditSettings = () => {
+    goToAcceleratorEditReportSettings(projectId);
+  };
+
   return (
     <>
       <Card
         style={{ display: 'flex', flexDirection: 'column' }}
         title={strings.SETTINGS}
         rightComponent={
-          <Button label={strings.EDIT_SETTINGS} icon='iconEdit' onClick={() => true} priority='secondary' />
+          <Button label={strings.EDIT_SETTINGS} icon='iconEdit' onClick={goToEditSettings} priority='secondary' />
         }
       >
         <Grid container sx={gridStyle}>
