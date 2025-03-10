@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
+import { DateTime } from 'luxon';
 
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
@@ -10,6 +11,9 @@ import DatePicker from 'src/components/common/DatePicker';
 import PageForm from 'src/components/common/PageForm';
 import TextField from 'src/components/common/Textfield/Textfield';
 import { APP_PATHS } from 'src/constants';
+import { selectCreateReportConfig, selectProjectReportConfig } from 'src/redux/features/reports/reportsSelectors';
+import { requestCreateReportConfig, requestProjectReportConfig } from 'src/redux/features/reports/reportsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { NewAcceleratorReportConfig } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
@@ -19,19 +23,39 @@ export default function EditSettings(): JSX.Element {
   const navigate = useNavigate();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
+  const dispatch = useAppDispatch();
+  const [requestId, setRequestId] = useState<string>('');
+  const createReportConfigResponse = useAppSelector(selectCreateReportConfig(requestId));
+  const projectReportConfig = useAppSelector((state) => selectProjectReportConfig(state));
 
-  const saveReportConfig = async () => {};
+  useEffect(() => {
+    if (projectId) {
+      dispatch(requestProjectReportConfig(projectId));
+    }
+  }, [projectId]);
+
   const { isMobile } = useDeviceInfo();
+
+  useEffect(() => {
+    if (createReportConfigResponse && createReportConfigResponse.status === 'success') {
+      goToProjectReports();
+    }
+  }, [createReportConfigResponse]);
 
   const goToProjectReports = () => {
     navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId.toString())}?tab=settings`);
   };
 
   const [newConfig, , onChange] = useForm<NewAcceleratorReportConfig>({
-    reportingStartDate: '',
-    reportingEndDate: '',
+    reportingStartDate: projectReportConfig.config?.reportingStartDate || '',
+    reportingEndDate: projectReportConfig.config?.reportingEndDate || '',
     frequency: 'Annual',
   });
+
+  const saveReportConfig = () => {
+    const request = dispatch(requestCreateReportConfig({ config: newConfig, projectId: projectId }));
+    setRequestId(request.requestId);
+  };
 
   return (
     <Page title={strings.REPORTS} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
@@ -64,7 +88,9 @@ export default function EditSettings(): JSX.Element {
                   id='reportingStartDate'
                   label={strings.START_DATE}
                   aria-label='reportingStartDate'
-                  onDateChange={(value) => onChange('reportingStartDate', value)}
+                  onDateChange={(value?: DateTime) => {
+                    onChange('reportingStartDate', value?.toFormat('yyyy-MM-dd'));
+                  }}
                   value={newConfig.reportingStartDate}
                 />
               </Grid>
@@ -73,7 +99,9 @@ export default function EditSettings(): JSX.Element {
                   id='reportingEndDate'
                   label={strings.END_DATE}
                   aria-label='reportingEndDate'
-                  onDateChange={(value) => onChange('reportingEndDate', value)}
+                  onDateChange={(value?: DateTime) => {
+                    onChange('reportingEndDate', value?.toFormat('yyyy-MM-dd'));
+                  }}
                   value={newConfig.reportingEndDate}
                 />
               </Grid>
