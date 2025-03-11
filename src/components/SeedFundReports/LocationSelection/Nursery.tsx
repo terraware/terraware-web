@@ -2,9 +2,9 @@ import React from 'react';
 
 import { Grid } from '@mui/material';
 
-import { LocationSectionProps } from 'src/components/Reports/LocationSelection';
-import { InfoField, infoCardStyles } from 'src/components/Reports/LocationSelection/InfoField';
-import { transformNumericValue } from 'src/components/Reports/LocationSelection/util';
+import { LocationSectionProps } from 'src/components/SeedFundReports/LocationSelection';
+import { InfoField, infoCardStyles } from 'src/components/SeedFundReports/LocationSelection/InfoField';
+import { transformNumericValue } from 'src/components/SeedFundReports/LocationSelection/util';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
 import { ReportNursery } from 'src/types/Report';

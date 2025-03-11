@@ -3,16 +3,16 @@ import React, { useState } from 'react';
 import { Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
-import { InfoField } from 'src/components/Reports/LocationSelection/InfoField';
-import LocationSectionNursery from 'src/components/Reports/LocationSelection/Nursery';
-import LocationSectionPlantingSite from 'src/components/Reports/LocationSelection/PlantingSite';
-import LocationSectionSeedBank from 'src/components/Reports/LocationSelection/SeedBank';
+import { InfoField } from 'src/components/SeedFundReports/LocationSelection/InfoField';
+import LocationSectionNursery from 'src/components/SeedFundReports/LocationSelection/Nursery';
+import LocationSectionPlantingSite from 'src/components/SeedFundReports/LocationSelection/PlantingSite';
+import LocationSectionSeedBank from 'src/components/SeedFundReports/LocationSelection/SeedBank';
 import {
   buildCompletedDateValid,
   buildStartedDateValid,
   operationStartedDateValid,
   transformNumericValue,
-} from 'src/components/Reports/LocationSelection/util';
+} from 'src/components/SeedFundReports/LocationSelection/util';
 import strings from 'src/strings';
 import { ReportNursery, ReportPlantingSite, ReportSeedBank } from 'src/types/Report';
 import useDeviceInfo from 'src/utils/useDeviceInfo';

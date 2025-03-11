@@ -3,10 +3,10 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 
-import { LocationSectionProps } from 'src/components/Reports/LocationSelection';
-import { InfoField, infoCardStyles } from 'src/components/Reports/LocationSelection/InfoField';
-import PlantingSiteSpeciesCellRenderer from 'src/components/Reports/LocationSelection/PlantingSitesSpeciesCellRenderer';
-import { transformNumericValue } from 'src/components/Reports/LocationSelection/util';
+import { LocationSectionProps } from 'src/components/SeedFundReports/LocationSelection';
+import { InfoField, infoCardStyles } from 'src/components/SeedFundReports/LocationSelection/InfoField';
+import PlantingSiteSpeciesCellRenderer from 'src/components/SeedFundReports/LocationSelection/PlantingSitesSpeciesCellRenderer';
+import { transformNumericValue } from 'src/components/SeedFundReports/LocationSelection/util';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import Table from 'src/components/common/table';
 import { useOrganization } from 'src/providers';

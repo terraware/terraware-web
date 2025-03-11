@@ -1,9 +1,9 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import ReportSettingsEdit from 'src/components/Reports/ReportSettingsEdit';
-import ReportsView from 'src/components/Reports/ReportsView';
-import { ReportEdit, ReportView } from 'src/components/Reports/index';
+import ReportSettingsEdit from 'src/components/SeedFundReports/ReportSettingsEdit';
+import ReportsView from 'src/components/SeedFundReports/ReportsView';
+import { ReportEdit, ReportView } from 'src/components/SeedFundReports/index';
 import { useOrganization } from 'src/providers';
 
 const ReportsRouter = (): JSX.Element | null => {

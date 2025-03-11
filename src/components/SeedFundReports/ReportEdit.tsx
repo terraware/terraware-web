@@ -5,15 +5,15 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner, FormButton } from '@terraware/web-components';
 import produce from 'immer';
 
-import CannotEditReportDialog from 'src/components/Reports/InvalidUserModal';
+import CannotEditReportDialog from 'src/components/SeedFundReports/InvalidUserModal';
 import {
   buildCompletedDateValid,
   buildStartedDateValid,
   operationStartedDateValid,
-} from 'src/components/Reports/LocationSelection/util';
-import ReportForm from 'src/components/Reports/ReportForm';
-import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
-import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
+} from 'src/components/SeedFundReports/LocationSelection/util';
+import ReportForm from 'src/components/SeedFundReports/ReportForm';
+import ReportFormAnnual from 'src/components/SeedFundReports/ReportFormAnnual';
+import SubmitConfirmationDialog from 'src/components/SeedFundReports/SubmitConfirmationDialog';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
@@ -154,7 +154,7 @@ export default function ReportEdit(): JSX.Element {
 
       // then navigate to view
       if (reportId) {
-        navigate({ pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId) });
+        navigate({ pathname: APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', reportId) });
       }
     }
   };
@@ -351,7 +351,7 @@ export default function ReportEdit(): JSX.Element {
         const submitResult = await ReportService.submitReport(reportIdInt);
         if (submitResult.requestSucceeded && reportId && selectedOrganization.id !== -1) {
           reloadOrganizations(selectedOrganization.id);
-          navigate({ pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId) }, { replace: true });
+          navigate({ pathname: APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', reportId) }, { replace: true });
         } else {
           snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SUBMIT);
         }
@@ -394,7 +394,7 @@ export default function ReportEdit(): JSX.Element {
 
   const redirectToReportView = () => {
     if (reportId) {
-      navigate(APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId));
+      navigate(APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', reportId));
     }
   };
 

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { DateTime } from 'luxon';
 
-import ReportLink from 'src/components/Reports/ReportLink';
+import ReportLink from 'src/components/SeedFundReports/ReportLink';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { ListReport, statusName } from 'src/types/Report';

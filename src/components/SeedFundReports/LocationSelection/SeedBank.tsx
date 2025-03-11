@@ -2,8 +2,8 @@ import React from 'react';
 
 import { Grid } from '@mui/material';
 
-import { LocationSectionProps } from 'src/components/Reports/LocationSelection';
-import { infoCardStyles } from 'src/components/Reports/LocationSelection/InfoField';
+import { LocationSectionProps } from 'src/components/SeedFundReports/LocationSelection';
+import { infoCardStyles } from 'src/components/SeedFundReports/LocationSelection/InfoField';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
 import { ReportSeedBank } from 'src/types/Report';

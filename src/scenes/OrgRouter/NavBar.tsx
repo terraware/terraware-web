@@ -71,7 +71,7 @@ export default function NavBar({
   const isPlantsDashboardRoute = useMatch({ path: APP_PATHS.PLANTS_DASHBOARD + '/', end: false });
   const isWithdrawalLogRoute = useMatch({ path: APP_PATHS.NURSERY_WITHDRAWALS + '/', end: false });
   const isReassignmentRoute = useMatch({ path: APP_PATHS.NURSERY_REASSIGNMENT + '/', end: false });
-  const isReportsRoute = useMatch({ path: APP_PATHS.REPORTS + '/', end: false });
+  const isSeedFundReportsRoute = useMatch({ path: APP_PATHS.SEED_FUND_REPORTS + '/', end: false });
   const isObservationsRoute = useMatch({ path: APP_PATHS.OBSERVATIONS + '/', end: false });
   const isProjectsRoute = useMatch({ path: APP_PATHS.PROJECTS + '/', end: true });
   const isProjectRoute = useMatch({ path: APP_PATHS.PROJECT_VIEW + '/', end: true });
@@ -195,20 +195,20 @@ export default function NavBar({
     [closeAndNavigateTo, isDeliverablesRoute, isDeliverableViewRoute, hasDeliverables]
   );
 
-  const reportsMenu = useMemo<JSX.Element | null>(
+  const seedFundReportsMenu = useMemo<JSX.Element | null>(
     () =>
       reports.length > 0 && selectedOrganization.canSubmitReports ? (
         <NavItem
           icon='iconGraphReport'
-          label={strings.REPORTS}
-          selected={!!isReportsRoute}
+          label={strings.SEED_FUND_REPORTS}
+          selected={!!isSeedFundReportsRoute}
           onClick={() => {
-            closeAndNavigateTo(APP_PATHS.REPORTS);
+            closeAndNavigateTo(APP_PATHS.SEED_FUND_REPORTS);
           }}
           id='reports-list'
         />
       ) : null,
-    [closeAndNavigateTo, isReportsRoute, reports.length, selectedOrganization.canSubmitReports]
+    [closeAndNavigateTo, isSeedFundReportsRoute, reports.length, selectedOrganization.canSubmitReports]
   );
 
   const modulesMenu = useMemo<JSX.Element | null>(
@@ -298,13 +298,13 @@ export default function NavBar({
         }}
         id='speciesNb'
       />
-      {(applicationMenu || deliverablesMenu || modulesMenu || reportsMenu) && (
+      {(applicationMenu || deliverablesMenu || modulesMenu || seedFundReportsMenu) && (
         <>
           <NavSection title={acceleratorSectionTitle} />
           {applicationMenu}
           {deliverablesMenu}
           {modulesMenu}
-          {reportsMenu}
+          {seedFundReportsMenu}
         </>
       )}
       <NavSection />
