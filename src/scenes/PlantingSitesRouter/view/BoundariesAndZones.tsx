@@ -145,6 +145,7 @@ export default function BoundariesAndZones({
             />
           }
           map={<PlantingSiteMapView plantingSite={plantingSite} data={data} search={search ? search.trim() : ''} />}
+          data={data}
         />
       )}
     </Box>

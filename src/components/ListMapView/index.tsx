@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
-import { Box, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 
 import Card from 'src/components/common/Card';
 import ListMapSelector, { View } from 'src/components/common/ListMapSelector';
+import { useLocalization } from 'src/providers';
+import strings from 'src/strings';
+import { useSupportedLocales } from 'src/strings/locales';
+import { ZoneAggregation } from 'src/types/Observations';
+import { useNumberFormatter } from 'src/utils/useNumber';
 
 /**
  * Props include an optional search component for the top left.
@@ -11,6 +16,7 @@ import ListMapSelector, { View } from 'src/components/common/ListMapSelector';
  * disable corresponding selector.
  */
 export type ListMapViewProps = {
+  data?: ZoneAggregation[];
   search: React.ReactNode;
   list: React.ReactNode;
   map: React.ReactNode;
@@ -19,9 +25,20 @@ export type ListMapViewProps = {
   style?: Record<string, string | number>;
 };
 
-export default function ListMapView({ search, list, map, onView, style, initialView }: ListMapViewProps): JSX.Element {
+export default function ListMapView({
+  search,
+  list,
+  map,
+  onView,
+  style,
+  initialView,
+  data,
+}: ListMapViewProps): JSX.Element {
   const [view, setView] = useState<View>(initialView);
   const theme = useTheme();
+  const { activeLocale } = useLocalization();
+  const supportedLocales = useSupportedLocales();
+  const numberFormatter = useNumberFormatter();
 
   const updateView = (nextView: View) => {
     setView(nextView);
@@ -29,6 +46,14 @@ export default function ListMapView({ search, list, map, onView, style, initialV
       onView(nextView);
     }
   };
+  const numericFormatter = useMemo(
+    () => numberFormatter(activeLocale, supportedLocales),
+    [activeLocale, numberFormatter, supportedLocales]
+  );
+
+  const siteAreaHa = useMemo(() => {
+    return data ? data.reduce((total, currentValue) => total + currentValue.areaHa, 0) : 0;
+  }, [data]);
 
   useEffect(() => {
     updateView(initialView);
@@ -49,6 +74,12 @@ export default function ListMapView({ search, list, map, onView, style, initialV
         marginTop={theme.spacing(2)}
         sx={view === 'map' ? { display: 'flex', flexDirection: 'column', flexGrow: 1 } : undefined}
       >
+        {data && siteAreaHa > 0 && (
+          <Typography marginBottom={theme.spacing(2)} fontSize={'16px'} fontWeight={'600'}>
+            {strings.PLANTING_SITE_AREA}:{' '}
+            {strings.formatString(strings.X_HA, numericFormatter.format(siteAreaHa))?.toString()}
+          </Typography>
+        )}
         <Box flexGrow={1} flexDirection='column' display={view === 'list' ? 'flex' : 'none'}>
           {list}
         </Box>

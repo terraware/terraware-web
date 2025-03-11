@@ -32,6 +32,11 @@ const columns = (): TableColumnType[] => [
     type: 'boolean',
   },
   {
+    key: 'areaHa',
+    name: strings.AREA_HA,
+    type: 'number',
+  },
+  {
     key: 'monitoringPlots',
     name: strings.MONITORING_PLOTS,
     type: 'number',
@@ -119,7 +124,7 @@ const DetailsRenderer =
   (plantingSiteId: number, zoneId: number, subzoneViewUrl: string) =>
   // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
-    const { column, row } = props;
+    const { column, row, value } = props;
 
     const textStyles = {
       fontSize: '16px',
@@ -151,6 +156,10 @@ const DetailsRenderer =
     if (column.key === 'monitoringPlots') {
       const numMonitoringPlots = row.monitoringPlots.length;
       return <CellRenderer {...props} value={numMonitoringPlots > 0 ? numMonitoringPlots : ''} sx={textStyles} />;
+    }
+
+    if (column.key === 'areaHa') {
+      return <CellRenderer {...props} value={value ? value : ''} sx={textStyles} />;
     }
 
     return <CellRenderer {...props} />;
