@@ -47,3 +47,13 @@ export const requestListProjectMetrics = createAsyncThunk(
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
+
+export const requestListStandardMetrics = createAsyncThunk('listStandardMetrics', async (_, { rejectWithValue }) => {
+  const response = await AcceleratorReportService.listStandardMetrics();
+
+  if (response && response.requestSucceeded) {
+    return response.data?.metrics;
+  }
+
+  return rejectWithValue(strings.GENERIC_ERROR);
+});

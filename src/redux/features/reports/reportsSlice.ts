@@ -1,9 +1,9 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { ExistingAcceleratorReportConfig, ProjectMetric } from 'src/types/AcceleratorReport';
+import { ExistingAcceleratorReportConfig, ProjectMetric, StandardMetric } from 'src/types/AcceleratorReport';
 
 import { StatusT, buildReducers } from '../asyncUtils';
-import { requestCreateReportConfig, requestListProjectMetrics } from './reportsThunks';
+import { requestCreateReportConfig, requestListProjectMetrics, requestListStandardMetrics } from './reportsThunks';
 
 type Data = {
   config?: ExistingAcceleratorReportConfig;
@@ -49,10 +49,22 @@ const listProjectMetricsSlice = createSlice({
   },
 });
 
+const initialListStandardMetricsState: { [key: string]: StatusT<StandardMetric[]> } = {};
+
+const listStandardMetricsSlice = createSlice({
+  name: 'listStandardMetricsSlice',
+  initialState: initialListStandardMetricsState,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestListStandardMetrics)(builder);
+  },
+});
+
 const reportsReducers = {
   projectReportConfig: projectReportConfigSlice.reducer,
   projectReportConfigCreate: createReportConfigSlice.reducer,
   listProjectMetrics: listProjectMetricsSlice.reducer,
+  listStandardMetrics: listStandardMetricsSlice.reducer,
 };
 
 export default reportsReducers;

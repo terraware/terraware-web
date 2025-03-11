@@ -10,3 +10,5 @@ export type CreateAcceleratorReportConfigRequestPayload =
 export type CreateAcceleratorReportConfigRequest = CreateAcceleratorReportConfigRequestPayload & { projectId: number };
 
 export type ProjectMetric = components['schemas']['ExistingProjectMetricPayload'];
+
+export type StandardMetric = components['schemas']['ExistingStandardMetricPayload'];
