@@ -6,6 +6,8 @@ import { TimeZoneDescription } from 'src/types/TimeZones';
 import { User } from 'src/types/User';
 import { GlobalRolePermission } from 'src/utils/acl';
 
+import { FundingEntity } from '../types/FundingEntity';
+
 export type PreferencesType = { [key: string]: unknown };
 
 export type ProvidedUserData = {
@@ -47,4 +49,9 @@ export type ProvidedLocalizationData = {
   setSelectedLocale: (locale: string) => void;
   supportedTimeZones: TimeZoneDescription[];
   bootstrapped: boolean;
+};
+
+export type ProvidedFundingEntityData = {
+  bootstrapped: boolean;
+  fundingEntity?: FundingEntity;
 };
