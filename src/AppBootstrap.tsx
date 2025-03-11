@@ -32,7 +32,14 @@ function BlockingBootstrap({ children }: BlockingBootstrapProps): JSX.Element {
           (organizationBootstrapped || isAcceleratorRoute || fundingEntityBootstrapped) &&
           localizationBootstrapped)
     );
-  }, [bootstrapped, userBootstrapped, organizationBootstrapped, isAcceleratorRoute, localizationBootstrapped]);
+  }, [
+    bootstrapped,
+    userBootstrapped,
+    fundingEntityBootstrapped,
+    organizationBootstrapped,
+    isAcceleratorRoute,
+    localizationBootstrapped,
+  ]);
 
   if (!bootstrapped) {
     return <BlockingSpinner />;
