@@ -31,11 +31,12 @@ type NavBarProps = {
   setShowNavBar: (value: boolean) => void;
   withdrawalCreated?: boolean;
 };
+
 export default function NavBar({
-  setShowNavBar,
   backgroundTransparent,
-  withdrawalCreated,
   hasPlantingSites,
+  setShowNavBar,
+  withdrawalCreated,
 }: NavBarProps): JSX.Element | null {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
