@@ -251,6 +251,9 @@ export default function useNavigateTo() {
 
       goToPlantingSiteView: (plantingSiteId: number) =>
         navigate(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', `${plantingSiteId}`)),
+
+      goToAcceleratorEditReportSettings: (projectId: number) =>
+        navigate(APP_PATHS.ACCELERATOR_PROJECT_REPORTS_EDIT.replace(':projectId', `${projectId}`)),
     }),
     [navigate]
   );

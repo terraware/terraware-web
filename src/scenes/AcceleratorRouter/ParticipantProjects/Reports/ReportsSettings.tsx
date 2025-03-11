@@ -1,15 +1,48 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Button, Textfield } from '@terraware/web-components';
+import { Button, TableColumnType, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
+import Table from 'src/components/common/table';
+import useNavigateTo from 'src/hooks/useNavigateTo';
+import { selectListReportMetrics, selectProjectReportConfig } from 'src/redux/features/reports/reportsSelectors';
+import { requestListProjectMetrics, requestProjectReportConfig } from 'src/redux/features/reports/reportsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { ProjectMetric } from 'src/types/AcceleratorReport';
 
 export default function ReportsSettings(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
+  const pathParams = useParams<{ projectId: string }>();
+  const projectId = Number(pathParams.projectId);
+  const projectReportConfig = useAppSelector((state) => selectProjectReportConfig(state));
+  const dispatch = useAppDispatch();
+  const { goToAcceleratorEditReportSettings } = useNavigateTo();
+  const [requestId, setRequestId] = useState<string>('');
+  const specificMetricsResponse = useAppSelector(selectListReportMetrics(requestId));
+  const [metrics, setMetrics] = useState<ProjectMetric[]>();
+  const [selectedRows, setSelectedRows] = useState<ProjectMetric[]>([]);
+
+  useEffect(() => {
+    const dispatched = dispatch(requestListProjectMetrics({ projectId }));
+    setRequestId(dispatched.requestId);
+  }, [projectId]);
+
+  useEffect(() => {
+    if (projectId) {
+      dispatch(requestProjectReportConfig(projectId));
+    }
+  }, [projectId]);
+
+  useEffect(() => {
+    if (specificMetricsResponse && specificMetricsResponse.status === 'success') {
+      setMetrics(specificMetricsResponse.data);
+    }
+  }, [specificMetricsResponse]);
 
   const gridSize = isMobile ? 12 : 4;
 
@@ -21,11 +54,11 @@ export default function ReportsSettings(): JSX.Element {
 
   const data: Record<string, any>[] = useMemo(() => {
     return [
-      { label: strings.START_DATE, value: '' },
-      { label: strings.END_DATE, value: '' },
+      { label: strings.START_DATE, value: projectReportConfig.config?.reportingStartDate },
+      { label: strings.END_DATE, value: projectReportConfig.config?.reportingEndDate },
       { label: strings.LOG_FRAME_AND_ME_PLAN_URL, value: '' },
     ];
-  }, []);
+  }, [projectReportConfig]);
 
   const title = (text: string, marginTop?: number, marginBottom?: number) => (
     <Typography
@@ -39,13 +72,40 @@ export default function ReportsSettings(): JSX.Element {
     </Typography>
   );
 
+  const goToEditSettings = () => {
+    goToAcceleratorEditReportSettings(projectId);
+  };
+
+  const columns = (): TableColumnType[] => [
+    {
+      key: 'name',
+      name: strings.NAME,
+      type: 'string',
+    },
+    {
+      key: 'type',
+      name: strings.TYPE,
+      type: 'string',
+    },
+    {
+      key: 'reference',
+      name: strings.REFERENCE,
+      type: 'string',
+    },
+    {
+      key: 'component',
+      name: strings.COMPONENT,
+      type: 'string',
+    },
+  ];
+
   return (
     <>
       <Card
         style={{ display: 'flex', flexDirection: 'column' }}
         title={strings.SETTINGS}
         rightComponent={
-          <Button label={strings.EDIT_SETTINGS} icon='iconEdit' onClick={() => true} priority='secondary' />
+          <Button label={strings.EDIT_SETTINGS} icon='iconEdit' onClick={goToEditSettings} priority='secondary' />
         }
       >
         <Grid container sx={gridStyle}>
@@ -70,7 +130,28 @@ export default function ReportsSettings(): JSX.Element {
             </Box>
           </Grid>
           <Grid item xs={12} textAlign={'center'}>
-            <Typography>{strings.NO_PROJECT_SPECIFIC_METRICS_TO_SHOW}</Typography>
+            {metrics && metrics.length > 0 ? (
+              <Table
+                id='project-specific-metrics-table'
+                columns={columns}
+                rows={metrics}
+                orderBy='name'
+                showCheckbox={true}
+                showTopBar={true}
+                selectedRows={selectedRows}
+                setSelectedRows={setSelectedRows}
+                topBarButtons={[
+                  {
+                    buttonText: strings.REMOVE,
+                    buttonType: 'destructive',
+                    onButtonClick: () => true,
+                    icon: 'iconTrashCan',
+                  },
+                ]}
+              />
+            ) : (
+              <Typography>{strings.NO_PROJECT_SPECIFIC_METRICS_TO_SHOW}</Typography>
+            )}
           </Grid>
         </Grid>
         <Grid container sx={gridStyle}>
