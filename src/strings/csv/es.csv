@@ -299,6 +299,7 @@ COMPLETE_REPORTS_SUBTITLE,Sus informes están listos para ser completados y envi
 COMPLETED,Completado,
 COMPLETED_ENDED,Completado (Finalizado),
 COMPLIANCE,Cumplimiento,
+COMPONENT,Componente,
 CONDITIONAL,Condicional,
 CONFIRMED_RESTORABLE_LAND,Terreno recuperable TF (ha),
 CONNECT_FAILED,La conexión ha fallado,
