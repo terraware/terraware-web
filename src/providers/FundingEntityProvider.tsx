@@ -69,8 +69,6 @@ export default function FundingEntityProvider({ children }: FundingEntityProvide
     }
   }, [entityAPIRequestStatus]);
 
-  useEffect(() => {}, [fundingEntity, setFundingEntity]);
-
   const [fundingEntityData, setFundingEntityData] = useState<ProvidedFundingEntityData>({
     fundingEntity: fundingEntity || undefined,
     bootstrapped: fundingEntity !== undefined,

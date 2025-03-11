@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useFunderPortal from 'src/hooks/useFunderPortal';
 import { store } from 'src/redux/store';
 import { OrganizationService, PreferencesService } from 'src/services';
 import strings from 'src/strings';
@@ -13,7 +14,6 @@ import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
-import useFunderPortal from '../hooks/useFunderPortal';
 import { PreferencesType, ProvidedOrganizationData } from './DataTypes';
 import { OrganizationContext } from './contexts';
 import { defaultSelectedOrg } from './contexts';
