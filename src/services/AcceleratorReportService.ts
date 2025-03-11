@@ -19,6 +19,11 @@ const httpAcceleratorReportsConfig = HttpService.root(ACCELERATOR_REPORT_CONFIG_
 type CreateResponse =
   paths[typeof ACCELERATOR_REPORT_CONFIG_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 
+const PROJECT_METRICS_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/metrics';
+
+export type ListProjectMetricsResponsePayload =
+  paths[typeof PROJECT_METRICS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
 /**
  * Get project reports config
  */
@@ -47,12 +52,19 @@ const createConfig = async (request: CreateAcceleratorReportConfigRequest): Prom
   });
 };
 
+const listProjectMetrics = async (projectId: number): Promise<Response2<ListProjectMetricsResponsePayload>> => {
+  return HttpService.root(
+    PROJECT_METRICS_ENDPOINT.replace('{projectId}', projectId.toString())
+  ).get2<ListProjectMetricsResponsePayload>();
+};
+
 /**
  * Exported functions
  */
 const ReportService = {
   getAcceleratorReportConfig,
   createConfig,
+  listProjectMetrics,
 };
 
 export default ReportService;

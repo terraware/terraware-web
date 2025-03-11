@@ -1,5 +1,4 @@
 import { components } from 'src/api/types/generated-schema';
-import strings from 'src/strings';
 
 export type ExistingAcceleratorReportConfig = components['schemas']['ExistingAcceleratorReportConfigPayload'];
 
@@ -9,3 +8,5 @@ export type CreateAcceleratorReportConfigRequestPayload =
   components['schemas']['CreateAcceleratorReportConfigRequestPayload'];
 
 export type CreateAcceleratorReportConfigRequest = CreateAcceleratorReportConfigRequestPayload & { projectId: number };
+
+export type ProjectMetric = components['schemas']['ExistingProjectMetricPayload'];
