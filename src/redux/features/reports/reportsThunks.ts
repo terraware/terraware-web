@@ -34,3 +34,16 @@ export const requestCreateReportConfig = createAsyncThunk(
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
+
+export const requestListProjectMetrics = createAsyncThunk(
+  'listMetrics',
+  async (request: { projectId: number }, { rejectWithValue }) => {
+    const response = await AcceleratorReportService.listProjectMetrics(request.projectId);
+
+    if (response && response.requestSucceeded) {
+      return response.data?.metrics;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);

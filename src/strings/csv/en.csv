@@ -299,6 +299,7 @@ COMPLETE_REPORTS_SUBTITLE,Your reports are ready to be completed and submitted t
 COMPLETED,Completed,
 COMPLETED_ENDED,Completed (Ended),
 COMPLIANCE,Compliance,
+COMPONENT,Component,
 CONDITIONAL,Conditional,
 CONFIRMED_RESTORABLE_LAND,TF Restorable Land (ha),
 CONNECT_FAILED,Connect failed,

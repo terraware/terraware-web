@@ -4,3 +4,5 @@ export const selectProjectReportConfig = (state: RootState) => state.projectRepo
 
 export const selectCreateReportConfig = (requestId: string) => (state: RootState) =>
   state.projectReportConfigCreate[requestId];
+
+export const selectListReportMetrics = (requestId: string) => (state: RootState) => state.listProjectMetrics[requestId];
