@@ -27,7 +27,7 @@ export default function TopBar(props: TopBarProps): JSX.Element {
     } else {
       return undefined;
     }
-  }, [isAcceleratorRoute]);
+  }, [isAcceleratorRoute, isFunderRoute]);
 
   return (
     <AppBar
