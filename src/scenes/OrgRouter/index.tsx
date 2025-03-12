@@ -48,6 +48,8 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useEnvironment from 'src/utils/useEnvironment';
 import useStateLocation from 'src/utils/useStateLocation';
 
+import ReportsRouter from '../Reports';
+
 interface OrgRouterProps {
   showNavBar: boolean;
   setShowNavBar: (value: boolean) => void;
@@ -252,6 +254,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
               <Route path={'/nursery/*'} element={<NurseryRouter />} />
               <Route path={APP_PATHS.HELP_SUPPORT + '/*'} element={<HelpSupportRouter />} />
               <Route path={APP_PATHS.MY_ACCOUNT + '/*'} element={<MyAccountRouter />} />
+              <Route path={APP_PATHS.REPORTS + '/*'} element={<ReportsRouter />} />
               <Route path={APP_PATHS.SEED_FUND_REPORTS + '/*'} element={<SeedFundReportsRouter />} />
               <Route path={APP_PATHS.OBSERVATIONS + '/*'} element={<ObservationsRouter />} />
               <Route path={APP_PATHS.DELIVERABLES + '/*'} element={<DeliverablesRouter />} />

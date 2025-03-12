@@ -72,6 +72,7 @@ export default function NavBar({
   const isPlantsDashboardRoute = useMatch({ path: APP_PATHS.PLANTS_DASHBOARD + '/', end: false });
   const isWithdrawalLogRoute = useMatch({ path: APP_PATHS.NURSERY_WITHDRAWALS + '/', end: false });
   const isReassignmentRoute = useMatch({ path: APP_PATHS.NURSERY_REASSIGNMENT + '/', end: false });
+  const isReportsRoute = useMatch({ path: APP_PATHS.REPORTS + '/', end: false });
   const isSeedFundReportsRoute = useMatch({ path: APP_PATHS.SEED_FUND_REPORTS + '/', end: false });
   const isObservationsRoute = useMatch({ path: APP_PATHS.OBSERVATIONS + '/', end: false });
   const isProjectsRoute = useMatch({ path: APP_PATHS.PROJECTS + '/', end: true });
@@ -196,6 +197,22 @@ export default function NavBar({
     [closeAndNavigateTo, isDeliverablesRoute, isDeliverableViewRoute, hasDeliverables]
   );
 
+  const reportsMenu = useMemo<JSX.Element | null>(
+    () =>
+      seedFundReports.length > 0 && selectedOrganization.canSubmitReports ? (
+        <NavItem
+          icon='iconGraphReport'
+          label={strings.REPORTS}
+          selected={!!isReportsRoute}
+          onClick={() => {
+            closeAndNavigateTo(APP_PATHS.REPORTS);
+          }}
+          id='reports-list'
+        />
+      ) : null,
+    [closeAndNavigateTo, isReportsRoute, seedFundReports.length, selectedOrganization.canSubmitReports]
+  );
+
   const seedFundReportsMenu = useMemo<JSX.Element | null>(
     () =>
       seedFundReports.length > 0 && selectedOrganization.canSubmitReports ? (
@@ -299,12 +316,13 @@ export default function NavBar({
         }}
         id='speciesNb'
       />
-      {(applicationMenu || deliverablesMenu || modulesMenu || seedFundReportsMenu) && (
+      {(applicationMenu || deliverablesMenu || modulesMenu || reportsMenu || seedFundReportsMenu) && (
         <>
           <NavSection title={acceleratorSectionTitle} />
           {applicationMenu}
           {deliverablesMenu}
           {modulesMenu}
+          {reportsMenu}
           {seedFundReportsMenu}
         </>
       )}
