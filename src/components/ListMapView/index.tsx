@@ -55,6 +55,20 @@ export default function ListMapView({
     return data ? data.reduce((total, currentValue) => total + currentValue.areaHa, 0) : 0;
   }, [data]);
 
+  const plantingCompleteArea = useMemo(() => {
+    let total = 0;
+    if (data) {
+      data.forEach((zone) => {
+        zone.plantingSubzones.forEach((subzone) => {
+          if (subzone.plantingCompleted) {
+            total += subzone.areaHa;
+          }
+        });
+      });
+    }
+    return total;
+  }, [data]);
+
   useEffect(() => {
     updateView(initialView);
   }, [initialView]);
@@ -75,10 +89,16 @@ export default function ListMapView({
         sx={view === 'map' ? { display: 'flex', flexDirection: 'column', flexGrow: 1 } : undefined}
       >
         {data && siteAreaHa > 0 && (
-          <Typography marginBottom={theme.spacing(2)} fontSize={'16px'} fontWeight={'600'}>
-            {strings.PLANTING_SITE_AREA}:{' '}
-            {strings.formatString(strings.X_HA, numericFormatter.format(siteAreaHa))?.toString()}
-          </Typography>
+          <Box marginBottom={theme.spacing(2)} display='flex' flexDirection='row' justifyContent='start'>
+            <Typography fontSize={'16px'} fontWeight={'600'} marginRight={theme.spacing(3)}>
+              {strings.PLANTING_SITE_AREA}:{' '}
+              {strings.formatString(strings.X_HA, numericFormatter.format(siteAreaHa))?.toString()}
+            </Typography>
+            <Typography fontSize={'16px'} fontWeight={'600'}>
+              {strings.PLANTING_COMPLETE_AREA}:{' '}
+              {strings.formatString(strings.X_HA, numericFormatter.format(plantingCompleteArea))?.toString()}
+            </Typography>
+          </Box>
         )}
         <Box flexGrow={1} flexDirection='column' display={view === 'list' ? 'flex' : 'none'}>
           {list}
