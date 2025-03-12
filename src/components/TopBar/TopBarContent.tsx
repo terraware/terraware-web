@@ -98,7 +98,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         )}
         {fundingEntity && (
           <>
-            <p style={{ fontSize: '16px' }}>{fundingEntity.name}</p>
+            <span style={{ fontSize: '16px' }}>{fundingEntity.name}</span>
           </>
         )}
       </Box>
