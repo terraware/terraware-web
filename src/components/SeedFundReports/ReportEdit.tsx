@@ -18,7 +18,7 @@ import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization, useUser } from 'src/providers';
-import ReportService from 'src/services/ReportService';
+import SeedFundReportService from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
 import { Report, ReportFile } from 'src/types/Report';
 import { overWordLimit } from 'src/utils/text';
@@ -67,7 +67,7 @@ export default function ReportEdit(): JSX.Element {
   useEffect(() => {
     const getReport = async () => {
       if (reportIdValid()) {
-        const result = await ReportService.getReport(reportIdInt);
+        const result = await SeedFundReportService.getReport(reportIdInt);
         if (result.requestSucceeded && result.report) {
           setReport(result.report);
         } else {
@@ -88,19 +88,19 @@ export default function ReportEdit(): JSX.Element {
       await Promise.all(
         initialReportFiles?.map((f: { id: number; filename: string }) => {
           if (!updatedReportFiles?.includes(f)) {
-            return ReportService.deleteReportFile(reportIdInt, f.id);
+            return SeedFundReportService.deleteReportFile(reportIdInt, f.id);
           }
           return undefined;
         }) ?? []
       );
-      await Promise.all(newReportFiles?.map((f) => ReportService.uploadReportFile(reportIdInt, f)) ?? []);
+      await Promise.all(newReportFiles?.map((f) => SeedFundReportService.uploadReportFile(reportIdInt, f)) ?? []);
     }
   };
 
   useEffect(() => {
     const getReport = async () => {
       if (reportIdInt && reportIdInt !== -1) {
-        const result = await ReportService.getReport(reportIdInt);
+        const result = await SeedFundReportService.getReport(reportIdInt);
         if (result.requestSucceeded && result.report) {
           setCurrentUserEditing(result.report.lockedByUserId === user?.id);
         }
@@ -122,10 +122,10 @@ export default function ReportEdit(): JSX.Element {
   }, [report, user, showInvalidUserModal, currentUserEditing]);
 
   const updatePhotos = async (iReportId: number) => {
-    await ReportService.uploadReportPhotos(iReportId, photos);
+    await SeedFundReportService.uploadReportPhotos(iReportId, photos);
     setPhotos([]);
     if (photoIdsToRemove) {
-      await ReportService.deleteReportPhotos(iReportId, photoIdsToRemove);
+      await SeedFundReportService.deleteReportPhotos(iReportId, photoIdsToRemove);
       setPhotoIdsToRemove([]);
     }
   };
@@ -134,7 +134,7 @@ export default function ReportEdit(): JSX.Element {
     let saveResult;
     if (saveChanges && report) {
       setBusyState(true);
-      saveResult = await ReportService.updateReport(report);
+      saveResult = await SeedFundReportService.updateReport(report);
       if (!saveResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
       } else {
@@ -147,7 +147,7 @@ export default function ReportEdit(): JSX.Element {
 
     if ((!saveResult || saveResult.requestSucceeded) && reportIdValid()) {
       // unlock the report
-      const unlockResult = await ReportService.unlockReport(reportIdInt);
+      const unlockResult = await SeedFundReportService.unlockReport(reportIdInt);
       if (!unlockResult.requestSucceeded) {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_UNLOCK);
       }
@@ -174,7 +174,7 @@ export default function ReportEdit(): JSX.Element {
   const handleSaveAndNext = async () => {
     if (report) {
       setBusyState(true);
-      const saveResult = await ReportService.updateReport(report);
+      const saveResult = await SeedFundReportService.updateReport(report);
       switchPages('annual');
       setValidateFields(false);
       if (!saveResult.requestSucceeded) {
@@ -191,7 +191,7 @@ export default function ReportEdit(): JSX.Element {
   const handleBack = async (hideToast?: boolean) => {
     if (report) {
       setBusyState(true);
-      const saveResult = await ReportService.updateReport(report);
+      const saveResult = await SeedFundReportService.updateReport(report);
       switchPages('quarterly');
       if (!hideToast) {
         if (!saveResult.requestSucceeded) {
@@ -344,11 +344,11 @@ export default function ReportEdit(): JSX.Element {
   const submitReport = async () => {
     if (report) {
       setBusyState(true);
-      const saveResult = await ReportService.updateReport(report);
+      const saveResult = await SeedFundReportService.updateReport(report);
       if (saveResult.requestSucceeded && reportIdInt) {
         await updateFiles();
         await updatePhotos(report.id);
-        const submitResult = await ReportService.submitReport(reportIdInt);
+        const submitResult = await SeedFundReportService.submitReport(reportIdInt);
         if (submitResult.requestSucceeded && reportId && selectedOrganization.id !== -1) {
           reloadOrganizations(selectedOrganization.id);
           navigate({ pathname: APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', reportId) }, { replace: true });

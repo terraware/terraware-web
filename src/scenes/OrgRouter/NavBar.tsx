@@ -13,6 +13,7 @@ import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useApplicationData } from 'src/providers/Application/Context';
@@ -20,7 +21,7 @@ import { useParticipantData } from 'src/providers/Participant/ParticipantContext
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { NurseryWithdrawalService } from 'src/services';
 import DeliverablesService from 'src/services/DeliverablesService';
-import ReportService, { Reports } from 'src/services/ReportService';
+import SeedFundReportService, { Reports } from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
 import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -41,11 +42,12 @@ export default function NavBar({
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
-  const [reports, setReports] = useState<Reports>([]);
+  const [seedFundReports, setSeedFundReports] = useState<Reports>([]);
   const [hasDeliverables, setHasDeliverables] = useState<boolean>(false);
   const { isDesktop, isMobile } = useDeviceInfo();
   const navigate = useNavigate();
   const mixpanel = useMixpanel();
+  const isReportsEnabled = isEnabled('Assigning and Collecting Reports');
 
   const { isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
@@ -72,6 +74,7 @@ export default function NavBar({
   const isPlantsDashboardRoute = useMatch({ path: APP_PATHS.PLANTS_DASHBOARD + '/', end: false });
   const isWithdrawalLogRoute = useMatch({ path: APP_PATHS.NURSERY_WITHDRAWALS + '/', end: false });
   const isReassignmentRoute = useMatch({ path: APP_PATHS.NURSERY_REASSIGNMENT + '/', end: false });
+  const isReportsRoute = useMatch({ path: APP_PATHS.REPORTS + '/', end: false });
   const isSeedFundReportsRoute = useMatch({ path: APP_PATHS.SEED_FUND_REPORTS + '/', end: false });
   const isObservationsRoute = useMatch({ path: APP_PATHS.OBSERVATIONS + '/', end: false });
   const isProjectsRoute = useMatch({ path: APP_PATHS.PROJECTS + '/', end: true });
@@ -118,8 +121,8 @@ export default function NavBar({
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
       const reportSearch = async () => {
-        const reportsResults = await ReportService.getReports(selectedOrganization.id);
-        setReports(reportsResults.reports || []);
+        const reportsResults = await SeedFundReportService.getReports(selectedOrganization.id);
+        setSeedFundReports(reportsResults.reports || []);
       };
 
       if (isAdmin(selectedOrganization)) {
@@ -196,9 +199,26 @@ export default function NavBar({
     [closeAndNavigateTo, isDeliverablesRoute, isDeliverableViewRoute, hasDeliverables]
   );
 
+  // TODO: get reports from API and only show reports nav menu if there are any
+  const reportsMenu = useMemo<JSX.Element | null>(
+    () =>
+      isReportsEnabled ? (
+        <NavItem
+          icon='iconGraphReport'
+          label={strings.REPORTS}
+          selected={!!isReportsRoute}
+          onClick={() => {
+            closeAndNavigateTo(APP_PATHS.REPORTS);
+          }}
+          id='reports-list'
+        />
+      ) : null,
+    [closeAndNavigateTo, isReportsEnabled, isReportsRoute]
+  );
+
   const seedFundReportsMenu = useMemo<JSX.Element | null>(
     () =>
-      reports.length > 0 && selectedOrganization.canSubmitReports ? (
+      seedFundReports.length > 0 && selectedOrganization.canSubmitReports ? (
         <NavItem
           icon='iconGraphReport'
           label={strings.SEED_FUND_REPORTS}
@@ -206,10 +226,10 @@ export default function NavBar({
           onClick={() => {
             closeAndNavigateTo(APP_PATHS.SEED_FUND_REPORTS);
           }}
-          id='reports-list'
+          id='seed-fund-reports-list'
         />
       ) : null,
-    [closeAndNavigateTo, isSeedFundReportsRoute, reports.length, selectedOrganization.canSubmitReports]
+    [closeAndNavigateTo, isSeedFundReportsRoute, seedFundReports.length, selectedOrganization.canSubmitReports]
   );
 
   const modulesMenu = useMemo<JSX.Element | null>(
@@ -299,12 +319,13 @@ export default function NavBar({
         }}
         id='speciesNb'
       />
-      {(applicationMenu || deliverablesMenu || modulesMenu || seedFundReportsMenu) && (
+      {(applicationMenu || deliverablesMenu || modulesMenu || reportsMenu || seedFundReportsMenu) && (
         <>
           <NavSection title={acceleratorSectionTitle} />
           {applicationMenu}
           {deliverablesMenu}
           {modulesMenu}
+          {reportsMenu}
           {seedFundReportsMenu}
         </>
       )}

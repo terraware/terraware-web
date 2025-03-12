@@ -362,7 +362,7 @@ const deleteReportPhoto = async (reportId: number, fileId: number): Promise<Resp
 /**
  * Exported functions
  */
-const ReportService = {
+const SeedFundReportService = {
   getReports,
   getReport,
   updateReport,
@@ -382,4 +382,4 @@ const ReportService = {
   deleteReportPhotos,
 };
 
-export default ReportService;
+export default SeedFundReportService;

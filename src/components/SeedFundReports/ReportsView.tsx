@@ -16,7 +16,7 @@ import { useOrganization } from 'src/providers';
 import { selectReportsSettings } from 'src/redux/features/reportsSettings/reportsSettingsSelectors';
 import { requestReportsSettings } from 'src/redux/features/reportsSettings/reportsSettingsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import ReportService from 'src/services/ReportService';
+import SeedFundReportService from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
 import { ListReport } from 'src/types/Report';
 
@@ -78,7 +78,7 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
       const refreshSearch = async () => {
-        const reportsResults = await ReportService.getReports(selectedOrganization.id);
+        const reportsResults = await SeedFundReportService.getReports(selectedOrganization.id);
         setResults(
           (reportsResults.reports || []).map((report) => {
             if (report.projectName) {
