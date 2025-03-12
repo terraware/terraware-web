@@ -1530,6 +1530,76 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/funder/entities": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Creates a new funding entity */
+        post: operations["createFundingEntity"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/funder/entities/users/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets the Funding Entity that a specific user belongs to */
+        get: operations["getFundingEntity_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/funder/entities/{fundingEntityId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets information about a funding entity */
+        get: operations["getFundingEntity"];
+        /** Updates an existing funding entity */
+        put: operations["updateFundingEntity"];
+        post?: never;
+        /** Deletes an existing funding entity */
+        delete: operations["deleteFundingEntity"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/funder/entities/{fundingEntityId}/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Invites a funder via email to a Funding Entity */
+        post: operations["inviteFunder"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/globalRoles/users": {
         parameters: {
             query?: never;
@@ -3833,6 +3903,7 @@ export interface components {
             modifiedTime: string;
             /** Format: int64 */
             projectId: number;
+            projectMetrics: components["schemas"]["ReportProjectMetricPayload"][];
             standardMetrics: components["schemas"]["ReportStandardMetricPayload"][];
             /** Format: date */
             startDate: string;
@@ -3842,6 +3913,7 @@ export interface components {
             submittedBy?: number;
             /** Format: date-time */
             submittedTime?: string;
+            systemMetrics: components["schemas"]["ReportSystemMetricPayload"][];
         };
         AccessionHistoryEntryPayload: {
             /** Format: int64 */
@@ -4755,6 +4827,10 @@ export interface components {
             id: number;
             status: components["schemas"]["SuccessOrError"];
         };
+        CreateFundingEntityRequestPayload: {
+            name: string;
+            projects?: number[];
+        };
         CreateModuleEventRequestPayload: {
             /** Format: date-time */
             endTime?: string;
@@ -5622,6 +5698,11 @@ export interface components {
             /** @description List of values in the matching accessions. If there are accessions where the field has no value, this list will contain null (an actual null value, not the string "null"). */
             values: (string | null)[];
         };
+        FundingEntityPayload: {
+            /** Format: int64 */
+            id: number;
+            name: string;
+        };
         Geolocation: {
             accuracy?: number;
             latitude: number;
@@ -5722,6 +5803,10 @@ export interface components {
         };
         GetFacilityResponse: {
             facility: components["schemas"]["FacilityPayload"];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        GetFundingEntityResponsePayload: {
+            fundingEntity: components["schemas"]["FundingEntityPayload"];
             status: components["schemas"]["SuccessOrError"];
         };
         GetMapboxTokenResponsePayload: {
@@ -6147,6 +6232,13 @@ export interface components {
             /** @description If true, this internal tag is system-defined and may affect the behavior of the application. If falso, the tag is admin-defined and is only used for reporting. */
             isSystem: boolean;
             name: string;
+        };
+        InviteFundingEntityFunderRequestPayload: {
+            email: string;
+        };
+        InviteFundingEntityFunderResponsePayload: {
+            email: string;
+            status: components["schemas"]["SuccessOrError"];
         };
         LineString: Omit<WithRequired<components["schemas"]["Geometry"], "type">, "type"> & {
             coordinates: number[][];
@@ -7903,6 +7995,23 @@ export interface components {
             /** Format: int32 */
             value?: number;
         };
+        ReportProjectMetricPayload: {
+            /** @enum {string} */
+            component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            description?: string;
+            /** Format: int64 */
+            id: number;
+            internalComment?: string;
+            name: string;
+            notes?: string;
+            reference: string;
+            /** Format: int32 */
+            target?: number;
+            /** @enum {string} */
+            type: "Activity" | "Output" | "Outcome" | "Impact";
+            /** Format: int32 */
+            value?: number;
+        };
         ReportReviewPayload: {
             feedback?: string;
             internalComment?: string;
@@ -7938,6 +8047,26 @@ export interface components {
             type: "Activity" | "Output" | "Outcome" | "Impact";
             /** Format: int32 */
             value?: number;
+        };
+        ReportSystemMetricPayload: {
+            /** @enum {string} */
+            component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            description?: string;
+            internalComment?: string;
+            /** @enum {string} */
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate";
+            notes?: string;
+            /** Format: int32 */
+            overrideValue?: number;
+            reference: string;
+            /** Format: date-time */
+            systemTime?: string;
+            /** Format: int32 */
+            systemValue: number;
+            /** Format: int32 */
+            target?: number;
+            /** @enum {string} */
+            type: "Activity" | "Output" | "Outcome" | "Impact";
         };
         RescheduleObservationRequestPayload: {
             /**
@@ -8651,6 +8780,11 @@ export interface components {
              */
             timeZone?: string;
         };
+        UpdateFundingEntityRequestPayload: {
+            addProjects?: number[];
+            name: string;
+            removeProjects?: number[];
+        };
         UpdateGlobalRolesRequestPayload: {
             globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
         };
@@ -9085,6 +9219,8 @@ export interface components {
              * @example America/New_York
              */
             timeZone?: string;
+            /** @enum {string} */
+            userType: "Individual" | "Device Manager" | "System" | "Funder";
         };
         UserWithGlobalRolesPayload: {
             /** Format: date-time */
@@ -12706,6 +12842,157 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    createFundingEntity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateFundingEntityRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetFundingEntityResponsePayload"];
+                };
+            };
+        };
+    };
+    getFundingEntity_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetFundingEntityResponsePayload"];
+                };
+            };
+        };
+    };
+    getFundingEntity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                fundingEntityId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetFundingEntityResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    updateFundingEntity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                fundingEntityId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateFundingEntityRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    deleteFundingEntity: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                fundingEntityId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    inviteFunder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                fundingEntityId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InviteFundingEntityFunderRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InviteFundingEntityFunderResponsePayload"];
                 };
             };
         };

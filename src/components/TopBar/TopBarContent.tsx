@@ -12,7 +12,7 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import useFunderPortal from 'src/hooks/useFunderPortal';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
-import { useOrganization, useUser } from 'src/providers/hooks';
+import { useFundingEntity, useOrganization, useUser } from 'src/providers/hooks';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import KnowledgeBaseLink from '../KnowledgeBaseLink';
@@ -31,6 +31,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   const navigate = useNavigate();
   const theme = useTheme();
   const { selectedOrganization, organizations, reloadOrganizations } = useOrganization();
+  const { fundingEntity } = useFundingEntity();
   const { setShowNavBar } = props;
   const { isDesktop } = useDeviceInfo();
   const { user } = useUser();
@@ -92,12 +93,12 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
                 <p style={{ fontSize: '16px' }}>{selectedOrganization.name}</p>
               </>
             )}
-            {isFunderRoute && (
-              <>
-                <p style={{ fontSize: '16px' }}>{selectedOrganization.name}</p>
-              </>
-            )}
             {!isAcceleratorRoute && !isApplicationPortal && !isFunderRoute && <OrganizationsDropdown />}
+          </>
+        )}
+        {fundingEntity && (
+          <>
+            <p style={{ fontSize: '16px' }}>{fundingEntity.name}</p>
           </>
         )}
       </Box>
