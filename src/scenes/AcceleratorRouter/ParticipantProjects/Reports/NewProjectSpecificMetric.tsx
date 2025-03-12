@@ -147,7 +147,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
               <Grid item xs={12}>
                 <Checkbox
                   disabled={false}
-                  id={'publishMtric'}
+                  id={'publishMetric'}
                   name={'publish-metric'}
                   label={strings.PUBLISH_METRIC}
                   value={false}
