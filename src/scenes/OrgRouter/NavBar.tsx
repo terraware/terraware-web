@@ -13,6 +13,7 @@ import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useApplicationData } from 'src/providers/Application/Context';
@@ -46,6 +47,7 @@ export default function NavBar({
   const { isDesktop, isMobile } = useDeviceInfo();
   const navigate = useNavigate();
   const mixpanel = useMixpanel();
+  const isReportsEnabled = isEnabled('Assigning and Collecting Reports');
 
   const { isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
@@ -200,7 +202,7 @@ export default function NavBar({
   // TODO: fetch reports from API and replace reference to seedFundReports in reportsMenu
   const reportsMenu = useMemo<JSX.Element | null>(
     () =>
-      seedFundReports.length > 0 && selectedOrganization.canSubmitReports ? (
+      isReportsEnabled && seedFundReports.length > 0 && selectedOrganization.canSubmitReports ? (
         <NavItem
           icon='iconGraphReport'
           label={strings.REPORTS}
@@ -211,7 +213,13 @@ export default function NavBar({
           id='reports-list'
         />
       ) : null,
-    [closeAndNavigateTo, isReportsRoute, seedFundReports.length, selectedOrganization.canSubmitReports]
+    [
+      closeAndNavigateTo,
+      isReportsEnabled,
+      isReportsRoute,
+      seedFundReports.length,
+      selectedOrganization.canSubmitReports,
+    ]
   );
 
   const seedFundReportsMenu = useMemo<JSX.Element | null>(
