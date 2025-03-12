@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1741806038485" clover="3.2.0">
-  <project timestamp="1741806038486" name="All files">
-    <metrics statements="27949" coveredstatements="1222" conditionals="18990" coveredconditionals="348" methods="8622" coveredmethods="197" elements="55561" coveredelements="1767" complexity="0" loc="27949" ncloc="27949" packages="245" files="1166" classes="1166"/>
+<coverage generated="1741806700412" clover="3.2.0">
+  <project timestamp="1741806700412" name="All files">
+    <metrics statements="27952" coveredstatements="1222" conditionals="18992" coveredconditionals="348" methods="8622" coveredmethods="197" elements="55566" coveredelements="1767" complexity="0" loc="27952" ncloc="27952" packages="245" files="1166" classes="1166"/>
     <package name="src">
       <metrics statements="179" coveredstatements="7" conditionals="126" coveredconditionals="0" methods="40" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -28439,19 +28439,22 @@
       </file>
     </package>
     <package name="src.scenes.TerrawareRouter">
-      <metrics statements="10" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="5" coveredmethods="0"/>
+      <metrics statements="13" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="5" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/TerrawareRouter/index.tsx">
-        <metrics statements="10" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <metrics statements="13" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="33" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="37" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="42" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
     </package>
     <package name="src.services">
