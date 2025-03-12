@@ -1,5 +1,9 @@
 import { paths } from 'src/api/types/generated-schema';
-import { CreateAcceleratorReportConfigRequest, ExistingAcceleratorReportConfig } from 'src/types/AcceleratorReport';
+import {
+  CreateAcceleratorReportConfigRequest,
+  CreateProjectMetricRequest,
+  ExistingAcceleratorReportConfig,
+} from 'src/types/AcceleratorReport';
 
 import HttpService, { Response, Response2 } from './HttpService';
 
@@ -27,6 +31,9 @@ export type ListProjectMetricsResponsePayload =
 
 export type ListStandardMetricsResponsePayload =
   paths[typeof STANDARD_METRICS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+type CreateProjectMetricResponse =
+  paths[typeof PROJECT_METRICS_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 
 /**
  * Get project reports config
@@ -66,6 +73,17 @@ const listStandardMetrics = async (): Promise<Response2<ListStandardMetricsRespo
   return HttpService.root(STANDARD_METRICS_ENDPOINT).get2<ListProjectMetricsResponsePayload>();
 };
 
+const createProjectMetric = async (
+  request: CreateProjectMetricRequest
+): Promise<Response2<CreateProjectMetricResponse>> => {
+  const { projectId, ...rest } = request;
+  return HttpService.root(
+    PROJECT_METRICS_ENDPOINT.replace('{projectId}', projectId.toString())
+  ).put2<CreateProjectMetricResponse>({
+    entity: rest,
+  });
+};
+
 /**
  * Exported functions
  */
@@ -74,6 +92,7 @@ const ReportService = {
   createConfig,
   listProjectMetrics,
   listStandardMetrics,
+  createProjectMetric,
 };
 
 export default ReportService;

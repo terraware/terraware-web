@@ -29,7 +29,7 @@ export default function ReportsSettings(): JSX.Element {
   const projectId = Number(pathParams.projectId);
   const projectReportConfig = useAppSelector((state) => selectProjectReportConfig(state));
   const dispatch = useAppDispatch();
-  const { goToAcceleratorEditReportSettings } = useNavigateTo();
+  const { goToAcceleratorEditReportSettings, goToNewProjectMetric } = useNavigateTo();
   const [requestId, setRequestId] = useState<string>('');
   const [standardRequestId, setStandardRequestId] = useState<string>('');
   const specificMetricsResponse = useAppSelector(selectListReportMetrics(requestId));
@@ -148,7 +148,12 @@ export default function ReportsSettings(): JSX.Element {
           <Grid item xs={12} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
             {title(strings.PROJECT_SPECIFIC_METRICS)}
             <Box>
-              <Button label={strings.ADD_METRIC} icon='plus' onClick={() => true} priority='secondary' />
+              <Button
+                label={strings.ADD_METRIC}
+                icon='plus'
+                onClick={() => goToNewProjectMetric(projectId)}
+                priority='secondary'
+              />
             </Box>
           </Grid>
           <Grid item xs={12} textAlign={'center'}>

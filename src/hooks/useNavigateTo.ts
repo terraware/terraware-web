@@ -254,6 +254,9 @@ export default function useNavigateTo() {
 
       goToAcceleratorEditReportSettings: (projectId: number) =>
         navigate(APP_PATHS.ACCELERATOR_PROJECT_REPORTS_EDIT.replace(':projectId', `${projectId}`)),
+
+      goToNewProjectMetric: (projectId: number) =>
+        navigate(APP_PATHS.ACCELERATOR_PROJECT_REPORTS_METRICS_NEW.replace(':projectId', `${projectId}`)),
     }),
     [navigate]
   );
