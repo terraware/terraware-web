@@ -197,6 +197,7 @@ export default function NavBar({
     [closeAndNavigateTo, isDeliverablesRoute, isDeliverableViewRoute, hasDeliverables]
   );
 
+  // TODO: fetch reports from API and replace reference to seedFundReports in reportsMenu
   const reportsMenu = useMemo<JSX.Element | null>(
     () =>
       seedFundReports.length > 0 && selectedOrganization.canSubmitReports ? (
