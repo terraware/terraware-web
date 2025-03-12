@@ -159,7 +159,7 @@ const DetailsRenderer =
     }
 
     if (column.key === 'areaHa') {
-      return <CellRenderer {...props} value={value ? value : ''} sx={textStyles} />;
+      return <CellRenderer {...props} value={value || ''} sx={textStyles} />;
     }
 
     return <CellRenderer {...props} />;
