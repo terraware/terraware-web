@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/Reports/InvalidUserModal.tsx</title>
+    <title>Code coverage report for src/components/SeedFundReports/SubmitConfirmationDialog.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/Reports</a> InvalidUserModal.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/SeedFundReports</a> SubmitConfirmationDialog.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
@@ -91,7 +91,19 @@
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -107,7 +119,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -121,29 +137,37 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 &nbsp;
+import { Typography } from '@mui/material';
+import { Confirm } from '@terraware/web-components';
+&nbsp;
 import strings from 'src/strings';
 &nbsp;
-import DialogBox from '../common/DialogBox/DialogBox';
-import Button from '../common/button/Button';
-&nbsp;
-export interface CannotEditReportDialogProps {
+export type SubmitConfirmationDialogProps = {
   open: boolean;
   onClose: () =&gt; void;
   onSubmit: () =&gt; void;
-}
+};
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >CannotEditReportDialog(</span>props: CannotEditReportDialogProps): JSX.Element {
-  const { onClose, open, onSubmit } = <span class="cstat-no" title="statement not covered" >props;</span>
-&nbsp;
+export default function <span class="fstat-no" title="function not covered" >SubmitConfirmationDialog(</span>{
+  open,
+  onClose,
+  onSubmit,
+}: SubmitConfirmationDialogProps): JSX.Element {
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;DialogBox
+    &lt;Confirm
+      closeButtonId='cancelSubmitReport'
+      closeButtonText={strings.CANCEL}
+      confirmButtonId='confirmEdit'
+      confirmButtonText={strings.REPORT_SUBMIT}
+      message={
+        &lt;Typography fontSize='16px' fontWeight={400}&gt;
+          {strings.REPORT_CONFIRM_SUBMIT}
+        &lt;/Typography&gt;
+      }
       onClose={onClose}
+      onConfirm={onSubmit}
       open={open}
-      title={strings.CANNOT_EDIT}
-      size='medium'
-      middleButtons={[&lt;Button id='gotId' label={strings.GOT_IT} onClick={onSubmit} key='button-1' /&gt;]}
-      message={strings.INVALID_EDITOR}
-      skrim={true}
+      title={strings.REPORT_SUBMIT}
     /&gt;
   );
 }
@@ -154,7 +178,7 @@ export default function <span class="fstat-no" title="function not covered" >Can
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-12T12:21:20.378Z
+                at 2025-03-12T18:39:13.080Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

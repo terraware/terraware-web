@@ -490,7 +490,9 @@
 <a name='L425'></a><a href='#L425'>425</a>
 <a name='L426'></a><a href='#L426'>426</a>
 <a name='L427'></a><a href='#L427'>427</a>
-<a name='L428'></a><a href='#L428'>428</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L428'></a><a href='#L428'>428</a>
+<a name='L429'></a><a href='#L429'>429</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -950,11 +952,12 @@ type NavBarProps = {
   setShowNavBar: (value: boolean) =&gt; void;
   withdrawalCreated?: boolean;
 };
+&nbsp;
 export default function <span class="fstat-no" title="function not covered" >NavBar(</span>{
-  setShowNavBar,
   backgroundTransparent,
-  withdrawalCreated,
   hasPlantingSites,
+  setShowNavBar,
+  withdrawalCreated,
 }: NavBarProps): JSX.Element | null {
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
@@ -990,7 +993,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
   const isPlantsDashboardRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.PLANTS_DASHBOARD + '/', end: false });</span>
   const isWithdrawalLogRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.NURSERY_WITHDRAWALS + '/', end: false });</span>
   const isReassignmentRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.NURSERY_REASSIGNMENT + '/', end: false });</span>
-  const isReportsRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.REPORTS + '/', end: false });</span>
+  const isSeedFundReportsRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.SEED_FUND_REPORTS + '/', end: false });</span>
   const isObservationsRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.OBSERVATIONS + '/', end: false });</span>
   const isProjectsRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.PROJECTS + '/', end: true });</span>
   const isProjectRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.PROJECT_VIEW + '/', end: true });</span>
@@ -1114,20 +1117,20 @@ export default function <span class="fstat-no" title="function not covered" >Nav
     [closeAndNavigateTo, isDeliverablesRoute, isDeliverableViewRoute, hasDeliverables]
   );
 &nbsp;
-  const reportsMenu = <span class="cstat-no" title="statement not covered" >useMemo&lt;JSX.Element | null&gt;(</span>
+  const seedFundReportsMenu = <span class="cstat-no" title="statement not covered" >useMemo&lt;JSX.Element | null&gt;(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
 <span class="cstat-no" title="statement not covered" >      reports.length &gt; 0 &amp;&amp; selectedOrganization.canSubmitReports ? (</span>
         &lt;NavItem
           icon='iconGraphReport'
-          label={strings.REPORTS}
-          selected={!!isReportsRoute}
+          label={strings.SEED_FUND_REPORTS}
+          selected={!!isSeedFundReportsRoute}
           onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
-<span class="cstat-no" title="statement not covered" >            closeAndNavigateTo(APP_PATHS.REPORTS);</span>
+<span class="cstat-no" title="statement not covered" >            closeAndNavigateTo(APP_PATHS.SEED_FUND_REPORTS);</span>
           }}
           id='reports-list'
         /&gt;
       ) : null,
-    [closeAndNavigateTo, isReportsRoute, reports.length, selectedOrganization.canSubmitReports]
+    [closeAndNavigateTo, isSeedFundReportsRoute, reports.length, selectedOrganization.canSubmitReports]
   );
 &nbsp;
   const modulesMenu = <span class="cstat-no" title="statement not covered" >useMemo&lt;JSX.Element | null&gt;(</span>
@@ -1217,13 +1220,13 @@ export default function <span class="fstat-no" title="function not covered" >Nav
         }}
         id='speciesNb'
       /&gt;
-      {(applicationMenu || deliverablesMenu || modulesMenu || reportsMenu) &amp;&amp; (
+      {(applicationMenu || deliverablesMenu || modulesMenu || seedFundReportsMenu) &amp;&amp; (
         &lt;&gt;
           &lt;NavSection title={acceleratorSectionTitle} /&gt;
           {applicationMenu}
           {deliverablesMenu}
           {modulesMenu}
-          {reportsMenu}
+          {seedFundReportsMenu}
         &lt;/&gt;
       )}
       &lt;NavSection /&gt;
@@ -1351,7 +1354,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-12T12:21:20.378Z
+                at 2025-03-12T18:39:13.080Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
