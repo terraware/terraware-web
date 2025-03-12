@@ -33,8 +33,7 @@ type PermissionDeliverable =
   | 'READ_SUBMISSION_DOCUMENT'
   | 'UPDATE_SUBMISSION_STATUS'
   | 'UPDATE_DELIVERABLE';
-type PermissionFunder =
-  | 'READ_FUNDING_ENTITIES';
+type PermissionFunder = 'READ_FUNDING_ENTITIES';
 type PermissionGlobalRole = 'READ_GLOBAL_ROLES' | 'ASSIGN_GLOBAL_ROLE_TO_USER' | 'ASSIGN_SOME_GLOBAL_ROLES';
 type PermissionParticipant =
   | 'CREATE_PARTICIPANTS'
