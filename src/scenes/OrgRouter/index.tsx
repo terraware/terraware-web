@@ -37,6 +37,7 @@ import OrganizationRouter from 'src/scenes/OrganizationRouter';
 import PeopleRouter from 'src/scenes/PeopleRouter';
 import PlantingSites from 'src/scenes/PlantingSitesRouter';
 import PlantsDashboardRouter from 'src/scenes/PlantsDashboardRouter';
+import ReportsRouter from 'src/scenes/Reports';
 import SeedBanksRouter from 'src/scenes/SeedBanksRouter';
 import SeedsDashboard from 'src/scenes/SeedsDashboard';
 import SpeciesRouter from 'src/scenes/Species';
@@ -47,8 +48,6 @@ import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organiza
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useEnvironment from 'src/utils/useEnvironment';
 import useStateLocation from 'src/utils/useStateLocation';
-
-import ReportsRouter from '../Reports';
 
 interface OrgRouterProps {
   showNavBar: boolean;
