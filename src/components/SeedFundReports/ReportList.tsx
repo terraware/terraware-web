@@ -7,7 +7,7 @@ import Card from 'src/components/common/Card';
 import TfMain from 'src/components/common/TfMain';
 import Table from 'src/components/common/table';
 import { useOrganization } from 'src/providers';
-import ReportService from 'src/services/ReportService';
+import SeedFundReportService from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
 import { ListReport } from 'src/types/Report';
 
@@ -30,7 +30,7 @@ export default function ReportList(): JSX.Element {
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
       const refreshSearch = async () => {
-        const reportsResults = await ReportService.getReports(selectedOrganization.id);
+        const reportsResults = await SeedFundReportService.getReports(selectedOrganization.id);
         setResults(reportsResults.reports || []);
       };
 

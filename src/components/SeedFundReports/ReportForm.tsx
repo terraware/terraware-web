@@ -13,7 +13,7 @@ import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch } from 'src/redux/store';
-import ReportService from 'src/services/ReportService';
+import SeedFundReportService from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
 import { Report, ReportNursery, ReportPlantingSite } from 'src/types/Report';
 import { ReportSeedBank } from 'src/types/Report';
@@ -85,7 +85,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
 
   useEffect(() => {
     const getPhotoCount = async () => {
-      const photoListResponse = await ReportService.getReportPhotos(draftReport.id);
+      const photoListResponse = await SeedFundReportService.getReportPhotos(draftReport.id);
       if (!photoListResponse.requestSucceeded || photoListResponse.error) {
         setPhotoCount(0);
       } else {

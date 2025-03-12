@@ -10,7 +10,7 @@ import useReportFiles from 'src/components/SeedFundReports/useReportFiles';
 import BackToLink from 'src/components/common/BackToLink';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
-import ReportService from 'src/services/ReportService';
+import SeedFundReportService from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
 import { Report } from 'src/types/Report';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -40,7 +40,7 @@ export default function ReportView(): JSX.Element {
 
   useEffect(() => {
     const getReport = async () => {
-      const result = await ReportService.getReport(reportIdInt);
+      const result = await SeedFundReportService.getReport(reportIdInt);
       if (result.requestSucceeded) {
         setReport(result.report);
       } else {
@@ -56,7 +56,7 @@ export default function ReportView(): JSX.Element {
   const confirmEdit = async () => {
     // lock the report
     if (reportIdValid()) {
-      const lockResult = await ReportService.forceLockReport(reportIdInt);
+      const lockResult = await SeedFundReportService.forceLockReport(reportIdInt);
 
       if (lockResult.requestSucceeded && reportId) {
         // then navigate to editing

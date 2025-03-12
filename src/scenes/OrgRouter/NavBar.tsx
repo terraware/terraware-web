@@ -20,7 +20,7 @@ import { useParticipantData } from 'src/providers/Participant/ParticipantContext
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { NurseryWithdrawalService } from 'src/services';
 import DeliverablesService from 'src/services/DeliverablesService';
-import ReportService, { Reports } from 'src/services/ReportService';
+import SeedFundReportService, { Reports } from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
 import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -41,7 +41,7 @@ export default function NavBar({
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
-  const [reports, setReports] = useState<Reports>([]);
+  const [seedFundReports, setSeedFundReports] = useState<Reports>([]);
   const [hasDeliverables, setHasDeliverables] = useState<boolean>(false);
   const { isDesktop, isMobile } = useDeviceInfo();
   const navigate = useNavigate();
@@ -118,8 +118,8 @@ export default function NavBar({
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
       const reportSearch = async () => {
-        const reportsResults = await ReportService.getReports(selectedOrganization.id);
-        setReports(reportsResults.reports || []);
+        const reportsResults = await SeedFundReportService.getReports(selectedOrganization.id);
+        setSeedFundReports(reportsResults.reports || []);
       };
 
       if (isAdmin(selectedOrganization)) {
@@ -198,7 +198,7 @@ export default function NavBar({
 
   const seedFundReportsMenu = useMemo<JSX.Element | null>(
     () =>
-      reports.length > 0 && selectedOrganization.canSubmitReports ? (
+      seedFundReports.length > 0 && selectedOrganization.canSubmitReports ? (
         <NavItem
           icon='iconGraphReport'
           label={strings.SEED_FUND_REPORTS}
@@ -206,10 +206,10 @@ export default function NavBar({
           onClick={() => {
             closeAndNavigateTo(APP_PATHS.SEED_FUND_REPORTS);
           }}
-          id='reports-list'
+          id='seed-fund-reports-list'
         />
       ) : null,
-    [closeAndNavigateTo, isSeedFundReportsRoute, reports.length, selectedOrganization.canSubmitReports]
+    [closeAndNavigateTo, isSeedFundReportsRoute, seedFundReports.length, selectedOrganization.canSubmitReports]
   );
 
   const modulesMenu = useMemo<JSX.Element | null>(

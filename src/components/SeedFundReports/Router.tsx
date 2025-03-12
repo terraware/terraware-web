@@ -6,7 +6,7 @@ import ReportsView from 'src/components/SeedFundReports/ReportsView';
 import { ReportEdit, ReportView } from 'src/components/SeedFundReports/index';
 import { useOrganization } from 'src/providers';
 
-const ReportsRouter = (): JSX.Element | null => {
+const SeedFundReportsRouter = (): JSX.Element | null => {
   const { selectedOrganization } = useOrganization();
 
   if (!selectedOrganization.canSubmitReports) {
@@ -24,4 +24,4 @@ const ReportsRouter = (): JSX.Element | null => {
   );
 };
 
-export default ReportsRouter;
+export default SeedFundReportsRouter;

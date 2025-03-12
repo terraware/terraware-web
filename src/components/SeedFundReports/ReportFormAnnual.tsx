@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox, Textfield } from '@terraware/web-components';
 
-import { REPORT_FILE_ENDPOINT } from 'src/services/ReportService';
+import { REPORT_FILE_ENDPOINT } from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
 import { Report, ReportFile } from 'src/types/Report';
 import { SDG, SustainableDevelopmentGoal } from 'src/types/Report';

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import ReportService from 'src/services/ReportService';
+import SeedFundReportService from 'src/services/SeedFundReportService';
 import { Report, ReportFile } from 'src/types/Report';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -13,7 +13,7 @@ export default function useReportFiles(
   useEffect(() => {
     const getFiles = async () => {
       if (report) {
-        const fileListResponse = await ReportService.getReportFiles(report.id);
+        const fileListResponse = await SeedFundReportService.getReportFiles(report.id);
         if (!fileListResponse.requestSucceeded) {
           setInitialReportFiles([]);
           snackbar.toastError();
