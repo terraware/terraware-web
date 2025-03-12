@@ -4,7 +4,11 @@ import { Dispatch } from 'redux';
 import { RootState } from 'src/redux/rootReducer';
 import AcceleratorReportService from 'src/services/AcceleratorReportService';
 import strings from 'src/strings';
-import { CreateAcceleratorReportConfigRequest, CreateProjectMetricRequest } from 'src/types/AcceleratorReport';
+import {
+  CreateAcceleratorReportConfigRequest,
+  CreateProjectMetricRequest,
+  UpdateProjectMetricRequest,
+} from 'src/types/AcceleratorReport';
 
 import { setProjectReportConfigAction } from './reportsSlice';
 
@@ -62,6 +66,19 @@ export const requestCreateProjectMetric = createAsyncThunk(
   'createProjectMetric',
   async (request: CreateProjectMetricRequest, { rejectWithValue }) => {
     const response = await AcceleratorReportService.createProjectMetric(request);
+
+    if (response && response.requestSucceeded) {
+      return response.data;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestUpdateProjectMetric = createAsyncThunk(
+  'updateProjectMetric',
+  async (request: UpdateProjectMetricRequest, { rejectWithValue }) => {
+    const response = await AcceleratorReportService.updateProjectMetric(request);
 
     if (response && response.requestSucceeded) {
       return response.data;
