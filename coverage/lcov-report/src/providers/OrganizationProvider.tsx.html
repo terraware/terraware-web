@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/86</span>
+                <span class='fraction'>0/87</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/69</span>
+                <span class='fraction'>0/71</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/81</span>
+                <span class='fraction'>0/82</span>
             </div>
         
             
@@ -273,7 +273,10 @@
 <a name='L208'></a><a href='#L208'>208</a>
 <a name='L209'></a><a href='#L209'>209</a>
 <a name='L210'></a><a href='#L210'>210</a>
-<a name='L211'></a><a href='#L211'>211</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L211'></a><a href='#L211'>211</a>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a>
+<a name='L214'></a><a href='#L214'>214</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -305,6 +308,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -319,6 +323,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -433,6 +438,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -488,6 +494,7 @@ import { useNavigate } from 'react-router-dom';
 &nbsp;
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useFunderPortal from 'src/hooks/useFunderPortal';
 import { store } from 'src/redux/store';
 import { OrganizationService, PreferencesService } from 'src/services';
 import strings from 'src/strings';
@@ -528,6 +535,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
   const location = <span class="cstat-no" title="statement not covered" >useStateLocation();</span>
   const { userPreferences, updateUserPreferences, bootstrapped: userBootstrapped } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
+  const { isFunderRoute } = <span class="cstat-no" title="statement not covered" >useFunderPortal();</span>
   const { isDev, isStaging } = <span class="cstat-no" title="statement not covered" >useEnvironment();</span>
 &nbsp;
   const reloadOrganizations = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >as</span>ync (selectedOrgId?: number) =&gt; {</span>
@@ -615,7 +623,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
   }, [reloadOrgPreferences]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (userBootstrapped &amp;&amp; userPreferences &amp;&amp; organizations &amp;&amp; !isAcceleratorRoute) {</span>
+<span class="cstat-no" title="statement not covered" >    if (userBootstrapped &amp;&amp; userPreferences &amp;&amp; organizations &amp;&amp; !isAcceleratorRoute &amp;&amp; !isFunderRoute) {</span>
       const queryOrganizationId = <span class="cstat-no" title="statement not covered" >query.get('organizationId');</span>
       let orgToUse;
 <span class="cstat-no" title="statement not covered" >      if (organizations.length) {</span>
@@ -639,7 +647,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
         }
       }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      if (queryOrganizationId &amp;&amp; (!orgToUse || isAcceleratorRoute)) {</span>
+<span class="cstat-no" title="statement not covered" >      if (queryOrganizationId &amp;&amp; (!orgToUse || isAcceleratorRoute || isFunderRoute)) {</span>
         // user does not belong to any orgs, clear the url param org id
 <span class="cstat-no" title="statement not covered" >        query.delete('organizationId');</span>
 <span class="cstat-no" title="statement not covered" >        navigate(getLocation(location.pathname, location, query.toString()), { replace: true });</span>
@@ -654,6 +662,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
     userPreferences,
     userBootstrapped,
     isAcceleratorRoute,
+    isFunderRoute,
   ]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -700,7 +709,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-12T18:49:26.835Z
+                at 2025-03-12T19:00:37.799Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
