@@ -48,13 +48,13 @@ export default function ReportsSettings(): JSX.Element {
     setStandardRequestId(dispatched.requestId);
   }, []);
 
-  const reloadSpecificfMetrics = () => {
+  const reloadSpecificMetrics = () => {
     const dispatched = dispatch(requestListProjectMetrics({ projectId }));
     setRequestId(dispatched.requestId);
   };
 
   useEffect(() => {
-    reloadSpecificfMetrics();
+    reloadSpecificMetrics();
   }, [projectId]);
 
   useEffect(() => {
@@ -141,7 +141,7 @@ export default function ReportsSettings(): JSX.Element {
         <EditMetricModal
           onClose={() => setEditMetricModalOpened(false)}
           projectMetric={selectedMetric}
-          reload={reloadSpecificfMetrics}
+          reload={reloadSpecificMetrics}
         />
       )}
       <Card
