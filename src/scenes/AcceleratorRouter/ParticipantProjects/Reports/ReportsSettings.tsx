@@ -8,11 +8,19 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { selectListReportMetrics, selectProjectReportConfig } from 'src/redux/features/reports/reportsSelectors';
-import { requestListProjectMetrics, requestProjectReportConfig } from 'src/redux/features/reports/reportsThunks';
+import {
+  selectListReportMetrics,
+  selectListStandardMetrics,
+  selectProjectReportConfig,
+} from 'src/redux/features/reports/reportsSelectors';
+import {
+  requestListProjectMetrics,
+  requestListStandardMetrics,
+  requestProjectReportConfig,
+} from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ProjectMetric } from 'src/types/AcceleratorReport';
+import { ProjectMetric, StandardMetric } from 'src/types/AcceleratorReport';
 
 export default function ReportsSettings(): JSX.Element {
   const { isMobile } = useDeviceInfo();
@@ -23,9 +31,17 @@ export default function ReportsSettings(): JSX.Element {
   const dispatch = useAppDispatch();
   const { goToAcceleratorEditReportSettings } = useNavigateTo();
   const [requestId, setRequestId] = useState<string>('');
+  const [standardRequestId, setStandardRequestId] = useState<string>('');
   const specificMetricsResponse = useAppSelector(selectListReportMetrics(requestId));
+  const standardMetricsResponse = useAppSelector(selectListStandardMetrics(standardRequestId));
   const [metrics, setMetrics] = useState<ProjectMetric[]>();
+  const [standardMetrics, setStandardMetrics] = useState<StandardMetric[]>();
   const [selectedRows, setSelectedRows] = useState<ProjectMetric[]>([]);
+
+  useEffect(() => {
+    const dispatched = dispatch(requestListStandardMetrics());
+    setStandardRequestId(dispatched.requestId);
+  }, []);
 
   useEffect(() => {
     const dispatched = dispatch(requestListProjectMetrics({ projectId }));
@@ -43,6 +59,12 @@ export default function ReportsSettings(): JSX.Element {
       setMetrics(specificMetricsResponse.data);
     }
   }, [specificMetricsResponse]);
+
+  useEffect(() => {
+    if (standardMetricsResponse && standardMetricsResponse.status === 'success') {
+      setStandardMetrics(standardMetricsResponse.data);
+    }
+  }, [standardMetricsResponse]);
 
   const gridSize = isMobile ? 12 : 4;
 
@@ -159,7 +181,13 @@ export default function ReportsSettings(): JSX.Element {
             {title(strings.STANDARD_METRICS)}
           </Grid>
           <Grid item xs={12}>
-            table
+            <Table
+              id='standard-metrics-table'
+              columns={columns}
+              rows={standardMetrics || []}
+              orderBy='name'
+              showCheckbox={false}
+            />
           </Grid>
         </Grid>
       </Card>
