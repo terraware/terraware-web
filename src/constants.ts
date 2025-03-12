@@ -69,6 +69,7 @@ export enum APP_PATHS {
   DELIVERABLE_VIEW = '/deliverables/:deliverableId/submissions/:projectId',
   ERROR = '/error',
   ERROR_MOBILE_NOT_SUPPORTED = '/error/mobile-not-supported',
+  ERROR_FAILED_TO_FETCH_FUNDING_ENTITY = '/error/cannot-fetch-funding-entity',
   ERROR_FAILED_TO_FETCH_ORG_DATA = '/error/cannot-fetch-org-data',
   FUNDER = '/funder',
   FUNDER_HOME = '/funder/home',

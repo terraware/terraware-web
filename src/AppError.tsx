@@ -14,6 +14,7 @@ export default function AppError() {
     <AppBootstrap>
       <Provider store={store}>
         <Routes>
+          <Route path={APP_PATHS.ERROR_FAILED_TO_FETCH_FUNDING_ENTITY} element={<ErrorContent />} />
           <Route path={APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA} element={<ErrorContent />} />
           <Route path={APP_PATHS.ERROR} element={<QueryParamsError />} />
         </Routes>
