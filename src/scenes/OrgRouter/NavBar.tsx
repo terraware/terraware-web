@@ -199,10 +199,10 @@ export default function NavBar({
     [closeAndNavigateTo, isDeliverablesRoute, isDeliverableViewRoute, hasDeliverables]
   );
 
-  // TODO: determine if we need to check selectedOrganization.canSubmitReports or if we need a new permission
+  // TODO: get reports from API and only show reports nav menu if there are any
   const reportsMenu = useMemo<JSX.Element | null>(
     () =>
-      isReportsEnabled && selectedOrganization.canSubmitReports ? (
+      isReportsEnabled ? (
         <NavItem
           icon='iconGraphReport'
           label={strings.REPORTS}
@@ -213,13 +213,7 @@ export default function NavBar({
           id='reports-list'
         />
       ) : null,
-    [
-      closeAndNavigateTo,
-      isReportsEnabled,
-      isReportsRoute,
-      seedFundReports.length,
-      selectedOrganization.canSubmitReports,
-    ]
+    [closeAndNavigateTo, isReportsEnabled, isReportsRoute]
   );
 
   const seedFundReportsMenu = useMemo<JSX.Element | null>(
