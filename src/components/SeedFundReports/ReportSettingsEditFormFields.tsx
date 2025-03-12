@@ -85,7 +85,7 @@ const ReportSettingsEditFormFields = ({ isEditing, onChange, reportsSettings }: 
               <Button
                 icon={'iconEdit'}
                 label={strings.EDIT}
-                onClick={() => navigate(APP_PATHS.REPORTS_SETTINGS_EDIT)}
+                onClick={() => navigate(APP_PATHS.SEED_FUND_REPORTS_SETTINGS_EDIT)}
               />
             </Grid>
           )}
