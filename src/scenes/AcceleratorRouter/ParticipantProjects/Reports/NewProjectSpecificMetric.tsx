@@ -22,7 +22,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
   const theme = useTheme();
   const navigate = useNavigate();
   const pathParams = useParams<{ projectId: string }>();
-  const projectId = Number(pathParams.projectId);
+  const projectId = String(pathParams.projectId);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
   const createProjectMetricResponse = useAppSelector(selectCreateProjectMetric(requestId));
@@ -42,7 +42,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
   }, [createProjectMetricResponse]);
 
   const goToProjectReports = () => {
-    navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId.toString())}?tab=settings`);
+    navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId)}?tab=settings`);
   };
 
   const [newMetric, , onChange] = useForm<NewMetric>({

@@ -38,14 +38,14 @@ type CreateProjectMetricResponse =
 /**
  * Get project reports config
  */
-const getAcceleratorReportConfig = async (projectId: number): Promise<ReportsConfigResponse> => {
+const getAcceleratorReportConfig = async (projectId: string): Promise<ReportsConfigResponse> => {
   const response: ReportsConfigResponse = await httpAcceleratorReportsConfig.get<
     ListAcceleratorReportConfigResponsePayload,
     ReportsConfigData
   >(
     {
       urlReplacements: {
-        '{projectId}': projectId.toString(),
+        '{projectId}': projectId,
       },
     },
     (data) => ({ config: data?.configs[0] })
@@ -63,9 +63,9 @@ const createConfig = async (request: CreateAcceleratorReportConfigRequest): Prom
   });
 };
 
-const listProjectMetrics = async (projectId: number): Promise<Response2<ListProjectMetricsResponsePayload>> => {
+const listProjectMetrics = async (projectId: string): Promise<Response2<ListProjectMetricsResponsePayload>> => {
   return HttpService.root(
-    PROJECT_METRICS_ENDPOINT.replace('{projectId}', projectId.toString())
+    PROJECT_METRICS_ENDPOINT.replace('{projectId}', projectId)
   ).get2<ListProjectMetricsResponsePayload>();
 };
 
@@ -77,11 +77,11 @@ const createProjectMetric = async (
   request: CreateProjectMetricRequest
 ): Promise<Response2<CreateProjectMetricResponse>> => {
   const { projectId, ...rest } = request;
-  return HttpService.root(
-    PROJECT_METRICS_ENDPOINT.replace('{projectId}', projectId.toString())
-  ).put2<CreateProjectMetricResponse>({
-    entity: rest,
-  });
+  return HttpService.root(PROJECT_METRICS_ENDPOINT.replace('{projectId}', projectId)).put2<CreateProjectMetricResponse>(
+    {
+      entity: rest,
+    }
+  );
 };
 
 /**
