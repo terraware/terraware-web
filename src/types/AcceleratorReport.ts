@@ -15,6 +15,10 @@ export type StandardMetric = components['schemas']['ExistingStandardMetricPayloa
 
 export type CreateProjectMetricRequestPayload = components['schemas']['CreateProjectMetricRequestPayload'];
 
+export type UpdateProjectMetricRequestPayload = components['schemas']['UpdateProjectMetricRequestPayload'];
+
 export type CreateProjectMetricRequest = CreateProjectMetricRequestPayload & { projectId: string };
+
+export type UpdateProjectMetricRequest = UpdateProjectMetricRequestPayload & { projectId: number; metricId: number };
 
 export type NewMetric = components['schemas']['NewMetricPayload'];

@@ -3,6 +3,7 @@ import {
   CreateAcceleratorReportConfigRequest,
   CreateProjectMetricRequest,
   ExistingAcceleratorReportConfig,
+  UpdateProjectMetricRequest,
 } from 'src/types/AcceleratorReport';
 
 import HttpService, { Response, Response2 } from './HttpService';
@@ -25,6 +26,7 @@ type CreateResponse =
 
 const PROJECT_METRICS_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/metrics';
 const STANDARD_METRICS_ENDPOINT = '/api/v1/accelerator/reports/standardMetrics';
+const PROJECT_METRIC_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/metrics/{metricId}';
 
 export type ListProjectMetricsResponsePayload =
   paths[typeof PROJECT_METRICS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -34,6 +36,9 @@ export type ListStandardMetricsResponsePayload =
 
 type CreateProjectMetricResponse =
   paths[typeof PROJECT_METRICS_ENDPOINT]['put']['responses'][200]['content']['application/json'];
+
+type UpdateProjectMetricResponse =
+  paths[typeof PROJECT_METRIC_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 /**
  * Get project reports config
@@ -84,6 +89,17 @@ const createProjectMetric = async (
   );
 };
 
+const updateProjectMetric = async (
+  request: UpdateProjectMetricRequest
+): Promise<Response2<UpdateProjectMetricResponse>> => {
+  const { projectId, metricId, ...rest } = request;
+  return HttpService.root(
+    PROJECT_METRIC_ENDPOINT.replace('{projectId}', projectId.toString()).replace('{metricId}', metricId.toString())
+  ).post2<UpdateProjectMetricResponse>({
+    entity: rest,
+  });
+};
+
 /**
  * Exported functions
  */
@@ -93,6 +109,7 @@ const ReportService = {
   listProjectMetrics,
   listStandardMetrics,
   createProjectMetric,
+  updateProjectMetric,
 };
 
 export default ReportService;

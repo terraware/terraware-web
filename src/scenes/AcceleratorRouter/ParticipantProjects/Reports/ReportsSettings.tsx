@@ -22,6 +22,9 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { ProjectMetric, StandardMetric } from 'src/types/AcceleratorReport';
 
+import EditMetricModal from './EditMetricModal';
+import SpecificMetricsRenderer from './SpecificMetricsRenderer';
+
 export default function ReportsSettings(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -37,15 +40,21 @@ export default function ReportsSettings(): JSX.Element {
   const [metrics, setMetrics] = useState<ProjectMetric[]>();
   const [standardMetrics, setStandardMetrics] = useState<StandardMetric[]>();
   const [selectedRows, setSelectedRows] = useState<ProjectMetric[]>([]);
+  const [selectedMetric, setSelectedMetric] = useState<ProjectMetric>();
+  const [editMetricModalOpened, setEditMetricModalOpened] = useState<boolean>(false);
 
   useEffect(() => {
     const dispatched = dispatch(requestListStandardMetrics());
     setStandardRequestId(dispatched.requestId);
   }, []);
 
-  useEffect(() => {
+  const reloadSpecificMetrics = () => {
     const dispatched = dispatch(requestListProjectMetrics({ projectId }));
     setRequestId(dispatched.requestId);
+  };
+
+  useEffect(() => {
+    reloadSpecificMetrics();
   }, [projectId]);
 
   useEffect(() => {
@@ -121,8 +130,20 @@ export default function ReportsSettings(): JSX.Element {
     },
   ];
 
+  const onRowClick = (metric: ProjectMetric) => {
+    setSelectedMetric(metric);
+    setEditMetricModalOpened(true);
+  };
+
   return (
     <>
+      {editMetricModalOpened && selectedMetric && (
+        <EditMetricModal
+          onClose={() => setEditMetricModalOpened(false)}
+          projectMetric={selectedMetric}
+          reload={reloadSpecificMetrics}
+        />
+      )}
       <Card
         style={{ display: 'flex', flexDirection: 'column' }}
         title={strings.SETTINGS}
@@ -175,6 +196,10 @@ export default function ReportsSettings(): JSX.Element {
                     icon: 'iconTrashCan',
                   },
                 ]}
+                Renderer={SpecificMetricsRenderer}
+                onSelect={onRowClick}
+                controlledOnSelect={true}
+                isClickable={() => false}
               />
             ) : (
               <Typography>{strings.NO_PROJECT_SPECIFIC_METRICS_TO_SHOW}</Typography>

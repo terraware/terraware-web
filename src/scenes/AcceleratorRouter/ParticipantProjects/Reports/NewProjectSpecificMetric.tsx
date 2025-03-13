@@ -18,6 +18,20 @@ import strings from 'src/strings';
 import { NewMetric } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
 
+export const metricTypeOptions = [
+  { label: strings.METRIC_TYPE_ACTIVITY, value: 'Activity' },
+  { label: strings.METRIC_TYPE_OUTPUT, value: 'Output' },
+  { label: strings.METRIC_TYPE_OUTCOME, value: 'Outcome' },
+  { label: strings.METRIC_TYPE_IMPACT, value: 'Impact' },
+];
+
+export const metricComponentOptions = [
+  { label: strings.COMMUNITY, value: 'Community' },
+  { label: strings.PROJECT_OBJECTIVES, value: 'Project Objectives' },
+  { label: strings.CLIMATE, value: 'Climate' },
+  { label: strings.BIODIVERSITY, value: 'Biodiversity' },
+];
+
 export default function NewProjectSpecificMetric(): JSX.Element {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -56,20 +70,6 @@ export default function NewProjectSpecificMetric(): JSX.Element {
     const request = dispatch(requestCreateProjectMetric({ metric: newMetric, projectId: projectId }));
     setRequestId(request.requestId);
   };
-
-  const typeOptions = [
-    { label: strings.METRIC_TYPE_ACTIVITY, value: 'Activity' },
-    { label: strings.METRIC_TYPE_OUTPUT, value: 'Output' },
-    { label: strings.METRIC_TYPE_OUTCOME, value: 'Outcome' },
-    { label: strings.METRIC_TYPE_IMPACT, value: 'Impact' },
-  ];
-
-  const componentOptions = [
-    { label: strings.COMMUNITY, value: 'Community' },
-    { label: strings.PROJECT_OBJECTIVES, value: 'Project Objectives' },
-    { label: strings.CLIMATE, value: 'Climate' },
-    { label: strings.BIODIVERSITY, value: 'Biodiversity' },
-  ];
 
   return (
     <Page title={strings.REPORTS} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
@@ -120,7 +120,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
                   id='type'
                   label={strings.TYPE}
                   onChange={(newValue: string) => onChange('type', newValue)}
-                  options={typeOptions}
+                  options={metricTypeOptions}
                   selectedValue={newMetric.type}
                   fullWidth
                 />
@@ -139,7 +139,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
                   id='component'
                   label={strings.COMPONENT}
                   onChange={(newValue: string) => onChange('component', newValue)}
-                  options={componentOptions}
+                  options={metricComponentOptions}
                   selectedValue={newMetric.component}
                   fullWidth
                 />

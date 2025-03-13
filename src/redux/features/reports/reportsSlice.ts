@@ -8,6 +8,7 @@ import {
   requestCreateReportConfig,
   requestListProjectMetrics,
   requestListStandardMetrics,
+  requestUpdateProjectMetric,
 } from './reportsThunks';
 
 type Data = {
@@ -79,12 +80,27 @@ const projectMetricCreateSlice = createSlice({
   },
 });
 
+/**
+ * Update Project Metric
+ */
+const initialProjectMetricUpdateState: { [key: string]: StatusT<number> } = {};
+
+const projectMetricUpdateSlice = createSlice({
+  name: 'projectMetricUpdateSlice',
+  initialState: initialProjectMetricUpdateState,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestUpdateProjectMetric)(builder);
+  },
+});
+
 const reportsReducers = {
   projectReportConfig: projectReportConfigSlice.reducer,
   projectReportConfigCreate: createReportConfigSlice.reducer,
   listProjectMetrics: listProjectMetricsSlice.reducer,
   listStandardMetrics: listStandardMetricsSlice.reducer,
   projectMetricCreate: projectMetricCreateSlice.reducer,
+  projectMetricUpdate: projectMetricUpdateSlice.reducer,
 };
 
 export default reportsReducers;
