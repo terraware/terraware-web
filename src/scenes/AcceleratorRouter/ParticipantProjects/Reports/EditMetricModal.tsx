@@ -60,7 +60,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
       onClose={onClose}
       open={true}
       title={strings.PROJECT_SPECIFIC_METRIC}
-      size='large'
+      size='medium'
       middleButtons={[
         <Button
           id='cancel'
@@ -73,7 +73,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
         <Button id='save' onClick={save} label={strings.SAVE} key='button-2' />,
       ]}
     >
-      <Grid container textAlign={'left'}>
+      <Grid container textAlign={'left'} spacing={2}>
         <Grid item xs={12}>
           <TextField
             id='name'
