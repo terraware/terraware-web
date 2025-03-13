@@ -246,6 +246,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -283,20 +297,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -409,6 +409,20 @@ import strings from 'src/strings';
 import { NewMetric } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
 &nbsp;
+export const metricTypeOptions = <span class="cstat-no" title="statement not covered" >[</span>
+  { label: strings.METRIC_TYPE_ACTIVITY, value: 'Activity' },
+  { label: strings.METRIC_TYPE_OUTPUT, value: 'Output' },
+  { label: strings.METRIC_TYPE_OUTCOME, value: 'Outcome' },
+  { label: strings.METRIC_TYPE_IMPACT, value: 'Impact' },
+];
+&nbsp;
+export const metricComponentOptions = <span class="cstat-no" title="statement not covered" >[</span>
+  { label: strings.COMMUNITY, value: 'Community' },
+  { label: strings.PROJECT_OBJECTIVES, value: 'Project Objectives' },
+  { label: strings.CLIMATE, value: 'Climate' },
+  { label: strings.BIODIVERSITY, value: 'Biodiversity' },
+];
+&nbsp;
 export default function <span class="fstat-no" title="function not covered" >NewProjectSpecificMetric(</span>): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
@@ -447,20 +461,6 @@ export default function <span class="fstat-no" title="function not covered" >New
     const request = <span class="cstat-no" title="statement not covered" >dispatch(requestCreateProjectMetric({ metric: newMetric, projectId: projectId }));</span>
 <span class="cstat-no" title="statement not covered" >    setRequestId(request.requestId);</span>
   };
-&nbsp;
-  const typeOptions = <span class="cstat-no" title="statement not covered" >[</span>
-    { label: strings.METRIC_TYPE_ACTIVITY, value: 'Activity' },
-    { label: strings.METRIC_TYPE_OUTPUT, value: 'Output' },
-    { label: strings.METRIC_TYPE_OUTCOME, value: 'Outcome' },
-    { label: strings.METRIC_TYPE_IMPACT, value: 'Impact' },
-  ];
-&nbsp;
-  const componentOptions = <span class="cstat-no" title="statement not covered" >[</span>
-    { label: strings.COMMUNITY, value: 'Community' },
-    { label: strings.PROJECT_OBJECTIVES, value: 'Project Objectives' },
-    { label: strings.CLIMATE, value: 'Climate' },
-    { label: strings.BIODIVERSITY, value: 'Biodiversity' },
-  ];
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Page title={strings.REPORTS} contentStyle={{ display: 'flex', flexDirection: 'column' }}&gt;
@@ -511,7 +511,7 @@ export default function <span class="fstat-no" title="function not covered" >New
                   id='type'
                   label={strings.TYPE}
                   onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue: string) =&gt; <span class="cstat-no" title="statement not covered" >onChange('type', newValue)}</span>
-                  options={typeOptions}
+                  options={metricTypeOptions}
                   selectedValue={newMetric.type}
                   fullWidth
                 /&gt;
@@ -530,7 +530,7 @@ export default function <span class="fstat-no" title="function not covered" >New
                   id='component'
                   label={strings.COMPONENT}
                   onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue: string) =&gt; <span class="cstat-no" title="statement not covered" >onChange('component', newValue)}</span>
-                  options={componentOptions}
+                  options={metricComponentOptions}
                   selectedValue={newMetric.component}
                   fullWidth
                 /&gt;
@@ -559,7 +559,7 @@ export default function <span class="fstat-no" title="function not covered" >New
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-13T12:37:58.927Z
+                at 2025-03-13T13:09:59.030Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
