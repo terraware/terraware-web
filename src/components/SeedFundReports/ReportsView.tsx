@@ -6,9 +6,9 @@ import { Message, TableColumnType, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PageHeader from 'src/components/PageHeader';
-import PreSetupView from 'src/components/Reports/PreSetupView';
-import ReportLink from 'src/components/Reports/ReportLink';
-import ReportsCellRenderer from 'src/components/Reports/TableCellRenderer';
+import PreSetupView from 'src/components/SeedFundReports/PreSetupView';
+import ReportLink from 'src/components/SeedFundReports/ReportLink';
+import ReportsCellRenderer from 'src/components/SeedFundReports/TableCellRenderer';
 import TfMain from 'src/components/common/TfMain';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
@@ -16,7 +16,7 @@ import { useOrganization } from 'src/providers';
 import { selectReportsSettings } from 'src/redux/features/reportsSettings/reportsSettingsSelectors';
 import { requestReportsSettings } from 'src/redux/features/reportsSettings/reportsSettingsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import ReportService from 'src/services/ReportService';
+import SeedFundReportService from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
 import { ListReport } from 'src/types/Report';
 
@@ -58,11 +58,11 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
 
       switch (newTab) {
         case 'reports': {
-          navigate(APP_PATHS.REPORTS);
+          navigate(APP_PATHS.SEED_FUND_REPORTS);
           break;
         }
         case 'settings': {
-          navigate(APP_PATHS.REPORTS_SETTINGS);
+          navigate(APP_PATHS.SEED_FUND_REPORTS_SETTINGS);
         }
       }
     },
@@ -78,7 +78,7 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
       const refreshSearch = async () => {
-        const reportsResults = await ReportService.getReports(selectedOrganization.id);
+        const reportsResults = await SeedFundReportService.getReports(selectedOrganization.id);
         setResults(
           (reportsResults.reports || []).map((report) => {
             if (report.projectName) {
@@ -100,7 +100,7 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
     <PreSetupView />
   ) : (
     <TfMain>
-      <PageHeader title={strings.REPORTS} />
+      <PageHeader title={strings.SEED_FUND_REPORTS} />
 
       {reportsToComplete.length > 0 && (
         <Box sx={{ marginBottom: theme.spacing(3) }}>

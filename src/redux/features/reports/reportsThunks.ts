@@ -12,7 +12,7 @@ import {
 
 import { setProjectReportConfigAction } from './reportsSlice';
 
-export const requestProjectReportConfig = (projectId: number) => {
+export const requestProjectReportConfig = (projectId: string) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
@@ -41,7 +41,7 @@ export const requestCreateReportConfig = createAsyncThunk(
 
 export const requestListProjectMetrics = createAsyncThunk(
   'listMetrics',
-  async (request: { projectId: number }, { rejectWithValue }) => {
+  async (request: { projectId: string }, { rejectWithValue }) => {
     const response = await AcceleratorReportService.listProjectMetrics(request.projectId);
 
     if (response && response.requestSucceeded) {

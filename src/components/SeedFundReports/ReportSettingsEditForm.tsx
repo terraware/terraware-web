@@ -41,7 +41,7 @@ const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEd
         return;
       }
 
-      navigate(APP_PATHS.REPORTS_SETTINGS);
+      navigate(APP_PATHS.SEED_FUND_REPORTS_SETTINGS);
     }
   }, [navigate, localReportsSettings, selectedOrganization.id, snackbar]);
 
@@ -80,7 +80,7 @@ const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEd
     <PageForm
       cancelID='cancelReportsSettings'
       saveID='saveReportsSettings'
-      onCancel={() => navigate(APP_PATHS.REPORTS_SETTINGS)}
+      onCancel={() => navigate(APP_PATHS.SEED_FUND_REPORTS_SETTINGS)}
       onSave={onSave}
       busy={isBusy}
     >

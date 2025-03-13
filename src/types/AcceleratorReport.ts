@@ -7,7 +7,7 @@ export type NewAcceleratorReportConfig = components['schemas']['NewAcceleratorRe
 export type CreateAcceleratorReportConfigRequestPayload =
   components['schemas']['CreateAcceleratorReportConfigRequestPayload'];
 
-export type CreateAcceleratorReportConfigRequest = CreateAcceleratorReportConfigRequestPayload & { projectId: number };
+export type CreateAcceleratorReportConfigRequest = CreateAcceleratorReportConfigRequestPayload & { projectId: string };
 
 export type ProjectMetric = components['schemas']['ExistingProjectMetricPayload'];
 
@@ -17,7 +17,7 @@ export type CreateProjectMetricRequestPayload = components['schemas']['CreatePro
 
 export type UpdateProjectMetricRequestPayload = components['schemas']['UpdateProjectMetricRequestPayload'];
 
-export type CreateProjectMetricRequest = CreateProjectMetricRequestPayload & { projectId: number };
+export type CreateProjectMetricRequest = CreateProjectMetricRequestPayload & { projectId: string };
 
 export type UpdateProjectMetricRequest = UpdateProjectMetricRequestPayload & { projectId: number; metricId: number };
 

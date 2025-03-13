@@ -70,6 +70,7 @@ const getUser = async (): Promise<UserResponse> => {
             lastName: data.user.lastName,
             locale: data.user.locale,
             timeZone: data.user.timeZone,
+            userType: data.user.userType,
           }
         : undefined,
     };

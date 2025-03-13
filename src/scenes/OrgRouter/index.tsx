@@ -5,7 +5,7 @@ import { Box, Slide, useTheme } from '@mui/material';
 
 import ErrorBoundary from 'src/ErrorBoundary';
 import ProjectsRouter from 'src/components/Projects/Router';
-import ReportsRouter from 'src/components/Reports/Router';
+import SeedFundReportsRouter from 'src/components/SeedFundReports/Router';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import ApplicationProvider from 'src/providers/Application';
@@ -37,6 +37,7 @@ import OrganizationRouter from 'src/scenes/OrganizationRouter';
 import PeopleRouter from 'src/scenes/PeopleRouter';
 import PlantingSites from 'src/scenes/PlantingSitesRouter';
 import PlantsDashboardRouter from 'src/scenes/PlantsDashboardRouter';
+import ReportsRouter from 'src/scenes/Reports';
 import SeedBanksRouter from 'src/scenes/SeedBanksRouter';
 import SeedsDashboard from 'src/scenes/SeedsDashboard';
 import SpeciesRouter from 'src/scenes/Species';
@@ -253,6 +254,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
               <Route path={APP_PATHS.HELP_SUPPORT + '/*'} element={<HelpSupportRouter />} />
               <Route path={APP_PATHS.MY_ACCOUNT + '/*'} element={<MyAccountRouter />} />
               <Route path={APP_PATHS.REPORTS + '/*'} element={<ReportsRouter />} />
+              <Route path={APP_PATHS.SEED_FUND_REPORTS + '/*'} element={<SeedFundReportsRouter />} />
               <Route path={APP_PATHS.OBSERVATIONS + '/*'} element={<ObservationsRouter />} />
               <Route path={APP_PATHS.DELIVERABLES + '/*'} element={<DeliverablesRouter />} />
               <Route path={APP_PATHS.APPLICATIONS + '/*'} element={<ApplicationRouter />} />

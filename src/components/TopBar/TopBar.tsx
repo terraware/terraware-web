@@ -4,6 +4,7 @@ import { AppBar, Box, Toolbar, useTheme } from '@mui/material';
 
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useApplicationPortal from 'src/hooks/useApplicationPortal';
+import useFunderPortal from 'src/hooks/useFunderPortal';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type TopBarProps = {
@@ -15,15 +16,18 @@ export default function TopBar(props: TopBarProps): JSX.Element {
   const { isDesktop } = useDeviceInfo();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { isApplicationPortal } = useApplicationPortal();
+  const { isFunderRoute } = useFunderPortal();
   const theme = useTheme();
 
   const borderTop = useCallback(() => {
     if (isAcceleratorRoute) {
       return `8px solid ${theme.palette.TwClrBgAccent}`;
+    } else if (isFunderRoute) {
+      return `8px solid ${theme.palette.TwClrBgAccentAux}`;
     } else {
       return undefined;
     }
-  }, [isAcceleratorRoute]);
+  }, [isAcceleratorRoute, isFunderRoute]);
 
   return (
     <AppBar
@@ -42,7 +46,7 @@ export default function TopBar(props: TopBarProps): JSX.Element {
           paddingBottom: '24px',
           paddingLeft: '32px',
           paddingRight: '32px',
-          paddingTop: isAcceleratorRoute || isApplicationPortal ? '16px' : '24px',
+          paddingTop: isAcceleratorRoute || isApplicationPortal || isFunderRoute ? '16px' : '24px',
           ...(isDesktop ? {} : { minHeight: '64px' }),
         }}
       >

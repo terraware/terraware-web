@@ -10,8 +10,9 @@ import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useApplicationPortal from 'src/hooks/useApplicationPortal';
+import useFunderPortal from 'src/hooks/useFunderPortal';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
-import { useOrganization, useUser } from 'src/providers/hooks';
+import { useFundingEntity, useOrganization, useUser } from 'src/providers/hooks';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import KnowledgeBaseLink from '../KnowledgeBaseLink';
@@ -20,6 +21,7 @@ import OrganizationsDropdown from '../OrganizationsDropdown';
 import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
 import UserMenu from '../UserMenu';
 import Icon from '../common/icon/Icon';
+import FunderBreadcrumbs from './FunderBreadcrumbs';
 
 type TopBarProps = {
   setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,11 +31,13 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   const navigate = useNavigate();
   const theme = useTheme();
   const { selectedOrganization, organizations, reloadOrganizations } = useOrganization();
+  const { fundingEntity } = useFundingEntity();
   const { setShowNavBar } = props;
   const { isDesktop } = useDeviceInfo();
   const { user } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { isApplicationPortal } = useApplicationPortal();
+  const { isFunderRoute } = useFunderPortal();
   const mixpanel = useMixpanel();
 
   const logoStyles = {
@@ -81,6 +85,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
 
         <div style={separatorStyles} />
         {user && <AcceleratorBreadcrumbs />}
+        {user && <FunderBreadcrumbs />}
         {organizations && organizations.length > 0 && (
           <>
             {isApplicationPortal && (
@@ -88,7 +93,12 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
                 <p style={{ fontSize: '16px' }}>{selectedOrganization.name}</p>
               </>
             )}
-            {!isAcceleratorRoute && !isApplicationPortal && <OrganizationsDropdown />}
+            {!isAcceleratorRoute && !isApplicationPortal && !isFunderRoute && <OrganizationsDropdown />}
+          </>
+        )}
+        {fundingEntity && (
+          <>
+            <span style={{ fontSize: '16px' }}>{fundingEntity.name}</span>
           </>
         )}
       </Box>

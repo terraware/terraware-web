@@ -4,13 +4,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
-import ConcurrentEditorWarningDialog from 'src/components/Reports/ConcurrentEditorWarningDialog';
-import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
-import useReportFiles from 'src/components/Reports/useReportFiles';
+import ConcurrentEditorWarningDialog from 'src/components/SeedFundReports/ConcurrentEditorWarningDialog';
+import ReportFormAnnual from 'src/components/SeedFundReports/ReportFormAnnual';
+import useReportFiles from 'src/components/SeedFundReports/useReportFiles';
 import BackToLink from 'src/components/common/BackToLink';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
-import ReportService from 'src/services/ReportService';
+import SeedFundReportService from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
 import { Report } from 'src/types/Report';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -40,7 +40,7 @@ export default function ReportView(): JSX.Element {
 
   useEffect(() => {
     const getReport = async () => {
-      const result = await ReportService.getReport(reportIdInt);
+      const result = await SeedFundReportService.getReport(reportIdInt);
       if (result.requestSucceeded) {
         setReport(result.report);
       } else {
@@ -56,11 +56,11 @@ export default function ReportView(): JSX.Element {
   const confirmEdit = async () => {
     // lock the report
     if (reportIdValid()) {
-      const lockResult = await ReportService.forceLockReport(reportIdInt);
+      const lockResult = await SeedFundReportService.forceLockReport(reportIdInt);
 
       if (lockResult.requestSucceeded && reportId) {
         // then navigate to editing
-        navigate({ pathname: APP_PATHS.REPORTS_EDIT.replace(':reportId', reportId) });
+        navigate({ pathname: APP_PATHS.SEED_FUND_REPORTS_EDIT.replace(':reportId', reportId) });
       } else {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_EDIT);
       }
@@ -97,7 +97,7 @@ export default function ReportView(): JSX.Element {
       />
       <Box display='flex' flexDirection='column'>
         <Box paddingLeft={theme.spacing(3)}>
-          <BackToLink id='backToReports' name={strings.REPORTS} to={APP_PATHS.REPORTS} />
+          <BackToLink id='backToReports' name={strings.REPORTS} to={APP_PATHS.SEED_FUND_REPORTS} />
         </Box>
         <Box
           display='flex'

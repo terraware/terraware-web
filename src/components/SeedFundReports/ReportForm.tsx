@@ -3,8 +3,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox, Textfield } from '@terraware/web-components';
 
-import LocationSection from 'src/components/Reports/LocationSelection';
-import ViewPhotos from 'src/components/Reports/ViewPhotos';
+import LocationSection from 'src/components/SeedFundReports/LocationSelection';
+import ViewPhotos from 'src/components/SeedFundReports/ViewPhotos';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import SelectPhotos from 'src/components/common/SelectPhotos';
 import { useOrganization } from 'src/providers';
@@ -13,7 +13,7 @@ import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch } from 'src/redux/store';
-import ReportService from 'src/services/ReportService';
+import SeedFundReportService from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
 import { Report, ReportNursery, ReportPlantingSite } from 'src/types/Report';
 import { ReportSeedBank } from 'src/types/Report';
@@ -85,7 +85,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
 
   useEffect(() => {
     const getPhotoCount = async () => {
-      const photoListResponse = await ReportService.getReportPhotos(draftReport.id);
+      const photoListResponse = await SeedFundReportService.getReportPhotos(draftReport.id);
       if (!photoListResponse.requestSucceeded || photoListResponse.error) {
         setPhotoCount(0);
       } else {

@@ -11,7 +11,7 @@ interface ReportLinkProps {
 
 const ReportLink = ({ report, fontSize }: ReportLinkProps) => {
   const reportLocation = {
-    pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', report.id.toString()),
+    pathname: APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', report.id.toString()),
   };
 
   let reportName = `${report.year}-Q${report.quarter}`;

@@ -17,7 +17,7 @@ const PreSetupView = () => {
 
   const goToSettings = () => {
     navigate({
-      pathname: APP_PATHS.REPORTS_SETTINGS_EDIT,
+      pathname: APP_PATHS.SEED_FUND_REPORTS_SETTINGS_EDIT,
     });
   };
 

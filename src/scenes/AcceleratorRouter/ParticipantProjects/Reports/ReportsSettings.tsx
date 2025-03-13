@@ -29,7 +29,7 @@ export default function ReportsSettings(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const pathParams = useParams<{ projectId: string }>();
-  const projectId = Number(pathParams.projectId);
+  const projectId = String(pathParams.projectId);
   const projectReportConfig = useAppSelector((state) => selectProjectReportConfig(state));
   const dispatch = useAppDispatch();
   const { goToAcceleratorEditReportSettings, goToNewProjectMetric } = useNavigateTo();
