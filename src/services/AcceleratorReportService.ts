@@ -1,5 +1,9 @@
 import { paths } from 'src/api/types/generated-schema';
-import { CreateAcceleratorReportConfigRequest, ExistingAcceleratorReportConfig } from 'src/types/AcceleratorReport';
+import {
+  CreateAcceleratorReportConfigRequest,
+  CreateProjectMetricRequest,
+  ExistingAcceleratorReportConfig,
+} from 'src/types/AcceleratorReport';
 
 import HttpService, { Response, Response2 } from './HttpService';
 
@@ -28,17 +32,20 @@ export type ListProjectMetricsResponsePayload =
 export type ListStandardMetricsResponsePayload =
   paths[typeof STANDARD_METRICS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
+type CreateProjectMetricResponse =
+  paths[typeof PROJECT_METRICS_ENDPOINT]['put']['responses'][200]['content']['application/json'];
+
 /**
  * Get project reports config
  */
-const getAcceleratorReportConfig = async (projectId: number): Promise<ReportsConfigResponse> => {
+const getAcceleratorReportConfig = async (projectId: string): Promise<ReportsConfigResponse> => {
   const response: ReportsConfigResponse = await httpAcceleratorReportsConfig.get<
     ListAcceleratorReportConfigResponsePayload,
     ReportsConfigData
   >(
     {
       urlReplacements: {
-        '{projectId}': projectId.toString(),
+        '{projectId}': projectId,
       },
     },
     (data) => ({ config: data?.configs[0] })
@@ -56,14 +63,25 @@ const createConfig = async (request: CreateAcceleratorReportConfigRequest): Prom
   });
 };
 
-const listProjectMetrics = async (projectId: number): Promise<Response2<ListProjectMetricsResponsePayload>> => {
+const listProjectMetrics = async (projectId: string): Promise<Response2<ListProjectMetricsResponsePayload>> => {
   return HttpService.root(
-    PROJECT_METRICS_ENDPOINT.replace('{projectId}', projectId.toString())
+    PROJECT_METRICS_ENDPOINT.replace('{projectId}', projectId)
   ).get2<ListProjectMetricsResponsePayload>();
 };
 
 const listStandardMetrics = async (): Promise<Response2<ListStandardMetricsResponsePayload>> => {
   return HttpService.root(STANDARD_METRICS_ENDPOINT).get2<ListProjectMetricsResponsePayload>();
+};
+
+const createProjectMetric = async (
+  request: CreateProjectMetricRequest
+): Promise<Response2<CreateProjectMetricResponse>> => {
+  const { projectId, ...rest } = request;
+  return HttpService.root(PROJECT_METRICS_ENDPOINT.replace('{projectId}', projectId)).put2<CreateProjectMetricResponse>(
+    {
+      entity: rest,
+    }
+  );
 };
 
 /**
@@ -74,6 +92,7 @@ const ReportService = {
   createConfig,
   listProjectMetrics,
   listStandardMetrics,
+  createProjectMetric,
 };
 
 export default ReportService;

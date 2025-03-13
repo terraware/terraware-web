@@ -22,7 +22,7 @@ export default function EditSettings(): JSX.Element {
   const theme = useTheme();
   const navigate = useNavigate();
   const pathParams = useParams<{ projectId: string }>();
-  const projectId = Number(pathParams.projectId);
+  const projectId = String(pathParams.projectId);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
   const createReportConfigResponse = useAppSelector(selectCreateReportConfig(requestId));
