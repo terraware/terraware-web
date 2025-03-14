@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>0/65</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/56</span>
+                <span class='fraction'>0/62</span>
             </div>
         
             
@@ -227,7 +227,18 @@
 <a name='L162'></a><a href='#L162'>162</a>
 <a name='L163'></a><a href='#L163'>163</a>
 <a name='L164'></a><a href='#L164'>164</a>
-<a name='L165'></a><a href='#L165'>165</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -301,6 +312,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -366,6 +387,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -452,6 +474,16 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 <span class="cstat-no" title="statement not covered" >    setDispatching(false);</span>
   }, [plantingSite, mapData?.site?.entities]);
 &nbsp;
+  const subzonesAreaHa: Record&lt;number, number&gt; = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const result: Record&lt;number, number&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
+<span class="cstat-no" title="statement not covered" >    plantingSite?.plantingZones</span>
+      ?.flatMap(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt; <span class="cstat-no" title="statement not covered" >zone.plantingSubzones)</span>
+      ?.forEach(<span class="fstat-no" title="function not covered" >(s</span>z) =&gt; {
+<span class="cstat-no" title="statement not covered" >        result[sz.id] = sz.areaHa;</span>
+      });
+<span class="cstat-no" title="statement not covered" >    return result;</span>
+  }, [plantingSite]);
+&nbsp;
   const subzonesComplete: Record&lt;number, boolean&gt; = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const result: Record&lt;number, boolean&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
 <span class="cstat-no" title="statement not covered" >    plantingSite?.plantingZones</span>
@@ -532,6 +564,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 <span class="cstat-no" title="statement not covered" >            &lt;PlantingProgressMapDialog</span>
               id={properties.id}
               subzoneName={properties.fullName}
+              subzoneAreaHa={subzonesAreaHa[properties.id]}
               siteName={plantingSite?.name || ''}
               plantingComplete={subzonesComplete[properties.id]}
               onUpdatePlantingComplete={updatePlantingComplete}
@@ -562,7 +595,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-14T16:10:52.709Z
+                at 2025-03-14T23:55:20.205Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
