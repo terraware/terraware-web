@@ -14,7 +14,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import FundingEntitiesCellRenderer from './FundingEntitiesCellRenderer';
 
-const fuzzySearchColumns = ['name', 'projects'];
+const fuzzySearchColumns = ['name'];
 
 const columns = (activeLocale: string | null): TableColumnType[] =>
   activeLocale
