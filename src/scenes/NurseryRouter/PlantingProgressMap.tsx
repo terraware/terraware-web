@@ -59,6 +59,16 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
     setDispatching(false);
   }, [plantingSite, mapData?.site?.entities]);
 
+  const subzonesAreaHa: Record<number, number> = useMemo(() => {
+    const result: Record<number, number> = {};
+    plantingSite?.plantingZones
+      ?.flatMap((zone) => zone.plantingSubzones)
+      ?.forEach((sz) => {
+        result[sz.id] = sz.areaHa;
+      });
+    return result;
+  }, [plantingSite]);
+
   const subzonesComplete: Record<number, boolean> = useMemo(() => {
     const result: Record<number, boolean> = {};
     plantingSite?.plantingZones
@@ -139,6 +149,7 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
             <PlantingProgressMapDialog
               id={properties.id}
               subzoneName={properties.fullName}
+              subzoneAreaHa={subzonesAreaHa[properties.id]}
               siteName={plantingSite?.name || ''}
               plantingComplete={subzonesComplete[properties.id]}
               onUpdatePlantingComplete={updatePlantingComplete}

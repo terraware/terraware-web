@@ -8,6 +8,7 @@ import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { useSupportedLocales } from 'src/strings/locales';
 import { ZoneAggregation } from 'src/types/Observations';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumber';
 
 /**
@@ -39,6 +40,7 @@ export default function ListMapView({
   const { activeLocale } = useLocalization();
   const supportedLocales = useSupportedLocales();
   const numberFormatter = useNumberFormatter();
+  const { isMobile } = useDeviceInfo();
 
   const updateView = (nextView: View) => {
     setView(nextView);
@@ -81,25 +83,33 @@ export default function ListMapView({
       flushMobile
     >
       <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center'>
-        {search}
+        <Box display='flex' flexDirection={isMobile ? 'column' : 'row'} justifyContent='start' alignItems='center'>
+          <Box>{search}</Box>
+          {data && siteAreaHa > 0 && view === 'map' && (
+            <Box
+              marginLeft={theme.spacing(2)}
+              marginTop={isMobile ? theme.spacing(1) : '0px'}
+              display='flex'
+              flexDirection='row'
+              justifyContent='start'
+            >
+              <Typography fontSize={'16px'} fontWeight={'600'} marginRight={theme.spacing(3)}>
+                {strings.PLANTING_SITE_AREA}:{' '}
+                {strings.formatString(strings.X_HA, numericFormatter.format(siteAreaHa))?.toString()}
+              </Typography>
+              <Typography fontSize={'16px'} fontWeight={'600'} marginRight={theme.spacing(3)}>
+                {strings.PLANTING_COMPLETE_AREA}:{' '}
+                {strings.formatString(strings.X_HA, numericFormatter.format(plantingCompleteArea))?.toString()}
+              </Typography>
+            </Box>
+          )}
+        </Box>
         <ListMapSelector defaultView={initialView} view={view} onView={updateView} />
       </Box>
       <Box
         marginTop={theme.spacing(2)}
         sx={view === 'map' ? { display: 'flex', flexDirection: 'column', flexGrow: 1 } : undefined}
       >
-        {data && siteAreaHa > 0 && (
-          <Box marginBottom={theme.spacing(2)} display='flex' flexDirection='row' justifyContent='start'>
-            <Typography fontSize={'16px'} fontWeight={'600'} marginRight={theme.spacing(3)}>
-              {strings.PLANTING_SITE_AREA}:{' '}
-              {strings.formatString(strings.X_HA, numericFormatter.format(siteAreaHa))?.toString()}
-            </Typography>
-            <Typography fontSize={'16px'} fontWeight={'600'}>
-              {strings.PLANTING_COMPLETE_AREA}:{' '}
-              {strings.formatString(strings.X_HA, numericFormatter.format(plantingCompleteArea))?.toString()}
-            </Typography>
-          </Box>
-        )}
         <Box flexGrow={1} flexDirection='column' display={view === 'list' ? 'flex' : 'none'}>
           {list}
         </Box>
