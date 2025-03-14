@@ -63,7 +63,7 @@ const listFundingEntities = async (
   search?: SearchNodePayload,
   searchSortOrder?: SearchSortOrder
 ): Promise<FundingEntitiesResponse> => {
-  let searchOrderConfig: SearchOrderConfig;
+  let searchOrderConfig: SearchOrderConfig | undefined;
   if (searchSortOrder) {
     searchOrderConfig = {
       locale,
