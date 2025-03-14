@@ -11,7 +11,9 @@ export default function FundingEntitiesCellRenderer(props: RendererProps<TableRo
   if (column.key === 'projects') {
     const stringList: string[] =
       Array.isArray(value) && value.length ? (value as Project[]).map((project: Project) => project.name) : [];
-    return <CellRenderer index={index} row={row} column={column} value={stringList.join(', ')} />;
+    return (
+      <CellRenderer index={index} row={row} column={column} value={stringList.join(', ')} style={{ width: '50%' }} />
+    );
   }
 
   return <CellRenderer {...props} />;
