@@ -3,6 +3,7 @@ import {
   CreateAcceleratorReportConfigRequest,
   CreateProjectMetricRequest,
   ExistingAcceleratorReportConfig,
+  UpdateAcceleratorReportConfigRequest,
   UpdateProjectMetricRequest,
 } from 'src/types/AcceleratorReport';
 
@@ -16,6 +17,8 @@ export type ReportsConfigResponse = Response & ReportsConfigData;
 
 const ACCELERATOR_REPORT_CONFIG_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/configs';
 
+const ACCELERATOR_REPORT_SINGLE_CONFIG_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/configs/{configId}';
+
 type ListAcceleratorReportConfigResponsePayload =
   paths[typeof ACCELERATOR_REPORT_CONFIG_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
@@ -23,6 +26,9 @@ const httpAcceleratorReportsConfig = HttpService.root(ACCELERATOR_REPORT_CONFIG_
 
 type CreateResponse =
   paths[typeof ACCELERATOR_REPORT_CONFIG_ENDPOINT]['put']['responses'][200]['content']['application/json'];
+
+type UpdateConfigResponse =
+  paths[typeof ACCELERATOR_REPORT_SINGLE_CONFIG_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 const PROJECT_METRICS_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/metrics';
 const STANDARD_METRICS_ENDPOINT = '/api/v1/accelerator/reports/standardMetrics';
@@ -68,6 +74,20 @@ const createConfig = async (request: CreateAcceleratorReportConfigRequest): Prom
   });
 };
 
+const updateConfig = async (
+  request: UpdateAcceleratorReportConfigRequest
+): Promise<Response2<UpdateConfigResponse>> => {
+  const { projectId, configId, ...rest } = request;
+  return HttpService.root(
+    ACCELERATOR_REPORT_SINGLE_CONFIG_ENDPOINT.replace('{projectId}', projectId.toString()).replace(
+      '{configId}',
+      configId.toString()
+    )
+  ).post2<UpdateConfigResponse>({
+    entity: rest,
+  });
+};
+
 const listProjectMetrics = async (projectId: string): Promise<Response2<ListProjectMetricsResponsePayload>> => {
   return HttpService.root(
     PROJECT_METRICS_ENDPOINT.replace('{projectId}', projectId)
@@ -106,6 +126,7 @@ const updateProjectMetric = async (
 const ReportService = {
   getAcceleratorReportConfig,
   createConfig,
+  updateConfig,
   listProjectMetrics,
   listStandardMetrics,
   createProjectMetric,

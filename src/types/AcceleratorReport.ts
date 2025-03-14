@@ -7,7 +7,15 @@ export type NewAcceleratorReportConfig = components['schemas']['NewAcceleratorRe
 export type CreateAcceleratorReportConfigRequestPayload =
   components['schemas']['CreateAcceleratorReportConfigRequestPayload'];
 
+export type UpdateAcceleratorReportConfigRequestPayload =
+  components['schemas']['UpdateAcceleratorReportConfigRequestPayload'];
+
 export type CreateAcceleratorReportConfigRequest = CreateAcceleratorReportConfigRequestPayload & { projectId: string };
+
+export type UpdateAcceleratorReportConfigRequest = UpdateAcceleratorReportConfigRequestPayload & {
+  projectId: string;
+  configId: number;
+};
 
 export type ProjectMetric = components['schemas']['ExistingProjectMetricPayload'];
 

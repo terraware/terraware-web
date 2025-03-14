@@ -742,6 +742,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/accelerator/projects/{projectId}/reports/configs/{configId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update accelerator report configuration. */
+        post: operations["updateAcceleratorReportConfig"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/accelerator/projects/{projectId}/reports/metrics": {
         parameters: {
             query?: never;
@@ -794,6 +811,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/accelerator/projects/{projectId}/reports/{reportId}/metrics/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Refresh system metric entries value for a report */
+        post: operations["refreshAcceleratorReportSystemMetrics"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/accelerator/projects/{projectId}/reports/{reportId}/metrics/review": {
         parameters: {
             query?: never;
@@ -804,7 +838,7 @@ export interface paths {
         get?: never;
         put?: never;
         /** Review metric entries for a report */
-        post: operations["reviewAcceleratorReport_1"];
+        post: operations["reviewAcceleratorReportMetrics"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1537,7 +1571,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** Lists all funding entities. */
+        get: operations["listFundingEntities"];
         put?: never;
         /** Creates a new funding entity */
         post: operations["createFundingEntity"];
@@ -3567,7 +3602,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get a user by ID, if they exist, only ordinary users are supported. */
+        /** Get a user by ID, if they exist. */
         get: operations["getUser"];
         put?: never;
         post?: never;
@@ -5702,6 +5737,7 @@ export interface components {
             /** Format: int64 */
             id: number;
             name: string;
+            projects: components["schemas"]["ProjectPayload"][];
         };
         Geolocation: {
             accuracy?: number;
@@ -6383,6 +6419,10 @@ export interface components {
             results: {
                 [key: string]: components["schemas"]["FieldValuesPayload"];
             };
+            status: components["schemas"]["SuccessOrError"];
+        };
+        ListFundingEntitiesPayload: {
+            fundingEntities: components["schemas"]["FundingEntityPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         ListModulesResponsePayload: {
@@ -8048,6 +8088,19 @@ export interface components {
             /** Format: int32 */
             value?: number;
         };
+        ReportSystemMetricEntriesPayload: {
+            internalComment?: string;
+            /** @enum {string} */
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate";
+            notes?: string;
+            /**
+             * Format: int32
+             * @description If set to null, system metric entry will use Terraware data value.
+             */
+            overrideValue?: number;
+            /** Format: int32 */
+            target?: number;
+        };
         ReportSystemMetricPayload: {
             /** @enum {string} */
             component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
@@ -8087,6 +8140,7 @@ export interface components {
         ReviewAcceleratorReportMetricsRequestPayload: {
             projectMetrics: components["schemas"]["ReportProjectMetricEntriesPayload"][];
             standardMetrics: components["schemas"]["ReportStandardMetricEntriesPayload"][];
+            systemMetrics: components["schemas"]["ReportSystemMetricEntriesPayload"][];
         };
         ReviewAcceleratorReportRequestPayload: {
             review: components["schemas"]["ReportReviewPayload"];
@@ -8561,9 +8615,19 @@ export interface components {
             timeseriesName: string;
             values: components["schemas"]["TimeseriesValuePayload"][];
         };
+        UpdateAcceleratorReportConfigPayload: {
+            /** Format: date */
+            reportingEndDate: string;
+            /** Format: date */
+            reportingStartDate: string;
+        };
+        UpdateAcceleratorReportConfigRequestPayload: {
+            config: components["schemas"]["UpdateAcceleratorReportConfigPayload"];
+        };
         UpdateAcceleratorReportMetricsRequestPayload: {
             projectMetrics: components["schemas"]["ReportProjectMetricEntriesPayload"][];
             standardMetrics: components["schemas"]["ReportStandardMetricEntriesPayload"][];
+            systemMetrics: components["schemas"]["ReportSystemMetricEntriesPayload"][];
         };
         UpdateAccessionRequestPayloadV2: {
             bagNumbers?: string[];
@@ -9219,7 +9283,10 @@ export interface components {
              * @example America/New_York
              */
             timeZone?: string;
-            /** @enum {string} */
+            /**
+             * @description Type of User. Could be Individual, Funder or DeviceManager
+             * @enum {string}
+             */
             userType: "Individual" | "Device Manager" | "System" | "Funder";
         };
         UserWithGlobalRolesPayload: {
@@ -11028,6 +11095,50 @@ export interface operations {
             };
         };
     };
+    updateAcceleratorReportConfig: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                configId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateAcceleratorReportConfigRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
     listProjectMetrics: {
         parameters: {
             query?: never;
@@ -11148,7 +11259,50 @@ export interface operations {
             };
         };
     };
-    reviewAcceleratorReport_1: {
+    refreshAcceleratorReportSystemMetrics: {
+        parameters: {
+            query: {
+                metrics: ("Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate")[];
+            };
+            header?: never;
+            path: {
+                projectId: number;
+                reportId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    reviewAcceleratorReportMetrics: {
         parameters: {
             query?: never;
             header?: never;
@@ -12842,6 +12996,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    listFundingEntities: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListFundingEntitiesPayload"];
                 };
             };
         };
