@@ -36,7 +36,7 @@ const ReportsView = () => {
   const { activeTab, onTabChange } = useStickyTabs({
     defaultTab: 'reports',
     tabs,
-    viewIdentifier: 'reports',
+    viewIdentifier: 'accelerator-reports',
     keepQuery: false,
   });
 

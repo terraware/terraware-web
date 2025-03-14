@@ -30,6 +30,11 @@ type CreateResponse =
 type UpdateConfigResponse =
   paths[typeof ACCELERATOR_REPORT_SINGLE_CONFIG_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
+const ACCELERATOR_REPORTS_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports';
+
+type ListAcceleratorReportsResponsePayload =
+  paths[typeof ACCELERATOR_REPORTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
 const PROJECT_METRICS_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/metrics';
 const STANDARD_METRICS_ENDPOINT = '/api/v1/accelerator/reports/standardMetrics';
 const PROJECT_METRIC_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/metrics/{metricId}';
@@ -88,6 +93,12 @@ const updateConfig = async (
   });
 };
 
+const listAcceleratorReports = async (projectId: number): Promise<Response2<ListAcceleratorReportsResponsePayload>> => {
+  return HttpService.root(
+    ACCELERATOR_REPORTS_ENDPOINT.replace('{projectId}', projectId.toString())
+  ).get2<ListAcceleratorReportsResponsePayload>();
+};
+
 const listProjectMetrics = async (projectId: string): Promise<Response2<ListProjectMetricsResponsePayload>> => {
   return HttpService.root(
     PROJECT_METRICS_ENDPOINT.replace('{projectId}', projectId)
@@ -127,6 +138,7 @@ const ReportService = {
   getAcceleratorReportConfig,
   createConfig,
   updateConfig,
+  listAcceleratorReports,
   listProjectMetrics,
   listStandardMetrics,
   createProjectMetric,
