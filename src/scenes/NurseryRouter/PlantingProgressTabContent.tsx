@@ -11,9 +11,10 @@ import Search, { FeaturedFilterConfig, SearchProps } from 'src/components/common
 import { useLocalization, useOrganization } from 'src/providers';
 import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { selectPlantingSitesNames } from 'src/redux/features/tracking/trackingSelectors';
+import { selectPlantingSite, selectPlantingSitesNames } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { ZoneAggregation } from 'src/types/Observations';
 import { Project } from 'src/types/Project';
 import { FieldOptionsMap, SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -41,6 +42,7 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
   const [activeView, setActiveView] = useState<View>(initialView);
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>(-1);
+  const plantingSite = useAppSelector((state) => selectPlantingSite(state, Number(selectedPlantingSiteId)));
 
   const getProjectName = useCallback(
     (projectId: number) => (projects?.find((project: Project) => project.id === projectId) || {}).name || '',
@@ -143,6 +145,7 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
           : strings.PLANTING_PROGRESS_MAP_DESCRIPTION}
       </Typography>
       <ListMapView
+        data={plantingSite?.plantingZones as ZoneAggregation[]}
         style={{
           display: 'flex',
           flexDirection: 'column',
