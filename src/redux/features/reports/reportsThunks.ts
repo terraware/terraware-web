@@ -7,6 +7,7 @@ import strings from 'src/strings';
 import {
   CreateAcceleratorReportConfigRequest,
   CreateProjectMetricRequest,
+  UpdateAcceleratorReportConfigRequest,
   UpdateProjectMetricRequest,
 } from 'src/types/AcceleratorReport';
 
@@ -30,6 +31,19 @@ export const requestCreateReportConfig = createAsyncThunk(
   'createReportConfig',
   async (request: CreateAcceleratorReportConfigRequest, { rejectWithValue }) => {
     const response = await AcceleratorReportService.createConfig(request);
+
+    if (response && response.requestSucceeded) {
+      return response.data;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestUpdateReportConfig = createAsyncThunk(
+  'updateReportConfig',
+  async (request: UpdateAcceleratorReportConfigRequest, { rejectWithValue }) => {
+    const response = await AcceleratorReportService.updateConfig(request);
 
     if (response && response.requestSucceeded) {
       return response.data;
