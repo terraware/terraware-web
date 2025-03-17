@@ -1962,6 +1962,8 @@ TOTAL_ACTIVE_ACCESSIONS,Total Active Accessions,
 TOTAL_AVERAGE_SCORE,Total Average Score,
 TOTAL_CARBON_T,Total Carbon (t),
 TOTAL_EXPANSION_POTENTIAL,Total Expansion Potential (ha),
+TOTAL_HECTARES_PLANTED,Total Hectares Planted,
+TOTAL_HECTARES_PLANTED_TOOLTIP,This is the total number of hectares marked as “Planting Complete” in this Planting Site
 TOTAL_NUMBER_OF_PLANTS,Total Number of Plants,
 TOTAL_NUMBER_OF_PLANTS_PROPAGATED,Total Number of Plants Propagated,
 TOTAL_NUMBER_OF_PLANTS_PROPAGATED_FOR_PROJECT,Plants Propagated for {0},
