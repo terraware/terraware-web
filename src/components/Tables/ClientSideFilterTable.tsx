@@ -15,7 +15,7 @@ import { useLocalization } from 'src/providers';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
 import { parseSearchTerm } from 'src/utils/search';
-import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
+import { SearchAndSortFn, SearchOrderConfig, searchAndSort as genericSearchAndSort } from 'src/utils/searchAndSort';
 import useDebounce from 'src/utils/useDebounce';
 
 export interface ClientSideFilterTableProps
@@ -34,6 +34,7 @@ export interface ClientSideFilterTableProps
   onFilterApplied?: (filter: string, values: (string | number | null)[]) => void;
   stickyFilters?: boolean;
   iconFilters?: FilterConfig[];
+  searchAndSort?: SearchAndSortFn<TableRowType>;
 }
 
 const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
@@ -53,6 +54,7 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
     stickyFilters,
     iconFilters,
     rows,
+    searchAndSort,
     ...tableProps
   } = props;
 
@@ -196,7 +198,9 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
     }
 
     if (searchSortOrder) {
-      return searchAndSort(rows, search, searchOrderConfig);
+      return searchAndSort
+        ? searchAndSort(rows, search, searchOrderConfig)
+        : genericSearchAndSort(rows, search, searchOrderConfig);
     }
 
     return rows;
