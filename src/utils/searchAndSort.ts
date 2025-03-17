@@ -118,6 +118,31 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
   } else if (isOrNodePayload(condition)) {
     return (condition.children as SearchNodePayload[]).some((_condition) => searchConditionMet(result, _condition));
   } else if (isFieldNodePayload(condition)) {
+    // check for underscore in field, attempt to do a nested property search if exists
+    if (condition.field.includes('_')) {
+      // split on underscore to figure out how to process from there
+      const index = condition.field.indexOf('_');
+      const first = condition.field.substring(0, index);
+      const last = condition.field.substring(index + 1);
+      const resultValue = result[first];
+
+      if (Array.isArray(resultValue)) {
+        return resultValue.some((subItem) =>
+          searchConditionMet(subItem, {
+            ...condition,
+            field: last,
+          })
+        );
+      } else if (typeof resultValue === 'object') {
+        return searchConditionMet(resultValue as Record<string, unknown>, {
+          ...condition,
+          field: last,
+        });
+      }
+
+      // don't return false here, in case the field actually just has an underscore in it instead of representing a sub-property
+    }
+
     // Only 'Exact' and 'Fuzzy' condition types are supported
     // `null` values (XYZ field contains no value) are also not supported
     const resultValue = `${result[condition.field] as string}`.toLowerCase();
