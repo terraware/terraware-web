@@ -5,6 +5,7 @@ import { RootState } from 'src/redux/rootReducer';
 import AcceleratorReportService from 'src/services/AcceleratorReportService';
 import strings from 'src/strings';
 import { CreateAcceleratorReportConfigRequest, CreateProjectMetricRequest } from 'src/types/AcceleratorReport';
+import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 
 import { setProjectReportConfigAction } from './reportsSlice';
 
@@ -65,6 +66,24 @@ export const requestCreateProjectMetric = createAsyncThunk(
 
     if (response && response.requestSucceeded) {
       return response.data;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestListAcceleratorReports = createAsyncThunk(
+  'acceleratorReports/list',
+  async (
+    request: { projectId: string; locale?: string; search?: SearchNodePayload; sortOrder?: SearchSortOrder },
+    { rejectWithValue }
+  ) => {
+    const { projectId, locale, search, sortOrder } = request;
+
+    const response = await AcceleratorReportService.listAcceleratorReports(projectId, locale, search, sortOrder);
+
+    if (response && response.requestSucceeded) {
+      return response.reports;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

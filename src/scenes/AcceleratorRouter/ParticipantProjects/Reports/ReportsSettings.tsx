@@ -22,6 +22,8 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { ProjectMetric, StandardMetric } from 'src/types/AcceleratorReport';
 
+import ReportsTargetsCellRenderer from './ReportsTargetsCellRenderer';
+
 export default function ReportsSettings(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -175,6 +177,7 @@ export default function ReportsSettings(): JSX.Element {
                     icon: 'iconTrashCan',
                   },
                 ]}
+                Renderer={ReportsTargetsCellRenderer}
               />
             ) : (
               <Typography>{strings.NO_PROJECT_SPECIFIC_METRICS_TO_SHOW}</Typography>

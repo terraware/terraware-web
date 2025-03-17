@@ -18,3 +18,5 @@ export type CreateProjectMetricRequestPayload = components['schemas']['CreatePro
 export type CreateProjectMetricRequest = CreateProjectMetricRequestPayload & { projectId: string };
 
 export type NewMetric = components['schemas']['NewMetricPayload'];
+
+export type AcceleratorReport = components['schemas']['AcceleratorReportPayload'];

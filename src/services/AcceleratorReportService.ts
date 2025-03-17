@@ -1,14 +1,21 @@
 import { paths } from 'src/api/types/generated-schema';
 import {
+  AcceleratorReport,
   CreateAcceleratorReportConfigRequest,
   CreateProjectMetricRequest,
   ExistingAcceleratorReportConfig,
 } from 'src/types/AcceleratorReport';
+import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 
 import HttpService, { Response, Response2 } from './HttpService';
 
 export type ReportsConfigData = {
   config?: ExistingAcceleratorReportConfig;
+};
+
+export type AcceleratorReportsData = {
+  reports?: AcceleratorReport[];
 };
 
 export type ReportsConfigResponse = Response & ReportsConfigData;
@@ -23,6 +30,7 @@ const httpAcceleratorReportsConfig = HttpService.root(ACCELERATOR_REPORT_CONFIG_
 type CreateResponse =
   paths[typeof ACCELERATOR_REPORT_CONFIG_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 
+const PROJECT_REPORTS_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports';
 const PROJECT_METRICS_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/metrics';
 const STANDARD_METRICS_ENDPOINT = '/api/v1/accelerator/reports/standardMetrics';
 
@@ -34,6 +42,9 @@ export type ListStandardMetricsResponsePayload =
 
 type CreateProjectMetricResponse =
   paths[typeof PROJECT_METRICS_ENDPOINT]['put']['responses'][200]['content']['application/json'];
+
+type ListAcceleratorReportsResponsePayload =
+  paths[typeof PROJECT_REPORTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 /**
  * Get project reports config
@@ -84,6 +95,32 @@ const createProjectMetric = async (
   );
 };
 
+const listAcceleratorReports = async (
+  projectId: string,
+  locale?: string,
+  search?: SearchNodePayload,
+  sortOrder?: SearchSortOrder
+): Promise<Response & AcceleratorReportsData> => {
+  let searchOrderConfig: SearchOrderConfig | undefined;
+  if (sortOrder) {
+    searchOrderConfig = {
+      locale: locale ?? null,
+      sortOrder,
+    };
+  }
+  return await HttpService.root(PROJECT_REPORTS_ENDPOINT.replace('{projectId}', projectId)).get<
+    ListAcceleratorReportsResponsePayload,
+    AcceleratorReportsData
+  >(
+    {
+      params: { includeMetrics: 'true' },
+    },
+    (data) => ({
+      reports: searchAndSort(data?.reports || [], search, searchOrderConfig),
+    })
+  );
+};
+
 /**
  * Exported functions
  */
@@ -93,6 +130,7 @@ const ReportService = {
   listProjectMetrics,
   listStandardMetrics,
   createProjectMetric,
+  listAcceleratorReports,
 };
 
 export default ReportService;
