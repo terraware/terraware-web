@@ -4,7 +4,12 @@ import { Dispatch } from 'redux';
 import { RootState } from 'src/redux/rootReducer';
 import AcceleratorReportService from 'src/services/AcceleratorReportService';
 import strings from 'src/strings';
-import { CreateAcceleratorReportConfigRequest, CreateProjectMetricRequest } from 'src/types/AcceleratorReport';
+import {
+  CreateAcceleratorReportConfigRequest,
+  CreateProjectMetricRequest,
+  UpdateAcceleratorReportConfigRequest,
+  UpdateProjectMetricRequest,
+} from 'src/types/AcceleratorReport';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 
 import { setProjectReportConfigAction } from './reportsSlice';
@@ -27,6 +32,19 @@ export const requestCreateReportConfig = createAsyncThunk(
   'createReportConfig',
   async (request: CreateAcceleratorReportConfigRequest, { rejectWithValue }) => {
     const response = await AcceleratorReportService.createConfig(request);
+
+    if (response && response.requestSucceeded) {
+      return response.data;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestUpdateReportConfig = createAsyncThunk(
+  'updateReportConfig',
+  async (request: UpdateAcceleratorReportConfigRequest, { rejectWithValue }) => {
+    const response = await AcceleratorReportService.updateConfig(request);
 
     if (response && response.requestSucceeded) {
       return response.data;
@@ -84,6 +102,19 @@ export const requestListAcceleratorReports = createAsyncThunk(
 
     if (response && response.requestSucceeded) {
       return response.reports;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestUpdateProjectMetric = createAsyncThunk(
+  'updateProjectMetric',
+  async (request: UpdateProjectMetricRequest, { rejectWithValue }) => {
+    const response = await AcceleratorReportService.updateProjectMetric(request);
+
+    if (response && response.requestSucceeded) {
+      return response.data;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

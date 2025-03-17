@@ -5,6 +5,9 @@ export const selectProjectReportConfig = (state: RootState) => state.projectRepo
 export const selectCreateReportConfig = (requestId: string) => (state: RootState) =>
   state.projectReportConfigCreate[requestId];
 
+export const selectUpdateReportConfig = (requestId: string) => (state: RootState) =>
+  state.projectReportConfigUpdate[requestId];
+
 export const selectListReportMetrics = (requestId: string) => (state: RootState) => state.listProjectMetrics[requestId];
 
 export const selectListStandardMetrics = (requestId: string) => (state: RootState) =>
@@ -15,3 +18,6 @@ export const selectCreateProjectMetric = (requestId: string) => (state: RootStat
 
 export const selectListAcceleratorReports = (requestId: string) => (state: RootState) =>
   state.listAcceleratorReports[requestId];
+
+export const selectUpdateProjectMetric = (requestId: string) => (state: RootState) =>
+  state.projectMetricUpdate[requestId];

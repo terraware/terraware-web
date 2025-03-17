@@ -49,6 +49,11 @@ const columns = (): TableColumnType[] => [
     type: 'boolean',
   },
   {
+    key: 'areaHa',
+    name: strings.AREA_HA,
+    type: 'number',
+  },
+  {
     key: 'plantingSubzones',
     name: strings.SUBZONES,
     type: 'number',
@@ -233,6 +238,10 @@ const DetailsRenderer =
       return (
         <CellRenderer {...props} value={value ? getDateDisplayValue(value as string, timeZone) : ''} sx={textStyles} />
       );
+    }
+
+    if (column.key === 'areaHa') {
+      return <CellRenderer {...props} value={value || ''} sx={textStyles} />;
     }
 
     if (column.key === 'monitoringPlots') {
