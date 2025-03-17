@@ -91,7 +91,7 @@ const projectMetricCreateSlice = createSlice({
 const initialStateListAcceleratorReports: { [key: string]: StatusT<AcceleratorReport[]> } = {};
 
 export const listAcceleratorReportsSlice = createSlice({
-  name: 'participantListSlice',
+  name: 'listAcceleratorReportsSlice',
   initialState: initialStateListAcceleratorReports,
   reducers: {},
   extraReducers: (builder) => {
