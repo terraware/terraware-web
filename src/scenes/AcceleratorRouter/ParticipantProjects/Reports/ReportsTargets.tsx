@@ -132,16 +132,35 @@ export default function ReportsTargets(): JSX.Element {
 
   useEffect(() => {
     if (allReports && allReports.length > 0) {
-      const firstReport = allReports[0];
-      const metrics: RowMetric[] = [];
-      firstReport.systemMetrics.forEach((sm) => {
-        metrics.push({ name: sm.metric, type: sm.type, reference: sm.reference, component: sm.component, id: -1 });
-      });
-      firstReport.standardMetrics.forEach((sm) => {
-        metrics.push({ name: sm.name, type: sm.type, reference: sm.reference, component: sm.component, id: sm.id });
-      });
-      firstReport.projectMetrics.forEach((pm) => {
-        metrics.push({ name: pm.name, type: pm.type, reference: pm.reference, component: pm.component, id: pm.id });
+      const metrics: Map<string, RowMetric> = new Map();
+      allReports.forEach((report) => {
+        report.systemMetrics.forEach((sm) => {
+          metrics.set(sm.metric, {
+            name: sm.metric,
+            type: sm.type,
+            reference: sm.reference,
+            component: sm.component,
+            id: -1,
+          });
+        });
+        report.standardMetrics.forEach((sm) => {
+          metrics.set(sm.id.toString(), {
+            name: sm.name,
+            type: sm.type,
+            reference: sm.reference,
+            component: sm.component,
+            id: sm.id,
+          });
+        });
+        report.projectMetrics.forEach((pm) => {
+          metrics.set(pm.id.toString(), {
+            name: pm.name,
+            type: pm.type,
+            reference: pm.reference,
+            component: pm.component,
+            id: pm.id,
+          });
+        });
       });
 
       allReports.forEach((report) => {
@@ -178,7 +197,7 @@ export default function ReportsTargets(): JSX.Element {
         }
       });
 
-      setMetricsToUse(metrics);
+      setMetricsToUse(Array.from(metrics.values()));
     }
   }, [allReports]);
 
