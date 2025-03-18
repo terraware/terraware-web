@@ -207,7 +207,7 @@ export default function ReportsTargets(): JSX.Element {
                 metric[quarterProp] = foundMetric?.target ?? undefined;
               } else {
                 const foundMetric = report.systemMetrics.find((met) => met.metric === metric.name);
-                metric.q1Target = foundMetric?.target;
+                metric[quarterProp] = foundMetric?.target;
               }
             });
           }
@@ -235,12 +235,12 @@ export default function ReportsTargets(): JSX.Element {
   );
 
   const getReportsYears = useMemo(() => {
-    const avaiableYears: Set<string> = new Set();
+    const availableYears: Set<string> = new Set();
     allReports?.forEach((report) => {
       const reportYear = DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;
-      avaiableYears.add(reportYear.toString());
+      availableYears.add(reportYear.toString());
     });
-    return Array.from(avaiableYears);
+    return Array.from(availableYears);
   }, [allReports]);
 
   const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
