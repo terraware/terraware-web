@@ -46,14 +46,12 @@ export default function FundingEntityProvider({ children }: FundingEntityProvide
       return;
     }
 
-    const request = getFundingEntityRequest;
-
-    if (request.status === 'success' && request && request.data) {
+    if (getFundingEntityRequest.status === 'success' && getFundingEntityRequest.data) {
       setEntityAPIRequestStatus(APIRequestStatus.SUCCEEDED);
       setFundingEntityData({
-        fundingEntity: request.data.fundingEntity,
+        fundingEntity: getFundingEntityRequest.data.fundingEntity,
       });
-    } else if (request.status === 'error') {
+    } else if (getFundingEntityRequest.status === 'error') {
       setEntityAPIRequestStatus(APIRequestStatus.FAILED);
     }
   }, [pathFundingEntityId, getFundingEntityRequest]);

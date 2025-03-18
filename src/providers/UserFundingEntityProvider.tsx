@@ -45,11 +45,7 @@ export default function UserFundingEntityProvider({ children }: UserFundingEntit
       return;
     }
 
-    if (
-      getUserFundingEntityRequest.status === 'success' &&
-      getUserFundingEntityRequest &&
-      getUserFundingEntityRequest.data
-    ) {
+    if (getUserFundingEntityRequest.status === 'success' && getUserFundingEntityRequest.data) {
       setEntityAPIRequestStatus(APIRequestStatus.SUCCEEDED);
       setFundingEntityData({
         userFundingEntity: getUserFundingEntityRequest.data.userFundingEntity,

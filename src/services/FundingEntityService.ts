@@ -16,9 +16,15 @@ export type FundingEntityData = {
   fundingEntity: FundingEntity | undefined;
 };
 
+export type UserFundingEntityData = {
+  userFundingEntity: FundingEntity | undefined;
+};
+
 export type FundingEntitiesResponse = Response & FundingEntitiesData;
 
-export type UserFundingEntityResponse = Response & FundingEntityData;
+export type UserFundingEntityResponse = Response & UserFundingEntityData;
+
+export type FundingEntityResponse = Response & FundingEntityData;
 
 // endpoints
 const FUNDING_ENTITIES_LIST_ENDPOINT = '/api/v1/funder/entities';
@@ -39,14 +45,14 @@ const httpUserFundingEntities = HttpService.root(FUNDING_ENTITIES_LIST_ENDPOINT)
 const getUserFundingEntity = async (userId: number): Promise<UserFundingEntityResponse> => {
   const response: UserFundingEntityResponse = await httpUserFundingEntity.get<
     UserFundingEntityServerResponse,
-    FundingEntityData
+    UserFundingEntityData
   >(
     {
       urlReplacements: {
         '{userId}': userId.toString(),
       },
     },
-    (data) => ({ fundingEntity: data?.fundingEntity ?? undefined })
+    (data) => ({ userFundingEntity: data?.fundingEntity ?? undefined })
   );
 
   if (!response.requestSucceeded) {
@@ -60,11 +66,8 @@ const getUserFundingEntity = async (userId: number): Promise<UserFundingEntityRe
   return response;
 };
 
-const get = async (fundingEntityId: number): Promise<UserFundingEntityResponse> => {
-  const response: UserFundingEntityResponse = await httpFundingEntity.get<
-    FundingEntityServerResponse,
-    FundingEntityData
-  >(
+const get = async (fundingEntityId: number): Promise<FundingEntityResponse> => {
+  const response: FundingEntityResponse = await httpFundingEntity.get<FundingEntityServerResponse, FundingEntityData>(
     {
       urlReplacements: {
         '{fundingEntityId}': fundingEntityId.toString(),
