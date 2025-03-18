@@ -73,8 +73,8 @@ const FundingEntitiesView = () => {
   const featuredFilters: FilterConfig[] = useMemo(
     () => [
       {
-        field: 'projects_id',
-        id: 'projects_id',
+        field: 'projects.id',
+        id: 'projects.id',
         label: strings.PROJECT,
         options: Object.entries(allProjects)
           .sort((a, b) => a[1].toLowerCase().localeCompare(b[1].toLowerCase(), activeLocale || undefined))
