@@ -1,15 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { TableColumnType } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
-import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
+import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
+import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
+import { useLocalization } from 'src/providers';
 import { requestFundingEntities } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
 import { selectFundingEntitiesRequest } from 'src/redux/features/funder/fundingEntitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
-import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { SearchSortOrder } from 'src/types/Search';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import FundingEntitiesCellRenderer from './FundingEntitiesCellRenderer';
@@ -30,19 +32,19 @@ const FundingEntitiesView = () => {
   const listRequest = useAppSelector(selectFundingEntitiesRequest(listRequestId));
   const [fundingEntities, setFundingEntities] = useState<FundingEntity[]>([]);
   const snackbar = useSnackbar();
+  const { activeLocale } = useLocalization();
 
-  const defaultSearchOrder: SearchSortOrder = {
+  const defaultSortOrder: SearchSortOrder = {
     field: 'name',
     direction: 'Ascending',
   };
 
-  const dispatchSearchRequest = useCallback(
-    (locale?: string | null, search?: SearchNodePayload, searchSortOrder?: SearchSortOrder) => {
-      const request = dispatch(requestFundingEntities({ locale: locale || null, search, searchSortOrder }));
+  useEffect(() => {
+    if (activeLocale) {
+      const request = dispatch(requestFundingEntities());
       setListRequestId(request.requestId);
-    },
-    [dispatch]
-  );
+    }
+  }, [activeLocale]);
 
   useEffect(() => {
     if (!listRequest) {
@@ -56,13 +58,43 @@ const FundingEntitiesView = () => {
     }
   }, [listRequest, snackbar]);
 
+  const allProjects = useMemo<Record<string, string>>(
+    () =>
+      (fundingEntities || []).reduce(
+        (record, entity) => {
+          entity?.projects?.forEach((project) => (record[project.id] = project.name));
+          return record;
+        },
+        {} as Record<string, string>
+      ),
+    [fundingEntities]
+  );
+
+  const featuredFilters: FilterConfig[] = useMemo(
+    () => [
+      {
+        field: 'projects.id',
+        id: 'projects.id',
+        label: strings.PROJECT,
+        options: Object.entries(allProjects)
+          .sort((a, b) => a[1].toLowerCase().localeCompare(b[1].toLowerCase(), activeLocale || undefined))
+          .map((entry) => entry[0]),
+        pillValueRenderer: (values: (string | number | null)[]) => {
+          return values.map((value) => allProjects[value || ''] || '').join(', ');
+        },
+        renderOption: (id: string | number) => allProjects[id] || '',
+      },
+    ],
+    [allProjects, fundingEntities]
+  );
+
   return (
     <Page title={strings.FUNDING_ENTITIES}>
-      <TableWithSearchFilters
+      <ClientSideFilterTable
         columns={columns}
-        defaultSearchOrder={defaultSearchOrder}
-        dispatchSearchRequest={dispatchSearchRequest}
+        defaultSortOrder={defaultSortOrder}
         fuzzySearchColumns={fuzzySearchColumns}
+        featuredFilters={featuredFilters}
         id='fundingEntitiesTable'
         rows={fundingEntities}
         isClickable={() => false}

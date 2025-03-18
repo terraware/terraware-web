@@ -1,8 +1,6 @@
 import { paths } from 'src/api/types/generated-schema';
 import { FundingEntity } from 'src/types/FundingEntity';
 
-import { SearchNodePayload, SearchSortOrder } from '../types/Search';
-import { SearchOrderConfig, searchAndSort } from '../utils/searchAndSort';
 import HttpService, { Response } from './HttpService';
 
 /**
@@ -58,22 +56,9 @@ const getUserFundingEntity = async (userId: number): Promise<UserFundingEntityRe
   return response;
 };
 
-const listFundingEntities = async (
-  locale: string | null,
-  search?: SearchNodePayload,
-  searchSortOrder?: SearchSortOrder
-): Promise<FundingEntitiesResponse> => {
-  let searchOrderConfig: SearchOrderConfig | undefined;
-  if (searchSortOrder) {
-    searchOrderConfig = {
-      locale,
-      sortOrder: searchSortOrder,
-      numberFields: ['id'],
-    };
-  }
-
+const listFundingEntities = async (): Promise<FundingEntitiesResponse> => {
   return await httpUserFundingEntities.get<FundingEntitiesServerResponse, FundingEntitiesData>({}, (data) => ({
-    fundingEntities: searchAndSort(data?.fundingEntities || [], search, searchOrderConfig),
+    fundingEntities: data?.fundingEntities || [],
   }));
 };
 
