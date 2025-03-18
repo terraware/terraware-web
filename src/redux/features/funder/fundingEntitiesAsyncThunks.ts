@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import FundingEntityService from 'src/services/FundingEntityService';
 import strings from 'src/strings';
+import { FundingEntity } from 'src/types/FundingEntity';
 
 export const requestFundingEntityForUser = createAsyncThunk(
   'funding-entities/get-for-user',
@@ -38,3 +39,17 @@ export const requestFundingEntities = createAsyncThunk('funding-entities/list', 
 
   return rejectWithValue(strings.GENERIC_ERROR);
 });
+
+export const requestUpdateFundingEntity = createAsyncThunk(
+  'funding-entities/update',
+  async (request: { fundingEntity: FundingEntity }, { rejectWithValue }) => {
+    const { fundingEntity } = request;
+
+    const response = await FundingEntityService.update(fundingEntity);
+    if (response && response.requestSucceeded) {
+      return response;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);

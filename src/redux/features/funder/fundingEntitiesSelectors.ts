@@ -8,3 +8,6 @@ export const selectFundingEntityRequest = (fundingEntityId?: number) => (state: 
 
 export const selectUserFundingEntityRequest = (userId?: number) => (state: RootState) =>
   state.userFundingEntity[userId || -1];
+
+export const selectFundingEntityUpdateRequest = (requestId: string) => (state: RootState) =>
+  state.fundingEntityUpdate[requestId];

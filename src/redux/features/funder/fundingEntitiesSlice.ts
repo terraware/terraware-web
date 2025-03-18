@@ -7,6 +7,7 @@ import {
   requestFundingEntities,
   requestFundingEntity,
   requestFundingEntityForUser,
+  requestUpdateFundingEntity,
 } from './fundingEntitiesAsyncThunks';
 
 const initialStateUserFundingEntity: { [key: string]: StatusT<{ userFundingEntity: FundingEntity }> } = {};
@@ -14,6 +15,8 @@ const initialStateUserFundingEntity: { [key: string]: StatusT<{ userFundingEntit
 const initialStateFundingEntity: { [key: string]: StatusT<{ fundingEntity: FundingEntity }> } = {};
 
 const initialStateFundingEntities: { [key: string]: StatusT<{ fundingEntities: FundingEntity[] }> } = {};
+
+const initialStateFundingEntityUpdate: { [requestId: string]: StatusT<{ fundingEntity: FundingEntity }> } = {};
 
 export const fundingEntitySlice = createSlice({
   name: 'fundingEntitySlice',
@@ -42,10 +45,20 @@ export const userFundingEntitySlice = createSlice({
   },
 });
 
+export const fundingEntityUpdateSlice = createSlice({
+  name: 'fundingEntityUpdateSlice',
+  initialState: initialStateFundingEntityUpdate,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestUpdateFundingEntity, true)(builder);
+  },
+});
+
 const fundingEntitiesReducers = {
   userFundingEntity: userFundingEntitySlice.reducer,
   fundingEntity: fundingEntitySlice.reducer,
   fundingEntities: fundingEntitiesSlice.reducer,
+  fundingEntityUpdate: fundingEntityUpdateSlice.reducer,
 };
 
 export default fundingEntitiesReducers;
