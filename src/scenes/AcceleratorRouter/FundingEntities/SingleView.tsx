@@ -10,7 +10,7 @@ import Link from 'src/components/common/Link';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization, useUser } from 'src/providers';
+import { useFundingEntity, useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
@@ -20,34 +20,15 @@ const SingleView = () => {
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
   const theme = useTheme();
+  const { fundingEntity } = useFundingEntity();
 
   const canEdit = isAllowed('MANAGE_FUNDING_ENTITIES');
-
-  // hardcode for now
-  const fundingEntity = {
-    id: 12,
-    name: 'Hardcoded Funding Entity',
-    projects: [
-      {
-        id: 1,
-        name: 'Test Project',
-      },
-      {
-        id: 6,
-        name: 'Test Project 2',
-      },
-      {
-        id: 7,
-        name: 'This is a really long project name and stuff',
-      },
-    ],
-  };
 
   const goToEditFundingEntity = useCallback(
     () =>
       navigate(
         getLocation(
-          APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_EDIT.replace(':fundingEntityId', `${fundingEntity.id}`),
+          APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_EDIT.replace(':fundingEntityId', `${fundingEntity?.id}`),
           location
         )
       ),

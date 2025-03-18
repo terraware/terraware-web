@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import { requestFundingEntity } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
@@ -10,7 +10,6 @@ import useEnvironment from 'src/utils/useEnvironment';
 
 import { ProvidedFundingEntityData } from './DataTypes';
 import { FundingEntityContext } from './contexts';
-import { useUser } from './hooks';
 
 export type FundingEntityProviderProps = {
   children?: React.ReactNode;
@@ -23,38 +22,41 @@ enum APIRequestStatus {
 }
 
 export default function FundingEntityProvider({ children }: FundingEntityProviderProps) {
-  const { user, bootstrapped: userBootstrapped } = useUser();
+  const pathParams = useParams<{ fundingEntityId: string }>();
+  const pathFundingEntityId = Number(pathParams.fundingEntityId);
   const dispatch = useAppDispatch();
   const [entityAPIRequestStatus, setEntityAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
   const navigate = useNavigate();
   const { isDev, isStaging } = useEnvironment();
-  const getFundingEntityRequest = useAppSelector(selectFundingEntityRequest(user?.id));
+  const getFundingEntityRequest = useAppSelector(selectFundingEntityRequest(pathFundingEntityId));
   const [fundingEntityData, setFundingEntityData] = useState<ProvidedFundingEntityData>({
     fundingEntity: undefined,
-    bootstrapped: false,
   });
 
-  useEffect(() => {
-    if (userBootstrapped && user && user.userType === 'Funder') {
-      dispatch(requestFundingEntity(user.id));
-    }
-  }, [userBootstrapped, user, dispatch]);
+  const pathParamExists = () => !isNaN(pathFundingEntityId) && pathFundingEntityId !== -1;
 
   useEffect(() => {
-    if (!getFundingEntityRequest) {
+    if (pathParamExists()) {
+      dispatch(requestFundingEntity(pathFundingEntityId));
+    }
+  }, [pathFundingEntityId, dispatch]);
+
+  useEffect(() => {
+    if (!pathParamExists() || !getFundingEntityRequest) {
       return;
     }
 
-    if (getFundingEntityRequest.status === 'success' && getFundingEntityRequest && getFundingEntityRequest.data) {
+    const request = getFundingEntityRequest;
+
+    if (request.status === 'success' && request && request.data) {
       setEntityAPIRequestStatus(APIRequestStatus.SUCCEEDED);
       setFundingEntityData({
-        fundingEntity: getFundingEntityRequest.data.fundingEntity,
-        bootstrapped: true,
+        fundingEntity: request.data.fundingEntity,
       });
-    } else if (getFundingEntityRequest.status === 'error') {
+    } else if (request.status === 'error') {
       setEntityAPIRequestStatus(APIRequestStatus.FAILED);
     }
-  }, [getFundingEntityRequest]);
+  }, [pathFundingEntityId, getFundingEntityRequest]);
 
   useEffect(() => {
     if (entityAPIRequestStatus === APIRequestStatus.FAILED) {
