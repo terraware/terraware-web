@@ -132,12 +132,24 @@ const listAcceleratorReports = async (
       sortOrder,
     };
   }
+  let params = { includeMetrics: 'true' };
+
+  const filters = search?.children?.find((ch: { operation: string }) => ch.operation === 'and');
+  const yearFilter = filters?.[0].children((ch: { field: string }) => ch.field === 'year');
+  if (yearFilter && yearFilter.length > 0) {
+    const yearToUse = yearFilter[0].values[0];
+    if (yearToUse) {
+      const yearParam = { year: yearToUse };
+      params = { includeMetrics: 'true', ...yearParam };
+    }
+  }
+
   return await HttpService.root(PROJECT_REPORTS_ENDPOINT.replace('{projectId}', projectId)).get<
     ListAcceleratorReportsResponsePayload,
     AcceleratorReportsData
   >(
     {
-      params: { includeMetrics: 'true' },
+      params,
     },
     (data) => ({
       reports: searchAndSort(data?.reports || [], search, searchOrderConfig),

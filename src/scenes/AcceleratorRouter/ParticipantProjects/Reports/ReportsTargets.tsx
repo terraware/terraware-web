@@ -5,7 +5,7 @@ import { TableColumnType } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
-import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
+import { FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
 import { useLocalization } from 'src/providers';
 import { selectListAcceleratorReports } from 'src/redux/features/reports/reportsSelectors';
 import { requestListAcceleratorReports } from 'src/redux/features/reports/reportsThunks';
@@ -87,21 +87,38 @@ type RowMetric = {
 };
 
 export default function ReportsTargets(): JSX.Element {
+  const [allReportsRequestId, setAllReportsRequestId] = useState<string>('');
+  const allReportsResults = useAppSelector(selectListAcceleratorReports(allReportsRequestId));
   const [requestId, setRequestId] = useState<string>('');
   const reportsResults = useAppSelector(selectListAcceleratorReports(requestId));
   const dispatch = useAppDispatch();
   const [allReports, setAllReports] = useState<AcceleratorReport[]>();
+  const [reports, setReports] = useState<AcceleratorReport[]>();
   const { activeLocale } = useLocalization();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = String(pathParams.projectId);
   const [metricsToUse, setMetricsToUse] = useState<RowMetric[]>();
 
   useEffect(() => {
+    const request = dispatch(requestListAcceleratorReports({ projectId }));
+    setAllReportsRequestId(request.requestId);
+  }, [projectId]);
+
+  useEffect(() => {
+    if (allReportsResults?.status === 'error') {
+      return;
+    }
+    if (allReportsResults?.data) {
+      setAllReports(allReportsResults.data);
+    }
+  }, [allReportsResults]);
+
+  useEffect(() => {
     if (reportsResults?.status === 'error') {
       return;
     }
     if (reportsResults?.data) {
-      setAllReports(reportsResults.data);
+      setReports(reportsResults.data);
     }
   }, [reportsResults]);
 
@@ -131,9 +148,9 @@ export default function ReportsTargets(): JSX.Element {
   };
 
   useEffect(() => {
-    if (allReports && allReports.length > 0) {
+    if (reports && reports.length > 0) {
       const metrics: Map<string, RowMetric> = new Map();
-      allReports.forEach((report) => {
+      reports.forEach((report) => {
         report.systemMetrics.forEach((sm) => {
           metrics.set(sm.metric, {
             name: sm.metric,
@@ -163,7 +180,7 @@ export default function ReportsTargets(): JSX.Element {
         });
       });
 
-      allReports.forEach((report) => {
+      reports.forEach((report) => {
         if (report.frequency === 'Annual') {
           metrics.forEach((metric) => {
             metric.year = DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;
@@ -199,7 +216,7 @@ export default function ReportsTargets(): JSX.Element {
 
       setMetricsToUse(Array.from(metrics.values()));
     }
-  }, [allReports]);
+  }, [reports]);
 
   const defaultSearchOrder: SearchSortOrder = {
     field: 'metric',
@@ -217,25 +234,34 @@ export default function ReportsTargets(): JSX.Element {
     [dispatch]
   );
 
-  const featuredFilters: FilterConfig[] = useMemo(
-    () =>
-      activeLocale
-        ? [
-            {
-              field: 'year',
-              label: strings.YEAR,
-              options: [2025],
-            },
-          ]
-        : [],
-    [activeLocale]
-  );
+  const getReportsYears = useMemo(() => {
+    const avaiableYears: Set<string> = new Set();
+    allReports?.forEach((report) => {
+      const reportYear = DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;
+      avaiableYears.add(reportYear.toString());
+    });
+    return Array.from(avaiableYears);
+  }, [allReports]);
+
+  const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
+    const currentYear = DateTime.now().year;
+    return activeLocale
+      ? [
+          {
+            field: 'year',
+            label: strings.YEAR,
+            options: getReportsYears,
+            values: getReportsYears.length > 0 && getReportsYears[0] ? [currentYear] : undefined,
+          },
+        ]
+      : [];
+  }, [activeLocale, allReports]);
 
   const fuzzySearchColumns = useMemo(() => ['name'], []);
 
   return (
     <TableWithSearchFilters
-      busy={reportsResults?.status === 'pending'}
+      busy={allReportsResults?.status === 'pending'}
       columns={columns}
       defaultSearchOrder={defaultSearchOrder}
       dispatchSearchRequest={dispatchSearchRequest}
