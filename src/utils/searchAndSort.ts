@@ -110,7 +110,7 @@ export const fuzzyMatch = (a: string, b: string) => {
 
 const searchConditionMet = <T extends Record<string, unknown>>(result: T, condition: SearchNodePayload): boolean => {
   // `as SearchNodePayload` casts below are because the SearchNodePayload in the generated types only has `operation`
-  // The the union type from our types has the correct properties
+  // The union type from our types has the correct properties
   if (isNotNodePayload(condition)) {
     return !searchConditionMet(result, condition.child as SearchNodePayload);
   } else if (isAndNodePayload(condition)) {
@@ -118,10 +118,10 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
   } else if (isOrNodePayload(condition)) {
     return (condition.children as SearchNodePayload[]).some((_condition) => searchConditionMet(result, _condition));
   } else if (isFieldNodePayload(condition)) {
-    // check for underscore in field, attempt to do a nested property search if exists
-    if (condition.field.includes('_')) {
-      // split on underscore to figure out how to process from there
-      const index = condition.field.indexOf('_');
+    // check for "." in field, attempt to do a nested property search if exists
+    if (condition.field.includes('.')) {
+      // split on "." to figure out how to process from there
+      const index = condition.field.indexOf('.');
       const first = condition.field.substring(0, index);
       const last = condition.field.substring(index + 1);
       const resultValue = result[first];
@@ -140,7 +140,7 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
         });
       }
 
-      // don't return false here, in case the field actually just has an underscore in it instead of representing a sub-property
+      // don't return false here, in case the field actually just has an "." in it instead of representing a sub-property
     }
 
     // Only 'Exact' and 'Fuzzy' condition types are supported

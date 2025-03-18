@@ -17,7 +17,7 @@ type MockResult = {
   numberFieldAsString?: string;
   projectName?: string;
   status?: string;
-  field_with_underscore?: number;
+  'field.with.dots'?: number;
   deepNestedResult?: MockResultWithSubProperties;
 };
 
@@ -614,7 +614,7 @@ describe('searchAndSort', () => {
 
     const search: SearchNodePayload = {
       operation: 'field',
-      field: 'subsets_id',
+      field: 'subsets.id',
       type: 'Exact',
       values: ['1'],
     };
@@ -678,7 +678,7 @@ describe('searchAndSort', () => {
 
     const search: SearchNodePayload = {
       operation: 'field',
-      field: 'subsets_name',
+      field: 'subsets.name',
       type: 'Exact',
       values: ['Project 2'],
     };
@@ -739,7 +739,7 @@ describe('searchAndSort', () => {
 
     const search: SearchNodePayload = {
       operation: 'field',
-      field: 'subsets_id',
+      field: 'subsets.id',
       type: 'Exact',
       values: ['1', '3'],
     };
@@ -802,7 +802,7 @@ describe('searchAndSort', () => {
 
     const search: SearchNodePayload = {
       operation: 'field',
-      field: 'subObject_id',
+      field: 'subObject.id',
       type: 'Exact',
       values: ['1'],
     };
@@ -827,26 +827,26 @@ describe('searchAndSort', () => {
     expect(searchAndSort(results, search)).toEqual(filteredResults);
   });
 
-  it('should filter the results as expected - supports properties that actually have underscores in the field', () => {
+  it('should filter the results as expected - supports properties that actually have dots in the field', () => {
     const results: MockResult[] = [
       {
         name: 'Result 1',
-        field_with_underscore: 42,
+        'field.with.dots': 42,
       },
       {
         name: 'Result 2',
-        field_with_underscore: 43,
+        'field.with.dots': 43,
       },
       {
         name: 'Result 1',
-        field_with_underscore: 42,
+        'field.with.dots': 42,
       },
     ];
 
 
     const search: SearchNodePayload = {
       operation: 'field',
-      field: 'field_with_underscore',
+      field: 'field.with.dots',
       type: 'Exact',
       values: ['42'],
     };
@@ -854,11 +854,11 @@ describe('searchAndSort', () => {
     const filteredResults: MockResult[] = [
       {
         name: 'Result 1',
-        field_with_underscore: 42,
+        'field.with.dots': 42,
       },
       {
         name: 'Result 1',
-        field_with_underscore: 42,
+        'field.with.dots': 42,
       },
     ];
 
@@ -916,7 +916,7 @@ describe('searchAndSort', () => {
 
     const search: SearchNodePayload = {
       operation: 'field',
-      field: 'subObject_deepNestedResult_subsets_name',
+      field: 'subObject.deepNestedResult.subsets.name',
       type: 'Exact',
       values: ['Last 100'],
     };
