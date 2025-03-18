@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1742318031007" clover="3.2.0">
-  <project timestamp="1742318031007" name="All files">
-    <metrics statements="28122" coveredstatements="1222" conditionals="19072" coveredconditionals="348" methods="8686" coveredmethods="197" elements="55880" coveredelements="1767" complexity="0" loc="28122" ncloc="28122" packages="246" files="1173" classes="1173"/>
+<coverage generated="1742318673234" clover="3.2.0">
+  <project timestamp="1742318673234" name="All files">
+    <metrics statements="28165" coveredstatements="1222" conditionals="19098" coveredconditionals="348" methods="8699" coveredmethods="197" elements="55962" coveredelements="1767" complexity="0" loc="28165" ncloc="28165" packages="247" files="1175" classes="1175"/>
     <package name="src">
       <metrics statements="179" coveredstatements="7" conditionals="126" coveredconditionals="0" methods="40" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -11607,26 +11607,36 @@
       </file>
     </package>
     <package name="src.redux.features.funder">
-      <metrics statements="11" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
+      <metrics statements="21" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="8" coveredmethods="0"/>
       <file name="fundingEntitiesAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/funder/fundingEntitiesAsyncThunks.ts">
-        <metrics statements="5" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="6" count="0" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="11" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
+        <metrics statements="11" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="12" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="34" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
       </file>
       <file name="fundingEntitiesSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/funder/fundingEntitiesSelectors.ts">
-        <metrics statements="2" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <metrics statements="3" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
-        <line num="4" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="6" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
       <file name="fundingEntitiesSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/funder/fundingEntitiesSlice.ts">
-        <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.redux.features.globalRoles">
@@ -13662,16 +13672,16 @@
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/index.tsx">
         <metrics statements="10" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="59" count="0" type="stmt"/>
-        <line num="66" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Applications">
@@ -15184,6 +15194,42 @@
         <line num="311" count="15" type="stmt"/>
         <line num="312" count="15" type="stmt"/>
         <line num="315" count="6" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.scenes.AcceleratorRouter.FundingEntities">
+      <metrics statements="27" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="7" coveredmethods="0"/>
+      <file name="FundingEntitiesCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/FundingEntities/FundingEntitiesCellRenderer.tsx">
+        <metrics statements="5" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="11" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="13" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+      </file>
+      <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/FundingEntities/index.tsx">
+        <metrics statements="22" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="41" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="52" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Modules">
@@ -28641,7 +28687,7 @@
       </file>
     </package>
     <package name="src.services">
-      <metrics statements="1805" coveredstatements="603" conditionals="649" coveredconditionals="94" methods="501" coveredmethods="70"/>
+      <metrics statements="1811" coveredstatements="603" conditionals="653" coveredconditionals="94" methods="503" coveredmethods="70"/>
       <file name="AcceleratorReportService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/AcceleratorReportService.ts">
         <metrics statements="27" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
@@ -29040,18 +29086,24 @@
         <line num="248" count="1" type="stmt"/>
       </file>
       <file name="FundingEntityService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/FundingEntityService.ts">
-        <metrics statements="11" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
+        <metrics statements="17" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="26" count="0" type="stmt"/>
-        <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="39" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="40" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="47" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="50" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="51" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="67" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
       </file>
       <file name="GlobalRolesService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/GlobalRolesService.ts">
         <metrics statements="17" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="5" coveredmethods="0"/>
