@@ -37,6 +37,8 @@ type UserFundingEntityServerResponse =
   paths[typeof USER_FUNDING_ENTITY_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type FundingEntityServerResponse =
   paths[typeof FUNDING_ENTITY_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+type UpdateFundingEntityResponse =
+  paths[typeof FUNDING_ENTITY_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 
 const httpUserFundingEntity = HttpService.root(USER_FUNDING_ENTITY_ENDPOINT);
 const httpFundingEntity = HttpService.root(FUNDING_ENTITY_ENDPOINT);
@@ -93,10 +95,18 @@ const listFundingEntities = async (): Promise<FundingEntitiesResponse> => {
   }));
 };
 
+const update = async (fundingEntity: FundingEntity): Promise<Response> => {
+  return httpFundingEntity.put2<UpdateFundingEntityResponse>({
+    urlReplacements: { '{fundingEntityId}': `${fundingEntity.id}` },
+    entity: fundingEntity,
+  });
+};
+
 const FundingEntityService = {
   getUserFundingEntity,
   get,
   listFundingEntities,
+  update,
 };
 
 export default FundingEntityService;

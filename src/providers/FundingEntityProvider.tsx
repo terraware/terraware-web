@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
@@ -31,9 +31,16 @@ export default function FundingEntityProvider({ children }: FundingEntityProvide
   const getFundingEntityRequest = useAppSelector(selectFundingEntityRequest(pathFundingEntityId));
   const [fundingEntityData, setFundingEntityData] = useState<ProvidedFundingEntityData>({
     fundingEntity: undefined,
+    reload: () => {},
   });
 
   const pathParamExists = () => !isNaN(pathFundingEntityId) && pathFundingEntityId !== -1;
+
+  const reload = useCallback(() => {
+    if (pathParamExists()) {
+      void dispatch(requestFundingEntity(pathFundingEntityId));
+    }
+  }, [dispatch, pathFundingEntityId]);
 
   useEffect(() => {
     if (pathParamExists()) {
@@ -50,11 +57,12 @@ export default function FundingEntityProvider({ children }: FundingEntityProvide
       setEntityAPIRequestStatus(APIRequestStatus.SUCCEEDED);
       setFundingEntityData({
         fundingEntity: getFundingEntityRequest.data.fundingEntity,
+        reload,
       });
     } else if (getFundingEntityRequest.status === 'error') {
       setEntityAPIRequestStatus(APIRequestStatus.FAILED);
     }
-  }, [pathFundingEntityId, getFundingEntityRequest]);
+  }, [pathFundingEntityId, getFundingEntityRequest, reload]);
 
   useEffect(() => {
     if (entityAPIRequestStatus === APIRequestStatus.FAILED) {

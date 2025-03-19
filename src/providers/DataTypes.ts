@@ -57,4 +57,5 @@ export type ProvidedUserFundingEntityData = {
 
 export type ProvidedFundingEntityData = {
   fundingEntity?: FundingEntity;
+  reload: () => void;
 };

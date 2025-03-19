@@ -2,6 +2,7 @@ import React, { Route, Routes } from 'react-router-dom';
 
 import FundingEntityProvider from 'src/providers/FundingEntityProvider';
 
+import EditView from './EditView';
 import FundingEntitiesListView from './ListView';
 import SingleView from './SingleView';
 
@@ -14,6 +15,7 @@ const FundingEntitiesRouter = () => {
           <FundingEntityProvider>
             <Routes>
               <Route path={''} element={<SingleView />} />
+              <Route path={'edit'} element={<EditView />} />
             </Routes>
           </FundingEntityProvider>
         }
