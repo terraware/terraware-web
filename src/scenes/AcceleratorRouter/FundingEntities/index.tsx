@@ -1,5 +1,7 @@
 import React, { Route, Routes } from 'react-router-dom';
 
+import FundingEntityProvider from 'src/providers/FundingEntityProvider';
+
 import FundingEntitiesListView from './ListView';
 import SingleView from './SingleView';
 
@@ -9,9 +11,11 @@ const FundingEntitiesRouter = () => {
       <Route
         path={':fundingEntityId/*'}
         element={
-          <Routes>
-            <Route path={''} element={<SingleView />} />
-          </Routes>
+          <FundingEntityProvider>
+            <Routes>
+              <Route path={''} element={<SingleView />} />
+            </Routes>
+          </FundingEntityProvider>
         }
       />
       <Route path={''} element={<FundingEntitiesListView />} />

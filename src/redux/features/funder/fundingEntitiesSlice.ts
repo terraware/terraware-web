@@ -3,7 +3,13 @@ import { createSlice } from '@reduxjs/toolkit';
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { FundingEntity } from 'src/types/FundingEntity';
 
-import { requestFundingEntities, requestFundingEntity } from './fundingEntitiesAsyncThunks';
+import {
+  requestFundingEntities,
+  requestFundingEntity,
+  requestFundingEntityForUser,
+} from './fundingEntitiesAsyncThunks';
+
+const initialStateUserFundingEntity: { [key: string]: StatusT<{ userFundingEntity: FundingEntity }> } = {};
 
 const initialStateFundingEntity: { [key: string]: StatusT<{ fundingEntity: FundingEntity }> } = {};
 
@@ -27,7 +33,17 @@ export const fundingEntitiesSlice = createSlice({
   },
 });
 
+export const userFundingEntitySlice = createSlice({
+  name: 'userFundingEntitySlice',
+  initialState: initialStateUserFundingEntity,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestFundingEntityForUser, true)(builder);
+  },
+});
+
 const fundingEntitiesReducers = {
+  userFundingEntity: userFundingEntitySlice.reducer,
   fundingEntity: fundingEntitySlice.reducer,
   fundingEntities: fundingEntitiesSlice.reducer,
 };
