@@ -37,12 +37,16 @@ type FundingEntityServerResponse =
   paths[typeof FUNDING_ENTITY_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type UpdateFundingEntityResponse =
   paths[typeof FUNDING_ENTITY_ENDPOINT]['put']['responses'][200]['content']['application/json'];
+type CreateFundingEntityResponse =
+  paths[typeof FUNDING_ENTITIES_LIST_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 export type UpdateFundingEntityRequest =
   paths[typeof FUNDING_ENTITY_ENDPOINT]['put']['requestBody']['content']['application/json'];
+export type CreateFundingEntityRequest =
+  paths[typeof FUNDING_ENTITIES_LIST_ENDPOINT]['post']['requestBody']['content']['application/json'];
 
 const httpUserFundingEntity = HttpService.root(USER_FUNDING_ENTITY_ENDPOINT);
 const httpFundingEntity = HttpService.root(FUNDING_ENTITY_ENDPOINT);
-const httpUserFundingEntities = HttpService.root(FUNDING_ENTITIES_LIST_ENDPOINT);
+const httpFundingEntities = HttpService.root(FUNDING_ENTITIES_LIST_ENDPOINT);
 
 const getUserFundingEntity = async (userId: number): Promise<UserFundingEntityResponse> => {
   const response: UserFundingEntityResponse = await httpUserFundingEntity.get<
@@ -90,7 +94,7 @@ const get = async (fundingEntityId: number): Promise<FundingEntityResponse> => {
 };
 
 const listFundingEntities = async (): Promise<FundingEntitiesResponse> => {
-  return await httpUserFundingEntities.get<FundingEntitiesServerResponse, FundingEntitiesData>({}, (data) => ({
+  return await httpFundingEntities.get<FundingEntitiesServerResponse, FundingEntitiesData>({}, (data) => ({
     fundingEntities: data?.fundingEntities || [],
   }));
 };
@@ -106,11 +110,22 @@ const update = async (fundingEntity: FundingEntity): Promise<Response> => {
   });
 };
 
+const create = async (fundingEntity: FundingEntity): Promise<Response> => {
+  const entity: CreateFundingEntityRequest = {
+    name: fundingEntity.name,
+    projects: fundingEntity.projects.map((project) => project.id),
+  };
+  return httpFundingEntities.post2<CreateFundingEntityResponse>({
+    entity: entity,
+  });
+};
+
 const FundingEntityService = {
   getUserFundingEntity,
   get,
   listFundingEntities,
   update,
+  create,
 };
 
 export default FundingEntityService;

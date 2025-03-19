@@ -53,3 +53,17 @@ export const requestUpdateFundingEntity = createAsyncThunk(
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
+
+export const requestCreateFundingEntity = createAsyncThunk(
+  'funding-entities/create',
+  async (request: { fundingEntity: FundingEntity }, { rejectWithValue }) => {
+    const { fundingEntity } = request;
+
+    const response = await FundingEntityService.create(fundingEntity);
+    if (response && response.requestSucceeded) {
+      return response;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);

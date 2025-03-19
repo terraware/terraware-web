@@ -1,17 +1,21 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { TableColumnType } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
-import { useLocalization } from 'src/providers';
+import Button from 'src/components/common/button/Button';
+import { APP_PATHS } from 'src/constants';
+import { useLocalization, useUser } from 'src/providers';
 import { requestFundingEntities } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
 import { selectFundingEntitiesRequest } from 'src/redux/features/funder/fundingEntitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
 import { SearchSortOrder } from 'src/types/Search';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import FundingEntitiesCellRenderer from './FundingEntitiesCellRenderer';
@@ -33,6 +37,9 @@ const FundingEntitiesListView = () => {
   const [fundingEntities, setFundingEntities] = useState<FundingEntity[]>([]);
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
+  const navigate = useNavigate();
+  const { isAllowed } = useUser();
+  const { isMobile } = useDeviceInfo();
 
   const defaultSortOrder: SearchSortOrder = {
     field: 'name',
@@ -57,6 +64,13 @@ const FundingEntitiesListView = () => {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
   }, [listRequest, snackbar]);
+
+  const goToNewFundingEntity = useCallback(() => {
+    const newProjectLocation = {
+      pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_NEW,
+    };
+    navigate(newProjectLocation);
+  }, [navigate]);
 
   const allProjects = useMemo<Record<string, string>>(
     () =>
@@ -88,8 +102,27 @@ const FundingEntitiesListView = () => {
     [allProjects, fundingEntities]
   );
 
+  const actionMenus = useMemo<ReactNode | null>(() => {
+    const canCreateFundingEntities = isAllowed('MANAGE_FUNDING_ENTITIES');
+
+    if (!activeLocale || !canCreateFundingEntities) {
+      return null;
+    }
+
+    return (
+      <Button
+        icon='plus'
+        id='new-funding-entity'
+        onClick={goToNewFundingEntity}
+        priority='primary'
+        label={isMobile ? '' : strings.ADD_FUNDING_ENTITY}
+        size='medium'
+      />
+    );
+  }, [activeLocale, goToNewFundingEntity, isAllowed, isMobile]);
+
   return (
-    <Page title={strings.FUNDING_ENTITIES}>
+    <Page title={strings.FUNDING_ENTITIES} rightComponent={actionMenus}>
       <ClientSideFilterTable
         columns={columns}
         defaultSortOrder={defaultSortOrder}
