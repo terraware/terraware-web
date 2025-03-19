@@ -153,26 +153,7 @@
 <a name='L88'></a><a href='#L88'>88</a>
 <a name='L89'></a><a href='#L89'>89</a>
 <a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a>
-<a name='L94'></a><a href='#L94'>94</a>
-<a name='L95'></a><a href='#L95'>95</a>
-<a name='L96'></a><a href='#L96'>96</a>
-<a name='L97'></a><a href='#L97'>97</a>
-<a name='L98'></a><a href='#L98'>98</a>
-<a name='L99'></a><a href='#L99'>99</a>
-<a name='L100'></a><a href='#L100'>100</a>
-<a name='L101'></a><a href='#L101'>101</a>
-<a name='L102'></a><a href='#L102'>102</a>
-<a name='L103'></a><a href='#L103'>103</a>
-<a name='L104'></a><a href='#L104'>104</a>
-<a name='L105'></a><a href='#L105'>105</a>
-<a name='L106'></a><a href='#L106'>106</a>
-<a name='L107'></a><a href='#L107'>107</a>
-<a name='L108'></a><a href='#L108'>108</a>
-<a name='L109'></a><a href='#L109'>109</a>
-<a name='L110'></a><a href='#L110'>110</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L91'></a><a href='#L91'>91</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -194,28 +175,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -293,7 +255,7 @@ import Link from 'src/components/common/Link';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization, useUser } from 'src/providers';
+import { useFundingEntity, useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 &nbsp;
@@ -303,34 +265,15 @@ const SingleView = <span class="cstat-no" title="statement not covered" ><span c
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+  const { fundingEntity } = <span class="cstat-no" title="statement not covered" >useFundingEntity();</span>
 &nbsp;
   const canEdit = <span class="cstat-no" title="statement not covered" >isAllowed('MANAGE_FUNDING_ENTITIES');</span>
-&nbsp;
-  // hardcode for now
-  const fundingEntity = <span class="cstat-no" title="statement not covered" >{</span>
-    id: 12,
-    name: 'Hardcoded Funding Entity',
-    projects: [
-      {
-        id: 1,
-        name: 'Test Project',
-      },
-      {
-        id: 6,
-        name: 'Test Project 2',
-      },
-      {
-        id: 7,
-        name: 'This is a really long project name and stuff',
-      },
-    ],
-  };
 &nbsp;
   const goToEditFundingEntity = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
 <span class="cstat-no" title="statement not covered" >      navigate(</span>
         getLocation(
-          APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_EDIT.replace(':fundingEntityId', `${fundingEntity.id}`),
+          APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_EDIT.replace(':fundingEntityId', `${fundingEntity?.id}`),
           location
         )
       ),
@@ -397,7 +340,7 @@ export default SingleView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-19T22:40:00.447Z
+                at 2025-03-19T22:52:25.068Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
