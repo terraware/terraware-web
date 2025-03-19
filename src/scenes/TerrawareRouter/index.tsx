@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { matchPath, useNavigate } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
-import { useFundingEntity, useOrganization } from 'src/providers';
+import { useOrganization, useUserFundingEntity } from 'src/providers';
 import useStateLocation from 'src/utils/useStateLocation';
 
 const OrgRouter = React.lazy(() => import('src/scenes/OrgRouter'));
@@ -25,19 +25,19 @@ const MINIMAL_USER_ROUTES: string[] = [
 ];
 
 export default function TerrawareRouter(props: TerrawareRouterProps) {
-  const { fundingEntity } = useFundingEntity();
+  const { userFundingEntity } = useUserFundingEntity();
   const { organizations } = useOrganization();
   const navigate = useNavigate();
   const location = useStateLocation();
 
   useEffect(() => {
-    if (fundingEntity) {
+    if (userFundingEntity) {
       navigate(APP_PATHS.FUNDER_HOME);
     }
     if (organizations?.length === 0 && !MINIMAL_USER_ROUTES.some((path) => !!matchPath(path, location.pathname))) {
       navigate(APP_PATHS.WELCOME);
     }
-  }, [navigate, location, fundingEntity, organizations]);
+  }, [navigate, location, userFundingEntity, organizations]);
 
   return organizations.length === 0 ? <NoOrgRouter /> : <OrgRouter {...props} />;
 }

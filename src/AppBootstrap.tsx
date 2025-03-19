@@ -3,14 +3,14 @@ import React, { useEffect, useState } from 'react';
 import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import {
-  FundingEntityProvider,
   LocalizationProvider,
   OrganizationProvider,
+  UserFundingEntityProvider,
   UserProvider,
-  useFundingEntity,
   useLocalization,
   useOrganization,
   useUser,
+  useUserFundingEntity,
 } from 'src/providers';
 
 type BlockingBootstrapProps = {
@@ -22,20 +22,20 @@ function BlockingBootstrap({ children }: BlockingBootstrapProps): JSX.Element {
   const { bootstrapped: userBootstrapped } = useUser();
   const { bootstrapped: organizationBootstrapped } = useOrganization();
   const { bootstrapped: localizationBootstrapped } = useLocalization();
-  const { bootstrapped: fundingEntityBootstrapped } = useFundingEntity();
+  const { bootstrapped: userFundingEntityBootstrapped } = useUserFundingEntity();
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
   useEffect(() => {
     setBootstrapped(
       bootstrapped ||
         (userBootstrapped &&
-          (organizationBootstrapped || isAcceleratorRoute || fundingEntityBootstrapped) &&
+          (organizationBootstrapped || isAcceleratorRoute || userFundingEntityBootstrapped) &&
           localizationBootstrapped)
     );
   }, [
     bootstrapped,
     userBootstrapped,
-    fundingEntityBootstrapped,
+    userFundingEntityBootstrapped,
     organizationBootstrapped,
     isAcceleratorRoute,
     localizationBootstrapped,
@@ -59,7 +59,7 @@ export default function AppBootstrap({ children }: AppBootstrapProps): JSX.Eleme
   return (
     <UserProvider>
       <OrganizationProvider>
-        <FundingEntityProvider>
+        <UserFundingEntityProvider>
           <LocalizationProvider
             selectedLocale={selectedLocale}
             setSelectedLocale={setSelectedLocale}
@@ -68,7 +68,7 @@ export default function AppBootstrap({ children }: AppBootstrapProps): JSX.Eleme
           >
             <BlockingBootstrap>{children}</BlockingBootstrap>
           </LocalizationProvider>
-        </FundingEntityProvider>
+        </UserFundingEntityProvider>
       </OrganizationProvider>
     </UserProvider>
   );
