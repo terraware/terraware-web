@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
@@ -83,7 +83,23 @@
 <a name='L18'></a><a href='#L18'>18</a>
 <a name='L19'></a><a href='#L19'>19</a>
 <a name='L20'></a><a href='#L20'>20</a>
-<a name='L21'></a><a href='#L21'>21</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -97,6 +113,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -107,17 +135,31 @@
 &nbsp;
 import { RendererProps, TableRowType } from '@terraware/web-components';
 &nbsp;
+import Link from 'src/components/common/Link';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
+import { APP_PATHS } from 'src/constants';
 import { Project } from 'src/types/Project';
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >FundingEntitiesCellRenderer(</span>props: RendererProps&lt;TableRowType&gt;): JSX.Element {
-  const { column, value, index, row } = <span class="cstat-no" title="statement not covered" >props;</span>
+  const { column, value, row } = <span class="cstat-no" title="statement not covered" >props;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (column.key === 'projects') {</span>
     const stringList: string[] =
 <span class="cstat-no" title="statement not covered" >      Array.isArray(value) &amp;&amp; value.length ? (value as Project[]).map(<span class="fstat-no" title="function not covered" >(p</span>roject: Project) =&gt; <span class="cstat-no" title="statement not covered" >project.name)</span> : [];</span>
+<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer {...props} value={stringList.join(', ')} style={{ width: '50%' }} /&gt;;</span>
+  } else <span class="cstat-no" title="statement not covered" >if (column.key === 'name') {</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
-      &lt;CellRenderer index={index} row={row} column={column} value={stringList.join(', ')} style={{ width: '50%' }} /&gt;
+      &lt;CellRenderer
+        {...props}
+        value={
+          &lt;Link
+            fontSize='16px'
+            to={APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_VIEW.replace(':fundingEntityId', `${row.id}`)}
+          &gt;
+            {String(value)}
+          &lt;/Link&gt;
+        }
+      /&gt;
     );
   }
 &nbsp;
@@ -130,7 +172,7 @@ export default function <span class="fstat-no" title="function not covered" >Fun
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-19T19:56:34.196Z
+                at 2025-03-19T22:40:00.447Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
