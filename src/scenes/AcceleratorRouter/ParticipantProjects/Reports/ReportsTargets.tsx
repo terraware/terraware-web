@@ -237,16 +237,19 @@ export default function ReportsTargets(): JSX.Element {
   );
 
   const currentYear = DateTime.now().year;
-  const [yearFilter, setYearFilter] = useState<string>(currentYear.toString());
+  const [yearFilter, setYearFilter] = useState<string>();
   const getReportsYears = useMemo(() => {
-    const availableYears: Set<string> = new Set();
-    availableYears.add(currentYear.toString());
+    const availableYears: Set<number> = new Set();
     allReports?.forEach((report) => {
       const reportYear = DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;
-      availableYears.add(reportYear.toString());
+      availableYears.add(reportYear);
     });
     return Array.from(availableYears);
   }, [allReports]);
+
+  const getReportsYearsString = useMemo(() => {
+    return getReportsYears.map((year) => year.toString());
+  }, [getReportsYears]);
 
   const extraTableFilters: SearchNodePayload[] = useMemo(() => {
     return [
@@ -261,6 +264,22 @@ export default function ReportsTargets(): JSX.Element {
 
   const fuzzySearchColumns = useMemo(() => ['name'], []);
 
+  useEffect(() => {
+    if ((allReports?.length || 0) > 0) {
+      if (getReportsYears.includes(currentYear)) {
+        setYearFilter(currentYear.toString());
+      } else {
+        const futureYears = getReportsYears.filter((year) => year > currentYear).sort((a, b) => a - b);
+        if (futureYears.length > 0) {
+          setYearFilter(futureYears[0].toString());
+        } else {
+          const pastYears = getReportsYears.filter((year) => year < currentYear).sort((a, b) => b - a);
+          setYearFilter(pastYears[0].toString());
+        }
+      }
+    }
+  }, [allReports]);
+
   const extraFilter = useMemo(
     () =>
       activeLocale ? (
@@ -270,7 +289,7 @@ export default function ReportsTargets(): JSX.Element {
               id='yearFilter'
               label={''}
               selectedValue={yearFilter}
-              options={getReportsYears}
+              options={getReportsYearsString}
               onChange={(year: string) => {
                 setYearFilter(year);
               }}
