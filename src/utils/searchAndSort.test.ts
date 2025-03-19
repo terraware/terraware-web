@@ -17,7 +17,15 @@ type MockResult = {
   numberFieldAsString?: string;
   projectName?: string;
   status?: string;
+  'field.with.dots'?: number;
+  deepNestedResult?: MockResultWithSubProperties;
 };
+
+type MockResultWithSubProperties = {
+  name?: string;
+  subObject?: MockResult;
+  subsets?: MockResult[];
+}
 
 describe('splitTrigrams', () => {
   it('should split a string into trigrams in the same way postgres does', () => {
@@ -35,7 +43,7 @@ describe('splitTrigrams', () => {
      * -----------------------------------------------
      * {'  b','  f',' ba',' fo','ar ',bar,foo,'oo '}
      */
-    expect(splitTrigrams('foo|bar')).toEqual(new Set(['  b','  f',' ba',' fo','ar ','bar','foo','oo ']));
+    expect(splitTrigrams('foo|bar')).toEqual(new Set(['  b', '  f', ' ba', ' fo', 'ar ', 'bar', 'foo', 'oo ']));
 
     /**
      * select show_trgm('olyolyoxenfree');
@@ -43,7 +51,7 @@ describe('splitTrigrams', () => {
      * -------------------------------------------------------------
      * {'  o',' ol','ee ',enf,fre,lyo,nfr,oly,oxe,ree,xen,yol,yox}
      */
-    expect(splitTrigrams('olyolyoxenfree')).toEqual(new Set(['  o',' ol','ee ','enf','fre','lyo','nfr','oly','oxe','ree','xen','yol','yox']));
+    expect(splitTrigrams('olyolyoxenfree')).toEqual(new Set(['  o', ' ol', 'ee ', 'enf', 'fre', 'lyo', 'nfr', 'oly', 'oxe', 'ree', 'xen', 'yol', 'yox']));
 
     /**
      * select show_trgm('sam');
@@ -51,7 +59,7 @@ describe('splitTrigrams', () => {
      * -------------------------
      * {'  s',' sa','am ',sam}
      */
-    expect(splitTrigrams('sam')).toEqual(new Set(['  s',' sa','am ','sam']));
+    expect(splitTrigrams('sam')).toEqual(new Set(['  s', ' sa', 'am ', 'sam']));
   });
 });
 
@@ -575,6 +583,380 @@ describe('searchAndSort', () => {
     expect(searchAndSort(results, search, searchOrderConfig)).toEqual(filteredResults);
   });
 
+  it('should filter the results as expected - field filter on subsets using numbers', () => {
+    const results: MockResultWithSubProperties[] = [
+      {
+        name: 'Funding Entity No Projects',
+      },
+      {
+        name: 'Funding Entity A',
+        subsets: [
+          {
+            id: 1,
+            name: 'Project 1',
+          },
+        ],
+      },
+      {
+        name: 'Funding Entity B',
+        subsets: [
+          {
+            id: 2,
+            name: 'Project 2',
+          },
+          {
+            id: 1,
+            name: 'Project 1',
+          },
+        ],
+      },
+    ];
+
+    const search: SearchNodePayload = {
+      operation: 'field',
+      field: 'subsets.id',
+      type: 'Exact',
+      values: ['1'],
+    };
+
+    const filteredResults: MockResultWithSubProperties[] = [
+      {
+        name: 'Funding Entity A',
+        subsets: [
+          {
+            id: 1,
+            name: 'Project 1',
+          },
+        ],
+      },
+      {
+        name: 'Funding Entity B',
+        subsets: [
+          {
+            id: 2,
+            name: 'Project 2',
+          },
+          {
+            id: 1,
+            name: 'Project 1',
+          },
+        ],
+      },
+    ];
+
+    expect(searchAndSort(results, search)).toEqual(filteredResults);
+  });
+
+  it('should filter the results as expected - field filter on subsets using strings', () => {
+    const results: MockResultWithSubProperties[] = [
+      {
+        name: 'Funding Entity No Projects',
+      },
+      {
+        name: 'Funding Entity A',
+        subsets: [
+          {
+            id: 1,
+            name: 'Project 1',
+          },
+        ],
+      },
+      {
+        name: 'Funding Entity B',
+        subsets: [
+          {
+            id: 2,
+            name: 'Project 2',
+          },
+          {
+            id: 1,
+            name: 'Project 1',
+          },
+        ],
+      },
+    ];
+
+    const search: SearchNodePayload = {
+      operation: 'field',
+      field: 'subsets.name',
+      type: 'Exact',
+      values: ['Project 2'],
+    };
+
+    const filteredResults: MockResultWithSubProperties[] = [
+      {
+        name: 'Funding Entity B',
+        subsets: [
+          {
+            id: 2,
+            name: 'Project 2',
+          },
+          {
+            id: 1,
+            name: 'Project 1',
+          },
+        ],
+      },
+    ];
+
+    expect(searchAndSort(results, search)).toEqual(filteredResults);
+  });
+
+  it('should filter the results as expected - field filter on subsets - multiple values', () => {
+    const results: MockResultWithSubProperties[] = [
+      {
+        name: 'Funding Entity A',
+        subsets: [
+          {
+            id: 1,
+            name: 'Project 1',
+          },
+          {
+            id: 2,
+            name: 'Project 2',
+          },
+        ],
+      },
+      {
+        name: 'Funding Entity B',
+        subsets: [
+          {
+            id: 2,
+            name: 'Project 2',
+          },
+        ],
+      },
+      {
+        name: 'Funding Entity C',
+        subsets: [
+          {
+            id: 3,
+            name: 'Project 3',
+          },
+        ],
+      },
+    ];
+
+    const search: SearchNodePayload = {
+      operation: 'field',
+      field: 'subsets.id',
+      type: 'Exact',
+      values: ['1', '3'],
+    };
+
+    const filteredResults: MockResultWithSubProperties[] = [
+      {
+        name: 'Funding Entity A',
+        subsets: [
+          {
+            id: 1,
+            name: 'Project 1',
+          },
+          {
+            id: 2,
+            name: 'Project 2',
+          },
+        ],
+      },
+      {
+        name: 'Funding Entity C',
+        subsets: [
+          {
+            id: 3,
+            name: 'Project 3',
+          },
+        ],
+      },
+    ];
+
+    expect(searchAndSort(results, search)).toEqual(filteredResults);
+  });
+
+  it('should filter the results as expected - field filter on sub objects', () => {
+    const results: MockResultWithSubProperties[] = [
+      {
+        name: 'No SubObject',
+      },
+      {
+        name: 'Funding Entity A',
+        subObject: {
+          id: 1,
+          name: 'Object 1',
+        },
+      },
+      {
+        name: 'Funding Entity B',
+        subObject: {
+          id: 1,
+          name: 'Object 1',
+        },
+      },
+      {
+        name: 'Funding Entity C',
+        subObject: {
+          id: 2,
+          name: 'Object 2',
+        },
+      },
+    ];
+
+    const search: SearchNodePayload = {
+      operation: 'field',
+      field: 'subObject.id',
+      type: 'Exact',
+      values: ['1'],
+    };
+
+    const filteredResults: MockResultWithSubProperties[] = [
+      {
+        name: 'Funding Entity A',
+        subObject: {
+          id: 1,
+          name: 'Object 1',
+        },
+      },
+      {
+        name: 'Funding Entity B',
+        subObject: {
+          id: 1,
+          name: 'Object 1',
+        },
+      },
+    ];
+
+    expect(searchAndSort(results, search)).toEqual(filteredResults);
+  });
+
+  it('should filter the results as expected - supports properties that actually have dots in the field', () => {
+    const results: MockResult[] = [
+      {
+        name: 'Result 1',
+        'field.with.dots': 42,
+      },
+      {
+        name: 'Result 2',
+        'field.with.dots': 43,
+      },
+      {
+        name: 'Result 1',
+        'field.with.dots': 42,
+      },
+    ];
+
+
+    const search: SearchNodePayload = {
+      operation: 'field',
+      field: 'field.with.dots',
+      type: 'Exact',
+      values: ['42'],
+    };
+
+    const filteredResults: MockResult[] = [
+      {
+        name: 'Result 1',
+        'field.with.dots': 42,
+      },
+      {
+        name: 'Result 1',
+        'field.with.dots': 42,
+      },
+    ];
+
+    expect(searchAndSort(results, search)).toEqual(filteredResults);
+  });
+
+  it('should filter the results as expected - complex deeply nested property works', () => {
+    const results: MockResultWithSubProperties[] = [
+      {
+        name: 'Top Level A',
+        subObject: {
+          id: 1,
+          deepNestedResult: {
+            name: 'Mid 10',
+            subsets: [
+              {
+                id: 112,
+                name: 'Last 100',
+              },
+            ],
+          },
+        },
+      },
+      {
+        name: 'Top Level B',
+        subObject: {
+          id: 2,
+          deepNestedResult: {
+            name: 'Mid 20',
+            subsets: [
+              {
+                id: 113,
+                name: 'Last 100',
+              },
+            ],
+          },
+        },
+      },
+      {
+        name: 'Top Level C',
+        subObject: {
+          id: 3,
+          deepNestedResult: {
+            name: 'Mid 30',
+            subsets: [
+              {
+                id: 120,
+                name: 'Last Level 200',
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    const search: SearchNodePayload = {
+      operation: 'field',
+      field: 'subObject.deepNestedResult.subsets.name',
+      type: 'Exact',
+      values: ['Last 100'],
+    };
+
+    const filteredResults: MockResultWithSubProperties[] = [
+      {
+        name: 'Top Level A',
+        subObject: {
+          id: 1,
+          deepNestedResult: {
+            name: 'Mid 10',
+            subsets: [
+              {
+                id: 112,
+                name: 'Last 100',
+              },
+            ],
+          },
+        },
+      },
+      {
+        name: 'Top Level B',
+        subObject: {
+          id: 2,
+          deepNestedResult: {
+            name: 'Mid 20',
+            subsets: [
+              {
+                id: 113,
+                name: 'Last 100',
+              },
+            ],
+          },
+        },
+      },
+    ]
+
+    expect(searchAndSort(results, search)).toEqual(filteredResults);
+  });
+
   it('should sort the results as expected for a string field', () => {
     const searchOrderConfig: SearchOrderConfig = {
       locale: 'en',
@@ -804,7 +1186,8 @@ describe('searchAndSort', () => {
 
     expect(searchAndSort(results, undefined, searchOrderConfig)).toEqual(sortedResultsDescending);
   });
-});
+})
+;
 
 describe('modifySearchNode', () => {
   it('modifies nested search nodes as expected - with condition and append operation', () => {

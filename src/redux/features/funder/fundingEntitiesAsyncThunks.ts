@@ -15,3 +15,13 @@ export const requestFundingEntity = createAsyncThunk(
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
+
+export const requestFundingEntities = createAsyncThunk('funding-entities/list', async (_, { rejectWithValue }) => {
+  const response = await FundingEntityService.listFundingEntities();
+
+  if (response && response.requestSucceeded) {
+    return response;
+  }
+
+  return rejectWithValue(strings.GENERIC_ERROR);
+});
