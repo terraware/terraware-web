@@ -2,14 +2,17 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Dispatch } from 'redux';
 
 import { RootState } from 'src/redux/rootReducer';
-import AcceleratorReportService from 'src/services/AcceleratorReportService';
+import AcceleratorReportService, { ListAcceleratorReportsRequestParams } from 'src/services/AcceleratorReportService';
 import strings from 'src/strings';
 import {
+  AcceleratorReport,
   CreateAcceleratorReportConfigRequest,
   CreateProjectMetricRequest,
   UpdateAcceleratorReportConfigRequest,
   UpdateProjectMetricRequest,
 } from 'src/types/AcceleratorReport';
+import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { SearchAndSortFn } from 'src/utils/searchAndSort';
 
 import { setProjectReportConfigAction } from './reportsSlice';
 
@@ -68,8 +71,26 @@ export const requestListProjectMetrics = createAsyncThunk(
 
 export const requestListAcceleratorReports = createAsyncThunk(
   'listReports',
-  async (request: { projectId: number }, { rejectWithValue }) => {
-    const response = await AcceleratorReportService.listAcceleratorReports(request.projectId);
+  async (
+    request: {
+      listRequest?: ListAcceleratorReportsRequestParams;
+      locale: string | null;
+      projectId: number;
+      search?: SearchNodePayload;
+      searchAndSort?: SearchAndSortFn<AcceleratorReport>;
+      searchSortOrder?: SearchSortOrder;
+    },
+    { rejectWithValue }
+  ) => {
+    const { listRequest, locale, projectId, search, searchSortOrder, searchAndSort } = request;
+    const response = await AcceleratorReportService.listAcceleratorReports(
+      projectId,
+      locale,
+      listRequest,
+      search,
+      searchSortOrder,
+      searchAndSort
+    );
 
     if (response && response.requestSucceeded) {
       return response.data?.reports;

@@ -33,3 +33,10 @@ export type NewMetric = components['schemas']['NewMetricPayload'];
 
 export type AcceleratorReport = components['schemas']['AcceleratorReportPayload'];
 export type AcceleratorReportStatus = components['schemas']['AcceleratorReportPayload']['status'];
+export const AcceleratorReportStatuses: AcceleratorReportStatus[] = [
+  'Not Submitted',
+  'Submitted',
+  'Approved',
+  'Needs Update',
+  'Not Needed',
+];

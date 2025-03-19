@@ -76,17 +76,6 @@ const listProjectMetricsSlice = createSlice({
   },
 });
 
-const initialListAcceleratorReportsState: { [key: string]: StatusT<AcceleratorReport[]> } = {};
-
-const listAcceleratorReportsSlice = createSlice({
-  name: 'listAcceleratorReportsSlice',
-  initialState: initialListAcceleratorReportsState,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestListAcceleratorReports)(builder);
-  },
-});
-
 const initialListStandardMetricsState: { [key: string]: StatusT<StandardMetric[]> } = {};
 
 const listStandardMetricsSlice = createSlice({
@@ -123,6 +112,20 @@ const projectMetricUpdateSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     buildReducers(requestUpdateProjectMetric)(builder);
+  },
+});
+
+/**
+ * List Accelerator Reports
+ */
+const initialListAcceleratorReportsState: { [key: string]: StatusT<AcceleratorReport[]> } = {};
+
+const listAcceleratorReportsSlice = createSlice({
+  name: 'listAcceleratorReportsSlice',
+  initialState: initialListAcceleratorReportsState,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestListAcceleratorReports)(builder);
   },
 });
 

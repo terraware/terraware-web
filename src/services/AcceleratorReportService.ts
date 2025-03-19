@@ -1,11 +1,14 @@
 import { paths } from 'src/api/types/generated-schema';
 import {
+  AcceleratorReport,
   CreateAcceleratorReportConfigRequest,
   CreateProjectMetricRequest,
   ExistingAcceleratorReportConfig,
   UpdateAcceleratorReportConfigRequest,
   UpdateProjectMetricRequest,
 } from 'src/types/AcceleratorReport';
+import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { SearchAndSortFn, SearchOrderConfig, searchAndSort as genericSearchAndSort } from 'src/utils/searchAndSort';
 
 import HttpService, { Response, Response2 } from './HttpService';
 
@@ -34,6 +37,9 @@ const ACCELERATOR_REPORTS_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/r
 
 type ListAcceleratorReportsResponsePayload =
   paths[typeof ACCELERATOR_REPORTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+export type ListAcceleratorReportsRequestParams =
+  paths[typeof ACCELERATOR_REPORTS_ENDPOINT]['get']['parameters']['query'];
 
 const PROJECT_METRICS_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/metrics';
 const STANDARD_METRICS_ENDPOINT = '/api/v1/accelerator/reports/standardMetrics';
@@ -93,10 +99,76 @@ const updateConfig = async (
   });
 };
 
-const listAcceleratorReports = async (projectId: number): Promise<Response2<ListAcceleratorReportsResponsePayload>> => {
-  return HttpService.root(
+// TODO: remove mockAcceleratorReports once reports are ready
+const mockAcceleratorReports: AcceleratorReport[] = [
+  {
+    endDate: '2023-12-31',
+    id: 1,
+    modifiedBy: 78,
+    modifiedTime: '2023-10-01',
+    projectId: -1,
+    projectMetrics: [],
+    standardMetrics: [],
+    startDate: '2023-01-01',
+    status: 'Not Submitted',
+    submittedBy: 78,
+    submittedTime: '2023-10-01',
+    systemMetrics: [],
+  },
+  {
+    endDate: '2023-12-31',
+    id: 2,
+    modifiedBy: 78,
+    modifiedTime: '2023-10-02',
+    projectId: -1,
+    projectMetrics: [],
+    standardMetrics: [],
+    startDate: '2023-01-01',
+    status: 'Submitted',
+    submittedBy: 78,
+    submittedTime: '2023-10-02',
+    systemMetrics: [],
+  },
+];
+
+const listAcceleratorReports = async (
+  projectId: number,
+  locale: string | null,
+  request?: ListAcceleratorReportsRequestParams,
+  search?: SearchNodePayload,
+  searchSortOrder?: SearchSortOrder,
+  searchAndSort?: SearchAndSortFn<AcceleratorReport>
+): Promise<Response2<ListAcceleratorReportsResponsePayload>> => {
+  let searchOrderConfig: SearchOrderConfig | undefined;
+  if (searchSortOrder) {
+    searchOrderConfig = {
+      locale,
+      sortOrder: searchSortOrder,
+      numberFields: ['id', 'numDocuments', 'organizationId', 'participantId'],
+    };
+  }
+
+  const result = await HttpService.root(
     ACCELERATOR_REPORTS_ENDPOINT.replace('{projectId}', projectId.toString())
-  ).get2<ListAcceleratorReportsResponsePayload>();
+  ).get2<ListAcceleratorReportsResponsePayload>({
+    // params: (request || {}),
+  });
+
+  if (result.requestSucceeded && result.data?.reports) {
+    const reportsResult = searchAndSort
+      ? searchAndSort(mockAcceleratorReports, search, searchOrderConfig)
+      : genericSearchAndSort(mockAcceleratorReports, search, searchOrderConfig);
+
+    return {
+      ...result,
+      data: {
+        ...result.data,
+        reports: reportsResult,
+      },
+    };
+  } else {
+    return Promise.reject(result.error);
+  }
 };
 
 const listProjectMetrics = async (projectId: string): Promise<Response2<ListProjectMetricsResponsePayload>> => {
