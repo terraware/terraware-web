@@ -5,9 +5,12 @@ import { Textfield } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
+import { useProjects } from 'src/hooks/useProjects';
 import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+import MultiProjectsEdit from './MultiProjectsEdit';
 
 type FundingEntityFormProps = {
   busy?: boolean;
@@ -22,10 +25,12 @@ const FundingEntityForm = (props: FundingEntityFormProps) => {
   const { isMobile } = useDeviceInfo();
 
   const [localRecord, setLocalRecord] = useState<Partial<FundingEntity>>({});
+  const { availableProjects: allProjects } = useProjects();
 
   const onSaveHandler = () => {
     onSave({
       ...(localRecord as FundingEntity),
+      projects: (localRecord.projects || []).filter((p) => p.id !== -1),
     });
   };
 
@@ -58,10 +63,10 @@ const FundingEntityForm = (props: FundingEntityFormProps) => {
           paddingLeft: theme.spacing(isMobile ? 0 : 4),
           paddingRight: theme.spacing(isMobile ? 0 : 4),
           paddingTop: theme.spacing(5),
-          width: isMobile ? '100%' : '700px',
+          width: isMobile ? '100%' : '800px',
         }}
       >
-        <Card style={{ width: '568px', margin: 'auto' }}>
+        <Card style={{ width: '800px', margin: 'auto' }}>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
             <Textfield
               id='name'
@@ -70,6 +75,13 @@ const FundingEntityForm = (props: FundingEntityFormProps) => {
               type='text'
               value={localRecord.name}
               required={true}
+            />
+          </Grid>
+          <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+            <MultiProjectsEdit
+              projects={localRecord.projects || []}
+              allProjects={allProjects || []}
+              setProjects={(projects) => updateField('projects', projects)}
             />
           </Grid>
         </Card>
