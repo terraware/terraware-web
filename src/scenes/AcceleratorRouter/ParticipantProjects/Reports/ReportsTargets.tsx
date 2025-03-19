@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { TableColumnType } from '@terraware/web-components';
+import { Box } from '@mui/material';
+import { Select, TableColumnType } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
-import { FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
 import { useLocalization } from 'src/providers';
 import { selectListAcceleratorReports } from 'src/redux/features/reports/reportsSelectors';
 import { requestListAcceleratorReports } from 'src/redux/features/reports/reportsThunks';
@@ -100,8 +100,10 @@ export default function ReportsTargets(): JSX.Element {
   const [metricsToUse, setMetricsToUse] = useState<RowMetric[]>();
 
   useEffect(() => {
-    const request = dispatch(requestListAcceleratorReports({ projectId }));
-    setAllReportsRequestId(request.requestId);
+    if (projectId) {
+      const request = dispatch(requestListAcceleratorReports({ projectId, includeFuture: true, includeMetrics: true }));
+      setAllReportsRequestId(request.requestId);
+    }
   }, [projectId]);
 
   useEffect(() => {
@@ -128,19 +130,19 @@ export default function ReportsTargets(): JSX.Element {
     const endDate = DateTime.fromFormat(report.endDate, 'yyyy-MM-dd');
     const endMonth = endDate.month;
 
-    if (startMonth === 1 && endMonth === 3) {
+    if (startMonth >= 1 && startMonth <= 3 && endMonth >= 1 && endMonth <= 3) {
       return 1;
     }
 
-    if (startMonth === 4 && endMonth === 6) {
+    if (startMonth >= 4 && startMonth <= 6 && endMonth >= 4 && endMonth <= 6) {
       return 2;
     }
 
-    if (startMonth === 7 && endMonth === 9) {
+    if (startMonth >= 7 && startMonth <= 9 && endMonth >= 7 && endMonth <= 9) {
       return 3;
     }
 
-    if (startMonth === 10 && endMonth === 12) {
+    if (startMonth >= 10 && startMonth <= 12 && endMonth >= 10 && endMonth <= 12) {
       return 4;
     }
 
@@ -148,74 +150,72 @@ export default function ReportsTargets(): JSX.Element {
   };
 
   useEffect(() => {
-    if (reports && reports.length > 0) {
-      const metrics: Map<string, RowMetric> = new Map();
-      reports.forEach((report) => {
-        report.systemMetrics.forEach((sm) => {
-          metrics.set(sm.metric, {
-            name: sm.metric,
-            type: sm.type,
-            reference: sm.reference,
-            component: sm.component,
-            id: -1,
-          });
-        });
-        report.standardMetrics.forEach((sm) => {
-          metrics.set(sm.id.toString(), {
-            name: sm.name,
-            type: sm.type,
-            reference: sm.reference,
-            component: sm.component,
-            id: sm.id,
-          });
-        });
-        report.projectMetrics.forEach((pm) => {
-          metrics.set(pm.id.toString(), {
-            name: pm.name,
-            type: pm.type,
-            reference: pm.reference,
-            component: pm.component,
-            id: pm.id,
-          });
+    const metrics: Map<string, RowMetric> = new Map();
+    reports?.forEach((report) => {
+      report.systemMetrics.forEach((sm) => {
+        metrics.set(sm.metric, {
+          name: sm.metric,
+          type: sm.type,
+          reference: sm.reference,
+          component: sm.component,
+          id: -1,
         });
       });
+      report.standardMetrics.forEach((sm) => {
+        metrics.set(sm.id.toString(), {
+          name: sm.name,
+          type: sm.type,
+          reference: sm.reference,
+          component: sm.component,
+          id: sm.id,
+        });
+      });
+      report.projectMetrics.forEach((pm) => {
+        metrics.set(pm.id.toString(), {
+          name: pm.name,
+          type: pm.type,
+          reference: pm.reference,
+          component: pm.component,
+          id: pm.id,
+        });
+      });
+    });
 
-      reports.forEach((report) => {
-        if (report.frequency === 'Annual') {
+    reports?.forEach((report) => {
+      if (report.frequency === 'Annual') {
+        metrics.forEach((metric) => {
+          metric.year = DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;
+          if (metric.id !== -1) {
+            const foundMetric = [...report.standardMetrics, ...report.projectMetrics].find(
+              (met) => met.id === metric.id
+            );
+            metric.annualTarget = foundMetric?.target;
+          } else {
+            const foundMetric = report.systemMetrics.find((met) => met.metric === metric.name);
+            metric.annualTarget = foundMetric?.target;
+          }
+        });
+      } else {
+        const quarter = getReportQuarter(report);
+        if (quarter !== -1) {
+          const quarterProp: 'q1Target' | 'q2Target' | 'q3Target' | 'q4Target' = `q${quarter}Target`;
           metrics.forEach((metric) => {
             metric.year = DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;
             if (metric.id !== -1) {
               const foundMetric = [...report.standardMetrics, ...report.projectMetrics].find(
                 (met) => met.id === metric.id
               );
-              metric.annualTarget = foundMetric?.target;
+              metric[quarterProp] = foundMetric?.target ?? undefined;
             } else {
               const foundMetric = report.systemMetrics.find((met) => met.metric === metric.name);
-              metric.annualTarget = foundMetric?.target;
+              metric[quarterProp] = foundMetric?.target;
             }
           });
-        } else {
-          const quarter = getReportQuarter(report);
-          if (quarter !== -1) {
-            const quarterProp: 'q1Target' | 'q2Target' | 'q3Target' | 'q4Target' = `q${quarter}Target`;
-            metrics.forEach((metric) => {
-              metric.year = DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;
-              if (metric.id !== -1) {
-                const foundMetric = [...report.standardMetrics, ...report.projectMetrics].find(
-                  (met) => met.id === metric.id
-                );
-                metric[quarterProp] = foundMetric?.target ?? undefined;
-              } else {
-                const foundMetric = report.systemMetrics.find((met) => met.metric === metric.name);
-                metric[quarterProp] = foundMetric?.target;
-              }
-            });
-          }
         }
-      });
+      }
+    });
 
-      setMetricsToUse(Array.from(metrics.values()));
-    }
+    setMetricsToUse(Array.from(metrics.values()));
   }, [reports]);
 
   const defaultSearchOrder: SearchSortOrder = {
@@ -228,14 +228,19 @@ export default function ReportsTargets(): JSX.Element {
       if (!locale) {
         return;
       }
-      const request = dispatch(requestListAcceleratorReports({ projectId, search, sortOrder }));
+      const request = dispatch(
+        requestListAcceleratorReports({ projectId, search, sortOrder, includeFuture: true, includeMetrics: true })
+      );
       setRequestId(request.requestId);
     },
     [dispatch]
   );
 
+  const currentYear = DateTime.now().year;
+  const [yearFilter, setYearFilter] = useState<string>(currentYear.toString());
   const getReportsYears = useMemo(() => {
     const availableYears: Set<string> = new Set();
+    availableYears.add(currentYear.toString());
     allReports?.forEach((report) => {
       const reportYear = DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;
       availableYears.add(reportYear.toString());
@@ -243,21 +248,39 @@ export default function ReportsTargets(): JSX.Element {
     return Array.from(availableYears);
   }, [allReports]);
 
-  const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
-    const currentYear = DateTime.now().year;
-    return activeLocale
-      ? [
-          {
-            field: 'year',
-            label: strings.YEAR,
-            options: getReportsYears,
-            values: getReportsYears.length > 0 && getReportsYears[0] ? [currentYear] : undefined,
-          },
-        ]
-      : [];
-  }, [activeLocale, allReports]);
+  const extraTableFilters: SearchNodePayload[] = useMemo(() => {
+    return [
+      {
+        operation: 'field',
+        field: 'year',
+        type: 'Exact',
+        values: [`${yearFilter}`],
+      },
+    ];
+  }, [yearFilter, allReports]);
 
   const fuzzySearchColumns = useMemo(() => ['name'], []);
+
+  const extraFilter = useMemo(
+    () =>
+      activeLocale ? (
+        <>
+          <Box paddingLeft={1} marginTop={0.5}>
+            <Select
+              id='yearFilter'
+              label={''}
+              selectedValue={yearFilter}
+              options={getReportsYears}
+              onChange={(year: string) => {
+                setYearFilter(year);
+              }}
+              fullWidth
+            />
+          </Box>
+        </>
+      ) : null,
+    [activeLocale, allReports, yearFilter]
+  );
 
   return (
     <TableWithSearchFilters
@@ -265,13 +288,14 @@ export default function ReportsTargets(): JSX.Element {
       columns={columns}
       defaultSearchOrder={defaultSearchOrder}
       dispatchSearchRequest={dispatchSearchRequest}
-      featuredFilters={featuredFilters}
       id='reports-targets-table'
       Renderer={ReportsTargetsCellRenderer}
       rows={metricsToUse || []}
       title={strings.TARGETS}
       fuzzySearchColumns={fuzzySearchColumns}
       stickyFilters
+      extraTableFilters={extraTableFilters}
+      extraComponent={extraFilter}
     />
   );
 }

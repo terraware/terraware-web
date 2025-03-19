@@ -44,6 +44,7 @@ export type SearchProps = SearchInputProps & {
   onFilterApplied?: (filter: string, values: (string | number | null)[]) => void;
   tableId?: string;
   stickyFilters?: boolean;
+  extraComponent?: React.ReactNode;
 };
 
 const defaultPillValueRenderer = (values: (string | number | null)[]): string | undefined => values.join(', ');
@@ -60,6 +61,7 @@ export default function SearchFiltersWrapperV2({
   onFilterApplied,
   tableId,
   stickyFilters,
+  extraComponent,
 }: SearchProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
 
@@ -185,6 +187,8 @@ export default function SearchFiltersWrapperV2({
             onClickRightIcon={() => onSearch('')}
           />
         </Box>
+
+        {extraComponent && extraComponent}
 
         {featuredFilters && (
           <FeaturedFilters

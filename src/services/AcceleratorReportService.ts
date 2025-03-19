@@ -123,7 +123,9 @@ const listAcceleratorReports = async (
   projectId: string,
   locale?: string,
   search?: SearchNodePayload,
-  sortOrder?: SearchSortOrder
+  sortOrder?: SearchSortOrder,
+  includeMetrics?: boolean,
+  includeFuture?: boolean
 ): Promise<Response & AcceleratorReportsData> => {
   let searchOrderConfig: SearchOrderConfig | undefined;
   if (sortOrder) {
@@ -132,15 +134,14 @@ const listAcceleratorReports = async (
       sortOrder,
     };
   }
-  let params = { includeMetrics: 'true' };
+  let params = { includeMetrics: (!!includeMetrics).toString(), includeFuture: (!!includeFuture).toString() };
 
-  const filters = search?.children?.find((ch: { operation: string }) => ch.operation === 'and');
-  const yearFilter = filters?.[0].children((ch: { field: string }) => ch.field === 'year');
-  if (yearFilter && yearFilter.length > 0) {
-    const yearToUse = yearFilter[0].values[0];
+  const yearFilter = search?.children?.find((ch: { field: string }) => ch.field === 'year');
+  if (yearFilter) {
+    const yearToUse = yearFilter.values[0];
     if (yearToUse) {
       const yearParam = { year: yearToUse };
-      params = { includeMetrics: 'true', ...yearParam };
+      params = { ...params, ...yearParam };
     }
   }
 
@@ -152,7 +153,7 @@ const listAcceleratorReports = async (
       params,
     },
     (data) => ({
-      reports: searchAndSort(data?.reports || [], search, searchOrderConfig),
+      reports: searchAndSort(data?.reports || [], undefined, searchOrderConfig),
     })
   );
 };

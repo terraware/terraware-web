@@ -93,12 +93,26 @@ export const requestCreateProjectMetric = createAsyncThunk(
 export const requestListAcceleratorReports = createAsyncThunk(
   'acceleratorReports/list',
   async (
-    request: { projectId: string; locale?: string; search?: SearchNodePayload; sortOrder?: SearchSortOrder },
+    request: {
+      projectId: string;
+      locale?: string;
+      search?: SearchNodePayload;
+      sortOrder?: SearchSortOrder;
+      includeMetrics?: boolean;
+      includeFuture?: boolean;
+    },
     { rejectWithValue }
   ) => {
-    const { projectId, locale, search, sortOrder } = request;
+    const { projectId, locale, search, sortOrder, includeMetrics, includeFuture } = request;
 
-    const response = await AcceleratorReportService.listAcceleratorReports(projectId, locale, search, sortOrder);
+    const response = await AcceleratorReportService.listAcceleratorReports(
+      projectId,
+      locale,
+      search,
+      sortOrder,
+      includeMetrics,
+      includeFuture
+    );
 
     if (response && response.requestSucceeded) {
       return response.reports;
