@@ -34,8 +34,6 @@ export default function ReportsList(): JSX.Element {
 
   const acceleratorReportsListRequest = useAppSelector(selectListAcceleratorReports(listAcceleratorReportsRequestId));
 
-
-
   useEffect(() => {
     if (acceleratorReportsListRequest?.status === 'success') {
       const nextAcceleratorReports = acceleratorReportsListRequest?.data || [];
@@ -49,38 +47,47 @@ export default function ReportsList(): JSX.Element {
     paddingBottom: theme.spacing(4),
   };
 
-  const columns = (): TableColumnType[] => [
-    {
-      key: 'report',
-      name: strings.REPORT,
-      type: 'string',
+  const columns = useCallback(
+    (activeLocale: string | null): TableColumnType[] => {
+      if (!activeLocale) {
+        return [];
+      }
+
+      return [
+        {
+          key: 'report',
+          name: strings.REPORT,
+          type: 'string',
+        },
+        {
+          key: 'status',
+          name: strings.STATUS,
+          type: 'string',
+        },
+        {
+          key: 'year',
+          name: strings.YEAR,
+          type: 'string',
+        },
+        {
+          key: 'modifiedBy',
+          name: strings.LAST_EDITED_BY,
+          type: 'string',
+        },
+        {
+          key: 'submittedBy',
+          name: strings.SUBMITTED_BY,
+          type: 'string',
+        },
+        {
+          key: 'submittedTime',
+          name: strings.DATE_SUBMITTED,
+          type: 'string',
+        },
+      ];
     },
-    {
-      key: 'status',
-      name: strings.STATUS,
-      type: 'string',
-    },
-    {
-      key: 'year',
-      name: strings.YEAR,
-      type: 'string',
-    },
-    {
-      key: 'modifiedBy',
-      name: strings.LAST_EDITED_BY,
-      type: 'string',
-    },
-    {
-      key: 'submittedBy',
-      name: strings.SUBMITTED_BY,
-      type: 'string',
-    },
-    {
-      key: 'submittedTime',
-      name: strings.DATE_SUBMITTED,
-      type: 'string',
-    },
-  ];
+    [activeLocale, strings]
+  );
 
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
