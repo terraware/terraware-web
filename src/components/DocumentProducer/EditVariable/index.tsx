@@ -166,6 +166,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
                 { operation: 'Update', valueId: valueIdToUpdate, value: newValue, existingValueId: valueIdToUpdate },
               ],
               projectId: projectId,
+              updateStatuses: false,
             })
           );
           setUpdateVariableValuesRequestId(request.requestId);
@@ -174,6 +175,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
             requestUpdateVariableValues({
               operations: [{ operation: 'Append', variableId: variable.id, value: newValue }],
               projectId: projectId,
+              updateStatuses: false,
             })
           );
           setUpdateVariableValuesRequestId(request.requestId);
@@ -208,6 +210,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
           requestUpdateVariableValues({
             operations,
             projectId,
+            updateStatuses: false,
           })
         );
         setUpdateVariableValuesRequestId(request.requestId);
