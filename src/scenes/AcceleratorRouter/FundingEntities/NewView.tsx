@@ -15,7 +15,7 @@ const NewView = () => {
 
   const goToListView = useCallback(() => {
     navigate({ pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES });
-  }, [navigate, location]);
+  }, [navigate]);
 
   const goToFundingEntityView = useCallback(
     (fundingEntityId: number) => {
@@ -23,7 +23,7 @@ const NewView = () => {
         pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_VIEW.replace(':fundingEntityId', String(fundingEntityId)),
       });
     },
-    [navigate, location]
+    [navigate]
   );
 
   const handleOnSave = useCallback(
