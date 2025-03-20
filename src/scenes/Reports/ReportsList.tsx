@@ -37,9 +37,7 @@ export default function ReportsList({ projectId }: ReportsListProps): JSX.Elemen
 
   useEffect(() => {
     if (acceleratorReportsListRequest?.status === 'success') {
-      const nextAcceleratorReports = acceleratorReportsListRequest?.data || [];
-
-      setAcceleratorReports(nextAcceleratorReports);
+      setAcceleratorReports(acceleratorReportsListRequest?.data || []);
     }
   }, [acceleratorReportsListRequest]);
 
