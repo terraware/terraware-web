@@ -735,7 +735,8 @@ export interface paths {
          * @description Set up an accelerator report configuration for a project. This will createall the reports within the reporting period.
          */
         put: operations["createAcceleratorReportConfig"];
-        post?: never;
+        /** Update all accelerator report configurations for a project. */
+        post: operations["updateProjectAcceleratorReportConfig"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3929,6 +3930,8 @@ export interface components {
             /** Format: date */
             endDate: string;
             feedback?: string;
+            /** @enum {string} */
+            frequency: "Quarterly" | "Annual";
             /** Format: int64 */
             id: number;
             internalComment?: string;
@@ -6706,8 +6709,6 @@ export interface components {
             type: "MultiPolygon";
         };
         NewAcceleratorReportConfigPayload: {
-            /** @enum {string} */
-            frequency: "Quarterly" | "Annual";
             /** Format: date */
             reportingEndDate: string;
             /** Format: date */
@@ -8984,6 +8985,9 @@ export interface components {
             totalExpansionPotential?: number;
             whatNeedsToBeTrue?: string;
         };
+        UpdateProjectAcceleratorReportConfigRequestPayload: {
+            config: components["schemas"]["UpdateAcceleratorReportConfigPayload"];
+        };
         UpdateProjectMetricRequestPayload: {
             metric: components["schemas"]["ExistingProjectMetricPayload"];
         };
@@ -11063,6 +11067,50 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["CreateAcceleratorReportConfigRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    updateProjectAcceleratorReportConfig: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateProjectAcceleratorReportConfigRequestPayload"];
             };
         };
         responses: {
