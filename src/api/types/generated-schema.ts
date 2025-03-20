@@ -3932,6 +3932,7 @@ export interface components {
             feedback?: string;
             /** @enum {string} */
             frequency: "Quarterly" | "Annual";
+            highlights?: string;
             /** Format: int64 */
             id: number;
             internalComment?: string;
@@ -8029,10 +8030,12 @@ export interface components {
         ReportProjectMetricEntriesPayload: {
             /** Format: int64 */
             id: number;
-            internalComment?: string;
-            notes?: string;
+            progressNotes?: string;
+            /** @enum {string} */
+            status?: "Achieved" | "On-Track" | "Unlikely";
             /** Format: int32 */
             target?: number;
+            underperformanceJustification?: string;
             /** Format: int32 */
             value?: number;
         };
@@ -8042,19 +8045,22 @@ export interface components {
             description?: string;
             /** Format: int64 */
             id: number;
-            internalComment?: string;
             name: string;
-            notes?: string;
+            progressNotes?: string;
             reference: string;
+            /** @enum {string} */
+            status?: "Achieved" | "On-Track" | "Unlikely";
             /** Format: int32 */
             target?: number;
             /** @enum {string} */
             type: "Activity" | "Output" | "Outcome" | "Impact";
+            underperformanceJustification?: string;
             /** Format: int32 */
             value?: number;
         };
         ReportReviewPayload: {
             feedback?: string;
+            highlights?: string;
             internalComment?: string;
             /**
              * @description Must be unchanged if a report has not been submitted yet.
@@ -8065,10 +8071,12 @@ export interface components {
         ReportStandardMetricEntriesPayload: {
             /** Format: int64 */
             id: number;
-            internalComment?: string;
-            notes?: string;
+            progressNotes?: string;
+            /** @enum {string} */
+            status?: "Achieved" | "On-Track" | "Unlikely";
             /** Format: int32 */
             target?: number;
+            underperformanceJustification?: string;
             /** Format: int32 */
             value?: number;
         };
@@ -8078,41 +8086,46 @@ export interface components {
             description?: string;
             /** Format: int64 */
             id: number;
-            internalComment?: string;
             name: string;
-            notes?: string;
+            progressNotes?: string;
             reference: string;
+            /** @enum {string} */
+            status?: "Achieved" | "On-Track" | "Unlikely";
             /** Format: int32 */
             target?: number;
             /** @enum {string} */
             type: "Activity" | "Output" | "Outcome" | "Impact";
+            underperformanceJustification?: string;
             /** Format: int32 */
             value?: number;
         };
         ReportSystemMetricEntriesPayload: {
-            internalComment?: string;
             /** @enum {string} */
             metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate";
-            notes?: string;
             /**
              * Format: int32
              * @description If set to null, system metric entry will use Terraware data value.
              */
             overrideValue?: number;
+            progressNotes?: string;
+            /** @enum {string} */
+            status?: "Achieved" | "On-Track" | "Unlikely";
             /** Format: int32 */
             target?: number;
+            underperformanceJustification?: string;
         };
         ReportSystemMetricPayload: {
             /** @enum {string} */
             component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             description?: string;
-            internalComment?: string;
             /** @enum {string} */
             metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate";
-            notes?: string;
             /** Format: int32 */
             overrideValue?: number;
+            progressNotes?: string;
             reference: string;
+            /** @enum {string} */
+            status?: "Achieved" | "On-Track" | "Unlikely";
             /** Format: date-time */
             systemTime?: string;
             /** Format: int32 */
@@ -8121,6 +8134,7 @@ export interface components {
             target?: number;
             /** @enum {string} */
             type: "Activity" | "Output" | "Outcome" | "Impact";
+            underperformanceJustification?: string;
         };
         RescheduleObservationRequestPayload: {
             /**
@@ -8846,9 +8860,8 @@ export interface components {
             timeZone?: string;
         };
         UpdateFundingEntityRequestPayload: {
-            addProjects?: number[];
             name: string;
-            removeProjects?: number[];
+            projects?: number[];
         };
         UpdateGlobalRolesRequestPayload: {
             globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
