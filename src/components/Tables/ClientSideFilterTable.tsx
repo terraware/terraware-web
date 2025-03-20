@@ -35,6 +35,7 @@ export interface ClientSideFilterTableProps
   stickyFilters?: boolean;
   iconFilters?: FilterConfig[];
   searchAndSort?: SearchAndSortFn<TableRowType>;
+  extraComponent?: React.ReactNode;
 }
 
 const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
@@ -55,6 +56,7 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
     iconFilters,
     rows,
     searchAndSort,
+    extraComponent,
     ...tableProps
   } = props;
 
@@ -230,6 +232,7 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
             onFilterApplied={onFilterApplied}
             stickyFilters={stickyFilters}
             iconFilters={iconFilters}
+            extraComponent={extraComponent}
           />
         </Grid>
 

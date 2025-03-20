@@ -101,10 +101,11 @@ export const requestListAcceleratorReports = createAsyncThunk(
       sortOrder?: SearchSortOrder;
       includeMetrics?: boolean;
       includeFuture?: boolean;
+      year?: string;
     },
     { rejectWithValue }
   ) => {
-    const { projectId, locale, search, sortOrder, includeMetrics, includeFuture } = request;
+    const { projectId, locale, search, sortOrder, includeMetrics, includeFuture, year } = request;
 
     const response = await AcceleratorReportService.listAcceleratorReports(
       projectId,
@@ -112,7 +113,8 @@ export const requestListAcceleratorReports = createAsyncThunk(
       search,
       sortOrder,
       includeMetrics,
-      includeFuture
+      includeFuture,
+      year
     );
 
     if (response && response.requestSucceeded) {

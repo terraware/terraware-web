@@ -1,18 +1,18 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box } from '@mui/material';
 import { Select, TableColumnType, TableRowType } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
-import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
+import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import { useLocalization } from 'src/providers';
 import { selectListAcceleratorReports } from 'src/redux/features/reports/reportsSelectors';
 import { requestListAcceleratorReports } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorReport } from 'src/types/AcceleratorReport';
-import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { SearchSortOrder } from 'src/types/Search';
 
 import EditTargetsModal from './EditTargetsModal';
 import ReportsTargetsCellRenderer from './ReportsTargetsCellRenderer';
@@ -109,7 +109,16 @@ export default function ReportsTargets(): JSX.Element {
   const [editOpenModal, setEditOpenModal] = useState(false);
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [selectedMetric, setSelectedMetric] = useState<RowMetric>();
-  const [forceReload, setForceReload] = useState(false);
+  const currentYear = DateTime.now().year;
+  const [yearFilter, setYearFilter] = useState<string>();
+  const getReportsYears = useMemo(() => {
+    const availableYears: Set<number> = new Set();
+    allReports?.forEach((report) => {
+      const reportYear = DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;
+      availableYears.add(reportYear);
+    });
+    return Array.from(availableYears);
+  }, [reports]);
 
   useEffect(() => {
     if (projectId) {
@@ -117,6 +126,10 @@ export default function ReportsTargets(): JSX.Element {
       setAllReportsRequestId(request.requestId);
     }
   }, [projectId]);
+
+  useEffect(() => {
+    reload();
+  }, [projectId, yearFilter]);
 
   useEffect(() => {
     if (allReportsResults?.status === 'error') {
@@ -133,12 +146,16 @@ export default function ReportsTargets(): JSX.Element {
     }
     if (reportsResults?.data) {
       setReports(reportsResults.data);
-      setForceReload(false);
     }
   }, [reportsResults]);
 
   const reload = () => {
-    setForceReload(true);
+    if (projectId) {
+      const request = dispatch(
+        requestListAcceleratorReports({ projectId, includeFuture: true, includeMetrics: true, year: yearFilter })
+      );
+      setRequestId(request.requestId);
+    }
   };
 
   const getReportQuarter = (report: AcceleratorReport) => {
@@ -249,49 +266,14 @@ export default function ReportsTargets(): JSX.Element {
     direction: 'Ascending',
   };
 
-  const dispatchSearchRequest = useCallback(
-    (locale: string | null, search: SearchNodePayload, sortOrder: SearchSortOrder) => {
-      if (!locale) {
-        return;
-      }
-      const request = dispatch(
-        requestListAcceleratorReports({ projectId, search, sortOrder, includeFuture: true, includeMetrics: true })
-      );
-      setRequestId(request.requestId);
-    },
-    [dispatch]
-  );
-
-  const currentYear = DateTime.now().year;
-  const [yearFilter, setYearFilter] = useState<string>();
-  const getReportsYears = useMemo(() => {
-    const availableYears: Set<number> = new Set();
-    allReports?.forEach((report) => {
-      const reportYear = DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;
-      availableYears.add(reportYear);
-    });
-    return Array.from(availableYears);
-  }, [allReports]);
-
   const getReportsYearsString = useMemo(() => {
     return getReportsYears.map((year) => year.toString());
   }, [getReportsYears]);
 
-  const extraTableFilters: SearchNodePayload[] = useMemo(() => {
-    return [
-      {
-        operation: 'field',
-        field: 'year',
-        type: 'Exact',
-        values: [`${yearFilter}`],
-      },
-    ];
-  }, [yearFilter, allReports]);
-
   const fuzzySearchColumns = useMemo(() => ['name'], []);
 
   useEffect(() => {
-    if ((allReports?.length || 0) > 0) {
+    if ((allReports?.length || 0) > 0 && getReportsYears.length > 0) {
       if (getReportsYears.includes(currentYear)) {
         setYearFilter(currentYear.toString());
       } else {
@@ -324,7 +306,7 @@ export default function ReportsTargets(): JSX.Element {
           </Box>
         </>
       ) : null,
-    [activeLocale, allReports, yearFilter]
+    [activeLocale, reports, yearFilter]
   );
 
   const onRowClick = (metric: TableRowType) => {
@@ -337,25 +319,22 @@ export default function ReportsTargets(): JSX.Element {
       {editOpenModal && selectedMetric && (
         <EditTargetsModal onClose={() => setEditOpenModal(false)} reload={reload} row={selectedMetric} />
       )}
-      <TableWithSearchFilters
-        busy={allReportsResults?.status === 'pending'}
+      <ClientSideFilterTable
+        busy={reportsResults?.status === 'pending'}
         columns={columns}
-        defaultSearchOrder={defaultSearchOrder}
-        dispatchSearchRequest={dispatchSearchRequest}
+        defaultSortOrder={defaultSearchOrder}
         id='reports-targets-table'
         Renderer={ReportsTargetsCellRenderer}
         rows={metricsToUse || []}
         title={strings.TARGETS}
         fuzzySearchColumns={fuzzySearchColumns}
         stickyFilters
-        extraTableFilters={extraTableFilters}
         extraComponent={extraFilter}
         onSelect={onRowClick}
         controlledOnSelect={true}
         selectedRows={selectedRows}
         setSelectedRows={setSelectedRows}
         isClickable={() => false}
-        forceReload={forceReload}
       />
     </>
   );
