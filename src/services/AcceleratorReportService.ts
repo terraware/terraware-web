@@ -100,40 +100,6 @@ const updateConfig = async (
   });
 };
 
-// TODO: remove mockAcceleratorReports once reports are ready
-const mockAcceleratorReports: AcceleratorReport[] = [
-  {
-    endDate: '2023-12-31',
-    frequency: 'Annual',
-    id: 1,
-    modifiedBy: 78,
-    modifiedTime: '2023-10-01',
-    projectId: -1,
-    projectMetrics: [],
-    standardMetrics: [],
-    startDate: '2023-01-01',
-    status: 'Not Submitted',
-    submittedBy: 78,
-    submittedTime: '2023-10-01',
-    systemMetrics: [],
-  },
-  {
-    endDate: '2023-12-31',
-    frequency: 'Annual',
-    id: 2,
-    modifiedBy: 78,
-    modifiedTime: '2023-10-02',
-    projectId: -1,
-    projectMetrics: [],
-    standardMetrics: [],
-    startDate: '2023-01-01',
-    status: 'Submitted',
-    submittedBy: 78,
-    submittedTime: '2023-10-02',
-    systemMetrics: [],
-  },
-];
-
 const listProjectMetrics = async (projectId: string): Promise<Response2<ListProjectMetricsResponsePayload>> => {
   return HttpService.root(
     PROJECT_METRICS_ENDPOINT.replace('{projectId}', projectId)
@@ -188,10 +154,8 @@ const listAcceleratorReports = async (
     {
       params,
     },
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (data) => ({
-      // TODO: replace mockAcceleratorReports with data?.reports once backend is ready
-      reports: searchAndSort(mockAcceleratorReports || [], search, searchOrderConfig),
+      reports: searchAndSort(data?.reports || [], search, searchOrderConfig),
     })
   );
 };
