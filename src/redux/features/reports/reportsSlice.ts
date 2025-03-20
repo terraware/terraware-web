@@ -14,6 +14,7 @@ import {
   requestListAcceleratorReports,
   requestListProjectMetrics,
   requestListStandardMetrics,
+  requestUpdateAcceleratorReportMetrics,
   requestUpdateProjectMetric,
   requestUpdateReportConfig,
 } from './reportsThunks';
@@ -129,6 +130,20 @@ const projectMetricUpdateSlice = createSlice({
   },
 });
 
+/**
+ * Update Accelerator Report Metrics
+ */
+const initialUpdateAcceleratorReportMetrics: { [key: string]: StatusT<number> } = {};
+
+const updateAcceleratorReportMetricsSlice = createSlice({
+  name: 'updateAcceleratorReportMetricsSlice',
+  initialState: initialUpdateAcceleratorReportMetrics,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestUpdateAcceleratorReportMetrics)(builder);
+  },
+});
+
 const reportsReducers = {
   projectReportConfig: projectReportConfigSlice.reducer,
   projectReportConfigCreate: createReportConfigSlice.reducer,
@@ -138,6 +153,7 @@ const reportsReducers = {
   projectMetricCreate: projectMetricCreateSlice.reducer,
   listAcceleratorReports: listAcceleratorReportsSlice.reducer,
   projectMetricUpdate: projectMetricUpdateSlice.reducer,
+  updateAcceleratorReportMetrics: updateAcceleratorReportMetricsSlice.reducer,
 };
 
 export default reportsReducers;
