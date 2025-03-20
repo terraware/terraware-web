@@ -92,6 +92,10 @@ export default function ReportCellRenderer(props: RendererProps<TableRowType>): 
     );
   }
 
+  if (column.key === 'year') {
+    return <CellRenderer {...props} value={row.startDate ? row.startDate?.split('-')?.[0] : ''} />;
+  }
+
   if (column.key === 'modifiedBy') {
     return <CellRenderer {...props} value={modifiedByName} />;
   }

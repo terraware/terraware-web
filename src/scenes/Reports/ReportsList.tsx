@@ -65,6 +65,11 @@ export default function ReportsList(): JSX.Element {
           type: 'string',
         },
         {
+          key: 'year',
+          name: strings.YEAR,
+          type: 'string',
+        },
+        {
           key: 'modifiedBy',
           name: strings.LAST_EDITED_BY,
           type: 'string',
