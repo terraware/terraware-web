@@ -23,9 +23,13 @@ const ReportsView = () => {
     setCurrentParticipantProject,
   } = useParticipantData();
 
-  const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({
-    projectId: currentParticipantProject?.id || '',
-  });
+  const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({});
+
+  useEffect(() => {
+    if (!projectFilter.projectId && currentParticipantProject?.id) {
+      setProjectFilter({ projectId: currentParticipantProject?.id });
+    }
+  }, [projectFilter]);
 
   useEffect(() => {
     if (projectFilter.projectId) {
@@ -42,7 +46,7 @@ const ReportsView = () => {
       {
         id: 'reports',
         label: strings.REPORTS,
-        children: <ReportsList />,
+        children: <ReportsList projectId={projectFilter?.projectId} />,
       },
       {
         id: 'targets',
@@ -50,7 +54,7 @@ const ReportsView = () => {
         children: <ReportsTargets />,
       },
     ];
-  }, [activeLocale]);
+  }, [activeLocale, projectFilter?.projectId]);
 
   const { activeTab, onTabChange } = useStickyTabs({
     defaultTab: 'reports',
