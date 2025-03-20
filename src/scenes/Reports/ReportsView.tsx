@@ -67,7 +67,7 @@ const ReportsView = () => {
     () =>
       activeLocale ? (
         <>
-          <Grid container sx={{ marginTop: theme.spacing(0.5), alignItems: 'center' }}>
+          <Grid container sx={{ alignItems: 'center', flexWrap: 'nowrap', marginTop: theme.spacing(0.5) }}>
             <Grid item>
               <Separator height={'40px'} />
             </Grid>
