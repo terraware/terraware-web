@@ -117,17 +117,6 @@ export default function ReportsList(): JSX.Element {
     const uniqueYears = Array.from(new Set(years));
     return uniqueYears;
   }, [acceleratorReports]);
-  console.log('ReportsList - availableYears:', availableYears);
-  // const extraTableFilters = useMemo(() => {
-  //   return [
-  //     {
-  //       field: 'year',
-  //       label: strings.YEAR,
-  //       options: availableYears,
-  //       type: 'MultiSelect',
-  //     },
-  //   ];
-  // }, [availableYears]);
 
   const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
     const rejectedStatus = activeLocale ? (isAcceleratorRoute ? strings.UPDATE_REQUESTED : strings.UPDATE_NEEDED) : '';
