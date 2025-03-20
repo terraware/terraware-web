@@ -61,7 +61,7 @@ export const requestCreateFundingEntity = createAsyncThunk(
 
     const response = await FundingEntityService.create(fundingEntity);
     if (response && response.requestSucceeded) {
-      return response;
+      return response.data;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

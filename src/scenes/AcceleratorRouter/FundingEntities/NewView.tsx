@@ -17,6 +17,15 @@ const NewView = () => {
     navigate({ pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES });
   }, [navigate, location]);
 
+  const goToFundingEntityView = useCallback(
+    (fundingEntityId: number) => {
+      navigate({
+        pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_VIEW.replace(':fundingEntityId', String(fundingEntityId)),
+      });
+    },
+    [navigate, location]
+  );
+
   const handleOnSave = useCallback(
     (record: FundingEntity) => {
       createFundingEntity.create(record);
@@ -25,8 +34,8 @@ const NewView = () => {
   );
 
   useEffect(() => {
-    if (createFundingEntity.succeeded) {
-      goToListView();
+    if (createFundingEntity.succeeded && createFundingEntity.data) {
+      goToFundingEntityView(createFundingEntity.data.id);
     }
   }, [createFundingEntity]);
 

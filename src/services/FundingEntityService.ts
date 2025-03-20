@@ -1,7 +1,7 @@
 import { paths } from 'src/api/types/generated-schema';
 import { FundingEntity } from 'src/types/FundingEntity';
 
-import HttpService, { Response } from './HttpService';
+import HttpService, { Response, Response2 } from './HttpService';
 
 /**
  * Service for Funding Entity related functionality
@@ -110,12 +110,12 @@ const update = async (fundingEntity: FundingEntity): Promise<Response> => {
   });
 };
 
-const create = async (fundingEntity: FundingEntity): Promise<Response> => {
+const create = async (fundingEntity: FundingEntity): Promise<Response2<CreateFundingEntityResponse>> => {
   const entity: CreateFundingEntityRequest = {
     name: fundingEntity.name,
     projects: fundingEntity.projects.map((project) => project.id),
   };
-  return httpFundingEntities.post2<CreateFundingEntityResponse>({
+  return await httpFundingEntities.post({
     entity: entity,
   });
 };

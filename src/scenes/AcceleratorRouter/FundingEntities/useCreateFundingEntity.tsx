@@ -10,6 +10,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 export type Response = {
   busy?: boolean;
   succeeded?: boolean;
+  data?: FundingEntity;
   create: (fundingEntity: FundingEntity) => void;
 };
 
@@ -42,6 +43,7 @@ export default function useCreateFundingEntity(): Response {
     () => ({
       busy: createRequest?.status === 'pending',
       succeeded: createRequest?.status === 'success',
+      data: createRequest?.data?.fundingEntity,
       create,
     }),
     [create, createRequest]
