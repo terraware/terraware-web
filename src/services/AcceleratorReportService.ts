@@ -8,12 +8,16 @@ import {
   UpdateProjectMetricRequest,
 } from 'src/types/AcceleratorReport';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-import { SearchAndSortFn, SearchOrderConfig, searchAndSort as genericSearchAndSort } from 'src/utils/searchAndSort';
+import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 
 import HttpService, { Params, Response, Response2 } from './HttpService';
 
 export type ReportsConfigData = {
   config?: ExistingAcceleratorReportConfig;
+};
+
+export type AcceleratorReportsData = {
+  reports?: AcceleratorReport[];
 };
 
 export type ReportsConfigResponse = Response & ReportsConfigData;
@@ -30,16 +34,9 @@ const httpAcceleratorReportsConfig = HttpService.root(ACCELERATOR_REPORT_CONFIG_
 type CreateResponse =
   paths[typeof ACCELERATOR_REPORT_CONFIG_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 
+const PROJECT_REPORTS_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports';
 type UpdateConfigResponse =
   paths[typeof ACCELERATOR_REPORT_SINGLE_CONFIG_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-
-const ACCELERATOR_REPORTS_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports';
-
-type ListAcceleratorReportsResponsePayload =
-  paths[typeof ACCELERATOR_REPORTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-
-export type ListAcceleratorReportsRequestParams =
-  paths[typeof ACCELERATOR_REPORTS_ENDPOINT]['get']['parameters']['query'];
 
 const PROJECT_METRICS_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/metrics';
 const STANDARD_METRICS_ENDPOINT = '/api/v1/accelerator/reports/standardMetrics';
@@ -54,8 +51,12 @@ export type ListStandardMetricsResponsePayload =
 type CreateProjectMetricResponse =
   paths[typeof PROJECT_METRICS_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 
+type ListAcceleratorReportsResponsePayload =
+  paths[typeof PROJECT_REPORTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type UpdateProjectMetricResponse =
   paths[typeof PROJECT_METRIC_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+
+export type ListAcceleratorReportsRequestParams = paths[typeof PROJECT_REPORTS_ENDPOINT]['get']['parameters']['query'];
 
 /**
  * Get project reports config
@@ -103,6 +104,7 @@ const updateConfig = async (
 const mockAcceleratorReports: AcceleratorReport[] = [
   {
     endDate: '2023-12-31',
+    frequency: 'Annual',
     id: 1,
     modifiedBy: 78,
     modifiedTime: '2023-10-01',
@@ -117,6 +119,7 @@ const mockAcceleratorReports: AcceleratorReport[] = [
   },
   {
     endDate: '2023-12-31',
+    frequency: 'Annual',
     id: 2,
     modifiedBy: 78,
     modifiedTime: '2023-10-02',
@@ -130,44 +133,6 @@ const mockAcceleratorReports: AcceleratorReport[] = [
     systemMetrics: [],
   },
 ];
-
-const listAcceleratorReports = async (
-  projectId: number,
-  locale: string | null,
-  params?: ListAcceleratorReportsRequestParams,
-  search?: SearchNodePayload,
-  searchSortOrder?: SearchSortOrder,
-  searchAndSort?: SearchAndSortFn<AcceleratorReport>
-): Promise<Response2<ListAcceleratorReportsResponsePayload>> => {
-  let searchOrderConfig: SearchOrderConfig | undefined;
-  if (searchSortOrder) {
-    searchOrderConfig = {
-      locale,
-      sortOrder: searchSortOrder,
-      numberFields: ['id', 'numDocuments', 'organizationId', 'participantId'],
-    };
-  }
-
-  const result = await HttpService.root(
-    ACCELERATOR_REPORTS_ENDPOINT.replace('{projectId}', projectId.toString())
-  ).get2<ListAcceleratorReportsResponsePayload>({ params: params as Params });
-
-  if (result.requestSucceeded && result.data?.reports) {
-    const reportsResult = searchAndSort
-      ? searchAndSort(mockAcceleratorReports, search, searchOrderConfig)
-      : genericSearchAndSort(mockAcceleratorReports, search, searchOrderConfig);
-
-    return {
-      ...result,
-      data: {
-        ...result.data,
-        reports: reportsResult,
-      },
-    };
-  } else {
-    return Promise.reject(result.error);
-  }
-};
 
 const listProjectMetrics = async (projectId: string): Promise<Response2<ListProjectMetricsResponsePayload>> => {
   return HttpService.root(
@@ -190,6 +155,45 @@ const createProjectMetric = async (
   );
 };
 
+const listAcceleratorReports = async (
+  projectId: string,
+  locale?: string,
+  search?: SearchNodePayload,
+  sortOrder?: SearchSortOrder,
+  includeMetrics?: boolean,
+  includeFuture?: boolean
+): Promise<Response & AcceleratorReportsData> => {
+  let searchOrderConfig: SearchOrderConfig | undefined;
+  if (sortOrder) {
+    searchOrderConfig = {
+      locale: locale ?? null,
+      sortOrder,
+    };
+  }
+  let params = { includeMetrics: (!!includeMetrics).toString(), includeFuture: (!!includeFuture).toString() };
+
+  const yearFilter = search?.children?.find((ch: { field: string }) => ch.field === 'year');
+  if (yearFilter) {
+    const yearToUse = yearFilter.values[0];
+    if (yearToUse) {
+      const yearParam = { year: yearToUse };
+      params = { ...params, ...yearParam };
+    }
+  }
+
+  return await HttpService.root(PROJECT_REPORTS_ENDPOINT.replace('{projectId}', projectId)).get<
+    ListAcceleratorReportsResponsePayload,
+    AcceleratorReportsData
+  >(
+    {
+      params,
+    },
+    (data) => ({
+      reports: searchAndSort(data?.reports || [], undefined, searchOrderConfig),
+    })
+  );
+};
+
 const updateProjectMetric = async (
   request: UpdateProjectMetricRequest
 ): Promise<Response2<UpdateProjectMetricResponse>> => {
@@ -208,10 +212,10 @@ const ReportService = {
   getAcceleratorReportConfig,
   createConfig,
   updateConfig,
-  listAcceleratorReports,
   listProjectMetrics,
   listStandardMetrics,
   createProjectMetric,
+  listAcceleratorReports,
   updateProjectMetric,
 };
 

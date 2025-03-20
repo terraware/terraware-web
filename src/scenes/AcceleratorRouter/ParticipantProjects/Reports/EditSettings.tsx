@@ -64,7 +64,6 @@ export default function EditSettings(): JSX.Element {
   const [newConfig, , onChange] = useForm<NewAcceleratorReportConfig>({
     reportingStartDate: projectReportConfig.config?.reportingStartDate || '',
     reportingEndDate: projectReportConfig.config?.reportingEndDate || '',
-    frequency: 'Annual',
   });
 
   const saveReportConfig = () => {

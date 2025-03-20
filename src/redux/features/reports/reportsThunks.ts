@@ -2,17 +2,15 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Dispatch } from 'redux';
 
 import { RootState } from 'src/redux/rootReducer';
-import AcceleratorReportService, { ListAcceleratorReportsRequestParams } from 'src/services/AcceleratorReportService';
+import AcceleratorReportService from 'src/services/AcceleratorReportService';
 import strings from 'src/strings';
 import {
-  AcceleratorReport,
   CreateAcceleratorReportConfigRequest,
   CreateProjectMetricRequest,
   UpdateAcceleratorReportConfigRequest,
   UpdateProjectMetricRequest,
 } from 'src/types/AcceleratorReport';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-import { SearchAndSortFn } from 'src/utils/searchAndSort';
 
 import { setProjectReportConfigAction } from './reportsSlice';
 
@@ -69,37 +67,6 @@ export const requestListProjectMetrics = createAsyncThunk(
   }
 );
 
-export const requestListAcceleratorReports = createAsyncThunk(
-  'listReports',
-  async (
-    request: {
-      params?: ListAcceleratorReportsRequestParams;
-      locale: string | null;
-      projectId: number;
-      search?: SearchNodePayload;
-      searchAndSort?: SearchAndSortFn<AcceleratorReport>;
-      searchSortOrder?: SearchSortOrder;
-    },
-    { rejectWithValue }
-  ) => {
-    const { params, locale, projectId, search, searchSortOrder, searchAndSort } = request;
-    const response = await AcceleratorReportService.listAcceleratorReports(
-      projectId,
-      locale,
-      params,
-      search,
-      searchSortOrder,
-      searchAndSort
-    );
-
-    if (response && response.requestSucceeded) {
-      return response.data?.reports;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
 export const requestListStandardMetrics = createAsyncThunk('listStandardMetrics', async (_, { rejectWithValue }) => {
   const response = await AcceleratorReportService.listStandardMetrics();
 
@@ -117,6 +84,38 @@ export const requestCreateProjectMetric = createAsyncThunk(
 
     if (response && response.requestSucceeded) {
       return response.data;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestListAcceleratorReports = createAsyncThunk(
+  'acceleratorReports/list',
+  async (
+    request: {
+      projectId: string;
+      locale?: string;
+      search?: SearchNodePayload;
+      sortOrder?: SearchSortOrder;
+      includeMetrics?: boolean;
+      includeFuture?: boolean;
+    },
+    { rejectWithValue }
+  ) => {
+    const { projectId, locale, search, sortOrder, includeMetrics, includeFuture } = request;
+
+    const response = await AcceleratorReportService.listAcceleratorReports(
+      projectId,
+      locale,
+      search,
+      sortOrder,
+      includeMetrics,
+      includeFuture
+    );
+
+    if (response && response.requestSucceeded) {
+      return response.reports;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
