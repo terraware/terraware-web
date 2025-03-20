@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1742503757417" clover="3.2.0">
-  <project timestamp="1742503757417" name="All files">
-    <metrics statements="28503" coveredstatements="1233" conditionals="19302" coveredconditionals="354" methods="8807" coveredmethods="198" elements="56612" coveredelements="1785" complexity="0" loc="28503" ncloc="28503" packages="248" files="1183" classes="1183"/>
+<coverage generated="1742509423117" clover="3.2.0">
+  <project timestamp="1742509423117" name="All files">
+    <metrics statements="28503" coveredstatements="1233" conditionals="19304" coveredconditionals="354" methods="8807" coveredmethods="198" elements="56614" coveredelements="1785" complexity="0" loc="28503" ncloc="28503" packages="248" files="1183" classes="1183"/>
     <package name="src">
       <metrics statements="179" coveredstatements="7" conditionals="126" coveredconditionals="0" methods="40" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -3340,9 +3340,9 @@
       </file>
     </package>
     <package name="src.components.DocumentProducer.VariableDetailsInput">
-      <metrics statements="157" coveredstatements="0" conditionals="169" coveredconditionals="0" methods="35" coveredmethods="0"/>
+      <metrics statements="157" coveredstatements="0" conditionals="171" coveredconditionals="0" methods="35" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DocumentProducer/VariableDetailsInput/index.tsx">
-        <metrics statements="157" coveredstatements="0" conditionals="169" coveredconditionals="0" methods="35" coveredmethods="0"/>
+        <metrics statements="157" coveredstatements="0" conditionals="171" coveredconditionals="0" methods="35" coveredmethods="0"/>
         <line num="39" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
@@ -3445,7 +3445,7 @@
         <line num="209" count="0" type="stmt"/>
         <line num="211" count="0" type="stmt"/>
         <line num="214" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="215" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="215" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="216" count="0" type="stmt"/>
         <line num="217" count="0" type="stmt"/>
         <line num="218" count="0" type="cond" truecount="0" falsecount="2"/>
