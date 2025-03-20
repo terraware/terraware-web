@@ -224,7 +224,15 @@ const VariableDetailsInput = ({
           }
           setValues(newValues);
         } else {
-          setValues([{ id: -1, listPosition: 0, url: newValue, type: 'Link' }]);
+          if (id === 'citation') {
+            setValues([{ id: -1, listPosition: 0, url: value?.toString() || '', type: 'Link', citation: newValue }]);
+          } else if (id === 'title') {
+            setValues([
+              { id: -1, listPosition: 0, url: value?.toString() || '', type: 'Link', title: newValue, citation },
+            ]);
+          } else {
+            setValues([{ id: -1, listPosition: 0, url: newValue, type: 'Link', title, citation }]);
+          }
         }
       }
     } else {
