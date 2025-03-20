@@ -109,6 +109,7 @@ export default function ReportsTargets(): JSX.Element {
   const [editOpenModal, setEditOpenModal] = useState(false);
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [selectedMetric, setSelectedMetric] = useState<RowMetric>();
+  const [forceReload, setForceReload] = useState(false);
 
   useEffect(() => {
     if (projectId) {
@@ -132,20 +133,12 @@ export default function ReportsTargets(): JSX.Element {
     }
     if (reportsResults?.data) {
       setReports(reportsResults.data);
+      setForceReload(false);
     }
   }, [reportsResults]);
 
   const reload = () => {
-    const request = dispatch(
-      requestListAcceleratorReports({
-        projectId,
-        search: undefined,
-        sortOrder: defaultSearchOrder,
-        includeFuture: true,
-        includeMetrics: true,
-      })
-    );
-    setRequestId(request.requestId);
+    setForceReload(true);
   };
 
   const getReportQuarter = (report: AcceleratorReport) => {
@@ -362,6 +355,7 @@ export default function ReportsTargets(): JSX.Element {
         selectedRows={selectedRows}
         setSelectedRows={setSelectedRows}
         isClickable={() => false}
+        forceReload={forceReload}
       />
     </>
   );

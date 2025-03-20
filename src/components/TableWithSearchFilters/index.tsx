@@ -35,6 +35,7 @@ export interface TableWithSearchFiltersProps
   stickyFilters?: boolean;
   iconFilters?: FilterConfig[];
   extraComponent?: React.ReactNode;
+  forceReload?: boolean;
 }
 
 const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
@@ -55,6 +56,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
     stickyFilters,
     iconFilters,
     extraComponent,
+    forceReload,
     ...tableProps
   } = props;
 
@@ -137,7 +139,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
     if (searchSortOrder) {
       dispatchSearchRequest(activeLocale, search, searchSortOrder);
     }
-  }, [activeLocale, dispatchSearchRequest, getSearchPayload, searchSortOrder]);
+  }, [activeLocale, dispatchSearchRequest, getSearchPayload, searchSortOrder, forceReload]);
 
   // reset filters when extraTableFilters change
   useEffect(() => {
