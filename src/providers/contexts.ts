@@ -8,6 +8,7 @@ import {
   ProvidedLocalizationData,
   ProvidedOrganizationData,
   ProvidedUserData,
+  ProvidedUserFundingEntityData,
 } from './DataTypes';
 
 export const UserContext = createContext<ProvidedUserData>({
@@ -72,7 +73,12 @@ export const LocalizationContext = createContext<ProvidedLocalizationData>({
   bootstrapped: false,
 });
 
+export const UserFundingEntityContext = createContext<ProvidedUserFundingEntityData>({
+  userFundingEntity: undefined,
+  bootstrapped: false,
+});
+
 export const FundingEntityContext = createContext<ProvidedFundingEntityData>({
   fundingEntity: undefined,
-  bootstrapped: false,
+  reload: () => {},
 });
