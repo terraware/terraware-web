@@ -11,7 +11,6 @@ import { useParticipantData } from 'src/providers/Participant/ParticipantContext
 import { selectListAcceleratorReports } from 'src/redux/features/reports/reportsSelectors';
 import { requestListAcceleratorReports } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { ListAcceleratorReportsRequestParams } from 'src/services/AcceleratorReportService';
 import strings from 'src/strings';
 import { AcceleratorReport, AcceleratorReportStatuses } from 'src/types/AcceleratorReport';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
@@ -90,20 +89,18 @@ export default function ReportsList(): JSX.Element {
   );
 
   const dispatchSearchRequest = useCallback(
-    (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
+    (locale: string | null, search: SearchNodePayload, sortOrder: SearchSortOrder) => {
       if (!currentParticipantProject?.id) {
         return;
       }
 
-      const params: ListAcceleratorReportsRequestParams = {};
-
       const request = dispatch(
         requestListAcceleratorReports({
-          locale,
-          params,
-          projectId: currentParticipantProject.id,
+          includeFuture: true,
+          locale: locale ?? undefined,
+          projectId: currentParticipantProject.id?.toString(),
           search,
-          searchSortOrder,
+          sortOrder,
         })
       );
       setListAcceleratorReportsRequestId(request.requestId);

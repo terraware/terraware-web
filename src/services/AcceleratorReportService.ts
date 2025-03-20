@@ -10,7 +10,7 @@ import {
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 
-import HttpService, { Params, Response, Response2 } from './HttpService';
+import HttpService, { Response, Response2 } from './HttpService';
 
 export type ReportsConfigData = {
   config?: ExistingAcceleratorReportConfig;
@@ -188,8 +188,10 @@ const listAcceleratorReports = async (
     {
       params,
     },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (data) => ({
-      reports: searchAndSort(data?.reports || [], undefined, searchOrderConfig),
+      // TODO: replace mockAcceleratorReports with data?.reports once backend is ready
+      reports: searchAndSort(mockAcceleratorReports || [], undefined, searchOrderConfig),
     })
   );
 };
