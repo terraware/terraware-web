@@ -29,13 +29,13 @@ const ReportsView = () => {
     if (!projectFilter.projectId && currentParticipantProject?.id) {
       setProjectFilter({ projectId: currentParticipantProject?.id });
     }
-  }, [projectFilter]);
+  }, [currentParticipantProject?.id, projectFilter?.projectId]);
 
   useEffect(() => {
     if (projectFilter.projectId) {
       setCurrentParticipantProject(projectFilter.projectId);
     }
-  }, [projectFilter]);
+  }, [projectFilter?.projectId]);
 
   const tabs = useMemo(() => {
     if (!activeLocale) {
@@ -93,7 +93,7 @@ const ReportsView = () => {
           </Grid>
         </>
       ) : undefined,
-    [activeLocale, currentParticipantProject, projectFilter]
+    [activeLocale, moduleProjects, projectFilter?.projectId]
   );
 
   return (
