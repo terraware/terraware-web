@@ -191,7 +191,7 @@ const listAcceleratorReports = async (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (data) => ({
       // TODO: replace mockAcceleratorReports with data?.reports once backend is ready
-      reports: searchAndSort(mockAcceleratorReports || [], undefined, searchOrderConfig),
+      reports: searchAndSort(mockAcceleratorReports || [], search, searchOrderConfig),
     })
   );
 };
