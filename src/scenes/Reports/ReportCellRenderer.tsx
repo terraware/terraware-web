@@ -23,10 +23,10 @@ export default function ReportCellRenderer(props: RendererProps<TableRowType>): 
   const modifiedByUser = useAppSelector(selectUser(row.modifiedBy));
   const submittedByUser = useAppSelector(selectUser(row.submittedBy));
 
-  // TODO: update link to nav to report
   const createLinkToReport = (iValue: React.ReactNode | unknown[]) => {
-    const reportUrl = isAcceleratorRoute ? APP_PATHS.ACCELERATOR_DELIVERABLE_VIEW : APP_PATHS.DELIVERABLE_VIEW;
-    const to = reportUrl.replace(':reportId', `${row.id}`).replace(':projectId', `${row.projectId}`);
+    // TODO: update link to accelerator report views once ready
+    const reportUrl = isAcceleratorRoute ? APP_PATHS.REPORTS_VIEW : APP_PATHS.REPORTS_VIEW;
+    const to = reportUrl.replace(':reportId', `${row.id}`);
 
     return (
       <Link to={to}>
