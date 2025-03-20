@@ -110,16 +110,24 @@ export default function ReportsList(): JSX.Element {
 
   const isAcceleratorRoute = false;
 
-  const fuzzySearchColumns = useMemo(
-    () => (isAcceleratorRoute ? ['name', 'projectDealName'] : ['report']),
-    [isAcceleratorRoute]
-  );
+  const fuzzySearchColumns = useMemo(() => ['report'], []);
 
   const availableYears = useMemo(() => {
     const years = acceleratorReports.map((report) => report.startDate?.split('-')?.[0]);
     const uniqueYears = Array.from(new Set(years));
     return uniqueYears;
   }, [acceleratorReports]);
+  console.log('ReportsList - availableYears:', availableYears);
+  // const extraTableFilters = useMemo(() => {
+  //   return [
+  //     {
+  //       field: 'year',
+  //       label: strings.YEAR,
+  //       options: availableYears,
+  //       type: 'MultiSelect',
+  //     },
+  //   ];
+  // }, [availableYears]);
 
   const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
     const rejectedStatus = activeLocale ? (isAcceleratorRoute ? strings.UPDATE_REQUESTED : strings.UPDATE_NEEDED) : '';
