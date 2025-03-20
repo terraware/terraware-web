@@ -903,6 +903,8 @@ MEETING_URL,Meeting URL,
 METHODOLOGY,Methodology,
 METRIC,Metric,
 METRIC_G_KG_MG,"Metric (g, kg, mg)",
+METRIC_TARGET,Metric Target,
+METRIC_TARGET_MESSAGE,Set a target for the next reporting period.
 METRIC_TYPE_ACTIVITY,Activity,
 METRIC_TYPE_IMPACT,Impact,
 METRIC_TYPE_OUTCOME,Outcome,

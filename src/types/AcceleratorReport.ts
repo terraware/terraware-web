@@ -29,6 +29,16 @@ export type CreateProjectMetricRequest = CreateProjectMetricRequestPayload & { p
 
 export type UpdateProjectMetricRequest = UpdateProjectMetricRequestPayload & { projectId: number; metricId: number };
 
+export type UpdateAcceleratorReportMetricsRequestPayload =
+  components['schemas']['UpdateAcceleratorReportMetricsRequestPayload'];
+
+export type UpdateAcceleratorReportMetricsRequest = UpdateAcceleratorReportMetricsRequestPayload & {
+  projectId: number;
+  reportId: number;
+};
+
 export type NewMetric = components['schemas']['NewMetricPayload'];
 
 export type AcceleratorReport = components['schemas']['AcceleratorReportPayload'];
+
+export type SystemMetricName = 'Mortality Rate' | 'Seedlings' | 'Seeds Collected' | 'Trees Planted' | 'Species Planted';
