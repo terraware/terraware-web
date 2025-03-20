@@ -114,7 +114,7 @@ export default function ReportsList(): JSX.Element {
   const isAcceleratorRoute = false;
 
   const fuzzySearchColumns = useMemo(
-    () => (isAcceleratorRoute ? ['name', 'projectDealName'] : ['report', 'modifiedBy', 'submittedBy']),
+    () => (isAcceleratorRoute ? ['name', 'projectDealName'] : ['report']),
     [isAcceleratorRoute]
   );
 
