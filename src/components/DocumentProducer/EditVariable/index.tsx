@@ -107,7 +107,6 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
 
   const save = () => {
     setValidate(true);
-    console.log(values)
     if (hasErrors || !variable) {
       return;
     }
