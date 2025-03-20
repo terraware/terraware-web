@@ -153,8 +153,7 @@ export default function ReportsList({ projectId }: ReportsListProps): JSX.Elemen
             isClickable={() => false}
             Renderer={ReportCellRenderer}
             rows={acceleratorReports}
-            showTopBar={false}
-            stickyFilters={false}
+            stickyFilters
           />
         </Grid>
       </Grid>
