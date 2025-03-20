@@ -10,7 +10,7 @@ import {
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchAndSortFn, SearchOrderConfig, searchAndSort as genericSearchAndSort } from 'src/utils/searchAndSort';
 
-import HttpService, { Response, Response2 } from './HttpService';
+import HttpService, { Params, Response, Response2 } from './HttpService';
 
 export type ReportsConfigData = {
   config?: ExistingAcceleratorReportConfig;
@@ -134,7 +134,7 @@ const mockAcceleratorReports: AcceleratorReport[] = [
 const listAcceleratorReports = async (
   projectId: number,
   locale: string | null,
-  request?: ListAcceleratorReportsRequestParams,
+  params?: ListAcceleratorReportsRequestParams,
   search?: SearchNodePayload,
   searchSortOrder?: SearchSortOrder,
   searchAndSort?: SearchAndSortFn<AcceleratorReport>
@@ -150,9 +150,7 @@ const listAcceleratorReports = async (
 
   const result = await HttpService.root(
     ACCELERATOR_REPORTS_ENDPOINT.replace('{projectId}', projectId.toString())
-  ).get2<ListAcceleratorReportsResponsePayload>({
-    // params: (request || {}),
-  });
+  ).get2<ListAcceleratorReportsResponsePayload>({ params: params as Params });
 
   if (result.requestSucceeded && result.data?.reports) {
     const reportsResult = searchAndSort

@@ -90,12 +90,12 @@ export default function ReportsList(): JSX.Element {
         return;
       }
 
-      const listRequest: ListAcceleratorReportsRequestParams = {};
+      const params: ListAcceleratorReportsRequestParams = {};
 
       const request = dispatch(
         requestListAcceleratorReports({
           locale,
-          listRequest,
+          params,
           projectId: currentParticipantProject.id,
           search,
           searchSortOrder,

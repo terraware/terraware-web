@@ -73,7 +73,7 @@ export const requestListAcceleratorReports = createAsyncThunk(
   'listReports',
   async (
     request: {
-      listRequest?: ListAcceleratorReportsRequestParams;
+      params?: ListAcceleratorReportsRequestParams;
       locale: string | null;
       projectId: number;
       search?: SearchNodePayload;
@@ -82,11 +82,11 @@ export const requestListAcceleratorReports = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-    const { listRequest, locale, projectId, search, searchSortOrder, searchAndSort } = request;
+    const { params, locale, projectId, search, searchSortOrder, searchAndSort } = request;
     const response = await AcceleratorReportService.listAcceleratorReports(
       projectId,
       locale,
-      listRequest,
+      params,
       search,
       searchSortOrder,
       searchAndSort
