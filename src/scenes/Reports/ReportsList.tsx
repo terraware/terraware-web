@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Grid, Typography } from '@mui/material';
 import { TableColumnType, theme } from '@terraware/web-components';
 
-import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
+import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import Card from 'src/components/common/Card';
 import { FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
@@ -14,13 +14,18 @@ import { requestListAcceleratorReports } from 'src/redux/features/reports/report
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorReport, AcceleratorReportStatuses } from 'src/types/AcceleratorReport';
-import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { SearchSortOrder } from 'src/types/Search';
 
 import ReportCellRenderer from './ReportCellRenderer';
 
+type AcceleratorReportRow = AcceleratorReport & {
+  report?: string;
+  year?: string;
+};
+
 const defaultSearchOrder: SearchSortOrder = {
-  field: 'status',
-  direction: 'Ascending',
+  field: 'report',
+  direction: 'Descending',
 };
 
 export default function ReportsList(): JSX.Element {
@@ -29,16 +34,33 @@ export default function ReportsList(): JSX.Element {
   const { currentParticipantProject } = useParticipantData();
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
-  const [acceleratorReports, setAcceleratorReports] = useState<AcceleratorReport[]>([]);
+  const [acceleratorReports, setAcceleratorReports] = useState<AcceleratorReportRow[]>([]);
   const [listAcceleratorReportsRequestId, setListAcceleratorReportsRequestId] = useState<string>('');
 
   const acceleratorReportsListRequest = useAppSelector(selectListAcceleratorReports(listAcceleratorReportsRequestId));
 
   useEffect(() => {
     if (acceleratorReportsListRequest?.status === 'success') {
-      setAcceleratorReports(acceleratorReportsListRequest?.data || []);
+      setAcceleratorReports(() => {
+        const reports = acceleratorReportsListRequest?.data?.map((report) => {
+          const year = report.startDate.split('-')[0];
+          const quarterNumber = report.startDate ? Math.ceil((new Date(report.startDate).getMonth() + 1) / 3) : 0;
+          const title = report.frequency === 'Annual' ? `${year}` : `${year}-Q${quarterNumber}`;
+
+          return {
+            ...report,
+            report: title,
+            year,
+          };
+        });
+        return reports || [];
+      });
     }
   }, [acceleratorReportsListRequest]);
+
+  useEffect(() => {
+    reload();
+  }, [currentParticipantProject?.id]);
 
   const columns = useCallback(
     (activeLocale: string | null): TableColumnType[] => {
@@ -82,25 +104,18 @@ export default function ReportsList(): JSX.Element {
     [activeLocale, strings]
   );
 
-  const dispatchSearchRequest = useCallback(
-    (locale: string | null, search: SearchNodePayload, sortOrder: SearchSortOrder) => {
-      if (!currentParticipantProject?.id) {
-        return;
-      }
-
+  const reload = () => {
+    if (currentParticipantProject?.id) {
       const request = dispatch(
         requestListAcceleratorReports({
-          includeFuture: true,
-          locale: locale ?? undefined,
           projectId: currentParticipantProject.id.toString(),
-          search,
-          sortOrder,
+          includeFuture: true,
+          includeMetrics: true,
         })
       );
       setListAcceleratorReportsRequestId(request.requestId);
-    },
-    [currentParticipantProject?.id, dispatch]
-  );
+    }
+  };
 
   const fuzzySearchColumns = useMemo(() => ['report'], []);
 
@@ -141,10 +156,9 @@ export default function ReportsList(): JSX.Element {
         </Grid>
 
         <Grid item xs={12} textAlign={'center'}>
-          <TableWithSearchFilters
+          <ClientSideFilterTable
             columns={columns}
-            defaultSearchOrder={defaultSearchOrder}
-            dispatchSearchRequest={dispatchSearchRequest}
+            defaultSortOrder={defaultSearchOrder}
             featuredFilters={featuredFilters}
             fuzzySearchColumns={fuzzySearchColumns}
             id='accelerator-reports-table'
