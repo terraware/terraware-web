@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
@@ -23,17 +23,21 @@ export default function ReportCellRenderer(props: RendererProps<TableRowType>): 
   const modifiedByUser = useAppSelector(selectUser(row.modifiedBy));
   const submittedByUser = useAppSelector(selectUser(row.submittedBy));
 
-  const createLinkToReport = (iValue: React.ReactNode | unknown[]) => {
+  const createLinkToReport = useCallback(() => {
     // TODO: update link to accelerator report views once ready
     const reportUrl = isAcceleratorRoute ? APP_PATHS.REPORTS_VIEW : APP_PATHS.REPORTS_VIEW;
     const to = reportUrl.replace(':reportId', `${row.id}`);
 
+    const year = row.startDate.split('-')[0];
+    const quarterNumber = row.startDate ? Math.ceil((new Date(row.startDate).getMonth() + 1) / 3) : 0;
+    const reportName = row.frequency === 'Annual' ? `${year}` : `${year}-Q${quarterNumber}`;
+
     return (
       <Link to={to}>
-        <TextTruncated fontSize={16} width={400} fontWeight={500} stringList={[iValue as string]} />
+        <TextTruncated fontSize={16} fontWeight={500} stringList={[reportName]} width={400} />
       </Link>
     );
-  };
+  }, [isAcceleratorRoute, row.id]);
 
   useEffect(() => {
     if (!modifiedByUser && row.modifiedBy && row.modifiedBy !== -1) {
@@ -60,10 +64,6 @@ export default function ReportCellRenderer(props: RendererProps<TableRowType>): 
   }, [submittedByUser]);
 
   if (column.key === 'report') {
-    const year = row.startDate.split('-')[0];
-    const quarterNumber = row.startDate ? Math.ceil((new Date(row.startDate).getMonth() + 1) / 3) : 0;
-    const title = row.frequency === 'Annual' ? `${year}` : `${year}-Q${quarterNumber}`;
-
     return (
       <CellRenderer
         column={column}
@@ -76,7 +76,7 @@ export default function ReportCellRenderer(props: RendererProps<TableRowType>): 
             fontSize: '16px',
           },
         }}
-        value={createLinkToReport(title)}
+        value={createLinkToReport()}
       />
     );
   }
