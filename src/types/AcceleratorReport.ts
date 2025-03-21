@@ -29,10 +29,10 @@ export type CreateProjectMetricRequest = CreateProjectMetricRequestPayload & { p
 
 export type UpdateProjectMetricRequest = UpdateProjectMetricRequestPayload & { projectId: number; metricId: number };
 
-export type UpdateAcceleratorReportMetricsRequestPayload =
-  components['schemas']['UpdateAcceleratorReportMetricsRequestPayload'];
+export type ReviewAcceleratorReportMetricsRequestPayload =
+  components['schemas']['ReviewAcceleratorReportMetricsRequestPayload'];
 
-export type UpdateAcceleratorReportMetricsRequest = UpdateAcceleratorReportMetricsRequestPayload & {
+export type ReviewAcceleratorReportMetricsRequest = ReviewAcceleratorReportMetricsRequestPayload & {
   projectId: number;
   reportId: number;
 };

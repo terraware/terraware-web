@@ -286,7 +286,7 @@ export default function ReportsTargets(): JSX.Element {
         }
       }
     }
-  }, [allReports]);
+  }, [allReports, getReportsYears]);
 
   const extraFilter = useMemo(
     () =>

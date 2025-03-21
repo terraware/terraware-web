@@ -6,8 +6,8 @@ import { Grid, Typography } from '@mui/material';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
-import { selectUpdateAcceleratorReportMetrics } from 'src/redux/features/reports/reportsSelectors';
-import { requestUpdateAcceleratorReportMetrics } from 'src/redux/features/reports/reportsThunks';
+import { selectReviewAcceleratorReportMetrics } from 'src/redux/features/reports/reportsSelectors';
+import { requestReviewAcceleratorReportMetrics } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { SystemMetricName } from 'src/types/AcceleratorReport';
@@ -26,7 +26,7 @@ export default function EditTargetsModal(props: EditTargetsModalProp): JSX.Eleme
   const { onClose, row, reload } = props;
   const [requestId, setRequestId] = useState<string>('');
   const dispatch = useAppDispatch();
-  const updateReportMetricsResponse = useAppSelector(selectUpdateAcceleratorReportMetrics(requestId));
+  const updateReportMetricsResponse = useAppSelector(selectReviewAcceleratorReportMetrics(requestId));
   const snackbar = useSnackbar();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
@@ -66,7 +66,7 @@ export default function EditTargetsModal(props: EditTargetsModalProp): JSX.Eleme
 
     if (row.annualReportId) {
       const requestAnnual = dispatch(
-        requestUpdateAcceleratorReportMetrics({
+        requestReviewAcceleratorReportMetrics({
           ...getUpdateBody('annual'),
           projectId: projectId,
           reportId: row.annualReportId,
@@ -76,7 +76,7 @@ export default function EditTargetsModal(props: EditTargetsModalProp): JSX.Eleme
     }
     if (row.q1ReportId) {
       const requestAnnual = dispatch(
-        requestUpdateAcceleratorReportMetrics({
+        requestReviewAcceleratorReportMetrics({
           ...getUpdateBody('q1'),
           projectId: projectId,
           reportId: row.q1ReportId,
@@ -86,7 +86,7 @@ export default function EditTargetsModal(props: EditTargetsModalProp): JSX.Eleme
     }
     if (row.q2ReportId) {
       const requestAnnual = dispatch(
-        requestUpdateAcceleratorReportMetrics({
+        requestReviewAcceleratorReportMetrics({
           ...getUpdateBody('q2'),
           projectId: projectId,
           reportId: row.q2ReportId,
@@ -96,7 +96,7 @@ export default function EditTargetsModal(props: EditTargetsModalProp): JSX.Eleme
     }
     if (row.q3ReportId) {
       const requestAnnual = dispatch(
-        requestUpdateAcceleratorReportMetrics({
+        requestReviewAcceleratorReportMetrics({
           ...getUpdateBody('q3'),
           projectId: projectId,
           reportId: row.q3ReportId,
@@ -106,7 +106,7 @@ export default function EditTargetsModal(props: EditTargetsModalProp): JSX.Eleme
     }
     if (row.q4ReportId) {
       const requestAnnual = dispatch(
-        requestUpdateAcceleratorReportMetrics({
+        requestReviewAcceleratorReportMetrics({
           ...getUpdateBody('q4'),
           projectId: projectId,
           reportId: row.q4ReportId,

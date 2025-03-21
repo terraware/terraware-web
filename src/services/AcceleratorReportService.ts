@@ -4,8 +4,8 @@ import {
   CreateAcceleratorReportConfigRequest,
   CreateProjectMetricRequest,
   ExistingAcceleratorReportConfig,
+  ReviewAcceleratorReportMetricsRequest,
   UpdateAcceleratorReportConfigRequest,
-  UpdateAcceleratorReportMetricsRequest,
   UpdateProjectMetricRequest,
 } from 'src/types/AcceleratorReport';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
@@ -42,7 +42,8 @@ type UpdateConfigResponse =
 const PROJECT_METRICS_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/metrics';
 const STANDARD_METRICS_ENDPOINT = '/api/v1/accelerator/reports/standardMetrics';
 const PROJECT_METRIC_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/metrics/{metricId}';
-const ACCELERATOR_REPORT_METRICS_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/metrics';
+const REVIEW_ACCELERATOR_REPORT_METRICS_ENDPOINT =
+  '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/metrics/review';
 
 export type ListProjectMetricsResponsePayload =
   paths[typeof PROJECT_METRICS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -57,8 +58,8 @@ type ListAcceleratorReportsResponsePayload =
   paths[typeof PROJECT_REPORTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type UpdateProjectMetricResponse =
   paths[typeof PROJECT_METRIC_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-type UpdateAcceleratorReportMetricsResponse =
-  paths[typeof ACCELERATOR_REPORT_METRICS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+type ReviewAcceleratorReportMetricsResponse =
+  paths[typeof REVIEW_ACCELERATOR_REPORT_METRICS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 /**
  * Get project reports config
@@ -170,16 +171,16 @@ const updateProjectMetric = async (
   });
 };
 
-const updateAcceleratorReportMetrics = async (
-  request: UpdateAcceleratorReportMetricsRequest
-): Promise<Response2<UpdateAcceleratorReportMetricsResponse>> => {
+const reviewAcceleratorReportMetrics = async (
+  request: ReviewAcceleratorReportMetricsRequest
+): Promise<Response2<ReviewAcceleratorReportMetricsResponse>> => {
   const { projectId, reportId, ...rest } = request;
   return HttpService.root(
-    ACCELERATOR_REPORT_METRICS_ENDPOINT.replace('{projectId}', projectId.toString()).replace(
+    REVIEW_ACCELERATOR_REPORT_METRICS_ENDPOINT.replace('{projectId}', projectId.toString()).replace(
       '{reportId}',
       reportId.toString()
     )
-  ).post2<UpdateAcceleratorReportMetricsResponse>({
+  ).post2<ReviewAcceleratorReportMetricsResponse>({
     entity: rest,
   });
 };
@@ -196,7 +197,7 @@ const ReportService = {
   createProjectMetric,
   listAcceleratorReports,
   updateProjectMetric,
-  updateAcceleratorReportMetrics,
+  reviewAcceleratorReportMetrics,
 };
 
 export default ReportService;
