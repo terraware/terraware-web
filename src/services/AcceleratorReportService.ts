@@ -4,6 +4,7 @@ import {
   CreateAcceleratorReportConfigRequest,
   CreateProjectMetricRequest,
   ExistingAcceleratorReportConfig,
+  ReviewAcceleratorReportMetricsRequest,
   UpdateAcceleratorReportConfigRequest,
   UpdateProjectMetricRequest,
 } from 'src/types/AcceleratorReport';
@@ -41,6 +42,8 @@ type UpdateConfigResponse =
 const PROJECT_METRICS_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/metrics';
 const STANDARD_METRICS_ENDPOINT = '/api/v1/accelerator/reports/standardMetrics';
 const PROJECT_METRIC_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/metrics/{metricId}';
+const REVIEW_ACCELERATOR_REPORT_METRICS_ENDPOINT =
+  '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/metrics/review';
 
 export type ListProjectMetricsResponsePayload =
   paths[typeof PROJECT_METRICS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -55,6 +58,8 @@ type ListAcceleratorReportsResponsePayload =
   paths[typeof PROJECT_REPORTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type UpdateProjectMetricResponse =
   paths[typeof PROJECT_METRIC_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+type ReviewAcceleratorReportMetricsResponse =
+  paths[typeof REVIEW_ACCELERATOR_REPORT_METRICS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 /**
  * Get project reports config
@@ -125,7 +130,8 @@ const listAcceleratorReports = async (
   search?: SearchNodePayload,
   sortOrder?: SearchSortOrder,
   includeMetrics?: boolean,
-  includeFuture?: boolean
+  includeFuture?: boolean,
+  year?: string
 ): Promise<Response & AcceleratorReportsData> => {
   let searchOrderConfig: SearchOrderConfig | undefined;
   if (sortOrder) {
@@ -136,13 +142,9 @@ const listAcceleratorReports = async (
   }
   let params = { includeMetrics: (!!includeMetrics).toString(), includeFuture: (!!includeFuture).toString() };
 
-  const yearFilter = search?.children?.find((ch: { field: string }) => ch.field === 'year');
-  if (yearFilter) {
-    const yearToUse = yearFilter.values[0];
-    if (yearToUse) {
-      const yearParam = { year: yearToUse };
-      params = { ...params, ...yearParam };
-    }
+  if (year) {
+    const yearParam = { year };
+    params = { ...params, ...yearParam };
   }
 
   return await HttpService.root(PROJECT_REPORTS_ENDPOINT.replace('{projectId}', projectId)).get<
@@ -169,6 +171,20 @@ const updateProjectMetric = async (
   });
 };
 
+const reviewAcceleratorReportMetrics = async (
+  request: ReviewAcceleratorReportMetricsRequest
+): Promise<Response2<ReviewAcceleratorReportMetricsResponse>> => {
+  const { projectId, reportId, ...rest } = request;
+  return HttpService.root(
+    REVIEW_ACCELERATOR_REPORT_METRICS_ENDPOINT.replace('{projectId}', projectId.toString()).replace(
+      '{reportId}',
+      reportId.toString()
+    )
+  ).post2<ReviewAcceleratorReportMetricsResponse>({
+    entity: rest,
+  });
+};
+
 /**
  * Exported functions
  */
@@ -181,6 +197,7 @@ const ReportService = {
   createProjectMetric,
   listAcceleratorReports,
   updateProjectMetric,
+  reviewAcceleratorReportMetrics,
 };
 
 export default ReportService;
