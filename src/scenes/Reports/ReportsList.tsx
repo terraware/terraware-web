@@ -6,6 +6,7 @@ import { TableColumnType, theme } from '@terraware/web-components';
 import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
 import Card from 'src/components/common/Card';
 import { FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { selectListAcceleratorReports } from 'src/redux/features/reports/reportsSelectors';
@@ -26,6 +27,7 @@ export default function ReportsList(): JSX.Element {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const { currentParticipantProject } = useParticipantData();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const [acceleratorReports, setAcceleratorReports] = useState<AcceleratorReport[]>([]);
   const [listAcceleratorReportsRequestId, setListAcceleratorReportsRequestId] = useState<string>('');
@@ -99,8 +101,6 @@ export default function ReportsList(): JSX.Element {
     },
     [currentParticipantProject?.id, dispatch]
   );
-
-  const isAcceleratorRoute = false;
 
   const fuzzySearchColumns = useMemo(() => ['report'], []);
 
