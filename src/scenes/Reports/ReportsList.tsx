@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Grid, Typography } from '@mui/material';
-import { TableColumnType, theme } from '@terraware/web-components';
+import { Box, Grid, Typography } from '@mui/material';
+import { Select, TableColumnType, theme } from '@terraware/web-components';
 
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import Card from 'src/components/common/Card';
@@ -34,6 +34,7 @@ export default function ReportsList(): JSX.Element {
   const { currentParticipantProject } = useParticipantData();
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
+  const [yearFilter, setYearFilter] = useState<string>();
   const [acceleratorReports, setAcceleratorReports] = useState<AcceleratorReportRow[]>([]);
   const [listAcceleratorReportsRequestId, setListAcceleratorReportsRequestId] = useState<string>('');
 
@@ -60,7 +61,7 @@ export default function ReportsList(): JSX.Element {
 
   useEffect(() => {
     reload();
-  }, [currentParticipantProject?.id]);
+  }, [currentParticipantProject?.id, yearFilter]);
 
   const columns = useCallback(
     (activeLocale: string | null): TableColumnType[] => {
@@ -99,24 +100,25 @@ export default function ReportsList(): JSX.Element {
     [activeLocale, strings]
   );
 
-  const reload = () => {
+  const reload = useCallback(() => {
     if (currentParticipantProject?.id) {
       const request = dispatch(
         requestListAcceleratorReports({
           projectId: currentParticipantProject.id.toString(),
           includeFuture: true,
           includeMetrics: true,
+          year: yearFilter,
         })
       );
       setListAcceleratorReportsRequestId(request.requestId);
     }
-  };
+  }, [currentParticipantProject?.id, dispatch, yearFilter]);
 
   const fuzzySearchColumns = useMemo(() => ['reportName'], []);
 
   const availableYears = useMemo(() => {
     const years = acceleratorReports.map((report) => report.startDate?.split('-')?.[0]);
-    const uniqueYears = Array.from(new Set(years));
+    const uniqueYears = Array.from(new Set(years)).sort((a, b) => (b || '').localeCompare(a || ''));
     return uniqueYears;
   }, [acceleratorReports]);
 
@@ -131,15 +133,36 @@ export default function ReportsList(): JSX.Element {
           values.map((value) => (value === 'Rejected' ? rejectedStatus : value)).join(', '),
         renderOption: (value: string | number) => (value.toString() === 'Rejected' ? rejectedStatus : value.toString()),
       },
-      {
-        field: 'year',
-        label: strings.YEAR,
-        options: availableYears,
-      },
     ];
 
     return activeLocale ? filters : [];
-  }, [activeLocale, availableYears, isAcceleratorRoute]);
+  }, [activeLocale, isAcceleratorRoute]);
+
+  const extraFilter = useMemo(
+    () =>
+      activeLocale ? (
+        <>
+          <Box marginTop={0.5} paddingLeft={1}>
+            <Select
+              fullWidth
+              id='yearFilter'
+              label={''}
+              onChange={(year: string) => setYearFilter(year)}
+              options={availableYears}
+              placeholder={strings.YEAR}
+              selectedValue={yearFilter}
+            />
+          </Box>
+        </>
+      ) : null,
+    [activeLocale, availableYears, yearFilter]
+  );
+
+  useEffect(() => {
+    if (!yearFilter) {
+      setYearFilter(availableYears[0]);
+    }
+  }, [availableYears, yearFilter]);
 
   return (
     <Card style={{ display: 'flex', flexDirection: 'column', paddingLeft: 0, paddingRight: 0 }}>
@@ -152,8 +175,10 @@ export default function ReportsList(): JSX.Element {
 
         <Grid item xs={12} textAlign={'center'}>
           <ClientSideFilterTable
+            busy={acceleratorReportsListRequest?.status === 'pending'}
             columns={columns}
             defaultSortOrder={defaultSearchOrder}
+            extraComponent={extraFilter}
             featuredFilters={featuredFilters}
             fuzzySearchColumns={fuzzySearchColumns}
             id='accelerator-reports-table'
