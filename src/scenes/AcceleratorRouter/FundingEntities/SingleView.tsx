@@ -1,5 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useMemo } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
@@ -10,30 +9,18 @@ import Link from 'src/components/common/Link';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useFundingEntity, useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 const SingleView = () => {
-  const navigate = useNavigate();
-  const location = useStateLocation();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
   const theme = useTheme();
   const { fundingEntity } = useFundingEntity();
+  const { goToEditFundingEntity } = useNavigateTo();
 
   const canEdit = isAllowed('MANAGE_FUNDING_ENTITIES');
-
-  const goToEditFundingEntity = useCallback(
-    () =>
-      navigate(
-        getLocation(
-          APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_EDIT.replace(':fundingEntityId', `${fundingEntity?.id}`),
-          location
-        )
-      ),
-    [navigate, location, fundingEntity]
-  );
 
   const rightComponent = useMemo(
     () =>
@@ -42,7 +29,7 @@ const SingleView = () => {
         <Button
           label={strings.EDIT_FUNDING_ENTITY}
           icon='iconEdit'
-          onClick={goToEditFundingEntity}
+          onClick={() => goToEditFundingEntity(String(fundingEntity?.id))}
           size='medium'
           id='editFundingEntity'
         />
