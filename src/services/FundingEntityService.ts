@@ -120,12 +120,21 @@ const create = async (fundingEntity: FundingEntity): Promise<Response2<CreateFun
   });
 };
 
+const deleteFundingEntity = async (fundingEntityId: number): Promise<Response> => {
+  return await httpFundingEntity.delete({
+    urlReplacements: {
+      '{fundingEntityId}': fundingEntityId.toString(),
+    },
+  });
+};
+
 const FundingEntityService = {
   getUserFundingEntity,
   get,
   listFundingEntities,
   update,
   create,
+  deleteFundingEntity,
 };
 
 export default FundingEntityService;
