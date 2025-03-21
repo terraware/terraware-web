@@ -45,7 +45,7 @@ export default function TreesAndShrubsTable({ trees }: TreesAndShrubsTableProps)
     },
     {
       key: 'shrubDiameter',
-      name: strings.DIAMETER_CM,
+      name: strings.CROWN_DIAMETER_CM,
       type: 'string',
     },
     {
