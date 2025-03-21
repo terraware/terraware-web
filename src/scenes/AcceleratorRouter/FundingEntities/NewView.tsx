@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import Page from 'src/components/Page';
-import { APP_PATHS } from 'src/constants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
 
@@ -10,21 +9,8 @@ import FundingEntityForm from './FundingEntityForm';
 import useCreateFundingEntity from './useCreateFundingEntity';
 
 const NewView = () => {
-  const navigate = useNavigate();
   const createFundingEntity = useCreateFundingEntity();
-
-  const goToListView = useCallback(() => {
-    navigate({ pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES });
-  }, [navigate]);
-
-  const goToFundingEntityView = useCallback(
-    (fundingEntityId: number) => {
-      navigate({
-        pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_VIEW.replace(':fundingEntityId', String(fundingEntityId)),
-      });
-    },
-    [navigate]
-  );
+  const { goToFundingEntities, goToFundingEntity } = useNavigateTo();
 
   const handleOnSave = useCallback(
     (record: FundingEntity) => {
@@ -35,13 +21,13 @@ const NewView = () => {
 
   useEffect(() => {
     if (createFundingEntity.succeeded && createFundingEntity.data) {
-      goToFundingEntityView(createFundingEntity.data.id);
+      goToFundingEntity(createFundingEntity.data.id);
     }
   }, [createFundingEntity]);
 
   return (
     <Page title={strings.ADD_FUNDING_ENTITY} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
-      <FundingEntityForm onCancel={goToListView} onSave={handleOnSave} />
+      <FundingEntityForm onCancel={goToFundingEntities} onSave={handleOnSave} />
     </Page>
   );
 };

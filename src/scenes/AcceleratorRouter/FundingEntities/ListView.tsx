@@ -1,5 +1,4 @@
-import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { TableColumnType } from '@terraware/web-components';
 
@@ -7,7 +6,7 @@ import Page from 'src/components/Page';
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import Button from 'src/components/common/button/Button';
-import { APP_PATHS } from 'src/constants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import { requestFundingEntities } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
 import { selectFundingEntitiesRequest } from 'src/redux/features/funder/fundingEntitiesSelectors';
@@ -37,9 +36,9 @@ const FundingEntitiesListView = () => {
   const [fundingEntities, setFundingEntities] = useState<FundingEntity[]>([]);
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
-  const navigate = useNavigate();
   const { isAllowed } = useUser();
   const { isMobile } = useDeviceInfo();
+  const { goToNewFundingEntity } = useNavigateTo();
 
   const defaultSortOrder: SearchSortOrder = {
     field: 'name',
@@ -64,13 +63,6 @@ const FundingEntitiesListView = () => {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
   }, [listRequest, snackbar]);
-
-  const goToNewFundingEntity = useCallback(() => {
-    const newProjectLocation = {
-      pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_NEW,
-    };
-    navigate(newProjectLocation);
-  }, [navigate]);
 
   const allProjects = useMemo<Record<string, string>>(
     () =>
