@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Grid } from '@mui/material';
-import { TableColumnType } from '@terraware/web-components';
+import { Grid, Typography } from '@mui/material';
+import { TableColumnType, theme } from '@terraware/web-components';
 
 import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
 import Card from 'src/components/common/Card';
@@ -134,8 +134,14 @@ export default function ReportsList({ projectId }: ReportsListProps): JSX.Elemen
   }, [activeLocale, availableYears, isAcceleratorRoute]);
 
   return (
-    <Card style={{ display: 'flex', flexDirection: 'column' }} title={strings.REPORTS}>
+    <Card style={{ display: 'flex', flexDirection: 'column', paddingLeft: 0, paddingRight: 0 }}>
       <Grid container sx={{}}>
+        <Grid item xs={12} paddingLeft={3}>
+          <Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={600} lineHeight='28px'>
+            {strings.REPORTS}
+          </Typography>
+        </Grid>
+
         <Grid item xs={12} textAlign={'center'}>
           <TableWithSearchFilters
             columns={columns}
