@@ -59,7 +59,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
       },
       {
         id: 'biomassMeasurements',
-        label: strings.BIOMASS_MEASUREMENT,
+        label: strings.BIOMASS_MONITORING,
         children: <BiomassMeasurement {...props} selectedPlantingSite={selectedPlantingSite} />,
       },
     ];
