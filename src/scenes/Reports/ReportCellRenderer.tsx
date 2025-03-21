@@ -60,7 +60,7 @@ export default function ReportCellRenderer(props: RendererProps<TableRowType>): 
   }, [submittedByUser]);
 
   if (column.key === 'report') {
-    const year = row.startDate ? row.startDate?.split('-')?.[0] : '';
+    const year = row.startDate.split('-')[0];
     const quarterNumber = row.startDate ? Math.ceil((new Date(row.startDate).getMonth() + 1) / 3) : 0;
     const title = row.frequency === 'Annual' ? `${year}` : `${year}-Q${quarterNumber}`;
 
