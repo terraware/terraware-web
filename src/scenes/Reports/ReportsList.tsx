@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Grid, useTheme } from '@mui/material';
+import { Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 
 import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
@@ -27,7 +27,6 @@ const defaultSearchOrder: SearchSortOrder = {
 
 export default function ReportsList({ projectId }: ReportsListProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const theme = useTheme();
   const { activeLocale } = useLocalization();
 
   const [acceleratorReports, setAcceleratorReports] = useState<AcceleratorReport[]>([]);
@@ -40,11 +39,6 @@ export default function ReportsList({ projectId }: ReportsListProps): JSX.Elemen
       setAcceleratorReports(acceleratorReportsListRequest?.data || []);
     }
   }, [acceleratorReportsListRequest]);
-
-  const gridStyle = {
-    marginBottom: theme.spacing(2),
-    paddingBottom: theme.spacing(4),
-  };
 
   const columns = useCallback(
     (activeLocale: string | null): TableColumnType[] => {
@@ -141,7 +135,7 @@ export default function ReportsList({ projectId }: ReportsListProps): JSX.Elemen
 
   return (
     <Card style={{ display: 'flex', flexDirection: 'column' }} title={strings.REPORTS}>
-      <Grid container sx={gridStyle}>
+      <Grid container sx={{}}>
         <Grid item xs={12} textAlign={'center'}>
           <TableWithSearchFilters
             columns={columns}
