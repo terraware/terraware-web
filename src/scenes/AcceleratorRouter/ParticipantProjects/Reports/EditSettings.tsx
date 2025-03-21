@@ -25,6 +25,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { NewAcceleratorReportConfig } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export default function EditSettings(): JSX.Element {
   const theme = useTheme();
@@ -36,6 +37,8 @@ export default function EditSettings(): JSX.Element {
   const createReportConfigResponse = useAppSelector(selectCreateReportConfig(requestId));
   const updateReportConfigResponse = useAppSelector(selectUpdateReportConfig(requestId));
   const projectReportConfig = useAppSelector((state) => selectProjectReportConfig(state));
+  const snackbar = useSnackbar();
+  const [validate, setValidate] = useState(false);
 
   useEffect(() => {
     if (projectId) {
@@ -46,13 +49,26 @@ export default function EditSettings(): JSX.Element {
   const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
-    if (createReportConfigResponse && createReportConfigResponse.status === 'success') {
+    if (!createReportConfigResponse) {
+      return;
+    }
+
+    if (createReportConfigResponse.status === 'error') {
+      snackbar.toastError();
+    } else if (createReportConfigResponse.status === 'success') {
       goToProjectReports();
     }
   }, [createReportConfigResponse]);
 
   useEffect(() => {
-    if (updateReportConfigResponse?.status === 'success') {
+    console.log('updateReportConfigResponse', updateReportConfigResponse);
+    if (!updateReportConfigResponse) {
+      return;
+    }
+
+    if (updateReportConfigResponse.status === 'error') {
+      snackbar.toastError();
+    } else if (updateReportConfigResponse.status === 'success') {
       goToProjectReports();
     }
   }, [updateReportConfigResponse]);
@@ -67,6 +83,19 @@ export default function EditSettings(): JSX.Element {
   });
 
   const saveReportConfig = () => {
+    if (newConfig.reportingEndDate && newConfig.reportingStartDate) {
+      const endDateDate = new Date(newConfig.reportingEndDate);
+      const startDateDate = new Date(newConfig.reportingStartDate);
+
+      if (endDateDate < startDateDate) {
+        setValidate(true);
+        return;
+      }
+    } else {
+      setValidate(true);
+      return;
+    }
+
     const request = projectReportConfig?.config
       ? dispatch(
           requestUpdateReportConfig({
@@ -114,6 +143,13 @@ export default function EditSettings(): JSX.Element {
                     onChange('reportingStartDate', value?.toFormat('yyyy-MM-dd'));
                   }}
                   value={newConfig.reportingStartDate}
+                  errorText={
+                    validate
+                      ? newConfig.reportingStartDate
+                        ? strings.INVALID_DATE
+                        : strings.REQUIRED_FIELD
+                      : undefined
+                  }
                 />
               </Grid>
               <Grid item xs={12}>
@@ -125,6 +161,9 @@ export default function EditSettings(): JSX.Element {
                     onChange('reportingEndDate', value?.toFormat('yyyy-MM-dd'));
                   }}
                   value={newConfig.reportingEndDate}
+                  errorText={
+                    validate ? (newConfig.reportingEndDate ? strings.INVALID_DATE : strings.REQUIRED_FIELD) : undefined
+                  }
                 />
               </Grid>
               <Grid item xs={12}>
