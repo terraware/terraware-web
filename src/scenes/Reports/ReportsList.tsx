@@ -19,12 +19,12 @@ import { SearchSortOrder } from 'src/types/Search';
 import ReportCellRenderer from './ReportCellRenderer';
 
 type AcceleratorReportRow = AcceleratorReport & {
-  report?: string;
+  reportName?: string;
   year?: string;
 };
 
 const defaultSearchOrder: SearchSortOrder = {
-  field: 'report',
+  field: 'reportName',
   direction: 'Descending',
 };
 
@@ -45,11 +45,11 @@ export default function ReportsList(): JSX.Element {
         const reports = acceleratorReportsListRequest?.data?.map((report) => {
           const year = report.startDate.split('-')[0];
           const quarterNumber = report.startDate ? Math.ceil((new Date(report.startDate).getMonth() + 1) / 3) : 0;
-          const title = report.frequency === 'Annual' ? `${year}` : `${year}-Q${quarterNumber}`;
+          const reportName = report.frequency === 'Annual' ? `${year}` : `${year}-Q${quarterNumber}`;
 
           return {
             ...report,
-            report: title,
+            reportName,
             year,
           };
         });
@@ -70,7 +70,7 @@ export default function ReportsList(): JSX.Element {
 
       return [
         {
-          key: 'report',
+          key: 'reportName',
           name: strings.REPORT,
           type: 'string',
         },
@@ -117,7 +117,7 @@ export default function ReportsList(): JSX.Element {
     }
   };
 
-  const fuzzySearchColumns = useMemo(() => ['report'], []);
+  const fuzzySearchColumns = useMemo(() => ['reportName'], []);
 
   const availableYears = useMemo(() => {
     const years = acceleratorReports.map((report) => report.startDate?.split('-')?.[0]);

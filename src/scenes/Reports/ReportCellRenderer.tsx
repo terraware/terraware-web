@@ -63,7 +63,7 @@ export default function ReportCellRenderer(props: RendererProps<TableRowType>): 
       : '';
   }, [submittedByUser]);
 
-  if (column.key === 'report') {
+  if (column.key === 'reportName') {
     return (
       <CellRenderer
         column={column}
