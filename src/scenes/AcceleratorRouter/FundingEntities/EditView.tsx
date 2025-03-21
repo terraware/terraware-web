@@ -1,30 +1,23 @@
 import React, { useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import Page from 'src/components/Page';
-import { APP_PATHS } from 'src/constants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useFundingEntity } from 'src/providers';
+import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import FundingEntityForm from './FundingEntityForm';
 import useUpdateFundingEntity from './useUpdateFundingEntity';
 
 const EditView = () => {
-  const navigate = useNavigate();
-  const location = useStateLocation();
   const { fundingEntity, reload } = useFundingEntity();
   const updateFundingEntity = useUpdateFundingEntity();
+  const { goToFundingEntity } = useNavigateTo();
 
   const goToViewFundingEntity = useCallback(() => {
     reload();
-    navigate(
-      getLocation(
-        APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_VIEW.replace(':fundingEntityId', `${fundingEntity?.id}`),
-        location
-      )
-    );
-  }, [navigate, location, fundingEntity]);
+    goToFundingEntity(String(fundingEntity?.id));
+  }, [fundingEntity]);
 
   const handleOnSave = useCallback(
     (record: FundingEntity) => {
@@ -40,7 +33,11 @@ const EditView = () => {
   }, [updateFundingEntity]);
 
   return (
-    <Page title={fundingEntity?.name || ''} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
+    <Page
+      title={strings.EDIT_FUNDING_ENTITY}
+      description={strings.EDIT_FUNDING_ENTITY_DESC}
+      contentStyle={{ display: 'flex', flexDirection: 'column' }}
+    >
       {fundingEntity && (
         <FundingEntityForm
           busy={updateFundingEntity.busy}

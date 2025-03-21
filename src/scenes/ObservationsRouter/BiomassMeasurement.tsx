@@ -70,7 +70,7 @@ export default function BiomassMeasurement(props: BiomassMeasurementProps): JSX.
           marginBottom: theme.spacing(2),
         }}
       >
-        {strings.BIOMASS_MEASUREMENT}
+        {strings.BIOMASS_MONITORING}
       </Typography>
 
       {unfilteredObservationsResults && unfilteredObservationsResults.length > 0 ? (

@@ -30,6 +30,7 @@ export type PageProps = {
   leftComponent?: JSX.Element;
   rightComponent?: React.ReactNode;
   title?: React.ReactNode;
+  description?: string;
 };
 
 /**
@@ -48,6 +49,7 @@ export default function Page({
   leftComponent,
   rightComponent,
   title,
+  description,
 }: PageProps): JSX.Element {
   const contentRef = useRef(null);
   const theme = useTheme();
@@ -115,6 +117,15 @@ export default function Page({
             </Grid>
           )}
         </Grid>
+        {description ? (
+          <Grid item xs={12} marginBottom={theme.spacing(2)} paddingX={theme.spacing(2)} sx={titleContainerStyle}>
+            <Typography margin={0} fontSize='14px' fontWeight={400} sx={{ paddingLeft: theme.spacing(3) }}>
+              {description}
+            </Typography>
+          </Grid>
+        ) : (
+          ''
+        )}
       </PageHeaderWrapper>
       <Grid item xs={12}>
         <PageSnackbar />

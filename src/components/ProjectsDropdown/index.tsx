@@ -20,7 +20,7 @@ type ProjectsDropdownProps<T extends { projectId?: number | string } | undefined
   required?: boolean;
   setRecord: (setFn: (previousValue: T) => T) => void;
   unselectLabel?: string;
-  unselectValue?: string;
+  unselectValue?: string | number;
   useDealName?: boolean;
 };
 

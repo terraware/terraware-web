@@ -122,7 +122,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
         to: APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', plantingSiteId?.toString()),
       });
       data.push({
-        name: strings.BIOMASS_MEASUREMENTS,
+        name: strings.BIOMASS_MONITORING,
         to: `${APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', plantingSiteId?.toString())}&tab=biomassMeasurements`,
       });
     }

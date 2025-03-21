@@ -4,11 +4,13 @@ import FundingEntityProvider from 'src/providers/FundingEntityProvider';
 
 import EditView from './EditView';
 import FundingEntitiesListView from './ListView';
+import NewView from './NewView';
 import SingleView from './SingleView';
 
 const FundingEntitiesRouter = () => {
   return (
     <Routes>
+      <Route path={'new'} element={<NewView />} />
       <Route
         path={':fundingEntityId/*'}
         element={

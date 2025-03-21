@@ -153,6 +153,18 @@ export default function useNavigateTo() {
           pathname: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW,
         }),
 
+      goToEditFundingEntity: (fundingEntityId: number | string) =>
+        navigate(APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_EDIT.replace(':fundingEntityId', `${fundingEntityId}`)),
+
+      goToFundingEntities: () => navigate({ pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES }),
+
+      goToFundingEntity: (fundingEntityId: number | string) =>
+        navigate({
+          pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_VIEW.replace(':fundingEntityId', String(fundingEntityId)),
+        }),
+
+      goToNewFundingEntity: () => navigate({ pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_NEW }),
+
       goToHelpSupport: () => {
         navigate({ pathname: APP_PATHS.HELP_SUPPORT });
       },

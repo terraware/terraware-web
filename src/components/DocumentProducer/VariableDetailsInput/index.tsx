@@ -212,7 +212,7 @@ const VariableDetailsInput = ({
         }
       }
       if (variable.type === 'Link') {
-        if (values) {
+        if (values && values.length > 0) {
           const linkValues = values as VariableValueLinkValue[];
           const newValues = linkValues.map((lv) => ({ ...lv }));
           if (id === 'citation') {
