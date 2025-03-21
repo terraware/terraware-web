@@ -46,7 +46,7 @@ const ReportsView = () => {
       {
         id: 'reports',
         label: strings.REPORTS,
-        children: <ReportsList projectId={projectFilter?.projectId} />,
+        children: <ReportsList />,
       },
       {
         id: 'targets',

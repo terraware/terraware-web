@@ -7,6 +7,7 @@ import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
 import Card from 'src/components/common/Card';
 import { FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
 import { useLocalization } from 'src/providers';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { selectListAcceleratorReports } from 'src/redux/features/reports/reportsSelectors';
 import { requestListAcceleratorReports } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -16,18 +17,15 @@ import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 
 import ReportCellRenderer from './ReportCellRenderer';
 
-type ReportsListProps = {
-  projectId?: number | string;
-};
-
 const defaultSearchOrder: SearchSortOrder = {
   field: 'status',
   direction: 'Ascending',
 };
 
-export default function ReportsList({ projectId }: ReportsListProps): JSX.Element {
+export default function ReportsList(): JSX.Element {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
+  const { currentParticipantProject } = useParticipantData();
 
   const [acceleratorReports, setAcceleratorReports] = useState<AcceleratorReport[]>([]);
   const [listAcceleratorReportsRequestId, setListAcceleratorReportsRequestId] = useState<string>('');
@@ -84,7 +82,7 @@ export default function ReportsList({ projectId }: ReportsListProps): JSX.Elemen
 
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, sortOrder: SearchSortOrder) => {
-      if (!projectId) {
+      if (!currentParticipantProject?.id) {
         return;
       }
 
@@ -92,14 +90,14 @@ export default function ReportsList({ projectId }: ReportsListProps): JSX.Elemen
         requestListAcceleratorReports({
           includeFuture: true,
           locale: locale ?? undefined,
-          projectId: projectId.toString(),
+          projectId: currentParticipantProject.id.toString(),
           search,
           sortOrder,
         })
       );
       setListAcceleratorReportsRequestId(request.requestId);
     },
-    [dispatch, projectId]
+    [currentParticipantProject?.id, dispatch]
   );
 
   const isAcceleratorRoute = false;
