@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -116,17 +116,7 @@
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a>
 <a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L54'></a><a href='#L54'>54</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -141,16 +131,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -186,33 +170,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 &nbsp;
 import Page from 'src/components/Page';
-import { APP_PATHS } from 'src/constants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useFundingEntity } from 'src/providers';
 import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 &nbsp;
 import FundingEntityForm from './FundingEntityForm';
 import useUpdateFundingEntity from './useUpdateFundingEntity';
 &nbsp;
 const EditView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-  const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
-  const location = <span class="cstat-no" title="statement not covered" >useStateLocation();</span>
   const { fundingEntity, reload } = <span class="cstat-no" title="statement not covered" >useFundingEntity();</span>
   const updateFundingEntity = <span class="cstat-no" title="statement not covered" >useUpdateFundingEntity();</span>
+  const { goToFundingEntity } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
 &nbsp;
   const goToViewFundingEntity = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    reload();</span>
-<span class="cstat-no" title="statement not covered" >    navigate(</span>
-      getLocation(
-        APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_VIEW.replace(':fundingEntityId', `${fundingEntity?.id}`),
-        location
-      )
-    );
-  }, [navigate, location, fundingEntity]);
+<span class="cstat-no" title="statement not covered" >    goToFundingEntity(String(fundingEntity?.id));</span>
+  }, [fundingEntity]);
 &nbsp;
   const handleOnSave = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (r</span>ecord: FundingEntity) =&gt; {
@@ -253,7 +229,7 @@ export default EditView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-20T23:50:59.562Z
+                at 2025-03-21T15:19:55.006Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
