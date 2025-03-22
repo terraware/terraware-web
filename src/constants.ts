@@ -121,6 +121,8 @@ export enum APP_PATHS {
   PROJECTS = '/projects',
   PROJECTS_NEW = '/projects/new',
   REPORTS = '/reports',
+  REPORTS_EDIT = '/reports/:reportId/edit',
+  REPORTS_VIEW = '/reports/:reportId',
   SEED_BANKS = '/seedbanks',
   SEED_BANKS_EDIT = '/seedbanks/:seedBankId/edit',
   SEED_BANKS_NEW = '/seedbanks/new',
