@@ -151,6 +151,7 @@ export default function ReportsList(): JSX.Element {
               options={availableYears}
               placeholder={strings.YEAR}
               selectedValue={yearFilter}
+              sx={{ textAlign: 'left' }}
             />
           </Box>
         </>
