@@ -144,9 +144,8 @@ export default function ReportsList(): JSX.Element {
         <>
           <Box marginTop={0.5} paddingLeft={1}>
             <Select
-              fullWidth
               id='yearFilter'
-              label={''}
+              label=''
               onChange={(year: string) => setYearFilter(year)}
               options={availableYears}
               placeholder={strings.YEAR}
