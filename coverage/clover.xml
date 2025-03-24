@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1742844600587" clover="3.2.0">
-  <project timestamp="1742844600587" name="All files">
-    <metrics statements="28695" coveredstatements="1233" conditionals="19438" coveredconditionals="354" methods="8873" coveredmethods="198" elements="57006" coveredelements="1785" complexity="0" loc="28695" ncloc="28695" packages="248" files="1189" classes="1189"/>
+<coverage generated="1742858870137" clover="3.2.0">
+  <project timestamp="1742858870137" name="All files">
+    <metrics statements="28698" coveredstatements="1233" conditionals="19442" coveredconditionals="354" methods="8873" coveredmethods="198" elements="57013" coveredelements="1785" complexity="0" loc="28698" ncloc="28698" packages="248" files="1189" classes="1189"/>
     <package name="src">
       <metrics statements="179" coveredstatements="7" conditionals="126" coveredconditionals="0" methods="40" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -23758,7 +23758,7 @@
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter">
-      <metrics statements="384" coveredstatements="0" conditionals="310" coveredconditionals="0" methods="139" coveredmethods="0"/>
+      <metrics statements="387" coveredstatements="0" conditionals="314" coveredconditionals="0" methods="139" coveredmethods="0"/>
       <file name="AdHocObservationsRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/AdHocObservationsRenderer.tsx">
         <metrics statements="17" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="11" count="0" type="stmt"/>
@@ -24097,7 +24097,7 @@
         <line num="63" count="0" type="stmt"/>
       </file>
       <file name="TreesAndShrubsRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/TreesAndShrubsRenderer.tsx">
-        <metrics statements="12" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="15" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="10" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
@@ -24108,8 +24108,11 @@
         <line num="21" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
         <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
+        <line num="41" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="45" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
       </file>
       <file name="TreesAndShrubsTable.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/TreesAndShrubsTable.tsx">
         <metrics statements="15" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="8" coveredmethods="0"/>
