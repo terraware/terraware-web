@@ -55,8 +55,7 @@ const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element => {
         <Fragment key={index}>
           <Grid item xs={11} rowSpacing={2}>
             <ProjectsDropdown
-              allowUnselect
-              unselectValue={-1}
+              placeholder={strings.SELECT}
               availableProjects={allProjects.filter(
                 (p) => p.id === project.id || !rows.map((r) => r.id).includes(p.id)
               )}
