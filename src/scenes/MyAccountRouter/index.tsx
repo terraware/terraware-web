@@ -18,6 +18,7 @@ const MyAccountRouter = ({ className, hasNav }: Props) => {
         path={'/edit'}
         element={
           <MyAccountView
+            includeHeader={true}
             className={className}
             edit={true}
             hasNav={hasNav}
@@ -28,7 +29,15 @@ const MyAccountRouter = ({ className, hasNav }: Props) => {
       />
       <Route
         path={'/*'}
-        element={<MyAccountView className={className} edit={false} hasNav={hasNav} organizations={organizations} />}
+        element={
+          <MyAccountView
+            includeHeader={true}
+            className={className}
+            edit={false}
+            hasNav={hasNav}
+            organizations={organizations}
+          />
+        }
       />
     </Routes>
   );

@@ -1,21 +1,26 @@
-import React, { CSSProperties, useEffect, useRef, useState } from 'react';
+import React, { CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
 
+import LocaleSelector from 'src/components/LocaleSelector';
 import RegionSelector from 'src/components/RegionSelector';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import WeightSystemSelector from 'src/components/WeightSystemSelector';
+import Checkbox from 'src/components/common/Checkbox';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import PageForm from 'src/components/common/PageForm';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TextWithLink from 'src/components/common/TextWithLink';
+import TextField from 'src/components/common/Textfield/Textfield';
 import TfMain from 'src/components/common/TfMain';
+import TitleDescription from 'src/components/common/TitleDescription';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useDocLinks } from 'src/docLinks';
-import { useLocalization, useUser } from 'src/providers';
-import { useTimeZones } from 'src/providers';
+import { useLocalization, useTimeZones, useUser, useUserFundingEntity } from 'src/providers';
 import { OrganizationService, OrganizationUserService, PreferencesService, UserService } from 'src/services';
 import strings from 'src/strings';
 import { findLocaleDetails, useSupportedLocales } from 'src/strings/locales';
@@ -29,12 +34,6 @@ import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 import { getUTC } from 'src/utils/useTimeZoneUtils';
 
-import LocaleSelector from '../../components/LocaleSelector';
-import Checkbox from '../../components/common/Checkbox';
-import PageForm from '../../components/common/PageForm';
-import PageHeaderWrapper from '../../components/common/PageHeaderWrapper';
-import TextField from '../../components/common/Textfield/Textfield';
-import TitleDescription from '../../components/common/TitleDescription';
 import AssignNewOwnerDialog from './AssignNewOwnerModal';
 import CannotRemoveOrgDialog from './CannotRemoveOrgModal';
 import DeleteAccountModal from './DeleteAccountModal';
@@ -47,6 +46,7 @@ type MyAccountProps = {
   hasNav?: boolean;
   organizations?: Organization[];
   reloadData?: () => void;
+  includeHeader?: boolean;
 };
 
 export default function MyAccountView(props: MyAccountProps): JSX.Element | null {
@@ -67,6 +67,7 @@ type MyAccountContentProps = {
   reloadData?: () => void;
   reloadUser: () => void;
   user: User;
+  includeHeader?: boolean;
 };
 
 /**
@@ -98,6 +99,7 @@ const MyAccountContent = ({
   reloadData,
   reloadUser,
   user,
+  includeHeader,
 }: MyAccountContentProps): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const supportedLocales = useSupportedLocales();
@@ -115,6 +117,7 @@ const MyAccountContent = ({
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
   const { userPreferences, reloadUserPreferences } = useUser();
+  const { userFundingEntity } = useUserFundingEntity();
   const snackbar = useSnackbar();
   const docLinks = useDocLinks();
   const contentRef = useRef(null);
@@ -308,6 +311,13 @@ const MyAccountContent = ({
     }
   };
 
+  const userIsFunder = useMemo(() => user.userType === 'Funder', [user]);
+
+  const onEditClick = () => {
+    // SW-6604 - make this optionally overridable with a prop
+    navigate(APP_PATHS.MY_ACCOUNT_EDIT);
+  };
+
   return (
     <TfMain style={style}>
       <PageForm
@@ -346,34 +356,40 @@ const MyAccountContent = ({
             />
           </>
         )}
-        <PageHeaderWrapper nextElement={contentRef.current} hasNav={hasNav}>
-          <Box
-            display='flex'
-            justifyContent='space-between'
-            marginBottom={theme.spacing(4)}
-            padding={hasNav === false ? theme.spacing(0, 5) : theme.spacing(0, 0, 0, 3)}
-            marginTop={organizations && organizations.length > 0 ? 0 : theme.spacing(12)}
-          >
-            <TitleDescription title={strings.MY_ACCOUNT} description={strings.MY_ACCOUNT_DESC} style={{ padding: 0 }} />
-            {!edit && (
-              <Box display='flex' height='fit-content'>
-                {openDeleteAccountModal && <DeleteAccountModal onCancel={() => setOpenDeleteAccountModal(false)} />}
-                <Button
-                  id='edit-account'
-                  icon='iconEdit'
-                  label={isMobile ? '' : strings.EDIT_ACCOUNT}
-                  onClick={() => navigate(APP_PATHS.MY_ACCOUNT_EDIT)}
-                  size='medium'
-                  priority='primary'
-                />
-                <OptionsMenu
-                  onOptionItemClick={onOptionItemClick}
-                  optionItems={[{ label: strings.DELETE_ACCOUNT, value: 'delete-account', type: 'destructive' }]}
-                />
-              </Box>
-            )}
-          </Box>
-        </PageHeaderWrapper>
+        {includeHeader && (
+          <PageHeaderWrapper nextElement={contentRef.current} hasNav={hasNav}>
+            <Box
+              display='flex'
+              justifyContent='space-between'
+              marginBottom={theme.spacing(4)}
+              padding={hasNav === false ? theme.spacing(0, 5) : theme.spacing(0, 0, 0, 3)}
+              marginTop={organizations && organizations.length > 0 ? 0 : theme.spacing(12)}
+            >
+              <TitleDescription
+                title={strings.MY_ACCOUNT}
+                description={strings.MY_ACCOUNT_DESC}
+                style={{ padding: 0 }}
+              />
+              {!edit && (
+                <Box display='flex' height='fit-content'>
+                  {openDeleteAccountModal && <DeleteAccountModal onCancel={() => setOpenDeleteAccountModal(false)} />}
+                  <Button
+                    id='edit-account'
+                    icon='iconEdit'
+                    label={isMobile ? '' : strings.EDIT_ACCOUNT}
+                    onClick={onEditClick}
+                    size='medium'
+                    priority='primary'
+                  />
+                  <OptionsMenu
+                    onOptionItemClick={onOptionItemClick}
+                    optionItems={[{ label: strings.DELETE_ACCOUNT, value: 'delete-account', type: 'destructive' }]}
+                  />
+                </Box>
+              )}
+            </Box>
+          </PageHeaderWrapper>
+        )}
         <Box
           ref={contentRef}
           sx={{
@@ -387,7 +403,7 @@ const MyAccountContent = ({
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Typography fontSize='20px' fontWeight={600}>
-                  {strings.GENERAL}
+                  {userIsFunder ? strings.FUNDER : strings.GENERAL}
                 </Typography>
               </Grid>
               <Grid item xs={isMobile ? 12 : 4}>
@@ -420,32 +436,46 @@ const MyAccountContent = ({
                   readonly={true}
                 />
               </Grid>
+              {userIsFunder && (
+                <Grid item xs={isMobile ? 12 : 4}>
+                  <TextField
+                    label={strings.FUNDING_ENTITY}
+                    id='fundingEntity'
+                    type='text'
+                    value={userFundingEntity?.name}
+                    display={!edit}
+                    readonly={true}
+                  />
+                </Grid>
+              )}
               <Grid item xs={12}>
                 <Typography fontSize='20px' fontWeight={600}>
                   {strings.LANGUAGE_AND_REGION}
                 </Typography>
               </Grid>
-              <Grid
-                item
-                xs={isMobile ? 12 : 3}
-                sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
-              >
-                {edit ? (
-                  <LocaleSelector
-                    onChangeLocale={(newValue) => setLocaleSelected(newValue)}
-                    localeSelected={localeSelected}
-                    fullWidth={true}
-                  />
-                ) : (
-                  <TextField
-                    label={strings.LANGUAGE}
-                    id='locale'
-                    type='text'
-                    value={findLocaleDetails(supportedLocales, selectedLocale).name}
-                    display={true}
-                  />
-                )}
-              </Grid>
+              {!userIsFunder && (
+                <Grid
+                  item
+                  xs={isMobile ? 12 : 3}
+                  sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
+                >
+                  {edit ? (
+                    <LocaleSelector
+                      onChangeLocale={(newValue) => setLocaleSelected(newValue)}
+                      localeSelected={localeSelected}
+                      fullWidth={true}
+                    />
+                  ) : (
+                    <TextField
+                      label={strings.LANGUAGE}
+                      id='locale'
+                      type='text'
+                      value={findLocaleDetails(supportedLocales, selectedLocale).name}
+                      display={true}
+                    />
+                  )}
+                </Grid>
+              )}
               <Grid
                 item
                 xs={isMobile ? 12 : 3}
@@ -469,27 +499,29 @@ const MyAccountContent = ({
                   />
                 )}
               </Grid>
-              <Grid
-                item
-                xs={isMobile ? 12 : 3}
-                sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
-              >
-                {edit ? (
-                  <WeightSystemSelector
-                    onChange={(newValue) => setPreferredWeightSystemSelected(newValue)}
-                    selectedWeightSystem={preferredWeightSystemSelected}
-                    fullWidth={true}
-                  />
-                ) : (
-                  <TextField
-                    label={strings.PREFERRED_WEIGHT_SYSTEM}
-                    id='preferredWeightSystem'
-                    type='text'
-                    value={weightSystems().find((ws) => ws.value === preferredWeightSystemSelected)?.label}
-                    display={true}
-                  />
-                )}
-              </Grid>
+              {!userIsFunder && (
+                <Grid
+                  item
+                  xs={isMobile ? 12 : 3}
+                  sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
+                >
+                  {edit ? (
+                    <WeightSystemSelector
+                      onChange={(newValue) => setPreferredWeightSystemSelected(newValue)}
+                      selectedWeightSystem={preferredWeightSystemSelected}
+                      fullWidth={true}
+                    />
+                  ) : (
+                    <TextField
+                      label={strings.PREFERRED_WEIGHT_SYSTEM}
+                      id='preferredWeightSystem'
+                      type='text'
+                      value={weightSystems().find((ws) => ws.value === preferredWeightSystemSelected)?.label}
+                      display={true}
+                    />
+                  )}
+                </Grid>
+              )}
               <Grid item xs={isMobile ? 12 : 3} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
                 {edit ? (
                   <TimeZoneSelector

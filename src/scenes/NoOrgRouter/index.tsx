@@ -8,6 +8,7 @@ import { useUser } from 'src/providers';
 import HelpSupportRouter from 'src/scenes/HelpSupportRouter';
 import MyAccountRouter from 'src/scenes/MyAccountRouter';
 import OptInFeaturesView from 'src/scenes/OptInFeatures';
+import SettingsPage from 'src/scenes/Settings/SettingsPage';
 import useEnvironment from 'src/utils/useEnvironment';
 
 const NoOrgRouter = () => {
@@ -16,6 +17,7 @@ const NoOrgRouter = () => {
   return (
     <Routes>
       <Route path={`${APP_PATHS.MY_ACCOUNT}/*`} element={<MyAccountRouter hasNav={false} />} />
+      <Route path={`${APP_PATHS.SETTINGS}*`} element={<SettingsPage />} />
       <Route path={APP_PATHS.WELCOME} element={<NoOrgLandingPage />} />
       <Route path={`${APP_PATHS.APPLICATIONS}/*`} element={<NoOrgApplicationLandingPage />} />
       {!isProduction && <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />}

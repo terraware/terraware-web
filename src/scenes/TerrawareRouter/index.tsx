@@ -24,6 +24,14 @@ const MINIMAL_USER_ROUTES: string[] = [
   APP_PATHS.HELP_SUPPORT_FORM,
 ];
 
+const MINIMAL_FUNDER_ROUTES: string[] = [
+  APP_PATHS.FUNDER_HOME,
+  APP_PATHS.SETTINGS,
+  APP_PATHS.OPT_IN,
+  APP_PATHS.HELP_SUPPORT,
+  APP_PATHS.HELP_SUPPORT_FORM,
+];
+
 export default function TerrawareRouter(props: TerrawareRouterProps) {
   const { userFundingEntity } = useUserFundingEntity();
   const { organizations } = useOrganization();
@@ -31,10 +39,14 @@ export default function TerrawareRouter(props: TerrawareRouterProps) {
   const location = useStateLocation();
 
   useEffect(() => {
-    if (userFundingEntity) {
+    if (userFundingEntity && !MINIMAL_FUNDER_ROUTES.some((path) => !!matchPath(path, location.pathname))) {
       navigate(APP_PATHS.FUNDER_HOME);
     }
-    if (organizations?.length === 0 && !MINIMAL_USER_ROUTES.some((path) => !!matchPath(path, location.pathname))) {
+    if (
+      organizations?.length === 0 &&
+      !MINIMAL_USER_ROUTES.some((path) => !!matchPath(path, location.pathname)) &&
+      !userFundingEntity
+    ) {
       navigate(APP_PATHS.WELCOME);
     }
   }, [navigate, location, userFundingEntity, organizations]);
