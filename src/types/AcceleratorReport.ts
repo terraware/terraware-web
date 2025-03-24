@@ -33,8 +33,12 @@ export type ReviewAcceleratorReportMetricsRequestPayload =
   components['schemas']['ReviewAcceleratorReportMetricsRequestPayload'];
 
 export type ReviewAcceleratorReportMetricsRequest = ReviewAcceleratorReportMetricsRequestPayload & {
-  projectId: number;
   reportId: number;
+};
+
+export type ReviewManyAcceleratorReportMetricsRequest = {
+  requests: ReviewAcceleratorReportMetricsRequest[];
+  projectId: number;
 };
 
 export type NewMetric = components['schemas']['NewMetricPayload'];

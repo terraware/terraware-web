@@ -6,11 +6,15 @@ import { Grid, Typography } from '@mui/material';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
-import { selectReviewAcceleratorReportMetrics } from 'src/redux/features/reports/reportsSelectors';
-import { requestReviewAcceleratorReportMetrics } from 'src/redux/features/reports/reportsThunks';
+import { selectReviewManyAcceleratorReportMetrics } from 'src/redux/features/reports/reportsSelectors';
+import { requestReviewManyAcceleratorReportMetrics } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { SystemMetricName } from 'src/types/AcceleratorReport';
+import {
+  ReviewAcceleratorReportMetricsRequest,
+  ReviewManyAcceleratorReportMetricsRequest,
+  SystemMetricName,
+} from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -26,7 +30,7 @@ export default function EditTargetsModal(props: EditTargetsModalProp): JSX.Eleme
   const { onClose, row, reload } = props;
   const [requestId, setRequestId] = useState<string>('');
   const dispatch = useAppDispatch();
-  const updateReportMetricsResponse = useAppSelector(selectReviewAcceleratorReportMetrics(requestId));
+  const updateReportMetricsResponse = useAppSelector(selectReviewManyAcceleratorReportMetrics(requestId));
   const snackbar = useSnackbar();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
@@ -64,56 +68,30 @@ export default function EditTargetsModal(props: EditTargetsModalProp): JSX.Eleme
       }
     };
 
+    const requests: ReviewAcceleratorReportMetricsRequest[] = [];
     if (row.annualReportId) {
-      const requestAnnual = dispatch(
-        requestReviewAcceleratorReportMetrics({
-          ...getUpdateBody('annual'),
-          projectId: projectId,
-          reportId: row.annualReportId,
-        })
-      );
-      setRequestId(requestAnnual.requestId);
+      requests.push({ ...getUpdateBody('annual'), reportId: row.annualReportId });
     }
     if (row.q1ReportId) {
-      const requestAnnual = dispatch(
-        requestReviewAcceleratorReportMetrics({
-          ...getUpdateBody('q1'),
-          projectId: projectId,
-          reportId: row.q1ReportId,
-        })
-      );
-      setRequestId(requestAnnual.requestId);
+      requests.push({ ...getUpdateBody('q1'), reportId: row.q1ReportId });
     }
     if (row.q2ReportId) {
-      const requestAnnual = dispatch(
-        requestReviewAcceleratorReportMetrics({
-          ...getUpdateBody('q2'),
-          projectId: projectId,
-          reportId: row.q2ReportId,
-        })
-      );
-      setRequestId(requestAnnual.requestId);
+      requests.push({ ...getUpdateBody('q2'), reportId: row.q2ReportId });
     }
     if (row.q3ReportId) {
-      const requestAnnual = dispatch(
-        requestReviewAcceleratorReportMetrics({
-          ...getUpdateBody('q3'),
-          projectId: projectId,
-          reportId: row.q3ReportId,
-        })
-      );
-      setRequestId(requestAnnual.requestId);
+      requests.push({ ...getUpdateBody('q3'), reportId: row.q3ReportId });
     }
     if (row.q4ReportId) {
-      const requestAnnual = dispatch(
-        requestReviewAcceleratorReportMetrics({
-          ...getUpdateBody('q4'),
-          projectId: projectId,
-          reportId: row.q4ReportId,
-        })
-      );
-      setRequestId(requestAnnual.requestId);
+      requests.push({ ...getUpdateBody('q4'), reportId: row.q4ReportId });
     }
+
+    const requestPayload: ReviewManyAcceleratorReportMetricsRequest = {
+      requests,
+      projectId,
+    };
+
+    const request = dispatch(requestReviewManyAcceleratorReportMetrics(requestPayload));
+    setRequestId(request.requestId);
   };
 
   return (

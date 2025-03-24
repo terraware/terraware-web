@@ -8,6 +8,7 @@ import {
   CreateAcceleratorReportConfigRequest,
   CreateProjectMetricRequest,
   ReviewAcceleratorReportMetricsRequest,
+  ReviewManyAcceleratorReportMetricsRequest,
   UpdateAcceleratorReportConfigRequest,
   UpdateProjectMetricRequest,
 } from 'src/types/AcceleratorReport';
@@ -138,15 +139,21 @@ export const requestUpdateProjectMetric = createAsyncThunk(
   }
 );
 
-export const requestReviewAcceleratorReportMetrics = createAsyncThunk(
+export const requestReviewManyAcceleratorReportMetrics = createAsyncThunk(
   'reviewAcceleratorReportMetrics',
-  async (request: ReviewAcceleratorReportMetricsRequest, { rejectWithValue }) => {
-    const response = await AcceleratorReportService.reviewAcceleratorReportMetrics(request);
+  async (request: ReviewManyAcceleratorReportMetricsRequest, { rejectWithValue }) => {
+    const { projectId, requests } = request;
 
-    if (response && response.requestSucceeded) {
-      return response.data;
+    const promises = requests.map((iRequest: ReviewAcceleratorReportMetricsRequest) => {
+      const { reportId, ...rest } = iRequest;
+      return AcceleratorReportService.reviewAcceleratorReportMetrics(rest, projectId, reportId);
+    });
+
+    const results = await Promise.all(promises);
+
+    if (results.every((result) => result && result.requestSucceeded)) {
+      return true;
     }
-
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
