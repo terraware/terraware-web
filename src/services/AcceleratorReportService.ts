@@ -56,6 +56,8 @@ type ListAcceleratorReportsResponsePayload =
 type UpdateProjectMetricResponse =
   paths[typeof PROJECT_METRIC_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
+export type ListAcceleratorReportsRequestParams = paths[typeof PROJECT_REPORTS_ENDPOINT]['get']['parameters']['query'];
+
 /**
  * Get project reports config
  */
@@ -125,7 +127,8 @@ const listAcceleratorReports = async (
   search?: SearchNodePayload,
   sortOrder?: SearchSortOrder,
   includeMetrics?: boolean,
-  includeFuture?: boolean
+  includeFuture?: boolean,
+  year?: string
 ): Promise<Response & AcceleratorReportsData> => {
   let searchOrderConfig: SearchOrderConfig | undefined;
   if (sortOrder) {
@@ -136,13 +139,9 @@ const listAcceleratorReports = async (
   }
   let params = { includeMetrics: (!!includeMetrics).toString(), includeFuture: (!!includeFuture).toString() };
 
-  const yearFilter = search?.children?.find((ch: { field: string }) => ch.field === 'year');
-  if (yearFilter) {
-    const yearToUse = yearFilter.values[0];
-    if (yearToUse) {
-      const yearParam = { year: yearToUse };
-      params = { ...params, ...yearParam };
-    }
+  if (year) {
+    const yearParam = { year };
+    params = { ...params, ...yearParam };
   }
 
   return await HttpService.root(PROJECT_REPORTS_ENDPOINT.replace('{projectId}', projectId)).get<
@@ -153,7 +152,7 @@ const listAcceleratorReports = async (
       params,
     },
     (data) => ({
-      reports: searchAndSort(data?.reports || [], undefined, searchOrderConfig),
+      reports: searchAndSort(data?.reports || [], search, searchOrderConfig),
     })
   );
 };
