@@ -118,7 +118,7 @@ export default function ReportsTargets(): JSX.Element {
       availableYears.add(reportYear);
     });
     return Array.from(availableYears);
-  }, [reports]);
+  }, [allReports]);
 
   useEffect(() => {
     if (projectId) {
