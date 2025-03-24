@@ -7,8 +7,8 @@ import { Tabs } from '@terraware/web-components';
 import Page from 'src/components/Page';
 import TitleDescription from 'src/components/common/TitleDescription';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
-import { useLocalization } from 'src/providers';
-import MyAccountView from 'src/scenes/MyAccountRouter/MyAccountView';
+import { useLocalization, useUser } from 'src/providers';
+import MyAccountForm from 'src/scenes/MyAccountRouter/MyAccountForm';
 import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
@@ -16,9 +16,14 @@ const SettingsPage = () => {
   const { activeLocale } = useLocalization();
   const mixpanel = useMixpanel();
   const theme = useTheme();
+  const { user, reloadUser } = useUser();
 
   const tabs = useMemo(() => {
     if (!activeLocale) {
+      return [];
+    }
+
+    if (!user) {
       return [];
     }
 
@@ -26,10 +31,10 @@ const SettingsPage = () => {
       {
         id: 'my-account',
         label: strings.MY_ACCOUNT,
-        children: <MyAccountView edit={false} />,
+        children: <MyAccountForm edit={false} user={{ ...user }} reloadUser={reloadUser} />,
       },
     ];
-  }, [activeLocale]);
+  }, [activeLocale, user, reloadUser]);
 
   const { activeTab, onTabChange } = useStickyTabs({
     defaultTab: 'my-account',
