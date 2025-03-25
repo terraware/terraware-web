@@ -1,53 +1,57 @@
-import React, { useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { DropdownItem } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useFundingEntity, useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+
+import DeleteFundingEntityModal from './DeleteFundingEntityModal';
 
 const SingleView = () => {
-  const navigate = useNavigate();
-  const location = useStateLocation();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
   const theme = useTheme();
   const { fundingEntity } = useFundingEntity();
+  const [openDeleteConfirm, setOpenDeleteConfirm] = useState<boolean>(false);
+  const { goToEditFundingEntity } = useNavigateTo();
 
-  const canEdit = isAllowed('MANAGE_FUNDING_ENTITIES');
+  const canManage = isAllowed('MANAGE_FUNDING_ENTITIES');
 
-  const goToEditFundingEntity = useCallback(
-    () =>
-      navigate(
-        getLocation(
-          APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_EDIT.replace(':fundingEntityId', `${fundingEntity?.id}`),
-          location
-        )
-      ),
-    [navigate, location, fundingEntity]
-  );
+  const onDeleteClick = (optionItem: DropdownItem) => {
+    if (optionItem.value === 'delete') {
+      setOpenDeleteConfirm(true);
+    }
+  };
 
   const rightComponent = useMemo(
     () =>
       activeLocale &&
-      canEdit && (
-        <Button
-          label={strings.EDIT_FUNDING_ENTITY}
-          icon='iconEdit'
-          onClick={goToEditFundingEntity}
-          size='medium'
-          id='editFundingEntity'
-        />
+      canManage && (
+        <>
+          <Button
+            label={strings.EDIT_FUNDING_ENTITY}
+            icon='iconEdit'
+            onClick={() => goToEditFundingEntity(String(fundingEntity?.id))}
+            size='medium'
+            id='editFundingEntity'
+          />
+          <OptionsMenu
+            onOptionItemClick={onDeleteClick}
+            optionItems={[{ label: strings.DELETE, value: 'delete', type: 'destructive' }]}
+          />
+        </>
       ),
-    [activeLocale, canEdit, goToEditFundingEntity]
+    [activeLocale, canManage, goToEditFundingEntity]
   );
 
   const crumbs: Crumb[] = useMemo(
@@ -61,29 +65,43 @@ const SingleView = () => {
   );
 
   return (
-    <Page crumbs={crumbs} title={fundingEntity?.name || ''} rightComponent={rightComponent}>
-      <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
-        <Grid container spacing={3}>
-          <Grid item xs={4}>
-            <TextField label={strings.NAME} id='name' type='text' value={fundingEntity?.name} display={true} />
-          </Grid>
-          {fundingEntity?.projects?.map((project, idx) => (
-            <Grid key={idx} item xs={4}>
-              <Typography fontSize='14px' fontWeight={400} lineHeight='20px' color={theme.palette.TwClrBaseGray500}>
-                {strings.PROJECT}
-              </Typography>
-              <Box display='flex' flexDirection='row' flexWrap='wrap' marginTop={theme.spacing(1.5)}>
-                <span>
-                  <Link fontSize='16px' to={APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${project.id}`)}>
-                    {project.name}
-                  </Link>
-                </span>
-              </Box>
+    <>
+      {fundingEntity && (
+        <Page crumbs={crumbs} title={fundingEntity.name || ''} rightComponent={rightComponent}>
+          {openDeleteConfirm && (
+            <DeleteFundingEntityModal
+              open={openDeleteConfirm}
+              onClose={() => setOpenDeleteConfirm(false)}
+              fundingEntity={fundingEntity}
+            />
+          )}
+          <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
+            <Grid container spacing={3}>
+              <Grid item xs={4}>
+                <TextField label={strings.NAME} id='name' type='text' value={fundingEntity.name} display={true} />
+              </Grid>
+              {fundingEntity.projects?.map((project, idx) => (
+                <Grid key={idx} item xs={4}>
+                  <Typography fontSize='14px' fontWeight={400} lineHeight='20px' color={theme.palette.TwClrBaseGray500}>
+                    {strings.PROJECT}
+                  </Typography>
+                  <Box display='flex' flexDirection='row' flexWrap='wrap' marginTop={theme.spacing(1.5)}>
+                    <span>
+                      <Link
+                        fontSize='16px'
+                        to={APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${project.id}`)}
+                      >
+                        {project.name}
+                      </Link>
+                    </span>
+                  </Box>
+                </Grid>
+              ))}
             </Grid>
-          ))}
-        </Grid>
-      </Card>
-    </Page>
+          </Card>
+        </Page>
+      )}
+    </>
   );
 };
 

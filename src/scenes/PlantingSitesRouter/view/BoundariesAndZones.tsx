@@ -117,7 +117,7 @@ export default function BoundariesAndZones({
                 onChange={(newValue) => setSelectedObservationType(newValue as ObservationType)}
                 options={[
                   { label: strings.PLANT_MONITORING, value: 'plantMonitoring' },
-                  { label: strings.BIOMASS_MEASUREMENTS, value: 'biomassMeasurements' },
+                  { label: strings.BIOMASS_MONITORING, value: 'biomassMeasurements' },
                 ]}
                 selectedValue={selectedObservationType}
                 fullWidth

@@ -39,7 +39,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
   });
 
   summaries?.[0]?.species.forEach((sp: ObservationSpeciesResultsPayload) => {
-    if (sp.mortalityRate !== undefined && sp.mortalityRate !== null && sp.mortalityRate <= lowestMortalityRate) {
+    if (sp.mortalityRate !== undefined && sp.mortalityRate !== null && sp.mortalityRate < lowestMortalityRate) {
       lowestMortalityRate = sp.mortalityRate;
       lowestSpecies =
         availableSpecies?.find((spec) => spec.id === sp.speciesId)?.scientificName || sp.speciesName || '';

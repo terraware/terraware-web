@@ -61,6 +61,8 @@ type UpdateProjectMetricResponse =
 type ReviewAcceleratorReportMetricsResponse =
   paths[typeof REVIEW_ACCELERATOR_REPORT_METRICS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
+export type ListAcceleratorReportsRequestParams = paths[typeof PROJECT_REPORTS_ENDPOINT]['get']['parameters']['query'];
+
 /**
  * Get project reports config
  */
@@ -155,7 +157,7 @@ const listAcceleratorReports = async (
       params,
     },
     (data) => ({
-      reports: searchAndSort(data?.reports || [], undefined, searchOrderConfig),
+      reports: searchAndSort(data?.reports || [], search, searchOrderConfig),
     })
   );
 };

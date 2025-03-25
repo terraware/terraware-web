@@ -21,42 +21,42 @@ import useDebounce from 'src/utils/useDebounce';
 export interface ClientSideFilterTableProps
   extends Omit<OrderPreservedTablePropsFull<TableRowType>, 'columns' | 'orderBy'> {
   busy?: boolean;
+  clientSortedFields?: string[];
   columns: (activeLocale: string | null) => TableColumnType[];
-  rows: TableRowType[];
   defaultSortOrder: SearchSortOrder;
+  extraComponent?: React.ReactNode;
   extraTableFilters?: SearchNodePayload[];
   featuredFilters?: FilterConfigWithValues[];
   filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
   fuzzySearchColumns?: string[];
-  rightComponent?: React.ReactNode;
-  title?: string;
-  clientSortedFields?: string[];
-  onFilterApplied?: (filter: string, values: (string | number | null)[]) => void;
-  stickyFilters?: boolean;
   iconFilters?: FilterConfig[];
+  onFilterApplied?: (filter: string, values: (string | number | null)[]) => void;
+  rightComponent?: React.ReactNode;
+  rows: TableRowType[];
   searchAndSort?: SearchAndSortFn<TableRowType>;
-  extraComponent?: React.ReactNode;
+  stickyFilters?: boolean;
+  title?: string;
 }
 
 const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
   const {
-    id,
-    columns,
     busy,
+    clientSortedFields,
+    columns,
     defaultSortOrder,
+    extraComponent,
     extraTableFilters,
     featuredFilters,
     filterModifiers,
     fuzzySearchColumns,
-    rightComponent,
-    title,
-    clientSortedFields,
-    onFilterApplied,
-    stickyFilters,
     iconFilters,
+    id,
+    onFilterApplied,
+    rightComponent,
     rows,
     searchAndSort,
-    extraComponent,
+    stickyFilters,
+    title,
     ...tableProps
   } = props;
 
@@ -207,45 +207,45 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
 
     return rows;
   }, [
-    rows,
-    searchSortOrder,
+    activeLocale,
     debouncedSearchTerm,
+    extraTableFilters,
     filters,
     fuzzySearchColumns,
-    extraTableFilters,
     getSearchPayload,
-    activeLocale,
+    rows,
+    searchSortOrder,
   ]);
 
   return (
-    <Container maxWidth={false} sx={{ padding: 0 }} disableGutters>
+    <Container disableGutters maxWidth={false} sx={{ padding: 0 }}>
       <Card busy={busy} flushMobile rightComponent={rightComponent} title={title}>
         <Grid item xs={12} sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }}>
           <SearchFiltersWrapperV2
-            tableId={id}
-            search={searchValue}
-            onSearch={setSearchValue}
             currentFilters={filters}
-            setCurrentFilters={setFilters}
-            featuredFilters={_featuredFilters}
-            rightComponent={<TableSettingsButton />}
-            onFilterApplied={onFilterApplied}
-            stickyFilters={stickyFilters}
-            iconFilters={iconFilters}
             extraComponent={extraComponent}
+            featuredFilters={_featuredFilters}
+            iconFilters={iconFilters}
+            onFilterApplied={onFilterApplied}
+            onSearch={setSearchValue}
+            rightComponent={<TableSettingsButton />}
+            search={searchValue}
+            setCurrentFilters={setFilters}
+            stickyFilters={stickyFilters}
+            tableId={id}
           />
         </Grid>
 
         <Grid item xs={12}>
           <OrderPreservedTable
             {...tableProps}
-            rows={_filteredSortedRows}
             columns={() => columns(activeLocale)}
-            orderBy={searchSortOrder?.field || defaultSortOrder.field}
-            order={searchSortOrder?.direction === 'Ascending' ? 'asc' : 'desc'}
-            sortHandler={onSortChange}
-            isPresorted={!!searchSortOrder}
             id={id}
+            isPresorted={!!searchSortOrder}
+            order={searchSortOrder?.direction === 'Ascending' ? 'asc' : 'desc'}
+            orderBy={searchSortOrder?.field || defaultSortOrder.field}
+            rows={_filteredSortedRows}
+            sortHandler={onSortChange}
           />
         </Grid>
       </Card>
