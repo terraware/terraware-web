@@ -439,11 +439,7 @@ const MyAccountForm = ({
               </Typography>
             </Grid>
             {!userIsFunder && (
-              <Grid
-                item
-                xs={isMobile ? 12 : 3}
-                sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
-              >
+              <Grid item xs={isMobile ? 12 : 3}>
                 {edit ? (
                   <LocaleSelector
                     onChangeLocale={(newValue) => setLocaleSelected(newValue)}
@@ -461,11 +457,7 @@ const MyAccountForm = ({
                 )}
               </Grid>
             )}
-            <Grid
-              item
-              xs={isMobile ? 12 : 3}
-              sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
-            >
+            <Grid item xs={isMobile ? 12 : 3}>
               {edit ? (
                 <RegionSelector
                   selectedCountryCode={countryCodeSelected}
@@ -485,11 +477,7 @@ const MyAccountForm = ({
               )}
             </Grid>
             {!userIsFunder && (
-              <Grid
-                item
-                xs={isMobile ? 12 : 3}
-                sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
-              >
+              <Grid item xs={isMobile ? 12 : 3}>
                 {edit ? (
                   <WeightSystemSelector
                     onChange={(newValue) => setPreferredWeightSystemSelected(newValue)}
@@ -507,7 +495,7 @@ const MyAccountForm = ({
                 )}
               </Grid>
             )}
-            <Grid item xs={isMobile ? 12 : 3} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
+            <Grid item xs={isMobile ? 12 : 3}>
               {edit ? (
                 <TimeZoneSelector
                   onTimeZoneSelected={onTimeZoneChange}

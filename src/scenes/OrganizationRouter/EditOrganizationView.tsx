@@ -180,6 +180,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
             horizontalLayout
             countryError={countryError}
             countrySubdivisionError={subdivisionError}
+            paddingBottom={theme.spacing(4)}
           />
           <Grid item xs={gridSize()} marginTop={isMobile ? 4 : 0}>
             <TimeZoneSelector
