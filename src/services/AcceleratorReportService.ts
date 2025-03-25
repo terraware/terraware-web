@@ -89,12 +89,9 @@ const createConfig = async (request: CreateAcceleratorReportConfigRequest): Prom
 const updateConfig = async (
   request: UpdateAcceleratorReportConfigRequest
 ): Promise<Response2<UpdateConfigResponse>> => {
-  const { projectId, configId, ...rest } = request;
+  const { projectId, ...rest } = request;
   return HttpService.root(
-    ACCELERATOR_REPORT_SINGLE_CONFIG_ENDPOINT.replace('{projectId}', projectId.toString()).replace(
-      '{configId}',
-      configId.toString()
-    )
+    ACCELERATOR_REPORT_CONFIG_ENDPOINT.replace('{projectId}', projectId.toString())
   ).post2<UpdateConfigResponse>({
     entity: rest,
   });
