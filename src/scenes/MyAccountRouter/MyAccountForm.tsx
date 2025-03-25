@@ -47,6 +47,9 @@ export type MyAccountFormProps = {
   reloadUser: () => void;
   user: User;
   includeHeader?: boolean;
+  deleteOpen?: boolean;
+  backToView?: () => void;
+  onDeleteCancel?: () => void;
 };
 
 /**
@@ -78,6 +81,9 @@ const MyAccountForm = ({
   reloadUser,
   user,
   includeHeader,
+  deleteOpen,
+  backToView,
+  onDeleteCancel,
 }: MyAccountFormProps): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const supportedLocales = useSupportedLocales();
@@ -169,7 +175,11 @@ const MyAccountForm = ({
     setLocaleSelected(selectedLocale);
     setSelectedRows([]);
     onChange('cookiesConsented', user.cookiesConsented);
-    navigate(APP_PATHS.MY_ACCOUNT);
+    if (backToView) {
+      backToView();
+    } else {
+      navigate(APP_PATHS.MY_ACCOUNT);
+    }
   };
 
   const saveChanges = async () => {
@@ -204,7 +214,11 @@ const MyAccountForm = ({
         setSelectedLocale(lastLocale);
         snackbar.toastError();
       }
-      navigate(APP_PATHS.MY_ACCOUNT);
+      if (backToView) {
+        backToView();
+      } else {
+        navigate(APP_PATHS.MY_ACCOUNT);
+      }
     }
   };
 
@@ -252,7 +266,11 @@ const MyAccountForm = ({
       snackbar.toastError();
     }
     setLeaveOrganizationModalOpened(false);
-    navigate(APP_PATHS.MY_ACCOUNT);
+    if (backToView) {
+      backToView();
+    } else {
+      navigate(APP_PATHS.MY_ACCOUNT);
+    }
   };
 
   const deleteOrgHandler = async () => {
@@ -291,10 +309,7 @@ const MyAccountForm = ({
 
   const userIsFunder = useMemo(() => user.userType === 'Funder', [user]);
 
-  const onEditClick = () => {
-    // SW-6604 - make this optionally overridable with a prop
-    navigate(APP_PATHS.MY_ACCOUNT_EDIT);
-  };
+  const onEditClick = () => navigate(APP_PATHS.MY_ACCOUNT_EDIT);
 
   return (
     <PageForm
@@ -333,6 +348,17 @@ const MyAccountForm = ({
           />
         </>
       )}
+      {(openDeleteAccountModal || deleteOpen) && (
+        <DeleteAccountModal
+          onCancel={() => {
+            if (onDeleteCancel) {
+              onDeleteCancel();
+            } else {
+              setOpenDeleteAccountModal(false);
+            }
+          }}
+        />
+      )}
       {includeHeader && (
         <PageHeaderWrapper nextElement={contentRef.current} hasNav={hasNav}>
           <Box
@@ -345,7 +371,6 @@ const MyAccountForm = ({
             <TitleDescription title={strings.MY_ACCOUNT} description={strings.MY_ACCOUNT_DESC} style={{ padding: 0 }} />
             {!edit && (
               <Box display='flex' height='fit-content'>
-                {openDeleteAccountModal && <DeleteAccountModal onCancel={() => setOpenDeleteAccountModal(false)} />}
                 <Button
                   id='edit-account'
                   icon='iconEdit'
