@@ -795,6 +795,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/accelerator/projects/{projectId}/reports/{reportId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update qualitative data for a report */
+        post: operations["updateAcceleratorReportQualitatives"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/accelerator/projects/{projectId}/reports/{reportId}/metrics": {
         parameters: {
             query?: never;
@@ -992,6 +1009,23 @@ export interface paths {
         put?: never;
         /** Update one standard metric by ID. */
         post: operations["updateStandardMetric"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accelerator/reports/systemMetrics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List all system metrics. */
+        get: operations["listSystemMetrics"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -3510,8 +3544,8 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * Gets a list of the species that have been planted in a specific planting subzone.
-         * @description The list is based on nursery withdrawals.
+         * Gets a list of the species that may have been planted in a planting subzone.
+         * @description The list is based on nursery withdrawals to the planting site as well as past observations.
          */
         get: operations["listPlantingSubzoneSpecies"];
         put?: never;
@@ -3927,6 +3961,8 @@ export interface components {
             participantId?: number;
         };
         AcceleratorReportPayload: {
+            achievements: string[];
+            challenges: components["schemas"]["ReportChallengePayload"][];
             /** Format: date */
             endDate: string;
             feedback?: string;
@@ -6572,6 +6608,10 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
             types: ("Bug Report" | "Feature Request" | "Contact Us")[];
         };
+        ListSystemMetricsResponsePayload: {
+            metrics: components["schemas"]["SystemMetricPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
         ListTimeZoneNamesResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
             timeZones: components["schemas"]["TimeZonePayload"][];
@@ -8027,6 +8067,10 @@ export interface components {
              */
             operation: "Replace";
         };
+        ReportChallengePayload: {
+            challenge: string;
+            mitigationPlan: string;
+        };
         ReportProjectMetricEntriesPayload: {
             /** Format: int64 */
             id: number;
@@ -8059,6 +8103,8 @@ export interface components {
             value?: number;
         };
         ReportReviewPayload: {
+            achievements: string[];
+            challenges: components["schemas"]["ReportChallengePayload"][];
             feedback?: string;
             highlights?: string;
             internalComment?: string;
@@ -8531,6 +8577,17 @@ export interface components {
             species: number;
             status: components["schemas"]["SuccessOrError"];
         };
+        SystemMetricPayload: {
+            /** @enum {string} */
+            component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            description: string;
+            /** @enum {string} */
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate";
+            name: string;
+            reference: string;
+            /** @enum {string} */
+            type: "Activity" | "Output" | "Outcome" | "Impact";
+        };
         TableColumnPayload: {
             isHeader: boolean;
             variable: components["schemas"]["VariablePayload"];
@@ -8643,6 +8700,11 @@ export interface components {
             projectMetrics: components["schemas"]["ReportProjectMetricEntriesPayload"][];
             standardMetrics: components["schemas"]["ReportStandardMetricEntriesPayload"][];
             systemMetrics: components["schemas"]["ReportSystemMetricEntriesPayload"][];
+        };
+        UpdateAcceleratorReportQualitativesRequestPayload: {
+            achievements: string[];
+            challenges: components["schemas"]["ReportChallengePayload"][];
+            highlights?: string;
         };
         UpdateAccessionRequestPayloadV2: {
             bagNumbers?: string[];
@@ -11275,6 +11337,50 @@ export interface operations {
             };
         };
     };
+    updateAcceleratorReportQualitatives: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                reportId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateAcceleratorReportQualitativesRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
     updateAcceleratorReportMetrics: {
         parameters: {
             query?: never;
@@ -11835,6 +11941,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    listSystemMetrics: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListSystemMetricsResponsePayload"];
                 };
             };
         };

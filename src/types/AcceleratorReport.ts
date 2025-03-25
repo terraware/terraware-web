@@ -21,6 +21,8 @@ export type ProjectMetric = components['schemas']['ExistingProjectMetricPayload'
 
 export type StandardMetric = components['schemas']['ExistingStandardMetricPayload'];
 
+export type SystemMetric = components['schemas']['SystemMetricPayload'];
+
 export type CreateProjectMetricRequestPayload = components['schemas']['CreateProjectMetricRequestPayload'];
 
 export type UpdateProjectMetricRequestPayload = components['schemas']['UpdateProjectMetricRequestPayload'];

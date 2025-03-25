@@ -5,6 +5,7 @@ import {
   ExistingAcceleratorReportConfig,
   ProjectMetric,
   StandardMetric,
+  SystemMetric,
 } from 'src/types/AcceleratorReport';
 
 import { StatusT, buildReducers } from '../asyncUtils';
@@ -14,6 +15,7 @@ import {
   requestListAcceleratorReports,
   requestListProjectMetrics,
   requestListStandardMetrics,
+  requestListSystemMetrics,
   requestUpdateProjectMetric,
   requestUpdateReportConfig,
 } from './reportsThunks';
@@ -87,6 +89,17 @@ const listStandardMetricsSlice = createSlice({
   },
 });
 
+const initialListSystemMetricsState: { [key: string]: StatusT<SystemMetric[]> } = {};
+
+const listSystemMetricsSlice = createSlice({
+  name: 'listSystemMetricsSlice',
+  initialState: initialListSystemMetricsState,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestListSystemMetrics)(builder);
+  },
+});
+
 /**
  * Create Project Metric
  */
@@ -135,6 +148,7 @@ const reportsReducers = {
   projectReportConfigUpdate: updateReportConfigSlice.reducer,
   listProjectMetrics: listProjectMetricsSlice.reducer,
   listStandardMetrics: listStandardMetricsSlice.reducer,
+  listSystemMetrics: listSystemMetricsSlice.reducer,
   projectMetricCreate: projectMetricCreateSlice.reducer,
   listAcceleratorReports: listAcceleratorReportsSlice.reducer,
   projectMetricUpdate: projectMetricUpdateSlice.reducer,

@@ -77,6 +77,16 @@ export const requestListStandardMetrics = createAsyncThunk('listStandardMetrics'
   return rejectWithValue(strings.GENERIC_ERROR);
 });
 
+export const requestListSystemMetrics = createAsyncThunk('listSystemdMetrics', async (_, { rejectWithValue }) => {
+  const response = await AcceleratorReportService.listSystemdMetrics();
+
+  if (response && response.requestSucceeded) {
+    return response.data?.metrics;
+  }
+
+  return rejectWithValue(strings.GENERIC_ERROR);
+});
+
 export const requestCreateProjectMetric = createAsyncThunk(
   'createProjectMetric',
   async (request: CreateProjectMetricRequest, { rejectWithValue }) => {
