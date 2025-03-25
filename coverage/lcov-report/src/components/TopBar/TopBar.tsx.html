@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -130,7 +130,10 @@
 <a name='L65'></a><a href='#L65'>65</a>
 <a name='L66'></a><a href='#L66'>66</a>
 <a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -144,6 +147,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -152,16 +163,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -204,6 +210,7 @@ import { AppBar, Box, Toolbar, useTheme } from '@mui/material';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import useFunderPortal from 'src/hooks/useFunderPortal';
+import { useUser } from 'src/providers';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 &nbsp;
 type TopBarProps = {
@@ -216,12 +223,13 @@ export default function <span class="fstat-no" title="function not covered" >Top
   const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
   const { isApplicationPortal } = <span class="cstat-no" title="statement not covered" >useApplicationPortal();</span>
   const { isFunderRoute } = <span class="cstat-no" title="statement not covered" >useFunderPortal();</span>
+  const { user } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
   const borderTop = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (isAcceleratorRoute) {</span>
 <span class="cstat-no" title="statement not covered" >      return `8px solid ${theme.palette.TwClrBgAccent}`;</span>
-    } else <span class="cstat-no" title="statement not covered" >if (isFunderRoute) {</span>
+    } else <span class="cstat-no" title="statement not covered" >if (isFunderRoute || user?.userType === 'Funder') {</span>
 <span class="cstat-no" title="statement not covered" >      return `8px solid ${theme.palette.TwClrBgAccentAux}`;</span>
     } else {
 <span class="cstat-no" title="statement not covered" >      return undefined;</span>
@@ -245,7 +253,8 @@ export default function <span class="fstat-no" title="function not covered" >Top
           paddingBottom: '24px',
           paddingLeft: '32px',
           paddingRight: '32px',
-          paddingTop: isAcceleratorRoute || isApplicationPortal || isFunderRoute ? '16px' : '24px',
+          paddingTop:
+            isAcceleratorRoute || isApplicationPortal || isFunderRoute || user?.userType === 'Funder' ? '16px' : '24px',
           ...(isDesktop ? {} : { minHeight: '64px' }),
         }}
       &gt;
@@ -271,7 +280,7 @@ export default function <span class="fstat-no" title="function not covered" >Top
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-25T18:46:58.807Z
+                at 2025-03-25T21:25:57.745Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

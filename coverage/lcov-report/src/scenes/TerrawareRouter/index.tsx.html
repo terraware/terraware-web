@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
@@ -106,7 +106,19 @@
 <a name='L41'></a><a href='#L41'>41</a>
 <a name='L42'></a><a href='#L42'>42</a>
 <a name='L43'></a><a href='#L43'>43</a>
-<a name='L44'></a><a href='#L44'>44</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -132,6 +144,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -143,6 +163,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -175,6 +199,14 @@ const MINIMAL_USER_ROUTES: string[] = <span class="cstat-no" title="statement no
   APP_PATHS.HELP_SUPPORT_FORM,
 ];
 &nbsp;
+const MINIMAL_FUNDER_ROUTES: string[] = <span class="cstat-no" title="statement not covered" >[</span>
+  APP_PATHS.FUNDER_HOME,
+  APP_PATHS.SETTINGS,
+  APP_PATHS.OPT_IN,
+  APP_PATHS.HELP_SUPPORT,
+  APP_PATHS.HELP_SUPPORT_FORM,
+];
+&nbsp;
 export default function <span class="fstat-no" title="function not covered" >TerrawareRouter(</span>props: TerrawareRouterProps) {
   const { userFundingEntity } = <span class="cstat-no" title="statement not covered" >useUserFundingEntity();</span>
   const { organizations } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
@@ -182,10 +214,14 @@ export default function <span class="fstat-no" title="function not covered" >Ter
   const location = <span class="cstat-no" title="statement not covered" >useStateLocation();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (userFundingEntity) {</span>
+<span class="cstat-no" title="statement not covered" >    if (userFundingEntity &amp;&amp; !MINIMAL_FUNDER_ROUTES.some(<span class="fstat-no" title="function not covered" >(p</span>ath) =&gt; <span class="cstat-no" title="statement not covered" >!!matchPath(path, location.pathname))</span>) {</span>
 <span class="cstat-no" title="statement not covered" >      navigate(APP_PATHS.FUNDER_HOME);</span>
     }
-<span class="cstat-no" title="statement not covered" >    if (organizations?.length === 0 &amp;&amp; !MINIMAL_USER_ROUTES.some(<span class="fstat-no" title="function not covered" >(p</span>ath) =&gt; <span class="cstat-no" title="statement not covered" >!!matchPath(path, location.pathname))</span>) {</span>
+<span class="cstat-no" title="statement not covered" >    if (</span>
+      organizations?.length === 0 &amp;&amp;
+      !MINIMAL_USER_ROUTES.some(<span class="fstat-no" title="function not covered" >(p</span>ath) =&gt; <span class="cstat-no" title="statement not covered" >!!matchPath(path, location.pathname))</span> &amp;&amp;
+      !userFundingEntity
+    ) {
 <span class="cstat-no" title="statement not covered" >      navigate(APP_PATHS.WELCOME);</span>
     }
   }, [navigate, location, userFundingEntity, organizations]);
@@ -199,7 +235,7 @@ export default function <span class="fstat-no" title="function not covered" >Ter
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-25T18:46:58.807Z
+                at 2025-03-25T21:25:57.745Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
