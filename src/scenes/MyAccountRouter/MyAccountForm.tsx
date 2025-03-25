@@ -19,7 +19,7 @@ import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useDocLinks } from 'src/docLinks';
-import { useLocalization, useTimeZones, useUser, useUserFundingEntity } from 'src/providers';
+import { useLocalization, useTimeZones, useUser } from 'src/providers';
 import { OrganizationService, OrganizationUserService, PreferencesService, UserService } from 'src/services';
 import strings from 'src/strings';
 import { findLocaleDetails, useSupportedLocales } from 'src/strings/locales';
@@ -101,7 +101,6 @@ const MyAccountForm = ({
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
   const { userPreferences, reloadUserPreferences } = useUser();
-  const { userFundingEntity } = useUserFundingEntity();
   const snackbar = useSnackbar();
   const docLinks = useDocLinks();
   const contentRef = useRef(null);
@@ -392,9 +391,9 @@ const MyAccountForm = ({
         ref={contentRef}
         sx={{
           backgroundColor: theme.palette.TwClrBg,
-          borderRadius: '32px',
+          borderRadius: theme.spacing(2),
           margin: theme.spacing(0, hasNav === false ? 4 : 0),
-          padding: theme.spacing(3),
+          padding: includeHeader ? theme.spacing(3) : theme.spacing(4),
         }}
       >
         <Box sx={isMobile ? { width: 'calc(100vw - 72px)' } : {}}>
@@ -434,21 +433,9 @@ const MyAccountForm = ({
                 readonly={true}
               />
             </Grid>
-            {userIsFunder && (
-              <Grid item xs={isMobile ? 12 : 4}>
-                <TextField
-                  label={strings.FUNDING_ENTITY}
-                  id='fundingEntity'
-                  type='text'
-                  value={userFundingEntity?.name}
-                  display={!edit}
-                  readonly={true}
-                />
-              </Grid>
-            )}
             <Grid item xs={12}>
               <Typography fontSize='20px' fontWeight={600}>
-                {strings.LANGUAGE_AND_REGION}
+                {userIsFunder ? strings.REGION : strings.LANGUAGE_AND_REGION}
               </Typography>
             </Grid>
             {!userIsFunder && (
