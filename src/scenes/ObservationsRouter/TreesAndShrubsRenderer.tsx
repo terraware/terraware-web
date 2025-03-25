@@ -37,6 +37,11 @@ export default function TreesAndShrubsRenderer(props: RendererProps<TableRowType
     );
   }
 
+  if (column.key === 'treeGrowthForm') {
+    const growthForm = row.treeGrowthForm === 'Trunk' ? 'Tree' : row.treeGrowthForm;
+    return <CellRenderer index={index} column={column} value={growthForm} row={row} title={value as string} />;
+  }
+
   if (column.key === 'treeNumber') {
     return <CellRenderer index={index} column={column} value={getTreeNumber()} row={row} title={value as string} />;
   }

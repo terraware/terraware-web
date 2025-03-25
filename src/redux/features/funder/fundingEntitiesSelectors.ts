@@ -11,3 +11,6 @@ export const selectUserFundingEntityRequest = (userId?: number) => (state: RootS
 
 export const selectFundingEntityUpdateRequest = (requestId: string) => (state: RootState) =>
   state.fundingEntityUpdate[requestId];
+
+export const selectFundingEntityCreateRequest = (requestId: string) => (state: RootState) =>
+  state.fundingEntityCreate[requestId];

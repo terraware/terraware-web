@@ -4,6 +4,7 @@ import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { FundingEntity } from 'src/types/FundingEntity';
 
 import {
+  requestCreateFundingEntity,
   requestFundingEntities,
   requestFundingEntity,
   requestFundingEntityForUser,
@@ -17,6 +18,8 @@ const initialStateFundingEntity: { [key: string]: StatusT<{ fundingEntity: Fundi
 const initialStateFundingEntities: { [key: string]: StatusT<{ fundingEntities: FundingEntity[] }> } = {};
 
 const initialStateFundingEntityUpdate: { [requestId: string]: StatusT<{ fundingEntity: FundingEntity }> } = {};
+
+const initialStateFundingEntityCreate: { [requestId: string]: StatusT<{ fundingEntity: FundingEntity }> } = {};
 
 export const fundingEntitySlice = createSlice({
   name: 'fundingEntitySlice',
@@ -54,11 +57,21 @@ export const fundingEntityUpdateSlice = createSlice({
   },
 });
 
+export const fundingEntityCreateSlice = createSlice({
+  name: 'fundingEntityCreateSlice',
+  initialState: initialStateFundingEntityCreate,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestCreateFundingEntity, true)(builder);
+  },
+});
+
 const fundingEntitiesReducers = {
   userFundingEntity: userFundingEntitySlice.reducer,
   fundingEntity: fundingEntitySlice.reducer,
   fundingEntities: fundingEntitiesSlice.reducer,
   fundingEntityUpdate: fundingEntityUpdateSlice.reducer,
+  fundingEntityCreate: fundingEntityCreateSlice.reducer,
 };
 
 export default fundingEntitiesReducers;

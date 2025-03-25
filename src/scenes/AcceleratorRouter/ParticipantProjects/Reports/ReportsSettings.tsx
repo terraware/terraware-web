@@ -8,6 +8,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useUser } from 'src/providers';
 import {
   selectListReportMetrics,
   selectListStandardMetrics,
@@ -48,6 +49,7 @@ export default function ReportsSettings(): JSX.Element {
   const [selectedRows, setSelectedRows] = useState<ProjectMetric[]>([]);
   const [selectedMetric, setSelectedMetric] = useState<ProjectMetric>();
   const [editMetricModalOpened, setEditMetricModalOpened] = useState<boolean>(false);
+  const { isAllowed } = useUser();
 
   useEffect(() => {
     const dispatched = dispatch(requestListStandardMetrics());
@@ -165,7 +167,9 @@ export default function ReportsSettings(): JSX.Element {
         style={{ display: 'flex', flexDirection: 'column' }}
         title={strings.SETTINGS}
         rightComponent={
-          <Button label={strings.EDIT_SETTINGS} icon='iconEdit' onClick={goToEditSettings} priority='secondary' />
+          isAllowed('UPDATE_REPORTS_SETTINGS') && (
+            <Button icon='iconEdit' onClick={goToEditSettings} priority='secondary' />
+          )
         }
       >
         <Grid container sx={gridStyle}>
@@ -185,14 +189,16 @@ export default function ReportsSettings(): JSX.Element {
         <Grid container sx={gridStyle}>
           <Grid item xs={12} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
             {title(strings.PROJECT_SPECIFIC_METRICS)}
-            <Box>
-              <Button
-                label={strings.ADD_METRIC}
-                icon='plus'
-                onClick={() => goToNewProjectMetric(projectId)}
-                priority='secondary'
-              />
-            </Box>
+            {isAllowed('UPDATE_REPORTS_SETTINGS') && (
+              <Box>
+                <Button
+                  label={strings.ADD_METRIC}
+                  icon='plus'
+                  onClick={() => goToNewProjectMetric(projectId)}
+                  priority='secondary'
+                />
+              </Box>
+            )}
           </Grid>
           <Grid item xs={12} textAlign={'center'}>
             {metrics && metrics.length > 0 ? (

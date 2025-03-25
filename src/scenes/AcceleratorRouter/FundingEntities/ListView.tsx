@@ -1,17 +1,20 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { TableColumnType } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
-import { useLocalization } from 'src/providers';
+import Button from 'src/components/common/button/Button';
+import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useLocalization, useUser } from 'src/providers';
 import { requestFundingEntities } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
 import { selectFundingEntitiesRequest } from 'src/redux/features/funder/fundingEntitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
 import { SearchSortOrder } from 'src/types/Search';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import FundingEntitiesCellRenderer from './FundingEntitiesCellRenderer';
@@ -33,6 +36,9 @@ const FundingEntitiesListView = () => {
   const [fundingEntities, setFundingEntities] = useState<FundingEntity[]>([]);
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
+  const { isAllowed } = useUser();
+  const { isMobile } = useDeviceInfo();
+  const { goToNewFundingEntity } = useNavigateTo();
 
   const defaultSortOrder: SearchSortOrder = {
     field: 'name',
@@ -88,8 +94,27 @@ const FundingEntitiesListView = () => {
     [allProjects, fundingEntities]
   );
 
+  const actionMenus = useMemo<ReactNode | null>(() => {
+    const canCreateFundingEntities = isAllowed('MANAGE_FUNDING_ENTITIES');
+
+    if (!activeLocale || !canCreateFundingEntities) {
+      return null;
+    }
+
+    return (
+      <Button
+        icon='plus'
+        id='new-funding-entity'
+        onClick={goToNewFundingEntity}
+        priority='primary'
+        label={isMobile ? '' : strings.ADD_FUNDING_ENTITY}
+        size='medium'
+      />
+    );
+  }, [activeLocale, goToNewFundingEntity, isAllowed, isMobile]);
+
   return (
-    <Page title={strings.FUNDING_ENTITIES}>
+    <Page title={strings.FUNDING_ENTITIES} rightComponent={actionMenus}>
       <ClientSideFilterTable
         columns={columns}
         defaultSortOrder={defaultSortOrder}

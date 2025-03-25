@@ -31,6 +31,28 @@ export type CreateProjectMetricRequest = CreateProjectMetricRequestPayload & { p
 
 export type UpdateProjectMetricRequest = UpdateProjectMetricRequestPayload & { projectId: number; metricId: number };
 
+export type ReviewAcceleratorReportMetricsRequestPayload =
+  components['schemas']['ReviewAcceleratorReportMetricsRequestPayload'];
+
+export type ReviewAcceleratorReportMetricsRequest = ReviewAcceleratorReportMetricsRequestPayload & {
+  reportId: number;
+};
+
+export type ReviewManyAcceleratorReportMetricsRequest = {
+  requests: ReviewAcceleratorReportMetricsRequest[];
+  projectId: number;
+};
+
 export type NewMetric = components['schemas']['NewMetricPayload'];
 
 export type AcceleratorReport = components['schemas']['AcceleratorReportPayload'];
+
+export type SystemMetricName = 'Mortality Rate' | 'Seedlings' | 'Seeds Collected' | 'Trees Planted' | 'Species Planted';
+export type AcceleratorReportStatus = components['schemas']['AcceleratorReportPayload']['status'];
+export const AcceleratorReportStatuses: AcceleratorReportStatus[] = [
+  'Not Submitted',
+  'Submitted',
+  'Approved',
+  'Needs Update',
+  'Not Needed',
+];
