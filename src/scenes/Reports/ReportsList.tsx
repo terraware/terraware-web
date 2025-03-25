@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { Box, Grid, Typography } from '@mui/material';
 import { Select, TableColumnType, theme } from '@terraware/web-components';
@@ -28,7 +29,11 @@ const defaultSearchOrder: SearchSortOrder = {
   direction: 'Descending',
 };
 
-export default function ReportsList(): JSX.Element {
+type ReportsListsProps = {
+  fromConsole?: boolean;
+};
+
+export default function ReportsList({ fromConsole }: ReportsListsProps): JSX.Element {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const { currentParticipantProject } = useParticipantData();
@@ -39,6 +44,9 @@ export default function ReportsList(): JSX.Element {
   const [listAcceleratorReportsRequestId, setListAcceleratorReportsRequestId] = useState<string>('');
 
   const acceleratorReportsListRequest = useAppSelector(selectListAcceleratorReports(listAcceleratorReportsRequestId));
+
+  const pathParams = useParams<{ projectId: string }>();
+  const urlProjectId = String(pathParams.projectId);
 
   useEffect(() => {
     if (acceleratorReportsListRequest?.status === 'success') {
@@ -62,6 +70,12 @@ export default function ReportsList(): JSX.Element {
   useEffect(() => {
     reload();
   }, [currentParticipantProject?.id, yearFilter]);
+
+  useEffect(() => {
+    if (fromConsole) {
+      reloadConsole();
+    }
+  }, [fromConsole, yearFilter]);
 
   const columns = useCallback(
     (activeLocale: string | null): TableColumnType[] => {
@@ -113,6 +127,20 @@ export default function ReportsList(): JSX.Element {
       setListAcceleratorReportsRequestId(request.requestId);
     }
   }, [currentParticipantProject?.id, dispatch, yearFilter]);
+
+  const reloadConsole = useCallback(() => {
+    if (fromConsole && urlProjectId) {
+      const request = dispatch(
+        requestListAcceleratorReports({
+          projectId: urlProjectId,
+          includeFuture: true,
+          includeMetrics: true,
+          year: yearFilter,
+        })
+      );
+      setListAcceleratorReportsRequestId(request.requestId);
+    }
+  }, [fromConsole, dispatch, yearFilter, urlProjectId]);
 
   const fuzzySearchColumns = useMemo(() => ['reportName'], []);
 

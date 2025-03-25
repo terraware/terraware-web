@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Box } from '@mui/material';
+import ReportsList from 'src/scenes/Reports/ReportsList';
 
-export default function ReportsList(): JSX.Element {
-  return <Box>Reports</Box>;
+export default function ConsoleReportsList(): JSX.Element {
+  return <ReportsList fromConsole />;
 }
