@@ -4,6 +4,7 @@ import {
   CreateAcceleratorReportConfigRequest,
   CreateProjectMetricRequest,
   ExistingAcceleratorReportConfig,
+  ReviewAcceleratorReportMetricsRequestPayload,
   UpdateAcceleratorReportConfigRequest,
   UpdateProjectMetricRequest,
 } from 'src/types/AcceleratorReport';
@@ -41,6 +42,8 @@ type UpdateConfigResponse =
 const PROJECT_METRICS_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/metrics';
 const STANDARD_METRICS_ENDPOINT = '/api/v1/accelerator/reports/standardMetrics';
 const PROJECT_METRIC_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/metrics/{metricId}';
+const REVIEW_ACCELERATOR_REPORT_METRICS_ENDPOINT =
+  '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/metrics/review';
 
 export type ListProjectMetricsResponsePayload =
   paths[typeof PROJECT_METRICS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -55,6 +58,8 @@ type ListAcceleratorReportsResponsePayload =
   paths[typeof PROJECT_REPORTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type UpdateProjectMetricResponse =
   paths[typeof PROJECT_METRIC_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+type ReviewAcceleratorReportMetricsResponse =
+  paths[typeof REVIEW_ACCELERATOR_REPORT_METRICS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 export type ListAcceleratorReportsRequestParams = paths[typeof PROJECT_REPORTS_ENDPOINT]['get']['parameters']['query'];
 
@@ -168,6 +173,21 @@ const updateProjectMetric = async (
   });
 };
 
+const reviewAcceleratorReportMetrics = async (
+  request: ReviewAcceleratorReportMetricsRequestPayload,
+  projectId: number,
+  reportId: number
+): Promise<Response2<ReviewAcceleratorReportMetricsResponse>> => {
+  return HttpService.root(
+    REVIEW_ACCELERATOR_REPORT_METRICS_ENDPOINT.replace('{projectId}', projectId.toString()).replace(
+      '{reportId}',
+      reportId.toString()
+    )
+  ).post2<ReviewAcceleratorReportMetricsResponse>({
+    entity: request,
+  });
+};
+
 /**
  * Exported functions
  */
@@ -180,6 +200,7 @@ const ReportService = {
   createProjectMetric,
   listAcceleratorReports,
   updateProjectMetric,
+  reviewAcceleratorReportMetrics,
 };
 
 export default ReportService;

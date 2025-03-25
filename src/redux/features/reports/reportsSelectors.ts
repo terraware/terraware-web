@@ -21,3 +21,6 @@ export const selectListAcceleratorReports = (requestId: string) => (state: RootS
 
 export const selectUpdateProjectMetric = (requestId: string) => (state: RootState) =>
   state.projectMetricUpdate[requestId];
+
+export const selectReviewManyAcceleratorReportMetrics = (requestId: string) => (state: RootState) =>
+  state.reviewManyAcceleratorReportMetrics[requestId];
