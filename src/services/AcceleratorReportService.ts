@@ -41,6 +41,7 @@ type UpdateConfigResponse =
 
 const PROJECT_METRICS_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/metrics';
 const STANDARD_METRICS_ENDPOINT = '/api/v1/accelerator/reports/standardMetrics';
+const SYSTEM_METRICS_ENDPOINT = '/api/v1/accelerator/reports/systemMetrics';
 const PROJECT_METRIC_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/metrics/{metricId}';
 const REVIEW_ACCELERATOR_REPORT_METRICS_ENDPOINT =
   '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/metrics/review';
@@ -50,6 +51,9 @@ export type ListProjectMetricsResponsePayload =
 
 export type ListStandardMetricsResponsePayload =
   paths[typeof STANDARD_METRICS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+export type ListSystemMetricsResponsePayload =
+  paths[typeof SYSTEM_METRICS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 type CreateProjectMetricResponse =
   paths[typeof PROJECT_METRICS_ENDPOINT]['put']['responses'][200]['content']['application/json'];
@@ -113,6 +117,10 @@ const listProjectMetrics = async (projectId: string): Promise<Response2<ListProj
 
 const listStandardMetrics = async (): Promise<Response2<ListStandardMetricsResponsePayload>> => {
   return HttpService.root(STANDARD_METRICS_ENDPOINT).get2<ListProjectMetricsResponsePayload>();
+};
+
+const listSystemdMetrics = async (): Promise<Response2<ListSystemMetricsResponsePayload>> => {
+  return HttpService.root(SYSTEM_METRICS_ENDPOINT).get2<ListSystemMetricsResponsePayload>();
 };
 
 const createProjectMetric = async (
@@ -197,6 +205,7 @@ const ReportService = {
   updateConfig,
   listProjectMetrics,
   listStandardMetrics,
+  listSystemdMetrics,
   createProjectMetric,
   listAcceleratorReports,
   updateProjectMetric,

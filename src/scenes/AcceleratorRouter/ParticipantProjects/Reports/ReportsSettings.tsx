@@ -12,19 +12,22 @@ import { useUser } from 'src/providers';
 import {
   selectListReportMetrics,
   selectListStandardMetrics,
+  selectListSystemMetrics,
   selectProjectReportConfig,
 } from 'src/redux/features/reports/reportsSelectors';
 import {
   requestListProjectMetrics,
   requestListStandardMetrics,
+  requestListSystemMetrics,
   requestProjectReportConfig,
 } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ProjectMetric, StandardMetric } from 'src/types/AcceleratorReport';
+import { ProjectMetric, StandardMetric, SystemMetric } from 'src/types/AcceleratorReport';
 
 import EditMetricModal from './EditMetricModal';
 import SpecificMetricsRenderer from './SpecificMetricsRenderer';
+import SystemMetricsRenderer from './SystemMetricsRenderer';
 
 export default function ReportsSettings(): JSX.Element {
   const { isMobile } = useDeviceInfo();
@@ -36,10 +39,13 @@ export default function ReportsSettings(): JSX.Element {
   const { goToAcceleratorEditReportSettings, goToNewProjectMetric } = useNavigateTo();
   const [requestId, setRequestId] = useState<string>('');
   const [standardRequestId, setStandardRequestId] = useState<string>('');
+  const [systemRequestId, setSystemRequestId] = useState<string>('');
   const specificMetricsResponse = useAppSelector(selectListReportMetrics(requestId));
   const standardMetricsResponse = useAppSelector(selectListStandardMetrics(standardRequestId));
+  const systemMetricsResponse = useAppSelector(selectListSystemMetrics(systemRequestId));
   const [metrics, setMetrics] = useState<ProjectMetric[]>();
   const [standardMetrics, setStandardMetrics] = useState<StandardMetric[]>();
+  const [systemMetrics, setSystemMetrics] = useState<SystemMetric[]>();
   const [selectedRows, setSelectedRows] = useState<ProjectMetric[]>([]);
   const [selectedMetric, setSelectedMetric] = useState<ProjectMetric>();
   const [editMetricModalOpened, setEditMetricModalOpened] = useState<boolean>(false);
@@ -48,6 +54,11 @@ export default function ReportsSettings(): JSX.Element {
   useEffect(() => {
     const dispatched = dispatch(requestListStandardMetrics());
     setStandardRequestId(dispatched.requestId);
+  }, []);
+
+  useEffect(() => {
+    const dispatched = dispatch(requestListSystemMetrics());
+    setSystemRequestId(dispatched.requestId);
   }, []);
 
   const reloadSpecificMetrics = () => {
@@ -76,6 +87,12 @@ export default function ReportsSettings(): JSX.Element {
       setStandardMetrics(standardMetricsResponse.data);
     }
   }, [standardMetricsResponse]);
+
+  useEffect(() => {
+    if (systemMetricsResponse && systemMetricsResponse.status === 'success') {
+      setSystemMetrics(systemMetricsResponse.data);
+    }
+  }, [systemMetricsResponse]);
 
   const gridSize = isMobile ? 12 : 4;
 
@@ -210,6 +227,21 @@ export default function ReportsSettings(): JSX.Element {
             ) : (
               <Typography>{strings.NO_PROJECT_SPECIFIC_METRICS_TO_SHOW}</Typography>
             )}
+          </Grid>
+        </Grid>
+        <Grid container sx={gridStyle}>
+          <Grid item xs={12}>
+            {title(strings.SYSTEM_METRICS)}
+          </Grid>
+          <Grid item xs={12}>
+            <Table
+              id='system-metrics-table'
+              columns={columns}
+              rows={systemMetrics || []}
+              orderBy='name'
+              showCheckbox={false}
+              Renderer={SystemMetricsRenderer}
+            />
           </Grid>
         </Grid>
         <Grid container sx={gridStyle}>

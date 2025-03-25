@@ -13,6 +13,8 @@ export const selectListReportMetrics = (requestId: string) => (state: RootState)
 export const selectListStandardMetrics = (requestId: string) => (state: RootState) =>
   state.listStandardMetrics[requestId];
 
+export const selectListSystemMetrics = (requestId: string) => (state: RootState) => state.listSystemMetrics[requestId];
+
 export const selectCreateProjectMetric = (requestId: string) => (state: RootState) =>
   state.projectMetricCreate[requestId];
 
