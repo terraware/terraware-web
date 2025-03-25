@@ -1029,6 +1029,7 @@ NO_PROJECT_SPECIFIC_METRICS_TO_SHOW,Aucun indicateur spécifique au projet à af
 NO_QUANTITY_SET,Pas de quantité définie,
 NO_REASSIGNMENTS,Aucune réaffectation,
 NO_REASSIGNMENTS_TEXT,Sélectionnez une sous-zone avec une quantité d'au moins une ligne de semis par lot.,
+NO_REPORTS_TO_SHOW,Aucun rapport à afficher.,
 NO_SEEDBANKS_ADMIN_TITLE,"Un instant, ajoutons tout d'abord une banque de semences.",
 NO_SEEDBANKS_MONITORING_ADMIN_MSG,"Commencez par ajouter une banque de semences. Si votre banque de semences a été créée par Terraformation, vous serez alors en mesure de contrôler la température et l'humidité de la banque de semences.",
 NO_SEEDBANKS_MONITORING_NON_ADMIN_MSG,"Avant de commencer à contrôler à distance la température et l'humidité grâce au kit de capteurs de la banque de semences, vous devrez ajouter une banque de semences dans Terraware. Seuls les administrateurs peuvent ajouter des banques de semences, contactez donc le vôtre pour obtenir de l'aide.",

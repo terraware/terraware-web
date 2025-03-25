@@ -1029,6 +1029,7 @@ NO_PROJECT_SPECIFIC_METRICS_TO_SHOW,No hay métricas específicas del proyecto p
 NO_QUANTITY_SET,No se ha establecido una cantidad.,
 NO_REASSIGNMENTS,No hay reasignaciones.,
 NO_REASSIGNMENTS_TEXT,Seleccione una nueva subzona con cantidad en al menos una fila de lotes de plántulas.,
+NO_REPORTS_TO_SHOW,Sin informes que mostrar.,
 NO_SEEDBANKS_ADMIN_TITLE,"Un momento, añadamos primero un banco de semillas.",
 NO_SEEDBANKS_MONITORING_ADMIN_MSG,"Comience por añadir un banco de semillas. Si su banco de semillas ha sido construido por Terraformation, entonces podrá monitorear aspectos como la temperatura y la humedad del banco de semillas.",
 NO_SEEDBANKS_MONITORING_NON_ADMIN_MSG,"Antes de que pueda comenzar a monitorear de forma remota aspectos como la temperatura y la humedad por medio del kit de sensores de un banco de semillas, deberá añadir un banco de semillas dentro de Terraware. Solo los administradores pueden añadir bancos de semillas, así que comuníquese con el suyo para obtener ayuda.",
