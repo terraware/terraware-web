@@ -1,21 +1,25 @@
-import React, { CSSProperties, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
 
+import LocaleSelector from 'src/components/LocaleSelector';
 import RegionSelector from 'src/components/RegionSelector';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import WeightSystemSelector from 'src/components/WeightSystemSelector';
+import Checkbox from 'src/components/common/Checkbox';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import PageForm from 'src/components/common/PageForm';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TextWithLink from 'src/components/common/TextWithLink';
-import TfMain from 'src/components/common/TfMain';
+import TextField from 'src/components/common/Textfield/Textfield';
+import TitleDescription from 'src/components/common/TitleDescription';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useDocLinks } from 'src/docLinks';
-import { useLocalization, useUser } from 'src/providers';
-import { useTimeZones } from 'src/providers';
+import { useLocalization, useTimeZones, useUser, useUserFundingEntity } from 'src/providers';
 import { OrganizationService, OrganizationUserService, PreferencesService, UserService } from 'src/services';
 import strings from 'src/strings';
 import { findLocaleDetails, useSupportedLocales } from 'src/strings/locales';
@@ -29,44 +33,20 @@ import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 import { getUTC } from 'src/utils/useTimeZoneUtils';
 
-import LocaleSelector from '../../components/LocaleSelector';
-import Checkbox from '../../components/common/Checkbox';
-import PageForm from '../../components/common/PageForm';
-import PageHeaderWrapper from '../../components/common/PageHeaderWrapper';
-import TextField from '../../components/common/Textfield/Textfield';
-import TitleDescription from '../../components/common/TitleDescription';
 import AssignNewOwnerDialog from './AssignNewOwnerModal';
 import CannotRemoveOrgDialog from './CannotRemoveOrgModal';
 import DeleteAccountModal from './DeleteAccountModal';
 import DeleteOrgDialog from './DeleteOrgModal';
 import LeaveOrganizationDialog from './LeaveOrganizationModal';
 
-type MyAccountProps = {
-  className?: string;
-  edit: boolean;
-  hasNav?: boolean;
-  organizations?: Organization[];
-  reloadData?: () => void;
-};
-
-export default function MyAccountView(props: MyAccountProps): JSX.Element | null {
-  const { user, reloadUser } = useUser();
-
-  if (!user) {
-    return null;
-  }
-
-  return <MyAccountContent user={{ ...user }} reloadUser={reloadUser} {...props} />;
-}
-
-type MyAccountContentProps = {
-  style?: CSSProperties;
+export type MyAccountFormProps = {
   edit: boolean;
   hasNav?: boolean;
   organizations?: Organization[];
   reloadData?: () => void;
   reloadUser: () => void;
   user: User;
+  includeHeader?: boolean;
 };
 
 /**
@@ -90,15 +70,15 @@ const columns = (): TableColumnType[] => [
   { key: 'roleName', name: strings.ROLE, type: 'string' },
 ];
 
-const MyAccountContent = ({
-  style,
+const MyAccountForm = ({
   edit,
   hasNav,
   organizations,
   reloadData,
   reloadUser,
   user,
-}: MyAccountContentProps): JSX.Element => {
+  includeHeader,
+}: MyAccountFormProps): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const supportedLocales = useSupportedLocales();
   const theme = useTheme();
@@ -115,6 +95,7 @@ const MyAccountContent = ({
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
   const { userPreferences, reloadUserPreferences } = useUser();
+  const { userFundingEntity } = useUserFundingEntity();
   const snackbar = useSnackbar();
   const docLinks = useDocLinks();
   const contentRef = useRef(null);
@@ -308,44 +289,51 @@ const MyAccountContent = ({
     }
   };
 
+  const userIsFunder = useMemo(() => user.userType === 'Funder', [user]);
+
+  const onEditClick = () => {
+    // SW-6604 - make this optionally overridable with a prop
+    navigate(APP_PATHS.MY_ACCOUNT_EDIT);
+  };
+
   return (
-    <TfMain style={style}>
-      <PageForm
-        cancelID='cancelAccountChange'
-        saveID='saveAccountChange'
-        onCancel={onCancel}
-        onSave={saveChanges}
-        hideEdit={!edit}
-      >
-        {removedOrg && (
-          <>
-            <LeaveOrganizationDialog
-              open={leaveOrganizationModalOpened}
-              onClose={() => setLeaveOrganizationModalOpened(false)}
-              onSubmit={leaveOrgHandler}
-              orgName={removedOrg.name}
-            />
-            <AssignNewOwnerDialog
-              open={assignNewOwnerModalOpened}
-              onClose={() => setAssignNewOwnerModalOpened(false)}
-              people={orgPeople || []}
-              onSubmit={saveChanges}
-              setNewOwner={setNewOwner}
-              selectedOwner={newOwner}
-            />
-            <CannotRemoveOrgDialog
-              open={cannotRemoveOrgModalOpened}
-              onClose={() => setCannotRemoveOrgModalOpened(false)}
-              onSubmit={openDeleteOrgModal}
-            />
-            <DeleteOrgDialog
-              open={deleteOrgModalOpened}
-              onClose={() => setDeleteOrgModalOpened(false)}
-              orgName={removedOrg.name}
-              onSubmit={deleteOrgHandler}
-            />
-          </>
-        )}
+    <PageForm
+      cancelID='cancelAccountChange'
+      saveID='saveAccountChange'
+      onCancel={onCancel}
+      onSave={saveChanges}
+      hideEdit={!edit}
+    >
+      {removedOrg && (
+        <>
+          <LeaveOrganizationDialog
+            open={leaveOrganizationModalOpened}
+            onClose={() => setLeaveOrganizationModalOpened(false)}
+            onSubmit={leaveOrgHandler}
+            orgName={removedOrg.name}
+          />
+          <AssignNewOwnerDialog
+            open={assignNewOwnerModalOpened}
+            onClose={() => setAssignNewOwnerModalOpened(false)}
+            people={orgPeople || []}
+            onSubmit={saveChanges}
+            setNewOwner={setNewOwner}
+            selectedOwner={newOwner}
+          />
+          <CannotRemoveOrgDialog
+            open={cannotRemoveOrgModalOpened}
+            onClose={() => setCannotRemoveOrgModalOpened(false)}
+            onSubmit={openDeleteOrgModal}
+          />
+          <DeleteOrgDialog
+            open={deleteOrgModalOpened}
+            onClose={() => setDeleteOrgModalOpened(false)}
+            orgName={removedOrg.name}
+            onSubmit={deleteOrgHandler}
+          />
+        </>
+      )}
+      {includeHeader && (
         <PageHeaderWrapper nextElement={contentRef.current} hasNav={hasNav}>
           <Box
             display='flex'
@@ -362,7 +350,7 @@ const MyAccountContent = ({
                   id='edit-account'
                   icon='iconEdit'
                   label={isMobile ? '' : strings.EDIT_ACCOUNT}
-                  onClick={() => navigate(APP_PATHS.MY_ACCOUNT_EDIT)}
+                  onClick={onEditClick}
                   size='medium'
                   priority='primary'
                 />
@@ -374,57 +362,71 @@ const MyAccountContent = ({
             )}
           </Box>
         </PageHeaderWrapper>
-        <Box
-          ref={contentRef}
-          sx={{
-            backgroundColor: theme.palette.TwClrBg,
-            borderRadius: '32px',
-            margin: theme.spacing(0, hasNav === false ? 4 : 0),
-            padding: theme.spacing(3),
-          }}
-        >
-          <Box sx={isMobile ? { width: 'calc(100vw - 72px)' } : {}}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Typography fontSize='20px' fontWeight={600}>
-                  {strings.GENERAL}
-                </Typography>
-              </Grid>
+      )}
+      <Box
+        ref={contentRef}
+        sx={{
+          backgroundColor: theme.palette.TwClrBg,
+          borderRadius: '32px',
+          margin: theme.spacing(0, hasNav === false ? 4 : 0),
+          padding: theme.spacing(3),
+        }}
+      >
+        <Box sx={isMobile ? { width: 'calc(100vw - 72px)' } : {}}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Typography fontSize='20px' fontWeight={600}>
+                {userIsFunder ? strings.FUNDER : strings.GENERAL}
+              </Typography>
+            </Grid>
+            <Grid item xs={isMobile ? 12 : 4}>
+              <TextField
+                label={strings.FIRST_NAME}
+                id='firstName'
+                type='text'
+                value={record.firstName}
+                display={!edit}
+                onChange={(value) => onChange('firstName', value)}
+              />
+            </Grid>
+            <Grid item xs={isMobile ? 12 : 4}>
+              <TextField
+                label={strings.LAST_NAME}
+                id='lastName'
+                type='text'
+                value={record.lastName}
+                display={!edit}
+                onChange={(value) => onChange('lastName', value)}
+              />
+            </Grid>
+            <Grid item xs={isMobile ? 12 : 4}>
+              <TextField
+                label={strings.EMAIL}
+                id='email'
+                type='text'
+                value={record.email}
+                display={!edit}
+                readonly={true}
+              />
+            </Grid>
+            {userIsFunder && (
               <Grid item xs={isMobile ? 12 : 4}>
                 <TextField
-                  label={strings.FIRST_NAME}
-                  id='firstName'
+                  label={strings.FUNDING_ENTITY}
+                  id='fundingEntity'
                   type='text'
-                  value={record.firstName}
-                  display={!edit}
-                  onChange={(value) => onChange('firstName', value)}
-                />
-              </Grid>
-              <Grid item xs={isMobile ? 12 : 4}>
-                <TextField
-                  label={strings.LAST_NAME}
-                  id='lastName'
-                  type='text'
-                  value={record.lastName}
-                  display={!edit}
-                  onChange={(value) => onChange('lastName', value)}
-                />
-              </Grid>
-              <Grid item xs={isMobile ? 12 : 4}>
-                <TextField
-                  label={strings.EMAIL}
-                  id='email'
-                  type='text'
-                  value={record.email}
+                  value={userFundingEntity?.name}
                   display={!edit}
                   readonly={true}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <Typography fontSize='20px' fontWeight={600}>
-                  {strings.LANGUAGE_AND_REGION}
-                </Typography>
-              </Grid>
+            )}
+            <Grid item xs={12}>
+              <Typography fontSize='20px' fontWeight={600}>
+                {strings.LANGUAGE_AND_REGION}
+              </Typography>
+            </Grid>
+            {!userIsFunder && (
               <Grid
                 item
                 xs={isMobile ? 12 : 3}
@@ -446,29 +448,31 @@ const MyAccountContent = ({
                   />
                 )}
               </Grid>
-              <Grid
-                item
-                xs={isMobile ? 12 : 3}
-                sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
-              >
-                {edit ? (
-                  <RegionSelector
-                    selectedCountryCode={countryCodeSelected}
-                    onChangeCountryCode={setCountryCodeSelected}
-                    hideCountrySubdivisions={true}
-                    countryLabel={strings.COUNTRY}
-                    countryTooltip={strings.TOOLTIP_COUNTRY_MY_ACCOUNT}
-                  />
-                ) : (
-                  <TextField
-                    label={strings.COUNTRY}
-                    id='country'
-                    type='text'
-                    value={countries && user.countryCode ? getCountryByCode(countries, user.countryCode)?.name : ''}
-                    display={true}
-                  />
-                )}
-              </Grid>
+            )}
+            <Grid
+              item
+              xs={isMobile ? 12 : 3}
+              sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
+            >
+              {edit ? (
+                <RegionSelector
+                  selectedCountryCode={countryCodeSelected}
+                  onChangeCountryCode={setCountryCodeSelected}
+                  hideCountrySubdivisions={true}
+                  countryLabel={strings.COUNTRY}
+                  countryTooltip={strings.TOOLTIP_COUNTRY_MY_ACCOUNT}
+                />
+              ) : (
+                <TextField
+                  label={strings.COUNTRY}
+                  id='country'
+                  type='text'
+                  value={countries && user.countryCode ? getCountryByCode(countries, user.countryCode)?.name : ''}
+                  display={true}
+                />
+              )}
+            </Grid>
+            {!userIsFunder && (
               <Grid
                 item
                 xs={isMobile ? 12 : 3}
@@ -490,103 +494,100 @@ const MyAccountContent = ({
                   />
                 )}
               </Grid>
-              <Grid item xs={isMobile ? 12 : 3} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
-                {edit ? (
-                  <TimeZoneSelector
-                    onTimeZoneSelected={onTimeZoneChange}
-                    selectedTimeZone={record.timeZone}
-                    tooltip={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
-                    label={strings.TIME_ZONE}
-                  />
-                ) : (
-                  <TextField
-                    label={strings.TIME_ZONE}
-                    id='timezone'
-                    type='text'
-                    value={tz.longName}
-                    tooltipTitle={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
-                    display={true}
-                  />
-                )}
-              </Grid>
-              <Grid item xs={12}>
-                <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
-                  {strings.NOTIFICATIONS}
-                </Typography>
-                <Typography fontSize='14px'>{strings.MY_ACCOUNT_NOTIFICATIONS_DESC}</Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Checkbox
-                  disabled={!edit}
-                  id='emailNotificationsEnabled'
-                  name={strings.RECEIVE_EMAIL_NOTIFICATIONS}
-                  label={strings.RECEIVE_EMAIL_NOTIFICATIONS}
-                  value={record.emailNotificationsEnabled}
-                  onChange={(value) => onChange('emailNotificationsEnabled', value)}
+            )}
+            <Grid item xs={isMobile ? 12 : 3} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
+              {edit ? (
+                <TimeZoneSelector
+                  onTimeZoneSelected={onTimeZoneChange}
+                  selectedTimeZone={record.timeZone}
+                  tooltip={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
+                  label={strings.TIME_ZONE}
                 />
-              </Grid>
-              <Grid item xs={12}>
-                <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
-                  {strings.COOKIES}
-                </Typography>
-                <RadioGroup
-                  name='radio-buttons-cookies-consent'
-                  onChange={(_event, value) => onChange('cookiesConsented', value === 'true' ? true : false)}
-                  value={record.cookiesConsented}
-                >
-                  <Grid item xs={12} textAlign='left' display='flex' flexDirection='row'>
-                    <FormControlLabel
-                      control={<Radio />}
-                      disabled={!edit}
-                      label={strings.COOKIES_ACCEPT}
-                      value={true}
-                    />
-                    <FormControlLabel
-                      control={<Radio />}
-                      disabled={!edit}
-                      label={strings.COOKIES_DECLINE}
-                      value={false}
-                    />
-                  </Grid>
-                </RadioGroup>
-                <Typography>{strings.COOKIES_DESCRIPTION}</Typography>
-                <TextWithLink href={docLinks.cookie_policy} isExternal text={strings.COOKIES_LEARN_MORE} />
-              </Grid>
+              ) : (
+                <TextField
+                  label={strings.TIME_ZONE}
+                  id='timezone'
+                  type='text'
+                  value={tz.longName}
+                  tooltipTitle={strings.TOOLTIP_TIME_ZONE_MY_ACCOUNT}
+                  display={true}
+                />
+              )}
             </Grid>
-          </Box>
-          {organizations && organizations.length > 0 ? (
-            <Grid container spacing={4}>
-              <Grid item xs={12} />
-              <Grid item xs={12}>
-                <Typography fontSize='20px' fontWeight={600}>
-                  {strings.ORGANIZATIONS}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                {organizations && (
-                  <Table
-                    id='organizations-table'
-                    columns={columns}
-                    rows={personOrganizations}
-                    orderBy='name'
-                    selectedRows={selectedRows}
-                    setSelectedRows={setSelectedRows}
-                    showCheckbox={edit}
-                    showTopBar={edit}
-                    topBarButtons={[
-                      {
-                        buttonType: 'destructive',
-                        buttonText: strings.REMOVE,
-                        onButtonClick: removeSelectedOrgs,
-                      },
-                    ]}
+            <Grid item xs={12}>
+              <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
+                {strings.NOTIFICATIONS}
+              </Typography>
+              <Typography fontSize='14px'>{strings.MY_ACCOUNT_NOTIFICATIONS_DESC}</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Checkbox
+                disabled={!edit}
+                id='emailNotificationsEnabled'
+                name={strings.RECEIVE_EMAIL_NOTIFICATIONS}
+                label={strings.RECEIVE_EMAIL_NOTIFICATIONS}
+                value={record.emailNotificationsEnabled}
+                onChange={(value) => onChange('emailNotificationsEnabled', value)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
+                {strings.COOKIES}
+              </Typography>
+              <RadioGroup
+                name='radio-buttons-cookies-consent'
+                onChange={(_event, value) => onChange('cookiesConsented', value === 'true')}
+                value={record.cookiesConsented}
+              >
+                <Grid item xs={12} textAlign='left' display='flex' flexDirection='row'>
+                  <FormControlLabel control={<Radio />} disabled={!edit} label={strings.COOKIES_ACCEPT} value={true} />
+                  <FormControlLabel
+                    control={<Radio />}
+                    disabled={!edit}
+                    label={strings.COOKIES_DECLINE}
+                    value={false}
                   />
-                )}
-              </Grid>
+                </Grid>
+              </RadioGroup>
+              <Typography>{strings.COOKIES_DESCRIPTION}</Typography>
+              <TextWithLink href={docLinks.cookie_policy} isExternal text={strings.COOKIES_LEARN_MORE} />
             </Grid>
-          ) : null}
+          </Grid>
         </Box>
-      </PageForm>
-    </TfMain>
+        {organizations && organizations.length > 0 ? (
+          <Grid container spacing={4}>
+            <Grid item xs={12} />
+            <Grid item xs={12}>
+              <Typography fontSize='20px' fontWeight={600}>
+                {strings.ORGANIZATIONS}
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              {organizations && (
+                <Table
+                  id='organizations-table'
+                  columns={columns}
+                  rows={personOrganizations}
+                  orderBy='name'
+                  selectedRows={selectedRows}
+                  setSelectedRows={setSelectedRows}
+                  showCheckbox={edit}
+                  showTopBar={edit}
+                  topBarButtons={[
+                    {
+                      buttonType: 'destructive',
+                      buttonText: strings.REMOVE,
+                      onButtonClick: removeSelectedOrgs,
+                    },
+                  ]}
+                />
+              )}
+            </Grid>
+          </Grid>
+        ) : null}
+      </Box>
+    </PageForm>
   );
 };
+
+export default MyAccountForm;

@@ -4,13 +4,15 @@ import { Grid, useTheme } from '@mui/material';
 import { Separator } from '@terraware/web-components';
 
 import useFunderPortal from 'src/hooks/useFunderPortal';
+import { useUser } from 'src/providers';
 import strings from 'src/strings';
 
 export default function FunderBreadcrumbs(): JSX.Element | null {
   const theme = useTheme();
   const { isFunderRoute } = useFunderPortal();
+  const { user } = useUser();
 
-  if (isFunderRoute) {
+  if (isFunderRoute || user?.userType === 'Funder') {
     return (
       <div>
         <Grid container>
