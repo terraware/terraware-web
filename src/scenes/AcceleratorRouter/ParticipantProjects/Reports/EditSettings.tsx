@@ -72,7 +72,6 @@ export default function EditSettings(): JSX.Element {
           requestUpdateReportConfig({
             config: newConfig,
             projectId: projectId,
-            configId: projectReportConfig.config.configId,
           })
         )
       : dispatch(requestCreateReportConfig({ config: newConfig, projectId: projectId }));
