@@ -96,7 +96,7 @@ export type RowMetric = {
   q4ReportId?: number;
 };
 
-export default function ConsoleReportsTargets(): JSX.Element {
+export default function ReportsTargets(): JSX.Element {
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { currentParticipantProject } = useParticipantData();
   const [allReportsRequestId, setAllReportsRequestId] = useState<string>('');
@@ -115,6 +115,7 @@ export default function ConsoleReportsTargets(): JSX.Element {
   const [selectedMetric, setSelectedMetric] = useState<RowMetric>();
   const currentYear = DateTime.now().year;
   const [yearFilter, setYearFilter] = useState<string>();
+
   const getReportsYears = useMemo(() => {
     const availableYears: Set<number> = new Set();
     allReports?.forEach((report) => {
