@@ -6,7 +6,9 @@ import { Select, TableColumnType, TableRowType } from '@terraware/web-components
 import { DateTime } from 'luxon';
 
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { selectListAcceleratorReports } from 'src/redux/features/reports/reportsSelectors';
 import { requestListAcceleratorReports } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -95,6 +97,8 @@ export type RowMetric = {
 };
 
 export default function ReportsTargets(): JSX.Element {
+  const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { currentParticipantProject } = useParticipantData();
   const [allReportsRequestId, setAllReportsRequestId] = useState<string>('');
   const allReportsResults = useAppSelector(selectListAcceleratorReports(allReportsRequestId));
   const [requestId, setRequestId] = useState<string>('');
@@ -104,20 +108,24 @@ export default function ReportsTargets(): JSX.Element {
   const [reports, setReports] = useState<AcceleratorReport[]>();
   const { activeLocale } = useLocalization();
   const pathParams = useParams<{ projectId: string }>();
-  const projectId = String(pathParams.projectId);
+  const projectId = isAcceleratorRoute ? String(pathParams.projectId) : currentParticipantProject?.id?.toString();
   const [metricsToUse, setMetricsToUse] = useState<RowMetric[]>();
   const [editOpenModal, setEditOpenModal] = useState(false);
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [selectedMetric, setSelectedMetric] = useState<RowMetric>();
   const currentYear = DateTime.now().year;
   const [yearFilter, setYearFilter] = useState<string>();
+
   const getReportsYears = useMemo(() => {
     const availableYears: Set<number> = new Set();
     allReports?.forEach((report) => {
       const reportYear = DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;
       availableYears.add(reportYear);
     });
-    return Array.from(availableYears);
+    const currentYear = new Date().getFullYear();
+    availableYears.add(currentYear);
+
+    return Array.from(availableYears).sort((a, b) => b - a);
   }, [allReports]);
 
   useEffect(() => {
