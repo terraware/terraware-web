@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Box } from '@mui/material';
+import ConsoleReportsTarget from 'src/scenes/AcceleratorRouter/ParticipantProjects/Reports/ReportsTargets';
 
 export default function ReportsTargets(): JSX.Element {
-  return <Box>Targets</Box>;
+  return <ConsoleReportsTarget />;
 }
