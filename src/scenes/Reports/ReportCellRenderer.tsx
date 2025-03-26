@@ -25,7 +25,7 @@ export default function ReportCellRenderer(props: RendererProps<TableRowType>): 
 
   const createLinkToReport = useCallback(() => {
     // TODO: update link to accelerator report views once ready
-    const reportUrl = isAcceleratorRoute ? APP_PATHS.REPORTS_VIEW : APP_PATHS.REPORTS_VIEW;
+    const reportUrl = isAcceleratorRoute ? APP_PATHS.ACCELERATOR_PROJECT_REPORTS_VIEW : APP_PATHS.REPORTS_VIEW;
     const to = reportUrl.replace(':reportId', `${row.id}`);
 
     const year = row.startDate.split('-')[0];
