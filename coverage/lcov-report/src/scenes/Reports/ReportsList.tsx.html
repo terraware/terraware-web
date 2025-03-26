@@ -273,20 +273,7 @@
 <a name='L208'></a><a href='#L208'>208</a>
 <a name='L209'></a><a href='#L209'>209</a>
 <a name='L210'></a><a href='#L210'>210</a>
-<a name='L211'></a><a href='#L211'>211</a>
-<a name='L212'></a><a href='#L212'>212</a>
-<a name='L213'></a><a href='#L213'>213</a>
-<a name='L214'></a><a href='#L214'>214</a>
-<a name='L215'></a><a href='#L215'>215</a>
-<a name='L216'></a><a href='#L216'>216</a>
-<a name='L217'></a><a href='#L217'>217</a>
-<a name='L218'></a><a href='#L218'>218</a>
-<a name='L219'></a><a href='#L219'>219</a>
-<a name='L220'></a><a href='#L220'>220</a>
-<a name='L221'></a><a href='#L221'>221</a>
-<a name='L222'></a><a href='#L222'>222</a>
-<a name='L223'></a><a href='#L223'>223</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L211'></a><a href='#L211'>211</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -488,18 +475,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -510,11 +486,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 &nbsp;
-import { Box, Grid, Typography } from '@mui/material';
-import { Select, TableColumnType, theme } from '@terraware/web-components';
+import { Box } from '@mui/material';
+import { Select, TableColumnType } from '@terraware/web-components';
 &nbsp;
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
-import Card from 'src/components/common/Card';
 import { FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
@@ -702,31 +677,20 @@ export default function <span class="fstat-no" title="function not covered" >Rep
   }, [availableYears, yearFilter]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Card style={{ display: 'flex', flexDirection: 'column', paddingLeft: 0, paddingRight: 0 }}&gt;
-      &lt;Grid container sx={{}}&gt;
-        &lt;Grid item xs={12} paddingLeft={3}&gt;
-          &lt;Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={600} lineHeight='28px'&gt;
-            {strings.REPORTS}
-          &lt;/Typography&gt;
-        &lt;/Grid&gt;
-&nbsp;
-        &lt;Grid item xs={12} textAlign={'center'}&gt;
-          &lt;ClientSideFilterTable
-            busy={acceleratorReportsListRequest?.status === 'pending'}
-            columns={columns}
-            defaultSortOrder={defaultSearchOrder}
-            extraComponent={extraFilter}
-            featuredFilters={featuredFilters}
-            fuzzySearchColumns={fuzzySearchColumns}
-            id='accelerator-reports-table'
-            isClickable={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >false}</span>
-            Renderer={ReportCellRenderer}
-            rows={acceleratorReports}
-            stickyFilters
-          /&gt;
-        &lt;/Grid&gt;
-      &lt;/Grid&gt;
-    &lt;/Card&gt;
+    &lt;ClientSideFilterTable
+      busy={acceleratorReportsListRequest?.status === 'pending'}
+      columns={columns}
+      defaultSortOrder={defaultSearchOrder}
+      extraComponent={extraFilter}
+      featuredFilters={featuredFilters}
+      fuzzySearchColumns={fuzzySearchColumns}
+      id='accelerator-reports-table'
+      isClickable={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >false}</span>
+      Renderer={ReportCellRenderer}
+      rows={acceleratorReports}
+      stickyFilters
+      title={strings.REPORTS}
+    /&gt;
   );
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -736,7 +700,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-26T19:47:27.006Z
+                at 2025-03-26T23:21:41.978Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

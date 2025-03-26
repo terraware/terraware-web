@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/scenes/AcceleratorRouter/ParticipantProjects/Reports/ReportsTargets.tsx</title>
+    <title>Code coverage report for src/components/AcceleratorReports/ReportsTargets.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../../../../prettify.css" />
-    <link rel="stylesheet" href="../../../../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../../../../favicon.png" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../../../../sort-arrow-sprite.png);
+            background-image: url(../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../../index.html">All files</a> / <a href="index.html">src/scenes/AcceleratorRouter/ParticipantProjects/Reports</a> ReportsTargets.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/AcceleratorReports</a> ReportsTargets.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/122</span>
+                <span class='fraction'>0/127</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/65</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/114</span>
+                <span class='fraction'>0/118</span>
             </div>
         
             
@@ -404,7 +404,17 @@
 <a name='L339'></a><a href='#L339'>339</a>
 <a name='L340'></a><a href='#L340'>340</a>
 <a name='L341'></a><a href='#L341'>341</a>
-<a name='L342'></a><a href='#L342'>342</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L342'></a><a href='#L342'>342</a>
+<a name='L343'></a><a href='#L343'>343</a>
+<a name='L344'></a><a href='#L344'>344</a>
+<a name='L345'></a><a href='#L345'>345</a>
+<a name='L346'></a><a href='#L346'>346</a>
+<a name='L347'></a><a href='#L347'>347</a>
+<a name='L348'></a><a href='#L348'>348</a>
+<a name='L349'></a><a href='#L349'>349</a>
+<a name='L350'></a><a href='#L350'>350</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -519,7 +529,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -753,7 +769,9 @@ import { Select, TableColumnType, TableRowType } from '@terraware/web-components
 import { DateTime } from 'luxon';
 &nbsp;
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { selectListAcceleratorReports } from 'src/redux/features/reports/reportsSelectors';
 import { requestListAcceleratorReports } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -842,6 +860,8 @@ export type RowMetric = {
 };
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >ReportsTargets(</span>): JSX.Element {
+  const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
+  const { currentParticipantProject } = <span class="cstat-no" title="statement not covered" >useParticipantData();</span>
   const [allReportsRequestId, setAllReportsRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const allReportsResults = <span class="cstat-no" title="statement not covered" >useAppSelector(selectListAcceleratorReports(allReportsRequestId));</span>
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
@@ -851,20 +871,24 @@ export default function <span class="fstat-no" title="function not covered" >Rep
   const [reports, setReports] = <span class="cstat-no" title="statement not covered" >useState&lt;AcceleratorReport[]&gt;();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const pathParams = <span class="cstat-no" title="statement not covered" >useParams&lt;{ projectId: string }&gt;();</span>
-  const projectId = <span class="cstat-no" title="statement not covered" >String(pathParams.projectId);</span>
+  const projectId = <span class="cstat-no" title="statement not covered" >isAcceleratorRoute ? String(pathParams.projectId) : currentParticipantProject?.id?.toString();</span>
   const [metricsToUse, setMetricsToUse] = <span class="cstat-no" title="statement not covered" >useState&lt;RowMetric[]&gt;();</span>
   const [editOpenModal, setEditOpenModal] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const [selectedRows, setSelectedRows] = <span class="cstat-no" title="statement not covered" >useState&lt;TableRowType[]&gt;([]);</span>
   const [selectedMetric, setSelectedMetric] = <span class="cstat-no" title="statement not covered" >useState&lt;RowMetric&gt;();</span>
   const currentYear = <span class="cstat-no" title="statement not covered" >DateTime.now().year;</span>
   const [yearFilter, setYearFilter] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;();</span>
+&nbsp;
   const getReportsYears = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const availableYears: Set&lt;number&gt; = <span class="cstat-no" title="statement not covered" >new Set();</span>
 <span class="cstat-no" title="statement not covered" >    allReports?.forEach(<span class="fstat-no" title="function not covered" >(r</span>eport) =&gt; {</span>
       const reportYear = <span class="cstat-no" title="statement not covered" >DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;</span>
 <span class="cstat-no" title="statement not covered" >      availableYears.add(reportYear);</span>
     });
-<span class="cstat-no" title="statement not covered" >    return Array.from(availableYears);</span>
+    const currentYear = <span class="cstat-no" title="statement not covered" >new Date().getFullYear();</span>
+<span class="cstat-no" title="statement not covered" >    availableYears.add(currentYear);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return Array.from(availableYears).sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b - a)</span>;</span>
   }, [allReports]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -1093,16 +1117,16 @@ export default function <span class="fstat-no" title="function not covered" >Rep
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-26T19:47:27.006Z
+                at 2025-03-26T23:21:41.978Z
             </div>
-        <script src="../../../../../prettify.js"></script>
+        <script src="../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../../../../sorter.js"></script>
-        <script src="../../../../../block-navigation.js"></script>
+        <script src="../../../sorter.js"></script>
+        <script src="../../../block-navigation.js"></script>
     </body>
 </html>
     
