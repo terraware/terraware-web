@@ -46,6 +46,7 @@ const SettingsPage = () => {
             backToView={() => setIsEditingAccount(false)}
             user={{ ...user }}
             reloadUser={reloadUser}
+            desktopOffset={'56px'}
           />
         ),
       },

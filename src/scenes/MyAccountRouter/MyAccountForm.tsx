@@ -50,6 +50,7 @@ export type MyAccountFormProps = {
   deleteOpen?: boolean;
   backToView?: () => void;
   onDeleteCancel?: () => void;
+  desktopOffset?: string;
 };
 
 /**
@@ -84,6 +85,7 @@ const MyAccountForm = ({
   deleteOpen,
   backToView,
   onDeleteCancel,
+  desktopOffset,
 }: MyAccountFormProps): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const supportedLocales = useSupportedLocales();
@@ -317,6 +319,7 @@ const MyAccountForm = ({
       onCancel={onCancel}
       onSave={saveChanges}
       hideEdit={!edit}
+      desktopOffset={desktopOffset}
     >
       {removedOrg && (
         <>
