@@ -216,6 +216,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
           }}
           countryError={countryError}
           countrySubdivisionError={stateError}
+          paddingBottom={theme.spacing(4)}
         />
         <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingTop: 0 } }}>
           <TimeZoneSelector

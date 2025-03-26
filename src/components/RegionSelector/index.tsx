@@ -20,6 +20,7 @@ type RegionSelectorProps = {
   hideCountrySubdivisions?: boolean;
   countryLabel?: string;
   countryTooltip?: string;
+  paddingBottom?: string;
 };
 
 export default function RegionSelector({
@@ -33,6 +34,7 @@ export default function RegionSelector({
   hideCountrySubdivisions,
   countryLabel,
   countryTooltip,
+  paddingBottom,
 }: RegionSelectorProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
@@ -96,7 +98,7 @@ export default function RegionSelector({
 
   return (
     <>
-      <Grid item xs={gridSize()} paddingBottom={isMobile ? 0 : theme.spacing(4)}>
+      <Grid item xs={gridSize()} paddingBottom={paddingBottom}>
         <Dropdown
           id='countryCode'
           placeholder={strings.SELECT}
@@ -115,7 +117,7 @@ export default function RegionSelector({
           item
           xs={gridSize()}
           paddingLeft={isMobile ? 0 : theme.spacing(2)}
-          paddingBottom={theme.spacing(4)}
+          paddingBottom={paddingBottom}
           sx={{ '&.MuiGrid-item': { paddingTop: 0 } }}
         >
           <Dropdown

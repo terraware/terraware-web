@@ -17,7 +17,7 @@ const NoOrgRouter = () => {
   return (
     <Routes>
       <Route path={`${APP_PATHS.MY_ACCOUNT}/*`} element={<MyAccountRouter hasNav={false} />} />
-      <Route path={`${APP_PATHS.SETTINGS}*`} element={<SettingsPage />} />
+      <Route path={APP_PATHS.SETTINGS} element={<SettingsPage />} />
       <Route path={APP_PATHS.WELCOME} element={<NoOrgLandingPage />} />
       <Route path={`${APP_PATHS.APPLICATIONS}/*`} element={<NoOrgApplicationLandingPage />} />
       {!isProduction && <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />}

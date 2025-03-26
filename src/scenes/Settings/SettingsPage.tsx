@@ -1,10 +1,13 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 
 import { Box, useTheme } from '@mui/material';
-import { Tabs } from '@terraware/web-components';
+import { Button, DropdownItem, Tabs } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Page from 'src/components/Page';
+import OptionsMenu from 'src/components/common/OptionsMenu';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TitleDescription from 'src/components/common/TitleDescription';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useUser } from 'src/providers';
@@ -17,6 +20,10 @@ const SettingsPage = () => {
   const mixpanel = useMixpanel();
   const theme = useTheme();
   const { user, reloadUser } = useUser();
+  const [isEditingAccount, setIsEditingAccount] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const { isMobile } = useDeviceInfo();
+  const contentRef = useRef(null);
 
   const tabs = useMemo(() => {
     if (!activeLocale) {
@@ -31,10 +38,20 @@ const SettingsPage = () => {
       {
         id: 'my-account',
         label: strings.MY_ACCOUNT,
-        children: <MyAccountForm edit={false} user={{ ...user }} reloadUser={reloadUser} />,
+        children: (
+          <MyAccountForm
+            edit={isEditingAccount}
+            deleteOpen={isDeleteModalOpen}
+            onDeleteCancel={() => setIsDeleteModalOpen(false)}
+            backToView={() => setIsEditingAccount(false)}
+            user={{ ...user }}
+            reloadUser={reloadUser}
+            desktopOffset={'56px'}
+          />
+        ),
       },
     ];
-  }, [activeLocale, user, reloadUser]);
+  }, [activeLocale, user, reloadUser, isEditingAccount, isDeleteModalOpen]);
 
   const { activeTab, onTabChange } = useStickyTabs({
     defaultTab: 'my-account',
@@ -49,7 +66,14 @@ const SettingsPage = () => {
         tab,
       });
     }
+    setIsEditingAccount(false);
     onTabChange(tab);
+  };
+
+  const onOptionItemClick = (optionItem: DropdownItem) => {
+    if (optionItem.value === 'delete-account') {
+      setIsDeleteModalOpen(true);
+    }
   };
 
   return (
@@ -75,16 +99,38 @@ const SettingsPage = () => {
         }}
         marginTop={theme.spacing(4)}
       >
-        <TitleDescription
-          title={strings.SETTINGS}
-          description={strings.MY_ACCOUNT_DESC}
-          style={{
-            padding: 0,
-            marginLeft: theme.spacing(4),
-            marginBottom: theme.spacing(2),
-          }}
-        />
-        <Tabs activeTab={activeTab} onTabChange={onTabChangeHandler} tabs={tabs} />
+        <PageHeaderWrapper nextElement={contentRef.current} hasNav={false}>
+          <Box display='flex' justifyContent='space-between'>
+            <TitleDescription
+              title={strings.SETTINGS}
+              description={strings.MY_ACCOUNT_DESC}
+              style={{
+                padding: 0,
+                marginLeft: theme.spacing(4),
+                marginBottom: theme.spacing(2),
+              }}
+            />
+            {!isEditingAccount && (
+              <Box display='flex' height='fit-content'>
+                <Button
+                  id='edit-account'
+                  icon='iconEdit'
+                  label={isMobile ? '' : strings.EDIT_ACCOUNT}
+                  onClick={() => setIsEditingAccount(true)}
+                  size='medium'
+                  priority='primary'
+                />
+                <OptionsMenu
+                  onOptionItemClick={onOptionItemClick}
+                  optionItems={[{ label: strings.DELETE_ACCOUNT, value: 'delete-account', type: 'destructive' }]}
+                />
+              </Box>
+            )}
+          </Box>
+        </PageHeaderWrapper>
+        <Box ref={contentRef}>
+          <Tabs activeTab={activeTab} onTabChange={onTabChangeHandler} tabs={tabs} />
+        </Box>
       </Box>
     </Page>
   );

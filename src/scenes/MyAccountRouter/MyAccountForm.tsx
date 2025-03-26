@@ -19,7 +19,7 @@ import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useDocLinks } from 'src/docLinks';
-import { useLocalization, useTimeZones, useUser, useUserFundingEntity } from 'src/providers';
+import { useLocalization, useTimeZones, useUser } from 'src/providers';
 import { OrganizationService, OrganizationUserService, PreferencesService, UserService } from 'src/services';
 import strings from 'src/strings';
 import { findLocaleDetails, useSupportedLocales } from 'src/strings/locales';
@@ -47,6 +47,10 @@ export type MyAccountFormProps = {
   reloadUser: () => void;
   user: User;
   includeHeader?: boolean;
+  deleteOpen?: boolean;
+  backToView?: () => void;
+  onDeleteCancel?: () => void;
+  desktopOffset?: string;
 };
 
 /**
@@ -78,6 +82,10 @@ const MyAccountForm = ({
   reloadUser,
   user,
   includeHeader,
+  deleteOpen,
+  backToView,
+  onDeleteCancel,
+  desktopOffset,
 }: MyAccountFormProps): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const supportedLocales = useSupportedLocales();
@@ -95,7 +103,6 @@ const MyAccountForm = ({
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
   const { userPreferences, reloadUserPreferences } = useUser();
-  const { userFundingEntity } = useUserFundingEntity();
   const snackbar = useSnackbar();
   const docLinks = useDocLinks();
   const contentRef = useRef(null);
@@ -169,7 +176,11 @@ const MyAccountForm = ({
     setLocaleSelected(selectedLocale);
     setSelectedRows([]);
     onChange('cookiesConsented', user.cookiesConsented);
-    navigate(APP_PATHS.MY_ACCOUNT);
+    if (backToView) {
+      backToView();
+    } else {
+      navigate(APP_PATHS.MY_ACCOUNT);
+    }
   };
 
   const saveChanges = async () => {
@@ -204,7 +215,11 @@ const MyAccountForm = ({
         setSelectedLocale(lastLocale);
         snackbar.toastError();
       }
-      navigate(APP_PATHS.MY_ACCOUNT);
+      if (backToView) {
+        backToView();
+      } else {
+        navigate(APP_PATHS.MY_ACCOUNT);
+      }
     }
   };
 
@@ -252,7 +267,11 @@ const MyAccountForm = ({
       snackbar.toastError();
     }
     setLeaveOrganizationModalOpened(false);
-    navigate(APP_PATHS.MY_ACCOUNT);
+    if (backToView) {
+      backToView();
+    } else {
+      navigate(APP_PATHS.MY_ACCOUNT);
+    }
   };
 
   const deleteOrgHandler = async () => {
@@ -291,10 +310,7 @@ const MyAccountForm = ({
 
   const userIsFunder = useMemo(() => user.userType === 'Funder', [user]);
 
-  const onEditClick = () => {
-    // SW-6604 - make this optionally overridable with a prop
-    navigate(APP_PATHS.MY_ACCOUNT_EDIT);
-  };
+  const onEditClick = () => navigate(APP_PATHS.MY_ACCOUNT_EDIT);
 
   return (
     <PageForm
@@ -303,6 +319,7 @@ const MyAccountForm = ({
       onCancel={onCancel}
       onSave={saveChanges}
       hideEdit={!edit}
+      desktopOffset={desktopOffset}
     >
       {removedOrg && (
         <>
@@ -333,6 +350,17 @@ const MyAccountForm = ({
           />
         </>
       )}
+      {(openDeleteAccountModal || deleteOpen) && (
+        <DeleteAccountModal
+          onCancel={() => {
+            if (onDeleteCancel) {
+              onDeleteCancel();
+            } else {
+              setOpenDeleteAccountModal(false);
+            }
+          }}
+        />
+      )}
       {includeHeader && (
         <PageHeaderWrapper nextElement={contentRef.current} hasNav={hasNav}>
           <Box
@@ -345,7 +373,6 @@ const MyAccountForm = ({
             <TitleDescription title={strings.MY_ACCOUNT} description={strings.MY_ACCOUNT_DESC} style={{ padding: 0 }} />
             {!edit && (
               <Box display='flex' height='fit-content'>
-                {openDeleteAccountModal && <DeleteAccountModal onCancel={() => setOpenDeleteAccountModal(false)} />}
                 <Button
                   id='edit-account'
                   icon='iconEdit'
@@ -367,9 +394,9 @@ const MyAccountForm = ({
         ref={contentRef}
         sx={{
           backgroundColor: theme.palette.TwClrBg,
-          borderRadius: '32px',
+          borderRadius: theme.spacing(2),
           margin: theme.spacing(0, hasNav === false ? 4 : 0),
-          padding: theme.spacing(3),
+          padding: includeHeader ? theme.spacing(3) : theme.spacing(4),
         }}
       >
         <Box sx={isMobile ? { width: 'calc(100vw - 72px)' } : {}}>
@@ -409,29 +436,13 @@ const MyAccountForm = ({
                 readonly={true}
               />
             </Grid>
-            {userIsFunder && (
-              <Grid item xs={isMobile ? 12 : 4}>
-                <TextField
-                  label={strings.FUNDING_ENTITY}
-                  id='fundingEntity'
-                  type='text'
-                  value={userFundingEntity?.name}
-                  display={!edit}
-                  readonly={true}
-                />
-              </Grid>
-            )}
             <Grid item xs={12}>
               <Typography fontSize='20px' fontWeight={600}>
-                {strings.LANGUAGE_AND_REGION}
+                {userIsFunder ? strings.REGION : strings.LANGUAGE_AND_REGION}
               </Typography>
             </Grid>
             {!userIsFunder && (
-              <Grid
-                item
-                xs={isMobile ? 12 : 3}
-                sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
-              >
+              <Grid item xs={isMobile ? 12 : 3}>
                 {edit ? (
                   <LocaleSelector
                     onChangeLocale={(newValue) => setLocaleSelected(newValue)}
@@ -449,11 +460,7 @@ const MyAccountForm = ({
                 )}
               </Grid>
             )}
-            <Grid
-              item
-              xs={isMobile ? 12 : 3}
-              sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
-            >
+            <Grid item xs={isMobile ? 12 : 3}>
               {edit ? (
                 <RegionSelector
                   selectedCountryCode={countryCodeSelected}
@@ -473,11 +480,7 @@ const MyAccountForm = ({
               )}
             </Grid>
             {!userIsFunder && (
-              <Grid
-                item
-                xs={isMobile ? 12 : 3}
-                sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(isMobile ? 3 : 2) } }}
-              >
+              <Grid item xs={isMobile ? 12 : 3}>
                 {edit ? (
                   <WeightSystemSelector
                     onChange={(newValue) => setPreferredWeightSystemSelected(newValue)}
@@ -495,7 +498,7 @@ const MyAccountForm = ({
                 )}
               </Grid>
             )}
-            <Grid item xs={isMobile ? 12 : 3} sx={{ '&.MuiGrid-item': { paddingTop: theme.spacing(2) } }}>
+            <Grid item xs={isMobile ? 12 : 3}>
               {edit ? (
                 <TimeZoneSelector
                   onTimeZoneSelected={onTimeZoneChange}
