@@ -121,7 +121,10 @@ export default function ConsoleReportsTargets(): JSX.Element {
       const reportYear = DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;
       availableYears.add(reportYear);
     });
-    return Array.from(availableYears);
+    const currentYear = new Date().getFullYear();
+    availableYears.add(currentYear);
+
+    return Array.from(availableYears).sort((a, b) => b - a);
   }, [allReports]);
 
   useEffect(() => {
