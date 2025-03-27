@@ -49,7 +49,7 @@ function RemoveFunderTopBarButton({ onConfirm, selectedRows }: RemoveFunderTopBa
       <Button
         icon='iconTrashCan'
         onClick={() => setIsModalOpen(true)}
-        label={titleText}
+        label={strings.REMOVE}
         priority={'secondary'}
         type={'destructive'}
       />
