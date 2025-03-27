@@ -104,26 +104,38 @@ export default function UserNotification(): Notification | null {
         body: (
           <Box>
             <ul>
-              <li>
-                {strings.formatString(
-                  strings.DEFAULT_LANGUAGE_SELECTED,
-                  supportedLocales.find((sLocale) => sLocale.id === user?.locale)?.name || ''
-                )}
-              </li>
+              {user?.userType !== 'Funder' && (
+                <li>
+                  {strings.formatString(
+                    strings.DEFAULT_LANGUAGE_SELECTED,
+                    supportedLocales.find((sLocale) => sLocale.id === user?.locale)?.name || ''
+                  )}
+                </li>
+              )}
               <li>{strings.formatString(strings.TIME_ZONE_SELECTED, userTimeZone || '')}</li>
-              <li>
-                {strings.formatString(
-                  strings.WEIGHT_SYSTEM_SELECTED,
-                  weightSystemsNames().find((ws) => ws.value === userPreferences.preferredWeightSystem)?.label || ''
-                )}
-              </li>
+              {user?.userType !== 'Funder' && (
+                <li>
+                  {strings.formatString(
+                    strings.WEIGHT_SYSTEM_SELECTED,
+                    weightSystemsNames().find((ws) => ws.value === userPreferences.preferredWeightSystem)?.label || ''
+                  )}
+                </li>
+              )}
             </ul>
             <Box paddingTop={1}>
-              <TextWithLink text={strings.USER_NOTIFICATION_ACTION} href={APP_PATHS.MY_ACCOUNT} fontSize='14px' />
+              {user?.userType === 'Funder' ? (
+                <TextWithLink
+                  text={strings.USER_NOTIFICATION_ACTION_SETTINGS}
+                  href={APP_PATHS.SETTINGS}
+                  fontSize='14px'
+                />
+              ) : (
+                <TextWithLink text={strings.USER_NOTIFICATION_ACTION} href={APP_PATHS.MY_ACCOUNT} fontSize='14px' />
+              )}
             </Box>
           </Box>
         ),
-        localUrl: APP_PATHS.MY_ACCOUNT,
+        localUrl: user?.userType === 'Funder' ? APP_PATHS.SETTINGS : APP_PATHS.MY_ACCOUNT,
         createdTime: getTodaysDateFormatted(),
         isRead: unitNotificationRead || timeZoneUserNotificationRead,
         hideDate: true,
@@ -145,6 +157,7 @@ export default function UserNotification(): Notification | null {
     timeZoneUserNotification,
     reloadUserPreferences,
     selectedOrganization.id,
+    user?.userType,
     user?.locale,
     userPreferences.preferredWeightSystem,
     userTimeZone,
