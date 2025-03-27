@@ -38,7 +38,9 @@ function RemoveFunderTopBarButton({ onConfirm, selectedRows }: RemoveFunderTopBa
     if (selectedRows.length > 1) {
       return strings.REMOVE_FUNDERS_MODAL_TEXT;
     } else {
-      return strings.formatString(strings.REMOVE_FUNDER, selectedRows[0].firstName ?? selectedRows[0].email).toString();
+      return strings
+        .formatString(strings.REMOVE_FUNDER_MODAL_TEXT, selectedRows[0].firstName ?? selectedRows[0].email)
+        .toString();
     }
   }, [activeLocale, selectedRows]);
 
@@ -62,7 +64,7 @@ function RemoveFunderTopBarButton({ onConfirm, selectedRows }: RemoveFunderTopBa
         onClose={() => setIsModalOpen(false)}
         onConfirm={_onConfirm}
         open={isModalOpen}
-        title={strings.REMOVE_ACCESS}
+        title={titleText}
       />
     </>
   );
