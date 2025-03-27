@@ -1,343 +1,325 @@
-import { Box, Grid, Typography } from '@mui/material';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import TextField from 'src/components/common/TextField';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
+import TextField from '@terraware/web-components/components/Textfield/Textfield';
+
 import Button from 'src/components/common/button/Button';
+import { useLocalization } from 'src/providers';
+import {
+  selectListReportMetrics,
+  selectListStandardMetrics,
+  selectListSystemMetrics,
+} from 'src/redux/features/reports/reportsSelectors';
+import {
+  requestListProjectMetrics,
+  requestListStandardMetrics,
+  requestListSystemMetrics,
+} from 'src/redux/features/reports/reportsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ProjectMetric, StandardMetric, SystemMetric } from 'src/types/AcceleratorReport';
+import {
+  MetricType,
+  ProjectMetric,
+  ReportProjectMetric,
+  ReportStandardMetric,
+  ReportSystemMetric,
+  StandardMetric,
+  SystemMetric,
+} from 'src/types/AcceleratorReport';
+import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
+
+import EditProgressModal from './EditProgressModal';
+
+const isReportSystemMetric = (metric: any): metric is ReportSystemMetric => {
+  return metric && typeof metric.metric === 'string';
+};
+
+const isStandardOrProjectMetric = (metric: any): metric is ReportStandardMetric | ReportProjectMetric => {
+  return metric && typeof metric.id === 'number';
+};
+
+export const getMetricId = (metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric) => {
+  if (isReportSystemMetric(metric)) {
+    return metric.metric.replace(/\s+/g, '');
+  } else if (isStandardOrProjectMetric(metric)) {
+    return metric.id.toString();
+  }
+  return '-1';
+};
 
 const MetricBox = ({
   editingId,
-  hideStatusBadge,
   index,
   projectId,
   reload,
   setEditingId,
   setUpdatePendingId,
   metric,
+  type,
 }: {
-  editingId?: number;
+  editingId?: string;
   hideStatusBadge?: boolean;
   index: number;
-  projectId: number;
+  projectId: string;
   reload: () => void;
-  setEditingId: (id: number | undefined) => void;
+  setEditingId: (id: string | undefined) => void;
   setUpdatePendingId: (variableId: number | undefined) => void;
-  metric: ProjectMetric | SystemMetric | StandardMetric;
+  metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric;
+  type: MetricType;
 }): JSX.Element => {
   const theme = useTheme();
   const { activeLocale } = useLocalization();
-  const {
-    hasVariableError,
-    pendingVariableValues,
-    setCellValues,
-    setDeletedImages,
-    setImages,
-    setNewImages,
-    setRemovedValue,
-    setValues,
-    setVariableHasError,
-    update,
-  } = useProjectVariablesUpdate(projectId, [variable]);
-  const { isAcceleratorApplicationRoute } = useAcceleratorConsole();
-  const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
-  const [showVariableHistoryModal, setShowVariableHistoryModal] = useState<boolean>(false);
-  const [displayActions, setDisplayActions] = useState(false);
   const snackbar = useSnackbar();
-
-  const {
-    update: updateWorkflow,
-    initialStatus,
-    initialFeedback,
-    initialInternalCommnet,
-  } = useProjectVariableWorklow(projectId, variable);
-
-  const [workflowDetails, , onChange] = useForm<UpdateVariableWorkflowDetailsPayload>({
-    feedback: initialFeedback,
-    internalComment: initialInternalCommnet,
-    status: initialStatus,
-  });
-
-  const pendingValues: VariableValueValue[] | undefined = useMemo(
-    () => pendingVariableValues.get(variable.id),
-    [pendingVariableValues, variable.id]
+  const [record, setRecord, onChange] = useForm<ReportProjectMetric | ReportSystemMetric | ReportStandardMetric>(
+    metric
   );
+  const [requestId, setRequestId] = useState<string>('');
+  const [standardRequestId, setStandardRequestId] = useState<string>('');
+  const dispatch = useAppDispatch();
+  const projectMetricsResponse = useAppSelector(selectListReportMetrics(requestId));
+  const systemMetricsResponse = useAppSelector(selectListSystemMetrics(requestId));
+  const standardMetricsResponse = useAppSelector(selectListStandardMetrics(standardRequestId));
+  const [projectMetrics, setProjectMetrics] = useState<ProjectMetric[]>();
+  const [systemMetrics, setSystemMetrics] = useState<SystemMetric[]>();
+  const [standardMetrics, setStandardMetrics] = useState<StandardMetric[]>();
+  const [metricData, setMetricData] = useState<ProjectMetric | SystemMetric | StandardMetric>();
+  const [progressModalOpened, setProgressModalOpened] = useState<boolean>(false);
 
-  const editing = useMemo(() => editingId === variable.id, [editingId, variable.id]);
+  useEffect(() => {
+    if (isStandardOrProjectMetric(metric)) {
+      const request = dispatch(requestListProjectMetrics({ projectId }));
+      setRequestId(request.requestId);
+      const request2 = dispatch(requestListStandardMetrics());
+      setStandardRequestId(request2.requestId);
+    }
+    if (isReportSystemMetric(metric)) {
+      const request = dispatch(requestListSystemMetrics());
+      setRequestId(request.requestId);
+    }
+  }, [metric]);
+
+  useEffect(() => {
+    if (projectMetricsResponse?.status === 'error') {
+      return;
+    }
+    if (projectMetricsResponse?.data) {
+      setProjectMetrics(projectMetricsResponse.data);
+    }
+  }, [projectMetricsResponse]);
+
+  useEffect(() => {
+    if (systemMetricsResponse?.status === 'error') {
+      return;
+    }
+    if (systemMetricsResponse?.data) {
+      setSystemMetrics(systemMetricsResponse.data);
+    }
+  }, [systemMetricsResponse]);
+
+  useEffect(() => {
+    if (standardMetricsResponse?.status === 'error') {
+      return;
+    }
+    if (standardMetricsResponse?.data) {
+      setStandardMetrics(standardMetricsResponse.data);
+    }
+  }, [standardMetricsResponse]);
+
+  useEffect(() => {
+    if (isReportSystemMetric(metric)) {
+      const found = systemMetrics?.find((sm) => sm.metric === metric.metric);
+      setMetricData(found);
+    }
+    if (isStandardOrProjectMetric(metric)) {
+      let found = standardMetrics?.find((sm) => sm.id === metric.id);
+      if (!found) {
+        found = projectMetrics?.find((sm) => sm.id === metric.id);
+      }
+      setMetricData(found);
+    }
+  }, [projectMetrics, systemMetrics, standardMetrics, metric]);
+
+  const editing = useMemo(() => editingId === getMetricId(metric), [editingId, metric, getMetricId]);
 
   const onEditItem = useCallback(() => {
-    setEditingId(variable.id);
-  }, [setEditingId, variable]);
-
-  const waitAndReload = useCallback(() => {
-    setTimeout(() => reload(), 500);
-  }, [reload]);
-
-  const approveCallback = useCallback(() => {
-    setUpdatePendingId(variable.id);
-    waitAndReload();
-    snackbar.toastSuccess(strings.ANSWER_APPROVED);
-  }, [waitAndReload, snackbar]);
-
-  const rejectCallback = useCallback(() => {
-    setUpdatePendingId(variable.id);
-    waitAndReload();
-    snackbar.toastSuccess(strings.UPDATE_REQUESTED);
-  }, [waitAndReload, snackbar]);
-
-  const updateCallback = useCallback(() => {
-    setUpdatePendingId(variable.id);
-    waitAndReload();
-  }, [waitAndReload]);
-
-  const approveItem = useCallback(() => {
-    updateWorkflow('Approved', undefined, workflowDetails.internalComment, approveCallback);
-  }, [workflowDetails, updateWorkflow, approveCallback]);
-
-  const rejectItem = useCallback(
-    (feedback: string) => {
-      updateWorkflow('Rejected', feedback, workflowDetails.internalComment, rejectCallback);
-    },
-    [workflowDetails, updateWorkflow, rejectCallback]
-  );
-
-  const onUpdateInternalComment = useCallback(
-    (internalComment: string) => {
-      updateWorkflow(workflowDetails.status, workflowDetails.feedback, internalComment, updateCallback);
-    },
-    [workflowDetails, updateWorkflow, updateCallback]
-  );
+    setEditingId(getMetricId(metric));
+  }, [setEditingId, metric, getMetricId]);
 
   const onSave = useCallback(() => {
-    update(false);
-    updateWorkflow(workflowDetails.status, workflowDetails.feedback, workflowDetails.internalComment, updateCallback);
-    setEditingId(undefined);
-  }, [update, updateCallback, updateWorkflow, workflowDetails]);
+    return true;
+  }, []);
 
-  const onOptionItemClick = useCallback(
-    (optionItem: DropdownItem) => {
-      switch (optionItem.value) {
-        case 'needs_translation': {
-          updateWorkflow(
-            'Needs Translation',
-            workflowDetails.feedback,
-            workflowDetails.internalComment,
-            updateCallback
-          );
-          break;
-        }
-        case 'not_needed': {
-          updateWorkflow('Not Needed', workflowDetails.feedback, workflowDetails.internalComment, updateCallback);
-          break;
-        }
-        case 'view_history': {
-          setShowVariableHistoryModal(true);
-          break;
-        }
-      }
-    },
-    [workflowDetails, updateCallback, updateWorkflow]
-  );
+  const onChangeProgress = (newValue: string) => {
+    if (isStandardOrProjectMetric(record)) {
+      onChange('value', newValue);
+    } else {
+      onChange('overrideValue', newValue);
+    }
+  };
 
-  const optionItems = useMemo(
-    (): DropdownItem[] =>
-      activeLocale
-        ? [
-            {
-              label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NEEDS_TRANSLATION) as string,
-              value: 'needs_translation',
-              disabled: workflowDetails.status === 'Needs Translation',
-            },
-            {
-              label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NOT_NEEDED) as string,
-              value: 'not_needed',
-              disabled: workflowDetails.status === 'Not Needed',
-            },
-            {
-              label: strings.VIEW_HISTORY,
-              value: 'view_history',
-            },
-          ]
-        : [],
-    [activeLocale, workflowDetails.status]
-  );
+  const getProgressValue = () => {
+    if (isStandardOrProjectMetric(record)) {
+      return record.value;
+    } else {
+      return record.overrideValue || record.systemValue;
+    }
+  };
+
+  const getMetricName = () => {
+    if (isStandardOrProjectMetric(metric)) {
+      return metric.name;
+    } else {
+      return metric.metric;
+    }
+  };
 
   return (
-    <Box data-metric-id={-1} key={`metric-${metric.name}`} sx={{ scrollMarginTop: '50vh' }}>
-      <Box
-        sx={{
-          borderRadius: 2,
-          '&:hover': {
-            background: editing ? theme.palette.TwClrBgActive : theme.palette.TwClrBgHover,
-            '.actions': {
-              display: 'block',
-            },
-          },
-          background: editing ? theme.palette.TwClrBgActive : displayActions ? theme.palette.TwClrBgHover : 'none',
-          '& .actions': {
-            display: displayActions ? 'block' : 'none',
-          },
-          marginBottom: theme.spacing(4),
-          padding: 2,
-          width: '100%',
-        }}
-      >
+    <>
+      {progressModalOpened && metric.target && (
+        <EditProgressModal
+          metricName={getMetricName()}
+          target={metric.target}
+          onChange={onChangeProgress}
+          value={getProgressValue()}
+          onClose={() => setProgressModalOpened(false)}
+        />
+      )}
+      <Box data-metric-id={getMetricId(metric)} key={`metric-${index}`} sx={{ scrollMarginTop: '50vh' }}>
         <Box
           sx={{
-            alignItems: 'center',
-            display: 'flex',
-            justifyContent: 'space-apart',
-            marginBottom: '16px',
+            borderRadius: 2,
+            '&:hover': {
+              background: editing ? theme.palette.TwClrBgActive : theme.palette.TwClrBgHover,
+              '.actions': {
+                display: 'block',
+              },
+            },
+            background: editing ? theme.palette.TwClrBgActive : 'none',
+            '& .actions': {
+              display: 'none',
+            },
+            marginBottom: theme.spacing(4),
+            padding: 2,
             width: '100%',
           }}
         >
           <Box
             sx={{
-              alignItems: 'start',
-              display: 'flex',
-              flexGrow: 1,
-              justifyContent: 'flex-start',
-              flexDirection: 'column',
-            }}
-          >
-            <Typography sx={{ fontWeight: '600' }}>{metric.name}</Typography>
-          </Box>
-
-          <Box
-            sx={{
               alignItems: 'center',
               display: 'flex',
-              flexGrow: 1,
-              justifyContent: 'flex-end',
+              justifyContent: 'space-apart',
+              marginBottom: '16px',
+              width: '100%',
             }}
           >
-            {!editingId && (
-              <Box className='actions'>
+            <Box
+              sx={{
+                alignItems: 'start',
+                display: 'flex',
+                flexGrow: 1,
+                justifyContent: 'flex-start',
+                flexDirection: 'column',
+              }}
+            >
+              {isReportSystemMetric(metric) && <Typography sx={{ fontWeight: '600' }}>{metric.metric}</Typography>}
+              {isStandardOrProjectMetric(metric) && <Typography sx={{ fontWeight: '600' }}>{metric.id}</Typography>}
+            </Box>
+
+            <Box
+              sx={{
+                alignItems: 'center',
+                display: 'flex',
+                flexGrow: 1,
+                justifyContent: 'flex-end',
+              }}
+            >
+              {!editingId && (
+                <Box className='actions'>
+                  <Button
+                    id='edit'
+                    label={strings.EDIT}
+                    onClick={onEditItem}
+                    icon='iconEdit'
+                    priority='secondary'
+                    className='edit-button'
+                    size='small'
+                    sx={{ '&.button': { margin: '4px' } }}
+                    type='passive'
+                  />
+                </Box>
+              )}
+            </Box>
+          </Box>
+
+          {!!metric.description && (
+            <Typography
+              sx={{
+                color: 'rgba(0, 0, 0, 0.54)',
+                fontSize: '14px',
+                fontStyle: 'italic',
+                lineHeight: '20px',
+                marginY: '16px',
+              }}
+            >
+              {metric?.description}
+            </Typography>
+          )}
+
+          <Grid container marginBottom={3}>
+            <Grid item xs={6}>
+              <Box display={'flex'} alignItems={'center'}>
+                <Typography paddingTop={3}>
+                  {getProgressValue()} / {record.target} ({strings.TARGET})
+                </Typography>
                 <Button
-                  id='edit'
-                  label={strings.EDIT}
-                  onClick={onEditItem}
                   icon='iconEdit'
-                  priority='secondary'
-                  className='edit-button'
+                  onClick={() => setProgressModalOpened(true)}
+                  priority='ghost'
                   size='small'
-                  sx={{ '&.button': { margin: '4px' } }}
                   type='passive'
+                  style={{
+                    marginLeft: '-1px',
+                    marginTop: '-1px',
+                  }}
                 />
               </Box>
-            )}
-          </Box>
-        </Box>
-
-        {!!metric.description && (
-          <Typography
-            sx={{
-              color: 'rgba(0, 0, 0, 0.54)',
-              fontSize: '14px',
-              fontStyle: 'italic',
-              lineHeight: '20px',
-              marginY: '16px',
-            }}
-          >
-            {metric.description}
-          </Typography>
-        )}
-
-        {editing && (
-          <Grid container spacing={3} sx={{ marginBottom: '24px', padding: 0 }} textAlign='left'>
-            <Grid item xs={12}>
-              <TextField
-                type='textarea'
-                label={strings.INTERNAL_COMMENTS}
-                id='internalComment'
-                onChange={(value) => {
-                  onChange('internalComment', value as string);
-                }}
-                sx={{ marginTop: theme.spacing(1) }}
-                value={workflowDetails.internalComment}
-              />
             </Grid>
-            <Grid item xs={12}>
-              <DeliverableVariableDetailsInput
-                hideDescription
-                values={pendingValues || variable.values}
-                setValues={(newValues: VariableValueValue[]) => setValues(variable.id, newValues)}
-                variable={variable}
-                addRemovedValue={(removedValue: VariableValueValue) => setRemovedValue(variable.id, removedValue)}
-                setCellValues={(newValues: VariableTableCell[][]) => setCellValues(variable.id, newValues)}
-                setDeletedImages={(newValues: VariableValueImageValue[]) => setDeletedImages(variable.id, newValues)}
-                setImages={(newValues: VariableValueImageValue[]) => setImages(variable.id, newValues)}
-                setNewImages={(newValues: PhotoWithAttributes[]) => setNewImages(variable.id, newValues)}
-                setVariableHasError={setVariableHasError}
-                projectId={projectId}
-                validateFields={false}
-              />
-            </Grid>
-
-            {workflowDetails.status === 'Rejected' && (
-              <Grid item xs={12}>
+            <Grid item xs={6}>
+              <Box>
                 <TextField
                   type='textarea'
-                  label={strings.FEEDBACK_SHARED_WITH_PROJECT}
-                  id='feedback'
-                  onChange={(value) => {
-                    onChange('feedback', value as string);
-                  }}
-                  sx={{ marginTop: theme.spacing(1) }}
-                  value={workflowDetails.feedback}
+                  label={strings.NOTES}
+                  value={record.underperformanceJustification}
+                  id={'underperformanceJustification'}
+                  onChange={(value: any) => onChange('underperformanceJustification', value)}
+                  display={!editing}
                 />
-              </Grid>
-            )}
+                {!!editing && (
+                  <Typography fontSize={14} color={theme.palette.TwClrTxtSecondary}>
+                    {strings.UNDERPERFORMANCE_DESCRIPTION}
+                  </Typography>
+                )}
+              </Box>
+            </Grid>
           </Grid>
-        )}
 
-        {workflowDetails.internalComment && !editing && (
-          <VariableInternalComment
-            editing={editing}
-            sx={{ marginY: theme.spacing(2) }}
-            update={onUpdateInternalComment}
-            variable={variable}
-          />
-        )}
-        {workflowDetails.status === 'Rejected' && workflowDetails.feedback && !editing && (
-          <Box marginY={theme.spacing(2)} display='flex' alignItems='center'>
-            <Message
-              body={
-                <Typography>
-                  <span style={{ fontWeight: 600 }}>{strings.FEEDBACK_SHARED_WITH_PROJECT}</span>{' '}
-                  {workflowDetails.feedback}
-                </Typography>
-              }
-              priority='critical'
-              type='page'
-            />
-          </Box>
-        )}
-        <Typography>
-          {!editing && <DeliverableDisplayVariableValue projectId={projectId} variable={variable} />}
-        </Typography>
-
-        {editing && (
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button
-              id='cancel'
-              label={strings.CANCEL}
-              type='passive'
-              onClick={() => setEditingId(undefined)}
-              priority='secondary'
-              key='button-1'
-            />
-            <Button
-              id={'save'}
-              onClick={onSave}
-              label={strings.SAVE}
-              disabled={hasVariableError}
-              key='button-2'
-              priority='secondary'
-            />
-          </Box>
-        )}
+          {editing && (
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Button
+                id='cancel'
+                label={strings.CANCEL}
+                type='passive'
+                onClick={() => setEditingId(undefined)}
+                priority='secondary'
+                key='button-1'
+              />
+              <Button id={'save'} onClick={onSave} label={strings.SAVE} key='button-2' priority='secondary' />
+            </Box>
+          )}
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 

@@ -14,91 +14,97 @@ import { AcceleratorReportStatus } from 'src/types/AcceleratorReport';
 
 import ReportStatusBadge from './ReportStatusBadge';
 
-export default function ReportCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
-  const { column, row, index, value } = props;
-  const { activeLocale } = useLocalization();
-  const { isAcceleratorRoute } = useAcceleratorConsole();
-  const dispatch = useAppDispatch();
+type ReportCellRenderer = {
+  projectId: string;
+};
 
-  const modifiedByUser = useAppSelector(selectUser(row.modifiedBy));
-  const submittedByUser = useAppSelector(selectUser(row.submittedBy));
+export default function ReportCellRenderer({ projectId }: ReportCellRenderer) {
+  return (props: RendererProps<TableRowType>): JSX.Element => {
+    const { column, row, index, value } = props;
+    const { activeLocale } = useLocalization();
+    const { isAcceleratorRoute } = useAcceleratorConsole();
+    const dispatch = useAppDispatch();
 
-  const createLinkToReport = useCallback(() => {
-    // TODO: update link to accelerator report views once ready
-    const reportUrl = isAcceleratorRoute ? APP_PATHS.ACCELERATOR_PROJECT_REPORTS_VIEW : APP_PATHS.REPORTS_VIEW;
-    const to = reportUrl.replace(':reportId', `${row.id}`);
+    const modifiedByUser = useAppSelector(selectUser(row.modifiedBy));
+    const submittedByUser = useAppSelector(selectUser(row.submittedBy));
 
-    const year = row.startDate.split('-')[0];
-    const quarterNumber = row.startDate ? Math.ceil((new Date(row.startDate).getMonth() + 1) / 3) : 0;
-    const reportName = row.frequency === 'Annual' ? `${year}` : `${year}-Q${quarterNumber}`;
+    const createLinkToReport = useCallback(() => {
+      // TODO: update link to accelerator report views once ready
+      const reportUrl = isAcceleratorRoute ? APP_PATHS.ACCELERATOR_PROJECT_REPORTS_VIEW : APP_PATHS.REPORTS_VIEW;
+      const to = reportUrl.replace(':reportId', `${row.id}`).replace(':projectId', projectId);
 
-    return (
-      <Link to={to}>
-        <TextTruncated fontSize={16} fontWeight={500} stringList={[reportName]} width={400} />
-      </Link>
-    );
-  }, [isAcceleratorRoute, row.id]);
+      const year = row.startDate.split('-')[0];
+      const quarterNumber = row.startDate ? Math.ceil((new Date(row.startDate).getMonth() + 1) / 3) : 0;
+      const reportName = row.frequency === 'Annual' ? `${year}` : `${year}-Q${quarterNumber}`;
 
-  useEffect(() => {
-    if (!modifiedByUser && row.modifiedBy && row.modifiedBy !== -1) {
-      dispatch(requestGetUser(row.modifiedBy));
-    }
-  }, [dispatch, row, modifiedByUser]);
+      return (
+        <Link to={to}>
+          <TextTruncated fontSize={16} fontWeight={500} stringList={[reportName]} width={400} />
+        </Link>
+      );
+    }, [isAcceleratorRoute, row.id]);
 
-  useEffect(() => {
-    if (!submittedByUser && row.submittedBy && row.submittedBy !== -1) {
-      dispatch(requestGetUser(row.submittedBy));
-    }
-  }, [dispatch, row, submittedByUser]);
+    useEffect(() => {
+      if (!modifiedByUser && row.modifiedBy && row.modifiedBy !== -1) {
+        dispatch(requestGetUser(row.modifiedBy));
+      }
+    }, [dispatch, row, modifiedByUser]);
 
-  const modifiedByName = useMemo(() => {
-    return modifiedByUser
-      ? `${modifiedByUser?.firstName ?? ''} ${modifiedByUser?.lastName ?? ''}`.trim() || modifiedByUser.email
-      : '';
-  }, [modifiedByUser]);
+    useEffect(() => {
+      if (!submittedByUser && row.submittedBy && row.submittedBy !== -1) {
+        dispatch(requestGetUser(row.submittedBy));
+      }
+    }, [dispatch, row, submittedByUser]);
 
-  const submittedByName = useMemo(() => {
-    return submittedByUser
-      ? `${submittedByUser?.firstName ?? ''} ${submittedByUser?.lastName ?? ''}`.trim() || submittedByUser.email
-      : '';
-  }, [submittedByUser]);
+    const modifiedByName = useMemo(() => {
+      return modifiedByUser
+        ? `${modifiedByUser?.firstName ?? ''} ${modifiedByUser?.lastName ?? ''}`.trim() || modifiedByUser.email
+        : '';
+    }, [modifiedByUser]);
 
-  if (column.key === 'reportName') {
-    return (
-      <CellRenderer
-        column={column}
-        index={index}
-        row={row}
-        style={{ maxWidth: '500px' }}
-        sx={{
-          fontSize: '16px',
-          '& > p': {
+    const submittedByName = useMemo(() => {
+      return submittedByUser
+        ? `${submittedByUser?.firstName ?? ''} ${submittedByUser?.lastName ?? ''}`.trim() || submittedByUser.email
+        : '';
+    }, [submittedByUser]);
+
+    if (column.key === 'reportName') {
+      return (
+        <CellRenderer
+          column={column}
+          index={index}
+          row={row}
+          style={{ maxWidth: '500px' }}
+          sx={{
             fontSize: '16px',
-          },
-        }}
-        value={createLinkToReport()}
-      />
-    );
-  }
+            '& > p': {
+              fontSize: '16px',
+            },
+          }}
+          value={createLinkToReport()}
+        />
+      );
+    }
 
-  if (column.key === 'status') {
-    return (
-      <CellRenderer
-        column={column}
-        index={index}
-        row={row}
-        value={activeLocale ? <ReportStatusBadge status={value as AcceleratorReportStatus} /> : ''}
-      />
-    );
-  }
+    if (column.key === 'status') {
+      return (
+        <CellRenderer
+          column={column}
+          index={index}
+          row={row}
+          value={activeLocale ? <ReportStatusBadge status={value as AcceleratorReportStatus} /> : ''}
+        />
+      );
+    }
 
-  if (column.key === 'modifiedBy') {
-    return <CellRenderer {...props} value={modifiedByName} />;
-  }
+    if (column.key === 'modifiedBy') {
+      return <CellRenderer {...props} value={modifiedByName} />;
+    }
 
-  if (column.key === 'submittedBy') {
-    return <CellRenderer {...props} value={submittedByName} />;
-  }
+    if (column.key === 'submittedBy') {
+      return <CellRenderer {...props} value={submittedByName} />;
+    }
 
-  return <CellRenderer {...props} />;
+    return <CellRenderer {...props} />;
+  };
 }

@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { useTheme } from '@emotion/react';
-import { Box } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import Tabs from '@terraware/web-components/components/Tabs';
 
@@ -16,17 +15,13 @@ import { selectListAcceleratorReports } from 'src/redux/features/reports/reports
 import { requestListAcceleratorReports } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { AcceleratorReport, SystemMetric } from 'src/types/AcceleratorReport';
-import { isAllowed } from 'src/utils/acl';
-import useStickyTabs from 'src/utils/useStickyTabs';
+import { AcceleratorReport, ReportSystemMetric } from 'src/types/AcceleratorReport';
 
 import { useParticipantProjectData } from '../ParticipantProjectContext';
 import ApprovedReportMessage from './ApprovedReportMessage';
 import Metadata from './Metadata';
+import MetricBox from './MetricBox';
 import RejectedReportMessage from './RejectedReportMessage';
-import ReportsList from './ReportsList';
-import ReportsSettings from './ReportsSettings';
-import ReportsTargets from './ReportsTargets';
 
 const ReportView = () => {
   const { activeLocale } = useLocalization();
@@ -43,6 +38,8 @@ const ReportView = () => {
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const { participantProject } = useParticipantProjectData();
   const theme = useTheme();
+  const [editingId, setEditingId] = useState<string | undefined>();
+  const [updatePendingId, setUpdatePendingId] = useState<number | undefined>();
 
   useEffect(() => {
     if (projectId) {
@@ -84,7 +81,7 @@ const ReportView = () => {
           <Button
             disabled={selectedReport?.status === 'Needs Update'}
             id='rejectDeliverable'
-            label={strings.REQUEST_UPDATE_ACTION}
+            label={strings.REJECT_ACTION}
             priority='secondary'
             onClick={() => void setShowRejectDialog(true)}
             size='medium'
@@ -115,11 +112,17 @@ const ReportView = () => {
   const quarterNumber = selectedReport?.startDate
     ? Math.ceil((new Date(selectedReport?.startDate).getMonth() + 1) / 3)
     : 0;
-  const reportName = selectedReport?.frequency === 'Annual' ? `${year}` : `${year}-Q${quarterNumber}`;
+  const reportName =
+    selectedReport?.frequency === 'Annual' ? `${year}` : quarterNumber ? `${year}-Q${quarterNumber}` : '';
 
   return (
     <Page
-      title={<TitleBar title={participantProject?.dealName} subtitle={participantProject?.dealName} />}
+      title={
+        <TitleBar
+          title={`${strings.REPORT} (${reportName})`}
+          subtitle={participantProject ? `${strings.PROJECT}: ${participantProject?.dealName}` : ''}
+        />
+      }
       rightComponent={rightComponent}
       crumbs={crumbs}
     >
@@ -137,17 +140,28 @@ const ReportView = () => {
           }}
         >
           {selectedReport && <Metadata report={selectedReport} />}
-          {selectedReport?.systemMetrics.map((systemMetric: SystemMetric, index: number) => (
+          {selectedReport?.startDate && selectedReport?.endDate && (
+            <Box
+              borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+              padding={theme.spacing(3, 0)}
+              marginBottom={3}
+            >
+              <Typography fontSize={14} fontStyle={'italic'}>
+                {strings.formatString(strings.REPORT_PERIOD, selectedReport?.startDate, selectedReport?.endDate)}
+              </Typography>
+            </Box>
+          )}
+          {selectedReport?.systemMetrics.map((systemMetric: ReportSystemMetric, index: number) => (
             <MetricBox
-              editingId={editingId}
-              hideStatusBadge={hideStatusBadge}
-              index={index}
               key={index}
-              projectId={deliverable.projectId}
-              reload={reload}
+              editingId={editingId}
+              index={index}
+              projectId={projectId}
+              reload={() => true}
               setEditingId={setEditingId}
               setUpdatePendingId={setUpdatePendingId}
-              variable={variableWithValues}
+              metric={systemMetric}
+              type={'system'}
             />
           ))}
         </Card>
