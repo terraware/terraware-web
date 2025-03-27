@@ -15,7 +15,7 @@ import ClientSideFilterTable from '../Tables/ClientSideFilterTable';
 import FunderCellRenderer from './FunderCellRenderer';
 import RemoveFunderTopBarButton from './RemoveFunderTopBarButton';
 
-const fuzzySearchColumns = ['email', 'name'];
+const fuzzySearchColumns = ['email', 'firstName', 'lastName'];
 const defaultSortOrder: SearchSortOrder = {
   field: 'email',
   direction: 'Ascending',
