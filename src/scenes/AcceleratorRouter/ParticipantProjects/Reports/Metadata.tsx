@@ -2,10 +2,6 @@ import React, { useCallback, useEffect } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 
-import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
-import useApplicationPortal from 'src/hooks/useApplicationPortal';
-import { useLocalization } from 'src/providers';
-import { useApplicationData } from 'src/providers/Application/Context';
 import ReportStatusBadge from 'src/scenes/Reports/ReportStatusBadge';
 import strings from 'src/strings';
 import { AcceleratorReport } from 'src/types/AcceleratorReport';
@@ -23,7 +19,7 @@ const Metadata = (props: MetadataProps): JSX.Element => {
   const snackbar = useSnackbar();
   const theme = useTheme();
 
-  const onUpdateInternalComment = useCallback((internalComment: string) => {
+  const onUpdateInternalComment = useCallback(() => {
     return true;
   }, []);
 

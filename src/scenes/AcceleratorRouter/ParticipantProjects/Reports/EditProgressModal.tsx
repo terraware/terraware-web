@@ -1,24 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
 
 import { Box, Grid, Typography } from '@mui/material';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
-import { selectReviewManyAcceleratorReportMetrics } from 'src/redux/features/reports/reportsSelectors';
-import { requestReviewManyAcceleratorReportMetrics } from 'src/redux/features/reports/reportsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import {
-  ReviewAcceleratorReportMetricsRequest,
-  ReviewManyAcceleratorReportMetricsRequest,
-  SystemMetricName,
-} from 'src/types/AcceleratorReport';
-import useForm from 'src/utils/useForm';
-import useSnackbar from 'src/utils/useSnackbar';
-
-import { RowMetric } from './ReportsTargets';
 
 export interface EditProgressModalProps {
   onClose: () => void;
@@ -34,7 +21,9 @@ export default function EditProgressModal(props: EditProgressModalProps): JSX.El
   const [newProgress, setNewProgress] = useState(value);
 
   const save = () => {
-    onChange(newProgress.toString());
+    if (newProgress) {
+      onChange(newProgress.toString());
+    }
   };
 
   return (
@@ -42,7 +31,7 @@ export default function EditProgressModal(props: EditProgressModalProps): JSX.El
       onClose={onClose}
       open={true}
       title={metricName}
-      size='small'
+      size='medium'
       middleButtons={[
         <Button
           id='cancel'
@@ -66,7 +55,7 @@ export default function EditProgressModal(props: EditProgressModalProps): JSX.El
               onChange={(value: any) => setNewProgress(value)}
             />
             {
-              <Typography paddingTop={3}>
+              <Typography paddingTop={3} paddingLeft={0.5}>
                 / {target} ({strings.TARGET})
               </Typography>
             }

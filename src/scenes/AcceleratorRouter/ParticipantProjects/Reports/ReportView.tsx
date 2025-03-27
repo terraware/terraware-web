@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
-import Tabs from '@terraware/web-components/components/Tabs';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
@@ -39,7 +38,6 @@ const ReportView = () => {
   const { participantProject } = useParticipantProjectData();
   const theme = useTheme();
   const [editingId, setEditingId] = useState<string | undefined>();
-  const [updatePendingId, setUpdatePendingId] = useState<number | undefined>();
 
   useEffect(() => {
     if (projectId) {
@@ -159,7 +157,6 @@ const ReportView = () => {
               projectId={projectId}
               reload={() => true}
               setEditingId={setEditingId}
-              setUpdatePendingId={setUpdatePendingId}
               metric={systemMetric}
               type={'system'}
             />

@@ -1,33 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import Button from 'src/components/common/button/Button';
-import { useLocalization } from 'src/providers';
-import {
-  selectListReportMetrics,
-  selectListStandardMetrics,
-  selectListSystemMetrics,
-} from 'src/redux/features/reports/reportsSelectors';
-import {
-  requestListProjectMetrics,
-  requestListStandardMetrics,
-  requestListSystemMetrics,
-} from 'src/redux/features/reports/reportsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import {
-  MetricType,
-  ProjectMetric,
-  ReportProjectMetric,
-  ReportStandardMetric,
-  ReportSystemMetric,
-  StandardMetric,
-  SystemMetric,
-} from 'src/types/AcceleratorReport';
+import { MetricType, ReportProjectMetric, ReportStandardMetric, ReportSystemMetric } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
-import useSnackbar from 'src/utils/useSnackbar';
 
 import EditProgressModal from './EditProgressModal';
 
@@ -39,11 +18,18 @@ const isStandardOrProjectMetric = (metric: any): metric is ReportStandardMetric 
   return metric && typeof metric.id === 'number';
 };
 
-export const getMetricId = (metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric) => {
+export const getMetricId = (
+  metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric,
+  type: MetricType
+) => {
   if (isReportSystemMetric(metric)) {
     return metric.metric.replace(/\s+/g, '');
   } else if (isStandardOrProjectMetric(metric)) {
-    return metric.id.toString();
+    if (type === 'project') {
+      return `p${metric.id}`;
+    } else {
+      return `s${metric.id}`;
+    }
   }
   return '-1';
 };
@@ -51,10 +37,7 @@ export const getMetricId = (metric: ReportProjectMetric | ReportSystemMetric | R
 const MetricBox = ({
   editingId,
   index,
-  projectId,
-  reload,
   setEditingId,
-  setUpdatePendingId,
   metric,
   type,
 }: {
@@ -64,86 +47,17 @@ const MetricBox = ({
   projectId: string;
   reload: () => void;
   setEditingId: (id: string | undefined) => void;
-  setUpdatePendingId: (variableId: number | undefined) => void;
   metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric;
   type: MetricType;
 }): JSX.Element => {
   const theme = useTheme();
-  const { activeLocale } = useLocalization();
-  const snackbar = useSnackbar();
-  const [record, setRecord, onChange] = useForm<ReportProjectMetric | ReportSystemMetric | ReportStandardMetric>(
-    metric
-  );
-  const [requestId, setRequestId] = useState<string>('');
-  const [standardRequestId, setStandardRequestId] = useState<string>('');
-  const dispatch = useAppDispatch();
-  const projectMetricsResponse = useAppSelector(selectListReportMetrics(requestId));
-  const systemMetricsResponse = useAppSelector(selectListSystemMetrics(requestId));
-  const standardMetricsResponse = useAppSelector(selectListStandardMetrics(standardRequestId));
-  const [projectMetrics, setProjectMetrics] = useState<ProjectMetric[]>();
-  const [systemMetrics, setSystemMetrics] = useState<SystemMetric[]>();
-  const [standardMetrics, setStandardMetrics] = useState<StandardMetric[]>();
-  const [metricData, setMetricData] = useState<ProjectMetric | SystemMetric | StandardMetric>();
+  const [record, , onChange] = useForm<ReportProjectMetric | ReportSystemMetric | ReportStandardMetric>(metric);
   const [progressModalOpened, setProgressModalOpened] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (isStandardOrProjectMetric(metric)) {
-      const request = dispatch(requestListProjectMetrics({ projectId }));
-      setRequestId(request.requestId);
-      const request2 = dispatch(requestListStandardMetrics());
-      setStandardRequestId(request2.requestId);
-    }
-    if (isReportSystemMetric(metric)) {
-      const request = dispatch(requestListSystemMetrics());
-      setRequestId(request.requestId);
-    }
-  }, [metric]);
-
-  useEffect(() => {
-    if (projectMetricsResponse?.status === 'error') {
-      return;
-    }
-    if (projectMetricsResponse?.data) {
-      setProjectMetrics(projectMetricsResponse.data);
-    }
-  }, [projectMetricsResponse]);
-
-  useEffect(() => {
-    if (systemMetricsResponse?.status === 'error') {
-      return;
-    }
-    if (systemMetricsResponse?.data) {
-      setSystemMetrics(systemMetricsResponse.data);
-    }
-  }, [systemMetricsResponse]);
-
-  useEffect(() => {
-    if (standardMetricsResponse?.status === 'error') {
-      return;
-    }
-    if (standardMetricsResponse?.data) {
-      setStandardMetrics(standardMetricsResponse.data);
-    }
-  }, [standardMetricsResponse]);
-
-  useEffect(() => {
-    if (isReportSystemMetric(metric)) {
-      const found = systemMetrics?.find((sm) => sm.metric === metric.metric);
-      setMetricData(found);
-    }
-    if (isStandardOrProjectMetric(metric)) {
-      let found = standardMetrics?.find((sm) => sm.id === metric.id);
-      if (!found) {
-        found = projectMetrics?.find((sm) => sm.id === metric.id);
-      }
-      setMetricData(found);
-    }
-  }, [projectMetrics, systemMetrics, standardMetrics, metric]);
-
-  const editing = useMemo(() => editingId === getMetricId(metric), [editingId, metric, getMetricId]);
+  const editing = useMemo(() => editingId === getMetricId(metric, type), [editingId, metric, getMetricId]);
 
   const onEditItem = useCallback(() => {
-    setEditingId(getMetricId(metric));
+    setEditingId(getMetricId(metric, type));
   }, [setEditingId, metric, getMetricId]);
 
   const onSave = useCallback(() => {
@@ -176,16 +90,16 @@ const MetricBox = ({
 
   return (
     <>
-      {progressModalOpened && metric.target && (
+      {progressModalOpened && (
         <EditProgressModal
           metricName={getMetricName()}
-          target={metric.target}
+          target={metric.target || 0}
           onChange={onChangeProgress}
           value={getProgressValue()}
           onClose={() => setProgressModalOpened(false)}
         />
       )}
-      <Box data-metric-id={getMetricId(metric)} key={`metric-${index}`} sx={{ scrollMarginTop: '50vh' }}>
+      <Box data-metric-id={getMetricId(metric, type)} key={`metric-${index}`} sx={{ scrollMarginTop: '50vh' }}>
         <Box
           sx={{
             borderRadius: 2,
@@ -269,20 +183,22 @@ const MetricBox = ({
           <Grid container marginBottom={3}>
             <Grid item xs={6}>
               <Box display={'flex'} alignItems={'center'}>
-                <Typography paddingTop={3}>
-                  {getProgressValue()} / {record.target} ({strings.TARGET})
+                <Typography>
+                  {getProgressValue() || 0} / {record.target} ({strings.TARGET})
                 </Typography>
-                <Button
-                  icon='iconEdit'
-                  onClick={() => setProgressModalOpened(true)}
-                  priority='ghost'
-                  size='small'
-                  type='passive'
-                  style={{
-                    marginLeft: '-1px',
-                    marginTop: '-1px',
-                  }}
-                />
+                {!!editing && (
+                  <Button
+                    icon='iconEdit'
+                    onClick={() => setProgressModalOpened(true)}
+                    priority='ghost'
+                    size='small'
+                    type='passive'
+                    style={{
+                      marginLeft: '-1px',
+                      marginTop: '-1px',
+                    }}
+                  />
+                )}
               </Box>
             </Grid>
             <Grid item xs={6}>

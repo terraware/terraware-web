@@ -19,6 +19,7 @@ type ReportCellRenderer = {
 };
 
 export default function ReportCellRenderer({ projectId }: ReportCellRenderer) {
+  // eslint-disable-next-line react/display-name
   return (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, index, value } = props;
     const { activeLocale } = useLocalization();
