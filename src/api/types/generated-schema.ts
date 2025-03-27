@@ -1660,7 +1660,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** List funders for a Funding Entity */
+        get: operations["getFunders"];
         put?: never;
         /** Invites a funder via email to a Funding Entity */
         post: operations["inviteFunder"];
@@ -5773,6 +5774,16 @@ export interface components {
             /** @description List of values in the matching accessions. If there are accessions where the field has no value, this list will contain null (an actual null value, not the string "null"). */
             values: (string | null)[];
         };
+        FunderPayload: {
+            accountCreated: boolean;
+            /** Format: date-time */
+            createdTime: string;
+            email: string;
+            firstName?: string;
+            lastName?: string;
+            /** Format: int64 */
+            userId: number;
+        };
         FundingEntityPayload: {
             /** Format: int64 */
             id: number;
@@ -5879,6 +5890,10 @@ export interface components {
         };
         GetFacilityResponse: {
             facility: components["schemas"]["FacilityPayload"];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        GetFundersResponsePayload: {
+            funders: components["schemas"]["FunderPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         GetFundingEntityResponsePayload: {
@@ -13328,6 +13343,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    getFunders: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                fundingEntityId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetFundersResponsePayload"];
                 };
             };
         };

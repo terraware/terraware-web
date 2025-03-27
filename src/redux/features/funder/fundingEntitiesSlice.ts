@@ -1,13 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { FundingEntity } from 'src/types/FundingEntity';
+import { Funder, FundingEntity } from 'src/types/FundingEntity';
 
 import {
   requestCreateFundingEntity,
   requestFundingEntities,
   requestFundingEntity,
   requestFundingEntityForUser,
+  requestListFunders,
   requestUpdateFundingEntity,
 } from './fundingEntitiesAsyncThunks';
 
@@ -66,12 +67,24 @@ export const fundingEntityCreateSlice = createSlice({
   },
 });
 
+const initialStateFunderList: { [requestId: string]: StatusT<Funder[]> } = {};
+
+export const funderListSlice = createSlice({
+  name: 'funderListSlice',
+  initialState: initialStateFunderList,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestListFunders, true)(builder);
+  },
+});
+
 const fundingEntitiesReducers = {
   userFundingEntity: userFundingEntitySlice.reducer,
   fundingEntity: fundingEntitySlice.reducer,
   fundingEntities: fundingEntitiesSlice.reducer,
   fundingEntityUpdate: fundingEntityUpdateSlice.reducer,
   fundingEntityCreate: fundingEntityCreateSlice.reducer,
+  funders: funderListSlice.reducer,
 };
 
 export default fundingEntitiesReducers;
