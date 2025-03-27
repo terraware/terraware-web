@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
-import useFunderPortal from 'src/hooks/useFunderPortal';
 import { store } from 'src/redux/store';
 import { OrganizationService, PreferencesService } from 'src/services';
 import strings from 'src/strings';
@@ -15,8 +14,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import { PreferencesType, ProvidedOrganizationData } from './DataTypes';
-import { OrganizationContext } from './contexts';
-import { defaultSelectedOrg } from './contexts';
+import { OrganizationContext, defaultSelectedOrg } from './contexts';
 import { useUser } from './hooks';
 
 export type OrganizationProviderProps = {
@@ -42,9 +40,8 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const navigate = useNavigate();
   const query = useQuery();
   const location = useStateLocation();
-  const { userPreferences, updateUserPreferences, bootstrapped: userBootstrapped } = useUser();
+  const { user, userPreferences, updateUserPreferences, bootstrapped: userBootstrapped } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
-  const { isFunderRoute } = useFunderPortal();
   const { isDev, isStaging } = useEnvironment();
 
   const reloadOrganizations = useCallback(async (selectedOrgId?: number) => {
@@ -132,7 +129,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   }, [reloadOrgPreferences]);
 
   useEffect(() => {
-    if (userBootstrapped && userPreferences && organizations && !isAcceleratorRoute && !isFunderRoute) {
+    if (userBootstrapped && userPreferences && organizations && !isAcceleratorRoute && user?.userType !== 'Funder') {
       const queryOrganizationId = query.get('organizationId');
       let orgToUse;
       if (organizations.length) {
@@ -156,7 +153,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
         }
       }
 
-      if (queryOrganizationId && (!orgToUse || isAcceleratorRoute || isFunderRoute)) {
+      if (queryOrganizationId && (!orgToUse || isAcceleratorRoute)) {
         // user does not belong to any orgs, clear the url param org id
         query.delete('organizationId');
         navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
@@ -171,7 +168,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     userPreferences,
     userBootstrapped,
     isAcceleratorRoute,
-    isFunderRoute,
+    user?.userType,
   ]);
 
   useEffect(() => {
