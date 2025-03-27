@@ -58,8 +58,8 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
   const listFundersResponse = useAppSelector(selectListFundersRequest(listFundersRequestId));
 
   const onRemoveConfirm = useCallback(() => {
-    snackbar.toastInfo('Delete Funder to be added.');
-  }, [dispatch, selectedRows, snackbar]);
+    snackbar.toastInfo('Remove deletion functionality not yet implemented.');
+  }, [dispatch]);
 
   useEffect(() => {
     const request = dispatch(requestListFunders(fundingEntityId));
