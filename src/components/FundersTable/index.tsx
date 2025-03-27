@@ -37,7 +37,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
         {
           key: 'dateAdded',
           name: strings.DATE_ADDED,
-          type: 'date',
+          type: 'string',
         },
       ]
     : [];
