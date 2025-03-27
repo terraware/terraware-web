@@ -4,6 +4,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { DropdownItem } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
+import FundersTable from 'src/components/FundersTable';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
@@ -16,7 +17,6 @@ import { useFundingEntity, useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
 
 import DeleteFundingEntityModal from './DeleteFundingEntityModal';
-import FundersTable from 'src/components/FundersTable';
 
 const SingleView = () => {
   const { activeLocale } = useLocalization();

@@ -68,7 +68,7 @@ export const requestCreateFundingEntity = createAsyncThunk(
   }
 );
 
-export const requeqstListFunders = createAsyncThunk(
+export const requestListFunders = createAsyncThunk(
   'funding-entities/create',
   async (fundingEntityId: number, { rejectWithValue }) => {
     const response = await FundingEntityService.listFunders(fundingEntityId);
