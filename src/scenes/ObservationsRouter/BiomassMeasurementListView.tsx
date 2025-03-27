@@ -24,7 +24,7 @@ export default function BiomassMeasurementList({ adHocObservationsResults }: Bio
         key: 'monitoringPlotDescription',
         name: strings.PLOT_DESCRIPTION,
         type: 'string',
-      }
+      },
       {
         key: 'plantingSiteName',
         name: strings.PLANTING_SITE,
