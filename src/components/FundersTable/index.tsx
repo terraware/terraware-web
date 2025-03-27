@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { TableRowType } from '@terraware/web-components';
+import { Button, TableRowType } from '@terraware/web-components';
 
 import { TableColumnType } from 'src/components/common/table/types';
 import { requestListFunders } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
@@ -14,6 +14,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import ClientSideFilterTable from '../Tables/ClientSideFilterTable';
 import FunderCellRenderer from './FunderCellRenderer';
 import RemoveFunderTopBarButton from './RemoveFunderTopBarButton';
+import { Grid, Typography, useTheme } from '@mui/material';
 
 const fuzzySearchColumns = ['email', 'firstName', 'lastName'];
 const defaultSortOrder: SearchSortOrder = {
@@ -49,6 +50,7 @@ type FundersTableProps = {
 const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
+  const theme = useTheme();
 
   const [listFundersRequestId, setListFundersRequestId] = useState<string>('');
   const [funders, setFunders] = useState<Funder[]>([]);
@@ -77,6 +79,33 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
   }, [listFundersResponse, setFunders, snackbar]);
 
   return (
+    <>
+    <Grid container paddingBottom={theme.spacing(16)}>
+      <Grid item xs={8}>
+        <Typography fontWeight={600} fontSize={'20px'} lineHeight={'28px'}>
+          {strings.PEOPLE}
+        </Typography>
+      </Grid>
+      <Grid
+        item
+        xs={4}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'flex-end',
+        }}
+      >
+        <Button 
+          id={'invite-funder'} 
+          icon={'plus'}
+          priority={'secondary'}
+          onClick={() => snackbar.toastInfo("Invite funder functionality not yet implemented")} 
+          label={strings.INVITE_FUNDER}
+          size='medium' />
+      </Grid>
+    </Grid>
+        
     <ClientSideFilterTable
       columns={columns}
       defaultSortOrder={defaultSortOrder}
@@ -91,6 +120,8 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
       rows={funders}
       topBarButtons={[<RemoveFunderTopBarButton key={0} onConfirm={onRemoveConfirm} selectedRows={selectedRows} />]}
     />
+    </>
+    
   );
 };
 
