@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Grid, Typography, useTheme } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { Button, TableRowType } from '@terraware/web-components';
 
 import { TableColumnType } from 'src/components/common/table/types';
@@ -50,7 +50,6 @@ type FundersTableProps = {
 const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
-  const theme = useTheme();
 
   const [listFundersRequestId, setListFundersRequestId] = useState<string>('');
   const [funders, setFunders] = useState<Funder[]>([]);
@@ -80,7 +79,7 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
 
   return (
     <>
-      <Grid container paddingTop={theme.spacing(4)} paddingBottom={theme.spacing(4)}>
+      <Grid container>
         <Grid item xs={8}>
           <Typography fontWeight={600} fontSize={'20px'} lineHeight={'28px'}>
             {strings.PEOPLE}
