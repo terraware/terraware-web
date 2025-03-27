@@ -164,6 +164,7 @@ const ReportView = () => {
               setEditingId={setEditingId}
               metric={systemMetric}
               type={'system'}
+              reportId={Number(reportId)}
             />
           ))}
           {selectedReport?.projectMetrics.map((projectMetric: ReportProjectMetric, index: number) => (
@@ -176,6 +177,7 @@ const ReportView = () => {
               setEditingId={setEditingId}
               metric={projectMetric}
               type={'project'}
+              reportId={Number(reportId)}
             />
           ))}
           {selectedReport?.standardMetrics.map((standardMetric: ReportStandardMetric, index: number) => (
@@ -188,6 +190,7 @@ const ReportView = () => {
               setEditingId={setEditingId}
               metric={standardMetric}
               type={'project'}
+              reportId={selectedReport.id}
             />
           ))}
         </Card>
