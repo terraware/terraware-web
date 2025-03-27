@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Box, Grid, Typography } from '@mui/material';
-import { Select, TableColumnType, theme } from '@terraware/web-components';
+import { Box } from '@mui/material';
+import { Select, TableColumnType } from '@terraware/web-components';
 
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
-import Card from 'src/components/common/Card';
 import { FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
@@ -193,30 +192,19 @@ export default function ReportsList({ fromConsole }: ReportsListsProps): JSX.Ele
   }, [availableYears, yearFilter]);
 
   return (
-    <Card style={{ display: 'flex', flexDirection: 'column', paddingLeft: 0, paddingRight: 0 }}>
-      <Grid container sx={{}}>
-        <Grid item xs={12} paddingLeft={3}>
-          <Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={600} lineHeight='28px'>
-            {strings.REPORTS}
-          </Typography>
-        </Grid>
-
-        <Grid item xs={12} textAlign={'center'}>
-          <ClientSideFilterTable
-            busy={acceleratorReportsListRequest?.status === 'pending'}
-            columns={columns}
-            defaultSortOrder={defaultSearchOrder}
-            extraComponent={extraFilter}
-            featuredFilters={featuredFilters}
-            fuzzySearchColumns={fuzzySearchColumns}
-            id='accelerator-reports-table'
-            isClickable={() => false}
-            Renderer={ReportCellRenderer({ projectId: urlProjectId })}
-            rows={acceleratorReports}
-            stickyFilters
-          />
-        </Grid>
-      </Grid>
-    </Card>
+    <ClientSideFilterTable
+      busy={acceleratorReportsListRequest?.status === 'pending'}
+      columns={columns}
+      defaultSortOrder={defaultSearchOrder}
+      extraComponent={extraFilter}
+      featuredFilters={featuredFilters}
+      fuzzySearchColumns={fuzzySearchColumns}
+      id='accelerator-reports-table'
+      isClickable={() => false}
+      Renderer={ReportCellRenderer}
+      rows={acceleratorReports}
+      stickyFilters
+      title={strings.REPORTS}
+    />
   );
 }

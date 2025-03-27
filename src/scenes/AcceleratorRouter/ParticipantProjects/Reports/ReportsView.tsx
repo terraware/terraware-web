@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import { Box } from '@mui/material';
 import Tabs from '@terraware/web-components/components/Tabs';
 
+import ReportsTargets from 'src/components/AcceleratorReports/ReportsTargets';
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
@@ -12,7 +13,6 @@ import useStickyTabs from 'src/utils/useStickyTabs';
 import { useParticipantProjectData } from '../ParticipantProjectContext';
 import ReportsList from './ReportsList';
 import ReportsSettings from './ReportsSettings';
-import ReportsTargets from './ReportsTargets';
 
 const ReportsView = () => {
   const { crumbs, participantProject } = useParticipantProjectData();

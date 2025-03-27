@@ -4,6 +4,7 @@ import { Box, Grid, Typography } from '@mui/material';
 import { Separator } from '@terraware/web-components';
 import Tabs from '@terraware/web-components/components/Tabs';
 
+import ReportsTargets from 'src/components/AcceleratorReports/ReportsTargets';
 import Page from 'src/components/Page';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import { useLocalization } from 'src/providers';
@@ -13,7 +14,6 @@ import theme from 'src/theme';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import ReportsList from './ReportsList';
-import ReportsTargets from './ReportsTargets';
 
 const ReportsView = () => {
   const { activeLocale } = useLocalization();

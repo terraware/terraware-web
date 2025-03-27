@@ -6,6 +6,8 @@ import { Grid, Typography } from '@mui/material';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { selectReviewManyAcceleratorReportMetrics } from 'src/redux/features/reports/reportsSelectors';
 import { requestReviewManyAcceleratorReportMetrics } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -27,13 +29,15 @@ export interface EditTargetsModalProp {
 }
 
 export default function EditTargetsModal(props: EditTargetsModalProp): JSX.Element {
+  const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { currentParticipantProject } = useParticipantData();
   const { onClose, row, reload } = props;
   const [requestId, setRequestId] = useState<string>('');
   const dispatch = useAppDispatch();
   const updateReportMetricsResponse = useAppSelector(selectReviewManyAcceleratorReportMetrics(requestId));
   const snackbar = useSnackbar();
   const pathParams = useParams<{ projectId: string }>();
-  const projectId = Number(pathParams.projectId);
+  const projectId = isAcceleratorRoute ? Number(pathParams.projectId) : currentParticipantProject?.id;
 
   const [record, , onChange] = useForm<RowMetric>(row);
 
@@ -48,6 +52,10 @@ export default function EditTargetsModal(props: EditTargetsModalProp): JSX.Eleme
   }, [updateReportMetricsResponse, snackbar]);
 
   const save = () => {
+    if (!projectId) {
+      return;
+    }
+
     const getUpdateBody = (quarter: 'q1' | 'q2' | 'q3' | 'q4' | 'annual') => {
       const propToRead: 'q1Target' | 'q2Target' | 'q3Target' | 'q4Target' | 'annualTarget' = `${quarter}Target`;
       if (row.metricType === 'system') {

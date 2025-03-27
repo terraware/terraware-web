@@ -5,8 +5,15 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Grid, IconButton, useTheme } from '@mui/material';
 import { Svg } from '@terraware/web-components';
 
+import KnowledgeBaseLink from 'src/components/KnowledgeBaseLink';
+import NotificationsDropdown from 'src/components/NotificationsDropdown';
+import OrganizationsDropdown from 'src/components/OrganizationsDropdown';
+import SettingsLink from 'src/components/SettingsLink';
+import SmallDeviceUserMenu from 'src/components/SmallDeviceUserMenu';
 import AcceleratorBreadcrumbs from 'src/components/TopBar/AcceleratorBreadcrumbs';
+import UserMenu from 'src/components/UserMenu';
 import Link from 'src/components/common/Link';
+import Icon from 'src/components/common/icon/Icon';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useApplicationPortal from 'src/hooks/useApplicationPortal';
@@ -15,12 +22,6 @@ import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser, useUserFundingEntity } from 'src/providers/hooks';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-import KnowledgeBaseLink from '../KnowledgeBaseLink';
-import NotificationsDropdown from '../NotificationsDropdown';
-import OrganizationsDropdown from '../OrganizationsDropdown';
-import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
-import UserMenu from '../UserMenu';
-import Icon from '../common/icon/Icon';
 import FunderBreadcrumbs from './FunderBreadcrumbs';
 
 type TopBarProps = {
@@ -109,6 +110,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
           organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}
           reloadOrganizationData={reloadOrganizations}
         />
+        {userFundingEntity && <SettingsLink />}
         <div style={separatorStyles} />
         <UserMenu hasOrganizations={organizations && organizations.length > 0} />
       </Box>
