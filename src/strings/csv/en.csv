@@ -763,8 +763,6 @@ IMPORTING_DELIVERABLES,Importing deliverables...this may take a few minutes.,
 IMPORTING_INVENTORY,Importing inventory...this may take a few minutes.,
 IMPORTING_MODULES,Importing modules...this may take a few minutes.,
 IMPORTING_SPECIES,Importing species...this may take a few minutes.,
-INVITE_FUNDER,Invite Funder,
-INVITED,Invited,
 IN_PROGRESS,In Progress,
 IN_REVIEW,In Review,
 IN_STORAGE,In Storage,
@@ -790,6 +788,8 @@ INVENTORY_ONBOARDING_SPECIES_MSG,Define a list of species used in your seedlings
 INVENTORY_PAGE_DESCRIPTION,Manage your Inventory.,
 INVESTMENT_COMMITTEE_VOTES,Investment Committee Votes,
 INVESTMENT_THESIS,Investment Thesis,
+INVITE_FUNDER,Invite Funder,
+INVITED,Invited,
 ISSUE,Issue,
 IUCN_CRITICALLY_ENDANGERED,Critically Endangered (CR),IUCN conservation category. Keep the two-letter code as is; only translate the description.
 IUCN_DATA_DEFICIENT,Data Deficient (DD),IUCN conservation category. Keep the two-letter code as is; only translate the description.
