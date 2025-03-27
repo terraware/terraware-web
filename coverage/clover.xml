@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1743111004145" clover="3.2.0">
-  <project timestamp="1743111004145" name="All files">
-    <metrics statements="28935" coveredstatements="1233" conditionals="19578" coveredconditionals="354" methods="8937" coveredmethods="198" elements="57450" coveredelements="1785" complexity="0" loc="28935" ncloc="28935" packages="252" files="1196" classes="1196"/>
+<coverage generated="1743112703905" clover="3.2.0">
+  <project timestamp="1743112703905" name="All files">
+    <metrics statements="28937" coveredstatements="1233" conditionals="19582" coveredconditionals="354" methods="8937" coveredmethods="198" elements="57456" coveredelements="1785" complexity="0" loc="28937" ncloc="28937" packages="252" files="1196" classes="1196"/>
     <package name="src">
       <metrics statements="179" coveredstatements="7" conditionals="126" coveredconditionals="0" methods="40" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -23977,7 +23977,7 @@
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter">
-      <metrics statements="387" coveredstatements="0" conditionals="314" coveredconditionals="0" methods="139" coveredmethods="0"/>
+      <metrics statements="389" coveredstatements="0" conditionals="318" coveredconditionals="0" methods="139" coveredmethods="0"/>
       <file name="AdHocObservationsRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/AdHocObservationsRenderer.tsx">
         <metrics statements="17" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="11" count="0" type="stmt"/>
@@ -24028,7 +24028,7 @@
         <metrics statements="3" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
       </file>
       <file name="BiomassMeasurementMapView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/BiomassMeasurementMapView.tsx">
         <metrics statements="68" coveredstatements="0" conditionals="49" coveredconditionals="0" methods="25" coveredmethods="0"/>
@@ -24102,7 +24102,7 @@
         <line num="197" count="0" type="stmt"/>
       </file>
       <file name="BiomassMeasurementRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/BiomassMeasurementRenderer.tsx">
-        <metrics statements="13" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <metrics statements="15" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="9" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
@@ -24115,7 +24115,9 @@
         <line num="47" count="0" type="stmt"/>
         <line num="59" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="60" count="0" type="stmt"/>
-        <line num="72" count="0" type="stmt"/>
+        <line num="72" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
       </file>
       <file name="BiomassMeasurementsDetails.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/BiomassMeasurementsDetails.tsx">
         <metrics statements="47" coveredstatements="0" conditionals="58" coveredconditionals="0" methods="27" coveredmethods="0"/>
