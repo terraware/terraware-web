@@ -77,7 +77,7 @@ const SingleView = () => {
             />
           )}
           <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
-            <Grid container spacing={3} paddingBottom={theme.spacing(8)}>
+            <Grid container spacing={3} paddingBottom={theme.spacing(4)}>
               <Grid item xs={4}>
                 <TextField label={strings.NAME} id='name' type='text' value={fundingEntity.name} display={true} />
               </Grid>
@@ -99,7 +99,9 @@ const SingleView = () => {
                 </Grid>
               ))}
             </Grid>
-            <FundersTable fundingEntityId={fundingEntity.id} />
+            <Grid container spacing={3}>
+              <FundersTable fundingEntityId={fundingEntity.id} />
+            </Grid>
           </Card>
         </Page>
       )}
