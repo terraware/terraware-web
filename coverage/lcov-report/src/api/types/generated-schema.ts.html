@@ -18314,7 +18314,81 @@
 <a name='L18249'></a><a href='#L18249'>18249</a>
 <a name='L18250'></a><a href='#L18250'>18250</a>
 <a name='L18251'></a><a href='#L18251'>18251</a>
-<a name='L18252'></a><a href='#L18252'>18252</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L18252'></a><a href='#L18252'>18252</a>
+<a name='L18253'></a><a href='#L18253'>18253</a>
+<a name='L18254'></a><a href='#L18254'>18254</a>
+<a name='L18255'></a><a href='#L18255'>18255</a>
+<a name='L18256'></a><a href='#L18256'>18256</a>
+<a name='L18257'></a><a href='#L18257'>18257</a>
+<a name='L18258'></a><a href='#L18258'>18258</a>
+<a name='L18259'></a><a href='#L18259'>18259</a>
+<a name='L18260'></a><a href='#L18260'>18260</a>
+<a name='L18261'></a><a href='#L18261'>18261</a>
+<a name='L18262'></a><a href='#L18262'>18262</a>
+<a name='L18263'></a><a href='#L18263'>18263</a>
+<a name='L18264'></a><a href='#L18264'>18264</a>
+<a name='L18265'></a><a href='#L18265'>18265</a>
+<a name='L18266'></a><a href='#L18266'>18266</a>
+<a name='L18267'></a><a href='#L18267'>18267</a>
+<a name='L18268'></a><a href='#L18268'>18268</a>
+<a name='L18269'></a><a href='#L18269'>18269</a>
+<a name='L18270'></a><a href='#L18270'>18270</a>
+<a name='L18271'></a><a href='#L18271'>18271</a>
+<a name='L18272'></a><a href='#L18272'>18272</a>
+<a name='L18273'></a><a href='#L18273'>18273</a>
+<a name='L18274'></a><a href='#L18274'>18274</a>
+<a name='L18275'></a><a href='#L18275'>18275</a>
+<a name='L18276'></a><a href='#L18276'>18276</a>
+<a name='L18277'></a><a href='#L18277'>18277</a>
+<a name='L18278'></a><a href='#L18278'>18278</a>
+<a name='L18279'></a><a href='#L18279'>18279</a>
+<a name='L18280'></a><a href='#L18280'>18280</a>
+<a name='L18281'></a><a href='#L18281'>18281</a>
+<a name='L18282'></a><a href='#L18282'>18282</a>
+<a name='L18283'></a><a href='#L18283'>18283</a>
+<a name='L18284'></a><a href='#L18284'>18284</a>
+<a name='L18285'></a><a href='#L18285'>18285</a>
+<a name='L18286'></a><a href='#L18286'>18286</a>
+<a name='L18287'></a><a href='#L18287'>18287</a>
+<a name='L18288'></a><a href='#L18288'>18288</a>
+<a name='L18289'></a><a href='#L18289'>18289</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -38227,7 +38301,8 @@
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** List funders for a Funding Entity */
+        get: operations["getFunders"];
         put?: never;
         /** Invites a funder via email to a Funding Entity */
         post: operations["inviteFunder"];
@@ -42340,6 +42415,16 @@ export interface components {
             /** @description List of values in the matching accessions. If there are accessions where the field has no value, this list will contain null (an actual null value, not the string "null"). */
             values: (string | null)[];
         };
+        FunderPayload: {
+            accountCreated: boolean;
+            /** Format: date-time */
+            createdTime: string;
+            email: string;
+            firstName?: string;
+            lastName?: string;
+            /** Format: int64 */
+            userId: number;
+        };
         FundingEntityPayload: {
             /** Format: int64 */
             id: number;
@@ -42446,6 +42531,10 @@ export interface components {
         };
         GetFacilityResponse: {
             facility: components["schemas"]["FacilityPayload"];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        GetFundersResponsePayload: {
+            funders: components["schemas"]["FunderPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         GetFundingEntityResponsePayload: {
@@ -49899,6 +49988,28 @@ export interface operations {
             };
         };
     };
+    getFunders: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                fundingEntityId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetFundersResponsePayload"];
+                };
+            };
+        };
+    };
     inviteFunder: {
         parameters: {
             query?: never;
@@ -54823,7 +54934,7 @@ type WithRequired&lt;T, K extends keyof T&gt; = T &amp; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-27T18:56:21.325Z
+                at 2025-03-27T21:30:03.484Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
