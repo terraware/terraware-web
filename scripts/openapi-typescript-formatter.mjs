@@ -29,7 +29,29 @@ const parseType = (typeString) => {
  * is immediately invoked.
  */
 (async function generateTypes() {
-  const types = await openapiTS('http://localhost:8080/v3/api-docs', {
+  // Get command-line arguments (skip first two elements: node and script path)
+  const args = process.argv.slice(2);
+
+  // Set default value "dev" if no argument is provided
+  const mode = args[0] || 'dev';
+
+  let root = 'http://localhost:8080';
+  switch (mode) {
+    case 'dev':
+      root = 'http://localhost:8080';
+      break;
+    case 'staging':
+      root = 'https://staging.terraware.io';
+      break;
+    case 'prod':
+      root = 'https://terraware.io';
+      break;
+    default:
+      console.log(`Unknown input "${input}". Input must be "dev", "staging", or "prod".`);
+      return;
+  }
+
+  const types = await openapiTS(`${root}/v3/api-docs`, {
     postTransform(schemaObject, metadata) {
       // We need to override the type of SearchNodePayload because otherwise
       // typescript complains about a circular type reference.

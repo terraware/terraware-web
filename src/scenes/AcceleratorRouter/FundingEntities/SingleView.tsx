@@ -16,6 +16,7 @@ import { useFundingEntity, useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
 
 import DeleteFundingEntityModal from './DeleteFundingEntityModal';
+import FundersTable from 'src/components/FundersTable';
 
 const SingleView = () => {
   const { activeLocale } = useLocalization();
@@ -98,6 +99,7 @@ const SingleView = () => {
                 </Grid>
               ))}
             </Grid>
+            <FundersTable fundingEntityId={fundingEntity.id} />
           </Card>
         </Page>
       )}
