@@ -4,11 +4,11 @@ import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { Funder, FundingEntity } from 'src/types/FundingEntity';
 
 import {
-  requeqstListFunders,
   requestCreateFundingEntity,
   requestFundingEntities,
   requestFundingEntity,
   requestFundingEntityForUser,
+  requestListFunders,
   requestUpdateFundingEntity,
 } from './fundingEntitiesAsyncThunks';
 
@@ -74,7 +74,7 @@ export const funderListSlice = createSlice({
   initialState: initialStateFunderList,
   reducers: {},
   extraReducers: (builder) => {
-    buildReducers(requeqstListFunders, true)(builder);
+    buildReducers(requestListFunders, true)(builder);
   },
 });
 

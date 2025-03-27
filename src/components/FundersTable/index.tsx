@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { TableRowType } from '@terraware/web-components';
 
 import { TableColumnType } from 'src/components/common/table/types';
-import { requeqstListFunders } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
+import { requestListFunders } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
 import { selectListFundersRequest } from 'src/redux/features/funder/fundingEntitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -62,7 +62,7 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
   }, [dispatch, selectedRows, snackbar]);
 
   useEffect(() => {
-    const request = dispatch(requeqstListFunders(fundingEntityId));
+    const request = dispatch(requestListFunders(fundingEntityId));
     setListFundersRequestId(request.requestId);
   }, [dispatch, fundingEntityId]);
 
