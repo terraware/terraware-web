@@ -14,7 +14,12 @@ import { selectListAcceleratorReports } from 'src/redux/features/reports/reports
 import { requestListAcceleratorReports } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { AcceleratorReport, ReportSystemMetric } from 'src/types/AcceleratorReport';
+import {
+  AcceleratorReport,
+  ReportProjectMetric,
+  ReportStandardMetric,
+  ReportSystemMetric,
+} from 'src/types/AcceleratorReport';
 
 import { useParticipantProjectData } from '../ParticipantProjectContext';
 import ApprovedReportMessage from './ApprovedReportMessage';
@@ -159,6 +164,30 @@ const ReportView = () => {
               setEditingId={setEditingId}
               metric={systemMetric}
               type={'system'}
+            />
+          ))}
+          {selectedReport?.projectMetrics.map((projectMetric: ReportProjectMetric, index: number) => (
+            <MetricBox
+              key={index}
+              editingId={editingId}
+              index={index}
+              projectId={projectId}
+              reload={() => true}
+              setEditingId={setEditingId}
+              metric={projectMetric}
+              type={'project'}
+            />
+          ))}
+          {selectedReport?.standardMetrics.map((standardMetric: ReportStandardMetric, index: number) => (
+            <MetricBox
+              key={index}
+              editingId={editingId}
+              index={index}
+              projectId={projectId}
+              reload={() => true}
+              setEditingId={setEditingId}
+              metric={standardMetric}
+              type={'project'}
             />
           ))}
         </Card>

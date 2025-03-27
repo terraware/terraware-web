@@ -137,7 +137,7 @@ const MetricBox = ({
               }}
             >
               {isReportSystemMetric(metric) && <Typography sx={{ fontWeight: '600' }}>{metric.metric}</Typography>}
-              {isStandardOrProjectMetric(metric) && <Typography sx={{ fontWeight: '600' }}>{metric.id}</Typography>}
+              {isStandardOrProjectMetric(metric) && <Typography sx={{ fontWeight: '600' }}>{metric.name}</Typography>}
             </Box>
 
             <Box
