@@ -1,3 +1,4 @@
+9065b281ff6 Refactor & Rename Accelerator Reports Components, Refactor Reports List/Table (#3763)
 735aa5117d0 Updated translations from Phrase (#3764)
 bd94cc88264 SW-6668 Add redux for reset system metric (#3761)
 50199584ee6 SW-6668 Redux - Save report status and internal comment (#3759)

@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/AcceleratorReports/ReportsTargets.tsx</title>
+    <title>Code coverage report for src/components/AcceleratorReports/AcceleratorReportTargetsTable.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/AcceleratorReports</a> ReportsTargets.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/AcceleratorReports</a> AcceleratorReportTargetsTable.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/127</span>
+                <span class='fraction'>0/125</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/118</span>
+                <span class='fraction'>0/116</span>
             </div>
         
             
@@ -412,7 +412,10 @@
 <a name='L347'></a><a href='#L347'>347</a>
 <a name='L348'></a><a href='#L348'>348</a>
 <a name='L349'></a><a href='#L349'>349</a>
-<a name='L350'></a><a href='#L350'>350</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L350'></a><a href='#L350'>350</a>
+<a name='L351'></a><a href='#L351'>351</a>
+<a name='L352'></a><a href='#L352'>352</a>
+<a name='L353'></a><a href='#L353'>353</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -532,12 +535,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -739,7 +741,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -779,8 +785,8 @@ import strings from 'src/strings';
 import { AcceleratorReport, MetricType } from 'src/types/AcceleratorReport';
 import { SearchSortOrder } from 'src/types/Search';
 &nbsp;
-import EditTargetsModal from './EditTargetsModal';
-import ReportsTargetsCellRenderer from './ReportsTargetsCellRenderer';
+import AcceleratorReportTargetsCellRenderer from './AcceleratorReportTargetsCellRenderer';
+import EditAcceleratorReportTargetsModal from './EditAcceleratorReportTargetsModal';
 &nbsp;
 const columns = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(a</span>ctiveLocale: string | null): TableColumnType[] =&gt;</span>
 <span class="cstat-no" title="statement not covered" >  activeLocale</span>
@@ -859,7 +865,7 @@ export type RowMetric = {
   q4ReportId?: number;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >ReportsTargets(</span>): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >AcceleratorReportTargetsTable(</span>): JSX.Element {
   const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
   const { currentParticipantProject } = <span class="cstat-no" title="statement not covered" >useParticipantData();</span>
   const [allReportsRequestId, setAllReportsRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
@@ -881,12 +887,11 @@ export default function <span class="fstat-no" title="function not covered" >Rep
 &nbsp;
   const getReportsYears = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const availableYears: Set&lt;number&gt; = <span class="cstat-no" title="statement not covered" >new Set();</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    allReports?.forEach(<span class="fstat-no" title="function not covered" >(r</span>eport) =&gt; {</span>
       const reportYear = <span class="cstat-no" title="statement not covered" >DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;</span>
 <span class="cstat-no" title="statement not covered" >      availableYears.add(reportYear);</span>
     });
-    const currentYear = <span class="cstat-no" title="statement not covered" >new Date().getFullYear();</span>
-<span class="cstat-no" title="statement not covered" >    availableYears.add(currentYear);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return Array.from(availableYears).sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >b - a)</span>;</span>
   }, [allReports]);
@@ -1088,14 +1093,18 @@ export default function <span class="fstat-no" title="function not covered" >Rep
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
       {editOpenModal &amp;&amp; selectedMetric &amp;&amp; (
-        &lt;EditTargetsModal onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setEditOpenModal(false)}</span> reload={reload} row={selectedMetric} /&gt;
+        &lt;EditAcceleratorReportTargetsModal
+          onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setEditOpenModal(false)}</span>
+          reload={reload}
+          row={selectedMetric}
+        /&gt;
       )}
       &lt;ClientSideFilterTable
         busy={reportsResults?.status === 'pending'}
         columns={columns}
         defaultSortOrder={defaultSearchOrder}
         id='reports-targets-table'
-        Renderer={ReportsTargetsCellRenderer}
+        Renderer={AcceleratorReportTargetsCellRenderer}
         rows={metricsToUse || []}
         title={strings.TARGETS}
         fuzzySearchColumns={fuzzySearchColumns}
@@ -1117,7 +1126,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-28T21:03:48.307Z
+                at 2025-03-28T23:22:20.478Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

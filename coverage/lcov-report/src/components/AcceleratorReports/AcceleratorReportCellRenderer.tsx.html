@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/scenes/Reports/ReportCellRenderer.tsx</title>
+    <title>Code coverage report for src/components/AcceleratorReports/AcceleratorReportCellRenderer.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/scenes/Reports</a> ReportCellRenderer.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/AcceleratorReports</a> AcceleratorReportCellRenderer.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/33</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/33</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
@@ -173,8 +173,7 @@
 <a name='L108'></a><a href='#L108'>108</a>
 <a name='L109'></a><a href='#L109'>109</a>
 <a name='L110'></a><a href='#L110'>110</a>
-<a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L111'></a><a href='#L111'>111</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -210,7 +209,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -299,13 +297,13 @@ import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { AcceleratorReportStatus } from 'src/types/AcceleratorReport';
 &nbsp;
-import ReportStatusBadge from './ReportStatusBadge';
+import AcceleratorReportStatusBadge from './AcceleratorReportStatusBadge';
 &nbsp;
-type ReportCellRenderer = {
+type AcceleratorReportCellRenderer = {
   projectId: string;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >ReportCellRenderer(</span>{ projectId }: ReportCellRenderer) {
+export default function <span class="fstat-no" title="function not covered" >AcceleratorReportCellRenderer(</span>{ projectId }: AcceleratorReportCellRenderer) {
   // eslint-disable-next-line react/display-name
 <span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >(p</span>rops: RendererProps&lt;TableRowType&gt;): JSX.Element =&gt; {</span>
     const { column, row, index, value } = <span class="cstat-no" title="statement not covered" >props;</span>
@@ -322,8 +320,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
       const to = <span class="cstat-no" title="statement not covered" >reportUrl.replace(':reportId', `${row.id}`).replace(':projectId', projectId);</span>
 &nbsp;
       const year = <span class="cstat-no" title="statement not covered" >row.startDate.split('-')[0];</span>
-      const quarterNumber = <span class="cstat-no" title="statement not covered" >row.startDate ? Math.ceil((new Date(row.startDate).getMonth() + 1) / 3) : 0;</span>
-      const reportName = <span class="cstat-no" title="statement not covered" >row.frequency === 'Annual' ? `${year}` : `${year}-Q${quarterNumber}`;</span>
+      const reportName = <span class="cstat-no" title="statement not covered" >row.frequency === 'Annual' ? `${year}` : `${year}-Q${row.quarter}`;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      return (</span>
         &lt;Link to={to}&gt;
@@ -380,7 +377,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
           column={column}
           index={index}
           row={row}
-          value={activeLocale ? &lt;ReportStatusBadge status={value as AcceleratorReportStatus} /&gt; : ''}
+          value={activeLocale ? &lt;AcceleratorReportStatusBadge status={value as AcceleratorReportStatus} /&gt; : ''}
         /&gt;
       );
     }
@@ -403,7 +400,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-28T21:03:48.307Z
+                at 2025-03-28T23:22:20.478Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
