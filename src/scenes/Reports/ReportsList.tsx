@@ -28,11 +28,7 @@ const defaultSearchOrder: SearchSortOrder = {
   direction: 'Descending',
 };
 
-type ReportsListsProps = {
-  fromConsole?: boolean;
-};
-
-export default function ReportsList({ fromConsole }: ReportsListsProps): JSX.Element {
+export default function ReportsList(): JSX.Element {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const { currentParticipantProject } = useParticipantData();
@@ -45,7 +41,7 @@ export default function ReportsList({ fromConsole }: ReportsListsProps): JSX.Ele
   const acceleratorReportsListRequest = useAppSelector(selectListAcceleratorReports(listAcceleratorReportsRequestId));
 
   const pathParams = useParams<{ projectId: string }>();
-  const urlProjectId = String(pathParams.projectId);
+  const projectId = isAcceleratorRoute ? String(pathParams.projectId) : currentParticipantProject?.id?.toString();
 
   useEffect(() => {
     if (acceleratorReportsListRequest?.status === 'success') {
@@ -68,13 +64,7 @@ export default function ReportsList({ fromConsole }: ReportsListsProps): JSX.Ele
 
   useEffect(() => {
     reload();
-  }, [currentParticipantProject?.id, yearFilter]);
-
-  useEffect(() => {
-    if (fromConsole) {
-      reloadConsole();
-    }
-  }, [fromConsole, yearFilter]);
+  }, [projectId, yearFilter]);
 
   const columns = useCallback(
     (activeLocale: string | null): TableColumnType[] => {
@@ -114,10 +104,10 @@ export default function ReportsList({ fromConsole }: ReportsListsProps): JSX.Ele
   );
 
   const reload = useCallback(() => {
-    if (currentParticipantProject?.id) {
+    if (projectId) {
       const request = dispatch(
         requestListAcceleratorReports({
-          projectId: currentParticipantProject.id.toString(),
+          projectId,
           includeFuture: true,
           includeMetrics: true,
           year: yearFilter,
@@ -125,21 +115,7 @@ export default function ReportsList({ fromConsole }: ReportsListsProps): JSX.Ele
       );
       setListAcceleratorReportsRequestId(request.requestId);
     }
-  }, [currentParticipantProject?.id, dispatch, yearFilter]);
-
-  const reloadConsole = useCallback(() => {
-    if (fromConsole && urlProjectId) {
-      const request = dispatch(
-        requestListAcceleratorReports({
-          projectId: urlProjectId,
-          includeFuture: true,
-          includeMetrics: true,
-          year: yearFilter,
-        })
-      );
-      setListAcceleratorReportsRequestId(request.requestId);
-    }
-  }, [fromConsole, dispatch, yearFilter, urlProjectId]);
+  }, [dispatch, projectId, yearFilter]);
 
   const fuzzySearchColumns = useMemo(() => ['reportName'], []);
 
@@ -191,6 +167,10 @@ export default function ReportsList({ fromConsole }: ReportsListsProps): JSX.Ele
     }
   }, [availableYears, yearFilter]);
 
+  if (!projectId) {
+    return <></>;
+  }
+
   return (
     <ClientSideFilterTable
       busy={acceleratorReportsListRequest?.status === 'pending'}
@@ -201,7 +181,7 @@ export default function ReportsList({ fromConsole }: ReportsListsProps): JSX.Ele
       fuzzySearchColumns={fuzzySearchColumns}
       id='accelerator-reports-table'
       isClickable={() => false}
-      Renderer={ReportCellRenderer({ projectId: urlProjectId })}
+      Renderer={ReportCellRenderer({ projectId })}
       rows={acceleratorReports}
       stickyFilters
       title={strings.REPORTS}
