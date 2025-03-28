@@ -12,13 +12,13 @@ import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { AcceleratorReportStatus } from 'src/types/AcceleratorReport';
 
-import ReportStatusBadge from './ReportStatusBadge';
+import AcceleratorReportStatusBadge from './AcceleratorReportStatusBadge';
 
-type ReportCellRenderer = {
+type AcceleratorReportCellRenderer = {
   projectId: string;
 };
 
-export default function ReportCellRenderer({ projectId }: ReportCellRenderer) {
+export default function AcceleratorReportCellRenderer({ projectId }: AcceleratorReportCellRenderer) {
   // eslint-disable-next-line react/display-name
   return (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, index, value } = props;
@@ -35,8 +35,7 @@ export default function ReportCellRenderer({ projectId }: ReportCellRenderer) {
       const to = reportUrl.replace(':reportId', `${row.id}`).replace(':projectId', projectId);
 
       const year = row.startDate.split('-')[0];
-      const quarterNumber = row.startDate ? Math.ceil((new Date(row.startDate).getMonth() + 1) / 3) : 0;
-      const reportName = row.frequency === 'Annual' ? `${year}` : `${year}-Q${quarterNumber}`;
+      const reportName = row.frequency === 'Annual' ? `${year}` : `${year}-Q${row.quarter}`;
 
       return (
         <Link to={to}>
@@ -93,7 +92,7 @@ export default function ReportCellRenderer({ projectId }: ReportCellRenderer) {
           column={column}
           index={index}
           row={row}
-          value={activeLocale ? <ReportStatusBadge status={value as AcceleratorReportStatus} /> : ''}
+          value={activeLocale ? <AcceleratorReportStatusBadge status={value as AcceleratorReportStatus} /> : ''}
         />
       );
     }

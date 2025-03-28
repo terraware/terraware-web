@@ -3980,6 +3980,8 @@ export interface components {
             /** Format: int64 */
             projectId: number;
             projectMetrics: components["schemas"]["ReportProjectMetricPayload"][];
+            /** @enum {string} */
+            quarter?: "Q1" | "Q2" | "Q3" | "Q4";
             standardMetrics: components["schemas"]["ReportStandardMetricPayload"][];
             /** Format: date */
             startDate: string;
@@ -4182,6 +4184,7 @@ export interface components {
             organizationName: string;
             /** Format: int32 */
             position: number;
+            projectDealName?: string;
             /** Format: int64 */
             projectId: number;
             projectName: string;
