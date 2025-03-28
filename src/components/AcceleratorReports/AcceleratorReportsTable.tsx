@@ -83,6 +83,8 @@ export default function AcceleratorReportsTable(): JSX.Element {
   const pathParams = useParams<{ projectId: string }>();
   const projectId = isAcceleratorRoute ? String(pathParams.projectId) : currentParticipantProject?.id?.toString();
 
+  const currentYear = DateTime.now().year;
+
   useEffect(() => {
     if (projectId) {
       const request = dispatch(requestListAcceleratorReports({ projectId, includeFuture: true, includeMetrics: true }));
@@ -146,7 +148,7 @@ export default function AcceleratorReportsTable(): JSX.Element {
 
   const fuzzySearchColumns = useMemo(() => ['reportName'], []);
 
-  const yearFilterOptions = useMemo(() => {
+  const allReportYears = useMemo(() => {
     const years: Set<number> = new Set();
 
     allAcceleratorReports?.forEach((report) => {
@@ -154,10 +156,29 @@ export default function AcceleratorReportsTable(): JSX.Element {
       years.add(reportYear);
     });
 
-    return Array.from(years)
-      .sort((a, b) => b - a)
-      .map((year) => year.toString());
+    return Array.from(years).sort((a, b) => b - a);
   }, [allAcceleratorReports]);
+
+  const yearFilterOptions = useMemo(() => {
+    return allReportYears.map((year) => year.toString());
+  }, [allAcceleratorReports]);
+
+
+  useEffect(() => {
+    if (!!allAcceleratorReports?.length && !!allReportYears.length) {
+      if (allReportYears.includes(currentYear)) {
+        setYearFilter(currentYear.toString());
+      } else {
+        const futureYears = allReportYears.filter((year) => year > currentYear).sort((a, b) => a - b);
+        if (!!futureYears.length) {
+          setYearFilter(futureYears[0].toString());
+        } else {
+          const pastYears = allReportYears.filter((year) => year < currentYear).sort((a, b) => b - a);
+          setYearFilter(pastYears[0].toString());
+        }
+      }
+    }
+  }, [allAcceleratorReports, allReportYears]);
 
   const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
     const rejectedStatus = activeLocale ? (isAcceleratorRoute ? strings.UPDATE_REQUESTED : strings.UPDATE_NEEDED) : '';
@@ -192,14 +213,8 @@ export default function AcceleratorReportsTable(): JSX.Element {
           </Box>
         </>
       ) : null,
-    [activeLocale, yearFilterOptions, yearFilter]
+    [activeLocale, allReportYears, yearFilter]
   );
-
-  useEffect(() => {
-    if (!yearFilter) {
-      setYearFilter(yearFilterOptions[0]);
-    }
-  }, [yearFilterOptions, yearFilter]);
 
   if (!projectId) {
     return <></>;
