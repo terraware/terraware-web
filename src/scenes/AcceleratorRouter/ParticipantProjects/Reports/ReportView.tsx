@@ -44,11 +44,15 @@ const ReportView = () => {
   const theme = useTheme();
   const [editingId, setEditingId] = useState<string | undefined>();
 
-  useEffect(() => {
+  const reload = () => {
     if (projectId) {
       const request = dispatch(requestListAcceleratorReports({ projectId, includeFuture: true, includeMetrics: true }));
       setRequestId(request.requestId);
     }
+  };
+
+  useEffect(() => {
+    reload();
   }, [projectId]);
 
   useEffect(() => {
@@ -141,7 +145,7 @@ const ReportView = () => {
             flexGrow: 1,
           }}
         >
-          {selectedReport && <Metadata report={selectedReport} />}
+          {selectedReport && <Metadata report={selectedReport} projectId={projectId} reload={reload} />}
           {selectedReport?.startDate && selectedReport?.endDate && (
             <Box
               borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}

@@ -24,6 +24,13 @@ export type FundingEntitiesResponse = Response & FundingEntitiesData;
 export type UserFundingEntityResponse = Response & UserFundingEntityData;
 export type FundingEntityResponse = Response & FundingEntityData;
 
+export type InviteFunderError = 'PRE_EXISTING_USER' | 'INVALID_EMAIL';
+
+export type InviteFunderResponse = Response & {
+  email: string;
+  errorDetails?: InviteFunderError;
+};
+
 // endpoints
 const FUNDING_ENTITIES_LIST_ENDPOINT = '/api/v1/funder/entities';
 const FUNDING_ENTITY_ENDPOINT = '/api/v1/funder/entities/{fundingEntityId}';
@@ -46,6 +53,9 @@ export type UpdateFundingEntityRequest =
   paths[typeof FUNDING_ENTITY_ENDPOINT]['put']['requestBody']['content']['application/json'];
 export type CreateFundingEntityRequest =
   paths[typeof FUNDING_ENTITIES_LIST_ENDPOINT]['post']['requestBody']['content']['application/json'];
+
+export type InviteFunderServerResponse =
+  paths[typeof FUNDING_ENTITY_USERS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 const httpUserFundingEntity = HttpService.root(USER_FUNDING_ENTITY_ENDPOINT);
 const httpFundingEntity = HttpService.root(FUNDING_ENTITY_ENDPOINT);
@@ -138,6 +148,30 @@ const deleteFundingEntity = async (fundingEntityId: number): Promise<Response> =
   });
 };
 
+const inviteFunder = async (fundingEntityId: number, email: string): Promise<InviteFunderResponse> => {
+  const serverResponse: Response = await httpFundingEntityUsers.post({
+    entity: { email: email },
+    urlReplacements: {
+      '{fundingEntityId}': fundingEntityId.toString(),
+    },
+  });
+
+  const response: InviteFunderResponse = { ...serverResponse, email: '' };
+  if (response.requestSucceeded) {
+    const data: InviteFunderServerResponse = response.data;
+    response.email = data?.email;
+  } else {
+    if (response.statusCode === 409) {
+      // conflict
+      response.errorDetails = 'PRE_EXISTING_USER';
+    } else if (response.error === 'Field value has incorrect format: email') {
+      response.errorDetails = 'INVALID_EMAIL';
+    }
+  }
+
+  return response;
+};
+
 const FundingEntityService = {
   getUserFundingEntity,
   get,
@@ -146,6 +180,7 @@ const FundingEntityService = {
   create,
   deleteFundingEntity,
   listFunders,
+  inviteFunder,
 };
 
 export default FundingEntityService;

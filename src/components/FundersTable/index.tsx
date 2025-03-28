@@ -1,9 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { Grid, Typography } from '@mui/material';
-import { Button, TableRowType } from '@terraware/web-components';
+import { TableRowType } from '@terraware/web-components';
 
+import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
+import Button from 'src/components/common/button/Button';
 import { TableColumnType } from 'src/components/common/table/types';
+import { APP_PATHS } from 'src/constants';
 import { requestListFunders } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
 import { selectListFundersRequest } from 'src/redux/features/funder/fundingEntitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -12,7 +15,6 @@ import { Funder } from 'src/types/FundingEntity';
 import { SearchSortOrder } from 'src/types/Search';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import ClientSideFilterTable from '../Tables/ClientSideFilterTable';
 import FunderCellRenderer from './FunderCellRenderer';
 import RemoveFunderTopBarButton from './RemoveFunderTopBarButton';
 
@@ -37,7 +39,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
         },
         {
           key: 'dateAdded',
-          name: strings.DATE_ADDED,
+          name: strings.STATUS,
           type: 'string',
         },
       ]
@@ -50,6 +52,7 @@ type FundersTableProps = {
 const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
+  const navigate = useNavigate();
 
   const [listFundersRequestId, setListFundersRequestId] = useState<string>('');
   const [funders, setFunders] = useState<Funder[]>([]);
@@ -77,50 +80,42 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
     }
   }, [listFundersResponse, setFunders, snackbar]);
 
-  return (
-    <>
-      <Grid container>
-        <Grid item xs={8}>
-          <Typography fontWeight={600} fontSize={'20px'} lineHeight={'28px'}>
-            {strings.PEOPLE}
-          </Typography>
-        </Grid>
-        <Grid
-          item
-          xs={4}
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'flex-end',
-          }}
-        >
-          <Button
-            id={'invite-funder'}
-            icon={'plus'}
-            priority={'secondary'}
-            onClick={() => snackbar.toastInfo('Invite funder functionality not yet implemented')}
-            label={strings.INVITE_FUNDER}
-            size='medium'
-          />
-        </Grid>
-      </Grid>
+  const goToInvitePage = useCallback(
+    () => navigate(APP_PATHS.ACCELERATOR_FUNDING_ENTITY_INVITE.replace(':fundingEntityId', fundingEntityId.toString())),
+    [fundingEntityId]
+  );
 
-      <ClientSideFilterTable
-        columns={columns}
-        defaultSortOrder={defaultSortOrder}
-        fuzzySearchColumns={fuzzySearchColumns}
-        id={'acceleratorPeopleTable'}
-        isClickable={() => false}
-        selectedRows={selectedRows}
-        setSelectedRows={setSelectedRows}
-        showCheckbox
-        showTopBar
-        Renderer={FunderCellRenderer}
-        rows={funders}
-        topBarButtons={[<RemoveFunderTopBarButton key={0} onConfirm={onRemoveConfirm} selectedRows={selectedRows} />]}
+  const rightComponent = useMemo(
+    () => (
+      <Button
+        label={strings.INVITE_FUNDER}
+        icon='plus'
+        onClick={goToInvitePage}
+        size='medium'
+        priority={'secondary'}
+        id='editFundingEntity'
       />
-    </>
+    ),
+    [goToInvitePage]
+  );
+
+  return (
+    <ClientSideFilterTable
+      columns={columns}
+      defaultSortOrder={defaultSortOrder}
+      fuzzySearchColumns={fuzzySearchColumns}
+      id={'fundersTable'}
+      isClickable={() => false}
+      selectedRows={selectedRows}
+      setSelectedRows={setSelectedRows}
+      showCheckbox
+      showTopBar
+      Renderer={FunderCellRenderer}
+      rows={funders}
+      title={strings.FUNDERS}
+      rightComponent={rightComponent}
+      topBarButtons={[<RemoveFunderTopBarButton key={0} onConfirm={onRemoveConfirm} selectedRows={selectedRows} />]}
+    />
   );
 };
 

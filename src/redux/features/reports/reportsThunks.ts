@@ -10,6 +10,7 @@ import {
   RefreshAcceleratorReportSystemMetricsRequest,
   ReviewAcceleratorReportMetricRequest,
   ReviewAcceleratorReportMetricsRequest,
+  ReviewAcceleratorReportRequest,
   ReviewManyAcceleratorReportMetricsRequest,
   UpdateAcceleratorReportConfigRequest,
   UpdateProjectMetricRequest,
@@ -185,6 +186,21 @@ export const requestReviewAcceleratorReportMetric = createAsyncThunk(
   }
 );
 
+export const requestReviewAcceleratorReport = createAsyncThunk(
+  'reviewAcceleratorReport',
+  async (request: ReviewAcceleratorReportRequest, { rejectWithValue }) => {
+    const { projectId, review, reportId } = request;
+
+    const response = await AcceleratorReportService.reviewAcceleratorReport(review, projectId, reportId);
+
+    if (response && response.requestSucceeded) {
+      return response.data;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
 export const requestRefreshAcceleratorReportSystemMetrics = createAsyncThunk(
   'refreshAcceleratorReportSystemMetrics',
   async (request: RefreshAcceleratorReportSystemMetricsRequest, { rejectWithValue }) => {
@@ -195,7 +211,6 @@ export const requestRefreshAcceleratorReportSystemMetrics = createAsyncThunk(
       reportId,
       metricName
     );
-
     if (response && response.requestSucceeded) {
       return response.data;
     }

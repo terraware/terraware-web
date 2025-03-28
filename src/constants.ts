@@ -9,6 +9,10 @@ export const TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK =
   'https://play.google.com/store/apps/details?id=com.terraformation.seedcollector';
 export const ACCELERATOR_LINK = 'https://www.terraformation.com/accelerator';
 
+// https://stackoverflow.com/questions/46155/whats-the-best-way-to-validate-an-email-address-in-javascript
+export const EMAIL_REGEX =
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 export enum APP_PATHS {
   ACCELERATOR = '/accelerator',
   ACCELERATOR_APPLICATION = '/accelerator/applications/:applicationId',
@@ -29,6 +33,7 @@ export enum APP_PATHS {
   ACCELERATOR_FUNDING_ENTITIES_EDIT = '/accelerator/funding-entities/:fundingEntityId/edit',
   ACCELERATOR_FUNDING_ENTITIES_VIEW = '/accelerator/funding-entities/:fundingEntityId',
   ACCELERATOR_FUNDING_ENTITIES_NEW = '/accelerator/funding-entities/new',
+  ACCELERATOR_FUNDING_ENTITY_INVITE = '/accelerator/funding-entities/:fundingEntityId/invite',
   ACCELERATOR_MODULES = '/accelerator/modules',
   ACCELERATOR_MODULE_CONTENT = '/accelerator/modules/:moduleId',
   ACCELERATOR_MODULE_EVENTS_EDIT = '/accelerator/modules/:moduleId/event/edit',

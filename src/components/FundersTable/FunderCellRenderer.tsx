@@ -16,7 +16,7 @@ export default function FunderCellRenderer(props: RendererProps<TableRowType>): 
     return <CellRenderer index={index} column={column} value={name} row={row} />;
   } else if (column.key === 'dateAdded') {
     const date = getDate(row.createdTime).toFormat('yyyy-MM-dd');
-    const value = row.accountCreated ? date : activeLocale ? strings.INVITED : '';
+    const value = row.accountCreated ? `${strings.ADDED} ${date}` : activeLocale ? strings.INVITED : '';
     return <CellRenderer index={index} column={column} value={value} row={row} />;
   } else {
     return <CellRenderer {...props} />;
