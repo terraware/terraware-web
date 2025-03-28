@@ -163,7 +163,6 @@ export default function AcceleratorReportsTable(): JSX.Element {
     return allReportYears.map((year) => year.toString());
   }, [allAcceleratorReports]);
 
-
   useEffect(() => {
     if (!!allAcceleratorReports?.length && !!allReportYears.length) {
       if (allReportYears.includes(currentYear)) {
