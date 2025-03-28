@@ -95,8 +95,7 @@ export default function AcceleratorReportsTable(): JSX.Element {
       setAllAcceleratorReports(() => {
         const reports = listAllAcceleratorReportsRequest?.data?.map((report) => {
           const year = report.startDate.split('-')[0];
-          const quarterNumber = report.startDate ? Math.ceil((new Date(report.startDate).getMonth() + 1) / 3) : 0;
-          const reportName = report.frequency === 'Annual' ? `${year}` : `${year}-Q${quarterNumber}`;
+          const reportName = report.frequency === 'Annual' ? `${year}` : `${year}-Q${report.quarter}`;
 
           return {
             ...report,
@@ -114,8 +113,7 @@ export default function AcceleratorReportsTable(): JSX.Element {
       setAcceleratorReports(() => {
         const reports = listAcceleratorReportsRequest?.data?.map((report) => {
           const year = report.startDate.split('-')[0];
-          const quarterNumber = report.startDate ? Math.ceil((new Date(report.startDate).getMonth() + 1) / 3) : 0;
-          const reportName = report.frequency === 'Annual' ? `${year}` : `${year}-Q${quarterNumber}`;
+          const reportName = report.frequency === 'Annual' ? `${year}` : `${year}-Q${report.quarter}`;
 
           return {
             ...report,
