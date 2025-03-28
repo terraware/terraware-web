@@ -28,6 +28,40 @@ const defaultSearchOrder: SearchSortOrder = {
   direction: 'Descending',
 };
 
+const columns = (activeLocale: string | null): TableColumnType[] => {
+  if (!activeLocale) {
+    return [];
+  }
+
+  return [
+    {
+      key: 'reportName',
+      name: strings.REPORT,
+      type: 'string',
+    },
+    {
+      key: 'status',
+      name: strings.STATUS,
+      type: 'string',
+    },
+    {
+      key: 'modifiedBy',
+      name: strings.LAST_EDITED_BY,
+      type: 'string',
+    },
+    {
+      key: 'submittedBy',
+      name: strings.SUBMITTED_BY,
+      type: 'string',
+    },
+    {
+      key: 'submittedTime',
+      name: strings.DATE_SUBMITTED,
+      type: 'string',
+    },
+  ];
+};
+
 export default function AcceleratorReportsTable(): JSX.Element {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
@@ -65,43 +99,6 @@ export default function AcceleratorReportsTable(): JSX.Element {
   useEffect(() => {
     reload();
   }, [projectId, yearFilter]);
-
-  const columns = useCallback(
-    (activeLocale: string | null): TableColumnType[] => {
-      if (!activeLocale) {
-        return [];
-      }
-
-      return [
-        {
-          key: 'reportName',
-          name: strings.REPORT,
-          type: 'string',
-        },
-        {
-          key: 'status',
-          name: strings.STATUS,
-          type: 'string',
-        },
-        {
-          key: 'modifiedBy',
-          name: strings.LAST_EDITED_BY,
-          type: 'string',
-        },
-        {
-          key: 'submittedBy',
-          name: strings.SUBMITTED_BY,
-          type: 'string',
-        },
-        {
-          key: 'submittedTime',
-          name: strings.DATE_SUBMITTED,
-          type: 'string',
-        },
-      ];
-    },
-    [activeLocale, strings]
-  );
 
   const reload = useCallback(() => {
     if (projectId) {
