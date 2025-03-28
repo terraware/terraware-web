@@ -197,7 +197,7 @@ const ReportView = () => {
             subtitle={participantProject ? `${strings.PROJECT}: ${participantProject?.dealName}` : ''}
           />
         }
-        rightComponent={rightComponent}
+        rightComponent={selectedReport?.status !== 'Not Submitted' ? rightComponent : undefined}
         crumbs={crumbs}
       >
         <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
