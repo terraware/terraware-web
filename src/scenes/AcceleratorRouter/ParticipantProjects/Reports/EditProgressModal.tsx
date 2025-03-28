@@ -23,12 +23,18 @@ export default function EditProgressModal(props: EditProgressModalProps): JSX.El
   const save = () => {
     if (newProgress) {
       onChange(newProgress.toString());
+      onClose();
     }
+  };
+
+  const onCloseHandler = () => {
+    onChange(value?.toString() || '');
+    onClose();
   };
 
   return (
     <DialogBox
-      onClose={onClose}
+      onClose={onCloseHandler}
       open={true}
       title={metricName}
       size='medium'
@@ -37,7 +43,7 @@ export default function EditProgressModal(props: EditProgressModalProps): JSX.El
           id='cancel'
           label={strings.CANCEL}
           type='passive'
-          onClick={onClose}
+          onClick={onCloseHandler}
           priority='secondary'
           key='button-1'
         />,
@@ -48,7 +54,7 @@ export default function EditProgressModal(props: EditProgressModalProps): JSX.El
         <Grid item xs={12}>
           <Box display={'flex'} alignItems={'center'}>
             <TextField
-              type='text'
+              type='number'
               label={strings.PROGRESS}
               value={newProgress}
               id={'progress'}

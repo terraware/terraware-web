@@ -1,12 +1,22 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import Button from 'src/components/common/button/Button';
+import { selectReviewAcceleratorReportMetric } from 'src/redux/features/reports/reportsSelectors';
+import { requestReviewAcceleratorReportMetric } from 'src/redux/features/reports/reportsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { MetricType, ReportProjectMetric, ReportStandardMetric, ReportSystemMetric } from 'src/types/AcceleratorReport';
+import {
+  MetricType,
+  ReportProjectMetric,
+  ReportStandardMetric,
+  ReportSystemMetric,
+  SystemMetricName,
+} from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import EditProgressModal from './EditProgressModal';
 
@@ -40,6 +50,8 @@ const MetricBox = ({
   setEditingId,
   metric,
   type,
+  projectId,
+  reportId,
 }: {
   editingId?: string;
   hideStatusBadge?: boolean;
@@ -49,10 +61,24 @@ const MetricBox = ({
   setEditingId: (id: string | undefined) => void;
   metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric;
   type: MetricType;
+  reportId: number;
 }): JSX.Element => {
   const theme = useTheme();
   const [record, , onChange] = useForm<ReportProjectMetric | ReportSystemMetric | ReportStandardMetric>(metric);
   const [progressModalOpened, setProgressModalOpened] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const [requestId, setRequestId] = useState<string>('');
+  const updateReportMetricResponse = useAppSelector(selectReviewAcceleratorReportMetric(requestId));
+  const snackbar = useSnackbar();
+
+  useEffect(() => {
+    if (updateReportMetricResponse?.status === 'error') {
+      snackbar.toastError();
+    } else if (updateReportMetricResponse?.status === 'success') {
+      setEditingId(undefined);
+      snackbar.toastSuccess(strings.CHANGES_SAVED);
+    }
+  }, [updateReportMetricResponse, snackbar]);
 
   const editing = useMemo(() => editingId === getMetricId(metric, type), [editingId, metric, getMetricId]);
 
@@ -60,9 +86,53 @@ const MetricBox = ({
     setEditingId(getMetricId(metric, type));
   }, [setEditingId, metric, getMetricId]);
 
+  const getUpdateBody = () => {
+    if (type === 'system' && isReportSystemMetric(record)) {
+      return {
+        systemMetrics: [
+          {
+            metric: record.metric as SystemMetricName,
+            overrideValue: record.overrideValue,
+            underperformanceJustification: record.underperformanceJustification,
+          },
+        ],
+        projectMetrics: [],
+        standardMetrics: [],
+      };
+    } else if (type === 'standard' && isStandardOrProjectMetric(record)) {
+      return {
+        standardMetrics: [
+          { id: record.id, value: record.value, underperformanceJustification: record.underperformanceJustification },
+        ],
+        systemMetrics: [],
+        projectMetrics: [],
+      };
+    } else if (type === 'project' && isStandardOrProjectMetric(record)) {
+      return {
+        projectMetrics: [
+          { id: record.id, value: record.value, underperformanceJustification: record.underperformanceJustification },
+        ],
+        standardMetrics: [],
+        systemMetrics: [],
+      };
+    }
+    return {
+      systemMetrics: [],
+      projectMetrics: [],
+      standardMetrics: [],
+    };
+  };
+
   const onSave = useCallback(() => {
-    return true;
-  }, []);
+    const request = dispatch(
+      requestReviewAcceleratorReportMetric({
+        metric: getUpdateBody(),
+        projectId: Number(projectId),
+        reportId: reportId,
+      })
+    );
+    setRequestId(request.requestId);
+  }, [dispatch, projectId, reportId, record]);
 
   const onChangeProgress = (newValue: string) => {
     if (isStandardOrProjectMetric(record)) {
