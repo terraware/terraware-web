@@ -149,9 +149,6 @@ export default function AcceleratorReportsTable(): JSX.Element {
   const yearFilterOptions = useMemo(() => {
     const years: Set<number> = new Set();
 
-    const currentYear = new Date().getFullYear();
-    years.add(currentYear);
-
     allAcceleratorReports?.forEach((report) => {
       const reportYear = DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;
       years.add(reportYear);
