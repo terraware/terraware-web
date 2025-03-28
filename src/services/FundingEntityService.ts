@@ -122,7 +122,7 @@ const listFunders = async (fundingEntityId: number): Promise<Response2<ListFunde
 const update = async (fundingEntity: FundingEntity): Promise<Response> => {
   const entity: UpdateFundingEntityRequest = {
     name: fundingEntity.name,
-    projects: fundingEntity.projects.map((project) => project.id),
+    projects: fundingEntity.projects.map((project) => project.projectId),
   };
   return httpFundingEntity.put2<UpdateFundingEntityResponse>({
     urlReplacements: { '{fundingEntityId}': `${fundingEntity.id}` },
@@ -133,7 +133,7 @@ const update = async (fundingEntity: FundingEntity): Promise<Response> => {
 const create = async (fundingEntity: FundingEntity): Promise<Response2<CreateFundingEntityResponse>> => {
   const entity: CreateFundingEntityRequest = {
     name: fundingEntity.name,
-    projects: fundingEntity.projects.map((project) => project.id),
+    projects: fundingEntity.projects.map((project) => project.projectId),
   };
   return await httpFundingEntities.post({
     entity: entity,

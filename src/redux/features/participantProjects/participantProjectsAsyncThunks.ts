@@ -21,8 +21,8 @@ export const requestGetParticipantProject = createAsyncThunk(
 
 export type ListRequest = {
   locale?: string;
-  search: SearchNodePayload;
-  sortOrder: SearchSortOrder;
+  search?: SearchNodePayload;
+  sortOrder?: SearchSortOrder;
 };
 
 export const requestListParticipantProjects = createAsyncThunk(
