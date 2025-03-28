@@ -4,6 +4,7 @@ import { APP_PATHS } from 'src/constants';
 
 import EditSettings from './EditSettings';
 import NewProjectSpecificMetric from './NewProjectSpecificMetric';
+import ReportView from './ReportView';
 import ReportsView from './ReportsView';
 
 const ReportsRouter = () => {
@@ -13,6 +14,7 @@ const ReportsRouter = () => {
   return (
     <Routes>
       <Route path='' element={<ReportsView />} />
+      <Route path='/:reportId' element={<ReportView />} />
       <Route path='/edit' element={<EditSettings />} />
       <Route path='/metrics/new' element={<NewProjectSpecificMetric />} />
       <Route

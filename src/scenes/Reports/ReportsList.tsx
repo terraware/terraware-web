@@ -201,7 +201,7 @@ export default function ReportsList({ fromConsole }: ReportsListsProps): JSX.Ele
       fuzzySearchColumns={fuzzySearchColumns}
       id='accelerator-reports-table'
       isClickable={() => false}
-      Renderer={ReportCellRenderer}
+      Renderer={ReportCellRenderer({ projectId: urlProjectId })}
       rows={acceleratorReports}
       stickyFilters
       title={strings.REPORTS}
