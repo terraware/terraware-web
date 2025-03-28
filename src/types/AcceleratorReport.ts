@@ -54,6 +54,14 @@ export type ReviewAcceleratorReportMetricRequest = {
   reportId: number;
 };
 
+export type ReportReviewPayload = components['schemas']['ReportReviewPayload'];
+
+export type ReviewAcceleratorReportRequest = {
+  review: ReportReviewPayload;
+  projectId: number;
+  reportId: number;
+};
+
 export type NewMetric = components['schemas']['NewMetricPayload'];
 
 export type AcceleratorReport = components['schemas']['AcceleratorReportPayload'];

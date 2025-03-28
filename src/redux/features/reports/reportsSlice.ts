@@ -16,6 +16,7 @@ import {
   requestListProjectMetrics,
   requestListStandardMetrics,
   requestListSystemMetrics,
+  requestReviewAcceleratorReport,
   requestReviewAcceleratorReportMetric,
   requestReviewManyAcceleratorReportMetrics,
   requestUpdateProjectMetric,
@@ -172,6 +173,20 @@ const reviewAcceleratorReportMetricSlice = createSlice({
   },
 });
 
+/**
+ * Update Accelerator Report
+ */
+const initialReviewAcceleratorReport: { [key: string]: StatusT<number> } = {};
+
+const reviewAcceleratorReportSlice = createSlice({
+  name: 'reviewAcceleratorReportSlice',
+  initialState: initialReviewAcceleratorReport,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestReviewAcceleratorReport)(builder);
+  },
+});
+
 const reportsReducers = {
   projectReportConfig: projectReportConfigSlice.reducer,
   projectReportConfigCreate: createReportConfigSlice.reducer,
@@ -184,6 +199,7 @@ const reportsReducers = {
   projectMetricUpdate: projectMetricUpdateSlice.reducer,
   reviewManyAcceleratorReportMetrics: reviewManyAcceleratorReportMetricsSlice.reducer,
   reviewAcceleratorReportMetric: reviewAcceleratorReportMetricSlice.reducer,
+  reviewAcceleratorReport: reviewAcceleratorReportSlice.reducer,
 };
 
 export default reportsReducers;
