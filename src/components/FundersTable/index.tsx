@@ -7,6 +7,7 @@ import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import Button from 'src/components/common/button/Button';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useUser } from 'src/providers';
 import { requestListFunders } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
 import { selectListFundersRequest } from 'src/redux/features/funder/fundingEntitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -53,6 +54,7 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const navigate = useNavigate();
+  const { isAllowed } = useUser();
 
   const [listFundersRequestId, setListFundersRequestId] = useState<string>('');
   const [funders, setFunders] = useState<Funder[]>([]);
@@ -86,16 +88,19 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
   );
 
   const rightComponent = useMemo(
-    () => (
-      <Button
-        label={strings.INVITE_FUNDER}
-        icon='plus'
-        onClick={goToInvitePage}
-        size='medium'
-        priority={'secondary'}
-        id='editFundingEntity'
-      />
-    ),
+    () =>
+      isAllowed('INVITE_FUNDER') ? (
+        <Button
+          label={strings.INVITE_FUNDER}
+          icon='plus'
+          onClick={goToInvitePage}
+          size='medium'
+          priority={'secondary'}
+          id='editFundingEntity'
+        />
+      ) : (
+        ''
+      ),
     [goToInvitePage]
   );
 
