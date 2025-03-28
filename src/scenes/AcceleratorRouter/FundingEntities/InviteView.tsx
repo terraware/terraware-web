@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Container, Grid, Typography, useTheme } from '@mui/material';
@@ -10,7 +10,9 @@ import PageForm from 'src/components/common/PageForm';
 import { EMAIL_REGEX } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useFundingEntity } from 'src/providers';
-import FundingEntityService from 'src/services/FundingEntityService';
+import { requestFundingEntityInviteFunder } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
+import { inviteFunderRequest } from 'src/redux/features/funder/fundingEntitiesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Funder } from 'src/types/FundingEntity';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -27,6 +29,9 @@ const InviteView = () => {
   const [record, , onChange] = useForm<Partial<Funder>>({});
   const [emailError, setEmailError] = useState('');
   const snackbar = useSnackbar();
+  const dispatch = useAppDispatch();
+  const [requestId, setRequestId] = useState<string>('');
+  const inviteFunderResponse = useAppSelector(inviteFunderRequest(requestId));
 
   const onCancel = useCallback(() => {
     if (fundingEntityId) {
@@ -34,7 +39,7 @@ const InviteView = () => {
     }
   }, [fundingEntityId]);
 
-  const onSendClick = useCallback(async () => {
+  const onSendClick = useCallback(() => {
     if (!fundingEntityId) {
       snackbar.toastError();
       return;
@@ -50,27 +55,26 @@ const InviteView = () => {
       return;
     }
 
-    let successMessage: string | null = null;
-    const response = await FundingEntityService.inviteFunder(fundingEntityId, record.email);
-    if (!response.requestSucceeded) {
-      if (response.errorDetails === 'PRE_EXISTING_USER') {
-        setEmailError(strings.EMAIL_ALREADY_EXISTS);
-        return;
-      } else if (response.errorDetails === 'INVALID_EMAIL') {
-        setEmailError(strings.INCORRECT_EMAIL_FORMAT);
-        return;
-      }
+    const request = dispatch(requestFundingEntityInviteFunder({ fundingEntityId, email: record.email }));
+    setRequestId(request.requestId);
+  }, [dispatch, snackbar, record.email, fundingEntityId]);
+
+  useEffect(() => {
+    if (!inviteFunderResponse || inviteFunderResponse.status === 'pending') return;
+
+    if (inviteFunderResponse.status === 'error') {
+      setEmailError(inviteFunderResponse.data as string);
+      return;
     }
 
-    successMessage = response.requestSucceeded ? strings.FUNDER_ADDED : null;
-    if (successMessage) {
-      snackbar.toastSuccess(successMessage);
+    if (inviteFunderResponse.status === 'success') {
+      snackbar.toastSuccess(strings.FUNDER_ADDED);
       reloadFundingEntity();
     } else {
       snackbar.toastError();
     }
     goToFundingEntity(fundingEntityId);
-  }, [snackbar, record.email, reloadFundingEntity, fundingEntityId]);
+  }, [inviteFunderResponse, snackbar]);
 
   return (
     <Page

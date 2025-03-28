@@ -19,3 +19,5 @@ export const selectListFundersRequest = (requestId: string) => (state: RootState
 
 export const selectFundingEntityFunders = (fundingEntityId?: number) => (state: RootState) =>
   state.funders[fundingEntityId || -1];
+
+export const inviteFunderRequest = (requestId: string) => (state: RootState) => state.fundingEntityInvite[requestId];

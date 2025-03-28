@@ -68,8 +68,28 @@ export const requestCreateFundingEntity = createAsyncThunk(
   }
 );
 
+export const requestFundingEntityInviteFunder = createAsyncThunk(
+  'funding-entities/invite',
+  async (request: { fundingEntityId: number; email: string }, { rejectWithValue }) => {
+    const { fundingEntityId, email } = request;
+    const response = await FundingEntityService.inviteFunder(fundingEntityId, email);
+
+    if (response) {
+      if (response.requestSucceeded) {
+        return response.data;
+      } else if (response.errorDetails === 'PRE_EXISTING_USER') {
+        return rejectWithValue(strings.EMAIL_ALREADY_EXISTS);
+      } else if (response.errorDetails === 'INVALID_EMAIL') {
+        return rejectWithValue(strings.INCORRECT_EMAIL_FORMAT);
+      }
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
 export const requestListFunders = createAsyncThunk(
-  'funding-entities/create',
+  'funding-entities/list',
   async (fundingEntityId: number, { rejectWithValue }) => {
     const response = await FundingEntityService.listFunders(fundingEntityId);
     if (response && response.requestSucceeded) {
