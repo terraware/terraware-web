@@ -1,4 +1,6 @@
-import React, { Typography, useTheme } from '@mui/material';
+import React from 'react';
+
+import { Typography, useTheme } from '@mui/material';
 import { Confirm } from '@terraware/web-components';
 
 import strings from 'src/strings';
@@ -21,7 +23,7 @@ export default function ApproveReportDialog({ onClose, onSubmit }: ApproveDialog
       message={
         <>
           <Typography fontSize='16px' fontWeight={400} lineHeight='24px' marginBottom={theme.spacing(2)}>
-            {strings.YOU_ARE_ABOUT_TO_APPROVE_THIS_REPERT}
+            {strings.YOU_ARE_ABOUT_TO_APPROVE_THIS_REPORT}
           </Typography>
 
           <Typography fontSize='16px' fontWeight={400} lineHeight='24px' marginBottom={theme.spacing(2)}>

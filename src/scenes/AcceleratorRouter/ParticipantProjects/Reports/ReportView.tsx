@@ -53,7 +53,7 @@ const ReportView = () => {
   const [editingId, setEditingId] = useState<string | undefined>();
   const [approveRequestId, setApproveRequestId] = useState('');
   const [rejectRequestId, setRejectRequestId] = useState('');
-  const approveReportReponse = useAppSelector(selectReviewAcceleratorReport(approveRequestId));
+  const approveReportResponse = useAppSelector(selectReviewAcceleratorReport(approveRequestId));
   const rejectReportResponse = useAppSelector(selectReviewAcceleratorReport(rejectRequestId));
 
   const approveReport = () => {
@@ -108,13 +108,13 @@ const ReportView = () => {
   }, [reportsResults]);
 
   useEffect(() => {
-    if (approveReportReponse?.status === 'error') {
+    if (approveReportResponse?.status === 'error') {
       return;
     }
-    if (approveReportReponse?.status === 'success') {
+    if (approveReportResponse?.status === 'success') {
       reload();
     }
-  }, [approveReportReponse]);
+  }, [approveReportResponse]);
 
   useEffect(() => {
     if (rejectReportResponse?.status === 'error') {
