@@ -64,9 +64,7 @@ const MetricBox = ({
   reportId: number;
 }): JSX.Element => {
   const theme = useTheme();
-  const [record, setRecord, onChange] = useForm<ReportProjectMetric | ReportSystemMetric | ReportStandardMetric>(
-    metric
-  );
+  const [record, , onChange] = useForm<ReportProjectMetric | ReportSystemMetric | ReportStandardMetric>(metric);
   const [progressModalOpened, setProgressModalOpened] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');

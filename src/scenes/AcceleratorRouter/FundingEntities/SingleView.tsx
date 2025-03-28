@@ -4,6 +4,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { DropdownItem } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
+import FundersTable from 'src/components/FundersTable';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
@@ -76,7 +77,7 @@ const SingleView = () => {
             />
           )}
           <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
-            <Grid container spacing={3}>
+            <Grid container spacing={3} paddingBottom={theme.spacing(8)}>
               <Grid item xs={4}>
                 <TextField label={strings.NAME} id='name' type='text' value={fundingEntity.name} display={true} />
               </Grid>
@@ -98,6 +99,7 @@ const SingleView = () => {
                 </Grid>
               ))}
             </Grid>
+            <FundersTable fundingEntityId={fundingEntity.id} />
           </Card>
         </Page>
       )}

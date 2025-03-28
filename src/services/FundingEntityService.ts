@@ -27,6 +27,7 @@ export type FundingEntityResponse = Response & FundingEntityData;
 // endpoints
 const FUNDING_ENTITIES_LIST_ENDPOINT = '/api/v1/funder/entities';
 const FUNDING_ENTITY_ENDPOINT = '/api/v1/funder/entities/{fundingEntityId}';
+const FUNDING_ENTITY_USERS_ENDPOINT = '/api/v1/funder/entities/{fundingEntityId}/users';
 const USER_FUNDING_ENTITY_ENDPOINT = '/api/v1/funder/entities/users/{userId}';
 
 type FundingEntitiesServerResponse =
@@ -39,6 +40,8 @@ type UpdateFundingEntityResponse =
   paths[typeof FUNDING_ENTITY_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 type CreateFundingEntityResponse =
   paths[typeof FUNDING_ENTITIES_LIST_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+type ListFundersServerResponse =
+  paths[typeof FUNDING_ENTITY_USERS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 export type UpdateFundingEntityRequest =
   paths[typeof FUNDING_ENTITY_ENDPOINT]['put']['requestBody']['content']['application/json'];
 export type CreateFundingEntityRequest =
@@ -46,6 +49,7 @@ export type CreateFundingEntityRequest =
 
 const httpUserFundingEntity = HttpService.root(USER_FUNDING_ENTITY_ENDPOINT);
 const httpFundingEntity = HttpService.root(FUNDING_ENTITY_ENDPOINT);
+const httpFundingEntityUsers = HttpService.root(FUNDING_ENTITY_USERS_ENDPOINT);
 const httpFundingEntities = HttpService.root(FUNDING_ENTITIES_LIST_ENDPOINT);
 
 const getUserFundingEntity = async (userId: number): Promise<UserFundingEntityResponse> => {
@@ -99,6 +103,12 @@ const listFundingEntities = async (): Promise<FundingEntitiesResponse> => {
   }));
 };
 
+const listFunders = async (fundingEntityId: number): Promise<Response2<ListFundersServerResponse>> => {
+  return await httpFundingEntityUsers.get2<ListFundersServerResponse>({
+    urlReplacements: { '{fundingEntityId}': fundingEntityId.toString() },
+  });
+};
+
 const update = async (fundingEntity: FundingEntity): Promise<Response> => {
   const entity: UpdateFundingEntityRequest = {
     name: fundingEntity.name,
@@ -135,6 +145,7 @@ const FundingEntityService = {
   update,
   create,
   deleteFundingEntity,
+  listFunders,
 };
 
 export default FundingEntityService;

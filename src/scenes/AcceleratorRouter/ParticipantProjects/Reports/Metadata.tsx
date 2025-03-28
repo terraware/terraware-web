@@ -1,11 +1,9 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 
 import ReportStatusBadge from 'src/scenes/Reports/ReportStatusBadge';
-import strings from 'src/strings';
 import { AcceleratorReport } from 'src/types/AcceleratorReport';
-import useSnackbar from 'src/utils/useSnackbar';
 
 import InternalComment from '../../Documents/DocumentView/InternalComment';
 
@@ -16,20 +14,11 @@ export type MetadataProps = {
 const Metadata = (props: MetadataProps): JSX.Element => {
   const { report } = props;
 
-  const snackbar = useSnackbar();
   const theme = useTheme();
 
   const onUpdateInternalComment = useCallback(() => {
     return true;
   }, []);
-
-  useEffect(() => {
-    if (status === 'success') {
-      snackbar.toastSuccess(strings.CHANGES_SAVED);
-    } else if (status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-    }
-  }, [status, snackbar]);
 
   return (
     <Box display='flex' flexDirection='column'>
