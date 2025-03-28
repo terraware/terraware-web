@@ -54,6 +54,12 @@ export type ReviewAcceleratorReportMetricRequest = {
   reportId: number;
 };
 
+export type RefreshAcceleratorReportSystemMetricsRequest = {
+  projectId: number;
+  reportId: number;
+  metricName: SystemMetricName;
+};
+
 export type ReportReviewPayload = components['schemas']['ReportReviewPayload'];
 
 export type ReviewAcceleratorReportRequest = {

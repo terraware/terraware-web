@@ -7,6 +7,7 @@ import strings from 'src/strings';
 import {
   CreateAcceleratorReportConfigRequest,
   CreateProjectMetricRequest,
+  RefreshAcceleratorReportSystemMetricsRequest,
   ReviewAcceleratorReportMetricRequest,
   ReviewAcceleratorReportMetricsRequest,
   ReviewAcceleratorReportRequest,
@@ -192,6 +193,24 @@ export const requestReviewAcceleratorReport = createAsyncThunk(
 
     const response = await AcceleratorReportService.reviewAcceleratorReport(review, projectId, reportId);
 
+    if (response && response.requestSucceeded) {
+      return response.data;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestRefreshAcceleratorReportSystemMetrics = createAsyncThunk(
+  'refreshAcceleratorReportSystemMetrics',
+  async (request: RefreshAcceleratorReportSystemMetricsRequest, { rejectWithValue }) => {
+    const { projectId, reportId, metricName } = request;
+
+    const response = await AcceleratorReportService.refreshAcceleratorReportSystemMetrics(
+      projectId,
+      reportId,
+      metricName
+    );
     if (response && response.requestSucceeded) {
       return response.data;
     }
