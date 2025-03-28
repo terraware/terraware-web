@@ -38,8 +38,8 @@ const ReportView = () => {
   const [reports, setReports] = useState<AcceleratorReport[]>();
   const [selectedReport, setSelectedReport] = useState<AcceleratorReport>();
   const { isAllowed } = useUser();
-  const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);
-  const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
+  const [, setShowApproveDialog] = useState<boolean>(false);
+  const [, setShowRejectDialog] = useState<boolean>(false);
   const { participantProject } = useParticipantProjectData();
   const theme = useTheme();
   const [editingId, setEditingId] = useState<string | undefined>();
@@ -129,7 +129,6 @@ const ReportView = () => {
       rightComponent={rightComponent}
       crumbs={crumbs}
     >
-      {/* {requestStatus === 'pending' && <BusySpinner />} */}
       <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
         {selectedReport && <ApprovedReportMessage report={selectedReport} />}
         {selectedReport && (
@@ -187,7 +186,7 @@ const ReportView = () => {
               reload={() => true}
               setEditingId={setEditingId}
               metric={standardMetric}
-              type={'project'}
+              type={'standard'}
             />
           ))}
         </Card>
