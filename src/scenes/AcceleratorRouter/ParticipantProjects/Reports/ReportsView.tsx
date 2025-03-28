@@ -3,8 +3,8 @@ import React, { useMemo } from 'react';
 import { Box } from '@mui/material';
 import Tabs from '@terraware/web-components/components/Tabs';
 
+import AcceleratorReportTargetsTable from 'src/components/AcceleratorReports/AcceleratorReportTargetsTable';
 import AcceleratorReportsTable from 'src/components/AcceleratorReports/AcceleratorReportsTable';
-import ReportsTargets from 'src/components/AcceleratorReports/ReportsTargets';
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
@@ -32,7 +32,7 @@ const ReportsView = () => {
       {
         id: 'targets',
         label: strings.TARGETS,
-        children: <ReportsTargets />,
+        children: <AcceleratorReportTargetsTable />,
       },
       {
         id: 'settings',

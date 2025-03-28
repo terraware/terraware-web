@@ -16,8 +16,8 @@ import strings from 'src/strings';
 import { AcceleratorReport, MetricType } from 'src/types/AcceleratorReport';
 import { SearchSortOrder } from 'src/types/Search';
 
-import EditTargetsModal from './EditTargetsModal';
-import ReportsTargetsCellRenderer from './ReportsTargetsCellRenderer';
+import AcceleratorReportsTargetsCellRenderer from './AcceleratorReportTargetsCellRenderer';
+import EditAcceleratorReportTargetsModal from './EditAcceleratorReportTargetsModal';
 
 const columns = (activeLocale: string | null): TableColumnType[] =>
   activeLocale
@@ -96,7 +96,7 @@ export type RowMetric = {
   q4ReportId?: number;
 };
 
-export default function ReportsTargets(): JSX.Element {
+export default function AcceleratorReportTargetsTable(): JSX.Element {
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { currentParticipantProject } = useParticipantData();
   const [allReportsRequestId, setAllReportsRequestId] = useState<string>('');
@@ -325,14 +325,18 @@ export default function ReportsTargets(): JSX.Element {
   return (
     <>
       {editOpenModal && selectedMetric && (
-        <EditTargetsModal onClose={() => setEditOpenModal(false)} reload={reload} row={selectedMetric} />
+        <EditAcceleratorReportTargetsModal
+          onClose={() => setEditOpenModal(false)}
+          reload={reload}
+          row={selectedMetric}
+        />
       )}
       <ClientSideFilterTable
         busy={reportsResults?.status === 'pending'}
         columns={columns}
         defaultSortOrder={defaultSearchOrder}
         id='reports-targets-table'
-        Renderer={ReportsTargetsCellRenderer}
+        Renderer={AcceleratorReportsTargetsCellRenderer}
         rows={metricsToUse || []}
         title={strings.TARGETS}
         fuzzySearchColumns={fuzzySearchColumns}
