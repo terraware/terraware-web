@@ -9,7 +9,7 @@ import ErrorBox from 'src/components/common/ErrorBox/ErrorBox';
 import PageForm from 'src/components/common/PageForm';
 import TextField from 'src/components/common/Textfield/Textfield';
 import TfMain from 'src/components/common/TfMain';
-import { APP_PATHS } from 'src/constants';
+import { APP_PATHS, EMAIL_REGEX } from 'src/constants';
 import { useOrganization } from 'src/providers/hooks';
 import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
@@ -85,12 +85,7 @@ export default function PersonView(): JSX.Element {
       return;
     }
 
-    // https://stackoverflow.com/questions/46155/whats-the-best-way-to-validate-an-email-address-in-javascript
-    if (
-      !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-        newPerson.email
-      )
-    ) {
+    if (!EMAIL_REGEX.test(newPerson.email)) {
       setEmailError(strings.INCORRECT_EMAIL_FORMAT);
       return;
     }

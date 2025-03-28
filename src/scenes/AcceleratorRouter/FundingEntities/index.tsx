@@ -3,6 +3,7 @@ import React, { Route, Routes } from 'react-router-dom';
 import FundingEntityProvider from 'src/providers/FundingEntityProvider';
 
 import EditView from './EditView';
+import InviteView from './InviteView';
 import FundingEntitiesListView from './ListView';
 import NewView from './NewView';
 import SingleView from './SingleView';
@@ -18,6 +19,7 @@ const FundingEntitiesRouter = () => {
             <Routes>
               <Route path={''} element={<SingleView />} />
               <Route path={'edit'} element={<EditView />} />
+              <Route path={'invite'} element={<InviteView />} />
             </Routes>
           </FundingEntityProvider>
         }
