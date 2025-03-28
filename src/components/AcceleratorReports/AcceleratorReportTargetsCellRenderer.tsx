@@ -4,7 +4,7 @@ import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 
-export default function AcceleratorReportsTargetsCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
+export default function AcceleratorReportTargetsCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, value, index, onRowClick } = props;
 
   if (column.key === 'name' && onRowClick) {

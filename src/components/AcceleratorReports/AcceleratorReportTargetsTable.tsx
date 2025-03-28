@@ -16,7 +16,7 @@ import strings from 'src/strings';
 import { AcceleratorReport, MetricType } from 'src/types/AcceleratorReport';
 import { SearchSortOrder } from 'src/types/Search';
 
-import AcceleratorReportsTargetsCellRenderer from './AcceleratorReportTargetsCellRenderer';
+import AcceleratorReportTargetsCellRenderer from './AcceleratorReportTargetsCellRenderer';
 import EditAcceleratorReportTargetsModal from './EditAcceleratorReportTargetsModal';
 
 const columns = (activeLocale: string | null): TableColumnType[] =>
@@ -336,7 +336,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         columns={columns}
         defaultSortOrder={defaultSearchOrder}
         id='reports-targets-table'
-        Renderer={AcceleratorReportsTargetsCellRenderer}
+        Renderer={AcceleratorReportTargetsCellRenderer}
         rows={metricsToUse || []}
         title={strings.TARGETS}
         fuzzySearchColumns={fuzzySearchColumns}
