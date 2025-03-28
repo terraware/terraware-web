@@ -2,10 +2,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 
+import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
 import { selectReviewAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
 import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import ReportStatusBadge from 'src/scenes/Reports/ReportStatusBadge';
 import strings from 'src/strings';
 import { AcceleratorReport, AcceleratorReportStatus } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -51,7 +51,7 @@ const Metadata = (props: MetadataProps): JSX.Element => {
       <Box border={`1px solid ${theme.palette.TwClrBaseGray100}`} borderRadius='8px' marginBottom='16px' padding='16px'>
         {report.status !== 'Needs Update' && (
           <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
-            <ReportStatusBadge status={report.status} />
+            <AcceleratorReportStatusBadge status={report.status} />
           </div>
         )}
         <InternalComment entity={report} update={onUpdateInternalComment} />

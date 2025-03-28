@@ -12,13 +12,13 @@ import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { AcceleratorReportStatus } from 'src/types/AcceleratorReport';
 
-import ReportStatusBadge from './ReportStatusBadge';
+import AcceleratorReportStatusBadge from './AcceleratorReportStatusBadge';
 
-type ReportCellRenderer = {
+type AcceleratorReportCellRenderer = {
   projectId: string;
 };
 
-export default function ReportCellRenderer({ projectId }: ReportCellRenderer) {
+export default function AcceleratorReportCellRenderer({ projectId }: AcceleratorReportCellRenderer) {
   // eslint-disable-next-line react/display-name
   return (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, index, value } = props;
@@ -93,7 +93,7 @@ export default function ReportCellRenderer({ projectId }: ReportCellRenderer) {
           column={column}
           index={index}
           row={row}
-          value={activeLocale ? <ReportStatusBadge status={value as AcceleratorReportStatus} /> : ''}
+          value={activeLocale ? <AcceleratorReportStatusBadge status={value as AcceleratorReportStatus} /> : ''}
         />
       );
     }

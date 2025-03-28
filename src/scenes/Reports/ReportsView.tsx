@@ -4,6 +4,7 @@ import { Box, Grid, Typography } from '@mui/material';
 import { Separator } from '@terraware/web-components';
 import Tabs from '@terraware/web-components/components/Tabs';
 
+import AcceleratorReportsTable from 'src/components/AcceleratorReports/AcceleratorReportsTable';
 import ReportsTargets from 'src/components/AcceleratorReports/ReportsTargets';
 import Page from 'src/components/Page';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
@@ -12,8 +13,6 @@ import { useParticipantData } from 'src/providers/Participant/ParticipantContext
 import strings from 'src/strings';
 import theme from 'src/theme';
 import useStickyTabs from 'src/utils/useStickyTabs';
-
-import ReportsList from './ReportsList';
 
 const ReportsView = () => {
   const { activeLocale } = useLocalization();
@@ -46,7 +45,7 @@ const ReportsView = () => {
       {
         id: 'reports',
         label: strings.REPORTS,
-        children: <ReportsList />,
+        children: <AcceleratorReportsTable />,
       },
       {
         id: 'targets',

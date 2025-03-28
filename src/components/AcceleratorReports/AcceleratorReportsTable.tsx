@@ -16,7 +16,7 @@ import strings from 'src/strings';
 import { AcceleratorReport, AcceleratorReportStatuses } from 'src/types/AcceleratorReport';
 import { SearchSortOrder } from 'src/types/Search';
 
-import ReportCellRenderer from './ReportCellRenderer';
+import AcceleratorReportCellRenderer from './AcceleratorReportCellRenderer';
 
 type AcceleratorReportRow = AcceleratorReport & {
   reportName?: string;
@@ -28,7 +28,7 @@ const defaultSearchOrder: SearchSortOrder = {
   direction: 'Descending',
 };
 
-export default function ReportsList(): JSX.Element {
+export default function AcceleratorReportsTable(): JSX.Element {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const { currentParticipantProject } = useParticipantData();
@@ -181,7 +181,7 @@ export default function ReportsList(): JSX.Element {
       fuzzySearchColumns={fuzzySearchColumns}
       id='accelerator-reports-table'
       isClickable={() => false}
-      Renderer={ReportCellRenderer({ projectId })}
+      Renderer={AcceleratorReportCellRenderer({ projectId })}
       rows={acceleratorReports}
       stickyFilters
       title={strings.REPORTS}
