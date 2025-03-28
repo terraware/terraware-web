@@ -14,7 +14,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 type DetailsPageProps = {
   plantingSiteId?: number | string;
   observationId?: number | string;
-  plantingZoneId?: number | string;
+  plantingZoneName?: string;
   title: string;
   children: React.ReactNode;
   rightComponent?: React.ReactNode;
@@ -23,7 +23,7 @@ type DetailsPageProps = {
 export default function DetailsPage({
   plantingSiteId,
   observationId,
-  plantingZoneId,
+  plantingZoneName,
   title,
   children,
   rightComponent,
@@ -37,7 +37,7 @@ export default function DetailsPage({
       {
         plantingSiteId: Number(plantingSiteId),
         observationId: Number(observationId),
-        plantingZoneId: Number(plantingZoneId),
+        plantingZoneName: plantingZoneName,
       },
       defaultTimeZone.get().id
     )
@@ -82,17 +82,17 @@ export default function DetailsPage({
           });
         }
 
-        if (plantingZoneId) {
+        if (plantingZoneName) {
           data.push({
-            name: plantingZone?.plantingZoneName ?? '',
-            to: `/zone/${plantingZoneId}`,
+            name: plantingZoneName,
+            to: 'zone' + encodeURIComponent(plantingZoneName),
           });
         }
       }
     }
 
     return data;
-  }, [activeLocale, plantingSiteId, observationId, plantingZoneId, plantingZone, details]);
+  }, [activeLocale, plantingSiteId, observationId, plantingZoneName, plantingZone, details]);
 
   return (
     <Page crumbs={crumbs} title={title} rightComponent={rightComponent}>
