@@ -35,7 +35,7 @@ export default function AcceleratorReportCellRenderer({ projectId }: Accelerator
       const to = reportUrl.replace(':reportId', `${row.id}`).replace(':projectId', projectId);
 
       const year = row.startDate.split('-')[0];
-      const reportName = row.frequency === 'Annual' ? `${year}` : `${year}-Q${row.quarter}`;
+      const reportName = row.frequency === 'Annual' ? `${year}` : `${year}-${row.quarter}`;
 
       return (
         <Link to={to}>
