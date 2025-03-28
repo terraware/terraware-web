@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { Box } from '@mui/material';
 import { Select, TableColumnType } from '@terraware/web-components';
+import { DateTime } from 'luxon';
 
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import { FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
@@ -70,17 +71,29 @@ export default function AcceleratorReportsTable(): JSX.Element {
 
   const [yearFilter, setYearFilter] = useState<string>();
   const [acceleratorReports, setAcceleratorReports] = useState<AcceleratorReportRow[]>([]);
+  const [allAcceleratorReports, setAllAcceleratorReports] = useState<AcceleratorReportRow[]>([]);
   const [listAcceleratorReportsRequestId, setListAcceleratorReportsRequestId] = useState<string>('');
+  const [listAllAcceleratorReportsRequestId, setListAllAcceleratorReportsRequestId] = useState<string>('');
 
-  const acceleratorReportsListRequest = useAppSelector(selectListAcceleratorReports(listAcceleratorReportsRequestId));
+  const listAcceleratorReportsRequest = useAppSelector(selectListAcceleratorReports(listAcceleratorReportsRequestId));
+  const listAllAcceleratorReportsRequest = useAppSelector(
+    selectListAcceleratorReports(listAllAcceleratorReportsRequestId)
+  );
 
   const pathParams = useParams<{ projectId: string }>();
   const projectId = isAcceleratorRoute ? String(pathParams.projectId) : currentParticipantProject?.id?.toString();
 
   useEffect(() => {
-    if (acceleratorReportsListRequest?.status === 'success') {
-      setAcceleratorReports(() => {
-        const reports = acceleratorReportsListRequest?.data?.map((report) => {
+    if (projectId) {
+      const request = dispatch(requestListAcceleratorReports({ projectId, includeFuture: true, includeMetrics: true }));
+      setListAllAcceleratorReportsRequestId(request.requestId);
+    }
+  }, [projectId]);
+
+  useEffect(() => {
+    if (listAllAcceleratorReportsRequest?.status === 'success') {
+      setAllAcceleratorReports(() => {
+        const reports = listAllAcceleratorReportsRequest?.data?.map((report) => {
           const year = report.startDate.split('-')[0];
           const quarterNumber = report.startDate ? Math.ceil((new Date(report.startDate).getMonth() + 1) / 3) : 0;
           const reportName = report.frequency === 'Annual' ? `${year}` : `${year}-Q${quarterNumber}`;
@@ -94,7 +107,26 @@ export default function AcceleratorReportsTable(): JSX.Element {
         return reports || [];
       });
     }
-  }, [acceleratorReportsListRequest]);
+  }, [listAllAcceleratorReportsRequest]);
+
+  useEffect(() => {
+    if (listAcceleratorReportsRequest?.status === 'success') {
+      setAcceleratorReports(() => {
+        const reports = listAcceleratorReportsRequest?.data?.map((report) => {
+          const year = report.startDate.split('-')[0];
+          const quarterNumber = report.startDate ? Math.ceil((new Date(report.startDate).getMonth() + 1) / 3) : 0;
+          const reportName = report.frequency === 'Annual' ? `${year}` : `${year}-Q${quarterNumber}`;
+
+          return {
+            ...report,
+            reportName,
+            year,
+          };
+        });
+        return reports || [];
+      });
+    }
+  }, [listAcceleratorReportsRequest]);
 
   useEffect(() => {
     reload();
@@ -116,11 +148,21 @@ export default function AcceleratorReportsTable(): JSX.Element {
 
   const fuzzySearchColumns = useMemo(() => ['reportName'], []);
 
-  const availableYears = useMemo(() => {
-    const years = acceleratorReports.map((report) => report.startDate?.split('-')?.[0]);
-    const uniqueYears = Array.from(new Set(years)).sort((a, b) => (b || '').localeCompare(a || ''));
-    return uniqueYears;
-  }, [acceleratorReports]);
+  const yearFilterOptions = useMemo(() => {
+    const years: Set<number> = new Set();
+
+    const currentYear = new Date().getFullYear();
+    years.add(currentYear);
+
+    allAcceleratorReports?.forEach((report) => {
+      const reportYear = DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;
+      years.add(reportYear);
+    });
+
+    return Array.from(years)
+      .sort((a, b) => b - a)
+      .map((year) => year.toString());
+  }, [allAcceleratorReports]);
 
   const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
     const rejectedStatus = activeLocale ? (isAcceleratorRoute ? strings.UPDATE_REQUESTED : strings.UPDATE_NEEDED) : '';
@@ -147,7 +189,7 @@ export default function AcceleratorReportsTable(): JSX.Element {
               id='yearFilter'
               label=''
               onChange={(year: string) => setYearFilter(year)}
-              options={availableYears}
+              options={yearFilterOptions}
               placeholder={strings.YEAR}
               selectedValue={yearFilter}
               sx={{ textAlign: 'left' }}
@@ -155,14 +197,14 @@ export default function AcceleratorReportsTable(): JSX.Element {
           </Box>
         </>
       ) : null,
-    [activeLocale, availableYears, yearFilter]
+    [activeLocale, yearFilterOptions, yearFilter]
   );
 
   useEffect(() => {
     if (!yearFilter) {
-      setYearFilter(availableYears[0]);
+      setYearFilter(yearFilterOptions[0]);
     }
-  }, [availableYears, yearFilter]);
+  }, [yearFilterOptions, yearFilter]);
 
   if (!projectId) {
     return <></>;
@@ -170,7 +212,7 @@ export default function AcceleratorReportsTable(): JSX.Element {
 
   return (
     <ClientSideFilterTable
-      busy={acceleratorReportsListRequest?.status === 'pending'}
+      busy={listAcceleratorReportsRequest?.status === 'pending'}
       columns={columns}
       defaultSortOrder={defaultSearchOrder}
       extraComponent={extraFilter}
