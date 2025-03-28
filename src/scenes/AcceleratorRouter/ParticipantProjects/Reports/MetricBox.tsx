@@ -132,7 +132,7 @@ const MetricBox = ({
       })
     );
     setRequestId(request.requestId);
-  }, []);
+  }, [dispatch, projectId, reportId, record]);
 
   const onChangeProgress = (newValue: string) => {
     if (isStandardOrProjectMetric(record)) {

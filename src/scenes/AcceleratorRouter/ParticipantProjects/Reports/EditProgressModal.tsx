@@ -54,7 +54,7 @@ export default function EditProgressModal(props: EditProgressModalProps): JSX.El
         <Grid item xs={12}>
           <Box display={'flex'} alignItems={'center'}>
             <TextField
-              type='text'
+              type='number'
               label={strings.PROGRESS}
               value={newProgress}
               id={'progress'}
