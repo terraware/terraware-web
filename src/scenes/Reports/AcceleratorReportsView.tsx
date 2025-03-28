@@ -14,7 +14,7 @@ import strings from 'src/strings';
 import theme from 'src/theme';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
-const ReportsView = () => {
+const AcceleratorReportsView = () => {
   const { activeLocale } = useLocalization();
   const {
     currentParticipantProject,
@@ -104,4 +104,4 @@ const ReportsView = () => {
   );
 };
 
-export default ReportsView;
+export default AcceleratorReportsView;
