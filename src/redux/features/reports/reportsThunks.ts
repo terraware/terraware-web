@@ -9,6 +9,7 @@ import {
   CreateProjectMetricRequest,
   ReviewAcceleratorReportMetricRequest,
   ReviewAcceleratorReportMetricsRequest,
+  ReviewAcceleratorReportRequest,
   ReviewManyAcceleratorReportMetricsRequest,
   UpdateAcceleratorReportConfigRequest,
   UpdateProjectMetricRequest,
@@ -175,6 +176,21 @@ export const requestReviewAcceleratorReportMetric = createAsyncThunk(
     const { projectId, metric, reportId } = request;
 
     const response = await AcceleratorReportService.reviewAcceleratorReportMetrics(metric, projectId, reportId);
+
+    if (response && response.requestSucceeded) {
+      return response.data;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestReviewAcceleratorReport = createAsyncThunk(
+  'reviewAcceleratorReport',
+  async (request: ReviewAcceleratorReportRequest, { rejectWithValue }) => {
+    const { projectId, review, reportId } = request;
+
+    const response = await AcceleratorReportService.reviewAcceleratorReport(review, projectId, reportId);
 
     if (response && response.requestSucceeded) {
       return response.data;

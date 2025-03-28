@@ -4,6 +4,7 @@ import {
   CreateAcceleratorReportConfigRequest,
   CreateProjectMetricRequest,
   ExistingAcceleratorReportConfig,
+  ReportReviewPayload,
   ReviewAcceleratorReportMetricsRequestPayload,
   UpdateAcceleratorReportConfigRequest,
   UpdateProjectMetricRequest,
@@ -45,6 +46,7 @@ const SYSTEM_METRICS_ENDPOINT = '/api/v1/accelerator/reports/systemMetrics';
 const PROJECT_METRIC_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/metrics/{metricId}';
 const REVIEW_ACCELERATOR_REPORT_METRICS_ENDPOINT =
   '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/metrics/review';
+const REVIEW_ACCELERATOR_REPORT_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/review';
 
 export type ListProjectMetricsResponsePayload =
   paths[typeof PROJECT_METRICS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -64,6 +66,9 @@ type UpdateProjectMetricResponse =
   paths[typeof PROJECT_METRIC_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 type ReviewAcceleratorReportMetricsResponse =
   paths[typeof REVIEW_ACCELERATOR_REPORT_METRICS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+
+type ReviewAcceleratorReportResponse =
+  paths[typeof REVIEW_ACCELERATOR_REPORT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 export type ListAcceleratorReportsRequestParams = paths[typeof PROJECT_REPORTS_ENDPOINT]['get']['parameters']['query'];
 
@@ -193,6 +198,21 @@ const reviewAcceleratorReportMetrics = async (
   });
 };
 
+const reviewAcceleratorReport = async (
+  review: ReportReviewPayload,
+  projectId: number,
+  reportId: number
+): Promise<Response2<ReviewAcceleratorReportResponse>> => {
+  return HttpService.root(
+    REVIEW_ACCELERATOR_REPORT_ENDPOINT.replace('{projectId}', projectId.toString()).replace(
+      '{reportId}',
+      reportId.toString()
+    )
+  ).post2<ReviewAcceleratorReportResponse>({
+    entity: { review },
+  });
+};
+
 /**
  * Exported functions
  */
@@ -207,6 +227,7 @@ const ReportService = {
   listAcceleratorReports,
   updateProjectMetric,
   reviewAcceleratorReportMetrics,
+  reviewAcceleratorReport,
 };
 
 export default ReportService;
