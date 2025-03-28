@@ -24,7 +24,7 @@ export const useAcceleratorProjects = () => {
       setAllProjects(result?.data || []);
       setBootstrapped(true);
     }
-  }, [dispatch, allProjects, result]);
+  }, [dispatch, result]);
 
   return { allProjects, bootstrapped };
 };
