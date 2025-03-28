@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { Select, TableColumnType } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
@@ -217,10 +217,6 @@ export default function AcceleratorReportsTable(): JSX.Element {
 
   if (!projectId) {
     return <></>;
-  }
-
-  if (listAllAcceleratorReportsRequest?.status === 'success' && !allAcceleratorReports?.length) {
-    return <Typography>{strings.NO_REPORTS_TO_SHOW}</Typography>;
   }
 
   return (
