@@ -34,7 +34,7 @@ const InviteView = () => {
     }
   }, [fundingEntityId]);
 
-  const onSendClick = async () => {
+  const onSendClick = useCallback(async () => {
     if (!fundingEntityId) {
       snackbar.toastError();
       return;
@@ -62,7 +62,7 @@ const InviteView = () => {
       }
     }
 
-    successMessage = response.requestSucceeded ? strings.PERSON_ADDED : null;
+    successMessage = response.requestSucceeded ? strings.FUNDER_ADDED : null;
     if (successMessage) {
       snackbar.toastSuccess(successMessage);
       reloadFundingEntity();
@@ -70,7 +70,7 @@ const InviteView = () => {
       snackbar.toastError();
     }
     goToFundingEntity(fundingEntityId);
-  };
+  }, [snackbar, record.email, reloadFundingEntity, fundingEntityId]);
 
   return (
     <Page
