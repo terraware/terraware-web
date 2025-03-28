@@ -13,7 +13,7 @@ import { selectListAcceleratorReports } from 'src/redux/features/reports/reports
 import { requestListAcceleratorReports } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { AcceleratorReport } from 'src/types/AcceleratorReport';
+import { AcceleratorReport, MetricType } from 'src/types/AcceleratorReport';
 import { SearchSortOrder } from 'src/types/Search';
 
 import EditTargetsModal from './EditTargetsModal';
@@ -83,7 +83,7 @@ export type RowMetric = {
   reference: string;
   component: string;
   id: number;
-  metricType: 'project' | 'standard' | 'system';
+  metricType: MetricType;
   annualTarget?: number;
   q1Target?: number;
   q2Target?: number;

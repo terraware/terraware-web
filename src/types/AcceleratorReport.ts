@@ -22,6 +22,12 @@ export type StandardMetric = components['schemas']['ExistingStandardMetricPayloa
 
 export type SystemMetric = components['schemas']['SystemMetricPayload'];
 
+export type ReportProjectMetric = components['schemas']['ReportProjectMetricPayload'];
+
+export type ReportStandardMetric = components['schemas']['ReportStandardMetricPayload'];
+
+export type ReportSystemMetric = components['schemas']['ReportSystemMetricPayload'];
+
 export type CreateProjectMetricRequestPayload = components['schemas']['CreateProjectMetricRequestPayload'];
 
 export type UpdateProjectMetricRequestPayload = components['schemas']['UpdateProjectMetricRequestPayload'];
@@ -42,6 +48,12 @@ export type ReviewManyAcceleratorReportMetricsRequest = {
   projectId: number;
 };
 
+export type ReviewAcceleratorReportMetricRequest = {
+  metric: ReviewAcceleratorReportMetricsRequestPayload;
+  projectId: number;
+  reportId: number;
+};
+
 export type NewMetric = components['schemas']['NewMetricPayload'];
 
 export type AcceleratorReport = components['schemas']['AcceleratorReportPayload'];
@@ -55,3 +67,5 @@ export const AcceleratorReportStatuses: AcceleratorReportStatus[] = [
   'Needs Update',
   'Not Needed',
 ];
+
+export type MetricType = 'project' | 'standard' | 'system';

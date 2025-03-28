@@ -43,6 +43,19 @@ export default function BiomassMeasurementRenderer(props: RendererProps<TableRow
     );
   }
 
+  if (column.key === 'monitoringPlotDescription') {
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        value={row.biomassMeasurements?.description ?? ''}
+        row={row}
+        sx={textStyles}
+        title={value as string}
+      />
+    );
+  }
+
   if (column.key === 'totalPlants') {
     return (
       <CellRenderer
