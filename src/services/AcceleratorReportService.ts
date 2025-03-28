@@ -1,3 +1,4 @@
+import addQueryParams from 'src/api/helpers/addQueryParams';
 import { paths } from 'src/api/types/generated-schema';
 import {
   AcceleratorReport,
@@ -5,6 +6,7 @@ import {
   CreateProjectMetricRequest,
   ExistingAcceleratorReportConfig,
   ReviewAcceleratorReportMetricsRequestPayload,
+  SystemMetricName,
   UpdateAcceleratorReportConfigRequest,
   UpdateProjectMetricRequest,
 } from 'src/types/AcceleratorReport';
@@ -45,6 +47,8 @@ const SYSTEM_METRICS_ENDPOINT = '/api/v1/accelerator/reports/systemMetrics';
 const PROJECT_METRIC_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/metrics/{metricId}';
 const REVIEW_ACCELERATOR_REPORT_METRICS_ENDPOINT =
   '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/metrics/review';
+const REFRESH_ACCELERATOR_REPORT_METRICS_ENDPOINT =
+  '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/metrics/refresh';
 
 export type ListProjectMetricsResponsePayload =
   paths[typeof PROJECT_METRICS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -64,6 +68,9 @@ type UpdateProjectMetricResponse =
   paths[typeof PROJECT_METRIC_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 type ReviewAcceleratorReportMetricsResponse =
   paths[typeof REVIEW_ACCELERATOR_REPORT_METRICS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+type RefreshAcceleratorReportSystemMetricsResponse =
+  paths[typeof REFRESH_ACCELERATOR_REPORT_METRICS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+type RefreshQuery = paths[typeof REFRESH_ACCELERATOR_REPORT_METRICS_ENDPOINT]['post']['parameters']['query'];
 
 export type ListAcceleratorReportsRequestParams = paths[typeof PROJECT_REPORTS_ENDPOINT]['get']['parameters']['query'];
 
@@ -193,6 +200,18 @@ const reviewAcceleratorReportMetrics = async (
   });
 };
 
+const refreshAcceleratorReportSystemMetrics = async (
+  projectId: number,
+  reportId: number,
+  metricName: SystemMetricName
+): Promise<Response2<RefreshAcceleratorReportSystemMetricsResponse>> => {
+  const queryParams: RefreshQuery = { metrics: [metricName] };
+  const endpoint = addQueryParams(REFRESH_ACCELERATOR_REPORT_METRICS_ENDPOINT, queryParams);
+  return HttpService.root(
+    endpoint.replace('{projectId}', projectId.toString()).replace('{reportId}', reportId.toString())
+  ).post2<RefreshAcceleratorReportSystemMetricsResponse>({});
+};
+
 /**
  * Exported functions
  */
@@ -207,6 +226,7 @@ const ReportService = {
   listAcceleratorReports,
   updateProjectMetric,
   reviewAcceleratorReportMetrics,
+  refreshAcceleratorReportSystemMetrics,
 };
 
 export default ReportService;

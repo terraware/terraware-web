@@ -1,11 +1,18 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { IconTooltip } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import Button from 'src/components/common/button/Button';
-import { selectReviewAcceleratorReportMetric } from 'src/redux/features/reports/reportsSelectors';
-import { requestReviewAcceleratorReportMetric } from 'src/redux/features/reports/reportsThunks';
+import {
+  selectRefreshAcceleratorReportSystemMetrics,
+  selectReviewAcceleratorReportMetric,
+} from 'src/redux/features/reports/reportsSelectors';
+import {
+  requestRefreshAcceleratorReportSystemMetrics,
+  requestReviewAcceleratorReportMetric,
+} from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import {
@@ -19,6 +26,7 @@ import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import EditProgressModal from './EditProgressModal';
+import ResetMetricModal from './ResetMetricModal';
 
 const isReportSystemMetric = (metric: any): metric is ReportSystemMetric => {
   return metric && typeof metric.metric === 'string';
@@ -66,9 +74,12 @@ const MetricBox = ({
   const theme = useTheme();
   const [record, , onChange] = useForm<ReportProjectMetric | ReportSystemMetric | ReportStandardMetric>(metric);
   const [progressModalOpened, setProgressModalOpened] = useState<boolean>(false);
+  const [resetMetricModalOpened, setResetMetricModalOpened] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
+  const [refreshRequestId, setRefreshRequestId] = useState<string>('');
   const updateReportMetricResponse = useAppSelector(selectReviewAcceleratorReportMetric(requestId));
+  const refreshReportMetricResponse = useAppSelector(selectRefreshAcceleratorReportSystemMetrics(refreshRequestId));
   const snackbar = useSnackbar();
 
   useEffect(() => {
@@ -79,6 +90,15 @@ const MetricBox = ({
       snackbar.toastSuccess(strings.CHANGES_SAVED);
     }
   }, [updateReportMetricResponse, snackbar]);
+
+  useEffect(() => {
+    if (refreshReportMetricResponse?.status === 'error') {
+      snackbar.toastError();
+    } else if (refreshReportMetricResponse?.status === 'success') {
+      setEditingId(undefined);
+      snackbar.toastSuccess(strings.CHANGES_SAVED);
+    }
+  }, [refreshReportMetricResponse, snackbar]);
 
   const editing = useMemo(() => editingId === getMetricId(metric, type), [editingId, metric, getMetricId]);
 
@@ -158,6 +178,19 @@ const MetricBox = ({
     }
   };
 
+  const onResetMetricHandler = () => {
+    if (isReportSystemMetric(metric)) {
+      const request = dispatch(
+        requestRefreshAcceleratorReportSystemMetrics({
+          reportId,
+          projectId: Number(projectId),
+          metricName: metric.metric,
+        })
+      );
+      setRefreshRequestId(request.requestId);
+    }
+  };
+
   return (
     <>
       {progressModalOpened && (
@@ -168,6 +201,9 @@ const MetricBox = ({
           value={getProgressValue()}
           onClose={() => setProgressModalOpened(false)}
         />
+      )}
+      {resetMetricModalOpened && (
+        <ResetMetricModal onClose={() => setResetMetricModalOpened(false)} onSubmit={onResetMetricHandler} />
       )}
       <Box data-metric-id={getMetricId(metric, type)} key={`metric-${index}`} sx={{ scrollMarginTop: '50vh' }}>
         <Box
@@ -252,10 +288,29 @@ const MetricBox = ({
 
           <Grid container marginBottom={3}>
             <Grid item xs={6}>
-              <Box display={'flex'} alignItems={'center'}>
+              <Typography fontSize={'14px'} color={theme.palette.TwClrTxtSecondary}>
+                {strings.PROGRESS} *
+              </Typography>
+              <Box display={'flex'} alignItems={'center'} paddingTop={1.5}>
                 <Typography>
                   {getProgressValue() || 0} / {record.target} ({strings.TARGET})
                 </Typography>
+                {isReportSystemMetric(metric) && !metric.overrideValue && (
+                  <IconTooltip iconName='iconModule' title={strings.TERRAWARE_METRIC_MESSAGE} />
+                )}
+                {!!editing && isReportSystemMetric(metric) && metric.overrideValue && (
+                  <Button
+                    icon='iconUndo'
+                    onClick={() => setResetMetricModalOpened(true)}
+                    priority='ghost'
+                    size='small'
+                    type='passive'
+                    style={{
+                      marginLeft: '-1px',
+                      marginTop: '-1px',
+                    }}
+                  />
+                )}
                 {!!editing && (
                   <Button
                     icon='iconEdit'
@@ -270,6 +325,11 @@ const MetricBox = ({
                   />
                 )}
               </Box>
+              {isReportSystemMetric(metric) && metric.overrideValue && (
+                <Typography fontSize={'14px'} color={theme.palette.TwClrTxtSecondary} paddingTop={1.5}>
+                  {strings.formatString(strings.OVERWRITTEN_ORIGINAL_VALUE, metric.systemValue)}
+                </Typography>
+              )}
             </Grid>
             <Grid item xs={6}>
               <Box>

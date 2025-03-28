@@ -29,3 +29,6 @@ export const selectReviewManyAcceleratorReportMetrics = (requestId: string) => (
 
 export const selectReviewAcceleratorReportMetric = (requestId: string) => (state: RootState) =>
   state.reviewAcceleratorReportMetric[requestId];
+
+export const selectRefreshAcceleratorReportSystemMetrics = (requestId: string) => (state: RootState) =>
+  state.refreshAcceleratorReportSystemMetrics[requestId];
