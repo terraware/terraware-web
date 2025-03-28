@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { IconTooltip } from '@terraware/web-components';
+import { Icon, Tooltip } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import Button from 'src/components/common/button/Button';
@@ -296,7 +296,11 @@ const MetricBox = ({
                   {getProgressValue() || 0} / {record.target} ({strings.TARGET})
                 </Typography>
                 {isReportSystemMetric(metric) && !metric.overrideValue && (
-                  <IconTooltip iconName='iconModule' title={strings.TERRAWARE_METRIC_MESSAGE} />
+                  <Box paddingTop={1} paddingLeft={1.5}>
+                    <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
+                      <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
+                    </Tooltip>
+                  </Box>
                 )}
                 {!!editing && isReportSystemMetric(metric) && metric.overrideValue && (
                   <Button
