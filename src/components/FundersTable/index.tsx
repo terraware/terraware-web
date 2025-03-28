@@ -113,7 +113,7 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
       isClickable={() => false}
       selectedRows={selectedRows}
       setSelectedRows={setSelectedRows}
-      showCheckbox
+      showCheckbox={isAllowed('MANAGE_FUNDING_ENTITIES')}
       showTopBar
       Renderer={FunderCellRenderer}
       rows={funders}
