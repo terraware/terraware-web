@@ -137,7 +137,10 @@ export default function UserNotification(): Notification | null {
         ),
         localUrl: user?.userType === 'Funder' ? APP_PATHS.SETTINGS : APP_PATHS.MY_ACCOUNT,
         createdTime: getTodaysDateFormatted(),
-        isRead: unitNotificationRead || timeZoneUserNotificationRead,
+        isRead:
+          user?.userType === 'Funder'
+            ? timeZoneUserNotificationRead
+            : unitNotificationRead || timeZoneUserNotificationRead,
         hideDate: true,
         markAsRead: async () => {
           await PreferencesService.updateUserPreferences({
