@@ -7,17 +7,17 @@ import AddLink from 'src/components/common/AddLink';
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
 import strings from 'src/strings';
-import { Project } from 'src/types/Project';
+import { ParticipantProject } from 'src/types/ParticipantProject';
 
 type ProjectsEditProps = {
-  projects: Project[];
-  allProjects: Project[];
-  setProjects: (projects: Project[]) => void;
+  projects: ParticipantProject[];
+  allProjects: ParticipantProject[];
+  setProjects: (projects: ParticipantProject[]) => void;
 };
 
 const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element => {
   const { projects, allProjects, setProjects } = props;
-  const [rows, setRows] = useState<Partial<Project> & { id: number }[]>([]);
+  const [rows, setRows] = useState<Partial<ParticipantProject> & { projectId: number }[]>([]);
 
   useEffect(() => {
     if (!rows.length) {
@@ -26,14 +26,14 @@ const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element => {
   }, [projects]);
 
   const onAddProject = () => {
-    setRows(rows.concat([{ id: -1 }]));
+    setRows(rows.concat([{ projectId: -1 }]));
   };
 
   const onDeleteProject = useCallback(
     (deletedIndex: number) => {
       const filteredRows = rows.filter((_row, _index) => _index !== deletedIndex);
       setRows(filteredRows);
-      setProjects(filteredRows as Project[]);
+      setProjects(filteredRows as ParticipantProject[]);
     },
     [rows, setRows]
   );
@@ -41,10 +41,10 @@ const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element => {
   const selectProject = useCallback(
     (updatedIndex: number, newProjectId: number) => {
       const updatedRows = rows.map((project, index) =>
-        index === updatedIndex ? { ...project, id: newProjectId } : project
+        index === updatedIndex ? { ...project, projectId: newProjectId } : project
       );
       setRows(updatedRows);
-      setProjects(updatedRows as Project[]);
+      setProjects(updatedRows as ParticipantProject[]);
     },
     [rows, setRows]
   );
@@ -56,10 +56,17 @@ const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element => {
           <Grid item xs={11} rowSpacing={2}>
             <ProjectsDropdown
               placeholder={strings.SELECT}
-              availableProjects={allProjects.filter(
-                (p) => p.id === project.id || !rows.map((r) => r.id).includes(p.id)
-              )}
-              record={{ projectId: project.id }}
+              availableProjects={allProjects
+                .filter((p) => p.projectId === project.projectId || !rows.map((r) => r.projectId).includes(p.projectId))
+                .map((p) => {
+                  return {
+                    id: p.projectId,
+                    dealName: p.dealName,
+                    name: '',
+                  };
+                })}
+              useDealName={true}
+              record={{ projectId: project.projectId }}
               setRecord={(setFn) => {
                 const project = setFn({ projectId: -1 });
                 selectProject(index, project.projectId);

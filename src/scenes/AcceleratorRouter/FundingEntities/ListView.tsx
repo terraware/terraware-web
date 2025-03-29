@@ -68,7 +68,11 @@ const FundingEntitiesListView = () => {
     () =>
       (fundingEntities || []).reduce(
         (record, entity) => {
-          entity?.projects?.forEach((project) => (record[project.id] = project.name));
+          entity?.projects?.forEach((project) => {
+            if (project.projectId !== undefined) {
+              record[project.projectId] = project.dealName || '';
+            }
+          });
           return record;
         },
         {} as Record<string, string>
@@ -79,8 +83,8 @@ const FundingEntitiesListView = () => {
   const featuredFilters: FilterConfig[] = useMemo(
     () => [
       {
-        field: 'projects.id',
-        id: 'projects.id',
+        field: 'projects.projectId',
+        id: 'projects.projectId',
         label: strings.PROJECT,
         options: Object.entries(allProjects)
           .sort((a, b) => a[1].toLowerCase().localeCompare(b[1].toLowerCase(), activeLocale || undefined))

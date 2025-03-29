@@ -5791,7 +5791,7 @@ export interface components {
             /** Format: int64 */
             id: number;
             name: string;
-            projects: components["schemas"]["ProjectPayload"][];
+            projects: components["schemas"]["ProjectAcceleratorDetailsPayload"][];
         };
         Geolocation: {
             accuracy?: number;
