@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1743451348730" clover="3.2.0">
-  <project timestamp="1743451348731" name="All files">
-    <metrics statements="29263" coveredstatements="1234" conditionals="19799" coveredconditionals="354" methods="9034" coveredmethods="198" elements="58096" coveredelements="1786" complexity="0" loc="29263" ncloc="29263" packages="252" files="1205" classes="1205"/>
+<coverage generated="1743463753455" clover="3.2.0">
+  <project timestamp="1743463753455" name="All files">
+    <metrics statements="29264" coveredstatements="1234" conditionals="19801" coveredconditionals="354" methods="9034" coveredmethods="198" elements="58099" coveredelements="1786" complexity="0" loc="29264" ncloc="29264" packages="252" files="1205" classes="1205"/>
     <package name="src">
       <metrics statements="180" coveredstatements="8" conditionals="126" coveredconditionals="0" methods="40" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -3943,7 +3943,7 @@
       </file>
     </package>
     <package name="src.components.FundersTable">
-      <metrics statements="59" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="15" coveredmethods="0"/>
+      <metrics statements="60" coveredstatements="0" conditionals="38" coveredconditionals="0" methods="15" coveredmethods="0"/>
       <file name="FunderCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/FundersTable/FunderCellRenderer.tsx">
         <metrics statements="10" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="11" count="0" type="stmt"/>
@@ -3981,36 +3981,37 @@
         <line num="64" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/FundersTable/index.tsx">
-        <metrics statements="29" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="8" coveredmethods="0"/>
-        <line num="21" count="0" type="stmt"/>
+        <metrics statements="30" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="22" count="0" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="28" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="52" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="53" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
         <line num="62" count="0" type="stmt"/>
         <line num="64" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
         <line num="70" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="74" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="75" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
         <line num="76" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="77" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="78" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
-        <line num="84" count="0" type="stmt"/>
-        <line num="88" count="0" type="stmt"/>
+        <line num="78" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="79" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
         <line num="90" count="0" type="stmt"/>
-        <line num="102" count="0" type="stmt"/>
-        <line num="108" count="0" type="stmt"/>
+        <line num="92" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="107" count="0" type="stmt"/>
+        <line num="113" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.KnowledgeBaseLink">
@@ -32817,13 +32818,13 @@
         <line num="128" count="1" type="stmt"/>
         <line num="133" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="140" count="1" type="stmt"/>
-        <line num="179" count="1" type="stmt"/>
-        <line num="184" count="76" type="stmt"/>
-        <line num="185" count="76" type="cond" truecount="1" falsecount="1"/>
-        <line num="186" count="0" type="stmt"/>
-        <line num="190" count="76" type="cond" truecount="2" falsecount="0"/>
-        <line num="191" count="114" type="stmt"/>
-        <line num="194" count="20" type="stmt"/>
+        <line num="180" count="1" type="stmt"/>
+        <line num="185" count="76" type="stmt"/>
+        <line num="186" count="76" type="cond" truecount="1" falsecount="1"/>
+        <line num="187" count="0" type="stmt"/>
+        <line num="191" count="76" type="cond" truecount="2" falsecount="0"/>
+        <line num="192" count="114" type="stmt"/>
+        <line num="195" count="20" type="stmt"/>
       </file>
       <file name="batch.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/batch.ts">
         <metrics statements="3" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
