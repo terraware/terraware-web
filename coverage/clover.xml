@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1743444320386" clover="3.2.0">
-  <project timestamp="1743444320386" name="All files">
-    <metrics statements="29262" coveredstatements="1234" conditionals="19797" coveredconditionals="354" methods="9034" coveredmethods="198" elements="58093" coveredelements="1786" complexity="0" loc="29262" ncloc="29262" packages="252" files="1205" classes="1205"/>
+<coverage generated="1743451348730" clover="3.2.0">
+  <project timestamp="1743451348731" name="All files">
+    <metrics statements="29263" coveredstatements="1234" conditionals="19799" coveredconditionals="354" methods="9034" coveredmethods="198" elements="58096" coveredelements="1786" complexity="0" loc="29263" ncloc="29263" packages="252" files="1205" classes="1205"/>
     <package name="src">
       <metrics statements="180" coveredstatements="8" conditionals="126" coveredconditionals="0" methods="40" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -16934,7 +16934,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.ParticipantProjects.Reports">
-      <metrics statements="346" coveredstatements="0" conditionals="217" coveredconditionals="0" methods="115" coveredmethods="0"/>
+      <metrics statements="347" coveredstatements="0" conditionals="219" coveredconditionals="0" methods="115" coveredmethods="0"/>
       <file name="ApprovedReportMessage.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/Reports/ApprovedReportMessage.tsx">
         <metrics statements="6" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
@@ -17308,12 +17308,13 @@
         <line num="14" count="0" type="stmt"/>
       </file>
       <file name="SpecificMetricsRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/Reports/SpecificMetricsRenderer.tsx">
-        <metrics statements="5" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="8" count="0" type="stmt"/>
-        <line num="10" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="11" count="0" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
+        <metrics statements="6" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="12" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
       </file>
       <file name="SystemMetricsRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/Reports/SystemMetricsRenderer.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
