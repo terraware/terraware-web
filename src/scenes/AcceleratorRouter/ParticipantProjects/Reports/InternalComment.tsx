@@ -99,18 +99,17 @@ function InternalComment({ entity, update, disabled }: InternalCommentProps) {
               preserveNewlines
             />
           </Grid>
-          {entity.status !== 'Not Submitted' && (
-            <Grid item xs={12}>
-              <Dropdown
-                fullWidth={true}
-                label={strings.STATUS}
-                onChange={(value) => setStatus(value as AcceleratorReportStatus)}
-                options={dropdownOptions}
-                required
-                selectedValue={status}
-              />
-            </Grid>
-          )}
+          <Grid item xs={12}>
+            <Dropdown
+              fullWidth={true}
+              label={strings.STATUS}
+              onChange={(value) => setStatus(value as AcceleratorReportStatus)}
+              options={dropdownOptions}
+              required
+              disabled={entity.status === 'Not Submitted'}
+              selectedValue={status}
+            />
+          </Grid>
         </Grid>
       </DialogBox>
     </>
