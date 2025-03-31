@@ -37,7 +37,8 @@ const SingleView = () => {
   const rightComponent = useMemo(
     () =>
       activeLocale &&
-      canManage && (
+      canManage &&
+      fundingEntity && (
         <>
           <Button
             label={strings.EDIT_FUNDING_ENTITY}
@@ -52,7 +53,7 @@ const SingleView = () => {
           />
         </>
       ),
-    [activeLocale, canManage, goToEditFundingEntity]
+    [fundingEntity, activeLocale, canManage, goToEditFundingEntity]
   );
 
   const crumbs: Crumb[] = useMemo(
@@ -90,9 +91,9 @@ const SingleView = () => {
                     <span>
                       <Link
                         fontSize='16px'
-                        to={APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${project.id}`)}
+                        to={APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${project.projectId}`)}
                       >
-                        {project.name}
+                        {project.dealName}
                       </Link>
                     </span>
                   </Box>

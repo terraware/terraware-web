@@ -5,7 +5,7 @@ import { Textfield } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
-import { useProjects } from 'src/hooks/useProjects';
+import { useAcceleratorProjects } from 'src/hooks/useAcceleratorProjects';
 import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -25,12 +25,12 @@ const FundingEntityForm = (props: FundingEntityFormProps) => {
   const { isMobile } = useDeviceInfo();
 
   const [localRecord, setLocalRecord] = useState<Partial<FundingEntity>>({});
-  const { availableProjects: allProjects } = useProjects();
+  const { allProjects } = useAcceleratorProjects();
 
   const onSaveHandler = () => {
     onSave({
       ...(localRecord as FundingEntity),
-      projects: (localRecord.projects || []).filter((p) => p.id !== -1),
+      projects: (localRecord.projects || []).filter((p) => p.projectId !== -1),
     });
   };
 
@@ -49,7 +49,7 @@ const FundingEntityForm = (props: FundingEntityFormProps) => {
 
   return (
     <PageForm
-      busy={busy}
+      busy={busy || allProjects === null}
       cancelID='cancelEditFundingEntity'
       onCancel={onCancel}
       onSave={onSaveHandler}
