@@ -1,3 +1,4 @@
+4dc6bea4a3c SW-6603 Fix Settings notification for funders (#3751)
 c207501247c Update dependency @babel/traverse to v7.27.0 (#3771)
 7458e88133c Updated translations from Phrase (#3768)
 b9ba3018d3c Update dependency eslint-plugin-storybook to ^0.12.0 (#3772)

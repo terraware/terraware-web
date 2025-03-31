@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1743425867296" clover="3.2.0">
-  <project timestamp="1743425867296" name="All files">
-    <metrics statements="29245" coveredstatements="1234" conditionals="19770" coveredconditionals="354" methods="9030" coveredmethods="198" elements="58045" coveredelements="1786" complexity="0" loc="29245" ncloc="29245" packages="252" files="1204" classes="1204"/>
+<coverage generated="1743435551280" clover="3.2.0">
+  <project timestamp="1743435551280" name="All files">
+    <metrics statements="29245" coveredstatements="1234" conditionals="19780" coveredconditionals="354" methods="9030" coveredmethods="198" elements="58055" coveredelements="1786" complexity="0" loc="29245" ncloc="29245" packages="252" files="1204" classes="1204"/>
     <package name="src">
       <metrics statements="180" coveredstatements="8" conditionals="126" coveredconditionals="0" methods="40" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -3834,7 +3834,7 @@
       </file>
     </package>
     <package name="src.components.FeatureNotification">
-      <metrics statements="97" coveredstatements="0" conditionals="52" coveredconditionals="0" methods="23" coveredmethods="0"/>
+      <metrics statements="97" coveredstatements="0" conditionals="62" coveredconditionals="0" methods="23" coveredmethods="0"/>
       <file name="OrganizationNotification.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/FeatureNotification/OrganizationNotification.tsx">
         <metrics statements="39" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="17" count="0" type="stmt"/>
@@ -3878,7 +3878,7 @@
         <line num="108" count="0" type="stmt"/>
       </file>
       <file name="UserNotification.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/FeatureNotification/UserNotification.tsx">
-        <metrics statements="53" coveredstatements="0" conditionals="32" coveredconditionals="0" methods="12" coveredmethods="0"/>
+        <metrics statements="53" coveredstatements="0" conditionals="42" coveredconditionals="0" methods="12" coveredmethods="0"/>
         <line num="20" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
@@ -3927,11 +3927,11 @@
         <line num="97" count="0" type="stmt"/>
         <line num="98" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="99" count="0" type="stmt"/>
-        <line num="110" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="117" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="131" count="0" type="stmt"/>
-        <line num="137" count="0" type="stmt"/>
-        <line num="142" count="0" type="stmt"/>
+        <line num="111" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="120" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="146" count="0" type="stmt"/>
+        <line num="152" count="0" type="stmt"/>
+        <line num="157" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/FeatureNotification/index.tsx">
         <metrics statements="5" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
