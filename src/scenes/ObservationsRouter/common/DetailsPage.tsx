@@ -85,7 +85,7 @@ export default function DetailsPage({
         if (plantingZoneName) {
           data.push({
             name: plantingZoneName,
-            to: 'zone' + encodeURIComponent(plantingZoneName),
+            to: '/zone/' + encodeURIComponent(plantingZoneName),
           });
         }
       }
