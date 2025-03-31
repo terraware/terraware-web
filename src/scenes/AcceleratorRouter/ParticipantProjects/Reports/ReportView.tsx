@@ -230,7 +230,7 @@ const ReportView = () => {
                 editingId={editingId}
                 index={index}
                 projectId={projectId}
-                reload={() => true}
+                reload={reload}
                 setEditingId={setEditingId}
                 metric={systemMetric}
                 type={'system'}
@@ -243,7 +243,7 @@ const ReportView = () => {
                 editingId={editingId}
                 index={index}
                 projectId={projectId}
-                reload={() => true}
+                reload={reload}
                 setEditingId={setEditingId}
                 metric={projectMetric}
                 type={'project'}
@@ -256,7 +256,7 @@ const ReportView = () => {
                 editingId={editingId}
                 index={index}
                 projectId={projectId}
-                reload={() => true}
+                reload={reload}
                 setEditingId={setEditingId}
                 metric={standardMetric}
                 type={'standard'}
