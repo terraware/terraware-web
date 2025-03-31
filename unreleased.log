@@ -1,3 +1,6 @@
+c207501247c Update dependency @babel/traverse to v7.27.0 (#3771)
+7458e88133c Updated translations from Phrase (#3768)
+b9ba3018d3c Update dependency eslint-plugin-storybook to ^0.12.0 (#3772)
 51ac0c846ca Accelerator Reports follow-up (#3770)
 9065b281ff6 Refactor & Rename Accelerator Reports Components, Refactor Reports List/Table (#3763)
 735aa5117d0 Updated translations from Phrase (#3764)
