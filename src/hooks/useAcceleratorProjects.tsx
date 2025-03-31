@@ -19,8 +19,8 @@ export const useAcceleratorProjects = () => {
   }, [dispatch, allProjects]);
 
   useEffect(() => {
-    if (result?.status === 'success' && result?.data) {
-      setAllProjects(result?.data || []);
+    if (result && result.status === 'success' && result.data) {
+      setAllProjects(result.data.sort((a, b) => (a.dealName || '').localeCompare(b.dealName || '')));
     }
   }, [result]);
 
