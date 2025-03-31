@@ -20,7 +20,7 @@ export const useAcceleratorProjects = () => {
 
   useEffect(() => {
     if (result && result.status === 'success' && result.data) {
-      setAllProjects(result.data.sort((a, b) => (a.dealName || '').localeCompare(b.dealName || '')));
+      setAllProjects(result.data.toSorted((a, b) => (a.dealName || '').localeCompare(b.dealName || '')));
     }
   }, [result]);
 
