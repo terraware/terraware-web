@@ -25,7 +25,7 @@ const FundingEntityForm = (props: FundingEntityFormProps) => {
   const { isMobile } = useDeviceInfo();
 
   const [localRecord, setLocalRecord] = useState<Partial<FundingEntity>>({});
-  const { allProjects, bootstrapped: projectsBootstrapped } = useAcceleratorProjects();
+  const { allProjects } = useAcceleratorProjects();
 
   const onSaveHandler = () => {
     onSave({
@@ -49,7 +49,7 @@ const FundingEntityForm = (props: FundingEntityFormProps) => {
 
   return (
     <PageForm
-      busy={busy || !projectsBootstrapped}
+      busy={busy || allProjects === null}
       cancelID='cancelEditFundingEntity'
       onCancel={onCancel}
       onSave={onSaveHandler}

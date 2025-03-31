@@ -7,24 +7,22 @@ import { ParticipantProject } from 'src/types/ParticipantProject';
 
 export const useAcceleratorProjects = () => {
   const dispatch = useAppDispatch();
-  const [allProjects, setAllProjects] = useState<ParticipantProject[]>([]);
+  const [allProjects, setAllProjects] = useState<ParticipantProject[] | null>(null);
   const [requestId, setRequestId] = useState<string>('');
-  const [bootstrapped, setBootstrapped] = useState<boolean>(false);
   const result = useAppSelector(selectParticipantProjectsListRequest(requestId));
 
   useEffect(() => {
-    if (allProjects.length === 0) {
+    if (allProjects === null) {
       const request = dispatch(requestListParticipantProjects({}));
       setRequestId(request.requestId);
     }
-  }, []);
+  }, [dispatch, allProjects]);
 
   useEffect(() => {
     if (result?.status === 'success' && result?.data) {
       setAllProjects(result?.data || []);
-      setBootstrapped(true);
     }
-  }, [dispatch, result]);
+  }, [result]);
 
-  return { allProjects, bootstrapped };
+  return { allProjects };
 };
