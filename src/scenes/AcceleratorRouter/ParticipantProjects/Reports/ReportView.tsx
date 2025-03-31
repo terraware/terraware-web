@@ -136,7 +136,7 @@ const ReportView = () => {
     () => [
       {
         name: activeLocale ? strings.REPORTS : '',
-        to: APP_PATHS.ACCELERATOR_PROJECT_REPORTS,
+        to: APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId),
       },
     ],
     [activeLocale]
