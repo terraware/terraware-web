@@ -8,8 +8,11 @@ import Button from 'src/components/common/button/Button';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useUser } from 'src/providers';
-import { requestListFunders } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
-import { selectListFundersRequest } from 'src/redux/features/funder/fundingEntitiesSelectors';
+import { requestDeleteFunders, requestListFunders } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
+import {
+  selectDeleteFundersRequest,
+  selectListFundersRequest,
+} from 'src/redux/features/funder/fundingEntitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Funder } from 'src/types/FundingEntity';
@@ -57,20 +60,43 @@ const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
   const { isAllowed } = useUser();
 
   const [listFundersRequestId, setListFundersRequestId] = useState<string>('');
+  const [deleteFundersRequestId, setDeleteFundersRequestId] = useState<string>('');
   const [funders, setFunders] = useState<Funder[]>([]);
 
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
 
   const listFundersResponse = useAppSelector(selectListFundersRequest(listFundersRequestId));
+  const deleteFundersResponse = useAppSelector(selectDeleteFundersRequest(deleteFundersRequestId));
 
-  const onRemoveConfirm = useCallback(() => {
-    snackbar.toastInfo('Remove deletion functionality not yet implemented.');
-  }, [dispatch]);
-
-  useEffect(() => {
+  const reload = useCallback(() => {
     const request = dispatch(requestListFunders(fundingEntityId));
     setListFundersRequestId(request.requestId);
   }, [dispatch, fundingEntityId]);
+
+  const onRemoveConfirm = useCallback(
+    (selectedFunders: TableRowType[]) => {
+      const request = dispatch(
+        requestDeleteFunders({ fundingEntityId, userIds: selectedFunders.map((f) => f.userId) })
+      );
+      setDeleteFundersRequestId(request.requestId);
+    },
+    [dispatch]
+  );
+
+  useEffect(() => {
+    reload();
+  }, [dispatch, fundingEntityId]);
+
+  useEffect(() => {
+    if (deleteFundersResponse) {
+      if (deleteFundersResponse?.status === 'success') {
+        snackbar.toastError(strings.FUNDERS_DELETED);
+        reload();
+      } else if (deleteFundersResponse.status === 'error') {
+        snackbar.toastError(strings.GENERIC_ERROR);
+      }
+    }
+  }, [deleteFundersResponse, snackbar]);
 
   useEffect(() => {
     if (listFundersResponse) {

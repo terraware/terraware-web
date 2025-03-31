@@ -1665,7 +1665,8 @@ export interface paths {
         put?: never;
         /** Invites a funder via email to a Funding Entity */
         post: operations["inviteFunder"];
-        delete?: never;
+        /** Removes a funder from a Funding Entity */
+        delete: operations["removeFunder"];
         options?: never;
         head?: never;
         patch?: never;
@@ -5175,6 +5176,9 @@ export interface components {
              * @enum {string}
              */
             type: "Date";
+        };
+        DeleteFundersRequestPayload: {
+            userIds: number[];
         };
         DeleteGlobalRolesRequestPayload: {
             userIds: number[];
@@ -13399,6 +13403,32 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["InviteFundingEntityFunderResponsePayload"];
+                };
+            };
+        };
+    };
+    removeFunder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                fundingEntityId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeleteFundersRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
                 };
             };
         };

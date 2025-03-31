@@ -99,3 +99,16 @@ export const requestListFunders = createAsyncThunk(
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
+
+export const requestDeleteFunders = createAsyncThunk(
+  'funder/delete',
+  async (request: { fundingEntityId: number; userIds: number[] }, { rejectWithValue }) => {
+    const { fundingEntityId, userIds } = request;
+    const response = await FundingEntityService.deleteFunders(fundingEntityId, userIds);
+    if (response && response.requestSucceeded) {
+      return response.data;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);

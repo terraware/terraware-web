@@ -17,6 +17,8 @@ export const selectFundingEntityCreateRequest = (requestId: string) => (state: R
 
 export const selectListFundersRequest = (requestId: string) => (state: RootState) => state.funders[requestId];
 
+export const selectDeleteFundersRequest = (requestId: string) => (state: RootState) => state.deleteFunders[requestId];
+
 export const selectFundingEntityFunders = (fundingEntityId?: number) => (state: RootState) =>
   state.funders[fundingEntityId || -1];
 
