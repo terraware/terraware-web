@@ -5791,7 +5791,12 @@ export interface components {
             /** Format: int64 */
             id: number;
             name: string;
-            projects: components["schemas"]["ProjectAcceleratorDetailsPayload"][];
+            projects: components["schemas"]["FundingProjectPayload"][];
+        };
+        FundingProjectPayload: {
+            dealName: string;
+            /** Format: int64 */
+            projectId: number;
         };
         Geolocation: {
             accuracy?: number;

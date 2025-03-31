@@ -7,17 +7,21 @@ import AddLink from 'src/components/common/AddLink';
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
 import strings from 'src/strings';
-import { ParticipantProject } from 'src/types/ParticipantProject';
+
+type ProjectsEditOption = {
+  projectId: number;
+  dealName?: string;
+};
 
 type ProjectsEditProps = {
-  projects: ParticipantProject[];
-  allProjects: ParticipantProject[];
-  setProjects: (projects: ParticipantProject[]) => void;
+  projects: ProjectsEditOption[];
+  allProjects: ProjectsEditOption[];
+  setProjects: (projects: ProjectsEditOption[]) => void;
 };
 
 const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element => {
   const { projects, allProjects, setProjects } = props;
-  const [rows, setRows] = useState<Partial<ParticipantProject> & { projectId: number }[]>([]);
+  const [rows, setRows] = useState<Partial<ProjectsEditOption> & { projectId: number }[]>([]);
 
   useEffect(() => {
     if (!rows.length) {
@@ -33,7 +37,7 @@ const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element => {
     (deletedIndex: number) => {
       const filteredRows = rows.filter((_row, _index) => _index !== deletedIndex);
       setRows(filteredRows);
-      setProjects(filteredRows as ParticipantProject[]);
+      setProjects(filteredRows as ProjectsEditOption[]);
     },
     [rows, setRows]
   );
@@ -44,7 +48,7 @@ const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element => {
         index === updatedIndex ? { ...project, projectId: newProjectId } : project
       );
       setRows(updatedRows);
-      setProjects(updatedRows as ParticipantProject[]);
+      setProjects(updatedRows as ProjectsEditOption[]);
     },
     [rows, setRows]
   );
