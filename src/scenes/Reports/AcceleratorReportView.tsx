@@ -92,7 +92,7 @@ const AcceleratorReportView = () => {
       <>
         <Button
           icon='iconEdit'
-          id='editDeliverable'
+          id='editReport'
           label={strings.EDIT}
           onClick={() => {
             // TODO: edit page
@@ -102,7 +102,7 @@ const AcceleratorReportView = () => {
         />
         <Button
           disabled={selectedReport?.status === 'Approved'}
-          id='submitDeliverable'
+          id='submitReport'
           label={strings.SUBMIT_FOR_APPROVAL}
           onClick={() => void setShowApproveDialog(true)}
           size='medium'
