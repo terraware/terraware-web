@@ -257,10 +257,7 @@
 <a name='L192'></a><a href='#L192'>192</a>
 <a name='L193'></a><a href='#L193'>193</a>
 <a name='L194'></a><a href='#L194'>194</a>
-<a name='L195'></a><a href='#L195'>195</a>
-<a name='L196'></a><a href='#L196'>196</a>
-<a name='L197'></a><a href='#L197'>197</a>
-<a name='L198'></a><a href='#L198'>198</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L195'></a><a href='#L195'>195</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -319,9 +316,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -488,17 +482,17 @@ export const selectPlantingSiteZones = <span class="cstat-no" title="statement n
      * Aggregate unique monitoring plots across results and keep those zones/subzones data with latest completed times
      */
 &nbsp;
-    const zones: Record&lt;number, Aggregation&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
+    const zones: Record&lt;string, Aggregation&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
     /**
      * Iterate through all the planting zones in the observations results to book-keep subzones and monitoring plots for the zone
      */
 <span class="cstat-no" title="statement not covered" >    observationsResults</span>
       ?.flatMap(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; <span class="cstat-no" title="statement not covered" >result.plantingZones)</span>
       .forEach(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt; {
-        const { plantingZoneId, completedTime, plantingSubzones } = <span class="cstat-no" title="statement not covered" >zone;</span>
-<span class="cstat-no" title="statement not covered" >        if (!zones[plantingZoneId]) {</span>
+        const { name: zoneName, completedTime, plantingSubzones } = <span class="cstat-no" title="statement not covered" >zone;</span>
+<span class="cstat-no" title="statement not covered" >        if (!zones[zoneName]) {</span>
           // initialize book-keeping data for zone
-<span class="cstat-no" title="statement not covered" >          zones[plantingZoneId] = { subzones: {}, plots: {}, completedTime };</span>
+<span class="cstat-no" title="statement not covered" >          zones[zoneName] = { subzones: {}, plots: {}, completedTime };</span>
         }
         /**
          * Iterate through planting zones and maintain a running set of all monitoring plots for a planting sub zone (across observations results)
@@ -508,32 +502,29 @@ export const selectPlantingSiteZones = <span class="cstat-no" title="statement n
          *     a mapping of subzoneA-&gt;[monitoring plots data]
          */
 <span class="cstat-no" title="statement not covered" >        plantingSubzones.forEach(<span class="fstat-no" title="function not covered" >(s</span>ubzone) =&gt; {</span>
-          const { plantingSubzoneId, monitoringPlots } = <span class="cstat-no" title="statement not covered" >subzone;</span>
+          const { name: subzoneName, monitoringPlots } = <span class="cstat-no" title="statement not covered" >subzone;</span>
           const monitoringPlotIds = <span class="cstat-no" title="statement not covered" >monitoringPlots.map(<span class="fstat-no" title="function not covered" >(p</span>lot) =&gt; <span class="cstat-no" title="statement not covered" >plot.monitoringPlotId)</span>;</span>
-          const lastSubzones = <span class="cstat-no" title="statement not covered" >zones[plantingZoneId].subzones[plantingSubzoneId];</span>
+          const lastSubzones = <span class="cstat-no" title="statement not covered" >zones[zoneName].subzones[subzoneName];</span>
           // book keep subzoneId-&gt;[set of monitoring plot ids]
 <span class="cstat-no" title="statement not covered" >          if (!lastSubzones) {</span>
-<span class="cstat-no" title="statement not covered" >            zones[plantingZoneId].subzones[plantingSubzoneId] = new Set(monitoringPlotIds);</span>
+<span class="cstat-no" title="statement not covered" >            zones[zoneName].subzones[subzoneName] = new Set(monitoringPlotIds);</span>
           } else {
-<span class="cstat-no" title="statement not covered" >            zones[plantingZoneId].subzones[plantingSubzoneId] = new Set([</span>
-              ...Array.from(lastSubzones),
-              ...monitoringPlotIds,
-            ]);
+<span class="cstat-no" title="statement not covered" >            zones[zoneName].subzones[subzoneName] = new Set([...Array.from(lastSubzones), ...monitoringPlotIds]);</span>
           }
           // populate map of monitoringPlotId-&gt;monitoringPlotData (keep the one with latest observed time)
 <span class="cstat-no" title="statement not covered" >          monitoringPlots.forEach(<span class="fstat-no" title="function not covered" >(m</span>onitoringPlot) =&gt; {</span>
             const { monitoringPlotId } = <span class="cstat-no" title="statement not covered" >monitoringPlot;</span>
-            const lastUpdated = <span class="cstat-no" title="statement not covered" >zones[plantingZoneId].plots[monitoringPlotId];</span>
+            const lastUpdated = <span class="cstat-no" title="statement not covered" >zones[zoneName].plots[monitoringPlotId];</span>
 <span class="cstat-no" title="statement not covered" >            if (lastUpdated &amp;&amp; !isAfter(monitoringPlot.completedTime, lastUpdated.completedTime)) {</span>
 <span class="cstat-no" title="statement not covered" >              return;</span>
             }
-<span class="cstat-no" title="statement not covered" >            zones[plantingZoneId].plots[monitoringPlotId] = monitoringPlot;</span>
+<span class="cstat-no" title="statement not covered" >            zones[zoneName].plots[monitoringPlotId] = monitoringPlot;</span>
           });
         });
         // keep the latest observed time for the zone
-        const lastCompletedTime = <span class="cstat-no" title="statement not covered" >zones[plantingZoneId].completedTime;</span>
+        const lastCompletedTime = <span class="cstat-no" title="statement not covered" >zones[zoneName].completedTime;</span>
 <span class="cstat-no" title="statement not covered" >        if (lastCompletedTime !== completedTime &amp;&amp; isAfter(completedTime, lastCompletedTime)) {</span>
-<span class="cstat-no" title="statement not covered" >          zones[plantingZoneId].completedTime = completedTime;</span>
+<span class="cstat-no" title="statement not covered" >          zones[zoneName].completedTime = completedTime;</span>
         }
       });
 &nbsp;
@@ -661,7 +652,7 @@ export const searchPlantingSiteMonitoringPlots = <span class="cstat-no" title="s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-01T15:34:11.787Z
+                at 2025-04-01T17:33:06.990Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

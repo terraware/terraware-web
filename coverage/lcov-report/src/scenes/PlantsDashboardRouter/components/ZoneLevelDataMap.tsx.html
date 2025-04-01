@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/127</span>
+                <span class='fraction'>0/129</span>
             </div>
         
             
@@ -562,11 +562,7 @@
 <a name='L497'></a><a href='#L497'>497</a>
 <a name='L498'></a><a href='#L498'>498</a>
 <a name='L499'></a><a href='#L499'>499</a>
-<a name='L500'></a><a href='#L500'>500</a>
-<a name='L501'></a><a href='#L501'>501</a>
-<a name='L502'></a><a href='#L502'>502</a>
-<a name='L503'></a><a href='#L503'>503</a>
-<a name='L504'></a><a href='#L504'>504</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L500'></a><a href='#L500'>500</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -815,10 +811,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1141,12 +1133,12 @@ export default function <span class="fstat-no" title="function not covered" >Zon
   );
 &nbsp;
   const zoneObservations = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const iZoneObservations: ObservationResultsPayload[][] = <span class="cstat-no" title="statement not covered" >[];</span>
+    const iZoneObservations: Record&lt;string, ObservationResultsPayload[]&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
 <span class="cstat-no" title="statement not covered" >    plantingSiteObservations?.forEach(<span class="fstat-no" title="function not covered" >(o</span>bservation) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      observation.plantingZones.forEach(<span class="fstat-no" title="function not covered" >(p</span>z) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        iZoneObservations[pz.plantingZoneId]</span>
-          ? iZoneObservations[pz.plantingZoneId].push(observation)
-          : (iZoneObservations[pz.plantingZoneId] = [observation]);
+<span class="cstat-no" title="statement not covered" >        iZoneObservations[pz.name]</span>
+          ? iZoneObservations[pz.name].push(observation)
+          : (iZoneObservations[pz.name] = [observation]);
       });
     });
 <span class="cstat-no" title="statement not covered" >    return iZoneObservations;</span>
@@ -1200,12 +1192,12 @@ export default function <span class="fstat-no" title="function not covered" >Zon
   }, []);
 &nbsp;
   const lastSubZoneObservation = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (o</span>bservationsList: ObservationResultsPayload[], zoneId: number, subzoneId: number) =&gt; {
+<span class="fstat-no" title="function not covered" >    (o</span>bservationsList: ObservationResultsPayload[], zoneName: string, subzoneName: string) =&gt; {
       const orderedObservations = <span class="cstat-no" title="statement not covered" >observationsList?.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; (<span class="cstat-no" title="statement not covered" >isAfter(b.startDate, a.startDate) ? 1 : -1)</span>);</span>
 <span class="cstat-no" title="statement not covered" >      if (orderedObservations) {</span>
 <span class="cstat-no" title="statement not covered" >        for (const observation of orderedObservations) {</span>
-          const zone = <span class="cstat-no" title="statement not covered" >observation.plantingZones.find(<span class="fstat-no" title="function not covered" >(p</span>z) =&gt; <span class="cstat-no" title="statement not covered" >pz.plantingZoneId === zoneId)</span>;</span>
-<span class="cstat-no" title="statement not covered" >          if (zone &amp;&amp; zone.plantingSubzones.find(<span class="fstat-no" title="function not covered" >(s</span>z) =&gt; <span class="cstat-no" title="statement not covered" >sz.plantingSubzoneId === subzoneId)</span>) {</span>
+          const zone = <span class="cstat-no" title="statement not covered" >observation.plantingZones.find(<span class="fstat-no" title="function not covered" >(p</span>z) =&gt; <span class="cstat-no" title="statement not covered" >pz.name === zoneName)</span>;</span>
+<span class="cstat-no" title="statement not covered" >          if (zone &amp;&amp; zone.plantingSubzones.find(<span class="fstat-no" title="function not covered" >(s</span>z) =&gt; <span class="cstat-no" title="statement not covered" >sz.name === subzoneName)</span>) {</span>
 <span class="cstat-no" title="statement not covered" >            return observation;</span>
           }
         }
@@ -1303,7 +1295,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
     }
 &nbsp;
     const baseMap = <span class="cstat-no" title="statement not covered" >MapService.getMapDataFromPlantingSite(plantingSite);</span>
-<span class="cstat-no" title="statement not covered" >    if (!observation) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!observation || !plantingSiteHistory) {</span>
 <span class="cstat-no" title="statement not covered" >      return baseMap;</span>
     }
 &nbsp;
@@ -1314,14 +1306,10 @@ export default function <span class="fstat-no" title="function not covered" >Zon
 <span class="cstat-no" title="statement not covered" >        return {</span>
           ...pz,
           lastObv:
-            lastZoneObservation(zoneObservations?.[pz.plantingZoneId])?.completedTime ||
-            lastZoneObservation(zoneObservations?.[pz.plantingZoneId])?.startDate,
+            lastZoneObservation(zoneObservations?.[pz.name])?.completedTime ||
+            lastZoneObservation(zoneObservations?.[pz.name])?.startDate,
           plantingSubzones: pz.plantingSubzones.map(<span class="fstat-no" title="function not covered" >(o</span>ldSubzone) =&gt; {
-            const lastSubZoneOb = <span class="cstat-no" title="statement not covered" >lastSubZoneObservation(</span>
-              zoneObservations?.[pz.plantingZoneId],
-              pz.plantingZoneId,
-              oldSubzone.plantingSubzoneId
-            );
+            const lastSubZoneOb = <span class="cstat-no" title="statement not covered" >lastSubZoneObservation(zoneObservations?.[pz.name], pz.name, oldSubzone.name);</span>
 <span class="cstat-no" title="statement not covered" >            return {</span>
               ...oldSubzone,
               lastObv: lastSubZoneOb?.completedTime
@@ -1426,7 +1414,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
     });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return baseMap;</span>
-  }, [plantingSite, observation]);
+  }, [plantingSite, observation, plantingSiteHistory]);
 &nbsp;
   const focusEntities = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return [{ sourceId: 'sites', id: plantingSiteId }];</span>
@@ -1579,7 +1567,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-01T15:34:11.787Z
+                at 2025-04-01T17:33:06.990Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
