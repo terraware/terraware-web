@@ -5,6 +5,9 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
+import ApprovedReportMessage from 'src/components/AcceleratorReports/ApprovedReportMessage';
+import MetricBox from 'src/components/AcceleratorReports/MetricBox';
+import RejectedReportMessage from 'src/components/AcceleratorReports/RejectedReportMessage';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
@@ -22,10 +25,6 @@ import {
   ReportStandardMetric,
   ReportSystemMetric,
 } from 'src/types/AcceleratorReport';
-
-import ApprovedReportMessage from '../AcceleratorRouter/ParticipantProjects/Reports/ApprovedReportMessage';
-import MetricBox from '../AcceleratorRouter/ParticipantProjects/Reports/MetricBox';
-import RejectedReportMessage from '../AcceleratorRouter/ParticipantProjects/Reports/RejectedReportMessage';
 
 const AcceleratorReportView = () => {
   const { activeLocale } = useLocalization();
