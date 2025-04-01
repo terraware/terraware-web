@@ -89,35 +89,13 @@ export type Value = {
   timeZone?: string;
 };
 
-// get zones reverse map
-const zonesReverseMap = (sites: PlantingSite[]): Record<number, Value> =>
-  reverseMap(
-    sites.filter((site) => site.plantingZones).flatMap((site) => site.plantingZones),
-    'zone'
-  );
-
-// get subzones reverse map
-const subzonesReverseMap = (sites: PlantingSite[]): Record<number, Value> =>
-  reverseMap(
-    sites
-      .filter((site) => site.plantingZones)
-      .flatMap((site) =>
-        site.plantingZones!.filter((zone) => zone.plantingSubzones).flatMap((zone) => zone.plantingSubzones)
-      ),
-    'subzone'
-  );
-
-// reverse map of id to name, boundary (for planting site, zone, subzone), optionally just name for species
-const reverseMap = (ary: any[], type: string): Record<number, Value> =>
+/** Returns a map of site IDs to name, boundary, and timeZone for each site. */
+const sitesReverseMap = (ary: PlantingSite[]): Record<number, Value> =>
   ary.reduce(
     (acc, curr) => {
-      const { id, name, fullName, boundary, timeZone } = curr;
-      if (type === 'site') {
+      const { id, name, boundary, timeZone } = curr;
+      if (boundary) {
         acc[id] = { name, boundary, timeZone };
-      } else if (type === 'subzone') {
-        acc[id] = { name: fullName, boundary };
-      } else {
-        acc[id] = { name, boundary };
       }
       return acc;
     },
@@ -142,9 +120,7 @@ export const mergeObservations = (
   plantingSites?: PlantingSite[],
   speciesData?: Species[]
 ): ObservationResults[] => {
-  const sites = reverseMap(plantingSites ?? [], 'site');
-  const zones = zonesReverseMap(plantingSites ?? []);
-  const subzones = subzonesReverseMap(plantingSites ?? []);
+  const sites = sitesReverseMap(plantingSites ?? []);
   const species = speciesReverseMap(speciesData ?? []);
 
   return observations
@@ -153,13 +129,7 @@ export const mergeObservations = (
       const { plantingSiteId } = observation;
       const site = sites[plantingSiteId];
 
-      const mergedZones = mergeZones(
-        observation.plantingZones,
-        zones,
-        subzones,
-        species,
-        site.timeZone ?? defaultTimeZone
-      );
+      const mergedZones = mergeZones(observation.plantingZones, species, site.timeZone ?? defaultTimeZone);
 
       return {
         ...observation,
@@ -183,20 +153,14 @@ const StatusWeights: Record<MonitoringPlotStatus, number> = {
   'Not Observed': 4,
 };
 
-// merge zone
+/** Merges additional data into the results of a planting zone observation. */
 const mergeZones = (
   zoneObservations: ObservationPlantingZoneResultsPayload[],
-  zones: Record<number, Value>,
-  subzones: Record<number, Value>,
   species: Record<number, SpeciesValue>,
   timeZone?: string
 ): ObservationPlantingZoneResults[] => {
-  return zoneObservations
-    .filter((zoneObservation: ObservationPlantingZoneResultsPayload) => zones[zoneObservation.plantingZoneId])
-    .map((zoneObservation: ObservationPlantingZoneResultsPayload): ObservationPlantingZoneResults => {
-      const { plantingZoneId } = zoneObservation;
-      const zone = zones[plantingZoneId];
-
+  return zoneObservations.map(
+    (zoneObservation: ObservationPlantingZoneResultsPayload): ObservationPlantingZoneResults => {
       const monitoringPlots: ObservationMonitoringPlotResultsPayload[] = zoneObservation.plantingSubzones.flatMap(
         (subZone: ObservationPlantingSubzoneResultsPayload) => subZone.monitoringPlots
       );
@@ -213,13 +177,12 @@ const mergeZones = (
 
       return {
         ...zoneObservation,
-        plantingZoneName: zone.name,
-        boundary: zone.boundary,
+        plantingZoneName: zoneObservation.name,
         completedDate: zoneObservation.completedTime
           ? getDateDisplayValue(zoneObservation.completedTime, timeZone)
           : undefined,
         species: mergeSpecies(zoneObservation.species, species),
-        plantingSubzones: mergeSubzones(zoneObservation.plantingSubzones, subzones, species, timeZone),
+        plantingSubzones: mergeSubzones(zoneObservation.plantingSubzones, species, timeZone),
         status,
         hasObservedPermanentPlots: zoneObservation.plantingSubzones.some((plantingSubzone) =>
           plantingSubzone.monitoringPlots.some((plot) => plot.isPermanent && plot.completedTime)
@@ -228,28 +191,21 @@ const mergeZones = (
           plantingSubzone.monitoringPlots.some((plot) => !plot.isPermanent && plot.completedTime)
         ),
       };
-    });
+    }
+  );
 };
 
 // merge subzone
 const mergeSubzones = (
   subzoneObservations: ObservationPlantingSubzoneResultsPayload[],
-  subzones: Record<number, Value>,
   species: Record<number, SpeciesValue>,
   timeZone?: string
 ): ObservationPlantingSubzoneResults[] => {
-  return subzoneObservations
-    .filter(
-      (subzoneObservation: ObservationPlantingSubzoneResultsPayload) => subzones[subzoneObservation.plantingSubzoneId]
-    )
-    .map((subzoneObservation: ObservationPlantingSubzoneResultsPayload): ObservationPlantingSubzoneResults => {
-      const { plantingSubzoneId } = subzoneObservation;
-      const subzone = subzones[plantingSubzoneId];
-
+  return subzoneObservations.map(
+    (subzoneObservation: ObservationPlantingSubzoneResultsPayload): ObservationPlantingSubzoneResults => {
       return {
         ...subzoneObservation,
-        plantingSubzoneName: subzone.name,
-        boundary: subzone.boundary,
+        plantingSubzoneName: subzoneObservation.name,
         monitoringPlots: subzoneObservation.monitoringPlots.map(
           (monitoringPlot: ObservationMonitoringPlotResultsPayload) => {
             return {
@@ -262,7 +218,8 @@ const mergeSubzones = (
           }
         ),
       };
-    });
+    }
+  );
 };
 
 const mergeSpecies = (
@@ -297,24 +254,16 @@ export const mergeAdHocObservations = (
   defaultTimeZone: string,
   plantingSites?: PlantingSite[]
 ): AdHocObservationResults[] => {
-  const sites = reverseMap(plantingSites ?? [], 'site');
+  const sites = sitesReverseMap(plantingSites ?? []);
 
   return observations
     .filter((observation) => sites[observation.plantingSiteId])
     .map((observation: ObservationResultsPayload): AdHocObservationResults => {
       const { plantingSiteId } = observation;
       const site = sites[plantingSiteId];
-      const zones = zonesReverseMap(plantingSites ?? []);
-      const subzones = subzonesReverseMap(plantingSites ?? []);
       const species = speciesReverseMap([]);
 
-      const mergedZones = mergeZones(
-        observation.plantingZones,
-        zones,
-        subzones,
-        species,
-        site.timeZone ?? defaultTimeZone
-      );
+      const mergedZones = mergeZones(observation.plantingZones, species, site.timeZone ?? defaultTimeZone);
 
       return {
         ...observation,

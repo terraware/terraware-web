@@ -70,12 +70,12 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
   );
 
   const zoneObservations = useMemo(() => {
-    const iZoneObservations: ObservationResultsPayload[][] = [];
+    const iZoneObservations: Record<string, ObservationResultsPayload[]> = {};
     plantingSiteObservations?.forEach((observation) => {
       observation.plantingZones.forEach((pz) => {
-        iZoneObservations[pz.plantingZoneId]
-          ? iZoneObservations[pz.plantingZoneId].push(observation)
-          : (iZoneObservations[pz.plantingZoneId] = [observation]);
+        iZoneObservations[pz.name]
+          ? iZoneObservations[pz.name].push(observation)
+          : (iZoneObservations[pz.name] = [observation]);
       });
     });
     return iZoneObservations;
@@ -129,12 +129,12 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
   }, []);
 
   const lastSubZoneObservation = useCallback(
-    (observationsList: ObservationResultsPayload[], zoneId: number, subzoneId: number) => {
+    (observationsList: ObservationResultsPayload[], zoneName: string, subzoneName: string) => {
       const orderedObservations = observationsList?.sort((a, b) => (isAfter(b.startDate, a.startDate) ? 1 : -1));
       if (orderedObservations) {
         for (const observation of orderedObservations) {
-          const zone = observation.plantingZones.find((pz) => pz.plantingZoneId === zoneId);
-          if (zone && zone.plantingSubzones.find((sz) => sz.plantingSubzoneId === subzoneId)) {
+          const zone = observation.plantingZones.find((pz) => pz.name === zoneName);
+          if (zone && zone.plantingSubzones.find((sz) => sz.name === subzoneName)) {
             return observation;
           }
         }
@@ -232,7 +232,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     }
 
     const baseMap = MapService.getMapDataFromPlantingSite(plantingSite);
-    if (!observation) {
+    if (!observation || !plantingSiteHistory) {
       return baseMap;
     }
 
@@ -243,14 +243,10 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
         return {
           ...pz,
           lastObv:
-            lastZoneObservation(zoneObservations?.[pz.plantingZoneId])?.completedTime ||
-            lastZoneObservation(zoneObservations?.[pz.plantingZoneId])?.startDate,
+            lastZoneObservation(zoneObservations?.[pz.name])?.completedTime ||
+            lastZoneObservation(zoneObservations?.[pz.name])?.startDate,
           plantingSubzones: pz.plantingSubzones.map((oldSubzone) => {
-            const lastSubZoneOb = lastSubZoneObservation(
-              zoneObservations?.[pz.plantingZoneId],
-              pz.plantingZoneId,
-              oldSubzone.plantingSubzoneId
-            );
+            const lastSubZoneOb = lastSubZoneObservation(zoneObservations?.[pz.name], pz.name, oldSubzone.name);
             return {
               ...oldSubzone,
               lastObv: lastSubZoneOb?.completedTime
