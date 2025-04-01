@@ -1,3 +1,4 @@
+b5370dd5aa8 Close reset metric modal after response (#3782)
 ac8d47ba3d8 Remove quotes from account notifications (#3779)
 0464069eb3e SW-6613 Sort accelerator projects (#3777)
 eb388f6d8e8 SW-6669 - Reject/Approve Report [Console] (#3762)
