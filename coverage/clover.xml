@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1743510011943" clover="3.2.0">
-  <project timestamp="1743510011943" name="All files">
-    <metrics statements="29298" coveredstatements="1234" conditionals="19823" coveredconditionals="354" methods="9041" coveredmethods="198" elements="58162" coveredelements="1786" complexity="0" loc="29298" ncloc="29298" packages="252" files="1207" classes="1207"/>
+<coverage generated="1743520424625" clover="3.2.0">
+  <project timestamp="1743520424625" name="All files">
+    <metrics statements="29298" coveredstatements="1234" conditionals="19826" coveredconditionals="354" methods="9042" coveredmethods="198" elements="58166" coveredelements="1786" complexity="0" loc="29298" ncloc="29298" packages="252" files="1207" classes="1207"/>
     <package name="src">
       <metrics statements="180" coveredstatements="8" conditionals="126" coveredconditionals="0" methods="40" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -9582,7 +9582,7 @@
       </file>
     </package>
     <package name="src.hooks">
-      <metrics statements="430" coveredstatements="25" conditionals="160" coveredconditionals="6" methods="159" coveredmethods="11"/>
+      <metrics statements="430" coveredstatements="25" conditionals="163" coveredconditionals="6" methods="160" coveredmethods="11"/>
       <file name="useAcceleratorConsole.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useAcceleratorConsole.ts">
         <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
@@ -9613,7 +9613,7 @@
         <line num="55" count="0" type="stmt"/>
       </file>
       <file name="useAcceleratorProjects.tsx" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useAcceleratorProjects.tsx">
-        <metrics statements="13" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="13" coveredstatements="0" conditionals="11" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
@@ -9624,8 +9624,8 @@
         <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
-        <line num="22" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="23" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="22" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="23" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="27" count="0" type="stmt"/>
       </file>
       <file name="useAppVersion.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useAppVersion.ts">
