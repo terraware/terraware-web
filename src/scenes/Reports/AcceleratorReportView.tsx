@@ -95,7 +95,7 @@ const AcceleratorReportView = () => {
           id='editDeliverable'
           label={strings.EDIT}
           onClick={() => {
-            // TODO: navigate to edit page
+            // TODO: edit page
           }}
           priority='secondary'
           size='medium'
@@ -166,7 +166,6 @@ const AcceleratorReportView = () => {
           {selectedReport?.systemMetrics.map((systemMetric: ReportSystemMetric, index: number) => (
             <MetricBox
               key={index}
-              // editingId={editingId}
               index={index}
               projectId={projectId}
               reload={() => true}
@@ -180,7 +179,6 @@ const AcceleratorReportView = () => {
           {selectedReport?.projectMetrics.map((projectMetric: ReportProjectMetric, index: number) => (
             <MetricBox
               key={index}
-              // editingId={editingId}
               index={index}
               projectId={projectId}
               reload={() => true}
@@ -194,7 +192,6 @@ const AcceleratorReportView = () => {
           {selectedReport?.standardMetrics.map((standardMetric: ReportStandardMetric, index: number) => (
             <MetricBox
               key={index}
-              // editingId={editingId}
               index={index}
               projectId={projectId}
               reload={() => true}
