@@ -125,10 +125,6 @@ const AcceleratorReportView = () => {
   const reportName =
     selectedReport?.frequency === 'Annual' ? year : selectedReport?.quarter ? `${year}-${selectedReport?.quarter}` : '';
 
-  if (!projectId) {
-    return <></>;
-  }
-
   return (
     <Page
       crumbs={crumbs}
