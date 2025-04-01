@@ -56,6 +56,8 @@ export type CreateFundingEntityRequest =
 
 export type InviteFunderServerResponse =
   paths[typeof FUNDING_ENTITY_USERS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+export type DeleteFundersServerRequest =
+  paths[typeof FUNDING_ENTITY_USERS_ENDPOINT]['delete']['requestBody']['content']['application/json'];
 
 const httpUserFundingEntity = HttpService.root(USER_FUNDING_ENTITY_ENDPOINT);
 const httpFundingEntity = HttpService.root(FUNDING_ENTITY_ENDPOINT);
@@ -119,6 +121,14 @@ const listFunders = async (fundingEntityId: number): Promise<Response2<ListFunde
   });
 };
 
+const deleteFunders = async (fundingEntityId: number, userIds: number[]): Promise<Response> => {
+  const entity: DeleteFundersServerRequest = { userIds };
+  return await httpFundingEntityUsers.delete({
+    urlReplacements: { '{fundingEntityId}': fundingEntityId.toString() },
+    entity,
+  });
+};
+
 const update = async (fundingEntity: FundingEntity): Promise<Response> => {
   const entity: UpdateFundingEntityRequest = {
     name: fundingEntity.name,
@@ -126,7 +136,7 @@ const update = async (fundingEntity: FundingEntity): Promise<Response> => {
   };
   return httpFundingEntity.put2<UpdateFundingEntityResponse>({
     urlReplacements: { '{fundingEntityId}': `${fundingEntity.id}` },
-    entity: entity,
+    entity,
   });
 };
 
@@ -136,7 +146,7 @@ const create = async (fundingEntity: FundingEntity): Promise<Response2<CreateFun
     projects: fundingEntity.projects.map((project) => project.projectId),
   };
   return await httpFundingEntities.post({
-    entity: entity,
+    entity,
   });
 };
 
@@ -181,6 +191,7 @@ const FundingEntityService = {
   deleteFundingEntity,
   listFunders,
   inviteFunder,
+  deleteFunders,
 };
 
 export default FundingEntityService;
