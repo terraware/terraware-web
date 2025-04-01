@@ -91,6 +91,7 @@ const AcceleratorReportView = () => {
     return (
       <>
         <Button
+          disabled={selectedReport?.status === 'Submitted'}
           icon='iconEdit'
           id='editReport'
           label={strings.EDIT}
