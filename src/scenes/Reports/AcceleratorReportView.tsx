@@ -41,7 +41,6 @@ const AcceleratorReportView = () => {
   const [reports, setReports] = useState<AcceleratorReport[]>();
   const [selectedReport, setSelectedReport] = useState<AcceleratorReport>();
   const [, setShowApproveDialog] = useState<boolean>(false);
-  const [, setShowRejectDialog] = useState<boolean>(false);
 
   const reportsResults = useAppSelector(selectListAcceleratorReports(requestId));
 
@@ -141,9 +140,7 @@ const AcceleratorReportView = () => {
     >
       <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
         {selectedReport && <ApprovedReportMessage report={selectedReport} />}
-        {selectedReport && (
-          <RejectedReportMessage report={selectedReport} showRejectDialog={() => setShowRejectDialog(true)} />
-        )}
+        {selectedReport && <RejectedReportMessage report={selectedReport} />}
         <Card
           style={{
             display: 'flex',
