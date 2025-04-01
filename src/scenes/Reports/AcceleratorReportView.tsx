@@ -90,7 +90,7 @@ const AcceleratorReportView = () => {
     return (
       <>
         <Button
-          disabled={selectedReport?.status === 'Submitted'}
+          disabled={selectedReport?.status !== 'Not Submitted' && selectedReport?.status !== 'Needs Update'}
           icon='iconEdit'
           id='editReport'
           label={strings.EDIT}
@@ -101,7 +101,7 @@ const AcceleratorReportView = () => {
           size='medium'
         />
         <Button
-          disabled={selectedReport?.status === 'Approved'}
+          disabled={selectedReport?.status !== 'Not Submitted' && selectedReport?.status !== 'Needs Update'}
           id='submitReport'
           label={strings.SUBMIT_FOR_APPROVAL}
           onClick={() => void setShowApproveDialog(true)}
