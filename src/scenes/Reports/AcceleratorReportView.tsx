@@ -107,6 +107,7 @@ const AcceleratorReportView = () => {
           label={strings.SUBMIT_FOR_APPROVAL}
           onClick={() => void setShowApproveDialog(true)}
           size='medium'
+          sx={{ '&.button': { whiteSpace: 'nowrap' } }}
         />
       </>
     );
