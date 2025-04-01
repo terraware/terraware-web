@@ -791,6 +791,7 @@ INVENTORY_ONBOARDING_SPECIES_MSG,Définir une liste d'espèces utilisées dans v
 INVENTORY_PAGE_DESCRIPTION,Gérer votre Inventaire.,
 INVESTMENT_COMMITTEE_VOTES,Votes du comité d'investissement,
 INVESTMENT_THESIS,Thèse d'investissement,
+INVITATION_PENDING,Invitation en attente,
 INVITE_FUNDER,Inviter le bailleur de fonds,
 INVITE_FUNDER_DESCRIPTION,Fournissez une adresse e-mail pour inviter un bailleur de fonds à accéder au portail des bailleurs de fonds sous cette entité de financement. Un e-mail d'invitation à créer un compte sera envoyé à l'adresse e-mail. Le prénom et le nom de famille seront fournis par le titulaire du compte.,
 INVITED,Invité·e,

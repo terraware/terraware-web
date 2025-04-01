@@ -791,6 +791,7 @@ INVENTORY_ONBOARDING_SPECIES_MSG,Defina una lista de especies utilizadas en su i
 INVENTORY_PAGE_DESCRIPTION,Gestione su inventario.,
 INVESTMENT_COMMITTEE_VOTES,Votos del Comité de inversión,
 INVESTMENT_THESIS,Tesis de inversión,
+INVITATION_PENDING,Invitación pendiente,
 INVITE_FUNDER,Invitar financiador,
 INVITE_FUNDER_DESCRIPTION,Ingrese un correo electrónico para invitar a un financiador al Portal de Financiación bajo esta entidad. Se enviará un correo de invitación para crear una cuenta. El nombre y el apellido serán ingresados por el titular de la cuenta.,
 INVITED,Invitado,
