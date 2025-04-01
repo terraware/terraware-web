@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
+import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
@@ -159,6 +160,10 @@ const AcceleratorReportView = () => {
               padding={theme.spacing(3, 0)}
               marginBottom={3}
             >
+              <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
+                <AcceleratorReportStatusBadge status={selectedReport.status} />
+              </div>
+
               <Typography fontSize={14} fontStyle={'italic'}>
                 {strings.formatString(strings.REPORT_PERIOD, selectedReport?.startDate, selectedReport?.endDate)}
               </Typography>
