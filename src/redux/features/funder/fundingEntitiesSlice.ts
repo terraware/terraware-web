@@ -104,14 +104,14 @@ export const deleteFundersSlice = createSlice({
 });
 
 const fundingEntitiesReducers = {
-  userFundingEntity: userFundingEntitySlice.reducer,
-  fundingEntity: fundingEntitySlice.reducer,
-  fundingEntities: fundingEntitiesSlice.reducer,
+  fundingEntitiesList: fundingEntitiesSlice.reducer,
+  fundingEntityForUser: userFundingEntitySlice.reducer,
+  fundingEntityGet: fundingEntitySlice.reducer,
   fundingEntityUpdate: fundingEntityUpdateSlice.reducer,
   fundingEntityCreate: fundingEntityCreateSlice.reducer,
   fundingEntityInvite: fundingEntityInviteSlice.reducer,
-  deleteFunders: deleteFundersSlice.reducer,
-  funders: funderListSlice.reducer,
+  fundingEntityDeleteFunders: deleteFundersSlice.reducer,
+  fundingEntityGetFunders: funderListSlice.reducer,
 };
 
 export default fundingEntitiesReducers;
