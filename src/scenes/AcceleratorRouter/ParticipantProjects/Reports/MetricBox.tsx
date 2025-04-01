@@ -100,6 +100,7 @@ const MetricBox = ({
       snackbar.toastError();
     } else if (refreshReportMetricResponse?.status === 'success') {
       setEditingId(undefined);
+      setResetMetricModalOpened(false);
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       reload();
     }
