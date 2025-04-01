@@ -14,7 +14,7 @@ const ObservationPlantingZoneRenderer =
   (
     plantingSiteId: number,
     observationId: number,
-    plantingZoneId: number,
+    plantingZoneName: string,
     setReplaceObservationPlot: React.Dispatch<React.SetStateAction<ObservationMonitoringPlotResultsPayload | undefined>>
   ) =>
   // eslint-disable-next-line react/display-name
@@ -24,7 +24,7 @@ const ObservationPlantingZoneRenderer =
     const createLinkToMonitoringPlotObservation = (name: string) => {
       const url = APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS.replace(':plantingSiteId', plantingSiteId.toString())
         .replace(':observationId', observationId.toString())
-        .replace(':plantingZoneId', plantingZoneId.toString())
+        .replace(':plantingZoneName', encodeURIComponent(plantingZoneName))
         .replace(':monitoringPlotId', row.monitoringPlotId.toString());
       return (
         <Link fontSize='16px' to={url}>

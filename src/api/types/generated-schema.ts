@@ -7257,6 +7257,7 @@ export interface components {
             mortalityRate?: number;
             /** Format: int32 */
             mortalityRateStdDev?: number;
+            name: string;
             /**
              * Format: int32
              * @description Estimated planting density for the subzone based on the observed planting densities of monitoring plots.
@@ -7265,7 +7266,7 @@ export interface components {
             /** Format: int32 */
             plantingDensityStdDev?: number;
             /** Format: int64 */
-            plantingSubzoneId: number;
+            plantingSubzoneId?: number;
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
             /**
              * Format: int32
@@ -7295,6 +7296,7 @@ export interface components {
             mortalityRate?: number;
             /** Format: int32 */
             mortalityRateStdDev?: number;
+            name: string;
             /**
              * Format: int32
              * @description Estimated planting density for the zone based on the observed planting densities of monitoring plots.
@@ -7304,7 +7306,7 @@ export interface components {
             plantingDensityStdDev?: number;
             plantingSubzones: components["schemas"]["ObservationPlantingSubzoneResultsPayload"][];
             /** Format: int64 */
-            plantingZoneId: number;
+            plantingZoneId?: number;
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
             /**
              * Format: int32

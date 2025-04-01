@@ -115,7 +115,7 @@ export default function BiomassMeasurementMapView({
   );
 
   const mapData: Record<MapObject, MapSourceBaseData | undefined> = useMemo(() => {
-    if (!selectedObservationDate || !selectedObservation) {
+    if (!selectedObservationDate || !selectedObservation || !plantingSiteHistory) {
       return {
         site: plantingSiteMapData,
         zone: undefined,

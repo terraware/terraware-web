@@ -53,12 +53,12 @@ export default function ObservationPlantingZone(): JSX.Element {
   const params = useParams<{
     plantingSiteId: string;
     observationId: string;
-    plantingZoneId: string;
+    plantingZoneName: string;
   }>();
 
   const plantingSiteId = Number(params.plantingSiteId);
   const observationId = Number(params.observationId);
-  const plantingZoneId = Number(params.plantingZoneId);
+  const plantingZoneName = params.plantingZoneName!;
 
   const [search, onSearch] = useState<string>('');
   const [filters, setFilters] = useState<Record<string, any>>({});
@@ -112,7 +112,7 @@ export default function ObservationPlantingZone(): JSX.Element {
       {
         plantingSiteId,
         observationId,
-        plantingZoneId,
+        plantingZoneName,
         search,
         plotType: filters.plotType === undefined ? undefined : filters.plotType.values[0] === strings.PERMANENT,
       },
@@ -145,7 +145,7 @@ export default function ObservationPlantingZone(): JSX.Element {
   const rows: (ObservationMonitoringPlotResultsPayload & { subzoneName?: string })[] = useMemo(
     () =>
       plantingZone?.plantingSubzones?.flatMap((subzone) =>
-        subzone.monitoringPlots.map((plot) => ({ ...plot, subzoneName: getSubzoneName(subzone.plantingSubzoneId) }))
+        subzone.monitoringPlots.map((plot) => ({ ...plot, subzoneName: subzone.name }))
       ) ?? [],
     [getSubzoneName, plantingZone]
   );
@@ -161,8 +161,9 @@ export default function ObservationPlantingZone(): JSX.Element {
         />
       )}
       <DetailsPage
-        title={plantingZone?.plantingZoneName ?? ''}
+        title={plantingZoneName}
         plantingSiteId={plantingSiteId}
+        plantingZoneName={plantingZoneName}
         observationId={observationId}
       >
         <Grid container spacing={3}>
@@ -182,7 +183,7 @@ export default function ObservationPlantingZone(): JSX.Element {
                 Renderer={ObservationPlantingZoneRenderer(
                   plantingSiteId,
                   observationId,
-                  plantingZoneId,
+                  plantingZoneName,
                   setReplaceObservationPlot
                 )}
                 tableComments={

@@ -36,9 +36,12 @@ const ObservationSubzoneSelector = ({
   const zoneObservations: ObservationResultsPayload[][] = [];
   plantingSiteObservations?.forEach((observation) => {
     observation.plantingZones.forEach((pz) => {
-      zoneObservations[pz.plantingZoneId]
-        ? zoneObservations[pz.plantingZoneId].push(observation)
-        : (zoneObservations[pz.plantingZoneId] = [observation]);
+      // Ignore observations of planting zones that no longer exist.
+      if (pz.plantingZoneId) {
+        zoneObservations[pz.plantingZoneId]
+          ? zoneObservations[pz.plantingZoneId].push(observation)
+          : (zoneObservations[pz.plantingZoneId] = [observation]);
+      }
     });
   });
 
