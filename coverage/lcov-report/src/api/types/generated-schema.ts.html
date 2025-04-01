@@ -18361,7 +18361,67 @@
 <a name='L18296'></a><a href='#L18296'>18296</a>
 <a name='L18297'></a><a href='#L18297'>18297</a>
 <a name='L18298'></a><a href='#L18298'>18298</a>
-<a name='L18299'></a><a href='#L18299'>18299</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L18299'></a><a href='#L18299'>18299</a>
+<a name='L18300'></a><a href='#L18300'>18300</a>
+<a name='L18301'></a><a href='#L18301'>18301</a>
+<a name='L18302'></a><a href='#L18302'>18302</a>
+<a name='L18303'></a><a href='#L18303'>18303</a>
+<a name='L18304'></a><a href='#L18304'>18304</a>
+<a name='L18305'></a><a href='#L18305'>18305</a>
+<a name='L18306'></a><a href='#L18306'>18306</a>
+<a name='L18307'></a><a href='#L18307'>18307</a>
+<a name='L18308'></a><a href='#L18308'>18308</a>
+<a name='L18309'></a><a href='#L18309'>18309</a>
+<a name='L18310'></a><a href='#L18310'>18310</a>
+<a name='L18311'></a><a href='#L18311'>18311</a>
+<a name='L18312'></a><a href='#L18312'>18312</a>
+<a name='L18313'></a><a href='#L18313'>18313</a>
+<a name='L18314'></a><a href='#L18314'>18314</a>
+<a name='L18315'></a><a href='#L18315'>18315</a>
+<a name='L18316'></a><a href='#L18316'>18316</a>
+<a name='L18317'></a><a href='#L18317'>18317</a>
+<a name='L18318'></a><a href='#L18318'>18318</a>
+<a name='L18319'></a><a href='#L18319'>18319</a>
+<a name='L18320'></a><a href='#L18320'>18320</a>
+<a name='L18321'></a><a href='#L18321'>18321</a>
+<a name='L18322'></a><a href='#L18322'>18322</a>
+<a name='L18323'></a><a href='#L18323'>18323</a>
+<a name='L18324'></a><a href='#L18324'>18324</a>
+<a name='L18325'></a><a href='#L18325'>18325</a>
+<a name='L18326'></a><a href='#L18326'>18326</a>
+<a name='L18327'></a><a href='#L18327'>18327</a>
+<a name='L18328'></a><a href='#L18328'>18328</a>
+<a name='L18329'></a><a href='#L18329'>18329</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -38326,7 +38386,8 @@
         put?: never;
         /** Invites a funder via email to a Funding Entity */
         post: operations["inviteFunder"];
-        delete?: never;
+        /** Removes a funder from a Funding Entity */
+        delete: operations["removeFunder"];
         options?: never;
         head?: never;
         patch?: never;
@@ -41836,6 +41897,9 @@ export interface components {
              * @enum {string}
              */
             type: "Date";
+        };
+        DeleteFundersRequestPayload: {
+            userIds: number[];
         };
         DeleteGlobalRolesRequestPayload: {
             userIds: number[];
@@ -50066,6 +50130,32 @@ export interface operations {
             };
         };
     };
+    removeFunder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                fundingEntityId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeleteFundersRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
     listGlobalRoles: {
         parameters: {
             query?: never;
@@ -54964,7 +55054,7 @@ type WithRequired&lt;T, K extends keyof T&gt; = T &amp; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-01T17:33:06.990Z
+                at 2025-04-01T22:56:31.273Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
