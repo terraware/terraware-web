@@ -331,26 +331,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
 
       baseMap.subzone.entities = entitiesToReturn;
     }
-    observationMapData.subzone?.entities?.forEach((subzoneEntity) => {
-      const subzoneReplaceIndex = baseMap.subzone?.entities?.findIndex((e) => e.id === subzoneEntity.id) ?? -1;
-      if (baseMap.subzone && subzoneReplaceIndex >= 0) {
-        const oldEntity = baseMap.subzone.entities[subzoneReplaceIndex];
-        baseMap.subzone.entities[subzoneReplaceIndex] = {
-          ...subzoneEntity,
-          properties: { ...subzoneEntity.properties, recency: oldEntity.properties.recency },
-        };
-      } else {
-        if (!baseMap.subzone) {
-          baseMap.subzone = {
-            id: 'subzones',
-            entities: [],
-          };
-        }
-        baseMap.subzone.entities.push(subzoneEntity);
-      }
-    });
-
-    return baseMap;
+    return observationMapData;
   }, [plantingSite, observation, plantingSiteHistory, defaultTimeZone, zoneObservations]);
 
   const focusEntities = useMemo(() => {
