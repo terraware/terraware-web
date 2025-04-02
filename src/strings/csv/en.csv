@@ -795,6 +795,7 @@ INVESTMENT_THESIS,Investment Thesis,
 INVITATION_PENDING,Invitation Pending,
 INVITE_FUNDER,Invite Funder,
 INVITE_FUNDER_DESCRIPTION,Provide an email address to invite a Funder to the Funder Portal under this Funding Entity. An invitation email to create an account will be sent to the email address. First Name and Last Name will be provided by the account holder.,
+INVITED,Invited,
 ISSUE,Issue,
 IUCN_CRITICALLY_ENDANGERED,Critically Endangered (CR),IUCN conservation category. Keep the two-letter code as is; only translate the description.
 IUCN_DATA_DEFICIENT,Data Deficient (DD),IUCN conservation category. Keep the two-letter code as is; only translate the description.
