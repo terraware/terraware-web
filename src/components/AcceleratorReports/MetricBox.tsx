@@ -367,11 +367,9 @@ const MetricBox = ({
                       display={!editing}
                       required={true}
                     />
-                    {
-                      <Typography paddingTop={3} paddingLeft={0.5}>
-                        / {record.target} ({strings.TARGET})
-                      </Typography>
-                    }
+                    <Typography paddingTop={3} paddingLeft={0.5}>
+                      / {record.target} ({strings.TARGET})
+                    </Typography>
                   </Box>
                 )
               )}
