@@ -351,7 +351,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     });
 
     return baseMap;
-  }, [plantingSite, observation, plantingSiteHistory]);
+  }, [plantingSite, observation, plantingSiteHistory, defaultTimeZone, zoneObservations]);
 
   const focusEntities = useMemo(() => {
     return [{ sourceId: 'sites', id: plantingSiteId }];
