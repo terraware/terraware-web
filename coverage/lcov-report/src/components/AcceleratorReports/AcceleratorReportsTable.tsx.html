@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/101</span>
+                <span class='fraction'>0/103</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/91</span>
+                <span class='fraction'>0/93</span>
             </div>
         
             
@@ -330,7 +330,11 @@
 <a name='L265'></a><a href='#L265'>265</a>
 <a name='L266'></a><a href='#L266'>266</a>
 <a name='L267'></a><a href='#L267'>267</a>
-<a name='L268'></a><a href='#L268'>268</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a>
+<a name='L272'></a><a href='#L272'>272</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -433,23 +437,27 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -698,16 +706,18 @@ export default function <span class="fstat-no" title="function not covered" >Acc
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (listAllAcceleratorReportsRequest?.status === 'success') {</span>
 <span class="cstat-no" title="statement not covered" >      setAllAcceleratorReports(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-        const reports = <span class="cstat-no" title="statement not covered" >listAllAcceleratorReportsRequest?.data?.map(<span class="fstat-no" title="function not covered" >(r</span>eport) =&gt; {</span>
-          const year = <span class="cstat-no" title="statement not covered" >report.startDate.split('-')[0];</span>
-          const reportName = <span class="cstat-no" title="statement not covered" >report.frequency === 'Annual' ? `${year}` : `${year}-${report.quarter}`;</span>
+        const reports = <span class="cstat-no" title="statement not covered" >listAllAcceleratorReportsRequest?.data</span>
+          ?.filter(<span class="fstat-no" title="function not covered" >(r</span>eport) =&gt; <span class="cstat-no" title="statement not covered" >report.frequency !== 'Annual')</span>
+          .map(<span class="fstat-no" title="function not covered" >(r</span>eport) =&gt; {
+            const year = <span class="cstat-no" title="statement not covered" >report.startDate.split('-')[0];</span>
+            const reportName = <span class="cstat-no" title="statement not covered" >report.frequency === 'Annual' ? `${year}` : `${year}-${report.quarter}`;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >          return {</span>
-            ...report,
-            reportName,
-            year,
-          };
-        });
+<span class="cstat-no" title="statement not covered" >            return {</span>
+              ...report,
+              reportName,
+              year,
+            };
+          });
 <span class="cstat-no" title="statement not covered" >        return reports || [];</span>
       });
     }
@@ -716,16 +726,18 @@ export default function <span class="fstat-no" title="function not covered" >Acc
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (listAcceleratorReportsRequest?.status === 'success') {</span>
 <span class="cstat-no" title="statement not covered" >      setAcceleratorReports(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-        const reports = <span class="cstat-no" title="statement not covered" >listAcceleratorReportsRequest?.data?.map(<span class="fstat-no" title="function not covered" >(r</span>eport) =&gt; {</span>
-          const year = <span class="cstat-no" title="statement not covered" >report.startDate.split('-')[0];</span>
-          const reportName = <span class="cstat-no" title="statement not covered" >report.frequency === 'Annual' ? `${year}` : `${year}-${report.quarter}`;</span>
+        const reports = <span class="cstat-no" title="statement not covered" >listAcceleratorReportsRequest?.data</span>
+          ?.filter(<span class="fstat-no" title="function not covered" >(r</span>eport) =&gt; <span class="cstat-no" title="statement not covered" >report.frequency !== 'Annual')</span>
+          .map(<span class="fstat-no" title="function not covered" >(r</span>eport) =&gt; {
+            const year = <span class="cstat-no" title="statement not covered" >report.startDate.split('-')[0];</span>
+            const reportName = <span class="cstat-no" title="statement not covered" >report.frequency === 'Annual' ? `${year}` : `${year}-${report.quarter}`;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >          return {</span>
-            ...report,
-            reportName,
-            year,
-          };
-        });
+<span class="cstat-no" title="statement not covered" >            return {</span>
+              ...report,
+              reportName,
+              year,
+            };
+          });
 <span class="cstat-no" title="statement not covered" >        return reports || [];</span>
       });
     }
@@ -871,7 +883,7 @@ export default function <span class="fstat-no" title="function not covered" >Acc
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-02T14:01:54.448Z
+                at 2025-04-02T15:34:34.816Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

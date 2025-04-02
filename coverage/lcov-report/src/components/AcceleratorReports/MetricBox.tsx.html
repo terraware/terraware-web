@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/78</span>
+                <span class='fraction'>0/79</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/81</span>
+                <span class='fraction'>0/85</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/77</span>
+                <span class='fraction'>0/78</span>
             </div>
         
             
@@ -456,7 +456,10 @@
 <a name='L391'></a><a href='#L391'>391</a>
 <a name='L392'></a><a href='#L392'>392</a>
 <a name='L393'></a><a href='#L393'>393</a>
-<a name='L394'></a><a href='#L394'>394</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L394'></a><a href='#L394'>394</a>
+<a name='L395'></a><a href='#L395'>395</a>
+<a name='L396'></a><a href='#L396'>396</a>
+<a name='L397'></a><a href='#L397'>397</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -486,6 +489,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -544,6 +548,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -675,6 +680,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -856,6 +862,7 @@ import { Icon, Tooltip } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 &nbsp;
 import Button from 'src/components/common/button/Button';
+import { useUser } from 'src/providers';
 import {
   selectRefreshAcceleratorReportSystemMetrics,
   selectReviewAcceleratorReportMetric,
@@ -936,6 +943,7 @@ const MetricBox = <span class="cstat-no" title="statement not covered" ><span cl
   const [refreshRequestId, setRefreshRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const updateReportMetricResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectReviewAcceleratorReportMetric(requestId));</span>
   const refreshReportMetricResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectRefreshAcceleratorReportSystemMetrics(refreshRequestId));</span>
+  const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -1074,13 +1082,14 @@ const MetricBox = <span class="cstat-no" title="statement not covered" ><span cl
           sx={{
             borderRadius: 2,
             '&amp;:hover': {
-              background: !showEditOnHover
-                ? 'none'
-                : editing
-                  ? theme.palette.TwClrBgActive
-                  : theme.palette.TwClrBgHover,
+              background:
+                !showEditOnHover || !isAllowed('UPDATE_REPORTS_SETTINGS')
+                  ? 'none'
+                  : editing
+                    ? theme.palette.TwClrBgActive
+                    : theme.palette.TwClrBgHover,
               '.actions': {
-                display: showEditOnHover ? 'block' : 'none',
+                display: showEditOnHover &amp;&amp; isAllowed('UPDATE_REPORTS_SETTINGS') ? 'block' : 'none',
               },
             },
             background: editing ? theme.palette.TwClrBgActive : 'none',
@@ -1249,7 +1258,7 @@ export default MetricBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-02T14:01:54.448Z
+                at 2025-04-02T15:34:34.816Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

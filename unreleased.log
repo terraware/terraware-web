@@ -1,3 +1,6 @@
+d28018b6f04 SW-6731 Remove edit on reports for Read Only users (#3786)
+a7b17bbd1b3 SW-6730 Hide yearly report in reports table (#3785)
+3546399a037 SW-6728 Remove link on Target name for TF Expert & Read Only (#3784)
 28dfb414526 Bump tar-fs from 2.1.1 to 2.1.2 (#3769)
 eeb4f4e11d7 Bump axios from 1.7.8 to 1.8.4 (#3765)
 be8caa37663 Bump @babel/runtime from 7.26.0 to 7.26.10 (#3701)
