@@ -12,7 +12,6 @@ import MapDateSelect from 'src/components/common/MapDateSelect';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import {
   searchAdHocObservations,
@@ -62,7 +61,6 @@ export default function BoundariesAndZones({
   const theme = useTheme();
   const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>('assigned');
   const [selectedObservationType, setSelectedObservationType] = useState<ObservationType>('plantMonitoring');
-  const adHocObservationSupportEnabled = isEnabled('Ad Hoc Observation Support');
 
   const searchProps = useMemo<SearchProps>(
     () => ({
@@ -78,53 +76,51 @@ export default function BoundariesAndZones({
         <Typography fontSize='16px' fontWeight={600} margin={theme.spacing(3, 0)}>
           {strings.BOUNDARIES_AND_ZONES}
         </Typography>
-        {adHocObservationSupportEnabled && view === 'list' && (
-          <Box display={'flex'} alignItems='center'>
-            <Box
-              sx={{
-                margin: theme.spacing(0, 2),
-                width: '1px',
-                height: '32px',
-                backgroundColor: theme.palette.TwClrBgTertiary,
-              }}
-            />
-            <Box display='flex' alignItems='center'>
-              <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>
-                {strings.PLOT_SELECTION}
-              </Typography>
-              <Box width='160px' marginRight={3}>
-                <Dropdown
-                  placeholder={strings.SELECT}
-                  id='plot-selection-selector'
-                  onChange={(newValue) => setSelectedPlotSelection(newValue as PlotSelectionType)}
-                  options={[
-                    { label: strings.ASSIGNED, value: 'assigned' },
-                    { label: strings.AD_HOC, value: 'adHoc' },
-                  ]}
-                  selectedValue={selectedPlotSelection}
-                  selectStyles={{ inputContainer: { maxWidth: '160px' }, optionsContainer: { maxWidth: '160px' } }}
-                  fullWidth
-                />
-              </Box>
-            </Box>
-            <Box display='flex' alignItems='center'>
-              <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>
-                {strings.OBSERVATION_TYPE}
-              </Typography>
+        <Box display={'flex'} alignItems='center'>
+          <Box
+            sx={{
+              margin: theme.spacing(0, 2),
+              width: '1px',
+              height: '32px',
+              backgroundColor: theme.palette.TwClrBgTertiary,
+            }}
+          />
+          <Box display='flex' alignItems='center'>
+            <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>
+              {strings.PLOT_SELECTION}
+            </Typography>
+            <Box width='160px' marginRight={3}>
               <Dropdown
                 placeholder={strings.SELECT}
-                id='observation-type-selector'
-                onChange={(newValue) => setSelectedObservationType(newValue as ObservationType)}
+                id='plot-selection-selector'
+                onChange={(newValue) => setSelectedPlotSelection(newValue as PlotSelectionType)}
                 options={[
-                  { label: strings.PLANT_MONITORING, value: 'plantMonitoring' },
-                  { label: strings.BIOMASS_MONITORING, value: 'biomassMeasurements' },
+                  { label: strings.ASSIGNED, value: 'assigned' },
+                  { label: strings.AD_HOC, value: 'adHoc' },
                 ]}
-                selectedValue={selectedObservationType}
+                selectedValue={selectedPlotSelection}
+                selectStyles={{ inputContainer: { maxWidth: '160px' }, optionsContainer: { maxWidth: '160px' } }}
                 fullWidth
               />
             </Box>
           </Box>
-        )}
+          <Box display='flex' alignItems='center'>
+            <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>
+              {strings.OBSERVATION_TYPE}
+            </Typography>
+            <Dropdown
+              placeholder={strings.SELECT}
+              id='observation-type-selector'
+              onChange={(newValue) => setSelectedObservationType(newValue as ObservationType)}
+              options={[
+                { label: strings.PLANT_MONITORING, value: 'plantMonitoring' },
+                { label: strings.BIOMASS_MONITORING, value: 'biomassMeasurements' },
+              ]}
+              selectedValue={selectedObservationType}
+              fullWidth
+            />
+          </Box>
+        </Box>
       </Box>
       {plantingSite.boundary && (
         <ListMapView
@@ -166,7 +162,6 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
   const timeZone = plantingSite.timeZone ?? defaultTimeZone.get().id;
   const { selectedOrganization } = useOrganization();
   const dispatch = useAppDispatch();
-  const adHocObservationSupportEnabled = isEnabled('Ad Hoc Observation Support');
   const [selectedObservation, setSelectedObservation] = useState<ObservationResults>();
   const [selectedAdHocObservation, setSelectedAdHocObservation] = useState<AdHocObservationResults>();
 
@@ -352,13 +347,7 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
-      <PlantingSiteMapLegend
-        options={
-          adHocObservationSupportEnabled
-            ? ['site', 'zone', 'subzone', 'permanentPlot', 'temporaryPlot', 'adHocPlot']
-            : ['site', 'zone', 'subzone', 'permanentPlot', 'temporaryPlot']
-        }
-      />
+      <PlantingSiteMapLegend options={['site', 'zone', 'subzone', 'permanentPlot', 'temporaryPlot', 'adHocPlot']} />
       <PlantingSiteMap
         mapData={mapData}
         style={{ borderRadius: '24px' }}
