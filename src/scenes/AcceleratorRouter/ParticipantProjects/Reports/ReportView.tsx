@@ -177,11 +177,11 @@ const ReportView = () => {
   );
 
   const year = selectedReport?.startDate.split('-')[0];
-  const quarterNumber = selectedReport?.startDate
-    ? Math.ceil((new Date(selectedReport?.startDate).getMonth() + 1) / 3)
-    : 0;
-  const reportName =
-    selectedReport?.frequency === 'Annual' ? `${year}` : quarterNumber ? `${year}-Q${quarterNumber}` : '';
+  const reportName = selectedReport
+    ? selectedReport.frequency === 'Annual'
+      ? `${year}`
+      : `${year}-${selectedReport.quarter}`
+    : '';
 
   return (
     <>
