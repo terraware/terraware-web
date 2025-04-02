@@ -12,6 +12,7 @@ import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { selectListAcceleratorReports } from 'src/redux/features/reports/reportsSelectors';
 import { requestListAcceleratorReports } from 'src/redux/features/reports/reportsThunks';
+import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorReport, AcceleratorReportStatuses } from 'src/types/AcceleratorReport';
@@ -74,6 +75,7 @@ export default function AcceleratorReportsTable(): JSX.Element {
   const [allAcceleratorReports, setAllAcceleratorReports] = useState<AcceleratorReportRow[]>([]);
   const [listAcceleratorReportsRequestId, setListAcceleratorReportsRequestId] = useState<string>('');
   const [listAllAcceleratorReportsRequestId, setListAllAcceleratorReportsRequestId] = useState<string>('');
+  const [userIdsRequested, setUserIdsRequested] = useState(new Set<number>());
 
   const listAcceleratorReportsRequest = useAppSelector(selectListAcceleratorReports(listAcceleratorReportsRequestId));
   const listAllAcceleratorReportsRequest = useAppSelector(
@@ -158,6 +160,31 @@ export default function AcceleratorReportsTable(): JSX.Element {
 
     return Array.from(years).sort((a, b) => b - a);
   }, [allAcceleratorReports]);
+
+  const allReportUserIds = useMemo(() => {
+    const userIds: Set<number> = new Set();
+
+    allAcceleratorReports?.forEach((report) => {
+      if (report.modifiedBy) {
+        userIds.add(report.modifiedBy);
+      }
+      if (report.submittedBy) {
+        userIds.add(report.submittedBy);
+      }
+    });
+
+    return Array.from(userIds).sort((a, b) => a - b);
+  }, [allAcceleratorReports]);
+
+  useEffect(() => {
+    allReportUserIds.forEach((userId) => {
+      if (userIdsRequested.has(userId)) {
+        return;
+      }
+      setUserIdsRequested((prev) => new Set(prev).add(userId));
+      dispatch(requestGetUser(userId));
+    });
+  }, [allReportUserIds, userIdsRequested, dispatch]);
 
   const yearFilterOptions = useMemo(() => {
     return allReportYears.map((year) => year.toString());
