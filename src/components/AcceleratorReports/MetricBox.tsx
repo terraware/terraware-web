@@ -63,7 +63,7 @@ const MetricBox = ({
   projectId,
   reportId,
   reload,
-  isParticipantView = true,
+  isConsoleView = false,
 }: {
   editingId?: string;
   hideStatusBadge?: boolean;
@@ -75,7 +75,7 @@ const MetricBox = ({
   metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric;
   type: MetricType;
   reportId: number;
-  isParticipantView?: boolean;
+  isConsoleView?: boolean;
 }): JSX.Element => {
   const theme = useTheme();
   const [record, setRecord, onChange] = useForm<ReportProjectMetric | ReportSystemMetric | ReportStandardMetric>(
@@ -318,7 +318,7 @@ const MetricBox = ({
                   <Typography fontSize={'14px'} color={theme.palette.TwClrTxtSecondary}>
                     {strings.PROGRESS} *
                   </Typography>
-                  <Box display={'flex'} alignItems={'center'} paddingTop={1.5}>
+                  <Box display={'flex'} alignItems={'center'} paddingTop={1.5} paddingBottom={theme.spacing(2)}>
                     <Typography>
                       {getProgressValue() || 0} / {record.target} ({strings.TARGET})
                     </Typography>
@@ -365,7 +365,7 @@ const MetricBox = ({
                 </>
               ) : (
                 isStandardOrProjectMetric(record) && (
-                  <Box display={'flex'} alignItems={'center'}>
+                  <Box display={'flex'} alignItems={'center'} paddingBottom={theme.spacing(2)}>
                     <TextField
                       type='text'
                       label={strings.PROGRESS}
@@ -382,9 +382,9 @@ const MetricBox = ({
                 )
               )}
             </Grid>
-            {!isParticipantView && (
-              <Grid item xs={6} padding={theme.spacing(2)}>
-                <Box paddingRight={theme.spacing(4)}>
+            {isConsoleView && (
+              <Grid item xs={6}>
+                <Box>
                   <TextField
                     type='textarea'
                     label={strings.STATUS}
@@ -397,7 +397,7 @@ const MetricBox = ({
               </Grid>
             )}
             <Grid item xs={6}>
-              <Box>
+              <Box paddingRight={theme.spacing(2)}>
                 <TextField
                   type='textarea'
                   label={strings.UNDERPERFORMANCE_JUSTIFICATION}
@@ -405,6 +405,7 @@ const MetricBox = ({
                   id={'underperformanceJustification'}
                   onChange={(value: any) => onChange('underperformanceJustification', value)}
                   display={!editing}
+                  preserveNewlines
                 />
                 {!!editing && (
                   <Typography fontSize={14} color={theme.palette.TwClrTxtSecondary}>
@@ -413,9 +414,9 @@ const MetricBox = ({
                 )}
               </Box>
             </Grid>
-            {!isParticipantView && (
+            {isConsoleView && (
               <Grid item xs={6}>
-                <Box>
+                <Box paddingRight={theme.spacing(2)}>
                   <TextField
                     type='textarea'
                     label={strings.PROGRESS_NOTES}
@@ -423,6 +424,7 @@ const MetricBox = ({
                     id={'progressNotes'}
                     onChange={(value: any) => onChange('progressNotes', value)}
                     display={!editing}
+                    preserveNewlines
                   />
                   {!!editing && (
                     <Typography fontSize={14} color={theme.palette.TwClrTxtSecondary}>

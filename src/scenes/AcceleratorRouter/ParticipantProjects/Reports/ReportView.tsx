@@ -253,7 +253,7 @@ const ReportView = () => {
                 metric={systemMetric}
                 type={'system'}
                 reportId={Number(reportId)}
-                isParticipantView={false}
+                isConsoleView={true}
               />
             ))}
             {selectedReport?.projectMetrics.map((projectMetric: ReportProjectMetric, index: number) => (
@@ -267,7 +267,7 @@ const ReportView = () => {
                 metric={projectMetric}
                 type={'project'}
                 reportId={Number(reportId)}
-                isParticipantView={false}
+                isConsoleView={true}
               />
             ))}
             {selectedReport?.standardMetrics.map((standardMetric: ReportStandardMetric, index: number) => (
@@ -281,7 +281,7 @@ const ReportView = () => {
                 metric={standardMetric}
                 type={'standard'}
                 reportId={selectedReport.id}
-                isParticipantView={false}
+                isConsoleView={true}
               />
             ))}
           </Card>
