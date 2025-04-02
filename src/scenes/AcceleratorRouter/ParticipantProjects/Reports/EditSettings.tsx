@@ -11,8 +11,16 @@ import DatePicker from 'src/components/common/DatePicker';
 import PageForm from 'src/components/common/PageForm';
 import TextField from 'src/components/common/Textfield/Textfield';
 import { APP_PATHS } from 'src/constants';
-import { selectCreateReportConfig, selectProjectReportConfig } from 'src/redux/features/reports/reportsSelectors';
-import { requestCreateReportConfig, requestProjectReportConfig } from 'src/redux/features/reports/reportsThunks';
+import {
+  selectCreateReportConfig,
+  selectProjectReportConfig,
+  selectUpdateReportConfig,
+} from 'src/redux/features/reports/reportsSelectors';
+import {
+  requestCreateReportConfig,
+  requestProjectReportConfig,
+  requestUpdateReportConfig,
+} from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { NewAcceleratorReportConfig } from 'src/types/AcceleratorReport';
@@ -22,10 +30,11 @@ export default function EditSettings(): JSX.Element {
   const theme = useTheme();
   const navigate = useNavigate();
   const pathParams = useParams<{ projectId: string }>();
-  const projectId = Number(pathParams.projectId);
+  const projectId = String(pathParams.projectId);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
   const createReportConfigResponse = useAppSelector(selectCreateReportConfig(requestId));
+  const updateReportConfigResponse = useAppSelector(selectUpdateReportConfig(requestId));
   const projectReportConfig = useAppSelector((state) => selectProjectReportConfig(state));
 
   useEffect(() => {
@@ -42,6 +51,12 @@ export default function EditSettings(): JSX.Element {
     }
   }, [createReportConfigResponse]);
 
+  useEffect(() => {
+    if (updateReportConfigResponse?.status === 'success') {
+      goToProjectReports();
+    }
+  }, [updateReportConfigResponse]);
+
   const goToProjectReports = () => {
     navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId.toString())}?tab=settings`);
   };
@@ -49,11 +64,17 @@ export default function EditSettings(): JSX.Element {
   const [newConfig, , onChange] = useForm<NewAcceleratorReportConfig>({
     reportingStartDate: projectReportConfig.config?.reportingStartDate || '',
     reportingEndDate: projectReportConfig.config?.reportingEndDate || '',
-    frequency: 'Annual',
   });
 
   const saveReportConfig = () => {
-    const request = dispatch(requestCreateReportConfig({ config: newConfig, projectId: projectId }));
+    const request = projectReportConfig?.config
+      ? dispatch(
+          requestUpdateReportConfig({
+            config: newConfig,
+            projectId: projectId,
+          })
+        )
+      : dispatch(requestCreateReportConfig({ config: newConfig, projectId: projectId }));
     setRequestId(request.requestId);
   };
 

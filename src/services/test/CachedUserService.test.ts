@@ -2,6 +2,7 @@ import { setHttpServiceMocks, clearHttpServiceMocks } from './HttpServiceMocks';
 import UserService from '../UserService';
 import CachedUserService from '../CachedUserService';
 import PreferencesService from '../PreferencesService';
+import { User } from '../../types/User';
 
 const USER = {
   id: 1,
@@ -9,13 +10,14 @@ const USER = {
   email: 'constanza@terraformation.com',
 };
 
-const UPDATED_USER = {
+const UPDATED_USER: User = {
   email: 'constanza@terraformation.com',
   emailNotificationsEnabled: false,
   firstName: 'Constanza',
   globalRoles: [],
   id: 1,
   lastName: 'Uanini',
+  userType: 'Individual'
 };
 
 const PREFERENCES = {

@@ -8,35 +8,48 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useUser } from 'src/providers';
 import {
   selectListReportMetrics,
   selectListStandardMetrics,
+  selectListSystemMetrics,
   selectProjectReportConfig,
 } from 'src/redux/features/reports/reportsSelectors';
 import {
   requestListProjectMetrics,
   requestListStandardMetrics,
+  requestListSystemMetrics,
   requestProjectReportConfig,
 } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ProjectMetric, StandardMetric } from 'src/types/AcceleratorReport';
+import { ProjectMetric, StandardMetric, SystemMetric } from 'src/types/AcceleratorReport';
+
+import EditMetricModal from './EditMetricModal';
+import SpecificMetricsRenderer from './SpecificMetricsRenderer';
+import SystemMetricsRenderer from './SystemMetricsRenderer';
 
 export default function ReportsSettings(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const pathParams = useParams<{ projectId: string }>();
-  const projectId = Number(pathParams.projectId);
+  const projectId = String(pathParams.projectId);
   const projectReportConfig = useAppSelector((state) => selectProjectReportConfig(state));
   const dispatch = useAppDispatch();
-  const { goToAcceleratorEditReportSettings } = useNavigateTo();
+  const { goToAcceleratorEditReportSettings, goToNewProjectMetric } = useNavigateTo();
   const [requestId, setRequestId] = useState<string>('');
   const [standardRequestId, setStandardRequestId] = useState<string>('');
+  const [systemRequestId, setSystemRequestId] = useState<string>('');
   const specificMetricsResponse = useAppSelector(selectListReportMetrics(requestId));
   const standardMetricsResponse = useAppSelector(selectListStandardMetrics(standardRequestId));
+  const systemMetricsResponse = useAppSelector(selectListSystemMetrics(systemRequestId));
   const [metrics, setMetrics] = useState<ProjectMetric[]>();
   const [standardMetrics, setStandardMetrics] = useState<StandardMetric[]>();
+  const [systemMetrics, setSystemMetrics] = useState<SystemMetric[]>();
   const [selectedRows, setSelectedRows] = useState<ProjectMetric[]>([]);
+  const [selectedMetric, setSelectedMetric] = useState<ProjectMetric>();
+  const [editMetricModalOpened, setEditMetricModalOpened] = useState<boolean>(false);
+  const { isAllowed } = useUser();
 
   useEffect(() => {
     const dispatched = dispatch(requestListStandardMetrics());
@@ -44,8 +57,17 @@ export default function ReportsSettings(): JSX.Element {
   }, []);
 
   useEffect(() => {
+    const dispatched = dispatch(requestListSystemMetrics());
+    setSystemRequestId(dispatched.requestId);
+  }, []);
+
+  const reloadSpecificMetrics = () => {
     const dispatched = dispatch(requestListProjectMetrics({ projectId }));
     setRequestId(dispatched.requestId);
+  };
+
+  useEffect(() => {
+    reloadSpecificMetrics();
   }, [projectId]);
 
   useEffect(() => {
@@ -65,6 +87,12 @@ export default function ReportsSettings(): JSX.Element {
       setStandardMetrics(standardMetricsResponse.data);
     }
   }, [standardMetricsResponse]);
+
+  useEffect(() => {
+    if (systemMetricsResponse && systemMetricsResponse.status === 'success') {
+      setSystemMetrics(systemMetricsResponse.data);
+    }
+  }, [systemMetricsResponse]);
 
   const gridSize = isMobile ? 12 : 4;
 
@@ -121,13 +149,27 @@ export default function ReportsSettings(): JSX.Element {
     },
   ];
 
+  const onRowClick = (metric: ProjectMetric) => {
+    setSelectedMetric(metric);
+    setEditMetricModalOpened(true);
+  };
+
   return (
     <>
+      {editMetricModalOpened && selectedMetric && (
+        <EditMetricModal
+          onClose={() => setEditMetricModalOpened(false)}
+          projectMetric={selectedMetric}
+          reload={reloadSpecificMetrics}
+        />
+      )}
       <Card
         style={{ display: 'flex', flexDirection: 'column' }}
         title={strings.SETTINGS}
         rightComponent={
-          <Button label={strings.EDIT_SETTINGS} icon='iconEdit' onClick={goToEditSettings} priority='secondary' />
+          isAllowed('UPDATE_REPORTS_SETTINGS') && (
+            <Button icon='iconEdit' onClick={goToEditSettings} priority='secondary' />
+          )
         }
       >
         <Grid container sx={gridStyle}>
@@ -147,9 +189,16 @@ export default function ReportsSettings(): JSX.Element {
         <Grid container sx={gridStyle}>
           <Grid item xs={12} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
             {title(strings.PROJECT_SPECIFIC_METRICS)}
-            <Box>
-              <Button label={strings.ADD_METRIC} icon='plus' onClick={() => true} priority='secondary' />
-            </Box>
+            {isAllowed('UPDATE_REPORTS_SETTINGS') && (
+              <Box>
+                <Button
+                  label={strings.ADD_METRIC}
+                  icon='plus'
+                  onClick={() => goToNewProjectMetric(projectId)}
+                  priority='secondary'
+                />
+              </Box>
+            )}
           </Grid>
           <Grid item xs={12} textAlign={'center'}>
             {metrics && metrics.length > 0 ? (
@@ -170,10 +219,29 @@ export default function ReportsSettings(): JSX.Element {
                     icon: 'iconTrashCan',
                   },
                 ]}
+                Renderer={SpecificMetricsRenderer}
+                onSelect={onRowClick}
+                controlledOnSelect={true}
+                isClickable={() => false}
               />
             ) : (
               <Typography>{strings.NO_PROJECT_SPECIFIC_METRICS_TO_SHOW}</Typography>
             )}
+          </Grid>
+        </Grid>
+        <Grid container sx={gridStyle}>
+          <Grid item xs={12}>
+            {title(strings.SYSTEM_METRICS)}
+          </Grid>
+          <Grid item xs={12}>
+            <Table
+              id='system-metrics-table'
+              columns={columns}
+              rows={systemMetrics || []}
+              orderBy='name'
+              showCheckbox={false}
+              Renderer={SystemMetricsRenderer}
+            />
           </Grid>
         </Grid>
         <Grid container sx={gridStyle}>

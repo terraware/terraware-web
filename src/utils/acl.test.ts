@@ -9,6 +9,7 @@ describe('isAllowed', () => {
       emailNotificationsEnabled: false,
       email: 'mock@email.com',
       globalRoles: [GLOBAL_ROLE_SUPER_ADMIN],
+      userType: 'Individual'
     };
 
     // Allowed Permissions
@@ -41,6 +42,7 @@ describe('isAllowed', () => {
       emailNotificationsEnabled: false,
       email: 'mock@email.com',
       globalRoles: [GLOBAL_ROLE_ACCELERATOR_ADMIN],
+      userType: 'Individual'
     };
 
     // Allowed Permissions
@@ -73,6 +75,7 @@ describe('isAllowed', () => {
       emailNotificationsEnabled: false,
       email: 'mock@email.com',
       globalRoles: [GLOBAL_ROLE_TF_EXPERT],
+      userType: 'Individual'
     };
 
     // Allowed permissions
@@ -107,6 +110,7 @@ describe('isAllowed', () => {
       emailNotificationsEnabled: false,
       email: 'mock@email.com',
       globalRoles: [GLOBAL_ROLE_READ_ONLY],
+      userType: 'Individual'
     };
 
     // Allowed permissions

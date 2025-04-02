@@ -9,6 +9,7 @@ import NavFooter from 'src/components/common/Navbar/NavFooter';
 import NavItem from 'src/components/common/Navbar/NavItem';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useUser } from 'src/providers';
 import strings from 'src/strings';
@@ -27,6 +28,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const isApplicationRoute = useMatch({ path: APP_PATHS.ACCELERATOR_APPLICATIONS, end: false });
   const isDocumentsRoute = useMatch({ path: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS, end: false });
   const isDeliverablesRoute = useMatch({ path: APP_PATHS.ACCELERATOR_DELIVERABLES, end: false });
+  const isFundingEntitiesRoute = useMatch({ path: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES, end: false });
   const isModuleContentRoute = useMatch({ path: APP_PATHS.ACCELERATOR_MODULES, end: false });
   const isOrganizationRoute = useMatch({ path: APP_PATHS.ACCELERATOR_ORGANIZATIONS, end: false });
   const isOverviewRoute = useMatch({ path: APP_PATHS.ACCELERATOR_OVERVIEW, end: false });
@@ -35,7 +37,10 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const isScoringRoute = useMatch({ path: APP_PATHS.ACCELERATOR_PROJECT_SCORES, end: false });
   const isVotingRoute = useMatch({ path: APP_PATHS.ACCELERATOR_PROJECT_VOTES, end: false });
 
+  const isFundingEntitiesEnabled = isEnabled('Funding Entities');
+
   const isAllowedViewPeople = isAllowed('READ_GLOBAL_ROLES');
+  const isAllowedViewFundingEntities = isAllowed('READ_FUNDING_ENTITIES');
 
   const closeAndNavigateTo = (path: string) => {
     closeNavBar();
@@ -138,6 +143,16 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_MODULES)}
         selected={!!isModuleContentRoute}
       />
+
+      {isFundingEntitiesEnabled && isAllowedViewFundingEntities && (
+        <NavItem
+          icon='iconCoinInHand'
+          id='funding-entities'
+          label={strings.FUNDING_ENTITIES}
+          onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_FUNDING_ENTITIES)}
+          selected={!!isFundingEntitiesRoute}
+        />
+      )}
 
       <NavFooter>
         <LocaleSelector transparent={true} />

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { IconTooltip } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Link from 'src/components/common/Link';
@@ -11,6 +12,8 @@ export type StatsCardItemProps = {
   linkText?: string;
   showBorder?: boolean;
   showLink?: boolean;
+  showTooltip?: boolean;
+  tooltipText?: string;
   value?: string;
 };
 
@@ -20,6 +23,8 @@ export const StatsCardItem = ({
   linkText,
   showBorder = true,
   showLink = true,
+  showTooltip = false,
+  tooltipText,
   value,
 }: StatsCardItemProps) => {
   const { isDesktop } = useDeviceInfo();
@@ -50,6 +55,7 @@ export const StatsCardItem = ({
         title={label}
       >
         {label}
+        {showTooltip && <IconTooltip placement='top' title={tooltipText} />}
       </Typography>
       <Typography
         sx={{

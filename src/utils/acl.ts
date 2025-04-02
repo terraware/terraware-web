@@ -21,6 +21,7 @@ import { isManagerOrHigher, isMember } from './organization';
 /**
  * We split the permissions up loosely by the entity that the user is being authorized to interact with or view
  */
+type PermissionAcceleratorReports = 'UPDATE_REPORTS_SETTINGS';
 type PermissionApplication =
   | 'READ_ALL_APPLICATIONS'
   | 'UPDATE_APPLICATION_INTERNAL_COMMENTS'
@@ -33,6 +34,7 @@ type PermissionDeliverable =
   | 'READ_SUBMISSION_DOCUMENT'
   | 'UPDATE_SUBMISSION_STATUS'
   | 'UPDATE_DELIVERABLE';
+type PermissionFunder = 'READ_FUNDING_ENTITIES' | 'MANAGE_FUNDING_ENTITIES' | 'INVITE_FUNDER';
 type PermissionGlobalRole = 'READ_GLOBAL_ROLES' | 'ASSIGN_GLOBAL_ROLE_TO_USER' | 'ASSIGN_SOME_GLOBAL_ROLES';
 type PermissionParticipant =
   | 'CREATE_PARTICIPANTS'
@@ -50,10 +52,12 @@ type PermissionParticipantProject =
   | 'EXPORT_PARTICIPANT_PROJECT';
 
 export type GlobalRolePermission =
+  | PermissionAcceleratorReports
   | PermissionApplication
   | PermissionCohort
   | PermissionConsole
   | PermissionDeliverable
+  | PermissionFunder
   | PermissionGlobalRole
   | PermissionParticipant
   | PermissionParticipantProject;
@@ -145,9 +149,12 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   DELETE_PARTICIPANTS: AcceleratorAdminPlus,
   EXPORT_PARTICIPANTS: ReadOnlyPlus,
   EXPORT_PARTICIPANT_PROJECT: ReadOnlyPlus,
+  INVITE_FUNDER: AcceleratorAdminPlus,
+  MANAGE_FUNDING_ENTITIES: AcceleratorAdminPlus,
   READ_ALL_APPLICATIONS: ReadOnlyPlus,
   READ_COHORTS: TFExpertPlus,
   READ_DELIVERABLE: isAllowedReadDeliverable,
+  READ_FUNDING_ENTITIES: ReadOnlyPlus,
   READ_GLOBAL_ROLES: AcceleratorAdminPlus,
   READ_PARTICIPANTS: TFExpertPlus,
   READ_PARTICIPANT_PROJECT: ReadOnlyPlus,
@@ -158,6 +165,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   UPDATE_DELIVERABLE: TFExpertPlus,
   UPDATE_PARTICIPANTS: AcceleratorAdminPlus,
   UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING: TFExpertPlus,
+  UPDATE_REPORTS_SETTINGS: AcceleratorAdminPlus,
   UPDATE_PARTICIPANT_PROJECT: TFExpertPlus,
   UPDATE_SUBMISSION_STATUS: TFExpertPlus,
   VIEW_CONSOLE: ReadOnlyPlus,

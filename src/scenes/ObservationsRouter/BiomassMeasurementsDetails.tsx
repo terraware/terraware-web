@@ -122,7 +122,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
         to: APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', plantingSiteId?.toString()),
       });
       data.push({
-        name: strings.BIOMASS_MEASUREMENTS,
+        name: strings.BIOMASS_MONITORING,
         to: `${APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', plantingSiteId?.toString())}&tab=biomassMeasurements`,
       });
     }
@@ -195,7 +195,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
                         fontWeight={400}
                         color={theme.palette.TwClrTxtSecondary}
                       >
-                        {strings.DESCRIPTION_NOTES}
+                        {strings.PLOT_DESCRIPTION}
                       </Typography>
                       <Typography fontSize='16px' lineHeight='24px' fontWeight={500} color={theme.palette.TwClrTxt}>
                         {biomassMeasurements?.description}

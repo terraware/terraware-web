@@ -13,6 +13,7 @@ import strings from 'src/strings';
 type PlantingProgressMapDialogProps = {
   id: number;
   subzoneName: string;
+  subzoneAreaHa: number;
   siteName: string;
   plantingComplete: boolean;
   onUpdatePlantingComplete: (id: number, val: boolean) => void;
@@ -22,6 +23,7 @@ type PlantingProgressMapDialogProps = {
 export default function PlantingProgressMapDialog({
   id,
   subzoneName,
+  subzoneAreaHa,
   siteName,
   plantingComplete,
   onUpdatePlantingComplete,
@@ -64,6 +66,11 @@ export default function PlantingProgressMapDialog({
       >
         <Typography fontSize='16px' fontWeight={600}>
           {subzoneName}
+        </Typography>
+        <Typography fontSize='16px' fontWeight={400}>
+          {strings.AREA_HA}
+          {': '}
+          {subzoneAreaHa}
         </Typography>
         <Typography fontSize='16px' fontWeight={400}>
           <FormattedNumber value={totalPlants} />

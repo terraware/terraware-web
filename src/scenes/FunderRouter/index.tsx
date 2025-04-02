@@ -1,13 +1,17 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 
 import { Box } from '@mui/material';
 
 import ErrorBoundary from 'src/ErrorBoundary';
 import { APP_PATHS } from 'src/constants';
+import { useUser } from 'src/providers';
 import FunderHome from 'src/scenes/FunderHome';
 
 export default function FunderRouter() {
+  const { user } = useUser();
+  const navigate = useNavigate();
+
   const contentStyles = {
     height: '100%',
     overflow: 'auto',
@@ -15,6 +19,12 @@ export default function FunderRouter() {
       paddingTop: '96px !important',
     },
   };
+
+  useEffect(() => {
+    if (navigate && user && user.userType !== 'Funder') {
+      navigate(APP_PATHS.WELCOME);
+    }
+  }, [navigate, user]);
 
   return (
     <Box sx={contentStyles} className={'scrollable-content'}>

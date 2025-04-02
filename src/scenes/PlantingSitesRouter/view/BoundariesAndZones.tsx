@@ -117,7 +117,7 @@ export default function BoundariesAndZones({
                 onChange={(newValue) => setSelectedObservationType(newValue as ObservationType)}
                 options={[
                   { label: strings.PLANT_MONITORING, value: 'plantMonitoring' },
-                  { label: strings.BIOMASS_MEASUREMENTS, value: 'biomassMeasurements' },
+                  { label: strings.BIOMASS_MONITORING, value: 'biomassMeasurements' },
                 ]}
                 selectedValue={selectedObservationType}
                 fullWidth
@@ -145,6 +145,7 @@ export default function BoundariesAndZones({
             />
           }
           map={<PlantingSiteMapView plantingSite={plantingSite} data={data} search={search ? search.trim() : ''} />}
+          data={data}
         />
       )}
     </Box>
@@ -314,7 +315,7 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
       }
     }
 
-    if (!selectedObservationDate || !observationToUse) {
+    if (!selectedObservationDate || !observationToUse || !plantingSiteHistory) {
       return {
         site: mapDataFromAggregation.site,
         zone: mapDataFromAggregation.zone,
@@ -427,6 +428,7 @@ const contextRenderer =
       const zone = data.find((z) => z.id === entity.id);
       title = zone?.name;
       properties = [
+        { key: strings.AREA_HA, value: zone?.areaHa && zone?.areaHa > 0 ? zone?.areaHa : '' },
         { key: strings.TARGET_PLANTING_DENSITY, value: zone?.targetPlantingDensity ?? 0 },
         { key: strings.PLANTING_COMPLETE, value: zone?.plantingCompleted ? strings.YES : strings.NO },
         { key: strings.SUBZONES, value: zone?.plantingSubzones.length ?? 0 },
@@ -443,6 +445,7 @@ const contextRenderer =
       const subzone = data.flatMap((z) => z.plantingSubzones).find((sz) => sz.id === entity.id);
       title = subzone?.fullName;
       properties = [
+        { key: strings.AREA_HA, value: subzone?.areaHa && subzone?.areaHa > 0 ? subzone?.areaHa : '' },
         { key: strings.PLANTING_COMPLETE, value: subzone?.plantingCompleted ? strings.YES : strings.NO },
         { key: strings.MONITORING_PLOTS, value: subzone?.monitoringPlots.length ?? 0 },
       ];

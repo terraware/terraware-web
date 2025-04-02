@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { Button, ViewPhotosDialog } from '@terraware/web-components';
 
-import ReportService, { REPORT_PHOTO_ENDPOINT } from 'src/services/ReportService';
+import SeedFundReportService, { REPORT_PHOTO_ENDPOINT } from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
 import { ReportPhoto } from 'src/types/Report';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -27,7 +27,7 @@ export default function ViewPhotos({ reportId, onPhotoRemove, editable }: Photos
 
   useEffect(() => {
     const getPhotos = async () => {
-      const photoListResponse = await ReportService.getReportPhotos(reportId);
+      const photoListResponse = await SeedFundReportService.getReportPhotos(reportId);
       if (!photoListResponse.requestSucceeded || photoListResponse.error) {
         setPhotos([]);
         snackbar.toastError();

@@ -3,7 +3,13 @@ import { createContext } from 'react';
 import { Organization } from 'src/types/Organization';
 import { GlobalRolePermission } from 'src/utils/acl';
 
-import { ProvidedLocalizationData, ProvidedOrganizationData, ProvidedUserData } from './DataTypes';
+import {
+  ProvidedFundingEntityData,
+  ProvidedLocalizationData,
+  ProvidedOrganizationData,
+  ProvidedUserData,
+  ProvidedUserFundingEntityData,
+} from './DataTypes';
 
 export const UserContext = createContext<ProvidedUserData>({
   reloadUser: () => {
@@ -65,4 +71,14 @@ export const LocalizationContext = createContext<ProvidedLocalizationData>({
   setSelectedLocale: () => undefined,
   supportedTimeZones: [],
   bootstrapped: false,
+});
+
+export const UserFundingEntityContext = createContext<ProvidedUserFundingEntityData>({
+  userFundingEntity: undefined,
+  bootstrapped: false,
+});
+
+export const FundingEntityContext = createContext<ProvidedFundingEntityData>({
+  fundingEntity: undefined,
+  reload: () => {},
 });

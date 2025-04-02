@@ -1,7 +1,11 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'Ad Hoc Observation Support' | 'Assigning and Collecting Reports';
+export type FeatureName =
+  | 'Show Production View'
+  | 'Ad Hoc Observation Support'
+  | 'Assigning and Collecting Reports'
+  | 'Funding Entities';
 
 export type Feature = {
   name: FeatureName;
@@ -51,6 +55,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Enable Assigning and Collecting Reports'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Funding Entities',
+    preferenceName: 'enableFundingEntities',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Enable Funding Entities.'],
     disclosure: ['This is a WIP'],
   },
 ];

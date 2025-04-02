@@ -65,16 +65,15 @@ export type ObservationResultsWithLastObv = Omit<
 
 // zone level results -> contains a list of subzone level results
 export type ObservationPlantingZoneResultsPayload = components['schemas']['ObservationPlantingZoneResultsPayload'];
-export type ObservationPlantingZoneResults = ObservationPlantingZoneResultsPayload &
-  Boundary & {
-    completedDate?: string;
-    plantingZoneName: string;
-    plantingSubzones: ObservationPlantingSubzoneResults[];
-    species: ObservationSpeciesResults[];
-    status?: MonitoringPlotStatus;
-    hasObservedPermanentPlots: boolean;
-    hasObservedTemporaryPlots: boolean;
-  };
+export type ObservationPlantingZoneResults = ObservationPlantingZoneResultsPayload & {
+  completedDate?: string;
+  plantingZoneName: string;
+  plantingSubzones: ObservationPlantingSubzoneResults[];
+  species: ObservationSpeciesResults[];
+  status?: MonitoringPlotStatus;
+  hasObservedPermanentPlots: boolean;
+  hasObservedTemporaryPlots: boolean;
+};
 
 export type ObservationPlantingZoneResultsWithLastObv = Omit<ObservationPlantingZoneResults, 'plantingSubzones'> & {
   lastObv?: string;
@@ -84,11 +83,10 @@ export type ObservationPlantingZoneResultsWithLastObv = Omit<ObservationPlanting
 // subzone level results -> contains lists of both species level results and monitoring plot level results
 export type ObservationPlantingSubzoneResultsPayload =
   components['schemas']['ObservationPlantingSubzoneResultsPayload'];
-export type ObservationPlantingSubzoneResults = ObservationPlantingSubzoneResultsPayload &
-  Boundary & {
-    plantingSubzoneName: string;
-    monitoringPlots: ObservationMonitoringPlotResults[];
-  };
+export type ObservationPlantingSubzoneResults = ObservationPlantingSubzoneResultsPayload & {
+  plantingSubzoneName: string;
+  monitoringPlots: ObservationMonitoringPlotResults[];
+};
 export type ObservationPlantingSubzoneResultsWithLastObv = ObservationPlantingSubzoneResults & {
   lastObv?: string;
 };
@@ -156,7 +154,7 @@ export const getReplaceObservationPlotDuration = (duration: ReplaceObservationPl
 };
 
 export type Aggregation = {
-  subzones: Record<number, Set<number>>;
+  subzones: Record<string, Set<number>>;
   plots: Record<number, ObservationMonitoringPlotResultsPayload>;
   completedTime?: string;
 };

@@ -29,17 +29,17 @@ export const selectPlantingSiteZones = createSelector(
      * Aggregate unique monitoring plots across results and keep those zones/subzones data with latest completed times
      */
 
-    const zones: Record<number, Aggregation> = {};
+    const zones: Record<string, Aggregation> = {};
     /**
      * Iterate through all the planting zones in the observations results to book-keep subzones and monitoring plots for the zone
      */
     observationsResults
       ?.flatMap((result) => result.plantingZones)
       .forEach((zone) => {
-        const { plantingZoneId, completedTime, plantingSubzones } = zone;
-        if (!zones[plantingZoneId]) {
+        const { name: zoneName, completedTime, plantingSubzones } = zone;
+        if (!zones[zoneName]) {
           // initialize book-keeping data for zone
-          zones[plantingZoneId] = { subzones: {}, plots: {}, completedTime };
+          zones[zoneName] = { subzones: {}, plots: {}, completedTime };
         }
         /**
          * Iterate through planting zones and maintain a running set of all monitoring plots for a planting sub zone (across observations results)
@@ -49,32 +49,29 @@ export const selectPlantingSiteZones = createSelector(
          *     a mapping of subzoneA->[monitoring plots data]
          */
         plantingSubzones.forEach((subzone) => {
-          const { plantingSubzoneId, monitoringPlots } = subzone;
+          const { name: subzoneName, monitoringPlots } = subzone;
           const monitoringPlotIds = monitoringPlots.map((plot) => plot.monitoringPlotId);
-          const lastSubzones = zones[plantingZoneId].subzones[plantingSubzoneId];
+          const lastSubzones = zones[zoneName].subzones[subzoneName];
           // book keep subzoneId->[set of monitoring plot ids]
           if (!lastSubzones) {
-            zones[plantingZoneId].subzones[plantingSubzoneId] = new Set(monitoringPlotIds);
+            zones[zoneName].subzones[subzoneName] = new Set(monitoringPlotIds);
           } else {
-            zones[plantingZoneId].subzones[plantingSubzoneId] = new Set([
-              ...Array.from(lastSubzones),
-              ...monitoringPlotIds,
-            ]);
+            zones[zoneName].subzones[subzoneName] = new Set([...Array.from(lastSubzones), ...monitoringPlotIds]);
           }
           // populate map of monitoringPlotId->monitoringPlotData (keep the one with latest observed time)
           monitoringPlots.forEach((monitoringPlot) => {
             const { monitoringPlotId } = monitoringPlot;
-            const lastUpdated = zones[plantingZoneId].plots[monitoringPlotId];
+            const lastUpdated = zones[zoneName].plots[monitoringPlotId];
             if (lastUpdated && !isAfter(monitoringPlot.completedTime, lastUpdated.completedTime)) {
               return;
             }
-            zones[plantingZoneId].plots[monitoringPlotId] = monitoringPlot;
+            zones[zoneName].plots[monitoringPlotId] = monitoringPlot;
           });
         });
         // keep the latest observed time for the zone
-        const lastCompletedTime = zones[plantingZoneId].completedTime;
+        const lastCompletedTime = zones[zoneName].completedTime;
         if (lastCompletedTime !== completedTime && isAfter(completedTime, lastCompletedTime)) {
-          zones[plantingZoneId].completedTime = completedTime;
+          zones[zoneName].completedTime = completedTime;
         }
       });
 

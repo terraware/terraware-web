@@ -14,8 +14,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import { PreferencesType, ProvidedOrganizationData } from './DataTypes';
-import { OrganizationContext } from './contexts';
-import { defaultSelectedOrg } from './contexts';
+import { OrganizationContext, defaultSelectedOrg } from './contexts';
 import { useUser } from './hooks';
 
 export type OrganizationProviderProps = {
@@ -41,7 +40,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const navigate = useNavigate();
   const query = useQuery();
   const location = useStateLocation();
-  const { userPreferences, updateUserPreferences, bootstrapped: userBootstrapped } = useUser();
+  const { user, userPreferences, updateUserPreferences, bootstrapped: userBootstrapped } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { isDev, isStaging } = useEnvironment();
 
@@ -130,7 +129,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   }, [reloadOrgPreferences]);
 
   useEffect(() => {
-    if (userBootstrapped && userPreferences && organizations && !isAcceleratorRoute) {
+    if (userBootstrapped && userPreferences && organizations && !isAcceleratorRoute && user?.userType !== 'Funder') {
       const queryOrganizationId = query.get('organizationId');
       let orgToUse;
       if (organizations.length) {
@@ -169,6 +168,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     userPreferences,
     userBootstrapped,
     isAcceleratorRoute,
+    user?.userType,
   ]);
 
   useEffect(() => {

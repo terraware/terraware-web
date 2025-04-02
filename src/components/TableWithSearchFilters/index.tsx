@@ -34,6 +34,7 @@ export interface TableWithSearchFiltersProps
   onFilterApplied?: (filter: string, values: (string | number | null)[]) => void;
   stickyFilters?: boolean;
   iconFilters?: FilterConfig[];
+  extraComponent?: React.ReactNode;
 }
 
 const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
@@ -53,6 +54,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
     onFilterApplied,
     stickyFilters,
     iconFilters,
+    extraComponent,
     ...tableProps
   } = props;
 
@@ -202,6 +204,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
             onFilterApplied={onFilterApplied}
             stickyFilters={stickyFilters}
             iconFilters={iconFilters}
+            extraComponent={extraComponent}
           />
         </Grid>
 
