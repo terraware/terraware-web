@@ -20,7 +20,7 @@ import {
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import { RowMetric } from './ReportsTargets';
+import { RowMetric } from './AcceleratorReportTargetsTable';
 
 export interface EditTargetsModalProp {
   onClose: () => void;
@@ -28,7 +28,7 @@ export interface EditTargetsModalProp {
   row: RowMetric;
 }
 
-export default function EditTargetsModal(props: EditTargetsModalProp): JSX.Element {
+export default function EditAcceleratorReportTargetsModal(props: EditTargetsModalProp): JSX.Element {
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { currentParticipantProject } = useParticipantData();
   const { onClose, row, reload } = props;

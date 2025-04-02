@@ -1665,7 +1665,8 @@ export interface paths {
         put?: never;
         /** Invites a funder via email to a Funding Entity */
         post: operations["inviteFunder"];
-        delete?: never;
+        /** Removes a funder from a Funding Entity */
+        delete: operations["removeFunder"];
         options?: never;
         head?: never;
         patch?: never;
@@ -3980,6 +3981,8 @@ export interface components {
             /** Format: int64 */
             projectId: number;
             projectMetrics: components["schemas"]["ReportProjectMetricPayload"][];
+            /** @enum {string} */
+            quarter?: "Q1" | "Q2" | "Q3" | "Q4";
             standardMetrics: components["schemas"]["ReportStandardMetricPayload"][];
             /** Format: date */
             startDate: string;
@@ -4182,6 +4185,7 @@ export interface components {
             organizationName: string;
             /** Format: int32 */
             position: number;
+            projectDealName?: string;
             /** Format: int64 */
             projectId: number;
             projectName: string;
@@ -5173,6 +5177,9 @@ export interface components {
              */
             type: "Date";
         };
+        DeleteFundersRequestPayload: {
+            userIds: number[];
+        };
         DeleteGlobalRolesRequestPayload: {
             userIds: number[];
         };
@@ -5788,7 +5795,12 @@ export interface components {
             /** Format: int64 */
             id: number;
             name: string;
-            projects: components["schemas"]["ProjectPayload"][];
+            projects: components["schemas"]["FundingProjectPayload"][];
+        };
+        FundingProjectPayload: {
+            dealName: string;
+            /** Format: int64 */
+            projectId: number;
         };
         Geolocation: {
             accuracy?: number;
@@ -7249,6 +7261,7 @@ export interface components {
             mortalityRate?: number;
             /** Format: int32 */
             mortalityRateStdDev?: number;
+            name: string;
             /**
              * Format: int32
              * @description Estimated planting density for the subzone based on the observed planting densities of monitoring plots.
@@ -7257,7 +7270,7 @@ export interface components {
             /** Format: int32 */
             plantingDensityStdDev?: number;
             /** Format: int64 */
-            plantingSubzoneId: number;
+            plantingSubzoneId?: number;
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
             /**
              * Format: int32
@@ -7287,6 +7300,7 @@ export interface components {
             mortalityRate?: number;
             /** Format: int32 */
             mortalityRateStdDev?: number;
+            name: string;
             /**
              * Format: int32
              * @description Estimated planting density for the zone based on the observed planting densities of monitoring plots.
@@ -7296,7 +7310,7 @@ export interface components {
             plantingDensityStdDev?: number;
             plantingSubzones: components["schemas"]["ObservationPlantingSubzoneResultsPayload"][];
             /** Format: int64 */
-            plantingZoneId: number;
+            plantingZoneId?: number;
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
             /**
              * Format: int32
@@ -13391,6 +13405,32 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["InviteFundingEntityFunderResponsePayload"];
+                };
+            };
+        };
+    };
+    removeFunder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                fundingEntityId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeleteFundersRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
                 };
             };
         };

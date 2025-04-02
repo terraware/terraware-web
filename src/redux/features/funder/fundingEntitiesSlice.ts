@@ -6,6 +6,7 @@ import { Funder, FundingEntity } from 'src/types/FundingEntity';
 
 import {
   requestCreateFundingEntity,
+  requestDeleteFunders,
   requestFundingEntities,
   requestFundingEntity,
   requestFundingEntityForUser,
@@ -91,14 +92,26 @@ export const funderListSlice = createSlice({
   },
 });
 
+const initialStateDeleteFunder: { [requestId: string]: StatusT<Response> } = {};
+
+export const deleteFundersSlice = createSlice({
+  name: 'deleteFundersSlice',
+  initialState: initialStateDeleteFunder,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestDeleteFunders, true)(builder);
+  },
+});
+
 const fundingEntitiesReducers = {
-  userFundingEntity: userFundingEntitySlice.reducer,
-  fundingEntity: fundingEntitySlice.reducer,
-  fundingEntities: fundingEntitiesSlice.reducer,
+  fundingEntitiesList: fundingEntitiesSlice.reducer,
+  fundingEntityForUser: userFundingEntitySlice.reducer,
+  fundingEntityGet: fundingEntitySlice.reducer,
   fundingEntityUpdate: fundingEntityUpdateSlice.reducer,
   fundingEntityCreate: fundingEntityCreateSlice.reducer,
   fundingEntityInvite: fundingEntityInviteSlice.reducer,
-  funders: funderListSlice.reducer,
+  fundingEntityDeleteFunders: deleteFundersSlice.reducer,
+  fundingEntityGetFunders: funderListSlice.reducer,
 };
 
 export default fundingEntitiesReducers;

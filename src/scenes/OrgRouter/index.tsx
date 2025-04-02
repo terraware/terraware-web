@@ -37,7 +37,7 @@ import OrganizationRouter from 'src/scenes/OrganizationRouter';
 import PeopleRouter from 'src/scenes/PeopleRouter';
 import PlantingSites from 'src/scenes/PlantingSitesRouter';
 import PlantsDashboardRouter from 'src/scenes/PlantsDashboardRouter';
-import ReportsRouter from 'src/scenes/Reports';
+import AcceleratorReportsRouter from 'src/scenes/Reports';
 import SeedBanksRouter from 'src/scenes/SeedBanksRouter';
 import SeedsDashboard from 'src/scenes/SeedsDashboard';
 import SpeciesRouter from 'src/scenes/Species';
@@ -253,7 +253,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
               <Route path={'/nursery/*'} element={<NurseryRouter />} />
               <Route path={APP_PATHS.HELP_SUPPORT + '/*'} element={<HelpSupportRouter />} />
               <Route path={APP_PATHS.MY_ACCOUNT + '/*'} element={<MyAccountRouter />} />
-              <Route path={APP_PATHS.REPORTS + '/*'} element={<ReportsRouter />} />
+              <Route path={APP_PATHS.REPORTS + '/*'} element={<AcceleratorReportsRouter />} />
               <Route path={APP_PATHS.SEED_FUND_REPORTS + '/*'} element={<SeedFundReportsRouter />} />
               <Route path={APP_PATHS.OBSERVATIONS + '/*'} element={<ObservationsRouter />} />
               <Route path={APP_PATHS.DELIVERABLES + '/*'} element={<DeliverablesRouter />} />

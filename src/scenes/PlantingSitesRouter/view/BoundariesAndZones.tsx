@@ -315,7 +315,7 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
       }
     }
 
-    if (!selectedObservationDate || !observationToUse) {
+    if (!selectedObservationDate || !observationToUse || !plantingSiteHistory) {
       return {
         site: mapDataFromAggregation.site,
         zone: mapDataFromAggregation.zone,

@@ -9,11 +9,11 @@ import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { AcceleratorReportStatus } from 'src/types/AcceleratorReport';
 
-type ReportStatusBadgeProps = {
+type AcceleratorReportStatusBadgeProps = {
   status: AcceleratorReportStatus;
 };
 
-const ReportStatusBadge = (props: ReportStatusBadgeProps): JSX.Element => {
+const AcceleratorReportStatusBadge = (props: AcceleratorReportStatusBadgeProps): JSX.Element => {
   const { status } = props;
   const { activeLocale } = useLocalization();
   const theme = useTheme();
@@ -68,4 +68,4 @@ const ReportStatusBadge = (props: ReportStatusBadgeProps): JSX.Element => {
   return <>{badgeProps && <Badge {...badgeProps} />}</>;
 };
 
-export default ReportStatusBadge;
+export default AcceleratorReportStatusBadge;

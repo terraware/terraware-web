@@ -106,6 +106,7 @@ function InternalComment({ entity, update, disabled }: InternalCommentProps) {
               onChange={(value) => setStatus(value as AcceleratorReportStatus)}
               options={dropdownOptions}
               required
+              disabled={entity.status === 'Not Submitted'}
               selectedValue={status}
             />
           </Grid>
