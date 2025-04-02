@@ -1,11 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName =
-  | 'Show Production View'
-  | 'Ad Hoc Observation Support'
-  | 'Assigning and Collecting Reports'
-  | 'Funding Entities';
+export type FeatureName = 'Show Production View' | 'Assigning and Collecting Reports' | 'Funding Entities';
 
 export type Feature = {
   name: FeatureName;
@@ -38,15 +34,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     ],
     get: env().isForcedProductionView,
     set: env().forceProductionView,
-  },
-  {
-    name: 'Ad Hoc Observation Support',
-    preferenceName: 'enableAdHocObservationSupport',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Enable ad hoc observation support'],
-    disclosure: ['This is a WIP'],
   },
   {
     name: 'Assigning and Collecting Reports',

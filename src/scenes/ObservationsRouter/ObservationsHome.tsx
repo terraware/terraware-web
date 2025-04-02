@@ -1,16 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Card, CircularProgress } from '@mui/material';
+import { Box } from '@mui/material';
 import { Tabs } from '@terraware/web-components';
 
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import { ButtonProps } from 'src/components/PlantsPrimaryPage/PlantsPrimaryPageView';
-import { View } from 'src/components/common/ListMapSelector';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import {
@@ -27,7 +24,6 @@ import { isAdmin } from 'src/utils/organization';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import BiomassMeasurement from './BiomassMeasurement';
-import ObservationsDataView from './ObservationsDataView';
 import ObservationsEventsNotification from './ObservationsEventsNotification';
 import PlantMonitoring from './PlantMonitoring';
 
@@ -43,9 +39,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [plantsSitePreferences, setPlantsSitePreferences] = useState<Record<string, unknown>>();
-  const [view, setView] = useState<View>();
   const plantingSites = useAppSelector(selectPlantingSites);
-  const adHocObservationSupportEnabled = isEnabled('Ad Hoc Observation Support');
 
   const tabs = useMemo(() => {
     if (!activeLocale) {
@@ -131,35 +125,12 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
       pagePath={APP_PATHS.OBSERVATIONS_SITE}
       plantsSitePreferences={plantsSitePreferences}
       setPlantsSitePreferences={onPreferences}
-      style={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}
+      style={{ display: 'flex', flexGrow: 1, flexDirection: 'column' }}
       title={strings.OBSERVATIONS}
     >
       <Box display='flex' flexGrow={1} flexDirection='column'>
         <ObservationsEventsNotification events={upcomingObservations} />
-        {adHocObservationSupportEnabled ? (
-          <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
-        ) : (
-          <>
-            {observationsResults === undefined ? (
-              <CircularProgress sx={{ margin: 'auto' }} />
-            ) : selectedPlantingSite && observationsResults?.length ? (
-              <ObservationsDataView
-                selectedPlantingSiteId={selectedPlantingSite.id}
-                selectedPlantingSite={selectedPlantingSite}
-                setView={setView}
-                view={view}
-                {...props}
-              />
-            ) : (
-              <Card style={{ margin: '56px auto 0', borderRadius: '24px', height: 'fit-content' }}>
-                <EmptyStateContent
-                  title={strings.OBSERVATIONS_EMPTY_STATE_TITLE}
-                  subtitle={[strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_2]}
-                />
-              </Card>
-            )}
-          </>
-        )}
+        <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
       </Box>
     </PlantsPrimaryPage>
   );
