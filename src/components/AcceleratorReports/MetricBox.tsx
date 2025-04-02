@@ -5,6 +5,7 @@ import { Icon, Tooltip } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import Button from 'src/components/common/button/Button';
+import { useUser } from 'src/providers';
 import {
   selectRefreshAcceleratorReportSystemMetrics,
   selectReviewAcceleratorReportMetric,
@@ -85,6 +86,7 @@ const MetricBox = ({
   const [refreshRequestId, setRefreshRequestId] = useState<string>('');
   const updateReportMetricResponse = useAppSelector(selectReviewAcceleratorReportMetric(requestId));
   const refreshReportMetricResponse = useAppSelector(selectRefreshAcceleratorReportSystemMetrics(refreshRequestId));
+  const { isAllowed } = useUser();
   const snackbar = useSnackbar();
 
   useEffect(() => {
@@ -223,13 +225,14 @@ const MetricBox = ({
           sx={{
             borderRadius: 2,
             '&:hover': {
-              background: !showEditOnHover
-                ? 'none'
-                : editing
-                  ? theme.palette.TwClrBgActive
-                  : theme.palette.TwClrBgHover,
+              background:
+                !showEditOnHover || !isAllowed('UPDATE_REPORTS_SETTINGS')
+                  ? 'none'
+                  : editing
+                    ? theme.palette.TwClrBgActive
+                    : theme.palette.TwClrBgHover,
               '.actions': {
-                display: showEditOnHover ? 'block' : 'none',
+                display: showEditOnHover && isAllowed('UPDATE_REPORTS_SETTINGS') ? 'block' : 'none',
               },
             },
             background: editing ? theme.palette.TwClrBgActive : 'none',

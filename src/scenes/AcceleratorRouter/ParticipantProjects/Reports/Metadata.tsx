@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Box, useTheme } from '@mui/material';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
+import { useUser } from 'src/providers';
 import { selectReviewAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
 import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -24,6 +25,7 @@ const Metadata = (props: MetadataProps): JSX.Element => {
   const reviewAcceleratorReportResponse = useAppSelector(selectReviewAcceleratorReport(requestId));
   const dispatch = useAppDispatch();
   const theme = useTheme();
+  const { isAllowed } = useUser();
   const snackbar = useSnackbar();
 
   useEffect(() => {
@@ -54,7 +56,11 @@ const Metadata = (props: MetadataProps): JSX.Element => {
             <AcceleratorReportStatusBadge status={report.status} />
           </div>
         )}
-        <InternalComment entity={report} update={onUpdateInternalComment} />
+        <InternalComment
+          entity={report}
+          update={onUpdateInternalComment}
+          disabled={!isAllowed('UPDATE_REPORTS_SETTINGS')}
+        />
       </Box>
     </Box>
   );
