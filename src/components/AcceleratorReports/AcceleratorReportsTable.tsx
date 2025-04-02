@@ -89,7 +89,9 @@ export default function AcceleratorReportsTable(): JSX.Element {
 
   useEffect(() => {
     if (projectId) {
-      const request = dispatch(requestListAcceleratorReports({ projectId, includeFuture: true, includeMetrics: true }));
+      const request = dispatch(
+        requestListAcceleratorReports({ projectId, includeFuture: false, includeMetrics: true })
+      );
       setListAllAcceleratorReportsRequestId(request.requestId);
     }
   }, [projectId]);
@@ -139,7 +141,7 @@ export default function AcceleratorReportsTable(): JSX.Element {
       const request = dispatch(
         requestListAcceleratorReports({
           projectId,
-          includeFuture: true,
+          includeFuture: false,
           includeMetrics: true,
           year: yearFilter,
         })
