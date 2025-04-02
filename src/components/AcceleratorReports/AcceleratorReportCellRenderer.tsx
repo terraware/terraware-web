@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
@@ -7,24 +7,22 @@ import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
-import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppSelector } from 'src/redux/store';
 import { AcceleratorReportStatus } from 'src/types/AcceleratorReport';
 
-import ReportStatusBadge from './ReportStatusBadge';
+import AcceleratorReportStatusBadge from './AcceleratorReportStatusBadge';
 
-type ReportCellRenderer = {
+type AcceleratorReportCellRenderer = {
   projectId: string;
 };
 
-export default function ReportCellRenderer({ projectId }: ReportCellRenderer) {
+export default function AcceleratorReportCellRenderer({ projectId }: AcceleratorReportCellRenderer) {
   // eslint-disable-next-line react/display-name
   return (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, index, value } = props;
     const { activeLocale } = useLocalization();
     const { isAcceleratorRoute } = useAcceleratorConsole();
-    const dispatch = useAppDispatch();
 
     const modifiedByUser = useAppSelector(selectUser(row.modifiedBy));
     const submittedByUser = useAppSelector(selectUser(row.submittedBy));
@@ -35,8 +33,7 @@ export default function ReportCellRenderer({ projectId }: ReportCellRenderer) {
       const to = reportUrl.replace(':reportId', `${row.id}`).replace(':projectId', projectId);
 
       const year = row.startDate.split('-')[0];
-      const quarterNumber = row.startDate ? Math.ceil((new Date(row.startDate).getMonth() + 1) / 3) : 0;
-      const reportName = row.frequency === 'Annual' ? `${year}` : `${year}-Q${quarterNumber}`;
+      const reportName = row.frequency === 'Annual' ? `${year}` : `${year}-${row.quarter}`;
 
       return (
         <Link to={to}>
@@ -44,18 +41,6 @@ export default function ReportCellRenderer({ projectId }: ReportCellRenderer) {
         </Link>
       );
     }, [isAcceleratorRoute, row.id]);
-
-    useEffect(() => {
-      if (!modifiedByUser && row.modifiedBy && row.modifiedBy !== -1) {
-        dispatch(requestGetUser(row.modifiedBy));
-      }
-    }, [dispatch, row, modifiedByUser]);
-
-    useEffect(() => {
-      if (!submittedByUser && row.submittedBy && row.submittedBy !== -1) {
-        dispatch(requestGetUser(row.submittedBy));
-      }
-    }, [dispatch, row, submittedByUser]);
 
     const modifiedByName = useMemo(() => {
       return modifiedByUser
@@ -93,7 +78,7 @@ export default function ReportCellRenderer({ projectId }: ReportCellRenderer) {
           column={column}
           index={index}
           row={row}
-          value={activeLocale ? <ReportStatusBadge status={value as AcceleratorReportStatus} /> : ''}
+          value={activeLocale ? <AcceleratorReportStatusBadge status={value as AcceleratorReportStatus} /> : ''}
         />
       );
     }

@@ -16,8 +16,8 @@ import strings from 'src/strings';
 import { AcceleratorReport, MetricType } from 'src/types/AcceleratorReport';
 import { SearchSortOrder } from 'src/types/Search';
 
-import EditTargetsModal from './EditTargetsModal';
-import ReportsTargetsCellRenderer from './ReportsTargetsCellRenderer';
+import AcceleratorReportTargetsCellRenderer from './AcceleratorReportTargetsCellRenderer';
+import EditAcceleratorReportTargetsModal from './EditAcceleratorReportTargetsModal';
 
 const columns = (activeLocale: string | null): TableColumnType[] =>
   activeLocale
@@ -96,7 +96,7 @@ export type RowMetric = {
   q4ReportId?: number;
 };
 
-export default function ReportsTargets(): JSX.Element {
+export default function AcceleratorReportTargetsTable(): JSX.Element {
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { currentParticipantProject } = useParticipantData();
   const [allReportsRequestId, setAllReportsRequestId] = useState<string>('');
@@ -118,12 +118,11 @@ export default function ReportsTargets(): JSX.Element {
 
   const getReportsYears = useMemo(() => {
     const availableYears: Set<number> = new Set();
+
     allReports?.forEach((report) => {
       const reportYear = DateTime.fromFormat(report.startDate, 'yyyy-MM-dd').year;
       availableYears.add(reportYear);
     });
-    const currentYear = new Date().getFullYear();
-    availableYears.add(currentYear);
 
     return Array.from(availableYears).sort((a, b) => b - a);
   }, [allReports]);
@@ -325,14 +324,18 @@ export default function ReportsTargets(): JSX.Element {
   return (
     <>
       {editOpenModal && selectedMetric && (
-        <EditTargetsModal onClose={() => setEditOpenModal(false)} reload={reload} row={selectedMetric} />
+        <EditAcceleratorReportTargetsModal
+          onClose={() => setEditOpenModal(false)}
+          reload={reload}
+          row={selectedMetric}
+        />
       )}
       <ClientSideFilterTable
         busy={reportsResults?.status === 'pending'}
         columns={columns}
         defaultSortOrder={defaultSearchOrder}
         id='reports-targets-table'
-        Renderer={ReportsTargetsCellRenderer}
+        Renderer={AcceleratorReportTargetsCellRenderer}
         rows={metricsToUse || []}
         title={strings.TARGETS}
         fuzzySearchColumns={fuzzySearchColumns}

@@ -56,10 +56,12 @@ const MetricBox = ({
   editingId,
   index,
   setEditingId,
+  showEditOnHover = true,
   metric,
   type,
   projectId,
   reportId,
+  reload,
 }: {
   editingId?: string;
   hideStatusBadge?: boolean;
@@ -67,12 +69,15 @@ const MetricBox = ({
   projectId: string;
   reload: () => void;
   setEditingId: (id: string | undefined) => void;
+  showEditOnHover?: boolean;
   metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric;
   type: MetricType;
   reportId: number;
 }): JSX.Element => {
   const theme = useTheme();
-  const [record, , onChange] = useForm<ReportProjectMetric | ReportSystemMetric | ReportStandardMetric>(metric);
+  const [record, setRecord, onChange] = useForm<ReportProjectMetric | ReportSystemMetric | ReportStandardMetric>(
+    metric
+  );
   const [progressModalOpened, setProgressModalOpened] = useState<boolean>(false);
   const [resetMetricModalOpened, setResetMetricModalOpened] = useState<boolean>(false);
   const dispatch = useAppDispatch();
@@ -88,6 +93,7 @@ const MetricBox = ({
     } else if (updateReportMetricResponse?.status === 'success') {
       setEditingId(undefined);
       snackbar.toastSuccess(strings.CHANGES_SAVED);
+      reload();
     }
   }, [updateReportMetricResponse, snackbar]);
 
@@ -96,7 +102,9 @@ const MetricBox = ({
       snackbar.toastError();
     } else if (refreshReportMetricResponse?.status === 'success') {
       setEditingId(undefined);
+      setResetMetricModalOpened(false);
       snackbar.toastSuccess(strings.CHANGES_SAVED);
+      reload();
     }
   }, [refreshReportMetricResponse, snackbar]);
 
@@ -191,6 +199,11 @@ const MetricBox = ({
     }
   };
 
+  const handleCancel = () => {
+    setRecord(metric);
+    setEditingId(undefined);
+  };
+
   return (
     <>
       {progressModalOpened && (
@@ -210,9 +223,13 @@ const MetricBox = ({
           sx={{
             borderRadius: 2,
             '&:hover': {
-              background: editing ? theme.palette.TwClrBgActive : theme.palette.TwClrBgHover,
+              background: !showEditOnHover
+                ? 'none'
+                : editing
+                  ? theme.palette.TwClrBgActive
+                  : theme.palette.TwClrBgHover,
               '.actions': {
-                display: 'block',
+                display: showEditOnHover ? 'block' : 'none',
               },
             },
             background: editing ? theme.palette.TwClrBgActive : 'none',
@@ -360,7 +377,7 @@ const MetricBox = ({
                 id='cancel'
                 label={strings.CANCEL}
                 type='passive'
-                onClick={() => setEditingId(undefined)}
+                onClick={handleCancel}
                 priority='secondary'
                 key='button-1'
               />

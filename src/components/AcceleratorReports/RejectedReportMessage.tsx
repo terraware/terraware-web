@@ -9,7 +9,7 @@ import { AcceleratorReport } from 'src/types/AcceleratorReport';
 
 type RejectedReportMessageProps = {
   report: AcceleratorReport;
-  showRejectDialog: () => void;
+  showRejectDialog?: () => void;
 };
 
 const RejectedReportMessage = ({ report, showRejectDialog }: RejectedReportMessageProps): JSX.Element => {
@@ -22,17 +22,21 @@ const RejectedReportMessage = ({ report, showRejectDialog }: RejectedReportMessa
         <Box marginBottom={theme.spacing(4)}>
           <Message
             body={report?.feedback || ''}
-            pageButtons={[
-              <Button
-                icon='iconEdit'
-                key={0}
-                label={strings.EDIT_FEEDBACK}
-                onClick={showRejectDialog}
-                priority='secondary'
-                size='small'
-                type='passive'
-              />,
-            ]}
+            pageButtons={
+              showRejectDialog
+                ? [
+                    <Button
+                      icon='iconEdit'
+                      key={0}
+                      label={strings.EDIT_FEEDBACK}
+                      onClick={showRejectDialog}
+                      priority='secondary'
+                      size='small'
+                      type='passive'
+                    />,
+                  ]
+                : undefined
+            }
             priority='critical'
             title={strings.REPORT_NEEDS_UPDATE}
             type='page'

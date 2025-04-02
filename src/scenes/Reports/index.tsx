@@ -1,14 +1,16 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import ReportsView from './ReportsView';
+import AcceleratorReportView from './AcceleratorReportView';
+import AcceleratorReportsView from './AcceleratorReportsView';
 
-const ReportsRouter = () => {
+const AcceleratorReportsRouter = () => {
   return (
     <Routes>
-      <Route path='/*' element={<ReportsView />} />
+      <Route path='/*' element={<AcceleratorReportsView />} />
+      <Route path={'/:projectId/:reportId'} element={<AcceleratorReportView />} />
     </Routes>
   );
 };
 
-export default ReportsRouter;
+export default AcceleratorReportsRouter;

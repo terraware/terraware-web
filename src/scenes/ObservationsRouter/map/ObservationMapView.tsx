@@ -155,7 +155,7 @@ export default function ObservationMapView({
       }
     }
 
-    if (!selectedObservationDate || !observationToUse) {
+    if (!selectedObservationDate || !observationToUse || !plantingSiteHistory) {
       return {
         site: plantingSiteMapData,
         zone: undefined,

@@ -34,7 +34,7 @@ type PermissionDeliverable =
   | 'READ_SUBMISSION_DOCUMENT'
   | 'UPDATE_SUBMISSION_STATUS'
   | 'UPDATE_DELIVERABLE';
-type PermissionFunder = 'READ_FUNDING_ENTITIES' | 'MANAGE_FUNDING_ENTITIES';
+type PermissionFunder = 'READ_FUNDING_ENTITIES' | 'MANAGE_FUNDING_ENTITIES' | 'INVITE_FUNDER';
 type PermissionGlobalRole = 'READ_GLOBAL_ROLES' | 'ASSIGN_GLOBAL_ROLE_TO_USER' | 'ASSIGN_SOME_GLOBAL_ROLES';
 type PermissionParticipant =
   | 'CREATE_PARTICIPANTS'
@@ -149,6 +149,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   DELETE_PARTICIPANTS: AcceleratorAdminPlus,
   EXPORT_PARTICIPANTS: ReadOnlyPlus,
   EXPORT_PARTICIPANT_PROJECT: ReadOnlyPlus,
+  INVITE_FUNDER: AcceleratorAdminPlus,
   MANAGE_FUNDING_ENTITIES: AcceleratorAdminPlus,
   READ_ALL_APPLICATIONS: ReadOnlyPlus,
   READ_COHORTS: TFExpertPlus,

@@ -4,14 +4,23 @@ import { useParams } from 'react-router-dom';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
+import ApprovedReportMessage from 'src/components/AcceleratorReports/ApprovedReportMessage';
+import MetricBox from 'src/components/AcceleratorReports/MetricBox';
+import RejectedReportMessage from 'src/components/AcceleratorReports/RejectedReportMessage';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useUser } from 'src/providers';
-import { selectListAcceleratorReports } from 'src/redux/features/reports/reportsSelectors';
-import { requestListAcceleratorReports } from 'src/redux/features/reports/reportsThunks';
+import {
+  selectListAcceleratorReports,
+  selectReviewAcceleratorReport,
+} from 'src/redux/features/reports/reportsSelectors';
+import {
+  requestListAcceleratorReports,
+  requestReviewAcceleratorReport,
+} from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import {
@@ -22,10 +31,9 @@ import {
 } from 'src/types/AcceleratorReport';
 
 import { useParticipantProjectData } from '../ParticipantProjectContext';
-import ApprovedReportMessage from './ApprovedReportMessage';
+import ApproveReportDialog from './ApproveReportDialog';
 import Metadata from './Metadata';
-import MetricBox from './MetricBox';
-import RejectedReportMessage from './RejectedReportMessage';
+import RejectDialog from './RejectDialog';
 
 const ReportView = () => {
   const { activeLocale } = useLocalization();
@@ -38,11 +46,46 @@ const ReportView = () => {
   const [reports, setReports] = useState<AcceleratorReport[]>();
   const [selectedReport, setSelectedReport] = useState<AcceleratorReport>();
   const { isAllowed } = useUser();
-  const [, setShowApproveDialog] = useState<boolean>(false);
-  const [, setShowRejectDialog] = useState<boolean>(false);
+  const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);
+  const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const { participantProject } = useParticipantProjectData();
   const theme = useTheme();
   const [editingId, setEditingId] = useState<string | undefined>();
+  const [approveRequestId, setApproveRequestId] = useState('');
+  const [rejectRequestId, setRejectRequestId] = useState('');
+  const approveReportResponse = useAppSelector(selectReviewAcceleratorReport(approveRequestId));
+  const rejectReportResponse = useAppSelector(selectReviewAcceleratorReport(rejectRequestId));
+
+  const approveReport = () => {
+    const request = dispatch(
+      requestReviewAcceleratorReport({
+        projectId: Number(projectId),
+        reportId: Number(reportId),
+        review: {
+          status: 'Approved',
+          achievements: [],
+          challenges: [],
+        },
+      })
+    );
+    setApproveRequestId(request.requestId);
+  };
+
+  const rejectReport = (feedback?: string) => {
+    const request = dispatch(
+      requestReviewAcceleratorReport({
+        projectId: Number(projectId),
+        reportId: Number(reportId),
+        review: {
+          status: 'Needs Update',
+          feedback: feedback,
+          achievements: [],
+          challenges: [],
+        },
+      })
+    );
+    setRejectRequestId(request.requestId);
+  };
 
   const reload = () => {
     if (projectId) {
@@ -65,6 +108,24 @@ const ReportView = () => {
   }, [reportsResults]);
 
   useEffect(() => {
+    if (approveReportResponse?.status === 'error') {
+      return;
+    }
+    if (approveReportResponse?.status === 'success') {
+      reload();
+    }
+  }, [approveReportResponse]);
+
+  useEffect(() => {
+    if (rejectReportResponse?.status === 'error') {
+      return;
+    }
+    if (rejectReportResponse?.status === 'success') {
+      reload();
+    }
+  }, [rejectReportResponse]);
+
+  useEffect(() => {
     if (reports) {
       const reportSelected = reports.find((report) => report.id.toString() === reportId);
       setSelectedReport(reportSelected);
@@ -75,7 +136,7 @@ const ReportView = () => {
     () => [
       {
         name: activeLocale ? strings.REPORTS : '',
-        to: APP_PATHS.ACCELERATOR_PROJECT_REPORTS,
+        to: APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId),
       },
     ],
     [activeLocale]
@@ -123,82 +184,89 @@ const ReportView = () => {
     selectedReport?.frequency === 'Annual' ? `${year}` : quarterNumber ? `${year}-Q${quarterNumber}` : '';
 
   return (
-    <Page
-      title={
-        <TitleBar
-          title={`${strings.REPORT} (${reportName})`}
-          subtitle={participantProject ? `${strings.PROJECT}: ${participantProject?.dealName}` : ''}
-        />
-      }
-      rightComponent={rightComponent}
-      crumbs={crumbs}
-    >
-      <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
-        {selectedReport && <ApprovedReportMessage report={selectedReport} />}
-        {selectedReport && (
-          <RejectedReportMessage report={selectedReport} showRejectDialog={() => setShowRejectDialog(true)} />
-        )}
-        <Card
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            flexGrow: 1,
-          }}
-        >
-          {selectedReport && <Metadata report={selectedReport} projectId={projectId} reload={reload} />}
-          {selectedReport?.startDate && selectedReport?.endDate && (
-            <Box
-              borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
-              padding={theme.spacing(3, 0)}
-              marginBottom={3}
-            >
-              <Typography fontSize={14} fontStyle={'italic'}>
-                {strings.formatString(strings.REPORT_PERIOD, selectedReport?.startDate, selectedReport?.endDate)}
-              </Typography>
-            </Box>
+    <>
+      {showApproveDialog && (
+        <ApproveReportDialog onClose={() => setShowApproveDialog(false)} onSubmit={approveReport} />
+      )}
+      {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectReport} />}
+
+      <Page
+        title={
+          <TitleBar
+            title={`${strings.REPORT} (${reportName})`}
+            subtitle={participantProject ? `${strings.PROJECT}: ${participantProject?.dealName}` : ''}
+          />
+        }
+        rightComponent={selectedReport?.status !== 'Not Submitted' ? rightComponent : undefined}
+        crumbs={crumbs}
+      >
+        <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
+          {selectedReport && <ApprovedReportMessage report={selectedReport} />}
+          {selectedReport && (
+            <RejectedReportMessage report={selectedReport} showRejectDialog={() => setShowRejectDialog(true)} />
           )}
-          {selectedReport?.systemMetrics.map((systemMetric: ReportSystemMetric, index: number) => (
-            <MetricBox
-              key={index}
-              editingId={editingId}
-              index={index}
-              projectId={projectId}
-              reload={() => true}
-              setEditingId={setEditingId}
-              metric={systemMetric}
-              type={'system'}
-              reportId={Number(reportId)}
-            />
-          ))}
-          {selectedReport?.projectMetrics.map((projectMetric: ReportProjectMetric, index: number) => (
-            <MetricBox
-              key={index}
-              editingId={editingId}
-              index={index}
-              projectId={projectId}
-              reload={() => true}
-              setEditingId={setEditingId}
-              metric={projectMetric}
-              type={'project'}
-              reportId={Number(reportId)}
-            />
-          ))}
-          {selectedReport?.standardMetrics.map((standardMetric: ReportStandardMetric, index: number) => (
-            <MetricBox
-              key={index}
-              editingId={editingId}
-              index={index}
-              projectId={projectId}
-              reload={() => true}
-              setEditingId={setEditingId}
-              metric={standardMetric}
-              type={'standard'}
-              reportId={selectedReport.id}
-            />
-          ))}
-        </Card>
-      </Box>
-    </Page>
+          <Card
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              flexGrow: 1,
+            }}
+          >
+            {selectedReport && <Metadata report={selectedReport} projectId={projectId} reload={reload} />}
+            {selectedReport?.startDate && selectedReport?.endDate && (
+              <Box
+                borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+                padding={theme.spacing(3, 0)}
+                marginBottom={3}
+              >
+                <Typography fontSize={14} fontStyle={'italic'}>
+                  {strings.formatString(strings.REPORT_PERIOD, selectedReport?.startDate, selectedReport?.endDate)}
+                </Typography>
+              </Box>
+            )}
+            {selectedReport?.systemMetrics.map((systemMetric: ReportSystemMetric, index: number) => (
+              <MetricBox
+                key={index}
+                editingId={editingId}
+                index={index}
+                projectId={projectId}
+                reload={reload}
+                setEditingId={setEditingId}
+                metric={systemMetric}
+                type={'system'}
+                reportId={Number(reportId)}
+              />
+            ))}
+            {selectedReport?.projectMetrics.map((projectMetric: ReportProjectMetric, index: number) => (
+              <MetricBox
+                key={index}
+                editingId={editingId}
+                index={index}
+                projectId={projectId}
+                reload={reload}
+                setEditingId={setEditingId}
+                metric={projectMetric}
+                type={'project'}
+                reportId={Number(reportId)}
+              />
+            ))}
+            {selectedReport?.standardMetrics.map((standardMetric: ReportStandardMetric, index: number) => (
+              <MetricBox
+                key={index}
+                editingId={editingId}
+                index={index}
+                projectId={projectId}
+                reload={reload}
+                setEditingId={setEditingId}
+                metric={standardMetric}
+                type={'standard'}
+                reportId={selectedReport.id}
+              />
+            ))}
+          </Card>
+        </Box>
+      </Page>
+    </>
   );
 };
 
