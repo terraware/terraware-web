@@ -17,7 +17,7 @@ const TargetsMustBeSetMessage = (): JSX.Element | null => {
   return (
     <Box marginBottom={theme.spacing(4)}>
       <Message
-        body={strings.GO_TO_REPORTS_AND_THEN_TO_TARGETS_TAB_TO_SET_UP_TARGETS_FOR_EACH_METRIC}
+        body={strings.GO_TO_REPORTS_TARGETS_FOR_METRIC}
         priority='warning'
         title={strings.TARGETS_MUST_BE_SET_TO_SUBMIT_REPORT}
         type='page'
