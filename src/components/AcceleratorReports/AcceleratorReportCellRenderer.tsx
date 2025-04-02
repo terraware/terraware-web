@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
@@ -7,9 +7,8 @@ import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
-import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppSelector } from 'src/redux/store';
 import { AcceleratorReportStatus } from 'src/types/AcceleratorReport';
 
 import AcceleratorReportStatusBadge from './AcceleratorReportStatusBadge';
@@ -24,7 +23,6 @@ export default function AcceleratorReportCellRenderer({ projectId }: Accelerator
     const { column, row, index, value } = props;
     const { activeLocale } = useLocalization();
     const { isAcceleratorRoute } = useAcceleratorConsole();
-    const dispatch = useAppDispatch();
 
     const modifiedByUser = useAppSelector(selectUser(row.modifiedBy));
     const submittedByUser = useAppSelector(selectUser(row.submittedBy));
@@ -43,18 +41,6 @@ export default function AcceleratorReportCellRenderer({ projectId }: Accelerator
         </Link>
       );
     }, [isAcceleratorRoute, row.id]);
-
-    useEffect(() => {
-      if (!modifiedByUser && row.modifiedBy && row.modifiedBy !== -1) {
-        dispatch(requestGetUser(row.modifiedBy));
-      }
-    }, [dispatch, row, modifiedByUser]);
-
-    useEffect(() => {
-      if (!submittedByUser && row.submittedBy && row.submittedBy !== -1) {
-        dispatch(requestGetUser(row.submittedBy));
-      }
-    }, [dispatch, row, submittedByUser]);
 
     const modifiedByName = useMemo(() => {
       return modifiedByUser

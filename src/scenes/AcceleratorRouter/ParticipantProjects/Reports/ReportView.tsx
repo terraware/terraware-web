@@ -4,6 +4,9 @@ import { useParams } from 'react-router-dom';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
+import ApprovedReportMessage from 'src/components/AcceleratorReports/ApprovedReportMessage';
+import MetricBox from 'src/components/AcceleratorReports/MetricBox';
+import RejectedReportMessage from 'src/components/AcceleratorReports/RejectedReportMessage';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
@@ -29,11 +32,8 @@ import {
 
 import { useParticipantProjectData } from '../ParticipantProjectContext';
 import ApproveReportDialog from './ApproveReportDialog';
-import ApprovedReportMessage from './ApprovedReportMessage';
 import Metadata from './Metadata';
-import MetricBox from './MetricBox';
 import RejectDialog from './RejectDialog';
-import RejectedReportMessage from './RejectedReportMessage';
 
 const ReportView = () => {
   const { activeLocale } = useLocalization();

@@ -56,6 +56,7 @@ const MetricBox = ({
   editingId,
   index,
   setEditingId,
+  showEditOnHover = true,
   metric,
   type,
   projectId,
@@ -68,6 +69,7 @@ const MetricBox = ({
   projectId: string;
   reload: () => void;
   setEditingId: (id: string | undefined) => void;
+  showEditOnHover?: boolean;
   metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric;
   type: MetricType;
   reportId: number;
@@ -221,9 +223,13 @@ const MetricBox = ({
           sx={{
             borderRadius: 2,
             '&:hover': {
-              background: editing ? theme.palette.TwClrBgActive : theme.palette.TwClrBgHover,
+              background: !showEditOnHover
+                ? 'none'
+                : editing
+                  ? theme.palette.TwClrBgActive
+                  : theme.palette.TwClrBgHover,
               '.actions': {
-                display: 'block',
+                display: showEditOnHover ? 'block' : 'none',
               },
             },
             background: editing ? theme.palette.TwClrBgActive : 'none',
