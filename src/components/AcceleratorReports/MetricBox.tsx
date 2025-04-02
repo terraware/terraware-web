@@ -63,6 +63,7 @@ const MetricBox = ({
   projectId,
   reportId,
   reload,
+  isParticipantView = true,
 }: {
   editingId?: string;
   hideStatusBadge?: boolean;
@@ -74,6 +75,7 @@ const MetricBox = ({
   metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric;
   type: MetricType;
   reportId: number;
+  isParticipantView?: boolean;
 }): JSX.Element => {
   const theme = useTheme();
   const [record, setRecord, onChange] = useForm<ReportProjectMetric | ReportSystemMetric | ReportStandardMetric>(
@@ -380,11 +382,25 @@ const MetricBox = ({
                 )
               )}
             </Grid>
+            {!isParticipantView && (
+              <Grid item xs={6} padding={theme.spacing(2)}>
+                <Box paddingRight={theme.spacing(4)}>
+                  <TextField
+                    type='textarea'
+                    label={strings.STATUS}
+                    value={record.status}
+                    id={'status'}
+                    onChange={(value: any) => onChange('status', value)}
+                    display={!editing}
+                  />
+                </Box>
+              </Grid>
+            )}
             <Grid item xs={6}>
               <Box>
                 <TextField
                   type='textarea'
-                  label={strings.NOTES}
+                  label={strings.UNDERPERFORMANCE_JUSTIFICATION}
                   value={record.underperformanceJustification}
                   id={'underperformanceJustification'}
                   onChange={(value: any) => onChange('underperformanceJustification', value)}
@@ -397,6 +413,25 @@ const MetricBox = ({
                 )}
               </Box>
             </Grid>
+            {!isParticipantView && (
+              <Grid item xs={6}>
+                <Box>
+                  <TextField
+                    type='textarea'
+                    label={strings.PROGRESS_NOTES}
+                    value={record.progressNotes}
+                    id={'progressNotes'}
+                    onChange={(value: any) => onChange('progressNotes', value)}
+                    display={!editing}
+                  />
+                  {!!editing && (
+                    <Typography fontSize={14} color={theme.palette.TwClrTxtSecondary}>
+                      {strings.UNDERPERFORMANCE_DESCRIPTION}
+                    </Typography>
+                  )}
+                </Box>
+              </Grid>
+            )}
           </Grid>
 
           {editing && (
