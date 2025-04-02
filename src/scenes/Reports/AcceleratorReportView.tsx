@@ -8,6 +8,7 @@ import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/Acce
 import ApprovedReportMessage from 'src/components/AcceleratorReports/ApprovedReportMessage';
 import MetricBox from 'src/components/AcceleratorReports/MetricBox';
 import RejectedReportMessage from 'src/components/AcceleratorReports/RejectedReportMessage';
+import TargetsMustBeSetMessage from 'src/components/AcceleratorReports/TargetsMustBeSetMessage';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
@@ -86,6 +87,18 @@ const AcceleratorReportView = () => {
     [activeLocale]
   );
 
+  const targetsAreSet = useMemo(() => {
+    const allMetrics = [
+      ...(selectedReport?.systemMetrics || []),
+      ...(selectedReport?.projectMetrics || []),
+      ...(selectedReport?.standardMetrics || []),
+    ];
+
+    const allMetricsHaveTargets = allMetrics.every((metric) => metric.target !== undefined && metric.target !== null);
+
+    return !!allMetrics.length && allMetricsHaveTargets;
+  }, [selectedReport]);
+
   const callToAction = useMemo(() => {
     return (
       <>
@@ -101,7 +114,9 @@ const AcceleratorReportView = () => {
           size='medium'
         />
         <Button
-          disabled={selectedReport?.status !== 'Not Submitted' && selectedReport?.status !== 'Needs Update'}
+          disabled={
+            (selectedReport?.status !== 'Not Submitted' && selectedReport?.status !== 'Needs Update') || !targetsAreSet
+          }
           id='submitReport'
           label={strings.SUBMIT_FOR_APPROVAL}
           onClick={() => void setShowApproveDialog(true)}
@@ -141,6 +156,7 @@ const AcceleratorReportView = () => {
       <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
         {selectedReport && <ApprovedReportMessage report={selectedReport} />}
         {selectedReport && <RejectedReportMessage report={selectedReport} />}
+        {selectedReport && !targetsAreSet && <TargetsMustBeSetMessage />}
         <Card
           style={{
             display: 'flex',
