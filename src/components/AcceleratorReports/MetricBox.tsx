@@ -103,8 +103,11 @@ const MetricBox = ({
     if (refreshReportMetricResponse?.status === 'error') {
       snackbar.toastError();
     } else if (refreshReportMetricResponse?.status === 'success') {
-      setEditingId(undefined);
       setResetMetricModalOpened(false);
+      setEditingId(undefined);
+      if (isReportSystemMetric(metric)) {
+        onChangeProgress(metric.systemValue.toString());
+      }
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       reload();
     }
