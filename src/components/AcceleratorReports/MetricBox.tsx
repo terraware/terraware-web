@@ -5,6 +5,7 @@ import { Icon, Tooltip } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import Button from 'src/components/common/button/Button';
+import { useUser } from 'src/providers';
 import {
   selectRefreshAcceleratorReportSystemMetrics,
   selectReviewAcceleratorReportMetric,
@@ -85,6 +86,7 @@ const MetricBox = ({
   const [refreshRequestId, setRefreshRequestId] = useState<string>('');
   const updateReportMetricResponse = useAppSelector(selectReviewAcceleratorReportMetric(requestId));
   const refreshReportMetricResponse = useAppSelector(selectRefreshAcceleratorReportSystemMetrics(refreshRequestId));
+  const { isAllowed } = useUser();
   const snackbar = useSnackbar();
 
   useEffect(() => {
@@ -226,13 +228,14 @@ const MetricBox = ({
           sx={{
             borderRadius: 2,
             '&:hover': {
-              background: !showEditOnHover
-                ? 'none'
-                : editing
-                  ? theme.palette.TwClrBgActive
-                  : theme.palette.TwClrBgHover,
+              background:
+                !showEditOnHover || !isAllowed('UPDATE_REPORTS_SETTINGS')
+                  ? 'none'
+                  : editing
+                    ? theme.palette.TwClrBgActive
+                    : theme.palette.TwClrBgHover,
               '.actions': {
-                display: showEditOnHover ? 'block' : 'none',
+                display: showEditOnHover && isAllowed('UPDATE_REPORTS_SETTINGS') ? 'block' : 'none',
               },
             },
             background: editing ? theme.palette.TwClrBgActive : 'none',
@@ -308,51 +311,73 @@ const MetricBox = ({
 
           <Grid container marginBottom={3}>
             <Grid item xs={6}>
-              <Typography fontSize={'14px'} color={theme.palette.TwClrTxtSecondary}>
-                {strings.PROGRESS} *
-              </Typography>
-              <Box display={'flex'} alignItems={'center'} paddingTop={1.5}>
-                <Typography>
-                  {getProgressValue() || 0} / {record.target} ({strings.TARGET})
-                </Typography>
-                {isReportSystemMetric(metric) && !metric.overrideValue && (
-                  <Box paddingTop={1} paddingLeft={1.5}>
-                    <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
-                      <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
-                    </Tooltip>
+              {isReportSystemMetric(metric) ? (
+                <>
+                  <Typography fontSize={'14px'} color={theme.palette.TwClrTxtSecondary}>
+                    {strings.PROGRESS} *
+                  </Typography>
+                  <Box display={'flex'} alignItems={'center'} paddingTop={1.5}>
+                    <Typography>
+                      {getProgressValue() || 0} / {record.target} ({strings.TARGET})
+                    </Typography>
+                    {!metric.overrideValue && (
+                      <Box paddingTop={1} paddingLeft={1.5}>
+                        <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
+                          <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
+                        </Tooltip>
+                      </Box>
+                    )}
+                    {!!editing && metric.overrideValue && (
+                      <Button
+                        icon='iconUndo'
+                        onClick={() => setResetMetricModalOpened(true)}
+                        priority='ghost'
+                        size='small'
+                        type='passive'
+                        style={{
+                          marginLeft: '-1px',
+                          marginTop: '-1px',
+                        }}
+                      />
+                    )}
+                    {!!editing && (
+                      <Button
+                        icon='iconEdit'
+                        onClick={() => setProgressModalOpened(true)}
+                        priority='ghost'
+                        size='small'
+                        type='passive'
+                        style={{
+                          marginLeft: '-1px',
+                          marginTop: '-1px',
+                        }}
+                      />
+                    )}
                   </Box>
-                )}
-                {!!editing && isReportSystemMetric(metric) && metric.overrideValue && (
-                  <Button
-                    icon='iconUndo'
-                    onClick={() => setResetMetricModalOpened(true)}
-                    priority='ghost'
-                    size='small'
-                    type='passive'
-                    style={{
-                      marginLeft: '-1px',
-                      marginTop: '-1px',
-                    }}
-                  />
-                )}
-                {!!editing && (
-                  <Button
-                    icon='iconEdit'
-                    onClick={() => setProgressModalOpened(true)}
-                    priority='ghost'
-                    size='small'
-                    type='passive'
-                    style={{
-                      marginLeft: '-1px',
-                      marginTop: '-1px',
-                    }}
-                  />
-                )}
-              </Box>
-              {isReportSystemMetric(metric) && metric.overrideValue && (
-                <Typography fontSize={'14px'} color={theme.palette.TwClrTxtSecondary} paddingTop={1.5}>
-                  {strings.formatString(strings.OVERWRITTEN_ORIGINAL_VALUE, metric.systemValue)}
-                </Typography>
+
+                  {metric.overrideValue && (
+                    <Typography fontSize={'14px'} color={theme.palette.TwClrTxtSecondary} paddingTop={1.5}>
+                      {strings.formatString(strings.OVERWRITTEN_ORIGINAL_VALUE, metric.systemValue)}
+                    </Typography>
+                  )}
+                </>
+              ) : (
+                isStandardOrProjectMetric(record) && (
+                  <Box display={'flex'} alignItems={'center'}>
+                    <TextField
+                      type='text'
+                      label={strings.PROGRESS}
+                      value={record.value}
+                      id={'value'}
+                      onChange={(value: any) => onChange('value', value)}
+                      display={!editing}
+                      required={true}
+                    />
+                    <Typography paddingTop={3} paddingLeft={0.5}>
+                      / {record.target} ({strings.TARGET})
+                    </Typography>
+                  </Box>
+                )
               )}
             </Grid>
             <Grid item xs={6}>
