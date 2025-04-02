@@ -76,51 +76,53 @@ export default function BoundariesAndZones({
         <Typography fontSize='16px' fontWeight={600} margin={theme.spacing(3, 0)}>
           {strings.BOUNDARIES_AND_ZONES}
         </Typography>
-        <Box display={'flex'} alignItems='center'>
-          <Box
-            sx={{
-              margin: theme.spacing(0, 2),
-              width: '1px',
-              height: '32px',
-              backgroundColor: theme.palette.TwClrBgTertiary,
-            }}
-          />
-          <Box display='flex' alignItems='center'>
-            <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>
-              {strings.PLOT_SELECTION}
-            </Typography>
-            <Box width='160px' marginRight={3}>
+        {view === 'list' && (
+          <Box display={'flex'} alignItems='center'>
+            <Box
+              sx={{
+                margin: theme.spacing(0, 2),
+                width: '1px',
+                height: '32px',
+                backgroundColor: theme.palette.TwClrBgTertiary,
+              }}
+            />
+            <Box display='flex' alignItems='center'>
+              <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>
+                {strings.PLOT_SELECTION}
+              </Typography>
+              <Box width='160px' marginRight={3}>
+                <Dropdown
+                  placeholder={strings.SELECT}
+                  id='plot-selection-selector'
+                  onChange={(newValue) => setSelectedPlotSelection(newValue as PlotSelectionType)}
+                  options={[
+                    { label: strings.ASSIGNED, value: 'assigned' },
+                    { label: strings.AD_HOC, value: 'adHoc' },
+                  ]}
+                  selectedValue={selectedPlotSelection}
+                  selectStyles={{ inputContainer: { maxWidth: '160px' }, optionsContainer: { maxWidth: '160px' } }}
+                  fullWidth
+                />
+              </Box>
+            </Box>
+            <Box display='flex' alignItems='center'>
+              <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>
+                {strings.OBSERVATION_TYPE}
+              </Typography>
               <Dropdown
                 placeholder={strings.SELECT}
-                id='plot-selection-selector'
-                onChange={(newValue) => setSelectedPlotSelection(newValue as PlotSelectionType)}
+                id='observation-type-selector'
+                onChange={(newValue) => setSelectedObservationType(newValue as ObservationType)}
                 options={[
-                  { label: strings.ASSIGNED, value: 'assigned' },
-                  { label: strings.AD_HOC, value: 'adHoc' },
+                  { label: strings.PLANT_MONITORING, value: 'plantMonitoring' },
+                  { label: strings.BIOMASS_MONITORING, value: 'biomassMeasurements' },
                 ]}
-                selectedValue={selectedPlotSelection}
-                selectStyles={{ inputContainer: { maxWidth: '160px' }, optionsContainer: { maxWidth: '160px' } }}
+                selectedValue={selectedObservationType}
                 fullWidth
               />
             </Box>
           </Box>
-          <Box display='flex' alignItems='center'>
-            <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>
-              {strings.OBSERVATION_TYPE}
-            </Typography>
-            <Dropdown
-              placeholder={strings.SELECT}
-              id='observation-type-selector'
-              onChange={(newValue) => setSelectedObservationType(newValue as ObservationType)}
-              options={[
-                { label: strings.PLANT_MONITORING, value: 'plantMonitoring' },
-                { label: strings.BIOMASS_MONITORING, value: 'biomassMeasurements' },
-              ]}
-              selectedValue={selectedObservationType}
-              fullWidth
-            />
-          </Box>
-        </Box>
+        )}
       </Box>
       {plantingSite.boundary && (
         <ListMapView

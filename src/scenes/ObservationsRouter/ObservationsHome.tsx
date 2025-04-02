@@ -6,7 +6,6 @@ import { Tabs } from '@terraware/web-components';
 
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import { ButtonProps } from 'src/components/PlantsPrimaryPage/PlantsPrimaryPageView';
-import { View } from 'src/components/common/ListMapSelector';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -40,7 +39,6 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [plantsSitePreferences, setPlantsSitePreferences] = useState<Record<string, unknown>>();
-  const [view] = useState<View>();
   const plantingSites = useAppSelector(selectPlantingSites);
 
   const tabs = useMemo(() => {
@@ -127,7 +125,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
       pagePath={APP_PATHS.OBSERVATIONS_SITE}
       plantsSitePreferences={plantsSitePreferences}
       setPlantsSitePreferences={onPreferences}
-      style={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}
+      style={{ display: 'flex', flexGrow: 1, flexDirection: 'column' }}
       title={strings.OBSERVATIONS}
     >
       <Box display='flex' flexGrow={1} flexDirection='column'>
