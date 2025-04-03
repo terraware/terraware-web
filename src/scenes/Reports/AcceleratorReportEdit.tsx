@@ -2,18 +2,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Button } from '@terraware/web-components';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
-import ApprovedReportMessage from 'src/components/AcceleratorReports/ApprovedReportMessage';
-import MetricBox from 'src/components/AcceleratorReports/MetricBox';
-import RejectedReportMessage from 'src/components/AcceleratorReports/RejectedReportMessage';
-import { Crumb } from 'src/components/BreadCrumbs';
+import MetricBox, { getMetricId } from 'src/components/AcceleratorReports/MetricBox';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import TitleBar from 'src/components/common/TitleBar';
-import { APP_PATHS } from 'src/constants';
-import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { selectListAcceleratorReports } from 'src/redux/features/reports/reportsSelectors';
@@ -27,7 +21,6 @@ const AcceleratorReportView = () => {
   const { currentParticipantProject, setCurrentParticipantProject } = useParticipantData();
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const { goToAcceleratorReportEdit } = useNavigateTo();
 
   const pathParams = useParams<{ projectId: string; reportId: string }>();
   const reportId = String(pathParams.reportId);
@@ -36,7 +29,6 @@ const AcceleratorReportView = () => {
   const [requestId, setRequestId] = useState<string>('');
   const [reports, setReports] = useState<AcceleratorReport[]>();
   const [selectedReport, setSelectedReport] = useState<AcceleratorReport>();
-  const [, setShowApproveDialog] = useState<boolean>(false);
 
   const reportsResults = useAppSelector(selectListAcceleratorReports(requestId));
 
@@ -77,70 +69,23 @@ const AcceleratorReportView = () => {
     return selectedReport?.startDate.split('-')[0];
   }, [selectedReport]);
 
-  const crumbs: Crumb[] = useMemo(
-    () => [
-      {
-        name: activeLocale ? strings.REPORTS : '',
-        to: year ? `${APP_PATHS.REPORTS}?year=${year}` : APP_PATHS.REPORTS,
-      },
-    ],
-    [activeLocale, year]
-  );
-
-  const callToAction = useMemo(() => {
-    return (
-      <>
-        <Button
-          disabled={selectedReport?.status !== 'Not Submitted' && selectedReport?.status !== 'Needs Update'}
-          icon='iconEdit'
-          id='editReport'
-          label={strings.EDIT}
-          onClick={() => {
-            goToAcceleratorReportEdit(Number(reportId), Number(projectId));
-          }}
-          priority='secondary'
-          size='medium'
-        />
-        <Button
-          disabled={selectedReport?.status !== 'Not Submitted' && selectedReport?.status !== 'Needs Update'}
-          id='submitReport'
-          label={strings.SUBMIT_FOR_APPROVAL}
-          onClick={() => void setShowApproveDialog(true)}
-          size='medium'
-          sx={{ '&.button': { whiteSpace: 'nowrap' } }}
-        />
-      </>
-    );
-  }, [selectedReport?.status]);
-
-  const rightComponent = useMemo(
-    () => (
-      <Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'>
-        {callToAction}
-      </Box>
-    ),
-    [callToAction]
-  );
-
   const reportName =
     selectedReport?.frequency === 'Annual' ? year : selectedReport?.quarter ? `${year}-${selectedReport?.quarter}` : '';
 
   return (
     <Page
-      crumbs={crumbs}
-      rightComponent={rightComponent}
       title={
         <TitleBar
           subtitle={
-            currentParticipantProject && reportsResults ? `${strings.PROJECT}: ${currentParticipantProject?.name}` : ''
+            currentParticipantProject && reportsResults && activeLocale
+              ? `${strings.PROJECT}: ${currentParticipantProject?.name}`
+              : ''
           }
-          title={`${strings.REPORT} (${reportName})`}
+          title={activeLocale ? `${strings.REPORT} (${reportName})` : ''}
         />
       }
     >
       <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
-        {selectedReport && <ApprovedReportMessage report={selectedReport} />}
-        {selectedReport && <RejectedReportMessage report={selectedReport} />}
         <Card
           style={{
             display: 'flex',
@@ -173,6 +118,7 @@ const AcceleratorReportView = () => {
 
             return metrics?.map((metric, index) => (
               <MetricBox
+                editingId={getMetricId(metric, type as MetricType)}
                 index={index}
                 isConsoleView={false}
                 key={`${type}-${index}`}
