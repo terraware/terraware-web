@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Icon, Tooltip } from '@terraware/web-components';
+import { Dropdown, DropdownItem, Icon, Tooltip } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import Button from 'src/components/common/button/Button';
@@ -17,6 +17,7 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import {
+  AcceleratorMetricStatuses,
   MetricType,
   ReportProjectMetric,
   ReportStandardMetric,
@@ -52,6 +53,11 @@ export const getMetricId = (
   }
   return '-1';
 };
+
+const statusOptions: DropdownItem[] = AcceleratorMetricStatuses.map((s) => ({
+  label: s || '', // these are hardcoded, so will never actually be ''
+  value: s || '',
+}));
 
 const MetricBox = ({
   editingId,
@@ -129,6 +135,8 @@ const MetricBox = ({
             metric: record.metric as SystemMetricName,
             overrideValue: record.overrideValue,
             underperformanceJustification: record.underperformanceJustification,
+            progressNotes: record.progressNotes,
+            status: record.status,
           },
         ],
         projectMetrics: [],
@@ -137,7 +145,13 @@ const MetricBox = ({
     } else if (type === 'standard' && isStandardOrProjectMetric(record)) {
       return {
         standardMetrics: [
-          { id: record.id, value: record.value, underperformanceJustification: record.underperformanceJustification },
+          {
+            id: record.id,
+            value: record.value,
+            underperformanceJustification: record.underperformanceJustification,
+            progressNotes: record.progressNotes,
+            status: record.status,
+          },
         ],
         systemMetrics: [],
         projectMetrics: [],
@@ -145,7 +159,13 @@ const MetricBox = ({
     } else if (type === 'project' && isStandardOrProjectMetric(record)) {
       return {
         projectMetrics: [
-          { id: record.id, value: record.value, underperformanceJustification: record.underperformanceJustification },
+          {
+            id: record.id,
+            value: record.value,
+            underperformanceJustification: record.underperformanceJustification,
+            progressNotes: record.progressNotes,
+            status: record.status,
+          },
         ],
         standardMetrics: [],
         systemMetrics: [],
@@ -254,7 +274,6 @@ const MetricBox = ({
               alignItems: 'center',
               display: 'flex',
               justifyContent: 'space-apart',
-              marginBottom: '16px',
               width: '100%',
             }}
           >
@@ -265,6 +284,7 @@ const MetricBox = ({
                 flexGrow: 1,
                 justifyContent: 'flex-start',
                 flexDirection: 'column',
+                marginBottom: theme.spacing(2),
               }}
             >
               {isReportSystemMetric(metric) && <Typography sx={{ fontWeight: '600' }}>{metric.metric}</Typography>}
@@ -385,14 +405,25 @@ const MetricBox = ({
             {isConsoleView && (
               <Grid item xs={6}>
                 <Box>
-                  <TextField
-                    type='textarea'
-                    label={strings.STATUS}
-                    value={record.status}
-                    id={'status'}
-                    onChange={(value: any) => onChange('status', value)}
-                    display={!editing}
-                  />
+                  {editing ? (
+                    <Dropdown
+                      label={strings.STATUS}
+                      selectedValue={record.status}
+                      options={statusOptions}
+                      onChange={(value: any) => onChange('status', value)}
+                      disabled={!editing}
+                      placeholder={'No Status'}
+                    />
+                  ) : (
+                    <>
+                      <Typography
+                        sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px', marginBottom: '12px' }}
+                      >
+                        {strings.STATUS}
+                      </Typography>
+                      <Typography sx={{ fontWeight: '500' }}>{record.status}</Typography>
+                    </>
+                  )}
                 </Box>
               </Grid>
             )}
