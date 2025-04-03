@@ -28,6 +28,7 @@ import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import EditProgressModal from './EditProgressModal';
+import EditableReportBox from './EditableReportBox';
 import ResetMetricModal from './ResetMetricModal';
 
 const isReportSystemMetric = (metric: any): metric is ReportSystemMetric => {
@@ -244,243 +245,149 @@ const MetricBox = ({
       {resetMetricModalOpened && (
         <ResetMetricModal onClose={() => setResetMetricModalOpened(false)} onSubmit={onResetMetricHandler} />
       )}
-      <Box data-metric-id={getMetricId(metric, type)} key={`metric-${index}`} sx={{ scrollMarginTop: '50vh' }}>
-        <Box
-          sx={{
-            borderRadius: 2,
-            '&:hover': {
-              background:
-                !showEditOnHover || !isAllowed('UPDATE_REPORTS_SETTINGS')
-                  ? 'none'
-                  : editing
-                    ? theme.palette.TwClrBgActive
-                    : theme.palette.TwClrBgHover,
-              '.actions': {
-                display: showEditOnHover && isAllowed('UPDATE_REPORTS_SETTINGS') ? 'block' : 'none',
-              },
-            },
-            background: editing ? theme.palette.TwClrBgActive : 'none',
-            '& .actions': {
-              display: 'none',
-            },
-            marginBottom: theme.spacing(4),
-            padding: 2,
-            width: '100%',
-          }}
-        >
-          <Box
-            sx={{
-              alignItems: 'center',
-              display: 'flex',
-              justifyContent: 'space-apart',
-              width: '100%',
-            }}
-          >
-            <Box
-              sx={{
-                alignItems: 'start',
-                display: 'flex',
-                flexGrow: 1,
-                justifyContent: 'flex-start',
-                flexDirection: 'column',
-                marginBottom: theme.spacing(2),
-              }}
-            >
-              {isReportSystemMetric(metric) && <Typography sx={{ fontWeight: '600' }}>{metric.metric}</Typography>}
-              {isStandardOrProjectMetric(metric) && <Typography sx={{ fontWeight: '600' }}>{metric.name}</Typography>}
-            </Box>
-
-            <Box
-              sx={{
-                alignItems: 'center',
-                display: 'flex',
-                flexGrow: 1,
-                justifyContent: 'flex-end',
-              }}
-            >
-              {!editingId && (
-                <Box className='actions'>
+      <EditableReportBox
+        name={getMetricName()}
+        canEdit={isAllowed('UPDATE_REPORTS_SETTINGS')}
+        onEdit={onEditItem}
+        onCancel={handleCancel}
+        onSave={onSave}
+        editing={editing}
+        key={`metric-${index}`}
+        showEditOnHover={showEditOnHover}
+        description={metric?.description}
+      >
+        <Grid item xs={6}>
+          {isReportSystemMetric(metric) ? (
+            <>
+              <Typography fontSize={'14px'} color={theme.palette.TwClrTxtSecondary}>
+                {strings.PROGRESS} *
+              </Typography>
+              <Box display={'flex'} alignItems={'center'} paddingTop={1.5} paddingBottom={theme.spacing(2)}>
+                <Typography>
+                  {getProgressValue() || 0} / {record.target} ({strings.TARGET})
+                </Typography>
+                {!metric.overrideValue && (
+                  <Box paddingTop={1} paddingLeft={1.5}>
+                    <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
+                      <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
+                    </Tooltip>
+                  </Box>
+                )}
+                {!!editing && metric.overrideValue && (
                   <Button
-                    id='edit'
-                    label={strings.EDIT}
-                    onClick={onEditItem}
-                    icon='iconEdit'
-                    priority='secondary'
-                    className='edit-button'
+                    icon='iconUndo'
+                    onClick={() => setResetMetricModalOpened(true)}
+                    priority='ghost'
                     size='small'
-                    sx={{ '&.button': { margin: '4px' } }}
                     type='passive'
+                    style={{
+                      marginLeft: '-1px',
+                      marginTop: '-1px',
+                    }}
                   />
-                </Box>
-              )}
-            </Box>
-          </Box>
-
-          {!!metric.description && (
-            <Typography
-              sx={{
-                color: 'rgba(0, 0, 0, 0.54)',
-                fontSize: '14px',
-                fontStyle: 'italic',
-                lineHeight: '20px',
-                marginY: '16px',
-              }}
-            >
-              {metric?.description}
-            </Typography>
-          )}
-
-          <Grid container marginBottom={3}>
-            <Grid item xs={6}>
-              {isReportSystemMetric(metric) ? (
-                <>
-                  <Typography fontSize={'14px'} color={theme.palette.TwClrTxtSecondary}>
-                    {strings.PROGRESS} *
-                  </Typography>
-                  <Box display={'flex'} alignItems={'center'} paddingTop={1.5} paddingBottom={theme.spacing(2)}>
-                    <Typography>
-                      {getProgressValue() || 0} / {record.target} ({strings.TARGET})
-                    </Typography>
-                    {!metric.overrideValue && (
-                      <Box paddingTop={1} paddingLeft={1.5}>
-                        <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
-                          <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
-                        </Tooltip>
-                      </Box>
-                    )}
-                    {!!editing && metric.overrideValue && (
-                      <Button
-                        icon='iconUndo'
-                        onClick={() => setResetMetricModalOpened(true)}
-                        priority='ghost'
-                        size='small'
-                        type='passive'
-                        style={{
-                          marginLeft: '-1px',
-                          marginTop: '-1px',
-                        }}
-                      />
-                    )}
-                    {!!editing && (
-                      <Button
-                        icon='iconEdit'
-                        onClick={() => setProgressModalOpened(true)}
-                        priority='ghost'
-                        size='small'
-                        type='passive'
-                        style={{
-                          marginLeft: '-1px',
-                          marginTop: '-1px',
-                        }}
-                      />
-                    )}
-                  </Box>
-
-                  {metric.overrideValue && (
-                    <Typography fontSize={'14px'} color={theme.palette.TwClrTxtSecondary} paddingTop={1.5}>
-                      {strings.formatString(strings.OVERWRITTEN_ORIGINAL_VALUE, metric.systemValue)}
-                    </Typography>
-                  )}
-                </>
-              ) : (
-                isStandardOrProjectMetric(record) && (
-                  <Box display={'flex'} alignItems={'center'} paddingBottom={theme.spacing(2)}>
-                    <TextField
-                      type='text'
-                      label={strings.PROGRESS}
-                      value={record.value}
-                      id={'value'}
-                      onChange={(value: any) => onChange('value', value)}
-                      display={!editing}
-                      required={true}
-                    />
-                    <Typography paddingTop={3} paddingLeft={0.5}>
-                      / {record.target} ({strings.TARGET})
-                    </Typography>
-                  </Box>
-                )
-              )}
-            </Grid>
-            {isConsoleView && (
-              <Grid item xs={6}>
-                <Box>
-                  {editing ? (
-                    <Dropdown
-                      label={strings.STATUS}
-                      selectedValue={record.status}
-                      options={statusOptions}
-                      onChange={(value: any) => onChange('status', value)}
-                      disabled={!editing}
-                      placeholder={'No Status'}
-                    />
-                  ) : (
-                    <>
-                      <Typography
-                        sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px', marginBottom: '12px' }}
-                      >
-                        {strings.STATUS}
-                      </Typography>
-                      <Typography sx={{ fontWeight: '500' }}>{record.status}</Typography>
-                    </>
-                  )}
-                </Box>
-              </Grid>
-            )}
-            <Grid item xs={6}>
-              <Box paddingRight={theme.spacing(2)}>
-                <TextField
-                  type='textarea'
-                  label={strings.UNDERPERFORMANCE_JUSTIFICATION}
-                  value={record.underperformanceJustification}
-                  id={'underperformanceJustification'}
-                  onChange={(value: any) => onChange('underperformanceJustification', value)}
-                  display={!editing}
-                  preserveNewlines
-                />
+                )}
                 {!!editing && (
-                  <Typography fontSize={14} color={theme.palette.TwClrTxtSecondary}>
-                    {strings.UNDERPERFORMANCE_DESCRIPTION}
-                  </Typography>
+                  <Button
+                    icon='iconEdit'
+                    onClick={() => setProgressModalOpened(true)}
+                    priority='ghost'
+                    size='small'
+                    type='passive'
+                    style={{
+                      marginLeft: '-1px',
+                      marginTop: '-1px',
+                    }}
+                  />
                 )}
               </Box>
-            </Grid>
-            {isConsoleView && (
-              <Grid item xs={6}>
-                <Box paddingRight={theme.spacing(2)}>
-                  <TextField
-                    type='textarea'
-                    label={strings.PROGRESS_NOTES}
-                    value={record.progressNotes}
-                    id={'progressNotes'}
-                    onChange={(value: any) => onChange('progressNotes', value)}
-                    display={!editing}
-                    preserveNewlines
-                  />
-                  {!!editing && (
-                    <Typography fontSize={14} color={theme.palette.TwClrTxtSecondary}>
-                      {strings.UNDERPERFORMANCE_DESCRIPTION}
-                    </Typography>
-                  )}
-                </Box>
-              </Grid>
-            )}
-          </Grid>
 
-          {editing && (
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <Button
-                id='cancel'
-                label={strings.CANCEL}
-                type='passive'
-                onClick={handleCancel}
-                priority='secondary'
-                key='button-1'
-              />
-              <Button id={'save'} onClick={onSave} label={strings.SAVE} key='button-2' priority='secondary' />
-            </Box>
+              {metric.overrideValue && (
+                <Typography fontSize={'14px'} color={theme.palette.TwClrTxtSecondary} paddingTop={1.5}>
+                  {strings.formatString(strings.OVERWRITTEN_ORIGINAL_VALUE, metric.systemValue)}
+                </Typography>
+              )}
+            </>
+          ) : (
+            isStandardOrProjectMetric(record) && (
+              <Box display={'flex'} alignItems={'center'} paddingBottom={theme.spacing(2)}>
+                <TextField
+                  type='text'
+                  label={strings.PROGRESS}
+                  value={record.value}
+                  id={'value'}
+                  onChange={(value: any) => onChange('value', value)}
+                  display={!editing}
+                  required={true}
+                />
+                <Typography paddingTop={3} paddingLeft={0.5}>
+                  / {record.target} ({strings.TARGET})
+                </Typography>
+              </Box>
+            )
           )}
-        </Box>
-      </Box>
+        </Grid>
+        {isConsoleView && (
+          <Grid item xs={6}>
+            <Box>
+              {editing ? (
+                <Dropdown
+                  label={strings.STATUS}
+                  selectedValue={record.status}
+                  options={statusOptions}
+                  onChange={(value: any) => onChange('status', value)}
+                  disabled={!editing}
+                  placeholder={'No Status'}
+                />
+              ) : (
+                <>
+                  <Typography sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px', marginBottom: '12px' }}>
+                    {strings.STATUS}
+                  </Typography>
+                  <Typography sx={{ fontWeight: '500' }}>{record.status}</Typography>
+                </>
+              )}
+            </Box>
+          </Grid>
+        )}
+        <Grid item xs={6}>
+          <Box paddingRight={theme.spacing(2)}>
+            <TextField
+              type='textarea'
+              label={strings.UNDERPERFORMANCE_JUSTIFICATION}
+              value={record.underperformanceJustification}
+              id={'underperformanceJustification'}
+              onChange={(value: any) => onChange('underperformanceJustification', value)}
+              display={!editing}
+              preserveNewlines
+            />
+            {!!editing && (
+              <Typography fontSize={14} color={theme.palette.TwClrTxtSecondary}>
+                {strings.UNDERPERFORMANCE_DESCRIPTION}
+              </Typography>
+            )}
+          </Box>
+        </Grid>
+        {isConsoleView && (
+          <Grid item xs={6}>
+            <Box paddingRight={theme.spacing(2)}>
+              <TextField
+                type='textarea'
+                label={strings.PROGRESS_NOTES}
+                value={record.progressNotes}
+                id={'progressNotes'}
+                onChange={(value: any) => onChange('progressNotes', value)}
+                display={!editing}
+                preserveNewlines
+              />
+              {!!editing && (
+                <Typography fontSize={14} color={theme.palette.TwClrTxtSecondary}>
+                  {strings.UNDERPERFORMANCE_DESCRIPTION}
+                </Typography>
+              )}
+            </Box>
+          </Grid>
+        )}
+      </EditableReportBox>
     </>
   );
 };
