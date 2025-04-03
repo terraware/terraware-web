@@ -46,7 +46,7 @@ const ReportsView = () => {
     defaultTab: 'reports',
     tabs,
     viewIdentifier: 'project-reports',
-    keepQuery: false,
+    keepQuery: true,
   });
 
   return (

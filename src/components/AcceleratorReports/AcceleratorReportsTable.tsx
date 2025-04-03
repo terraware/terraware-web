@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorReport, AcceleratorReportStatuses } from 'src/types/AcceleratorReport';
 import { SearchSortOrder } from 'src/types/Search';
+import useQuery from 'src/utils/useQuery';
 
 import AcceleratorReportCellRenderer from './AcceleratorReportCellRenderer';
 
@@ -84,6 +85,8 @@ export default function AcceleratorReportsTable(): JSX.Element {
 
   const pathParams = useParams<{ projectId: string }>();
   const projectId = isAcceleratorRoute ? String(pathParams.projectId) : currentParticipantProject?.id?.toString();
+  const query = useQuery();
+  const yearQuery = query.get('year');
 
   const currentYear = DateTime.now().year;
 
@@ -198,6 +201,10 @@ export default function AcceleratorReportsTable(): JSX.Element {
 
   useEffect(() => {
     if (!!allAcceleratorReports?.length && !!allReportYears.length) {
+      if (yearQuery) {
+        setYearFilter(yearQuery);
+        return;
+      }
       if (allReportYears.includes(currentYear)) {
         setYearFilter(currentYear.toString());
       } else {
@@ -210,7 +217,7 @@ export default function AcceleratorReportsTable(): JSX.Element {
         }
       }
     }
-  }, [allAcceleratorReports, allReportYears]);
+  }, [allAcceleratorReports, allReportYears, yearQuery]);
 
   const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
     const rejectedStatus = activeLocale ? (isAcceleratorRoute ? strings.UPDATE_REQUESTED : strings.UPDATE_NEEDED) : '';
