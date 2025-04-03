@@ -1,3 +1,4 @@
+70fa78970fb SW-6734 Clicking back to Reports page from a Report should keep table filters (#3798)
 cd01d33115b SW-6724 Fix Redirect issue (#3793)
 c5010b460da Updated translations from Phrase (#3780)
 ac6cca72bb9 SW-6744 - Ad-hoc & biomass observations - remove feature flag (#3792)
