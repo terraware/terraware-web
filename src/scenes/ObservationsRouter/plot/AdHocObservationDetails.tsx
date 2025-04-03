@@ -22,6 +22,7 @@ import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelector
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
+import MergedSuccessMessage from 'src/scenes/ObservationsRouter/common/MergedSuccessMessage';
 import SpeciesMortalityRateChart from 'src/scenes/ObservationsRouter/common/SpeciesMortalityRateChart';
 import SpeciesTotalPlantsChart from 'src/scenes/ObservationsRouter/common/SpeciesTotalPlantsChart';
 import MatchSpeciesModal, {
@@ -35,17 +36,12 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import MonitoringPlotPhotos from './MonitoringPlotPhotos';
 
-const MergedSuccessMessage = (merged: MergeOtherSpeciesRequestData[]): JSX.Element => (
-  <ul style={{ paddingLeft: '24px', margin: 0 }}>
-    {merged.map((sp, index) => (
-      <li key={index}>
-        {sp.otherSpeciesName} &#8594; {sp.newName}
-      </li>
-    ))}
-  </ul>
-);
+type AdHocObservationDetailsProps = {
+  reload: () => void;
+};
 
-export default function AdHocObservationDetails(): JSX.Element {
+export default function AdHocObservationDetails(props: AdHocObservationDetailsProps): JSX.Element {
+  const { reload } = props;
   const { plantingSiteId, observationId, monitoringPlotId } = useParams<{
     plantingSiteId: string;
     observationId: string;
@@ -157,7 +153,7 @@ export default function AdHocObservationDetails(): JSX.Element {
   useEffect(() => {
     if (matchResponse?.status === 'success' && matchResponse?.data && matchResponse.data.length > 0) {
       // Force reload page to show updated data
-      window.location.reload();
+      reload();
       snackbar.toastSuccess([MergedSuccessMessage(matchResponse.data)], strings.SPECIES_MATCHED);
     }
     if (matchResponse?.status === 'error') {

@@ -26,6 +26,7 @@ import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelector
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
+import MergedSuccessMessage from 'src/scenes/ObservationsRouter/common/MergedSuccessMessage';
 import strings from 'src/strings';
 import { ObservationState } from 'src/types/Observations';
 import { FieldOptionsMap } from 'src/types/Search';
@@ -43,16 +44,6 @@ export type ObservationDetailsProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;
   reload: () => void;
 };
-
-const MergedSuccessMessage = (merged: MergeOtherSpeciesRequestData[]): JSX.Element => (
-  <ul style={{ paddingLeft: '24px', margin: 0 }}>
-    {merged.map((sp, index) => (
-      <li key={index}>
-        {sp.otherSpeciesName} &#8594; {sp.newName}
-      </li>
-    ))}
-  </ul>
-);
 
 export default function ObservationDetails(props: ObservationDetailsProps): JSX.Element {
   const { setFilterOptions, reload } = props;
