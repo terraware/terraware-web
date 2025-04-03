@@ -162,7 +162,7 @@ const ReportView = () => {
           <Button
             disabled={selectedReport?.status === 'Needs Update'}
             id='rejectDeliverable'
-            label={strings.REJECT_ACTION}
+            label={strings.REQUEST_UPDATE_ACTION}
             priority='secondary'
             onClick={() => void setShowRejectDialog(true)}
             size='medium'
@@ -253,6 +253,7 @@ const ReportView = () => {
                 <MetricBox
                   editingId={editingId}
                   index={index}
+                  isConsoleView
                   key={`${type}-${index}`}
                   metric={metric}
                   projectId={projectId}

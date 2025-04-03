@@ -26,7 +26,7 @@ export default function RejectDialog({ onClose, onSubmit, initialFeedback }: Rej
   return (
     <DialogBox
       open={true}
-      title={strings.REJECT}
+      title={strings.REQUEST_UPDATE}
       size='medium'
       onClose={onClose}
       middleButtons={[
@@ -42,14 +42,14 @@ export default function RejectDialog({ onClose, onSubmit, initialFeedback }: Rej
           id='confirmReject'
           priority='primary'
           type='destructive'
-          label={strings.REJECT}
+          label={strings.REQUEST_UPDATE}
           onClick={reject}
           key='button-2'
         />,
       ]}
     >
       <Typography fontSize='16px' fontWeight={400} lineHeight='24px' marginBottom={theme.spacing(2)}>
-        {strings.REJECT_REASON}
+        {strings.REQUEST_UPDATE_REASON}
       </Typography>
       <Box textAlign='left'>
         <Textfield

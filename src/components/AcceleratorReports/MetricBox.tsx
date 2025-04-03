@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Icon, Tooltip } from '@terraware/web-components';
+import { Dropdown, DropdownItem, Icon, Tooltip } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import Button from 'src/components/common/button/Button';
@@ -17,6 +17,7 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import {
+  AcceleratorMetricStatuses,
   MetricType,
   ReportProjectMetric,
   ReportStandardMetric,
@@ -53,6 +54,11 @@ export const getMetricId = (
   return '-1';
 };
 
+const statusOptions: DropdownItem[] = AcceleratorMetricStatuses.map((s) => ({
+  label: s || '', // these are hardcoded, so will never actually be ''
+  value: s || '',
+}));
+
 const MetricBox = ({
   editingId,
   index,
@@ -63,6 +69,7 @@ const MetricBox = ({
   projectId,
   reportId,
   reload,
+  isConsoleView = false,
 }: {
   editingId?: string;
   hideStatusBadge?: boolean;
@@ -74,6 +81,7 @@ const MetricBox = ({
   metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric;
   type: MetricType;
   reportId: number;
+  isConsoleView?: boolean;
 }): JSX.Element => {
   const theme = useTheme();
   const [record, setRecord, onChange] = useForm<ReportProjectMetric | ReportSystemMetric | ReportStandardMetric>(
@@ -120,13 +128,18 @@ const MetricBox = ({
   }, [setEditingId, metric, getMetricId]);
 
   const getUpdateBody = () => {
+    const baseMetric = {
+      underperformanceJustification: record.underperformanceJustification,
+      progressNotes: record.progressNotes,
+      status: record.status,
+    };
     if (type === 'system' && isReportSystemMetric(record)) {
       return {
         systemMetrics: [
           {
             metric: record.metric as SystemMetricName,
             overrideValue: record.overrideValue,
-            underperformanceJustification: record.underperformanceJustification,
+            ...baseMetric,
           },
         ],
         projectMetrics: [],
@@ -135,7 +148,11 @@ const MetricBox = ({
     } else if (type === 'standard' && isStandardOrProjectMetric(record)) {
       return {
         standardMetrics: [
-          { id: record.id, value: record.value, underperformanceJustification: record.underperformanceJustification },
+          {
+            id: record.id,
+            value: record.value,
+            ...baseMetric,
+          },
         ],
         systemMetrics: [],
         projectMetrics: [],
@@ -143,7 +160,11 @@ const MetricBox = ({
     } else if (type === 'project' && isStandardOrProjectMetric(record)) {
       return {
         projectMetrics: [
-          { id: record.id, value: record.value, underperformanceJustification: record.underperformanceJustification },
+          {
+            id: record.id,
+            value: record.value,
+            ...baseMetric,
+          },
         ],
         standardMetrics: [],
         systemMetrics: [],
@@ -252,7 +273,6 @@ const MetricBox = ({
               alignItems: 'center',
               display: 'flex',
               justifyContent: 'space-apart',
-              marginBottom: '16px',
               width: '100%',
             }}
           >
@@ -263,6 +283,7 @@ const MetricBox = ({
                 flexGrow: 1,
                 justifyContent: 'flex-start',
                 flexDirection: 'column',
+                marginBottom: theme.spacing(2),
               }}
             >
               {isReportSystemMetric(metric) && <Typography sx={{ fontWeight: '600' }}>{metric.metric}</Typography>}
@@ -316,7 +337,7 @@ const MetricBox = ({
                   <Typography fontSize={'14px'} color={theme.palette.TwClrTxtSecondary}>
                     {strings.PROGRESS} *
                   </Typography>
-                  <Box display={'flex'} alignItems={'center'} paddingTop={1.5}>
+                  <Box display={'flex'} alignItems={'center'} paddingTop={1.5} paddingBottom={theme.spacing(2)}>
                     <Typography>
                       {getProgressValue() || 0} / {record.target} ({strings.TARGET})
                     </Typography>
@@ -363,7 +384,7 @@ const MetricBox = ({
                 </>
               ) : (
                 isStandardOrProjectMetric(record) && (
-                  <Box display={'flex'} alignItems={'center'}>
+                  <Box display={'flex'} alignItems={'center'} paddingBottom={theme.spacing(2)}>
                     <TextField
                       type='text'
                       label={strings.PROGRESS}
@@ -380,15 +401,41 @@ const MetricBox = ({
                 )
               )}
             </Grid>
+            {isConsoleView && (
+              <Grid item xs={6}>
+                <Box>
+                  {editing ? (
+                    <Dropdown
+                      label={strings.STATUS}
+                      selectedValue={record.status}
+                      options={statusOptions}
+                      onChange={(value: any) => onChange('status', value)}
+                      disabled={!editing}
+                      placeholder={'No Status'}
+                    />
+                  ) : (
+                    <>
+                      <Typography
+                        sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px', marginBottom: '12px' }}
+                      >
+                        {strings.STATUS}
+                      </Typography>
+                      <Typography sx={{ fontWeight: '500' }}>{record.status}</Typography>
+                    </>
+                  )}
+                </Box>
+              </Grid>
+            )}
             <Grid item xs={6}>
-              <Box>
+              <Box paddingRight={theme.spacing(2)}>
                 <TextField
                   type='textarea'
-                  label={strings.NOTES}
+                  label={strings.UNDERPERFORMANCE_JUSTIFICATION}
                   value={record.underperformanceJustification}
                   id={'underperformanceJustification'}
                   onChange={(value: any) => onChange('underperformanceJustification', value)}
                   display={!editing}
+                  preserveNewlines
                 />
                 {!!editing && (
                   <Typography fontSize={14} color={theme.palette.TwClrTxtSecondary}>
@@ -397,6 +444,26 @@ const MetricBox = ({
                 )}
               </Box>
             </Grid>
+            {isConsoleView && (
+              <Grid item xs={6}>
+                <Box paddingRight={theme.spacing(2)}>
+                  <TextField
+                    type='textarea'
+                    label={strings.PROGRESS_NOTES}
+                    value={record.progressNotes}
+                    id={'progressNotes'}
+                    onChange={(value: any) => onChange('progressNotes', value)}
+                    display={!editing}
+                    preserveNewlines
+                  />
+                  {!!editing && (
+                    <Typography fontSize={14} color={theme.palette.TwClrTxtSecondary}>
+                      {strings.UNDERPERFORMANCE_DESCRIPTION}
+                    </Typography>
+                  )}
+                </Box>
+              </Grid>
+            )}
           </Grid>
 
           {editing && (
