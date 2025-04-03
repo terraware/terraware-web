@@ -19,12 +19,7 @@ import { selectListAcceleratorReports } from 'src/redux/features/reports/reports
 import { requestListAcceleratorReports } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import {
-  AcceleratorReport,
-  ReportProjectMetric,
-  ReportStandardMetric,
-  ReportSystemMetric,
-} from 'src/types/AcceleratorReport';
+import { AcceleratorReport, MetricType } from 'src/types/AcceleratorReport';
 
 const AcceleratorReportView = () => {
   const { activeLocale } = useLocalization();
@@ -166,45 +161,28 @@ const AcceleratorReportView = () => {
               </Typography>
             </Box>
           )}
-          {selectedReport?.systemMetrics.map((systemMetric: ReportSystemMetric, index: number) => (
-            <MetricBox
-              key={index}
-              index={index}
-              projectId={projectId}
-              reload={() => true}
-              setEditingId={() => {}}
-              showEditOnHover={false}
-              metric={systemMetric}
-              type={'system'}
-              reportId={Number(reportId)}
-            />
-          ))}
-          {selectedReport?.projectMetrics.map((projectMetric: ReportProjectMetric, index: number) => (
-            <MetricBox
-              key={index}
-              index={index}
-              projectId={projectId}
-              reload={() => true}
-              setEditingId={() => {}}
-              showEditOnHover={false}
-              metric={projectMetric}
-              type={'project'}
-              reportId={Number(reportId)}
-            />
-          ))}
-          {selectedReport?.standardMetrics.map((standardMetric: ReportStandardMetric, index: number) => (
-            <MetricBox
-              key={index}
-              index={index}
-              projectId={projectId}
-              reload={() => true}
-              setEditingId={() => {}}
-              showEditOnHover={false}
-              metric={standardMetric}
-              type={'standard'}
-              reportId={selectedReport.id}
-            />
-          ))}
+          {['system', 'project', 'standard'].map((type) => {
+            const metrics =
+              type === 'system'
+                ? selectedReport?.systemMetrics
+                : type === 'project'
+                  ? selectedReport?.projectMetrics
+                  : selectedReport?.standardMetrics;
+
+            return metrics?.map((metric, index) => (
+              <MetricBox
+                index={index}
+                isConsoleView={false}
+                key={`${type}-${index}`}
+                metric={metric}
+                projectId={projectId}
+                reload={reload}
+                reportId={Number(reportId)}
+                setEditingId={() => {}}
+                type={type as MetricType}
+              />
+            ));
+          })}
         </Card>
       </Box>
     </Page>
