@@ -28,7 +28,6 @@ export default function AcceleratorReportCellRenderer({ projectId }: Accelerator
     const submittedByUser = useAppSelector(selectUser(row.submittedBy));
 
     const createLinkToReport = useCallback(() => {
-      // TODO: update link to accelerator report views once ready
       const reportUrl = isAcceleratorRoute ? APP_PATHS.ACCELERATOR_PROJECT_REPORTS_VIEW : APP_PATHS.REPORTS_VIEW;
       const to = reportUrl.replace(':reportId', `${row.id}`).replace(':projectId', projectId);
 
