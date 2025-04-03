@@ -128,15 +128,18 @@ const MetricBox = ({
   }, [setEditingId, metric, getMetricId]);
 
   const getUpdateBody = () => {
+    const baseMetric = {
+      underperformanceJustification: record.underperformanceJustification,
+      progressNotes: record.progressNotes,
+      status: record.status,
+    };
     if (type === 'system' && isReportSystemMetric(record)) {
       return {
         systemMetrics: [
           {
             metric: record.metric as SystemMetricName,
             overrideValue: record.overrideValue,
-            underperformanceJustification: record.underperformanceJustification,
-            progressNotes: record.progressNotes,
-            status: record.status,
+            ...baseMetric,
           },
         ],
         projectMetrics: [],
@@ -148,9 +151,7 @@ const MetricBox = ({
           {
             id: record.id,
             value: record.value,
-            underperformanceJustification: record.underperformanceJustification,
-            progressNotes: record.progressNotes,
-            status: record.status,
+            ...baseMetric,
           },
         ],
         systemMetrics: [],
@@ -162,9 +163,7 @@ const MetricBox = ({
           {
             id: record.id,
             value: record.value,
-            underperformanceJustification: record.underperformanceJustification,
-            progressNotes: record.progressNotes,
-            status: record.status,
+            ...baseMetric,
           },
         ],
         standardMetrics: [],
