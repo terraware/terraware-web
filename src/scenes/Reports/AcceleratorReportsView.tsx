@@ -59,7 +59,7 @@ const AcceleratorReportsView = () => {
     defaultTab: 'reports',
     tabs,
     viewIdentifier: 'accelerator-reports',
-    keepQuery: false,
+    keepQuery: true,
   });
 
   const PageHeaderLeftComponent = useMemo(

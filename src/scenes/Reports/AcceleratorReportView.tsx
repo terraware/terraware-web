@@ -76,14 +76,18 @@ const AcceleratorReportView = () => {
     }
   }, [reportId, reports]);
 
+  const year = useMemo(() => {
+    return selectedReport?.startDate.split('-')[0];
+  }, [selectedReport]);
+
   const crumbs: Crumb[] = useMemo(
     () => [
       {
         name: activeLocale ? strings.REPORTS : '',
-        to: APP_PATHS.REPORTS,
+        to: year ? `${APP_PATHS.REPORTS}?year=${year}` : APP_PATHS.REPORTS,
       },
     ],
-    [activeLocale]
+    [activeLocale, year]
   );
 
   const callToAction = useMemo(() => {
@@ -121,7 +125,6 @@ const AcceleratorReportView = () => {
     [callToAction]
   );
 
-  const year = selectedReport?.startDate.split('-')[0];
   const reportName =
     selectedReport?.frequency === 'Annual' ? year : selectedReport?.quarter ? `${year}-${selectedReport?.quarter}` : '';
 

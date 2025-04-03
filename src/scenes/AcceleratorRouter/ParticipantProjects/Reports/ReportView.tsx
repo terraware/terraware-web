@@ -132,14 +132,20 @@ const ReportView = () => {
     }
   }, [reportId, reports]);
 
+  const year = useMemo(() => {
+    return selectedReport?.startDate.split('-')[0];
+  }, [selectedReport]);
+
   const crumbs: Crumb[] = useMemo(
     () => [
       {
         name: activeLocale ? strings.REPORTS : '',
-        to: APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId),
+        to: year
+          ? `${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId)}?year=${year}`
+          : APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId),
       },
     ],
-    [activeLocale]
+    [activeLocale, year]
   );
 
   const callToAction = useMemo(() => {
@@ -176,7 +182,6 @@ const ReportView = () => {
     [callToAction]
   );
 
-  const year = selectedReport?.startDate.split('-')[0];
   const reportName = selectedReport
     ? selectedReport.frequency === 'Annual'
       ? `${year}`
