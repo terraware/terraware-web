@@ -1,3 +1,4 @@
+0cde2649cd7 Updated translations from Phrase (#3803)
 f77b01592b7 Refactor Accelerator Report render to use a single .map for metrics (#3802)
 88d8d0b22cd Create Editable Report Box for reuse (#3801)
 98926731a3a Change reject to request update for reports (#3800)
