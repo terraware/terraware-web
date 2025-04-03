@@ -24,12 +24,7 @@ import {
 } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import {
-  AcceleratorReport,
-  ReportProjectMetric,
-  ReportStandardMetric,
-  ReportSystemMetric,
-} from 'src/types/AcceleratorReport';
+import { AcceleratorReport, MetricType } from 'src/types/AcceleratorReport';
 
 import { useParticipantProjectData } from '../ParticipantProjectContext';
 import ApproveReportDialog from './ApproveReportDialog';
@@ -242,45 +237,32 @@ const ReportView = () => {
                 </Typography>
               </Box>
             )}
-            {selectedReport?.systemMetrics.map((systemMetric: ReportSystemMetric, index: number) => (
-              <MetricBox
-                key={index}
-                editingId={editingId}
-                index={index}
-                projectId={projectId}
-                reload={reload}
-                setEditingId={setEditingId}
-                metric={systemMetric}
-                type={'system'}
-                reportId={Number(reportId)}
-              />
-            ))}
-            {selectedReport?.projectMetrics.map((projectMetric: ReportProjectMetric, index: number) => (
-              <MetricBox
-                key={index}
-                editingId={editingId}
-                index={index}
-                projectId={projectId}
-                reload={reload}
-                setEditingId={setEditingId}
-                metric={projectMetric}
-                type={'project'}
-                reportId={Number(reportId)}
-              />
-            ))}
-            {selectedReport?.standardMetrics.map((standardMetric: ReportStandardMetric, index: number) => (
-              <MetricBox
-                key={index}
-                editingId={editingId}
-                index={index}
-                projectId={projectId}
-                reload={reload}
-                setEditingId={setEditingId}
-                metric={standardMetric}
-                type={'standard'}
-                reportId={selectedReport.id}
-              />
-            ))}
+            {['system', 'project', 'standard'].map((type) => {
+              const metrics =
+                type === 'system'
+                  ? selectedReport?.systemMetrics
+                  : type === 'project'
+                    ? selectedReport?.projectMetrics
+                    : selectedReport?.standardMetrics;
+
+              if (!selectedReport) {
+                return null;
+              }
+
+              return metrics?.map((metric, index) => (
+                <MetricBox
+                  editingId={editingId}
+                  index={index}
+                  key={`${type}-${index}`}
+                  metric={metric}
+                  projectId={projectId}
+                  reload={reload}
+                  reportId={type === 'standard' ? selectedReport?.id : Number(reportId)}
+                  setEditingId={setEditingId}
+                  type={type as MetricType}
+                />
+              ));
+            })}
           </Card>
         </Box>
       </Page>
