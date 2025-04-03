@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import {
   AcceleratorMetricStatuses,
+  AcceleratorReportMetricStatus,
   MetricType,
   ReportProjectMetric,
   ReportStandardMetric,
@@ -131,7 +132,7 @@ const MetricBox = ({
     const baseMetric = {
       underperformanceJustification: record.underperformanceJustification,
       progressNotes: record.progressNotes,
-      status: record.status,
+      status: record.status as AcceleratorReportMetricStatus,
     };
     if (type === 'system' && isReportSystemMetric(record)) {
       return {

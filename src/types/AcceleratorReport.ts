@@ -82,7 +82,8 @@ export const AcceleratorReportStatuses: AcceleratorReportStatus[] = [
   'Not Needed',
 ];
 
-export const AcceleratorMetricStatuses: (ReportProjectMetric | ReportStandardMetric | ReportSystemMetric)['status'][] =
-  ['Achieved', 'On-Track', 'Unlikely'];
+export type AcceleratorReportMetricStatus = (ReportProjectMetric | ReportStandardMetric | ReportSystemMetric)['status'];
+
+export const AcceleratorMetricStatuses: AcceleratorReportMetricStatus[] = ['Achieved', 'On-Track', 'Unlikely'];
 
 export type MetricType = 'project' | 'standard' | 'system';
