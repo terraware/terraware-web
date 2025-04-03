@@ -50,7 +50,7 @@ const ReportView = () => {
   const { isAllowed } = useUser();
   const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
-  const { crumbs: participantProjectCrumbs, participantProject } = useParticipantProjectData();
+  const { crumbs: participantProjectCrumbs, participantProject, project } = useParticipantProjectData();
   const theme = useTheme();
   const [editingId, setEditingId] = useState<string | undefined>();
   const [approveRequestId, setApproveRequestId] = useState('');
@@ -151,14 +151,14 @@ const ReportView = () => {
       crumbsList = [
         ...participantProjectCrumbs,
         {
-          name: participantProject?.dealName || '',
+          name: participantProject?.dealName || project?.name || '',
           to: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', participantProject?.projectId.toString() || ''),
         },
       ].concat(crumbsList);
     }
 
     return crumbsList;
-  }, [activeLocale, participantProject, year]);
+  }, [activeLocale, participantProject, project, year]);
 
   const callToAction = useMemo(() => {
     return (
