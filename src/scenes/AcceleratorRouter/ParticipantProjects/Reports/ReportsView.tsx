@@ -15,7 +15,7 @@ import { useParticipantProjectData } from '../ParticipantProjectContext';
 import ReportsSettings from './ReportsSettings';
 
 const ReportsView = () => {
-  const { crumbs, participantProject } = useParticipantProjectData();
+  const { crumbs, participantProject, project } = useParticipantProjectData();
   const { activeLocale } = useLocalization();
 
   const tabs = useMemo(() => {
@@ -55,7 +55,7 @@ const ReportsView = () => {
       crumbs={[
         ...crumbs,
         {
-          name: participantProject?.dealName || '',
+          name: participantProject?.dealName || project?.name || '',
           to: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', participantProject?.projectId.toString() || ''),
         },
       ]}

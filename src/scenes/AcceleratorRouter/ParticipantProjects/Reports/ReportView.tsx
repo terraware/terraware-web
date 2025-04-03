@@ -12,6 +12,7 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization, useUser } from 'src/providers';
 import {
   selectListAcceleratorReports,
@@ -40,6 +41,7 @@ const ReportView = () => {
   const pathParams = useParams<{ projectId: string; reportId: string }>();
   const projectId = String(pathParams.projectId);
   const reportId = String(pathParams.reportId);
+  const { isAcceleratorRoute } = useAcceleratorConsole();
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
   const reportsResults = useAppSelector(selectListAcceleratorReports(requestId));
@@ -48,7 +50,7 @@ const ReportView = () => {
   const { isAllowed } = useUser();
   const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
-  const { participantProject } = useParticipantProjectData();
+  const { crumbs: participantProjectCrumbs, participantProject, project } = useParticipantProjectData();
   const theme = useTheme();
   const [editingId, setEditingId] = useState<string | undefined>();
   const [approveRequestId, setApproveRequestId] = useState('');
@@ -136,17 +138,27 @@ const ReportView = () => {
     return selectedReport?.startDate.split('-')[0];
   }, [selectedReport]);
 
-  const crumbs: Crumb[] = useMemo(
-    () => [
+  const crumbs: Crumb[] = useMemo(() => {
+    let crumbsList = [
       {
         name: activeLocale ? strings.REPORTS : '',
         to: year
           ? `${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId)}?year=${year}`
           : APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId),
       },
-    ],
-    [activeLocale, year]
-  );
+    ];
+    if (isAcceleratorRoute) {
+      crumbsList = [
+        ...participantProjectCrumbs,
+        {
+          name: participantProject?.dealName || project?.name || '',
+          to: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', participantProject?.projectId.toString() || ''),
+        },
+      ].concat(crumbsList);
+    }
+
+    return crumbsList;
+  }, [activeLocale, participantProject, project, year]);
 
   const callToAction = useMemo(() => {
     return (
@@ -204,6 +216,7 @@ const ReportView = () => {
         }
         rightComponent={selectedReport?.status !== 'Not Submitted' ? rightComponent : undefined}
         crumbs={crumbs}
+        hierarchicalCrumbs={false}
       >
         <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
           {selectedReport && <ApprovedReportMessage report={selectedReport} />}
