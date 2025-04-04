@@ -1,3 +1,4 @@
+e7cc99c12bf SW-6741 Display qualitative data in reports (#3805)
 00092e96d32 SW-6739 Fix Edit Metric data QA finds (#3806)
 0cde2649cd7 Updated translations from Phrase (#3803)
 f77b01592b7 Refactor Accelerator Report render to use a single .map for metrics (#3802)
