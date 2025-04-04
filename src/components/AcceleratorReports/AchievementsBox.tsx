@@ -38,8 +38,8 @@ const Achievement = ({
     <>
       <Grid
         item
-        xs={editing ? 11.7 : 12}
-        borderBottom={includeBorder ? `1px solid ${theme.palette.TwClrBgTertiary}` : ''}
+        xs={editing ? 11.5 : 12}
+        borderBottom={includeBorder && !editing ? `1px solid ${theme.palette.TwClrBgTertiary}` : ''}
         marginBottom={1}
       >
         <Textfield
@@ -55,7 +55,7 @@ const Achievement = ({
         />
       </Grid>
       {editing && (
-        <Grid item xs={0.3} display={'flex'} flexDirection={'column'}>
+        <Grid item xs={0.5} display={'flex'} flexDirection={'column'}>
           <Link onClick={onRemove} style={{ height: '100%' }}>
             <Box paddingTop='8px'>
               <Icon name='iconSubtract' size='medium' />
