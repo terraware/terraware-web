@@ -7,7 +7,9 @@ import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/Acce
 import MetricBox, { getMetricId } from 'src/components/AcceleratorReports/MetricBox';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
+import WrappedPageForm from 'src/components/common/PageForm';
 import TitleBar from 'src/components/common/TitleBar';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { selectListAcceleratorReports } from 'src/redux/features/reports/reportsSelectors';
@@ -21,6 +23,7 @@ const AcceleratorReportView = () => {
   const { currentParticipantProject, setCurrentParticipantProject } = useParticipantData();
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const { goToAcceleratorReport } = useNavigateTo();
 
   const pathParams = useParams<{ projectId: string; reportId: string }>();
   const reportId = String(pathParams.reportId);
@@ -85,53 +88,65 @@ const AcceleratorReportView = () => {
         />
       }
     >
-      <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
-        <Card
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            flexGrow: 1,
-          }}
-        >
-          {selectedReport?.startDate && selectedReport?.endDate && (
-            <Box
-              borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
-              padding={theme.spacing(3, 0)}
-              marginBottom={3}
-            >
-              <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
-                <AcceleratorReportStatusBadge status={selectedReport.status} />
-              </div>
+      <WrappedPageForm
+        cancelID={'cancelEditAcceleratorReport'}
+        onCancel={() => {
+          goToAcceleratorReport(Number(reportId), Number(projectId));
+        }}
+        onSave={() => {
+          // TODO: save report
+        }}
+        saveID={'saveEditAcceleratorReport'}
+        saveDisabled={false}
+      >
+        <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
+          <Card
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              flexGrow: 1,
+            }}
+          >
+            {selectedReport?.startDate && selectedReport?.endDate && (
+              <Box
+                borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+                padding={theme.spacing(3, 0)}
+                marginBottom={3}
+              >
+                <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
+                  <AcceleratorReportStatusBadge status={selectedReport.status} />
+                </div>
 
-              <Typography fontSize={14} fontStyle={'italic'}>
-                {strings.formatString(strings.REPORT_PERIOD, selectedReport?.startDate, selectedReport?.endDate)}
-              </Typography>
-            </Box>
-          )}
-          {['system', 'project', 'standard'].map((type) => {
-            const metrics =
-              type === 'system'
-                ? selectedReport?.systemMetrics
-                : type === 'project'
-                  ? selectedReport?.projectMetrics
-                  : selectedReport?.standardMetrics;
+                <Typography fontSize={14} fontStyle={'italic'}>
+                  {strings.formatString(strings.REPORT_PERIOD, selectedReport?.startDate, selectedReport?.endDate)}
+                </Typography>
+              </Box>
+            )}
+            {['system', 'project', 'standard'].map((type) => {
+              const metrics =
+                type === 'system'
+                  ? selectedReport?.systemMetrics
+                  : type === 'project'
+                    ? selectedReport?.projectMetrics
+                    : selectedReport?.standardMetrics;
 
-            return metrics?.map((metric, index) => (
-              <MetricBox
-                editingId={getMetricId(metric, type as MetricType)}
-                index={index}
-                key={`${type}-${index}`}
-                metric={metric}
-                projectId={projectId}
-                reload={reload}
-                reportId={Number(reportId)}
-                setEditingId={() => {}}
-                type={type as MetricType}
-              />
-            ));
-          })}
-        </Card>
-      </Box>
+              return metrics?.map((metric, index) => (
+                <MetricBox
+                  editingId={getMetricId(metric, type as MetricType)}
+                  index={index}
+                  key={`${type}-${index}`}
+                  metric={metric}
+                  projectId={projectId}
+                  reload={reload}
+                  reportId={Number(reportId)}
+                  setEditingId={() => {}}
+                  type={type as MetricType}
+                />
+              ));
+            })}
+          </Card>
+        </Box>
+      </WrappedPageForm>
     </Page>
   );
 };
