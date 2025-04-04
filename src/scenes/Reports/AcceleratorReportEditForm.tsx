@@ -11,6 +11,7 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 import { AcceleratorReport, MetricType } from 'src/types/AcceleratorReport';
+import useForm from 'src/utils/useForm';
 
 type AcceleratorReportEditFormProps = {
   report: AcceleratorReport;
@@ -24,6 +25,8 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
   const pathParams = useParams<{ projectId: string; reportId: string }>();
   const reportId = String(pathParams.reportId);
   const projectId = String(pathParams.projectId);
+
+  const [record, setRecord, onChange] = useForm<AcceleratorReport>(report);
 
   useEffect(() => {
     if (projectId !== currentParticipantProject?.id?.toString()) {
@@ -52,28 +55,28 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
             flexGrow: 1,
           }}
         >
-          {report?.startDate && report?.endDate && (
+          {record.startDate && record.endDate && (
             <Box
               borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
               padding={theme.spacing(3, 0)}
               marginBottom={3}
             >
               <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
-                <AcceleratorReportStatusBadge status={report.status} />
+                <AcceleratorReportStatusBadge status={record.status} />
               </div>
 
               <Typography fontSize={14} fontStyle={'italic'}>
-                {strings.formatString(strings.REPORT_PERIOD, report?.startDate, report?.endDate)}
+                {strings.formatString(strings.REPORT_PERIOD, record.startDate, record.endDate)}
               </Typography>
             </Box>
           )}
           {['system', 'project', 'standard'].map((type) => {
             const metrics =
               type === 'system'
-                ? report?.systemMetrics
+                ? record.systemMetrics
                 : type === 'project'
-                  ? report?.projectMetrics
-                  : report?.standardMetrics;
+                  ? record.projectMetrics
+                  : record.standardMetrics;
 
             return metrics?.map((metric, index) => (
               <MetricBox
