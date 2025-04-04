@@ -181,13 +181,8 @@ const AcceleratorReportView = () => {
               />
             ));
           })}
-<<<<<<< HEAD
-          <AchievementsBox achievements={report?.achievements} />
-          <ChallengesMitigationBox challenges={report?.challenges} />
-=======
-          <AchievementsBox report={selectedReport} projectId={projectId} reportId={reportId} reload={reload} />
-          <ChallengesMitigationBox challenges={selectedReport?.challenges} />
->>>>>>> 4e94bb915ba (SW-6742 Edit Achievements)
+          <AchievementsBox report={report} projectId={projectId} reportId={reportId} reload={reload} />
+          <ChallengesMitigationBox report={report} projectId={projectId} reportId={reportId} reload={reload} />
         </Card>
       </Box>
     </Page>
