@@ -5,7 +5,10 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
+import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
 import ApprovedReportMessage from 'src/components/AcceleratorReports/ApprovedReportMessage';
+import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
+import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import MetricBox from 'src/components/AcceleratorReports/MetricBox';
 import RejectedReportMessage from 'src/components/AcceleratorReports/RejectedReportMessage';
 import { Crumb } from 'src/components/BreadCrumbs';
@@ -161,6 +164,7 @@ const AcceleratorReportView = () => {
               </Typography>
             </Box>
           )}
+          <HighlightsBox highlights={selectedReport?.highlights} />
           {['system', 'project', 'standard'].map((type) => {
             const metrics =
               type === 'system'
@@ -183,6 +187,8 @@ const AcceleratorReportView = () => {
               />
             ));
           })}
+          <AchievementsBox achievements={selectedReport?.achievements} />
+          <ChallengesMitigationBox challenges={selectedReport?.challenges} />
         </Card>
       </Box>
     </Page>
