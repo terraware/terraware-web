@@ -27,7 +27,7 @@ const ChallengeMitigationPlan = ({
         borderBottom={`1px solid ${theme.palette.TwClrBrdrSecondary}`}
         width={'100%'}
       >
-        <Grid container marginBottom={1} xs={12} width={'100%'}>
+        <Grid container marginBottom={1}>
           <Grid item xs={6}>
             <Typography fontWeight={600}>{strings.CHALLENGE}</Typography>
           </Grid>
