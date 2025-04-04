@@ -64,7 +64,6 @@ const MetricBox = ({
   editingId,
   index,
   setEditingId,
-  showEditOnHover = true,
   metric,
   type,
   projectId,
@@ -78,7 +77,6 @@ const MetricBox = ({
   projectId: string;
   reload: () => void;
   setEditingId: (id: string | undefined) => void;
-  showEditOnHover?: boolean;
   metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric;
   type: MetricType;
   reportId: number;
@@ -253,7 +251,7 @@ const MetricBox = ({
         onSave={onSave}
         editing={editing}
         key={`metric-${index}`}
-        showEditOnHover={showEditOnHover}
+        isConsoleView={isConsoleView}
         description={metric?.description}
       >
         <Grid item xs={6}>

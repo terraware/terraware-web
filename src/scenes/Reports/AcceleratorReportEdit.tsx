@@ -120,7 +120,6 @@ const AcceleratorReportView = () => {
               <MetricBox
                 editingId={getMetricId(metric, type as MetricType)}
                 index={index}
-                isConsoleView={false}
                 key={`${type}-${index}`}
                 metric={metric}
                 projectId={projectId}
