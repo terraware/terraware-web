@@ -264,7 +264,7 @@ const ReportView = () => {
                 />
               ));
             })}
-            <AchievementsBox achievements={selectedReport?.achievements} />
+            <AchievementsBox report={selectedReport} projectId={projectId} reportId={reportId} reload={reload} />
             <ChallengesMitigationBox challenges={selectedReport?.challenges} />
           </Card>
         </Box>

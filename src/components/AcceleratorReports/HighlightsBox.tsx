@@ -8,21 +8,14 @@ import { selectReviewAcceleratorReport } from 'src/redux/features/reports/report
 import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { AcceleratorReport } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import EditableReportBox from './EditableReportBox';
+import { ReportBoxProps } from './ReportBox';
 
 const textAreaStyles = { textarea: { height: '120px' } };
 
-type HighlightsBoxProps = {
-  report?: AcceleratorReport;
-  projectId: string;
-  reportId: string;
-  reload: () => void;
-};
-
-const HighlightsBox = ({ report, projectId, reportId, reload }: HighlightsBoxProps) => {
+const HighlightsBox = ({ report, projectId, reportId, reload }: ReportBoxProps) => {
   const { isAllowed } = useUser();
   const [editing, setEditing] = useState<boolean>(false);
   const [highlights, setHighlights] = useState<string | undefined>(report?.highlights);
@@ -60,13 +53,18 @@ const HighlightsBox = ({ report, projectId, reportId, reload }: HighlightsBoxPro
     setRequestId(request.requestId);
   }, [dispatch, projectId, reportId, highlights, report]);
 
+  const onCancel = useCallback(() => {
+    setHighlights(report?.highlights);
+    setEditing(false);
+  }, [highlights, report?.highlights]);
+
   return (
     <EditableReportBox
       name={strings.HIGHLIGHTS}
       canEdit={isAllowed('UPDATE_REPORTS_SETTINGS')}
       editing={editing}
       onEdit={() => setEditing(true)}
-      onCancel={() => setEditing(false)}
+      onCancel={onCancel}
       onSave={onSave}
     >
       <Grid item xs={12}>
