@@ -25,6 +25,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { NewAcceleratorReportConfig } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export default function EditSettings(): JSX.Element {
   const theme = useTheme();
@@ -36,6 +37,7 @@ export default function EditSettings(): JSX.Element {
   const createReportConfigResponse = useAppSelector(selectCreateReportConfig(requestId));
   const updateReportConfigResponse = useAppSelector(selectUpdateReportConfig(requestId));
   const projectReportConfig = useAppSelector((state) => selectProjectReportConfig(state));
+  const snackbar = useSnackbar();
 
   useEffect(() => {
     if (projectId) {
@@ -46,13 +48,17 @@ export default function EditSettings(): JSX.Element {
   const { isMobile } = useDeviceInfo();
 
   useEffect(() => {
-    if (createReportConfigResponse && createReportConfigResponse.status === 'success') {
+    if (createReportConfigResponse?.status === 'error') {
+      snackbar.toastError();
+    } else if (createReportConfigResponse && createReportConfigResponse.status === 'success') {
       goToProjectReports();
     }
   }, [createReportConfigResponse]);
 
   useEffect(() => {
-    if (updateReportConfigResponse?.status === 'success') {
+    if (updateReportConfigResponse?.status === 'error') {
+      snackbar.toastError();
+    } else if (updateReportConfigResponse?.status === 'success') {
       goToProjectReports();
     }
   }, [updateReportConfigResponse]);
@@ -64,14 +70,16 @@ export default function EditSettings(): JSX.Element {
   const [newConfig, , onChange] = useForm<NewAcceleratorReportConfig>({
     reportingStartDate: projectReportConfig.config?.reportingStartDate || '',
     reportingEndDate: projectReportConfig.config?.reportingEndDate || '',
+    logframeUrl: projectReportConfig.config?.logframeUrl,
   });
 
   const saveReportConfig = () => {
     const request = projectReportConfig?.config
       ? dispatch(
           requestUpdateReportConfig({
-            config: newConfig,
+            config: { reportingEndDate: newConfig.reportingEndDate, reportingStartDate: newConfig.reportingEndDate },
             projectId: projectId,
+            logframeUrl: newConfig.logframeUrl,
           })
         )
       : dispatch(requestCreateReportConfig({ config: newConfig, projectId: projectId }));
@@ -131,9 +139,8 @@ export default function EditSettings(): JSX.Element {
                   id='logframe'
                   label={strings.LOG_FRAME_AND_ME_PLAN_URL}
                   type='text'
-                  onChange={(value) => onChange('logframe', value)}
-                  disabled={true}
-                  value={''}
+                  onChange={(value) => onChange('logframeUrl', value)}
+                  value={newConfig.logframeUrl}
                 />
               </Grid>
             </Grid>
