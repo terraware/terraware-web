@@ -77,7 +77,7 @@ export default function EditSettings(): JSX.Element {
     const request = projectReportConfig?.config
       ? dispatch(
           requestUpdateReportConfig({
-            config: { reportingEndDate: newConfig.reportingEndDate, reportingStartDate: newConfig.reportingEndDate },
+            config: { reportingEndDate: newConfig.reportingEndDate, reportingStartDate: newConfig.reportingStartDate },
             projectId: projectId,
             logframeUrl: newConfig.logframeUrl,
           })
