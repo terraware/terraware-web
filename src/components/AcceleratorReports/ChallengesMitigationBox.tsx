@@ -37,13 +37,7 @@ const ChallengeMitigationPlan = ({
         </Grid>
       </Box>
 
-      <Grid
-        container
-        borderBottom={includeBorder ? `1px solid ${theme.palette.TwClrBgTertiary}` : ''}
-        marginBottom={1}
-        xs={12}
-        width={'100%'}
-      >
+      <Grid container borderBottom={includeBorder ? `1px solid ${theme.palette.TwClrBgTertiary}` : ''} marginBottom={1}>
         <Grid item xs={6}>
           <Box paddingRight={theme.spacing(2)}>
             <Textfield

@@ -159,7 +159,7 @@ const AcceleratorReportView = () => {
               </Typography>
             </Box>
           )}
-          <HighlightsBox highlights={report?.highlights} />
+          <HighlightsBox report={report} projectId={projectId} reportId={reportId} reload={reload} />
           {['system', 'project', 'standard'].map((type) => {
             const metrics =
               type === 'system'
