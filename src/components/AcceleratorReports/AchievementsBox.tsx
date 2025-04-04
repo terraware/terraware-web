@@ -27,7 +27,7 @@ const Achievement = ({
         id={`achievement-${key}`}
         label={''}
         display={true}
-        preserveNewlines={true}
+        preserveNewlines
       />
     </Grid>
   );
