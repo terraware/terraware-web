@@ -123,7 +123,7 @@ const EditableReportBox = ({
             {children}
           </Grid>
 
-          {editing && (
+          {isConsoleView && editing && (
             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
               <Button
                 id='cancel'
