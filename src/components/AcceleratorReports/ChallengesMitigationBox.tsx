@@ -25,6 +25,7 @@ const ChallengeMitigationPlan = ({
   includeBorder,
   editing,
   onRemove,
+  validateFields,
 }: {
   challengeMitigation: ChallengeMitigation;
   setChallengeMitigation: (challengeMitigation: ChallengeMitigation) => void;
@@ -32,6 +33,7 @@ const ChallengeMitigationPlan = ({
   includeBorder: boolean;
   editing: boolean;
   onRemove: () => void;
+  validateFields: boolean;
 }) => {
   const theme = useTheme();
 
@@ -80,6 +82,10 @@ const ChallengeMitigationPlan = ({
               display={!editing}
               styles={textAreaStyles}
               onChange={setChallenge}
+              errorText={
+                validateFields && !challengeMitigation.challenge ? strings.TEXT_REQUIRED_BOTH_FIELDS : undefined
+              }
+              required
               preserveNewlines
             />
           </Box>
@@ -95,6 +101,10 @@ const ChallengeMitigationPlan = ({
               display={!editing}
               styles={textAreaStyles}
               onChange={setMitigation}
+              errorText={
+                validateFields && !challengeMitigation.mitigationPlan ? strings.TEXT_REQUIRED_BOTH_FIELDS : undefined
+              }
+              required
               preserveNewlines
             />
           </Box>
@@ -117,12 +127,17 @@ const ChallengesMitigationBox = ({ report, projectId, reportId, reload }: Report
   const { isAllowed } = useUser();
   const [editing, setEditing] = useState<boolean>(false);
   const [challengeMitigations, setChallengeMitigations] = useState<ChallengeMitigation[]>(report?.challenges || []);
+  const [validateFields, setValidateFields] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
   const updateReportResponse = useAppSelector(selectReviewAcceleratorReport(requestId));
   const snackbar = useSnackbar();
 
   useEffect(() => setChallengeMitigations(report?.challenges || []), [report?.challenges]);
+
+  useEffect(() => {
+    setValidateFields(false);
+  }, [challengeMitigations]);
 
   useEffect(() => {
     if (updateReportResponse?.status === 'error') {
@@ -135,12 +150,19 @@ const ChallengesMitigationBox = ({ report, projectId, reportId, reload }: Report
   }, [updateReportResponse, snackbar]);
 
   const onSave = useCallback(() => {
+    setValidateFields(false);
+    const filteredChallenges = challengeMitigations.filter((s) => !!s.challenge || !!s.mitigationPlan);
+    if (filteredChallenges.some((c) => !c.challenge || !c.mitigationPlan)) {
+      setValidateFields(true);
+      return;
+    }
+
     const request = dispatch(
       requestReviewAcceleratorReport({
         review: {
           ...report,
           achievements: report?.achievements || [],
-          challenges: challengeMitigations.filter((s) => !!s.challenge || !!s.mitigationPlan),
+          challenges: filteredChallenges,
           status: report?.status || 'Not Submitted',
         },
         projectId: Number(projectId),
@@ -181,6 +203,7 @@ const ChallengesMitigationBox = ({ report, projectId, reportId, reload }: Report
           editing={editing}
           onRemove={() => setChallengeMitigations(challengeMitigations.filter((_, i) => index !== i))}
           setChallengeMitigation={(chal: ChallengeMitigation) => updateChallenge(chal, index)}
+          validateFields={validateFields}
         />
       ))}
       {editing && (
