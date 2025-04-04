@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/87</span>
+                <span class='fraction'>0/88</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/85</span>
+                <span class='fraction'>0/86</span>
             </div>
         
             
@@ -458,7 +458,11 @@
 <a name='L393'></a><a href='#L393'>393</a>
 <a name='L394'></a><a href='#L394'>394</a>
 <a name='L395'></a><a href='#L395'>395</a>
-<a name='L396'></a><a href='#L396'>396</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L396'></a><a href='#L396'>396</a>
+<a name='L397'></a><a href='#L397'>397</a>
+<a name='L398'></a><a href='#L398'>398</a>
+<a name='L399'></a><a href='#L399'>399</a>
+<a name='L400'></a><a href='#L400'>400</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -522,6 +526,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -835,7 +841,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -857,7 +865,7 @@
 &nbsp;
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem, Icon, Tooltip } from '@terraware/web-components';
-import TextField from '@terraware/web-components/components/Textfield/Textfield';
+import { Textfield } from '@terraware/web-components';
 &nbsp;
 import Button from 'src/components/common/button/Button';
 import { useUser } from 'src/providers';
@@ -914,6 +922,8 @@ const statusOptions: DropdownItem[] = <span class="cstat-no" title="statement no
   label: s || '', // these are hardcoded, so will never actually be ''
   value: s || '',
 }));
+&nbsp;
+const textAreaStyles = <span class="cstat-no" title="statement not covered" >{ textarea: { height: '120px' } };</span>
 &nbsp;
 const MetricBox = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span></span>
   editingId,
@@ -1165,7 +1175,7 @@ const MetricBox = <span class="cstat-no" title="statement not covered" ><span cl
           ) : (
             isStandardOrProjectMetric(record) &amp;&amp; (
               &lt;Box display={'flex'} alignItems={'center'} paddingBottom={theme.spacing(2)}&gt;
-                &lt;TextField
+                &lt;Textfield
                   type='text'
                   label={strings.PROGRESS}
                   value={record.value}
@@ -1206,13 +1216,14 @@ const MetricBox = <span class="cstat-no" title="statement not covered" ><span cl
         )}
         &lt;Grid item xs={6}&gt;
           &lt;Box paddingRight={theme.spacing(2)}&gt;
-            &lt;TextField
+            &lt;Textfield
               type='textarea'
               label={strings.UNDERPERFORMANCE_JUSTIFICATION}
               value={record.underperformanceJustification}
               id={'underperformanceJustification'}
               onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: any) =&gt; <span class="cstat-no" title="statement not covered" >onChange('underperformanceJustification', value)}</span>
               display={!editing}
+              styles={textAreaStyles}
               preserveNewlines
             /&gt;
             {!!editing &amp;&amp; (
@@ -1225,18 +1236,19 @@ const MetricBox = <span class="cstat-no" title="statement not covered" ><span cl
         {isConsoleView &amp;&amp; (
           &lt;Grid item xs={6}&gt;
             &lt;Box paddingRight={theme.spacing(2)}&gt;
-              &lt;TextField
+              &lt;Textfield
                 type='textarea'
                 label={strings.PROGRESS_NOTES}
                 value={record.progressNotes}
                 id={'progressNotes'}
                 onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: any) =&gt; <span class="cstat-no" title="statement not covered" >onChange('progressNotes', value)}</span>
                 display={!editing}
+                styles={textAreaStyles}
                 preserveNewlines
               /&gt;
               {!!editing &amp;&amp; (
                 &lt;Typography fontSize={14} color={theme.palette.TwClrTxtSecondary}&gt;
-                  {strings.UNDERPERFORMANCE_DESCRIPTION}
+                  {strings.PROGRESS_NOTES_DESCRIPTION}
                 &lt;/Typography&gt;
               )}
             &lt;/Box&gt;
@@ -1255,7 +1267,7 @@ export default MetricBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-03T22:49:58.573Z
+                at 2025-04-04T18:19:27.592Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
