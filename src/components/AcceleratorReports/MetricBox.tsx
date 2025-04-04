@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem, Icon, Tooltip } from '@terraware/web-components';
-import TextField from '@terraware/web-components/components/Textfield/Textfield';
+import { Textfield } from '@terraware/web-components';
 
 import Button from 'src/components/common/button/Button';
 import { useUser } from 'src/providers';
@@ -59,6 +59,8 @@ const statusOptions: DropdownItem[] = AcceleratorMetricStatuses.map((s) => ({
   label: s || '', // these are hardcoded, so will never actually be ''
   value: s || '',
 }));
+
+const textAreaStyles = { textarea: { height: '120px' } };
 
 const MetricBox = ({
   editingId,
@@ -308,7 +310,7 @@ const MetricBox = ({
           ) : (
             isStandardOrProjectMetric(record) && (
               <Box display={'flex'} alignItems={'center'} paddingBottom={theme.spacing(2)}>
-                <TextField
+                <Textfield
                   type='text'
                   label={strings.PROGRESS}
                   value={record.value}
@@ -349,13 +351,14 @@ const MetricBox = ({
         )}
         <Grid item xs={6}>
           <Box paddingRight={theme.spacing(2)}>
-            <TextField
+            <Textfield
               type='textarea'
               label={strings.UNDERPERFORMANCE_JUSTIFICATION}
               value={record.underperformanceJustification}
               id={'underperformanceJustification'}
               onChange={(value: any) => onChange('underperformanceJustification', value)}
               display={!editing}
+              styles={textAreaStyles}
               preserveNewlines
             />
             {!!editing && (
@@ -368,18 +371,19 @@ const MetricBox = ({
         {isConsoleView && (
           <Grid item xs={6}>
             <Box paddingRight={theme.spacing(2)}>
-              <TextField
+              <Textfield
                 type='textarea'
                 label={strings.PROGRESS_NOTES}
                 value={record.progressNotes}
                 id={'progressNotes'}
                 onChange={(value: any) => onChange('progressNotes', value)}
                 display={!editing}
+                styles={textAreaStyles}
                 preserveNewlines
               />
               {!!editing && (
                 <Typography fontSize={14} color={theme.palette.TwClrTxtSecondary}>
-                  {strings.UNDERPERFORMANCE_DESCRIPTION}
+                  {strings.PROGRESS_NOTES_DESCRIPTION}
                 </Typography>
               )}
             </Box>

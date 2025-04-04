@@ -16,6 +16,7 @@ export type EditableReportBoxProps = {
   onEdit: () => void;
   onCancel: () => void;
   onSave: () => void;
+  includeBorder?: boolean;
 };
 
 const EditableReportBox = ({
@@ -29,12 +30,17 @@ const EditableReportBox = ({
   onEdit,
   onCancel,
   onSave,
+  includeBorder = true,
 }: EditableReportBoxProps): JSX.Element => {
   const theme = useTheme();
 
   return (
     <>
-      <Box key={key} sx={{ scrollMarginTop: '50vh' }} borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}>
+      <Box
+        key={key}
+        sx={{ scrollMarginTop: '50vh' }}
+        borderBottom={includeBorder ? `1px solid ${theme.palette.TwClrBgTertiary}` : ''}
+      >
         <Box
           sx={{
             borderRadius: 2,
@@ -53,7 +59,6 @@ const EditableReportBox = ({
             '& .actions': {
               display: 'none',
             },
-            marginBottom: theme.spacing(4),
             padding: 2,
             width: '100%',
           }}
@@ -119,9 +124,7 @@ const EditableReportBox = ({
             </Typography>
           )}
 
-          <Grid container marginBottom={3}>
-            {children}
-          </Grid>
+          <Grid container>{children}</Grid>
 
           {isConsoleView && editing && (
             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>

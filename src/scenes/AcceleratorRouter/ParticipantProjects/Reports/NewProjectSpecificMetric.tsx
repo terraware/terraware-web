@@ -40,6 +40,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
   const createProjectMetricResponse = useAppSelector(selectCreateProjectMetric(requestId));
+  const [validate, setValidate] = useState(false);
 
   useEffect(() => {
     if (projectId) {
@@ -67,6 +68,10 @@ export default function NewProjectSpecificMetric(): JSX.Element {
   });
 
   const saveNewMetric = () => {
+    if (!newMetric.name || !newMetric.reference) {
+      setValidate(true);
+      return;
+    }
     const request = dispatch(requestCreateProjectMetric({ metric: newMetric, projectId: projectId }));
     setRequestId(request.requestId);
   };
@@ -104,6 +109,8 @@ export default function NewProjectSpecificMetric(): JSX.Element {
                   type='text'
                   onChange={(value) => onChange('name', value)}
                   value={newMetric.name}
+                  required
+                  errorText={validate && !newMetric.name ? strings.REQUIRED_FIELD : ''}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -132,6 +139,8 @@ export default function NewProjectSpecificMetric(): JSX.Element {
                   type='text'
                   onChange={(value) => onChange('reference', value)}
                   value={newMetric.reference}
+                  required
+                  errorText={validate && !newMetric.reference ? strings.REQUIRED_FIELD : ''}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -142,6 +151,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
                   options={metricComponentOptions}
                   selectedValue={newMetric.component}
                   fullWidth
+                  required
                 />
               </Grid>
               <Grid item xs={12}>
