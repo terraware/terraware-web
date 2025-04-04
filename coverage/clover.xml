@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1743799858390" clover="3.2.0">
-  <project timestamp="1743799858390" name="All files">
+<coverage generated="1743801560378" clover="3.2.0">
+  <project timestamp="1743801560378" name="All files">
     <metrics statements="29428" coveredstatements="1234" conditionals="19933" coveredconditionals="354" methods="9087" coveredmethods="198" elements="58448" coveredelements="1786" complexity="0" loc="29428" ncloc="29428" packages="252" files="1213" classes="1213"/>
     <package name="src">
       <metrics statements="180" coveredstatements="8" conditionals="126" coveredconditionals="0" methods="40" coveredmethods="0"/>
@@ -24697,38 +24697,38 @@
         <line num="47" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="49" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
-        <line num="100" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="111" count="0" type="stmt"/>
+        <line num="99" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="115" count="0" type="stmt"/>
         <line num="116" count="0" type="stmt"/>
-        <line num="117" count="0" type="stmt"/>
-        <line num="119" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="120" count="0" type="stmt"/>
-        <line num="124" count="0" type="stmt"/>
-        <line num="130" count="0" type="stmt"/>
-        <line num="132" count="0" type="stmt"/>
-        <line num="133" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="136" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="138" count="0" type="stmt"/>
-        <line num="139" count="0" type="cond" truecount="0" falsecount="3"/>
-        <line num="142" count="0" type="stmt"/>
-        <line num="152" count="0" type="stmt"/>
-        <line num="215" count="0" type="stmt"/>
-        <line num="238" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="239" count="0" type="stmt"/>
-        <line num="247" count="0" type="stmt"/>
-        <line num="254" count="0" type="stmt"/>
-        <line num="270" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="271" count="0" type="stmt"/>
-        <line num="279" count="0" type="stmt"/>
-        <line num="286" count="0" type="stmt"/>
-        <line num="302" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="303" count="0" type="stmt"/>
-        <line num="311" count="0" type="stmt"/>
-        <line num="318" count="0" type="stmt"/>
-        <line num="334" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="335" count="0" type="stmt"/>
-        <line num="343" count="0" type="stmt"/>
-        <line num="350" count="0" type="stmt"/>
+        <line num="118" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="119" count="0" type="stmt"/>
+        <line num="123" count="0" type="stmt"/>
+        <line num="129" count="0" type="stmt"/>
+        <line num="131" count="0" type="stmt"/>
+        <line num="132" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="135" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="137" count="0" type="stmt"/>
+        <line num="138" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="141" count="0" type="stmt"/>
+        <line num="151" count="0" type="stmt"/>
+        <line num="214" count="0" type="stmt"/>
+        <line num="237" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="238" count="0" type="stmt"/>
+        <line num="246" count="0" type="stmt"/>
+        <line num="253" count="0" type="stmt"/>
+        <line num="269" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="270" count="0" type="stmt"/>
+        <line num="278" count="0" type="stmt"/>
+        <line num="285" count="0" type="stmt"/>
+        <line num="301" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="302" count="0" type="stmt"/>
+        <line num="310" count="0" type="stmt"/>
+        <line num="317" count="0" type="stmt"/>
+        <line num="333" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="334" count="0" type="stmt"/>
+        <line num="342" count="0" type="stmt"/>
+        <line num="349" count="0" type="stmt"/>
       </file>
       <file name="DescriptionModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/DescriptionModal.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
