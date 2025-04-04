@@ -49,7 +49,7 @@ const EditableReportBox = ({
                 display: isConsoleView && canEdit ? 'block' : 'none',
               },
             },
-            background: editing ? theme.palette.TwClrBgActive : 'none',
+            background: isConsoleView && editing ? theme.palette.TwClrBgActive : 'none',
             '& .actions': {
               display: 'none',
             },
