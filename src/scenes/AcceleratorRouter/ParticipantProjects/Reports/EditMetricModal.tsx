@@ -31,6 +31,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
   const snackbar = useSnackbar();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
+  const [validate, setValidate] = useState(false);
 
   const [record, , onChange] = useForm<ProjectMetric>(projectMetric);
 
@@ -45,6 +46,10 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
   }, [updateProjectMetricResponse, snackbar]);
 
   const save = () => {
+    if (!record.name || !record.reference) {
+      setValidate(true);
+      return;
+    }
     const request = dispatch(
       requestUpdateProjectMetric({
         metric: record,
@@ -81,6 +86,8 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
             type='text'
             onChange={(value) => onChange('name', value)}
             value={record.name}
+            required
+            errorText={validate && !record.name ? strings.REQUIRED_FIELD : ''}
           />
         </Grid>
         <Grid item xs={12}>
@@ -109,6 +116,8 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
             type='text'
             onChange={(value) => onChange('reference', value)}
             value={record.reference}
+            required
+            errorText={validate && !record.reference ? strings.REQUIRED_FIELD : ''}
           />
         </Grid>
         <Grid item xs={12}>
@@ -119,6 +128,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
             options={metricComponentOptions}
             selectedValue={record.component}
             fullWidth
+            required
           />
         </Grid>
       </Grid>
