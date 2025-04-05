@@ -240,7 +240,7 @@ const ReportView = () => {
                 </Typography>
               </Box>
             )}
-            <HighlightsBox highlights={selectedReport?.highlights} />
+            <HighlightsBox report={selectedReport} projectId={projectId} reportId={reportId} reload={reload} />
             {['system', 'project', 'standard'].map((type) => {
               const metrics =
                 type === 'system'
@@ -264,8 +264,13 @@ const ReportView = () => {
                 />
               ));
             })}
-            <AchievementsBox achievements={selectedReport?.achievements} />
-            <ChallengesMitigationBox challenges={selectedReport?.challenges} />
+            <AchievementsBox report={selectedReport} projectId={projectId} reportId={reportId} reload={reload} />
+            <ChallengesMitigationBox
+              report={selectedReport}
+              projectId={projectId}
+              reportId={reportId}
+              reload={reload}
+            />
           </Card>
         </Box>
       </Page>
