@@ -1,16 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
-import MetricBox, { getMetricId } from 'src/components/AcceleratorReports/MetricBox';
+import MetricBox, { getMetricId, isReportSystemMetric } from 'src/components/AcceleratorReports/MetricBox';
 import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
-import { AcceleratorReport, MetricType } from 'src/types/AcceleratorReport';
+import {
+  AcceleratorReport,
+  MetricType,
+  ReportProjectMetric,
+  ReportStandardMetric,
+  ReportSystemMetric,
+} from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
 
 type AcceleratorReportEditFormProps = {
@@ -26,13 +32,29 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
   const reportId = String(pathParams.reportId);
   const projectId = String(pathParams.projectId);
 
-  const [record, setRecord, onChange] = useForm<AcceleratorReport>(report);
+  const [record, , onChange] = useForm<AcceleratorReport>(report);
 
   useEffect(() => {
     if (projectId !== currentParticipantProject?.id?.toString()) {
       setCurrentParticipantProject(projectId);
     }
   }, [currentParticipantProject?.id, projectId]);
+
+  const onChangeMetric = useCallback(
+    (metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric, type: MetricType) => {
+      const key = `${type}Metrics`;
+      const metricsToUpdate = record[`${type}Metrics`];
+      const updatedMetrics = metricsToUpdate?.map((m) => {
+        if (isReportSystemMetric(m)) {
+          return m.metric === (metric as ReportSystemMetric).metric ? { ...m, ...metric } : m;
+        } else {
+          return m.id === (metric as ReportProjectMetric | ReportStandardMetric).id ? { ...m, ...metric } : m;
+        }
+      });
+      onChange(key, updatedMetrics);
+    },
+    [onChange]
+  );
 
   return (
     <WrappedPageForm
@@ -84,6 +106,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
                 index={index}
                 key={`${type}-${index}`}
                 metric={metric}
+                onChangeMetric={onChangeMetric}
                 projectId={projectId}
                 reload={() => {}}
                 reportId={Number(reportId)}

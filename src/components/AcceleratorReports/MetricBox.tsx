@@ -31,7 +31,7 @@ import EditProgressModal from './EditProgressModal';
 import EditableReportBox from './EditableReportBox';
 import ResetMetricModal from './ResetMetricModal';
 
-const isReportSystemMetric = (metric: any): metric is ReportSystemMetric => {
+export const isReportSystemMetric = (metric: any): metric is ReportSystemMetric => {
   return metric && typeof metric.metric === 'string';
 };
 
@@ -72,6 +72,7 @@ const MetricBox = ({
   reportId,
   reload,
   isConsoleView = false,
+  onChangeMetric,
 }: {
   editingId?: string;
   hideStatusBadge?: boolean;
@@ -83,6 +84,7 @@ const MetricBox = ({
   type: MetricType;
   reportId: number;
   isConsoleView?: boolean;
+  onChangeMetric?: (metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric, type: MetricType) => void;
 }): JSX.Element => {
   const theme = useTheme();
   const [record, setRecord, onChange] = useForm<ReportProjectMetric | ReportSystemMetric | ReportStandardMetric>(
@@ -97,6 +99,12 @@ const MetricBox = ({
   const refreshReportMetricResponse = useAppSelector(selectRefreshAcceleratorReportSystemMetrics(refreshRequestId));
   const { isAllowed } = useUser();
   const snackbar = useSnackbar();
+
+  useEffect(() => {
+    if (JSON.stringify(record) !== JSON.stringify(metric)) {
+      onChangeMetric?.(record, type);
+    }
+  }, [record]);
 
   useEffect(() => {
     if (updateReportMetricResponse?.status === 'error') {
