@@ -106,7 +106,7 @@ export default function ReportsSettings(): JSX.Element {
     return [
       { label: strings.START_DATE, value: projectReportConfig.config?.reportingStartDate },
       { label: strings.END_DATE, value: projectReportConfig.config?.reportingEndDate },
-      { label: strings.LOG_FRAME_AND_ME_PLAN_URL, value: '' },
+      { label: strings.LOG_FRAME_AND_ME_PLAN_URL, value: projectReportConfig.config?.logframeUrl },
     ];
   }, [projectReportConfig]);
 

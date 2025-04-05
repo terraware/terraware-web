@@ -8,7 +8,7 @@ import {
   ReportReviewPayload,
   ReviewAcceleratorReportMetricsRequestPayload,
   SystemMetricName,
-  UpdateAcceleratorReportConfigRequest,
+  UpdateAcceleratorReportConfigPayload,
   UpdateProjectMetricRequest,
 } from 'src/types/AcceleratorReport';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
@@ -29,6 +29,8 @@ export type ReportsConfigResponse = Response & ReportsConfigData;
 const ACCELERATOR_REPORT_CONFIG_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/configs';
 
 const ACCELERATOR_REPORT_SINGLE_CONFIG_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/configs/{configId}';
+
+const REPORT_LOGFRAME_URL = '/api/v1/accelerator/projects/{projectId}/reports/logframe';
 
 type ListAcceleratorReportConfigResponsePayload =
   paths[typeof ACCELERATOR_REPORT_CONFIG_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -108,13 +110,19 @@ const createConfig = async (request: CreateAcceleratorReportConfigRequest): Prom
 };
 
 const updateConfig = async (
-  request: UpdateAcceleratorReportConfigRequest
+  config: UpdateAcceleratorReportConfigPayload,
+  projectId: string
 ): Promise<Response2<UpdateConfigResponse>> => {
-  const { projectId, ...rest } = request;
   return HttpService.root(
-    ACCELERATOR_REPORT_CONFIG_ENDPOINT.replace('{projectId}', projectId.toString())
+    ACCELERATOR_REPORT_CONFIG_ENDPOINT.replace('{projectId}', projectId)
   ).post2<UpdateConfigResponse>({
-    entity: rest,
+    entity: { config },
+  });
+};
+
+const updateLogframeUrl = async (logframeUrl: string, projectId: string): Promise<Response2<UpdateConfigResponse>> => {
+  return HttpService.root(REPORT_LOGFRAME_URL.replace('{projectId}', projectId)).post2<UpdateConfigResponse>({
+    entity: { logframeUrl },
   });
 };
 
@@ -248,6 +256,7 @@ const ReportService = {
   reviewAcceleratorReportMetrics,
   reviewAcceleratorReport,
   refreshAcceleratorReportSystemMetrics,
+  updateLogframeUrl,
 };
 
 export default ReportService;
