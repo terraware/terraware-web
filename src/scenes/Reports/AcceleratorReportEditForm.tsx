@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -9,6 +9,9 @@ import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
+import { selectReviewAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
+import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import {
   AcceleratorReport,
@@ -27,12 +30,39 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
   const { currentParticipantProject, setCurrentParticipantProject } = useParticipantData();
   const theme = useTheme();
   const { goToAcceleratorReport } = useNavigateTo();
+  const dispatch = useAppDispatch();
 
   const pathParams = useParams<{ projectId: string; reportId: string }>();
   const reportId = String(pathParams.reportId);
   const projectId = String(pathParams.projectId);
 
   const [record, , onChange] = useForm<AcceleratorReport>(report);
+  const [saveReportRequestId, setSaveReportRequestId] = useState('');
+  const saveReportResponse = useAppSelector(selectReviewAcceleratorReport(saveReportRequestId));
+
+  const saveReport = () => {
+    const request = dispatch(
+      requestReviewAcceleratorReport({
+        projectId: Number(projectId),
+        reportId: Number(reportId),
+        review: {
+          status: 'Approved',
+          achievements: [],
+          challenges: [],
+        },
+      })
+    );
+    setSaveReportRequestId(request.requestId);
+  };
+
+  useEffect(() => {
+    if (saveReportResponse?.status === 'error') {
+      return;
+    }
+    if (saveReportResponse?.data) {
+      goToAcceleratorReport(Number(reportId), Number(projectId));
+    }
+  }, [projectId, reportId, saveReportResponse]);
 
   useEffect(() => {
     if (projectId !== currentParticipantProject?.id?.toString()) {
@@ -58,12 +88,14 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
 
   return (
     <WrappedPageForm
+      busy={saveReportResponse.status === 'pending'}
       cancelID={'cancelEditAcceleratorReport'}
       onCancel={() => {
         goToAcceleratorReport(Number(reportId), Number(projectId));
       }}
       onSave={() => {
         // TODO: save report
+        // saveReport();
         goToAcceleratorReport(Number(reportId), Number(projectId));
       }}
       saveID={'saveEditAcceleratorReport'}
