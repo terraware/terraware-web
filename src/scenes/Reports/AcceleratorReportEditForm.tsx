@@ -84,7 +84,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
 
   return (
     <WrappedPageForm
-      busy={saveReportResponse.status === 'pending'}
+      busy={saveReportResponse?.status === 'pending'}
       cancelID={'cancelEditAcceleratorReport'}
       onCancel={() => {
         goToAcceleratorReport(Number(reportId), Number(projectId));
