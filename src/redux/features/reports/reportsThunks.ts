@@ -13,6 +13,7 @@ import {
   ReviewAcceleratorReportRequest,
   ReviewManyAcceleratorReportMetricsRequest,
   UpdateAcceleratorReportConfigRequest,
+  UpdateAcceleratorReportRequest,
   UpdateProjectMetricRequest,
 } from 'src/types/AcceleratorReport';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
@@ -133,6 +134,19 @@ export const requestListAcceleratorReports = createAsyncThunk(
 
     if (response && response.requestSucceeded) {
       return response.reports;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestUpdateAcceleratorReport = createAsyncThunk(
+  'updateProjectMetric',
+  async (request: UpdateAcceleratorReportRequest, { rejectWithValue }) => {
+    const response = await AcceleratorReportService.updateAcceleratorReport(request);
+
+    if (response && response.requestSucceeded) {
+      return response.data;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

@@ -1,5 +1,11 @@
 import { components } from 'src/api/types/generated-schema';
 
+export type UpdateAcceleratorReportRequest = {
+  projectId: number;
+  reportId: number;
+  report: AcceleratorReport;
+};
+
 export type ExistingAcceleratorReportConfig = components['schemas']['ExistingAcceleratorReportConfigPayload'];
 
 export type NewAcceleratorReportConfig = components['schemas']['NewAcceleratorReportConfigPayload'];

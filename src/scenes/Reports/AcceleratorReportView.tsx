@@ -16,6 +16,7 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { selectListAcceleratorReports } from 'src/redux/features/reports/reportsSelectors';
@@ -29,6 +30,7 @@ const AcceleratorReportView = () => {
   const { currentParticipantProject, setCurrentParticipantProject } = useParticipantData();
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const { goToAcceleratorReportEdit } = useNavigateTo();
 
   const pathParams = useParams<{ projectId: string; reportId: string }>();
   const reportId = String(pathParams.reportId);
@@ -97,7 +99,7 @@ const AcceleratorReportView = () => {
           id='editReport'
           label={strings.EDIT}
           onClick={() => {
-            // TODO: edit page
+            goToAcceleratorReportEdit(Number(reportId), Number(projectId));
           }}
           priority='secondary'
           size='medium'
@@ -176,7 +178,6 @@ const AcceleratorReportView = () => {
             return metrics?.map((metric, index) => (
               <MetricBox
                 index={index}
-                isConsoleView={false}
                 key={`${type}-${index}`}
                 metric={metric}
                 projectId={projectId}
