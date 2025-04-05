@@ -10,7 +10,7 @@ import WrappedPageForm from 'src/components/common/PageForm';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { selectReviewAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
-import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
+import { requestUpdateAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import {
@@ -42,14 +42,10 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
 
   const saveReport = () => {
     const request = dispatch(
-      requestReviewAcceleratorReport({
+      requestUpdateAcceleratorReport({
         projectId: Number(projectId),
         reportId: Number(reportId),
-        review: {
-          status: 'Approved',
-          achievements: [],
-          challenges: [],
-        },
+        report: record,
       })
     );
     setSaveReportRequestId(request.requestId);

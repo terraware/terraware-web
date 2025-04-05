@@ -9,6 +9,7 @@ import {
   ReviewAcceleratorReportMetricsRequestPayload,
   SystemMetricName,
   UpdateAcceleratorReportConfigRequest,
+  UpdateAcceleratorReportRequest,
   UpdateProjectMetricRequest,
 } from 'src/types/AcceleratorReport';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
@@ -51,6 +52,11 @@ const REVIEW_ACCELERATOR_REPORT_METRICS_ENDPOINT =
 const REFRESH_ACCELERATOR_REPORT_METRICS_ENDPOINT =
   '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/metrics/refresh';
 const REVIEW_ACCELERATOR_REPORT_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/review';
+const ACCELERATOR_REPORT_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}';
+
+// TODO: update this once the API is updated
+type UpdateAcceleratorReportResponse =
+  paths[typeof PROJECT_METRICS_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 
 export type ListProjectMetricsResponsePayload =
   paths[typeof PROJECT_METRICS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -179,6 +185,17 @@ const listAcceleratorReports = async (
   );
 };
 
+const updateAcceleratorReport = async (
+  request: UpdateAcceleratorReportRequest
+): Promise<Response2<UpdateAcceleratorReportResponse>> => {
+  const { projectId, reportId, report } = request;
+  return HttpService.root(
+    ACCELERATOR_REPORT_ENDPOINT.replace('{projectId}', projectId.toString()).replace('{reportId}', reportId.toString())
+  ).post2<UpdateAcceleratorReportResponse>({
+    entity: report,
+  });
+};
+
 const updateProjectMetric = async (
   request: UpdateProjectMetricRequest
 ): Promise<Response2<UpdateProjectMetricResponse>> => {
@@ -244,6 +261,7 @@ const ReportService = {
   listSystemdMetrics,
   createProjectMetric,
   listAcceleratorReports,
+  updateAcceleratorReport,
   updateProjectMetric,
   reviewAcceleratorReportMetrics,
   reviewAcceleratorReport,
