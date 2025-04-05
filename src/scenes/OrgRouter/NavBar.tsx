@@ -184,7 +184,7 @@ export default function NavBar({
 
   const deliverablesMenu = useMemo<JSX.Element | null>(
     () =>
-      hasDeliverables ? (
+      hasDeliverables && activeLocale ? (
         <NavItem
           label={strings.DELIVERABLES}
           icon='iconSubmit'
@@ -196,7 +196,7 @@ export default function NavBar({
           id='deliverables'
         />
       ) : null,
-    [closeAndNavigateTo, isDeliverablesRoute, isDeliverableViewRoute, hasDeliverables]
+    [activeLocale, closeAndNavigateTo, isDeliverablesRoute, isDeliverableViewRoute, hasDeliverables]
   );
 
   // TODO: get reports from API and only show reports nav menu if there are any
@@ -218,7 +218,7 @@ export default function NavBar({
 
   const seedFundReportsMenu = useMemo<JSX.Element | null>(
     () =>
-      seedFundReports.length > 0 && selectedOrganization.canSubmitReports ? (
+      seedFundReports.length > 0 && selectedOrganization.canSubmitReports && activeLocale ? (
         <NavItem
           icon='iconGraphReport'
           label={strings.SEED_FUND_REPORTS}
@@ -229,7 +229,13 @@ export default function NavBar({
           id='seed-fund-reports-list'
         />
       ) : null,
-    [closeAndNavigateTo, isSeedFundReportsRoute, seedFundReports.length, selectedOrganization.canSubmitReports]
+    [
+      activeLocale,
+      closeAndNavigateTo,
+      isSeedFundReportsRoute,
+      seedFundReports.length,
+      selectedOrganization.canSubmitReports,
+    ]
   );
 
   const modulesMenu = useMemo<JSX.Element | null>(
