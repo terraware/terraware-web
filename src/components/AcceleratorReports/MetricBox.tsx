@@ -281,7 +281,7 @@ const MetricBox = ({
                     </Tooltip>
                   </Box>
                 )}
-                {!!editing && metric.overrideValue && (
+                {!!editing && metric.overrideValue && (isConsoleView || type !== 'system') && (
                   <Button
                     icon='iconUndo'
                     onClick={() => setResetMetricModalOpened(true)}
