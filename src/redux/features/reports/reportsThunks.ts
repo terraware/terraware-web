@@ -19,6 +19,27 @@ import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 
 import { setProjectReportConfigAction } from './reportsSlice';
 
+export const requestAcceleratorReport = createAsyncThunk(
+  'getAcceleratorReport',
+  async (
+    request: {
+      includeMetrics?: boolean;
+      projectId: string;
+      reportId: string;
+    },
+    { rejectWithValue }
+  ) => {
+    const { includeMetrics, projectId, reportId } = request;
+    const response = await AcceleratorReportService.getAcceleratorReport(projectId, reportId, includeMetrics);
+
+    if (response && response.requestSucceeded) {
+      return response.data?.report;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
 export const requestProjectReportConfig = (projectId: string) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return async (dispatch: Dispatch, _getState: () => RootState) => {

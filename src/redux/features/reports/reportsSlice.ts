@@ -10,6 +10,7 @@ import {
 
 import { StatusT, buildReducers } from '../asyncUtils';
 import {
+  requestAcceleratorReport,
   requestCreateProjectMetric,
   requestCreateReportConfig,
   requestListAcceleratorReports,
@@ -69,6 +70,19 @@ const updateReportConfigSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     buildReducers(requestUpdateReportConfig)(builder);
+  },
+});
+
+/**
+ * Get Accelerator Report
+ */
+const initialGetAcceleratorReportState: { [key: string]: StatusT<AcceleratorReport> } = {};
+const getAcceleratorReportSlice = createSlice({
+  name: 'getAcceleratorReportSlice',
+  initialState: initialGetAcceleratorReportState,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestAcceleratorReport)(builder);
   },
 });
 
@@ -218,6 +232,7 @@ const updateAcceleratorReportSlice = createSlice({
 });
 
 const reportsReducers = {
+  getAcceleratorReport: getAcceleratorReportSlice.reducer,
   projectReportConfig: projectReportConfigSlice.reducer,
   projectReportConfigCreate: createReportConfigSlice.reducer,
   projectReportConfigUpdate: updateReportConfigSlice.reducer,

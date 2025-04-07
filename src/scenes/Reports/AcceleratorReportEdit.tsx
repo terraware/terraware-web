@@ -5,8 +5,8 @@ import Page from 'src/components/Page';
 import TitleBar from 'src/components/common/TitleBar';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { selectListAcceleratorReports } from 'src/redux/features/reports/reportsSelectors';
-import { requestListAcceleratorReports } from 'src/redux/features/reports/reportsThunks';
+import { getAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
+import { requestAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorReport } from 'src/types/AcceleratorReport';
@@ -23,14 +23,13 @@ const AcceleratorReportEditView = (): JSX.Element | null => {
   const projectId = String(pathParams.projectId);
 
   const [requestId, setRequestId] = useState<string>('');
-  const [reports, setReports] = useState<AcceleratorReport[]>();
-  const [selectedReport, setSelectedReport] = useState<AcceleratorReport>();
+  const [report, setReport] = useState<AcceleratorReport>();
 
-  const reportsResults = useAppSelector(selectListAcceleratorReports(requestId));
+  const getReportResult = useAppSelector(getAcceleratorReport(requestId));
 
   const reload = () => {
     if (projectId) {
-      const request = dispatch(requestListAcceleratorReports({ projectId, includeFuture: true, includeMetrics: true }));
+      const request = dispatch(requestAcceleratorReport({ projectId, reportId, includeMetrics: true }));
       setRequestId(request.requestId);
     }
   };
@@ -43,32 +42,24 @@ const AcceleratorReportEditView = (): JSX.Element | null => {
 
   useEffect(() => {
     reload();
-  }, [projectId]);
+  }, [projectId, reportId]);
 
   useEffect(() => {
-    if (reportsResults?.status === 'error') {
+    if (getReportResult?.status === 'error') {
       return;
     }
-    if (reportsResults?.data) {
-      setReports(reportsResults.data);
+    if (getReportResult?.data) {
+      setReport(getReportResult.data);
     }
-  }, [reportsResults]);
-
-  useEffect(() => {
-    if (reports) {
-      const reportSelected = reports.find((report) => report.id.toString() === reportId);
-      setSelectedReport(reportSelected);
-    }
-  }, [reportId, reports]);
+  }, [getReportResult]);
 
   const year = useMemo(() => {
-    return selectedReport?.startDate.split('-')[0];
-  }, [selectedReport]);
+    return report?.startDate?.split('-')[0];
+  }, [report]);
 
-  const reportName =
-    selectedReport?.frequency === 'Annual' ? year : selectedReport?.quarter ? `${year}-${selectedReport?.quarter}` : '';
+  const reportName = report?.frequency === 'Annual' ? `${year}` : report?.quarter ? `${year}-${report?.quarter}` : '';
 
-  if (!selectedReport) {
+  if (!report) {
     return null;
   }
 
@@ -77,7 +68,7 @@ const AcceleratorReportEditView = (): JSX.Element | null => {
       title={
         <TitleBar
           subtitle={
-            currentParticipantProject && reportsResults && activeLocale
+            currentParticipantProject && getReportResult && activeLocale
               ? `${strings.PROJECT}: ${currentParticipantProject?.name}`
               : ''
           }
@@ -85,7 +76,7 @@ const AcceleratorReportEditView = (): JSX.Element | null => {
         />
       }
     >
-      <AcceleratorReportEditForm report={selectedReport} />
+      <AcceleratorReportEditForm report={report} />
     </Page>
   );
 };
