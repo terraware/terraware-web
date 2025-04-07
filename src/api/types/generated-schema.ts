@@ -802,27 +802,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** Get one report. */
+        get: operations["getAcceleratorReport"];
         put?: never;
-        /** Update qualitative data for a report */
-        post: operations["updateAcceleratorReportQualitatives"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/accelerator/projects/{projectId}/reports/{reportId}/metrics": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Update metric entries for a report */
-        post: operations["updateAcceleratorReportMetrics"];
+        /** Update metric data and qualitative data for a report */
+        post: operations["updateAcceleratorReportValues"];
         delete?: never;
         options?: never;
         head?: never;
@@ -4863,10 +4847,7 @@ export interface components {
              * @description If the draft is associated with a project, its ID.
              */
             projectId?: number;
-            /**
-             * @description Time zone name in IANA tz database format
-             * @example America/New_York
-             */
+            /** @example Europe/Paris */
             timeZone?: string;
         };
         CreateDraftPlantingSiteResponsePayload: {
@@ -4894,10 +4875,7 @@ export interface components {
              */
             organizationId: number;
             subLocationNames?: string[];
-            /**
-             * @description Time zone name in IANA tz database format
-             * @example America/New_York
-             */
+            /** @example Europe/Paris */
             timeZone?: string;
             /** @enum {string} */
             type: "Seed Bank" | "Desalination" | "Reverse Osmosis" | "Nursery";
@@ -5012,10 +4990,7 @@ export interface components {
             organizationType?: "Government" | "NGO" | "Arboreta" | "Academia" | "ForProfit" | "Other";
             /** @description Non-empty additional description of organization when type is Other. */
             organizationTypeDetails?: string;
-            /**
-             * @description Time zone name in IANA tz database format
-             * @example America/New_York
-             */
+            /** @example Europe/Paris */
             timeZone?: string;
             /** @description Website of organization, no restrictions on format. */
             website?: string;
@@ -5059,10 +5034,7 @@ export interface components {
             plantingZones?: components["schemas"]["NewPlantingZonePayload"][];
             /** Format: int64 */
             projectId?: number;
-            /**
-             * @description Time zone name in IANA tz database format
-             * @example America/New_York
-             */
+            /** @example Europe/Paris */
             timeZone?: string;
         };
         CreatePlantingSiteResponsePayload: {
@@ -5461,10 +5433,7 @@ export interface components {
              * @description If the draft is associated with a project, its ID.
              */
             projectId?: number;
-            /**
-             * @description Time zone name in IANA tz database format
-             * @example America/New_York
-             */
+            /** @example Europe/Paris */
             timeZone?: string;
         };
         EmailVariablePayload: Omit<components["schemas"]["VariablePayload"], "type"> & {
@@ -5482,6 +5451,8 @@ export interface components {
             configId: number;
             /** @enum {string} */
             frequency: "Quarterly" | "Annual";
+            /** Format: uri */
+            logframeUrl?: string;
             /** Format: int64 */
             projectId: number;
             /** Format: date */
@@ -5602,6 +5573,7 @@ export interface components {
             description?: string;
             /** Format: int64 */
             id: number;
+            isPublishable: boolean;
             name: string;
             /** Format: int64 */
             projectId: number;
@@ -5647,6 +5619,7 @@ export interface components {
             description?: string;
             /** Format: int64 */
             id: number;
+            isPublishable: boolean;
             name: string;
             reference: string;
             /** @enum {string} */
@@ -5748,10 +5721,7 @@ export interface components {
             operationStartedDate?: string;
             /** Format: int64 */
             organizationId: number;
-            /**
-             * @description Time zone name in IANA tz database format
-             * @example America/New_York
-             */
+            /** @example Europe/Paris */
             timeZone?: string;
             /** @enum {string} */
             type: "Seed Bank" | "Desalination" | "Reverse Osmosis" | "Nursery";
@@ -5823,6 +5793,10 @@ export interface components {
              * @enum {string}
              */
             type: "GeometryCollection";
+        };
+        GetAcceleratorReportResponsePayload: {
+            report: components["schemas"]["AcceleratorReportPayload"];
+            status: components["schemas"]["SuccessOrError"];
         };
         GetAccessionHistoryResponsePayload: {
             /** @description History of changes in descending time order (newest first.) */
@@ -6777,6 +6751,8 @@ export interface components {
             type: "MultiPolygon";
         };
         NewAcceleratorReportConfigPayload: {
+            /** Format: uri */
+            logframeUrl?: string;
             /** Format: date */
             reportingEndDate: string;
             /** Format: date */
@@ -6879,6 +6855,7 @@ export interface components {
             /** @enum {string} */
             component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             description?: string;
+            isPublishable: boolean;
             name: string;
             reference: string;
             /** @enum {string} */
@@ -7269,7 +7246,10 @@ export interface components {
             plantingDensity: number;
             /** Format: int32 */
             plantingDensityStdDev?: number;
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @description ID of the subzone. Absent if the subzone was deleted after the observation.
+             */
             plantingSubzoneId?: number;
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
             /**
@@ -7309,7 +7289,10 @@ export interface components {
             /** Format: int32 */
             plantingDensityStdDev?: number;
             plantingSubzones: components["schemas"]["ObservationPlantingSubzoneResultsPayload"][];
-            /** Format: int64 */
+            /**
+             * Format: int64
+             * @description ID of the zone. Absent if the zone was deleted after the observation.
+             */
             plantingZoneId?: number;
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
             /**
@@ -7475,10 +7458,7 @@ export interface components {
              */
             role?: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
             tfContactUser?: components["schemas"]["TerraformationContactUserPayload"];
-            /**
-             * @description Time zone name in IANA tz database format
-             * @example America/New_York
-             */
+            /** @example Europe/Paris */
             timeZone?: string;
             /**
              * Format: int32
@@ -7673,10 +7653,7 @@ export interface components {
             plantingZones?: components["schemas"]["PlantingZonePayload"][];
             /** Format: int64 */
             projectId?: number;
-            /**
-             * @description Time zone name in IANA tz database format
-             * @example America/New_York
-             */
+            /** @example Europe/Paris */
             timeZone?: string;
         };
         PlantingSiteReportedPlantsPayload: {
@@ -8118,6 +8095,7 @@ export interface components {
             description?: string;
             /** Format: int64 */
             id: number;
+            isPublishable: boolean;
             name: string;
             progressNotes?: string;
             reference: string;
@@ -8161,6 +8139,7 @@ export interface components {
             description?: string;
             /** Format: int64 */
             id: number;
+            isPublishable: boolean;
             name: string;
             progressNotes?: string;
             reference: string;
@@ -8193,6 +8172,7 @@ export interface components {
             /** @enum {string} */
             component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             description?: string;
+            isPublishable: boolean;
             /** @enum {string} */
             metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate";
             /** Format: int32 */
@@ -8654,10 +8634,7 @@ export interface components {
             type: "Text";
         };
         TimeZonePayload: {
-            /**
-             * @description Time zone name in IANA tz database format
-             * @example America/New_York
-             */
+            /** @example Europe/Paris */
             id: string;
             /**
              * @description Long name of time zone, possibly including a city name. This name is guaranteed to be unique across all zones.
@@ -8717,6 +8694,8 @@ export interface components {
             values: components["schemas"]["TimeseriesValuePayload"][];
         };
         UpdateAcceleratorReportConfigPayload: {
+            /** Format: uri */
+            logframeUrl?: string;
             /** Format: date */
             reportingEndDate: string;
             /** Format: date */
@@ -8725,15 +8704,13 @@ export interface components {
         UpdateAcceleratorReportConfigRequestPayload: {
             config: components["schemas"]["UpdateAcceleratorReportConfigPayload"];
         };
-        UpdateAcceleratorReportMetricsRequestPayload: {
-            projectMetrics: components["schemas"]["ReportProjectMetricEntriesPayload"][];
-            standardMetrics: components["schemas"]["ReportStandardMetricEntriesPayload"][];
-            systemMetrics: components["schemas"]["ReportSystemMetricEntriesPayload"][];
-        };
-        UpdateAcceleratorReportQualitativesRequestPayload: {
+        UpdateAcceleratorReportValuesRequestPayload: {
             achievements: string[];
             challenges: components["schemas"]["ReportChallengePayload"][];
             highlights?: string;
+            projectMetrics: components["schemas"]["ReportProjectMetricEntriesPayload"][];
+            standardMetrics: components["schemas"]["ReportStandardMetricEntriesPayload"][];
+            systemMetrics: components["schemas"]["ReportSystemMetricEntriesPayload"][];
         };
         UpdateAccessionRequestPayloadV2: {
             bagNumbers?: string[];
@@ -8924,10 +8901,7 @@ export interface components {
              * @description If the draft is associated with a project, its ID.
              */
             projectId?: number;
-            /**
-             * @description Time zone name in IANA tz database format
-             * @example America/New_York
-             */
+            /** @example Europe/Paris */
             timeZone?: string;
         };
         UpdateFacilityRequestPayload: {
@@ -8944,10 +8918,7 @@ export interface components {
             name: string;
             /** Format: date */
             operationStartedDate?: string;
-            /**
-             * @description Time zone name in IANA tz database format
-             * @example America/New_York
-             */
+            /** @example Europe/Paris */
             timeZone?: string;
         };
         UpdateFundingEntityRequestPayload: {
@@ -9001,10 +8972,7 @@ export interface components {
             organizationType?: "Government" | "NGO" | "Arboreta" | "Academia" | "ForProfit" | "Other";
             /** @description Non-empty additional description of organization when type is Other. */
             organizationTypeDetails?: string;
-            /**
-             * @description Time zone name in IANA tz database format
-             * @example America/New_York
-             */
+            /** @example Europe/Paris */
             timeZone?: string;
             website?: string;
         };
@@ -9039,10 +9007,7 @@ export interface components {
             plantingSeasons?: components["schemas"]["UpdatedPlantingSeasonPayload"][];
             /** Format: int64 */
             projectId?: number;
-            /**
-             * @description Time zone name in IANA tz database format
-             * @example America/New_York
-             */
+            /** @example Europe/Paris */
             timeZone?: string;
         };
         UpdatePlantingSubzoneRequestPayload: {
@@ -9168,10 +9133,7 @@ export interface components {
              * @example en
              */
             locale?: string;
-            /**
-             * @description Time zone name in IANA tz database format
-             * @example America/New_York
-             */
+            /** @example Europe/Paris */
             timeZone?: string;
         };
         /** @description Operation that replaces a single existing value with a new one. The new value will have the same list position as the existing one.
@@ -9386,10 +9348,7 @@ export interface components {
              * @example en
              */
             locale?: string;
-            /**
-             * @description Time zone name in IANA tz database format
-             * @example America/New_York
-             */
+            /** @example Europe/Paris */
             timeZone?: string;
             /**
              * @description Type of User. Could be Individual, Funder or DeviceManager
@@ -11366,20 +11325,18 @@ export interface operations {
             };
         };
     };
-    updateAcceleratorReportQualitatives: {
+    getAcceleratorReport: {
         parameters: {
-            query?: never;
+            query?: {
+                includeMetrics?: boolean;
+            };
             header?: never;
             path: {
                 reportId: number;
             };
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateAcceleratorReportQualitativesRequestPayload"];
-            };
-        };
+        requestBody?: never;
         responses: {
             /** @description The requested operation succeeded. */
             200: {
@@ -11387,42 +11344,23 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-                };
-            };
-            /** @description The request was not valid. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-            /** @description The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                    "application/json": components["schemas"]["GetAcceleratorReportResponsePayload"];
                 };
             };
         };
     };
-    updateAcceleratorReportMetrics: {
+    updateAcceleratorReportValues: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                projectId: number;
                 reportId: number;
             };
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["UpdateAcceleratorReportMetricsRequestPayload"];
+                "application/json": components["schemas"]["UpdateAcceleratorReportValuesRequestPayload"];
             };
         };
         responses: {
