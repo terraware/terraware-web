@@ -1,3 +1,4 @@
+753c361c0ed Updated translations from Phrase (#3816)
 f3faaad6785 SW-6764 Multiple observations with the same start/end dates cause only one to be drawn in the map view (#3815)
 c4b5ac05b77 Update dependency express to v5 (#3814)
 ad762766473 Remove unnecessary description (#3811)
