@@ -9,7 +9,7 @@ import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { selectReviewAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
+import { selectUpdateAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
 import { requestUpdateAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -38,7 +38,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
 
   const [record, , onChange] = useForm<AcceleratorReport>(report);
   const [saveReportRequestId, setSaveReportRequestId] = useState('');
-  const saveReportResponse = useAppSelector(selectReviewAcceleratorReport(saveReportRequestId));
+  const saveReportResponse = useAppSelector(selectUpdateAcceleratorReport(saveReportRequestId));
 
   const saveReport = () => {
     const request = dispatch(
@@ -55,7 +55,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
     if (saveReportResponse?.status === 'error') {
       return;
     }
-    if (saveReportResponse?.data) {
+    if (saveReportResponse?.status === 'success') {
       goToAcceleratorReport(Number(reportId), Number(projectId));
     }
   }, [projectId, reportId, saveReportResponse]);
@@ -90,7 +90,6 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
         goToAcceleratorReport(Number(reportId), Number(projectId));
       }}
       onSave={() => {
-        // TODO: save report
         saveReport();
       }}
       saveID={'saveEditAcceleratorReport'}
