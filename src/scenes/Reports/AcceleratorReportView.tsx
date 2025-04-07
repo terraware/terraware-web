@@ -19,8 +19,8 @@ import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { selectListAcceleratorReports } from 'src/redux/features/reports/reportsSelectors';
-import { requestListAcceleratorReports } from 'src/redux/features/reports/reportsThunks';
+import { getAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
+import { requestAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorReport, MetricType } from 'src/types/AcceleratorReport';
@@ -37,15 +37,14 @@ const AcceleratorReportView = () => {
   const projectId = String(pathParams.projectId);
 
   const [requestId, setRequestId] = useState<string>('');
-  const [reports, setReports] = useState<AcceleratorReport[]>();
-  const [selectedReport, setSelectedReport] = useState<AcceleratorReport>();
+  const [report, setReport] = useState<AcceleratorReport>();
   const [, setShowApproveDialog] = useState<boolean>(false);
 
-  const reportsResults = useAppSelector(selectListAcceleratorReports(requestId));
+  const getReportResults = useAppSelector(getAcceleratorReport(requestId));
 
   const reload = () => {
     if (projectId) {
-      const request = dispatch(requestListAcceleratorReports({ projectId, includeFuture: true, includeMetrics: true }));
+      const request = dispatch(requestAcceleratorReport({ projectId, reportId, includeMetrics: true }));
       setRequestId(request.requestId);
     }
   };
@@ -61,24 +60,17 @@ const AcceleratorReportView = () => {
   }, [projectId]);
 
   useEffect(() => {
-    if (reportsResults?.status === 'error') {
+    if (getReportResults?.status === 'error') {
       return;
     }
-    if (reportsResults?.data) {
-      setReports(reportsResults.data);
+    if (getReportResults?.data) {
+      setReport(getReportResults.data);
     }
-  }, [reportsResults]);
-
-  useEffect(() => {
-    if (reports) {
-      const reportSelected = reports.find((report) => report.id.toString() === reportId);
-      setSelectedReport(reportSelected);
-    }
-  }, [reportId, reports]);
+  }, [getReportResults]);
 
   const year = useMemo(() => {
-    return selectedReport?.startDate.split('-')[0];
-  }, [selectedReport]);
+    return report?.startDate.split('-')[0];
+  }, [report]);
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -94,7 +86,7 @@ const AcceleratorReportView = () => {
     return (
       <>
         <Button
-          disabled={selectedReport?.status !== 'Not Submitted' && selectedReport?.status !== 'Needs Update'}
+          disabled={report?.status !== 'Not Submitted' && report?.status !== 'Needs Update'}
           icon='iconEdit'
           id='editReport'
           label={strings.EDIT}
@@ -105,7 +97,7 @@ const AcceleratorReportView = () => {
           size='medium'
         />
         <Button
-          disabled={selectedReport?.status !== 'Not Submitted' && selectedReport?.status !== 'Needs Update'}
+          disabled={report?.status !== 'Not Submitted' && report?.status !== 'Needs Update'}
           id='submitReport'
           label={strings.SUBMIT_FOR_APPROVAL}
           onClick={() => void setShowApproveDialog(true)}
@@ -114,7 +106,7 @@ const AcceleratorReportView = () => {
         />
       </>
     );
-  }, [selectedReport?.status]);
+  }, [report?.status]);
 
   const rightComponent = useMemo(
     () => (
@@ -125,8 +117,7 @@ const AcceleratorReportView = () => {
     [callToAction]
   );
 
-  const reportName =
-    selectedReport?.frequency === 'Annual' ? year : selectedReport?.quarter ? `${year}-${selectedReport?.quarter}` : '';
+  const reportName = report?.frequency === 'Annual' ? year : report?.quarter ? `${year}-${report?.quarter}` : '';
 
   return (
     <Page
@@ -135,15 +126,17 @@ const AcceleratorReportView = () => {
       title={
         <TitleBar
           subtitle={
-            currentParticipantProject && reportsResults ? `${strings.PROJECT}: ${currentParticipantProject?.name}` : ''
+            currentParticipantProject && getReportResults
+              ? `${strings.PROJECT}: ${currentParticipantProject?.name}`
+              : ''
           }
           title={`${strings.REPORT} (${reportName})`}
         />
       }
     >
       <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
-        {selectedReport && <ApprovedReportMessage report={selectedReport} />}
-        {selectedReport && <RejectedReportMessage report={selectedReport} />}
+        {report && <ApprovedReportMessage report={report} />}
+        {report && <RejectedReportMessage report={report} />}
         <Card
           style={{
             display: 'flex',
@@ -151,29 +144,29 @@ const AcceleratorReportView = () => {
             flexGrow: 1,
           }}
         >
-          {selectedReport?.startDate && selectedReport?.endDate && (
+          {report?.startDate && report?.endDate && (
             <Box
               borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
               padding={theme.spacing(3, 0)}
               marginBottom={3}
             >
               <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
-                <AcceleratorReportStatusBadge status={selectedReport.status} />
+                <AcceleratorReportStatusBadge status={report.status} />
               </div>
 
               <Typography fontSize={14} fontStyle={'italic'}>
-                {strings.formatString(strings.REPORT_PERIOD, selectedReport?.startDate, selectedReport?.endDate)}
+                {strings.formatString(strings.REPORT_PERIOD, report?.startDate, report?.endDate)}
               </Typography>
             </Box>
           )}
-          <HighlightsBox highlights={selectedReport?.highlights} />
+          <HighlightsBox highlights={report?.highlights} />
           {['system', 'project', 'standard'].map((type) => {
             const metrics =
               type === 'system'
-                ? selectedReport?.systemMetrics
+                ? report?.systemMetrics
                 : type === 'project'
-                  ? selectedReport?.projectMetrics
-                  : selectedReport?.standardMetrics;
+                  ? report?.projectMetrics
+                  : report?.standardMetrics;
 
             return metrics?.map((metric, index) => (
               <MetricBox
@@ -188,8 +181,8 @@ const AcceleratorReportView = () => {
               />
             ));
           })}
-          <AchievementsBox achievements={selectedReport?.achievements} />
-          <ChallengesMitigationBox challenges={selectedReport?.challenges} />
+          <AchievementsBox achievements={report?.achievements} />
+          <ChallengesMitigationBox challenges={report?.challenges} />
         </Card>
       </Box>
     </Page>
