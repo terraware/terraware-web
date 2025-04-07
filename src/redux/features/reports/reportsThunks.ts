@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Dispatch } from 'redux';
 
 import { RootState } from 'src/redux/rootReducer';
-import AcceleratorReportService from 'src/services/AcceleratorReportService';
+import AcceleratorReportService, { UpdateAcceleratorReportParams } from 'src/services/AcceleratorReportService';
 import strings from 'src/strings';
 import {
   CreateAcceleratorReportConfigRequest,
@@ -13,7 +13,6 @@ import {
   ReviewAcceleratorReportRequest,
   ReviewManyAcceleratorReportMetricsRequest,
   UpdateAcceleratorReportConfigRequest,
-  UpdateAcceleratorReportRequest,
   UpdateProjectMetricRequest,
 } from 'src/types/AcceleratorReport';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
@@ -142,7 +141,7 @@ export const requestListAcceleratorReports = createAsyncThunk(
 
 export const requestUpdateAcceleratorReport = createAsyncThunk(
   'updateProjectMetric',
-  async (request: UpdateAcceleratorReportRequest, { rejectWithValue }) => {
+  async (request: UpdateAcceleratorReportParams, { rejectWithValue }) => {
     const response = await AcceleratorReportService.updateAcceleratorReport(request);
 
     if (response && response.requestSucceeded) {

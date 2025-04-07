@@ -56,7 +56,7 @@ const ACCELERATOR_REPORT_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/re
 
 // TODO: update this once the API is updated
 type UpdateAcceleratorReportResponse =
-  paths[typeof PROJECT_METRICS_ENDPOINT]['put']['responses'][200]['content']['application/json'];
+  paths[typeof ACCELERATOR_REPORT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 export type ListProjectMetricsResponsePayload =
   paths[typeof PROJECT_METRICS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -185,14 +185,30 @@ const listAcceleratorReports = async (
   );
 };
 
+export type UpdateAcceleratorReportParams = {
+  projectId: number;
+  reportId: number;
+  report: AcceleratorReport;
+};
+
 const updateAcceleratorReport = async (
-  request: UpdateAcceleratorReportRequest
+  params: UpdateAcceleratorReportParams
 ): Promise<Response2<UpdateAcceleratorReportResponse>> => {
-  const { projectId, reportId, report } = request;
+  const { projectId, reportId, report } = params;
+
+  const reportUpdate: UpdateAcceleratorReportRequest = {
+    achievements: [...report.achievements],
+    challenges: [...report.challenges],
+    highlights: report.highlights,
+    projectMetrics: [...report.projectMetrics],
+    standardMetrics: [...report.standardMetrics],
+    systemMetrics: [...report.systemMetrics],
+  };
+
   return HttpService.root(
     ACCELERATOR_REPORT_ENDPOINT.replace('{projectId}', projectId.toString()).replace('{reportId}', reportId.toString())
   ).post2<UpdateAcceleratorReportResponse>({
-    entity: report,
+    entity: reportUpdate,
   });
 };
 
