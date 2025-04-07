@@ -8,7 +8,7 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useUser } from 'src/providers';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
+import { selectDefaultSpecies } from 'src/redux/features/species/speciesSelectors';
 import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
@@ -81,7 +81,7 @@ const SiteWithoutZonesCard = ({ plantingSiteId, newVersion }: NumberOfSpeciesPla
 
 const SiteWithZonesCard = ({ newVersion }: NumberOfSpeciesPlantedCardProps): JSX.Element => {
   const populationSelector = useAppSelector((state) => selectSitePopulationZones(state));
-  const speciesSelector = useAppSelector((state) => selectSpecies(state));
+  const speciesSelector = useAppSelector((state) => selectDefaultSpecies(state));
   const [totalSpecies, setTotalSpecies] = useState<number>();
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();

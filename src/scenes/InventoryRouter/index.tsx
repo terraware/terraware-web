@@ -21,7 +21,7 @@ const InventoryRouter = ({ setWithdrawalCreated }: InventoryRouterProps) => {
   const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
 
-  const species = useAppSelector(selectSpecies);
+  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
 
   const reloadSpecies = useCallback(() => {
     if (selectedOrganization.id !== -1) {
@@ -30,10 +30,10 @@ const InventoryRouter = ({ setWithdrawalCreated }: InventoryRouterProps) => {
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
-    if (!species) {
+    if (!speciesResponse?.data?.species) {
       reloadSpecies();
     }
-  }, [species, reloadSpecies]);
+  }, [speciesResponse?.data?.species, reloadSpecies]);
 
   return (
     <Routes>
@@ -42,7 +42,7 @@ const InventoryRouter = ({ setWithdrawalCreated }: InventoryRouterProps) => {
         element={
           <InventoryV2View
             hasNurseries={selectedOrgHasFacilityType(selectedOrganization, 'Nursery')}
-            hasSpecies={(species || []).length > 0}
+            hasSpecies={(speciesResponse?.data?.species || []).length > 0}
           />
         }
       />
@@ -51,17 +51,23 @@ const InventoryRouter = ({ setWithdrawalCreated }: InventoryRouterProps) => {
         path={'/withdraw'}
         element={<SpeciesBulkWithdrawView withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />}
       />
-      <Route path={'/batch/:batchId'} element={<InventoryBatchView origin='Batches' species={species || []} />} />
+      <Route
+        path={'/batch/:batchId'}
+        element={<InventoryBatchView origin='Batches' species={speciesResponse?.data?.species || []} />}
+      />
       <Route
         path={'/nursery/:nurseryId/batch/:batchId'}
-        element={<InventoryBatchView origin='Nursery' species={species || []} />}
+        element={<InventoryBatchView origin='Nursery' species={speciesResponse?.data?.species || []} />}
       />
       <Route
         path={'/species/:speciesId/batch/:batchId'}
-        element={<InventoryBatchView origin='Species' species={species || []} />}
+        element={<InventoryBatchView origin='Species' species={speciesResponse?.data?.species || []} />}
       />
       <Route path={'/nursery/:nurseryId'} element={<InventoryForNurseryView />} />
-      <Route path={'/:speciesId'} element={<InventoryForSpeciesView species={species || []} />} />
+      <Route
+        path={'/:speciesId'}
+        element={<InventoryForSpeciesView species={speciesResponse?.data?.species || []} />}
+      />
     </Routes>
   );
 };

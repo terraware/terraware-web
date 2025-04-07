@@ -134,7 +134,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     }
   }, [searchProps.filtersProps?.filters.status]);
 
-  const allSpecies = useAppSelector(selectSpecies);
+  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const observation = useAppSelector((state) => selectObservation(state, plantingSiteId, observationId));
   const zoneNames = useAppSelector((state) => selectDetailsZoneNames(state, plantingSiteId, observationId));
@@ -168,10 +168,10 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   }, [activeLocale, details, observation]);
 
   useEffect(() => {
-    if (!allSpecies && selectedOrganization.id !== -1) {
+    if (!speciesResponse?.data?.species && selectedOrganization.id !== -1) {
       dispatch(requestSpecies(selectedOrganization.id));
     }
-  }, [dispatch, allSpecies, selectedOrganization]);
+  }, [dispatch, speciesResponse?.data?.species, selectedOrganization]);
 
   useEffect(() => {
     const speciesWithNoIdMap = _.uniqBy(
@@ -237,7 +237,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     const mergeOtherSpeciesRequestData: MergeOtherSpeciesRequestData[] = mergedSpeciesPayloads
       .filter((sp) => !!sp.otherSpeciesName && !!sp.speciesId)
       .map((sp) => ({
-        newName: allSpecies?.find((existing) => existing.id === sp.speciesId)?.scientificName || '',
+        newName: speciesResponse?.data?.species?.find((existing) => existing.id === sp.speciesId)?.scientificName || '',
         otherSpeciesName: sp.otherSpeciesName!,
         speciesId: sp.speciesId!,
       }));
