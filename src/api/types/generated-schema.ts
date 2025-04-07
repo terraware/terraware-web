@@ -760,23 +760,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/accelerator/projects/{projectId}/reports/logframe": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Update project logframe URL. */
-        post: operations["updateLogframeUrl"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v1/accelerator/projects/{projectId}/reports/metrics": {
         parameters: {
             query?: never;
@@ -822,25 +805,8 @@ export interface paths {
         /** Get one report. */
         get: operations["getAcceleratorReport"];
         put?: never;
-        /** Update qualitative data for a report */
-        post: operations["updateAcceleratorReportQualitatives"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/accelerator/projects/{projectId}/reports/{reportId}/metrics": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Update metric entries for a report */
-        post: operations["updateAcceleratorReportMetrics"];
+        /** Update metric data and qualitative data for a report */
+        post: operations["updateAcceleratorReportValues"];
         delete?: never;
         options?: never;
         head?: never;
@@ -8728,6 +8694,8 @@ export interface components {
             values: components["schemas"]["TimeseriesValuePayload"][];
         };
         UpdateAcceleratorReportConfigPayload: {
+            /** Format: uri */
+            logframeUrl?: string;
             /** Format: date */
             reportingEndDate: string;
             /** Format: date */
@@ -8736,15 +8704,13 @@ export interface components {
         UpdateAcceleratorReportConfigRequestPayload: {
             config: components["schemas"]["UpdateAcceleratorReportConfigPayload"];
         };
-        UpdateAcceleratorReportMetricsRequestPayload: {
-            projectMetrics: components["schemas"]["ReportProjectMetricEntriesPayload"][];
-            standardMetrics: components["schemas"]["ReportStandardMetricEntriesPayload"][];
-            systemMetrics: components["schemas"]["ReportSystemMetricEntriesPayload"][];
-        };
-        UpdateAcceleratorReportQualitativesRequestPayload: {
+        UpdateAcceleratorReportValuesRequestPayload: {
             achievements: string[];
             challenges: components["schemas"]["ReportChallengePayload"][];
             highlights?: string;
+            projectMetrics: components["schemas"]["ReportProjectMetricEntriesPayload"][];
+            standardMetrics: components["schemas"]["ReportStandardMetricEntriesPayload"][];
+            systemMetrics: components["schemas"]["ReportSystemMetricEntriesPayload"][];
         };
         UpdateAccessionRequestPayloadV2: {
             bagNumbers?: string[];
@@ -9090,10 +9056,6 @@ export interface components {
         };
         UpdateProjectAcceleratorReportConfigRequestPayload: {
             config: components["schemas"]["UpdateAcceleratorReportConfigPayload"];
-        };
-        UpdateProjectLogframeUrlRequestPayload: {
-            /** Format: uri */
-            logframeUrl?: string;
         };
         UpdateProjectMetricRequestPayload: {
             metric: components["schemas"]["ExistingProjectMetricPayload"];
@@ -11288,50 +11250,6 @@ export interface operations {
             };
         };
     };
-    updateLogframeUrl: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                projectId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateProjectLogframeUrlRequestPayload"];
-            };
-        };
-        responses: {
-            /** @description The requested operation succeeded. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-                };
-            };
-            /** @description The request was not valid. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-            /** @description The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-        };
-    };
     listProjectMetrics: {
         parameters: {
             query?: never;
@@ -11431,7 +11349,7 @@ export interface operations {
             };
         };
     };
-    updateAcceleratorReportQualitatives: {
+    updateAcceleratorReportValues: {
         parameters: {
             query?: never;
             header?: never;
@@ -11442,52 +11360,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["UpdateAcceleratorReportQualitativesRequestPayload"];
-            };
-        };
-        responses: {
-            /** @description The requested operation succeeded. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-                };
-            };
-            /** @description The request was not valid. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-            /** @description The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-        };
-    };
-    updateAcceleratorReportMetrics: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                projectId: number;
-                reportId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateAcceleratorReportMetricsRequestPayload"];
+                "application/json": components["schemas"]["UpdateAcceleratorReportValuesRequestPayload"];
             };
         };
         responses: {

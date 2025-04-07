@@ -16,8 +16,6 @@ export type CreateAcceleratorReportConfigRequest = CreateAcceleratorReportConfig
 
 export type UpdateAcceleratorReportConfigRequest = UpdateAcceleratorReportConfigRequestPayload & {
   projectId: string;
-  config: UpdateAcceleratorReportConfigPayload;
-  logframeUrl?: string;
 };
 
 export type ProjectMetric = components['schemas']['ExistingProjectMetricPayload'];

@@ -49,17 +49,12 @@ export const requestCreateReportConfig = createAsyncThunk(
 export const requestUpdateReportConfig = createAsyncThunk(
   'updateReportConfig',
   async (request: UpdateAcceleratorReportConfigRequest, { rejectWithValue }) => {
-    const promises = [AcceleratorReportService.updateConfig(request.config, request.projectId)];
+    const response = await AcceleratorReportService.updateConfig(request.config, request.projectId);
 
-    if (request.logframeUrl) {
-      promises.push(AcceleratorReportService.updateLogframeUrl(request.logframeUrl, request.projectId));
+    if (response && response.requestSucceeded) {
+      return response.data;
     }
 
-    const results = await Promise.all(promises);
-
-    if (results.every((result) => result && result.requestSucceeded)) {
-      return true;
-    }
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
