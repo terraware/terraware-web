@@ -369,11 +369,6 @@ const MetricBox = ({
               styles={textAreaStyles}
               preserveNewlines
             />
-            {!!editing && (
-              <Typography fontSize={14} color={theme.palette.TwClrTxtSecondary}>
-                {strings.UNDERPERFORMANCE_DESCRIPTION}
-              </Typography>
-            )}
           </Box>
         </Grid>
         {isConsoleView && (
