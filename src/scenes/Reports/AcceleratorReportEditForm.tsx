@@ -91,8 +91,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
       }}
       onSave={() => {
         // TODO: save report
-        // saveReport();
-        goToAcceleratorReport(Number(reportId), Number(projectId));
+        saveReport();
       }}
       saveID={'saveEditAcceleratorReport'}
       saveDisabled={false}
