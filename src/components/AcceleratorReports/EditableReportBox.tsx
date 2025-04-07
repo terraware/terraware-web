@@ -53,6 +53,7 @@ const EditableReportBox = ({
                     : theme.palette.TwClrBgHover,
               '.actions': {
                 display: isConsoleView && canEdit ? 'block' : 'none',
+                marginTop: name ? 0 : '20px',
               },
             },
             background: isConsoleView && editing ? theme.palette.TwClrBgActive : 'none',
@@ -90,6 +91,8 @@ const EditableReportBox = ({
                 display: 'flex',
                 flexGrow: 1,
                 justifyContent: 'flex-end',
+                position: 'relative',
+                height: 0,
               }}
             >
               {!editing && (
