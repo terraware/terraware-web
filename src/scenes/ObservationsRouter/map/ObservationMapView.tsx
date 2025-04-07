@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
-import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import { PlantingSiteMap } from 'src/components/Map';
 import MapDateSelect from 'src/components/common/MapDateSelect';
@@ -23,7 +22,6 @@ import { AdHocObservationResults, Observation, ObservationResults } from 'src/ty
 import { PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
 import { isAfter } from 'src/utils/dateUtils';
 import { regexMatch } from 'src/utils/search';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type ObservationMapViewProps = SearchProps & {
   hideDate?: boolean;
@@ -48,7 +46,6 @@ export default function ObservationMapView({
   const [plantingSiteHistory, setPlantingSiteHistory] = useState<PlantingSiteHistory>();
   const [selectedObservation, setSelectedObservation] = useState<ObservationResults>();
   const [selectedAdHocObservation, setSelectedAdHocObservation] = useState<AdHocObservationResults>();
-  const defaultTimeZone = useDefaultTimeZone();
 
   const observations: Observation[] | undefined = useAppSelector((state) =>
     selectPlantingSiteObservations(state, selectedPlantingSite.id)
@@ -59,10 +56,9 @@ export default function ObservationMapView({
   );
 
   const observationsDates = useMemo(() => {
-    const uniqueDates = new Set(observationsResults?.map((obs) => obs.completedDate || obs.startDate));
+    const uniqueDates = new Set(observationsResults?.map((obs) => obs.completedTime || obs.startDate));
     adHocObservationsResults?.forEach((obs) => {
-      const timeZone = selectedPlantingSite?.timeZone ?? defaultTimeZone.get().id;
-      const dateToUse = obs.completedTime ? getDateDisplayValue(obs.completedTime, timeZone) : obs.startDate;
+      const dateToUse = obs.completedTime ? obs.completedTime : obs.startDate;
       uniqueDates.add(dateToUse);
     });
 
@@ -96,15 +92,14 @@ export default function ObservationMapView({
 
   useEffect(() => {
     const selObservation = observationsResults?.find((obs) => {
-      const dateToCheck = obs.state === 'Completed' || obs.state === 'Abandoned' ? obs.completedDate : obs.startDate;
+      const dateToCheck = obs.state === 'Completed' || obs.state === 'Abandoned' ? obs.completedTime : obs.startDate;
       return dateToCheck === selectedObservationDate;
     });
 
     setSelectedObservation(selObservation);
 
     const selAdHocObservation = adHocObservationsResults?.find((obs) => {
-      const timeZone = selectedPlantingSite?.timeZone ?? defaultTimeZone.get().id;
-      const dateToCheck = obs.completedTime ? getDateDisplayValue(obs.completedTime, timeZone) : obs.startDate;
+      const dateToCheck = obs.completedTime ? obs.completedTime : obs.startDate;
       return dateToCheck === selectedObservationDate;
     });
 
