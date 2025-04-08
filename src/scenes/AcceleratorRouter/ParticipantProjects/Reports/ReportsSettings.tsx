@@ -6,6 +6,7 @@ import { Button, TableColumnType, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
+import Link from 'src/components/common/Link';
 import Table from 'src/components/common/table';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useUser } from 'src/providers';
@@ -106,7 +107,6 @@ export default function ReportsSettings(): JSX.Element {
     return [
       { label: strings.START_DATE, value: projectReportConfig.config?.reportingStartDate },
       { label: strings.END_DATE, value: projectReportConfig.config?.reportingEndDate },
-      { label: strings.LOG_FRAME_AND_ME_PLAN_URL, value: projectReportConfig.config?.logframeUrl },
     ];
   }, [projectReportConfig]);
 
@@ -185,6 +185,21 @@ export default function ReportsSettings(): JSX.Element {
               />
             </Grid>
           ))}
+          <Grid item xs={gridSize} marginTop={2}>
+            <Box>
+              <Typography
+                fontSize={'14px'}
+                color={theme.palette.TwClrTxtSecondary}
+                paddingBottom={'12px'}
+                lineHeight={'20px'}
+              >
+                {strings.LOG_FRAME_AND_ME_PLAN_URL}
+              </Typography>
+              <Link to={projectReportConfig.config?.logframeUrl} target='_blank' fontSize={'16px'}>
+                {projectReportConfig.config?.logframeUrl}
+              </Link>
+            </Box>
+          </Grid>
         </Grid>
         <Grid container sx={gridStyle}>
           <Grid item xs={12} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
