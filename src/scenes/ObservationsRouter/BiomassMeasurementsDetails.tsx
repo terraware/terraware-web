@@ -163,15 +163,15 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
 
   const exportDetailsCsv = useCallback(async () => {
     await downloadCsv(strings.BIOMASS_MEASUREMENTS, ObservationsService.exportBiomassDetailsCsv);
-  }, [observation]);
+  }, [observation, plantingSite]);
 
   const exportSpeciesCsv = useCallback(async () => {
     await downloadCsv(strings.SPECIES, ObservationsService.exportBiomassSpeciesCsv);
-  }, [observation]);
+  }, [observation, plantingSite]);
 
   const exportTreesShrubsCsv = useCallback(async () => {
     await downloadCsv(strings.TREES_AND_SHRUBS, ObservationsService.exportBiomassTreesShrubsCsv);
-  }, [observation]);
+  }, [observation, plantingSite]);
 
   return (
     <Page
