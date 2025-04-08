@@ -107,7 +107,7 @@ const AchievementsBox = ({ report, projectId, reportId, reload }: ReportBoxProps
   const onCancel = useCallback(() => {
     setEditing(false);
     setAchievements(report?.achievements || []);
-  }, [achievements, report?.achievements]);
+  }, [report?.achievements]);
 
   const updateAchievement = (newAchievement: string, index: number) => {
     setAchievements(achievements.map((ach, i) => (index === i ? newAchievement : ach)));
