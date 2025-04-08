@@ -137,6 +137,10 @@ const ChallengesMitigationBox = ({ report, projectId, reportId, reload }: Report
 
   useEffect(() => {
     setValidateFields(false);
+
+    if (challengeMitigations.length === 0) {
+      addRow();
+    }
   }, [challengeMitigations]);
 
   useEffect(() => {
@@ -195,17 +199,18 @@ const ChallengesMitigationBox = ({ report, projectId, reportId, reload }: Report
       onCancel={onCancel}
       onSave={onSave}
     >
-      {challengeMitigations?.map((challenge, index) => (
-        <ChallengeMitigationPlan
-          challengeMitigation={challenge}
-          key={index.toString()}
-          includeBorder={index < challengeMitigations.length - 1}
-          editing={editing}
-          onRemove={() => setChallengeMitigations(challengeMitigations.filter((_, i) => index !== i))}
-          setChallengeMitigation={(chal: ChallengeMitigation) => updateChallenge(chal, index)}
-          validateFields={validateFields}
-        />
-      ))}
+      {challengeMitigations &&
+        challengeMitigations.map((challenge, index) => (
+          <ChallengeMitigationPlan
+            challengeMitigation={challenge}
+            key={index.toString()}
+            includeBorder={index < challengeMitigations.length - 1}
+            editing={editing}
+            onRemove={() => setChallengeMitigations(challengeMitigations.filter((_, i) => index !== i))}
+            setChallengeMitigation={(chal: ChallengeMitigation) => updateChallenge(chal, index)}
+            validateFields={validateFields}
+          />
+        ))}
       {editing && (
         <Button
           onClick={addRow}
