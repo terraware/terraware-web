@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/88</span>
+                <span class='fraction'>0/91</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/77</span>
+                <span class='fraction'>0/82</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/86</span>
+                <span class='fraction'>0/89</span>
             </div>
         
             
@@ -457,7 +457,13 @@
 <a name='L392'></a><a href='#L392'>392</a>
 <a name='L393'></a><a href='#L393'>393</a>
 <a name='L394'></a><a href='#L394'>394</a>
-<a name='L395'></a><a href='#L395'>395</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L395'></a><a href='#L395'>395</a>
+<a name='L396'></a><a href='#L396'>396</a>
+<a name='L397'></a><a href='#L397'>397</a>
+<a name='L398'></a><a href='#L398'>398</a>
+<a name='L399'></a><a href='#L399'>399</a>
+<a name='L400'></a><a href='#L400'>400</a>
+<a name='L401'></a><a href='#L401'>401</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -558,6 +564,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -884,7 +896,7 @@ import EditProgressModal from './EditProgressModal';
 import EditableReportBox from './EditableReportBox';
 import ResetMetricModal from './ResetMetricModal';
 &nbsp;
-const isReportSystemMetric = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(m</span>etric: any): metric is ReportSystemMetric =&gt; {</span>
+export const isReportSystemMetric = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(m</span>etric: any): metric is ReportSystemMetric =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  return metric &amp;&amp; typeof metric.metric === 'string';</span>
 };
 &nbsp;
@@ -919,13 +931,13 @@ const MetricBox = <span class="cstat-no" title="statement not covered" ><span cl
   editingId,
   index,
   setEditingId,
-  showEditOnHover = <span class="branch-0 cbranch-no" title="branch not covered" >true,</span>
   metric,
   type,
   projectId,
   reportId,
   reload,
   isConsoleView = <span class="branch-0 cbranch-no" title="branch not covered" >false,</span>
+  onChangeMetric,
 }: {
   editingId?: string;
   hideStatusBadge?: boolean;
@@ -933,11 +945,11 @@ const MetricBox = <span class="cstat-no" title="statement not covered" ><span cl
   projectId: string;
   reload: () =&gt; void;
   setEditingId: (id: string | undefined) =&gt; void;
-  showEditOnHover?: boolean;
   metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric;
   type: MetricType;
   reportId: number;
   isConsoleView?: boolean;
+  onChangeMetric?: (metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric, type: MetricType) =&gt; void;
 }): JSX.Element =&gt; {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const [record, setRecord, onChange] = <span class="cstat-no" title="statement not covered" >useForm&lt;ReportProjectMetric | ReportSystemMetric | ReportStandardMetric&gt;(</span>
@@ -952,6 +964,12 @@ const MetricBox = <span class="cstat-no" title="statement not covered" ><span cl
   const refreshReportMetricResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectRefreshAcceleratorReportSystemMetrics(refreshRequestId));</span>
   const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (JSON.stringify(record) !== JSON.stringify(metric)) {</span>
+<span class="cstat-no" title="statement not covered" >      onChangeMetric?.(record, type);</span>
+    }
+  }, [record]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (updateReportMetricResponse?.status === 'error') {</span>
@@ -1108,7 +1126,7 @@ const MetricBox = <span class="cstat-no" title="statement not covered" ><span cl
         onSave={onSave}
         editing={editing}
         key={`metric-${index}`}
-        showEditOnHover={showEditOnHover}
+        isConsoleView={isConsoleView}
         description={metric?.description}
       &gt;
         &lt;Grid item xs={6}&gt;
@@ -1128,7 +1146,7 @@ const MetricBox = <span class="cstat-no" title="statement not covered" ><span cl
                     &lt;/Tooltip&gt;
                   &lt;/Box&gt;
                 )}
-                {!!editing &amp;&amp; metric.overrideValue &amp;&amp; (
+                {!!editing &amp;&amp; metric.overrideValue &amp;&amp; (isConsoleView || type !== 'system') &amp;&amp; (
                   &lt;Button
                     icon='iconUndo'
                     onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setResetMetricModalOpened(true)}</span>
@@ -1141,7 +1159,7 @@ const MetricBox = <span class="cstat-no" title="statement not covered" ><span cl
                     }}
                   /&gt;
                 )}
-                {!!editing &amp;&amp; (
+                {!!editing &amp;&amp; (isConsoleView || type !== 'system') &amp;&amp; (
                   &lt;Button
                     icon='iconEdit'
                     onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setProgressModalOpened(true)}</span>
@@ -1252,7 +1270,7 @@ export default MetricBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-08T18:35:32.831Z
+                at 2025-04-08T19:32:03.793Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
