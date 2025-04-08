@@ -176,11 +176,11 @@ const ChallengesMitigationBox = ({ report, projectId, reportId, reload, isConsol
   const onCancel = useCallback(() => {
     setEditing(false);
     setChallengeMitigations(report?.challenges || []);
-  }, [challengeMitigations, report?.challenges]);
+  }, [report?.challenges]);
 
-  const addRow = () => {
+  const addRow = useCallback(() => {
     setChallengeMitigations(challengeMitigations.concat({ challenge: '', mitigationPlan: '' }));
-  };
+  }, [challengeMitigations]);
 
   const updateChallenge = (newChal: ChallengeMitigation, index: number) => {
     setChallengeMitigations(challengeMitigations.map((chal, i) => (index === i ? newChal : chal)));
