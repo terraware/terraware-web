@@ -10,6 +10,8 @@ export type CreateAcceleratorReportConfigRequestPayload =
 export type UpdateAcceleratorReportConfigRequestPayload =
   components['schemas']['UpdateAcceleratorReportConfigRequestPayload'];
 
+export type UpdateAcceleratorReportConfigPayload = components['schemas']['UpdateAcceleratorReportConfigPayload'];
+
 export type CreateAcceleratorReportConfigRequest = CreateAcceleratorReportConfigRequestPayload & { projectId: string };
 
 export type UpdateAcceleratorReportConfigRequest = UpdateAcceleratorReportConfigRequestPayload & {

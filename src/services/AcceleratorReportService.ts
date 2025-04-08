@@ -8,7 +8,7 @@ import {
   ReportReviewPayload,
   ReviewAcceleratorReportMetricsRequestPayload,
   SystemMetricName,
-  UpdateAcceleratorReportConfigRequest,
+  UpdateAcceleratorReportConfigPayload,
   UpdateProjectMetricRequest,
 } from 'src/types/AcceleratorReport';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
@@ -108,13 +108,13 @@ const createConfig = async (request: CreateAcceleratorReportConfigRequest): Prom
 };
 
 const updateConfig = async (
-  request: UpdateAcceleratorReportConfigRequest
+  config: UpdateAcceleratorReportConfigPayload,
+  projectId: string
 ): Promise<Response2<UpdateConfigResponse>> => {
-  const { projectId, ...rest } = request;
   return HttpService.root(
-    ACCELERATOR_REPORT_CONFIG_ENDPOINT.replace('{projectId}', projectId.toString())
+    ACCELERATOR_REPORT_CONFIG_ENDPOINT.replace('{projectId}', projectId)
   ).post2<UpdateConfigResponse>({
-    entity: rest,
+    entity: { config },
   });
 };
 
