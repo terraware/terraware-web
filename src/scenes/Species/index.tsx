@@ -17,7 +17,7 @@ const SpeciesRouter = () => {
   const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
 
-  const species = useAppSelector(selectSpecies);
+  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
 
   const reloadSpecies = useCallback(() => {
     if (selectedOrganization.id !== -1) {
@@ -26,22 +26,22 @@ const SpeciesRouter = () => {
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
-    if (!species) {
+    if (!speciesResponse?.data?.species) {
       reloadSpecies();
     }
-  }, [species, reloadSpecies]);
+  }, [speciesResponse?.data?.species, reloadSpecies]);
 
   const getSpeciesView = useCallback((): JSX.Element => {
-    if (species === undefined) {
+    if (speciesResponse?.data?.species === undefined) {
       return <BusySpinner withSkrim />;
     }
 
-    if ((species || []).length > 0) {
-      return <SpeciesListView reloadData={reloadSpecies} species={species || []} />;
+    if ((speciesResponse?.data?.species || []).length > 0) {
+      return <SpeciesListView reloadData={reloadSpecies} species={speciesResponse?.data?.species || []} />;
     }
 
     return <EmptyStatePage pageName={'Species'} reloadData={reloadSpecies} />;
-  }, [species, reloadSpecies]);
+  }, [speciesResponse?.data?.species, reloadSpecies]);
 
   return (
     <Routes>

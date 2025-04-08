@@ -64,7 +64,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
 
-  const species = useAppSelector(selectSpecies);
+  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
   const hasObservationsResults: boolean = useAppSelector(selectHasObservationsResults);
   const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
   const projects: Project[] | undefined = useAppSelector(selectProjects);
@@ -97,7 +97,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
 
   const reloadSpecies = useCallback(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization.id !== -1 && !['pending', 'success'].includes(speciesResponse?.status || '')) {
       void dispatch(requestSpecies(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization.id]);
@@ -142,7 +142,10 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
     setDefaults();
   }, [setDefaults]);
 
-  const selectedOrgHasSpecies = useCallback((): boolean => (species || []).length > 0, [species]);
+  const selectedOrgHasSpecies = useCallback(
+    (): boolean => (speciesResponse?.data?.species || []).length > 0,
+    [speciesResponse?.data?.species]
+  );
 
   const selectedOrgHasSeedBanks = useCallback(
     (): boolean => selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank'),

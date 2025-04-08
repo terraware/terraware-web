@@ -42,7 +42,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   const theme = useTheme();
   const docLinks = useDocLinks();
 
-  const allSpecies = useAppSelector(selectSpecies);
+  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
 
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectParticipantProjectSpeciesCreateRequest(requestId));
@@ -51,11 +51,11 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
 
   const selectableSpecies = useMemo(() => {
     return (
-      allSpecies?.filter((species) => {
+      speciesResponse?.data?.species?.filter((species) => {
         return !participantProjectSpecies?.find((_species) => species.id === _species.species.id);
       }) ?? []
     );
-  }, [allSpecies, participantProjectSpecies]);
+  }, [speciesResponse?.data?.species, participantProjectSpecies]);
 
   const [record, setRecord, onChange] = useForm<Partial<CreateParticipantProjectSpeciesRequestPayload>>({
     projectId: -1,
@@ -63,10 +63,10 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   const { activeLocale } = useLocalization();
 
   useEffect(() => {
-    if (!allSpecies && selectedOrganization.id !== -1) {
+    if (!speciesResponse?.data?.species && selectedOrganization.id !== -1) {
       dispatch(requestSpecies(selectedOrganization.id));
     }
-  }, [allSpecies, selectedOrganization]);
+  }, [speciesResponse?.data?.species, selectedOrganization]);
 
   useEffect(() => {
     if (result?.status === 'error') {
@@ -185,7 +185,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
               a.scientificName.localeCompare(b.scientificName)
             )}
             onChange={onChangeSpecies}
-            selectedValue={allSpecies?.find((_species) => record?.speciesId === _species.id)}
+            selectedValue={speciesResponse?.data?.species?.find((_species) => record?.speciesId === _species.id)}
             fullWidth={true}
             isEqual={(a: Species, b: Species) => a.id === b.id}
             renderOption={(species: Species) => species?.scientificName || ''}

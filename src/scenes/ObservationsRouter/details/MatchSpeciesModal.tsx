@@ -23,8 +23,8 @@ export interface MatchSpeciesModalProps {
 export default function MatchSpeciesModal(props: MatchSpeciesModalProps): JSX.Element {
   const { onClose, onSave, unrecognizedSpecies } = props;
   const dispatch = useAppDispatch();
-  const allSpecies = useAppSelector(selectSpecies);
   const { selectedOrganization } = useOrganization();
+  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
   const [records, setRecords] = useForm<MergeOtherSpeciesPayloadPartial[]>(
     unrecognizedSpecies.map((species) => {
       return { otherSpeciesName: species };
@@ -32,10 +32,10 @@ export default function MatchSpeciesModal(props: MatchSpeciesModalProps): JSX.El
   );
 
   useEffect(() => {
-    if (!allSpecies && selectedOrganization.id !== -1) {
+    if (!speciesResponse?.data?.species && selectedOrganization.id !== -1) {
       dispatch(requestSpecies(selectedOrganization.id));
     }
-  }, [dispatch, allSpecies, selectedOrganization]);
+  }, [dispatch, speciesResponse?.data?.species, selectedOrganization]);
 
   const theme = useTheme();
 

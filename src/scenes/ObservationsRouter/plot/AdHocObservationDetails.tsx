@@ -66,7 +66,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
   const [mergeRequestId, setMergeRequestId] = useState<string>('');
 
-  const allSpecies = useAppSelector(selectSpecies);
+  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
   const matchResponse = useAppSelector(selectMergeOtherSpecies(mergeRequestId));
 
   const monitoringPlot = useMemo(() => {
@@ -131,10 +131,10 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
   }, [navigate, monitoringPlot]);
 
   useEffect(() => {
-    if (!allSpecies && selectedOrganization.id !== -1) {
+    if (!speciesResponse?.data?.species && selectedOrganization.id !== -1) {
       dispatch(requestSpecies(selectedOrganization.id));
     }
-  }, [dispatch, allSpecies, selectedOrganization]);
+  }, [dispatch, speciesResponse?.data?.species, selectedOrganization]);
 
   useEffect(() => {
     const speciesWithNoIdMap = _.uniqBy(
@@ -165,7 +165,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
     const mergeOtherSpeciesRequestData: MergeOtherSpeciesRequestData[] = mergedSpeciesPayloads
       .filter((sp) => !!sp.otherSpeciesName && !!sp.speciesId)
       .map((sp) => ({
-        newName: allSpecies?.find((existing) => existing.id === sp.speciesId)?.scientificName || '',
+        newName: speciesResponse?.data?.species?.find((existing) => existing.id === sp.speciesId)?.scientificName || '',
         otherSpeciesName: sp.otherSpeciesName!,
         speciesId: sp.speciesId!,
       }));

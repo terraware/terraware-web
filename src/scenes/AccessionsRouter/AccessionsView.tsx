@@ -20,7 +20,7 @@ const AccessionsView = ({}: AccessionsViewProps) => {
   const { selectedOrganization, reloadOrganizations, orgPreferences } = useOrganization();
   const preferredWeightSystem = userPreferences.preferredWeightSystem as string;
 
-  const species = useAppSelector(selectSpecies);
+  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
   const [seedSearchCriteria, setSeedSearchCriteria] = useState<SearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
@@ -55,10 +55,10 @@ const AccessionsView = ({}: AccessionsViewProps) => {
   }, [setDefaults]);
 
   useEffect(() => {
-    if (!species && selectedOrganization.id !== -1) {
+    if (!speciesResponse?.data?.species && selectedOrganization.id !== -1) {
       void dispatch(requestSpecies(selectedOrganization.id));
     }
-  }, [dispatch, selectedOrganization.id, species]);
+  }, [dispatch, selectedOrganization.id, speciesResponse?.data?.species]);
 
   return (
     <Database
@@ -71,7 +71,7 @@ const AccessionsView = ({}: AccessionsViewProps) => {
       displayColumnNames={accessionsDisplayColumns}
       setDisplayColumnNames={setAccessionsDisplayColumns}
       hasSeedBanks={selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')}
-      hasSpecies={(species || []).length > 0}
+      hasSpecies={(speciesResponse?.data?.species || []).length > 0}
       reloadData={reloadOrganizations}
     />
   );
