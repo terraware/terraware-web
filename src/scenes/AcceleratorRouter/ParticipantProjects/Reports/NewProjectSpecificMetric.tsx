@@ -62,7 +62,6 @@ export default function NewProjectSpecificMetric(): JSX.Element {
 
   const [newMetric, , onChange] = useForm<NewMetric>({
     component: 'Biodiversity',
-    isPublishable: true,
     name: '',
     reference: '',
     type: 'Activity',
