@@ -10,7 +10,7 @@ export type EditableReportBoxProps = {
   name: string;
   description?: string;
   canEdit: boolean;
-  showEditOnHover?: boolean;
+  isConsoleView?: boolean;
   editing?: boolean;
   children: ReactNode;
   onEdit: () => void;
@@ -26,7 +26,7 @@ const EditableReportBox = ({
   description,
   canEdit,
   children,
-  showEditOnHover = true,
+  isConsoleView,
   onEdit,
   onCancel,
   onSave,
@@ -46,16 +46,16 @@ const EditableReportBox = ({
             borderRadius: 2,
             '&:hover': {
               background:
-                !showEditOnHover || !canEdit
+                !isConsoleView || !canEdit
                   ? 'none'
                   : editing
                     ? theme.palette.TwClrBgActive
                     : theme.palette.TwClrBgHover,
               '.actions': {
-                display: showEditOnHover && canEdit ? 'block' : 'none',
+                display: isConsoleView && canEdit ? 'block' : 'none',
               },
             },
-            background: editing ? theme.palette.TwClrBgActive : 'none',
+            background: isConsoleView && editing ? theme.palette.TwClrBgActive : 'none',
             '& .actions': {
               display: 'none',
             },
@@ -126,7 +126,7 @@ const EditableReportBox = ({
 
           <Grid container>{children}</Grid>
 
-          {editing && (
+          {isConsoleView && editing && (
             <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
               <Button
                 id='cancel'

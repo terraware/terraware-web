@@ -31,7 +31,7 @@ import EditProgressModal from './EditProgressModal';
 import EditableReportBox from './EditableReportBox';
 import ResetMetricModal from './ResetMetricModal';
 
-const isReportSystemMetric = (metric: any): metric is ReportSystemMetric => {
+export const isReportSystemMetric = (metric: any): metric is ReportSystemMetric => {
   return metric && typeof metric.metric === 'string';
 };
 
@@ -66,13 +66,13 @@ const MetricBox = ({
   editingId,
   index,
   setEditingId,
-  showEditOnHover = true,
   metric,
   type,
   projectId,
   reportId,
   reload,
   isConsoleView = false,
+  onChangeMetric,
 }: {
   editingId?: string;
   hideStatusBadge?: boolean;
@@ -80,11 +80,11 @@ const MetricBox = ({
   projectId: string;
   reload: () => void;
   setEditingId: (id: string | undefined) => void;
-  showEditOnHover?: boolean;
   metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric;
   type: MetricType;
   reportId: number;
   isConsoleView?: boolean;
+  onChangeMetric?: (metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric, type: MetricType) => void;
 }): JSX.Element => {
   const theme = useTheme();
   const [record, setRecord, onChange] = useForm<ReportProjectMetric | ReportSystemMetric | ReportStandardMetric>(
@@ -99,6 +99,12 @@ const MetricBox = ({
   const refreshReportMetricResponse = useAppSelector(selectRefreshAcceleratorReportSystemMetrics(refreshRequestId));
   const { isAllowed } = useUser();
   const snackbar = useSnackbar();
+
+  useEffect(() => {
+    if (JSON.stringify(record) !== JSON.stringify(metric)) {
+      onChangeMetric?.(record, type);
+    }
+  }, [record]);
 
   useEffect(() => {
     if (updateReportMetricResponse?.status === 'error') {
@@ -255,7 +261,7 @@ const MetricBox = ({
         onSave={onSave}
         editing={editing}
         key={`metric-${index}`}
-        showEditOnHover={showEditOnHover}
+        isConsoleView={isConsoleView}
         description={metric?.description}
       >
         <Grid item xs={6}>
@@ -275,7 +281,7 @@ const MetricBox = ({
                     </Tooltip>
                   </Box>
                 )}
-                {!!editing && metric.overrideValue && (
+                {!!editing && metric.overrideValue && (isConsoleView || type !== 'system') && (
                   <Button
                     icon='iconUndo'
                     onClick={() => setResetMetricModalOpened(true)}
@@ -288,7 +294,7 @@ const MetricBox = ({
                     }}
                   />
                 )}
-                {!!editing && (
+                {!!editing && (isConsoleView || type !== 'system') && (
                   <Button
                     icon='iconEdit'
                     onClick={() => setProgressModalOpened(true)}

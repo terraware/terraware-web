@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Dispatch } from 'redux';
 
 import { RootState } from 'src/redux/rootReducer';
-import AcceleratorReportService from 'src/services/AcceleratorReportService';
+import AcceleratorReportService, { UpdateAcceleratorReportParams } from 'src/services/AcceleratorReportService';
 import strings from 'src/strings';
 import {
   CreateAcceleratorReportConfigRequest,
@@ -18,6 +18,27 @@ import {
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 
 import { setProjectReportConfigAction } from './reportsSlice';
+
+export const requestAcceleratorReport = createAsyncThunk(
+  'getAcceleratorReport',
+  async (
+    request: {
+      includeMetrics?: boolean;
+      projectId: string;
+      reportId: string;
+    },
+    { rejectWithValue }
+  ) => {
+    const { includeMetrics, projectId, reportId } = request;
+    const response = await AcceleratorReportService.getAcceleratorReport(projectId, reportId, includeMetrics);
+
+    if (response && response.requestSucceeded) {
+      return response.data?.report;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
 
 export const requestProjectReportConfig = (projectId: string) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -133,6 +154,19 @@ export const requestListAcceleratorReports = createAsyncThunk(
 
     if (response && response.requestSucceeded) {
       return response.reports;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestUpdateAcceleratorReport = createAsyncThunk(
+  'updateProjectMetric',
+  async (request: UpdateAcceleratorReportParams, { rejectWithValue }) => {
+    const response = await AcceleratorReportService.updateAcceleratorReport(request);
+
+    if (response && response.requestSucceeded) {
+      return response.data;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

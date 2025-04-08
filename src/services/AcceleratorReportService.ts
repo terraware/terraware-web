@@ -9,6 +9,7 @@ import {
   ReviewAcceleratorReportMetricsRequestPayload,
   SystemMetricName,
   UpdateAcceleratorReportConfigPayload,
+  UpdateAcceleratorReportRequest,
   UpdateProjectMetricRequest,
 } from 'src/types/AcceleratorReport';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
@@ -51,6 +52,14 @@ const REVIEW_ACCELERATOR_REPORT_METRICS_ENDPOINT =
 const REFRESH_ACCELERATOR_REPORT_METRICS_ENDPOINT =
   '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/metrics/refresh';
 const REVIEW_ACCELERATOR_REPORT_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/review';
+const ACCELERATOR_REPORT_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}';
+
+type GetAcceleratorReportResponsePayload =
+  paths[typeof ACCELERATOR_REPORT_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+// TODO: update this once the API is updated
+type UpdateAcceleratorReportResponse =
+  paths[typeof ACCELERATOR_REPORT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 export type ListProjectMetricsResponsePayload =
   paths[typeof PROJECT_METRICS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -96,6 +105,20 @@ const getAcceleratorReportConfig = async (projectId: string): Promise<ReportsCon
   );
 
   return response;
+};
+
+const getAcceleratorReport = async (
+  projectId: string,
+  reportId: string,
+  includeMetrics?: boolean
+): Promise<Response2<GetAcceleratorReportResponsePayload>> => {
+  const params = { includeMetrics: (!!includeMetrics).toString() };
+
+  return HttpService.root(
+    ACCELERATOR_REPORT_ENDPOINT.replace('{projectId}', projectId).replace('{reportId}', reportId)
+  ).get2<GetAcceleratorReportResponsePayload>({
+    params,
+  });
 };
 
 const createConfig = async (request: CreateAcceleratorReportConfigRequest): Promise<Response2<CreateResponse>> => {
@@ -179,6 +202,33 @@ const listAcceleratorReports = async (
   );
 };
 
+export type UpdateAcceleratorReportParams = {
+  projectId: number;
+  reportId: number;
+  report: AcceleratorReport;
+};
+
+const updateAcceleratorReport = async (
+  params: UpdateAcceleratorReportParams
+): Promise<Response2<UpdateAcceleratorReportResponse>> => {
+  const { projectId, reportId, report } = params;
+
+  const reportUpdate: UpdateAcceleratorReportRequest = {
+    achievements: [...report.achievements],
+    challenges: [...report.challenges],
+    highlights: report.highlights,
+    projectMetrics: [...report.projectMetrics],
+    standardMetrics: [...report.standardMetrics],
+    systemMetrics: [...report.systemMetrics],
+  };
+
+  return HttpService.root(
+    ACCELERATOR_REPORT_ENDPOINT.replace('{projectId}', projectId.toString()).replace('{reportId}', reportId.toString())
+  ).post2<UpdateAcceleratorReportResponse>({
+    entity: reportUpdate,
+  });
+};
+
 const updateProjectMetric = async (
   request: UpdateProjectMetricRequest
 ): Promise<Response2<UpdateProjectMetricResponse>> => {
@@ -236,6 +286,7 @@ const refreshAcceleratorReportSystemMetrics = async (
  * Exported functions
  */
 const ReportService = {
+  getAcceleratorReport,
   getAcceleratorReportConfig,
   createConfig,
   updateConfig,
@@ -244,6 +295,7 @@ const ReportService = {
   listSystemdMetrics,
   createProjectMetric,
   listAcceleratorReports,
+  updateAcceleratorReport,
   updateProjectMetric,
   reviewAcceleratorReportMetrics,
   reviewAcceleratorReport,

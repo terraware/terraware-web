@@ -141,7 +141,7 @@ export enum APP_PATHS {
   PROJECTS = '/projects',
   PROJECTS_NEW = '/projects/new',
   REPORTS = '/reports',
-  REPORTS_EDIT = '/reports/:reportId/edit',
+  REPORTS_EDIT = '/reports/:projectId/:reportId/edit',
   REPORTS_VIEW = '/reports/:projectId/:reportId',
   RESCHEDULE_OBSERVATION = '/observations/schedule/:observationId',
   SCHEDULE_OBSERVATION = '/observations/schedule',

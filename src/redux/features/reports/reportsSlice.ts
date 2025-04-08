@@ -10,6 +10,7 @@ import {
 
 import { StatusT, buildReducers } from '../asyncUtils';
 import {
+  requestAcceleratorReport,
   requestCreateProjectMetric,
   requestCreateReportConfig,
   requestListAcceleratorReports,
@@ -20,6 +21,7 @@ import {
   requestReviewAcceleratorReport,
   requestReviewAcceleratorReportMetric,
   requestReviewManyAcceleratorReportMetrics,
+  requestUpdateAcceleratorReport,
   requestUpdateProjectMetric,
   requestUpdateReportConfig,
 } from './reportsThunks';
@@ -68,6 +70,19 @@ const updateReportConfigSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     buildReducers(requestUpdateReportConfig)(builder);
+  },
+});
+
+/**
+ * Get Accelerator Report
+ */
+const initialGetAcceleratorReportState: { [key: string]: StatusT<AcceleratorReport> } = {};
+const getAcceleratorReportSlice = createSlice({
+  name: 'getAcceleratorReportSlice',
+  initialState: initialGetAcceleratorReportState,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestAcceleratorReport)(builder);
   },
 });
 
@@ -202,7 +217,22 @@ const refreshAcceleratorReportSystemMetricsSlice = createSlice({
   },
 });
 
+/**
+ * Update Accelerator Report Values
+ */
+const initialUpdateAcceleratorReport: { [key: string]: StatusT<number> } = {};
+
+const updateAcceleratorReportSlice = createSlice({
+  name: 'updateAcceleratorReportSlice',
+  initialState: initialUpdateAcceleratorReport,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestUpdateAcceleratorReport)(builder);
+  },
+});
+
 const reportsReducers = {
+  getAcceleratorReport: getAcceleratorReportSlice.reducer,
   projectReportConfig: projectReportConfigSlice.reducer,
   projectReportConfigCreate: createReportConfigSlice.reducer,
   projectReportConfigUpdate: updateReportConfigSlice.reducer,
@@ -216,6 +246,7 @@ const reportsReducers = {
   reviewAcceleratorReportMetric: reviewAcceleratorReportMetricSlice.reducer,
   reviewAcceleratorReport: reviewAcceleratorReportSlice.reducer,
   refreshAcceleratorReportSystemMetrics: refreshAcceleratorReportSystemMetricsSlice.reducer,
+  updateAcceleratorReport: updateAcceleratorReportSlice.reducer,
 };
 
 export default reportsReducers;

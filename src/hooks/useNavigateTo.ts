@@ -51,6 +51,16 @@ export default function useNavigateTo() {
         navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES_EDIT.replace(':projectId', `${projectId}`) });
       },
 
+      goToAcceleratorReport: (reportId: number, projectId: number) =>
+        navigate({
+          pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', `${reportId}`).replace(':projectId', `${projectId}`),
+        }),
+
+      goToAcceleratorReportEdit: (reportId: number, projectId: number) =>
+        navigate({
+          pathname: APP_PATHS.REPORTS_EDIT.replace(':reportId', `${reportId}`).replace(':projectId', `${projectId}`),
+        }),
+
       goToApplication: (applicationId: number) => {
         navigate({ pathname: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${applicationId}`) });
       },
