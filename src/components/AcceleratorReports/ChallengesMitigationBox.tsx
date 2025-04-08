@@ -199,18 +199,17 @@ const ChallengesMitigationBox = ({ report, projectId, reportId, reload }: Report
       onCancel={onCancel}
       onSave={onSave}
     >
-      {challengeMitigations &&
-        challengeMitigations.map((challenge, index) => (
-          <ChallengeMitigationPlan
-            challengeMitigation={challenge}
-            key={index.toString()}
-            includeBorder={index < challengeMitigations.length - 1}
-            editing={editing}
-            onRemove={() => setChallengeMitigations(challengeMitigations.filter((_, i) => index !== i))}
-            setChallengeMitigation={(chal: ChallengeMitigation) => updateChallenge(chal, index)}
-            validateFields={validateFields}
-          />
-        ))}
+      {challengeMitigations?.map((challenge, index) => (
+        <ChallengeMitigationPlan
+          challengeMitigation={challenge}
+          key={index.toString()}
+          includeBorder={index < challengeMitigations.length - 1}
+          editing={editing}
+          onRemove={() => setChallengeMitigations(challengeMitigations.filter((_, i) => index !== i))}
+          setChallengeMitigation={(chal: ChallengeMitigation) => updateChallenge(chal, index)}
+          validateFields={validateFields}
+        />
+      ))}
       {editing && (
         <Button
           onClick={addRow}
