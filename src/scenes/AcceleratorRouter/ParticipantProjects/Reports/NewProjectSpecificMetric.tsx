@@ -66,6 +66,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
     name: '',
     reference: '',
     type: 'Activity',
+    isPublishable: true,
   });
 
   const saveNewMetric = () => {

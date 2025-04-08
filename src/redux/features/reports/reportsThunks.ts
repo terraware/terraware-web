@@ -70,7 +70,7 @@ export const requestCreateReportConfig = createAsyncThunk(
 export const requestUpdateReportConfig = createAsyncThunk(
   'updateReportConfig',
   async (request: UpdateAcceleratorReportConfigRequest, { rejectWithValue }) => {
-    const response = await AcceleratorReportService.updateConfig(request);
+    const response = await AcceleratorReportService.updateConfig(request.config, request.projectId);
 
     if (response && response.requestSucceeded) {
       return response.data;

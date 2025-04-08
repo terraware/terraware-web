@@ -7,22 +7,30 @@ import { requestGetOneSpecies, requestUpdateSpecies } from './speciesAsyncThunks
 import { MergeOtherSpeciesRequestData, requestMergeOtherSpecies } from './speciesThunks';
 
 // Define a type for the slice state
-type Data = {
+export type SpeciesSliceData = {
   error?: string;
   species?: Species[];
+  organizationId?: number;
 };
 
 // Define the initial state
-const initialState: Data = {};
+const initialState: { [key: string]: StatusT<SpeciesSliceData> } & SpeciesSliceData = {};
 
 export const speciesSlice = createSlice({
   name: 'speciesSlice',
   initialState,
   reducers: {
-    setSpeciesAction: (state, action: PayloadAction<Data>) => {
-      const data: Data = action.payload;
+    setSpeciesAction: (state, action: PayloadAction<SpeciesSliceData>) => {
+      const data: SpeciesSliceData = action.payload;
       state.error = data.error;
       state.species = data.species;
+      state.organizationId = data.organizationId;
+      if (data.organizationId) {
+        state[data.organizationId.toString()] = {
+          status: 'success',
+          data,
+        };
+      }
     },
   },
 });

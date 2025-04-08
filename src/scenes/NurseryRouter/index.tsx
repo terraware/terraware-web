@@ -18,7 +18,7 @@ const NurseryRouter = () => {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
 
-  const species = useAppSelector(selectSpecies);
+  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
   const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
 
   const [plantingSubzoneNames, setPlantingSubzoneNames] = useState<Record<number, string>>({});
@@ -39,10 +39,10 @@ const NurseryRouter = () => {
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
-    if (!species) {
+    if (!speciesResponse?.data?.species) {
       reloadSpecies();
     }
-  }, [species, reloadSpecies]);
+  }, [speciesResponse?.data?.species, reloadSpecies]);
 
   useEffect(() => {
     const subzones: Record<number, string> = {};
@@ -62,7 +62,12 @@ const NurseryRouter = () => {
       <Route path={'/withdrawals'} element={<NurseryPlantingsAndWithdrawalsView reloadTracking={reloadTracking} />} />
       <Route
         path={'/withdrawals/:withdrawalId'}
-        element={<NurseryWithdrawalsDetailsView species={species || []} plantingSubzoneNames={plantingSubzoneNames} />}
+        element={
+          <NurseryWithdrawalsDetailsView
+            species={speciesResponse?.data?.species || []}
+            plantingSubzoneNames={plantingSubzoneNames}
+          />
+        }
       />
       <Route path={'/reassignment/:deliveryId'} element={<NurseryReassignmentView />} />
     </Routes>

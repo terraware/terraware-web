@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createCachedSelector } from 're-reselect';
 
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
+import { selectDefaultSpecies } from 'src/redux/features/species/speciesSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { RootState } from 'src/redux/rootReducer';
 import {
@@ -79,7 +79,7 @@ export const selectMergedPlantingSiteObservations = createCachedSelector(
   (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[]) =>
     selectPlantingSites(state),
   (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[]) =>
-    selectSpecies(state),
+    selectDefaultSpecies(state),
   (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[]) => defaultTimeZone,
 
   // here we have the responses from first three selectors

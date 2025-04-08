@@ -51,24 +51,29 @@ export default function ObservationsRouter(): JSX.Element {
   const plantingSitesError = useAppSelector(selectPlantingSitesError);
   // listen for data
   const observationsResults = useAppSelector(selectObservationsResults);
-  const species = useAppSelector(selectSpecies);
+  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
   const plantingSites = useAppSelector(selectPlantingSites);
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization.id !== -1 && !['pending', 'success'].includes(speciesResponse?.status || '')) {
       dispatch(requestSpecies(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
-    if (species !== undefined && plantingSites !== undefined && !dispatched && selectedOrganization.id !== -1) {
+    if (
+      speciesResponse?.data?.species !== undefined &&
+      plantingSites !== undefined &&
+      !dispatched &&
+      selectedOrganization.id !== -1
+    ) {
       setDispatched(true);
       dispatch(requestObservationsResults(selectedOrganization.id));
       dispatch(requestAdHocObservationsResults(selectedOrganization.id));
       dispatch(requestObservations(selectedOrganization.id));
       dispatch(requestObservations(selectedOrganization.id, true));
     }
-  }, [dispatch, selectedOrganization.id, species, plantingSites, dispatched]);
+  }, [dispatch, selectedOrganization.id, speciesResponse?.data?.species, plantingSites, dispatched]);
 
   useEffect(() => {
     if (observationsResultsError || speciesError || plantingSitesError) {
