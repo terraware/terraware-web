@@ -20,14 +20,14 @@ const textAreaStyles = { textarea: { height: '120px' } };
 const Achievement = ({
   achievement,
   setAchievement,
-  key,
+  keyString,
   includeBorder,
   editing,
   onRemove,
 }: {
   achievement: string;
   setAchievement: (achievement: string) => void;
-  key: string;
+  keyString: string;
   includeBorder: boolean;
   editing: boolean;
   onRemove: () => void;
@@ -43,10 +43,10 @@ const Achievement = ({
         marginBottom={1}
       >
         <Textfield
-          key={key}
+          key={keyString}
           type='textarea'
           value={achievement}
-          id={`achievement-${key}`}
+          id={`achievement-${keyString}`}
           label={''}
           display={!editing}
           styles={textAreaStyles}
@@ -67,7 +67,7 @@ const Achievement = ({
   );
 };
 
-const AchievementsBox = ({ report, projectId, reportId, reload }: ReportBoxProps) => {
+const AchievementsBox = ({ report, projectId, reportId, reload, isConsoleView }: ReportBoxProps) => {
   const { isAllowed } = useUser();
   const [editing, setEditing] = useState<boolean>(false);
   const [achievements, setAchievements] = useState<string[]>(report?.achievements || []);
@@ -77,6 +77,12 @@ const AchievementsBox = ({ report, projectId, reportId, reload }: ReportBoxProps
   const snackbar = useSnackbar();
 
   useEffect(() => setAchievements(report?.achievements || []), [report?.achievements]);
+
+  useEffect(() => {
+    if (achievements.length === 0) {
+      addRow();
+    }
+  }, [achievements]);
 
   useEffect(() => {
     if (updateReportResponse?.status === 'error') {
@@ -113,6 +119,10 @@ const AchievementsBox = ({ report, projectId, reportId, reload }: ReportBoxProps
     setAchievements(achievements.map((ach, i) => (index === i ? newAchievement : ach)));
   };
 
+  const addRow = () => {
+    setAchievements(achievements.concat(''));
+  };
+
   return (
     <EditableReportBox
       name={strings.ACHIEVEMENTS}
@@ -121,11 +131,13 @@ const AchievementsBox = ({ report, projectId, reportId, reload }: ReportBoxProps
       onEdit={() => setEditing(true)}
       onCancel={onCancel}
       onSave={onSave}
+      isConsoleView={isConsoleView}
     >
       {achievements.map((achievement, index) => (
         <Achievement
           achievement={achievement}
-          key={index.toString()}
+          key={index}
+          keyString={index.toString()}
           includeBorder={index < achievements.length - 1}
           editing={editing}
           onRemove={() => setAchievements(achievements.filter((_, i) => index !== i))}
@@ -134,7 +146,7 @@ const AchievementsBox = ({ report, projectId, reportId, reload }: ReportBoxProps
       ))}
       {editing && (
         <Button
-          onClick={() => setAchievements(achievements.concat(''))}
+          onClick={addRow}
           icon={'iconAdd'}
           type='productive'
           priority='ghost'

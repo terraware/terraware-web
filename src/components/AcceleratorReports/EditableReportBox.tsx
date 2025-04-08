@@ -6,7 +6,7 @@ import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
 
 export type EditableReportBoxProps = {
-  key?: string;
+  keyString?: string;
   name: string;
   description?: string;
   canEdit: boolean;
@@ -21,7 +21,7 @@ export type EditableReportBoxProps = {
 
 const EditableReportBox = ({
   editing,
-  key,
+  keyString,
   name,
   description,
   canEdit,
@@ -37,7 +37,7 @@ const EditableReportBox = ({
   return (
     <>
       <Box
-        key={key}
+        key={keyString}
         sx={{ scrollMarginTop: '50vh' }}
         borderBottom={includeBorder ? `1px solid ${theme.palette.TwClrBgTertiary}` : ''}
       >

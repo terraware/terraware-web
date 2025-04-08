@@ -5,4 +5,5 @@ export type ReportBoxProps = {
   projectId: string;
   reportId: string;
   reload: () => void;
+  isConsoleView?: boolean;
 };

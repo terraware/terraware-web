@@ -21,7 +21,7 @@ const textAreaStyles = { textarea: { height: '120px' } };
 const ChallengeMitigationPlan = ({
   challengeMitigation,
   setChallengeMitigation,
-  key,
+  keyString,
   includeBorder,
   editing,
   onRemove,
@@ -29,7 +29,7 @@ const ChallengeMitigationPlan = ({
 }: {
   challengeMitigation: ChallengeMitigation;
   setChallengeMitigation: (challengeMitigation: ChallengeMitigation) => void;
-  key: string;
+  keyString: string;
   includeBorder: boolean;
   editing: boolean;
   onRemove: () => void;
@@ -44,7 +44,6 @@ const ChallengeMitigationPlan = ({
   return (
     <Grid item xs={12} marginBottom={1}>
       <Box
-        key={key}
         sx={{ scrollMarginTop: '50vh' }}
         borderBottom={`1px solid ${theme.palette.TwClrBrdrSecondary}`}
         width={'100%'}
@@ -74,10 +73,10 @@ const ChallengeMitigationPlan = ({
         <Grid item xs={editing ? 5.75 : 6}>
           <Box paddingRight={theme.spacing(2)} marginBottom={1}>
             <Textfield
-              key={key}
+              key={keyString}
               type='textarea'
               value={challengeMitigation.challenge}
-              id={`challenge-${key}`}
+              id={`challenge-${keyString}`}
               label={''}
               display={!editing}
               styles={textAreaStyles}
@@ -93,10 +92,10 @@ const ChallengeMitigationPlan = ({
         <Grid item xs={editing ? 5.75 : 6}>
           <Box paddingRight={editing ? 0 : theme.spacing(2)} marginBottom={1}>
             <Textfield
-              key={key}
+              key={keyString}
               type='textarea'
               value={challengeMitigation.mitigationPlan}
-              id={`mitigation-${key}`}
+              id={`mitigation-${keyString}`}
               label={''}
               display={!editing}
               styles={textAreaStyles}
@@ -123,7 +122,7 @@ const ChallengeMitigationPlan = ({
   );
 };
 
-const ChallengesMitigationBox = ({ report, projectId, reportId, reload }: ReportBoxProps) => {
+const ChallengesMitigationBox = ({ report, projectId, reportId, reload, isConsoleView }: ReportBoxProps) => {
   const { isAllowed } = useUser();
   const [editing, setEditing] = useState<boolean>(false);
   const [challengeMitigations, setChallengeMitigations] = useState<ChallengeMitigation[]>(report?.challenges || []);
@@ -198,11 +197,13 @@ const ChallengesMitigationBox = ({ report, projectId, reportId, reload }: Report
       onEdit={() => setEditing(true)}
       onCancel={onCancel}
       onSave={onSave}
+      isConsoleView={isConsoleView}
     >
       {challengeMitigations?.map((challenge, index) => (
         <ChallengeMitigationPlan
           challengeMitigation={challenge}
-          key={index.toString()}
+          key={index}
+          keyString={index.toString()}
           includeBorder={index < challengeMitigations.length - 1}
           editing={editing}
           onRemove={() => setChallengeMitigations(challengeMitigations.filter((_, i) => index !== i))}

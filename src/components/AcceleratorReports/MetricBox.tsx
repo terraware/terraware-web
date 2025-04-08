@@ -260,7 +260,7 @@ const MetricBox = ({
         onCancel={handleCancel}
         onSave={onSave}
         editing={editing}
-        key={`metric-${index}`}
+        keyString={`metric-${index}`}
         isConsoleView={isConsoleView}
         description={metric?.description}
       >

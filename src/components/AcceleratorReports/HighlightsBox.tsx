@@ -15,7 +15,7 @@ import { ReportBoxProps } from './ReportBox';
 
 const textAreaStyles = { textarea: { height: '120px' } };
 
-const HighlightsBox = ({ report, projectId, reportId, reload }: ReportBoxProps) => {
+const HighlightsBox = ({ report, projectId, reportId, reload, isConsoleView }: ReportBoxProps) => {
   const { isAllowed } = useUser();
   const [editing, setEditing] = useState<boolean>(false);
   const [highlights, setHighlights] = useState<string | undefined>(report?.highlights);
@@ -66,6 +66,7 @@ const HighlightsBox = ({ report, projectId, reportId, reload }: ReportBoxProps) 
       onEdit={() => setEditing(true)}
       onCancel={onCancel}
       onSave={onSave}
+      isConsoleView={isConsoleView}
     >
       <Grid item xs={12}>
         <Textfield
