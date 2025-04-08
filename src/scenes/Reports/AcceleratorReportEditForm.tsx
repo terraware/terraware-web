@@ -4,6 +4,9 @@ import { useParams } from 'react-router-dom';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
+import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
+import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
+import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import MetricBox, { getMetricId, isReportSystemMetric } from 'src/components/AcceleratorReports/MetricBox';
 import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
@@ -118,6 +121,14 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
               </Typography>
             </Box>
           )}
+          <HighlightsBox
+            report={record}
+            projectId={projectId}
+            reportId={reportId}
+            reload={() => {}}
+            editing={true}
+            onChange={(value: any) => onChange('highlights', value)}
+          />
           {['system', 'project', 'standard'].map((type) => {
             const metrics =
               type === 'system'
@@ -140,6 +151,22 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
               />
             ));
           })}
+          <AchievementsBox
+            report={record}
+            projectId={projectId}
+            reportId={reportId}
+            reload={() => {}}
+            editing={true}
+            onChange={(value: any) => onChange('achievements', value)}
+          />
+          <ChallengesMitigationBox
+            report={record}
+            projectId={projectId}
+            reportId={reportId}
+            reload={() => {}}
+            editing={true}
+            onChange={(value: any) => onChange('challenges', value)}
+          />
         </Card>
       </Box>
     </WrappedPageForm>

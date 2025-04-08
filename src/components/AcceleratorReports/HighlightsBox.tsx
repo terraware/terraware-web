@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Grid } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
@@ -15,9 +15,10 @@ import { ReportBoxProps } from './ReportBox';
 
 const textAreaStyles = { textarea: { height: '120px' } };
 
-const HighlightsBox = ({ report, projectId, reportId, reload, isConsoleView }: ReportBoxProps) => {
+const HighlightsBox = (props: ReportBoxProps) => {
+  const { report, projectId, reportId, reload, isConsoleView, onChange, editing } = props;
   const { isAllowed } = useUser();
-  const [editing, setEditing] = useState<boolean>(false);
+  const [internalEditing, setInternalEditing] = useState<boolean>(false);
   const [highlights, setHighlights] = useState<string | undefined>(report?.highlights);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
@@ -27,11 +28,17 @@ const HighlightsBox = ({ report, projectId, reportId, reload, isConsoleView }: R
   useEffect(() => setHighlights(report?.highlights), [report?.highlights]);
 
   useEffect(() => {
+    if (highlights && highlights !== report?.highlights) {
+      onChange?.(highlights);
+    }
+  }, [highlights]);
+
+  useEffect(() => {
     if (updateReportResponse?.status === 'error') {
       snackbar.toastError();
     } else if (updateReportResponse?.status === 'success') {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
-      setEditing(false);
+      setInternalEditing(false);
       reload();
     }
   }, [updateReportResponse, snackbar]);
@@ -55,15 +62,17 @@ const HighlightsBox = ({ report, projectId, reportId, reload, isConsoleView }: R
 
   const onCancel = useCallback(() => {
     setHighlights(report?.highlights);
-    setEditing(false);
+    setInternalEditing(false);
   }, [highlights, report?.highlights]);
+
+  const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
 
   return (
     <EditableReportBox
       name={strings.HIGHLIGHTS}
       canEdit={isAllowed('UPDATE_REPORTS_SETTINGS')}
-      editing={editing}
-      onEdit={() => setEditing(true)}
+      editing={isEditing}
+      onEdit={() => setInternalEditing(true)}
       onCancel={onCancel}
       onSave={onSave}
       isConsoleView={isConsoleView}
@@ -74,7 +83,7 @@ const HighlightsBox = ({ report, projectId, reportId, reload, isConsoleView }: R
           value={highlights}
           id={'highlights'}
           label={''}
-          display={!editing}
+          display={!isEditing}
           styles={textAreaStyles}
           onChange={(value: any) => setHighlights(value)}
           preserveNewlines

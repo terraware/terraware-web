@@ -6,4 +6,6 @@ export type ReportBoxProps = {
   reportId: string;
   reload: () => void;
   isConsoleView?: boolean;
+  editing?: boolean;
+  onChange?: (value: any) => void;
 };

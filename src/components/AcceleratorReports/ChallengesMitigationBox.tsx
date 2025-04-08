@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Textfield } from '@terraware/web-components';
@@ -120,9 +120,10 @@ const ChallengeMitigationPlan = ({
   );
 };
 
-const ChallengesMitigationBox = ({ report, projectId, reportId, reload, isConsoleView }: ReportBoxProps) => {
+const ChallengesMitigationBox = (props: ReportBoxProps) => {
+  const { report, projectId, reportId, reload, isConsoleView, onChange, editing } = props;
   const { isAllowed } = useUser();
-  const [editing, setEditing] = useState<boolean>(false);
+  const [internalEditing, setInternalEditing] = useState<boolean>(false);
   const [challengeMitigations, setChallengeMitigations] = useState<ChallengeMitigation[]>(report?.challenges || []);
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const dispatch = useAppDispatch();
@@ -138,6 +139,9 @@ const ChallengesMitigationBox = ({ report, projectId, reportId, reload, isConsol
     if (challengeMitigations.length === 0) {
       addRow();
     }
+    if (challengeMitigations && JSON.stringify(challengeMitigations) !== JSON.stringify(report?.challenges)) {
+      onChange?.(challengeMitigations);
+    }
   }, [challengeMitigations]);
 
   useEffect(() => {
@@ -145,7 +149,7 @@ const ChallengesMitigationBox = ({ report, projectId, reportId, reload, isConsol
       snackbar.toastError();
     } else if (updateReportResponse?.status === 'success') {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
-      setEditing(false);
+      setInternalEditing(false);
       reload();
     }
   }, [updateReportResponse, snackbar]);
@@ -174,7 +178,7 @@ const ChallengesMitigationBox = ({ report, projectId, reportId, reload, isConsol
   }, [dispatch, projectId, reportId, challengeMitigations, report]);
 
   const onCancel = useCallback(() => {
-    setEditing(false);
+    setInternalEditing(false);
     setChallengeMitigations(report?.challenges || []);
   }, [report?.challenges]);
 
@@ -186,13 +190,15 @@ const ChallengesMitigationBox = ({ report, projectId, reportId, reload, isConsol
     setChallengeMitigations(challengeMitigations.map((chal, i) => (index === i ? newChal : chal)));
   };
 
+  const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
+
   return (
     <EditableReportBox
       name={''}
       includeBorder={false}
       canEdit={isAllowed('UPDATE_REPORTS_SETTINGS')}
-      editing={editing}
-      onEdit={() => setEditing(true)}
+      editing={isEditing}
+      onEdit={() => setInternalEditing(true)}
       onCancel={onCancel}
       onSave={onSave}
       isConsoleView={isConsoleView}
@@ -203,13 +209,13 @@ const ChallengesMitigationBox = ({ report, projectId, reportId, reload, isConsol
           key={`challenge-mitigation-${index}`}
           index={index}
           includeBorder={index < challengeMitigations.length - 1}
-          editing={editing}
+          editing={isEditing}
           onRemove={() => setChallengeMitigations(challengeMitigations.filter((_, i) => index !== i))}
           setChallengeMitigation={(chal: ChallengeMitigation) => updateChallenge(chal, index)}
           validateFields={validateFields}
         />
       ))}
-      {editing && (
+      {isEditing && (
         <Button
           onClick={addRow}
           icon={'iconAdd'}
