@@ -240,7 +240,13 @@ const ReportView = () => {
                 </Typography>
               </Box>
             )}
-            <HighlightsBox highlights={selectedReport?.highlights} />
+            <HighlightsBox
+              report={selectedReport}
+              projectId={projectId}
+              reportId={reportId}
+              reload={reload}
+              isConsoleView={true}
+            />
             {['system', 'project', 'standard'].map((type) => {
               const metrics =
                 type === 'system'
@@ -252,7 +258,6 @@ const ReportView = () => {
               return metrics?.map((metric, index) => (
                 <MetricBox
                   editingId={editingId}
-                  index={index}
                   isConsoleView
                   key={`${type}-${index}`}
                   metric={metric}
@@ -264,8 +269,20 @@ const ReportView = () => {
                 />
               ));
             })}
-            <AchievementsBox achievements={selectedReport?.achievements} />
-            <ChallengesMitigationBox challenges={selectedReport?.challenges} />
+            <AchievementsBox
+              report={selectedReport}
+              projectId={projectId}
+              reportId={reportId}
+              reload={reload}
+              isConsoleView={true}
+            />
+            <ChallengesMitigationBox
+              report={selectedReport}
+              projectId={projectId}
+              reportId={reportId}
+              reload={reload}
+              isConsoleView={true}
+            />
           </Card>
         </Box>
       </Page>

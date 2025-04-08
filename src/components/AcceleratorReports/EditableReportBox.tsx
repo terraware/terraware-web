@@ -6,7 +6,6 @@ import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
 
 export type EditableReportBoxProps = {
-  key?: string;
   name: string;
   description?: string;
   canEdit: boolean;
@@ -21,7 +20,6 @@ export type EditableReportBoxProps = {
 
 const EditableReportBox = ({
   editing,
-  key,
   name,
   description,
   canEdit,
@@ -37,7 +35,6 @@ const EditableReportBox = ({
   return (
     <>
       <Box
-        key={key}
         sx={{ scrollMarginTop: '50vh' }}
         borderBottom={includeBorder ? `1px solid ${theme.palette.TwClrBgTertiary}` : ''}
       >
@@ -53,6 +50,7 @@ const EditableReportBox = ({
                     : theme.palette.TwClrBgHover,
               '.actions': {
                 display: isConsoleView && canEdit ? 'block' : 'none',
+                marginTop: name ? 0 : '20px',
               },
             },
             background: isConsoleView && editing ? theme.palette.TwClrBgActive : 'none',
@@ -90,6 +88,8 @@ const EditableReportBox = ({
                 display: 'flex',
                 flexGrow: 1,
                 justifyContent: 'flex-end',
+                position: 'relative',
+                height: 0,
               }}
             >
               {!editing && (

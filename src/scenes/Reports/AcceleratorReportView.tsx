@@ -159,7 +159,7 @@ const AcceleratorReportView = () => {
               </Typography>
             </Box>
           )}
-          <HighlightsBox highlights={report?.highlights} />
+          <HighlightsBox report={report} projectId={projectId} reportId={reportId} reload={reload} />
           {['system', 'project', 'standard'].map((type) => {
             const metrics =
               type === 'system'
@@ -170,7 +170,6 @@ const AcceleratorReportView = () => {
 
             return metrics?.map((metric, index) => (
               <MetricBox
-                index={index}
                 key={`${type}-${index}`}
                 metric={metric}
                 projectId={projectId}
@@ -181,8 +180,8 @@ const AcceleratorReportView = () => {
               />
             ));
           })}
-          <AchievementsBox achievements={report?.achievements} />
-          <ChallengesMitigationBox challenges={report?.challenges} />
+          <AchievementsBox report={report} projectId={projectId} reportId={reportId} reload={reload} />
+          <ChallengesMitigationBox report={report} projectId={projectId} reportId={reportId} reload={reload} />
         </Card>
       </Box>
     </Page>

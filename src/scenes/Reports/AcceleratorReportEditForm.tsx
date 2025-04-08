@@ -129,7 +129,6 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
             return metrics?.map((metric, index) => (
               <MetricBox
                 editingId={getMetricId(metric, type as MetricType)}
-                index={index}
                 key={`${type}-${index}`}
                 metric={metric}
                 onChangeMetric={onChangeMetric}

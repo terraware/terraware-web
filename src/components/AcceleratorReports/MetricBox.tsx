@@ -64,7 +64,6 @@ const textAreaStyles = { textarea: { height: '120px' } };
 
 const MetricBox = ({
   editingId,
-  index,
   setEditingId,
   metric,
   type,
@@ -76,7 +75,6 @@ const MetricBox = ({
 }: {
   editingId?: string;
   hideStatusBadge?: boolean;
-  index: number;
   projectId: string;
   reload: () => void;
   setEditingId: (id: string | undefined) => void;
@@ -260,7 +258,6 @@ const MetricBox = ({
         onCancel={handleCancel}
         onSave={onSave}
         editing={editing}
-        key={`metric-${index}`}
         isConsoleView={isConsoleView}
         description={metric?.description}
       >
