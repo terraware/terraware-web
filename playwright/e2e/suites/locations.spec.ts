@@ -125,8 +125,6 @@ export default function LocationTests() {
     await page.locator('#create-org-question-website').getByRole('textbox').fill('fakeuniversity.edu');
     await page.getByRole('button', { name: 'Save' }).click();
     await expect(page.getByRole('heading', { name: `You have created ${newOrgName}!` })).toBeVisible();
-    await page.getByRole('button', { name: 'Terraformation (staging)' }).click();
-    await page.getByRole('menuitem', { name: newOrgName }).click();
     await page.getByRole('button', { name: 'Organization' }).click();
     await expect(page.getByText(`Organization Name${newOrgName}`)).toBeVisible();
     await expect(page.getByText('DescriptionThis is my new')).toBeVisible();
