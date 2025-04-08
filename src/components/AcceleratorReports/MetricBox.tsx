@@ -294,7 +294,7 @@ const MetricBox = ({
                     }}
                   />
                 )}
-                {!!editing && (
+                {!!editing && (isConsoleView || type !== 'system') && (
                   <Button
                     icon='iconEdit'
                     onClick={() => setProgressModalOpened(true)}
