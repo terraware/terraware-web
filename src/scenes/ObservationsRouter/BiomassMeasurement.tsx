@@ -1,17 +1,20 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { Typography, useTheme } from '@mui/material';
+import sanitize from 'sanitize-filename';
 
 import ListMapView from 'src/components/ListMapView';
 import Card from 'src/components/common/Card';
 import { View } from 'src/components/common/ListMapSelector';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
+import { useOrganization } from 'src/providers';
 import {
   searchAdHocObservations,
   selectAdHocObservationsResults,
 } from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
+import { ObservationsService } from 'src/services';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -26,6 +29,7 @@ export type BiomassMeasurementProps = SearchProps & {
 
 export default function BiomassMeasurement(props: BiomassMeasurementProps): JSX.Element {
   const theme = useTheme();
+  const organization = useOrganization();
   const [view, setView] = useState<View>();
   const defaultTimeZone = useDefaultTimeZone();
   const { selectedPlantingSite } = props;
@@ -60,6 +64,25 @@ export default function BiomassMeasurement(props: BiomassMeasurementProps): JSX.
     });
   }, [allAdHocObservationsResults, selectedPlantingSite]);
 
+  const exportObservationsList = useCallback(async () => {
+    const content = await ObservationsService.exportBiomassObservationsCsv(
+      organization.selectedOrganization.id,
+      selectedPlantingSite?.id
+    );
+
+    if (content !== null) {
+      const siteName = selectedPlantingSite?.name ?? organization.selectedOrganization.name;
+      const fileName = sanitize(`${siteName}-${strings.BIOMASS_MONITORING}.csv`);
+
+      const encodedUri = `data:text/csv;charset=utf-8,` + encodeURIComponent(content);
+
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', fileName);
+      link.click();
+    }
+  }, [organization, selectedPlantingSite]);
+
   return (
     <Card>
       <Typography
@@ -88,7 +111,7 @@ export default function BiomassMeasurement(props: BiomassMeasurementProps): JSX.
             )
           }
           onView={setView}
-          search={<Search {...searchProps} filtersProps={undefined} />}
+          search={<Search {...searchProps} filtersProps={undefined} onExport={exportObservationsList} />}
           style={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}
         />
       ) : (

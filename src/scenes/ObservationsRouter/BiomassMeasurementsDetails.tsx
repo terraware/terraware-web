@@ -1,19 +1,22 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
+import sanitize from 'sanitize-filename';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { selectAdHocObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import { getConditionString } from 'src/redux/features/observations/utils';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
+import ObservationsService from 'src/services/ObservationsService';
 import strings from 'src/strings';
 import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -138,8 +141,65 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
     (photo) => photo.type === 'Plot' && photo.position !== undefined && photo.position !== 'SouthwestCorner'
   );
 
+  const downloadCsv = async (
+    fileNameSuffix: string,
+    fetchContent: (observationId: number) => Promise<string | null>
+  ) => {
+    if (observation) {
+      const content = await fetchContent(observation.observationId);
+
+      if (content != null && plantingSite != null) {
+        const fileName = sanitize(`${plantingSite.name}-${observation?.startDate}-${fileNameSuffix}.csv`);
+
+        const encodedUri = `data:text/csv;charset=utf-8,` + encodeURIComponent(content);
+
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', fileName);
+        link.click();
+      }
+    }
+  };
+
+  const exportDetailsCsv = useCallback(async () => {
+    await downloadCsv(strings.BIOMASS_MEASUREMENTS, ObservationsService.exportBiomassDetailsCsv);
+  }, [observation, plantingSite]);
+
+  const exportSpeciesCsv = useCallback(async () => {
+    await downloadCsv(strings.SPECIES, ObservationsService.exportBiomassSpeciesCsv);
+  }, [observation, plantingSite]);
+
+  const exportTreesShrubsCsv = useCallback(async () => {
+    await downloadCsv(strings.TREES_AND_SHRUBS, ObservationsService.exportBiomassTreesShrubsCsv);
+  }, [observation, plantingSite]);
+
   return (
-    <Page crumbs={crumbs} title={title} titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}>
+    <Page
+      crumbs={crumbs}
+      title={title}
+      titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}
+      rightComponent={
+        <OptionsMenu
+          optionItems={[
+            {
+              label: strings.EXPORT_BIOMASS_MONITORING_DETAILS_CSV,
+              value: 'exportDetails',
+              onClick: exportDetailsCsv,
+            },
+            {
+              label: strings.EXPORT_SPECIES_CSV,
+              value: 'exportSpecies',
+              onClick: exportSpeciesCsv,
+            },
+            {
+              label: strings.EXPORT_TREES_AND_SHRUBS_CSV,
+              value: 'exportTreesAndShrubs',
+              onClick: exportTreesShrubsCsv,
+            },
+          ]}
+        />
+      }
+    >
       <Grid container>
         <Grid item xs={12}>
           <Card flushMobile>

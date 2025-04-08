@@ -81,6 +81,128 @@ const exportCsv = async (observationId: number): Promise<any> => {
   });
 };
 
+const exportBiomassObservationsCsv = async (organizationId: number, plantingSiteId?: number): Promise<any> => {
+  let fieldName: string;
+  let fieldValue: string;
+  if (plantingSiteId && plantingSiteId > 0) {
+    fieldName = 'plantingSite_id';
+    fieldValue = `${plantingSiteId}`;
+  } else {
+    fieldName = 'plantingSite_organization_id';
+    fieldValue = `${organizationId}`;
+  }
+
+  return SearchService.searchCsv({
+    prefix: 'plantingSites.observations',
+    fields: [
+      'observationPlots_monitoringPlot_plotNumber',
+      'observationPlots_notes',
+      'plantingSite_name',
+      'startDate',
+      'observationPlots_biomassDetails_numPlants',
+      'observationPlots_biomassDetails_numSpecies',
+    ],
+    sortOrder: [{ field: 'observationPlots_monitoringPlot_plotNumber', direction: 'Descending' }],
+    search: {
+      operation: 'and',
+      children: [
+        {
+          operation: 'field',
+          type: 'Exact',
+          field: 'type(raw)',
+          values: ['Biomass Measurements'],
+        },
+        {
+          operation: 'field',
+          type: 'Exact',
+          field: fieldName,
+          values: [fieldValue],
+        },
+      ],
+    },
+  });
+};
+
+const exportBiomassDetailsCsv = async (observationId: number): Promise<any> => {
+  return SearchService.searchCsv({
+    prefix: 'plantingSites.observations',
+    fields: [
+      'observationPlots_monitoringPlot_plotNumber',
+      'observationPlots_notes',
+      'plantingSite_name',
+      'observationPlots_completedTime',
+      'observationPlots_monitoringPlot_southwestLatitude',
+      'observationPlots_monitoringPlot_southwestLongitude',
+      'observationPlots_monitoringPlot_northwestLatitude',
+      'observationPlots_monitoringPlot_northwestLongitude',
+      'observationPlots_monitoringPlot_southeastLatitude',
+      'observationPlots_monitoringPlot_southeastLongitude',
+      'observationPlots_monitoringPlot_northeastLatitude',
+      'observationPlots_monitoringPlot_northeastLongitude',
+      'observationPlots_biomassDetails_description',
+      'observationPlots_biomassDetails_forestType',
+      'observationPlots_biomassDetails_herbaceousCoverPercent',
+      'observationPlots_biomassDetails_ph',
+      'observationPlots_biomassDetails_smallTreesCountLow',
+      'observationPlots_biomassDetails_smallTreesCountHigh',
+      'observationPlots_biomassDetails_salinity',
+      'observationPlots_biomassDetails_soilAssessment',
+      'observationPlots_biomassDetails_tide',
+      'observationPlots_biomassDetails_tideTime',
+      'observationPlots_biomassDetails_waterDepth',
+      'observationPlots_biomassDetails_numPlants',
+      'observationPlots_biomassDetails_numSpecies',
+      'observationPlots.conditions_condition',
+    ],
+    sortOrder: [{ field: 'observationPlots_monitoringPlot_plotNumber' }],
+    search: {
+      operation: 'field',
+      type: 'Exact',
+      field: 'id',
+      values: [`${observationId}`],
+    },
+  });
+};
+
+const exportBiomassSpeciesCsv = async (observationId: number): Promise<any> => {
+  return SearchService.searchCsv({
+    prefix: 'plantingSites.observations.observationPlots.biomassDetails.species',
+    fields: ['name', 'quadratSpecies_position', 'quadratSpecies_abundancePercent', 'isInvasive', 'isThreatened'],
+    sortOrder: [{ field: 'name' }, { field: 'quadratSpecies_position' }],
+    search: {
+      operation: 'and',
+      children: [{ operation: 'field', type: 'Exact', field: 'observation_id', values: [`${observationId}`] }],
+    },
+  });
+};
+
+const exportBiomassTreesShrubsCsv = async (observationId: number): Promise<any> => {
+  return SearchService.searchCsv({
+    prefix: 'plantingSites.observations.observationPlots.recordedTrees',
+    fields: [
+      'treeNumber',
+      'trunkNumber',
+      'biomassSpecies_name',
+      'growthForm',
+      'diameterAtBreastHeight',
+      'pointOfMeasurement',
+      'height',
+      'shrubDiameter',
+      'biomassSpecies_isInvasive',
+      'biomassSpecies_isThreatened',
+      'isDead',
+      'description',
+    ],
+    sortOrder: [{ field: 'biomassSpecies_name' }, { field: 'treeNumber' }, { field: 'trunkNumber' }],
+    search: {
+      operation: 'field',
+      type: 'Exact',
+      field: 'observation_id',
+      values: [`${observationId}`],
+    },
+  });
+};
+
 const exportGpx = async (observationId: number): Promise<any> => {
   const headers = {
     accept: 'application/gpx+xml',
@@ -237,6 +359,10 @@ const listAdHocObservationsResults = async (
  * Exported functions
  */
 const ObservationsService = {
+  exportBiomassDetailsCsv,
+  exportBiomassObservationsCsv,
+  exportBiomassSpeciesCsv,
+  exportBiomassTreesShrubsCsv,
   exportCsv,
   exportGpx,
   listObservationsResults,

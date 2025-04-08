@@ -54,6 +54,7 @@ export default function BiomassMeasurementList({ adHocObservationsResults }: Bio
       columns={columns}
       rows={adHocObservationsResults || []}
       orderBy='startDate'
+      showTopBar={true}
       Renderer={BiomassMeasurementRenderer}
     />
   );
