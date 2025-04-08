@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/86</span>
+                <span class='fraction'>0/83</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/70</span>
+                <span class='fraction'>0/68</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/81</span>
+                <span class='fraction'>0/78</span>
             </div>
         
             
@@ -254,26 +254,7 @@
 <a name='L189'></a><a href='#L189'>189</a>
 <a name='L190'></a><a href='#L190'>190</a>
 <a name='L191'></a><a href='#L191'>191</a>
-<a name='L192'></a><a href='#L192'>192</a>
-<a name='L193'></a><a href='#L193'>193</a>
-<a name='L194'></a><a href='#L194'>194</a>
-<a name='L195'></a><a href='#L195'>195</a>
-<a name='L196'></a><a href='#L196'>196</a>
-<a name='L197'></a><a href='#L197'>197</a>
-<a name='L198'></a><a href='#L198'>198</a>
-<a name='L199'></a><a href='#L199'>199</a>
-<a name='L200'></a><a href='#L200'>200</a>
-<a name='L201'></a><a href='#L201'>201</a>
-<a name='L202'></a><a href='#L202'>202</a>
-<a name='L203'></a><a href='#L203'>203</a>
-<a name='L204'></a><a href='#L204'>204</a>
-<a name='L205'></a><a href='#L205'>205</a>
-<a name='L206'></a><a href='#L206'>206</a>
-<a name='L207'></a><a href='#L207'>207</a>
-<a name='L208'></a><a href='#L208'>208</a>
-<a name='L209'></a><a href='#L209'>209</a>
-<a name='L210'></a><a href='#L210'>210</a>
-<a name='L211'></a><a href='#L211'>211</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L192'></a><a href='#L192'>192</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -302,10 +283,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -364,14 +341,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -380,14 +350,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -492,10 +454,8 @@ import { store } from 'src/redux/store';
 import { OrganizationService, PreferencesService } from 'src/services';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useEnvironment from 'src/utils/useEnvironment';
 import useQuery from 'src/utils/useQuery';
-import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 &nbsp;
 import { PreferencesType, ProvidedOrganizationData } from './DataTypes';
@@ -514,8 +474,6 @@ enum APIRequestStatus {
 }
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >OrganizationProvider(</span>{ children }: OrganizationProviderProps): JSX.Element {
-  const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-  const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const [bootstrapped, setBootstrapped] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [selectedOrganization, setSelectedOrganization] = <span class="cstat-no" title="statement not covered" >useState&lt;Organization&gt;();</span>
   const [orgPreferences, setOrgPreferences] = <span class="cstat-no" title="statement not covered" >useState&lt;PreferencesType&gt;({});</span>
@@ -573,16 +531,9 @@ export default function <span class="fstat-no" title="function not covered" >Org
 <span class="cstat-no" title="statement not covered" >    getOrgPreferences();</span>
   }, [selectedOrganization]);
 &nbsp;
-  const redirectAndNotify = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (o</span>rganization: Organization) =&gt; {
-<span class="cstat-no" title="statement not covered" >      navigate({ pathname: APP_PATHS.HOME });</span>
-<span class="cstat-no" title="statement not covered" >      snackbar.pageSuccess(</span>
-        isDesktop ? strings.ORGANIZATION_CREATED_MSG_DESKTOP : strings.ORGANIZATION_CREATED_MSG,
-        strings.formatString(strings.ORGANIZATION_CREATED_TITLE, organization.name)
-      );
-    },
-    [snackbar, isDesktop]
-  );
+  const redirectAndNotify = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(o</span>rganization: Organization) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    navigate({ pathname: APP_PATHS.HOME, search: `organizationId=${organization.id}&amp;newOrg=true` });</span>
+  };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    reloadOrganizations();</span>
@@ -599,15 +550,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
       orgPreferenceForId,
       reloadOrgPreferences,
     }));
-  }, [
-    redirectAndNotify,
-    selectedOrganization,
-    organizations,
-    orgPreferences,
-    bootstrapped,
-    orgPreferenceForId,
-    reloadOrgPreferences,
-  ]);
+  }, [selectedOrganization, organizations, orgPreferences, bootstrapped, orgPreferenceForId, reloadOrgPreferences]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    reloadOrgPreferences();</span>
@@ -700,7 +643,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-08T22:34:29.739Z
+                at 2025-04-08T22:58:49.386Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
