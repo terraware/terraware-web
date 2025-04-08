@@ -258,7 +258,6 @@ const ReportView = () => {
               return metrics?.map((metric, index) => (
                 <MetricBox
                   editingId={editingId}
-                  index={index}
                   isConsoleView
                   key={`${type}-${index}`}
                   metric={metric}

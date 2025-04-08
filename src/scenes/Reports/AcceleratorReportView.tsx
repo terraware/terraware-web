@@ -170,7 +170,6 @@ const AcceleratorReportView = () => {
 
             return metrics?.map((metric, index) => (
               <MetricBox
-                index={index}
                 key={`${type}-${index}`}
                 metric={metric}
                 projectId={projectId}

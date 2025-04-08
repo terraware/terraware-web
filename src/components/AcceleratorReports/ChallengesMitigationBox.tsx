@@ -21,7 +21,7 @@ const textAreaStyles = { textarea: { height: '120px' } };
 const ChallengeMitigationPlan = ({
   challengeMitigation,
   setChallengeMitigation,
-  keyString,
+  index,
   includeBorder,
   editing,
   onRemove,
@@ -29,7 +29,7 @@ const ChallengeMitigationPlan = ({
 }: {
   challengeMitigation: ChallengeMitigation;
   setChallengeMitigation: (challengeMitigation: ChallengeMitigation) => void;
-  keyString: string;
+  index: number;
   includeBorder: boolean;
   editing: boolean;
   onRemove: () => void;
@@ -73,10 +73,9 @@ const ChallengeMitigationPlan = ({
         <Grid item xs={editing ? 5.75 : 6}>
           <Box paddingRight={theme.spacing(2)} marginBottom={1}>
             <Textfield
-              key={keyString}
               type='textarea'
               value={challengeMitigation.challenge}
-              id={`challenge-${keyString}`}
+              id={`challenge-${index}`}
               label={''}
               display={!editing}
               styles={textAreaStyles}
@@ -92,10 +91,9 @@ const ChallengeMitigationPlan = ({
         <Grid item xs={editing ? 5.75 : 6}>
           <Box paddingRight={editing ? 0 : theme.spacing(2)} marginBottom={1}>
             <Textfield
-              key={keyString}
               type='textarea'
               value={challengeMitigation.mitigationPlan}
-              id={`mitigation-${keyString}`}
+              id={`mitigation-${index}`}
               label={''}
               display={!editing}
               styles={textAreaStyles}
@@ -202,8 +200,8 @@ const ChallengesMitigationBox = ({ report, projectId, reportId, reload, isConsol
       {challengeMitigations?.map((challenge, index) => (
         <ChallengeMitigationPlan
           challengeMitigation={challenge}
-          key={index}
-          keyString={index.toString()}
+          key={`challenge-mitigation-${index}`}
+          index={index}
           includeBorder={index < challengeMitigations.length - 1}
           editing={editing}
           onRemove={() => setChallengeMitigations(challengeMitigations.filter((_, i) => index !== i))}

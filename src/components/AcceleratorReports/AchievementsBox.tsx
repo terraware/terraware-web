@@ -20,14 +20,14 @@ const textAreaStyles = { textarea: { height: '120px' } };
 const Achievement = ({
   achievement,
   setAchievement,
-  keyString,
+  index,
   includeBorder,
   editing,
   onRemove,
 }: {
   achievement: string;
   setAchievement: (achievement: string) => void;
-  keyString: string;
+  index: number;
   includeBorder: boolean;
   editing: boolean;
   onRemove: () => void;
@@ -43,10 +43,9 @@ const Achievement = ({
         marginBottom={1}
       >
         <Textfield
-          key={keyString}
           type='textarea'
           value={achievement}
-          id={`achievement-${keyString}`}
+          id={`achievement-${index}`}
           label={''}
           display={!editing}
           styles={textAreaStyles}
@@ -136,8 +135,8 @@ const AchievementsBox = ({ report, projectId, reportId, reload, isConsoleView }:
       {achievements.map((achievement, index) => (
         <Achievement
           achievement={achievement}
-          key={index}
-          keyString={index.toString()}
+          key={`achievement-${index}`}
+          index={index}
           includeBorder={index < achievements.length - 1}
           editing={editing}
           onRemove={() => setAchievements(achievements.filter((_, i) => index !== i))}
