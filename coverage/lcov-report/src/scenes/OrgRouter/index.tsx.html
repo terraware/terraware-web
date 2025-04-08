@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/45</span>
+                <span class='fraction'>0/49</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/54</span>
+                <span class='fraction'>0/55</span>
             </div>
         
             
@@ -338,7 +338,10 @@
 <a name='L273'></a><a href='#L273'>273</a>
 <a name='L274'></a><a href='#L274'>274</a>
 <a name='L275'></a><a href='#L275'>275</a>
-<a name='L276'></a><a href='#L276'>276</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L276'></a><a href='#L276'>276</a>
+<a name='L277'></a><a href='#L277'>277</a>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -483,6 +486,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -679,7 +685,7 @@ const OrgRouter = <span class="cstat-no" title="statement not covered" ><span cl
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
-  const species = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSpecies);</span>
+  const speciesResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSpecies(selectedOrganization.id));</span>
   const hasObservationsResults: boolean = <span class="cstat-no" title="statement not covered" >useAppSelector(selectHasObservationsResults);</span>
   const plantingSites: PlantingSite[] | undefined = <span class="cstat-no" title="statement not covered" >useAppSelector(selectPlantingSites);</span>
   const projects: Project[] | undefined = <span class="cstat-no" title="statement not covered" >useAppSelector(selectProjects);</span>
@@ -712,7 +718,7 @@ const OrgRouter = <span class="cstat-no" title="statement not covered" ><span cl
   const [withdrawalCreated, setWithdrawalCreated] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
 &nbsp;
   const reloadSpecies = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (selectedOrganization.id !== -1) {</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization.id !== -1 &amp;&amp; !['pending', 'success'].includes(speciesResponse?.status || '')) {</span>
 <span class="cstat-no" title="statement not covered" >      void dispatch(requestSpecies(selectedOrganization.id));</span>
     }
   }, [dispatch, selectedOrganization.id]);
@@ -757,7 +763,10 @@ const OrgRouter = <span class="cstat-no" title="statement not covered" ><span cl
 <span class="cstat-no" title="statement not covered" >    setDefaults();</span>
   }, [setDefaults]);
 &nbsp;
-  const selectedOrgHasSpecies = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span>: boolean =&gt; <span class="cstat-no" title="statement not covered" >(species || []).length &gt; 0,</span> [species]);</span>
+  const selectedOrgHasSpecies = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    ()</span>: boolean =&gt; <span class="cstat-no" title="statement not covered" >(speciesResponse?.data?.species || []).length &gt; 0,</span>
+    [speciesResponse?.data?.species]
+  );
 &nbsp;
   const selectedOrgHasSeedBanks = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    ()</span>: boolean =&gt; <span class="cstat-no" title="statement not covered" >selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank'),</span>
@@ -895,7 +904,7 @@ export default OrgRouter;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-07T19:09:34.115Z
+                at 2025-04-08T18:06:03.613Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

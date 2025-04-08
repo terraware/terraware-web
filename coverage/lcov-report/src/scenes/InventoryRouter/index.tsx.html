@@ -132,7 +132,13 @@
 <a name='L67'></a><a href='#L67'>67</a>
 <a name='L68'></a><a href='#L68'>68</a>
 <a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -184,6 +190,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -224,7 +236,7 @@ const InventoryRouter = <span class="cstat-no" title="statement not covered" ><s
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
 &nbsp;
-  const species = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSpecies);</span>
+  const speciesResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSpecies(selectedOrganization.id));</span>
 &nbsp;
   const reloadSpecies = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (selectedOrganization.id !== -1) {</span>
@@ -233,10 +245,10 @@ const InventoryRouter = <span class="cstat-no" title="statement not covered" ><s
   }, [dispatch, selectedOrganization.id]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!species) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!speciesResponse?.data?.species) {</span>
 <span class="cstat-no" title="statement not covered" >      reloadSpecies();</span>
     }
-  }, [species, reloadSpecies]);
+  }, [speciesResponse?.data?.species, reloadSpecies]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Routes&gt;
@@ -245,7 +257,7 @@ const InventoryRouter = <span class="cstat-no" title="statement not covered" ><s
         element={
           &lt;InventoryV2View
             hasNurseries={selectedOrgHasFacilityType(selectedOrganization, 'Nursery')}
-            hasSpecies={(species || []).length &gt; 0}
+            hasSpecies={(speciesResponse?.data?.species || []).length &gt; 0}
           /&gt;
         }
       /&gt;
@@ -254,17 +266,23 @@ const InventoryRouter = <span class="cstat-no" title="statement not covered" ><s
         path={'/withdraw'}
         element={&lt;SpeciesBulkWithdrawView withdrawalCreatedCallback={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setWithdrawalCreated(true)}</span> /&gt;}
       /&gt;
-      &lt;Route path={'/batch/:batchId'} element={&lt;InventoryBatchView origin='Batches' species={species || []} /&gt;} /&gt;
+      &lt;Route
+        path={'/batch/:batchId'}
+        element={&lt;InventoryBatchView origin='Batches' species={speciesResponse?.data?.species || []} /&gt;}
+      /&gt;
       &lt;Route
         path={'/nursery/:nurseryId/batch/:batchId'}
-        element={&lt;InventoryBatchView origin='Nursery' species={species || []} /&gt;}
+        element={&lt;InventoryBatchView origin='Nursery' species={speciesResponse?.data?.species || []} /&gt;}
       /&gt;
       &lt;Route
         path={'/species/:speciesId/batch/:batchId'}
-        element={&lt;InventoryBatchView origin='Species' species={species || []} /&gt;}
+        element={&lt;InventoryBatchView origin='Species' species={speciesResponse?.data?.species || []} /&gt;}
       /&gt;
       &lt;Route path={'/nursery/:nurseryId'} element={&lt;InventoryForNurseryView /&gt;} /&gt;
-      &lt;Route path={'/:speciesId'} element={&lt;InventoryForSpeciesView species={species || []} /&gt;} /&gt;
+      &lt;Route
+        path={'/:speciesId'}
+        element={&lt;InventoryForSpeciesView species={speciesResponse?.data?.species || []} /&gt;}
+      /&gt;
     &lt;/Routes&gt;
   );
 };
@@ -277,7 +295,7 @@ export default InventoryRouter;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-07T19:09:34.115Z
+                at 2025-04-08T18:06:03.613Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
