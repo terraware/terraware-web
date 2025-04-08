@@ -101,7 +101,7 @@ export default function SmallDeviceUserMenu({
   const selectOrganization = (newlySelectedOrg: Organization) => {
     setSelectedOrganization((currentlySelectedOrg: Organization | undefined) => {
       if (newlySelectedOrg.id !== currentlySelectedOrg?.id) {
-        navigate({ pathname: APP_PATHS.HOME });
+        navigate({ pathname: APP_PATHS.HOME, search: `organizationId=${newlySelectedOrg.id}` });
       }
       return newlySelectedOrg;
     });
