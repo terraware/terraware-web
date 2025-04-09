@@ -21,7 +21,7 @@ import { isManagerOrHigher, isMember } from './organization';
 /**
  * We split the permissions up loosely by the entity that the user is being authorized to interact with or view
  */
-type PermissionAcceleratorReports = 'UPDATE_REPORTS_SETTINGS' | 'EDIT_REPORTS';
+type PermissionAcceleratorReports = 'UPDATE_REPORTS_SETTINGS' | 'EDIT_REPORTS' | 'READ_REPORTS';
 type PermissionApplication =
   | 'READ_ALL_APPLICATIONS'
   | 'UPDATE_APPLICATION_INTERNAL_COMMENTS'
@@ -159,6 +159,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   READ_GLOBAL_ROLES: AcceleratorAdminPlus,
   READ_PARTICIPANTS: TFExpertPlus,
   READ_PARTICIPANT_PROJECT: ReadOnlyPlus,
+  READ_REPORTS: AcceleratorAdminPlus,
   READ_SUBMISSION_DOCUMENT: ReadOnlyPlus,
   UPDATE_APPLICATION_INTERNAL_COMMENTS: AcceleratorAdminPlus,
   UPDATE_APPLICATION_STATUS: TFExpertPlus,
