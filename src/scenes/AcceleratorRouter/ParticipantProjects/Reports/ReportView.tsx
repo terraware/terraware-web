@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Button } from '@terraware/web-components';
+import { Button, DropdownItem } from '@terraware/web-components';
 
 import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
 import ApprovedReportMessage from 'src/components/AcceleratorReports/ApprovedReportMessage';
@@ -13,6 +13,7 @@ import RejectedReportMessage from 'src/components/AcceleratorReports/RejectedRep
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
@@ -32,6 +33,7 @@ import { AcceleratorReport, MetricType } from 'src/types/AcceleratorReport';
 import { useParticipantProjectData } from '../ParticipantProjectContext';
 import ApproveReportDialog from './ApproveReportDialog';
 import Metadata from './Metadata';
+import PublishModal from './PublishModal';
 import RejectDialog from './RejectDialog';
 
 const ReportView = () => {
@@ -55,6 +57,11 @@ const ReportView = () => {
   const [rejectRequestId, setRejectRequestId] = useState('');
   const approveReportResponse = useAppSelector(selectReviewAcceleratorReport(approveRequestId));
   const rejectReportResponse = useAppSelector(selectReviewAcceleratorReport(rejectRequestId));
+  const [showPublishModal, setShowPublishModal] = useState(false);
+
+  const publishReport = () => {
+    setShowPublishModal(false);
+  };
 
   const approveReport = () => {
     const request = dispatch(
@@ -158,6 +165,31 @@ const ReportView = () => {
     return crumbsList;
   }, [activeLocale, participantProject, project, year]);
 
+  const onOptionItemClick = useCallback(
+    (optionItem: DropdownItem) => {
+      switch (optionItem.value) {
+        case 'publish': {
+          setShowPublishModal(true);
+          break;
+        }
+      }
+    },
+    [showPublishModal]
+  );
+
+  const optionItems = useMemo(
+    (): DropdownItem[] =>
+      activeLocale
+        ? [
+            {
+              label: strings.PUBLISH,
+              value: 'publish',
+            },
+          ]
+        : [],
+    [activeLocale]
+  );
+
   const callToAction = useMemo(() => {
     return (
       isAllowed('UPDATE_SUBMISSION_STATUS') && (
@@ -177,6 +209,12 @@ const ReportView = () => {
             label={strings.APPROVE}
             onClick={() => void setShowApproveDialog(true)}
             size='medium'
+          />
+          <OptionsMenu
+            onOptionItemClick={onOptionItemClick}
+            optionItems={optionItems}
+            size='medium'
+            sx={{ '& .button': { margin: '4px' }, marginLeft: 0 }}
           />
         </>
       )
@@ -200,6 +238,7 @@ const ReportView = () => {
 
   return (
     <>
+      {showPublishModal && <PublishModal onClose={() => setShowPublishModal(false)} onSubmit={publishReport} />}
       {showApproveDialog && (
         <ApproveReportDialog onClose={() => setShowApproveDialog(false)} onSubmit={approveReport} />
       )}
