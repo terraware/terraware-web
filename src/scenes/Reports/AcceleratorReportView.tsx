@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -19,17 +19,21 @@ import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { getAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
-import { requestAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
+import { selectAcceleratorReport, selectSubmitAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
+import { requestAcceleratorReport, requestSubmitAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorReport, MetricType } from 'src/types/AcceleratorReport';
+import useSnackbar from 'src/utils/useSnackbar';
+
+import SubmitReportDialog from './SubmitReportDialog';
 
 const AcceleratorReportView = () => {
   const { activeLocale } = useLocalization();
   const { currentParticipantProject, setCurrentParticipantProject } = useParticipantData();
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const snackbar = useSnackbar();
   const { goToAcceleratorReportEdit } = useNavigateTo();
 
   const pathParams = useParams<{ projectId: string; reportId: string }>();
@@ -37,10 +41,12 @@ const AcceleratorReportView = () => {
   const projectId = String(pathParams.projectId);
 
   const [requestId, setRequestId] = useState<string>('');
+  const [submitReportRequestId, setSubmitReportRequestId] = useState<string>('');
   const [report, setReport] = useState<AcceleratorReport>();
-  const [, setShowApproveDialog] = useState<boolean>(false);
+  const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);
 
-  const getReportResults = useAppSelector(getAcceleratorReport(requestId));
+  const getReportResults = useAppSelector(selectAcceleratorReport(requestId));
+  const submitReportResults = useAppSelector(selectSubmitAcceleratorReport(submitReportRequestId));
 
   const reload = () => {
     if (projectId) {
@@ -67,6 +73,14 @@ const AcceleratorReportView = () => {
       setReport(getReportResults.data);
     }
   }, [getReportResults]);
+
+  useEffect(() => {
+    if (submitReportResults?.status === 'error') {
+      snackbar.toastError();
+    } else if (submitReportResults?.status === 'success') {
+      snackbar.toastSuccess(strings.REPORT_SUBMITTED_FOR_APPROVAL);
+    }
+  }, [submitReportResults]);
 
   const year = useMemo(() => {
     return report?.startDate.split('-')[0];
@@ -100,7 +114,9 @@ const AcceleratorReportView = () => {
           disabled={report?.status !== 'Not Submitted' && report?.status !== 'Needs Update'}
           id='submitReport'
           label={strings.SUBMIT_FOR_APPROVAL}
-          onClick={() => void setShowApproveDialog(true)}
+          onClick={() => {
+            setShowApproveDialog(true);
+          }}
           size='medium'
           sx={{ '&.button': { whiteSpace: 'nowrap' } }}
         />
@@ -117,74 +133,84 @@ const AcceleratorReportView = () => {
     [callToAction]
   );
 
+  const submitReport = useCallback(() => {
+    const request = dispatch(requestSubmitAcceleratorReport({ projectId, reportId }));
+    setSubmitReportRequestId(request.requestId);
+    setShowApproveDialog(false);
+  }, [projectId, reportId]);
+
   const reportName = report?.frequency === 'Annual' ? year : report?.quarter ? `${year}-${report?.quarter}` : '';
 
   return (
-    <Page
-      crumbs={crumbs}
-      rightComponent={rightComponent}
-      title={
-        <TitleBar
-          subtitle={
-            currentParticipantProject && getReportResults
-              ? `${strings.PROJECT}: ${currentParticipantProject?.name}`
-              : ''
-          }
-          title={`${strings.REPORT} (${reportName})`}
-        />
-      }
-    >
-      <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
-        {report && <ApprovedReportMessage report={report} />}
-        {report && <RejectedReportMessage report={report} />}
-        <Card
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            flexGrow: 1,
-          }}
-        >
-          {report?.startDate && report?.endDate && (
-            <Box
-              borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
-              padding={theme.spacing(3, 0)}
-              marginBottom={3}
-            >
-              <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
-                <AcceleratorReportStatusBadge status={report.status} />
-              </div>
+    <>
+      {showApproveDialog && <SubmitReportDialog onClose={() => setShowApproveDialog(false)} onSubmit={submitReport} />}
 
-              <Typography fontSize={14} fontStyle={'italic'}>
-                {strings.formatString(strings.REPORT_PERIOD, report?.startDate, report?.endDate)}
-              </Typography>
-            </Box>
-          )}
-          <HighlightsBox report={report} projectId={projectId} reportId={reportId} reload={reload} />
-          {['system', 'project', 'standard'].map((type) => {
-            const metrics =
-              type === 'system'
-                ? report?.systemMetrics
-                : type === 'project'
-                  ? report?.projectMetrics
-                  : report?.standardMetrics;
+      <Page
+        crumbs={crumbs}
+        rightComponent={rightComponent}
+        title={
+          <TitleBar
+            subtitle={
+              currentParticipantProject && getReportResults
+                ? `${strings.PROJECT}: ${currentParticipantProject?.name}`
+                : ''
+            }
+            title={`${strings.REPORT} (${reportName})`}
+          />
+        }
+      >
+        <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
+          {report && <ApprovedReportMessage report={report} />}
+          {report && <RejectedReportMessage report={report} />}
+          <Card
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              flexGrow: 1,
+            }}
+          >
+            {report?.startDate && report?.endDate && (
+              <Box
+                borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+                padding={theme.spacing(3, 0)}
+                marginBottom={3}
+              >
+                <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
+                  <AcceleratorReportStatusBadge status={report.status} />
+                </div>
 
-            return metrics?.map((metric, index) => (
-              <MetricBox
-                key={`${type}-${index}`}
-                metric={metric}
-                projectId={projectId}
-                reload={reload}
-                reportId={Number(reportId)}
-                setEditingId={() => {}}
-                type={type as MetricType}
-              />
-            ));
-          })}
-          <AchievementsBox report={report} projectId={projectId} reportId={reportId} reload={reload} />
-          <ChallengesMitigationBox report={report} projectId={projectId} reportId={reportId} reload={reload} />
-        </Card>
-      </Box>
-    </Page>
+                <Typography fontSize={14} fontStyle={'italic'}>
+                  {strings.formatString(strings.REPORT_PERIOD, report?.startDate, report?.endDate)}
+                </Typography>
+              </Box>
+            )}
+            <HighlightsBox report={report} projectId={projectId} reportId={reportId} reload={reload} />
+            {['system', 'project', 'standard'].map((type) => {
+              const metrics =
+                type === 'system'
+                  ? report?.systemMetrics
+                  : type === 'project'
+                    ? report?.projectMetrics
+                    : report?.standardMetrics;
+
+              return metrics?.map((metric, index) => (
+                <MetricBox
+                  key={`${type}-${index}`}
+                  metric={metric}
+                  projectId={projectId}
+                  reload={reload}
+                  reportId={Number(reportId)}
+                  setEditingId={() => {}}
+                  type={type as MetricType}
+                />
+              ));
+            })}
+            <AchievementsBox report={report} projectId={projectId} reportId={reportId} reload={reload} />
+            <ChallengesMitigationBox report={report} projectId={projectId} reportId={reportId} reload={reload} />
+          </Card>
+        </Box>
+      </Page>
+    </>
   );
 };
 

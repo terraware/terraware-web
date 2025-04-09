@@ -39,4 +39,8 @@ export const selectRefreshAcceleratorReportSystemMetrics = (requestId: string) =
 export const selectUpdateAcceleratorReport = (requestId: string) => (state: RootState) =>
   state.updateAcceleratorReport[requestId];
 
-export const getAcceleratorReport = (requestId: string) => (state: RootState) => state.getAcceleratorReport[requestId];
+export const selectAcceleratorReport = (requestId: string) => (state: RootState) =>
+  state.getAcceleratorReport[requestId];
+
+export const selectSubmitAcceleratorReport = (requestId: string) => (state: RootState) =>
+  state.submitAcceleratorReport[requestId];
