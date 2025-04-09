@@ -56,11 +56,7 @@ const Metadata = (props: MetadataProps): JSX.Element => {
             <AcceleratorReportStatusBadge status={report.status} />
           </div>
         )}
-        <InternalComment
-          entity={report}
-          update={onUpdateInternalComment}
-          disabled={!isAllowed('UPDATE_REPORTS_SETTINGS')}
-        />
+        <InternalComment entity={report} update={onUpdateInternalComment} disabled={!isAllowed('EDIT_REPORTS')} />
       </Box>
     </Box>
   );

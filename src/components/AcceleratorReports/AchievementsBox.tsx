@@ -136,7 +136,7 @@ const AchievementsBox = (props: ReportBoxProps) => {
   return (
     <EditableReportBox
       name={strings.ACHIEVEMENTS}
-      canEdit={isAllowed('UPDATE_REPORTS_SETTINGS')}
+      canEdit={isAllowed('EDIT_REPORTS')}
       editing={isEditing}
       onEdit={() => setInternalEditing(true)}
       onCancel={onCancel}
