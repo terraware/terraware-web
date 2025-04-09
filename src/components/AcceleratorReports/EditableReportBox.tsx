@@ -9,6 +9,7 @@ export type EditableReportBoxProps = {
   name: string;
   description?: string;
   canEdit: boolean;
+  visibleToFunder: boolean;
   isConsoleView?: boolean;
   editing?: boolean;
   children: ReactNode;
@@ -23,6 +24,7 @@ const EditableReportBox = ({
   name,
   description,
   canEdit,
+  visibleToFunder,
   children,
   isConsoleView,
   onEdit,
@@ -79,7 +81,16 @@ const EditableReportBox = ({
                 marginBottom: theme.spacing(2),
               }}
             >
-              <Typography sx={{ fontWeight: '600' }}>{name}</Typography>
+              <Typography fontWeight={600}>{name}</Typography>
+              <Typography
+                fontWeight={500}
+                fontSize={'14px'}
+                lineHeight={'20px'}
+                color={visibleToFunder ? theme.palette.TwClrTxtSuccess : theme.palette.TwClrTxtDanger}
+                paddingLeft={theme.spacing(2)}
+              >
+                {visibleToFunder ? strings.METRIC_VISIBLE_TO_FUNDER : strings.METRIC_NOT_VISIBLE_TO_FUNDER}
+              </Typography>
             </Box>
 
             <Box

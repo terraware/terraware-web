@@ -234,6 +234,7 @@ const MetricBox = ({
         onCancel={handleCancel}
         onSave={onSave}
         editing={isEditing}
+        visibleToFunder={metric.isPublishable}
         isConsoleView={isConsoleView}
         description={metric?.description}
       >
