@@ -18,7 +18,7 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useApplicationData } from 'src/providers/Application/Context';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import { NurseryWithdrawalService } from 'src/services';
 import DeliverablesService from 'src/services/DeliverablesService';
 import SeedFundReportService, { Reports } from 'src/services/SeedFundReportService';
@@ -39,6 +39,7 @@ export default function NavBar({
   setShowNavBar,
   withdrawalCreated,
 }: NavBarProps): JSX.Element | null {
+  const { isAllowed } = useUser();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
@@ -202,7 +203,7 @@ export default function NavBar({
   // TODO: get reports from API and only show reports nav menu if there are any
   const reportsMenu = useMemo<JSX.Element | null>(
     () =>
-      isReportsEnabled ? (
+      isReportsEnabled && isAllowed('READ_REPORTS') ? (
         <NavItem
           icon='iconGraphReport'
           label={strings.REPORTS}
