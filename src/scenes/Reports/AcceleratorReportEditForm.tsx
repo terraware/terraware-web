@@ -97,6 +97,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
       }}
       saveID={'saveEditAcceleratorReport'}
       saveDisabled={false}
+      style={{ width: '100%' }}
     >
       <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
         <Card

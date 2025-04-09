@@ -131,6 +131,10 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   const updateReportResponse = useAppSelector(selectReviewAcceleratorReport(requestId));
   const snackbar = useSnackbar();
 
+  const getNonEmptyChallenges = useCallback(() => {
+    return challengeMitigations.filter((s) => !!s.challenge || !!s.mitigationPlan);
+  }, [challengeMitigations]);
+
   useEffect(() => setChallengeMitigations(report?.challenges || []), [report?.challenges]);
 
   useEffect(() => {
@@ -139,8 +143,9 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
     if (challengeMitigations.length === 0) {
       addRow();
     }
-    if (challengeMitigations && JSON.stringify(challengeMitigations) !== JSON.stringify(report?.challenges)) {
-      onChange?.(challengeMitigations);
+    const filteredChallenges = getNonEmptyChallenges();
+    if (filteredChallenges && JSON.stringify(filteredChallenges) !== JSON.stringify(report?.challenges)) {
+      onChange?.(filteredChallenges);
     }
   }, [challengeMitigations]);
 
@@ -156,7 +161,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
 
   const onSave = useCallback(() => {
     setValidateFields(false);
-    const filteredChallenges = challengeMitigations.filter((s) => !!s.challenge || !!s.mitigationPlan);
+    const filteredChallenges = getNonEmptyChallenges();
     if (filteredChallenges.some((c) => !c.challenge || !c.mitigationPlan)) {
       setValidateFields(true);
       return;

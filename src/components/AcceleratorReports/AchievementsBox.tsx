@@ -76,14 +76,19 @@ const AchievementsBox = (props: ReportBoxProps) => {
   const updateReportResponse = useAppSelector(selectReviewAcceleratorReport(requestId));
   const snackbar = useSnackbar();
 
+  const getNonEmptyAchievements = useCallback(() => {
+    return achievements.filter((s) => !!s);
+  }, [achievements]);
+
   useEffect(() => setAchievements(report?.achievements || []), [report?.achievements]);
 
   useEffect(() => {
     if (achievements.length === 0) {
       addRow();
     }
-    if (achievements && JSON.stringify(achievements) !== JSON.stringify(report?.achievements)) {
-      onChange?.(achievements);
+    const filteredAchievements = getNonEmptyAchievements();
+    if (filteredAchievements && JSON.stringify(filteredAchievements) !== JSON.stringify(report?.achievements)) {
+      onChange?.(filteredAchievements);
     }
   }, [achievements]);
 
@@ -102,7 +107,7 @@ const AchievementsBox = (props: ReportBoxProps) => {
       requestReviewAcceleratorReport({
         review: {
           ...report,
-          achievements: achievements.filter((s) => !!s),
+          achievements: getNonEmptyAchievements(),
           challenges: report?.challenges || [],
           status: report?.status || 'Not Submitted',
         },
