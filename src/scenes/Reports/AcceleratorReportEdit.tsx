@@ -5,7 +5,7 @@ import Page from 'src/components/Page';
 import TitleBar from 'src/components/common/TitleBar';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { getAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
+import { selectAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
 import { requestAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -25,7 +25,7 @@ const AcceleratorReportEditView = (): JSX.Element | null => {
   const [requestId, setRequestId] = useState<string>('');
   const [report, setReport] = useState<AcceleratorReport>();
 
-  const getReportResult = useAppSelector(getAcceleratorReport(requestId));
+  const getReportResult = useAppSelector(selectAcceleratorReport(requestId));
 
   const reload = () => {
     if (projectId) {

@@ -40,6 +40,26 @@ export const requestAcceleratorReport = createAsyncThunk(
   }
 );
 
+export const requestSubmitAcceleratorReport = createAsyncThunk(
+  'submitAcceleratorReport',
+  async (
+    request: {
+      projectId: string;
+      reportId: string;
+    },
+    { rejectWithValue }
+  ) => {
+    const { projectId, reportId } = request;
+
+    const response = await AcceleratorReportService.submitAcceleratorReport({ projectId, reportId });
+
+    if (response && response.requestSucceeded) {
+      return true;
+    }
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
 export const requestProjectReportConfig = (projectId: string) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return async (dispatch: Dispatch, _getState: () => RootState) => {
