@@ -15,7 +15,7 @@ import { ReportBoxProps } from './ReportBox';
 const textAreaStyles = { textarea: { height: '120px' } };
 
 const HighlightsBox = (props: ReportBoxProps) => {
-  const { report, projectId, reportId, reload, isConsoleView, onChange, editing, onEditChange, canEdit } = props;
+  const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit } = props;
   const [internalEditing, setInternalEditing] = useState<boolean>(false);
   const [highlights, setHighlights] = useState<string | undefined>(report?.highlights);
   const dispatch = useAppDispatch();
@@ -53,11 +53,11 @@ const HighlightsBox = (props: ReportBoxProps) => {
           status: report?.status || 'Not Submitted',
         },
         projectId: Number(projectId),
-        reportId: Number(reportId),
+        reportId: report?.id || -1,
       })
     );
     setRequestId(request.requestId);
-  }, [dispatch, projectId, reportId, highlights, report]);
+  }, [dispatch, projectId, highlights, report]);
 
   const onCancel = useCallback(() => {
     setHighlights(report?.highlights);

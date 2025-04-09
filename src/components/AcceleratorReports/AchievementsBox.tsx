@@ -66,7 +66,7 @@ const Achievement = ({
 };
 
 const AchievementsBox = (props: ReportBoxProps) => {
-  const { report, projectId, reportId, reload, isConsoleView, onChange, editing, onEditChange, canEdit } = props;
+  const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit } = props;
   const [internalEditing, setInternalEditing] = useState<boolean>(false);
   const [achievements, setAchievements] = useState<string[]>(report?.achievements || []);
   const dispatch = useAppDispatch();
@@ -111,11 +111,11 @@ const AchievementsBox = (props: ReportBoxProps) => {
           status: report?.status || 'Not Submitted',
         },
         projectId: Number(projectId),
-        reportId: Number(reportId),
+        reportId: report?.id || -1,
       })
     );
     setRequestId(request.requestId);
-  }, [dispatch, projectId, reportId, achievements, report]);
+  }, [dispatch, projectId, achievements, report]);
 
   const onCancel = useCallback(() => {
     setInternalEditing(false);

@@ -125,7 +125,6 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
           <HighlightsBox
             report={record}
             projectId={projectId}
-            reportId={reportId}
             editing={true}
             onChange={(value: any) => onChange('highlights', value)}
           />
@@ -152,14 +151,12 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
           <AchievementsBox
             report={record}
             projectId={projectId}
-            reportId={reportId}
             editing={true}
             onChange={(value: any) => onChange('achievements', value)}
           />
           <ChallengesMitigationBox
             report={record}
             projectId={projectId}
-            reportId={reportId}
             editing={true}
             onChange={(value: any) => onChange('challenges', value)}
           />

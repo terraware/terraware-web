@@ -237,7 +237,6 @@ const ReportView = () => {
     : '';
 
   const onEditChange = (isInEdit: boolean) => {
-    console.log('boxInEdit', isInEdit);
     setBoxInEdit(isInEdit);
   };
 
@@ -287,7 +286,6 @@ const ReportView = () => {
             <HighlightsBox
               report={selectedReport}
               projectId={projectId}
-              reportId={reportId}
               reload={reload}
               isConsoleView={true}
               onEditChange={onEditChange}
@@ -318,7 +316,6 @@ const ReportView = () => {
             <AchievementsBox
               report={selectedReport}
               projectId={projectId}
-              reportId={reportId}
               reload={reload}
               isConsoleView={true}
               onEditChange={onEditChange}
@@ -327,7 +324,6 @@ const ReportView = () => {
             <ChallengesMitigationBox
               report={selectedReport}
               projectId={projectId}
-              reportId={reportId}
               reload={reload}
               isConsoleView={true}
               onEditChange={onEditChange}

@@ -120,7 +120,7 @@ const ChallengeMitigationPlan = ({
 };
 
 const ChallengesMitigationBox = (props: ReportBoxProps) => {
-  const { report, projectId, reportId, reload, isConsoleView, onChange, editing, onEditChange, canEdit } = props;
+  const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit } = props;
   const [internalEditing, setInternalEditing] = useState<boolean>(false);
   const [challengeMitigations, setChallengeMitigations] = useState<ChallengeMitigation[]>(report?.challenges || []);
   const [validateFields, setValidateFields] = useState<boolean>(false);
@@ -175,11 +175,11 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
           status: report?.status || 'Not Submitted',
         },
         projectId: Number(projectId),
-        reportId: Number(reportId),
+        reportId: report?.id || -1,
       })
     );
     setRequestId(request.requestId);
-  }, [dispatch, projectId, reportId, challengeMitigations, report]);
+  }, [dispatch, projectId, challengeMitigations, report]);
 
   const onCancel = useCallback(() => {
     setInternalEditing(false);

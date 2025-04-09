@@ -184,7 +184,7 @@ const AcceleratorReportView = () => {
                 </Typography>
               </Box>
             )}
-            <HighlightsBox report={report} projectId={projectId} reportId={reportId} reload={reload} />
+            <HighlightsBox report={report} projectId={projectId} reload={reload} />
             {['system', 'project', 'standard'].map((type) => {
               const metrics =
                 type === 'system'
@@ -204,8 +204,8 @@ const AcceleratorReportView = () => {
                 />
               ));
             })}
-            <AchievementsBox report={report} projectId={projectId} reportId={reportId} reload={reload} />
-            <ChallengesMitigationBox report={report} projectId={projectId} reportId={reportId} reload={reload} />
+            <AchievementsBox report={report} projectId={projectId} reload={reload} />
+            <ChallengesMitigationBox report={report} projectId={projectId} reload={reload} />
           </Card>
         </Box>
       </Page>

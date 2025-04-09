@@ -27,6 +27,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import EditProgressModal from './EditProgressModal';
 import EditableReportBox from './EditableReportBox';
+import { ReportBoxProps } from './ReportBox';
 import ResetMetricModal from './ResetMetricModal';
 
 export const isReportSystemMetric = (metric: any): metric is ReportSystemMetric => {
@@ -35,22 +36,6 @@ export const isReportSystemMetric = (metric: any): metric is ReportSystemMetric 
 
 const isStandardOrProjectMetric = (metric: any): metric is ReportStandardMetric | ReportProjectMetric => {
   return metric && typeof metric.id === 'number';
-};
-
-export const getMetricId = (
-  metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric,
-  type: MetricType
-) => {
-  if (isReportSystemMetric(metric)) {
-    return metric.metric.replace(/\s+/g, '');
-  } else if (isStandardOrProjectMetric(metric)) {
-    if (type === 'project') {
-      return `p${metric.id}`;
-    } else {
-      return `s${metric.id}`;
-    }
-  }
-  return '-1';
 };
 
 const statusOptions: DropdownItem[] = AcceleratorMetricStatuses.map((s) => ({
@@ -72,18 +57,12 @@ const MetricBox = ({
   onEditChange,
   canEdit,
 }: {
-  editing?: boolean;
   hideStatusBadge?: boolean;
-  projectId: string;
-  reload?: () => void;
   metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric;
   type: MetricType;
   reportId: number;
-  isConsoleView?: boolean;
   onChangeMetric?: (metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric, type: MetricType) => void;
-  onEditChange?: (value: boolean) => void;
-  canEdit?: boolean;
-}): JSX.Element => {
+} & ReportBoxProps): JSX.Element => {
   const theme = useTheme();
   const [record, setRecord, onChange] = useForm<ReportProjectMetric | ReportSystemMetric | ReportStandardMetric>(
     metric
@@ -275,7 +254,7 @@ const MetricBox = ({
                     </Tooltip>
                   </Box>
                 )}
-                {!!isEditing && metric.overrideValue && (isConsoleView || type !== 'system') && (
+                {isEditing && metric.overrideValue && (isConsoleView || type !== 'system') && (
                   <Button
                     icon='iconUndo'
                     onClick={() => setResetMetricModalOpened(true)}
@@ -288,7 +267,7 @@ const MetricBox = ({
                     }}
                   />
                 )}
-                {!!isEditing && (isConsoleView || type !== 'system') && (
+                {isEditing && (isConsoleView || type !== 'system') && (
                   <Button
                     icon='iconEdit'
                     onClick={() => setProgressModalOpened(true)}
@@ -378,7 +357,7 @@ const MetricBox = ({
                 styles={textAreaStyles}
                 preserveNewlines
               />
-              {!!isEditing && (
+              {isEditing && (
                 <Typography fontSize={14} color={theme.palette.TwClrTxtSecondary}>
                   {strings.PROGRESS_NOTES_DESCRIPTION}
                 </Typography>
