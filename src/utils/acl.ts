@@ -21,7 +21,7 @@ import { isManagerOrHigher, isMember } from './organization';
 /**
  * We split the permissions up loosely by the entity that the user is being authorized to interact with or view
  */
-type PermissionAcceleratorReports = 'UPDATE_REPORTS_SETTINGS';
+type PermissionAcceleratorReports = 'UPDATE_REPORTS_SETTINGS' | 'EDIT_REPORTS';
 type PermissionApplication =
   | 'READ_ALL_APPLICATIONS'
   | 'UPDATE_APPLICATION_INTERNAL_COMMENTS'
@@ -147,6 +147,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   CREATE_SUBMISSION: isAllowedCreateSubmission,
   DELETE_COHORTS: AcceleratorAdminPlus,
   DELETE_PARTICIPANTS: AcceleratorAdminPlus,
+  EDIT_REPORTS: AcceleratorAdminPlus,
   EXPORT_PARTICIPANTS: ReadOnlyPlus,
   EXPORT_PARTICIPANT_PROJECT: ReadOnlyPlus,
   INVITE_FUNDER: AcceleratorAdminPlus,

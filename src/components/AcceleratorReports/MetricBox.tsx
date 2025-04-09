@@ -253,7 +253,7 @@ const MetricBox = ({
       )}
       <EditableReportBox
         name={getMetricName()}
-        canEdit={isAllowed('UPDATE_REPORTS_SETTINGS')}
+        canEdit={isAllowed('EDIT_REPORTS')}
         onEdit={onEditItem}
         onCancel={handleCancel}
         onSave={onSave}

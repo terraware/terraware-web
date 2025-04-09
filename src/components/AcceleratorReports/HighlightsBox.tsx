@@ -70,7 +70,7 @@ const HighlightsBox = (props: ReportBoxProps) => {
   return (
     <EditableReportBox
       name={strings.HIGHLIGHTS}
-      canEdit={isAllowed('UPDATE_REPORTS_SETTINGS')}
+      canEdit={isAllowed('EDIT_REPORTS')}
       editing={isEditing}
       onEdit={() => setInternalEditing(true)}
       onCancel={onCancel}
