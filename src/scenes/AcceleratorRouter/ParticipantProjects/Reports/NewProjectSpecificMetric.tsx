@@ -158,11 +158,11 @@ export default function NewProjectSpecificMetric(): JSX.Element {
               <Grid item xs={12}>
                 <Checkbox
                   disabled={false}
-                  id={'publishMetric'}
-                  name={'publish-metric'}
-                  label={strings.PUBLISH_METRIC}
-                  value={false}
-                  onChange={() => true}
+                  id={'isPublishable'}
+                  name={'isPublishable'}
+                  label={strings.PUBLISH_TO_FUNDER_PORTAL}
+                  value={newMetric.isPublishable}
+                  onChange={(newValue: boolean) => onChange('isPublishable', newValue)}
                 />
               </Grid>
             </Grid>

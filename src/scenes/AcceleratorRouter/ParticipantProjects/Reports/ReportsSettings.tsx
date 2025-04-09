@@ -147,6 +147,11 @@ export default function ReportsSettings(): JSX.Element {
       name: strings.COMPONENT,
       type: 'string',
     },
+    {
+      key: 'isPublishable',
+      name: strings.PUBLISH,
+      type: 'boolean',
+    },
   ];
 
   const onRowClick = (metric: ProjectMetric) => {
