@@ -200,7 +200,6 @@ const AcceleratorReportView = () => {
                   projectId={projectId}
                   reload={reload}
                   reportId={Number(reportId)}
-                  setEditingId={() => {}}
                   type={type as MetricType}
                 />
               ));

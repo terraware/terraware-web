@@ -5,7 +5,6 @@ import { Button, Textfield } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
-import { useUser } from 'src/providers';
 import { selectReviewAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
 import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -121,8 +120,7 @@ const ChallengeMitigationPlan = ({
 };
 
 const ChallengesMitigationBox = (props: ReportBoxProps) => {
-  const { report, projectId, reportId, reload, isConsoleView, onChange, editing } = props;
-  const { isAllowed } = useUser();
+  const { report, projectId, reportId, reload, isConsoleView, onChange, editing, onEditChange, canEdit } = props;
   const [internalEditing, setInternalEditing] = useState<boolean>(false);
   const [challengeMitigations, setChallengeMitigations] = useState<ChallengeMitigation[]>(report?.challenges || []);
   const [validateFields, setValidateFields] = useState<boolean>(false);
@@ -136,6 +134,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   }, [challengeMitigations]);
 
   useEffect(() => setChallengeMitigations(report?.challenges || []), [report?.challenges]);
+  useEffect(() => onEditChange?.(internalEditing), [internalEditing]);
 
   useEffect(() => {
     setValidateFields(false);
@@ -201,7 +200,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
     <EditableReportBox
       name={''}
       includeBorder={false}
-      canEdit={isAllowed('EDIT_REPORTS')}
+      canEdit={!!canEdit}
       editing={isEditing}
       onEdit={() => setInternalEditing(true)}
       onCancel={onCancel}

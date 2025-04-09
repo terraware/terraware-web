@@ -52,7 +52,7 @@ const ReportView = () => {
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const { crumbs: participantProjectCrumbs, participantProject, project } = useParticipantProjectData();
   const theme = useTheme();
-  const [editingId, setEditingId] = useState<string | undefined>();
+  const [boxInEdit, setBoxInEdit] = useState<boolean>(false);
   const [approveRequestId, setApproveRequestId] = useState('');
   const [rejectRequestId, setRejectRequestId] = useState('');
   const approveReportResponse = useAppSelector(selectReviewAcceleratorReport(approveRequestId));
@@ -236,6 +236,11 @@ const ReportView = () => {
       : `${year}-${selectedReport.quarter}`
     : '';
 
+  const onEditChange = (isInEdit: boolean) => {
+    console.log('boxInEdit', isInEdit);
+    setBoxInEdit(isInEdit);
+  };
+
   return (
     <>
       {showPublishModal && <PublishModal onClose={() => setShowPublishModal(false)} onSubmit={publishReport} />}
@@ -285,6 +290,8 @@ const ReportView = () => {
               reportId={reportId}
               reload={reload}
               isConsoleView={true}
+              onEditChange={onEditChange}
+              canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
             />
             {['system', 'project', 'standard'].map((type) => {
               const metrics =
@@ -296,15 +303,15 @@ const ReportView = () => {
 
               return metrics?.map((metric, index) => (
                 <MetricBox
-                  editingId={editingId}
                   isConsoleView
                   key={`${type}-${index}`}
                   metric={metric}
                   projectId={projectId}
                   reload={reload}
                   reportId={Number(reportId)}
-                  setEditingId={setEditingId}
                   type={type as MetricType}
+                  onEditChange={onEditChange}
+                  canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
                 />
               ));
             })}
@@ -314,6 +321,8 @@ const ReportView = () => {
               reportId={reportId}
               reload={reload}
               isConsoleView={true}
+              onEditChange={onEditChange}
+              canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
             />
             <ChallengesMitigationBox
               report={selectedReport}
@@ -321,6 +330,8 @@ const ReportView = () => {
               reportId={reportId}
               reload={reload}
               isConsoleView={true}
+              onEditChange={onEditChange}
+              canEdit={isAllowed('EDIT_REPORTS') && !boxInEdit}
             />
           </Card>
         </Box>
