@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { Button, Textfield } from '@terraware/web-components';
@@ -66,20 +66,29 @@ const Achievement = ({
   );
 };
 
-const AchievementsBox = ({ report, projectId, reportId, reload, isConsoleView }: ReportBoxProps) => {
+const AchievementsBox = (props: ReportBoxProps) => {
+  const { report, projectId, reportId, reload, isConsoleView, onChange, editing } = props;
   const { isAllowed } = useUser();
-  const [editing, setEditing] = useState<boolean>(false);
+  const [internalEditing, setInternalEditing] = useState<boolean>(false);
   const [achievements, setAchievements] = useState<string[]>(report?.achievements || []);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
   const updateReportResponse = useAppSelector(selectReviewAcceleratorReport(requestId));
   const snackbar = useSnackbar();
 
+  const getNonEmptyAchievements = useCallback(() => {
+    return achievements.filter((s) => !!s);
+  }, [achievements]);
+
   useEffect(() => setAchievements(report?.achievements || []), [report?.achievements]);
 
   useEffect(() => {
     if (achievements.length === 0) {
       addRow();
+    }
+    const filteredAchievements = getNonEmptyAchievements();
+    if (filteredAchievements && JSON.stringify(filteredAchievements) !== JSON.stringify(report?.achievements)) {
+      onChange?.(filteredAchievements);
     }
   }, [achievements]);
 
@@ -88,8 +97,8 @@ const AchievementsBox = ({ report, projectId, reportId, reload, isConsoleView }:
       snackbar.toastError();
     } else if (updateReportResponse?.status === 'success') {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
-      setEditing(false);
-      reload();
+      setInternalEditing(false);
+      reload?.();
     }
   }, [updateReportResponse, snackbar]);
 
@@ -98,7 +107,7 @@ const AchievementsBox = ({ report, projectId, reportId, reload, isConsoleView }:
       requestReviewAcceleratorReport({
         review: {
           ...report,
-          achievements: achievements.filter((s) => !!s),
+          achievements: getNonEmptyAchievements(),
           challenges: report?.challenges || [],
           status: report?.status || 'Not Submitted',
         },
@@ -110,7 +119,7 @@ const AchievementsBox = ({ report, projectId, reportId, reload, isConsoleView }:
   }, [dispatch, projectId, reportId, achievements, report]);
 
   const onCancel = useCallback(() => {
-    setEditing(false);
+    setInternalEditing(false);
     setAchievements(report?.achievements || []);
   }, [report?.achievements]);
 
@@ -122,12 +131,14 @@ const AchievementsBox = ({ report, projectId, reportId, reload, isConsoleView }:
     setAchievements(achievements.concat(''));
   };
 
+  const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
+
   return (
     <EditableReportBox
       name={strings.ACHIEVEMENTS}
       canEdit={isAllowed('UPDATE_REPORTS_SETTINGS')}
-      editing={editing}
-      onEdit={() => setEditing(true)}
+      editing={isEditing}
+      onEdit={() => setInternalEditing(true)}
       onCancel={onCancel}
       onSave={onSave}
       isConsoleView={isConsoleView}
@@ -138,12 +149,12 @@ const AchievementsBox = ({ report, projectId, reportId, reload, isConsoleView }:
           key={`achievement-${index}`}
           index={index}
           includeBorder={index < achievements.length - 1}
-          editing={editing}
+          editing={isEditing}
           onRemove={() => setAchievements(achievements.filter((_, i) => index !== i))}
           setAchievement={(ach: string) => updateAchievement(ach, index)}
         />
       ))}
-      {editing && (
+      {isEditing && (
         <Button
           onClick={addRow}
           icon={'iconAdd'}

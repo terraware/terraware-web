@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Textfield } from '@terraware/web-components';
@@ -120,15 +120,20 @@ const ChallengeMitigationPlan = ({
   );
 };
 
-const ChallengesMitigationBox = ({ report, projectId, reportId, reload, isConsoleView }: ReportBoxProps) => {
+const ChallengesMitigationBox = (props: ReportBoxProps) => {
+  const { report, projectId, reportId, reload, isConsoleView, onChange, editing } = props;
   const { isAllowed } = useUser();
-  const [editing, setEditing] = useState<boolean>(false);
+  const [internalEditing, setInternalEditing] = useState<boolean>(false);
   const [challengeMitigations, setChallengeMitigations] = useState<ChallengeMitigation[]>(report?.challenges || []);
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
   const updateReportResponse = useAppSelector(selectReviewAcceleratorReport(requestId));
   const snackbar = useSnackbar();
+
+  const getNonEmptyChallenges = useCallback(() => {
+    return challengeMitigations.filter((s) => !!s.challenge || !!s.mitigationPlan);
+  }, [challengeMitigations]);
 
   useEffect(() => setChallengeMitigations(report?.challenges || []), [report?.challenges]);
 
@@ -138,6 +143,10 @@ const ChallengesMitigationBox = ({ report, projectId, reportId, reload, isConsol
     if (challengeMitigations.length === 0) {
       addRow();
     }
+    const filteredChallenges = getNonEmptyChallenges();
+    if (filteredChallenges && JSON.stringify(filteredChallenges) !== JSON.stringify(report?.challenges)) {
+      onChange?.(filteredChallenges);
+    }
   }, [challengeMitigations]);
 
   useEffect(() => {
@@ -145,14 +154,14 @@ const ChallengesMitigationBox = ({ report, projectId, reportId, reload, isConsol
       snackbar.toastError();
     } else if (updateReportResponse?.status === 'success') {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
-      setEditing(false);
-      reload();
+      setInternalEditing(false);
+      reload?.();
     }
   }, [updateReportResponse, snackbar]);
 
   const onSave = useCallback(() => {
     setValidateFields(false);
-    const filteredChallenges = challengeMitigations.filter((s) => !!s.challenge || !!s.mitigationPlan);
+    const filteredChallenges = getNonEmptyChallenges();
     if (filteredChallenges.some((c) => !c.challenge || !c.mitigationPlan)) {
       setValidateFields(true);
       return;
@@ -174,7 +183,7 @@ const ChallengesMitigationBox = ({ report, projectId, reportId, reload, isConsol
   }, [dispatch, projectId, reportId, challengeMitigations, report]);
 
   const onCancel = useCallback(() => {
-    setEditing(false);
+    setInternalEditing(false);
     setChallengeMitigations(report?.challenges || []);
   }, [report?.challenges]);
 
@@ -186,13 +195,15 @@ const ChallengesMitigationBox = ({ report, projectId, reportId, reload, isConsol
     setChallengeMitigations(challengeMitigations.map((chal, i) => (index === i ? newChal : chal)));
   };
 
+  const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
+
   return (
     <EditableReportBox
       name={''}
       includeBorder={false}
       canEdit={isAllowed('UPDATE_REPORTS_SETTINGS')}
-      editing={editing}
-      onEdit={() => setEditing(true)}
+      editing={isEditing}
+      onEdit={() => setInternalEditing(true)}
       onCancel={onCancel}
       onSave={onSave}
       isConsoleView={isConsoleView}
@@ -203,13 +214,13 @@ const ChallengesMitigationBox = ({ report, projectId, reportId, reload, isConsol
           key={`challenge-mitigation-${index}`}
           index={index}
           includeBorder={index < challengeMitigations.length - 1}
-          editing={editing}
+          editing={isEditing}
           onRemove={() => setChallengeMitigations(challengeMitigations.filter((_, i) => index !== i))}
           setChallengeMitigation={(chal: ChallengeMitigation) => updateChallenge(chal, index)}
           validateFields={validateFields}
         />
       ))}
-      {editing && (
+      {isEditing && (
         <Button
           onClick={addRow}
           icon={'iconAdd'}

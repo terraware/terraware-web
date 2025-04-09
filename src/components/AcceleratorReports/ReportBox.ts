@@ -4,6 +4,8 @@ export type ReportBoxProps = {
   report?: AcceleratorReport;
   projectId: string;
   reportId: string;
-  reload: () => void;
+  reload?: () => void;
   isConsoleView?: boolean;
+  editing?: boolean;
+  onChange?: (value: any) => void;
 };

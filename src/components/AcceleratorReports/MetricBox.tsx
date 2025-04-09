@@ -76,7 +76,7 @@ const MetricBox = ({
   editingId?: string;
   hideStatusBadge?: boolean;
   projectId: string;
-  reload: () => void;
+  reload?: () => void;
   setEditingId: (id: string | undefined) => void;
   metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric;
   type: MetricType;
@@ -110,7 +110,7 @@ const MetricBox = ({
     } else if (updateReportMetricResponse?.status === 'success') {
       setEditingId(undefined);
       snackbar.toastSuccess(strings.CHANGES_SAVED);
-      reload();
+      reload?.();
     }
   }, [updateReportMetricResponse, snackbar]);
 
@@ -124,7 +124,7 @@ const MetricBox = ({
         onChangeProgress(metric.systemValue.toString());
       }
       snackbar.toastSuccess(strings.CHANGES_SAVED);
-      reload();
+      reload?.();
     }
   }, [refreshReportMetricResponse, snackbar]);
 
