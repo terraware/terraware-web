@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Grid } from '@mui/material';
-import { Dropdown } from '@terraware/web-components';
+import { Checkbox, Dropdown } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
@@ -129,6 +129,16 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
             selectedValue={record.component}
             fullWidth
             required
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Checkbox
+            disabled={false}
+            id={'isPublishable'}
+            name={'isPublishable'}
+            label={strings.PUBLISH_TO_FUNDER_PORTAL}
+            value={record.isPublishable}
+            onChange={(newValue: boolean) => onChange('isPublishable', newValue)}
           />
         </Grid>
       </Grid>
