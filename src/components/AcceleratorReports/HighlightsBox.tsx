@@ -31,7 +31,7 @@ const HighlightsBox = (props: ReportBoxProps) => {
     if (highlights && highlights !== report?.highlights) {
       onChange?.(highlights);
     }
-  }, [highlights]);
+  }, [highlights, report?.highlights, onChange]);
 
   useEffect(() => {
     if (updateReportResponse?.status === 'error') {
@@ -39,7 +39,7 @@ const HighlightsBox = (props: ReportBoxProps) => {
     } else if (updateReportResponse?.status === 'success') {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       setInternalEditing(false);
-      reload();
+      reload?.();
     }
   }, [updateReportResponse, snackbar]);
 

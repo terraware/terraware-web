@@ -125,7 +125,6 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
             report={record}
             projectId={projectId}
             reportId={reportId}
-            reload={() => {}}
             editing={true}
             onChange={(value: any) => onChange('highlights', value)}
           />
@@ -144,7 +143,6 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
                 metric={metric}
                 onChangeMetric={onChangeMetric}
                 projectId={projectId}
-                reload={() => {}}
                 reportId={Number(reportId)}
                 setEditingId={() => {}}
                 type={type as MetricType}
@@ -155,7 +153,6 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
             report={record}
             projectId={projectId}
             reportId={reportId}
-            reload={() => {}}
             editing={true}
             onChange={(value: any) => onChange('achievements', value)}
           />
@@ -163,7 +160,6 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
             report={record}
             projectId={projectId}
             reportId={reportId}
-            reload={() => {}}
             editing={true}
             onChange={(value: any) => onChange('challenges', value)}
           />

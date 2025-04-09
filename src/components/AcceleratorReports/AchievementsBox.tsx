@@ -93,7 +93,7 @@ const AchievementsBox = (props: ReportBoxProps) => {
     } else if (updateReportResponse?.status === 'success') {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       setInternalEditing(false);
-      reload();
+      reload?.();
     }
   }, [updateReportResponse, snackbar]);
 
