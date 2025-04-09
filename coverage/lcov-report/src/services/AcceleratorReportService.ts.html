@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/58</span>
+                <span class='fraction'>0/62</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/58</span>
+                <span class='fraction'>0/62</span>
             </div>
         
             
@@ -368,7 +368,25 @@
 <a name='L303'></a><a href='#L303'>303</a>
 <a name='L304'></a><a href='#L304'>304</a>
 <a name='L305'></a><a href='#L305'>305</a>
-<a name='L306'></a><a href='#L306'>306</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L306'></a><a href='#L306'>306</a>
+<a name='L307'></a><a href='#L307'>307</a>
+<a name='L308'></a><a href='#L308'>308</a>
+<a name='L309'></a><a href='#L309'>309</a>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a>
+<a name='L317'></a><a href='#L317'>317</a>
+<a name='L318'></a><a href='#L318'>318</a>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a>
+<a name='L324'></a><a href='#L324'>324</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -423,6 +441,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -652,10 +673,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -727,14 +763,17 @@ const REVIEW_ACCELERATOR_REPORT_METRICS_ENDPOINT =
 const REFRESH_ACCELERATOR_REPORT_METRICS_ENDPOINT =
 <span class="cstat-no" title="statement not covered" >  '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/metrics/refresh';</span>
 const REVIEW_ACCELERATOR_REPORT_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v1/accelerator/projects/{projectId}/reports/{reportId}/review';</span>
+const SUBMIT_ACCELERATOR_REPORT_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v1/accelerator/projects/{projectId}/reports/{reportId}/submit';</span>
 const ACCELERATOR_REPORT_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v1/accelerator/projects/{projectId}/reports/{reportId}';</span>
 &nbsp;
 type GetAcceleratorReportResponsePayload =
   paths[typeof ACCELERATOR_REPORT_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 &nbsp;
-// TODO: update this once the API is updated
 type UpdateAcceleratorReportResponse =
   paths[typeof ACCELERATOR_REPORT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+&nbsp;
+type SubmitAcceleratorReportResponse =
+  paths[typeof SUBMIT_ACCELERATOR_REPORT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 &nbsp;
 export type ListProjectMetricsResponsePayload =
   paths[typeof PROJECT_METRICS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -957,6 +996,20 @@ const refreshAcceleratorReportSystemMetrics = <span class="cstat-no" title="stat
   ).post2&lt;RefreshAcceleratorReportSystemMetricsResponse&gt;({});
 };
 &nbsp;
+const submitAcceleratorReport = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (params: {</span>
+  projectId: string;
+  reportId: string;
+}): Promise&lt;Response2&lt;SubmitAcceleratorReportResponse&gt;&gt; =&gt; {
+  const { projectId, reportId } = <span class="cstat-no" title="statement not covered" >params;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return HttpService.root(</span>
+    SUBMIT_ACCELERATOR_REPORT_ENDPOINT.replace('{projectId}', projectId.toString()).replace(
+      '{reportId}',
+      reportId.toString()
+    )
+  ).post2&lt;SubmitAcceleratorReportResponse&gt;();
+};
+&nbsp;
 /**
  * Exported functions
  */
@@ -975,6 +1028,7 @@ const ReportService = <span class="cstat-no" title="statement not covered" >{</s
   reviewAcceleratorReportMetrics,
   reviewAcceleratorReport,
   refreshAcceleratorReportSystemMetrics,
+  submitAcceleratorReport,
 };
 &nbsp;
 export default ReportService;
@@ -985,7 +1039,7 @@ export default ReportService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-09T18:42:59.088Z
+                at 2025-04-09T20:43:45.917Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
