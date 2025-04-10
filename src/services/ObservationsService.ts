@@ -96,7 +96,7 @@ const exportBiomassObservationsCsv = async (organizationId: number, plantingSite
     prefix: 'plantingSites.observations',
     fields: [
       'observationPlots_monitoringPlot_plotNumber',
-      'observationPlots_notes',
+      'observationPlots_biomassDetails_description',
       'plantingSite_name',
       'startDate',
       'observationPlots_biomassDetails_numPlants',
