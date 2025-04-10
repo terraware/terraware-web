@@ -77,7 +77,7 @@ const EditableReportBox = ({
                 display: 'flex',
                 flexGrow: 1,
                 justifyContent: 'flex-start',
-                flexDirection: 'column',
+                flexDirection: 'row',
                 marginBottom: theme.spacing(2),
               }}
             >
@@ -87,7 +87,6 @@ const EditableReportBox = ({
                   fontWeight={500}
                   fontSize={'14px'}
                   lineHeight={'20px'}
-                  display={'inline'}
                   color={visibleToFunder ? theme.palette.TwClrTxtSuccess : theme.palette.TwClrTxtDanger}
                   paddingLeft={theme.spacing(2)}
                 >
