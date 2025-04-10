@@ -63,7 +63,7 @@ const CTACard = ({
         <Box>
           {title && (
             <Typography
-              component='p'
+              component='div'
               variant='h6'
               sx={{
                 color: theme.palette.TwClrTxt,
@@ -76,7 +76,7 @@ const CTACard = ({
             </Typography>
           )}
           <Typography
-            component='p'
+            component='div'
             variant='h6'
             sx={{
               color: theme.palette.TwClrTxt,
