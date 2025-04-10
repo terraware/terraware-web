@@ -52,6 +52,7 @@ export default function SpeciesTests() {
     await expect(page.getByRole('main')).toContainText('Growth FormTree');
     await expect(page.getByRole('main')).toContainText('Seed Storage BehaviorOrthodox');
     await page.getByRole('link', { name: 'Species' }).click();
+    await page.waitForTimeout(250); //Wait for table to load
     await expect(page.getByText(newSpeciesName)).toBeVisible();
     await expect(page.locator('#row1-scientificName')).toContainText(newSpeciesName);
     await page.getByRole('link', { name: 'Acacia koa-' }).click();
