@@ -73,7 +73,7 @@ const EditableReportBox = ({
           >
             <Box
               sx={{
-                alignItems: 'start',
+                alignItems: 'center',
                 display: 'flex',
                 flexGrow: 1,
                 justifyContent: 'flex-start',
