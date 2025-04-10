@@ -24,7 +24,7 @@ root.render(
   <React.Suspense fallback={strings.LOADING}>
     <Router
       future={{
-        // v7_relativeSplatPath: true,
+        v7_relativeSplatPath: true,
         v7_startTransition: true,
       }}
     >
