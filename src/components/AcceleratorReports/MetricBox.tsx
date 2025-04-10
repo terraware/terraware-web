@@ -1,11 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Dropdown, DropdownItem, Icon, Tooltip } from '@terraware/web-components';
-import { Textfield } from '@terraware/web-components';
+import { Dropdown, DropdownItem, Icon, Textfield, Tooltip } from '@terraware/web-components';
 
 import Button from 'src/components/common/button/Button';
-import { useUser } from 'src/providers';
 import {
   selectRefreshAcceleratorReportSystemMetrics,
   selectReviewAcceleratorReportMetric,
@@ -29,6 +27,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import EditProgressModal from './EditProgressModal';
 import EditableReportBox from './EditableReportBox';
+import { ReportBoxProps } from './ReportBox';
 import ResetMetricModal from './ResetMetricModal';
 
 export const isReportSystemMetric = (metric: any): metric is ReportSystemMetric => {
@@ -39,22 +38,6 @@ const isStandardOrProjectMetric = (metric: any): metric is ReportStandardMetric 
   return metric && typeof metric.id === 'number';
 };
 
-export const getMetricId = (
-  metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric,
-  type: MetricType
-) => {
-  if (isReportSystemMetric(metric)) {
-    return metric.metric.replace(/\s+/g, '');
-  } else if (isStandardOrProjectMetric(metric)) {
-    if (type === 'project') {
-      return `p${metric.id}`;
-    } else {
-      return `s${metric.id}`;
-    }
-  }
-  return '-1';
-};
-
 const statusOptions: DropdownItem[] = AcceleratorMetricStatuses.map((s) => ({
   label: s || '', // these are hardcoded, so will never actually be ''
   value: s || '',
@@ -63,8 +46,7 @@ const statusOptions: DropdownItem[] = AcceleratorMetricStatuses.map((s) => ({
 const textAreaStyles = { textarea: { height: '120px' } };
 
 const MetricBox = ({
-  editingId,
-  setEditingId,
+  editing,
   metric,
   type,
   projectId,
@@ -72,18 +54,15 @@ const MetricBox = ({
   reload,
   isConsoleView = false,
   onChangeMetric,
+  onEditChange,
+  canEdit,
 }: {
-  editingId?: string;
   hideStatusBadge?: boolean;
-  projectId: string;
-  reload?: () => void;
-  setEditingId: (id: string | undefined) => void;
   metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric;
   type: MetricType;
   reportId: number;
-  isConsoleView?: boolean;
   onChangeMetric?: (metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric, type: MetricType) => void;
-}): JSX.Element => {
+} & ReportBoxProps): JSX.Element => {
   const theme = useTheme();
   const [record, setRecord, onChange] = useForm<ReportProjectMetric | ReportSystemMetric | ReportStandardMetric>(
     metric
@@ -92,10 +71,10 @@ const MetricBox = ({
   const [resetMetricModalOpened, setResetMetricModalOpened] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
+  const [internalEditing, setInternalEditing] = useState<boolean>(false);
   const [refreshRequestId, setRefreshRequestId] = useState<string>('');
   const updateReportMetricResponse = useAppSelector(selectReviewAcceleratorReportMetric(requestId));
   const refreshReportMetricResponse = useAppSelector(selectRefreshAcceleratorReportSystemMetrics(refreshRequestId));
-  const { isAllowed } = useUser();
   const snackbar = useSnackbar();
 
   useEffect(() => {
@@ -103,12 +82,13 @@ const MetricBox = ({
       onChangeMetric?.(record, type);
     }
   }, [record]);
+  useEffect(() => onEditChange?.(internalEditing), [internalEditing]);
 
   useEffect(() => {
     if (updateReportMetricResponse?.status === 'error') {
       snackbar.toastError();
     } else if (updateReportMetricResponse?.status === 'success') {
-      setEditingId(undefined);
+      setInternalEditing(false);
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       reload?.();
     }
@@ -119,7 +99,7 @@ const MetricBox = ({
       snackbar.toastError();
     } else if (refreshReportMetricResponse?.status === 'success') {
       setResetMetricModalOpened(false);
-      setEditingId(undefined);
+      setInternalEditing(false);
       if (isReportSystemMetric(metric)) {
         onChangeProgress(metric.systemValue.toString());
       }
@@ -127,12 +107,6 @@ const MetricBox = ({
       reload?.();
     }
   }, [refreshReportMetricResponse, snackbar]);
-
-  const editing = useMemo(() => editingId === getMetricId(metric, type), [editingId, metric, getMetricId]);
-
-  const onEditItem = useCallback(() => {
-    setEditingId(getMetricId(metric, type));
-  }, [setEditingId, metric, getMetricId]);
 
   const getUpdateBody = () => {
     const baseMetric = {
@@ -232,9 +206,11 @@ const MetricBox = ({
     }
   };
 
+  const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
+
   const handleCancel = () => {
     setRecord(metric);
-    setEditingId(undefined);
+    setInternalEditing(false);
   };
 
   return (
@@ -253,11 +229,11 @@ const MetricBox = ({
       )}
       <EditableReportBox
         name={getMetricName()}
-        canEdit={isAllowed('EDIT_REPORTS')}
-        onEdit={onEditItem}
+        canEdit={!!canEdit}
+        onEdit={() => setInternalEditing(true)}
         onCancel={handleCancel}
         onSave={onSave}
-        editing={editing}
+        editing={isEditing}
         isConsoleView={isConsoleView}
         description={metric?.description}
       >
@@ -278,7 +254,7 @@ const MetricBox = ({
                     </Tooltip>
                   </Box>
                 )}
-                {!!editing && metric.overrideValue && (isConsoleView || type !== 'system') && (
+                {isEditing && metric.overrideValue && (isConsoleView || type !== 'system') && (
                   <Button
                     icon='iconUndo'
                     onClick={() => setResetMetricModalOpened(true)}
@@ -291,7 +267,7 @@ const MetricBox = ({
                     }}
                   />
                 )}
-                {!!editing && (isConsoleView || type !== 'system') && (
+                {isEditing && (isConsoleView || type !== 'system') && (
                   <Button
                     icon='iconEdit'
                     onClick={() => setProgressModalOpened(true)}
@@ -321,7 +297,7 @@ const MetricBox = ({
                   value={record.value}
                   id={'value'}
                   onChange={(value: any) => onChange('value', value)}
-                  display={!editing}
+                  display={!isEditing}
                   required={true}
                 />
                 <Typography paddingTop={3} paddingLeft={0.5}>
@@ -334,13 +310,13 @@ const MetricBox = ({
         {isConsoleView && (
           <Grid item xs={6}>
             <Box>
-              {editing ? (
+              {isEditing ? (
                 <Dropdown
                   label={strings.STATUS}
                   selectedValue={record.status}
                   options={statusOptions}
                   onChange={(value: any) => onChange('status', value)}
-                  disabled={!editing}
+                  disabled={!isEditing}
                   placeholder={'No Status'}
                 />
               ) : (
@@ -362,7 +338,7 @@ const MetricBox = ({
               value={record.underperformanceJustification}
               id={'underperformanceJustification'}
               onChange={(value: any) => onChange('underperformanceJustification', value)}
-              display={!editing}
+              display={!isEditing}
               styles={textAreaStyles}
               preserveNewlines
             />
@@ -377,11 +353,11 @@ const MetricBox = ({
                 value={record.progressNotes}
                 id={'progressNotes'}
                 onChange={(value: any) => onChange('progressNotes', value)}
-                display={!editing}
+                display={!isEditing}
                 styles={textAreaStyles}
                 preserveNewlines
               />
-              {!!editing && (
+              {isEditing && (
                 <Typography fontSize={14} color={theme.palette.TwClrTxtSecondary}>
                   {strings.PROGRESS_NOTES_DESCRIPTION}
                 </Typography>

@@ -43,13 +43,13 @@ const EditableReportBox = ({
             borderRadius: 2,
             '&:hover': {
               background:
-                !isConsoleView || !canEdit
+                !isConsoleView || (!canEdit && !editing)
                   ? 'none'
                   : editing
                     ? theme.palette.TwClrBgActive
                     : theme.palette.TwClrBgHover,
               '.actions': {
-                display: isConsoleView && canEdit ? 'block' : 'none',
+                display: isConsoleView && (canEdit || editing) ? 'block' : 'none',
                 marginTop: name ? 0 : '20px',
               },
             },
