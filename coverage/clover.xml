@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1744310014857" clover="3.2.0">
-  <project timestamp="1744310014857" name="All files">
-    <metrics statements="29736" coveredstatements="1238" conditionals="20167" coveredconditionals="354" methods="9179" coveredmethods="198" elements="59082" coveredelements="1790" complexity="0" loc="29736" ncloc="29736" packages="252" files="1218" classes="1218"/>
+<coverage generated="1744315009337" clover="3.2.0">
+  <project timestamp="1744315009337" name="All files">
+    <metrics statements="29744" coveredstatements="1238" conditionals="20169" coveredconditionals="354" methods="9181" coveredmethods="198" elements="59094" coveredelements="1790" complexity="0" loc="29744" ncloc="29744" packages="253" files="1219" classes="1219"/>
     <package name="src">
       <metrics statements="180" coveredstatements="8" conditionals="126" coveredconditionals="0" methods="40" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -21105,10 +21105,24 @@
       </file>
     </package>
     <package name="src.scenes.FunderHome">
-      <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <metrics statements="7" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/FunderHome/index.tsx">
-        <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="9" count="0" type="stmt"/>
+        <metrics statements="7" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.scenes.FunderReport">
+      <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <file name="FunderReportView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/FunderReport/FunderReportView.tsx">
+        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="5" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.FunderRouter">
