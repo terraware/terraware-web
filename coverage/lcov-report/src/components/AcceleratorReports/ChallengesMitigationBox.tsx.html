@@ -25,21 +25,21 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/62</span>
+                <span class='fraction'>0/63</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/60</span>
+                <span class='fraction'>0/62</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
@@ -299,9 +299,7 @@
 <a name='L234'></a><a href='#L234'>234</a>
 <a name='L235'></a><a href='#L235'>235</a>
 <a name='L236'></a><a href='#L236'>236</a>
-<a name='L237'></a><a href='#L237'>237</a>
-<a name='L238'></a><a href='#L238'>238</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L237'></a><a href='#L237'>237</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -431,12 +429,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -544,7 +542,6 @@ import { Button, Textfield } from '@terraware/web-components';
 &nbsp;
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
-import { useUser } from 'src/providers';
 import { selectReviewAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
 import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -660,8 +657,7 @@ const ChallengeMitigationPlan = <span class="cstat-no" title="statement not cove
 };
 &nbsp;
 const ChallengesMitigationBox = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rops: ReportBoxProps) =&gt; {</span>
-  const { report, projectId, reportId, reload, isConsoleView, onChange, editing } = <span class="cstat-no" title="statement not covered" >props;</span>
-  const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
+  const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit } = <span class="cstat-no" title="statement not covered" >props;</span>
   const [internalEditing, setInternalEditing] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [challengeMitigations, setChallengeMitigations] = <span class="cstat-no" title="statement not covered" >useState&lt;ChallengeMitigation[]&gt;(report?.challenges || []);</span>
   const [validateFields, setValidateFields] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
@@ -675,6 +671,7 @@ const ChallengesMitigationBox = <span class="cstat-no" title="statement not cove
   }, [challengeMitigations]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setChallengeMitigations(report?.challenges || []),</span> [report?.challenges]);</span>
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onEditChange?.(internalEditing),</span> [internalEditing]);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setValidateFields(false);</span>
@@ -715,11 +712,11 @@ const ChallengesMitigationBox = <span class="cstat-no" title="statement not cove
           status: report?.status || 'Not Submitted',
         },
         projectId: Number(projectId),
-        reportId: Number(reportId),
+        reportId: report?.id || -1,
       })
     );
 <span class="cstat-no" title="statement not covered" >    setRequestId(request.requestId);</span>
-  }, [dispatch, projectId, reportId, challengeMitigations, report]);
+  }, [dispatch, projectId, challengeMitigations, report]);
 &nbsp;
   const onCancel = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setInternalEditing(false);</span>
@@ -740,7 +737,7 @@ const ChallengesMitigationBox = <span class="cstat-no" title="statement not cove
     &lt;EditableReportBox
       name={''}
       includeBorder={false}
-      canEdit={isAllowed('EDIT_REPORTS')}
+      canEdit={!!canEdit}
       editing={isEditing}
       onEdit={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setInternalEditing(true)}</span>
       onCancel={onCancel}
@@ -781,7 +778,7 @@ export default ChallengesMitigationBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-09T23:21:06.276Z
+                at 2025-04-10T15:16:11.620Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

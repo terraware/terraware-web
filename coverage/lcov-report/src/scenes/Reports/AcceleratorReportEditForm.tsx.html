@@ -39,7 +39,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -232,11 +232,7 @@
 <a name='L167'></a><a href='#L167'>167</a>
 <a name='L168'></a><a href='#L168'>168</a>
 <a name='L169'></a><a href='#L169'>169</a>
-<a name='L170'></a><a href='#L170'>170</a>
-<a name='L171'></a><a href='#L171'>171</a>
-<a name='L172'></a><a href='#L172'>172</a>
-<a name='L173'></a><a href='#L173'>173</a>
-<a name='L174'></a><a href='#L174'>174</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L170'></a><a href='#L170'>170</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -364,7 +360,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -391,10 +386,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -418,7 +410,7 @@ import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/Acce
 import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
 import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
-import MetricBox, { getMetricId, isReportSystemMetric } from 'src/components/AcceleratorReports/MetricBox';
+import MetricBox, { isReportSystemMetric } from 'src/components/AcceleratorReports/MetricBox';
 import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -536,7 +528,6 @@ const AcceleratorReportEditForm = <span class="cstat-no" title="statement not co
           &lt;HighlightsBox
             report={record}
             projectId={projectId}
-            reportId={reportId}
             editing={true}
             onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: any) =&gt; <span class="cstat-no" title="statement not covered" >onChange('highlights', value)}</span>
           /&gt;
@@ -550,13 +541,12 @@ const AcceleratorReportEditForm = <span class="cstat-no" title="statement not co
 &nbsp;
 <span class="cstat-no" title="statement not covered" >            return metrics?.map(<span class="fstat-no" title="function not covered" >(m</span>etric, index) =&gt; (</span>
 <span class="cstat-no" title="statement not covered" >              &lt;MetricBox</span>
-                editingId={getMetricId(metric, type as MetricType)}
+                editing={true}
                 key={`${type}-${index}`}
                 metric={metric}
                 onChangeMetric={onChangeMetric}
                 projectId={projectId}
                 reportId={Number(reportId)}
-                setEditingId={<span class="fstat-no" title="function not covered" >()</span> =&gt; {}}
                 type={type as MetricType}
               /&gt;
             ));
@@ -564,14 +554,12 @@ const AcceleratorReportEditForm = <span class="cstat-no" title="statement not co
           &lt;AchievementsBox
             report={record}
             projectId={projectId}
-            reportId={reportId}
             editing={true}
             onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: any) =&gt; <span class="cstat-no" title="statement not covered" >onChange('achievements', value)}</span>
           /&gt;
           &lt;ChallengesMitigationBox
             report={record}
             projectId={projectId}
-            reportId={reportId}
             editing={true}
             onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: any) =&gt; <span class="cstat-no" title="statement not covered" >onChange('challenges', value)}</span>
           /&gt;
@@ -589,7 +577,7 @@ export default AcceleratorReportEditForm;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-09T23:21:06.276Z
+                at 2025-04-10T15:16:11.620Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
