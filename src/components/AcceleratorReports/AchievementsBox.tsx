@@ -67,7 +67,7 @@ const Achievement = ({
 };
 
 const AchievementsBox = (props: ReportBoxProps) => {
-  const { report, projectId, reportId, reload, isConsoleView, onChange, editing } = props;
+  const { report, projectId, reportId, reload, isConsoleView, onChange, editing, noTitle } = props;
   const { isAllowed } = useUser();
   const [internalEditing, setInternalEditing] = useState<boolean>(false);
   const [achievements, setAchievements] = useState<string[]>(report?.achievements || []);
@@ -135,7 +135,7 @@ const AchievementsBox = (props: ReportBoxProps) => {
 
   return (
     <EditableReportBox
-      name={strings.ACHIEVEMENTS}
+      name={noTitle ? '' : strings.ACHIEVEMENTS}
       canEdit={isAllowed('EDIT_REPORTS')}
       editing={isEditing}
       onEdit={() => setInternalEditing(true)}

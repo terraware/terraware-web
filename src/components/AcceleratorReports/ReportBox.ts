@@ -8,4 +8,5 @@ export type ReportBoxProps = {
   isConsoleView?: boolean;
   editing?: boolean;
   onChange?: (value: any) => void;
+  noTitle?: boolean;
 };
