@@ -128,7 +128,6 @@ const exportBiomassDetailsCsv = async (observationId: number): Promise<any> => {
     prefix: 'plantingSites.observations',
     fields: [
       'observationPlots_monitoringPlot_plotNumber',
-      'observationPlots_notes',
       'plantingSite_name',
       'observationPlots_completedTime',
       'observationPlots_monitoringPlot_southwestLatitude',
@@ -153,6 +152,7 @@ const exportBiomassDetailsCsv = async (observationId: number): Promise<any> => {
       'observationPlots_biomassDetails_numPlants',
       'observationPlots_biomassDetails_numSpecies',
       'observationPlots.conditions_condition',
+      'observationPlots_notes',
     ],
     sortOrder: [{ field: 'observationPlots_monitoringPlot_plotNumber' }],
     search: {
