@@ -1,17 +1,15 @@
 import React, { useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Icon } from '@terraware/web-components';
-import Tooltip from '@terraware/web-components/components/Tooltip/Tooltip';
 
 import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
 import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
-import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
-import TitleBar from 'src/components/common/TitleBar';
 import strings from 'src/strings';
 import { AcceleratorReport } from 'src/types/AcceleratorReport';
+
+import MetricBox from './MetricBox';
 
 const FunderReportView = () => {
   const theme = useTheme();
@@ -198,59 +196,20 @@ const FunderReportView = () => {
 
         <Card style={{ borderRadius: '8px' }}>
           <Box display='flex' flexWrap='wrap'>
-            {report.systemMetrics?.map((metric, index) => (
-              <Box
-                key={index}
-                flexBasis={'calc(50% - 24px)'}
-                flexShrink={0}
-                marginTop={3}
-                borderRight={index % 2 !== 0 ? 'none' : `1px solid ${theme.palette.TwClrBrdr}`}
-                marginRight={3}
-              >
-                <Box display={'flex'} alignItems={'center'}>
-                  <Typography fontSize='20px' fontWeight={600} paddingRight={'10px'}>
-                    {metric.metric}
-                  </Typography>
-                  {metric.description && (
-                    <Tooltip title={metric.description}>
-                      <Box display='flex'>
-                        <Icon
-                          fillColor={theme.palette.TwClrIcnInfo}
-                          name='info'
-                          size='medium'
-                          style={{ marginRight: '10px' }}
-                        />
-                      </Box>
-                    </Tooltip>
-                  )}
-                  {metric.status && <MetricStatusBadge status={metric.status} />}
-                </Box>
-                <Box display='flex' marginTop={1}>
-                  <Box flex='0 0 50%'>
-                    <Typography fontWeight={600}>
-                      {year} {strings.TARGET}
-                    </Typography>
-                    <Typography fontSize={'24px'} fontWeight={600}>
-                      {metric.target}
-                    </Typography>
-                  </Box>
-                  <Box flex='0 0 50%'>
-                    <Typography fontWeight={600}>
-                      {report.quarter} {strings.PROGRESS}
-                    </Typography>
-                    <Typography fontSize={'24px'} fontWeight={600}>
-                      {metric.overrideValue || metric.systemValue}
-                    </Typography>
-                  </Box>
-                </Box>
-                <Box>
-                  <Typography fontWeight={500} fontSize='20px' marginTop={1}>
-                    {strings.PROGRESS_NOTES}
-                  </Typography>
-                  <Typography fontWeight={400}>{metric.progressNotes}</Typography>
-                </Box>
-              </Box>
-            ))}
+            {['system', 'project', 'standard'].map((type) => {
+              const metrics =
+                type === 'system'
+                  ? report?.systemMetrics
+                  : type === 'project'
+                    ? report?.projectMetrics
+                    : report?.standardMetrics;
+
+              const climateMetrics = metrics.filter((m) => m.component === 'Climate');
+
+              return climateMetrics?.map((metric, index) => (
+                <MetricBox metric={metric} index={index} year={year} quarter={report.quarter} key={index} />
+              ));
+            })}
           </Box>
         </Card>
       </Box>
