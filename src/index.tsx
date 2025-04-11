@@ -22,7 +22,12 @@ root.render(
   // of the HTML which is later parsed by PagedJS
   // <React.StrictMode>
   <React.Suspense fallback={strings.LOADING}>
-    <Router>
+    <Router
+      future={{
+        v7_relativeSplatPath: true,
+        v7_startTransition: true,
+      }}
+    >
       <Routes>
         <Route
           path={APP_PATHS.ERROR}

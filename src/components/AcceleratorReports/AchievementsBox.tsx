@@ -5,7 +5,6 @@ import { Button, Textfield } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
-import { useUser } from 'src/providers';
 import { selectReviewAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
 import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -67,8 +66,7 @@ const Achievement = ({
 };
 
 const AchievementsBox = (props: ReportBoxProps) => {
-  const { report, projectId, reportId, reload, isConsoleView, onChange, editing, noTitle } = props;
-  const { isAllowed } = useUser();
+  const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit, noTitle } = props;
   const [internalEditing, setInternalEditing] = useState<boolean>(false);
   const [achievements, setAchievements] = useState<string[]>(report?.achievements || []);
   const dispatch = useAppDispatch();
@@ -81,6 +79,7 @@ const AchievementsBox = (props: ReportBoxProps) => {
   }, [achievements]);
 
   useEffect(() => setAchievements(report?.achievements || []), [report?.achievements]);
+  useEffect(() => onEditChange?.(internalEditing), [internalEditing]);
 
   useEffect(() => {
     if (achievements.length === 0) {
@@ -112,11 +111,11 @@ const AchievementsBox = (props: ReportBoxProps) => {
           status: report?.status || 'Not Submitted',
         },
         projectId: Number(projectId),
-        reportId: Number(reportId),
+        reportId: report?.id || -1,
       })
     );
     setRequestId(request.requestId);
-  }, [dispatch, projectId, reportId, achievements, report]);
+  }, [dispatch, projectId, achievements, report]);
 
   const onCancel = useCallback(() => {
     setInternalEditing(false);
@@ -136,7 +135,7 @@ const AchievementsBox = (props: ReportBoxProps) => {
   return (
     <EditableReportBox
       name={noTitle ? '' : strings.ACHIEVEMENTS}
-      canEdit={isAllowed('EDIT_REPORTS')}
+      canEdit={!!canEdit}
       editing={isEditing}
       onEdit={() => setInternalEditing(true)}
       onCancel={onCancel}

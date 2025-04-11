@@ -314,7 +314,8 @@ export default function InventoryTests() {
 
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Withdrawals' }).click();
-    await page.getByText('Map').click();
+    const mapTab = page.locator('p.MuiTypography-root').filter({ hasText: 'Map', hasNotText: 'show for this' });
+    await mapTab.click();
     await page.mouse.down();
     await expect(page.getByLabel('Planting Progress').getByText('Planting Progress')).toBeVisible();
     await page.waitForTimeout(6000); //Wait for map to load

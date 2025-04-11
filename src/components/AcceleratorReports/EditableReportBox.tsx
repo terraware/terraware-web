@@ -9,6 +9,7 @@ export type EditableReportBoxProps = {
   name: string;
   description?: string;
   canEdit: boolean;
+  visibleToFunder?: boolean; // undefined to hide text, true/false to determine state to show
   isConsoleView?: boolean;
   editing?: boolean;
   children: ReactNode;
@@ -23,6 +24,7 @@ const EditableReportBox = ({
   name,
   description,
   canEdit,
+  visibleToFunder,
   children,
   isConsoleView,
   onEdit,
@@ -43,13 +45,13 @@ const EditableReportBox = ({
             borderRadius: 2,
             '&:hover': {
               background:
-                !isConsoleView || !canEdit
+                !isConsoleView || (!canEdit && !editing)
                   ? 'none'
                   : editing
                     ? theme.palette.TwClrBgActive
                     : theme.palette.TwClrBgHover,
               '.actions': {
-                display: isConsoleView && canEdit ? 'block' : 'none',
+                display: isConsoleView && (canEdit || editing) ? 'block' : 'none',
                 marginTop: name ? 0 : '20px',
               },
             },
@@ -71,15 +73,26 @@ const EditableReportBox = ({
           >
             <Box
               sx={{
-                alignItems: 'start',
+                alignItems: 'center',
                 display: 'flex',
                 flexGrow: 1,
                 justifyContent: 'flex-start',
-                flexDirection: 'column',
+                flexDirection: 'row',
                 marginBottom: theme.spacing(2),
               }}
             >
-              <Typography sx={{ fontWeight: '600' }}>{name}</Typography>
+              <Typography fontWeight={600}>{name}</Typography>
+              {visibleToFunder !== undefined && (
+                <Typography
+                  fontWeight={500}
+                  fontSize={'14px'}
+                  lineHeight={'20px'}
+                  color={visibleToFunder ? theme.palette.TwClrTxtSuccess : theme.palette.TwClrTxtDanger}
+                  paddingLeft={theme.spacing(2)}
+                >
+                  {visibleToFunder ? strings.METRIC_VISIBLE_TO_FUNDER : strings.METRIC_NOT_VISIBLE_TO_FUNDER}
+                </Typography>
+              )}
             </Box>
 
             <Box

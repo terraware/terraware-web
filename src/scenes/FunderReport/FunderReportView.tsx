@@ -263,7 +263,7 @@ const FunderReportView = () => {
             borderRadius: '8px',
           }}
         >
-          <AchievementsBox report={report} projectId={'28'} reportId={'222'} noTitle />
+          <AchievementsBox report={report} projectId={'28'} noTitle />
         </Card>
       </Box>
       <Box width='100%'>
@@ -275,7 +275,7 @@ const FunderReportView = () => {
             borderRadius: '8px',
           }}
         >
-          <ChallengesMitigationBox report={report} projectId={'28'} reportId={'222'} noTitle />
+          <ChallengesMitigationBox report={report} projectId={'28'} noTitle />
         </Card>
       </Box>
     </Box>

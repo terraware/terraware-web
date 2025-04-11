@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Grid } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
-import { useUser } from 'src/providers';
 import { selectReviewAcceleratorReport } from 'src/redux/features/reports/reportsSelectors';
 import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -16,8 +15,7 @@ import { ReportBoxProps } from './ReportBox';
 const textAreaStyles = { textarea: { height: '120px' } };
 
 const HighlightsBox = (props: ReportBoxProps) => {
-  const { report, projectId, reportId, reload, isConsoleView, onChange, editing } = props;
-  const { isAllowed } = useUser();
+  const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit } = props;
   const [internalEditing, setInternalEditing] = useState<boolean>(false);
   const [highlights, setHighlights] = useState<string | undefined>(report?.highlights);
   const dispatch = useAppDispatch();
@@ -26,6 +24,7 @@ const HighlightsBox = (props: ReportBoxProps) => {
   const snackbar = useSnackbar();
 
   useEffect(() => setHighlights(report?.highlights), [report?.highlights]);
+  useEffect(() => onEditChange?.(internalEditing), [internalEditing]);
 
   useEffect(() => {
     if (highlights && highlights !== report?.highlights) {
@@ -54,11 +53,11 @@ const HighlightsBox = (props: ReportBoxProps) => {
           status: report?.status || 'Not Submitted',
         },
         projectId: Number(projectId),
-        reportId: Number(reportId),
+        reportId: report?.id || -1,
       })
     );
     setRequestId(request.requestId);
-  }, [dispatch, projectId, reportId, highlights, report]);
+  }, [dispatch, projectId, highlights, report]);
 
   const onCancel = useCallback(() => {
     setHighlights(report?.highlights);
@@ -70,7 +69,7 @@ const HighlightsBox = (props: ReportBoxProps) => {
   return (
     <EditableReportBox
       name={strings.HIGHLIGHTS}
-      canEdit={isAllowed('EDIT_REPORTS')}
+      canEdit={!!canEdit}
       editing={isEditing}
       onEdit={() => setInternalEditing(true)}
       onCancel={onCancel}

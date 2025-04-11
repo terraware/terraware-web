@@ -7,7 +7,7 @@ import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/Acce
 import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
 import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
-import MetricBox, { getMetricId, isReportSystemMetric } from 'src/components/AcceleratorReports/MetricBox';
+import MetricBox, { isReportSystemMetric } from 'src/components/AcceleratorReports/MetricBox';
 import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -125,7 +125,6 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
           <HighlightsBox
             report={record}
             projectId={projectId}
-            reportId={reportId}
             editing={true}
             onChange={(value: any) => onChange('highlights', value)}
           />
@@ -139,13 +138,12 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
 
             return metrics?.map((metric, index) => (
               <MetricBox
-                editingId={getMetricId(metric, type as MetricType)}
+                editing={true}
                 key={`${type}-${index}`}
                 metric={metric}
                 onChangeMetric={onChangeMetric}
                 projectId={projectId}
                 reportId={Number(reportId)}
-                setEditingId={() => {}}
                 type={type as MetricType}
               />
             ));
@@ -153,14 +151,12 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
           <AchievementsBox
             report={record}
             projectId={projectId}
-            reportId={reportId}
             editing={true}
             onChange={(value: any) => onChange('achievements', value)}
           />
           <ChallengesMitigationBox
             report={record}
             projectId={projectId}
-            reportId={reportId}
             editing={true}
             onChange={(value: any) => onChange('challenges', value)}
           />
