@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -237,7 +237,11 @@
 <a name='L172'></a><a href='#L172'>172</a>
 <a name='L173'></a><a href='#L173'>173</a>
 <a name='L174'></a><a href='#L174'>174</a>
-<a name='L175'></a><a href='#L175'>175</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -258,6 +262,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -265,6 +271,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -431,19 +439,23 @@ import strings from 'src/strings';
 import { NewMetric } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
 &nbsp;
-export const metricTypeOptions = <span class="cstat-no" title="statement not covered" >[</span>
-  { label: strings.METRIC_TYPE_ACTIVITY, value: 'Activity' },
-  { label: strings.METRIC_TYPE_OUTPUT, value: 'Output' },
-  { label: strings.METRIC_TYPE_OUTCOME, value: 'Outcome' },
-  { label: strings.METRIC_TYPE_IMPACT, value: 'Impact' },
-];
+export const metricTypeOptions = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return [</span>
+    { label: strings.METRIC_TYPE_ACTIVITY, value: 'Activity' },
+    { label: strings.METRIC_TYPE_OUTPUT, value: 'Output' },
+    { label: strings.METRIC_TYPE_OUTCOME, value: 'Outcome' },
+    { label: strings.METRIC_TYPE_IMPACT, value: 'Impact' },
+  ];
+};
 &nbsp;
-export const metricComponentOptions = <span class="cstat-no" title="statement not covered" >[</span>
-  { label: strings.COMMUNITY, value: 'Community' },
-  { label: strings.PROJECT_OBJECTIVES, value: 'Project Objectives' },
-  { label: strings.CLIMATE, value: 'Climate' },
-  { label: strings.BIODIVERSITY, value: 'Biodiversity' },
-];
+export const metricComponentOptions = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return [</span>
+    { label: strings.COMMUNITY, value: 'Community' },
+    { label: strings.PROJECT_OBJECTIVES, value: 'Project Objectives' },
+    { label: strings.CLIMATE, value: 'Climate' },
+    { label: strings.BIODIVERSITY, value: 'Biodiversity' },
+  ];
+};
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >NewProjectSpecificMetric(</span>): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
@@ -541,7 +553,7 @@ export default function <span class="fstat-no" title="function not covered" >New
                   id='type'
                   label={strings.TYPE}
                   onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue: string) =&gt; <span class="cstat-no" title="statement not covered" >onChange('type', newValue)}</span>
-                  options={metricTypeOptions}
+                  options={metricTypeOptions()}
                   selectedValue={newMetric.type}
                   fullWidth
                 /&gt;
@@ -562,7 +574,7 @@ export default function <span class="fstat-no" title="function not covered" >New
                   id='component'
                   label={strings.COMPONENT}
                   onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue: string) =&gt; <span class="cstat-no" title="statement not covered" >onChange('component', newValue)}</span>
-                  options={metricComponentOptions}
+                  options={metricComponentOptions()}
                   selectedValue={newMetric.component}
                   fullWidth
                   required
@@ -592,7 +604,7 @@ export default function <span class="fstat-no" title="function not covered" >New
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-11T16:31:38.012Z
+                at 2025-04-14T15:50:37.479Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

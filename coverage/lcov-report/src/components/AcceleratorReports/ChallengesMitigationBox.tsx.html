@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/62</span>
+                <span class='fraction'>0/64</span>
             </div>
         
             
@@ -299,7 +299,12 @@
 <a name='L234'></a><a href='#L234'>234</a>
 <a name='L235'></a><a href='#L235'>235</a>
 <a name='L236'></a><a href='#L236'>236</a>
-<a name='L237'></a><a href='#L237'>237</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -335,6 +340,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -420,6 +427,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -496,12 +505,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -516,7 +519,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -562,6 +572,7 @@ const ChallengeMitigationPlan = <span class="cstat-no" title="statement not cove
   editing,
   onRemove,
   validateFields,
+  noTitle,
 }: {
   challengeMitigation: ChallengeMitigation;
   setChallengeMitigation: (challengeMitigation: ChallengeMitigation) =&gt; void;
@@ -570,6 +581,7 @@ const ChallengeMitigationPlan = <span class="cstat-no" title="statement not cove
   editing: boolean;
   onRemove: () =&gt; void;
   validateFields: boolean;
+  noTitle?: boolean;
 }) =&gt; {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
@@ -579,26 +591,28 @@ const ChallengeMitigationPlan = <span class="cstat-no" title="statement not cove
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Grid item xs={12} marginBottom={1}&gt;
-      &lt;Box
-        sx={{ scrollMarginTop: '50vh' }}
-        borderBottom={`1px solid ${theme.palette.TwClrBrdrSecondary}`}
-        width={'100%'}
-      &gt;
-        &lt;Grid container marginBottom={1}&gt;
-          &lt;Grid item xs={editing ? 5.75 : 6}&gt;
-            &lt;Typography fontWeight={600}&gt;
-              {strings.CHALLENGE}
-              {editing &amp;&amp; ' *'}
-            &lt;/Typography&gt;
+      {!noTitle &amp;&amp; (
+        &lt;Box
+          sx={{ scrollMarginTop: '50vh' }}
+          borderBottom={`1px solid ${theme.palette.TwClrBrdrSecondary}`}
+          width={'100%'}
+        &gt;
+          &lt;Grid container marginBottom={1}&gt;
+            &lt;Grid item xs={editing ? 5.75 : 6}&gt;
+              &lt;Typography fontWeight={600}&gt;
+                {strings.CHALLENGE}
+                {editing &amp;&amp; ' *'}
+              &lt;/Typography&gt;
+            &lt;/Grid&gt;
+            &lt;Grid item xs={editing ? 5.75 : 6}&gt;
+              &lt;Typography fontWeight={600}&gt;
+                {strings.MITIGATION_PLAN}
+                {editing &amp;&amp; ' *'}
+              &lt;/Typography&gt;
+            &lt;/Grid&gt;
           &lt;/Grid&gt;
-          &lt;Grid item xs={editing ? 5.75 : 6}&gt;
-            &lt;Typography fontWeight={600}&gt;
-              {strings.MITIGATION_PLAN}
-              {editing &amp;&amp; ' *'}
-            &lt;/Typography&gt;
-          &lt;/Grid&gt;
-        &lt;/Grid&gt;
-      &lt;/Box&gt;
+        &lt;/Box&gt;
+      )}
 &nbsp;
       &lt;Grid
         container
@@ -657,7 +671,7 @@ const ChallengeMitigationPlan = <span class="cstat-no" title="statement not cove
 };
 &nbsp;
 const ChallengesMitigationBox = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rops: ReportBoxProps) =&gt; {</span>
-  const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit } = <span class="cstat-no" title="statement not covered" >props;</span>
+  const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit, noTitle } = <span class="cstat-no" title="statement not covered" >props;</span>
   const [internalEditing, setInternalEditing] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [challengeMitigations, setChallengeMitigations] = <span class="cstat-no" title="statement not covered" >useState&lt;ChallengeMitigation[]&gt;(report?.challenges || []);</span>
   const [validateFields, setValidateFields] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
@@ -754,6 +768,7 @@ const ChallengesMitigationBox = <span class="cstat-no" title="statement not cove
           onRemove={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setChallengeMitigations(challengeMitigations.filter(<span class="fstat-no" title="function not covered" >(_</span>, i) =&gt; <span class="cstat-no" title="statement not covered" >index !== i)</span>)}</span>
           setChallengeMitigation={<span class="fstat-no" title="function not covered" >(c</span>hal: ChallengeMitigation) =&gt; <span class="cstat-no" title="statement not covered" >updateChallenge(chal, index)}</span>
           validateFields={validateFields}
+          noTitle={noTitle}
         /&gt;
       ))}
       {isEditing &amp;&amp; (
@@ -778,7 +793,7 @@ export default ChallengesMitigationBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-11T16:31:38.012Z
+                at 2025-04-14T15:50:37.479Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
