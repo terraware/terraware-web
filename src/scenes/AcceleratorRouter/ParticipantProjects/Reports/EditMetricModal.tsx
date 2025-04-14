@@ -104,7 +104,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
             id='type'
             label={strings.TYPE}
             onChange={(newValue: string) => onChange('type', newValue)}
-            options={metricTypeOptions}
+            options={metricTypeOptions()}
             selectedValue={record.type}
             fullWidth
           />
@@ -125,7 +125,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
             id='component'
             label={strings.COMPONENT}
             onChange={(newValue: string) => onChange('component', newValue)}
-            options={metricComponentOptions}
+            options={metricComponentOptions()}
             selectedValue={record.component}
             fullWidth
             required

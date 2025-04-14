@@ -18,19 +18,23 @@ import strings from 'src/strings';
 import { NewMetric } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
 
-export const metricTypeOptions = [
-  { label: strings.METRIC_TYPE_ACTIVITY, value: 'Activity' },
-  { label: strings.METRIC_TYPE_OUTPUT, value: 'Output' },
-  { label: strings.METRIC_TYPE_OUTCOME, value: 'Outcome' },
-  { label: strings.METRIC_TYPE_IMPACT, value: 'Impact' },
-];
+export const metricTypeOptions = () => {
+  return [
+    { label: strings.METRIC_TYPE_ACTIVITY, value: 'Activity' },
+    { label: strings.METRIC_TYPE_OUTPUT, value: 'Output' },
+    { label: strings.METRIC_TYPE_OUTCOME, value: 'Outcome' },
+    { label: strings.METRIC_TYPE_IMPACT, value: 'Impact' },
+  ];
+};
 
-export const metricComponentOptions = [
-  { label: strings.COMMUNITY, value: 'Community' },
-  { label: strings.PROJECT_OBJECTIVES, value: 'Project Objectives' },
-  { label: strings.CLIMATE, value: 'Climate' },
-  { label: strings.BIODIVERSITY, value: 'Biodiversity' },
-];
+export const metricComponentOptions = () => {
+  return [
+    { label: strings.COMMUNITY, value: 'Community' },
+    { label: strings.PROJECT_OBJECTIVES, value: 'Project Objectives' },
+    { label: strings.CLIMATE, value: 'Climate' },
+    { label: strings.BIODIVERSITY, value: 'Biodiversity' },
+  ];
+};
 
 export default function NewProjectSpecificMetric(): JSX.Element {
   const theme = useTheme();
@@ -128,7 +132,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
                   id='type'
                   label={strings.TYPE}
                   onChange={(newValue: string) => onChange('type', newValue)}
-                  options={metricTypeOptions}
+                  options={metricTypeOptions()}
                   selectedValue={newMetric.type}
                   fullWidth
                 />
@@ -149,7 +153,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
                   id='component'
                   label={strings.COMPONENT}
                   onChange={(newValue: string) => onChange('component', newValue)}
-                  options={metricComponentOptions}
+                  options={metricComponentOptions()}
                   selectedValue={newMetric.component}
                   fullWidth
                   required

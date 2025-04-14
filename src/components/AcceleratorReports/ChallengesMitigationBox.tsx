@@ -25,6 +25,7 @@ const ChallengeMitigationPlan = ({
   editing,
   onRemove,
   validateFields,
+  noTitle,
 }: {
   challengeMitigation: ChallengeMitigation;
   setChallengeMitigation: (challengeMitigation: ChallengeMitigation) => void;
@@ -33,6 +34,7 @@ const ChallengeMitigationPlan = ({
   editing: boolean;
   onRemove: () => void;
   validateFields: boolean;
+  noTitle?: boolean;
 }) => {
   const theme = useTheme();
 
@@ -42,26 +44,28 @@ const ChallengeMitigationPlan = ({
 
   return (
     <Grid item xs={12} marginBottom={1}>
-      <Box
-        sx={{ scrollMarginTop: '50vh' }}
-        borderBottom={`1px solid ${theme.palette.TwClrBrdrSecondary}`}
-        width={'100%'}
-      >
-        <Grid container marginBottom={1}>
-          <Grid item xs={editing ? 5.75 : 6}>
-            <Typography fontWeight={600}>
-              {strings.CHALLENGE}
-              {editing && ' *'}
-            </Typography>
+      {!noTitle && (
+        <Box
+          sx={{ scrollMarginTop: '50vh' }}
+          borderBottom={`1px solid ${theme.palette.TwClrBrdrSecondary}`}
+          width={'100%'}
+        >
+          <Grid container marginBottom={1}>
+            <Grid item xs={editing ? 5.75 : 6}>
+              <Typography fontWeight={600}>
+                {strings.CHALLENGE}
+                {editing && ' *'}
+              </Typography>
+            </Grid>
+            <Grid item xs={editing ? 5.75 : 6}>
+              <Typography fontWeight={600}>
+                {strings.MITIGATION_PLAN}
+                {editing && ' *'}
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid item xs={editing ? 5.75 : 6}>
-            <Typography fontWeight={600}>
-              {strings.MITIGATION_PLAN}
-              {editing && ' *'}
-            </Typography>
-          </Grid>
-        </Grid>
-      </Box>
+        </Box>
+      )}
 
       <Grid
         container
@@ -120,7 +124,7 @@ const ChallengeMitigationPlan = ({
 };
 
 const ChallengesMitigationBox = (props: ReportBoxProps) => {
-  const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit } = props;
+  const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit, noTitle } = props;
   const [internalEditing, setInternalEditing] = useState<boolean>(false);
   const [challengeMitigations, setChallengeMitigations] = useState<ChallengeMitigation[]>(report?.challenges || []);
   const [validateFields, setValidateFields] = useState<boolean>(false);
@@ -217,6 +221,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
           onRemove={() => setChallengeMitigations(challengeMitigations.filter((_, i) => index !== i))}
           setChallengeMitigation={(chal: ChallengeMitigation) => updateChallenge(chal, index)}
           validateFields={validateFields}
+          noTitle={noTitle}
         />
       ))}
       {isEditing && (

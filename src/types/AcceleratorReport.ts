@@ -93,3 +93,5 @@ export const AcceleratorMetricStatuses: AcceleratorReportMetricStatus[] = ['Achi
 export type MetricType = 'project' | 'standard' | 'system';
 
 export type ChallengeMitigation = components['schemas']['ReportChallengePayload'];
+
+export type MetricStatus = 'Achieved' | 'On-Track' | 'Unlikely';
