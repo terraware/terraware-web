@@ -7,7 +7,12 @@ import ChallengesMitigationBox from 'src/components/AcceleratorReports/Challenge
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
 import Card from 'src/components/common/Card';
 import strings from 'src/strings';
-import { AcceleratorReport } from 'src/types/AcceleratorReport';
+import {
+  AcceleratorReport,
+  ReportProjectMetric,
+  ReportStandardMetric,
+  ReportSystemMetric,
+} from 'src/types/AcceleratorReport';
 
 import MetricBox from './MetricBox';
 
@@ -141,6 +146,18 @@ const FunderReportView = () => {
 
   const reportName = report?.frequency === 'Annual' ? year : report?.quarter ? `${year}-${report?.quarter}` : '';
 
+  const allMetrics: (ReportProjectMetric | ReportSystemMetric | ReportStandardMetric)[] = [];
+
+  ['system', 'project', 'standard'].map((type) => {
+    const metrics =
+      type === 'system' ? report?.systemMetrics : type === 'project' ? report?.projectMetrics : report?.standardMetrics;
+    allMetrics.push(...metrics);
+  });
+
+  const climateMetrics = allMetrics.filter((m) => m.component === 'Climate');
+  const biodiversityMetrics = allMetrics.filter((m) => m.component === 'Biodiversity');
+  const communityMetrics = allMetrics.filter((m) => m.component === 'Community');
+
   return (
     <Box>
       <Box sx={{ background: theme.palette.TwClrBgSecondary }} padding={3.5} borderRadius={'8px'}>
@@ -189,30 +206,51 @@ const FunderReportView = () => {
           </Box>
         </Card>
       </Box>
-      <Box width='100%'>
-        <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
-          {strings.CLIMATE}
-        </Typography>
+      {climateMetrics.length > 0 && (
+        <Box width='100%'>
+          <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
+            {strings.CLIMATE}
+          </Typography>
 
-        <Card style={{ borderRadius: '8px' }}>
-          <Box display='flex' flexWrap='wrap'>
-            {['system', 'project', 'standard'].map((type) => {
-              const metrics =
-                type === 'system'
-                  ? report?.systemMetrics
-                  : type === 'project'
-                    ? report?.projectMetrics
-                    : report?.standardMetrics;
-
-              const climateMetrics = metrics.filter((m) => m.component === 'Climate');
-
-              return climateMetrics?.map((metric, index) => (
+          <Card style={{ borderRadius: '8px' }}>
+            <Box display='flex' flexWrap='wrap'>
+              {climateMetrics?.map((metric, index) => (
                 <MetricBox metric={metric} index={index} year={year} quarter={report.quarter} key={index} />
-              ));
-            })}
-          </Box>
-        </Card>
-      </Box>
+              ))}
+            </Box>
+          </Card>
+        </Box>
+      )}
+      {biodiversityMetrics.length > 0 && (
+        <Box width='100%'>
+          <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
+            {strings.BIODIVERSITY}
+          </Typography>
+
+          <Card style={{ borderRadius: '8px' }}>
+            <Box display='flex' flexWrap='wrap'>
+              {biodiversityMetrics?.map((metric, index) => (
+                <MetricBox metric={metric} index={index} year={year} quarter={report.quarter} key={index} />
+              ))}
+            </Box>
+          </Card>
+        </Box>
+      )}
+      {communityMetrics.length > 0 && (
+        <Box width='100%'>
+          <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
+            {strings.COMMUNITY}
+          </Typography>
+
+          <Card style={{ borderRadius: '8px' }}>
+            <Box display='flex' flexWrap='wrap'>
+              {communityMetrics?.map((metric, index) => (
+                <MetricBox metric={metric} index={index} year={year} quarter={report.quarter} key={index} />
+              ))}
+            </Box>
+          </Card>
+        </Box>
+      )}
       <Box width='100%'>
         <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
           {strings.ACHIEVEMENTS}
