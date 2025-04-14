@@ -11,6 +11,7 @@ import deliverablesReducers from './features/deliverables/deliverablesSlice';
 import documentProducerReducers from './features/documentProducer';
 import draftPlantingSiteReducers from './features/draftPlantingSite/draftPlantingSiteSlice';
 import eventReducers from './features/events/eventsSlice';
+import fundingEntitiesReducers from './features/funder/fundingEntitiesSlice';
 import globalRolesReducers from './features/globalRoles/globalRolesSlice';
 import locationReducers from './features/location/locationSlice';
 import messageReducers from './features/message/messageSlice';
@@ -26,6 +27,7 @@ import plantingsReducers from './features/plantings/plantingsSlice';
 import projectSpeciesReducers from './features/projectSpecies/projectSpeciesSlice';
 import projectToDoReducers from './features/projectToDo/projectToDoSlice';
 import projectsReducers from './features/projects/projectsSlice';
+import reportsReducers from './features/reports/reportsSlice';
 import reportsSettingsReducers from './features/reportsSettings/reportsSettingsSlice';
 import scoresReducers from './features/scores/scoresSlice';
 import snackbarReducers from './features/snackbar/snackbarSlice';
@@ -52,6 +54,7 @@ export const reducers = {
   ...documentProducerReducers,
   ...draftPlantingSiteReducers,
   ...eventReducers,
+  ...fundingEntitiesReducers,
   ...globalRolesReducers,
   ...locationReducers,
   ...messageReducers,
@@ -67,6 +70,7 @@ export const reducers = {
   ...projectsReducers,
   ...projectSpeciesReducers,
   ...projectToDoReducers,
+  ...reportsReducers,
   ...reportsSettingsReducers,
   ...scoresReducers,
   ...snackbarReducers,

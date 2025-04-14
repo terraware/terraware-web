@@ -4,8 +4,6 @@ import { useMap } from 'react-map-gl';
 import { Box, IconButton, Typography, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
 
-import isEnabled from 'src/features';
-
 /**
  * Full screen map container ref for Portals
  */
@@ -44,7 +42,6 @@ export type MapTooltipProps = {
 
 export function MapTooltip({ title, properties, subtitle }: MapTooltipProps): JSX.Element {
   const theme = useTheme();
-  const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
 
   const textStyle = {
     fontWeight: 400,
@@ -64,34 +61,25 @@ export function MapTooltip({ title, properties, subtitle }: MapTooltipProps): JS
     ...textStyle,
     marginLeft: theme.spacing(1),
     overflowWrap: 'anywhere',
-    textAlign: newPlantsDashboardEnabled ? 'right' : 'left',
+    textAlign: 'right',
   };
 
   return (
     <>
       <Box
-        sx={
-          newPlantsDashboardEnabled
-            ? {
-                backgroundColor: theme.palette.TwClrBgSecondary,
-                borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-                padding: theme.spacing(2, 4),
-                borderRadius: 1,
-              }
-            : undefined
-        }
+        sx={{
+          backgroundColor: theme.palette.TwClrBgSecondary,
+          borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+          padding: theme.spacing(2, 4),
+          borderRadius: 1,
+        }}
       >
         {title && (
-          <Typography
-            fontSize={newPlantsDashboardEnabled ? '20px' : '16px'}
-            fontWeight={600}
-            marginBottom={newPlantsDashboardEnabled ? 0 : theme.spacing(2)}
-            textAlign='left'
-          >
+          <Typography fontSize={'20px'} fontWeight={600} marginBottom={0} textAlign='left'>
             {title}
           </Typography>
         )}
-        {newPlantsDashboardEnabled && subtitle && (
+        {subtitle && (
           <Typography
             fontSize='16px'
             fontWeight={500}
@@ -103,7 +91,7 @@ export function MapTooltip({ title, properties, subtitle }: MapTooltipProps): JS
           </Typography>
         )}
       </Box>
-      <Box padding={newPlantsDashboardEnabled ? 2 : 0}>
+      <Box padding={2}>
         <table>
           <tbody>
             {properties.map((prop: TooltipProperty, index: number) => (

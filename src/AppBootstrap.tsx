@@ -5,10 +5,12 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import {
   LocalizationProvider,
   OrganizationProvider,
+  UserFundingEntityProvider,
   UserProvider,
   useLocalization,
   useOrganization,
   useUser,
+  useUserFundingEntity,
 } from 'src/providers';
 
 type BlockingBootstrapProps = {
@@ -20,14 +22,24 @@ function BlockingBootstrap({ children }: BlockingBootstrapProps): JSX.Element {
   const { bootstrapped: userBootstrapped } = useUser();
   const { bootstrapped: organizationBootstrapped } = useOrganization();
   const { bootstrapped: localizationBootstrapped } = useLocalization();
+  const { bootstrapped: userFundingEntityBootstrapped } = useUserFundingEntity();
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
   useEffect(() => {
     setBootstrapped(
       bootstrapped ||
-        (userBootstrapped && !!(organizationBootstrapped || isAcceleratorRoute) && localizationBootstrapped)
+        (userBootstrapped &&
+          (organizationBootstrapped || isAcceleratorRoute || userFundingEntityBootstrapped) &&
+          localizationBootstrapped)
     );
-  }, [bootstrapped, userBootstrapped, organizationBootstrapped, isAcceleratorRoute, localizationBootstrapped]);
+  }, [
+    bootstrapped,
+    userBootstrapped,
+    userFundingEntityBootstrapped,
+    organizationBootstrapped,
+    isAcceleratorRoute,
+    localizationBootstrapped,
+  ]);
 
   if (!bootstrapped) {
     return <BlockingSpinner />;
@@ -47,14 +59,16 @@ export default function AppBootstrap({ children }: AppBootstrapProps): JSX.Eleme
   return (
     <UserProvider>
       <OrganizationProvider>
-        <LocalizationProvider
-          selectedLocale={selectedLocale}
-          setSelectedLocale={setSelectedLocale}
-          activeLocale={activeLocale}
-          setActiveLocale={setActiveLocale}
-        >
-          <BlockingBootstrap>{children}</BlockingBootstrap>
-        </LocalizationProvider>
+        <UserFundingEntityProvider>
+          <LocalizationProvider
+            selectedLocale={selectedLocale}
+            setSelectedLocale={setSelectedLocale}
+            activeLocale={activeLocale}
+            setActiveLocale={setActiveLocale}
+          >
+            <BlockingBootstrap>{children}</BlockingBootstrap>
+          </LocalizationProvider>
+        </UserFundingEntityProvider>
       </OrganizationProvider>
     </UserProvider>
   );

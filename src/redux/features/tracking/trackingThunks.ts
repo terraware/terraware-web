@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Dispatch } from 'redux';
 
 import { RootState } from 'src/redux/rootReducer';
 import { TrackingService } from 'src/services';
+import strings from 'src/strings';
 import { PlantingSiteSearchResult } from 'src/types/Tracking';
 
 import {
@@ -86,3 +88,16 @@ export const requestSiteReportedPlants = (plantingSiteId: number) => {
     }
   };
 };
+
+export const requestGetPlantingSiteHistory = createAsyncThunk(
+  'observations/summaries',
+  async (request: { plantingSiteId: number; historyId: number }, { rejectWithValue }) => {
+    const response = await TrackingService.getPlantingSiteHistory(request.plantingSiteId, request.historyId);
+
+    if (response !== null && response.requestSucceeded && response?.data?.site !== undefined) {
+      return response.data.site;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);

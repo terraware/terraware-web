@@ -85,6 +85,7 @@ export default function ScheduleObservation(): JSX.Element {
       plantingSiteId={plantingSiteId}
       plantingSites={plantingSites}
       onCancel={() => goToObservations()}
+      selectedSubzones={selectedSubzones}
       onChangeSelectedSubzones={setSelectedSubzones}
       onEndDate={(date) => setEndDate(date)}
       onErrors={onErrors}

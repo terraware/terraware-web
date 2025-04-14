@@ -37,6 +37,18 @@ export type ObservationResults = Omit<ObservationResultsPayload, 'species'> &
     hasObservedTemporaryPlots: boolean;
   };
 
+export type AdHocObservationResults = Omit<
+  ObservationResultsPayload &
+    Boundary & {
+      plantingSiteName: string;
+      totalPlants: number;
+      plotName?: string;
+      plotNumber?: number;
+      plantingZones: ObservationPlantingZoneResultsWithLastObv[];
+    },
+  'plantingZones'
+> & { plantingZones: ObservationPlantingZoneResultsWithLastObv[] };
+
 export type ObservationResultsWithLastObv = Omit<
   Omit<ObservationResultsPayload, 'species'> &
     Boundary & {
@@ -53,30 +65,37 @@ export type ObservationResultsWithLastObv = Omit<
 
 // zone level results -> contains a list of subzone level results
 export type ObservationPlantingZoneResultsPayload = components['schemas']['ObservationPlantingZoneResultsPayload'];
-export type ObservationPlantingZoneResults = ObservationPlantingZoneResultsPayload &
-  Boundary & {
-    completedDate?: string;
-    plantingZoneName: string;
-    plantingSubzones: ObservationPlantingSubzoneResults[];
-    species: ObservationSpeciesResults[];
-    status?: MonitoringPlotStatus;
-    hasObservedPermanentPlots: boolean;
-    hasObservedTemporaryPlots: boolean;
-  };
+export type ObservationPlantingZoneResults = ObservationPlantingZoneResultsPayload & {
+  completedDate?: string;
+  plantingZoneName: string;
+  plantingSubzones: ObservationPlantingSubzoneResults[];
+  species: ObservationSpeciesResults[];
+  status?: MonitoringPlotStatus;
+  hasObservedPermanentPlots: boolean;
+  hasObservedTemporaryPlots: boolean;
+};
 
-export type ObservationPlantingZoneResultsWithLastObv = ObservationPlantingZoneResults & { lastObv?: string };
+export type ObservationPlantingZoneResultsWithLastObv = Omit<ObservationPlantingZoneResults, 'plantingSubzones'> & {
+  lastObv?: string;
+  plantingSubzones: ObservationPlantingSubzoneResultsWithLastObv[];
+};
 
 // subzone level results -> contains lists of both species level results and monitoring plot level results
 export type ObservationPlantingSubzoneResultsPayload =
   components['schemas']['ObservationPlantingSubzoneResultsPayload'];
-export type ObservationPlantingSubzoneResults = ObservationPlantingSubzoneResultsPayload &
-  Boundary & {
-    plantingSubzoneName: string;
-    monitoringPlots: ObservationMonitoringPlotResults[];
-  };
-
+export type ObservationPlantingSubzoneResults = ObservationPlantingSubzoneResultsPayload & {
+  plantingSubzoneName: string;
+  monitoringPlots: ObservationMonitoringPlotResults[];
+};
+export type ObservationPlantingSubzoneResultsWithLastObv = ObservationPlantingSubzoneResults & {
+  lastObv?: string;
+};
 // monitoring plot level results
 export type ObservationMonitoringPlotResultsPayload = components['schemas']['ObservationMonitoringPlotResultsPayload'];
+export type ObservationMonitoringPlotForMap = ObservationMonitoringPlotResultsPayload & {
+  isBiomassMeasurement?: boolean;
+  totalShrubs?: number;
+};
 export type MonitoringPlotStatus = ObservationMonitoringPlotResultsPayload['status'];
 export type ObservationMonitoringPlotResults = ObservationMonitoringPlotResultsPayload & {
   completedDate?: string;
@@ -135,7 +154,7 @@ export const getReplaceObservationPlotDuration = (duration: ReplaceObservationPl
 };
 
 export type Aggregation = {
-  subzones: Record<number, Set<number>>;
+  subzones: Record<string, Set<number>>;
   plots: Record<number, ObservationMonitoringPlotResultsPayload>;
   completedTime?: string;
 };
@@ -153,3 +172,11 @@ export type ZoneAggregation = Omit<PlantingZone, 'plantingSubzones'> & {
 export type PlantingSiteAggregation = Omit<MinimalPlantingSite, 'plantingZones'> & {
   plantingZones: ZoneAggregation[];
 };
+
+export type ObservationSummary = components['schemas']['PlantingSiteObservationSummaryPayload'];
+
+export type PlantingZoneObservationSummary = components['schemas']['PlantingZoneObservationSummaryPayload'];
+
+export type ExistingTreePayload = components['schemas']['ExistingTreePayload'];
+
+export type BiomassSpeciesPayload = components['schemas']['BiomassSpeciesPayload'];

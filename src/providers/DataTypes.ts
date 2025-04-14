@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Country } from 'src/types/Country';
+import { FundingEntity } from 'src/types/FundingEntity';
 import { Organization } from 'src/types/Organization';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { User } from 'src/types/User';
@@ -47,4 +48,14 @@ export type ProvidedLocalizationData = {
   setSelectedLocale: (locale: string) => void;
   supportedTimeZones: TimeZoneDescription[];
   bootstrapped: boolean;
+};
+
+export type ProvidedUserFundingEntityData = {
+  bootstrapped: boolean;
+  userFundingEntity?: FundingEntity;
+};
+
+export type ProvidedFundingEntityData = {
+  fundingEntity?: FundingEntity;
+  reload: () => void;
 };

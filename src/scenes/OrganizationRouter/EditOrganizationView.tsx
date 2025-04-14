@@ -180,6 +180,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
             horizontalLayout
             countryError={countryError}
             countrySubdivisionError={subdivisionError}
+            paddingBottom={theme.spacing(4)}
           />
           <Grid item xs={gridSize()} marginTop={isMobile ? 4 : 0}>
             <TimeZoneSelector
@@ -208,8 +209,9 @@ export default function OrganizationView({ organization, reloadOrganizationData 
                   required
                   type='text'
                   label={strings.DESCRIBE_ORGANIZATION_TYPE_DETAILS}
-                  id='edit-org-question-website'
+                  id='edit-org-question-type-details'
                   display={false}
+                  maxLength={100}
                   onChange={(value) => {
                     onChange('organizationTypeDetails', value);
                     setOrganizationTypeDetailsError('');

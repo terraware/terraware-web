@@ -33,9 +33,9 @@ export const getLongDateTime = (date: string, locale: string | undefined | null)
  * Returns <Hour>:<Minute> <am/pm> (eg. 12:00 pm)
  */
 export const getShortTime = (dateTime: string, locale: string | undefined | null, timeZone?: string): string =>
-  new Intl.DateTimeFormat(locale || 'en-US', { timeStyle: 'short', timeZone: timeZone ?? 'UTC' })
-    .format(new Date(dateTime))
-    .toLowerCase();
+  new Intl.DateTimeFormat(locale || 'en-US', { timeStyle: 'short', timeZone: timeZone ?? 'UTC' }).format(
+    new Date(dateTime)
+  );
 
 /**
  * Returns <ISO Date> <Hour>:<Minute> <AM/PM> (eg. 2023-09-05 3:31 PM)

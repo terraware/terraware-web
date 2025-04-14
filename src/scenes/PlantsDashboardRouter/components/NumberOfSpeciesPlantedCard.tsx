@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { Icon, Tooltip } from '@terraware/web-components';
 
 import BarChart from 'src/components/common/Chart/BarChart';
+import FormattedNumber from 'src/components/common/FormattedNumber';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useUser } from 'src/providers';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
+import { selectDefaultSpecies } from 'src/redux/features/species/speciesSelectors';
 import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
@@ -79,7 +81,7 @@ const SiteWithoutZonesCard = ({ plantingSiteId, newVersion }: NumberOfSpeciesPla
 
 const SiteWithZonesCard = ({ newVersion }: NumberOfSpeciesPlantedCardProps): JSX.Element => {
   const populationSelector = useAppSelector((state) => selectSitePopulationZones(state));
-  const speciesSelector = useAppSelector((state) => selectSpecies(state));
+  const speciesSelector = useAppSelector((state) => selectDefaultSpecies(state));
   const [totalSpecies, setTotalSpecies] = useState<number>();
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
@@ -185,9 +187,16 @@ const ChartData = ({ labels, values, totalSpecies, newVersion }: ChartDataProps)
 
   return newVersion ? (
     <Box marginRight={2}>
-      <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-        {strings.formatString(strings.SPECIES_CATEGORIES_NUMBER, totalSpecies?.toString() || '')}
-      </Typography>
+      <Box display={'flex'} alignItems={'center'}>
+        <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
+          {strings.SPECIES_CATEGORIES}
+        </Typography>
+        <Tooltip title={strings.SPECIES_CATEGORIES_TOOLTIP}>
+          <Box display='flex'>
+            <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+          </Box>
+        </Tooltip>
+      </Box>
 
       <Box height={'220px'} marginTop={6}>
         <BarChart
@@ -211,7 +220,7 @@ const ChartData = ({ labels, values, totalSpecies, newVersion }: ChartDataProps)
           </Typography>
           <Box display='flex' alignItems='flex-end' flexWrap='wrap' marginBottom={theme.spacing(3)}>
             <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
-              {totalSpecies}
+              {totalSpecies !== undefined && <FormattedNumber value={totalSpecies} />}
             </Typography>
             &nbsp;
             <Typography fontSize='24px' fontWeight={600}>

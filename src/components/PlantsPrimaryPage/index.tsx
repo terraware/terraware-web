@@ -27,6 +27,8 @@ export type PlantsPrimaryPageProps = {
   title: string;
   text?: string;
   newHeader?: boolean;
+  showGeometryNote?: boolean;
+  latestObservationId?: number;
 };
 
 const allSitesOption = (organizationId: number): PlantingSite => ({
@@ -51,6 +53,8 @@ export default function PlantsPrimaryPage({
   title,
   text,
   newHeader,
+  showGeometryNote,
+  latestObservationId,
 }: PlantsPrimaryPageProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
@@ -158,6 +162,8 @@ export default function PlantsPrimaryPage({
       title={title}
       text={text}
       newHeader={newHeader}
+      showGeometryNote={showGeometryNote}
+      latestObservationId={latestObservationId}
     />
   );
 }

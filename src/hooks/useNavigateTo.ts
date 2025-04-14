@@ -51,6 +51,16 @@ export default function useNavigateTo() {
         navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES_EDIT.replace(':projectId', `${projectId}`) });
       },
 
+      goToAcceleratorReport: (reportId: number, projectId: number) =>
+        navigate({
+          pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', `${reportId}`).replace(':projectId', `${projectId}`),
+        }),
+
+      goToAcceleratorReportEdit: (reportId: number, projectId: number) =>
+        navigate({
+          pathname: APP_PATHS.REPORTS_EDIT.replace(':reportId', `${reportId}`).replace(':projectId', `${projectId}`),
+        }),
+
       goToApplication: (applicationId: number) => {
         navigate({ pathname: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${applicationId}`) });
       },
@@ -153,6 +163,18 @@ export default function useNavigateTo() {
           pathname: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW,
         }),
 
+      goToEditFundingEntity: (fundingEntityId: number | string) =>
+        navigate(APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_EDIT.replace(':fundingEntityId', `${fundingEntityId}`)),
+
+      goToFundingEntities: () => navigate({ pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES }),
+
+      goToFundingEntity: (fundingEntityId: number | string) =>
+        navigate({
+          pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_VIEW.replace(':fundingEntityId', String(fundingEntityId)),
+        }),
+
+      goToNewFundingEntity: () => navigate({ pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_NEW }),
+
       goToHelpSupport: () => {
         navigate({ pathname: APP_PATHS.HELP_SUPPORT });
       },
@@ -251,6 +273,14 @@ export default function useNavigateTo() {
 
       goToPlantingSiteView: (plantingSiteId: number) =>
         navigate(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', `${plantingSiteId}`)),
+
+      goToSettings: () => navigate(APP_PATHS.SETTINGS),
+
+      goToAcceleratorEditReportSettings: (projectId: string) =>
+        navigate(APP_PATHS.ACCELERATOR_PROJECT_REPORTS_EDIT.replace(':projectId', projectId)),
+
+      goToNewProjectMetric: (projectId: string) =>
+        navigate(APP_PATHS.ACCELERATOR_PROJECT_REPORTS_METRICS_NEW.replace(':projectId', projectId)),
     }),
     [navigate]
   );

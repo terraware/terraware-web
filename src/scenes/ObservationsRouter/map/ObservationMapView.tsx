@@ -7,37 +7,75 @@ import MapDateSelect from 'src/components/common/MapDateSelect';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
+import {
+  selectPlantingSiteAdHocObservations,
+  selectPlantingSiteObservations,
+} from 'src/redux/features/observations/observationsSelectors';
+import { selectPlantingSiteHistory } from 'src/redux/features/tracking/trackingSelectors';
+import { requestGetPlantingSiteHistory } from 'src/redux/features/tracking/trackingThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import TooltipContents from 'src/scenes/ObservationsRouter/map/TooltipContents';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapEntityId, MapObject, MapSourceBaseData, MapSourceProperties } from 'src/types/Map';
-import { ObservationResults } from 'src/types/Observations';
-import { PlantingSite } from 'src/types/Tracking';
+import { AdHocObservationResults, Observation, ObservationResults } from 'src/types/Observations';
+import { PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
+import { isAfter } from 'src/utils/dateUtils';
 import { regexMatch } from 'src/utils/search';
 
 type ObservationMapViewProps = SearchProps & {
   hideDate?: boolean;
   observationsResults?: ObservationResults[];
+  adHocObservationsResults?: AdHocObservationResults[];
   selectedPlantingSite: PlantingSite;
 };
 
 export default function ObservationMapView({
   hideDate,
   observationsResults,
+  adHocObservationsResults,
   search,
   filtersProps,
   selectedPlantingSite,
 }: ObservationMapViewProps): JSX.Element {
+  const dispatch = useAppDispatch();
+  const [requestId, setRequestId] = useState<string>('');
+
+  const observationHistory = useAppSelector((state) => selectPlantingSiteHistory(state, requestId));
+
+  const [plantingSiteHistory, setPlantingSiteHistory] = useState<PlantingSiteHistory>();
+  const [selectedObservation, setSelectedObservation] = useState<ObservationResults>();
+  const [selectedAdHocObservation, setSelectedAdHocObservation] = useState<AdHocObservationResults>();
+
+  const observations: Observation[] | undefined = useAppSelector((state) =>
+    selectPlantingSiteObservations(state, selectedPlantingSite.id)
+  );
+
+  const adHocObservations: Observation[] | undefined = useAppSelector((state) =>
+    selectPlantingSiteAdHocObservations(state, selectedPlantingSite.id)
+  );
+
   const observationsDates = useMemo(() => {
-    const uniqueDates = new Set(observationsResults?.map((obs) => obs.completedDate || obs.startDate));
+    const uniqueDates = new Set(observationsResults?.map((obs) => obs.completedTime || obs.startDate));
+    adHocObservationsResults?.forEach((obs) => {
+      const dateToUse = obs.completedTime ? obs.completedTime : obs.startDate;
+      uniqueDates.add(dateToUse);
+    });
 
     return Array.from(uniqueDates)
       ?.filter((time) => time)
       ?.map((time) => time)
       ?.sort((a, b) => (Date.parse(a) > Date.parse(b) ? 1 : -1));
-  }, [observationsResults]);
+  }, [observationsResults, adHocObservationsResults]);
 
   const [selectedObservationDate, setSelectedObservationDate] = useState<string | undefined>();
+
+  useEffect(() => {
+    if (observationHistory?.status === 'success') {
+      setPlantingSiteHistory(observationHistory.data);
+    }
+  }, [observationHistory]);
+
   useEffect(() => {
     if (observationsDates) {
       setSelectedObservationDate((currentDate) => {
@@ -52,14 +90,52 @@ export default function ObservationMapView({
     }
   }, [observationsDates]);
 
-  const selectedObservation = useMemo(
-    () =>
-      observationsResults?.find((obs) => {
-        const dateToCheck = obs.state === 'Completed' ? obs.completedDate : obs.startDate;
-        return dateToCheck === selectedObservationDate;
-      }),
-    [observationsResults, selectedObservationDate]
-  );
+  useEffect(() => {
+    const selObservation = observationsResults?.find((obs) => {
+      const dateToCheck = obs.state === 'Completed' || obs.state === 'Abandoned' ? obs.completedTime : obs.startDate;
+      return dateToCheck === selectedObservationDate;
+    });
+
+    setSelectedObservation(selObservation);
+
+    const selAdHocObservation = adHocObservationsResults?.find((obs) => {
+      const dateToCheck = obs.completedTime ? obs.completedTime : obs.startDate;
+      return dateToCheck === selectedObservationDate;
+    });
+
+    setSelectedAdHocObservation(selAdHocObservation);
+  }, [observationsResults, adHocObservationsResults, selectedPlantingSite, selectedObservationDate]);
+
+  const observationData = useMemo(() => {
+    let observationToUse = selectedObservation || selectedAdHocObservation;
+    if (selectedObservation && selectedAdHocObservation) {
+      if (isAfter(selectedAdHocObservation.completedTime, selectedObservation.completedTime)) {
+        observationToUse = selectedAdHocObservation;
+      }
+    }
+
+    return (
+      observations.find((obv) => obv.id === observationToUse?.observationId) ||
+      adHocObservations.find((obv) => obv.id === observationToUse?.observationId)
+    );
+  }, [observations, selectedObservation, selectedAdHocObservation]);
+
+  useEffect(() => {
+    if (observationData) {
+      const historyId = observationData.plantingSiteHistoryId;
+      if (historyId) {
+        const requestObservationHistory = dispatch(
+          requestGetPlantingSiteHistory({
+            plantingSiteId: selectedPlantingSite.id,
+            historyId: historyId,
+          })
+        );
+        setRequestId(requestObservationHistory.requestId);
+      }
+    } else {
+      setRequestId('');
+    }
+  }, [observationData]);
 
   const plantingSiteMapData: MapSourceBaseData | undefined = useMemo(
     () => MapService.getMapDataFromPlantingSite(selectedPlantingSite)?.site,
@@ -67,18 +143,32 @@ export default function ObservationMapView({
   );
 
   const mapData: Record<MapObject, MapSourceBaseData | undefined> = useMemo(() => {
-    if (!selectedObservationDate || !selectedObservation) {
+    let observationToUse = selectedObservation || selectedAdHocObservation;
+    if (selectedObservation && selectedAdHocObservation) {
+      if (isAfter(selectedAdHocObservation.completedTime, selectedObservation.completedTime)) {
+        observationToUse = selectedAdHocObservation;
+      }
+    }
+
+    if (!selectedObservationDate || !observationToUse || !plantingSiteHistory) {
       return {
         site: plantingSiteMapData,
         zone: undefined,
         subzone: undefined,
         permanentPlot: undefined,
         temporaryPlot: undefined,
+        adHocPlot: undefined,
       };
     }
 
-    return MapService.getMapDataFromObservation(selectedObservation);
-  }, [selectedObservation, selectedObservationDate, plantingSiteMapData]);
+    return MapService.getMapDataFromObservation(observationToUse, plantingSiteHistory);
+  }, [
+    selectedObservation,
+    selectedObservationDate,
+    plantingSiteMapData,
+    plantingSiteHistory,
+    selectedAdHocObservation,
+  ]);
 
   const filterZoneNames = useMemo(() => filtersProps?.filters.zone?.values ?? [], [filtersProps?.filters.zone?.values]);
 
@@ -113,13 +203,17 @@ export default function ObservationMapView({
       if (properties.type === 'site') {
         entity = selectedObservation;
       } else if (properties.type === 'zone') {
-        entity = selectedObservation?.plantingZones?.find((z) => z.plantingZoneId === properties.id);
+        entity =
+          selectedObservation?.plantingZones?.find((z) => z.plantingZoneId === properties.id) ||
+          plantingSiteHistory?.plantingZones.find((z) => z.plantingZoneId === properties.id);
       } else {
         // monitoring plot
-        entity = selectedObservation?.plantingZones
-          ?.flatMap((z) => z.plantingSubzones)
-          ?.flatMap((sz) => sz.monitoringPlots)
-          ?.find((p) => p.monitoringPlotId === properties.id);
+        entity =
+          selectedAdHocObservation?.adHocPlot ||
+          selectedObservation?.plantingZones
+            ?.flatMap((z) => z.plantingSubzones)
+            ?.flatMap((sz) => sz.monitoringPlots)
+            ?.find((p) => p.monitoringPlotId === properties.id);
       }
 
       if (!entity) {
@@ -132,16 +226,16 @@ export default function ObservationMapView({
           observationId={selectedObservation?.observationId}
           observationState={selectedObservation?.state}
           plantingSiteId={selectedPlantingSite.id}
-          title={`${properties.name}${properties.type === 'temporaryPlot' ? ` (${strings.TEMPORARY})` : ''}`}
+          title={`${properties.name}${properties.type === 'temporaryPlot' ? ` (${strings.TEMPORARY})` : properties.type === 'adHocPlot' ? ` (${strings.AD_HOC})` : properties.type === 'permanentPlot' ? ` (${strings.PERMANENT})` : ''}`}
         />
       );
     },
-    [selectedObservation, selectedPlantingSite]
+    [selectedObservation, selectedPlantingSite, plantingSiteHistory]
   );
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
-      <PlantingSiteMapLegend options={['site', 'zone', 'permanentPlot', 'temporaryPlot']} />
+      <PlantingSiteMapLegend options={['site', 'zone', 'permanentPlot', 'temporaryPlot', 'adHocPlot']} />
       <Box display='flex' sx={{ flexGrow: 1 }}>
         {mapData.site && (
           <PlantingSiteMap
@@ -171,6 +265,7 @@ export default function ObservationMapView({
                 />
               )
             }
+            zoneInteractive={true}
             contextRenderer={{
               render: contextRenderer,
               sx: {
@@ -185,7 +280,12 @@ export default function ObservationMapView({
             highlightEntities={hasSearchCriteria ? searchZoneEntities : []}
             focusEntities={
               !hasSearchCriteria || searchZoneEntities.length === 0
-                ? [{ sourceId: 'sites', id: selectedObservation?.plantingSiteId }]
+                ? [
+                    {
+                      sourceId: 'sites',
+                      id: selectedObservation?.plantingSiteId || selectedAdHocObservation?.plantingSiteId,
+                    },
+                  ]
                 : searchZoneEntities
             }
           />

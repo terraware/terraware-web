@@ -6,9 +6,9 @@ import { Dropdown, Textfield } from '@terraware/web-components';
 import VariableStatusBadge from 'src/components/Variables/VariableStatusBadge';
 import strings from 'src/strings';
 import {
+  NonSectionVariableStatuses,
   UpdateVariableWorkflowDetailsPayload,
   VariableStatusType,
-  VariableStatuses,
 } from 'src/types/documentProducer/Variable';
 
 type VariableWorkflowDetailsProps = {
@@ -57,8 +57,8 @@ const VariableWorkflowDetails = ({
                   status: newValue as VariableStatusType,
                 });
               }}
-              options={VariableStatuses.map((status) => ({
-                label: status,
+              options={NonSectionVariableStatuses.map((status) => ({
+                label: status === 'Rejected' ? strings.UPDATE_REQUESTED : status,
                 value: status,
               }))}
               selectedValue={variableWorkflowDetails?.status}

@@ -16,11 +16,17 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ObservationsService } from 'src/services';
 import strings from 'src/strings';
-import { Observation, ObservationPlantingZoneResults, ObservationResults } from 'src/types/Observations';
+import {
+  AdHocObservationResults,
+  Observation,
+  ObservationPlantingZoneResults,
+  ObservationResults,
+} from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { isAdmin } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import AdHocObservationsRenderer from '../AdHocObservationsRenderer';
 import EndObservationModal from './EndObservationModal';
 import OrgObservationsRenderer from './OrgObservationsRenderer';
 
@@ -83,13 +89,19 @@ const scheduleObservationsColumn = (): TableColumnType[] => [
 export type OrgObservationsListViewProps = {
   plantingSiteId: number;
   observationsResults?: ObservationResults[];
+  adHocObservationsResults?: AdHocObservationResults[];
   reload: () => void;
+  selectedPlotSelection?: string;
+  timeZone: string;
 };
 
 export default function OrgObservationsListView({
   observationsResults,
+  adHocObservationsResults,
   plantingSiteId,
   reload,
+  selectedPlotSelection,
+  timeZone,
 }: OrgObservationsListViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
@@ -132,7 +144,37 @@ export default function OrgObservationsListView({
     }
 
     return [...defaultColumns(), ...(scheduleObservationsEnabled ? scheduleObservationsColumn() : [])];
-  }, [activeLocale, scheduleObservationsEnabled]);
+  }, [activeLocale, scheduleObservationsEnabled, selectedPlotSelection]);
+
+  const adHocColumns = useCallback((): TableColumnType[] => {
+    return [
+      {
+        key: 'plotNumber',
+        name: strings.PLOT,
+        type: 'string',
+      },
+      {
+        key: 'plantingSiteName',
+        name: strings.PLANTING_SITE,
+        type: 'string',
+      },
+      {
+        key: 'observationDate',
+        name: strings.DATE,
+        type: 'string',
+      },
+      {
+        key: 'totalPlants',
+        name: strings.PLANTS,
+        type: 'number',
+      },
+      {
+        key: 'totalSpecies',
+        name: strings.SPECIES,
+        type: 'number',
+      },
+    ];
+  }, [activeLocale]);
 
   const exportObservation = useCallback(
     async (observationId: number, gpxOrCsv: 'gpx' | 'csv') => {
@@ -218,22 +260,33 @@ export default function OrgObservationsListView({
       {endObservationModalOpened && selectedObservation && (
         <EndObservationModal observation={selectedObservation} onClose={onCloseModal} onSave={onEndObservation} />
       )}
-      <Table
-        id='org-observations-table'
-        columns={columns}
-        rows={results}
-        orderBy='completedDate'
-        Renderer={OrgObservationsRenderer(
-          theme,
-          activeLocale,
-          goToRescheduleObservation,
-          (observationId: number) => exportObservation(observationId, 'csv'),
-          (observationId: number) => exportObservation(observationId, 'gpx'),
-          (observation: any) => {
-            endObservation(observation);
-          }
-        )}
-      />
+      {selectedPlotSelection === 'adHoc' && (
+        <Table
+          id='org-ad-hoc-observations-table'
+          columns={adHocColumns}
+          rows={adHocObservationsResults || []}
+          orderBy='observationDate'
+          Renderer={AdHocObservationsRenderer(timeZone)}
+        />
+      )}
+      {(!selectedPlotSelection || selectedPlotSelection === 'assigned') && (
+        <Table
+          id='org-observations-table'
+          columns={columns}
+          rows={results}
+          orderBy='observationDate'
+          Renderer={OrgObservationsRenderer(
+            theme,
+            activeLocale,
+            goToRescheduleObservation,
+            (observationId: number) => exportObservation(observationId, 'csv'),
+            (observationId: number) => exportObservation(observationId, 'gpx'),
+            (observation: any) => {
+              endObservation(observation);
+            }
+          )}
+        />
+      )}
     </Box>
   );
 }

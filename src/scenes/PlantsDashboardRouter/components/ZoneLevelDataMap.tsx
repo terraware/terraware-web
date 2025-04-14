@@ -1,32 +1,41 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import { PlantingSiteMap } from 'src/components/Map';
 import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
 import MapLegend, { MapLegendGroup } from 'src/components/common/MapLegend';
-import isEnabled from 'src/features';
-import { useLocalization, useOrganization } from 'src/providers';
+import useObservationSummaries from 'src/hooks/useObservationSummaries';
+import { useOrganization } from 'src/providers';
 import {
   selectLatestObservation,
   selectObservationsResults,
+  selectPlantingSiteObservations,
 } from 'src/redux/features/observations/observationsSelectors';
 import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { selectZonePopulationStats } from 'src/redux/features/tracking/sitePopulationSelector';
-import { selectPlantingSite, selectZoneProgress } from 'src/redux/features/tracking/trackingSelectors';
+import {
+  selectPlantingSite,
+  selectPlantingSiteHistory,
+  selectZoneProgress,
+} from 'src/redux/features/tracking/trackingSelectors';
+import { requestGetPlantingSiteHistory } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
-import { MapSourceProperties } from 'src/types/Map';
+import { MapGeometry, MapSourceProperties } from 'src/types/Map';
 import {
+  Observation,
   ObservationPlantingZoneResults,
   ObservationPlantingZoneResultsWithLastObv,
   ObservationResults,
   ObservationResultsPayload,
   ObservationResultsWithLastObv,
+  ObservationSummary,
 } from 'src/types/Observations';
+import { PlantingSiteHistory } from 'src/types/Tracking';
 import { getRgbaFromHex } from 'src/utils/color';
-import { getShortDate } from 'src/utils/dateFormatter';
 import { isAfter } from 'src/utils/dateUtils';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -36,7 +45,6 @@ type ZoneLevelDataMapProps = {
 
 export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapProps): JSX.Element {
   const theme = useTheme();
-  const locale = useLocalization();
   const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
   const defaultTimeZone = useDefaultTimeZone();
@@ -46,23 +54,66 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
   const observation: ObservationResults | undefined = useAppSelector((state) =>
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
   );
-  const newPlantsDashboardEnabled = isEnabled('New Plants Dashboard');
+  const summaries = useObservationSummaries(plantingSiteId);
   const allObservationsResults = useAppSelector(selectObservationsResults);
+  const [requestId, setRequestId] = useState<string>('');
+
+  const observationHistory = useAppSelector((state) => selectPlantingSiteHistory(state, requestId));
+
+  const [plantingSiteHistory, setPlantingSiteHistory] = useState<PlantingSiteHistory>();
+
+  const observations: Observation[] | undefined = useAppSelector((state) =>
+    selectPlantingSiteObservations(state, plantingSite?.id || -1)
+  );
   const plantingSiteObservations = allObservationsResults?.filter(
-    (observation) => observation.plantingSiteId === plantingSiteId
+    (observation) => observation.plantingSiteId === plantingSiteId && observation.completedTime
   );
 
   const zoneObservations = useMemo(() => {
-    const iZoneObservations: ObservationResultsPayload[][] = [];
+    const iZoneObservations: Record<string, ObservationResultsPayload[]> = {};
     plantingSiteObservations?.forEach((observation) => {
       observation.plantingZones.forEach((pz) => {
-        iZoneObservations[pz.plantingZoneId]
-          ? iZoneObservations[pz.plantingZoneId].push(observation)
-          : (iZoneObservations[pz.plantingZoneId] = [observation]);
+        iZoneObservations[pz.name]
+          ? iZoneObservations[pz.name].push(observation)
+          : (iZoneObservations[pz.name] = [observation]);
       });
     });
     return iZoneObservations;
   }, [plantingSiteObservations]);
+  const [lastSummary, setLastSummary] = useState<ObservationSummary>();
+
+  useEffect(() => {
+    if (summaries?.[0]) {
+      setLastSummary(summaries[0]);
+    }
+  }, [summaries]);
+
+  useEffect(() => {
+    if (observationHistory?.status === 'success') {
+      setPlantingSiteHistory(observationHistory.data);
+    }
+  }, [observationHistory]);
+
+  const observationData = useMemo(() => {
+    return observations.find((obv) => obv.id === observation?.observationId);
+  }, [observations, observation]);
+
+  useEffect(() => {
+    if (observationData && plantingSite) {
+      const historyId = observationData.plantingSiteHistoryId;
+      if (historyId) {
+        const requestObservationHistory = dispatch(
+          requestGetPlantingSiteHistory({
+            plantingSiteId: plantingSite.id,
+            historyId: historyId,
+          })
+        );
+        setRequestId(requestObservationHistory.requestId);
+      }
+    } else {
+      setRequestId('');
+    }
+  }, [observationData]);
 
   const lastZoneObservation = useCallback((observationsList: ObservationResultsPayload[]) => {
     const observationsToProcess = observationsList;
@@ -77,6 +128,21 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     }
   }, []);
 
+  const lastSubZoneObservation = useCallback(
+    (observationsList: ObservationResultsPayload[], zoneName: string, subzoneName: string) => {
+      const orderedObservations = observationsList?.sort((a, b) => (isAfter(b.startDate, a.startDate) ? 1 : -1));
+      if (orderedObservations) {
+        for (const observation of orderedObservations) {
+          const zone = observation.plantingZones.find((pz) => pz.name === zoneName);
+          if (zone && zone.plantingSubzones.find((sz) => sz.name === subzoneName)) {
+            return observation;
+          }
+        }
+      }
+    },
+    []
+  );
+
   const [legends, setLegends] = useState<MapLegendGroup[]>([]);
 
   useEffect(() => {
@@ -84,103 +150,119 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
+    const boundariesLegendItems = [
+      {
+        label: strings.PLANTING_SITE,
+        borderColor: theme.palette.TwClrBaseGreen300 as string,
+        fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.2),
+      },
+      {
+        label: strings.ZONES,
+        borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+        fillColor: 'transparent',
+      },
+    ];
     const result: MapLegendGroup[] = [
       {
         title: strings.BOUNDARIES,
         items: [
+          ...boundariesLegendItems,
           {
-            label: strings.PLANTING_SITE,
-            borderColor: theme.palette.TwClrBaseGreen300 as string,
-            fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.2),
-          },
-          {
-            label: strings.ZONES,
-            borderColor: theme.palette.TwClrBaseLightGreen300 as string,
-            fillColor: 'transparent',
+            label: strings.SUBZONES,
+            borderColor: theme.palette.TwClrBaseBlue300 as string,
+            fillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.2),
           },
         ],
       },
     ];
-    if (observation) {
-      result.push({
-        title: strings.MORTALITY_RATE,
-        items: [
-          {
-            label: strings.LESS_THAN_TWENTY_FIVE_PERCENT,
-            borderColor: theme.palette.TwClrBaseLightGreen300 as string,
-            fillColor: 'transparent',
-            fillPatternUrl: newPlantsDashboardEnabled
-              ? '/assets/mortality-rate-less-25.png'
-              : '/assets/mortality-rate-indicator-legend.png',
-            opacity: newPlantsDashboardEnabled ? undefined : 0.3,
-            height: '16px',
-          },
-          {
-            label: strings.TWENTY_FIVE_TO_FIFTY_PERCENT,
-            borderColor: theme.palette.TwClrBaseLightGreen300 as string,
-            fillColor: 'transparent',
-            fillPatternUrl: newPlantsDashboardEnabled
-              ? '/assets/mortality-rate-less-50.png'
-              : '/assets/mortality-rate-indicator-legend.png',
-            opacity: newPlantsDashboardEnabled ? undefined : 0.5,
-            height: '16px',
-          },
-          {
-            label: strings.GREATER_THAN_FIFTY_PERCENT,
-            borderColor: theme.palette.TwClrBaseLightGreen300 as string,
-            fillColor: 'transparent',
-            fillPatternUrl: newPlantsDashboardEnabled
-              ? '/assets/mortality-rate-more-50.png'
-              : '/assets/mortality-rate-indicator-legend.png',
-            opacity: newPlantsDashboardEnabled ? undefined : 0.7,
-            height: '16px',
-          },
-        ],
-        switch: newPlantsDashboardEnabled,
-      });
 
-      if (newPlantsDashboardEnabled) {
-        result.push({
-          title: strings.OBSERVATION_RECENCY,
-          items: [
-            {
-              label: strings.LATEST_OBSERVATION,
-              borderColor: theme.palette.TwClrBaseLightGreen300 as string,
-              fillColor: theme.palette.TwClrBasePink200 as string,
-              opacity: 0.9,
-              height: '16px',
-            },
-          ],
-          switch: true,
-        });
-      }
-    }
+    result.push({
+      title: strings.MORTALITY_RATE,
+      items: [
+        {
+          label: strings.LESS_THAN_TWENTY_FIVE_PERCENT,
+          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+          fillColor: 'transparent',
+          fillPatternUrl: '/assets/mortality-rate-less-25.png',
+          height: '16px',
+        },
+        {
+          label: strings.TWENTY_FIVE_TO_FIFTY_PERCENT,
+          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+          fillColor: 'transparent',
+          fillPatternUrl: '/assets/mortality-rate-less-50.png',
+          height: '16px',
+        },
+        {
+          label: strings.GREATER_THAN_FIFTY_PERCENT,
+          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+          fillColor: 'transparent',
+          fillPatternUrl: '/assets/mortality-rate-more-50.png',
+          height: '16px',
+        },
+      ],
+      switch: true,
+      disabled: !observation,
+      checked: true,
+    });
+
+    result.push({
+      title: strings.OBSERVATION_RECENCY,
+      items: [
+        {
+          label: strings.LATEST_OBSERVATION,
+          borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+          fillColor: theme.palette.TwClrBasePink200 as string,
+          opacity: 0.9,
+          height: '16px',
+        },
+      ],
+      switch: true,
+      disabled: !observation,
+      checked: true,
+    });
+
     setLegends(result);
   }, [observation, theme.palette.TwClrBaseGreen300, theme.palette.TwClrBaseLightGreen300]);
 
   const mapData = useMemo(() => {
+    const timeZone = plantingSite?.timeZone ?? defaultTimeZone.get().id;
     if (!plantingSite?.boundary) {
       return undefined;
     }
 
     const baseMap = MapService.getMapDataFromPlantingSite(plantingSite);
-    if (!observation) {
+    if (!observation || !plantingSiteHistory) {
       return baseMap;
     }
 
     const oldPlantingZones: ObservationPlantingZoneResults[] = observation.plantingZones;
 
     const plantingZonesWithLastObservation: ObservationPlantingZoneResultsWithLastObv[] = oldPlantingZones.map(
-      (pz: ObservationPlantingZoneResults) => {
-        return { ...pz, lastObv: lastZoneObservation(zoneObservations?.[pz.plantingZoneId])?.startDate };
+      (pz: ObservationPlantingZoneResultsWithLastObv) => {
+        return {
+          ...pz,
+          lastObv:
+            lastZoneObservation(zoneObservations?.[pz.name])?.completedTime ||
+            lastZoneObservation(zoneObservations?.[pz.name])?.startDate,
+          plantingSubzones: pz.plantingSubzones.map((oldSubzone) => {
+            const lastSubZoneOb = lastSubZoneObservation(zoneObservations?.[pz.name], pz.name, oldSubzone.name);
+            return {
+              ...oldSubzone,
+              lastObv: lastSubZoneOb?.completedTime
+                ? getDateDisplayValue(lastSubZoneOb?.completedTime || '', timeZone)
+                : lastSubZoneOb?.startDate || '',
+            };
+          }),
+        };
       }
     );
     const observationWithLastObv: ObservationResultsWithLastObv = {
       ...observation,
       plantingZones: plantingZonesWithLastObservation,
     };
-
-    const observationMapData = MapService.getMapDataFromObservation(observationWithLastObv);
+    const observationMapData = MapService.getMapDataFromObservation(observationWithLastObv, plantingSiteHistory);
+    baseMap.site = observationMapData.site;
     observationMapData.zone?.entities?.forEach((zoneEntity) => {
       const zoneReplaceIndex = baseMap.zone?.entities?.findIndex((e) => e.id === zoneEntity.id) ?? -1;
       if (baseMap.zone && zoneReplaceIndex >= 0) {
@@ -196,12 +278,73 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
       }
     });
 
-    return baseMap;
-  }, [plantingSite, observation]);
+    if (baseMap.subzone?.entities) {
+      baseMap.subzone.entities = baseMap.subzone.entities.map((entity) => {
+        const lastSubZoneOb = lastSubZoneObservation(
+          zoneObservations?.[entity.properties.zoneId],
+          entity.properties.zoneId,
+          entity.properties.id
+        );
+        return {
+          ...entity,
+          properties: {
+            ...entity.properties,
+            lastObv: lastSubZoneOb?.completedTime
+              ? getDateDisplayValue(lastSubZoneOb.completedTime || '', timeZone)
+              : lastSubZoneOb?.startDate || '',
+          },
+        };
+      });
+
+      const orderedSubzoneEntities = baseMap.subzone.entities.sort((a, b) => {
+        if (a.properties.lastObv && b.properties.lastObv) {
+          return isAfter(b.properties.lastObv, a.properties.lastObv) ? 1 : -1;
+        }
+        return 0;
+      });
+
+      const entitiesToReturn: {
+        properties: { recency: number; id: number; name: string; type: string };
+        id: number;
+        boundary: MapGeometry;
+      }[] = [];
+      let lastProcecedDate = orderedSubzoneEntities[0].properties.lastObv;
+      let recencyToSet = 1;
+
+      orderedSubzoneEntities.forEach((entity) => {
+        if (entity.properties.lastObv && entity.properties.lastObv !== lastProcecedDate) {
+          recencyToSet = recencyToSet + 1;
+          lastProcecedDate = entity.properties.lastObv;
+        }
+
+        entitiesToReturn.push({
+          ...entity,
+          properties: {
+            ...entity.properties,
+            recency: entity.properties.lastObv ? recencyToSet : 0,
+            id: entity.properties.id,
+            name: entity.properties.name,
+            type: entity.properties.type,
+          },
+        });
+      });
+
+      baseMap.subzone.entities = entitiesToReturn;
+    }
+    return observationMapData;
+  }, [plantingSite, observation, plantingSiteHistory, defaultTimeZone, zoneObservations]);
 
   const focusEntities = useMemo(() => {
     return [{ sourceId: 'sites', id: plantingSiteId }];
   }, [plantingSiteId]);
+
+  const findZoneArea = useCallback(
+    (zoneId: number) => {
+      const selectedZone = plantingSite?.plantingZones?.find((pZone) => pZone.id === zoneId);
+      return selectedZone?.areaHa;
+    },
+    [plantingSite]
+  );
 
   const getContextRenderer = useCallback(
     () =>
@@ -211,80 +354,77 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
         const zoneObservation: ObservationPlantingZoneResults | undefined = observation?.plantingZones?.find(
           (z: ObservationPlantingZoneResults) => z.plantingZoneId === entity.id
         );
+        const timeZone = plantingSite?.timeZone ?? defaultTimeZone.get().id;
         if (!zoneStats[entity.id]?.reportedPlants) {
-          properties = [{ key: strings.NO_PLANTS, value: '' }];
+          properties = [
+            {
+              key: strings.AREA_HA,
+              value: findZoneArea(entity.id) || 0,
+            },
+            { key: strings.NO_PLANTS, value: '' },
+          ];
         } else if (zoneProgress[entity.id] && zoneStats[entity.id]) {
-          if (newPlantsDashboardEnabled) {
-            properties = [
-              {
-                key: strings.AREA_HA,
-                value: plantingSite?.areaHa ?? 0,
-              },
-              {
-                key: strings.MORTALITY_RATE,
-                value: zoneObservation?.hasObservedPermanentPlots
-                  ? `${zoneObservation.mortalityRate}%`
-                  : strings.UNKNOWN,
-              },
-              {
-                key: strings.PLANTING_DENSITY,
-                value: `${zoneProgress[entity.id].targetDensity} ${strings.PLANTS_PER_HECTARE}`,
-              },
-              { key: strings.PLANTED_PLANTS, value: `${zoneStats[entity.id].reportedPlants}` },
-              { key: strings.OBSERVED_PLANTS, value: `${zoneObservation?.totalPlants || '0'}` },
-              { key: strings.PLANTED_SPECIES, value: `${zoneStats[entity.id].reportedSpecies}` },
-              { key: strings.OBSERVED_SPECIES, value: `${zoneObservation?.totalSpecies || '0'}` },
-            ];
-          } else {
-            if (zoneObservation) {
-              properties = [
-                {
-                  key: strings.MORTALITY_RATE,
-                  value: zoneObservation.hasObservedPermanentPlots
+          const lastZoneOb = lastZoneObservation(zoneObservations?.[entity.id]);
+          const lastZoneSummary = lastSummary?.plantingZones.find((pz) => pz.plantingZoneId === entity.id);
+          properties = [
+            {
+              key: strings.AREA_HA,
+              value: zoneObservation?.areaHa ?? (findZoneArea(entity.id) || 0),
+            },
+            {
+              key: strings.MORTALITY_RATE,
+              value:
+                zoneObservation && zoneObservation.hasObservedPermanentPlots
+                  ? zoneObservation.mortalityRate
                     ? `${zoneObservation.mortalityRate}%`
+                    : strings.UNKNOWN
+                  : lastZoneOb?.mortalityRate
+                    ? `${lastZoneOb.mortalityRate}%`
                     : strings.UNKNOWN,
-                },
-                {
-                  key: strings.TARGET_PLANTING_DENSITY,
-                  value: `${zoneProgress[entity.id].targetDensity} ${strings.PLANTS_PER_HECTARE}`,
-                },
-                { key: strings.PLANTING_PROGRESS, value: `${zoneProgress[entity.id].progress}%` },
-                { key: strings.RECORDED_PLANTS, value: `${zoneStats[entity.id].reportedPlants} ${strings.PLANTS}` },
-                { key: strings.OBSERVED_PLANTS, value: `${zoneObservation.totalPlants} ${strings.PLANTS}` },
-                {
-                  key: strings.RECORDED_SPECIES,
-                  value: `${zoneStats[entity.id].reportedSpecies} ${strings.SPECIES}`,
-                },
-                { key: strings.OBSERVED_SPECIES, value: `${zoneObservation.totalSpecies} ${strings.SPECIES}` },
-              ];
-            } else {
-              properties = [
-                {
-                  key: strings.TARGET_PLANTING_DENSITY,
-                  value: `${zoneProgress[entity.id].targetDensity} ${strings.PLANTS_PER_HECTARE}`,
-                },
-                { key: strings.PLANTING_PROGRESS, value: `${zoneProgress[entity.id].progress}%` },
-                { key: strings.RECORDED_PLANTS, value: `${zoneStats[entity.id].reportedPlants} ${strings.PLANTS}` },
-                { key: strings.RECORDED_SPECIES, value: `${zoneStats[entity.id].reportedSpecies} ${strings.SPECIES}` },
-              ];
-            }
-          }
+            },
+            {
+              key: strings.PLANTING_DENSITY,
+              value: zoneObservation?.plantingDensity
+                ? `${zoneObservation?.plantingDensity} ${strings.PLANTS_PER_HECTARE}`
+                : lastZoneOb
+                  ? `${lastZoneOb.plantingZones.find((pz) => pz.plantingZoneId === entity.id)?.plantingDensity} ${strings.PLANTS_PER_HECTARE}`
+                  : strings.UNKNOWN,
+            },
+            { key: strings.PLANTED_PLANTS, value: `${zoneStats[entity.id].reportedPlants}` },
+            {
+              key: strings.OBSERVED_PLANTS,
+              value: `${zoneObservation?.totalPlants ?? lastZoneSummary?.totalPlants ?? 0}`,
+            },
+            { key: strings.PLANTED_SPECIES, value: `${zoneStats[entity.id].reportedSpecies}` },
+            {
+              key: strings.OBSERVED_SPECIES,
+              value: `${zoneObservation?.totalSpecies ?? lastZoneOb?.totalSpecies ?? 0}`,
+            },
+          ];
         }
 
+        const lastZoneOb = lastZoneObservation(zoneObservations?.[entity.id]);
         return (
           <MapTooltip
             title={entity.name}
-            subtitle={strings
-              .formatString(
-                strings.DATE_OBSERVATION,
-                lastZoneObservation(zoneObservations?.[entity.id])?.startDate || ''
-              )
-              .toString()}
+            subtitle={
+              zoneObservations?.[entity.id]
+                ? strings
+                    .formatString(
+                      strings.DATE_OBSERVATION,
+                      lastZoneOb?.completedTime
+                        ? getDateDisplayValue(lastZoneOb?.completedTime || '', timeZone)
+                        : lastZoneOb?.startDate || ''
+                    )
+
+                    .toString()
+                : ''
+            }
             properties={properties}
           />
         );
       },
-    [observation, zoneProgress, zoneStats]
+    [observation, zoneProgress, zoneStats, lastSummary]
   );
 
   return (
@@ -293,55 +433,42 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
         display: 'flex',
         flexDirection: 'column',
         background: theme.palette.TwClrBg,
-        borderRadius: newPlantsDashboardEnabled ? '8px' : '24px',
+        borderRadius: '8px',
         padding: theme.spacing(3),
         gap: theme.spacing(3),
       }}
     >
-      {newPlantsDashboardEnabled ? (
-        <Typography fontSize='20px' fontWeight={600}>
-          {strings.formatString(strings.X_HA_TOTAL_IN_PLANTING_SITE, plantingSite?.areaHa?.toString() || '')}{' '}
-        </Typography>
-      ) : (
-        <Typography fontSize='16px' fontWeight={600}>
-          {observation?.completedTime
-            ? strings.formatString(
-                strings.ZONE_LEVEL_DATA_MAP_TITLE_WITH_OBSERVATION,
-                getShortDate(observation.completedTime, locale.activeLocale)
-              )
-            : strings.ZONE_LEVEL_DATA_MAP_TITLE}
-        </Typography>
-      )}
+      <Typography fontSize='20px' fontWeight={600}>
+        {strings.formatString(strings.X_HA_IN_TOTAL_PLANTING_AREA, plantingSite?.areaHa?.toString() || '')}{' '}
+      </Typography>
       <MapLegend legends={legends} setLegends={setLegends} />
       {plantingSite?.boundary ? (
         <PlantingSiteMap
           mapData={mapData!}
-          style={{ borderRadius: newPlantsDashboardEnabled ? '8px' : '24px' }}
-          layers={['Planting Site', 'Zones']}
-          showMortalityRateFill={!!observation && !legends.find((l) => l.title === strings.MORTALITY_RATE)?.disabled}
-          showRecencyFill={
-            newPlantsDashboardEnabled &&
-            !!observation &&
-            !legends.find((l) => l.title === strings.OBSERVATION_RECENCY)?.disabled
-          }
+          style={{ borderRadius: '8px' }}
+          layers={['Planting Site', 'Zones', 'Sub-Zones']}
+          showMortalityRateFill={!!observation && legends.find((l) => l.title === strings.MORTALITY_RATE)?.checked}
+          showRecencyFill={legends.find((l) => l.title === strings.OBSERVATION_RECENCY)?.checked}
           focusEntities={focusEntities}
           contextRenderer={{
             render: getContextRenderer(),
             sx: {
               '.mapboxgl-popup .mapboxgl-popup-content': {
                 borderRadius: '8px',
-                padding: newPlantsDashboardEnabled ? '0' : '10px',
+                padding: '0',
                 width: 'fit-content',
                 maxWidth: '350px',
               },
               '.mapboxgl-popup .mapboxgl-popup-content .mapboxgl-popup-close-button': {
-                display: newPlantsDashboardEnabled ? 'none' : 'block',
+                display: 'none',
               },
               '.mapboxgl-popup-anchor-top .mapboxgl-popup-tip': {
-                borderBottomColor: newPlantsDashboardEnabled ? theme.palette.TwClrBgSecondary : '#fff',
+                borderBottomColor: theme.palette.TwClrBgSecondary,
               },
             },
           }}
+          zoneInteractive={true}
+          subzoneInteractive={false}
         />
       ) : (
         <Box sx={{ position: 'fixed', top: '50%', left: '50%' }}>

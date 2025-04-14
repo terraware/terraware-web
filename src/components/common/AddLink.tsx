@@ -20,7 +20,12 @@ export default function AddLink(props: AddLinkProps): JSX.Element {
 
   return (
     <Link id={id} onClick={onClick} fontSize={large ? '16px' : ''} disabled={disabled}>
-      <Box display='flex'>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
         <Icon
           name='iconAdd'
           style={{

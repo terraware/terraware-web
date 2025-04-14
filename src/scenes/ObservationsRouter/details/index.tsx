@@ -26,10 +26,12 @@ import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelector
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
+import MergedSuccessMessage from 'src/scenes/ObservationsRouter/common/MergedSuccessMessage';
 import strings from 'src/strings';
 import { ObservationState } from 'src/types/Observations';
 import { FieldOptionsMap } from 'src/types/Search';
 import { getLongDate, getShortDate } from 'src/utils/dateFormatter';
+import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -42,16 +44,6 @@ export type ObservationDetailsProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;
   reload: () => void;
 };
-
-const MergedSuccessMessage = (merged: MergeOtherSpeciesRequestData[]): JSX.Element => (
-  <ul style={{ paddingLeft: '24px', margin: 0 }}>
-    {merged.map((sp, index) => (
-      <li key={index}>
-        {sp.otherSpeciesName} &#8594; {sp.newName}
-      </li>
-    ))}
-  </ul>
-);
 
 export default function ObservationDetails(props: ObservationDetailsProps): JSX.Element {
   const { setFilterOptions, reload } = props;
@@ -70,12 +62,21 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const observationId = Number(params.observationId || -1);
 
   const [view, setView] = useState<View>('list');
+  const [initialView, setInitialView] = useState<View>('list');
   const [unrecognizedSpecies, setUnrecognizedSpecies] = useState<string[]>();
   const [showPageMessage, setShowPageMessage] = useState(false);
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
   const [mergeRequestId, setMergeRequestId] = useState<string>('');
   const [status, setStatus] = useState<ObservationState[]>([]);
   const dispatch = useAppDispatch();
+  const query = useQuery();
+
+  useEffect(() => {
+    const mapView = query.get('map');
+    if (mapView) {
+      setInitialView('map');
+    }
+  }, [query]);
 
   const observationsResults = useAppSelector((state) =>
     searchObservations(
@@ -133,7 +134,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     }
   }, [searchProps.filtersProps?.filters.status]);
 
-  const allSpecies = useAppSelector(selectSpecies);
+  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const observation = useAppSelector((state) => selectObservation(state, plantingSiteId, observationId));
   const zoneNames = useAppSelector((state) => selectDetailsZoneNames(state, plantingSiteId, observationId));
@@ -167,10 +168,10 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   }, [activeLocale, details, observation]);
 
   useEffect(() => {
-    if (!allSpecies && selectedOrganization.id !== -1) {
+    if (!speciesResponse?.data?.species && selectedOrganization.id !== -1) {
       dispatch(requestSpecies(selectedOrganization.id));
     }
-  }, [dispatch, allSpecies, selectedOrganization]);
+  }, [dispatch, speciesResponse?.data?.species, selectedOrganization]);
 
   useEffect(() => {
     const speciesWithNoIdMap = _.uniqBy(
@@ -236,7 +237,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     const mergeOtherSpeciesRequestData: MergeOtherSpeciesRequestData[] = mergedSpeciesPayloads
       .filter((sp) => !!sp.otherSpeciesName && !!sp.speciesId)
       .map((sp) => ({
-        newName: allSpecies?.find((existing) => existing.id === sp.speciesId)?.scientificName || '',
+        newName: speciesResponse?.data?.species?.find((existing) => existing.id === sp.speciesId)?.scientificName || '',
         otherSpeciesName: sp.otherSpeciesName!,
         speciesId: sp.speciesId!,
       }));
@@ -315,7 +316,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
         <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
           {plantingSite && selectedObservationResults && (
             <ListMapView
-              initialView='list'
+              initialView={initialView}
               list={<ObservationDetailsList {...searchProps} />}
               map={
                 <ObservationMapView

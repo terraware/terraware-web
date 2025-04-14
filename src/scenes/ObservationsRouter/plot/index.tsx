@@ -10,6 +10,7 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { selectObservationMonitoringPlot } from 'src/redux/features/observations/observationMonitoringPlotSelectors';
 import { selectObservationsResults } from 'src/redux/features/observations/observationsSelectors';
+import { getConditionString } from 'src/redux/features/observations/utils';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
@@ -23,10 +24,10 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import MonitoringPlotPhotos from './MonitoringPlotPhotos';
 
 export default function ObservationMonitoringPlot(): JSX.Element {
-  const { plantingSiteId, observationId, plantingZoneId, monitoringPlotId } = useParams<{
+  const { plantingSiteId, observationId, plantingZoneName, monitoringPlotId } = useParams<{
     plantingSiteId: string;
     observationId: string;
-    plantingZoneId: string;
+    plantingZoneName: string;
     monitoringPlotId: string;
   }>();
   const defaultTimeZone = useDefaultTimeZone();
@@ -52,7 +53,7 @@ export default function ObservationMonitoringPlot(): JSX.Element {
       {
         plantingSiteId: Number(plantingSiteId),
         observationId: Number(observationId),
-        plantingZoneId: Number(plantingZoneId),
+        plantingZoneName: plantingZoneName,
         monitoringPlotId: Number(monitoringPlotId),
       },
       defaultTimeZone.get().id
@@ -92,7 +93,11 @@ export default function ObservationMonitoringPlot(): JSX.Element {
         ? [{ label: strings.MORTALITY_RATE, value: handleMissingData(monitoringPlot?.mortalityRate) }]
         : []),
       { label: strings.NUMBER_OF_PHOTOS, value: handleMissingData(monitoringPlot?.photos.length) },
-      { label: strings.FIELD_NOTES, value: monitoringPlot?.notes, text: true },
+      {
+        label: strings.PLOT_CONDITIONS,
+        value: monitoringPlot?.conditions.map((condition) => getConditionString(condition)).join(', ') || '- -',
+      },
+      { label: strings.FIELD_NOTES, value: monitoringPlot?.notes || '- -', text: true },
     ];
   }, [activeLocale, defaultTimeZone, monitoringPlot, plantingSite]);
 
@@ -109,14 +114,14 @@ export default function ObservationMonitoringPlot(): JSX.Element {
   );
 
   useEffect(() => {
-    if (!monitoringPlot) {
+    if (plantingZoneName && !monitoringPlot) {
       navigate(
         APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS.replace(':plantingSiteId', Number(plantingSiteId).toString())
           .replace(':observationId', Number(observationId).toString())
-          .replace(':plantingZoneId', Number(plantingZoneId).toString())
+          .replace(':plantingZoneName', encodeURIComponent(plantingZoneName))
       );
     }
-  }, [navigate, monitoringPlot, observationId, plantingZoneId, plantingSiteId]);
+  }, [navigate, monitoringPlot, observationId, plantingZoneName, plantingSiteId]);
 
   const getReplacedPlotsNames = (): JSX.Element[] => {
     const names =
@@ -140,7 +145,7 @@ export default function ObservationMonitoringPlot(): JSX.Element {
                 Number(plantingSiteId).toString()
               )
                 .replace(':observationId', Number(found.observationId).toString())
-                .replace(':plantingZoneId', Number(plantingZoneId).toString())
+                .replace(':plantingZoneName', encodeURIComponent(plantingZoneName || ''))
                 .replace(':monitoringPlotId', found.monitoringPlotId.toString())}
             >
               {found.monitoringPlotNumber}
@@ -159,7 +164,7 @@ export default function ObservationMonitoringPlot(): JSX.Element {
       title={monitoringPlot?.monitoringPlotNumber.toString() ?? ''}
       plantingSiteId={plantingSiteId}
       observationId={observationId}
-      plantingZoneId={plantingZoneId}
+      plantingZoneName={plantingZoneName}
     >
       <Grid container>
         <Grid item xs={12}>

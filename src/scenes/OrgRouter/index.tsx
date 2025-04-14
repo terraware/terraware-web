@@ -5,7 +5,7 @@ import { Box, Slide, useTheme } from '@mui/material';
 
 import ErrorBoundary from 'src/ErrorBoundary';
 import ProjectsRouter from 'src/components/Projects/Router';
-import ReportsRouter from 'src/components/Reports/Router';
+import SeedFundReportsRouter from 'src/components/SeedFundReports/Router';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import ApplicationProvider from 'src/providers/Application';
@@ -37,6 +37,7 @@ import OrganizationRouter from 'src/scenes/OrganizationRouter';
 import PeopleRouter from 'src/scenes/PeopleRouter';
 import PlantingSites from 'src/scenes/PlantingSitesRouter';
 import PlantsDashboardRouter from 'src/scenes/PlantsDashboardRouter';
+import AcceleratorReportsRouter from 'src/scenes/Reports';
 import SeedBanksRouter from 'src/scenes/SeedBanksRouter';
 import SeedsDashboard from 'src/scenes/SeedsDashboard';
 import SpeciesRouter from 'src/scenes/Species';
@@ -63,7 +64,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
 
-  const species = useAppSelector(selectSpecies);
+  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
   const hasObservationsResults: boolean = useAppSelector(selectHasObservationsResults);
   const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
   const projects: Project[] | undefined = useAppSelector(selectProjects);
@@ -96,7 +97,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
 
   const reloadSpecies = useCallback(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization.id !== -1 && !['pending', 'success'].includes(speciesResponse?.status || '')) {
       void dispatch(requestSpecies(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization.id]);
@@ -141,7 +142,10 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
     setDefaults();
   }, [setDefaults]);
 
-  const selectedOrgHasSpecies = useCallback((): boolean => (species || []).length > 0, [species]);
+  const selectedOrgHasSpecies = useCallback(
+    (): boolean => (speciesResponse?.data?.species || []).length > 0,
+    [speciesResponse?.data?.species]
+  );
 
   const selectedOrgHasSeedBanks = useCallback(
     (): boolean => selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank'),
@@ -211,7 +215,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
           <ErrorBoundary setShowNavBar={setShowNavBar}>
             <Routes>
               {/* Routes, in order of their appearance down the side NavBar */}
-              <Route path={APP_PATHS.HOME} element={<Home />} />
+              <Route path={APP_PATHS.HOME} element={<Home selectedOrgHasSpecies={selectedOrgHasSpecies} />} />
               <Route path={APP_PATHS.SEEDS_DASHBOARD} element={<SeedsDashboard />} />
               <Route path={APP_PATHS.CHECKIN} element={<CheckIn />} />
               <Route
@@ -252,7 +256,8 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
               <Route path={'/nursery/*'} element={<NurseryRouter />} />
               <Route path={APP_PATHS.HELP_SUPPORT + '/*'} element={<HelpSupportRouter />} />
               <Route path={APP_PATHS.MY_ACCOUNT + '/*'} element={<MyAccountRouter />} />
-              <Route path={APP_PATHS.REPORTS + '/*'} element={<ReportsRouter />} />
+              <Route path={APP_PATHS.REPORTS + '/*'} element={<AcceleratorReportsRouter />} />
+              <Route path={APP_PATHS.SEED_FUND_REPORTS + '/*'} element={<SeedFundReportsRouter />} />
               <Route path={APP_PATHS.OBSERVATIONS + '/*'} element={<ObservationsRouter />} />
               <Route path={APP_PATHS.DELIVERABLES + '/*'} element={<DeliverablesRouter />} />
               <Route path={APP_PATHS.APPLICATIONS + '/*'} element={<ApplicationRouter />} />

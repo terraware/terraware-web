@@ -68,6 +68,15 @@ export default function useRenderAttributes(): (type: RenderableObject) => MapSo
           lineWidth: 2,
           selectFillColor: getRgbaFromHex(theme.palette.TwClrBasePink300 as string, 0.6),
         };
+      } else if (objectType === 'adHocPlot') {
+        return {
+          fillColor: getRgbaFromHex(theme.palette.TwClrBaseOrange300 as string, 0.2),
+          highlightFillColor: getRgbaFromHex(theme.palette.TwClrBaseOrange300 as string, 0.6),
+          hoverFillColor: getRgbaFromHex(theme.palette.TwClrBaseOrange300 as string, 0.4),
+          lineColor: theme.palette.TwClrBaseOrange300 as string,
+          lineWidth: 2,
+          selectFillColor: getRgbaFromHex(theme.palette.TwClrBaseOrange300 as string, 0.6),
+        };
       } else if (objectType === 'boundary') {
         // Only highlight border
         return {

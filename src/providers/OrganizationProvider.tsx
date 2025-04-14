@@ -7,15 +7,12 @@ import { store } from 'src/redux/store';
 import { OrganizationService, PreferencesService } from 'src/services';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useEnvironment from 'src/utils/useEnvironment';
 import useQuery from 'src/utils/useQuery';
-import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import { PreferencesType, ProvidedOrganizationData } from './DataTypes';
-import { OrganizationContext } from './contexts';
-import { defaultSelectedOrg } from './contexts';
+import { OrganizationContext, defaultSelectedOrg } from './contexts';
 import { useUser } from './hooks';
 
 export type OrganizationProviderProps = {
@@ -30,8 +27,6 @@ enum APIRequestStatus {
 }
 
 export default function OrganizationProvider({ children }: OrganizationProviderProps): JSX.Element {
-  const { isDesktop } = useDeviceInfo();
-  const snackbar = useSnackbar();
   const [bootstrapped, setBootstrapped] = useState<boolean>(false);
   const [selectedOrganization, setSelectedOrganization] = useState<Organization>();
   const [orgPreferences, setOrgPreferences] = useState<PreferencesType>({});
@@ -41,7 +36,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const navigate = useNavigate();
   const query = useQuery();
   const location = useStateLocation();
-  const { userPreferences, updateUserPreferences, bootstrapped: userBootstrapped } = useUser();
+  const { user, userPreferences, updateUserPreferences, bootstrapped: userBootstrapped } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { isDev, isStaging } = useEnvironment();
 
@@ -89,16 +84,9 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     getOrgPreferences();
   }, [selectedOrganization]);
 
-  const redirectAndNotify = useCallback(
-    (organization: Organization) => {
-      navigate({ pathname: APP_PATHS.HOME });
-      snackbar.pageSuccess(
-        isDesktop ? strings.ORGANIZATION_CREATED_MSG_DESKTOP : strings.ORGANIZATION_CREATED_MSG,
-        strings.formatString(strings.ORGANIZATION_CREATED_TITLE, organization.name)
-      );
-    },
-    [snackbar, isDesktop]
-  );
+  const redirectAndNotify = (organization: Organization) => {
+    navigate({ pathname: APP_PATHS.HOME, search: `organizationId=${organization.id}&newOrg=true` });
+  };
 
   useEffect(() => {
     reloadOrganizations();
@@ -115,22 +103,14 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       orgPreferenceForId,
       reloadOrgPreferences,
     }));
-  }, [
-    redirectAndNotify,
-    selectedOrganization,
-    organizations,
-    orgPreferences,
-    bootstrapped,
-    orgPreferenceForId,
-    reloadOrgPreferences,
-  ]);
+  }, [selectedOrganization, organizations, orgPreferences, bootstrapped, orgPreferenceForId, reloadOrgPreferences]);
 
   useEffect(() => {
     reloadOrgPreferences();
   }, [reloadOrgPreferences]);
 
   useEffect(() => {
-    if (userBootstrapped && userPreferences && organizations && !isAcceleratorRoute) {
+    if (userBootstrapped && userPreferences && organizations && !isAcceleratorRoute && user?.userType !== 'Funder') {
       const queryOrganizationId = query.get('organizationId');
       let orgToUse;
       if (organizations.length) {
@@ -169,6 +149,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     userPreferences,
     userBootstrapped,
     isAcceleratorRoute,
+    user?.userType,
   ]);
 
   useEffect(() => {

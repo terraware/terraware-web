@@ -19,7 +19,7 @@ export default function OrganizationsDropdown(): JSX.Element {
   const selectOrganization = (newlySelectedOrg: Organization) => {
     setSelectedOrganization((currentlySelectedOrg: Organization | undefined) => {
       if (newlySelectedOrg.id !== currentlySelectedOrg?.id) {
-        navigate({ pathname: APP_PATHS.HOME });
+        navigate({ pathname: APP_PATHS.HOME, search: `organizationId=${newlySelectedOrg.id}` });
       }
       return newlySelectedOrg;
     });
@@ -49,8 +49,8 @@ export default function OrganizationsDropdown(): JSX.Element {
       <AddNewOrganizationModal
         open={newOrganizationModalOpened}
         onCancel={onCloseCreateOrganizationModal}
-        onSuccess={(organization: Organization) => {
-          reloadOrganizations();
+        onSuccess={async (organization: Organization) => {
+          await reloadOrganizations(organization.id);
           redirectAndNotify(organization);
         }}
       />

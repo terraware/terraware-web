@@ -1,6 +1,8 @@
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 
+import strings from 'src/strings';
 import {
+  AdHocObservationResults,
   MonitoringPlotStatus,
   ObservationMonitoringPlotResults,
   ObservationMonitoringPlotResultsPayload,
@@ -52,7 +54,7 @@ export const searchResultZones = (search: string, zoneNames: string[], observati
 };
 
 export const searchZones = (search: string, zoneNames: string[], observations?: ObservationResults[]) => {
-  if (!search.trim() && !zoneNames.length) {
+  if (!search?.trim() && !zoneNames?.length) {
     return observations;
   }
   return observations?.filter(
@@ -67,6 +69,15 @@ export const searchZones = (search: string, zoneNames: string[], observations?: 
 
 const matchZone = (zone: ObservationPlantingZoneResults, search: string) => regexMatch(zone.plantingZoneName, search);
 
+export const searchPlots = (search: string, observations?: AdHocObservationResults[]) => {
+  if (!search?.trim()) {
+    return observations;
+  }
+  return observations?.filter((observation: AdHocObservationResults) =>
+    observation.adHocPlot ? regexMatch(observation.adHocPlot.monitoringPlotNumber.toString(), search) : true
+  );
+};
+
 type SpeciesValue = {
   commonName?: string;
   scientificName: string;
@@ -78,35 +89,13 @@ export type Value = {
   timeZone?: string;
 };
 
-// get zones reverse map
-const zonesReverseMap = (sites: PlantingSite[]): Record<number, Value> =>
-  reverseMap(
-    sites.filter((site) => site.plantingZones).flatMap((site) => site.plantingZones),
-    'zone'
-  );
-
-// get subzones reverse map
-const subzonesReverseMap = (sites: PlantingSite[]): Record<number, Value> =>
-  reverseMap(
-    sites
-      .filter((site) => site.plantingZones)
-      .flatMap((site) =>
-        site.plantingZones!.filter((zone) => zone.plantingSubzones).flatMap((zone) => zone.plantingSubzones)
-      ),
-    'subzone'
-  );
-
-// reverse map of id to name, boundary (for planting site, zone, subzone), optionally just name for species
-const reverseMap = (ary: any[], type: string): Record<number, Value> =>
+/** Returns a map of site IDs to name, boundary, and timeZone for each site. */
+const sitesReverseMap = (ary: PlantingSite[]): Record<number, Value> =>
   ary.reduce(
     (acc, curr) => {
-      const { id, name, fullName, boundary, timeZone } = curr;
-      if (type === 'site') {
+      const { id, name, boundary, timeZone } = curr;
+      if (boundary) {
         acc[id] = { name, boundary, timeZone };
-      } else if (type === 'subzone') {
-        acc[id] = { name: fullName, boundary };
-      } else {
-        acc[id] = { name, boundary };
       }
       return acc;
     },
@@ -131,9 +120,7 @@ export const mergeObservations = (
   plantingSites?: PlantingSite[],
   speciesData?: Species[]
 ): ObservationResults[] => {
-  const sites = reverseMap(plantingSites ?? [], 'site');
-  const zones = zonesReverseMap(plantingSites ?? []);
-  const subzones = subzonesReverseMap(plantingSites ?? []);
+  const sites = sitesReverseMap(plantingSites ?? []);
   const species = speciesReverseMap(speciesData ?? []);
 
   return observations
@@ -142,13 +129,7 @@ export const mergeObservations = (
       const { plantingSiteId } = observation;
       const site = sites[plantingSiteId];
 
-      const mergedZones = mergeZones(
-        observation.plantingZones,
-        zones,
-        subzones,
-        species,
-        site.timeZone ?? defaultTimeZone
-      );
+      const mergedZones = mergeZones(observation.plantingZones, species, site.timeZone ?? defaultTimeZone);
 
       return {
         ...observation,
@@ -172,20 +153,14 @@ const StatusWeights: Record<MonitoringPlotStatus, number> = {
   'Not Observed': 4,
 };
 
-// merge zone
+/** Merges additional data into the results of a planting zone observation. */
 const mergeZones = (
   zoneObservations: ObservationPlantingZoneResultsPayload[],
-  zones: Record<number, Value>,
-  subzones: Record<number, Value>,
   species: Record<number, SpeciesValue>,
   timeZone?: string
 ): ObservationPlantingZoneResults[] => {
-  return zoneObservations
-    .filter((zoneObservation: ObservationPlantingZoneResultsPayload) => zones[zoneObservation.plantingZoneId])
-    .map((zoneObservation: ObservationPlantingZoneResultsPayload): ObservationPlantingZoneResults => {
-      const { plantingZoneId } = zoneObservation;
-      const zone = zones[plantingZoneId];
-
+  return zoneObservations.map(
+    (zoneObservation: ObservationPlantingZoneResultsPayload): ObservationPlantingZoneResults => {
       const monitoringPlots: ObservationMonitoringPlotResultsPayload[] = zoneObservation.plantingSubzones.flatMap(
         (subZone: ObservationPlantingSubzoneResultsPayload) => subZone.monitoringPlots
       );
@@ -202,13 +177,12 @@ const mergeZones = (
 
       return {
         ...zoneObservation,
-        plantingZoneName: zone.name,
-        boundary: zone.boundary,
+        plantingZoneName: zoneObservation.name,
         completedDate: zoneObservation.completedTime
           ? getDateDisplayValue(zoneObservation.completedTime, timeZone)
           : undefined,
         species: mergeSpecies(zoneObservation.species, species),
-        plantingSubzones: mergeSubzones(zoneObservation.plantingSubzones, subzones, species, timeZone),
+        plantingSubzones: mergeSubzones(zoneObservation.plantingSubzones, species, timeZone),
         status,
         hasObservedPermanentPlots: zoneObservation.plantingSubzones.some((plantingSubzone) =>
           plantingSubzone.monitoringPlots.some((plot) => plot.isPermanent && plot.completedTime)
@@ -217,28 +191,21 @@ const mergeZones = (
           plantingSubzone.monitoringPlots.some((plot) => !plot.isPermanent && plot.completedTime)
         ),
       };
-    });
+    }
+  );
 };
 
 // merge subzone
 const mergeSubzones = (
   subzoneObservations: ObservationPlantingSubzoneResultsPayload[],
-  subzones: Record<number, Value>,
   species: Record<number, SpeciesValue>,
   timeZone?: string
 ): ObservationPlantingSubzoneResults[] => {
-  return subzoneObservations
-    .filter(
-      (subzoneObservation: ObservationPlantingSubzoneResultsPayload) => subzones[subzoneObservation.plantingSubzoneId]
-    )
-    .map((subzoneObservation: ObservationPlantingSubzoneResultsPayload): ObservationPlantingSubzoneResults => {
-      const { plantingSubzoneId } = subzoneObservation;
-      const subzone = subzones[plantingSubzoneId];
-
+  return subzoneObservations.map(
+    (subzoneObservation: ObservationPlantingSubzoneResultsPayload): ObservationPlantingSubzoneResults => {
       return {
         ...subzoneObservation,
-        plantingSubzoneName: subzone.name,
-        boundary: subzone.boundary,
+        plantingSubzoneName: subzoneObservation.name,
         monitoringPlots: subzoneObservation.monitoringPlots.map(
           (monitoringPlot: ObservationMonitoringPlotResultsPayload) => {
             return {
@@ -251,7 +218,8 @@ const mergeSubzones = (
           }
         ),
       };
-    });
+    }
+  );
 };
 
 const mergeSpecies = (
@@ -279,4 +247,70 @@ export const has25mPlots = (
   return subzones
     ?.flatMap((subzone: { monitoringPlots: any[] }) => subzone.monitoringPlots.flatMap((plot) => plot.sizeMeters))
     .some((size: number) => size.toString() === '25');
+};
+
+export const mergeAdHocObservations = (
+  observations: ObservationResultsPayload[],
+  defaultTimeZone: string,
+  plantingSites?: PlantingSite[]
+): AdHocObservationResults[] => {
+  const sites = sitesReverseMap(plantingSites ?? []);
+
+  return observations
+    .filter((observation) => sites[observation.plantingSiteId])
+    .map((observation: ObservationResultsPayload): AdHocObservationResults => {
+      const { plantingSiteId } = observation;
+      const site = sites[plantingSiteId];
+      const species = speciesReverseMap([]);
+
+      const mergedZones = mergeZones(observation.plantingZones, species, site.timeZone ?? defaultTimeZone);
+
+      return {
+        ...observation,
+        boundary: site.boundary,
+        plantingSiteName: site.name,
+        plantingZones: mergedZones,
+        plotName: observation?.adHocPlot?.monitoringPlotName,
+        plotNumber: observation?.adHocPlot?.monitoringPlotNumber,
+        totalPlants: observation.plantingZones.reduce((acc, curr) => acc + curr.totalPlants, 0),
+      };
+    });
+};
+
+export const getConditionString = (
+  condition:
+    | 'AnimalDamage'
+    | 'FastGrowth'
+    | 'FavorableWeather'
+    | 'Fungus'
+    | 'Pests'
+    | 'SeedProduction'
+    | 'UnfavorableWeather'
+) => {
+  switch (condition) {
+    case 'AnimalDamage': {
+      return strings.ANIMAL_DAMAGE;
+    }
+    case 'FastGrowth': {
+      return strings.FAST_GROWTH;
+    }
+    case 'FavorableWeather': {
+      return strings.FAVORABLE_WEATHER;
+    }
+    case 'Fungus': {
+      return strings.FUNGUS;
+    }
+    case 'Pests': {
+      return strings.PESTS;
+    }
+    case 'SeedProduction': {
+      return strings.SEED_PRODUCTION;
+    }
+    case 'UnfavorableWeather': {
+      return strings.UNFAVORABLE_WEATHER;
+    }
+    default: {
+      return '';
+    }
+  }
 };

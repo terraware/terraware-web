@@ -135,7 +135,7 @@ export type MapEntityOptions = {
 /**
  * Types of objects that can be added to MapData
  */
-export type MapObject = 'site' | 'zone' | 'subzone' | 'permanentPlot' | 'temporaryPlot';
+export type MapObject = 'site' | 'zone' | 'subzone' | 'permanentPlot' | 'temporaryPlot' | 'adHocPlot';
 
 /**
  * Sources for a map

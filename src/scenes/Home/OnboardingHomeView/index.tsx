@@ -23,6 +23,8 @@ import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { OrganizationUser } from 'src/types/User';
 import { isAdmin, isManagerOrHigher, isOwner } from 'src/utils/organization';
+import useQuery from 'src/utils/useQuery';
+import useSnackbar from 'src/utils/useSnackbar';
 
 const OnboardingHomeView = () => {
   const { user } = useUser();
@@ -34,6 +36,17 @@ const OnboardingHomeView = () => {
   const [people, setPeople] = useState<OrganizationUser[]>();
   const [allSpecies, setAllSpecies] = useState<Species[]>();
   const [showAcceleratorCard, setShowAcceleratorCard] = useState(true);
+  const snackbar = useSnackbar();
+  const query = useQuery();
+
+  useEffect(() => {
+    if (selectedOrganization && query.get('newOrg') === 'true') {
+      snackbar.toastSuccess(
+        isDesktop ? strings.ORGANIZATION_CREATED_MSG_DESKTOP : strings.ORGANIZATION_CREATED_MSG,
+        strings.formatString(strings.ORGANIZATION_CREATED_TITLE, selectedOrganization.name)
+      );
+    }
+  }, [snackbar, selectedOrganization, isDesktop, query]);
 
   useEffect(() => {
     if (orgPreferences.showAcceleratorCard === false && showAcceleratorCard) {

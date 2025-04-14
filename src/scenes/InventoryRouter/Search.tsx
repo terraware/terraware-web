@@ -68,7 +68,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
 
   const origin = props.origin || 'Species';
 
-  const species = useAppSelector(selectSpecies);
+  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
   const projects = useAppSelector(selectProjects);
   const [nurseries, setNurseries] = useState<Facility[]>([]);
   const [availableSpecies, setAvailableSpecies] = useState<Species[]>([]);
@@ -88,7 +88,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
   }, [dispatch, selectedOrganization.id, activeLocale]);
 
   useEffect(() => {
-    if (origin !== 'Nursery' || !species?.length) {
+    if (origin !== 'Nursery' || !speciesResponse?.data?.species?.length) {
       return;
     }
 
@@ -98,9 +98,11 @@ export default function Search(props: SearchProps): JSX.Element | null {
       setAvailableSpecies([]);
     } else {
       const speciesWithinResults = new Set(availableSpeciesNames);
-      setAvailableSpecies(species.filter((singleSpecies) => speciesWithinResults.has(singleSpecies.scientificName)));
+      setAvailableSpecies(
+        speciesResponse?.data?.species.filter((singleSpecies) => speciesWithinResults.has(singleSpecies.scientificName))
+      );
     }
-  }, [getResultsSpeciesNames, origin, species]);
+  }, [getResultsSpeciesNames, origin, speciesResponse?.data?.species]);
 
   const subLocations = useAppSelector(selectSubLocations);
 

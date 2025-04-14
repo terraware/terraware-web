@@ -21,6 +21,7 @@ export type ScheduleObservationFormProps = {
   endDate?: string;
   title: string;
   onCancel: () => void;
+  selectedSubzones?: number[];
   onChangeSelectedSubzones?: (requestedSubzoneIds: number[]) => void;
   onEndDate: (value: string) => void;
   onErrors: (hasErrors: boolean) => void;
@@ -43,6 +44,7 @@ export default function ScheduleObservationForm({
   plantingSiteId,
   plantingSites,
   onCancel,
+  selectedSubzones,
   onChangeSelectedSubzones,
   onEndDate,
   onErrors,
@@ -60,7 +62,7 @@ export default function ScheduleObservationForm({
 
   const [startDateError, setStartDateError] = useState<string>();
   const [endDateError, setEndDateError] = useState<string>();
-  const [limitObservation, setLimitObservation] = useState(false);
+  const [selectAll, setSelectAll] = useState(false);
 
   const gridSize = () => {
     if (isMobile) {
@@ -72,6 +74,7 @@ export default function ScheduleObservationForm({
   useEffect(() => {
     let startError: string = '';
     let endError: string = '';
+    let subzoneError: string = '';
     if (!startDate) {
       startError = strings.REQUIRED_FIELD;
     }
@@ -94,7 +97,11 @@ export default function ScheduleObservationForm({
     }
     setStartDateError(startError);
     setEndDateError(endError);
-    const hasErrors: boolean = startError || endError || !plantingSiteId ? true : false;
+
+    if (!selectedSubzones || selectedSubzones?.length === 0) {
+      subzoneError = strings.SELECT_AT_LEAST_ONE_SUBZONE;
+    }
+    const hasErrors: boolean = startError || endError || subzoneError || !plantingSiteId ? true : false;
     onErrors(hasErrors);
   }, [plantingSiteId, startDate, endDate, onErrors]);
 
@@ -132,26 +139,30 @@ export default function ScheduleObservationForm({
               />
             </Grid>
 
-            {onChangeSelectedSubzones && (
+            {onChangeSelectedSubzones && selectedPlantingSite && (
               <>
                 <Grid item xs={12}>
+                  <Typography> {strings.SCHEDULE_OBSERVATION_MESSAGE}</Typography>
+                  {validate && (!selectedSubzones || selectedSubzones?.length === 0) && (
+                    <Typography color={theme.palette.TwClrTxtDanger}>{strings.SELECT_AT_LEAST_ONE_SUBZONE}</Typography>
+                  )}
+                </Grid>
+                <Grid item xs={12}>
                   <Checkbox
-                    id='limitObservation'
-                    name='Limit Observation'
-                    label={strings.LIMIT_OBSERVATION_LABEL}
-                    value={limitObservation}
-                    onChange={(value) => setLimitObservation(value)}
+                    id='selectAll'
+                    name='SelectAll'
+                    label={strings.SELECT_ALL}
+                    value={selectAll}
+                    onChange={(value) => setSelectAll(value)}
                   />
                 </Grid>
-
-                {limitObservation && selectedPlantingSite && (
-                  <Grid item xs={12}>
-                    <ObservationSubzoneSelector
-                      onChangeSelectedSubzones={onChangeSelectedSubzones}
-                      plantingSite={selectedPlantingSite}
-                    />
-                  </Grid>
-                )}
+                <Grid item xs={12}>
+                  <ObservationSubzoneSelector
+                    onChangeSelectedSubzones={onChangeSelectedSubzones}
+                    plantingSite={selectedPlantingSite}
+                    selectAll={selectAll}
+                  />
+                </Grid>
               </>
             )}
 

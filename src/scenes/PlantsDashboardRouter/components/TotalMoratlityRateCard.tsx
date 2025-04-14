@@ -34,7 +34,7 @@ export default function TotalMortalityRateCard({ plantingSiteId }: TotalMortalit
           </Typography>
           <Box display='flex' sx={{ flexFlow: 'row wrap' }}>
             <Typography fontSize='84px' fontWeight={600} lineHeight={1}>
-              <FormattedNumber value={observation?.mortalityRate || 0} />
+              {observation?.mortalityRate ? <FormattedNumber value={observation?.mortalityRate} /> : '--'}
             </Typography>
             <Typography fontSize='84px' fontWeight={600} lineHeight={1}>
               %

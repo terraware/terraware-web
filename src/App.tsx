@@ -15,14 +15,15 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useAppVersion } from 'src/hooks/useAppVersion';
 import { useLocalization, useUser } from 'src/providers';
 import { store } from 'src/redux/store';
+import AcceleratorRouter from 'src/scenes/AcceleratorRouter';
+import FunderRouter from 'src/scenes/FunderRouter';
+import TerrawareRouter from 'src/scenes/TerrawareRouter';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import useApplicationPortal from './hooks/useApplicationPortal';
+import useFunderPortal from './hooks/useFunderPortal';
 import ApplicationPortalRouter from './scenes/ApplicationRouter/portal';
-
-const AcceleratorRouter = React.lazy(() => import('src/scenes/AcceleratorRouter'));
-const TerrawareRouter = React.lazy(() => import('src/scenes/TerrawareRouter'));
 
 // Mixpanel setup
 const MIXPANEL_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN;
@@ -39,6 +40,7 @@ function AppContent() {
   const { user, isAllowed } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { isApplicationPortal } = useApplicationPortal();
+  const { isFunderRoute } = useFunderPortal();
   const theme = useTheme();
   const mixpanel = useMixpanel();
 
@@ -122,6 +124,8 @@ function AppContent() {
             <AcceleratorRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
           ) : isApplicationPortal ? (
             <ApplicationPortalRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
+          ) : isFunderRoute ? (
+            <FunderRouter />
           ) : (
             <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
           )}

@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { CircularProgress } from '@mui/material';
+import { Option } from '@terraware/web-components/components/table/types';
 
 import { FilterField } from 'src/components/common/FilterGroup';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
@@ -10,19 +11,26 @@ import {
   selectObservationsResults,
   selectObservationsResultsError,
 } from 'src/redux/features/observations/observationsSelectors';
-import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import {
+  requestAdHocObservationsResults,
+  requestObservations,
+  requestObservationsResults,
+} from 'src/redux/features/observations/observationsThunks';
 import { selectSpecies, selectSpeciesError } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { selectPlantingSites, selectPlantingSitesError } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { FieldOptionsMap } from 'src/types/Search';
+import { ObservationState, getStatus } from 'src/types/Observations';
+import { FieldOptionsMap, FieldValuesPayload } from 'src/types/Search';
 import { isAdmin } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import BiomassMeasurementsDetails from './BiomassMeasurementsDetails';
 import ObservationsHome from './ObservationsHome';
 import ObservationDetails from './details';
 import ObservationMonitoringPlotDetails from './plot';
+import AdHocObservationDetails from './plot/AdHocObservationDetails';
 import { RescheduleObservation, ScheduleObservation } from './schedule';
 import ObservationPlantingZoneDetails from './zone';
 
@@ -43,22 +51,29 @@ export default function ObservationsRouter(): JSX.Element {
   const plantingSitesError = useAppSelector(selectPlantingSitesError);
   // listen for data
   const observationsResults = useAppSelector(selectObservationsResults);
-  const species = useAppSelector(selectSpecies);
+  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
   const plantingSites = useAppSelector(selectPlantingSites);
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization.id !== -1 && !['pending', 'success'].includes(speciesResponse?.status || '')) {
       dispatch(requestSpecies(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
-    if (species !== undefined && plantingSites !== undefined && !dispatched && selectedOrganization.id !== -1) {
+    if (
+      speciesResponse?.data?.species !== undefined &&
+      plantingSites !== undefined &&
+      !dispatched &&
+      selectedOrganization.id !== -1
+    ) {
       setDispatched(true);
       dispatch(requestObservationsResults(selectedOrganization.id));
+      dispatch(requestAdHocObservationsResults(selectedOrganization.id));
       dispatch(requestObservations(selectedOrganization.id));
+      dispatch(requestObservations(selectedOrganization.id, true));
     }
-  }, [dispatch, selectedOrganization.id, species, plantingSites, dispatched]);
+  }, [dispatch, selectedOrganization.id, speciesResponse?.data?.species, plantingSites, dispatched]);
 
   useEffect(() => {
     if (observationsResultsError || speciesError || plantingSitesError) {
@@ -107,6 +122,26 @@ const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Elemen
         setFilters: (value: Record<string, any>) => setFilters(value),
         filterColumns,
         filterOptions,
+        optionsRenderer: (filterName: string, fieldValues: FieldValuesPayload): Option[] | undefined => {
+          if (filterName !== 'status') {
+            return;
+          }
+
+          return fieldValues[filterName]?.values.map(
+            (value): Option => ({
+              label: getStatus(value as ObservationState),
+              value,
+              disabled: false,
+            })
+          );
+        },
+        pillValuesRenderer: (filterName: string, values: unknown[]): string | undefined => {
+          if (filterName !== 'status') {
+            return;
+          }
+
+          return values.map((value) => getStatus(value as ObservationState)).join(', ');
+        },
       },
     }),
     [filters, filterColumns, filterOptions, search]
@@ -132,12 +167,20 @@ const ObservationsInnerRouter = ({ reload }: { reload: () => void }): JSX.Elemen
       {scheduleObservationsEnabled && <Route path={'schedule/:observationId'} element={<RescheduleObservation />} />}
       {scheduleObservationsEnabled && <Route path={'/schedule'} element={<ScheduleObservation />} />}
       <Route
-        path={'/:plantingSiteId/results/:observationId/zone/:plantingZoneId/plot/:monitoringPlotId'}
+        path={'/:plantingSiteId/results/:observationId/biomassMeasurements/:monitoringPlotId'}
+        element={<BiomassMeasurementsDetails />}
+      />
+      <Route
+        path={'/:plantingSiteId/results/:observationId/zone/:plantingZoneName/plot/:monitoringPlotId'}
         element={<ObservationMonitoringPlotDetails />}
       />
       <Route
-        path={'/:plantingSiteId/results/:observationId/zone/:plantingZoneId'}
+        path={'/:plantingSiteId/results/:observationId/zone/:plantingZoneName'}
         element={<ObservationPlantingZoneDetails />}
+      />
+      <Route
+        path={'/:plantingSiteId/results/:observationId/adHocPlot/:monitoringPlotId'}
+        element={<AdHocObservationDetails reload={reload} />}
       />
       <Route
         path={'/:plantingSiteId/results/:observationId'}

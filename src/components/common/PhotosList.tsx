@@ -9,9 +9,10 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 export type PhotosListProps = {
   photoUrls: string[];
   initialSlide?: number;
+  fillSpace?: boolean;
 };
 
-export default function PhotosList({ photoUrls, initialSlide }: PhotosListProps): JSX.Element {
+export default function PhotosList({ photoUrls, initialSlide, fillSpace }: PhotosListProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const [selectedSlide, setSelectedSlide] = useState<number>(initialSlide ?? 0);
   const [photosModalOpened, setPhotosModalOpened] = useState<boolean>(false);
@@ -28,7 +29,7 @@ export default function PhotosList({ photoUrls, initialSlide }: PhotosListProps)
         prevButtonLabel={strings.PREVIOUS}
         title={strings.PHOTOS}
       />
-      <Box display='flex' flexDirection='row' flexWrap='wrap' marginBottom={2}>
+      <Box display='flex' flexDirection='row' flexWrap='wrap' marginBottom={2} minHeight={fillSpace ? 122 : 'auto'}>
         {photoUrls.map((photoUrl, index) => (
           <Box
             key={index}

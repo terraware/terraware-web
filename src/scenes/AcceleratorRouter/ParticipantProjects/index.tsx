@@ -5,6 +5,7 @@ import ProjectProvider from 'src/providers/Project/ProjectProvider';
 
 import EditView from './EditView';
 import ParticipantProjectProvider from './ParticipantProjectProvider';
+import Reports from './Reports';
 import Scoring from './Scoring';
 import SingleView from './SingleView';
 import Voting from './Voting';
@@ -20,6 +21,7 @@ const ParticipantProjectsRouter = () => {
             <Route path={''} element={<SingleView />} />
             <Route path={'votes/*'} element={<Voting />} />
             <Route path={'scores/*'} element={<Scoring />} />
+            <Route path={'reports/*'} element={<Reports />} />
             <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_OVERVIEW} />} />
           </Routes>
         </ParticipantProjectProvider>

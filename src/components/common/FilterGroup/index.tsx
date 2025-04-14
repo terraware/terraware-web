@@ -29,6 +29,7 @@ export type FilterField = {
     | 'count_weight'
     | 'hidden'
     | 'boolean';
+  pillValueRenderer?: (values: (string | number | null)[]) => string | undefined;
 };
 
 export type FilterGroupProps = {
@@ -111,6 +112,7 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
                   values={filters[f.name]?.values ?? []}
                   onChange={(filter) => onFilterChange(f.name, filter)}
                   options={options ?? getOptions(f.name, values || {})}
+                  pillValueRenderer={f.pillValueRenderer}
                 />
               )}
               {f.type === 'single_selection' && (

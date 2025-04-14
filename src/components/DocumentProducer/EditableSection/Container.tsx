@@ -6,6 +6,7 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 
 import VariableHistoryModal from 'src/components/Variables/VariableHistoryModal';
 import VariableInternalComment from 'src/components/Variables/VariableInternalComment';
+import { useUser } from 'src/providers';
 import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
 import { requestUpdateSectionVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { selectUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesSelector';
@@ -57,6 +58,7 @@ export default function EditableSectionContainer({
   const [openVariableHistoryModal, setOpenVariableHistoryModal] = useState<boolean>(false);
   const [openEditCommentModal, setOpenEditCommenteModal] = useState<boolean>(false);
   const [clickedVariable, setClickedVariable] = useState<VariableWithValues>();
+  const { isAllowed } = useUser();
 
   const variableValues = section?.variableValues || [];
   // For section variables, multiple variableValues are returned, so we need to find the one with the current ID
@@ -324,7 +326,7 @@ export default function EditableSectionContainer({
               backgroundColor: theme.palette.TwClrBgHover,
 
               '.edit-buttons': {
-                display: 'block',
+                display: isAllowed('UPDATE_DELIVERABLE') ? 'block' : 'none',
               },
             },
           }}

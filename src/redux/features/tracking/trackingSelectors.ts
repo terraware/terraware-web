@@ -41,3 +41,5 @@ export const selectZoneProgress = createCachedSelector(
 )((state: RootState, plantingSiteId: number) => `${plantingSiteId}`);
 
 export const selectMonitoringPlots = (state: RootState, requestId: string) => state.monitoringPlots[requestId];
+
+export const selectPlantingSiteHistory = (state: RootState, requestId: string) => state.plantingSiteHistory[requestId];

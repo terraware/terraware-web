@@ -6,7 +6,7 @@ import MapLegend from 'src/components/common/MapLegend';
 import strings from 'src/strings';
 import { getRgbaFromHex } from 'src/utils/color';
 
-export type PlantingSiteMapLegendOption = 'site' | 'zone' | 'subzone' | 'permanentPlot' | 'temporaryPlot';
+export type PlantingSiteMapLegendOption = 'site' | 'zone' | 'subzone' | 'permanentPlot' | 'temporaryPlot' | 'adHocPlot';
 
 export type PlantingSiteMapLegendProps = {
   options: PlantingSiteMapLegendOption[];
@@ -19,6 +19,7 @@ export default function PlantingSiteMapLegend({ options }: PlantingSiteMapLegend
   const hasSubzone = !!options.find((opt) => opt === 'subzone');
   const hasPermanentPlot = !!options.find((opt) => opt === 'permanentPlot');
   const hasTemporaryPlot = !!options.find((opt) => opt === 'temporaryPlot');
+  const hasAdHocPlot = !!options.find((opt) => opt === 'adHocPlot');
 
   const legends = useMemo(() => {
     const items = [];
@@ -60,6 +61,14 @@ export default function PlantingSiteMapLegend({ options }: PlantingSiteMapLegend
         label: strings.PLOTS_TEMPORARY,
         borderColor: theme.palette.TwClrBaseYellow300 as string,
         fillColor: getRgbaFromHex(theme.palette.TwClrBaseYellow300 as string, 0.2),
+      });
+    }
+
+    if (hasAdHocPlot) {
+      items.push({
+        label: strings.PLOTS_AD_HOC,
+        borderColor: theme.palette.TwClrBaseOrange300 as string,
+        fillColor: getRgbaFromHex(theme.palette.TwClrBaseOrange300 as string, 0.2),
       });
     }
 

@@ -1,14 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, CircularProgress } from '@mui/material';
+import { Box } from '@mui/material';
+import { Tabs } from '@terraware/web-components';
 
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import { ButtonProps } from 'src/components/PlantsPrimaryPage/PlantsPrimaryPageView';
-import Card from 'src/components/common/Card';
-import { View } from 'src/components/common/ListMapSelector';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectObservationsResults } from 'src/redux/features/observations/observationsSelectors';
@@ -23,9 +21,11 @@ import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
 import { PlantingSite } from 'src/types/Tracking';
 import { isAdmin } from 'src/utils/organization';
+import useStickyTabs from 'src/utils/useStickyTabs';
 
-import ObservationsDataView from './ObservationsDataView';
+import BiomassMeasurement from './BiomassMeasurement';
 import ObservationsEventsNotification from './ObservationsEventsNotification';
+import PlantMonitoring from './PlantMonitoring';
 
 export type ObservationsHomeProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;
@@ -39,9 +39,32 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [plantsSitePreferences, setPlantsSitePreferences] = useState<Record<string, unknown>>();
-  const [view, setView] = useState<View>();
   const plantingSites = useAppSelector(selectPlantingSites);
 
+  const tabs = useMemo(() => {
+    if (!activeLocale) {
+      return [];
+    }
+    return [
+      {
+        id: 'plantMonitoring',
+        label: strings.PLANT_MONITORING,
+        children: <PlantMonitoring {...props} selectedPlantingSite={selectedPlantingSite} />,
+      },
+      {
+        id: 'biomassMeasurements',
+        label: strings.BIOMASS_MONITORING,
+        children: <BiomassMeasurement {...props} selectedPlantingSite={selectedPlantingSite} />,
+      },
+    ];
+  }, [activeLocale, selectedPlantingSite, props]);
+
+  const { activeTab, onTabChange } = useStickyTabs({
+    defaultTab: 'plantMonitoring',
+    tabs,
+    viewIdentifier: 'accelerator-overview',
+    keepQuery: false,
+  });
   const allObservationsResults = useAppSelector(selectObservationsResults);
   const observationsResults = useMemo(() => {
     if (!allObservationsResults || !selectedPlantingSite?.id) {
@@ -51,7 +74,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
     return allObservationsResults?.filter((observationResult) => {
       const matchesSite =
         selectedPlantingSite.id !== -1 ? observationResult.plantingSiteId === selectedPlantingSite.id : true;
-      const matchesState = ['Completed', 'Overdue', 'InProgress'].indexOf(observationResult.state) !== -1;
+      const matchesState = ['Abandoned', 'Completed', 'Overdue', 'InProgress'].indexOf(observationResult.state) !== -1;
       return matchesSite && matchesState;
     });
   }, [allObservationsResults, selectedPlantingSite]);
@@ -102,29 +125,12 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
       pagePath={APP_PATHS.OBSERVATIONS_SITE}
       plantsSitePreferences={plantsSitePreferences}
       setPlantsSitePreferences={onPreferences}
-      style={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}
+      style={{ display: 'flex', flexGrow: 1, flexDirection: 'column' }}
       title={strings.OBSERVATIONS}
     >
       <Box display='flex' flexGrow={1} flexDirection='column'>
         <ObservationsEventsNotification events={upcomingObservations} />
-        {observationsResults === undefined ? (
-          <CircularProgress sx={{ margin: 'auto' }} />
-        ) : selectedPlantingSite && observationsResults?.length ? (
-          <ObservationsDataView
-            selectedPlantingSiteId={selectedPlantingSite.id}
-            selectedPlantingSite={selectedPlantingSite}
-            setView={setView}
-            view={view}
-            {...props}
-          />
-        ) : (
-          <Card style={{ margin: '56px auto 0', borderRadius: '24px', height: 'fit-content' }}>
-            <EmptyStateContent
-              title={strings.OBSERVATIONS_EMPTY_STATE_TITLE}
-              subtitle={[strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_2]}
-            />
-          </Card>
-        )}
+        <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
       </Box>
     </PlantsPrimaryPage>
   );

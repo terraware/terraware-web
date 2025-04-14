@@ -8,8 +8,9 @@ However, sometimes it's useful to run a local frontend dev environment but send 
 a remote backend, e.g., if you want to test how a UI change works with a real-world data set.
 Here's how to set that up using Docker Desktop on MacOS.
 
-1. Generate a self-signed certificate. The following command should work. You'll only need
+1. From the directory of this readme, generate a self-signed certificate. The following command should work. You'll only need
    to do this once.
+   1. You might need to change `--` to `-` for all params in this request if it fails
 
 ```shell
 openssl req \
@@ -28,6 +29,7 @@ openssl req \
 4. Start (or restart) the Node dev server, e.g., by running `yarn start:dev` in the repo
    root directory.
 5. In this directory, run `docker compose up -d`.
+   1. Or alternatively from the top level run `yarn run docker:remote-be:start`.
 6. Point your browser at `https://localhost/` (HTTPS and no port number).
 7. Accept the self-signed certificate. In Chrome, you'd click the "Advanced" button on the
    warning message, then click the "Proceed" link. You should only need to do this once;
@@ -36,7 +38,7 @@ openssl req \
 Now you should be able to log in and use the web app.
 
 When you're done, you can run `docker compose down` in this directory to shut down the HTTPS
-proxy.
+proxy (or `yarn run docker:remote-be:stop`).
 
 You don't need to run the HTTPS proxy if you're testing with a local terraware-server instance;
 in that case you can point your browser at Node's HTTP listen port (`http://localhost:3000`).

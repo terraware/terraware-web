@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
 import ListMapView from 'src/components/ListMapView';
 import { View } from 'src/components/common/ListMapSelector';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import { useLocalization } from 'src/providers';
-import { searchObservations, selectObservationsZoneNames } from 'src/redux/features/observations/observationsSelectors';
+import {
+  searchAdHocObservations,
+  searchObservations,
+  selectObservationsZoneNames,
+} from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ObservationState } from 'src/types/Observations';
 import { FieldOptionsMap } from 'src/types/Search';
 import { PlantingSite } from 'src/types/Tracking';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -24,14 +26,22 @@ export type ObservationsDataViewProps = SearchProps & {
   setView: (view: View) => void;
   view?: View;
   reload: () => void;
+  selectedPlotSelection?: string;
 };
 
 export default function ObservationsDataView(props: ObservationsDataViewProps): JSX.Element {
-  const { selectedPlantingSiteId, selectedPlantingSite, setFilterOptions, setView, view, reload } = props;
+  const {
+    selectedPlantingSiteId,
+    selectedPlantingSite,
+    setFilterOptions,
+    setView,
+    view,
+    reload,
+    selectedPlotSelection,
+  } = props;
   const { ...searchProps }: SearchProps = props;
   const defaultTimeZone = useDefaultTimeZone();
-  const { activeLocale } = useLocalization();
-  const [status, setStatus] = useState<ObservationState[]>([]);
+  const timeZone = selectedPlantingSite?.timeZone || defaultTimeZone.get().id;
 
   const observationsResults = useAppSelector((state) =>
     searchObservations(
@@ -40,50 +50,41 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
       defaultTimeZone.get().id,
       searchProps.search,
       searchProps.filtersProps?.filters.zone?.values ?? [],
-      status
+      searchProps.filtersProps?.filters.status?.values ?? []
     )
   );
 
-  const zoneNames = useAppSelector((state) => selectObservationsZoneNames(state, selectedPlantingSiteId, status));
+  const allAdHocObservationsResults = useAppSelector((state) =>
+    searchAdHocObservations(state, selectedPlantingSiteId, defaultTimeZone.get().id, searchProps.search)
+  );
+
+  const adHocObservationsResults = useMemo(() => {
+    if (!allAdHocObservationsResults || !selectedPlantingSite?.id) {
+      return [];
+    }
+
+    return allAdHocObservationsResults?.filter((observationResult) => {
+      const isMonitoring = observationResult.type === 'Monitoring';
+      return isMonitoring;
+    });
+  }, [allAdHocObservationsResults, selectedPlantingSite]);
+
+  const zoneNames = useAppSelector((state) =>
+    selectObservationsZoneNames(state, selectedPlantingSiteId, searchProps.filtersProps?.filters.status?.values)
+  );
 
   useEffect(() => {
-    if (activeLocale) {
-      setFilterOptions({
-        zone: {
-          partial: false,
-          values: zoneNames,
-        },
-        status: {
-          partial: false,
-          values: [strings.COMPLETED, strings.IN_PROGRESS, strings.OVERDUE],
-        },
-      });
-    }
-  }, [setFilterOptions, zoneNames, activeLocale]);
-
-  useEffect(() => {
-    const values = searchProps.filtersProps?.filters.status?.values ?? [];
-    const mappedValues = values.reduce((acc: ObservationState[], curr: string) => {
-      let mappedValue;
-      if (curr === strings.COMPLETED) {
-        mappedValue = 'Completed';
-      } else if (curr === strings.IN_PROGRESS) {
-        mappedValue = 'InProgress';
-      } else if (curr === strings.OVERDUE) {
-        mappedValue = 'Overdue';
-      } else if (curr === strings.ABANDONED) {
-        mappedValue = 'Abandoned';
-      }
-      return mappedValue ? [...acc, mappedValue] : acc;
-    }, [] as ObservationState[]);
-
-    if (mappedValues.length) {
-      setStatus(mappedValues);
-    } else {
-      // if user clears filter, get specific statuses, we don't want to see Upcoming
-      setStatus(['Completed', 'InProgress', 'Overdue', 'Abandoned']);
-    }
-  }, [searchProps.filtersProps?.filters.status]);
+    setFilterOptions({
+      zone: {
+        partial: false,
+        values: zoneNames,
+      },
+      status: {
+        partial: false,
+        values: ['Abandoned', 'Completed', 'InProgress', 'Overdue'],
+      },
+    });
+  }, [setFilterOptions, zoneNames]);
 
   return (
     <ListMapView
@@ -91,14 +92,18 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
       list={
         <OrgObservationsListView
           observationsResults={observationsResults}
+          adHocObservationsResults={adHocObservationsResults}
           plantingSiteId={selectedPlantingSiteId}
           reload={reload}
+          selectedPlotSelection={selectedPlotSelection}
+          timeZone={timeZone}
         />
       }
       map={
         selectedPlantingSite && selectedPlantingSiteId !== -1 ? (
           <ObservationMapView
             observationsResults={observationsResults}
+            adHocObservationsResults={adHocObservationsResults}
             selectedPlantingSite={selectedPlantingSite}
             {...searchProps}
           />
@@ -107,13 +112,18 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
         )
       }
       onView={setView}
-      search={<Search {...searchProps} />}
+      search={
+        <Search
+          {...searchProps}
+          filtersProps={selectedPlotSelection === 'adHoc' ? undefined : searchProps.filtersProps}
+        />
+      }
       style={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}
     />
   );
 }
 
-const AllPlantingSitesMapView = (): JSX.Element => {
+export const AllPlantingSitesMapView = (): JSX.Element => {
   const theme = useTheme();
 
   return (

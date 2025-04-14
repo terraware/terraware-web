@@ -1,5 +1,4 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Dispatch } from 'redux';
 
 import { RootState } from 'src/redux/rootReducer';
 import { SpeciesService } from 'src/services';
@@ -9,20 +8,31 @@ import { MergeOtherSpeciesPayload } from 'src/types/Species';
 
 import { setSpeciesAction } from './speciesSlice';
 
-export const requestSpecies = (organizationId: number) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  return async (dispatch: Dispatch, _getState: () => RootState) => {
+export const requestSpecies = createAsyncThunk(
+  'species/requestSpecies',
+  async (organizationId: number, { dispatch, getState, rejectWithValue, fulfillWithValue }) => {
     try {
+      const existingRequest = (getState() as RootState).species[organizationId];
+
+      if (['success'].includes(existingRequest?.status)) {
+        return fulfillWithValue(existingRequest?.data?.species);
+      }
+
       const response = await SpeciesService.getAllSpecies(organizationId);
-      const { error, species } = response;
-      dispatch(setSpeciesAction({ error, species }));
+      if (response && response.requestSucceeded) {
+        const { error, species } = response;
+        dispatch(setSpeciesAction({ error, species, organizationId }));
+        return fulfillWithValue(species);
+      }
+
+      return rejectWithValue(strings.GENERIC_ERROR);
     } catch (e) {
       // should not happen, the response above captures any http request errors
       // tslint:disable-next-line: no-console
       console.error('Error dispatching species', e);
     }
-  };
-};
+  }
+);
 
 export type MergeOtherSpeciesRequestData = MergeOtherSpeciesPayload & {
   newName: string;

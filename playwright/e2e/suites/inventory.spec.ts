@@ -294,11 +294,9 @@ export default function InventoryTests() {
     await waitFor(page, '#home');
     await page.getByRole('button', { name: 'Plants' }).click();
     await page.getByRole('button', { name: 'Dashboard' }).click();
-    await expect(page.getByText('60 Plants')).toBeVisible();
-    await expect(page.getByText('1 Species')).toBeVisible();
-    await page.getByText('Total Plants and Species').click();
+    await expect(page.getByText('60')).toBeVisible();
+    await expect(page.getByText('1', { exact: true })).toBeVisible();
     await page.mouse.wheel(0, 2000);
-    await expect(page.getByText('Zone Level Data')).toBeVisible();
     await page.waitForTimeout(6000); //Wait for map to load
     await expect(page.locator('.mapboxgl-canvas')).toBeVisible();
     await page.locator('.mapboxgl-map').click({
@@ -307,8 +305,7 @@ export default function InventoryTests() {
         y: 172,
       },
     });
-    await expect(page.getByRole('cell', { name: '60 Plants' })).toBeVisible();
-    await page.getByLabel('Close popup').click();
+    await expect(page.getByRole('cell', { name: '60' })).toBeVisible();
   });
 
   test('Withdrawals after outplanting', async ({ page }, testInfo) => {
@@ -317,7 +314,8 @@ export default function InventoryTests() {
 
     await page.getByRole('button', { name: 'Seedlings' }).click();
     await page.getByRole('button', { name: 'Withdrawals' }).click();
-    await page.getByText('Map').click();
+    const mapTab = page.locator('p.MuiTypography-root').filter({ hasText: 'Map', hasNotText: 'show for this' });
+    await mapTab.click();
     await page.mouse.down();
     await expect(page.getByLabel('Planting Progress').getByText('Planting Progress')).toBeVisible();
     await page.waitForTimeout(6000); //Wait for map to load

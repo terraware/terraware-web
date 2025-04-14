@@ -20,7 +20,8 @@ You may see references to some private repositories in the documentation. We're 
 
 ## How to Run the App in Development Mode
 
-1. Configure the `.env` file using the sample file `.env.sample` located at the root directory of this repo.
+1. Copy `.env.sample` from the root directory of this repo to the same directory, with the filename `.env`
+   1. If you work for Terraformation and are using existing Keycloak setup, refer to the secrets in the "Onboarding Plan for Frontend WebApp Developers" confluence page
 2. Login to Docker hub
 
 ```shell
@@ -87,6 +88,12 @@ Tip: if you want to save the contents of a `terraware` database that you're usin
 psql postgres
 # rename the existing terraware database to save it's contents
 ALTER DATABASE terraware RENAME TO terrawareTEMP;
+```
+
+If this is your first time running the end-to-end tests, run this to install the necessary dependencies:
+
+```shell
+yarn playwright install
 ```
 
 To run the end-to-end tests:

@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { useOrganization } from 'src/providers';
-import MyAccountView from 'src/scenes/MyAccountRouter/MyAccountView';
+import MyAccountPage from 'src/scenes/MyAccountRouter/MyAccountPage';
 
 export interface Props {
   className?: string;
@@ -17,7 +17,8 @@ const MyAccountRouter = ({ className, hasNav }: Props) => {
       <Route
         path={'/edit'}
         element={
-          <MyAccountView
+          <MyAccountPage
+            includeHeader={true}
             className={className}
             edit={true}
             hasNav={hasNav}
@@ -28,7 +29,15 @@ const MyAccountRouter = ({ className, hasNav }: Props) => {
       />
       <Route
         path={'/*'}
-        element={<MyAccountView className={className} edit={false} hasNav={hasNav} organizations={organizations} />}
+        element={
+          <MyAccountPage
+            includeHeader={true}
+            className={className}
+            edit={false}
+            hasNav={hasNav}
+            organizations={organizations}
+          />
+        }
       />
     </Routes>
   );

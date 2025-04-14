@@ -17,6 +17,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useListCohortModules from 'src/hooks/useListCohortModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectScore from 'src/hooks/useProjectScore';
@@ -47,6 +48,7 @@ const SingleView = () => {
   const [searchDeliverablesRequestId, setSearchDeliverablesRequestId] = useState('');
   const deliverablesResponse = useAppSelector(selectDeliverablesSearchRequest(searchDeliverablesRequestId));
   const [hasDeliverables, setHasDeliverables] = useState(false);
+  const isReportsEnabled = isEnabled('Assigning and Collecting Reports');
 
   useEffect(() => {
     if (project && project.cohortId) {
@@ -124,6 +126,14 @@ const SingleView = () => {
     </Box>
   );
 
+  const separatorStyles = {
+    width: '1px',
+    height: 'auto',
+    backgroundColor: theme.palette.TwClrBrdrTertiary,
+    marginRight: '8px',
+    marginLeft: '8px',
+  };
+
   return (
     <PageWithModuleTimeline
       title={projectViewTitle}
@@ -138,13 +148,31 @@ const SingleView = () => {
 
       {project && (
         <>
-          {hasDeliverables && (
-            <Box paddingLeft={3}>
-              <Link to={`${APP_PATHS.ACCELERATOR_DELIVERABLES}?projectId=${project.id}`} style={{ fontWeight: 400 }}>
-                {strings.VIEW_ALL_DELIVERABLES}
-              </Link>
-            </Box>
-          )}
+          <Box paddingLeft={3} display={'flex'}>
+            {hasDeliverables && (
+              <>
+                <Box>
+                  <Link
+                    to={`${APP_PATHS.ACCELERATOR_DELIVERABLES}?projectId=${project.id}`}
+                    style={{ fontWeight: 400 }}
+                  >
+                    {strings.VIEW_DELIVERABLES}
+                  </Link>
+                </Box>
+                <div style={separatorStyles} />
+              </>
+            )}
+            {isReportsEnabled && (
+              <Box>
+                <Link
+                  to={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', project.id.toString())}
+                  style={{ fontWeight: 400 }}
+                >
+                  {strings.VIEW_REPORTS}
+                </Link>
+              </Box>
+            )}
+          </Box>
           <Card
             style={{
               display: 'flex',

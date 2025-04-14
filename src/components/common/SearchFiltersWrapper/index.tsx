@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 
 import { Box, Grid } from '@mui/material';
-import { PillList, Textfield } from '@terraware/web-components';
+import { Button, PillList, Textfield, Tooltip } from '@terraware/web-components';
 import { Option } from '@terraware/web-components/components/table/types';
 
 import { FilterField } from 'src/components/common/FilterGroup';
@@ -68,11 +68,14 @@ export type SearchFiltersProps = {
   filterColumns: FilterField[];
   optionsRenderer?: (filterName: string, values: FieldValuesPayload) => Option[] | undefined;
   noScroll?: boolean;
+  pillValuesRenderer?: (filterName: string, values: unknown[]) => string | undefined;
 };
 
 export type SearchProps = SearchInputProps & {
   filtersProps?: SearchFiltersProps;
   featuredFilters?: FeaturedFilterConfig[];
+  // If set, add an export button and call this function when it's clicked
+  onExport?: () => void;
 };
 
 export default function SearchFiltersWrapper({
@@ -80,6 +83,7 @@ export default function SearchFiltersWrapper({
   onSearch,
   filtersProps,
   featuredFilters,
+  onExport,
 }: SearchProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
 
@@ -93,14 +97,23 @@ export default function SearchFiltersWrapper({
               filtersProps.setFilters(result);
             };
 
-            let pillValue: string | undefined = filtersProps.filters[key]?.values.join(', ');
+            const values = filtersProps.filters[key]?.values ?? [];
+            let pillValue: string | undefined = values.join(', ');
             let label = filtersProps.filterColumns.find((f) => key === f.name)?.label ?? '';
+
+            // If the filter props provide a pillValuesRenderer, use that instead.
+            if (filtersProps.pillValuesRenderer) {
+              const renderedValue = filtersProps.pillValuesRenderer(key, values);
+              if (renderedValue) {
+                pillValue = renderedValue;
+              }
+            }
 
             // If the filter is coming from a featured filter, the pill value and label will come from featuredFilters
             if (featuredFilters) {
               const featuredFilter = featuredFilters.find((ff) => ff.field === key);
               if (featuredFilter) {
-                pillValue = featuredFilter.pillValuesRenderer(filtersProps.filters[key].values);
+                pillValue = featuredFilter.pillValuesRenderer(values);
                 label = featuredFilter.label;
               }
             }
@@ -142,6 +155,12 @@ export default function SearchFiltersWrapper({
         )}
 
         {filtersProps && <IconFilters filtersProps={filtersProps} />}
+
+        {onExport && (
+          <Tooltip title={strings.EXPORT}>
+            <Button onClick={onExport} icon='iconExport' type='passive' priority='ghost' />
+          </Tooltip>
+        )}
 
         <TableSettingsButton />
       </Grid>

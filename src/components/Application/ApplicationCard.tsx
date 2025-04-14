@@ -45,22 +45,21 @@ export default function ApplicationCard({
           return strings.FAILED_PRESCREEN;
         case 'Passed Pre-screen':
           return strings.PASSED_PRESCREEN;
-        case 'Carbon Eligible':
-        case 'Needs Follow-up':
-        case 'PL Review':
-        case 'Pre-check':
-        case 'Ready for Review':
         case 'Submitted':
+        case 'Sourcing Team Review':
+        case 'GIS Assessment':
+        case 'Carbon Assessment':
+        case 'Expert Review':
+        case 'P0 Eligible':
         case 'In Review':
           return strings.IN_REVIEW;
         case 'Waitlist':
         case 'Issue Active':
-        case 'Issue Pending':
-        case 'Issue Resolved':
+        case 'Issue Reassessment':
           return strings.IN_REVIEW;
         case 'Accepted':
           return strings.IN_REVIEW;
-        case 'Not Accepted':
+        case 'Not Eligible':
           return strings.IN_REVIEW;
       }
     },

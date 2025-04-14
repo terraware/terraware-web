@@ -35,6 +35,7 @@ interface DeliverablesTableProps {
   participantId?: number;
   searchAndSort?: SearchAndSortFn<ListDeliverablesElementWithOverdue>;
   tableId: string;
+  iconFilters?: FilterConfig[];
 }
 
 const columns =
@@ -99,6 +100,7 @@ const DeliverablesTable = ({
   participantId,
   searchAndSort,
   tableId,
+  iconFilters,
 }: DeliverablesTableProps) => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
@@ -170,7 +172,10 @@ const DeliverablesTable = ({
         options: DeliverableCategories,
         label: strings.CATEGORY,
       },
-      {
+    ];
+
+    if (!iconFilters) {
+      filters.push({
         field: 'type',
         options: DeliverableTypes,
         label: strings.TYPE,
@@ -178,8 +183,8 @@ const DeliverablesTable = ({
           values.map((value) => (value === 'Questions' ? 'Questionnaire' : value)).join(', '),
         renderOption: (value: string | number) =>
           value.toString() === 'Questions' ? 'Questionnaire' : value.toString(),
-      },
-    ];
+      });
+    }
 
     // show the project filter only in the accelerator route
     // the participant view already has a projects filter above the table
@@ -287,6 +292,7 @@ const DeliverablesTable = ({
       rows={_deliverables}
       onFilterApplied={ofFilterAppliedHandler}
       stickyFilters
+      iconFilters={iconFilters}
     />
   );
 };

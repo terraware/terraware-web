@@ -1,3 +1,6 @@
+import { Theme } from '@mui/material';
+import { Property } from 'csstype';
+
 import { components } from 'src/api/types/generated-schema';
 
 export type Application = components['schemas']['ApplicationPayload'];
@@ -12,15 +15,14 @@ export type ApplicationDeliverableWithBoundaryFlag = ApplicationDeliverable & { 
 
 export const ApplicationReviewStatuses: ApplicationReviewStatus[] = [
   'Accepted',
-  'Carbon Eligible',
+  'Carbon Assessment',
+  'Expert Review',
+  'GIS Assessment',
   'Issue Active',
-  'Issue Pending',
-  'Issue Resolved',
-  'Needs Follow-up',
-  'Not Accepted',
-  'PL Review',
-  'Pre-check',
-  'Ready for Review',
+  'Issue Reassessment',
+  'Not Eligible',
+  'P0 Eligible',
+  'Sourcing Team Review',
   'Submitted',
 ];
 
@@ -30,26 +32,43 @@ export const ApplicationStatusOrder: { [key in ApplicationStatus]: number } = {
   'Passed Pre-screen': 3,
   'In Review': 4,
   Submitted: 5,
-  'PL Review': 6,
-  'Ready for Review': 7,
-  'Pre-check': 8,
-  'Needs Follow-up': 9,
-  'Carbon Eligible': 10,
-  Accepted: 11,
-  Waitlist: 12,
-  'Issue Active': 13,
-  'Issue Pending': 14,
-  'Issue Resolved': 15,
-  'Not Accepted': 16,
+  'Sourcing Team Review': 6,
+  'GIS Assessment': 7,
+  'Carbon Assessment': 8,
+  'Expert Review': 9,
+  'P0 Eligible': 10,
+  'Issue Active': 11,
+  'Issue Reassessment': 12,
+  'Not Eligible': 13,
+  Accepted: 14,
+  Waitlist: 15,
 };
 
-export const getApplicationStatusLabel = (status: ApplicationStatus): string => {
+export const getApplicationStatusColor = (
+  status: ApplicationStatus,
+  theme: Theme
+): Property.Color | string | undefined => {
   switch (status) {
+    case 'Accepted':
+      return theme.palette.TwClrTxtSuccess;
     case 'Issue Active':
-    case 'Issue Pending':
-    case 'Issue Resolved':
-      return `Waitlist - ${status}`;
+    case 'Issue Reassessment':
+    case 'Waitlist':
+      return theme.palette.TwClrTxtWarning;
+    case 'Not Eligible':
+      return theme.palette.TwClrTxtDanger;
+    case 'Not Submitted':
+    case 'Passed Pre-screen':
+    case 'Submitted':
+    case 'Sourcing Team Review':
+    case 'GIS Assessment':
+    case 'Carbon Assessment':
+    case 'Expert Review':
+    case 'P0 Eligible':
+    case 'In Review':
+      return theme.palette.TwClrTxtInfo;
+    case 'Failed Pre-screen':
     default:
-      return status;
+      return theme.palette.TwClrTxtWarning;
   }
 };

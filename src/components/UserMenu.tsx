@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,9 +8,8 @@ import { DropdownItem, PopoverMenu } from '@terraware/web-components';
 import { APP_PATHS } from 'src/constants';
 import { useDocLinks } from 'src/docLinks';
 import { useUser } from 'src/providers';
+import strings from 'src/strings';
 import useEnvironment from 'src/utils/useEnvironment';
-
-import strings from '../../src/strings';
 
 type UserMenuProps = {
   hasOrganizations?: boolean;
@@ -46,20 +45,24 @@ export default function UserMenu({}: UserMenuProps): JSX.Element {
     }
   };
 
-  const getMenuItems = () => {
-    const items: DropdownItem[] = [
-      { label: strings.MY_ACCOUNT, value: APP_PATHS.MY_ACCOUNT },
+  const menuItems = useMemo(() => {
+    let items: DropdownItem[] = [];
+    if (user?.userType !== 'Funder') {
+      items.push({ label: strings.MY_ACCOUNT, value: APP_PATHS.MY_ACCOUNT });
+    }
+
+    if (!isProduction) {
+      items.push({ label: strings.OPT_IN, value: APP_PATHS.OPT_IN });
+    }
+
+    items = items.concat([
       { label: strings.PRIVACY_POLICY, value: 'privacyPolicy' },
       { label: strings.HELP_SUPPORT, value: APP_PATHS.HELP_SUPPORT },
       { label: strings.LOG_OUT, value: 'logOut' },
-    ];
-
-    if (!isProduction) {
-      items.splice(1, 0, { label: strings.OPT_IN, value: APP_PATHS.OPT_IN });
-    }
+    ]);
 
     return items;
-  };
+  }, [user, isProduction]);
 
   return (
     <PopoverMenu
@@ -74,7 +77,7 @@ export default function UserMenu({}: UserMenuProps): JSX.Element {
           {user?.firstName} {user?.lastName}
         </span>
       }
-      menuSections={[getMenuItems()]}
+      menuSections={[menuItems]}
       onClick={onItemClick}
     />
   );

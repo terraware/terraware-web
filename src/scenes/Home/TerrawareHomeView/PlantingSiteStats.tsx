@@ -5,6 +5,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import AddLink from 'src/components/common/AddLink';
 import Link from 'src/components/common/Link';
 import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
 import { APP_PATHS } from 'src/constants';
@@ -18,14 +19,19 @@ import { requestSitePopulation } from 'src/redux/features/tracking/trackingThunk
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
+import { useSupportedLocales } from 'src/strings/locales';
 import { PlantingSite } from 'src/types/Tracking';
 import { isAdmin } from 'src/utils/organization';
 import useMapboxToken from 'src/utils/useMapboxToken';
+import { useNumberFormatter } from 'src/utils/useNumber';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import StatsCardItem from './StatsCardItem';
 
 export const PlantingSiteStats = () => {
+  const { activeLocale } = useLocalization();
+  const supportedLocales = useSupportedLocales();
+  const numberFormatter = useNumberFormatter();
   const { isDesktop } = useDeviceInfo();
   const theme = useTheme();
   const navigate = useNavigate();
@@ -41,6 +47,11 @@ export const PlantingSiteStats = () => {
   const { countries } = useLocalization();
   const dispatch = useAppDispatch();
 
+  const numericFormatter = useMemo(
+    () => numberFormatter(activeLocale, supportedLocales),
+    [activeLocale, numberFormatter, supportedLocales]
+  );
+
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, selectedPlantingSiteId || -1, defaultTimeZone.get().id)
   );
@@ -48,6 +59,20 @@ export const PlantingSiteStats = () => {
   const populationSelector = useAppSelector((state) => selectSitePopulationZones(state));
 
   const primaryGridSize = useMemo(() => (isDesktop ? 6 : 12), [isDesktop]);
+
+  const plantingCompleteArea = useMemo(() => {
+    let total = 0;
+    if (selectedPlantingSite?.plantingZones) {
+      selectedPlantingSite.plantingZones.forEach((zone) => {
+        zone.plantingSubzones.forEach((subzone) => {
+          if (subzone.plantingCompleted) {
+            total += subzone.areaHa;
+          }
+        });
+      });
+    }
+    return total;
+  }, [selectedPlantingSite]);
 
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
@@ -123,7 +148,7 @@ export const PlantingSiteStats = () => {
                 padding: '18px',
               }}
             >
-              <Icon name='iconSeedling' size='medium' style={{ fill: theme.palette.TwClrIcnSecondary }} />
+              <Icon name='iconRestorationSite' size='medium' style={{ fill: theme.palette.TwClrIcnSecondary }} />
               <Typography
                 sx={{
                   color: theme.palette.TwClrTxt,
@@ -180,7 +205,7 @@ export const PlantingSiteStats = () => {
               showBorder={!isDesktop}
               value={
                 selectedPlantingSite?.areaHa
-                  ? strings.formatString(strings.X_HA, selectedPlantingSite.areaHa.toString())?.toString()
+                  ? strings.formatString(strings.X_HA, numericFormatter.format(selectedPlantingSite.areaHa))?.toString()
                   : undefined
               }
             />
@@ -199,12 +224,16 @@ export const PlantingSiteStats = () => {
               label={strings.MORTALITY_RATE}
               showBorder={!isDesktop}
               showLink={false}
-              value={observation?.mortalityRate ? `${observation.mortalityRate.toString()}%` : ''}
+              value={observation?.mortalityRate ? `${observation.mortalityRate}%` : ''}
             />
           </Grid>
 
           <Grid item xs={primaryGridSize}>
-            <StatsCardItem label={strings.TOTAL_PLANTS_PLANTED} showLink={false} value={totalPlants.toString()} />
+            <StatsCardItem
+              label={strings.TOTAL_PLANTS_PLANTED}
+              showLink={false}
+              value={numericFormatter.format(totalPlants)}
+            />
           </Grid>
 
           <Grid item xs={primaryGridSize}>
@@ -212,26 +241,21 @@ export const PlantingSiteStats = () => {
               label={strings.TOTAL_SPECIES_PLANTED}
               showBorder={!isDesktop}
               showLink={false}
-              value={totalSpecies?.toString()}
+              value={numericFormatter.format(totalSpecies ?? 0)}
             />
           </Grid>
 
-          <Grid item xs={primaryGridSize} sx={{ whiteSpace: 'nowrap' }}>
-            <Box sx={isDesktop ? undefined : { textAlign: 'center' }}>
-              {isAdmin(selectedOrganization) ? (
-                <Link
-                  onClick={() => {
-                    navigate(`${APP_PATHS.PLANTING_SITES}?new=true`);
-                  }}
-                  style={{ textWrap: 'wrap', textAlign: 'left' }}
-                >
-                  {strings.ADD_PLANTING_SITE}
-                </Link>
-              ) : null}
-            </Box>
+          <Grid item xs={primaryGridSize}>
+            <StatsCardItem
+              label={strings.TOTAL_HECTARES_PLANTED}
+              showLink={false}
+              showTooltip={true}
+              tooltipText={strings.TOTAL_HECTARES_PLANTED_TOOLTIP}
+              value={numericFormatter.format(plantingCompleteArea)}
+            />
           </Grid>
 
-          <Grid item xs={primaryGridSize} sx={{ textAlign: isDesktop ? 'right' : 'center' }}>
+          <Grid item xs={primaryGridSize} sx={{ textAlign: isDesktop ? 'left' : 'center' }}>
             <Link
               onClick={() => {
                 navigate(`${APP_PATHS.PLANTS_DASHBOARD}/${selectedPlantingSiteId}`);
@@ -240,6 +264,19 @@ export const PlantingSiteStats = () => {
             >
               {strings.VIEW_FULL_DASHBOARD}
             </Link>
+            <Box>
+              {isAdmin(selectedOrganization) ? (
+                <AddLink
+                  disabled={false}
+                  id='add-planting-site'
+                  large={false}
+                  onClick={() => {
+                    navigate(`${APP_PATHS.PLANTING_SITES}?new=true`);
+                  }}
+                  text={strings.ADD_PLANTING_SITE}
+                />
+              ) : null}
+            </Box>
           </Grid>
         </Grid>
       </Box>

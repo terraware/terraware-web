@@ -76,21 +76,24 @@ const ApplicationListTab = ({ isPrescreen }: ApplicationListTabProps) => {
   const result = useAppSelector(selectApplicationList(requestId));
   const [applications, setApplications] = useState<ApplicationRow[]>([]);
 
-  const allFilterValues: ApplicationStatus[] = isPrescreen
-    ? ['Failed Pre-screen', 'Passed Pre-screen']
-    : [
-        'Accepted',
-        'Carbon Eligible',
-        'Issue Active',
-        'Issue Pending',
-        'Issue Resolved',
-        'Needs Follow-up',
-        'Not Accepted',
-        'PL Review',
-        'Pre-check',
-        'Ready for Review',
+  const allFilterValues = useMemo((): ApplicationStatus[] => {
+    if (isPrescreen) {
+      return ['Failed Pre-screen', 'Passed Pre-screen'];
+    } else {
+      return [
         'Submitted',
+        'Sourcing Team Review',
+        'GIS Assessment',
+        'Carbon Assessment',
+        'Expert Review',
+        'P0 Eligible',
+        'Issue Active',
+        'Issue Reassessment',
+        'Not Eligible',
+        'Accepted',
       ];
+    }
+  }, [isPrescreen]);
 
   const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
     if (!activeLocale || !countries) {
@@ -114,7 +117,7 @@ const ApplicationListTab = ({ isPrescreen }: ApplicationListTabProps) => {
     ];
 
     return filters;
-  }, [activeLocale, countries]);
+  }, [activeLocale, countries, allFilterValues]);
 
   useEffect(() => {
     if (result?.status === 'error') {

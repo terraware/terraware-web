@@ -216,6 +216,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
           }}
           countryError={countryError}
           countrySubdivisionError={stateError}
+          paddingBottom={theme.spacing(4)}
         />
         <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingTop: 0 } }}>
           <TimeZoneSelector
@@ -267,6 +268,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
               label={strings.DESCRIBE_ORGANIZATION_TYPE_DETAILS}
               id='create-org-question-website'
               display={false}
+              maxLength={100}
               onChange={(value) => {
                 onChange('organizationTypeDetails', value);
                 setOrganizationTypeDetailsError('');

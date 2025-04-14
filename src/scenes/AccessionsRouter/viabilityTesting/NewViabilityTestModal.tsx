@@ -118,6 +118,12 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     };
 
     setRecord(initViabilityTest());
+
+    if (viabilityTest?.testType === 'Cut') {
+      setTotalSeedsTested(
+        (viabilityTest.seedsEmpty || 0) + (viabilityTest.seedsFilled || 0) + (viabilityTest.seedsCompromised || 0)
+      );
+    }
   }, [viabilityTest, setRecord, accession, user, tz.id]);
 
   useEffect(() => {
@@ -165,6 +171,29 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     }
     setIndividualError('seedsTested', '');
     return true;
+  };
+
+  const validateTotalSeedsTested = (value: any): boolean => {
+    setIndividualError('totalSeedsTested', '');
+    if (value) {
+      if (isNaN(value)) {
+        setIndividualError('totalSeedsTested', strings.INVALID_VALUE);
+        return false;
+      }
+      if (accession.estimatedCount !== undefined) {
+        if (value > accession.estimatedCount) {
+          setIndividualError('totalSeedsTested', strings.TOTAL_SEEDS_TESTED_ERROR);
+          return false;
+        }
+      } else {
+        setIndividualError('totalSeedsTested', strings.MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST);
+        return false;
+      }
+      return true;
+    } else {
+      setIndividualError('totalSeedsTested', strings.REQUIRED_FIELD);
+      return false;
+    }
   };
 
   const validateSeedsGerminated = () => {
@@ -276,6 +305,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     if (record) {
       const seedTestedError =
         record.testType !== 'Cut' && record?.id === -1 ? !validateSeedsTested(record.seedsTested) : false;
+      const totalSeedsTestedError = record.testType === 'Cut' ? !validateTotalSeedsTested(totalSeedsTested) : false;
       const seedsGerminatedError = !validateSeedsGerminated();
       const startDateError = !validateStartDate();
       const recordingDateError = !validateRecordingDate();
@@ -287,7 +317,15 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
         missingRequiredField =
           missingRequiredField || CUT_MANDATORY_FIELDS.some((field: MandatoryCutField) => !record[field]);
       }
-      return seedTestedError || seedsGerminatedError || startDateError || recordingDateError || missingRequiredField;
+
+      return (
+        seedTestedError ||
+        seedsGerminatedError ||
+        totalSeedsTestedError ||
+        startDateError ||
+        recordingDateError ||
+        missingRequiredField
+      );
     }
   };
 
@@ -337,6 +375,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       setIndividualError(`recordingDate${index}`, '');
     });
     setIndividualError(`seedsTested`, '');
+    setIndividualError('totalSeedsTested', '');
   };
 
   const onCloseHandler = () => {
@@ -596,7 +635,10 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                       onChange={(value) => onChangeCutValue('seedsFilled', value)}
                       id='seedsFilled'
                       value={record?.seedsFilled}
-                      errorText={validateFields && !record?.seedsFilled ? strings.REQUIRED_FIELD : ''}
+                      errorText={
+                        viabilityFieldsErrors.totalSeedsTested ||
+                        (validateFields && !record?.seedsFilled ? strings.REQUIRED_FIELD : '')
+                      }
                     />
                   ) : (
                     <Textfield

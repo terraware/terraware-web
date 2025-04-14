@@ -3,6 +3,7 @@ import React, { useCallback, useState } from 'react';
 import EditableSectionContainer from 'src/components/DocumentProducer/EditableSection/Container';
 import MultiLineComponentNonEditable from 'src/components/DocumentProducer/MultiLineComponentNonEditable';
 import PageContent from 'src/components/DocumentProducer/PageContent';
+import { useUser } from 'src/providers';
 import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
 import { SectionVariableWithValues, VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue } from 'src/types/documentProducer/VariableValue';
@@ -12,7 +13,8 @@ import Metadata from './Metadata';
 const DocumentTab = (): JSX.Element => {
   const { allVariables, document, documentId, documentVariables, projectId, reload, variablesOwners, reloadVariables } =
     useDocumentProducerData();
-  const [metadataDisabled, setMetadataDisabled] = useState(false);
+  const { isAllowed } = useUser();
+  const [metadataDisabled, setMetadataDisabled] = useState(!isAllowed('UPDATE_DELIVERABLE'));
 
   const getVariableOwner = (variableId: number) => {
     const variableOwner = variablesOwners?.find((vo) => vo.variableId.toString() === variableId.toString());

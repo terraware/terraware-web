@@ -1,30 +1,27 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useOrganization } from 'src/providers';
-import { SpeciesService } from 'src/services';
-import { AllSpeciesResponse } from 'src/services/SpeciesService';
-import strings from 'src/strings';
+import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
+import { requestSpecies } from 'src/redux/features/species/speciesThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Species } from 'src/types/Species';
-import useSnackbar from 'src/utils/useSnackbar';
+
+let requestDispatched = false;
 
 export const useSpecies = (record?: { speciesId?: number }) => {
-  const snackbar = useSnackbar();
   const { selectedOrganization } = useOrganization();
+  const dispatch = useAppDispatch();
 
   const [availableSpecies, setAvailableSpecies] = useState<Species[]>();
   const [selectedSpecies, setSelectedSpecies] = useState<Species>();
 
-  const initSpecies = useCallback(async () => {
-    if (selectedOrganization.id !== -1) {
-      const result: AllSpeciesResponse = await SpeciesService.getAllSpecies(selectedOrganization.id);
-      if (!result.requestSucceeded || !result.species) {
-        snackbar.toastError(strings.ERROR_LOAD_SPECIES);
-        return;
-      }
+  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
 
-      setAvailableSpecies(result.species);
+  useEffect(() => {
+    if (speciesResponse?.data?.species && !availableSpecies) {
+      setAvailableSpecies([...speciesResponse?.data?.species]);
     }
-  }, [selectedOrganization.id, snackbar]);
+  }, [speciesResponse?.data?.species, availableSpecies]);
 
   useEffect(() => {
     if (availableSpecies && record?.speciesId) {
@@ -33,10 +30,11 @@ export const useSpecies = (record?: { speciesId?: number }) => {
   }, [availableSpecies, record?.speciesId]);
 
   useEffect(() => {
-    if (!availableSpecies) {
-      void initSpecies();
+    if (!availableSpecies && !requestDispatched && selectedOrganization.id !== -1) {
+      requestDispatched = true;
+      void dispatch(requestSpecies(selectedOrganization.id));
     }
-  }, [availableSpecies, initSpecies]);
+  }, [selectedOrganization.id, availableSpecies, requestDispatched, dispatch]);
 
   return { availableSpecies, selectedSpecies };
 };
