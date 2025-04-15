@@ -274,7 +274,7 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
             display={true}
           />
         </Grid>
-        {(variable.isList || (!variable.isList && newImages?.length === 0)) &&
+        {(variable.isList || (!variable.isList && (!newImages || newImages?.length === 0))) &&
           imagesCopy.map((image, index) => (
             <Box key={`image-${index}`} display='flex' padding={theme.spacing(2, 3)} width='100%'>
               <Box
