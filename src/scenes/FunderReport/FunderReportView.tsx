@@ -33,7 +33,7 @@ const FunderReportView = () => {
   const [selectedReport, setSelectedReport] = useState<PublishedReport>();
 
   useEffect(() => {
-    if (userFundingEntity?.projects?.length || 0 > 0) {
+    if ((userFundingEntity?.projects?.length ?? 0) > 0) {
       setSelectedProjectId(userFundingEntity?.projects?.[0].projectId);
     }
   }, [userFundingEntity]);
