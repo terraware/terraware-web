@@ -112,3 +112,15 @@ export const requestDeleteFunders = createAsyncThunk(
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
+
+export const requestListFunderReports = createAsyncThunk(
+  'published-reports/list',
+  async (projectId: number, { rejectWithValue }) => {
+    const response = await FundingEntityService.listFunderReports(projectId);
+    if (response && response.requestSucceeded) {
+      return response.data?.reports ?? [];
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
