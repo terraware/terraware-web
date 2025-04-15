@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1744657792801" clover="3.2.0">
-  <project timestamp="1744657792801" name="All files">
-    <metrics statements="29773" coveredstatements="1238" conditionals="20207" coveredconditionals="354" methods="9189" coveredmethods="198" elements="59169" coveredelements="1790" complexity="0" loc="29773" ncloc="29773" packages="253" files="1221" classes="1221"/>
+<coverage generated="1744730000444" clover="3.2.0">
+  <project timestamp="1744730000444" name="All files">
+    <metrics statements="29773" coveredstatements="1238" conditionals="20208" coveredconditionals="354" methods="9189" coveredmethods="198" elements="59170" coveredelements="1790" complexity="0" loc="29773" ncloc="29773" packages="253" files="1221" classes="1221"/>
     <package name="src">
       <metrics statements="177" coveredstatements="8" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -3074,7 +3074,7 @@
       </file>
     </package>
     <package name="src.components.DocumentProducer.EditImagesModal">
-      <metrics statements="142" coveredstatements="0" conditionals="97" coveredconditionals="0" methods="40" coveredmethods="0"/>
+      <metrics statements="142" coveredstatements="0" conditionals="98" coveredconditionals="0" methods="40" coveredmethods="0"/>
       <file name="PhotoSelector.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DocumentProducer/EditImagesModal/PhotoSelector.tsx">
         <metrics statements="69" coveredstatements="0" conditionals="54" coveredconditionals="0" methods="20" coveredmethods="0"/>
         <line num="55" count="0" type="stmt"/>
@@ -3148,7 +3148,7 @@
         <line num="252" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DocumentProducer/EditImagesModal/index.tsx">
-        <metrics statements="73" coveredstatements="0" conditionals="43" coveredconditionals="0" methods="20" coveredmethods="0"/>
+        <metrics statements="73" coveredstatements="0" conditionals="44" coveredconditionals="0" methods="20" coveredmethods="0"/>
         <line num="44" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
