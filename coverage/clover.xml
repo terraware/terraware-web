@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1744732212607" clover="3.2.0">
-  <project timestamp="1744732212607" name="All files">
-    <metrics statements="29773" coveredstatements="1238" conditionals="20208" coveredconditionals="354" methods="9189" coveredmethods="198" elements="59170" coveredelements="1790" complexity="0" loc="29773" ncloc="29773" packages="253" files="1221" classes="1221"/>
+<coverage generated="1744747302176" clover="3.2.0">
+  <project timestamp="1744747302177" name="All files">
+    <metrics statements="29775" coveredstatements="1238" conditionals="20216" coveredconditionals="354" methods="9189" coveredmethods="198" elements="59180" coveredelements="1790" complexity="0" loc="29775" ncloc="29775" packages="253" files="1221" classes="1221"/>
     <package name="src">
       <metrics statements="177" coveredstatements="8" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -13531,7 +13531,7 @@
       </file>
     </package>
     <package name="src.redux.features.plantings">
-      <metrics statements="103" coveredstatements="0" conditionals="60" coveredconditionals="0" methods="48" coveredmethods="0"/>
+      <metrics statements="105" coveredstatements="0" conditionals="68" coveredconditionals="0" methods="48" coveredmethods="0"/>
       <file name="plantingsAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/plantings/plantingsAsyncThunks.ts">
         <metrics statements="17" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="9" coveredmethods="0"/>
         <line num="12" count="0" type="stmt"/>
@@ -13553,7 +13553,7 @@
         <line num="50" count="0" type="stmt"/>
       </file>
       <file name="plantingsSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/plantings/plantingsSelectors.ts">
-        <metrics statements="70" coveredstatements="0" conditionals="50" coveredconditionals="0" methods="35" coveredmethods="0"/>
+        <metrics statements="72" coveredstatements="0" conditionals="58" coveredconditionals="0" methods="35" coveredmethods="0"/>
         <line num="13" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
@@ -13600,30 +13600,32 @@
         <line num="123" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="125" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="126" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="128" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="129" count="0" type="stmt"/>
-        <line num="132" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="136" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="137" count="0" type="stmt"/>
-        <line num="138" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="139" count="0" type="stmt"/>
-        <line num="143" count="0" type="stmt"/>
+        <line num="128" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="131" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="133" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="140" count="0" type="stmt"/>
+        <line num="143" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="147" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="148" count="0" type="stmt"/>
-        <line num="149" count="0" type="stmt"/>
-        <line num="151" count="0" type="stmt"/>
-        <line num="152" count="0" type="stmt"/>
+        <line num="149" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="150" count="0" type="stmt"/>
         <line num="154" count="0" type="stmt"/>
-        <line num="156" count="0" type="stmt"/>
-        <line num="157" count="0" type="stmt"/>
-        <line num="158" count="0" type="stmt"/>
-        <line num="161" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="159" count="0" type="stmt"/>
+        <line num="160" count="0" type="stmt"/>
         <line num="162" count="0" type="stmt"/>
         <line num="163" count="0" type="stmt"/>
-        <line num="164" count="0" type="stmt"/>
         <line num="165" count="0" type="stmt"/>
-        <line num="166" count="0" type="stmt"/>
-        <line num="168" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="167" count="0" type="stmt"/>
+        <line num="168" count="0" type="stmt"/>
+        <line num="169" count="0" type="stmt"/>
+        <line num="172" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="173" count="0" type="stmt"/>
+        <line num="174" count="0" type="stmt"/>
         <line num="175" count="0" type="stmt"/>
+        <line num="176" count="0" type="stmt"/>
+        <line num="177" count="0" type="stmt"/>
+        <line num="179" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="186" count="0" type="stmt"/>
       </file>
       <file name="plantingsSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/plantings/plantingsSlice.ts">
         <metrics statements="9" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
