@@ -124,9 +124,20 @@ export const searchPlantingProgress = createSelector(
           const matchesPlantingCompleted =
             plantingCompleted === undefined || progress.plantingCompleted === plantingCompleted;
           const matchesSiteName = siteNameSelected === undefined || siteName === siteNameSelected;
+          const matchesProjectId =
+            projectNotPresentSelected ||
+            projectIdsSelected === undefined ||
+            projectIdsSelected.includes(Number(projectId));
+          const matchesProjectNotPresent = !projectNotPresentSelected || (projectNotPresentSelected && !projectId);
 
-          if (matchesQuery && matchesPlantingCompleted && matchesSiteName) {
-            acc.push({ siteId, siteName, totalPlants, ...progress });
+          if (
+            matchesQuery &&
+            matchesPlantingCompleted &&
+            matchesSiteName &&
+            matchesProjectId &&
+            matchesProjectNotPresent
+          ) {
+            acc.push({ siteId, siteName, totalPlants, projectName, ...progress });
           }
         });
       } else if (
