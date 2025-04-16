@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import { OrganizationFeaturesData } from 'src/services/OrganizationService';
 import { InternalTag } from 'src/types/InternalTag';
 import { OrganizationWithInternalTags } from 'src/types/Organization';
 
@@ -7,10 +8,23 @@ import { StatusT, buildReducers } from '../asyncUtils';
 import {
   requestAddAcceleratorOrganization,
   requestListAllOrganizationsInternalTags,
+  requestOrganizationFeatures,
   requestOrganizationInternalTags,
   requestRemoveAcceleratorOrganizations,
   requestUpdateOrganizationInternalTags,
 } from './organizationsAsyncThunks';
+
+// Define the initial state
+const initialStateFeatures: { [key: string]: StatusT<OrganizationFeaturesData> } = {};
+
+export const featuresSlice = createSlice({
+  name: 'featuresSlice',
+  initialState: initialStateFeatures,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestOrganizationFeatures)(builder);
+  },
+});
 
 // Define the initial state
 const initialStateInternalTags: { [key: string]: StatusT<InternalTag[]> } = {};
@@ -70,6 +84,7 @@ export const listAllOrganizationsInternalTagsSlice = createSlice({
 });
 
 const organizationsReducers = {
+  features: featuresSlice.reducer,
   internalTags: internalTagsSlice.reducer,
   internalTagsUpdate: internalTagsUpdateSlice.reducer,
   addAcceleratorOrganization: addAcceleratorOrganizationSlice.reducer,
