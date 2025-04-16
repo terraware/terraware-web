@@ -24,6 +24,7 @@ export type TerrawarePath =
   | '/nursery/withdrawals'
   | '/nursery/withdrawals.*tab=withdrawal_history'
   | '/observations'
+  | '/observations.*tab=biomassMeasurements'
   | '/planting-sites'
   | '/seedbanks'
   | '/nurseries'
@@ -64,6 +65,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/nursery/withdrawals.*tab=withdrawal_history':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718192553876-Withdrawal-History',
     '/observations': 'https://knowledge.terraformation.com/hc/en-us/articles/28388716231956-Observations',
+    '/observations.*tab=biomassMeasurements':
+      'https://knowledge.terraformation.com/hc/en-us/articles/36072166476052-Baselines-through-Biomass-Observations',
     '/planting-sites':
       'https://knowledge.terraformation.com/hc/en-us/articles/27918882767892-Creating-A-Planting-Sites',
     '/seedbanks':
@@ -104,6 +107,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/nursery/withdrawals.*tab=withdrawal_history':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718192553876-Withdrawal-History',
     '/observations': 'https://knowledge.terraformation.com/hc/en-us/articles/28388716231956-Observations',
+    '/observations.*tab=biomassMeasurements':
+      'https://knowledge.terraformation.com/hc/en-us/articles/36072166476052-Baselines-through-Biomass-Observations',
     '/planting-sites':
       'https://knowledge.terraformation.com/hc/en-us/articles/27918882767892-Creating-A-Planting-Sites',
     '/seedbanks':
@@ -144,6 +149,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/nursery/withdrawals.*tab=withdrawal_history':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718192553876-Withdrawal-History',
     '/observations': 'https://knowledge.terraformation.com/hc/en-us/articles/28388716231956-Observations',
+    '/observations.*tab=biomassMeasurements':
+      'https://knowledge.terraformation.com/hc/en-us/articles/36072166476052-Baselines-through-Biomass-Observations',
     '/planting-sites':
       'https://knowledge.terraformation.com/hc/en-us/articles/27918882767892-Creating-A-Planting-Sites',
     '/seedbanks':
