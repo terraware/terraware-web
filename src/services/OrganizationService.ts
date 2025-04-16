@@ -346,16 +346,16 @@ const getAllOrganizationsInternalTags = async (): Promise<OrganizationsInternalT
  * Exported functions
  */
 const OrganizationService = {
-  getOrganizations,
-  getOrganizationFeatures,
-  getOrganizationRoles,
   createOrganization,
-  updateOrganization,
   deleteOrganization,
-  initializeTimeZone,
-  getOrganizationInternalTags,
-  updateOrganizationInternalTags,
   getAllOrganizationsInternalTags,
+  getOrganizationFeatures,
+  getOrganizationInternalTags,
+  getOrganizationRoles,
+  getOrganizations,
+  initializeTimeZone,
+  updateOrganization,
+  updateOrganizationInternalTags,
 };
 
 export default OrganizationService;
