@@ -11,12 +11,13 @@ import ReactMapGL, {
 
 import { Box, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
+import { FeatureCollection } from 'geojson';
 
 /**
  * The following is needed to deal with a mapbox bug
  * See: https://docs.mapbox.com/mapbox-gl-js/guides/install/#transpiling
  */
-import mapboxgl from 'mapbox-gl';
+import mapboxgl, { SymbolLayer } from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { useIsVisible } from 'src/hooks/useIsVisible';
@@ -112,6 +113,14 @@ export default function Map(props: MapProps): JSX.Element {
 
   const loadImages = useCallback(
     (map: MapRef) => {
+      map.loadImage('/assets/619.png', (error, image) => {
+        if (error || !image) {
+          snackbar.toastError(error?.message ?? 'Error loading map image.');
+        } else {
+          map.addImage('map-point', image, { sdf: true });
+        }
+      });
+
       mapImages?.forEach(({ name, url }) => {
         if (!map.hasImage(name)) {
           map.loadImage(url, (error, image) => {
@@ -377,6 +386,35 @@ export default function Map(props: MapProps): JSX.Element {
         {geo.layerOutline && <Layer {...geo.layerOutline} />}
       </Source>
     ));
+
+    const geojsonPoint: FeatureCollection = {
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-81.53147401888832, 40.399232858241405],
+          },
+          properties: { title: 'Testing point' },
+        },
+      ],
+    };
+
+    const pointLayerStyle: SymbolLayer = {
+      id: 'point',
+      type: 'symbol',
+      layout: {
+        'icon-image': 'map-point',
+        'icon-size': 0.1,
+      },
+    };
+
+    sources.push(
+      <Source type='geojson' data={geojsonPoint} id={'point'}>
+        <Layer {...pointLayerStyle} />
+      </Source>
+    );
 
     return sources;
   }, [geoData, reloadSources, mapImages]);
