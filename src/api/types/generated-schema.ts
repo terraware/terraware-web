@@ -1656,6 +1656,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/funder/reports/projects/{projectId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get the published reports for a specific project. */
+        get: operations["listPublishedReports"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/globalRoles/users": {
         parameters: {
             query?: never;
@@ -2192,6 +2209,23 @@ export interface paths {
          * @description Organizations can only be deleted if they have no members other than the current user.
          */
         delete: operations["deleteOrganization"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/organizations/{organizationId}/features": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lists the features available to an organization. */
+        get: operations["listOrganizationFeatures"];
+        put?: never;
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -6493,6 +6527,14 @@ export interface components {
              */
             totalUnclaimedPlots: number;
         };
+        ListOrganizationFeaturesResponsePayload: {
+            applications: components["schemas"]["OrganizationFeaturePayload"];
+            deliverables: components["schemas"]["OrganizationFeaturePayload"];
+            modules: components["schemas"]["OrganizationFeaturePayload"];
+            reports: components["schemas"]["OrganizationFeaturePayload"];
+            seedFundReports: components["schemas"]["OrganizationFeaturePayload"];
+            status: components["schemas"]["SuccessOrError"];
+        };
         ListOrganizationInternalTagsResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
             tagIds: number[];
@@ -6540,6 +6582,10 @@ export interface components {
         };
         ListProjectsResponsePayload: {
             projects: components["schemas"]["ProjectPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        ListPublishedReportsResponsePayload: {
+            reports: components["schemas"]["PublishedReportPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         ListReportFilesResponseElement: {
@@ -7392,6 +7438,10 @@ export interface components {
              */
             operation: "or";
         };
+        OrganizationFeaturePayload: {
+            enabled: boolean;
+            projectIds: number[];
+        };
         OrganizationInternalTagsPayload: {
             internalTagIds: number[];
             /** Format: int64 */
@@ -7675,7 +7725,7 @@ export interface components {
             /** @description If the problem relates to a particular planting zone, its name. */
             plantingZone?: string;
             /** @enum {string} */
-            problemType: "CannotRemovePlantedSubzone" | "CannotSplitSubzone" | "CannotSplitZone" | "DuplicateSubzoneName" | "DuplicateZoneName" | "ExclusionWithoutBoundary" | "SiteTooLarge" | "SubzoneBoundaryChanged" | "SubzoneBoundaryOverlaps" | "SubzoneInExclusionArea" | "SubzoneNotInZone" | "ZoneBoundaryChanged" | "ZoneBoundaryOverlaps" | "ZoneHasNoSubzones" | "ZoneNotInSite" | "ZoneTooSmall" | "ZonesWithoutSiteBoundary";
+            problemType: "DuplicateSubzoneName" | "DuplicateZoneName" | "ExclusionWithoutBoundary" | "SiteTooLarge" | "SubzoneBoundaryOverlaps" | "SubzoneInExclusionArea" | "SubzoneNotInZone" | "ZoneBoundaryOverlaps" | "ZoneHasNoSubzones" | "ZoneNotInSite" | "ZoneTooSmall" | "ZonesWithoutSiteBoundary";
         };
         PlantingSubzoneHistoryPayload: {
             boundary: components["schemas"]["MultiPolygon"];
@@ -7923,6 +7973,28 @@ export interface components {
         };
         ProjectVotesPayload: {
             phases: components["schemas"]["PhaseVotes"][];
+        };
+        PublishedReportPayload: {
+            achievements: string[];
+            challenges: components["schemas"]["ReportChallengePayload"][];
+            /** Format: date */
+            endDate: string;
+            /** @enum {string} */
+            frequency: "Quarterly" | "Annual";
+            highlights?: string;
+            /** Format: int64 */
+            projectId: number;
+            projectName: string;
+            /** Format: int64 */
+            publishedBy: number;
+            /** Format: date-time */
+            publishedTime: string;
+            /** @enum {string} */
+            quarter?: "Q1" | "Q2" | "Q3" | "Q4";
+            /** Format: int64 */
+            reportId: number;
+            /** Format: date */
+            startDate: string;
         };
         PutNurseryV1: {
             /** Format: date */
@@ -13373,6 +13445,37 @@ export interface operations {
             };
         };
     };
+    listPublishedReports: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListPublishedReportsResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
     listGlobalRoles: {
         parameters: {
             query?: never;
@@ -14511,6 +14614,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    listOrganizationFeatures: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organizationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListOrganizationFeaturesResponsePayload"];
                 };
             };
         };
