@@ -27,8 +27,7 @@ const FunderReportView = () => {
   const { userFundingEntity } = useUserFundingEntity();
   const [selectedProjectId, setSelectedProjectId] = useState<number>();
   const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState<string>('');
-  const reportsResponse = useAppSelector(selectListFunderReports(requestId));
+  const reportsResponse = useAppSelector(selectListFunderReports(selectedProjectId?.toString() ?? ''));
   const [reports, setReports] = useState<PublishedReport[]>();
   const [selectedReport, setSelectedReport] = useState<PublishedReport>();
 
@@ -40,8 +39,7 @@ const FunderReportView = () => {
 
   useEffect(() => {
     if (selectedProjectId) {
-      const request = dispatch(requestListFunderReports(selectedProjectId));
-      setRequestId(request.requestId);
+      dispatch(requestListFunderReports(selectedProjectId));
     }
   }, [selectedProjectId]);
 
@@ -206,7 +204,7 @@ const FunderReportView = () => {
         justifyContent='space-between'
       >
         <Typography fontSize='24px' fontWeight={600}>{`${strings.REPORT} (${reportName})`}</Typography>
-        {reports && (
+        {(reports?.length ?? 0) > 0 && (
           <SelectT<PublishedReport>
             id='report'
             label={''}
