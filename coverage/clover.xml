@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1744747302176" clover="3.2.0">
-  <project timestamp="1744747302177" name="All files">
-    <metrics statements="29775" coveredstatements="1238" conditionals="20216" coveredconditionals="354" methods="9189" coveredmethods="198" elements="59180" coveredelements="1790" complexity="0" loc="29775" ncloc="29775" packages="253" files="1221" classes="1221"/>
+<coverage generated="1744817536931" clover="3.2.0">
+  <project timestamp="1744817536931" name="All files">
+    <metrics statements="29777" coveredstatements="1238" conditionals="20218" coveredconditionals="354" methods="9190" coveredmethods="198" elements="59185" coveredelements="1790" complexity="0" loc="29777" ncloc="29777" packages="253" files="1221" classes="1221"/>
     <package name="src">
       <metrics statements="177" coveredstatements="8" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -7682,7 +7682,7 @@
       </file>
     </package>
     <package name="src.components.common">
-      <metrics statements="445" coveredstatements="0" conditionals="426" coveredconditionals="0" methods="123" coveredmethods="0"/>
+      <metrics statements="447" coveredstatements="0" conditionals="428" coveredconditionals="0" methods="124" coveredmethods="0"/>
       <file name="AddLink.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/AddLink.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
@@ -8159,25 +8159,27 @@
         <line num="94" count="0" type="stmt"/>
       </file>
       <file name="PlantingSiteSelector.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/PlantingSiteSelector.tsx">
-        <metrics statements="18" coveredstatements="0" conditionals="17" coveredconditionals="0" methods="5" coveredmethods="0"/>
-        <line num="17" count="0" type="stmt"/>
+        <metrics statements="20" coveredstatements="0" conditionals="19" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="22" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="26" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="29" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="31" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="30" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="42" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="43" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
+        <line num="33" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="34" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="35" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="47" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
       </file>
       <file name="RadioButton.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/RadioButton.tsx">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -21775,9 +21777,9 @@
         <line num="120" count="0" type="stmt"/>
         <line num="123" count="0" type="stmt"/>
         <line num="188" count="0" type="stmt"/>
-        <line num="197" count="0" type="stmt"/>
-        <line num="261" count="0" type="stmt"/>
-        <line num="274" count="0" type="stmt"/>
+        <line num="198" count="0" type="stmt"/>
+        <line num="262" count="0" type="stmt"/>
+        <line num="275" count="0" type="stmt"/>
       </file>
       <file name="StatsCardItem.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/TerrawareHomeView/StatsCardItem.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="28" coveredconditionals="0" methods="1" coveredmethods="0"/>

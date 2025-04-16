@@ -1,3 +1,4 @@
+be32e28b4ba SW-6400 Do not include planting sites with no maps in new home page site selector (#3847)
 4fcd0f62b23 SW-6648 Planting Progress: Project Filter and Column in Planting Progress table do not work (#3845)
 ff336b516e7 Fix organization navigation (#3843)
 6705e9a228e SW-6432 Image Variable should display already uploaded images with ability to edit caption & remove image (#3842)
