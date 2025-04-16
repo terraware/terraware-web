@@ -1,5 +1,7 @@
 import { RootState } from 'src/redux/rootReducer';
 
+export const listOrganizationFeatures = (requestId: string) => (state: RootState) => state.features[requestId];
+
 export const listOrganizationInternalTags = (requestId: string) => (state: RootState) => state.internalTags[requestId];
 
 export const selectUpdateOrganizationInternalTags = (requestId: string) => (state: RootState) =>

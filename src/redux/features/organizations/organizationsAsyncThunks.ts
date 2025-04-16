@@ -5,6 +5,20 @@ import { Response2 } from 'src/services/HttpService';
 import strings from 'src/strings';
 import { UpdateOrganizationInternalTagsRequestPayload } from 'src/types/Organization';
 
+export const requestOrganizationFeatures = createAsyncThunk(
+  'organizations/features',
+  async ({ organizationId }: { organizationId: number }, { rejectWithValue }) => {
+    const response = await OrganizationService.getOrganizationFeatures(organizationId);
+
+    if (response !== null && response.requestSucceeded) {
+      const { applications, deliverables, modules, reports, seedFundReports } = response;
+      return { applications, deliverables, modules, reports, seedFundReports };
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
 export const requestOrganizationInternalTags = createAsyncThunk(
   'organizations/internalTags',
   async ({ organizationId }: { organizationId: number }, { rejectWithValue }) => {

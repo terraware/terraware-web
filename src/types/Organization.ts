@@ -35,6 +35,8 @@ export type Organization = {
   website?: string;
 };
 
+export type OrganizationFeature = components['schemas']['OrganizationFeaturePayload'];
+
 export type HighOrganizationRoles = 'Admin' | 'Owner' | 'Terraformation Contact';
 
 export const HighOrganizationRolesValues = ['Admin', 'Owner', 'Terraformation Contact'];

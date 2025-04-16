@@ -16,12 +16,12 @@ import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
-import { useApplicationData } from 'src/providers/Application/Context';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
+import { requestOrganizationFeatures } from 'src/redux/features/organizations/organizationsAsyncThunks';
+import { listOrganizationFeatures } from 'src/redux/features/organizations/organizationsSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { NurseryWithdrawalService } from 'src/services';
-import DeliverablesService from 'src/services/DeliverablesService';
-import SeedFundReportService, { Reports } from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
 import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -42,32 +42,31 @@ export default function NavBar({
   const { isAllowed } = useUser();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
+  const dispatch = useAppDispatch();
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
-  const [seedFundReports, setSeedFundReports] = useState<Reports>([]);
-  const [hasDeliverables, setHasDeliverables] = useState<boolean>(false);
   const { isDesktop, isMobile } = useDeviceInfo();
   const navigate = useNavigate();
   const mixpanel = useMixpanel();
   const isReportsEnabled = isEnabled('Assigning and Collecting Reports');
 
+  const [orgFeaturesRequestId, setOrgFeaturesRequestId] = useState<string>('');
+  const orgFeatures = useAppSelector(listOrganizationFeatures(orgFeaturesRequestId));
+
   const { isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
-  const { orgHasModules, currentParticipantProject, setCurrentParticipantProject, projectsWithModules } =
-    useParticipantData();
-
-  const { allApplications } = useApplicationData();
+  const { currentParticipantProject, setCurrentParticipantProject, projectsWithModules } = useParticipantData();
 
   const isAccessionDashboardRoute = useMatch({ path: APP_PATHS.SEEDS_DASHBOARD + '/', end: false });
   const isAccessionsRoute = useMatch({ path: APP_PATHS.ACCESSIONS + '/', end: false });
   const isApplicationRoute = useMatch({ path: APP_PATHS.APPLICATIONS + '/', end: false });
-  const isCheckinRoute = useMatch({ path: APP_PATHS.CHECKIN + '/', end: false });
+  const isCheckInRoute = useMatch({ path: APP_PATHS.CHECKIN + '/', end: false });
   const isDeliverablesRoute = useMatch({ path: APP_PATHS.DELIVERABLES + '/', end: false });
   const isDeliverableViewRoute = useMatch({ path: APP_PATHS.DELIVERABLE_VIEW + '/', end: false });
   const isHomeRoute = useMatch({ path: APP_PATHS.HOME + '/', end: false });
   const isPeopleRoute = useMatch({ path: APP_PATHS.PEOPLE + '/', end: false });
   const isSpeciesRoute = useMatch({ path: APP_PATHS.SPECIES + '/', end: false });
   const isOrganizationRoute = useMatch({ path: APP_PATHS.ORGANIZATION + '/', end: false });
-  const isSeedbanksRoute = useMatch({ path: APP_PATHS.SEED_BANKS + '/', end: false });
+  const isSeedBanksRoute = useMatch({ path: APP_PATHS.SEED_BANKS + '/', end: false });
   const isNurseriesRoute = useMatch({ path: APP_PATHS.NURSERIES + '/', end: false });
   const isInventoryRoute = useMatch({ path: APP_PATHS.INVENTORY + '/', end: false });
   const isBatchWithdrawRoute = useMatch({ path: APP_PATHS.BATCH_WITHDRAW + '/', end: false });
@@ -121,33 +120,10 @@ export default function NavBar({
 
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
-      const reportSearch = async () => {
-        const reportsResults = await SeedFundReportService.getReports(selectedOrganization.id);
-        setSeedFundReports(reportsResults.reports || []);
-      };
-
-      if (isAdmin(selectedOrganization)) {
-        // not open to contributors, will get a 403
-        reportSearch();
-      }
+      const request = dispatch(requestOrganizationFeatures({ organizationId: selectedOrganization.id }));
+      setOrgFeaturesRequestId(request.requestId);
     }
-  }, [selectedOrganization]);
-
-  useEffect(() => {
-    const fetchDeliverables = async () => {
-      // TODO I think we should pull this out of redux
-      // using a direct service call, without redux, to keep with existing pattern in the nav bars
-      const response = await DeliverablesService.list(activeLocale, {
-        organizationId: selectedOrganization.id,
-      });
-      setHasDeliverables(!!(response && response.data && response.data.length > 0));
-    };
-    if (isManagerOrHigher(selectedOrganization)) {
-      fetchDeliverables();
-    } else {
-      setHasDeliverables(false);
-    }
-  }, [activeLocale, selectedOrganization]);
+  }, [selectedOrganization.id]);
 
   useEffect(() => {
     if (!currentParticipantProject && projectsWithModules && projectsWithModules.length > 0) {
@@ -185,7 +161,7 @@ export default function NavBar({
 
   const deliverablesMenu = useMemo<JSX.Element | null>(
     () =>
-      hasDeliverables && activeLocale ? (
+      !!orgFeatures?.data?.deliverables?.enabled && activeLocale ? (
         <NavItem
           label={strings.DELIVERABLES}
           icon='iconSubmit'
@@ -197,13 +173,18 @@ export default function NavBar({
           id='deliverables'
         />
       ) : null,
-    [activeLocale, closeAndNavigateTo, isDeliverablesRoute, isDeliverableViewRoute, hasDeliverables]
+    [
+      activeLocale,
+      closeAndNavigateTo,
+      isDeliverablesRoute,
+      isDeliverableViewRoute,
+      orgFeatures?.data?.deliverables?.enabled,
+    ]
   );
 
-  // TODO: get reports from API and only show reports nav menu if there are any
   const reportsMenu = useMemo<JSX.Element | null>(
     () =>
-      isReportsEnabled && isAllowed('READ_REPORTS') ? (
+      isReportsEnabled && isAllowed('READ_REPORTS') && !!orgFeatures?.data?.reports?.enabled && activeLocale ? (
         <NavItem
           icon='iconGraphReport'
           label={strings.REPORTS}
@@ -214,12 +195,12 @@ export default function NavBar({
           id='reports-list'
         />
       ) : null,
-    [closeAndNavigateTo, isReportsEnabled, isReportsRoute]
+    [activeLocale, closeAndNavigateTo, isReportsEnabled, isReportsRoute, orgFeatures?.data?.reports?.enabled]
   );
 
   const seedFundReportsMenu = useMemo<JSX.Element | null>(
     () =>
-      seedFundReports.length > 0 && selectedOrganization.canSubmitReports && activeLocale ? (
+      selectedOrganization.canSubmitReports && !!orgFeatures?.data?.seedFundReports?.enabled && activeLocale ? (
         <NavItem
           icon='iconGraphReport'
           label={strings.SEED_FUND_REPORTS}
@@ -234,14 +215,17 @@ export default function NavBar({
       activeLocale,
       closeAndNavigateTo,
       isSeedFundReportsRoute,
-      seedFundReports.length,
+      orgFeatures?.data?.seedFundReports?.enabled,
       selectedOrganization.canSubmitReports,
     ]
   );
 
   const modulesMenu = useMemo<JSX.Element | null>(
     () =>
-      currentParticipantProject && orgHasModules && isManagerOrHigher(selectedOrganization) ? (
+      currentParticipantProject &&
+      !!orgFeatures?.data?.modules?.enabled &&
+      isManagerOrHigher(selectedOrganization) &&
+      activeLocale ? (
         <NavItem
           icon='iconModule'
           label={strings.MODULES}
@@ -255,12 +239,18 @@ export default function NavBar({
           id='modules-list'
         />
       ) : null,
-    [closeAndNavigateTo, isProjectModulesRoute, currentParticipantProject, orgHasModules]
+    [
+      activeLocale,
+      closeAndNavigateTo,
+      currentParticipantProject,
+      isProjectModulesRoute,
+      orgFeatures?.data?.reports?.enabled,
+    ]
   );
 
   const applicationMenu = useMemo<JSX.Element | null>(
     () =>
-      allApplications && allApplications.length > 0 ? (
+      !!orgFeatures?.data?.applications?.enabled && activeLocale ? (
         <NavItem
           label={
             <Box
@@ -287,7 +277,7 @@ export default function NavBar({
           id='applications-list'
         />
       ) : null,
-    [closeAndNavigateTo, allApplications, isApplicationRoute]
+    [activeLocale, closeAndNavigateTo, isApplicationRoute, orgFeatures?.data?.applications?.enabled]
   );
 
   const acceleratorSectionTitle = useMemo<string>(
@@ -349,7 +339,7 @@ export default function NavBar({
           />
           <NavItem
             label={strings.ACCESSIONS}
-            selected={isAccessionsRoute || isCheckinRoute ? true : false}
+            selected={isAccessionsRoute || isCheckInRoute ? true : false}
             onClick={() => {
               closeAndNavigateTo(APP_PATHS.ACCESSIONS);
             }}
@@ -421,7 +411,7 @@ export default function NavBar({
             <SubNavbar>
               <NavItem
                 label={strings.SEED_BANKS}
-                selected={!!isSeedbanksRoute}
+                selected={!!isSeedBanksRoute}
                 onClick={() => {
                   closeAndNavigateTo(APP_PATHS.SEED_BANKS);
                 }}
