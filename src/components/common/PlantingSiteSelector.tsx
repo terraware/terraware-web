@@ -10,16 +10,20 @@ import strings from 'src/strings';
 
 type PlantingSiteSelectorProps = {
   onChange: (plantingSiteId: number) => void;
+  hideNoBoundary?: boolean;
 };
 
-export default function PlantingSiteSelector({ onChange }: PlantingSiteSelectorProps): JSX.Element {
+export default function PlantingSiteSelector({ onChange, hideNoBoundary }: PlantingSiteSelectorProps): JSX.Element {
   // assume `requestPlantingSites` thunk has been dispatched by consumer
   const plantingSites = useAppSelector(selectPlantingSites);
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number | undefined>();
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
 
   const options = useMemo(
-    () => plantingSites?.map((site) => ({ label: site.name, value: site.id })) ?? [],
+    () =>
+      plantingSites
+        ?.filter((ps) => (hideNoBoundary ? !!ps.boundary : true))
+        .map((site) => ({ label: site.name, value: site.id })) ?? [],
     [plantingSites]
   );
 
