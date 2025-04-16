@@ -277,7 +277,7 @@ export default function NavBar({
           id='applications-list'
         />
       ) : null,
-    [activeLocale, closeAndNavigateTo, isApplicationRoute, orgFeatures?.data?.modules?.enabled]
+    [activeLocale, closeAndNavigateTo, isApplicationRoute, orgFeatures?.data?.applications?.enabled]
   );
 
   const acceleratorSectionTitle = useMemo<string>(
