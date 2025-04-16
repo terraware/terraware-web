@@ -59,14 +59,14 @@ export default function NavBar({
   const isAccessionDashboardRoute = useMatch({ path: APP_PATHS.SEEDS_DASHBOARD + '/', end: false });
   const isAccessionsRoute = useMatch({ path: APP_PATHS.ACCESSIONS + '/', end: false });
   const isApplicationRoute = useMatch({ path: APP_PATHS.APPLICATIONS + '/', end: false });
-  const isCheckinRoute = useMatch({ path: APP_PATHS.CHECKIN + '/', end: false });
+  const isCheckInRoute = useMatch({ path: APP_PATHS.CHECKIN + '/', end: false });
   const isDeliverablesRoute = useMatch({ path: APP_PATHS.DELIVERABLES + '/', end: false });
   const isDeliverableViewRoute = useMatch({ path: APP_PATHS.DELIVERABLE_VIEW + '/', end: false });
   const isHomeRoute = useMatch({ path: APP_PATHS.HOME + '/', end: false });
   const isPeopleRoute = useMatch({ path: APP_PATHS.PEOPLE + '/', end: false });
   const isSpeciesRoute = useMatch({ path: APP_PATHS.SPECIES + '/', end: false });
   const isOrganizationRoute = useMatch({ path: APP_PATHS.ORGANIZATION + '/', end: false });
-  const isSeedbanksRoute = useMatch({ path: APP_PATHS.SEED_BANKS + '/', end: false });
+  const isSeedBanksRoute = useMatch({ path: APP_PATHS.SEED_BANKS + '/', end: false });
   const isNurseriesRoute = useMatch({ path: APP_PATHS.NURSERIES + '/', end: false });
   const isInventoryRoute = useMatch({ path: APP_PATHS.INVENTORY + '/', end: false });
   const isBatchWithdrawRoute = useMatch({ path: APP_PATHS.BATCH_WITHDRAW + '/', end: false });
@@ -339,7 +339,7 @@ export default function NavBar({
           />
           <NavItem
             label={strings.ACCESSIONS}
-            selected={isAccessionsRoute || isCheckinRoute ? true : false}
+            selected={isAccessionsRoute || isCheckInRoute ? true : false}
             onClick={() => {
               closeAndNavigateTo(APP_PATHS.ACCESSIONS);
             }}
@@ -411,7 +411,7 @@ export default function NavBar({
             <SubNavbar>
               <NavItem
                 label={strings.SEED_BANKS}
-                selected={!!isSeedbanksRoute}
+                selected={!!isSeedBanksRoute}
                 onClick={() => {
                   closeAndNavigateTo(APP_PATHS.SEED_BANKS);
                 }}
