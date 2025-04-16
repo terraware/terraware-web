@@ -187,6 +187,7 @@ export const PlantingSiteStats = () => {
               onChange={(plantingSiteId) => {
                 setSelectedPlantingSiteId(plantingSiteId);
               }}
+              hideNoBoundary
             />
           </Grid>
 
