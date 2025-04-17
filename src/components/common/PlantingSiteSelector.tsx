@@ -19,13 +19,15 @@ export default function PlantingSiteSelector({ onChange, hideNoBoundary }: Plant
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number | undefined>();
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
 
-  const options = useMemo(
-    () =>
-      plantingSites
-        ?.filter((ps) => (hideNoBoundary ? !!ps.boundary : true))
-        .map((site) => ({ label: site.name, value: site.id })) ?? [],
-    [plantingSites, hideNoBoundary]
-  );
+  const filteredPlantingSites = useMemo(() => {
+    console.log('plantingSites', plantingSites);
+    return plantingSites?.filter((ps) => (hideNoBoundary ? !!ps.boundary : true));
+  }, [plantingSites, hideNoBoundary]);
+
+  const options = useMemo(() => {
+    console.log('filteredPlantingSites', filteredPlantingSites);
+    return filteredPlantingSites?.map((site) => ({ label: site.name, value: site.id })) ?? [];
+  }, [filteredPlantingSites]);
 
   const updateSelection = useCallback(
     async (newValue: any) => {
