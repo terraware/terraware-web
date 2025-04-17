@@ -26,7 +26,7 @@ type SiteData = {
 };
 
 // Define the initial state
-const initialState: SitesData = {};
+const initialState: { [key: string]: StatusT<SitesData> } & SitesData = {};
 
 export const trackingSlice = createSlice({
   name: 'trackingSlice',
@@ -36,6 +36,10 @@ export const trackingSlice = createSlice({
       const data: SitesData = action.payload;
       state.error = data.error;
       state.plantingSites = data.plantingSites;
+      state.tracking = {
+        status: 'success',
+        data,
+      };
     },
     setPlantingSiteAction: (state, action: PayloadAction<SiteData>) => {
       const data: SiteData = action.payload;

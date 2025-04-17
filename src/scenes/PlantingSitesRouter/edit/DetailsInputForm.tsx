@@ -76,7 +76,7 @@ export default function DetailsInputForm<T extends MinimalPlantingSite>({
 
   useEffect(() => {
     if (!plantingSites && selectedOrganization.id !== -1) {
-      dispatch(requestPlantingSites(selectedOrganization.id, activeLocale));
+      dispatch(requestPlantingSites(selectedOrganization.id));
     }
   }, [activeLocale, dispatch, plantingSites, selectedOrganization.id]);
 

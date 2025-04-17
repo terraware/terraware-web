@@ -114,7 +114,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const reloadPlantingSites = useCallback(() => {
     const populatePlantingSites = () => {
       if (!isPlaceholderOrg(selectedOrganization.id)) {
-        void dispatch(requestPlantingSites(selectedOrganization.id, activeLocale || undefined));
+        void dispatch(requestPlantingSites(selectedOrganization.id));
       }
     };
     populatePlantingSites();
