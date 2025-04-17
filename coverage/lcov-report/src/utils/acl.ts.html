@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.33% </span>
+                <span class="strong">81.57% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>30/36</span>
+                <span class='fraction'>31/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">68.75% </span>
+                <span class="strong">61.11% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>11/16</span>
+                <span class='fraction'>11/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">54.54% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>6/11</span>
+                <span class='fraction'>6/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">87.5% </span>
+                <span class="strong">85.29% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>28/32</span>
+                <span class='fraction'>29/34</span>
             </div>
         
             
@@ -262,7 +262,20 @@
 <a name='L197'></a><a href='#L197'>197</a>
 <a name='L198'></a><a href='#L198'>198</a>
 <a name='L199'></a><a href='#L199'>199</a>
-<a name='L200'></a><a href='#L200'>200</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a>
+<a name='L205'></a><a href='#L205'>205</a>
+<a name='L206'></a><a href='#L206'>206</a>
+<a name='L207'></a><a href='#L207'>207</a>
+<a name='L208'></a><a href='#L208'>208</a>
+<a name='L209'></a><a href='#L209'>209</a>
+<a name='L210'></a><a href='#L210'>210</a>
+<a name='L211'></a><a href='#L211'>211</a>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -401,6 +414,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -473,7 +499,7 @@ import { Organization } from 'src/types/Organization';
 import { User, UserGlobalRole, UserGlobalRoles } from 'src/types/User';
 import { isArrayOfT } from 'src/types/utils';
 &nbsp;
-import { isManagerOrHigher, isMember } from './organization';
+import { isAdmin, isManagerOrHigher, isMember } from './organization';
 &nbsp;
 /**
  * The main structure of the ACL functionality is a list of permissions with either an array of global roles
@@ -597,6 +623,19 @@ const isAllowedReadDeliverable: PermissionCheckFn&lt;ReadSubmissionMetadata&gt; 
 };
 &nbsp;
 /**
+ * Function related to reading of accelerator reports, since the permission also applies to
+ * org roles, we need to check the passed-in organization
+ */
+type ReadReportsMetadata = { organization: Organization };
+const isAllowedReadReports: PermissionCheckFn&lt;ReadReportsMetadata&gt; = <span class="fstat-no" title="function not covered" >(</span>
+  user: User,
+  _: GlobalRolePermission,
+  metadata?: ReadReportsMetadata
+): boolean =&gt; {
+<span class="cstat-no" title="statement not covered" >  return isAcceleratorAdmin(user) || isAdmin(metadata?.organization);</span>
+};
+&nbsp;
+/**
  * This is the main ACL entrypoint where all permissions are indicated through a global role
  * array or a function that returns a boolean
  */
@@ -622,7 +661,7 @@ const ACL: Record&lt;GlobalRolePermission, UserGlobalRoles | PermissionCheckFn&g
   READ_GLOBAL_ROLES: AcceleratorAdminPlus,
   READ_PARTICIPANTS: TFExpertPlus,
   READ_PARTICIPANT_PROJECT: ReadOnlyPlus,
-  READ_REPORTS: AcceleratorAdminPlus,
+  READ_REPORTS: isAllowedReadReports,
   READ_SUBMISSION_DOCUMENT: ReadOnlyPlus,
   UPDATE_APPLICATION_INTERNAL_COMMENTS: AcceleratorAdminPlus,
   UPDATE_APPLICATION_STATUS: TFExpertPlus,
@@ -667,7 +706,7 @@ export const isAllowed: PermissionCheckFn = (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-17T15:45:07.376Z
+                at 2025-04-17T23:23:23.017Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
