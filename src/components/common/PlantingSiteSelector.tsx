@@ -24,7 +24,7 @@ export default function PlantingSiteSelector({ onChange, hideNoBoundary }: Plant
       plantingSites
         ?.filter((ps) => (hideNoBoundary ? !!ps.boundary : true))
         .map((site) => ({ label: site.name, value: site.id })) ?? [],
-    [plantingSites]
+    [plantingSites, hideNoBoundary]
   );
 
   const updateSelection = useCallback(
