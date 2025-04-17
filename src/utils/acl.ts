@@ -10,7 +10,7 @@ import { Organization } from 'src/types/Organization';
 import { User, UserGlobalRole, UserGlobalRoles } from 'src/types/User';
 import { isArrayOfT } from 'src/types/utils';
 
-import { isManagerOrHigher, isMember } from './organization';
+import { isAdmin, isManagerOrHigher, isMember } from './organization';
 
 /**
  * The main structure of the ACL functionality is a list of permissions with either an array of global roles
@@ -134,6 +134,19 @@ const isAllowedReadDeliverable: PermissionCheckFn<ReadSubmissionMetadata> = (
 };
 
 /**
+ * Function related to reading of accelerator reports, since the permission also applies to
+ * org roles, we need to check the passed-in organization
+ */
+type ReadReportsMetadata = { organization: Organization };
+const isAllowedReadReports: PermissionCheckFn<ReadReportsMetadata> = (
+  user: User,
+  _: GlobalRolePermission,
+  metadata?: ReadReportsMetadata
+): boolean => {
+  return isAcceleratorAdmin(user) || isAdmin(metadata?.organization);
+};
+
+/**
  * This is the main ACL entrypoint where all permissions are indicated through a global role
  * array or a function that returns a boolean
  */
@@ -159,7 +172,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   READ_GLOBAL_ROLES: AcceleratorAdminPlus,
   READ_PARTICIPANTS: TFExpertPlus,
   READ_PARTICIPANT_PROJECT: ReadOnlyPlus,
-  READ_REPORTS: AcceleratorAdminPlus,
+  READ_REPORTS: isAllowedReadReports,
   READ_SUBMISSION_DOCUMENT: ReadOnlyPlus,
   UPDATE_APPLICATION_INTERNAL_COMMENTS: AcceleratorAdminPlus,
   UPDATE_APPLICATION_STATUS: TFExpertPlus,
