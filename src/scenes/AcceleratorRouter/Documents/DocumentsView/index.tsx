@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 import { IconName, Separator, TableColumnType } from '@terraware/web-components';
@@ -19,7 +20,9 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { Document } from 'src/types/documentProducer/Document';
+import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 const columns = (activeLocale: string | null): TableColumnType[] =>
   activeLocale
@@ -42,6 +45,8 @@ const defaultSearchOrder: SearchSortOrder = {
 
 export default function DocumentsView(): JSX.Element | null {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const location = useStateLocation();
   const { goToDocumentNew } = useNavigateTo();
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
@@ -51,7 +56,7 @@ export default function DocumentsView(): JSX.Element | null {
   const [tableRows, setTableRows] = useState<Document[]>([]);
   const [tableSelectedRows, tableSetSelectedRows] = useState<TableRowType[]>([]);
   const [requestId, setRequestId] = useState('');
-  const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({ projectId: '' });
+  const query = useQuery();
 
   const documentsResponse = useAppSelector(selectDocumentSearch(requestId));
 
@@ -99,6 +104,16 @@ export default function DocumentsView(): JSX.Element | null {
     );
   }, [availableParticipants]);
 
+  const filteredProject = useMemo(() => {
+    if (availableProjects && query.get('dealName')) {
+      return availableProjects.find((p) => p.dealName === query.get('dealName'));
+    }
+  }, [availableProjects, query.get('dealName')]);
+
+  const resetFilter = useCallback(() => {
+    navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+  }, [location, query]);
+
   const PageHeaderLeftComponent = useMemo(
     () =>
       activeLocale ? (
@@ -116,34 +131,44 @@ export default function DocumentsView(): JSX.Element | null {
               <ProjectsDropdown
                 allowUnselect
                 availableProjects={availableProjects}
-                record={projectFilter}
-                setRecord={setProjectFilter}
+                record={{ projectId: filteredProject?.id }}
+                setRecord={(setFn) => {
+                  const newProjectFilter = setFn({ projectId: filteredProject?.id });
+                  if (newProjectFilter.projectId) {
+                    const newProject = availableProjects.find((p) => p.id === newProjectFilter.projectId);
+                    if (newProject?.dealName) {
+                      query.set('dealName', newProject.dealName);
+                      resetFilter();
+                    }
+                  } else {
+                    query.delete('dealName');
+                    resetFilter();
+                  }
+                }}
                 label={''}
                 unselectLabel={strings.ALL}
-                unselectValue={''}
+                unselectValue={undefined}
                 useDealName
               />
             </Grid>
           </Grid>
         </>
       ) : undefined,
-    [activeLocale, availableProjects, projectFilter]
+    [activeLocale, availableProjects, query.get('dealName')]
   );
 
-  const extraTableFilters: SearchNodePayload[] = useMemo(
-    () =>
-      projectFilter.projectId
-        ? [
-            {
-              operation: 'field',
-              field: 'projectId',
-              type: 'Exact',
-              values: [`${projectFilter.projectId}`],
-            },
-          ]
-        : [],
-    [projectFilter]
-  );
+  const extraTableFilters: SearchNodePayload[] = useMemo(() => {
+    return query.get('dealName')
+      ? [
+          {
+            operation: 'field',
+            field: 'projectDealName',
+            type: 'Exact',
+            values: [`${query.get('dealName')}`],
+          },
+        ]
+      : [];
+  }, [query.get('dealName')]);
 
   useEffect(() => {
     if (!documentsResponse) {
@@ -156,10 +181,6 @@ export default function DocumentsView(): JSX.Element | null {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
   }, [snackbar, documentsResponse]);
-
-  // if (tableRows.length === 0) {
-  //   return <DocumentsEmptyPage />;
-  // }
 
   const listViewProps: PageListViewProps = {
     leftComponent: PageHeaderLeftComponent,
