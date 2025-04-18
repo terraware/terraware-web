@@ -95,3 +95,5 @@ export type MetricType = 'project' | 'standard' | 'system';
 export type ChallengeMitigation = components['schemas']['ReportChallengePayload'];
 
 export type MetricStatus = 'Achieved' | 'On-Track' | 'Unlikely';
+
+export type PublishedReport = components['schemas']['PublishedReportPayload'];

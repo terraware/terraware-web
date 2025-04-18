@@ -36,6 +36,7 @@ const FUNDING_ENTITIES_LIST_ENDPOINT = '/api/v1/funder/entities';
 const FUNDING_ENTITY_ENDPOINT = '/api/v1/funder/entities/{fundingEntityId}';
 const FUNDING_ENTITY_USERS_ENDPOINT = '/api/v1/funder/entities/{fundingEntityId}/users';
 const USER_FUNDING_ENTITY_ENDPOINT = '/api/v1/funder/entities/users/{userId}';
+const FUNDER_REPORTS_ENDPOINT = '/api/v1/funder/reports/projects/{projectId}';
 
 type FundingEntitiesServerResponse =
   paths[typeof FUNDING_ENTITIES_LIST_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -49,6 +50,8 @@ type CreateFundingEntityResponse =
   paths[typeof FUNDING_ENTITIES_LIST_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 type ListFundersServerResponse =
   paths[typeof FUNDING_ENTITY_USERS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+type ListFunderReportsServerResponse =
+  paths[typeof FUNDER_REPORTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 export type UpdateFundingEntityRequest =
   paths[typeof FUNDING_ENTITY_ENDPOINT]['put']['requestBody']['content']['application/json'];
 export type CreateFundingEntityRequest =
@@ -63,6 +66,7 @@ const httpUserFundingEntity = HttpService.root(USER_FUNDING_ENTITY_ENDPOINT);
 const httpFundingEntity = HttpService.root(FUNDING_ENTITY_ENDPOINT);
 const httpFundingEntityUsers = HttpService.root(FUNDING_ENTITY_USERS_ENDPOINT);
 const httpFundingEntities = HttpService.root(FUNDING_ENTITIES_LIST_ENDPOINT);
+const httpFunderReports = HttpService.root(FUNDER_REPORTS_ENDPOINT);
 
 const getUserFundingEntity = async (userId: number): Promise<UserFundingEntityResponse> => {
   const response: UserFundingEntityResponse = await httpUserFundingEntity.get<
@@ -182,6 +186,12 @@ const inviteFunder = async (fundingEntityId: number, email: string): Promise<Inv
   return response;
 };
 
+const listFunderReports = async (projectId: number): Promise<Response2<ListFunderReportsServerResponse>> => {
+  return await httpFunderReports.get2<ListFunderReportsServerResponse>({
+    urlReplacements: { '{projectId}': projectId.toString() },
+  });
+};
+
 const FundingEntityService = {
   getUserFundingEntity,
   get,
@@ -192,6 +202,7 @@ const FundingEntityService = {
   listFunders,
   inviteFunder,
   deleteFunders,
+  listFunderReports,
 };
 
 export default FundingEntityService;
