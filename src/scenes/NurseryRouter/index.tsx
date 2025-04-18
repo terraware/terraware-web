@@ -26,7 +26,7 @@ const NurseryRouter = () => {
   const reloadTracking = useCallback(() => {
     const populatePlantingSites = () => {
       if (!isPlaceholderOrg(selectedOrganization.id)) {
-        void dispatch(requestPlantingSites(selectedOrganization.id, activeLocale || undefined));
+        void dispatch(requestPlantingSites(selectedOrganization.id));
       }
     };
     populatePlantingSites();
