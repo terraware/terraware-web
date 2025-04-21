@@ -20,12 +20,10 @@ export default function PlantingSiteSelector({ onChange, hideNoBoundary }: Plant
   const plantingSites = useAppSelector(selectOrgPlantingSites(selectedOrganization.id));
 
   const filteredPlantingSites = useMemo(() => {
-    console.log('plantingSites', plantingSites);
     return plantingSites?.filter((ps) => (hideNoBoundary ? !!ps.boundary : true));
   }, [plantingSites, hideNoBoundary]);
 
   const options = useMemo(() => {
-    console.log('filteredPlantingSites', filteredPlantingSites);
     return filteredPlantingSites?.map((site) => ({ label: site.name, value: site.id })) ?? [];
   }, [filteredPlantingSites]);
 

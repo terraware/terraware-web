@@ -80,7 +80,6 @@ export const selectMergedPlantingSiteObservations = createCachedSelector(
   (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[], orgId?: number) =>
     selectPlantingSiteObservationsResults(state, plantingSiteId, status, orgId),
   (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[], orgId?: number) => {
-    console.log('orgId', orgId);
     return orgId && orgId !== -1 ? selectOrgPlantingSites(orgId)(state) : selectPlantingSites(state);
   },
   (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[], orgId?: number) =>
@@ -91,8 +90,6 @@ export const selectMergedPlantingSiteObservations = createCachedSelector(
   // here we have the responses from first three selectors
   // merge the results so observations results have names and boundaries and time zones applied
   (observations, plantingSites, species, defaultTimeZone) => {
-    console.log('plantingSites', observations);
-    console.log('observationsSelectors - selectMergedPlantingSiteObservations - observations', observations);
     if (!observations) {
       return observations;
     }
