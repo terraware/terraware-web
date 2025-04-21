@@ -41,7 +41,7 @@ export default function PlantingSiteSelector({ onChange, hideNoBoundary }: Plant
         reloadOrgPreferences();
       }
     },
-    [onChange]
+    [onChange, orgPreferences.lastPlantingSiteSelected, selectedOrganization.id]
   );
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export default function PlantingSiteSelector({ onChange, hideNoBoundary }: Plant
         updateSelection(plantingSites[0]?.id);
       }
     }
-  }, [plantingSites, selectedPlantingSiteId, updateSelection]);
+  }, [plantingSites, selectedPlantingSiteId, updateSelection, orgPreferences.lastPlantingSiteSelected]);
 
   return (
     <Dropdown

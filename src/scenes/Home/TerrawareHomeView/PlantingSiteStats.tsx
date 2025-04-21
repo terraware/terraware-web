@@ -84,7 +84,7 @@ export const PlantingSiteStats = () => {
     if (selectedPlantingSiteId && selectedOrganization.id !== -1) {
       dispatch(requestSitePopulation(selectedOrganization.id, selectedPlantingSiteId));
     }
-  }, [selectedPlantingSiteId, dispatch]);
+  }, [selectedPlantingSiteId, selectedOrganization.id, dispatch]);
 
   // auto-select planting site when selectedPlantingSiteId is set
   useEffect(() => {
