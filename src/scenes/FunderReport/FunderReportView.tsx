@@ -1,14 +1,20 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { SelectT } from '@terraware/web-components';
 
 import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
 import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
 import Card from 'src/components/common/Card';
+import { useUserFundingEntity } from 'src/providers';
+import { requestListFunderReports } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
+import { selectListFunderReports } from 'src/redux/features/funder/fundingEntitiesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import {
   AcceleratorReport,
+  PublishedReport,
   ReportProjectMetric,
   ReportStandardMetric,
   ReportSystemMetric,
@@ -18,6 +24,36 @@ import MetricBox from './MetricBox';
 
 const FunderReportView = () => {
   const theme = useTheme();
+  const { userFundingEntity } = useUserFundingEntity();
+  const [selectedProjectId, setSelectedProjectId] = useState<number>();
+  const dispatch = useAppDispatch();
+  const reportsResponse = useAppSelector(selectListFunderReports(selectedProjectId?.toString() ?? ''));
+  const [reports, setReports] = useState<PublishedReport[]>();
+  const [selectedReport, setSelectedReport] = useState<PublishedReport>();
+
+  useEffect(() => {
+    if ((userFundingEntity?.projects?.length ?? 0) > 0) {
+      setSelectedProjectId(userFundingEntity?.projects?.[0].projectId);
+    }
+  }, [userFundingEntity]);
+
+  useEffect(() => {
+    if (selectedProjectId) {
+      dispatch(requestListFunderReports(selectedProjectId));
+    }
+  }, [selectedProjectId]);
+
+  useEffect(() => {
+    if (reportsResponse?.status === 'success') {
+      setReports(reportsResponse.data);
+    }
+  }, [reportsResponse]);
+
+  useEffect(() => {
+    if (!selectedReport && reports?.length) {
+      setSelectedReport(reports[0]);
+    }
+  }, [reports, selectedReport]);
 
   const report = {
     id: 213,
@@ -141,7 +177,7 @@ const FunderReportView = () => {
   } as AcceleratorReport;
 
   const year = useMemo(() => {
-    return report?.startDate.split('-')[0];
+    return report?.startDate?.split('-')[0];
   }, [report]);
 
   const reportName = report?.frequency === 'Annual' ? year : report?.quarter ? `${year}-${report?.quarter}` : '';
@@ -160,8 +196,30 @@ const FunderReportView = () => {
 
   return (
     <Box>
-      <Box sx={{ background: theme.palette.TwClrBgSecondary }} padding={3.5} borderRadius={'8px'}>
+      <Box
+        sx={{ background: theme.palette.TwClrBgSecondary }}
+        padding={3.5}
+        borderRadius={'8px'}
+        display={'flex'}
+        justifyContent='space-between'
+      >
         <Typography fontSize='24px' fontWeight={600}>{`${strings.REPORT} (${reportName})`}</Typography>
+        {(reports?.length ?? 0) > 0 && (
+          <SelectT<PublishedReport>
+            id='report'
+            label={''}
+            placeholder={strings.SELECT}
+            options={reports}
+            onChange={(_report: PublishedReport) => {
+              setSelectedReport(_report);
+            }}
+            selectedValue={selectedReport}
+            isEqual={(a: PublishedReport, b: PublishedReport) => a.reportId === b.reportId}
+            renderOption={(_report: PublishedReport) => `${_report?.startDate?.split('-')[0]} ${_report?.quarter}`}
+            displayLabel={(_report: PublishedReport) => `${_report?.startDate?.split('-')[0]} ${_report?.quarter}`}
+            toT={(name: string) => ({ name }) as unknown as PublishedReport}
+          />
+        )}
       </Box>
       <Box display='flex' marginTop={3}>
         <Card
