@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/129</span>
+                <span class='fraction'>0/125</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/46</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/121</span>
+                <span class='fraction'>0/120</span>
             </div>
         
             
@@ -660,7 +660,10 @@
 <a name='L595'></a><a href='#L595'>595</a>
 <a name='L596'></a><a href='#L596'>596</a>
 <a name='L597'></a><a href='#L597'>597</a>
-<a name='L598'></a><a href='#L598'>598</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L598'></a><a href='#L598'>598</a>
+<a name='L599'></a><a href='#L599'>599</a>
+<a name='L600'></a><a href='#L600'>600</a>
+<a name='L601'></a><a href='#L601'>601</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -673,7 +676,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -747,7 +749,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -819,7 +823,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -829,12 +833,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1053,10 +1057,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1264,8 +1270,7 @@ import { Button, Checkbox, Textfield } from '@terraware/web-components';
 &nbsp;
 import { REPORT_FILE_ENDPOINT } from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
-import { Report, ReportFile } from 'src/types/Report';
-import { SDG, SustainableDevelopmentGoal } from 'src/types/Report';
+import { Report, ReportFile, SustainableDevelopmentGoal } from 'src/types/Report';
 import { numWords, overWordLimit } from 'src/utils/text';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 &nbsp;
@@ -1318,23 +1323,23 @@ export default function <span class="fstat-no" title="function not covered" >Rep
   ];
 &nbsp;
   const SDG_STRING: { [key in SustainableDevelopmentGoal]: string } = <span class="cstat-no" title="statement not covered" >{</span>
-    NoPoverty: strings.SDG_01,
-    ZeroHunger: strings.SDG_02,
-    GoodHealth: strings.SDG_03,
-    QualityEducation: strings.SDG_04,
-    GenderEquality: strings.SDG_05,
-    CleanWater: strings.SDG_06,
-    AffordableEnergy: strings.SDG_07,
-    DecentWork: strings.SDG_08,
-    Industry: strings.SDG_09,
-    ReducedInequalities: strings.SDG_10,
-    SustainableCities: strings.SDG_11,
-    ResponsibleConsumption: strings.SDG_12,
-    ClimateAction: strings.SDG_13,
-    LifeBelowWater: strings.SDG_14,
-    LifeOnLand: strings.SDG_15,
-    Peace: strings.SDG_16,
-    Partnerships: strings.SDG_17,
+    1: strings.SDG_01,
+    2: strings.SDG_02,
+    3: strings.SDG_03,
+    4: strings.SDG_04,
+    5: strings.SDG_05,
+    6: strings.SDG_06,
+    7: strings.SDG_07,
+    8: strings.SDG_08,
+    9: strings.SDG_09,
+    10: strings.SDG_10,
+    11: strings.SDG_11,
+    12: strings.SDG_12,
+    13: strings.SDG_13,
+    14: strings.SDG_14,
+    15: strings.SDG_15,
+    16: strings.SDG_16,
+    17: strings.SDG_17,
   };
 &nbsp;
   const [projectSummary, setProjectSummary] = <span class="cstat-no" title="statement not covered" >useState(report.annualDetails?.projectSummary ?? '');</span>
@@ -1344,7 +1349,9 @@ export default function <span class="fstat-no" title="function not covered" >Rep
   );
   const [socialImpact, setSocialImpact] = <span class="cstat-no" title="statement not covered" >useState(report.annualDetails?.socialImpact ?? '');</span>
 &nbsp;
-  const [sdgList, setSdgList] = <span class="cstat-no" title="statement not covered" >useState(report.annualDetails?.sustainableDevelopmentGoals.map(<span class="fstat-no" title="function not covered" >(g</span>) =&gt; <span class="cstat-no" title="statement not covered" >g.goal)</span> ?? []);</span>
+  const [sdgList, setSdgList] = <span class="cstat-no" title="statement not covered" >useState(</span>
+    report.annualDetails?.sustainableDevelopmentGoals.map(<span class="fstat-no" title="function not covered" >(g</span>) =&gt; <span class="cstat-no" title="statement not covered" >g.goal.toString())</span> ?? []
+  );
   const [sdgProgressStates, setSdgProgressStates] = <span class="cstat-no" title="statement not covered" >useSDGProgress(report);</span>
 &nbsp;
   const [challenges, setChallenges] = <span class="cstat-no" title="statement not covered" >useState(report.annualDetails?.challenges ?? '');</span>
@@ -1416,7 +1423,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
         'sustainableDevelopmentGoals',
         newSdg.map(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
           goal: s,
-          progress: sdgProgressStates[SDG.findIndex(<span class="fstat-no" title="function not covered" >(s</span>dg) =&gt; <span class="cstat-no" title="statement not covered" >s === sdg)</span>],
+          progress: sdgProgressStates[Number(s) - 1],
         }))
       );
     } else <span class="cstat-no" title="statement not covered" >if (updateDetails &amp;&amp; !add &amp;&amp; sdgList.includes(key)) {</span>
@@ -1426,7 +1433,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
         'sustainableDevelopmentGoals',
         newSdg.map(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
           goal: s,
-          progress: sdgProgressStates[SDG.findIndex(<span class="fstat-no" title="function not covered" >(s</span>dg) =&gt; <span class="cstat-no" title="statement not covered" >s === sdg)</span>],
+          progress: sdgProgressStates[Number(s) - 1],
         }))
       );
     }
@@ -1650,10 +1657,12 @@ export default function <span class="fstat-no" title="function not covered" >Rep
                 type='textarea'
                 display={!editable}
                 preserveNewlines={true}
-                value={sdgProgressStates[SDG.findIndex(<span class="fstat-no" title="function not covered" >(s</span>dg) =&gt; <span class="cstat-no" title="statement not covered" >key === sdg)</span>]}
+                value={sdgProgressStates[Number(key) - 1]}
                 onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; {
-<span class="cstat-no" title="statement not covered" >                  setSdgProgressStates[SDG.findIndex(<span class="fstat-no" title="function not covered" >(s</span>dg) =&gt; <span class="cstat-no" title="statement not covered" >key === sdg)</span>](value as string);</span>
-                  const index = <span class="cstat-no" title="statement not covered" >report.annualDetails?.sustainableDevelopmentGoals?.findIndex(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; <span class="cstat-no" title="statement not covered" >s.goal === key)</span>;</span>
+<span class="cstat-no" title="statement not covered" >                  setSdgProgressStates[Number(key) - 1](value as string);</span>
+                  const index = <span class="cstat-no" title="statement not covered" >report.annualDetails?.sustainableDevelopmentGoals?.findIndex(</span>
+<span class="fstat-no" title="function not covered" >                    (s</span>) =&gt; <span class="cstat-no" title="statement not covered" >s.goal.toString() === key</span>
+                  );
 <span class="cstat-no" title="statement not covered" >                  if (updateSDGProgress &amp;&amp; index !== undefined &amp;&amp; index &gt;= 0) {</span>
 <span class="cstat-no" title="statement not covered" >                    updateSDGProgress(index, value as string);</span>
                   }
@@ -1661,7 +1670,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
                 errorText={
                   validate &amp;&amp;
                   !report.annualDetails?.sustainableDevelopmentGoals[
-                    report.annualDetails?.sustainableDevelopmentGoals?.findIndex(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; <span class="cstat-no" title="statement not covered" >s.goal === key)</span>
+                    report.annualDetails?.sustainableDevelopmentGoals?.findIndex(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; <span class="cstat-no" title="statement not covered" >s.goal.toString() === key)</span>
                   ].progress
                     ? strings.REQUIRED_FIELD
                     : ''
@@ -1861,7 +1870,7 @@ function <span class="fstat-no" title="function not covered" >ReportField(</span
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-21T15:52:32.716Z
+                at 2025-04-21T19:19:41.663Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
