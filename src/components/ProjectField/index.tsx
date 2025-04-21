@@ -13,6 +13,7 @@ export interface ProjectFieldProps {
   rightBorder?: boolean;
   user?: string;
   date?: string;
+  backgroundColor?: string;
 }
 
 export type ProjectIdFieldProps = ProjectFieldProps & {
