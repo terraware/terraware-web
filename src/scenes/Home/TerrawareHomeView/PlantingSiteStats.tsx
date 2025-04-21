@@ -14,7 +14,7 @@ import { selectLatestObservation } from 'src/redux/features/observations/observa
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { selectOrgPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
@@ -36,7 +36,7 @@ export const PlantingSiteStats = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const { selectedOrganization } = useOrganization();
-  const plantingSites = useAppSelector(selectPlantingSites);
+  const plantingSites = useAppSelector(selectOrgPlantingSites(selectedOrganization.id));
   const { token } = useMapboxToken();
   const defaultTimeZone = useDefaultTimeZone();
 
