@@ -20,10 +20,11 @@ import { requestGetPlantingSiteObservationsSummaries } from './observationsThunk
 type ResultsData = {
   error?: string;
   observations?: ObservationResultsPayload[];
+  organizationId?: number;
 };
 
 // Define the initial state
-const initialResultsState: ResultsData = {};
+const initialResultsState: { [organizationId: string]: StatusT<ResultsData> } & ResultsData = {};
 
 export const observationsResultsSlice = createSlice({
   name: 'observationsResultsSlice',
@@ -33,6 +34,13 @@ export const observationsResultsSlice = createSlice({
       const data: ResultsData = action.payload;
       state.error = data.error;
       state.observations = data.observations;
+      state.organizationId = data.organizationId;
+      if (data.organizationId) {
+        state[data.organizationId.toString()] = {
+          status: 'success',
+          data,
+        };
+      }
     },
   },
 });

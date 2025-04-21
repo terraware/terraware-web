@@ -17,24 +17,35 @@ import {
 /**
  * Fetch observation results
  */
-export const requestObservationsResults = (organizationId: number) => {
-  return async (dispatch: Dispatch, _getState: () => RootState) => {
+export const requestObservationsResults = createAsyncThunk(
+  'requestPlantingSites',
+  async (organizationId: number, { dispatch, getState, rejectWithValue, fulfillWithValue }) => {
     try {
+      const existingRequest = (getState() as RootState).observationsResults;
+
+      if (['success'].includes(existingRequest?.data?.status)) {
+        return fulfillWithValue(existingRequest?.data?.data?.observations);
+      }
       const response = await ObservationsService.listObservationsResults(organizationId);
-      const { error, observations } = response;
-      dispatch(
-        setObservationsResultsAction({
-          error,
-          observations,
-        })
-      );
+      if (response && response.requestSucceeded) {
+        const { error, observations } = response;
+        dispatch(
+          setObservationsResultsAction({
+            error,
+            observations,
+            organizationId,
+          })
+        );
+        return fulfillWithValue(observations);
+      }
+      return rejectWithValue(strings.GENERIC_ERROR);
     } catch (e) {
       // should not happen, the response above captures any http request errors
       // tslint:disable-next-line: no-console
       console.error('Error dispatching observations results', e);
     }
-  };
-};
+  }
+);
 
 /**
  * Fetch planting site observation results

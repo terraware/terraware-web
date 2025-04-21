@@ -19,6 +19,8 @@ export const ALL_STATES: ObservationState[] = ['Abandoned', 'Completed', 'Overdu
  * Observations results selectors below
  */
 export const selectObservationsResults = (state: RootState) => state.observationsResults?.observations;
+export const selectOrgObservationsResults = (orgId: number) => (state: RootState) =>
+  state.observationsResults?.[orgId]?.data?.observations;
 export const selectObservationsResultsError = (state: RootState) => state.observationsResults?.error;
 export const selectHasObservationsResults = (state: RootState) => {
   const results = selectObservationsResults(state);
@@ -37,9 +39,10 @@ export const selectHasCompletedObservations = (state: RootState, plantingSiteId:
  * Preserves order of results.
  */
 export const selectPlantingSiteObservationsResults = createCachedSelector(
-  (state: RootState, plantingSiteId: number, status?: ObservationState[]) => selectObservationsResults(state),
-  (state: RootState, plantingSiteId: number, status?: ObservationState[]) => plantingSiteId,
-  (state: RootState, plantingSiteId: number, status?: ObservationState[]) => status,
+  (state: RootState, plantingSiteId: number, status?: ObservationState[], orgId?: number) =>
+    orgId && orgId !== -1 ? selectOrgObservationsResults(orgId)(state) : selectObservationsResults(state),
+  (state: RootState, plantingSiteId: number, status?: ObservationState[], orgId?: number) => plantingSiteId,
+  (state: RootState, plantingSiteId: number, status?: ObservationState[], orgId?: number) => status,
   (observationsResults, plantingSiteId, status) => {
     if (plantingSiteId === -1 && !status?.length) {
       // default to hide Upcoming if no status is selected
@@ -75,7 +78,7 @@ export const selectPlantingSiteAdHocObservationsResults = createCachedSelector(
  */
 export const selectMergedPlantingSiteObservations = createCachedSelector(
   (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[], orgId?: number) =>
-    selectPlantingSiteObservationsResults(state, plantingSiteId, status),
+    selectPlantingSiteObservationsResults(state, plantingSiteId, status, orgId),
   (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[], orgId?: number) => {
     console.log('orgId', orgId);
     return orgId && orgId !== -1 ? selectOrgPlantingSites(orgId)(state) : selectPlantingSites(state);
@@ -88,7 +91,7 @@ export const selectMergedPlantingSiteObservations = createCachedSelector(
   // here we have the responses from first three selectors
   // merge the results so observations results have names and boundaries and time zones applied
   (observations, plantingSites, species, defaultTimeZone) => {
-    console.log('plantingSites', plantingSites);
+    console.log('plantingSites', observations);
     console.log('observationsSelectors - selectMergedPlantingSiteObservations - observations', observations);
     if (!observations) {
       return observations;
