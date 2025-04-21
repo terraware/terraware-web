@@ -5,6 +5,9 @@ import { PlantingSite } from 'src/types/Tracking';
 
 export const selectPlantingSites = (state: RootState) => state.tracking?.plantingSites;
 
+export const selectOrgPlantingSites = (organizationId: number) => (state: RootState) =>
+  state.tracking?.[organizationId]?.data?.plantingSites;
+
 export const selectPlantingSitesNames = createCachedSelector(
   (state: RootState) => selectPlantingSites(state),
   (plantingSites) => {

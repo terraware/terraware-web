@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dropdown } from '@terraware/web-components';
 
 import { useOrganization } from 'src/providers';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { selectOrgPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
@@ -15,9 +15,9 @@ type PlantingSiteSelectorProps = {
 
 export default function PlantingSiteSelector({ onChange, hideNoBoundary }: PlantingSiteSelectorProps): JSX.Element {
   // assume `requestPlantingSites` thunk has been dispatched by consumer
-  const plantingSites = useAppSelector(selectPlantingSites);
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number | undefined>();
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
+  const plantingSites = useAppSelector(selectOrgPlantingSites(selectedOrganization.id));
 
   const filteredPlantingSites = useMemo(() => {
     console.log('plantingSites', plantingSites);

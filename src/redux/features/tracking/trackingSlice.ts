@@ -16,6 +16,7 @@ import { requestGetPlantingSiteHistory } from './trackingThunks';
 type SitesData = {
   error?: string;
   plantingSites?: PlantingSite[];
+  organizationId?: number;
 };
 
 // single planting site
@@ -26,7 +27,7 @@ type SiteData = {
 };
 
 // Define the initial state
-const initialState: { [key: string]: StatusT<SitesData> } & SitesData = {};
+const initialState: { [organizationId: string]: StatusT<SitesData> } & SitesData = {};
 
 export const trackingSlice = createSlice({
   name: 'trackingSlice',
@@ -36,10 +37,13 @@ export const trackingSlice = createSlice({
       const data: SitesData = action.payload;
       state.error = data.error;
       state.plantingSites = data.plantingSites;
-      state.tracking = {
-        status: 'success',
-        data,
-      };
+      state.organizationId = data.organizationId;
+      if (data.organizationId) {
+        state[data.organizationId.toString()] = {
+          status: 'success',
+          data,
+        };
+      }
     },
     setPlantingSiteAction: (state, action: PayloadAction<SiteData>) => {
       const data: SiteData = action.payload;
