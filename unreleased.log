@@ -1,2 +1,4 @@
+59ba6bfa2c2 SW-6792 Add deal name to documents page query (#3852)
+522130bbb73 SW-6779 Add Feature Flag for new Project Profile page (#3853)
 604573c3200 SW-6799 Funder Reports - Add BE api calls to UI (#3844)
 25d6a7ad108 SW-6761: Reports page should not be accessible by Contributors & Managers (Follow-ups) (#3846)
