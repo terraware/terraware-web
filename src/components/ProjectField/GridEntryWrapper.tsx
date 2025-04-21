@@ -18,7 +18,7 @@ const GridEntryWrapper = ({ children, height, md, rightBorder, sx }: GridEntryWr
       item
       xs={12}
       md={md || 3}
-      height={height || '100px'}
+      height={height}
       margin={`${theme.spacing(2)} 0`}
       sx={{
         borderRight: rightBorder ? `1px solid ${theme.palette.TwClrBaseGray100}` : 0,

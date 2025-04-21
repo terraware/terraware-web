@@ -8,7 +8,7 @@ const TextfieldDisplay = ({ id, label, value }: ProjectIdFieldProps) => {
   const theme = useTheme();
 
   return (
-    <GridEntryWrapper>
+    <GridEntryWrapper height={'100px'}>
       <Box paddingX={theme.spacing(2)}>
         <Textfield id={id} display label={label!} type='text' value={value as string} />
       </Box>

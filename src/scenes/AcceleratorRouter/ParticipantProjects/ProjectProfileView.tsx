@@ -2,23 +2,28 @@ import React, { useMemo } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
 
+import ProjectProfileFooter from 'src/components/ProjectField/Footer';
+import ProjectFieldInlineMeta from 'src/components/ProjectField/InlineMeta';
 import InvertedCard from 'src/components/ProjectField/InvertedCard';
 import ProjectOverviewCard from 'src/components/ProjectField/ProjectOverviewCard';
 import Card from 'src/components/common/Card';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { useSupportedLocales } from 'src/strings/locales';
+import { AcceleratorOrg } from 'src/types/Accelerator';
 import { ParticipantProject } from 'src/types/ParticipantProject';
-import { Project } from 'src/types/Project';
+import { Project, ProjectMeta } from 'src/types/Project';
 import { getCountryByCode } from 'src/utils/country';
 import { useNumberFormatter } from 'src/utils/useNumber';
 
 type ProjectProfileViewProps = {
   participantProject?: ParticipantProject;
   project?: Project;
+  projectMeta?: ProjectMeta;
+  organization?: AcceleratorOrg;
 };
 
-const ProjectProfileView = ({ participantProject, project }: ProjectProfileViewProps) => {
+const ProjectProfileView = ({ participantProject, project, projectMeta, organization }: ProjectProfileViewProps) => {
   const theme = useTheme();
   const supportedLocales = useSupportedLocales();
   const numberFormatter = useNumberFormatter();
@@ -32,6 +37,30 @@ const ProjectProfileView = ({ participantProject, project }: ProjectProfileViewP
   );
   // const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
 
+  const projectSize = useMemo(() => {
+    const getCard = (label: string, value: number) => (
+      <InvertedCard
+        md={12}
+        backgroundColor={theme.palette.TwClrBaseGray100}
+        label={label}
+        value={strings.formatString(strings.X_HA, numericFormatter.format(value))?.toString()}
+      />
+    );
+    if (participantProject?.projectArea) {
+      return getCard(strings.PROJECT_AREA, participantProject.projectArea);
+    }
+    if (participantProject?.minProjectArea) {
+      return getCard(strings.MIN_PROJECT_AREA, participantProject.minProjectArea);
+    }
+    if (participantProject?.applicationReforestableLand) {
+      return getCard(strings.ELIGIBLE_AREA, participantProject.applicationReforestableLand);
+    }
+  }, [
+    participantProject?.projectArea,
+    participantProject?.minProjectArea,
+    participantProject?.applicationReforestableLand,
+  ]);
+
   return (
     <Card
       style={{
@@ -43,8 +72,18 @@ const ProjectProfileView = ({ participantProject, project }: ProjectProfileViewP
         borderRadius: theme.spacing(1),
       }}
     >
-      {/*TODO application, score, voting, cohort, phase, project lead here */}
+      {/*TODO application, score, voting, cohort, phase here */}
 
+      <Grid container>
+        <ProjectFieldInlineMeta
+          userLabel={strings.PROJECT_LEAD}
+          userId={organization?.tfContactUser?.userId}
+          userName={`${organization?.tfContactUser?.firstName} ${organization?.tfContactUser?.lastName}`}
+          fontSize={'16px'}
+          lineHeight={'24px'}
+          fontWeight={500}
+        />
+      </Grid>
       <Grid container>
         <ProjectOverviewCard md={9} dealDescription={participantProject?.dealDescription} projectName={project?.name} />
         <Grid container item md={3}>
@@ -58,22 +97,11 @@ const ProjectProfileView = ({ participantProject, project }: ProjectProfileViewP
                 : participantProject?.countryCode
             }
           />
-          <InvertedCard
-            md={12}
-            backgroundColor={theme.palette.TwClrBaseGray100}
-            label={strings.PROJECT_AREA}
-            value={
-              participantProject?.projectArea
-                ? strings
-                    .formatString(strings.X_HA, numericFormatter.format(participantProject?.projectArea)) // TODO change this to project size
-                    ?.toString()
-                : undefined
-            }
-          />
+          {projectSize}
         </Grid>
       </Grid>
 
-      {/* TODO footer here (created/modified) */}
+      <ProjectProfileFooter project={project} projectMeta={projectMeta} />
     </Card>
   );
 };
