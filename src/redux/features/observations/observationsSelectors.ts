@@ -77,7 +77,7 @@ export const selectMergedPlantingSiteObservations = createCachedSelector(
   (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[], orgId?: number) =>
     selectPlantingSiteObservationsResults(state, plantingSiteId, status),
   (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[], orgId?: number) =>
-    orgId ? selectOrgPlantingSites(orgId)(state) : selectPlantingSites(state),
+    orgId && orgId !== -1 ? selectOrgPlantingSites(orgId)(state) : selectPlantingSites(state),
   (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[], orgId?: number) =>
     selectDefaultSpecies(state),
   (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[], orgId?: number) =>
@@ -230,7 +230,10 @@ export const selectLatestObservation = createCachedSelector(
   (observationsResults: ObservationResults[] | undefined) =>
     // the order of results (as returned by the server) are in reverse completed-time order, most recent completed will show up first
     observationsResults?.filter((result: ObservationResults) => result.completedTime)?.[0]
-)((state: RootState, plantingSiteId: number, defaultTimeZoneId: string) => `${plantingSiteId}-${defaultTimeZoneId}`);
+)(
+  (state: RootState, plantingSiteId: number, defaultTimeZoneId: string, orgId?: number) =>
+    `${plantingSiteId}-${defaultTimeZoneId}`
+);
 
 // scheduling selectors
 
