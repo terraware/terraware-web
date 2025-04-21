@@ -1,10 +1,12 @@
 import React, { Navigate, Route, Routes } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import ProjectProvider from 'src/providers/Project/ProjectProvider';
 
 import EditView from './EditView';
 import ParticipantProjectProvider from './ParticipantProjectProvider';
+import ProjectProfileView from './ProjectProfileView';
 import Reports from './Reports';
 import Scoring from './Scoring';
 import SingleView from './SingleView';
@@ -18,7 +20,7 @@ const ParticipantProjectsRouter = () => {
         <ParticipantProjectProvider>
           <Routes>
             <Route path={'edit'} element={<EditView />} />
-            <Route path={''} element={<SingleView />} />
+            <Route path={''} element={isEnabled('New Project Profile') ? <ProjectProfileView /> : <SingleView />} />
             <Route path={'votes/*'} element={<Voting />} />
             <Route path={'scores/*'} element={<Scoring />} />
             <Route path={'reports/*'} element={<Reports />} />
