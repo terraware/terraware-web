@@ -2,7 +2,7 @@
 import { createCachedSelector } from 're-reselect';
 
 import { selectDefaultSpecies } from 'src/redux/features/species/speciesSelectors';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { selectOrgPlantingSites, selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { RootState } from 'src/redux/rootReducer';
 import {
   Observation,
@@ -74,13 +74,14 @@ export const selectPlantingSiteAdHocObservationsResults = createCachedSelector(
  * Preserves order of results.
  */
 export const selectMergedPlantingSiteObservations = createCachedSelector(
-  (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[]) =>
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[], orgId?: number) =>
     selectPlantingSiteObservationsResults(state, plantingSiteId, status),
-  (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[]) =>
-    selectPlantingSites(state),
-  (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[]) =>
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[], orgId?: number) =>
+    orgId ? selectOrgPlantingSites(orgId)(state) : selectPlantingSites(state),
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[], orgId?: number) =>
     selectDefaultSpecies(state),
-  (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[]) => defaultTimeZone,
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[], orgId?: number) =>
+    defaultTimeZone,
 
   // here we have the responses from first three selectors
   // merge the results so observations results have names and boundaries and time zones applied
@@ -124,7 +125,8 @@ export const searchObservations = createCachedSelector(
     defaultTimeZone: string,
     search: string,
     zoneNames: string[],
-    status?: ObservationState[]
+    status?: ObservationState[],
+    orgId?: number
   ) => search,
   (
     state: RootState,
@@ -132,7 +134,8 @@ export const searchObservations = createCachedSelector(
     defaultTimeZone: string,
     search: string,
     zoneNames: string[],
-    status?: ObservationState[]
+    status?: ObservationState[],
+    orgId?: number
   ) => zoneNames,
   (
     state: RootState,
@@ -140,8 +143,9 @@ export const searchObservations = createCachedSelector(
     defaultTimeZone: string,
     search: string,
     zoneNames: string[],
-    status?: ObservationState[]
-  ) => selectMergedPlantingSiteObservations(state, plantingSiteId, defaultTimeZone, status),
+    status?: ObservationState[],
+    orgId?: number
+  ) => selectMergedPlantingSiteObservations(state, plantingSiteId, defaultTimeZone, status, orgId),
   searchZones
 )(
   (
@@ -150,7 +154,8 @@ export const searchObservations = createCachedSelector(
     defaultTimeZone: string,
     search: string,
     zoneNames: string[],
-    status?: ObservationState[]
+    status?: ObservationState[],
+    orgId?: number
   ) =>
     `${plantingSiteId}_${defaultTimeZone}_${search}_${Array.from(new Set(zoneNames)).toString()}_${status?.join(',')}`
 );
@@ -220,8 +225,8 @@ export const selectPlantingSiteAdHocObservations = createCachedSelector(
 
 // get the latest observation for a planting site
 export const selectLatestObservation = createCachedSelector(
-  (state: RootState, plantingSiteId: number, defaultTimeZoneId: string) =>
-    searchObservations(state, plantingSiteId, defaultTimeZoneId, '', []),
+  (state: RootState, plantingSiteId: number, defaultTimeZoneId: string, orgId?: number) =>
+    searchObservations(state, plantingSiteId, defaultTimeZoneId, '', [], [], orgId),
   (observationsResults: ObservationResults[] | undefined) =>
     // the order of results (as returned by the server) are in reverse completed-time order, most recent completed will show up first
     observationsResults?.filter((result: ObservationResults) => result.completedTime)?.[0]

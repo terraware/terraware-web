@@ -53,7 +53,7 @@ export const PlantingSiteStats = () => {
   );
 
   const observation = useAppSelector((state) =>
-    selectLatestObservation(state, selectedPlantingSiteId || -1, defaultTimeZone.get().id)
+    selectLatestObservation(state, selectedPlantingSiteId || -1, defaultTimeZone.get().id, selectedOrganization.id)
   );
   const plantings = useAppSelector((state) => selectPlantingsForSite(state, selectedPlantingSiteId || -1));
   const populationSelector = useAppSelector((state) => selectSitePopulationZones(state));
