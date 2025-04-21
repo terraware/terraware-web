@@ -31,23 +31,3 @@ export function statusName(status: ReportStatus): string {
       return strings.SUBMITTED;
   }
 }
-
-export const SDG: SustainableDevelopmentGoal[] = [
-  'NoPoverty',
-  'ZeroHunger',
-  'GoodHealth',
-  'QualityEducation',
-  'GenderEquality',
-  'CleanWater',
-  'AffordableEnergy',
-  'DecentWork',
-  'Industry',
-  'ReducedInequalities',
-  'SustainableCities',
-  'ResponsibleConsumption',
-  'ClimateAction',
-  'LifeBelowWater',
-  'LifeOnLand',
-  'Peace',
-  'Partnerships',
-];

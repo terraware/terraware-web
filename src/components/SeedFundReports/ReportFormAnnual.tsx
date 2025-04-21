@@ -5,8 +5,7 @@ import { Button, Checkbox, Textfield } from '@terraware/web-components';
 
 import { REPORT_FILE_ENDPOINT } from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
-import { Report, ReportFile } from 'src/types/Report';
-import { SDG, SustainableDevelopmentGoal } from 'src/types/Report';
+import { Report, ReportFile, SustainableDevelopmentGoal } from 'src/types/Report';
 import { numWords, overWordLimit } from 'src/utils/text';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -59,23 +58,23 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
   ];
 
   const SDG_STRING: { [key in SustainableDevelopmentGoal]: string } = {
-    NoPoverty: strings.SDG_01,
-    ZeroHunger: strings.SDG_02,
-    GoodHealth: strings.SDG_03,
-    QualityEducation: strings.SDG_04,
-    GenderEquality: strings.SDG_05,
-    CleanWater: strings.SDG_06,
-    AffordableEnergy: strings.SDG_07,
-    DecentWork: strings.SDG_08,
-    Industry: strings.SDG_09,
-    ReducedInequalities: strings.SDG_10,
-    SustainableCities: strings.SDG_11,
-    ResponsibleConsumption: strings.SDG_12,
-    ClimateAction: strings.SDG_13,
-    LifeBelowWater: strings.SDG_14,
-    LifeOnLand: strings.SDG_15,
-    Peace: strings.SDG_16,
-    Partnerships: strings.SDG_17,
+    1: strings.SDG_01,
+    2: strings.SDG_02,
+    3: strings.SDG_03,
+    4: strings.SDG_04,
+    5: strings.SDG_05,
+    6: strings.SDG_06,
+    7: strings.SDG_07,
+    8: strings.SDG_08,
+    9: strings.SDG_09,
+    10: strings.SDG_10,
+    11: strings.SDG_11,
+    12: strings.SDG_12,
+    13: strings.SDG_13,
+    14: strings.SDG_14,
+    15: strings.SDG_15,
+    16: strings.SDG_16,
+    17: strings.SDG_17,
   };
 
   const [projectSummary, setProjectSummary] = useState(report.annualDetails?.projectSummary ?? '');
@@ -85,7 +84,9 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
   );
   const [socialImpact, setSocialImpact] = useState(report.annualDetails?.socialImpact ?? '');
 
-  const [sdgList, setSdgList] = useState(report.annualDetails?.sustainableDevelopmentGoals.map((g) => g.goal) ?? []);
+  const [sdgList, setSdgList] = useState(
+    report.annualDetails?.sustainableDevelopmentGoals.map((g) => g.goal.toString()) ?? []
+  );
   const [sdgProgressStates, setSdgProgressStates] = useSDGProgress(report);
 
   const [challenges, setChallenges] = useState(report.annualDetails?.challenges ?? '');
@@ -157,7 +158,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
         'sustainableDevelopmentGoals',
         newSdg.map((s) => ({
           goal: s,
-          progress: sdgProgressStates[SDG.findIndex((sdg) => s === sdg)],
+          progress: sdgProgressStates[Number(s) - 1],
         }))
       );
     } else if (updateDetails && !add && sdgList.includes(key)) {
@@ -167,7 +168,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
         'sustainableDevelopmentGoals',
         newSdg.map((s) => ({
           goal: s,
-          progress: sdgProgressStates[SDG.findIndex((sdg) => s === sdg)],
+          progress: sdgProgressStates[Number(s) - 1],
         }))
       );
     }
@@ -391,10 +392,12 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
                 type='textarea'
                 display={!editable}
                 preserveNewlines={true}
-                value={sdgProgressStates[SDG.findIndex((sdg) => key === sdg)]}
+                value={sdgProgressStates[Number(key) - 1]}
                 onChange={(value) => {
-                  setSdgProgressStates[SDG.findIndex((sdg) => key === sdg)](value as string);
-                  const index = report.annualDetails?.sustainableDevelopmentGoals?.findIndex((s) => s.goal === key);
+                  setSdgProgressStates[Number(key) - 1](value as string);
+                  const index = report.annualDetails?.sustainableDevelopmentGoals?.findIndex(
+                    (s) => s.goal.toString() === key
+                  );
                   if (updateSDGProgress && index !== undefined && index >= 0) {
                     updateSDGProgress(index, value as string);
                   }
@@ -402,7 +405,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
                 errorText={
                   validate &&
                   !report.annualDetails?.sustainableDevelopmentGoals[
-                    report.annualDetails?.sustainableDevelopmentGoals?.findIndex((s) => s.goal === key)
+                    report.annualDetails?.sustainableDevelopmentGoals?.findIndex((s) => s.goal.toString() === key)
                   ].progress
                     ? strings.REQUIRED_FIELD
                     : ''

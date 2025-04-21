@@ -847,6 +847,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/accelerator/projects/{projectId}/reports/{reportId}/publish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Publishes a report to funder */
+        post: operations["publishAcceleratorReport"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/accelerator/projects/{projectId}/reports/{reportId}/review": {
         parameters: {
             query?: never;
@@ -3410,7 +3427,7 @@ export interface paths {
         put?: never;
         /**
          * Requests that a monitoring plot be replaced with a new one.
-         * @description Additional monitoring plots may be replaced as well, e.g., if the requested plot is part of a permanent cluster. In some cases, the requested plot will be removed from the observation but not replaced with a different one.
+         * @description In some cases, the requested plot will be removed from the observation but not replaced with a different one.
          */
         post: operations["replaceObservationPlot"];
         delete?: never;
@@ -4281,6 +4298,7 @@ export interface components {
             completedByUserId?: number;
             /** Format: date-time */
             completedTime?: string;
+            elevationMeters?: number;
             /** @description True if this is the first observation to include the monitoring plot. */
             isFirstObservation: boolean;
             isPermanent: boolean;
@@ -6307,7 +6325,7 @@ export interface components {
         };
         GoalProgressPayloadV1: {
             /** @enum {string} */
-            goal: "NoPoverty" | "ZeroHunger" | "GoodHealth" | "QualityEducation" | "GenderEquality" | "CleanWater" | "AffordableEnergy" | "DecentWork" | "Industry" | "ReducedInequalities" | "SustainableCities" | "ResponsibleConsumption" | "ClimateAction" | "LifeBelowWater" | "LifeOnLand" | "Peace" | "Partnerships";
+            goal: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17";
             progress?: string;
         };
         ImageVariablePayload: Omit<components["schemas"]["VariablePayload"], "type"> & {
@@ -7177,6 +7195,7 @@ export interface components {
             conditions: ("AnimalDamage" | "FastGrowth" | "FavorableWeather" | "Fungus" | "Pests" | "SeedProduction" | "UnfavorableWeather")[];
             /** @description Observed coordinates, if any, up to one per position. */
             coordinates: components["schemas"]["ObservationMonitoringPlotCoordinatesPayload"][];
+            elevationMeters?: number;
             isAdHoc: boolean;
             /** @description True if this was a permanent monitoring plot in this observation. Clients should not assume that the set of permanent monitoring plots is the same in all observations; the number of permanent monitoring plots can be adjusted over time based on observation results. */
             isPermanent: boolean;
@@ -7888,9 +7907,12 @@ export interface components {
             type: "Polygon";
         };
         ProjectAcceleratorDetailsPayload: {
+            accumulationRate?: number;
             annualCarbon?: number;
             applicationReforestableLand?: number;
             carbonCapacity?: number;
+            /** Format: uri */
+            clickUpLink?: string;
             /** Format: int64 */
             cohortId?: number;
             cohortName?: string;
@@ -7906,13 +7928,20 @@ export interface components {
             failureRisk?: string;
             fileNaming?: string;
             /** Format: uri */
+            gisReportsLink?: string;
+            /** Format: uri */
             googleFolderUrl?: string;
             /** Format: uri */
             hubSpotUrl?: string;
             investmentThesis?: string;
+            landUseModelHectares?: {
+                [key: string]: number;
+            };
             landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
             maxCarbonAccumulation?: number;
+            methodologyNumber?: string;
             minCarbonAccumulation?: number;
+            minProjectArea?: number;
             /** Format: int32 */
             numCommunities?: number;
             /** Format: int32 */
@@ -7923,13 +7952,27 @@ export interface components {
             perHectareBudget?: number;
             /** @enum {string} */
             pipeline?: "Accelerator Projects" | "Carbon Supply" | "Carbon Waitlist";
+            projectArea?: number;
+            /** Format: int64 */
+            projectHighlightPhotoValueId?: number;
             /** Format: int64 */
             projectId: number;
             projectLead?: string;
+            /** Format: int64 */
+            projectZoneFigureValueId?: number;
             /** @enum {string} */
             region?: "Antarctica" | "East Asia & Pacific" | "Europe & Central Asia" | "Latin America & Caribbean" | "Middle East & North Africa" | "North America" | "Oceania" | "South Asia" | "Sub-Saharan Africa";
+            /** Format: uri */
+            riskTrackerLink?: string;
+            sdgList?: ("1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17")[];
+            /** Format: uri */
+            slackLink?: string;
+            standard?: string;
             totalCarbon?: number;
             totalExpansionPotential?: number;
+            totalVCU?: number;
+            /** Format: uri */
+            verraLink?: string;
             whatNeedsToBeTrue?: string;
         };
         ProjectOverallScorePayload: {
@@ -9090,9 +9133,12 @@ export interface components {
             coordinates: components["schemas"]["ObservationMonitoringPlotCoordinatesPayload"][];
         };
         UpdateProjectAcceleratorDetailsRequestPayload: {
+            accumulationRate?: number;
             annualCarbon?: number;
             applicationReforestableLand?: number;
             carbonCapacity?: number;
+            /** Format: uri */
+            clickUpLink?: string;
             confirmedReforestableLand?: number;
             countryCode?: string;
             dealDescription?: string;
@@ -9103,6 +9149,8 @@ export interface components {
             dropboxFolderPath?: string;
             failureRisk?: string;
             fileNaming?: string;
+            /** Format: uri */
+            gisReportsLink?: string;
             /**
              * Format: uri
              * @description URL of Google Drive folder to use for non-sensitive document storage. Ignored if the user does not have permission to update project document settings.
@@ -9111,9 +9159,14 @@ export interface components {
             /** Format: uri */
             hubSpotUrl?: string;
             investmentThesis?: string;
+            landUseModelHectares?: {
+                [key: string]: number;
+            };
             landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
             maxCarbonAccumulation?: number;
+            methodologyNumber?: string;
             minCarbonAccumulation?: number;
+            minProjectArea?: number;
             /** Format: int32 */
             numCommunities?: number;
             /** Format: int32 */
@@ -9121,9 +9174,19 @@ export interface components {
             perHectareBudget?: number;
             /** @enum {string} */
             pipeline?: "Accelerator Projects" | "Carbon Supply" | "Carbon Waitlist";
+            projectArea?: number;
             projectLead?: string;
+            /** Format: uri */
+            riskTrackerLink?: string;
+            sdgList?: ("1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17")[];
+            /** Format: uri */
+            slackLink?: string;
+            standard?: string;
             totalCarbon?: number;
             totalExpansionPotential?: number;
+            totalVCU?: number;
+            /** Format: uri */
+            verraLink?: string;
             whatNeedsToBeTrue?: string;
         };
         UpdateProjectAcceleratorReportConfigRequestPayload: {
@@ -11523,6 +11586,47 @@ export interface operations {
                 "application/json": components["schemas"]["ReviewAcceleratorReportMetricsRequestPayload"];
             };
         };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    publishAcceleratorReport: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+                reportId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description The requested operation succeeded. */
             200: {
