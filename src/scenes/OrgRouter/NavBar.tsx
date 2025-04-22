@@ -184,7 +184,10 @@ export default function NavBar({
 
   const reportsMenu = useMemo<JSX.Element | null>(
     () =>
-      isReportsEnabled && isAllowed('READ_REPORTS') && !!orgFeatures?.data?.reports?.enabled && activeLocale ? (
+      isReportsEnabled &&
+      isAllowed('READ_REPORTS', { organization: selectedOrganization }) &&
+      !!orgFeatures?.data?.reports?.enabled &&
+      activeLocale ? (
         <NavItem
           icon='iconGraphReport'
           label={strings.REPORTS}
