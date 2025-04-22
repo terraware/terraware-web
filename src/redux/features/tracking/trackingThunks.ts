@@ -39,6 +39,10 @@ export const requestPlantingSites = createAsyncThunk(
         return fulfillWithValue(existingRequest?.data?.data?.plantingSites);
       }
 
+      if (['pending'].includes(existingRequest?.data?.status)) {
+        return;
+      }
+
       const response = await TrackingService.listPlantingSites(organizationId, true);
       if (response && response.requestSucceeded) {
         const { error, sites } = response;

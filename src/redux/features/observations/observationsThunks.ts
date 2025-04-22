@@ -26,6 +26,11 @@ export const requestObservationsResults = createAsyncThunk(
       if (['success'].includes(existingRequest?.data?.status)) {
         return fulfillWithValue(existingRequest?.data?.data?.observations);
       }
+
+      if (['pending'].includes(existingRequest?.data?.status)) {
+        return;
+      }
+
       const response = await ObservationsService.listObservationsResults(organizationId);
       if (response && response.requestSucceeded) {
         const { error, observations } = response;
