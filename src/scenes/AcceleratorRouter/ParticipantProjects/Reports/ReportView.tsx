@@ -31,6 +31,7 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorReport, MetricType } from 'src/types/AcceleratorReport';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import { useParticipantProjectData } from '../ParticipantProjectContext';
 import ApproveReportDialog from './ApproveReportDialog';
@@ -62,6 +63,7 @@ const ReportView = () => {
   const rejectReportResponse = useAppSelector(selectReviewAcceleratorReport(rejectRequestId));
   const [showPublishModal, setShowPublishModal] = useState(false);
   const publishReportResponse = useAppSelector(selectPublishAcceleratorReport(publishRequestId));
+  const snackbar = useSnackbar();
 
   const publishReport = () => {
     const request = dispatch(
@@ -145,6 +147,7 @@ const ReportView = () => {
 
   useEffect(() => {
     if (publishReportResponse?.status === 'error') {
+      snackbar.toastError();
       return;
     }
     if (publishReportResponse?.status === 'success') {
