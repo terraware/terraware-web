@@ -5,6 +5,7 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import strings from 'src/strings';
 
 import FluidEntryWrapper from './FluidEntryWrapper';
 
@@ -66,14 +67,18 @@ const ProjectFieldInlineMeta = ({
             >
               {userLabel}
             </Typography>
-            <Link
-              to={APP_PATHS.PEOPLE_VIEW.replace(':personId', `${userId}`)}
-              fontSize={fontSize || '14px'}
-              fontWeight={fontWeight || 400}
-              lineHeight={lineHeight || '20px'}
-            >
-              {userName}
-            </Link>
+            {userName ? (
+              <Link
+                to={APP_PATHS.PEOPLE_VIEW.replace(':personId', `${userId}`)}
+                fontSize={fontSize || '14px'}
+                fontWeight={fontWeight || 400}
+                lineHeight={lineHeight || '20px'}
+              >
+                {userName}
+              </Link>
+            ) : (
+              strings.UNASSIGNED
+            )}
           </Box>
         </Grid>
       </Grid>

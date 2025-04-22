@@ -5,12 +5,15 @@ import { BusySpinner, Button, Tabs } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import useProjectScore from 'src/hooks/useProjectScore';
 import { useLocalization, useUser } from 'src/providers';
+import { useApplicationData } from 'src/providers/Application/Context';
 import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import { useParticipantProjectData } from './ParticipantProjectContext';
 import ProjectProfileView from './ProjectProfileView';
+import { useVotingData } from './Voting/VotingContext';
 
 const ProjectPage = () => {
   const { activeLocale } = useLocalization();
@@ -18,8 +21,16 @@ const ProjectPage = () => {
   const { isAllowed } = useUser();
   const projectData = useParticipantProjectData();
   const { goToParticipantProjectEdit } = useNavigateTo();
+  const { getApplicationByProjectId } = useApplicationData();
+  const { projectScore } = useProjectScore(projectData.projectId);
+  const { phaseVotes } = useVotingData();
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
+
+  const projectApplication = useMemo(
+    () => getApplicationByProjectId(projectData.projectId),
+    [getApplicationByProjectId, projectData.projectId]
+  );
 
   const tabs = useMemo(() => {
     if (!activeLocale) {
@@ -29,7 +40,14 @@ const ProjectPage = () => {
       {
         id: 'projectProfile',
         label: strings.PROJECT_PROFILE,
-        children: <ProjectProfileView {...projectData} />,
+        children: (
+          <ProjectProfileView
+            {...projectData}
+            projectApplication={projectApplication}
+            projectScore={projectScore}
+            phaseVotes={phaseVotes}
+          />
+        ),
       },
     ];
   }, [activeLocale, projectData]);
