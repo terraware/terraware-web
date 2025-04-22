@@ -28,7 +28,7 @@ const ProjectFieldSelect = ({ id, label, onChange, value, options }: ProjectFiel
   }, [value]);
 
   return (
-    <GridEntryWrapper>
+    <GridEntryWrapper height={'100px'}>
       <Box paddingX={theme.spacing(2)}>
         <Dropdown
           id={id}

@@ -6,7 +6,7 @@ import ProjectProvider from 'src/providers/Project/ProjectProvider';
 
 import EditView from './EditView';
 import ParticipantProjectProvider from './ParticipantProjectProvider';
-import ProjectProfileView from './ProjectProfileView';
+import ProjectPage from './ProjectPage';
 import Reports from './Reports';
 import Scoring from './Scoring';
 import SingleView from './SingleView';
@@ -20,7 +20,7 @@ const ParticipantProjectsRouter = () => {
         <ParticipantProjectProvider>
           <Routes>
             <Route path={'edit'} element={<EditView />} />
-            <Route path={''} element={isEnabled('New Project Profile') ? <ProjectProfileView /> : <SingleView />} />
+            <Route path={''} element={isEnabled('New Project Profile') ? <ProjectPage /> : <SingleView />} />
             <Route path={'votes/*'} element={<Voting />} />
             <Route path={'scores/*'} element={<Scoring />} />
             <Route path={'reports/*'} element={<Reports />} />

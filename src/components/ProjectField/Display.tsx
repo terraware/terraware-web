@@ -9,7 +9,7 @@ const ProjectFieldDisplay = ({ label, md, rightBorder, value }: ProjectFieldProp
   const theme = useTheme();
 
   return (
-    <GridEntryWrapper md={md} rightBorder={rightBorder}>
+    <GridEntryWrapper md={md} rightBorder={rightBorder} height={'100px'}>
       <Box paddingX={theme.spacing(2)}>
         <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={600} marginBottom={theme.spacing(1)}>
           {label}

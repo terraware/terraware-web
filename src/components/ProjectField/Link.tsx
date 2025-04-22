@@ -11,7 +11,7 @@ const ProjectFieldLink = ({ label, rightBorder, value }: ProjectFieldProps) => {
   const theme = useTheme();
 
   return (
-    <GridEntryWrapper rightBorder={rightBorder}>
+    <GridEntryWrapper rightBorder={rightBorder} height={'100px'}>
       <Grid container alignContent={'center'} height={'100px'} paddingX={theme.spacing(2)}>
         <Grid item xs={12}>
           <Box padding={theme.spacing(2)} textAlign={'center'}>
