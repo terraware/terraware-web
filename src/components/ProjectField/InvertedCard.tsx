@@ -14,7 +14,7 @@ const InvertedCard = ({ label, md, value, backgroundColor }: ProjectFieldProps) 
         borderRadius={theme.spacing(1)}
         textAlign={'left'}
         margin={`0 ${theme.spacing(2)}`}
-        padding={`${theme.spacing(2)} ${theme.spacing(2)}`}
+        padding={`${theme.spacing(2, 2)}`}
         sx={{
           backgroundColor: backgroundColor,
         }}
@@ -22,7 +22,7 @@ const InvertedCard = ({ label, md, value, backgroundColor }: ProjectFieldProps) 
         <Grid container alignContent={'left'}>
           <Grid item xs={12}>
             {renderFieldValue(value)}
-            <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={600} marginBottom={theme.spacing(1)}>
+            <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={600} marginTop={theme.spacing(1)}>
               {label}
             </Typography>
           </Grid>
