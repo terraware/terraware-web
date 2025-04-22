@@ -6,10 +6,15 @@ import { Icon } from '@terraware/web-components';
 import { isReportSystemMetric } from 'src/components/AcceleratorReports/MetricBox';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
 import strings from 'src/strings';
-import { ReportProjectMetric, ReportStandardMetric, ReportSystemMetric } from 'src/types/AcceleratorReport';
+import {
+  PublishedReportMetric,
+  ReportProjectMetric,
+  ReportStandardMetric,
+  ReportSystemMetric,
+} from 'src/types/AcceleratorReport';
 
 type MetricBoxProps = {
-  metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric;
+  metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric | PublishedReportMetric;
   index: number;
   year: string;
   quarter?: string;
@@ -56,12 +61,14 @@ const MetricBox = ({ metric, index, year, quarter }: MetricBoxProps) => {
           </Typography>
         </Box>
       </Box>
-      <Box>
-        <Typography fontWeight={500} fontSize='20px' marginTop={1}>
-          {strings.PROGRESS_NOTES}
-        </Typography>
-        <Typography fontWeight={400}>{metric.progressNotes}</Typography>
-      </Box>
+      {'progressNotes' in metric && (
+        <Box>
+          <Typography fontWeight={500} fontSize='20px' marginTop={1}>
+            {strings.PROGRESS_NOTES}
+          </Typography>
+          <Typography fontWeight={400}>{metric.progressNotes}</Typography>
+        </Box>
+      )}
     </Box>
   );
 };

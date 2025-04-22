@@ -54,6 +54,7 @@ const REFRESH_ACCELERATOR_REPORT_METRICS_ENDPOINT =
 const REVIEW_ACCELERATOR_REPORT_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/review';
 const SUBMIT_ACCELERATOR_REPORT_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/submit';
 const ACCELERATOR_REPORT_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}';
+const PUBLISH_ACCELERATOR_REPORT_ENDPOINT = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/publish';
 
 type GetAcceleratorReportResponsePayload =
   paths[typeof ACCELERATOR_REPORT_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -63,6 +64,9 @@ type UpdateAcceleratorReportResponse =
 
 type SubmitAcceleratorReportResponse =
   paths[typeof SUBMIT_ACCELERATOR_REPORT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+
+type PublishAcceleratorReportResponse =
+  paths[typeof PUBLISH_ACCELERATOR_REPORT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 export type ListProjectMetricsResponsePayload =
   paths[typeof PROJECT_METRICS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -299,6 +303,15 @@ const submitAcceleratorReport = async (params: {
   ).post2<SubmitAcceleratorReportResponse>();
 };
 
+const publishAcceleratorReport = async (
+  projectId: string,
+  reportId: string
+): Promise<Response2<PublishAcceleratorReportResponse>> => {
+  return HttpService.root(
+    PUBLISH_ACCELERATOR_REPORT_ENDPOINT.replace('{projectId}', projectId).replace('{reportId}', reportId)
+  ).post2<PublishAcceleratorReportResponse>();
+};
+
 /**
  * Exported functions
  */
@@ -318,6 +331,7 @@ const ReportService = {
   reviewAcceleratorReport,
   refreshAcceleratorReportSystemMetrics,
   submitAcceleratorReport,
+  publishAcceleratorReport,
 };
 
 export default ReportService;

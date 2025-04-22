@@ -8017,6 +8017,22 @@ export interface components {
         ProjectVotesPayload: {
             phases: components["schemas"]["PhaseVotes"][];
         };
+        PublishedReportMetricPayload: {
+            /** @enum {string} */
+            component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
+            description?: string;
+            name: string;
+            reference: string;
+            /** @enum {string} */
+            status?: "Achieved" | "On-Track" | "Unlikely";
+            /** Format: int32 */
+            target?: number;
+            /** @enum {string} */
+            type: "Activity" | "Output" | "Outcome" | "Impact";
+            underperformanceJustification?: string;
+            /** Format: int32 */
+            value?: number;
+        };
         PublishedReportPayload: {
             achievements: string[];
             challenges: components["schemas"]["ReportChallengePayload"][];
@@ -8027,6 +8043,7 @@ export interface components {
             highlights?: string;
             /** Format: int64 */
             projectId: number;
+            projectMetrics: components["schemas"]["PublishedReportMetricPayload"][];
             projectName: string;
             /** Format: int64 */
             publishedBy: number;
@@ -8036,8 +8053,10 @@ export interface components {
             quarter?: "Q1" | "Q2" | "Q3" | "Q4";
             /** Format: int64 */
             reportId: number;
+            standardMetrics: components["schemas"]["PublishedReportMetricPayload"][];
             /** Format: date */
             startDate: string;
+            systemMetrics: components["schemas"]["PublishedReportMetricPayload"][];
         };
         PutNurseryV1: {
             /** Format: date */

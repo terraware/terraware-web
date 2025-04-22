@@ -12,13 +12,7 @@ import { requestListFunderReports } from 'src/redux/features/funder/fundingEntit
 import { selectListFunderReports } from 'src/redux/features/funder/fundingEntitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import {
-  AcceleratorReport,
-  PublishedReport,
-  ReportProjectMetric,
-  ReportStandardMetric,
-  ReportSystemMetric,
-} from 'src/types/AcceleratorReport';
+import { AcceleratorReport, PublishedReport, PublishedReportMetric } from 'src/types/AcceleratorReport';
 
 import MetricBox from './MetricBox';
 
@@ -182,12 +176,18 @@ const FunderReportView = () => {
 
   const reportName = report?.frequency === 'Annual' ? year : report?.quarter ? `${year}-${report?.quarter}` : '';
 
-  const allMetrics: (ReportProjectMetric | ReportSystemMetric | ReportStandardMetric)[] = [];
+  const allMetrics: PublishedReportMetric[] = [];
 
   ['system', 'project', 'standard'].map((type) => {
     const metrics =
-      type === 'system' ? report?.systemMetrics : type === 'project' ? report?.projectMetrics : report?.standardMetrics;
-    allMetrics.push(...metrics);
+      type === 'system'
+        ? selectedReport?.systemMetrics
+        : type === 'project'
+          ? selectedReport?.projectMetrics
+          : selectedReport?.standardMetrics;
+    if (metrics) {
+      allMetrics.push(...metrics);
+    }
   });
 
   const climateMetrics = allMetrics.filter((m) => m.component === 'Climate');

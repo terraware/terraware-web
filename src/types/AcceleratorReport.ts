@@ -72,6 +72,11 @@ export type ReviewAcceleratorReportRequest = {
   reportId: number;
 };
 
+export type PublishAcceleratorReportRequest = {
+  projectId: number;
+  reportId: number;
+};
+
 export type NewMetric = components['schemas']['NewMetricPayload'];
 
 export type AcceleratorReport = components['schemas']['AcceleratorReportPayload'];
@@ -97,3 +102,4 @@ export type ChallengeMitigation = components['schemas']['ReportChallengePayload'
 export type MetricStatus = 'Achieved' | 'On-Track' | 'Unlikely';
 
 export type PublishedReport = components['schemas']['PublishedReportPayload'];
+export type PublishedReportMetric = components['schemas']['PublishedReportMetricPayload'];

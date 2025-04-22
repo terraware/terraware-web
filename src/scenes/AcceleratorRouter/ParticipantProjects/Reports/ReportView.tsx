@@ -20,10 +20,12 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization, useUser } from 'src/providers';
 import {
   selectListAcceleratorReports,
+  selectPublishAcceleratorReport,
   selectReviewAcceleratorReport,
 } from 'src/redux/features/reports/reportsSelectors';
 import {
   requestListAcceleratorReports,
+  requestPublishAcceleratorReport,
   requestReviewAcceleratorReport,
 } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -55,11 +57,20 @@ const ReportView = () => {
   const [boxInEdit, setBoxInEdit] = useState<boolean>(false);
   const [approveRequestId, setApproveRequestId] = useState('');
   const [rejectRequestId, setRejectRequestId] = useState('');
+  const [publishRequestId, setPublishRequestId] = useState('');
   const approveReportResponse = useAppSelector(selectReviewAcceleratorReport(approveRequestId));
   const rejectReportResponse = useAppSelector(selectReviewAcceleratorReport(rejectRequestId));
   const [showPublishModal, setShowPublishModal] = useState(false);
+  const publishReportResponse = useAppSelector(selectPublishAcceleratorReport(publishRequestId));
 
   const publishReport = () => {
+    const request = dispatch(
+      requestPublishAcceleratorReport({
+        projectId: Number(projectId),
+        reportId: Number(reportId),
+      })
+    );
+    setPublishRequestId(request.requestId);
     setShowPublishModal(false);
   };
 
@@ -131,6 +142,15 @@ const ReportView = () => {
       reload();
     }
   }, [rejectReportResponse]);
+
+  useEffect(() => {
+    if (publishReportResponse?.status === 'error') {
+      return;
+    }
+    if (publishReportResponse?.status === 'success') {
+      reload();
+    }
+  }, [publishReportResponse]);
 
   useEffect(() => {
     if (reports) {
