@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1745355386742" clover="3.2.0">
-  <project timestamp="1745355386742" name="All files">
-    <metrics statements="29897" coveredstatements="1243" conditionals="20295" coveredconditionals="354" methods="9222" coveredmethods="198" elements="59414" coveredelements="1795" complexity="0" loc="29897" ncloc="29897" packages="253" files="1224" classes="1224"/>
+<coverage generated="1745357903766" clover="3.2.0">
+  <project timestamp="1745357903766" name="All files">
+    <metrics statements="29916" coveredstatements="1243" conditionals="20308" coveredconditionals="354" methods="9228" coveredmethods="198" elements="59452" coveredelements="1795" complexity="0" loc="29916" ncloc="29916" packages="253" files="1229" classes="1229"/>
     <package name="src">
       <metrics statements="177" coveredstatements="8" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -5470,7 +5470,7 @@
       </file>
     </package>
     <package name="src.components.ProjectField">
-      <metrics statements="121" coveredstatements="0" conditionals="60" coveredconditionals="0" methods="44" coveredmethods="0"/>
+      <metrics statements="136" coveredstatements="0" conditionals="66" coveredconditionals="0" methods="49" coveredmethods="0"/>
       <file name="ApplicationStatusCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/ApplicationStatusCard.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="17" count="0" type="stmt"/>
@@ -5478,11 +5478,21 @@
         <line num="19" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="21" count="0" type="stmt"/>
       </file>
+      <file name="ApplicationStatusLink.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/ApplicationStatusLink.tsx">
+        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+      </file>
       <file name="Card.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/Card.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
+      </file>
+      <file name="CohortBadge.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/CohortBadge.tsx">
+        <metrics statements="2" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
       </file>
       <file name="CountrySelect.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/CountrySelect.tsx">
         <metrics statements="12" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="7" coveredmethods="0"/>
@@ -5580,8 +5590,21 @@
         <line num="18" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
       </file>
+      <file name="ProjectBadgeLink.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/ProjectBadgeLink.tsx">
+        <metrics statements="3" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+      </file>
       <file name="ProjectOverviewCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/ProjectOverviewCard.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+      </file>
+      <file name="ProjectScoreLink.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/ProjectScoreLink.tsx">
+        <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
@@ -5647,6 +5670,13 @@
         <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
+      </file>
+      <file name="VotingDecisionLink.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/VotingDecisionLink.tsx">
+        <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/index.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -17056,7 +17086,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.ParticipantProjects">
-      <metrics statements="177" coveredstatements="0" conditionals="130" coveredconditionals="0" methods="49" coveredmethods="0"/>
+      <metrics statements="181" coveredstatements="0" conditionals="137" coveredconditionals="0" methods="50" coveredmethods="0"/>
       <file name="CellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/CellRenderer.tsx">
         <metrics statements="14" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
@@ -17203,10 +17233,14 @@
         <line num="89" count="0" type="stmt"/>
       </file>
       <file name="ProjectProfileView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/ProjectProfileView.tsx">
-        <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
+        <metrics statements="7" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
       </file>
       <file name="SingleView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/SingleView.tsx">
         <metrics statements="42" coveredstatements="0" conditionals="50" coveredconditionals="0" methods="10" coveredmethods="0"/>
