@@ -103,3 +103,7 @@ export type MetricStatus = 'Achieved' | 'On-Track' | 'Unlikely';
 
 export type PublishedReport = components['schemas']['PublishedReportPayload'];
 export type PublishedReportMetric = components['schemas']['PublishedReportMetricPayload'];
+
+export const isAcceleratorReport = (report: any): report is AcceleratorReport => {
+  return report && 'id' in report && 'status' in report;
+};

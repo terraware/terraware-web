@@ -6,6 +6,7 @@ import { SelectT } from '@terraware/web-components';
 import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
 import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
+import { getReportName } from 'src/components/AcceleratorReports/utils';
 import Card from 'src/components/common/Card';
 import { useUserFundingEntity } from 'src/providers';
 import { requestListFunderReports } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
@@ -53,8 +54,7 @@ const FunderReportView = () => {
     return selectedReport?.startDate?.split('-')[0];
   }, [selectedReport]);
 
-  const reportName =
-    selectedReport?.frequency === 'Annual' ? year : selectedReport?.quarter ? `${year}-${selectedReport?.quarter}` : '';
+  const reportName = selectedReport ? getReportName(selectedReport) : '';
 
   const allMetrics: PublishedReportMetric[] = [];
 

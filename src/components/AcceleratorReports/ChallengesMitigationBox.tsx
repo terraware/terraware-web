@@ -9,10 +9,9 @@ import { selectReviewAcceleratorReport } from 'src/redux/features/reports/report
 import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ChallengeMitigation } from 'src/types/AcceleratorReport';
+import { ChallengeMitigation, isAcceleratorReport } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import { isAcceleratorReport } from './AchievementsBox';
 import EditableReportBox from './EditableReportBox';
 import { ReportBoxProps } from './ReportBox';
 

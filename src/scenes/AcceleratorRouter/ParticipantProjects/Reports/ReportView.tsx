@@ -10,6 +10,7 @@ import ChallengesMitigationBox from 'src/components/AcceleratorReports/Challenge
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import MetricBox from 'src/components/AcceleratorReports/MetricBox';
 import RejectedReportMessage from 'src/components/AcceleratorReports/RejectedReportMessage';
+import { getReportName } from 'src/components/AcceleratorReports/utils';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
@@ -151,6 +152,7 @@ const ReportView = () => {
       return;
     }
     if (publishReportResponse?.status === 'success') {
+      snackbar.toastSuccess(strings.REPORT_PUBLISHED);
       reload();
     }
   }, [publishReportResponse]);
@@ -253,11 +255,7 @@ const ReportView = () => {
     [callToAction]
   );
 
-  const reportName = selectedReport
-    ? selectedReport.frequency === 'Annual'
-      ? `${year}`
-      : `${year}-${selectedReport.quarter}`
-    : '';
+  const reportName = selectedReport ? getReportName(selectedReport) : '';
 
   const onEditChange = (isInEdit: boolean) => {
     setBoxInEdit(isInEdit);
