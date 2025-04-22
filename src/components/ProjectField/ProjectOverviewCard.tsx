@@ -22,7 +22,7 @@ const ProjectOverviewCard = ({ dealDescription, projectName, md }: ProjectOvervi
         borderRadius={theme.spacing(1)}
         textAlign={'left'}
         margin={`0 ${theme.spacing(1)}`}
-        padding={`${theme.spacing(2)} ${theme.spacing(2)}`}
+        padding={`${theme.spacing(2, 2)}`}
         sx={{ backgroundColor: theme.palette.TwClrBaseGray050 }}
       >
         <Grid container alignContent={'center'}>

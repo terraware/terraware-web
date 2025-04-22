@@ -31,7 +31,7 @@ const ProjectProfileView = ({ participantProject, project }: ProjectProfileViewP
         flexDirection: 'column',
         flexGrow: 1,
         marginBottom: theme.spacing(3),
-        padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
+        padding: `${theme.spacing(2, 1)}`,
         borderRadius: theme.spacing(1),
       }}
     >
