@@ -41,7 +41,7 @@ const ProjectFieldMultiSelect = ({ id, label, onChange, options, values }: Proje
   }, [values]);
 
   return (
-    <GridEntryWrapper>
+    <GridEntryWrapper height={'100px'}>
       <Box paddingX={theme.spacing(2)}>
         <MultiSelect<string, string>
           id={id}
