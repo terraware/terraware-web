@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1745358862589" clover="3.2.0">
-  <project timestamp="1745358862589" name="All files">
-    <metrics statements="29921" coveredstatements="1243" conditionals="20336" coveredconditionals="354" methods="9230" coveredmethods="198" elements="59487" coveredelements="1795" complexity="0" loc="29921" ncloc="29921" packages="253" files="1231" classes="1231"/>
+<coverage generated="1745359363201" clover="3.2.0">
+  <project timestamp="1745359363201" name="All files">
+    <metrics statements="29936" coveredstatements="1243" conditionals="20351" coveredconditionals="354" methods="9234" coveredmethods="198" elements="59521" coveredelements="1795" complexity="0" loc="29936" ncloc="29936" packages="253" files="1232" classes="1232"/>
     <package name="src">
       <metrics statements="177" coveredstatements="8" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -5470,7 +5470,7 @@
       </file>
     </package>
     <package name="src.components.ProjectField">
-      <metrics statements="141" coveredstatements="0" conditionals="92" coveredconditionals="0" methods="51" coveredmethods="0"/>
+      <metrics statements="144" coveredstatements="0" conditionals="94" coveredconditionals="0" methods="52" coveredmethods="0"/>
       <file name="ApplicationStatusCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/ApplicationStatusCard.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="17" count="0" type="stmt"/>
@@ -5537,6 +5537,12 @@
         <line num="23" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
+      </file>
+      <file name="InvertedCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/InvertedCard.tsx">
+        <metrics statements="3" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
       </file>
       <file name="LandUseMultiSelect.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/LandUseMultiSelect.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
@@ -5691,10 +5697,10 @@
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/index.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="36" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="40" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.ProjectNewView">
@@ -17097,7 +17103,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.ParticipantProjects">
-      <metrics statements="181" coveredstatements="0" conditionals="139" coveredconditionals="0" methods="50" coveredmethods="0"/>
+      <metrics statements="193" coveredstatements="0" conditionals="152" coveredconditionals="0" methods="53" coveredmethods="0"/>
       <file name="CellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/CellRenderer.tsx">
         <metrics statements="14" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
@@ -17244,14 +17250,26 @@
         <line num="89" count="0" type="stmt"/>
       </file>
       <file name="ProjectProfileView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/ProjectProfileView.tsx">
-        <metrics statements="7" coveredstatements="0" conditionals="9" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
+        <metrics statements="19" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="72" count="0" type="cond" truecount="0" falsecount="7"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
       </file>
       <file name="SingleView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/SingleView.tsx">
         <metrics statements="42" coveredstatements="0" conditionals="50" coveredconditionals="0" methods="10" coveredmethods="0"/>
