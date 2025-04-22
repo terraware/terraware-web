@@ -4,11 +4,14 @@ import { Box, Grid, useTheme } from '@mui/material';
 
 import ApplicationStatusLink from 'src/components/ProjectField/ApplicationStatusLink';
 import CohortBadge from 'src/components/ProjectField/CohortBadge';
+import ProjectProfileFooter from 'src/components/ProjectField/Footer';
+import ProjectFieldInlineMeta from 'src/components/ProjectField/InlineMeta';
 import ProjectOverviewCard from 'src/components/ProjectField/ProjectOverviewCard';
 import ProjectScoreLink from 'src/components/ProjectField/ProjectScoreLink';
 import VotingDecisionLink from 'src/components/ProjectField/VotingDecisionLink';
 import Card from 'src/components/common/Card';
 import { useUser } from 'src/providers';
+import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
 import { Application } from 'src/types/Application';
 import { ParticipantProject } from 'src/types/ParticipantProject';
@@ -29,6 +32,8 @@ type ProjectProfileViewProps = {
 const ProjectProfileView = ({
   participantProject,
   project,
+  projectMeta,
+  organization,
   projectApplication,
   projectScore,
   phaseVotes,
@@ -72,11 +77,26 @@ const ProjectProfileView = ({
             </>
           )}
         </Box>
+        <Box justifySelf={'flex-end'}>
+          <ProjectFieldInlineMeta
+            userLabel={strings.PROJECT_LEAD}
+            userId={organization?.tfContactUser?.userId}
+            userName={
+              organization?.tfContactUser &&
+              `${organization?.tfContactUser?.firstName} ${organization?.tfContactUser?.lastName}`
+            }
+            fontSize={'16px'}
+            lineHeight={'24px'}
+            fontWeight={500}
+          />
+        </Box>
       </Grid>
 
       <Grid container>
         <ProjectOverviewCard md={9} dealDescription={participantProject?.dealDescription} projectName={project?.name} />
       </Grid>
+
+      <ProjectProfileFooter project={project} projectMeta={projectMeta} />
     </Card>
   );
 };
