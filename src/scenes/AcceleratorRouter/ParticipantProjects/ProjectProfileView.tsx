@@ -8,6 +8,7 @@ import ProjectProfileFooter from 'src/components/ProjectField/Footer';
 import ProjectFieldInlineMeta from 'src/components/ProjectField/InlineMeta';
 import InvertedCard from 'src/components/ProjectField/InvertedCard';
 import ProjectOverviewCard from 'src/components/ProjectField/ProjectOverviewCard';
+import ProjectProfileImage from 'src/components/ProjectField/ProjectProfileImage';
 import ProjectScoreLink from 'src/components/ProjectField/ProjectScoreLink';
 import VotingDecisionLink from 'src/components/ProjectField/VotingDecisionLink';
 import Card from 'src/components/common/Card';
@@ -46,7 +47,6 @@ const ProjectProfileView = ({
   const supportedLocales = useSupportedLocales();
   const numberFormatter = useNumberFormatter();
   const { isAllowed } = useUser();
-
   const { activeLocale, countries } = useLocalization();
 
   const numericFormatter = useMemo(
@@ -149,6 +149,23 @@ const ProjectProfileView = ({
             {projectSize}
           </Box>
         </Grid>
+      </Grid>
+
+      <Grid container paddingRight={theme.spacing(1)}>
+        {project && participantProject?.projectHighlightPhotoValueId && (
+          <ProjectProfileImage
+            projectId={project.id}
+            imageValueId={participantProject.projectHighlightPhotoValueId}
+            alt={strings.PROJECT_HIGHLIGHT_IMAGE}
+          />
+        )}
+        {project && participantProject?.projectZoneFigureValueId && (
+          <ProjectProfileImage
+            projectId={project.id}
+            imageValueId={participantProject.projectZoneFigureValueId}
+            alt={strings.PROJECT_ZONE_FIGURE}
+          />
+        )}
       </Grid>
 
       <ProjectProfileFooter project={project} projectMeta={projectMeta} />
