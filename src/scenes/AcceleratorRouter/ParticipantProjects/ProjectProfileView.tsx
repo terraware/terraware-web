@@ -55,34 +55,38 @@ const ProjectProfileView = ({
   );
   const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
 
-  const projectSize = useMemo(() => {
-    const getCard = (label: string, value: number) => (
-      <InvertedCard
-        md={12}
-        backgroundColor={theme.palette.TwClrBaseGray100}
-        label={label}
-        value={strings.formatString(strings.X_HA, numericFormatter.format(value))?.toString()}
-      />
-    );
-    if (participantProject?.projectArea) {
-      return getCard(strings.PROJECT_AREA, participantProject.projectArea);
-    }
-    if (participantProject?.minProjectArea) {
-      return getCard(strings.MIN_PROJECT_AREA, participantProject.minProjectArea);
-    }
-    if (participantProject?.applicationReforestableLand) {
-      return getCard(strings.ELIGIBLE_AREA, participantProject.applicationReforestableLand);
-    }
-  }, [
-    participantProject?.projectArea,
-    participantProject?.minProjectArea,
-    participantProject?.applicationReforestableLand,
-  ]);
-
   const isProjectInPhase = useMemo(
     () => participantProject?.cohortPhase?.startsWith('Phase'),
     [participantProject?.cohortPhase]
   );
+
+  const projectSize = useMemo(() => {
+    const getCard = (label: string, value: number | undefined) => (
+      <InvertedCard
+        md={12}
+        backgroundColor={theme.palette.TwClrBaseGray100}
+        label={label}
+        value={value ? strings.formatString(strings.X_HA, numericFormatter.format(value))?.toString() : 'N/A'}
+      />
+    );
+    switch (participantProject?.cohortPhase) {
+      case 'Phase 1 - Feasibility Study':
+        return getCard(strings.MIN_PROJECT_AREA, participantProject?.minProjectArea);
+      case 'Phase 2 - Plan and Scale':
+      case 'Phase 3 - Implement and Monitor':
+        return getCard(strings.PROJECT_AREA, participantProject.projectArea);
+      case 'Application':
+      case 'Pre-Screen':
+      case 'Phase 0 - Due Diligence':
+      default:
+        return getCard(strings.ELIGIBLE_AREA, participantProject?.applicationReforestableLand);
+    }
+  }, [
+    participantProject?.cohortPhase,
+    participantProject?.projectArea,
+    participantProject?.minProjectArea,
+    participantProject?.applicationReforestableLand,
+  ]);
 
   return (
     <Card
@@ -130,18 +134,20 @@ const ProjectProfileView = ({
 
       <Grid container>
         <ProjectOverviewCard md={9} dealDescription={participantProject?.dealDescription} projectName={project?.name} />
-        <Grid container item md={3}>
-          <InvertedCard
-            md={12}
-            backgroundColor={theme.palette.TwClrBaseGray100}
-            label={strings.COUNTRY}
-            value={
-              countries && participantProject?.countryCode
-                ? getCountryByCode(countries, participantProject?.countryCode)?.name
-                : participantProject?.countryCode
-            }
-          />
-          {projectSize}
+        <Grid item md={3}>
+          <Box>
+            <InvertedCard
+              md={12}
+              backgroundColor={theme.palette.TwClrBaseGray100}
+              label={strings.COUNTRY}
+              value={
+                countries && participantProject?.countryCode
+                  ? getCountryByCode(countries, participantProject?.countryCode)?.name
+                  : participantProject?.countryCode
+              }
+            />
+            {projectSize}
+          </Box>
         </Grid>
       </Grid>
 
