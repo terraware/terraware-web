@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/63</span>
+                <span class='fraction'>0/64</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/64</span>
+                <span class='fraction'>0/66</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/54</span>
+                <span class='fraction'>0/55</span>
             </div>
         
             
@@ -304,7 +304,9 @@
 <a name='L239'></a><a href='#L239'>239</a>
 <a name='L240'></a><a href='#L240'>240</a>
 <a name='L241'></a><a href='#L241'>241</a>
-<a name='L242'></a><a href='#L242'>242</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -474,6 +476,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -489,6 +492,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -556,7 +560,7 @@ import { selectReviewAcceleratorReport } from 'src/redux/features/reports/report
 import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ChallengeMitigation } from 'src/types/AcceleratorReport';
+import { ChallengeMitigation, isAcceleratorReport } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
 import EditableReportBox from './EditableReportBox';
@@ -710,26 +714,28 @@ const ChallengesMitigationBox = <span class="cstat-no" title="statement not cove
   }, [updateReportResponse, snackbar]);
 &nbsp;
   const onSave = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setValidateFields(false);</span>
-    const filteredChallenges = <span class="cstat-no" title="statement not covered" >getNonEmptyChallenges();</span>
-<span class="cstat-no" title="statement not covered" >    if (filteredChallenges.some(<span class="fstat-no" title="function not covered" >(c</span>) =&gt; <span class="cstat-no" title="statement not covered" >!c.challenge || !c.mitigationPlan)</span>) {</span>
-<span class="cstat-no" title="statement not covered" >      setValidateFields(true);</span>
-<span class="cstat-no" title="statement not covered" >      return;</span>
-    }
+<span class="cstat-no" title="statement not covered" >    if (isAcceleratorReport(report)) {</span>
+<span class="cstat-no" title="statement not covered" >      setValidateFields(false);</span>
+      const filteredChallenges = <span class="cstat-no" title="statement not covered" >getNonEmptyChallenges();</span>
+<span class="cstat-no" title="statement not covered" >      if (filteredChallenges.some(<span class="fstat-no" title="function not covered" >(c</span>) =&gt; <span class="cstat-no" title="statement not covered" >!c.challenge || !c.mitigationPlan)</span>) {</span>
+<span class="cstat-no" title="statement not covered" >        setValidateFields(true);</span>
+<span class="cstat-no" title="statement not covered" >        return;</span>
+      }
 &nbsp;
-    const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
-      requestReviewAcceleratorReport({
-        review: {
-          ...report,
-          achievements: report?.achievements || [],
-          challenges: filteredChallenges,
-          status: report?.status || 'Not Submitted',
-        },
-        projectId: Number(projectId),
-        reportId: report?.id || -1,
-      })
-    );
-<span class="cstat-no" title="statement not covered" >    setRequestId(request.requestId);</span>
+      const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
+        requestReviewAcceleratorReport({
+          review: {
+            ...report,
+            achievements: report?.achievements || [],
+            challenges: filteredChallenges,
+            status: report?.status || 'Not Submitted',
+          },
+          projectId: Number(projectId),
+          reportId: report?.id || -1,
+        })
+      );
+<span class="cstat-no" title="statement not covered" >      setRequestId(request.requestId);</span>
+    }
   }, [dispatch, projectId, challengeMitigations, report]);
 &nbsp;
   const onCancel = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -793,7 +799,7 @@ export default ChallengesMitigationBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-21T19:58:50.530Z
+                at 2025-04-22T18:37:28.144Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
