@@ -9,7 +9,7 @@ import { selectReviewAcceleratorReport } from 'src/redux/features/reports/report
 import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ChallengeMitigation } from 'src/types/AcceleratorReport';
+import { ChallengeMitigation, isAcceleratorReport } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import EditableReportBox from './EditableReportBox';
@@ -163,26 +163,28 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   }, [updateReportResponse, snackbar]);
 
   const onSave = useCallback(() => {
-    setValidateFields(false);
-    const filteredChallenges = getNonEmptyChallenges();
-    if (filteredChallenges.some((c) => !c.challenge || !c.mitigationPlan)) {
-      setValidateFields(true);
-      return;
-    }
+    if (isAcceleratorReport(report)) {
+      setValidateFields(false);
+      const filteredChallenges = getNonEmptyChallenges();
+      if (filteredChallenges.some((c) => !c.challenge || !c.mitigationPlan)) {
+        setValidateFields(true);
+        return;
+      }
 
-    const request = dispatch(
-      requestReviewAcceleratorReport({
-        review: {
-          ...report,
-          achievements: report?.achievements || [],
-          challenges: filteredChallenges,
-          status: report?.status || 'Not Submitted',
-        },
-        projectId: Number(projectId),
-        reportId: report?.id || -1,
-      })
-    );
-    setRequestId(request.requestId);
+      const request = dispatch(
+        requestReviewAcceleratorReport({
+          review: {
+            ...report,
+            achievements: report?.achievements || [],
+            challenges: filteredChallenges,
+            status: report?.status || 'Not Submitted',
+          },
+          projectId: Number(projectId),
+          reportId: report?.id || -1,
+        })
+      );
+      setRequestId(request.requestId);
+    }
   }, [dispatch, projectId, challengeMitigations, report]);
 
   const onCancel = useCallback(() => {

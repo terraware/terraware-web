@@ -9,6 +9,7 @@ import { selectReviewAcceleratorReport } from 'src/redux/features/reports/report
 import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { isAcceleratorReport } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import EditableReportBox from './EditableReportBox';
@@ -102,19 +103,21 @@ const AchievementsBox = (props: ReportBoxProps) => {
   }, [updateReportResponse, snackbar]);
 
   const onSave = useCallback(() => {
-    const request = dispatch(
-      requestReviewAcceleratorReport({
-        review: {
-          ...report,
-          achievements: getNonEmptyAchievements(),
-          challenges: report?.challenges || [],
-          status: report?.status || 'Not Submitted',
-        },
-        projectId: Number(projectId),
-        reportId: report?.id || -1,
-      })
-    );
-    setRequestId(request.requestId);
+    if (isAcceleratorReport(report)) {
+      const request = dispatch(
+        requestReviewAcceleratorReport({
+          review: {
+            ...report,
+            achievements: getNonEmptyAchievements(),
+            challenges: report?.challenges || [],
+            status: report?.status || 'Not Submitted',
+          },
+          projectId: Number(projectId),
+          reportId: report?.id || -1,
+        })
+      );
+      setRequestId(request.requestId);
+    }
   }, [dispatch, projectId, achievements, report]);
 
   const onCancel = useCallback(() => {

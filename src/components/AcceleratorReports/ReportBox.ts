@@ -1,7 +1,7 @@
-import { AcceleratorReport } from 'src/types/AcceleratorReport';
+import { AcceleratorReport, PublishedReport } from 'src/types/AcceleratorReport';
 
 export type ReportBoxProps = {
-  report?: AcceleratorReport;
+  report?: AcceleratorReport | PublishedReport;
   projectId: string;
   reload?: () => void;
   isConsoleView?: boolean;

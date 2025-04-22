@@ -10,6 +10,7 @@ import ChallengesMitigationBox from 'src/components/AcceleratorReports/Challenge
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import MetricBox from 'src/components/AcceleratorReports/MetricBox';
 import RejectedReportMessage from 'src/components/AcceleratorReports/RejectedReportMessage';
+import { getReportName } from 'src/components/AcceleratorReports/utils';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
@@ -20,15 +21,18 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization, useUser } from 'src/providers';
 import {
   selectListAcceleratorReports,
+  selectPublishAcceleratorReport,
   selectReviewAcceleratorReport,
 } from 'src/redux/features/reports/reportsSelectors';
 import {
   requestListAcceleratorReports,
+  requestPublishAcceleratorReport,
   requestReviewAcceleratorReport,
 } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorReport, MetricType } from 'src/types/AcceleratorReport';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import { useParticipantProjectData } from '../ParticipantProjectContext';
 import ApproveReportDialog from './ApproveReportDialog';
@@ -55,11 +59,21 @@ const ReportView = () => {
   const [boxInEdit, setBoxInEdit] = useState<boolean>(false);
   const [approveRequestId, setApproveRequestId] = useState('');
   const [rejectRequestId, setRejectRequestId] = useState('');
+  const [publishRequestId, setPublishRequestId] = useState('');
   const approveReportResponse = useAppSelector(selectReviewAcceleratorReport(approveRequestId));
   const rejectReportResponse = useAppSelector(selectReviewAcceleratorReport(rejectRequestId));
   const [showPublishModal, setShowPublishModal] = useState(false);
+  const publishReportResponse = useAppSelector(selectPublishAcceleratorReport(publishRequestId));
+  const snackbar = useSnackbar();
 
   const publishReport = () => {
+    const request = dispatch(
+      requestPublishAcceleratorReport({
+        projectId: Number(projectId),
+        reportId: Number(reportId),
+      })
+    );
+    setPublishRequestId(request.requestId);
     setShowPublishModal(false);
   };
 
@@ -131,6 +145,17 @@ const ReportView = () => {
       reload();
     }
   }, [rejectReportResponse]);
+
+  useEffect(() => {
+    if (publishReportResponse?.status === 'error') {
+      snackbar.toastError();
+      return;
+    }
+    if (publishReportResponse?.status === 'success') {
+      snackbar.toastSuccess(strings.REPORT_PUBLISHED);
+      reload();
+    }
+  }, [publishReportResponse]);
 
   useEffect(() => {
     if (reports) {
@@ -230,11 +255,7 @@ const ReportView = () => {
     [callToAction]
   );
 
-  const reportName = selectedReport
-    ? selectedReport.frequency === 'Annual'
-      ? `${year}`
-      : `${year}-${selectedReport.quarter}`
-    : '';
+  const reportName = selectedReport ? getReportName(selectedReport) : '';
 
   const onEditChange = (isInEdit: boolean) => {
     setBoxInEdit(isInEdit);

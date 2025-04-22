@@ -20,6 +20,7 @@ import { SearchSortOrder } from 'src/types/Search';
 import useQuery from 'src/utils/useQuery';
 
 import AcceleratorReportCellRenderer from './AcceleratorReportCellRenderer';
+import { getReportName } from './utils';
 
 type AcceleratorReportRow = AcceleratorReport & {
   reportName?: string;
@@ -106,8 +107,7 @@ export default function AcceleratorReportsTable(): JSX.Element {
           ?.filter((report) => report.frequency !== 'Annual')
           .map((report) => {
             const year = report.startDate.split('-')[0];
-            const reportName = report.frequency === 'Annual' ? `${year}` : `${year}-${report.quarter}`;
-
+            const reportName = getReportName(report);
             return {
               ...report,
               reportName,
@@ -126,7 +126,7 @@ export default function AcceleratorReportsTable(): JSX.Element {
           ?.filter((report) => report.frequency !== 'Annual')
           .map((report) => {
             const year = report.startDate.split('-')[0];
-            const reportName = report.frequency === 'Annual' ? `${year}` : `${year}-${report.quarter}`;
+            const reportName = getReportName(report);
 
             return {
               ...report,

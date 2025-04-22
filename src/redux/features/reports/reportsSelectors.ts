@@ -44,3 +44,6 @@ export const selectAcceleratorReport = (requestId: string) => (state: RootState)
 
 export const selectSubmitAcceleratorReport = (requestId: string) => (state: RootState) =>
   state.submitAcceleratorReport[requestId];
+
+export const selectPublishAcceleratorReport = (requestId: string) => (state: RootState) =>
+  state.publishAcceleratorReport[requestId];
