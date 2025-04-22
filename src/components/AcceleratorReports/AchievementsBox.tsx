@@ -9,6 +9,7 @@ import { selectReviewAcceleratorReport } from 'src/redux/features/reports/report
 import { requestReviewAcceleratorReport } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { AcceleratorReport } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import EditableReportBox from './EditableReportBox';
@@ -65,6 +66,10 @@ const Achievement = ({
   );
 };
 
+export const isAcceleratorReport = (report: any): report is AcceleratorReport => {
+  return report && 'id' in report && 'status' in report;
+};
+
 const AchievementsBox = (props: ReportBoxProps) => {
   const { report, projectId, reload, isConsoleView, onChange, editing, onEditChange, canEdit, noTitle } = props;
   const [internalEditing, setInternalEditing] = useState<boolean>(false);
@@ -102,19 +107,21 @@ const AchievementsBox = (props: ReportBoxProps) => {
   }, [updateReportResponse, snackbar]);
 
   const onSave = useCallback(() => {
-    const request = dispatch(
-      requestReviewAcceleratorReport({
-        review: {
-          ...report,
-          achievements: getNonEmptyAchievements(),
-          challenges: report?.challenges || [],
-          status: report?.status || 'Not Submitted',
-        },
-        projectId: Number(projectId),
-        reportId: report?.id || -1,
-      })
-    );
-    setRequestId(request.requestId);
+    if (isAcceleratorReport(report)) {
+      const request = dispatch(
+        requestReviewAcceleratorReport({
+          review: {
+            ...report,
+            achievements: getNonEmptyAchievements(),
+            challenges: report?.challenges || [],
+            status: report?.status || 'Not Submitted',
+          },
+          projectId: Number(projectId),
+          reportId: report?.id || -1,
+        })
+      );
+      setRequestId(request.requestId);
+    }
   }, [dispatch, projectId, achievements, report]);
 
   const onCancel = useCallback(() => {
