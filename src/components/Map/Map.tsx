@@ -84,6 +84,8 @@ export default function Map(props: MapProps): JSX.Element {
     topRightMapControl,
     bottomLeftMapControl,
     hideAllControls,
+    disablePan,
+    disableZoom,
   } = props;
   const theme = useTheme();
   const [geoData, setGeoData] = useState<any[]>();
@@ -458,6 +460,14 @@ export default function Map(props: MapProps): JSX.Element {
               event.target.resize();
             }
           }}
+          dragPan={!disablePan}
+          keyboard={!disablePan}
+          dragRotate={!disablePan}
+          scrollZoom={!disableZoom}
+          boxZoom={!disableZoom}
+          doubleClickZoom={!disableZoom}
+          touchZoomRotate={!disableZoom}
+          touchPitch={!disableZoom}
         >
           {mapSources}
           {!hideAllControls && (

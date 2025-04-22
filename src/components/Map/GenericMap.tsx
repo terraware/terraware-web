@@ -22,6 +22,7 @@ type GenericMapProps = {
   bannerMessage?: string;
   entityOptions?: MapEntityOptions;
   mapImages?: MapImage[];
+  readOnly?: boolean;
 } & MapControl;
 
 export default function GenericMap(props: GenericMapProps): JSX.Element | null {
@@ -50,6 +51,9 @@ export default function GenericMap(props: GenericMapProps): JSX.Element | null {
         bannerMessage={bannerMessage}
         entityOptions={entityOptions}
         mapImages={mapImages}
+        hideAllControls={props.readOnly}
+        disablePan={props.readOnly}
+        disableZoom={props.readOnly}
         {...mapControlProps}
       />
     </Box>

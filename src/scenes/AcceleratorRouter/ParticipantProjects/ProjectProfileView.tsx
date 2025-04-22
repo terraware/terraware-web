@@ -7,6 +7,7 @@ import CohortBadge from 'src/components/ProjectField/CohortBadge';
 import ProjectProfileFooter from 'src/components/ProjectField/Footer';
 import ProjectFieldInlineMeta from 'src/components/ProjectField/InlineMeta';
 import InvertedCard from 'src/components/ProjectField/InvertedCard';
+import ProjectMap from 'src/components/ProjectField/ProjectMap';
 import ProjectOverviewCard from 'src/components/ProjectField/ProjectOverviewCard';
 import ProjectProfileImage from 'src/components/ProjectField/ProjectProfileImage';
 import ProjectScoreLink from 'src/components/ProjectField/ProjectScoreLink';
@@ -151,7 +152,11 @@ const ProjectProfileView = ({
         </Grid>
       </Grid>
 
-      <Grid container paddingRight={theme.spacing(1)}>
+      <Grid
+        container
+        padding={theme.spacing(2, 2, 0, 0)}
+        sx={{ '.mapboxgl-canvas-container.mapboxgl-interactive': { cursor: 'default' } }}
+      >
         {project && participantProject?.projectHighlightPhotoValueId && (
           <ProjectProfileImage
             projectId={project.id}
@@ -165,6 +170,9 @@ const ProjectProfileView = ({
             imageValueId={participantProject.projectZoneFigureValueId}
             alt={strings.PROJECT_ZONE_FIGURE}
           />
+        )}
+        {project && !participantProject?.projectZoneFigureValueId && projectApplication && (
+          <ProjectMap application={projectApplication} md={participantProject?.projectHighlightPhotoValueId ? 6 : 12} />
         )}
       </Grid>
 

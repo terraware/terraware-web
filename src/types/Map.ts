@@ -153,6 +153,8 @@ export type MapControl = {
   topRightMapControl?: React.ReactNode;
   bottomLeftMapControl?: React.ReactNode;
   hideAllControls?: boolean;
+  disablePan?: boolean;
+  disableZoom?: boolean;
 };
 
 /**
