@@ -20,7 +20,7 @@ const ProjectFieldMeta = ({ date, dateLabel, userId, userName, userLabel }: Proj
   const theme = useTheme();
 
   return (
-    <FluidEntryWrapper>
+    <FluidEntryWrapper height={'100px'}>
       <Grid container alignContent={'center'} height={'100px'} paddingX={theme.spacing(2)}>
         <Grid item xs={12}>
           <Box>
