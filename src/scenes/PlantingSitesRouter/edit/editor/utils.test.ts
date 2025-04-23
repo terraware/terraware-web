@@ -1,7 +1,16 @@
+/**
+ * @jest-environment node
+ */
 import { Feature } from 'geojson';
 import { GeometryFeature } from 'src/types/Map';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
-import { alphabetName, cutOverlappingBoundaries, getLatestFeature, subzoneNameGenerator, zoneNameGenerator } from './utils';
+import {
+  alphabetName,
+  cutOverlappingBoundaries,
+  getLatestFeature,
+  subzoneNameGenerator,
+  zoneNameGenerator,
+} from './utils';
 import {
   cutOnNoOverlapFeature,
   cutOnOverlapFeature,
@@ -11,7 +20,6 @@ import {
   featureCollection2,
   featureCollection3,
 } from 'src/components/Map/testdata';
-import strings from 'src/strings';
 
 const createDraftSiteWith = (cutBoundaries: GeometryFeature[]): DraftPlantingSite => {
   return {

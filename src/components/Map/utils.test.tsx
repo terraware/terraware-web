@@ -1,3 +1,6 @@
+/**
+ * @jest-environment node
+ */
 import { Feature } from 'geojson';
 
 import { ReadOnlyBoundary, RenderableReadOnlyBoundary } from 'src/types/Map';
