@@ -14,6 +14,7 @@ import { selectListFunderReports } from 'src/redux/features/funder/fundingEntiti
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PublishedReport, PublishedReportMetric } from 'src/types/AcceleratorReport';
+import useQuery from 'src/utils/useQuery';
 
 import MetricBox from './MetricBox';
 
@@ -25,6 +26,7 @@ const FunderReportView = () => {
   const reportsResponse = useAppSelector(selectListFunderReports(selectedProjectId?.toString() ?? ''));
   const [reports, setReports] = useState<PublishedReport[]>();
   const [selectedReport, setSelectedReport] = useState<PublishedReport>();
+  const query = useQuery();
 
   useEffect(() => {
     if ((userFundingEntity?.projects?.length ?? 0) > 0) {
@@ -46,9 +48,14 @@ const FunderReportView = () => {
 
   useEffect(() => {
     if (!selectedReport && reports?.length) {
-      setSelectedReport(reports[0]);
+      if (query.get('reportId')) {
+        const found = reports?.find((r) => r.reportId.toString() === query.get('reportId'));
+        setSelectedReport(found || reports[0]);
+      } else {
+        setSelectedReport(reports[0]);
+      }
     }
-  }, [reports, selectedReport]);
+  }, [reports, selectedReport, query.get('reportId')]);
 
   const year = useMemo(() => {
     return selectedReport?.startDate?.split('-')[0];
