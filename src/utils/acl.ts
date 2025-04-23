@@ -21,7 +21,11 @@ import { isAdmin, isManagerOrHigher, isMember } from './organization';
 /**
  * We split the permissions up loosely by the entity that the user is being authorized to interact with or view
  */
-type PermissionAcceleratorReports = 'UPDATE_REPORTS_SETTINGS' | 'EDIT_REPORTS' | 'READ_REPORTS';
+type PermissionAcceleratorReports =
+  | 'EDIT_REPORTS'
+  | 'READ_REPORTS'
+  | 'UPDATE_REPORTS_SETTINGS'
+  | 'UPDATE_REPORTS_TARGETS';
 type PermissionApplication =
   | 'READ_ALL_APPLICATIONS'
   | 'UPDATE_APPLICATION_INTERNAL_COMMENTS'
@@ -147,6 +151,19 @@ const isAllowedReadReports: PermissionCheckFn<ReadReportsMetadata> = (
 };
 
 /**
+ * Function related to updating accelerator report targets, since the permission also applies to
+ * org roles, we need to check the passed-in organization
+ */
+type UpdateReportsTargetsMetadata = { organization: Organization };
+const isAllowedUpdateReportsTargets: PermissionCheckFn<UpdateReportsTargetsMetadata> = (
+  user: User,
+  _: GlobalRolePermission,
+  metadata?: UpdateReportsTargetsMetadata
+): boolean => {
+  return isAcceleratorAdmin(user) || isAdmin(metadata?.organization);
+};
+
+/**
  * This is the main ACL entrypoint where all permissions are indicated through a global role
  * array or a function that returns a boolean
  */
@@ -181,6 +198,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   UPDATE_PARTICIPANTS: AcceleratorAdminPlus,
   UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING: TFExpertPlus,
   UPDATE_REPORTS_SETTINGS: AcceleratorAdminPlus,
+  UPDATE_REPORTS_TARGETS: isAllowedUpdateReportsTargets,
   UPDATE_PARTICIPANT_PROJECT: TFExpertPlus,
   UPDATE_SUBMISSION_STATUS: TFExpertPlus,
   VIEW_CONSOLE: ReadOnlyPlus,
