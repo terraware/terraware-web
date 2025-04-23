@@ -28,6 +28,7 @@ import {
   MapGeometry,
   MapOptions,
   MapPopupRenderer,
+  MapViewStyle,
   MapViewStyles,
   PopupInfo,
 } from 'src/types/Map';
@@ -63,6 +64,7 @@ export type MapProps = {
   mapId?: string;
   // style overrides
   style?: object;
+  mapViewStyle?: MapViewStyle;
   bannerMessage?: string;
   // entity options
   entityOptions?: MapEntityOptions;
@@ -84,8 +86,7 @@ export default function Map(props: MapProps): JSX.Element {
     topRightMapControl,
     bottomLeftMapControl,
     hideAllControls,
-    disablePan,
-    disableZoom,
+    mapViewStyle: initialMapViewStyle,
   } = props;
   const theme = useTheme();
   const [geoData, setGeoData] = useState<any[]>();
@@ -100,7 +101,7 @@ export default function Map(props: MapProps): JSX.Element {
   const highlightStateId: FeatureStateId = useMemo(() => ({}), []);
   const [firstVisible, setFirstVisible] = useState<boolean>(false);
   const [resized, setResized] = useState<boolean>(false);
-  const [mapViewStyle, onChangeMapViewStyle] = useMapViewStyle();
+  const [mapViewStyle, onChangeMapViewStyle] = useMapViewStyle(initialMapViewStyle);
   const [reloadSources, setReloadSources] = useState(false);
   const visible = useIsVisible(containerRef);
   const snackbar = useSnackbar();
@@ -460,14 +461,6 @@ export default function Map(props: MapProps): JSX.Element {
               event.target.resize();
             }
           }}
-          dragPan={!disablePan}
-          keyboard={!disablePan}
-          dragRotate={!disablePan}
-          scrollZoom={!disableZoom}
-          boxZoom={!disableZoom}
-          doubleClickZoom={!disableZoom}
-          touchZoomRotate={!disableZoom}
-          touchPitch={!disableZoom}
         >
           {mapSources}
           {!hideAllControls && (

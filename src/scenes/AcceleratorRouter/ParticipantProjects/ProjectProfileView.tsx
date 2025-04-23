@@ -171,8 +171,12 @@ const ProjectProfileView = ({
             alt={strings.PROJECT_ZONE_FIGURE}
           />
         )}
-        {project && !participantProject?.projectZoneFigureValueId && projectApplication && (
-          <ProjectMap application={projectApplication} md={participantProject?.projectHighlightPhotoValueId ? 6 : 12} />
+        {project && !participantProject?.projectZoneFigureValueId && (
+          <ProjectMap
+            application={projectApplication}
+            countryCode={participantProject?.countryCode}
+            md={participantProject?.projectHighlightPhotoValueId ? 6 : 12}
+          />
         )}
       </Grid>
 

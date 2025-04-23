@@ -1,4 +1,8 @@
+import React from 'react';
+import { Layer, LngLatBoundsLike, Source } from 'react-map-gl';
+
 import { Theme } from '@mui/material';
+import bbox from '@turf/bbox';
 import center from '@turf/center';
 import difference from '@turf/difference';
 import intersect from '@turf/intersect';
@@ -12,6 +16,8 @@ import {
   MapErrorLayer,
   MapSourceProperties,
   MapSourceRenderProperties,
+  ReadOnlyBoundary,
+  RenderableReadOnlyBoundary,
 } from 'src/types/Map';
 
 export function toMultiPolygon(geometry: Geometry): MultiPolygon | null {
@@ -282,4 +288,41 @@ export const leftOrderedFeatures = (features: GeometryFeature[]): { feature: Geo
         return data1.center[0] - data2.center[0];
       }
     });
+};
+
+export const boundariesToViewState = (boundaries: ReadOnlyBoundary[]) => {
+  const coordinates = boundaries
+    .flatMap((b) => b.data.features)
+    .flatMap((feature) => toMultiPolygon(feature.geometry))
+    .filter((poly: MultiPolygon | null): poly is MultiPolygon => poly !== null)
+    .flatMap((poly: MultiPolygon) => poly.coordinates);
+
+  return {
+    bounds: bbox({
+      type: 'MultiPolygon',
+      coordinates,
+    }) as LngLatBoundsLike,
+    fitBoundsOptions: {
+      animate: false,
+      padding: 25,
+    },
+  };
+};
+
+export const readOnlyBoundariesToMapLayers = (boundaries?: RenderableReadOnlyBoundary[]) => {
+  if (!boundaries?.length) {
+    return null;
+  }
+
+  return boundaries.map((boundaryData: RenderableReadOnlyBoundary) => {
+    const drawingLayer: MapDrawingLayer = getMapDrawingLayer(boundaryData.renderProperties, boundaryData.id);
+    return (
+      <Source type='geojson' key={boundaryData.id} data={boundaryData.data} id={boundaryData.id}>
+        {drawingLayer.patternFill && <Layer {...drawingLayer.patternFill} />}
+        {drawingLayer.textAnnotation && <Layer {...drawingLayer.textAnnotation} />}
+        {drawingLayer.layerOutline && <Layer {...drawingLayer.layerOutline} />}
+        {drawingLayer.layer && <Layer {...drawingLayer.layer} />}
+      </Source>
+    );
+  });
 };

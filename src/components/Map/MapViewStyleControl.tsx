@@ -9,9 +9,9 @@ import { MapViewStyle } from 'src/types/Map';
 
 import { useMapPortalContainer } from './MapRenderUtils';
 
-export const useMapViewStyle = (): [MapViewStyle, (style: MapViewStyle) => void] => {
+export const useMapViewStyle = (initialMapViewStyle?: MapViewStyle): [MapViewStyle, (style: MapViewStyle) => void] => {
   const [mapViewStyle, setMapViewStyle] = useState<MapViewStyle>(
-    localStorage.getItem('mapViewStyle') === 'Outdoors' ? 'Outdoors' : 'Satellite'
+    initialMapViewStyle || (localStorage.getItem('mapViewStyle') as MapViewStyle) || 'Satellite'
   );
 
   const onChangeMapViewStyle = useCallback(
