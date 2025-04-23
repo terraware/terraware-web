@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/55</span>
+                <span class='fraction'>0/57</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/41</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/55</span>
+                <span class='fraction'>0/57</span>
             </div>
         
             
@@ -279,7 +279,14 @@
 <a name='L214'></a><a href='#L214'>214</a>
 <a name='L215'></a><a href='#L215'>215</a>
 <a name='L216'></a><a href='#L216'>216</a>
-<a name='L217'></a><a href='#L217'>217</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a>
+<a name='L224'></a><a href='#L224'>224</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -360,6 +367,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -378,6 +386,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -575,9 +589,10 @@ const AcceleratorReportView = <span class="cstat-no" title="statement not covere
 <span class="cstat-no" title="statement not covered" >    if (submitReportResults?.status === 'error') {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError();</span>
     } else <span class="cstat-no" title="statement not covered" >if (submitReportResults?.status === 'success') {</span>
+<span class="cstat-no" title="statement not covered" >      reload();</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastSuccess(strings.REPORT_SUBMITTED_FOR_APPROVAL);</span>
     }
-  }, [submitReportResults]);
+  }, [submitReportResults?.status]);
 &nbsp;
   const year = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return report?.startDate.split('-')[0];</span>
@@ -594,10 +609,16 @@ const AcceleratorReportView = <span class="cstat-no" title="statement not covere
   );
 &nbsp;
   const callToAction = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const buttonsDisabled =
+<span class="cstat-no" title="statement not covered" >      !report?.id ||</span>
+      (report?.status !== 'Not Submitted' &amp;&amp; report?.status !== 'Needs Update') ||
+      getReportResults?.status === 'pending' ||
+      submitReportResults?.status === 'pending';
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return (</span>
       &lt;&gt;
         &lt;Button
-          disabled={report?.status !== 'Not Submitted' &amp;&amp; report?.status !== 'Needs Update'}
+          disabled={buttonsDisabled}
           icon='iconEdit'
           id='editReport'
           label={strings.EDIT}
@@ -608,7 +629,7 @@ const AcceleratorReportView = <span class="cstat-no" title="statement not covere
           size='medium'
         /&gt;
         &lt;Button
-          disabled={report?.status !== 'Not Submitted' &amp;&amp; report?.status !== 'Needs Update'}
+          disabled={buttonsDisabled}
           id='submitReport'
           label={strings.SUBMIT_FOR_APPROVAL}
           onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
@@ -619,7 +640,7 @@ const AcceleratorReportView = <span class="cstat-no" title="statement not covere
         /&gt;
       &lt;/&gt;
     );
-  }, [report?.status]);
+  }, [activeLocale, getReportResults?.status, report?.status, submitReportResults?.status]);
 &nbsp;
   const rightComponent = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; (
@@ -718,7 +739,7 @@ export default AcceleratorReportView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-23T01:52:09.791Z
+                at 2025-04-23T03:28:37.945Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
