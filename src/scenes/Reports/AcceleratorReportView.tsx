@@ -78,9 +78,10 @@ const AcceleratorReportView = () => {
     if (submitReportResults?.status === 'error') {
       snackbar.toastError();
     } else if (submitReportResults?.status === 'success') {
+      reload();
       snackbar.toastSuccess(strings.REPORT_SUBMITTED_FOR_APPROVAL);
     }
-  }, [submitReportResults]);
+  }, [submitReportResults?.status]);
 
   const year = useMemo(() => {
     return report?.startDate.split('-')[0];
@@ -97,10 +98,16 @@ const AcceleratorReportView = () => {
   );
 
   const callToAction = useMemo(() => {
+    const buttonsDisabled =
+      !report?.id ||
+      (report?.status !== 'Not Submitted' && report?.status !== 'Needs Update') ||
+      getReportResults?.status === 'pending' ||
+      submitReportResults?.status === 'pending';
+
     return (
       <>
         <Button
-          disabled={report?.status !== 'Not Submitted' && report?.status !== 'Needs Update'}
+          disabled={buttonsDisabled}
           icon='iconEdit'
           id='editReport'
           label={strings.EDIT}
@@ -111,7 +118,7 @@ const AcceleratorReportView = () => {
           size='medium'
         />
         <Button
-          disabled={report?.status !== 'Not Submitted' && report?.status !== 'Needs Update'}
+          disabled={buttonsDisabled}
           id='submitReport'
           label={strings.SUBMIT_FOR_APPROVAL}
           onClick={() => {
@@ -122,7 +129,7 @@ const AcceleratorReportView = () => {
         />
       </>
     );
-  }, [report?.status]);
+  }, [activeLocale, getReportResults?.status, report?.status, submitReportResults?.status]);
 
   const rightComponent = useMemo(
     () => (
