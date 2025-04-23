@@ -118,8 +118,16 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
       setSubsetWeightError('');
     }
 
-    if (quantityChanged && isByWeight && !record.subsetCount) {
-      setSubsetCountError(strings.REQUIRED_FIELD);
+    if (quantityChanged && !isByWeight) {
+      if (!record.subsetCount) {
+        setSubsetCountError(strings.REQUIRED_FIELD);
+        hasErrors = true;
+      } else if (record.subsetCount <= 0) {
+        setSubsetCountError(strings.SUBSET_COUNT_POSITIVE);
+        hasErrors = true;
+      } else {
+        setSubsetCountError('');
+      }
     } else {
       setSubsetCountError('');
     }
@@ -312,6 +320,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
                 }
                 disabledCharacters={[',', '.', '-']}
                 required={true}
+                min={0}
               />
             ) : (
               <Box display='flex' textAlign='left' alignItems='end'>
