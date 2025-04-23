@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.57% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>31/38</span>
+                <span class='fraction'>32/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">61.11% </span>
+                <span class="strong">55% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>11/18</span>
+                <span class='fraction'>11/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">46.15% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>6/12</span>
+                <span class='fraction'>6/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.29% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>29/34</span>
+                <span class='fraction'>30/36</span>
             </div>
         
             
@@ -275,7 +275,29 @@
 <a name='L210'></a><a href='#L210'>210</a>
 <a name='L211'></a><a href='#L211'>211</a>
 <a name='L212'></a><a href='#L212'>212</a>
-<a name='L213'></a><a href='#L213'>213</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L213'></a><a href='#L213'>213</a>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a>
+<a name='L224'></a><a href='#L224'>224</a>
+<a name='L225'></a><a href='#L225'>225</a>
+<a name='L226'></a><a href='#L226'>226</a>
+<a name='L227'></a><a href='#L227'>227</a>
+<a name='L228'></a><a href='#L228'>228</a>
+<a name='L229'></a><a href='#L229'>229</a>
+<a name='L230'></a><a href='#L230'>230</a>
+<a name='L231'></a><a href='#L231'>231</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -427,7 +449,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -510,7 +546,11 @@ import { isAdmin, isManagerOrHigher, isMember } from './organization';
 /**
  * We split the permissions up loosely by the entity that the user is being authorized to interact with or view
  */
-type PermissionAcceleratorReports = 'UPDATE_REPORTS_SETTINGS' | 'EDIT_REPORTS' | 'READ_REPORTS';
+type PermissionAcceleratorReports =
+  | 'EDIT_REPORTS'
+  | 'READ_REPORTS'
+  | 'UPDATE_REPORTS_SETTINGS'
+  | 'UPDATE_REPORTS_TARGETS';
 type PermissionApplication =
   | 'READ_ALL_APPLICATIONS'
   | 'UPDATE_APPLICATION_INTERNAL_COMMENTS'
@@ -636,6 +676,19 @@ const isAllowedReadReports: PermissionCheckFn&lt;ReadReportsMetadata&gt; = <span
 };
 &nbsp;
 /**
+ * Function related to updating accelerator report targets, since the permission also applies to
+ * org roles, we need to check the passed-in organization
+ */
+type UpdateReportsTargetsMetadata = { organization: Organization };
+const isAllowedUpdateReportsTargets: PermissionCheckFn&lt;UpdateReportsTargetsMetadata&gt; = <span class="fstat-no" title="function not covered" >(</span>
+  user: User,
+  _: GlobalRolePermission,
+  metadata?: UpdateReportsTargetsMetadata
+): boolean =&gt; {
+<span class="cstat-no" title="statement not covered" >  return isAcceleratorAdmin(user) || isAdmin(metadata?.organization);</span>
+};
+&nbsp;
+/**
  * This is the main ACL entrypoint where all permissions are indicated through a global role
  * array or a function that returns a boolean
  */
@@ -670,6 +723,7 @@ const ACL: Record&lt;GlobalRolePermission, UserGlobalRoles | PermissionCheckFn&g
   UPDATE_PARTICIPANTS: AcceleratorAdminPlus,
   UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING: TFExpertPlus,
   UPDATE_REPORTS_SETTINGS: AcceleratorAdminPlus,
+  UPDATE_REPORTS_TARGETS: isAllowedUpdateReportsTargets,
   UPDATE_PARTICIPANT_PROJECT: TFExpertPlus,
   UPDATE_SUBMISSION_STATUS: TFExpertPlus,
   VIEW_CONSOLE: ReadOnlyPlus,
@@ -706,7 +760,7 @@ export const isAllowed: PermissionCheckFn = (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-23T20:32:48.160Z
+                at 2025-04-23T22:51:20.058Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
