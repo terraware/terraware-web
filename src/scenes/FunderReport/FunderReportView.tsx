@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { SelectT } from '@terraware/web-components';
@@ -15,6 +16,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PublishedReport, PublishedReportMetric } from 'src/types/AcceleratorReport';
 import useQuery from 'src/utils/useQuery';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import MetricBox from './MetricBox';
 
@@ -27,6 +29,8 @@ const FunderReportView = () => {
   const [reports, setReports] = useState<PublishedReport[]>();
   const [selectedReport, setSelectedReport] = useState<PublishedReport>();
   const query = useQuery();
+  const location = useStateLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if ((userFundingEntity?.projects?.length ?? 0) > 0) {
@@ -51,6 +55,8 @@ const FunderReportView = () => {
       if (query.get('reportId')) {
         const found = reports?.find((r) => r.reportId.toString() === query.get('reportId'));
         setSelectedReport(found || reports[0]);
+        query.delete('reportId');
+        navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       } else {
         setSelectedReport(reports[0]);
       }
