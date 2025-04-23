@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -16,6 +16,7 @@ import { selectAdHocObservationsResults } from 'src/redux/features/observations/
 import { getConditionString } from 'src/redux/features/observations/utils';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
+import MatchSpeciesModal, { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/details/MatchSpeciesModal';
 import ObservationsService from 'src/services/ObservationsService';
 import strings from 'src/strings';
 import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
@@ -26,7 +27,12 @@ import QuadratSpeciesTable from './QuadratSepciesTable';
 import TreesAndShrubsTable from './TreesAndShrubsTable';
 import MonitoringPlotPhotos from './plot/MonitoringPlotPhotos';
 
-export default function BiomassMeasurementsDetails(): JSX.Element {
+type BiomassMeasurementDetailsProps = {
+  reload: () => void;
+};
+
+export default function BiomassMeasurementsDetails(props: BiomassMeasurementDetailsProps): JSX.Element {
+  const { reload } = props;
   const { plantingSiteId, observationId } = useParams<{
     plantingSiteId: string;
     observationId: string;
@@ -36,6 +42,8 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
   const allAdHocObservationsResults = useAppSelector(selectAdHocObservationsResults);
   const defaultTimeZone = useDefaultTimeZone();
   const { isMobile } = useDeviceInfo();
+
+  const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
 
   const observation = allAdHocObservationsResults?.find(
     (obsResult) => obsResult?.observationId.toString() === observationId?.toString()
@@ -108,7 +116,7 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
         value: undefined,
       },
     ];
-  }, [activeLocale, defaultTimeZone, plantingSite]);
+  }, [activeLocale, biomassMeasurements, defaultTimeZone, plantingSite]);
 
   const title = (
     <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
@@ -142,6 +150,26 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
     (photo) => photo.type === 'Plot' && photo.position !== undefined && photo.position !== 'SouthwestCorner'
   );
 
+  const unrecognizedSpecies: string[] = useMemo(() => {
+    if (biomassMeasurements) {
+      const quadratSpeciesNames = biomassMeasurements.quadrats.flatMap((quadrat) =>
+        quadrat.species.map((species) => species.speciesName)
+      );
+      const treeSpeciesNames = biomassMeasurements.trees.map((tree) => tree.speciesName);
+      const additionalSpeciesNames = biomassMeasurements.additionalSpecies.map((species) => species.scientificName);
+      return Array.from(
+        new Set(
+          additionalSpeciesNames
+            .concat(quadratSpeciesNames)
+            .concat(treeSpeciesNames)
+            .filter((s): s is string => s !== undefined)
+        )
+      ).toSorted();
+    } else {
+      return [];
+    }
+  }, [biomassMeasurements]);
+
   const downloadCsv = async (
     fileNameSuffix: string,
     fetchContent: (observationId: number) => Promise<string | null>
@@ -174,6 +202,12 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
     await downloadCsv(strings.TREES_AND_SHRUBS, ObservationsService.exportBiomassTreesShrubsCsv);
   }, [observation, plantingSite]);
 
+  const onSaveMergedSpecies = useOnSaveMergedSpecies({
+    observationId,
+    reload,
+    setShowMatchSpeciesModal,
+  });
+
   return (
     <Page
       crumbs={crumbs}
@@ -197,10 +231,23 @@ export default function BiomassMeasurementsDetails(): JSX.Element {
               value: 'exportTreesAndShrubs',
               onClick: exportTreesShrubsCsv,
             },
+            {
+              label: strings.MATCH_UNRECOGNIZED_SPECIES,
+              value: 'matchUnrecognizedSpecies',
+              onClick: () => setShowMatchSpeciesModal(true),
+              disabled: unrecognizedSpecies.length === 0,
+            },
           ]}
         />
       }
     >
+      {showMatchSpeciesModal && (
+        <MatchSpeciesModal
+          onClose={() => setShowMatchSpeciesModal(false)}
+          onSave={onSaveMergedSpecies}
+          unrecognizedSpecies={unrecognizedSpecies || []}
+        />
+      )}
       <Grid container>
         <Grid item xs={12}>
           <Card flushMobile>

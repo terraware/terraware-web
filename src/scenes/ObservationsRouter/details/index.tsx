@@ -16,27 +16,21 @@ import {
   selectDetailsZoneNames,
 } from 'src/redux/features/observations/observationDetailsSelectors';
 import { searchObservations, selectObservation } from 'src/redux/features/observations/observationsSelectors';
-import { selectMergeOtherSpecies, selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import {
-  MergeOtherSpeciesRequestData,
-  requestMergeOtherSpecies,
-  requestSpecies,
-} from 'src/redux/features/species/speciesThunks';
+import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
+import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
-import MergedSuccessMessage from 'src/scenes/ObservationsRouter/common/MergedSuccessMessage';
 import strings from 'src/strings';
 import { ObservationState } from 'src/types/Observations';
 import { FieldOptionsMap } from 'src/types/Search';
 import { getLongDate, getShortDate } from 'src/utils/dateFormatter';
 import useQuery from 'src/utils/useQuery';
-import useSnackbar from 'src/utils/useSnackbar';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import ObservationMapView from '../map/ObservationMapView';
-import MatchSpeciesModal, { MergeOtherSpeciesPayloadPartial } from './MatchSpeciesModal';
+import MatchSpeciesModal, { useOnSaveMergedSpecies } from './MatchSpeciesModal';
 import ObservationDetailsList from './ObservationDetailsList';
 import ObservationStatusSummaryMessage, { ObservationStatusSummary } from './ObservationStatusSummaryMessage';
 
@@ -66,7 +60,6 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const [unrecognizedSpecies, setUnrecognizedSpecies] = useState<string[]>();
   const [showPageMessage, setShowPageMessage] = useState(false);
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
-  const [mergeRequestId, setMergeRequestId] = useState<string>('');
   const [status, setStatus] = useState<ObservationState[]>([]);
   const dispatch = useAppDispatch();
   const query = useQuery();
@@ -138,8 +131,6 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const observation = useAppSelector((state) => selectObservation(state, plantingSiteId, observationId));
   const zoneNames = useAppSelector((state) => selectDetailsZoneNames(state, plantingSiteId, observationId));
-  const matchResponse = useAppSelector(selectMergeOtherSpecies(mergeRequestId));
-  const snackbar = useSnackbar();
 
   const title = useMemo(() => {
     const plantingSiteName = details?.plantingSiteName ?? '';
@@ -223,32 +214,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     }
   }, [zoneNames, searchProps.filtersProps]);
 
-  useEffect(() => {
-    if (matchResponse?.status === 'success' && matchResponse?.data && matchResponse.data.length > 0) {
-      reload();
-      snackbar.toastSuccess([MergedSuccessMessage(matchResponse.data)], strings.SPECIES_MATCHED);
-    }
-    if (matchResponse?.status === 'error') {
-      snackbar.toastError();
-    }
-  }, [matchResponse]);
-
-  const onSaveMergedSpecies = (mergedSpeciesPayloads: MergeOtherSpeciesPayloadPartial[]) => {
-    const mergeOtherSpeciesRequestData: MergeOtherSpeciesRequestData[] = mergedSpeciesPayloads
-      .filter((sp) => !!sp.otherSpeciesName && !!sp.speciesId)
-      .map((sp) => ({
-        newName: speciesResponse?.data?.species?.find((existing) => existing.id === sp.speciesId)?.scientificName || '',
-        otherSpeciesName: sp.otherSpeciesName!,
-        speciesId: sp.speciesId!,
-      }));
-
-    if (mergeOtherSpeciesRequestData.length > 0) {
-      const request = dispatch(requestMergeOtherSpecies({ mergeOtherSpeciesRequestData, observationId }));
-      setMergeRequestId(request.requestId);
-    }
-
-    setShowMatchSpeciesModal(false);
-  };
+  const onSaveMergedSpecies = useOnSaveMergedSpecies({ observationId, reload, setShowMatchSpeciesModal });
 
   return (
     <DetailsPage

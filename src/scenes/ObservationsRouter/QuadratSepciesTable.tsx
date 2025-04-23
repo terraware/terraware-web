@@ -58,7 +58,7 @@ export default function QuadratSpeciesTable({ species, quadrat }: QuadratSpecies
         speciesName: foundSpecies?.scientificName || sp.scientificName || sp.speciesName,
       };
     });
-  }, [availableSpecies]);
+  }, [species, availableSpecies]);
 
   return (
     <Box minHeight={'160px'} padding={2}>
