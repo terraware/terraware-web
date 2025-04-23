@@ -1,3 +1,4 @@
+1ebf378a399 SW-6400 follow-up When changing orgs, planting site data is not updated correctly (#3851)
 668e3263548 SW-6806: Need to refresh after submitting a report to view status update (#3866)
 b733be012f3 Updated translations from Phrase (#3863)
 b0c92c08183 SW-6761: Reports page should not be accessible by Contributors & Managers (Follow-ups) (#3862)
