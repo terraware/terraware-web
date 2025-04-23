@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1745435151918" clover="3.2.0">
-  <project timestamp="1745435151918" name="All files">
+<coverage generated="1745440368850" clover="3.2.0">
+  <project timestamp="1745440368850" name="All files">
     <metrics statements="29977" coveredstatements="1243" conditionals="20386" coveredconditionals="354" methods="9241" coveredmethods="198" elements="59604" coveredelements="1795" complexity="0" loc="29977" ncloc="29977" packages="253" files="1233" classes="1233"/>
     <package name="src">
       <metrics statements="177" coveredstatements="8" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -19416,10 +19416,10 @@
         <line num="240" count="0" type="cond" truecount="0" falsecount="7"/>
         <line num="247" count="0" type="stmt"/>
         <line num="299" count="0" type="stmt"/>
-        <line num="321" count="0" type="stmt"/>
-        <line num="365" count="0" type="stmt"/>
-        <line num="404" count="0" type="stmt"/>
-        <line num="423" count="0" type="stmt"/>
+        <line num="322" count="0" type="stmt"/>
+        <line num="366" count="0" type="stmt"/>
+        <line num="405" count="0" type="stmt"/>
+        <line num="424" count="0" type="stmt"/>
       </file>
       <file name="ViabilityModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AccessionsRouter/edit/ViabilityModal.tsx">
         <metrics statements="32" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="7" coveredmethods="0"/>
