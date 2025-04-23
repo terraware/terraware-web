@@ -29,19 +29,35 @@ export const requestPlantingSite = (plantingSiteId: number, locale?: string | nu
   };
 };
 
-export const requestPlantingSites = (organizationId: number, locale?: string | null) => {
-  return async (dispatch: Dispatch, _getState: () => RootState) => {
+export const requestPlantingSites = createAsyncThunk(
+  'requestPlantingSites',
+  async (organizationId: number, { dispatch, getState, rejectWithValue, fulfillWithValue }) => {
     try {
-      const response = await TrackingService.listPlantingSites(organizationId, true, locale);
-      const { error, sites } = response;
-      dispatch(setPlantingSitesAction({ error, plantingSites: sites }));
+      const existingRequest = (getState() as RootState).tracking;
+
+      if (['success'].includes(existingRequest?.data?.status)) {
+        return fulfillWithValue(existingRequest?.data?.data?.plantingSites);
+      }
+
+      if (['pending'].includes(existingRequest?.data?.status)) {
+        return;
+      }
+
+      const response = await TrackingService.listPlantingSites(organizationId, true);
+      if (response && response.requestSucceeded) {
+        const { error, sites } = response;
+        dispatch(setPlantingSitesAction({ error, plantingSites: sites, organizationId }));
+        return fulfillWithValue(sites);
+      }
+
+      return rejectWithValue(strings.GENERIC_ERROR);
     } catch (e) {
       // should not happen, the response above captures any http request errors
       // tslint:disable-next-line: no-console
       console.error('Error dispatching planting sites', e);
     }
-  };
-};
+  }
+);
 
 export const requestSitePopulation = (organizationId: number, siteId: number) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {

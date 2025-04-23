@@ -5,6 +5,9 @@ import { PlantingSite } from 'src/types/Tracking';
 
 export const selectPlantingSites = (state: RootState) => state.tracking?.plantingSites;
 
+export const selectOrgPlantingSites = (organizationId: number) => (state: RootState) =>
+  state.tracking?.[organizationId]?.data?.plantingSites;
+
 export const selectPlantingSitesNames = createCachedSelector(
   (state: RootState) => selectPlantingSites(state),
   (plantingSites) => {
@@ -20,6 +23,9 @@ export const selectPlantingSitesError = (state: RootState) => state.tracking?.er
 
 export const selectPlantingSite = (state: RootState, plantingSiteId: number) =>
   selectPlantingSites(state)?.find((site: PlantingSite) => site.id === plantingSiteId);
+
+export const selectOrgPlantingSite = (state: RootState, plantingSiteId: number, orgId: number) =>
+  selectOrgPlantingSites(orgId)(state)?.find((site: PlantingSite) => site.id === plantingSiteId);
 
 export const selectSiteReportedPlants = (state: RootState, plantingSiteId: number) =>
   state.siteReportedPlantsResults[plantingSiteId]?.site;

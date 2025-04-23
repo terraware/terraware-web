@@ -14,7 +14,7 @@ import { selectLatestObservation } from 'src/redux/features/observations/observa
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { selectOrgPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
@@ -36,7 +36,7 @@ export const PlantingSiteStats = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const { selectedOrganization } = useOrganization();
-  const plantingSites = useAppSelector(selectPlantingSites);
+  const plantingSites = useAppSelector(selectOrgPlantingSites(selectedOrganization.id));
   const { token } = useMapboxToken();
   const defaultTimeZone = useDefaultTimeZone();
 
@@ -53,7 +53,7 @@ export const PlantingSiteStats = () => {
   );
 
   const observation = useAppSelector((state) =>
-    selectLatestObservation(state, selectedPlantingSiteId || -1, defaultTimeZone.get().id)
+    selectLatestObservation(state, selectedPlantingSiteId || -1, defaultTimeZone.get().id, selectedOrganization.id)
   );
   const plantings = useAppSelector((state) => selectPlantingsForSite(state, selectedPlantingSiteId || -1));
   const populationSelector = useAppSelector((state) => selectSitePopulationZones(state));
@@ -84,7 +84,7 @@ export const PlantingSiteStats = () => {
     if (selectedPlantingSiteId && selectedOrganization.id !== -1) {
       dispatch(requestSitePopulation(selectedOrganization.id, selectedPlantingSiteId));
     }
-  }, [selectedPlantingSiteId, dispatch]);
+  }, [selectedPlantingSiteId, selectedOrganization.id, dispatch]);
 
   // auto-select planting site when selectedPlantingSiteId is set
   useEffect(() => {

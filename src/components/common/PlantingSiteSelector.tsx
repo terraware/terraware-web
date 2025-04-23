@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dropdown } from '@terraware/web-components';
 
 import { useOrganization } from 'src/providers';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { selectOrgPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
@@ -15,17 +15,17 @@ type PlantingSiteSelectorProps = {
 
 export default function PlantingSiteSelector({ onChange, hideNoBoundary }: PlantingSiteSelectorProps): JSX.Element {
   // assume `requestPlantingSites` thunk has been dispatched by consumer
-  const plantingSites = useAppSelector(selectPlantingSites);
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number | undefined>();
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
+  const plantingSites = useAppSelector(selectOrgPlantingSites(selectedOrganization.id));
 
-  const options = useMemo(
-    () =>
-      plantingSites
-        ?.filter((ps) => (hideNoBoundary ? !!ps.boundary : true))
-        .map((site) => ({ label: site.name, value: site.id })) ?? [],
-    [plantingSites]
-  );
+  const filteredPlantingSites = useMemo(() => {
+    return plantingSites?.filter((ps) => (hideNoBoundary ? !!ps.boundary : true));
+  }, [plantingSites, hideNoBoundary]);
+
+  const options = useMemo(() => {
+    return filteredPlantingSites?.map((site) => ({ label: site.name, value: site.id })) ?? [];
+  }, [filteredPlantingSites]);
 
   const updateSelection = useCallback(
     async (newValue: any) => {
@@ -39,7 +39,7 @@ export default function PlantingSiteSelector({ onChange, hideNoBoundary }: Plant
         reloadOrgPreferences();
       }
     },
-    [onChange]
+    [onChange, orgPreferences.lastPlantingSiteSelected, selectedOrganization.id]
   );
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export default function PlantingSiteSelector({ onChange, hideNoBoundary }: Plant
         updateSelection(plantingSites[0]?.id);
       }
     }
-  }, [plantingSites, selectedPlantingSiteId, updateSelection]);
+  }, [plantingSites, selectedPlantingSiteId, updateSelection, orgPreferences.lastPlantingSiteSelected]);
 
   return (
     <Dropdown

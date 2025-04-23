@@ -15,7 +15,7 @@ import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { selectOrgPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AccessionsRouter from 'src/scenes/AccessionsRouter';
@@ -66,7 +66,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
 
   const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
   const hasObservationsResults: boolean = useAppSelector(selectHasObservationsResults);
-  const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
+  const plantingSites: PlantingSite[] | undefined = useAppSelector(selectOrgPlantingSites(selectedOrganization.id));
   const projects: Project[] | undefined = useAppSelector(selectProjects);
 
   const contentStyles = {
@@ -114,7 +114,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const reloadPlantingSites = useCallback(() => {
     const populatePlantingSites = () => {
       if (!isPlaceholderOrg(selectedOrganization.id)) {
-        void dispatch(requestPlantingSites(selectedOrganization.id, activeLocale || undefined));
+        void dispatch(requestPlantingSites(selectedOrganization.id));
       }
     };
     populatePlantingSites();

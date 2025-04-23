@@ -2,7 +2,7 @@
 import { createCachedSelector } from 're-reselect';
 
 import { selectDefaultSpecies } from 'src/redux/features/species/speciesSelectors';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { selectOrgPlantingSites, selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { RootState } from 'src/redux/rootReducer';
 import {
   Observation,
@@ -19,6 +19,8 @@ export const ALL_STATES: ObservationState[] = ['Abandoned', 'Completed', 'Overdu
  * Observations results selectors below
  */
 export const selectObservationsResults = (state: RootState) => state.observationsResults?.observations;
+export const selectOrgObservationsResults = (orgId: number) => (state: RootState) =>
+  state.observationsResults?.[orgId]?.data?.observations;
 export const selectObservationsResultsError = (state: RootState) => state.observationsResults?.error;
 export const selectHasObservationsResults = (state: RootState) => {
   const results = selectObservationsResults(state);
@@ -37,9 +39,10 @@ export const selectHasCompletedObservations = (state: RootState, plantingSiteId:
  * Preserves order of results.
  */
 export const selectPlantingSiteObservationsResults = createCachedSelector(
-  (state: RootState, plantingSiteId: number, status?: ObservationState[]) => selectObservationsResults(state),
-  (state: RootState, plantingSiteId: number, status?: ObservationState[]) => plantingSiteId,
-  (state: RootState, plantingSiteId: number, status?: ObservationState[]) => status,
+  (state: RootState, plantingSiteId: number, status?: ObservationState[], orgId?: number) =>
+    orgId && orgId !== -1 ? selectOrgObservationsResults(orgId)(state) : selectObservationsResults(state),
+  (state: RootState, plantingSiteId: number, status?: ObservationState[], orgId?: number) => plantingSiteId,
+  (state: RootState, plantingSiteId: number, status?: ObservationState[], orgId?: number) => status,
   (observationsResults, plantingSiteId, status) => {
     if (plantingSiteId === -1 && !status?.length) {
       // default to hide Upcoming if no status is selected
@@ -74,13 +77,15 @@ export const selectPlantingSiteAdHocObservationsResults = createCachedSelector(
  * Preserves order of results.
  */
 export const selectMergedPlantingSiteObservations = createCachedSelector(
-  (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[]) =>
-    selectPlantingSiteObservationsResults(state, plantingSiteId, status),
-  (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[]) =>
-    selectPlantingSites(state),
-  (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[]) =>
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[], orgId?: number) =>
+    selectPlantingSiteObservationsResults(state, plantingSiteId, status, orgId),
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[], orgId?: number) => {
+    return orgId && orgId !== -1 ? selectOrgPlantingSites(orgId)(state) : selectPlantingSites(state);
+  },
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[], orgId?: number) =>
     selectDefaultSpecies(state),
-  (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[]) => defaultTimeZone,
+  (state: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[], orgId?: number) =>
+    defaultTimeZone,
 
   // here we have the responses from first three selectors
   // merge the results so observations results have names and boundaries and time zones applied
@@ -124,7 +129,8 @@ export const searchObservations = createCachedSelector(
     defaultTimeZone: string,
     search: string,
     zoneNames: string[],
-    status?: ObservationState[]
+    status?: ObservationState[],
+    orgId?: number
   ) => search,
   (
     state: RootState,
@@ -132,7 +138,8 @@ export const searchObservations = createCachedSelector(
     defaultTimeZone: string,
     search: string,
     zoneNames: string[],
-    status?: ObservationState[]
+    status?: ObservationState[],
+    orgId?: number
   ) => zoneNames,
   (
     state: RootState,
@@ -140,8 +147,9 @@ export const searchObservations = createCachedSelector(
     defaultTimeZone: string,
     search: string,
     zoneNames: string[],
-    status?: ObservationState[]
-  ) => selectMergedPlantingSiteObservations(state, plantingSiteId, defaultTimeZone, status),
+    status?: ObservationState[],
+    orgId?: number
+  ) => selectMergedPlantingSiteObservations(state, plantingSiteId, defaultTimeZone, status, orgId),
   searchZones
 )(
   (
@@ -150,7 +158,8 @@ export const searchObservations = createCachedSelector(
     defaultTimeZone: string,
     search: string,
     zoneNames: string[],
-    status?: ObservationState[]
+    status?: ObservationState[],
+    orgId?: number
   ) =>
     `${plantingSiteId}_${defaultTimeZone}_${search}_${Array.from(new Set(zoneNames)).toString()}_${status?.join(',')}`
 );
@@ -220,12 +229,15 @@ export const selectPlantingSiteAdHocObservations = createCachedSelector(
 
 // get the latest observation for a planting site
 export const selectLatestObservation = createCachedSelector(
-  (state: RootState, plantingSiteId: number, defaultTimeZoneId: string) =>
-    searchObservations(state, plantingSiteId, defaultTimeZoneId, '', []),
+  (state: RootState, plantingSiteId: number, defaultTimeZoneId: string, orgId?: number) =>
+    searchObservations(state, plantingSiteId, defaultTimeZoneId, '', [], [], orgId),
   (observationsResults: ObservationResults[] | undefined) =>
     // the order of results (as returned by the server) are in reverse completed-time order, most recent completed will show up first
     observationsResults?.filter((result: ObservationResults) => result.completedTime)?.[0]
-)((state: RootState, plantingSiteId: number, defaultTimeZoneId: string) => `${plantingSiteId}-${defaultTimeZoneId}`);
+)(
+  (state: RootState, plantingSiteId: number, defaultTimeZoneId: string, orgId?: number) =>
+    `${plantingSiteId}-${defaultTimeZoneId}`
+);
 
 // scheduling selectors
 
