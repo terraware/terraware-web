@@ -14,14 +14,13 @@ import {
   selectAdHocObservationsResults,
 } from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
+import { AllPlantingSitesMapView } from 'src/scenes/ObservationsRouter/ObservationsDataView';
+import BiomassMeasurementList from 'src/scenes/ObservationsRouter/biomass/BiomassMeasurementListView';
+import BiomassMeasurementMapView from 'src/scenes/ObservationsRouter/biomass/BiomassMeasurementMapView';
 import { ObservationsService } from 'src/services';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-
-import BiomassMeasurementList from './BiomassMeasurementListView';
-import BiomassMeasurementMapView from './BiomassMeasurementMapView';
-import { AllPlantingSitesMapView } from './ObservationsDataView';
 
 export type BiomassMeasurementProps = SearchProps & {
   selectedPlantingSite?: PlantingSite;

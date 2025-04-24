@@ -4,8 +4,8 @@ import { useOrganization } from 'src/providers';
 import { selectMergeOtherSpecies, selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { MergeOtherSpeciesRequestData, requestMergeOtherSpecies } from 'src/redux/features/species/speciesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { MergeOtherSpeciesPayloadPartial } from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
 import MergedSuccessMessage from 'src/scenes/ObservationsRouter/common/MergedSuccessMessage';
-import { MergeOtherSpeciesPayloadPartial } from 'src/scenes/ObservationsRouter/details/MatchSpeciesModal';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 

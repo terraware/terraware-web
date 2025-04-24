@@ -17,13 +17,13 @@ import {
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import BiomassMeasurement from 'src/scenes/ObservationsRouter/biomass/BiomassMeasurement';
 import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
 import { PlantingSite } from 'src/types/Tracking';
 import { isAdmin } from 'src/utils/organization';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
-import BiomassMeasurement from './BiomassMeasurement';
 import ObservationsEventsNotification from './ObservationsEventsNotification';
 import PlantMonitoring from './PlantMonitoring';
 

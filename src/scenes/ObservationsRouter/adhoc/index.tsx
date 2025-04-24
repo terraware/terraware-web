@@ -14,14 +14,13 @@ import { getConditionString } from 'src/redux/features/observations/utils';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
+import MonitoringPlotPhotos from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotos';
 import SpeciesMortalityRateChart from 'src/scenes/ObservationsRouter/common/SpeciesMortalityRateChart';
 import SpeciesTotalPlantsChart from 'src/scenes/ObservationsRouter/common/SpeciesTotalPlantsChart';
 import strings from 'src/strings';
 import { getShortTime } from 'src/utils/dateFormatter';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-
-import MonitoringPlotPhotos from './MonitoringPlotPhotos';
 
 export default function ObservationMonitoringPlot(): JSX.Element {
   const { plantingSiteId, observationId, plantingZoneName, monitoringPlotId } = useParams<{
