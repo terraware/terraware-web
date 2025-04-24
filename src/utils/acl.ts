@@ -191,7 +191,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   READ_PARTICIPANT_PROJECT: ReadOnlyPlus,
   READ_REPORTS: isAllowedReadReports,
   READ_SUBMISSION_DOCUMENT: ReadOnlyPlus,
-  UPDATE_APPLICATION_INTERNAL_COMMENTS: AcceleratorAdminPlus,
+  UPDATE_APPLICATION_INTERNAL_COMMENTS: TFExpertPlus,
   UPDATE_APPLICATION_STATUS: TFExpertPlus,
   UPDATE_COHORTS: AcceleratorAdminPlus,
   UPDATE_DELIVERABLE: TFExpertPlus,
