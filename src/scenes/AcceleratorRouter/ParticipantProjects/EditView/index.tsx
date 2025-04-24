@@ -137,17 +137,17 @@ const EditView = () => {
     }
   }, [participantProjectRecord, dispatch]);
 
-  const saveTFContact = () => {
-    if (organization && tfContact) {
+  const saveTFContact = useCallback(() => {
+    if (project?.organizationId && tfContact) {
       const assignRequest = dispatch(
         requestAssignTerraformationContact({
-          organizationId: organization.id,
+          organizationId: project?.organizationId,
           terraformationContactId: tfContact?.value,
         })
       );
       setAssignTfContactRequestId(assignRequest.requestId);
     }
-  };
+  }, [tfContact, dispatch, project?.organizationId]);
 
   const handleOnCancel = useCallback(() => goToParticipantProject(projectId), [goToParticipantProject, projectId]);
 
@@ -250,7 +250,7 @@ const EditView = () => {
               onChange={onChangeParticipantProject}
               value={participantProjectRecord?.fileNaming}
             />
-            <GridEntryWrapper>
+            <GridEntryWrapper height={'100px'}>
               <Box paddingX={theme.spacing(2)}>
                 <Dropdown
                   id='projectLead'
