@@ -22,7 +22,7 @@ import SpeciesMortalityRateChart from 'src/scenes/ObservationsRouter/common/Spec
 import SpeciesTotalPlantsChart from 'src/scenes/ObservationsRouter/common/SpeciesTotalPlantsChart';
 import MatchSpeciesModal from 'src/scenes/ObservationsRouter/details/MatchSpeciesModal';
 import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/details/UnrecognizedSpeciesPageMessage';
-import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/details/UseOnSaveMergedSpecies';
+import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/details/useOnSaveMergedSpecies';
 import strings from 'src/strings';
 import { getShortTime } from 'src/utils/dateFormatter';
 import useDeviceInfo from 'src/utils/useDeviceInfo';

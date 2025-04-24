@@ -18,7 +18,7 @@ import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelector
 import { useAppSelector } from 'src/redux/store';
 import MatchSpeciesModal from 'src/scenes/ObservationsRouter/details/MatchSpeciesModal';
 import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/details/UnrecognizedSpeciesPageMessage';
-import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/details/UseOnSaveMergedSpecies';
+import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/details/useOnSaveMergedSpecies';
 import ObservationsService from 'src/services/ObservationsService';
 import strings from 'src/strings';
 import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
