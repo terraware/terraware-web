@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Grid, Typography } from '@mui/material';
-import { Button, Message } from '@terraware/web-components';
+import { Grid } from '@mui/material';
 import _ from 'lodash';
 
 import ListMapView from 'src/components/ListMapView';
@@ -22,6 +21,7 @@ import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelector
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
+import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/details/UnrecognizedSpeciesPageMessage';
 import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/details/UseOnSaveMergedSpecies';
 import strings from 'src/strings';
 import { ObservationState } from 'src/types/Observations';
@@ -179,15 +179,6 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     }
   }, [details]);
 
-  const pageMessage = (
-    <Box key='unrecognized-species-message'>
-      <Typography>{strings.UNRECOGNIZED_SPECIES_MESSAGE}</Typography>
-      <ul style={{ margin: 0 }}>
-        {unrecognizedSpecies?.map((species, index) => <li key={`species-${index}`}>{species}</li>)}
-      </ul>
-    </Box>
-  );
-
   useEffect(() => {
     setFilterOptions({
       zone: {
@@ -235,34 +226,11 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
       }
     >
       {showPageMessage && (
-        <Box marginTop={1} marginBottom={4} width={'100%'}>
-          <Message
-            body={pageMessage}
-            onClose={() => setShowPageMessage(false)}
-            priority='warning'
-            showCloseButton
-            title={strings.UNRECOGNIZED_SPECIES}
-            type='page'
-            pageButtons={[
-              <Button
-                onClick={() => setShowPageMessage(false)}
-                label={strings.DISMISS}
-                priority='secondary'
-                type='passive'
-                key='button-1'
-                size='small'
-              />,
-              <Button
-                onClick={() => setShowMatchSpeciesModal(true)}
-                label={strings.MATCH_SPECIES}
-                priority='secondary'
-                type='passive'
-                key='button-2'
-                size='small'
-              />,
-            ]}
-          />
-        </Box>
+        <UnrecognizedSpeciesPageMessage
+          setShowMatchSpeciesModal={setShowMatchSpeciesModal}
+          setShowPageMessage={setShowPageMessage}
+          unrecognizedSpecies={unrecognizedSpecies || []}
+        />
       )}
       {showMatchSpeciesModal && (
         <MatchSpeciesModal

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -17,6 +17,7 @@ import { getConditionString } from 'src/redux/features/observations/utils';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import MatchSpeciesModal from 'src/scenes/ObservationsRouter/details/MatchSpeciesModal';
+import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/details/UnrecognizedSpeciesPageMessage';
 import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/details/UseOnSaveMergedSpecies';
 import ObservationsService from 'src/services/ObservationsService';
 import strings from 'src/strings';
@@ -44,6 +45,8 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
   const defaultTimeZone = useDefaultTimeZone();
   const { isMobile } = useDeviceInfo();
 
+  const [unrecognizedSpecies, setUnrecognizedSpecies] = useState<string[]>([]);
+  const [showPageMessage, setShowPageMessage] = useState(false);
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
 
   const observation = allAdHocObservationsResults?.find(
@@ -151,14 +154,14 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
     (photo) => photo.type === 'Plot' && photo.position !== undefined && photo.position !== 'SouthwestCorner'
   );
 
-  const unrecognizedSpecies: string[] = useMemo(() => {
+  useEffect(() => {
     if (biomassMeasurements) {
       const quadratSpeciesNames = biomassMeasurements.quadrats.flatMap((quadrat) =>
         quadrat.species.map((species) => species.speciesName)
       );
       const treeSpeciesNames = biomassMeasurements.trees.map((tree) => tree.speciesName);
       const additionalSpeciesNames = biomassMeasurements.additionalSpecies.map((species) => species.scientificName);
-      return Array.from(
+      const combinedNames = Array.from(
         new Set(
           additionalSpeciesNames
             .concat(quadratSpeciesNames)
@@ -166,10 +169,11 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
             .filter((s): s is string => s !== undefined)
         )
       ).toSorted();
-    } else {
-      return [];
+
+      setUnrecognizedSpecies(combinedNames);
+      setShowPageMessage(combinedNames.length > 0);
     }
-  }, [biomassMeasurements]);
+  }, [biomassMeasurements, setShowPageMessage, setUnrecognizedSpecies]);
 
   const downloadCsv = async (
     fileNameSuffix: string,
@@ -242,6 +246,13 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
         />
       }
     >
+      {showPageMessage && (
+        <UnrecognizedSpeciesPageMessage
+          setShowMatchSpeciesModal={setShowMatchSpeciesModal}
+          setShowPageMessage={setShowPageMessage}
+          unrecognizedSpecies={unrecognizedSpecies || []}
+        />
+      )}
       {showMatchSpeciesModal && (
         <MatchSpeciesModal
           onClose={() => setShowMatchSpeciesModal(false)}
