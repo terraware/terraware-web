@@ -4,9 +4,8 @@ import { Box } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
+import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import strings from 'src/strings';
-
-import { useSpecies } from '../InventoryRouter/form/useSpecies';
 
 type QuadratSpeciesTableProps = {
   species?: {

@@ -18,17 +18,16 @@ import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelector
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
+import MatchSpeciesModal from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
+import MonitoringPlotPhotos from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotos';
 import SpeciesMortalityRateChart from 'src/scenes/ObservationsRouter/common/SpeciesMortalityRateChart';
 import SpeciesTotalPlantsChart from 'src/scenes/ObservationsRouter/common/SpeciesTotalPlantsChart';
-import MatchSpeciesModal from 'src/scenes/ObservationsRouter/details/MatchSpeciesModal';
-import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/details/UnrecognizedSpeciesPageMessage';
-import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/details/useOnSaveMergedSpecies';
+import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/common/UnrecognizedSpeciesPageMessage';
+import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/common/useOnSaveMergedSpecies';
 import strings from 'src/strings';
 import { getShortTime } from 'src/utils/dateFormatter';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-
-import MonitoringPlotPhotos from './MonitoringPlotPhotos';
 
 type AdHocObservationDetailsProps = {
   reload: () => void;

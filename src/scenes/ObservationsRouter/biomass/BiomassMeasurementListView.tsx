@@ -3,10 +3,9 @@ import React from 'react';
 import { TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
+import BiomassMeasurementRenderer from 'src/scenes/ObservationsRouter/biomass/BiomassMeasurementRenderer';
 import strings from 'src/strings';
 import { ObservationResultsPayload } from 'src/types/Observations';
-
-import BiomassMeasurementRenderer from './BiomassMeasurementRenderer';
 
 export type BiomassMeasurementListProps = {
   adHocObservationsResults?: ObservationResultsPayload[];

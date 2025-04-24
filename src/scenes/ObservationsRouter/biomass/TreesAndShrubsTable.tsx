@@ -4,12 +4,11 @@ import { Box } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
+import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
+import DescriptionModal from 'src/scenes/ObservationsRouter/biomass/DescriptionModal';
+import TreesAndShrubsRenderer from 'src/scenes/ObservationsRouter/biomass/TreesAndShrubsRenderer';
 import strings from 'src/strings';
 import { ExistingTreePayload } from 'src/types/Observations';
-
-import { useSpecies } from '../InventoryRouter/form/useSpecies';
-import DescriptionModal from './DescriptionModal';
-import TreesAndShrubsRenderer from './TreesAndShrubsRenderer';
 
 type TreesAndShrubsTableProps = {
   trees?: ExistingTreePayload[];

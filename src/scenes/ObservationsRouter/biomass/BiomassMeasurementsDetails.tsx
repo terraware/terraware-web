@@ -16,18 +16,17 @@ import { selectAdHocObservationsResults } from 'src/redux/features/observations/
 import { getConditionString } from 'src/redux/features/observations/utils';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
-import MatchSpeciesModal from 'src/scenes/ObservationsRouter/details/MatchSpeciesModal';
-import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/details/UnrecognizedSpeciesPageMessage';
-import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/details/useOnSaveMergedSpecies';
+import LiveTreesPerSpecies from 'src/scenes/ObservationsRouter/biomass/LiveTreesPerSpecies';
+import QuadratSpeciesTable from 'src/scenes/ObservationsRouter/biomass/QuadratSpeciesTable';
+import TreesAndShrubsTable from 'src/scenes/ObservationsRouter/biomass/TreesAndShrubsTable';
+import MatchSpeciesModal from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
+import MonitoringPlotPhotos from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotos';
+import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/common/UnrecognizedSpeciesPageMessage';
+import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/common/useOnSaveMergedSpecies';
 import ObservationsService from 'src/services/ObservationsService';
 import strings from 'src/strings';
 import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-
-import LiveTreesPerSpecies from './LiveTreesPerSpecies';
-import QuadratSpeciesTable from './QuadratSepciesTable';
-import TreesAndShrubsTable from './TreesAndShrubsTable';
-import MonitoringPlotPhotos from './plot/MonitoringPlotPhotos';
 
 type BiomassMeasurementDetailsProps = {
   reload: () => void;

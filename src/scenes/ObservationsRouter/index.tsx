@@ -20,17 +20,17 @@ import { selectSpecies, selectSpeciesError } from 'src/redux/features/species/sp
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { selectPlantingSites, selectPlantingSitesError } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import BiomassMeasurementsDetails from 'src/scenes/ObservationsRouter/biomass/BiomassMeasurementsDetails';
 import strings from 'src/strings';
 import { ObservationState, getStatus } from 'src/types/Observations';
 import { FieldOptionsMap, FieldValuesPayload } from 'src/types/Search';
 import { isAdmin } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import BiomassMeasurementsDetails from './BiomassMeasurementsDetails';
 import ObservationsHome from './ObservationsHome';
+import ObservationMonitoringPlotDetails from './adhoc';
+import AdHocObservationDetails from './adhoc/AdHocObservationDetails';
 import ObservationDetails from './details';
-import ObservationMonitoringPlotDetails from './plot';
-import AdHocObservationDetails from './plot/AdHocObservationDetails';
 import { RescheduleObservation, ScheduleObservation } from './schedule';
 import ObservationPlantingZoneDetails from './zone';
 

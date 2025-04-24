@@ -14,6 +14,7 @@ import {
   selectPlantingSiteObservations,
 } from 'src/redux/features/observations/observationsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import AdHocObservationsRenderer from 'src/scenes/ObservationsRouter/adhoc/AdHocObservationsRenderer';
 import { ObservationsService } from 'src/services';
 import strings from 'src/strings';
 import {
@@ -26,7 +27,6 @@ import { getShortDate } from 'src/utils/dateFormatter';
 import { isAdmin } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import AdHocObservationsRenderer from '../AdHocObservationsRenderer';
 import EndObservationModal from './EndObservationModal';
 import OrgObservationsRenderer from './OrgObservationsRenderer';
 

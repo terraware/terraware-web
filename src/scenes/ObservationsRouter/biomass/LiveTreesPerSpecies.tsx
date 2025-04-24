@@ -1,9 +1,8 @@
 import React, { useMemo } from 'react';
 
 import BarChart from 'src/components/common/Chart/BarChart';
+import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import { ExistingTreePayload } from 'src/types/Observations';
-
-import { useSpecies } from '../InventoryRouter/form/useSpecies';
 
 export type LiveTreesPerSpeciesProps = {
   trees?: ExistingTreePayload[];
