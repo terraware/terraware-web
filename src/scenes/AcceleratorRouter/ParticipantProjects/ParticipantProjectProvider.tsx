@@ -103,15 +103,15 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   }, [getParticipantProjectResult, snackbar]);
 
   useEffect(() => {
-    if (!acceleratorOrgs || !project?.organizationId) {
+    if (!acceleratorOrgs || !project?.organizationId || project.organizationId === organization?.id) {
       return;
     }
 
     setOrganization(acceleratorOrgs.find((org) => org.id === project.organizationId));
   }, [acceleratorOrgs, project?.organizationId]);
 
-  useEffect(() => {
-    setParticipantProjectData({
+  const participantProjectDataValues = useMemo(
+    () => ({
       crumbs,
       organization,
       participant,
@@ -121,18 +121,23 @@ const ParticipantProjectProvider = ({ children }: Props) => {
       projectMeta,
       status: getParticipantProjectResult?.status ?? 'pending',
       reload,
-    });
-  }, [
-    crumbs,
-    getParticipantProjectResult,
-    organization,
-    participant,
-    participantProject,
-    project,
-    projectId,
-    projectMeta,
-    reload,
-  ]);
+    }),
+    [
+      crumbs,
+      getParticipantProjectResult?.status,
+      organization,
+      participant,
+      participantProject,
+      project,
+      projectId,
+      projectMeta,
+      reload,
+    ]
+  );
+
+  useEffect(() => {
+    setParticipantProjectData(participantProjectDataValues);
+  }, [participantProjectDataValues]);
 
   return (
     <ParticipantProjectContext.Provider value={participantProjectData}>{children}</ParticipantProjectContext.Provider>
