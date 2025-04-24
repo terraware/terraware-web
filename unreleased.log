@@ -1,3 +1,4 @@
+f3832c04e6b SW-6815 Add static map to project profile (#3865)
 6b65adfc7f0 Update dependency http-proxy-middleware to v2.0.8 [SECURITY] (#3877)
 4e02d1e8e0a Update Browserslist DB (#3879)
 176df9ddff9 Fix node warning in console: `util._extend` API is deprecated (#3875)
