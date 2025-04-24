@@ -205,10 +205,5 @@
     "wrap-ansi": "7.0.0",
     "string-width": "4.2.3",
     "strip-ansi": "6.0.1"
-  },
-  "overrides": {
-    "http-proxy-middleware": {
-      "http-proxy": "github:nikeee/node-http-proxy#b42c38fc3486ee8ad4374cc2397458b6e4cd99ca"
-    }
   }
 }
