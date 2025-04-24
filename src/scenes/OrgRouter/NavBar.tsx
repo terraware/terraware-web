@@ -23,7 +23,7 @@ import { listOrganizationFeatures } from 'src/redux/features/organizations/organ
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { NurseryWithdrawalService } from 'src/services';
 import strings from 'src/strings';
-import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
+import { isAdmin, isContributor, isManagerOrHigher } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type NavBarProps = {
@@ -119,7 +119,7 @@ export default function NavBar({
   }, [withdrawalCreated, checkNurseryWithdrawals, showNurseryWithdrawals]);
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) {
+    if (selectedOrganization.id !== -1 && !isContributor(selectedOrganization)) {
       const request = dispatch(requestOrganizationFeatures({ organizationId: selectedOrganization.id }));
       setOrgFeaturesRequestId(request.requestId);
     }
