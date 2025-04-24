@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/45</span>
+                <span class='fraction'>0/47</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/46</span>
             </div>
         
             
@@ -205,7 +205,12 @@
 <a name='L140'></a><a href='#L140'>140</a>
 <a name='L141'></a><a href='#L141'>141</a>
 <a name='L142'></a><a href='#L142'>142</a>
-<a name='L143'></a><a href='#L143'>143</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -339,6 +344,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -452,15 +462,15 @@ const ParticipantProjectProvider = <span class="cstat-no" title="statement not c
   }, [getParticipantProjectResult, snackbar]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!acceleratorOrgs || !project?.organizationId) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!acceleratorOrgs || !project?.organizationId || project.organizationId === organization?.id) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    setOrganization(acceleratorOrgs.find(<span class="fstat-no" title="function not covered" >(o</span>rg) =&gt; <span class="cstat-no" title="statement not covered" >org.id === project.organizationId)</span>);</span>
   }, [acceleratorOrgs, project?.organizationId]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setParticipantProjectData({</span>
+  const participantProjectDataValues = <span class="cstat-no" title="statement not covered" >useMemo(</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
       crumbs,
       organization,
       participant,
@@ -470,18 +480,23 @@ const ParticipantProjectProvider = <span class="cstat-no" title="statement not c
       projectMeta,
       status: getParticipantProjectResult?.status ?? 'pending',
       reload,
-    });
-  }, [
-    crumbs,
-    getParticipantProjectResult,
-    organization,
-    participant,
-    participantProject,
-    project,
-    projectId,
-    projectMeta,
-    reload,
-  ]);
+    }),
+    [
+      crumbs,
+      getParticipantProjectResult?.status,
+      organization,
+      participant,
+      participantProject,
+      project,
+      projectId,
+      projectMeta,
+      reload,
+    ]
+  );
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    setParticipantProjectData(participantProjectDataValues);</span>
+  }, [participantProjectDataValues]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;ParticipantProjectContext.Provider value={participantProjectData}&gt;{children}&lt;/ParticipantProjectContext.Provider&gt;
@@ -496,7 +511,7 @@ export default ParticipantProjectProvider;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-24T15:40:37.049Z
+                at 2025-04-24T18:58:11.391Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
