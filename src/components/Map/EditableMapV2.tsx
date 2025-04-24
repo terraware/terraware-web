@@ -15,12 +15,11 @@ import ReactMapGL, {
 import { AddressAutofillFeatureSuggestion } from '@mapbox/search-js-core';
 import { Box, useTheme } from '@mui/material';
 import bbox from '@turf/bbox';
-import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
+import { Feature, FeatureCollection } from 'geojson';
 
 import EditableMapDraw, { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
 import { useIsVisible } from 'src/hooks/useIsVisible';
 import {
-  MapDrawingLayer,
   MapEntityId,
   MapEntityOptions,
   MapErrorLayer,
@@ -36,7 +35,7 @@ import MapSearchBox from './MapSearchBox';
 import { useMapViewStyle } from './MapViewStyleControl';
 import MapViewStyleSwitch from './MapViewStyleSwitch';
 import UndoRedoControl from './UndoRedoControl';
-import { getMapDrawingLayer, getMapErrorLayer, toMultiPolygon } from './utils';
+import { boundariesToViewState, getMapErrorLayer, readOnlyBoundariesToMapLayers } from './utils';
 
 // Callback to select one feature from among list of features on the map that overlap the click target.
 export type LayerFeature = MapboxGeoJSONFeature;
@@ -98,22 +97,7 @@ export default function EditableMap({
 
   const initialViewState = useMemo<{ bounds: LngLatBoundsLike } | undefined>(() => {
     if (readOnlyBoundary?.length) {
-      const coordinates = readOnlyBoundary
-        .flatMap((b) => b.data.features)
-        .flatMap((feature) => toMultiPolygon(feature.geometry))
-        .filter((poly: MultiPolygon | null): poly is MultiPolygon => poly !== null)
-        .flatMap((poly: MultiPolygon) => poly.coordinates);
-
-      return {
-        bounds: bbox({
-          type: 'MultiPolygon',
-          coordinates,
-        }) as LngLatBoundsLike,
-        fitBoundsOptions: {
-          animate: false,
-          padding: 25,
-        },
-      };
+      return boundariesToViewState(readOnlyBoundary);
     } else if (editableBoundary) {
       return {
         bounds: bbox(editableBoundary) as LngLatBoundsLike,
@@ -128,21 +112,7 @@ export default function EditableMap({
   }, [editableBoundary, readOnlyBoundary]);
 
   const mapLayers = useMemo(() => {
-    if (!readOnlyBoundary?.length) {
-      return null;
-    }
-
-    return readOnlyBoundary.map((boundaryData: RenderableReadOnlyBoundary) => {
-      const drawingLayer: MapDrawingLayer = getMapDrawingLayer(boundaryData.renderProperties, boundaryData.id);
-      return (
-        <Source type='geojson' key={boundaryData.id} data={boundaryData.data} id={boundaryData.id}>
-          {drawingLayer.patternFill && <Layer {...drawingLayer.patternFill} />}
-          {drawingLayer.textAnnotation && <Layer {...drawingLayer.textAnnotation} />}
-          {drawingLayer.layerOutline && <Layer {...drawingLayer.layerOutline} />}
-          {drawingLayer.layer && <Layer {...drawingLayer.layer} />}
-        </Source>
-      );
-    });
+    return readOnlyBoundariesToMapLayers(readOnlyBoundary);
   }, [readOnlyBoundary]);
 
   const errorLayer = useMemo(() => {

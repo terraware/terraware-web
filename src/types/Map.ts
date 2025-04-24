@@ -158,10 +158,13 @@ export type MapControl = {
 /**
  * Map view style
  */
-export type MapViewStyle = 'Outdoors' | 'Satellite';
+export type MapViewStyle = 'Outdoors' | 'Satellite' | 'Light' | 'Dark' | 'Streets';
 export const MapViewStyles: Record<MapViewStyle, string> = {
   Outdoors: 'mapbox://styles/mapbox/outdoors-v12?optimize=true',
   Satellite: 'mapbox://styles/mapbox/satellite-streets-v12?optimize=true',
+  Streets: 'mapbox://styles/mapbox/streets-v12?optimize=true',
+  Light: 'mapbox://styles/mapbox/light-v11?optimize=true',
+  Dark: 'mapbox://styles/mapbox/dark-v11?optimize=true',
 };
 
 export type ReadOnlyBoundary = {
@@ -176,7 +179,13 @@ export type RenderableReadOnlyBoundary = ReadOnlyBoundary & {
 };
 
 // TODO: integrate exclusions as a first class MapObject (not there yet)
-export type RenderableObject = MapObject | 'exclusions' | 'draft-zone' | 'draft-subzone' | 'boundary';
+export type RenderableObject =
+  | MapObject
+  | 'exclusions'
+  | 'draft-zone'
+  | 'draft-subzone'
+  | 'boundary'
+  | 'countryBoundary';
 
 export type MapDrawingLayer = {
   id: string;

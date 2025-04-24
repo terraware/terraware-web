@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Box, CircularProgress } from '@mui/material';
 
-import { MapControl, MapEntityOptions, MapOptions, MapPopupRenderer } from 'src/types/Map';
+import { MapControl, MapEntityOptions, MapOptions, MapPopupRenderer, MapViewStyle } from 'src/types/Map';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
 import Map, { MapImage } from './Map';
@@ -19,13 +19,16 @@ type GenericMapProps = {
   contextRenderer?: MapPopupRenderer;
   options?: MapOptions;
   style?: object;
+  mapViewStyle?: MapViewStyle;
   bannerMessage?: string;
+  bottomRightLabel?: React.ReactNode;
   entityOptions?: MapEntityOptions;
   mapImages?: MapImage[];
 } & MapControl;
 
 export default function GenericMap(props: GenericMapProps): JSX.Element | null {
-  const { contextRenderer, options, style, bannerMessage, entityOptions, mapImages } = props;
+  const { contextRenderer, options, style, bannerMessage, bottomRightLabel, entityOptions, mapImages, mapViewStyle } =
+    props;
   const { ...mapControlProps }: MapControl = props;
 
   const { token, mapId, refreshToken } = useMapboxToken();
@@ -50,6 +53,8 @@ export default function GenericMap(props: GenericMapProps): JSX.Element | null {
         bannerMessage={bannerMessage}
         entityOptions={entityOptions}
         mapImages={mapImages}
+        mapViewStyle={mapViewStyle}
+        bottomRightLabel={bottomRightLabel}
         {...mapControlProps}
       />
     </Box>

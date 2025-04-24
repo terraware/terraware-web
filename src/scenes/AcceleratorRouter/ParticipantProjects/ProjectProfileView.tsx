@@ -7,6 +7,8 @@ import CohortBadge from 'src/components/ProjectField/CohortBadge';
 import ProjectProfileFooter from 'src/components/ProjectField/Footer';
 import ProjectFieldInlineMeta from 'src/components/ProjectField/InlineMeta';
 import InvertedCard from 'src/components/ProjectField/InvertedCard';
+import ProjectFigureLabel from 'src/components/ProjectField/ProjectFigureLabel';
+import ProjectMap from 'src/components/ProjectField/ProjectMap';
 import ProjectOverviewCard from 'src/components/ProjectField/ProjectOverviewCard';
 import ProjectProfileImage from 'src/components/ProjectField/ProjectProfileImage';
 import ProjectScoreLink from 'src/components/ProjectField/ProjectScoreLink';
@@ -151,7 +153,11 @@ const ProjectProfileView = ({
         </Grid>
       </Grid>
 
-      <Grid container paddingRight={theme.spacing(1)}>
+      <Grid
+        container
+        padding={theme.spacing(2, 2, 0, 0)}
+        sx={{ '.mapboxgl-canvas-container.mapboxgl-interactive': { cursor: 'default' } }}
+      >
         {project && participantProject?.projectHighlightPhotoValueId && (
           <ProjectProfileImage
             projectId={project.id}
@@ -164,6 +170,14 @@ const ProjectProfileView = ({
             projectId={project.id}
             imageValueId={participantProject.projectZoneFigureValueId}
             alt={strings.PROJECT_ZONE_FIGURE}
+            label={<ProjectFigureLabel labelText={strings.PROJECT_ZONE_FIGURE_VARIABLE} />}
+          />
+        )}
+        {project && !participantProject?.projectZoneFigureValueId && (
+          <ProjectMap
+            application={projectApplication}
+            countryCode={participantProject?.countryCode}
+            md={participantProject?.projectHighlightPhotoValueId ? 6 : 12}
           />
         )}
       </Grid>
