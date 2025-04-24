@@ -22,6 +22,7 @@ import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelector
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
+import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/details/UseOnSaveMergedSpecies';
 import strings from 'src/strings';
 import { ObservationState } from 'src/types/Observations';
 import { FieldOptionsMap } from 'src/types/Search';
@@ -30,7 +31,7 @@ import useQuery from 'src/utils/useQuery';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import ObservationMapView from '../map/ObservationMapView';
-import MatchSpeciesModal, { useOnSaveMergedSpecies } from './MatchSpeciesModal';
+import MatchSpeciesModal from './MatchSpeciesModal';
 import ObservationDetailsList from './ObservationDetailsList';
 import ObservationStatusSummaryMessage, { ObservationStatusSummary } from './ObservationStatusSummaryMessage';
 

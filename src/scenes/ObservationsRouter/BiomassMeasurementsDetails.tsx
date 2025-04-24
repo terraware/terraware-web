@@ -16,7 +16,8 @@ import { selectAdHocObservationsResults } from 'src/redux/features/observations/
 import { getConditionString } from 'src/redux/features/observations/utils';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
-import MatchSpeciesModal, { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/details/MatchSpeciesModal';
+import MatchSpeciesModal from 'src/scenes/ObservationsRouter/details/MatchSpeciesModal';
+import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/details/UseOnSaveMergedSpecies';
 import ObservationsService from 'src/services/ObservationsService';
 import strings from 'src/strings';
 import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
