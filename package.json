@@ -208,7 +208,7 @@
   },
   "overrides": {
     "http-proxy-middleware": {
-      "http-proxy": "github:nikeee/node-http-proxy#b42c38fc3486ee8ad4374cc2397458b6e4cd99ca"
+      "http-proxy": "github:nikeee/node-http-proxy#9b96cd725127a024dabebec6c7ea8c807272223d"
     }
   }
 }
