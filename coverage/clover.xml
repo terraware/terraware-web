@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1745448680734" clover="3.2.0">
-  <project timestamp="1745448680734" name="All files">
-    <metrics statements="29982" coveredstatements="1244" conditionals="20388" coveredconditionals="354" methods="9243" coveredmethods="198" elements="59613" coveredelements="1796" complexity="0" loc="29982" ncloc="29982" packages="253" files="1233" classes="1233"/>
+<coverage generated="1745509237709" clover="3.2.0">
+  <project timestamp="1745509237709" name="All files">
+    <metrics statements="29982" coveredstatements="1244" conditionals="20390" coveredconditionals="354" methods="9243" coveredmethods="198" elements="59615" coveredelements="1796" complexity="0" loc="29982" ncloc="29982" packages="253" files="1233" classes="1233"/>
     <package name="src">
       <metrics statements="177" coveredstatements="8" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -26498,9 +26498,9 @@
       </file>
     </package>
     <package name="src.scenes.OrgRouter">
-      <metrics statements="157" coveredstatements="0" conditionals="130" coveredconditionals="0" methods="55" coveredmethods="0"/>
+      <metrics statements="157" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="55" coveredmethods="0"/>
       <file name="NavBar.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/OrgRouter/NavBar.tsx">
-        <metrics statements="102" coveredstatements="0" conditionals="83" coveredconditionals="0" methods="36" coveredmethods="0"/>
+        <metrics statements="102" coveredstatements="0" conditionals="85" coveredconditionals="0" methods="36" coveredmethods="0"/>
         <line num="42" count="0" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
@@ -26558,7 +26558,7 @@
         <line num="116" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="117" count="0" type="stmt"/>
         <line num="121" count="0" type="stmt"/>
-        <line num="122" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="122" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="123" count="0" type="stmt"/>
         <line num="124" count="0" type="stmt"/>
         <line num="128" count="0" type="stmt"/>
