@@ -78,7 +78,7 @@ export default function TreesAndShrubsTable({ trees }: TreesAndShrubsTableProps)
         speciesName: tree.speciesName || foundSpecies?.scientificName,
       };
     });
-  }, [availableSpecies]);
+  }, [trees, availableSpecies]);
 
   const [openDescriptionModal, setOpenDescriptionModal] = useState(false);
 
