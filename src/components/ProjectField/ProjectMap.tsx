@@ -8,8 +8,11 @@ import { requestGetCountryBoundary } from 'src/redux/features/location/locationA
 import { selectCountryBoundary } from 'src/redux/features/location/locationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { MapService } from 'src/services';
+import strings from 'src/strings';
 import { Application } from 'src/types/Application';
-import { MapOptions } from 'src/types/Map';
+import { MapOptions, RenderableObject } from 'src/types/Map';
+
+import ProjectFigureLabel from './ProjectFigureLabel';
 
 type ProjectMapProps = {
   application?: Application;
@@ -29,13 +32,7 @@ const ProjectMap = ({ application, countryCode, md }: ProjectMapProps) => {
     }
   }, [dispatch, countryCode]);
 
-  const countryMapOptions = useMemo<MapOptions | undefined>(() => {
-    if (!countryBoundaryResult || !countryBoundaryResult.data) {
-      return undefined;
-    }
-
-    const coordinates = countryBoundaryResult.data.coordinates;
-
+  const getMapOptions = (coordinates: number[][][][], name: string, type: RenderableObject, id: number) => {
     return {
       bbox: MapService.getBoundingBox([coordinates]),
       sources: [
@@ -43,20 +40,28 @@ const ProjectMap = ({ application, countryCode, md }: ProjectMapProps) => {
           entities: [
             {
               properties: {
-                id: 1,
-                name: 'countryBoundary',
-                type: 'countryBoundary',
+                id: id,
+                name: name,
+                type: type,
               },
               boundary: coordinates,
-              id: 1,
+              id: id,
             },
           ],
           id: 'boundary',
           isInteractive: false,
-          ...getRenderAttributes('countryBoundary'),
+          ...getRenderAttributes(type),
         },
       ],
     };
+  };
+
+  const countryMapOptions = useMemo<MapOptions | undefined>(() => {
+    if (!countryBoundaryResult || !countryBoundaryResult.data) {
+      return undefined;
+    }
+
+    return getMapOptions(countryBoundaryResult.data.coordinates, 'countryBoundary', 'countryBoundary', 1);
   }, [getRenderAttributes, countryBoundaryResult]);
 
   const appBoundaryMapOptions = useMemo<MapOptions | undefined>(() => {
@@ -64,29 +69,7 @@ const ProjectMap = ({ application, countryCode, md }: ProjectMapProps) => {
       return undefined;
     }
 
-    const id = application.id;
-
-    return {
-      bbox: MapService.getBoundingBox([application.boundary.coordinates]),
-      sources: [
-        {
-          entities: [
-            {
-              properties: {
-                id,
-                name: 'boundary',
-                type: 'site',
-              },
-              boundary: application.boundary.coordinates,
-              id,
-            },
-          ],
-          id: 'boundary',
-          isInteractive: false,
-          ...getRenderAttributes('site'),
-        },
-      ],
-    };
+    return getMapOptions(application.boundary.coordinates, 'boundary', 'site', application.id);
   }, [application, getRenderAttributes]);
 
   const mapElement = useMemo(() => {
@@ -97,6 +80,7 @@ const ProjectMap = ({ application, countryCode, md }: ProjectMapProps) => {
           mapViewStyle={'Satellite'}
           style={{ height: '100%', width: '100%', borderRadius: theme.spacing(1) }}
           hideAllControls={true}
+          bottomRightLabel={<ProjectFigureLabel labelText={strings.APPLICATION_SITE_BOUNDARY} />}
         />
       );
     } else if (countryCode && countryMapOptions) {
@@ -106,6 +90,7 @@ const ProjectMap = ({ application, countryCode, md }: ProjectMapProps) => {
           mapViewStyle={'Light'}
           style={{ height: '100%', width: '100%', borderRadius: theme.spacing(1) }}
           hideAllControls={true}
+          bottomRightLabel={<ProjectFigureLabel labelText={strings.COUNTRY_ONLY} />}
         />
       );
     }

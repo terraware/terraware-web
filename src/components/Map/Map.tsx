@@ -66,6 +66,7 @@ export type MapProps = {
   style?: object;
   mapViewStyle?: MapViewStyle;
   bannerMessage?: string;
+  bottomRightLabel?: React.ReactNode;
   // entity options
   entityOptions?: MapEntityOptions;
   mapImages?: MapImage[];
@@ -80,6 +81,7 @@ export default function Map(props: MapProps): JSX.Element {
     mapId,
     style,
     bannerMessage,
+    bottomRightLabel,
     entityOptions,
     mapImages,
     hideFullScreen,
@@ -471,6 +473,20 @@ export default function Map(props: MapProps): JSX.Element {
           {!hideAllControls && <ZoomToFitControl onClick={zoomToFit} />}
           {!hideAllControls && (
             <MapViewStyleControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
+          )}
+          {bottomRightLabel && (
+            <div
+              style={{
+                height: 'max-content',
+                position: 'absolute',
+                right: theme.spacing(2),
+                bottom: theme.spacing(2),
+                width: 'max-content',
+                zIndex: 1000,
+              }}
+            >
+              {bottomRightLabel}
+            </div>
           )}
           {popupInfo && popupRenderer && renderedPopup && (
             <Popup

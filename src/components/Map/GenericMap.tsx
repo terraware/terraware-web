@@ -21,12 +21,14 @@ type GenericMapProps = {
   style?: object;
   mapViewStyle?: MapViewStyle;
   bannerMessage?: string;
+  bottomRightLabel?: React.ReactNode;
   entityOptions?: MapEntityOptions;
   mapImages?: MapImage[];
 } & MapControl;
 
 export default function GenericMap(props: GenericMapProps): JSX.Element | null {
-  const { contextRenderer, options, style, bannerMessage, entityOptions, mapImages, mapViewStyle } = props;
+  const { contextRenderer, options, style, bannerMessage, bottomRightLabel, entityOptions, mapImages, mapViewStyle } =
+    props;
   const { ...mapControlProps }: MapControl = props;
 
   const { token, mapId, refreshToken } = useMapboxToken();
@@ -52,6 +54,7 @@ export default function GenericMap(props: GenericMapProps): JSX.Element | null {
         entityOptions={entityOptions}
         mapImages={mapImages}
         mapViewStyle={mapViewStyle}
+        bottomRightLabel={bottomRightLabel}
         {...mapControlProps}
       />
     </Box>
