@@ -17,7 +17,7 @@ import { getConditionString } from 'src/redux/features/observations/utils';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import LiveTreesPerSpecies from 'src/scenes/ObservationsRouter/biomass/LiveTreesPerSpecies';
-import QuadratSpeciesTable from 'src/scenes/ObservationsRouter/biomass/QuadratSepciesTable';
+import QuadratSpeciesTable from 'src/scenes/ObservationsRouter/biomass/QuadratSpeciesTable';
 import TreesAndShrubsTable from 'src/scenes/ObservationsRouter/biomass/TreesAndShrubsTable';
 import MatchSpeciesModal from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
 import MonitoringPlotPhotos from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotos';
