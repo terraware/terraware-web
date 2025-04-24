@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/scenes/ObservationsRouter/DescriptionModal.tsx</title>
+    <title>Code coverage report for src/scenes/ObservationsRouter/biomass/LiveTreesPerSpecies.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../../prettify.css" />
-    <link rel="stylesheet" href="../../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../../sort-arrow-sprite.png);
+            background-image: url(../../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/scenes/ObservationsRouter</a> DescriptionModal.tsx</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/scenes/ObservationsRouter/biomass</a> LiveTreesPerSpecies.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -99,9 +99,12 @@
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -114,6 +117,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -125,52 +143,49 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo } from 'react';
 &nbsp;
-import { Box, Typography, useTheme } from '@mui/material';
+import BarChart from 'src/components/common/Chart/BarChart';
+import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
+import { ExistingTreePayload } from 'src/types/Observations';
 &nbsp;
-import DialogBox from 'src/components/common/DialogBox/DialogBox';
-import Button from 'src/components/common/button/Button';
-import strings from 'src/strings';
-&nbsp;
-export type DescriptionModal = {
-  onClose: () =&gt; void;
-  description?: string;
+export type LiveTreesPerSpeciesProps = {
+  trees?: ExistingTreePayload[];
 };
 &nbsp;
-const DescriptionModal = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> onClose, description }: DescriptionModal) =&gt; {</span>
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;DialogBox
-      onClose={onClose}
-      open={true}
-      title={strings.DESCRIPTION_NOTES}
-      size='small'
-      middleButtons={[&lt;Button id='close' label={strings.CLOSE} onClick={onClose} key='close-button' /&gt;]}
-    &gt;
-      &lt;Box textAlign='left'&gt;
-        &lt;Typography fontSize='14px' lineHeight='28px' fontWeight={400} color={theme.palette.TwClrTxt}&gt;
-          {strings.DESCRIPTION_NOTES}
-        &lt;/Typography&gt;
-        &lt;Typography fontSize='16px' lineHeight='24px' fontWeight={500} color={theme.palette.TwClrTxt}&gt;
-          {description}
-        &lt;/Typography&gt;
-      &lt;/Box&gt;
-    &lt;/DialogBox&gt;
+export default function <span class="fstat-no" title="function not covered" >LiveTreesPerSpecies(</span>{ trees }: LiveTreesPerSpeciesProps): JSX.Element {
+  const species: Record&lt;string, number&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
+  const { availableSpecies } = <span class="cstat-no" title="statement not covered" >useSpecies();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  trees?.forEach(<span class="fstat-no" title="function not covered" >(t</span>ree) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (!tree.isDead) {</span>
+<span class="cstat-no" title="statement not covered" >      if (tree.speciesId) {</span>
+<span class="cstat-no" title="statement not covered" >        species[tree.speciesId] = (species[tree.speciesId] || 0) + 1;</span>
+      } else <span class="cstat-no" title="statement not covered" >if (tree.speciesName) {</span>
+<span class="cstat-no" title="statement not covered" >        species[tree.speciesName] = (species[tree.speciesName] || 0) + 1;</span>
+      }
+    }
+  });
+&nbsp;
+  const chartData = <span class="cstat-no" title="statement not covered" >useMemo(</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+      labels: Object.keys(species).map(
+<span class="fstat-no" title="function not covered" >        (s</span>peciesId) =&gt;
+<span class="cstat-no" title="statement not covered" >          availableSpecies?.find(<span class="fstat-no" title="function not covered" >(s</span>p) =&gt; <span class="cstat-no" title="statement not covered" >sp.id.toString() === speciesId.toString())</span>?.scientificName || speciesId</span>
+      ),
+      datasets: [
+        {
+          values: Object.values(species),
+        },
+      ],
+    }),
+    [species]
   );
-};
 &nbsp;
-export default DescriptionModal;
+<span class="cstat-no" title="statement not covered" >  return &lt;BarChart chartId='observationsMortalityRateBySpecies' chartData={chartData} barWidth={0} minHeight='360px' /&gt;;</span>
+}
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -178,16 +193,16 @@ export default DescriptionModal;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-24T22:55:11.743Z
+                at 2025-04-24T23:06:37.437Z
             </div>
-        <script src="../../../prettify.js"></script>
+        <script src="../../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../../sorter.js"></script>
-        <script src="../../../block-navigation.js"></script>
+        <script src="../../../../sorter.js"></script>
+        <script src="../../../../block-navigation.js"></script>
     </body>
 </html>
     
