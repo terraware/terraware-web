@@ -26,6 +26,7 @@ export default fixupConfigRules([
       'plugin:@typescript-eslint/recommended',
       'plugin:@typescript-eslint/recommended-requiring-type-checking',
       'plugin:react/recommended',
+      'plugin:jest-react/recommended',
       'prettier'
     )
     .map((config) => ({
