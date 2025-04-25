@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/71</span>
+                <span class='fraction'>0/73</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/54</span>
+                <span class='fraction'>0/63</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/69</span>
+                <span class='fraction'>0/71</span>
             </div>
         
             
@@ -372,7 +372,20 @@
 <a name='L307'></a><a href='#L307'>307</a>
 <a name='L308'></a><a href='#L308'>308</a>
 <a name='L309'></a><a href='#L309'>309</a>
-<a name='L310'></a><a href='#L310'>310</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a>
+<a name='L317'></a><a href='#L317'>317</a>
+<a name='L318'></a><a href='#L318'>318</a>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -426,6 +439,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -506,7 +523,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -585,6 +605,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -623,7 +645,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -708,6 +734,8 @@ export type PhotoChooserProps = {
   chooseFileText?: string;
   replaceFileText?: string;
   maxPhotos?: number;
+  includeCaption?: boolean;
+  includeCitation?: boolean;
 };
 &nbsp;
 export type PhotoWithAttributes = {
@@ -735,6 +763,8 @@ export default function <span class="fstat-no" title="function not covered" >Pho
     chooseFileText = <span class="branch-0 cbranch-no" title="branch not covered" >strings.CHOOSE_FILE,</span>
     replaceFileText = <span class="branch-0 cbranch-no" title="branch not covered" >strings.REPLACE_FILE,</span>
     maxPhotos,
+    includeCaption = <span class="branch-0 cbranch-no" title="branch not covered" >true,</span>
+    includeCitation = <span class="branch-0 cbranch-no" title="branch not covered" >true,</span>
   } = <span class="cstat-no" title="statement not covered" >props;</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const [files, setFiles] = <span class="cstat-no" title="statement not covered" >useState&lt;File[]&gt;([]);</span>
@@ -817,6 +847,9 @@ export default function <span class="fstat-no" title="function not covered" >Pho
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (lastImage) {</span>
 <span class="cstat-no" title="statement not covered" >        setFilesData([lastImage]);</span>
+<span class="cstat-no" title="statement not covered" >        setFilesDataChanged(true);</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        setFilesData([]);</span>
 <span class="cstat-no" title="statement not covered" >        setFilesDataChanged(true);</span>
       }
     }
@@ -916,26 +949,32 @@ export default function <span class="fstat-no" title="function not covered" >Pho
                   /&gt;
                 &lt;/Box&gt;
 &nbsp;
-                &lt;Box width='100%'&gt;
-                  &lt;Grid&gt;
-                    &lt;Textfield
-                      type='text'
-                      label={strings.CAPTION}
-                      id='citation'
-                      value={fileData.caption}
-                      onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue) =&gt; <span class="cstat-no" title="statement not covered" >updateFileData(index, 'caption', newValue as string)}</span>
-                    /&gt;
-                  &lt;/Grid&gt;
-                  &lt;Grid paddingTop={theme.spacing(2)}&gt;
-                    &lt;Textfield
-                      type='text'
-                      label={strings.CITATION}
-                      id='citation'
-                      value={fileData.citation}
-                      onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue) =&gt; <span class="cstat-no" title="statement not covered" >updateFileData(index, 'citation', newValue as string)}</span>
-                    /&gt;
-                  &lt;/Grid&gt;
-                &lt;/Box&gt;
+                {(includeCaption || includeCitation) &amp;&amp; (
+                  &lt;Box width='100%'&gt;
+                    {includeCaption &amp;&amp; (
+                      &lt;Grid&gt;
+                        &lt;Textfield
+                          type='text'
+                          label={strings.CAPTION}
+                          id='citation'
+                          value={fileData.caption}
+                          onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue) =&gt; <span class="cstat-no" title="statement not covered" >updateFileData(index, 'caption', newValue as string)}</span>
+                        /&gt;
+                      &lt;/Grid&gt;
+                    )}
+                    {includeCitation &amp;&amp; (
+                      &lt;Grid paddingTop={theme.spacing(2)}&gt;
+                        &lt;Textfield
+                          type='text'
+                          label={strings.CITATION}
+                          id='citation'
+                          value={fileData.citation}
+                          onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue) =&gt; <span class="cstat-no" title="statement not covered" >updateFileData(index, 'citation', newValue as string)}</span>
+                        /&gt;
+                      &lt;/Grid&gt;
+                    )}
+                  &lt;/Box&gt;
+                )}
               &lt;/Box&gt;
             ))}
           &lt;/Box&gt;
@@ -997,7 +1036,7 @@ export default function <span class="fstat-no" title="function not covered" >Pho
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-25T17:46:44.812Z
+                at 2025-04-25T20:17:00.688Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
