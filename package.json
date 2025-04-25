@@ -16,7 +16,7 @@
     "generate-strings": "node scripts/generate-strings.js && node scripts/unused-strings.js",
     "generate-types": "node scripts/openapi-typescript-formatter.mjs",
     "license-report": "license-report --only=prod --department.value=terraware --relatedTo.value=terraware-web --output=html > docs/license-report.html",
-    "lint": "ESLINT_USE_FLAT_CONFIG=true eslint -c eslint.config.mjs src/**/*.ts src/**/*.tsx ",
+    "lint": "ESLINT_USE_FLAT_CONFIG=true eslint src/**/*.ts src/**/*.tsx ",
     "ts": "tsc --project ./tsconfig.json",
     "format": "prettier --write .",
     "docker:start": "./scripts/launch_server.sh",
@@ -95,6 +95,31 @@
     "utm": "^1.1.1",
     "web-vitals": "^4.0.0",
     "worker-loader": "^3.0.8"
+  },
+  "eslintConfig": {
+    "extends": [
+      "plugin:react/recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:@typescript-eslint/recommended-requiring-type-checking",
+      "plugin:jest-react/recommended",
+      "plugin:storybook/recommended"
+    ],
+    "parserOptions": {
+      "project": "tsconfig.json"
+    },
+    "rules": {
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-argument": "off",
+      "@typescript-eslint/no-floating-promises": "off",
+      "@typescript-eslint/no-redundant-type-constituents": "off",
+      "@typescript-eslint/no-unsafe-return": "off",
+      "@typescript-eslint/restrict-template-expressions": "off",
+      "@typescript-eslint/no-misused-promises": "off",
+      "@typescript-eslint/no-base-to-string": "off"
+    }
   },
   "browserslist": {
     "production": [
