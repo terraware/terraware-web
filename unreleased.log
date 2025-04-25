@@ -1,3 +1,4 @@
+bf26a808323 SW-5592 Enable eslint in editors (#3886)
 7fda0c79e01 SW-6820 Initial version of upload photos with no styling (#3884)
 5434188ebee Restructure photo files in preparation of upcoming updates (#3883)
 4690b99f37f Fix TFContact not updating in project profile if no prior org contact (#3880)
