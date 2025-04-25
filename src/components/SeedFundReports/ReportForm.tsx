@@ -6,7 +6,7 @@ import { Checkbox, Textfield } from '@terraware/web-components';
 import LocationSection from 'src/components/SeedFundReports/LocationSelection';
 import ViewPhotos from 'src/components/SeedFundReports/ViewPhotos';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import SelectPhotos from 'src/components/common/SelectPhotos';
+import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
 import { useOrganization } from 'src/providers';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';

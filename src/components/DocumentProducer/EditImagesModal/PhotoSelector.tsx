@@ -25,6 +25,8 @@ export type PhotoChooserProps = {
   chooseFileText?: string;
   replaceFileText?: string;
   maxPhotos?: number;
+  includeCaption?: boolean;
+  includeCitation?: boolean;
 };
 
 export type PhotoWithAttributes = {
@@ -52,6 +54,8 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
     chooseFileText = strings.CHOOSE_FILE,
     replaceFileText = strings.REPLACE_FILE,
     maxPhotos,
+    includeCaption = true,
+    includeCitation = true,
   } = props;
   const { isMobile } = useDeviceInfo();
   const [files, setFiles] = useState<File[]>([]);
@@ -134,6 +138,9 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
 
       if (lastImage) {
         setFilesData([lastImage]);
+        setFilesDataChanged(true);
+      } else {
+        setFilesData([]);
         setFilesDataChanged(true);
       }
     }
@@ -233,26 +240,32 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
                   />
                 </Box>
 
-                <Box width='100%'>
-                  <Grid>
-                    <Textfield
-                      type='text'
-                      label={strings.CAPTION}
-                      id='citation'
-                      value={fileData.caption}
-                      onChange={(newValue) => updateFileData(index, 'caption', newValue as string)}
-                    />
-                  </Grid>
-                  <Grid paddingTop={theme.spacing(2)}>
-                    <Textfield
-                      type='text'
-                      label={strings.CITATION}
-                      id='citation'
-                      value={fileData.citation}
-                      onChange={(newValue) => updateFileData(index, 'citation', newValue as string)}
-                    />
-                  </Grid>
-                </Box>
+                {(includeCaption || includeCitation) && (
+                  <Box width='100%'>
+                    {includeCaption && (
+                      <Grid>
+                        <Textfield
+                          type='text'
+                          label={strings.CAPTION}
+                          id='citation'
+                          value={fileData.caption}
+                          onChange={(newValue) => updateFileData(index, 'caption', newValue as string)}
+                        />
+                      </Grid>
+                    )}
+                    {includeCitation && (
+                      <Grid paddingTop={theme.spacing(2)}>
+                        <Textfield
+                          type='text'
+                          label={strings.CITATION}
+                          id='citation'
+                          value={fileData.citation}
+                          onChange={(newValue) => updateFileData(index, 'citation', newValue as string)}
+                        />
+                      </Grid>
+                    )}
+                  </Box>
+                )}
               </Box>
             ))}
           </Box>
