@@ -11,6 +11,7 @@ import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
 import ProjectFieldMeta from 'src/components/ProjectField/Meta';
 import MinMaxCarbonTextfield from 'src/components/ProjectField/MinMaxCarbonTextfield';
 import PhaseScoreCard from 'src/components/ProjectField/PhaseScoreCard';
+import ProjectProfileImage from 'src/components/ProjectField/ProjectProfileImage';
 import RegionDisplay from 'src/components/ProjectField/RegionDisplay';
 import ProjectFieldTextAreaEdit from 'src/components/ProjectField/TextAreaEdit';
 import ProjectFieldTextfield from 'src/components/ProjectField/Textfield';
@@ -30,7 +31,7 @@ import {
   requestListSpecificVariablesValues,
   requestUploadManyImageValues,
 } from 'src/redux/features/documentProducer/values/valuesThunks';
-import { selectSpecificVariables } from 'src/redux/features/documentProducer/variables/variablesSelector';
+import { selectSpecificVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
 import { requestListSpecificVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { requestListGlobalRolesUsers } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
 import { selectGlobalRolesUsersSearchRequest } from 'src/redux/features/globalRoles/globalRolesSelectors';
@@ -97,9 +98,9 @@ const ProjectProfileEdit = () => {
   const assignContactResponse = useAppSelector(selectAssignTerraformationContact(assignTfContactRequestId));
   const response = useAppSelector(selectOrganizationUsers(organizationUsersRequestId));
 
-  // todo why isn't this working?
-  // const photoValues = useAppSelector((state) => selectSpecificVariablesWithValues(state, photoVariableStableIds, projectId));
-  const photoVariablesResponse = useAppSelector(selectSpecificVariables(photoVariableStableIds));
+  const photoValues = useAppSelector((state) =>
+    selectSpecificVariablesWithValues(state, photoVariableStableIds, projectId)
+  );
   const [photoVariableIds, setPhotoVariableIds] = useState<Record<string, number>>();
   const { activeLocale } = useLocalization();
   const [globalUsersOptions, setGlobalUsersOptions] = useState<DropdownItem[]>();
@@ -115,15 +116,15 @@ const ProjectProfileEdit = () => {
   }, [reload, snackbar, goToParticipantProject, projectId]);
 
   useEffect(() => {
-    if (photoVariablesResponse?.status === 'success') {
+    if (photoValues.length > 0) {
       setPhotoVariableIds(
-        photoVariablesResponse.data?.reduce<Record<string, number>>((map, variable) => {
-          map[variable.stableId] = variable.id;
+        photoValues.reduce<Record<string, number>>((map, variableWithValues) => {
+          map[variableWithValues.stableId] = variableWithValues.id;
           return map;
         }, {})
       );
     }
-  }, [photoVariablesResponse]);
+  }, [photoValues]);
 
   useEffect(() => {
     if (!requestsInProgress) return;
@@ -242,7 +243,6 @@ const ProjectProfileEdit = () => {
       newInitiatedRequests.assignTfContact = true;
     }
     if ((mainPhoto || mapPhoto) && photoVariableIds) {
-      // TODO consider using `useProjectVariablesUpdate` instead of manual
       const imageValues = [];
       if (mainPhoto) {
         imageValues.push({
@@ -322,7 +322,6 @@ const ProjectProfileEdit = () => {
     return globalUsersOptions?.filter((opt) => opt.value.toString() !== ownerId?.toString()) || [];
   }, [organizationUsers, globalUsersOptions]);
 
-  // todo retrieve images if they exist
   return (
     <PageWithModuleTimeline
       title={participantProject?.dealName}
@@ -554,6 +553,13 @@ const ProjectProfileEdit = () => {
               multipleSelection={false}
             />
           </Grid>
+          {participantProject?.projectHighlightPhotoValueId && (
+            <ProjectProfileImage
+              projectId={projectId}
+              imageValueId={participantProject.projectHighlightPhotoValueId}
+              alt={strings.PROJECT_HIGHLIGHT_IMAGE}
+            />
+          )}
         </Grid>
         <Grid container>
           <Grid item md={6}>
@@ -569,6 +575,13 @@ const ProjectProfileEdit = () => {
               multipleSelection={false}
             />
           </Grid>
+          {participantProject?.projectZoneFigureValueId && (
+            <ProjectProfileImage
+              projectId={projectId}
+              imageValueId={participantProject.projectZoneFigureValueId}
+              alt={strings.PROJECT_ZONE_FIGURE}
+            />
+          )}
         </Grid>
       </PageForm>
     </PageWithModuleTimeline>
