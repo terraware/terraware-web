@@ -4,8 +4,8 @@ import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
 import ProgressCircle from 'src/components/common/ProgressCircle/ProgressCircle';
-import SelectPhotos from 'src/components/common/SelectPhotos';
 import SpeciesSelector from 'src/components/common/SpeciesSelector';
 import { useLocalization, useOrganization } from 'src/providers';
 import AccessionService from 'src/services/AccessionService';

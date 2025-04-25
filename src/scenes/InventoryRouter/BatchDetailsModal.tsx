@@ -6,6 +6,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 
 import DatePicker from 'src/components/common/DatePicker';
+import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
 import { useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
 import { NurseryBatchService } from 'src/services';
@@ -25,8 +26,6 @@ import useForm from 'src/utils/useForm';
 import { useNumberFormatter } from 'src/utils/useNumber';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
-
-import SelectPhotos from '../../components/common/SelectPhotos';
 
 export interface BatchDetailsModalProps {
   onClose: () => void;

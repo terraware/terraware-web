@@ -7,7 +7,7 @@ import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import PageForm from 'src/components/common/PageForm';
-import SelectPhotos from 'src/components/common/SelectPhotos';
+import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
 import SpeciesSelector from 'src/components/common/SpeciesSelector';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import TfMain from 'src/components/common/TfMain';

@@ -11,6 +11,7 @@ import {
   requestListVariablesValues,
   requestUpdateVariableValues,
   requestUploadImageValue,
+  requestUploadManyImageValues,
 } from './valuesThunks';
 
 /**
@@ -86,6 +87,7 @@ const variableValuesImageUploadSlice = createSlice({
   reducers: {},
   extraReducers: (builder: ActionReducerMapBuilder<VariableValuesImageUploadState>) => {
     buildReducers(requestUploadImageValue)(builder);
+    buildReducers(requestUploadManyImageValues)(builder);
   },
 });
 
