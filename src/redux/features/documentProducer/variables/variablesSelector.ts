@@ -294,6 +294,10 @@ export const selectSpecificVariablesWithValues = createCachedSelector(
   specificVariablesCompositeKeyFn({ variablesStableIds, projectId })
 );
 
+export const selectSpecificVariables = (variablesStableIds: string[]) => (state: RootState) => {
+  return state.documentProducerSpecificVariables[variablesStableIds.toString()];
+};
+
 export const selectUpdateVariableWorkflowDetails = (requestId: string) => (state: RootState) =>
   state.variableWorkflowDetailsUpdate[requestId];
 

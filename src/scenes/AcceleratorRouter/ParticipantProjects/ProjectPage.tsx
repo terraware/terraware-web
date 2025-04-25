@@ -50,7 +50,7 @@ const ProjectPage = () => {
         ),
       },
     ];
-  }, [activeLocale, projectData]);
+  }, [activeLocale, projectData, projectApplication, projectScore, phaseVotes]);
 
   const { activeTab, onTabChange } = useStickyTabs({
     defaultTab: 'projectProfile',
