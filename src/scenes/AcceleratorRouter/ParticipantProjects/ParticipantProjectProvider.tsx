@@ -30,7 +30,10 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   const { activeLocale } = useLocalization();
   const { project, projectId } = useProjectData();
   const { participant } = useParticipant(project?.participantId ?? -1);
-  const { acceleratorOrgs, reload: reloadAll } = useAcceleratorOrgs({ hasProjectApplication: true });
+  const { acceleratorOrgs, reload: reloadAll } = useAcceleratorOrgs({
+    hasProjectApplication: true,
+    includeParticipants: true,
+  });
 
   const [participantProject, setParticipantProject] = useState<ParticipantProject>();
   const [participantProjectData, setParticipantProjectData] = useState<ParticipantProjectData>({
@@ -103,7 +106,7 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   }, [getParticipantProjectResult, snackbar]);
 
   useEffect(() => {
-    if (!acceleratorOrgs || !project?.organizationId || project.organizationId === organization?.id) {
+    if (!acceleratorOrgs || !project?.organizationId) {
       return;
     }
 
