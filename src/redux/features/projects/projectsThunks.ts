@@ -13,7 +13,7 @@ export const requestProjects = (organizationId?: number, locale?: string | null)
       dispatch(setProjectsAction({ error, projects }));
     } catch (e) {
       // should not happen, the response above captures any http request errors
-      // tslint:disable-next-line: no-console
+      // eslint-disable-next-line no-console
       console.error('Error dispatching projects', e);
     }
   };
@@ -29,7 +29,7 @@ export const requestProject = (projectId: number) => async (dispatch: Dispatch, 
     }
   } catch (e) {
     // should not happen, the response above captures any http request errors
-    // tslint:disable-next-line: no-console
+    // eslint-disable-next-line no-console
     console.error('Error dispatching projects', e);
   }
 };

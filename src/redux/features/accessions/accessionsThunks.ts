@@ -24,7 +24,7 @@ export const requestAccessions = (organizationId: number, speciesId?: number) =>
       dispatch(setAccessionsAction({ orgIdSpeciesId, data: { accessions: results } }));
     } catch (e: unknown) {
       // should not happen, the response above captures any http request errors
-      // tslint:disable-next-line: no-console
+
       const errorMessage = (e as Error).message ?? e;
       dispatch(
         setAccessionsAction({

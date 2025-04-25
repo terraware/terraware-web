@@ -23,7 +23,7 @@ export const ParticipantContext = createContext<ParticipantData>({
   orgHasModules: false,
   orgHasParticipants: false,
   projectsWithModules: [],
-  // eslint-disable-next-line no-empty
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setCurrentParticipantProject: () => {},
 });
 

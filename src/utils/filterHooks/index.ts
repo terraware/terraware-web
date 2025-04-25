@@ -68,8 +68,9 @@ export const getFiltersFromSession = (viewIdentifier: string): FiltersType => {
 export const writeFiltersToSession = (viewIdentifier: string, filters: FiltersType): void => {
   try {
     sessionStorage.setItem(makeFiltersSessionKey(viewIdentifier), JSON.stringify(filters));
-    // tslint:disable-next-line:no-empty
-  } catch (e) {}
+  } catch (e) {
+    /* empty */
+  }
 };
 
 export const getFiltersFromQuery = (query: URLSearchParams, viewIdentifier: string): FiltersType => {

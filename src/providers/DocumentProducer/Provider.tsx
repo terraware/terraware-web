@@ -130,11 +130,12 @@ const DocumentProducerProvider = ({ children }: Props) => {
     getUsedSections,
     isLoading: true,
     projectId,
-    // eslint-disable-next-line no-empty
-    reload: () => {},
     variablesOwners,
+    /* eslint-disable @typescript-eslint/no-empty-function */
+    reload: () => {},
     reloadVariables: () => {},
     reloadDocument: () => {},
+    /* eslint-enable @typescript-eslint/no-empty-function */
   });
 
   useEffect(() => {

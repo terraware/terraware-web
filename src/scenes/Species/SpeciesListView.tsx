@@ -280,16 +280,14 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       const result = (data || {}) as FieldOptionsMap;
 
       // remap ecosystemTypes to nested field from flattened field
-      /* tslint:disable:no-string-literal */
-      if (result['ecosystemTypes_ecosystemType']) {
-        result['ecosystemTypes.ecosystemType'] = result['ecosystemTypes_ecosystemType'];
-        delete result['ecosystemTypes_ecosystemType'];
+      if (result.ecosystemTypes_ecosystemType) {
+        result['ecosystemTypes.ecosystemType'] = result.ecosystemTypes_ecosystemType;
+        delete result.ecosystemTypes_ecosystemType;
       }
-      if (result['growthForms_growthForm']) {
-        result['growthForms.growthForm'] = result['growthForms_growthForm'];
-        delete result['growthForms_growthForm'];
+      if (result.growthForms_growthForm) {
+        result['growthForms.growthForm'] = result.growthForms_growthForm;
+        delete result.growthForms_growthForm;
       }
-      /* tslint:enable:no-string-literal */
 
       result.rare = { partial: false, values: [strings.YES, strings.NO] };
       setFilterOptions(result);
@@ -496,7 +494,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       const encodedUri = encodeURI(csvContent);
       const link = document.createElement('a');
       link.setAttribute('href', encodedUri);
-      link.setAttribute('download', `species.csv`);
+      link.setAttribute('download', 'species.csv');
       link.click();
     }
   };

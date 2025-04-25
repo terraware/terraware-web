@@ -37,6 +37,7 @@ export const writeTokenToSession = (token: string): void => {
     };
 
     sessionStorage.setItem(MAPBOX_SESSION_KEY, JSON.stringify(sessionToken));
-    // tslint:disable-next-line:no-empty
-  } catch (e) {}
+  } catch (e) {
+    /* empty */
+  }
 };
