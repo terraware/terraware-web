@@ -26,7 +26,9 @@ const getTabFromSession = (viewIdentifier: string): string => {
 const writeTabToSession = (viewIdentifier: string, tab: string): void => {
   try {
     sessionStorage.setItem(makeTabSessionKey(viewIdentifier), tab);
-  } catch (e) {}
+  } catch (e) {
+    /* empty */
+  }
 };
 
 const useStickyTabs = ({ defaultTab, tabs, viewIdentifier, keepQuery = true }: StickyTabsProps) => {
