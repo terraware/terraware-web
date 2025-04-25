@@ -69,7 +69,7 @@ export const requestProjectReportConfig = (projectId: string) => {
       dispatch(setProjectReportConfigAction({ config: response.config }));
     } catch (e) {
       // should not happen, the response above captures any http request errors
-      // tslint:disable-next-line: no-console
+      // eslint-disable-next-line no-console
       console.error('Error dispatching project report config', e);
     }
   };

@@ -26,7 +26,6 @@ const getTabFromSession = (viewIdentifier: string): string => {
 const writeTabToSession = (viewIdentifier: string, tab: string): void => {
   try {
     sessionStorage.setItem(makeTabSessionKey(viewIdentifier), tab);
-    // eslint-disable-next-line no-empty
   } catch (e) {}
 };
 

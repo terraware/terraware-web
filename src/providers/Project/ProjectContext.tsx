@@ -11,7 +11,7 @@ export type ProjectData = {
 // default values pointing to nothing
 export const ProjectContext = createContext<ProjectData>({
   projectId: -1,
-  // eslint-disable-next-line no-empty
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   reload: () => {},
 });
 

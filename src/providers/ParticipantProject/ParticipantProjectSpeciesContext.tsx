@@ -16,10 +16,10 @@ export type ParticipantProjectSpeciesData = {
 export const ParticipantProjectSpeciesContext = createContext<ParticipantProjectSpeciesData>({
   isBusy: false,
   participantProjectSpeciesId: -1,
-  // eslint-disable-next-line no-empty
+  /* eslint-disable @typescript-eslint/no-empty-function */
   reload: () => {},
-  // eslint-disable-next-line no-empty
   update: () => {},
+  /* eslint-enable @typescript-eslint/no-empty-function */
 });
 
 export const useParticipantProjectSpeciesData = () => useContext(ParticipantProjectSpeciesContext);

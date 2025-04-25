@@ -23,7 +23,7 @@ export type ParticipantProjectData = {
 export const ParticipantProjectContext = createContext<ParticipantProjectData>({
   crumbs: [],
   projectId: -1,
-  // tslint:disable-next-line:no-empty
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   reload: () => {},
 });
 

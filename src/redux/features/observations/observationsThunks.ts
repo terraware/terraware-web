@@ -46,7 +46,7 @@ export const requestObservationsResults = createAsyncThunk(
       return rejectWithValue(strings.GENERIC_ERROR);
     } catch (e) {
       // should not happen, the response above captures any http request errors
-      // tslint:disable-next-line: no-console
+      // eslint-disable-next-line no-console
       console.error('Error dispatching observations results', e);
     }
   }
@@ -74,7 +74,7 @@ export const requestPlantingSiteObservationsResults = (
       );
     } catch (e) {
       // should not happen, the response above captures any http request errors
-      // tslint:disable-next-line: no-console
+      // eslint-disable-next-line no-console
       console.error('Error dispatching planting site observations results', e);
     }
   };
@@ -103,7 +103,7 @@ export const requestObservations = (organizationId: number, adHoc?: boolean) => 
       );
     } catch (e) {
       // should not happen, the response above captures any http request errors
-      // tslint:disable-next-line: no-console
+      // eslint-disable-next-line no-console
       console.error('Error dispatching observations', e);
     }
   };
@@ -138,7 +138,7 @@ export const requestAdHocObservationsResults = (organizationId: number) => {
       );
     } catch (e) {
       // should not happen, the response above captures any http request errors
-      // tslint:disable-next-line: no-console
+      // eslint-disable-next-line no-console
       console.error('Error dispatching observations results', e);
     }
   };
