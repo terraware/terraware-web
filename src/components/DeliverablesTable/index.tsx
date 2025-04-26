@@ -49,7 +49,7 @@ const columns =
     const baseColumns: TableColumnType[] = [
       {
         key: 'name',
-        name: strings.DELIVERABLE_NAME,
+        name: projectId ? strings.NAME : strings.DELIVERABLE_NAME,
         type: 'string',
       },
       {
