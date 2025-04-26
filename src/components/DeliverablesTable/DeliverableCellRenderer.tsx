@@ -19,7 +19,9 @@ export default function DeliverableCellRenderer(props: RendererProps<TableRowTyp
     const deliverableUrl = isAcceleratorRoute ? APP_PATHS.ACCELERATOR_DELIVERABLE_VIEW : APP_PATHS.DELIVERABLE_VIEW;
     const to = deliverableUrl.replace(':deliverableId', `${row.id}`).replace(':projectId', `${row.projectId}`);
     return (
-      <Link to={`${to}?source=${window.location.pathname}`}>
+      const url = new URL(to, window.location.origin);
+      url.searchParams.append('source', window.location.pathname);
+      <Link to={url.pathname + url.search}>
         <TextTruncated fontSize={16} width={400} fontWeight={500} stringList={[iValue as string]} />
       </Link>
     );
