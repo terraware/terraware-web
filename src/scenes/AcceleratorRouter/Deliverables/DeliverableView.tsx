@@ -1,4 +1,5 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem } from '@terraware/web-components';
@@ -17,6 +18,8 @@ import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useQuery from 'src/utils/useQuery';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import DownloadSpeciesSnapshotModal from '../Species/DownloadSpeciesSnapshotModal';
 import ApproveDeliverableDialog from './ApproveDeliverableDialog';
@@ -27,13 +30,26 @@ const DeliverableView = () => {
   const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const [showDownloadModal, setShowDownloadModal] = useState<boolean>(false);
+  const [source, setSource] = useState<string | null>();
 
+  const query = useQuery();
+  const location = useStateLocation();
+  const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
   const { status: requestStatus, update } = useUpdateDeliverable();
   const theme = useTheme();
   const { isAllowed } = useUser();
   const { activeLocale } = useLocalization();
   const { currentDeliverable: deliverable } = useDeliverableData();
+
+  useEffect(() => {
+    const _source = query.get('source');
+    if (_source) {
+      setSource(_source);
+      query.delete('source');
+      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+    }
+  }, [query]);
 
   const setStatus = useCallback(
     (status: DeliverableStatusType) => {
@@ -163,15 +179,25 @@ const DeliverableView = () => {
     [callToAction, optionsMenu]
   );
 
-  const crumbs: Crumb[] = useMemo(
-    () => [
-      {
-        name: activeLocale ? strings.DELIVERABLES : '',
-        to: APP_PATHS.ACCELERATOR_DELIVERABLES,
-      },
-    ],
-    [activeLocale]
-  );
+  const crumbs: Crumb[] = useMemo(() => {
+    if (!activeLocale) {
+      return [];
+    }
+
+    return source?.startsWith('/accelerator/projects/')
+      ? [
+          {
+            name: strings.OVERVIEW,
+            to: source,
+          },
+        ]
+      : [
+          {
+            name: strings.DELIVERABLES,
+            to: APP_PATHS.ACCELERATOR_DELIVERABLES,
+          },
+        ];
+  }, [activeLocale, source]);
 
   if (deliverable) {
     if (isMobile) {

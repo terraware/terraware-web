@@ -12,6 +12,7 @@ import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import { useParticipantProjectData } from './ParticipantProjectContext';
+import ProjectDeliverablesView from './ProjectDeliverablesView';
 import ProjectProfileView from './ProjectProfileView';
 import { useVotingData } from './Voting/VotingContext';
 
@@ -36,6 +37,7 @@ const ProjectPage = () => {
     if (!activeLocale) {
       return [];
     }
+
     return [
       {
         id: 'projectProfile',
@@ -48,6 +50,11 @@ const ProjectPage = () => {
             phaseVotes={phaseVotes}
           />
         ),
+      },
+      {
+        id: 'projectDeliverables',
+        label: strings.DELIVERABLES,
+        children: <ProjectDeliverablesView projectId={projectData.projectId} />,
       },
     ];
   }, [activeLocale, projectData, projectApplication, projectScore, phaseVotes]);
