@@ -79,7 +79,6 @@ async function exportStrings(englishStrings, localizedStrings, locale, targetDir
     if (key in localizedStrings) {
       stringsMap[key] = localizedStrings[key];
     } else {
-      // tslint:disable-next-line:no-console
       console.warn(`Locale ${locale} has no translation for ${key}`);
       stringsMap[key] = englishStrings[key];
     }

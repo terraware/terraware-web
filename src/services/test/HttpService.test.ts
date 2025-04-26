@@ -1,4 +1,3 @@
-/* tslint:disable:no-console */
 import axios from '../axios';
 import HttpService, { Response, ServerData } from '../HttpService';
 
@@ -181,7 +180,7 @@ describe('HttpService', () => {
     test('HttpService sets url replacements correctly', async () => {
       axiosGet.mockImplementation(() => Promise.resolve(DUMMY_DATA));
 
-      const respons: Response = await HttpService.root('/url-name/{id}').get(
+      const response: Response = await HttpService.root('/url-name/{id}').get(
         { urlReplacements: { '{id}': 'idvalue' } },
         (data) => ({ value: data?.status })
       );
@@ -192,7 +191,7 @@ describe('HttpService', () => {
     test('HttpService.{put,post} sets entity content correctly', async () => {
       axiosPost.mockImplementation(() => Promise.resolve(DUMMY_DATA));
 
-      const respons: Response = await HttpService.root('/url-name').post({
+      const response: Response = await HttpService.root('/url-name').post({
         entity: { key: 'value' },
         headers: {},
         params: {},

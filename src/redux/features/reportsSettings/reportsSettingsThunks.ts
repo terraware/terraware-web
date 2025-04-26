@@ -13,7 +13,7 @@ export const requestReportsSettings = (organizationId: number) => {
       dispatch(setReportsSettingsAction({ settings: response }));
     } catch (e) {
       // should not happen, the response above captures any http request errors
-      // tslint:disable-next-line: no-console
+      // eslint-disable-next-line no-console
       console.error('Error dispatching request to get projects for a species', e);
     }
   };

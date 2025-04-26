@@ -39,7 +39,7 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   const [participantProjectData, setParticipantProjectData] = useState<ParticipantProjectData>({
     crumbs: [],
     projectId,
-    // tslint:disable-next-line:no-empty
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     reload: () => {},
   });
 

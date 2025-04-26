@@ -23,7 +23,7 @@ export const requestPlantingSite = (plantingSiteId: number, locale?: string | nu
       dispatch(setPlantingSiteAction({ error, locale, plantingSite: site }));
     } catch (e) {
       // should not happen, the response above captures any http request errors
-      // tslint:disable-next-line: no-console
+      // eslint-disable-next-line no-console
       console.error('Error dispatching planting site', e);
     }
   };
@@ -53,7 +53,7 @@ export const requestPlantingSites = createAsyncThunk(
       return rejectWithValue(strings.GENERIC_ERROR);
     } catch (e) {
       // should not happen, the response above captures any http request errors
-      // tslint:disable-next-line: no-console
+      // eslint-disable-next-line no-console
       console.error('Error dispatching planting sites', e);
     }
   }
@@ -70,7 +70,7 @@ export const requestSitePopulation = (organizationId: number, siteId: number) =>
       }
     } catch (e) {
       // should not happen, the response above captures any http request errors
-      // tslint:disable-next-line: no-console
+      // eslint-disable-next-line no-console
       console.error('Error dispatching site population', e);
     }
   };
@@ -85,7 +85,7 @@ export const requestPlantingSitesSearchResults = (organizationId: number) => {
       }
     } catch (e) {
       // should not happen, the response above captures any http request errors
-      // tslint:disable-next-line: no-console
+      // eslint-disable-next-line no-console
       console.error('Error dispatching planting sites', e);
     }
   };
@@ -99,7 +99,7 @@ export const requestSiteReportedPlants = (plantingSiteId: number) => {
       dispatch(setSiteReportedPlantsAction({ plantingSiteId, data: { error, site } }));
     } catch (e) {
       // should not happen, the response above captures any http request errors
-      // tslint:disable-next-line: no-console
+      // eslint-disable-next-line no-console
       console.error('Error dispatching site reported plants request', e);
     }
   };

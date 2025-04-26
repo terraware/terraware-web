@@ -23,7 +23,7 @@ export const requestListDocumentTemplates = () => {
 
       dispatch(setDocumentTemplates({ documentTemplates, error }));
     } catch (e) {
-      // tslint:disable-next-line: no-console
+      // eslint-disable-next-line no-console
       console.error('Error dispatching list documentTemplates', e);
     }
   };

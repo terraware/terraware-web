@@ -28,7 +28,7 @@ export const requestSpecies = createAsyncThunk(
       return rejectWithValue(strings.GENERIC_ERROR);
     } catch (e) {
       // should not happen, the response above captures any http request errors
-      // tslint:disable-next-line: no-console
+      // eslint-disable-next-line no-console
       console.error('Error dispatching species', e);
     }
   }

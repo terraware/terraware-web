@@ -47,7 +47,7 @@ export default function ViabilityResultModal(props: ViabilityResultModalProps): 
       sum = sum + Number(tr.seedsGerminated);
     });
     const result = (sum / Number(viabilityTest.seedsTested)) * 100;
-    // tslint:disable-next-line:no-bitwise
+    // eslint-disable-next-line no-bitwise
     return isNaN(result) ? 0 : ~~result;
   };
 

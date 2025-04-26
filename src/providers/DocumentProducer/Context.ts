@@ -26,10 +26,11 @@ export const DocumentProducerContext = createContext<DocumentProducerData>({
   getUsedSections: () => [],
   isLoading: false,
   projectId: -1,
-  // eslint-disable-next-line no-empty
+  /* eslint-disable @typescript-eslint/no-empty-function */
   reload: () => {},
   reloadVariables: () => {},
   reloadDocument: () => {},
+  /* eslint-enable @typescript-eslint/no-empty-function */
 });
 
 export const useDocumentProducerData = () => useContext(DocumentProducerContext);
