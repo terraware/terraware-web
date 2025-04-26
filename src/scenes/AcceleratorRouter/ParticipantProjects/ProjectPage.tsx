@@ -68,21 +68,23 @@ const ProjectPage = () => {
 
   const rightComponent = useMemo(
     () => (
-      <Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'>
-        {isAllowedEdit && (
-          <Button
-            id='editProject'
-            icon='iconEdit'
-            label={strings.EDIT_PROJECT}
-            priority='primary'
-            onClick={() => goToParticipantProjectEdit(projectData.projectId)}
-            size='medium'
-            type='productive'
-          />
-        )}
+      <Box display='flex' flexDirection='column' justifyContent='center' minHeight={80}>
+        <Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'>
+          {activeTab === 'projectProfile' && isAllowedEdit && (
+            <Button
+              id='editProject'
+              icon='iconEdit'
+              label={strings.EDIT_PROJECT}
+              priority='primary'
+              onClick={() => goToParticipantProjectEdit(projectData.projectId)}
+              size='medium'
+              type='productive'
+            />
+          )}
+        </Box>
       </Box>
     ),
-    [goToParticipantProjectEdit, isAllowedEdit, projectData.projectId, theme]
+    [activeTab, goToParticipantProjectEdit, isAllowedEdit, projectData.projectId, theme]
   );
 
   const projectViewTitle = (
