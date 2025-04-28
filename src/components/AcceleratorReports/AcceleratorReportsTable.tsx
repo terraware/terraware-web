@@ -81,7 +81,7 @@ export default function AcceleratorReportsTable(): JSX.Element {
   const query = useQuery();
   const yearQuery = query.get('year');
 
-  const { busy, reload, acceleratorReports: projectReports } = useProjectReports(projectId, false, true, yearFilter);
+  const { busy, acceleratorReports: projectReports } = useProjectReports(projectId, false, true, yearFilter);
   const { acceleratorReports: allProjectReports } = useProjectReports(projectId, false, true);
 
   const currentYear = DateTime.now().year;
@@ -124,10 +124,6 @@ export default function AcceleratorReportsTable(): JSX.Element {
       });
     }
   }, [projectReports]);
-
-  useEffect(() => {
-    reload();
-  }, [projectId, yearFilter]);
 
   const fuzzySearchColumns = useMemo(() => ['reportName'], []);
 

@@ -7,11 +7,9 @@ import { DateTime } from 'luxon';
 
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { selectListAcceleratorReports } from 'src/redux/features/reports/reportsSelectors';
-import { requestListAcceleratorReports } from 'src/redux/features/reports/reportsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorReport, MetricType } from 'src/types/AcceleratorReport';
 import { SearchSortOrder } from 'src/types/Search';
@@ -99,13 +97,6 @@ export type RowMetric = {
 export default function AcceleratorReportTargetsTable(): JSX.Element {
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { currentParticipantProject } = useParticipantData();
-  const [allReportsRequestId, setAllReportsRequestId] = useState<string>('');
-  const allReportsResults = useAppSelector(selectListAcceleratorReports(allReportsRequestId));
-  const [requestId, setRequestId] = useState<string>('');
-  const reportsResults = useAppSelector(selectListAcceleratorReports(requestId));
-  const dispatch = useAppDispatch();
-  const [allReports, setAllReports] = useState<AcceleratorReport[]>();
-  const [reports, setReports] = useState<AcceleratorReport[]>();
   const { activeLocale } = useLocalization();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = isAcceleratorRoute ? String(pathParams.projectId) : currentParticipantProject?.id?.toString();
@@ -115,6 +106,9 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   const [selectedMetric, setSelectedMetric] = useState<RowMetric>();
   const currentYear = DateTime.now().year;
   const [yearFilter, setYearFilter] = useState<string>();
+
+  const { busy, reload, acceleratorReports: reports } = useProjectReports(projectId, true, true, yearFilter);
+  const { acceleratorReports: allReports } = useProjectReports(projectId, true, true);
 
   const getReportsYears = useMemo(() => {
     const availableYears: Set<number> = new Set();
@@ -126,44 +120,6 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
 
     return Array.from(availableYears).sort((a, b) => b - a);
   }, [allReports]);
-
-  useEffect(() => {
-    if (projectId) {
-      const request = dispatch(requestListAcceleratorReports({ projectId, includeFuture: true, includeMetrics: true }));
-      setAllReportsRequestId(request.requestId);
-    }
-  }, [projectId]);
-
-  useEffect(() => {
-    reload();
-  }, [projectId, yearFilter]);
-
-  useEffect(() => {
-    if (allReportsResults?.status === 'error') {
-      return;
-    }
-    if (allReportsResults?.data) {
-      setAllReports(allReportsResults.data);
-    }
-  }, [allReportsResults]);
-
-  useEffect(() => {
-    if (reportsResults?.status === 'error') {
-      return;
-    }
-    if (reportsResults?.data) {
-      setReports(reportsResults.data);
-    }
-  }, [reportsResults]);
-
-  const reload = () => {
-    if (projectId) {
-      const request = dispatch(
-        requestListAcceleratorReports({ projectId, includeFuture: true, includeMetrics: true, year: yearFilter })
-      );
-      setRequestId(request.requestId);
-    }
-  };
 
   const getReportQuarter = (report: AcceleratorReport) => {
     const startDate = DateTime.fromFormat(report.startDate, 'yyyy-MM-dd');
@@ -331,7 +287,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         />
       )}
       <ClientSideFilterTable
-        busy={reportsResults?.status === 'pending'}
+        busy={busy}
         columns={columns}
         defaultSortOrder={defaultSearchOrder}
         id='reports-targets-table'
