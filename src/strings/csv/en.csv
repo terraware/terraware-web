@@ -1355,6 +1355,7 @@ PLANTINGS_REQUIRE_READY_SEEDLINGS,"Plantings require batches with seedlings that
 PLANTS,Plants,
 PLANTS_AND_SPECIES_STATISTICS,Plants and Species Statistics,
 PLANTS_CARD_DESCRIPTION,They’ve taken root! View all your plants in one place.,
+PLANTS_DASHBOARD,Plants Dashboard,
 PLANTS_PER_HA,Plants per Ha,
 PLANTS_PER_HA_TOOLTIP,"Plants per Ha trend represents the numbers of plants per ha, as observed within all observations.",
 PLANTS_PER_HECTARE,plants/ha,
