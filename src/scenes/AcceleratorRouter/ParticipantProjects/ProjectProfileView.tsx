@@ -14,6 +14,7 @@ import ProjectOverviewCard from 'src/components/ProjectField/ProjectOverviewCard
 import ProjectProfileImage from 'src/components/ProjectField/ProjectProfileImage';
 import ProjectScoreLink from 'src/components/ProjectField/ProjectScoreLink';
 import VotingDecisionLink from 'src/components/ProjectField/VotingDecisionLink';
+import Co2HectareYear from 'src/components/Units/Co2HectareYear';
 import Card from 'src/components/common/Card';
 import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
@@ -59,9 +60,7 @@ const ProjectProfileView = ({
   );
 
   const isPhaseZeroOrApplication = useMemo(
-    () =>
-      participantProject?.cohortPhase === 'Phase 0 - Due Diligence' ||
-      participantProject?.cohortPhase === 'Application',
+    () => [undefined, 'Phase 0 - Due Diligence', 'Application', 'Pre-Screen'].includes(participantProject?.cohortPhase),
     [participantProject?.cohortPhase]
   );
 
@@ -71,7 +70,7 @@ const ProjectProfileView = ({
         md={12}
         backgroundColor={theme.palette.TwClrBaseGray100}
         label={label}
-        value={value ? strings.formatString(strings.X_HA, numericFormatter.format(value))?.toString() : 'N/A'}
+        value={value && strings.formatString(strings.X_HA, numericFormatter.format(value))?.toString()}
       />
     );
     switch (participantProject?.cohortPhase) {
@@ -158,7 +157,7 @@ const ProjectProfileView = ({
 
       <Grid
         container
-        paddingTop={theme.spacing(1)}
+        paddingTop={theme.spacing(2)}
         sx={{ '.mapboxgl-canvas-container.mapboxgl-interactive': { cursor: 'default' } }}
       >
         {project && participantProject?.projectHighlightPhotoValueId && (
@@ -198,36 +197,37 @@ const ProjectProfileView = ({
             md={4}
             label={strings.MIN_MAX_CARBON_ACCUMULATION}
             value={
-              participantProject?.minCarbonAccumulation && participantProject?.maxCarbonAccumulation
-                ? `${participantProject.minCarbonAccumulation}-${participantProject.maxCarbonAccumulation} tCO2/ha/yr`
-                : 'N/A'
+              participantProject?.minCarbonAccumulation &&
+              participantProject?.maxCarbonAccumulation &&
+              `${participantProject.minCarbonAccumulation}-${participantProject.maxCarbonAccumulation}`
             }
             backgroundColor={theme.palette.TwClrBaseGray050}
+            units={<Co2HectareYear />}
           />
         )}
         {!isPhaseZeroOrApplication && (
           <InvertedCard
             md={4}
             label={strings.ACCUMULATION_RATE}
-            value={participantProject?.accumulationRate || 'N/A'}
+            value={participantProject?.accumulationRate}
             backgroundColor={theme.palette.TwClrBaseGray050}
           />
         )}
         <InvertedCard
           md={4}
           label={strings.TOTAL_VCU_40YRS}
-          value={participantProject?.totalVCU ? `${numericFormatter.format(participantProject.totalVCU)} t` : 'N/A'}
+          value={participantProject?.totalVCU && `${numericFormatter.format(participantProject.totalVCU)}`}
+          units={'t'}
           backgroundColor={theme.palette.TwClrBaseGray050}
         />
         <InvertedCard
           md={4}
           label={strings.ESTIMATED_BUDGET}
           value={
-            participantProject?.perHectareBudget
-              ? strings
-                  .formatString(strings.USD_PER_HECTARE, numericFormatter.format(participantProject.perHectareBudget))
-                  ?.toString()
-              : 'N/A'
+            participantProject?.perHectareBudget &&
+            strings
+              .formatString(strings.USD_PER_HECTARE, numericFormatter.format(participantProject.perHectareBudget))
+              ?.toString()
           }
           backgroundColor={theme.palette.TwClrBaseGray050}
         />

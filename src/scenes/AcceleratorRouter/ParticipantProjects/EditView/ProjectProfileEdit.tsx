@@ -475,7 +475,7 @@ const ProjectProfileEdit = () => {
               </Typography>
             </Grid>
             <MinMaxCarbonTextfield
-              label={strings.MIN_MAX_CARBON_ACCUMULATION}
+              label={strings.MIN_MAX_CARBON_ACCUMULATION_UNITS}
               onChange={onChangeParticipantProject}
               valueMax={participantProjectRecord?.maxCarbonAccumulation}
               valueMin={participantProjectRecord?.minCarbonAccumulation}
