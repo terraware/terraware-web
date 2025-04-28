@@ -19,7 +19,6 @@ import { requestSitePopulation } from 'src/redux/features/tracking/trackingThunk
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
-import { useSupportedLocales } from 'src/strings/locales';
 import { PlantingSite } from 'src/types/Tracking';
 import { isAdmin } from 'src/utils/organization';
 import useMapboxToken from 'src/utils/useMapboxToken';
@@ -30,7 +29,6 @@ import StatsCardItem from './StatsCardItem';
 
 export const PlantingSiteStats = () => {
   const { activeLocale } = useLocalization();
-  const supportedLocales = useSupportedLocales();
   const numberFormatter = useNumberFormatter();
   const { isDesktop } = useDeviceInfo();
   const theme = useTheme();
@@ -47,10 +45,7 @@ export const PlantingSiteStats = () => {
   const { countries } = useLocalization();
   const dispatch = useAppDispatch();
 
-  const numericFormatter = useMemo(
-    () => numberFormatter(activeLocale, supportedLocales),
-    [activeLocale, numberFormatter, supportedLocales]
-  );
+  const numericFormatter = useMemo(() => numberFormatter(activeLocale), [activeLocale, numberFormatter]);
 
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, selectedPlantingSiteId || -1, defaultTimeZone.get().id, selectedOrganization.id)

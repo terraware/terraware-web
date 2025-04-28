@@ -25,7 +25,6 @@ import MobileAppCard from 'src/scenes/Home/MobileAppCard';
 import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
-import { useSupportedLocales } from 'src/strings/locales';
 import { isAdmin, isManagerOrHigher, selectedOrgHasFacilityType } from 'src/utils/organization';
 import { useNumberFormatter } from 'src/utils/useNumber';
 
@@ -33,7 +32,6 @@ import OrganizationStatsCard, { OrganizationStatsCardRow } from './OrganizationS
 
 const TerrawareHomeView = () => {
   const { activeLocale } = useLocalization();
-  const supportedLocales = useSupportedLocales();
   const numberFormatter = useNumberFormatter();
   const { user } = useUser();
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
@@ -50,10 +48,7 @@ const TerrawareHomeView = () => {
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 
-  const numericFormatter = useMemo(
-    () => numberFormatter(activeLocale, supportedLocales),
-    [activeLocale, numberFormatter, supportedLocales]
-  );
+  const numericFormatter = useMemo(() => numberFormatter(activeLocale), [activeLocale, numberFormatter]);
 
   useEffect(() => {
     if (orgPreferences.showAcceleratorCard === false && showAcceleratorCard) {
