@@ -47,6 +47,7 @@ export enum APP_PATHS {
   ACCELERATOR_PERSON_NEW = '/accelerator/people/new',
   ACCELERATOR_PERSON = '/accelerator/people/:userId',
   ACCELERATOR_PERSON_EDIT = '/accelerator/people/:userId/edit',
+  ACCELERATOR_PROJECT_BASE = '/accelerator/projects/',
   ACCELERATOR_PROJECT_EDIT = '/accelerator/projects/:projectId/edit',
   ACCELERATOR_PROJECT_VIEW = '/accelerator/projects/:projectId',
   ACCELERATOR_PROJECT_REPORTS = '/accelerator/projects/:projectId/reports',

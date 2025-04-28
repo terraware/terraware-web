@@ -23,7 +23,11 @@ import {
   modifySearchNode,
 } from 'src/utils/searchAndSort';
 
-const DeliverablesList = (): JSX.Element => {
+type DeliverablesListProps = {
+  projectId?: number;
+};
+
+const DeliverablesList = ({ projectId }: DeliverablesListProps): JSX.Element => {
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const {
@@ -32,7 +36,7 @@ const DeliverablesList = (): JSX.Element => {
     setCurrentParticipantProject,
   } = useParticipantData();
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({
-    projectId: currentParticipantProject?.id || '',
+    projectId: (projectId ? projectId : currentParticipantProject?.id) || '',
   });
 
   useEffect(() => {
@@ -118,7 +122,7 @@ const DeliverablesList = (): JSX.Element => {
 
   const PageHeaderLeftComponent = useMemo(
     () =>
-      activeLocale ? (
+      activeLocale && !projectId ? (
         <>
           <Grid container sx={{ marginTop: theme.spacing(0.5), alignItems: 'center' }}>
             <Grid item>
@@ -163,6 +167,7 @@ const DeliverablesList = (): JSX.Element => {
         organizationId={selectedOrganization.id}
         searchAndSort={searchAndSort}
         tableId={'participantDeliverablesTable'}
+        projectId={projectId}
       />
     </TfMain>
   );
