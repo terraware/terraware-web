@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/68</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/63</span>
+                <span class='fraction'>0/61</span>
             </div>
         
             
@@ -374,13 +374,7 @@
 <a name='L309'></a><a href='#L309'>309</a>
 <a name='L310'></a><a href='#L310'>310</a>
 <a name='L311'></a><a href='#L311'>311</a>
-<a name='L312'></a><a href='#L312'>312</a>
-<a name='L313'></a><a href='#L313'>313</a>
-<a name='L314'></a><a href='#L314'>314</a>
-<a name='L315'></a><a href='#L315'>315</a>
-<a name='L316'></a><a href='#L316'>316</a>
-<a name='L317'></a><a href='#L317'>317</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L312'></a><a href='#L312'>312</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -419,7 +413,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -429,9 +422,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -716,7 +706,6 @@ import { requestSitePopulation } from 'src/redux/features/tracking/trackingThunk
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
-import { useSupportedLocales } from 'src/strings/locales';
 import { PlantingSite } from 'src/types/Tracking';
 import { isAdmin } from 'src/utils/organization';
 import useMapboxToken from 'src/utils/useMapboxToken';
@@ -727,7 +716,6 @@ import StatsCardItem from './StatsCardItem';
 &nbsp;
 export const PlantingSiteStats = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const supportedLocales = <span class="cstat-no" title="statement not covered" >useSupportedLocales();</span>
   const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter();</span>
   const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
@@ -744,10 +732,7 @@ export const PlantingSiteStats = <span class="cstat-no" title="statement not cov
   const { countries } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
 &nbsp;
-  const numericFormatter = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >numberFormatter(activeLocale, supportedLocales),</span>
-    [activeLocale, numberFormatter, supportedLocales]
-  );
+  const numericFormatter = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >numberFormatter(activeLocale),</span> [activeLocale, numberFormatter]);</span>
 &nbsp;
   const observation = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >    selectLatestObservation(state, selectedPlantingSiteId || -1, defaultTimeZone.get().id, selectedOrganization.id)</span>
@@ -1018,7 +1003,7 @@ export default PlantingSiteStats;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-28T15:51:00.502Z
+                at 2025-04-28T16:23:33.027Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
