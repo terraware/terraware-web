@@ -32,6 +32,7 @@ export type PlantsPrimaryPageViewProps = {
   newHeader?: boolean;
   showGeometryNote?: boolean;
   latestObservationId?: number;
+  projectId?: number;
 };
 
 export default function PlantsPrimaryPageView({
@@ -46,6 +47,7 @@ export default function PlantsPrimaryPageView({
   newHeader,
   showGeometryNote,
   latestObservationId,
+  projectId,
 }: PlantsPrimaryPageViewProps): JSX.Element {
   const theme = useTheme();
   const { isMobile, isDesktop } = useDeviceInfo();
@@ -71,8 +73,9 @@ export default function PlantsPrimaryPageView({
     );
   }
 
+  const Wrapper = projectId ? Box : TfMain;
   return (
-    <TfMain>
+    <Wrapper>
       {newHeader && plantingSites.length > 0 ? (
         <>
           {showGeometryNote && selectedPlantingSiteId && latestObservationId && (
@@ -200,6 +203,6 @@ export default function PlantsPrimaryPageView({
       <Box ref={contentRef} sx={style}>
         {children}
       </Box>
-    </TfMain>
+    </Wrapper>
   );
 }

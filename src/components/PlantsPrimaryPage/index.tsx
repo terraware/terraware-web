@@ -30,6 +30,7 @@ export type PlantsPrimaryPageProps = {
   showGeometryNote?: boolean;
   latestObservationId?: number;
   projectId?: number;
+  organizationId?: number;
 };
 
 const allSitesOption = (organizationId: number): PlantingSite => ({
@@ -57,6 +58,7 @@ export default function PlantsPrimaryPage({
   showGeometryNote,
   latestObservationId,
   projectId,
+  organizationId,
 }: PlantsPrimaryPageProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
@@ -80,12 +82,9 @@ export default function PlantsPrimaryPage({
   useEffect(() => {
     const populatePlantingSites = async () => {
       let plantingSitesList: PlantingSite[] | undefined = plantingSitesData;
-      if (plantingSitesList === undefined && selectedOrganization.id !== -1) {
-        const serverResponse = await TrackingService.listPlantingSites(
-          selectedOrganization.id,
-          undefined,
-          activeLocale
-        );
+      if (plantingSitesList === undefined && (selectedOrganization.id !== -1 || organizationId)) {
+        const orgIdToUse = selectedOrganization.id !== -1 ? selectedOrganization.id : organizationId;
+        const serverResponse = await TrackingService.listPlantingSites(orgIdToUse ?? -1, undefined, activeLocale);
         if (serverResponse.requestSucceeded) {
           plantingSitesList = projectId
             ? serverResponse.sites?.filter((ps) => ps.projectId === projectId)
@@ -102,24 +101,39 @@ export default function PlantsPrimaryPage({
       setPlantingSites(plantingSitesList);
     };
     populatePlantingSites();
-  }, [selectedOrganization.id, snackbar, allowAllAsSiteSelection, plantingSitesData, activeLocale, projectId]);
+  }, [
+    selectedOrganization.id,
+    snackbar,
+    allowAllAsSiteSelection,
+    plantingSitesData,
+    activeLocale,
+    projectId,
+    organizationId,
+  ]);
 
   const setActivePlantingSite = useCallback(
     (site: PlantingSite | undefined) => {
       if (site) {
-        navigate(pagePath.replace(':plantingSiteId', site.id.toString()));
+        if (projectId) {
+          onSelect(site);
+          setSelectedPlantingSite(site);
+        } else {
+          navigate(pagePath.replace(':plantingSiteId', site.id.toString()));
+        }
       }
     },
-    [navigate, pagePath]
+    [navigate, pagePath, projectId]
   );
 
   useEffect(() => {
     const initializePlantingSite = () => {
-      if (plantingSites && plantingSites.length && selectedOrganization.id !== -1) {
+      if (plantingSites && plantingSites.length) {
         let lastVisitedPlantingSite: any = {};
-        const response = CachedUserService.getUserOrgPreferences(selectedOrganization.id);
-        if (response[lastVisitedPreferenceName]) {
-          lastVisitedPlantingSite = response[lastVisitedPreferenceName];
+        if (selectedOrganization.id !== -1) {
+          const response = CachedUserService.getUserOrgPreferences(selectedOrganization.id);
+          if (response[lastVisitedPreferenceName]) {
+            lastVisitedPlantingSite = response[lastVisitedPreferenceName];
+          }
         }
         const plantingSiteIdToUse = plantingSiteId || lastVisitedPlantingSite.plantingSiteId;
         const requestedPlantingSite = plantingSites.find(
@@ -127,13 +141,16 @@ export default function PlantsPrimaryPage({
         );
         const plantingSiteToUse = requestedPlantingSite || plantingSites[0];
 
-        if (plantingSiteToUse.id !== lastVisitedPlantingSite.plantingSiteId) {
-          lastVisitedPlantingSite = { plantingSiteId: plantingSiteToUse.id };
-          PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
-            [lastVisitedPreferenceName]: lastVisitedPlantingSite,
-          });
+        if (selectedOrganization.id !== -1) {
+          if (plantingSiteToUse.id !== lastVisitedPlantingSite.plantingSiteId) {
+            lastVisitedPlantingSite = { plantingSiteId: plantingSiteToUse.id };
+            PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
+              [lastVisitedPreferenceName]: lastVisitedPlantingSite,
+            });
+          }
+          setPlantsSitePreferences(lastVisitedPlantingSite);
         }
-        setPlantsSitePreferences(lastVisitedPlantingSite);
+
         if (plantingSiteToUse.id.toString() === plantingSiteId) {
           setSelectedPlantingSite(plantingSiteToUse);
           onSelect(plantingSiteToUse);
@@ -151,6 +168,7 @@ export default function PlantsPrimaryPage({
     selectedOrganization.id,
     lastVisitedPreferenceName,
     setPlantsSitePreferences,
+    organizationId,
   ]);
 
   return (
