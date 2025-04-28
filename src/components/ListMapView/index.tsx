@@ -6,7 +6,6 @@ import Card from 'src/components/common/Card';
 import ListMapSelector, { View } from 'src/components/common/ListMapSelector';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { useSupportedLocales } from 'src/strings/locales';
 import { ZoneAggregation } from 'src/types/Observations';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumber';
@@ -38,7 +37,6 @@ export default function ListMapView({
   const [view, setView] = useState<View>(initialView);
   const theme = useTheme();
   const { activeLocale } = useLocalization();
-  const supportedLocales = useSupportedLocales();
   const numberFormatter = useNumberFormatter();
   const { isMobile } = useDeviceInfo();
 
@@ -48,10 +46,7 @@ export default function ListMapView({
       onView(nextView);
     }
   };
-  const numericFormatter = useMemo(
-    () => numberFormatter(activeLocale, supportedLocales),
-    [activeLocale, numberFormatter, supportedLocales]
-  );
+  const numericFormatter = useMemo(() => numberFormatter(activeLocale), [activeLocale, numberFormatter]);
 
   const siteAreaHa = useMemo(() => {
     return data ? data.reduce((total, currentValue) => total + currentValue.areaHa, 0) : 0;

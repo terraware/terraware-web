@@ -16,7 +16,6 @@ import VotingDecisionLink from 'src/components/ProjectField/VotingDecisionLink';
 import Card from 'src/components/common/Card';
 import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
-import { useSupportedLocales } from 'src/strings/locales';
 import { AcceleratorOrg } from 'src/types/Accelerator';
 import { Application } from 'src/types/Application';
 import { ParticipantProject } from 'src/types/ParticipantProject';
@@ -46,15 +45,11 @@ const ProjectProfileView = ({
   phaseVotes,
 }: ProjectProfileViewProps) => {
   const theme = useTheme();
-  const supportedLocales = useSupportedLocales();
   const numberFormatter = useNumberFormatter();
   const { isAllowed } = useUser();
   const { activeLocale, countries } = useLocalization();
 
-  const numericFormatter = useMemo(
-    () => numberFormatter(activeLocale, supportedLocales),
-    [activeLocale, numberFormatter, supportedLocales]
-  );
+  const numericFormatter = useMemo(() => numberFormatter(activeLocale), [activeLocale, numberFormatter]);
   const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
 
   const isProjectInPhase = useMemo(
