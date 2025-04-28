@@ -104,8 +104,8 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
       setRemainingQuantityNotesError(false);
     }
 
-    if (quantityChanged && isByWeight) {
-      if (!record.subsetWeight) {
+    if (isByWeight || isSubsetOpen) {
+      if (!record.subsetWeight?.quantity) {
         setSubsetWeightError(strings.REQUIRED_FIELD);
         hasErrors = true;
       } else if (record.subsetWeight.quantity <= 0) {
@@ -114,16 +114,16 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
       } else {
         setSubsetWeightError('');
       }
-    } else {
-      setSubsetWeightError('');
+      if (!record.subsetCount) {
+        setSubsetCountError(strings.REQUIRED_FIELD);
+        hasErrors = true;
+      } else if (record.subsetCount <= 0) {
+        setSubsetCountError(strings.SUBSET_COUNT_POSITIVE);
+        hasErrors = true;
+      } else {
+        setSubsetCountError('');
+      }
     }
-
-    if (quantityChanged && isByWeight && !record.subsetCount) {
-      setSubsetCountError(strings.REQUIRED_FIELD);
-    } else {
-      setSubsetCountError('');
-    }
-
     return !hasErrors;
   };
 
@@ -423,7 +423,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
                       id='subsetCount'
                       onChange={(value) => onChangeSubsetCount(value as number)}
                       type='number'
-                      min={0}
+                      min={1}
                       disabledCharacters={['.', ',', '-']}
                       value={record.subsetCount}
                       errorText={subsetCountError}
