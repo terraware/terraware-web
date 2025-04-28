@@ -8,6 +8,7 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectScore from 'src/hooks/useProjectScore';
 import { useLocalization, useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
+import PlantsDashboardView from 'src/scenes/PlantsDashboardRouter/PlantsDashboardView';
 import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
@@ -48,6 +49,11 @@ const ProjectPage = () => {
             phaseVotes={phaseVotes}
           />
         ),
+      },
+      {
+        id: 'plantsDashboard',
+        label: strings.PLANTS_DASHBOARD,
+        children: <PlantsDashboardView />,
       },
     ];
   }, [activeLocale, projectData, projectApplication, projectScore, phaseVotes]);
