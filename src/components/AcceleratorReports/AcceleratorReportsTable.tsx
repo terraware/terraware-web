@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box } from '@mui/material';
@@ -8,12 +8,11 @@ import { DateTime } from 'luxon';
 import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import { FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { selectListAcceleratorReports } from 'src/redux/features/reports/reportsSelectors';
-import { requestListAcceleratorReports } from 'src/redux/features/reports/reportsThunks';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorReport, AcceleratorReportStatuses } from 'src/types/AcceleratorReport';
 import { SearchSortOrder } from 'src/types/Search';
@@ -75,35 +74,22 @@ export default function AcceleratorReportsTable(): JSX.Element {
   const [yearFilter, setYearFilter] = useState<string>();
   const [acceleratorReports, setAcceleratorReports] = useState<AcceleratorReportRow[]>([]);
   const [allAcceleratorReports, setAllAcceleratorReports] = useState<AcceleratorReportRow[]>([]);
-  const [listAcceleratorReportsRequestId, setListAcceleratorReportsRequestId] = useState<string>('');
-  const [listAllAcceleratorReportsRequestId, setListAllAcceleratorReportsRequestId] = useState<string>('');
   const [userIdsRequested, setUserIdsRequested] = useState(new Set<number>());
-
-  const listAcceleratorReportsRequest = useAppSelector(selectListAcceleratorReports(listAcceleratorReportsRequestId));
-  const listAllAcceleratorReportsRequest = useAppSelector(
-    selectListAcceleratorReports(listAllAcceleratorReportsRequestId)
-  );
 
   const pathParams = useParams<{ projectId: string }>();
   const projectId = isAcceleratorRoute ? String(pathParams.projectId) : currentParticipantProject?.id?.toString();
   const query = useQuery();
   const yearQuery = query.get('year');
 
+  const { busy, reload, acceleratorReports: projectReports } = useProjectReports(projectId, false, true, yearFilter);
+  const { acceleratorReports: allProjectReports } = useProjectReports(projectId, false, true);
+
   const currentYear = DateTime.now().year;
 
   useEffect(() => {
-    if (projectId) {
-      const request = dispatch(
-        requestListAcceleratorReports({ projectId, includeFuture: false, includeMetrics: true })
-      );
-      setListAllAcceleratorReportsRequestId(request.requestId);
-    }
-  }, [projectId]);
-
-  useEffect(() => {
-    if (listAllAcceleratorReportsRequest?.status === 'success') {
+    if (allProjectReports?.length > 0) {
       setAllAcceleratorReports(() => {
-        const reports = listAllAcceleratorReportsRequest?.data
+        const reports = allProjectReports
           ?.filter((report) => report.frequency !== 'Annual')
           .map((report) => {
             const year = report.startDate.split('-')[0];
@@ -117,12 +103,12 @@ export default function AcceleratorReportsTable(): JSX.Element {
         return reports || [];
       });
     }
-  }, [listAllAcceleratorReportsRequest]);
+  }, [allProjectReports]);
 
   useEffect(() => {
-    if (listAcceleratorReportsRequest?.status === 'success') {
+    if (projectReports?.length > 0) {
       setAcceleratorReports(() => {
-        const reports = listAcceleratorReportsRequest?.data
+        const reports = projectReports
           ?.filter((report) => report.frequency !== 'Annual')
           .map((report) => {
             const year = report.startDate.split('-')[0];
@@ -137,25 +123,11 @@ export default function AcceleratorReportsTable(): JSX.Element {
         return reports || [];
       });
     }
-  }, [listAcceleratorReportsRequest]);
+  }, [projectReports]);
 
   useEffect(() => {
     reload();
   }, [projectId, yearFilter]);
-
-  const reload = useCallback(() => {
-    if (projectId) {
-      const request = dispatch(
-        requestListAcceleratorReports({
-          projectId,
-          includeFuture: false,
-          includeMetrics: true,
-          year: yearFilter,
-        })
-      );
-      setListAcceleratorReportsRequestId(request.requestId);
-    }
-  }, [dispatch, projectId, yearFilter]);
 
   const fuzzySearchColumns = useMemo(() => ['reportName'], []);
 
@@ -191,7 +163,7 @@ export default function AcceleratorReportsTable(): JSX.Element {
         return;
       }
       setUserIdsRequested((prev) => new Set(prev).add(userId));
-      dispatch(requestGetUser(userId));
+      void dispatch(requestGetUser(userId));
     });
   }, [allReportUserIds, userIdsRequested, dispatch]);
 
@@ -261,7 +233,7 @@ export default function AcceleratorReportsTable(): JSX.Element {
 
   return (
     <ClientSideFilterTable
-      busy={listAcceleratorReportsRequest?.status === 'pending'}
+      busy={busy}
       columns={columns}
       defaultSortOrder={defaultSearchOrder}
       extraComponent={extraFilter}
