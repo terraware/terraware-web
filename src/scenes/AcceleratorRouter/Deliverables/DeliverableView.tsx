@@ -184,7 +184,7 @@ const DeliverableView = () => {
       return [];
     }
 
-    return source?.startsWith('/accelerator/projects/')
+    return source?.startsWith(APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', ''))
       ? [
           {
             name: strings.OVERVIEW,
