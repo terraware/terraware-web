@@ -13,11 +13,9 @@ const InvertedCard = ({ label, md, value, backgroundColor }: ProjectFieldProps) 
       <Box
         borderRadius={theme.spacing(1)}
         textAlign={'left'}
-        margin={`0 ${theme.spacing(2)}`}
+        margin={`0 ${theme.spacing(1)}`}
         padding={`${theme.spacing(2, 2)}`}
-        sx={{
-          backgroundColor: backgroundColor,
-        }}
+        sx={{ backgroundColor }}
       >
         <Grid container alignContent={'left'}>
           <Grid item xs={12}>
