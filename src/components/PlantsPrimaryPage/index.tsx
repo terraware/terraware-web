@@ -29,6 +29,7 @@ export type PlantsPrimaryPageProps = {
   newHeader?: boolean;
   showGeometryNote?: boolean;
   latestObservationId?: number;
+  projectId?: number;
 };
 
 const allSitesOption = (organizationId: number): PlantingSite => ({
@@ -55,6 +56,7 @@ export default function PlantsPrimaryPage({
   newHeader,
   showGeometryNote,
   latestObservationId,
+  projectId,
 }: PlantsPrimaryPageProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
@@ -85,7 +87,9 @@ export default function PlantsPrimaryPage({
           activeLocale
         );
         if (serverResponse.requestSucceeded) {
-          plantingSitesList = serverResponse.sites;
+          plantingSitesList = projectId
+            ? serverResponse.sites?.filter((ps) => ps.projectId === projectId)
+            : serverResponse.sites;
         } else {
           snackbar.toastError();
           return;
@@ -98,7 +102,7 @@ export default function PlantsPrimaryPage({
       setPlantingSites(plantingSitesList);
     };
     populatePlantingSites();
-  }, [selectedOrganization.id, snackbar, allowAllAsSiteSelection, plantingSitesData, activeLocale]);
+  }, [selectedOrganization.id, snackbar, allowAllAsSiteSelection, plantingSitesData, activeLocale, projectId]);
 
   const setActivePlantingSite = useCallback(
     (site: PlantingSite | undefined) => {

@@ -37,7 +37,11 @@ import PlantingSiteTrendsCard from './components/PlantingSiteTrendsCard';
 import PlantsAndSpeciesCard from './components/PlantsAndSpeciesCard';
 import ZoneLevelDataMap from './components/ZoneLevelDataMap';
 
-export default function PlantsDashboardView(): JSX.Element {
+type PlantsDashboardViewProps = {
+  projectId?: number;
+};
+
+export default function PlantsDashboardView({ projectId }: PlantsDashboardViewProps): JSX.Element {
   const org = useOrganization();
   const { isMobile } = useDeviceInfo();
   const dispatch = useAppDispatch();
@@ -364,6 +368,7 @@ export default function PlantsDashboardView(): JSX.Element {
       newHeader={true}
       showGeometryNote={geometryChangedNote}
       latestObservationId={latestObservationId}
+      projectId={projectId}
     >
       {selectedPlantingSiteId !== -1 ? (
         <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
