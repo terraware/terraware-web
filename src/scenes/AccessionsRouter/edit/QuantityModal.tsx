@@ -114,18 +114,16 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
       } else {
         setSubsetWeightError('');
       }
-    }
-
-    if (isByWeight || isSubsetOpen) {
       if (!record.subsetCount) {
         setSubsetCountError(strings.REQUIRED_FIELD);
         hasErrors = true;
       } else if (record.subsetCount <= 0) {
         setSubsetCountError(strings.SUBSET_COUNT_POSITIVE);
         hasErrors = true;
+      } else {
+        setSubsetCountError('');
       }
     }
-
     return !hasErrors;
   };
 
