@@ -5,6 +5,7 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import ApplicationStatusLink from 'src/components/ProjectField/ApplicationStatusLink';
 import CohortBadge from 'src/components/ProjectField/CohortBadge';
+import ProjectFieldDisplay from 'src/components/ProjectField/Display';
 import ProjectProfileFooter from 'src/components/ProjectField/Footer';
 import ProjectFieldInlineMeta from 'src/components/ProjectField/InlineMeta';
 import InvertedCard from 'src/components/ProjectField/InvertedCard';
@@ -296,6 +297,82 @@ const ProjectProfileView = ({
           </Grid>
         </Grid>
       )}
+
+      <Grid container>
+        <Box marginX={theme.spacing(2)} borderTop={`1px solid ${theme.palette.TwClrBrdrTertiary}`} width={'100%'}>
+          <Grid item xs={12} marginTop={theme.spacing(2)}>
+            <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
+              {strings.LAND_DATA}
+            </Typography>
+          </Grid>
+        </Box>
+        <ProjectFieldDisplay
+          label={strings.ELIGIBLE_AREA}
+          height={'64px'}
+          md={4}
+          value={strings
+            .formatString(strings.X_HA, numericFormatter.format(participantProject?.confirmedReforestableLand))
+            ?.toString()}
+          tooltip={strings.ELIGIBLE_AREA_DESCRIPTION}
+        />
+        <ProjectFieldDisplay
+          label={strings.PROJECT_AREA}
+          height={'64px'}
+          md={4}
+          value={strings
+            .formatString(strings.X_HA, numericFormatter.format(participantProject?.projectArea))
+            ?.toString()}
+          tooltip={strings.PROJECT_AREA_DESCRIPTION}
+        />
+        <ProjectFieldDisplay
+          label={strings.NATIVE_SPECIES_TO_BE_PLANTED}
+          height={'64px'}
+          md={4}
+          value={participantProject?.numNativeSpecies}
+        />
+        <ProjectFieldDisplay
+          label={strings.MIN_PROJECT_AREA}
+          height={'64px'}
+          md={4}
+          value={strings
+            .formatString(strings.X_HA, numericFormatter.format(participantProject?.minProjectArea))
+            ?.toString()}
+          tooltip={strings.MIN_PROJECT_AREA_DESCRIPTION}
+        />
+        <ProjectFieldDisplay
+          label={strings.EXPANSION_POTENTIAL}
+          height={'64px'}
+          md={4}
+          value={strings
+            .formatString(strings.X_HA, numericFormatter.format(participantProject?.totalExpansionPotential))
+            ?.toString()}
+          tooltip={strings.EXPANSION_POTENTIAL_DESCRIPTION}
+        />
+      </Grid>
+
+      <Grid container>
+        <Box marginX={theme.spacing(2)} width={'100%'}>
+          <Grid item xs={12} marginTop={theme.spacing(2)}>
+            <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
+              {strings.CARBON_DATA}
+            </Typography>
+          </Grid>
+        </Box>
+        <ProjectFieldDisplay
+          label={strings.ACCUMULATION_RATE}
+          height={'64px'}
+          md={4}
+          value={numericFormatter.format(participantProject?.accumulationRate)}
+          units={<Co2HectareYear />}
+        />
+        <ProjectFieldDisplay label={strings.STANDARD} height={'64px'} md={4} value={participantProject?.standard} />
+        <ProjectFieldDisplay
+          label={strings.METHODOLOGY_NUMBER}
+          height={'64px'}
+          md={4}
+          value={participantProject?.methodologyNumber}
+        />
+      </Grid>
 
       <ProjectProfileFooter project={project} projectMeta={projectMeta} />
     </Card>

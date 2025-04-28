@@ -11,6 +11,7 @@ export interface ProjectFieldProps {
   md?: number;
   value?: DisplayFieldValue;
   units?: DisplayFieldValue;
+  tooltip?: string;
   rightBorder?: boolean;
   user?: string;
   date?: string;
