@@ -1,3 +1,4 @@
+84bf46cfba6 SW-6812: Add Deliverables tab to Project Profile in Console (#3888)
 43e4aea7afb Remove unnecessary supported locales to numberFormatter (#3893)
 5eb5b40357e SW-6828 Console - Add Dashboard tab in Project View (#3891)
 5bf7eae1d69 SW-6821 Add validation to subset count by count (#3885)
