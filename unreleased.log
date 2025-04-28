@@ -1,3 +1,5 @@
+5eb5b40357e SW-6828 Console - Add Dashboard tab in Project View (#3891)
+5bf7eae1d69 SW-6821 Add validation to subset count by count (#3885)
 e8b1f14f41e Replace tslint disables with eslint (#3887)
 bf26a808323 SW-5592 Enable eslint in editors (#3886)
 7fda0c79e01 SW-6820 Initial version of upload photos with no styling (#3884)
