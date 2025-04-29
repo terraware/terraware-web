@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
-import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import { PlantingSiteMap } from 'src/components/Map';
 import MapDateSelect from 'src/components/common/MapDateSelect';
@@ -17,7 +16,6 @@ import strings from 'src/strings';
 import { MapObject, MapSourceBaseData, MapSourceProperties } from 'src/types/Map';
 import { AdHocObservationResults, Observation } from 'src/types/Observations';
 import { PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type BiomassMeasurementMapViewProps = {
   hideDate?: boolean;
@@ -32,7 +30,6 @@ export default function BiomassMeasurementMapView({
 }: BiomassMeasurementMapViewProps): JSX.Element {
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
-  const defaultTimeZone = useDefaultTimeZone();
 
   const observationHistory = useAppSelector((state) => selectPlantingSiteHistory(state, requestId));
 
@@ -45,8 +42,7 @@ export default function BiomassMeasurementMapView({
   const observationsDates = useMemo(() => {
     const uniqueDates: Set<string> = new Set();
     observationsResults?.forEach((obs) => {
-      const timeZone = selectedPlantingSite?.timeZone ?? defaultTimeZone.get().id;
-      const dateToUse = obs.completedTime ? getDateDisplayValue(obs.completedTime, timeZone) : obs.startDate;
+      const dateToUse = obs.completedTime ? obs.completedTime : obs.startDate;
       uniqueDates.add(dateToUse);
     });
 
@@ -81,8 +77,7 @@ export default function BiomassMeasurementMapView({
   const selectedObservation = useMemo(
     () =>
       observationsResults?.find((obs) => {
-        const timeZone = selectedPlantingSite?.timeZone ?? defaultTimeZone.get().id;
-        const dateToCheck = obs.completedTime ? getDateDisplayValue(obs.completedTime, timeZone) : obs.startDate;
+        const dateToCheck = obs.completedTime ? obs.completedTime : obs.startDate;
         return dateToCheck === selectedObservationDate;
       }),
     [observationsResults, selectedObservationDate]
