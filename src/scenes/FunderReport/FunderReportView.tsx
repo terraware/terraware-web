@@ -66,7 +66,7 @@ const FunderReportView = () => {
     return selectedReport?.startDate?.split('-')[0];
   }, [selectedReport]);
 
-  const reportName = userFundingEntity?.projects?.[0].dealName || '';
+  const projectName = userFundingEntity?.projects?.[0]?.dealName || '';
 
   const allMetrics: PublishedReportMetric[] = [];
 
@@ -96,7 +96,7 @@ const FunderReportView = () => {
         justifyContent='space-between'
       >
         <Typography fontSize='24px' fontWeight={600}>
-          {reportName}
+          {projectName}
         </Typography>
         {(reports?.length ?? 0) > 0 && (
           <SelectT<PublishedReport>
