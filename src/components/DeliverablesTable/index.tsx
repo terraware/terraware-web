@@ -152,11 +152,11 @@ const DeliverablesTable = ({
   const isAllowedReadDeliverable = isAllowed('READ_DELIVERABLE', { organization: selectedOrganization });
 
   const getFilterProjectName = useCallback(
-    (projectId: number | string) => {
+    (_projectId: number | string) => {
       return (
         (participantId
-          ? selectedParticipant?.projects?.find((p) => p.projectId === Number(projectId))?.projectId
-          : projectsFilterOptions?.find((p) => p.id === Number(projectId))?.name) || ''
+          ? selectedParticipant?.projects?.find((p) => p.projectId === Number(_projectId))?.projectId
+          : projectsFilterOptions?.find((p) => p.id === Number(_projectId))?.name) || ''
       );
     },
     [participantId, projectsFilterOptions, selectedParticipant?.projects]
