@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, useTheme } from '@mui/material';
+import { useTheme } from '@mui/material';
 
 import Card from 'src/components/common/Card';
 import DeliverablesList from 'src/scenes/DeliverablesRouter/DeliverablesList';
@@ -19,9 +19,7 @@ const ProjectDeliverablesView = ({ projectId }: ProjectDeliverablesViewProps) =>
         padding: 0,
       }}
     >
-      <Box marginX={`-${theme.spacing(4)}`}>
-        <DeliverablesList projectId={projectId} />
-      </Box>
+      <DeliverablesList projectId={projectId} />
     </Card>
   );
 };
