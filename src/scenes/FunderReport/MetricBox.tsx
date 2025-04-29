@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Box, Tooltip, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { isReportSystemMetric } from 'src/components/AcceleratorReports/MetricBox';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
@@ -18,17 +19,21 @@ type MetricBoxProps = {
   index: number;
   year: string;
   quarter?: string;
+  lastIndex: boolean;
 };
 
-const MetricBox = ({ metric, index, year, quarter }: MetricBoxProps) => {
+const MetricBox = ({ metric, index, year, quarter, lastIndex }: MetricBoxProps) => {
+  const { isDesktop } = useDeviceInfo();
   const theme = useTheme();
   return (
     <Box
       flexBasis={'calc(50% - 24px)'}
       flexShrink={0}
       marginTop={3}
-      borderRight={index % 2 !== 0 ? 'none' : `1px solid ${theme.palette.TwClrBrdr}`}
+      borderRight={isDesktop ? (index % 2 !== 0 ? 'none' : `1px solid ${theme.palette.TwClrBrdrTertiary}`) : 'none'}
+      borderBottom={isDesktop || lastIndex ? 'none' : `1px solid ${theme.palette.TwClrBrdrTertiary}`}
       marginRight={3}
+      paddingBottom={isDesktop ? 0 : 3}
     >
       <Box display={'flex'} alignItems={'center'}>
         <Typography fontSize='20px' fontWeight={600} paddingRight={'10px'}>
