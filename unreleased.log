@@ -1,3 +1,5 @@
+df9d39380b2 Updated translations from Phrase (#3895)
+8b9eafc4c66 SW-6841 Fix Challenge/Mitigation box for participant reports (#3903)
 313733b3c14 Biomass Observations: Not seeing Ad Hoc plots in Map (#3901)
 9503637f5a6 SW-6829 Console - Add Planting Site dropdown in Dashboard (#3892)
 d33f492f403 Update nginx Docker tag to v1.28 (#3890)
