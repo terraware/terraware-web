@@ -265,7 +265,7 @@ const getMapDataFromObservation = (
       id: zone.plantingZoneId || -1,
       properties: {
         id: zone.plantingZoneId || -1,
-        name: zoneFromObservation?.plantingZoneName || '',
+        name: zoneFromObservation?.plantingZoneName || zone.name || '',
         type: 'zone',
         mortalityRate: zoneFromObservation?.mortalityRate,
         hasObservedPermanentPlots: zoneFromObservation?.hasObservedPermanentPlots,
@@ -287,7 +287,7 @@ const getMapDataFromObservation = (
       id: subzone.plantingSubzoneId || -1,
       properties: {
         id: subzone.plantingSubzoneId || -1,
-        name: subzoneFromObservation?.plantingSubzoneName || '',
+        name: subzoneFromObservation?.plantingSubzoneName || subzone.name || '',
         mortalityRate: zoneFromObservation?.mortalityRate,
         type: 'subzone',
       },
