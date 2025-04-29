@@ -137,7 +137,20 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
     return challengeMitigations.filter((s) => !!s.challenge || !!s.mitigationPlan);
   }, [challengeMitigations]);
 
-  useEffect(() => setChallengeMitigations(report?.challenges || []), [report?.challenges]);
+  const areFilteredChallengesDifferent = useMemo(() => {
+    const filteredChallenges = getNonEmptyChallenges();
+    return filteredChallenges && JSON.stringify(filteredChallenges) !== JSON.stringify(report?.challenges);
+  }, [challengeMitigations]);
+
+  useEffect(() => {
+    // For participant editing, react can't keep up with setting challengeMitigations, then calling onChange on the
+    // report, and having this useEffect update challengeMitigations again. This check ensures we're only setting it
+    // from report when needed
+    if ((!getNonEmptyChallenges() || getNonEmptyChallenges().length === 0) && report?.challenges) {
+      setChallengeMitigations(report.challenges || []);
+    }
+  }, [report?.challenges]);
+
   useEffect(() => onEditChange?.(internalEditing), [internalEditing]);
 
   useEffect(() => {
@@ -146,9 +159,12 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
     if (challengeMitigations.length === 0) {
       addRow();
     }
-    const filteredChallenges = getNonEmptyChallenges();
-    if (filteredChallenges && JSON.stringify(filteredChallenges) !== JSON.stringify(report?.challenges)) {
-      onChange?.(filteredChallenges);
+    if (onChange) {
+      if (areFilteredChallengesDifferent) {
+        // only call onChange if the non-empty challenges are different, but call it with all to include the empty
+        // challenges; otherwise deleting characters can cause rows to disappear
+        onChange(challengeMitigations);
+      }
     }
   }, [challengeMitigations]);
 
