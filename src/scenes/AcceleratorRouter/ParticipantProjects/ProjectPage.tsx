@@ -23,7 +23,7 @@ const ProjectPage = () => {
   const theme = useTheme();
   const { isAllowed } = useUser();
   const projectData = useParticipantProjectData();
-  const { goToParticipantProjectEdit } = useNavigateTo();
+  const { goToDocumentNew, goToParticipantProjectEdit } = useNavigateTo();
   const { getApplicationByProjectId } = useApplicationData();
   const { projectScore } = useProjectScore(projectData.projectId);
   const { phaseVotes } = useVotingData();
@@ -91,6 +91,18 @@ const ProjectPage = () => {
               label={strings.EDIT_PROJECT}
               priority='primary'
               onClick={() => goToParticipantProjectEdit(projectData.projectId)}
+              size='medium'
+              type='productive'
+            />
+          )}
+
+          {activeTab === 'projectDocuments' && (
+            <Button
+              icon='plus'
+              id='createDocument'
+              label={strings.ADD_DOCUMENT}
+              onClick={goToDocumentNew}
+              priority='primary'
               size='medium'
               type='productive'
             />
