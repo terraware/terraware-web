@@ -52,6 +52,32 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
   const theme = useTheme();
   const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
   const summaries = useObservationSummaries(selectedPlantingSiteId);
+  const defaultTimeZone = useDefaultTimeZone();
+  const latestObservation = useAppSelector((state) =>
+    selectLatestObservation(state, selectedPlantingSiteId, defaultTimeZone.get().id)
+  );
+
+  const hasObservations = useMemo(() => !!latestObservation, [latestObservation]);
+
+  const populationResults = useAppSelector((state) => selectSitePopulationZones(state));
+  const hasReportedPlants = useMemo(() => {
+    const population =
+      populationResults
+        ?.flatMap((zone) => zone.plantingSubzones)
+        ?.flatMap((sz) => sz.populations)
+        ?.filter((pop) => pop !== undefined)
+        ?.reduce((acc, pop) => +pop['totalPlants(raw)'] + acc, 0) ?? 0;
+    return population > 0;
+  }, [populationResults]);
+
+  const plantingSiteResult = useAppSelector((state) => selectPlantingSite(state, selectedPlantingSiteId));
+  const sitePlantingComplete = useMemo(() => {
+    return (
+      plantingSiteResult?.plantingZones
+        ?.flatMap((zone) => zone.plantingSubzones)
+        ?.every((sz) => sz.plantingCompleted) ?? false
+    );
+  }, [plantingSiteResult]);
 
   const organizationIdToUse = useMemo(
     () => (organizationId ? organizationId : org.selectedOrganization.id),
@@ -74,11 +100,6 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
   const onPreferences = useCallback(
     (preferences: Record<string, unknown>) => setPlantsDashboardPreferences(preferences),
     [setPlantsDashboardPreferences]
-  );
-
-  const defaultTimeZone = useDefaultTimeZone();
-  const latestObservation = useAppSelector((state) =>
-    selectLatestObservation(state, selectedPlantingSiteId, defaultTimeZone.get().id)
   );
 
   const latestObservationId = useMemo(() => {
@@ -132,182 +153,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     </Grid>
   );
 
-  const renderMortalityRate = () => (
-    <>
-      <Grid item xs={12}>
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: isMobile ? 'flex-start' : 'center',
-            flexDirection: isMobile ? 'column' : 'row',
-          }}
-        >
-          <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
-            {strings.MORTALITY_RATE}
-          </Typography>
-          {hasObservations && (
-            <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
-          )}
-        </Box>
-      </Grid>
-      <Grid item xs={12}>
-        <MortalityRateCard plantingSiteId={selectedPlantingSiteId} />
-      </Grid>
-    </>
-  );
-
-  const renderTotalPlantsAndSpecies = () => (
-    <>
-      <Grid item xs={12}>
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: isMobile ? 'flex-start' : 'center',
-            flexDirection: isMobile ? 'column' : 'row',
-          }}
-        >
-          <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
-            {strings.PLANTS_AND_SPECIES_STATISTICS}
-          </Typography>
-        </Box>
-      </Grid>
-      <Grid item xs={12}>
-        <PlantsAndSpeciesCard plantingSiteId={selectedPlantingSiteId} hasReportedPlants={hasReportedPlants} />
-      </Grid>
-    </>
-  );
-
-  const hasObservations = useMemo(() => !!latestObservation, [latestObservation]);
-
-  const populationResults = useAppSelector((state) => selectSitePopulationZones(state));
-  const hasReportedPlants = useMemo(() => {
-    const population =
-      populationResults
-        ?.flatMap((zone) => zone.plantingSubzones)
-        ?.flatMap((sz) => sz.populations)
-        ?.filter((pop) => pop !== undefined)
-        ?.reduce((acc, pop) => +pop['totalPlants(raw)'] + acc, 0) ?? 0;
-    return population > 0;
-  }, [populationResults]);
-
-  const plantingSiteResult = useAppSelector((state) => selectPlantingSite(state, selectedPlantingSiteId));
-  const sitePlantingComplete = useMemo(() => {
-    return (
-      plantingSiteResult?.plantingZones
-        ?.flatMap((zone) => zone.plantingSubzones)
-        ?.every((sz) => sz.plantingCompleted) ?? false
-    );
-  }, [plantingSiteResult]);
-
-  const renderPlantingProgressAndDensity = () => (
-    <>
-      <Grid item xs={12}>
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: isMobile ? 'flex-start' : 'center',
-            flexDirection: isMobile ? 'column' : 'row',
-          }}
-        >
-          <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
-            {strings.PLANTING_DENSITY}
-          </Typography>
-          {hasObservations && (
-            <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
-          )}
-        </Box>
-      </Grid>
-      <Grid item xs={12}>
-        <PlantingDensityCard
-          plantingSiteId={selectedPlantingSiteId}
-          sitePlantingComplete={sitePlantingComplete}
-          hasObservations={hasObservations}
-        />
-      </Grid>
-    </>
-  );
-
-  const renderPlantingSiteTrends = () => (
-    <>
-      <Grid item xs={12}>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
-            {strings.ZONE_TRENDS}
-          </Typography>
-
-          <Typography>{strings.ALL_OBSERVATIONS}</Typography>
-        </Box>
-      </Grid>
-      <Grid item xs={12}>
-        <PlantingSiteTrendsCard plantingSiteId={selectedPlantingSiteId} />
-      </Grid>
-    </>
-  );
-
-  const renderZoneLevelData = () => (
-    <>
-      <Grid item xs={12}>
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: isMobile ? 'flex-start' : 'center',
-            flexDirection: isMobile ? 'column' : 'row',
-          }}
-        >
-          <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
-            {strings.SITE_MAP}
-          </Typography>
-          {hasObservations && (
-            <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
-          )}
-        </Box>
-      </Grid>
-      <Grid item xs={12}>
-        <ZoneLevelDataMap plantingSiteId={selectedPlantingSiteId} />
-      </Grid>
-    </>
-  );
-
-  const renderSimpleSiteMap = () => (
-    <>
-      {sectionHeader(strings.SITE_MAP)}
-      <Grid item xs={12}>
-        <Box
-          sx={{
-            background: theme.palette.TwClrBg,
-            borderRadius: '24px',
-            padding: theme.spacing(3),
-            gap: theme.spacing(3),
-          }}
-        >
-          <SimplePlantingSiteMap plantingSiteId={selectedPlantingSiteId} />
-        </Box>
-      </Grid>
-    </>
-  );
-
-  const hasPolygons = useMemo(
-    () => !!plantingSiteResult && !!plantingSiteResult.boundary && plantingSiteResult.boundary.coordinates?.length > 0,
-    [plantingSiteResult]
-  );
-
-  const hasPlantingZones = useMemo(
-    () => !!plantingSiteResult && !!plantingSiteResult.plantingZones && plantingSiteResult.plantingZones.length > 0,
-    [plantingSiteResult]
-  );
-
-  const getSummariesHectares = useCallback(() => {
-    const totalSquareMeters =
-      summaries?.[0]?.plantingZones
-        .flatMap((pz) =>
-          pz.plantingSubzones.flatMap((psz) => psz.monitoringPlots.map((mp) => mp.sizeMeters * mp.sizeMeters))
-        )
-        .reduce((acc, area) => acc + area, 0) ?? 0;
-
-    return totalSquareMeters * SQ_M_TO_HECTARES;
-  }, [summaries]);
-
-  const getLatestObservationLink = () => {
+  const getLatestObservationLink = useCallback(() => {
     const allMonitoringPlots = latestObservation?.plantingZones.flatMap((pz) =>
       pz.plantingSubzones.flatMap((sz) => sz.monitoringPlots)
     );
@@ -331,9 +177,180 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     ) : (
       ''
     );
-  };
+  }, [latestObservation]);
 
-  const getObservationHectares = () => {
+  const renderMortalityRate = useCallback(
+    () => (
+      <>
+        <Grid item xs={12}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: isMobile ? 'flex-start' : 'center',
+              flexDirection: isMobile ? 'column' : 'row',
+            }}
+          >
+            <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
+              {strings.MORTALITY_RATE}
+            </Typography>
+            {hasObservations && (
+              <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
+            )}
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <MortalityRateCard plantingSiteId={selectedPlantingSiteId} />
+        </Grid>
+      </>
+    ),
+    [selectedPlantingSiteId, getLatestObservationLink]
+  );
+
+  const renderTotalPlantsAndSpecies = useCallback(
+    () => (
+      <>
+        <Grid item xs={12}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: isMobile ? 'flex-start' : 'center',
+              flexDirection: isMobile ? 'column' : 'row',
+            }}
+          >
+            <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
+              {strings.PLANTS_AND_SPECIES_STATISTICS}
+            </Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <PlantsAndSpeciesCard plantingSiteId={selectedPlantingSiteId} hasReportedPlants={hasReportedPlants} />
+        </Grid>
+      </>
+    ),
+    [selectedPlantingSiteId, hasReportedPlants]
+  );
+
+  const renderPlantingProgressAndDensity = useCallback(
+    () => (
+      <>
+        <Grid item xs={12}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: isMobile ? 'flex-start' : 'center',
+              flexDirection: isMobile ? 'column' : 'row',
+            }}
+          >
+            <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
+              {strings.PLANTING_DENSITY}
+            </Typography>
+            {hasObservations && (
+              <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
+            )}
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <PlantingDensityCard
+            plantingSiteId={selectedPlantingSiteId}
+            sitePlantingComplete={sitePlantingComplete}
+            hasObservations={hasObservations}
+          />
+        </Grid>
+      </>
+    ),
+    [selectedPlantingSiteId, sitePlantingComplete, hasObservations, getLatestObservationLink]
+  );
+
+  const renderPlantingSiteTrends = useCallback(
+    () => (
+      <>
+        <Grid item xs={12}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
+              {strings.ZONE_TRENDS}
+            </Typography>
+
+            <Typography>{strings.ALL_OBSERVATIONS}</Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <PlantingSiteTrendsCard plantingSiteId={selectedPlantingSiteId} />
+        </Grid>
+      </>
+    ),
+    [selectedPlantingSiteId]
+  );
+
+  const renderZoneLevelData = useCallback(
+    () => (
+      <>
+        <Grid item xs={12}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: isMobile ? 'flex-start' : 'center',
+              flexDirection: isMobile ? 'column' : 'row',
+            }}
+          >
+            <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
+              {strings.SITE_MAP}
+            </Typography>
+            {hasObservations && (
+              <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
+            )}
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <ZoneLevelDataMap plantingSiteId={selectedPlantingSiteId} />
+        </Grid>
+      </>
+    ),
+    [selectedPlantingSiteId, getLatestObservationLink]
+  );
+
+  const renderSimpleSiteMap = useCallback(
+    () => (
+      <>
+        {sectionHeader(strings.SITE_MAP)}
+        <Grid item xs={12}>
+          <Box
+            sx={{
+              background: theme.palette.TwClrBg,
+              borderRadius: '24px',
+              padding: theme.spacing(3),
+              gap: theme.spacing(3),
+            }}
+          >
+            <SimplePlantingSiteMap plantingSiteId={selectedPlantingSiteId} />
+          </Box>
+        </Grid>
+      </>
+    ),
+    [selectedPlantingSiteId]
+  );
+
+  const hasPolygons = useMemo(
+    () => !!plantingSiteResult && !!plantingSiteResult.boundary && plantingSiteResult.boundary.coordinates?.length > 0,
+    [plantingSiteResult]
+  );
+
+  const hasPlantingZones = useMemo(
+    () => !!plantingSiteResult && !!plantingSiteResult.plantingZones && plantingSiteResult.plantingZones.length > 0,
+    [plantingSiteResult]
+  );
+
+  const getSummariesHectares = useCallback(() => {
+    const totalSquareMeters =
+      summaries?.[0]?.plantingZones
+        .flatMap((pz) =>
+          pz.plantingSubzones.flatMap((psz) => psz.monitoringPlots.map((mp) => mp.sizeMeters * mp.sizeMeters))
+        )
+        .reduce((acc, area) => acc + area, 0) ?? 0;
+
+    return totalSquareMeters * SQ_M_TO_HECTARES;
+  }, [summaries]);
+
+  const getObservationHectares = useCallback(() => {
     const totalSquareMeters =
       latestObservation?.plantingZones
         .flatMap((pz) =>
@@ -342,9 +359,9 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
         .reduce((acc, area) => acc + area, 0) ?? 0;
 
     return totalSquareMeters * SQ_M_TO_HECTARES;
-  };
+  }, [latestObservation]);
 
-  const getDashboardSubhead = () => {
+  const getDashboardSubhead = useCallback(() => {
     if (selectedPlantingSiteId === -1) {
       return strings.FIRST_ADD_PLANTING_SITE;
     }
@@ -369,7 +386,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
           </b>,
           <b>{summaries?.[0]?.latestObservationTime ? getDateDisplayValue(summaries[0].latestObservationTime) : ''}</b>
         ) as string);
-  };
+  }, [selectedPlantingSiteId, summaries]);
 
   return (
     <PlantsPrimaryPage
