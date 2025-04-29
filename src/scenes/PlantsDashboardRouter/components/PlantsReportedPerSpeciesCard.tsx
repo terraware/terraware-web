@@ -23,10 +23,12 @@ type PlantsReportedPerSpeciesCardProps = {
 export default function PlantsReportedPerSpeciesCard({
   plantingSiteId,
   newVersion,
-}: PlantsReportedPerSpeciesCardProps): JSX.Element {
+}: PlantsReportedPerSpeciesCardProps): JSX.Element | undefined {
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
 
-  if (!plantingSite?.plantingZones?.length) {
+  if (!plantingSite) {
+    return undefined;
+  } else if (!plantingSite.plantingZones?.length) {
     return <SiteWithoutZonesCard plantingSiteId={plantingSiteId} newVersion={newVersion} />;
   } else {
     return <SiteWithZonesCard plantingSiteId={plantingSiteId} newVersion={newVersion} />;
@@ -169,19 +171,18 @@ type ChartDataProps = {
   newVersion?: boolean;
 };
 
-const ChartData = ({ plantingSiteId, tooltipTitles, labels, values, newVersion }: ChartDataProps): JSX.Element => {
+const ChartData = ({
+  plantingSiteId,
+  tooltipTitles,
+  labels,
+  values,
+  newVersion,
+}: ChartDataProps): JSX.Element | undefined => {
   const theme = useTheme();
 
   const chartData = useMemo(() => {
     if (!labels?.length || !values?.length) {
-      return {
-        labels: [],
-        datasets: [
-          {
-            values: [],
-          },
-        ],
-      };
+      return undefined;
     }
 
     return {
@@ -193,6 +194,10 @@ const ChartData = ({ plantingSiteId, tooltipTitles, labels, values, newVersion }
       ],
     };
   }, [labels, values]);
+
+  if (!chartData) {
+    return undefined;
+  }
 
   return newVersion ? (
     <Box>
@@ -210,14 +215,7 @@ const ChartData = ({ plantingSiteId, tooltipTitles, labels, values, newVersion }
         <PieChart
           key={`${plantingSiteId}_${values?.length}`}
           chartId='plantsBySpecies'
-          chartData={{
-            labels: labels ?? [],
-            datasets: [
-              {
-                values: values ?? [],
-              },
-            ],
-          }}
+          chartData={chartData}
           maxWidth='100%'
         />
       </Box>

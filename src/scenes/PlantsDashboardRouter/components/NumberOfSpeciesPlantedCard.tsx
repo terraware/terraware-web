@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
@@ -23,17 +23,22 @@ type NumberOfSpeciesPlantedCardProps = {
 export default function NumberOfSpeciesPlantedCard({
   plantingSiteId,
   newVersion,
-}: NumberOfSpeciesPlantedCardProps): JSX.Element {
+}: NumberOfSpeciesPlantedCardProps): JSX.Element | undefined {
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
 
-  if (!plantingSite?.plantingZones?.length) {
+  if (!plantingSite) {
+    return undefined;
+  } else if (!plantingSite.plantingZones?.length) {
     return <SiteWithoutZonesCard plantingSiteId={plantingSiteId} newVersion={newVersion} />;
   } else {
     return <SiteWithZonesCard plantingSiteId={plantingSiteId} newVersion={newVersion} />;
   }
 }
 
-const SiteWithoutZonesCard = ({ plantingSiteId, newVersion }: NumberOfSpeciesPlantedCardProps): JSX.Element => {
+const SiteWithoutZonesCard = ({
+  plantingSiteId,
+  newVersion,
+}: NumberOfSpeciesPlantedCardProps): JSX.Element | undefined => {
   const [totalSpecies, setTotalSpecies] = useState<number>();
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
@@ -142,7 +147,7 @@ type ChartDataProps = {
   newVersion?: boolean;
 };
 
-const ChartData = ({ labels, values, totalSpecies, newVersion }: ChartDataProps): JSX.Element => {
+const ChartData = ({ labels, values, totalSpecies, newVersion }: ChartDataProps): JSX.Element | undefined => {
   const theme = useTheme();
   const user = useUser().user;
   const numberFormatter = useNumberFormatter();
@@ -163,7 +168,7 @@ const ChartData = ({ labels, values, totalSpecies, newVersion }: ChartDataProps)
     };
   }, [labels, values]);
 
-  const getBarAnnotations = useCallback(() => {
+  const barAnnotations = useMemo(() => {
     if (!values || !labels) {
       return undefined;
     }
@@ -185,6 +190,10 @@ const ChartData = ({ labels, values, totalSpecies, newVersion }: ChartDataProps)
     return { annotations };
   }, [values, labels, numericFormatter]);
 
+  if (!chartData) {
+    return undefined;
+  }
+
   return newVersion ? (
     <Box marginRight={2}>
       <Box display={'flex'} alignItems={'center'}>
@@ -204,7 +213,7 @@ const ChartData = ({ labels, values, totalSpecies, newVersion }: ChartDataProps)
           chartData={chartData}
           maxWidth='100%'
           minHeight='100px'
-          barAnnotations={getBarAnnotations()}
+          barAnnotations={barAnnotations}
           yLimits={{ min: 0, max: 100 }}
           yStepSize={20}
         />
@@ -233,7 +242,7 @@ const ChartData = ({ labels, values, totalSpecies, newVersion }: ChartDataProps)
               chartData={chartData}
               maxWidth='100%'
               minHeight='100px'
-              barAnnotations={getBarAnnotations()}
+              barAnnotations={barAnnotations}
               yLimits={{ min: 0, max: 100 }}
             />
           </Box>
