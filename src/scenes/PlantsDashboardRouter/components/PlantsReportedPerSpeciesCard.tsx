@@ -89,16 +89,19 @@ const SiteWithoutZonesCard = ({
 
   const plantings = useAppSelector((state) => selectPlantingsForSite(state, plantingSiteId));
 
-  useEffect(() => {
+  const speciesQuantities = useMemo(() => {
     const transformedPlantings = plantings?.map((planting) => ({
       plants: Number(planting['numPlants(raw)']),
       scientificName: planting.species.scientificName,
     }));
-    const speciesQuantities: Record<string, number> = calculateSpeciesQuantities(transformedPlantings, newVersion);
+    return calculateSpeciesQuantities(transformedPlantings, newVersion);
+  }, [plantings, newVersion]);
+
+  useEffect(() => {
     setLabels(Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)));
     setValues(Object.values(speciesQuantities));
     setTooltipTitles(Object.keys(speciesQuantities));
-  }, [plantings]);
+  }, [speciesQuantities]);
 
   return (
     <ChartData
@@ -123,7 +126,7 @@ const SiteWithZonesCard = ({
   const [values, setValues] = useState<number[]>();
   const [tooltipTitles, setTooltipTitles] = useState<string[]>();
 
-  useEffect(() => {
+  const speciesQuantities = useMemo(() => {
     if (populationSelector) {
       const transformedPlantings = populationSelector
         .flatMap((zone) =>
@@ -135,16 +138,17 @@ const SiteWithZonesCard = ({
           )
         )
         .filter((tp) => tp !== undefined);
-      const speciesQuantities: Record<string, number> = calculateSpeciesQuantities(transformedPlantings, newVersion);
-      setLabels(Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)));
-      setValues(Object.values(speciesQuantities));
-      setTooltipTitles(Object.keys(speciesQuantities));
+      return calculateSpeciesQuantities(transformedPlantings, newVersion);
     } else {
-      setLabels([]);
-      setValues([]);
-      setTooltipTitles([]);
+      return [];
     }
-  }, [populationSelector]);
+  }, [populationSelector, newVersion]);
+
+  useEffect(() => {
+    setLabels(Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)));
+    setValues(Object.values(speciesQuantities));
+    setTooltipTitles(Object.keys(speciesQuantities));
+  }, [speciesQuantities]);
 
   return (
     <ChartData
