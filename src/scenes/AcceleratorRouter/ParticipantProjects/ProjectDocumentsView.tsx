@@ -20,7 +20,7 @@ const ProjectDocumentsView = ({ projectId }: ProjectDocumentsViewProps) => {
         padding: 0,
       }}
     >
-      <DocumentsTable showTitle />
+      <DocumentsTable projectId={projectId} />
     </Card>
   );
 };

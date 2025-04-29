@@ -20,7 +20,7 @@ import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 
 type DocumentsTableProps = {
-  showTitle?: boolean;
+  projectId?: number;
 };
 
 const columns = (activeLocale: string | null): TableColumnType[] =>
@@ -42,7 +42,7 @@ const defaultSearchOrder: SearchSortOrder = {
   direction: 'Ascending',
 };
 
-export default function DocumentsTable({ showTitle }: DocumentsTableProps): JSX.Element | null {
+export default function DocumentsTable({ projectId }: DocumentsTableProps): JSX.Element | null {
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
@@ -89,6 +89,17 @@ export default function DocumentsTable({ showTitle }: DocumentsTableProps): JSX.
   );
 
   const extraTableFilters: SearchNodePayload[] = useMemo(() => {
+    if (projectId) {
+      return [
+        {
+          operation: 'field',
+          field: 'projectId',
+          type: 'Exact',
+          values: [`${projectId}`],
+        },
+      ];
+    }
+
     return query.get('dealName')
       ? [
           {
@@ -99,7 +110,7 @@ export default function DocumentsTable({ showTitle }: DocumentsTableProps): JSX.
           },
         ]
       : [];
-  }, [query.get('dealName')]);
+  }, [projectId, query.get('dealName')]);
 
   useEffect(() => {
     if (!documentsResponse) {
@@ -115,7 +126,7 @@ export default function DocumentsTable({ showTitle }: DocumentsTableProps): JSX.
 
   return (
     <Box>
-      {showTitle && (
+      {projectId && (
         <Typography
           sx={{
             fontSize: '20px',
