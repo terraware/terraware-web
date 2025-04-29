@@ -155,11 +155,27 @@ const DeliverablesList = ({ projectId }: DeliverablesListProps): JSX.Element => 
     [activeLocale, currentParticipantProject, projectFilter]
   );
 
+  const Wrapper = projectId ? Box : TfMain;
+
   return (
-    <TfMain>
-      <PageHeaderWrapper>
-        <PageHeader title={strings.DELIVERABLES} leftComponent={PageHeaderLeftComponent} />
-      </PageHeaderWrapper>
+    <Wrapper>
+      {projectId ? (
+        <Typography
+          sx={{
+            fontSize: '20px',
+            fontWeight: 600,
+            lineHeight: '28px',
+            padding: '24px',
+          }}
+          variant='h4'
+        >
+          {strings.DELIVERABLES}
+        </Typography>
+      ) : (
+        <PageHeaderWrapper>
+          <PageHeader title={strings.DELIVERABLES} leftComponent={PageHeaderLeftComponent} />
+        </PageHeaderWrapper>
+      )}
 
       <DeliverablesTable
         extraTableFilters={extraTableFilters}
@@ -169,7 +185,7 @@ const DeliverablesList = ({ projectId }: DeliverablesListProps): JSX.Element => 
         tableId={'participantDeliverablesTable'}
         projectId={projectId}
       />
-    </TfMain>
+    </Wrapper>
   );
 };
 
