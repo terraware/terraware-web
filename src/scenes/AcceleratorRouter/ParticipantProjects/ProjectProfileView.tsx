@@ -310,18 +310,22 @@ const ProjectProfileView = ({
           label={strings.ELIGIBLE_AREA}
           height={'64px'}
           md={4}
-          value={strings
-            .formatString(strings.X_HA, numericFormatter.format(participantProject?.confirmedReforestableLand))
-            ?.toString()}
+          value={
+            participantProject?.confirmedReforestableLand &&
+            strings
+              .formatString(strings.X_HA, numericFormatter.format(participantProject.confirmedReforestableLand))
+              ?.toString()
+          }
           tooltip={strings.ELIGIBLE_AREA_DESCRIPTION}
         />
         <ProjectFieldDisplay
           label={strings.PROJECT_AREA}
           height={'64px'}
           md={4}
-          value={strings
-            .formatString(strings.X_HA, numericFormatter.format(participantProject?.projectArea))
-            ?.toString()}
+          value={
+            participantProject?.projectArea &&
+            strings.formatString(strings.X_HA, numericFormatter.format(participantProject.projectArea))?.toString()
+          }
           tooltip={strings.PROJECT_AREA_DESCRIPTION}
         />
         <ProjectFieldDisplay
@@ -334,18 +338,22 @@ const ProjectProfileView = ({
           label={strings.MIN_PROJECT_AREA}
           height={'64px'}
           md={4}
-          value={strings
-            .formatString(strings.X_HA, numericFormatter.format(participantProject?.minProjectArea))
-            ?.toString()}
+          value={
+            participantProject?.minProjectArea &&
+            strings.formatString(strings.X_HA, numericFormatter.format(participantProject.minProjectArea))?.toString()
+          }
           tooltip={strings.MIN_PROJECT_AREA_DESCRIPTION}
         />
         <ProjectFieldDisplay
           label={strings.EXPANSION_POTENTIAL}
           height={'64px'}
           md={4}
-          value={strings
-            .formatString(strings.X_HA, numericFormatter.format(participantProject?.totalExpansionPotential))
-            ?.toString()}
+          value={
+            participantProject?.totalExpansionPotential &&
+            strings
+              .formatString(strings.X_HA, numericFormatter.format(participantProject.totalExpansionPotential))
+              ?.toString()
+          }
           tooltip={strings.EXPANSION_POTENTIAL_DESCRIPTION}
         />
       </Grid>
@@ -358,20 +366,37 @@ const ProjectProfileView = ({
             </Typography>
           </Grid>
         </Box>
-        <ProjectFieldDisplay
-          label={strings.ACCUMULATION_RATE}
-          height={'64px'}
-          md={4}
-          value={numericFormatter.format(participantProject?.accumulationRate)}
-          units={<Co2HectareYear />}
-        />
-        <ProjectFieldDisplay label={strings.STANDARD} height={'64px'} md={4} value={participantProject?.standard} />
-        <ProjectFieldDisplay
-          label={strings.METHODOLOGY_NUMBER}
-          height={'64px'}
-          md={4}
-          value={participantProject?.methodologyNumber}
-        />
+        {isPhaseZeroOrApplication && (
+          <ProjectFieldDisplay
+            label={strings.ACCUMULATION_RATE}
+            height={'64px'}
+            md={4}
+            value={participantProject?.accumulationRate}
+            units={<Co2HectareYear />}
+          />
+        )}
+        {!isPhaseZeroOrApplication && (
+          <>
+            <ProjectFieldDisplay
+              label={strings.MIN_MAX_CARBON_ACCUMULATION}
+              height={'64px'}
+              md={4}
+              value={
+                participantProject?.minCarbonAccumulation &&
+                participantProject?.maxCarbonAccumulation &&
+                `${participantProject.minCarbonAccumulation}-${participantProject.maxCarbonAccumulation}`
+              }
+              units={<Co2HectareYear />}
+            />
+            <ProjectFieldDisplay label={strings.STANDARD} height={'64px'} md={4} value={participantProject?.standard} />
+            <ProjectFieldDisplay
+              label={strings.METHODOLOGY_NUMBER}
+              height={'64px'}
+              md={4}
+              value={participantProject?.methodologyNumber}
+            />
+          </>
+        )}
       </Grid>
 
       <ProjectProfileFooter project={project} projectMeta={projectMeta} />
