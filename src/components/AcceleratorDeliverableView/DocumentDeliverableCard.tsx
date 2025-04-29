@@ -3,7 +3,7 @@ import React from 'react';
 import { Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 
-import DocumentsList from 'src/components/DeliverableView/DocumentsList';
+import DeliverableDocumentsList from 'src/components/DeliverableView/DeliverableDocumentsList';
 import DocumentsUploader from 'src/components/DeliverableView/DocumentsUploader';
 import Metadata from 'src/components/DeliverableView/Metadata';
 import { EditProps } from 'src/components/DeliverableView/types';
@@ -61,7 +61,7 @@ const DocumentDeliverableCard = (props: EditProps): JSX.Element => {
       {canCreateSubmission && (
         <DocumentsUploader {...viewProps} deliverableStatusesToIgnore={['Not Submitted', 'In Review']} />
       )}
-      <DocumentsList {...viewProps} columns={columns(activeLocale)} />
+      <DeliverableDocumentsList {...viewProps} columns={columns(activeLocale)} />
     </Card>
   );
 };

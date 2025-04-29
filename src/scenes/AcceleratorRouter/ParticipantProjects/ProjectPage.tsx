@@ -14,6 +14,7 @@ import useStickyTabs from 'src/utils/useStickyTabs';
 
 import { useParticipantProjectData } from './ParticipantProjectContext';
 import ProjectDeliverablesView from './ProjectDeliverablesView';
+import ProjectDocumentsView from './ProjectDocumentsView';
 import ProjectProfileView from './ProjectProfileView';
 import { useVotingData } from './Voting/VotingContext';
 
@@ -56,6 +57,11 @@ const ProjectPage = () => {
         id: 'projectDeliverables',
         label: strings.DELIVERABLES,
         children: <ProjectDeliverablesView projectId={projectData.projectId} />,
+      },
+      {
+        id: 'projectDocuments',
+        label: strings.DOCUMENTS,
+        children: <ProjectDocumentsView projectId={projectData.projectId} />,
       },
       {
         id: 'plantsDashboard',

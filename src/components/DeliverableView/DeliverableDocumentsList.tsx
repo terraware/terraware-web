@@ -16,7 +16,7 @@ interface DocumentsListProps extends ViewProps {
   columns: TableColumnType[];
 }
 
-const DocumentsList = (props: DocumentsListProps): JSX.Element => {
+const DeliverableDocumentsList = (props: DocumentsListProps): JSX.Element => {
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { isAllowed } = useUser();
 
@@ -61,4 +61,4 @@ const DocumentsList = (props: DocumentsListProps): JSX.Element => {
   );
 };
 
-export default DocumentsList;
+export default DeliverableDocumentsList;
