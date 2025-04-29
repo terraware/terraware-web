@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1745968726887" clover="3.2.0">
-  <project timestamp="1745968726887" name="All files">
-    <metrics statements="30213" coveredstatements="1263" conditionals="20584" coveredconditionals="378" methods="9300" coveredmethods="207" elements="60097" coveredelements="1848" complexity="0" loc="30213" ncloc="30213" packages="256" files="1243" classes="1243"/>
+<coverage generated="1745969529438" clover="3.2.0">
+  <project timestamp="1745969529438" name="All files">
+    <metrics statements="30225" coveredstatements="1274" conditionals="20593" coveredconditionals="386" methods="9302" coveredmethods="209" elements="60120" coveredelements="1869" complexity="0" loc="30225" ncloc="30225" packages="256" files="1244" classes="1244"/>
     <package name="src">
       <metrics statements="177" coveredstatements="8" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -33861,7 +33861,7 @@
       </file>
     </package>
     <package name="src.utils">
-      <metrics statements="507" coveredstatements="190" conditionals="276" coveredconditionals="73" methods="161" coveredmethods="35"/>
+      <metrics statements="519" coveredstatements="201" conditionals="285" coveredconditionals="81" methods="163" coveredmethods="37"/>
       <file name="acl.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/acl.ts">
         <metrics statements="36" coveredstatements="30" conditionals="20" coveredconditionals="11" methods="13" coveredmethods="6"/>
         <line num="74" count="1" type="stmt"/>
@@ -34022,6 +34022,21 @@
       <file name="memoize.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/memoize.ts">
         <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
+      </file>
+      <file name="numbers.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/numbers.ts">
+        <metrics statements="12" coveredstatements="11" conditionals="9" coveredconditionals="8" methods="2" coveredmethods="2"/>
+        <line num="7" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="8" count="11" type="cond" truecount="2" falsecount="0"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="11" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="13" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="14" count="2" type="stmt"/>
+        <line num="17" count="8" type="stmt"/>
+        <line num="25" count="25" type="stmt"/>
+        <line num="26" count="8" type="cond" truecount="1" falsecount="1"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="30" count="8" type="stmt"/>
+        <line num="31" count="8" type="stmt"/>
       </file>
       <file name="organization.tsx" path="/home/runner/work/terraware-web/terraware-web/src/utils/organization.tsx">
         <metrics statements="34" coveredstatements="13" conditionals="14" coveredconditionals="0" methods="18" coveredmethods="0"/>

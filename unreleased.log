@@ -1,3 +1,4 @@
+c39ff5738d2 Add general purpose number scale formatter (#3896)
 1cb2ad1f7cf SW-6811: Add Documents tab to Project Profile in Console (#3910)
 5a62301e73e SW-6781 Add data section cards to project profile view (#3894)
 b8ee8ffd4ba SW-6836 Added render callback deps (#3907)
