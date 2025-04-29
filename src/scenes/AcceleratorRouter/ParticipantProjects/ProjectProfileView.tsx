@@ -23,6 +23,7 @@ import Co2HectareYear from 'src/components/Units/Co2HectareYear';
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import useProjectFundingEntities from 'src/hooks/useProjectFundingEntities';
 import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
@@ -60,6 +61,7 @@ const ProjectProfileView = ({
   const { isAllowed } = useUser();
   const { activeLocale, countries } = useLocalization();
   const { acceleratorReports: projectReports } = useProjectReports(project?.id);
+  const { fundingEntities } = useProjectFundingEntities(project?.id);
 
   const numericFormatter = useMemo(() => numberFormatter(activeLocale), [activeLocale, numberFormatter]);
   const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
@@ -466,6 +468,22 @@ const ProjectProfileView = ({
             </Typography>
           </Grid>
           {participantProject?.sdgList && <ProjectSdgDisplay sdgList={participantProject.sdgList} />}
+        </Box>
+      </Grid>
+
+      <Grid container>
+        <Box marginX={theme.spacing(2)} width={'100%'}>
+          <Grid item xs={12} marginY={theme.spacing(2)}>
+            <Typography fontSize='16px' fontWeight={600} lineHeight='24px'>
+              {strings.FUNDING_ENTITIES}
+            </Typography>
+          </Grid>
+          {fundingEntities?.length > 0 &&
+            fundingEntities.map((e, i) => (
+              <Typography key={`entity-${i}`} fontSize='20px' fontWeight={600} lineHeight='28px'>
+                {e.name}
+              </Typography>
+            ))}
         </Box>
       </Grid>
 

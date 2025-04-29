@@ -124,3 +124,16 @@ export const requestListFunderReports = createAsyncThunk(
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
+
+export const requestProjectFundingEntities = createAsyncThunk(
+  'funding-entities/list-for-project',
+  async ({ projectId }: { projectId: number }, { rejectWithValue }) => {
+    const response = await FundingEntityService.listForProject(projectId);
+
+    if (response.requestSucceeded) {
+      return response.fundingEntities || [];
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);

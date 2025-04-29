@@ -14,6 +14,7 @@ import {
   requestFundingEntityInviteFunder,
   requestListFunderReports,
   requestListFunders,
+  requestProjectFundingEntities,
   requestUpdateFundingEntity,
 } from './fundingEntitiesAsyncThunks';
 
@@ -116,6 +117,17 @@ export const funderReportsListSlice = createSlice({
   },
 });
 
+const initialStateProjectFundingEntities: { [requestId: string]: StatusT<FundingEntity[]> } = {};
+
+export const projectFundingEntitiesSlice = createSlice({
+  name: 'projectFundingEntitiesSlice',
+  initialState: initialStateProjectFundingEntities,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestProjectFundingEntities, true)(builder);
+  },
+});
+
 const fundingEntitiesReducers = {
   fundingEntitiesList: fundingEntitiesSlice.reducer,
   fundingEntityForUser: userFundingEntitySlice.reducer,
@@ -126,6 +138,7 @@ const fundingEntitiesReducers = {
   fundingEntityDeleteFunders: deleteFundersSlice.reducer,
   fundingEntityGetFunders: funderListSlice.reducer,
   funderReportsList: funderReportsListSlice.reducer,
+  projectFundingEntities: projectFundingEntitiesSlice.reducer,
 };
 
 export default fundingEntitiesReducers;
