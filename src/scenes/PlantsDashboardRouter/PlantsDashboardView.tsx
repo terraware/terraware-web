@@ -177,7 +177,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     </>
   );
 
-  const hasObservations = !!latestObservation;
+  const hasObservations = useMemo(() => !!latestObservation, [latestObservation]);
 
   const populationResults = useAppSelector((state) => selectSitePopulationZones(state));
   const hasReportedPlants = useMemo(() => {
@@ -286,11 +286,15 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     </>
   );
 
-  const hasPolygons =
-    !!plantingSiteResult && !!plantingSiteResult.boundary && plantingSiteResult.boundary.coordinates?.length > 0;
+  const hasPolygons = useMemo(
+    () => !!plantingSiteResult && !!plantingSiteResult.boundary && plantingSiteResult.boundary.coordinates?.length > 0,
+    [plantingSiteResult]
+  );
 
-  const hasPlantingZones =
-    !!plantingSiteResult && !!plantingSiteResult.plantingZones && plantingSiteResult.plantingZones.length > 0;
+  const hasPlantingZones = useMemo(
+    () => !!plantingSiteResult && !!plantingSiteResult.plantingZones && plantingSiteResult.plantingZones.length > 0,
+    [plantingSiteResult]
+  );
 
   const getSummariesHectares = useCallback(() => {
     const totalSquareMeters =
