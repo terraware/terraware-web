@@ -1,7 +1,7 @@
 import React, { useMemo, useRef } from 'react';
 
 import { Box, CircularProgress, Grid, Typography, useTheme } from '@mui/material';
-import { Button, Dropdown, DropdownItem, IconName, Message, PopoverMenu } from '@terraware/web-components';
+import { Button, Dropdown, IconName, Message } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -32,6 +32,7 @@ export type PlantsPrimaryPageViewProps = {
   newHeader?: boolean;
   showGeometryNote?: boolean;
   latestObservationId?: number;
+  projectId?: number;
 };
 
 export default function PlantsPrimaryPageView({
@@ -46,17 +47,11 @@ export default function PlantsPrimaryPageView({
   newHeader,
   showGeometryNote,
   latestObservationId,
+  projectId,
 }: PlantsPrimaryPageViewProps): JSX.Element {
   const theme = useTheme();
   const { isMobile, isDesktop } = useDeviceInfo();
   const contentRef = useRef(null);
-
-  const onChangePlantingSite = (selectedSite: DropdownItem) => {
-    const selectedPlantingSite = plantingSites?.find((ps) => ps.id === selectedSite.value);
-    if (selectedPlantingSite) {
-      onSelect(selectedPlantingSite);
-    }
-  };
 
   const onChangePlantingSiteId = (siteId: any) => {
     const selectedPlantingSite = plantingSites?.find((ps) => ps.id === siteId);
@@ -78,8 +73,9 @@ export default function PlantsPrimaryPageView({
     );
   }
 
+  const Wrapper = projectId ? Box : TfMain;
   return (
-    <TfMain>
+    <Wrapper>
       {newHeader && plantingSites.length > 0 ? (
         <>
           {showGeometryNote && selectedPlantingSiteId && latestObservationId && (
@@ -110,23 +106,17 @@ export default function PlantsPrimaryPageView({
           )}
           <Card radius={'8px'} style={{ 'margin-bottom': '32px' }}>
             <Grid container alignItems={'center'} spacing={4}>
-              <Grid item xs={isDesktop ? 4 : 12}>
-                <PopoverMenu
-                  anchor={
-                    <p style={{ fontSize: '24px', fontWeight: 600, color: theme.palette.TwClrTxt }}>
-                      {plantingSites.find((ps) => ps.id === selectedPlantingSiteId)?.name || strings.SELECT}
-                    </p>
-                  }
-                  menuSections={[
-                    options?.map((opt) => ({
-                      label: opt.label,
-                      value: opt.value,
-                    })),
-                  ]}
-                  onClick={onChangePlantingSite}
+              <Grid item xs={isDesktop ? 3 : 12}>
+                <Dropdown
+                  placeholder={strings.SELECT}
+                  id='planting-site-selector'
+                  onChange={onChangePlantingSiteId}
+                  options={options}
+                  selectedValue={selectedPlantingSiteId}
+                  fullWidth
                 />
               </Grid>
-              <Grid item xs={isDesktop ? 2 : 12}>
+              <Grid item xs={isDesktop ? 3 : 12}>
                 <Box>
                   <Typography fontWeight={600}>{strings.TOTAL_PLANTING_AREA}</Typography>
                   <Typography fontSize='28px' fontWeight={600}>
@@ -213,6 +203,6 @@ export default function PlantsPrimaryPageView({
       <Box ref={contentRef} sx={style}>
         {children}
       </Box>
-    </TfMain>
+    </Wrapper>
   );
 }

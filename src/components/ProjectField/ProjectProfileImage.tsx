@@ -15,11 +15,17 @@ const ProjectProfileImage = ({ projectId, imageValueId, alt, label }: ProjectPro
   const theme = useTheme();
   return (
     <Grid item md={6} maxHeight={400} paddingX={theme.spacing(1)}>
-      <Box maxHeight={400} overflow={'clip'} borderRadius={theme.spacing(1)} position={'relative'}>
+      <Box
+        maxHeight={400}
+        overflow={'hidden'}
+        borderRadius={theme.spacing(1)}
+        position={'relative'}
+        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      >
         <img
           src={getImagePath(projectId, imageValueId)}
           alt={alt}
-          style={{ width: '100%', height: '100%', borderRadius: theme.spacing(1) }}
+          style={{ width: '100%', objectFit: 'cover', borderRadius: theme.spacing(1) }}
         />
         {label && (
           <div
