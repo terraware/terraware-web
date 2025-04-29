@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { SelectT } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
 import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
@@ -31,6 +32,7 @@ const FunderReportView = () => {
   const query = useQuery();
   const location = useStateLocation();
   const navigate = useNavigate();
+  const { isDesktop, isMobile } = useDeviceInfo();
 
   useEffect(() => {
     if ((userFundingEntity?.projects?.length ?? 0) > 0) {
@@ -93,7 +95,7 @@ const FunderReportView = () => {
         sx={{ background: theme.palette.TwClrBgSecondary }}
         padding={3.5}
         borderRadius={'8px'}
-        display={'flex'}
+        display={isMobile ? 'block' : 'flex'}
         justifyContent='space-between'
       >
         <Typography fontSize='24px' fontWeight={600}>{`${strings.REPORT} (${reportName})`}</Typography>
@@ -111,10 +113,11 @@ const FunderReportView = () => {
             renderOption={(_report: PublishedReport) => `${_report?.startDate?.split('-')[0]} ${_report?.quarter}`}
             displayLabel={(_report: PublishedReport) => `${_report?.startDate?.split('-')[0]} ${_report?.quarter}`}
             toT={(name: string) => ({ name }) as unknown as PublishedReport}
+            selectStyles={{ inputContainer: { 'margin-top': isMobile ? theme.spacing(4) : 0 } }}
           />
         )}
       </Box>
-      <Box display='flex' marginTop={3}>
+      <Box display={isDesktop ? 'flex' : 'block'} marginTop={3}>
         <Card
           style={{
             width: '100%',
@@ -130,6 +133,7 @@ const FunderReportView = () => {
         <Card
           style={{
             borderRadius: '8px',
+            marginTop: isDesktop ? 0 : 3,
           }}
         >
           <Typography fontSize={20} fontWeight={600}>
@@ -166,7 +170,7 @@ const FunderReportView = () => {
               </Typography>
 
               <Card style={{ borderRadius: '8px' }}>
-                <Box display='flex' flexWrap='wrap'>
+                <Box display={isDesktop ? 'flex' : 'block'} flexWrap='wrap'>
                   {climateMetrics?.map((metric, index) => (
                     <MetricBox
                       metric={metric}
@@ -174,6 +178,7 @@ const FunderReportView = () => {
                       year={year}
                       quarter={selectedReport?.quarter}
                       key={index}
+                      lastIndex={index === climateMetrics.length - 1}
                     />
                   ))}
                 </Box>
@@ -187,7 +192,7 @@ const FunderReportView = () => {
               </Typography>
 
               <Card style={{ borderRadius: '8px' }}>
-                <Box display='flex' flexWrap='wrap'>
+                <Box display={isDesktop ? 'flex' : 'block'} flexWrap='wrap'>
                   {biodiversityMetrics?.map((metric, index) => (
                     <MetricBox
                       metric={metric}
@@ -195,6 +200,7 @@ const FunderReportView = () => {
                       year={year}
                       quarter={selectedReport?.quarter}
                       key={index}
+                      lastIndex={index === biodiversityMetrics.length - 1}
                     />
                   ))}
                 </Box>
@@ -208,7 +214,7 @@ const FunderReportView = () => {
               </Typography>
 
               <Card style={{ borderRadius: '8px' }}>
-                <Box display='flex' flexWrap='wrap'>
+                <Box display={isDesktop ? 'flex' : 'block'} flexWrap='wrap'>
                   {communityMetrics?.map((metric, index) => (
                     <MetricBox
                       metric={metric}
@@ -216,6 +222,7 @@ const FunderReportView = () => {
                       year={year}
                       quarter={selectedReport?.quarter}
                       key={index}
+                      lastIndex={index === communityMetrics.length - 1}
                     />
                   ))}
                 </Box>
