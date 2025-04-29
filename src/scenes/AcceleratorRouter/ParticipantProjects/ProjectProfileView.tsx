@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import ApplicationStatusLink from 'src/components/ProjectField/ApplicationStatusLink';
 import CohortBadge from 'src/components/ProjectField/CohortBadge';
@@ -100,7 +101,13 @@ const ProjectProfileView = ({
 
   const lastSubmittedReport = useMemo(() => {
     if (projectReports?.length > 0) {
-      const submittedReports = projectReports.toSorted((a, b) => b.endDate.localeCompare(a.endDate));
+      const submittedReports = projectReports
+        .filter((r) => ['Submitted', 'Approved'].includes(r.status) && !!r.submittedTime)
+        .toSorted((a, b) => {
+          const timeA = a.submittedTime ? new Date(a.submittedTime).getTime() : 0;
+          const timeB = b.submittedTime ? new Date(b.submittedTime).getTime() : 0;
+          return timeB - timeA;
+        });
       if (submittedReports.length > 0) {
         return submittedReports[0];
       }
@@ -227,7 +234,7 @@ const ProjectProfileView = ({
         <InvertedCard
           md={4}
           label={strings.TOTAL_VCU_40YRS}
-          value={participantProject?.totalVCU && `${numericFormatter.format(participantProject.totalVCU)}`}
+          value={participantProject?.totalVCU && numericFormatter.format(participantProject.totalVCU)}
           units={'t'}
           backgroundColor={theme.palette.TwClrBaseGray050}
         />
@@ -271,10 +278,13 @@ const ProjectProfileView = ({
       )}
       {projectReports && (
         <Grid container marginY={theme.spacing(2)} marginLeft={theme.spacing(1)}>
-          {lastSubmittedReport && (
+          {lastSubmittedReport && lastSubmittedReport.submittedTime && (
             <Grid item marginRight={theme.spacing(3)}>
               <Typography fontWeight={500}>
-                {strings.formatString(strings.LAST_REPORT_PUBLISHED, lastSubmittedReport.endDate)}
+                {strings.formatString(
+                  strings.LAST_REPORT_SUBMITTED,
+                  getDateDisplayValue(lastSubmittedReport.submittedTime)
+                )}
               </Typography>
             </Grid>
           )}
