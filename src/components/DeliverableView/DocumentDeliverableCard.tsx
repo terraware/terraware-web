@@ -7,9 +7,9 @@ import Card from 'src/components/common/Card';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
+import DeliverableDocumentsList from './DeliverableDocumentsList';
 import DocumentDeliverableRejectedMessage from './DocumentDeliverableRejectedMessage';
 import DocumentLimitReachedMessage from './DocumentLimitReachedMessage';
-import DocumentsList from './DocumentsList';
 import DocumentsUploader from './DocumentsUploader';
 import Metadata from './Metadata';
 import { EditProps, ViewProps } from './types';
@@ -67,7 +67,7 @@ const DocumentDeliverableCard = (props: EditProps): JSX.Element => {
             maxFiles={MAX_FILES_LIMIT}
           />
         )}
-        <DocumentsList columns={columns} {...viewProps} />
+        <DeliverableDocumentsList columns={columns} {...viewProps} />
       </Card>
     </Box>
   );

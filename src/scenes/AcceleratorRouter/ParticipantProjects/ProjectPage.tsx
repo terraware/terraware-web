@@ -14,6 +14,7 @@ import useStickyTabs from 'src/utils/useStickyTabs';
 
 import { useParticipantProjectData } from './ParticipantProjectContext';
 import ProjectDeliverablesView from './ProjectDeliverablesView';
+import ProjectDocumentsView from './ProjectDocumentsView';
 import ProjectProfileView from './ProjectProfileView';
 import { useVotingData } from './Voting/VotingContext';
 
@@ -22,7 +23,7 @@ const ProjectPage = () => {
   const theme = useTheme();
   const { isAllowed } = useUser();
   const projectData = useParticipantProjectData();
-  const { goToParticipantProjectEdit } = useNavigateTo();
+  const { goToDocumentNew, goToParticipantProjectEdit } = useNavigateTo();
   const { getApplicationByProjectId } = useApplicationData();
   const { projectScore } = useProjectScore(projectData.projectId);
   const { phaseVotes } = useVotingData();
@@ -58,6 +59,11 @@ const ProjectPage = () => {
         children: <ProjectDeliverablesView projectId={projectData.projectId} />,
       },
       {
+        id: 'projectDocuments',
+        label: strings.DOCUMENTS,
+        children: <ProjectDocumentsView projectId={projectData.projectId} />,
+      },
+      {
         id: 'plantsDashboard',
         label: strings.PLANTS_DASHBOARD,
         children: (
@@ -85,6 +91,18 @@ const ProjectPage = () => {
               label={strings.EDIT_PROJECT}
               priority='primary'
               onClick={() => goToParticipantProjectEdit(projectData.projectId)}
+              size='medium'
+              type='productive'
+            />
+          )}
+
+          {activeTab === 'projectDocuments' && (
+            <Button
+              icon='plus'
+              id='createDocument'
+              label={strings.ADD_DOCUMENT}
+              onClick={goToDocumentNew}
+              priority='primary'
               size='medium'
               type='productive'
             />
