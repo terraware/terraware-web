@@ -18,14 +18,13 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization, useUser } from 'src/providers';
 import {
-  selectListAcceleratorReports,
   selectPublishAcceleratorReport,
   selectReviewAcceleratorReport,
 } from 'src/redux/features/reports/reportsSelectors';
 import {
-  requestListAcceleratorReports,
   requestPublishAcceleratorReport,
   requestReviewAcceleratorReport,
 } from 'src/redux/features/reports/reportsThunks';
@@ -47,9 +46,6 @@ const ReportView = () => {
   const reportId = String(pathParams.reportId);
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState<string>('');
-  const reportsResults = useAppSelector(selectListAcceleratorReports(requestId));
-  const [reports, setReports] = useState<AcceleratorReport[]>();
   const [selectedReport, setSelectedReport] = useState<AcceleratorReport>();
   const { isAllowed } = useUser();
   const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);
@@ -65,6 +61,7 @@ const ReportView = () => {
   const [showPublishModal, setShowPublishModal] = useState(false);
   const publishReportResponse = useAppSelector(selectPublishAcceleratorReport(publishRequestId));
   const snackbar = useSnackbar();
+  const { reload, acceleratorReports: reports } = useProjectReports(projectId, true, true);
 
   const publishReport = () => {
     const request = dispatch(
@@ -99,7 +96,7 @@ const ReportView = () => {
         reportId: Number(reportId),
         review: {
           status: 'Needs Update',
-          feedback: feedback,
+          feedback,
           achievements: [],
           challenges: [],
         },
@@ -107,26 +104,6 @@ const ReportView = () => {
     );
     setRejectRequestId(request.requestId);
   };
-
-  const reload = () => {
-    if (projectId) {
-      const request = dispatch(requestListAcceleratorReports({ projectId, includeFuture: true, includeMetrics: true }));
-      setRequestId(request.requestId);
-    }
-  };
-
-  useEffect(() => {
-    reload();
-  }, [projectId]);
-
-  useEffect(() => {
-    if (reportsResults?.status === 'error') {
-      return;
-    }
-    if (reportsResults?.data) {
-      setReports(reportsResults.data);
-    }
-  }, [reportsResults]);
 
   useEffect(() => {
     if (approveReportResponse?.status === 'error') {
