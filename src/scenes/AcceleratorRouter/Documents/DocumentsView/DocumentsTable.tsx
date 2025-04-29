@@ -23,19 +23,6 @@ type DocumentsTableProps = {
   projectId?: number;
 };
 
-const columns = (activeLocale: string | null): TableColumnType[] =>
-  activeLocale
-    ? [
-        { key: 'name', name: strings.NAME, type: 'string' },
-        { key: 'projectDealName', name: strings.DEAL_NAME, type: 'string' },
-        { key: 'documentTemplateName', name: strings.DOCUMENT_TEMPLATE, type: 'string' },
-        { key: 'lastSavedVersionId', name: strings.VERSION, type: 'number' },
-        { key: 'createdTime', name: strings.CREATED, type: 'date' },
-        { key: 'modifiedTime', name: strings.LAST_EDITED, type: 'date' },
-        { key: 'status', name: strings.STATUS, type: 'string' },
-      ]
-    : [];
-
 const fuzzySearchColumns = ['name', 'projectDealName'];
 const defaultSearchOrder: SearchSortOrder = {
   field: 'name',
@@ -112,6 +99,22 @@ export default function DocumentsTable({ projectId }: DocumentsTableProps): JSX.
       : [];
   }, [projectId, query.get('dealName')]);
 
+  const columns = useCallback(
+    (): TableColumnType[] =>
+      activeLocale
+        ? [
+            { key: 'name', name: strings.NAME, type: 'string' },
+            ...(projectId ? [] : [{ key: 'projectDealName', name: strings.DEAL_NAME, type: 'string' as const }]),
+            { key: 'documentTemplateName', name: strings.DOCUMENT_TEMPLATE, type: 'string' },
+            { key: 'lastSavedVersionId', name: strings.VERSION, type: 'number' },
+            { key: 'createdTime', name: strings.CREATED, type: 'date' },
+            { key: 'modifiedTime', name: strings.LAST_EDITED, type: 'date' },
+            { key: 'status', name: strings.STATUS, type: 'string' },
+          ]
+        : [],
+    [activeLocale, projectId, strings]
+  );
+
   useEffect(() => {
     if (!documentsResponse) {
       return;
@@ -141,7 +144,7 @@ export default function DocumentsTable({ projectId }: DocumentsTableProps): JSX.
       )}
 
       <TableWithSearchFilters
-        columns={() => columns(activeLocale)}
+        columns={() => columns()}
         defaultSearchOrder={defaultSearchOrder}
         dispatchSearchRequest={dispatchSearchRequest}
         extraTableFilters={extraTableFilters}
