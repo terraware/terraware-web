@@ -15,7 +15,7 @@ const ProjectFieldDisplay = ({ label, md, rightBorder, value, tooltip, height, u
         <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={600} marginBottom={theme.spacing(1)}>
           {label}
           {tooltip && (
-            <Tooltip title={tooltip} style={{ verticalAlign: 'center' }}>
+            <Tooltip title={tooltip}>
               <Icon
                 style={{ marginLeft: theme.spacing(1) }}
                 name='info'
