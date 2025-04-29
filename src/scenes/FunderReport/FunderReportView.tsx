@@ -7,7 +7,6 @@ import { SelectT } from '@terraware/web-components';
 import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
 import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
-import { getReportName } from 'src/components/AcceleratorReports/utils';
 import Card from 'src/components/common/Card';
 import { useUserFundingEntity } from 'src/providers';
 import { requestListFunderReports } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
@@ -67,7 +66,7 @@ const FunderReportView = () => {
     return selectedReport?.startDate?.split('-')[0];
   }, [selectedReport]);
 
-  const reportName = selectedReport ? getReportName(selectedReport) : '';
+  const reportName = userFundingEntity?.projects?.[0].dealName || '';
 
   const allMetrics: PublishedReportMetric[] = [];
 
@@ -96,7 +95,9 @@ const FunderReportView = () => {
         display={'flex'}
         justifyContent='space-between'
       >
-        <Typography fontSize='24px' fontWeight={600}>{`${strings.REPORT} (${reportName})`}</Typography>
+        <Typography fontSize='24px' fontWeight={600}>
+          {reportName}
+        </Typography>
         {(reports?.length ?? 0) > 0 && (
           <SelectT<PublishedReport>
             id='report'
