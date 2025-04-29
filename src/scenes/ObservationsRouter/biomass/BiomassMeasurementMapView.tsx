@@ -42,7 +42,7 @@ export default function BiomassMeasurementMapView({
   const observationsDates = useMemo(() => {
     const uniqueDates: Set<string> = new Set();
     observationsResults?.forEach((obs) => {
-      const dateToUse = obs.completedTime ? obs.completedTime : obs.startDate;
+      const dateToUse = obs.completedTime || obs.startDate;
       uniqueDates.add(dateToUse);
     });
 
@@ -77,7 +77,7 @@ export default function BiomassMeasurementMapView({
   const selectedObservation = useMemo(
     () =>
       observationsResults?.find((obs) => {
-        const dateToCheck = obs.completedTime ? obs.completedTime : obs.startDate;
+        const dateToCheck = obs.completedTime || obs.startDate;
         return dateToCheck === selectedObservationDate;
       }),
     [observationsResults, selectedObservationDate]
