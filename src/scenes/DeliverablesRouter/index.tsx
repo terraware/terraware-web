@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 
 import DeliverableProvider from 'src/providers/Deliverable/DeliverableProvider';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';

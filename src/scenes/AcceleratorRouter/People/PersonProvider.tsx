@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUserRequest } from 'src/redux/features/user/usersSelectors';

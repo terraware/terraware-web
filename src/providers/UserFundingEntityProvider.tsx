@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
 import { requestFundingEntityForUser } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';

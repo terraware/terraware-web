@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { MultiPolygon } from 'geojson';

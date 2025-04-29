@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import AcceleratorDeliverableCard from 'src/components/AcceleratorDeliverableView/DeliverableCard';
 import { Crumb } from 'src/components/BreadCrumbs';

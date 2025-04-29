@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { matchPath, useNavigate } from 'react-router-dom';
+import { matchPath, useNavigate } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
 import { useOrganization, useUserFundingEntity } from 'src/providers';

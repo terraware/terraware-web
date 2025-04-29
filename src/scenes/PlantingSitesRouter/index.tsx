@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useParams } from 'react-router';
 
 import { CircularProgress } from '@mui/material';
 

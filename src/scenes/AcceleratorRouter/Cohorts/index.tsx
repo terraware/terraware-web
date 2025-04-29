@@ -1,4 +1,5 @@
-import React, { Navigate, Route, Routes } from 'react-router-dom';
+import React from 'react';
+import { Navigate, Route, Routes } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
 

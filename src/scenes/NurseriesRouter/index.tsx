@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { useOrganization } from 'src/providers';

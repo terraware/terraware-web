@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 
 import { useOrganization } from 'src/providers';
 import EditOrganizationView from 'src/scenes/OrganizationRouter/EditOrganizationView';

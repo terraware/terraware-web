@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { useDeviceInfo } from '@terraware/web-components/utils';
 

@@ -86,7 +86,7 @@
     "react-multi-carousel": "^2.8.2",
     "react-redux": "^9.0.0",
     "react-responsive": "^10.0.0",
-    "react-router-dom": "6",
+    "react-router": "^7.5.3",
     "sanitize-filename": "^1.6.3",
     "slate": "^0.112.0",
     "slate-dom": "^0.112.0",

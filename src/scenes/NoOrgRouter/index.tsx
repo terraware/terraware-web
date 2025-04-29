@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router';
 
 import NoOrgApplicationLandingPage from 'src/components/emptyStatePages/NoOrgApplicationLandingPage';
 import NoOrgLandingPage from 'src/components/emptyStatePages/NoOrgLandingPage';

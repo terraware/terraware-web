@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox } from '@terraware/web-components';

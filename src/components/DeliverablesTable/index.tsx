@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { TableColumnType } from '@terraware/web-components';
 

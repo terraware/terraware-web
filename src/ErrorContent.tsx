@@ -1,6 +1,6 @@
 import React from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
