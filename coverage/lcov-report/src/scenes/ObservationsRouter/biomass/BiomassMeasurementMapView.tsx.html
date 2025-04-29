@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/70</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/50</span>
+                <span class='fraction'>0/46</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/68</span>
+                <span class='fraction'>0/65</span>
             </div>
         
             
@@ -291,14 +291,7 @@
 <a name='L226'></a><a href='#L226'>226</a>
 <a name='L227'></a><a href='#L227'>227</a>
 <a name='L228'></a><a href='#L228'>228</a>
-<a name='L229'></a><a href='#L229'>229</a>
-<a name='L230'></a><a href='#L230'>230</a>
-<a name='L231'></a><a href='#L231'>231</a>
-<a name='L232'></a><a href='#L232'>232</a>
-<a name='L233'></a><a href='#L233'>233</a>
-<a name='L234'></a><a href='#L234'>234</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L229'></a><a href='#L229'>229</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -330,7 +323,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -340,7 +332,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -378,7 +369,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -532,13 +522,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useState } from 'react';
 &nbsp;
 import { Box } from '@mui/material';
-import { getDateDisplayValue } from '@terraware/web-components/utils';
 &nbsp;
 import { PlantingSiteMap } from 'src/components/Map';
 import MapDateSelect from 'src/components/common/MapDateSelect';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
-import { selectPlantingSiteObservations } from 'src/redux/features/observations/observationsSelectors';
+import { selectPlantingSiteAdHocObservations } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSiteHistory } from 'src/redux/features/tracking/trackingSelectors';
 import { requestGetPlantingSiteHistory } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -548,7 +537,6 @@ import strings from 'src/strings';
 import { MapObject, MapSourceBaseData, MapSourceProperties } from 'src/types/Map';
 import { AdHocObservationResults, Observation } from 'src/types/Observations';
 import { PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 &nbsp;
 type BiomassMeasurementMapViewProps = {
   hideDate?: boolean;
@@ -563,21 +551,19 @@ export default function <span class="fstat-no" title="function not covered" >Bio
 }: BiomassMeasurementMapViewProps): JSX.Element {
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
-  const defaultTimeZone = <span class="cstat-no" title="statement not covered" >useDefaultTimeZone();</span>
 &nbsp;
   const observationHistory = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectPlantingSiteHistory(state, requestId))</span>;</span>
 &nbsp;
   const [plantingSiteHistory, setPlantingSiteHistory] = <span class="cstat-no" title="statement not covered" >useState&lt;PlantingSiteHistory&gt;();</span>
 &nbsp;
   const observations: Observation[] | undefined = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    selectPlantingSiteObservations(state, selectedPlantingSite.id)</span>
+<span class="cstat-no" title="statement not covered" >    selectPlantingSiteAdHocObservations(state, selectedPlantingSite.id)</span>
   );
 &nbsp;
   const observationsDates = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const uniqueDates: Set&lt;string&gt; = <span class="cstat-no" title="statement not covered" >new Set();</span>
 <span class="cstat-no" title="statement not covered" >    observationsResults?.forEach(<span class="fstat-no" title="function not covered" >(o</span>bs) =&gt; {</span>
-      const timeZone = <span class="cstat-no" title="statement not covered" >selectedPlantingSite?.timeZone ?? defaultTimeZone.get().id;</span>
-      const dateToUse = <span class="cstat-no" title="statement not covered" >obs.completedTime ? getDateDisplayValue(obs.completedTime, timeZone) : obs.startDate;</span>
+      const dateToUse = <span class="cstat-no" title="statement not covered" >obs.completedTime || obs.startDate;</span>
 <span class="cstat-no" title="statement not covered" >      uniqueDates.add(dateToUse);</span>
     });
 &nbsp;
@@ -612,8 +598,7 @@ export default function <span class="fstat-no" title="function not covered" >Bio
   const selectedObservation = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
 <span class="cstat-no" title="statement not covered" >      observationsResults?.find(<span class="fstat-no" title="function not covered" >(o</span>bs) =&gt; {</span>
-        const timeZone = <span class="cstat-no" title="statement not covered" >selectedPlantingSite?.timeZone ?? defaultTimeZone.get().id;</span>
-        const dateToCheck = <span class="cstat-no" title="statement not covered" >obs.completedTime ? getDateDisplayValue(obs.completedTime, timeZone) : obs.startDate;</span>
+        const dateToCheck = <span class="cstat-no" title="statement not covered" >obs.completedTime || obs.startDate;</span>
 <span class="cstat-no" title="statement not covered" >        return dateToCheck === selectedObservationDate;</span>
       }),
     [observationsResults, selectedObservationDate]
@@ -769,7 +754,7 @@ export default function <span class="fstat-no" title="function not covered" >Bio
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-04-29T12:46:20.882Z
+                at 2025-04-29T17:52:52.925Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
