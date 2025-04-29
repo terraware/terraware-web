@@ -155,11 +155,7 @@ const ProjectProfileView = ({
         </Grid>
       </Grid>
 
-      <Grid
-        container
-        paddingTop={theme.spacing(2)}
-        sx={{ '.mapboxgl-canvas-container.mapboxgl-interactive': { cursor: 'default' } }}
-      >
+      <Grid container paddingTop={theme.spacing(2)}>
         {project && participantProject?.projectHighlightPhotoValueId && (
           <ProjectProfileImage
             projectId={project.id}

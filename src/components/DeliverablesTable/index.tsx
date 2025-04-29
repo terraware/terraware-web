@@ -36,56 +36,72 @@ interface DeliverablesTableProps {
   searchAndSort?: SearchAndSortFn<ListDeliverablesElementWithOverdue>;
   tableId: string;
   iconFilters?: FilterConfig[];
+  projectId?: number;
 }
 
 const columns =
-  (isAcceleratorRoute: boolean) =>
-  (activeLocale: string | null): TableColumnType[] =>
-    activeLocale
-      ? [
-          {
-            key: 'name',
-            name: strings.DELIVERABLE_NAME,
-            type: 'string',
-          },
-          {
-            key: 'dueDate',
-            name: strings.DUE_DATE,
-            type: 'date',
-          },
-          {
-            key: 'status',
-            name: strings.STATUS,
-            type: 'string',
-          },
-          isAcceleratorRoute
-            ? {
-                key: 'projectDealName',
-                name: strings.DEAL_NAME,
-                type: 'string',
-              }
-            : {
-                key: 'projectName',
-                name: strings.PROJECT,
-                type: 'string',
-              },
-          {
-            key: 'module',
-            name: strings.MODULE,
-            type: 'string',
-          },
-          {
-            key: 'category',
-            name: strings.CATEGORY,
-            type: 'string',
-          },
-          {
-            key: 'type',
-            name: strings.TYPE,
-            type: 'string',
-          },
-        ]
-      : [];
+  (isAcceleratorRoute: boolean, projectId?: number) =>
+  (activeLocale: string | null): TableColumnType[] => {
+    if (!activeLocale) {
+      return [];
+    }
+
+    const baseColumns: TableColumnType[] = [
+      {
+        key: 'name',
+        name: projectId ? strings.NAME : strings.DELIVERABLE_NAME,
+        type: 'string',
+      },
+      {
+        key: 'dueDate',
+        name: strings.DUE_DATE,
+        type: 'date',
+      },
+      {
+        key: 'status',
+        name: strings.STATUS,
+        type: 'string',
+      },
+    ];
+
+    // add project column when projectId is not provided
+    if (!projectId) {
+      baseColumns.push(
+        isAcceleratorRoute
+          ? {
+              key: 'projectDealName',
+              name: strings.DEAL_NAME,
+              type: 'string',
+            }
+          : {
+              key: 'projectName',
+              name: strings.PROJECT,
+              type: 'string',
+            }
+      );
+    }
+
+    // add remaining columns
+    baseColumns.push(
+      {
+        key: 'module',
+        name: strings.MODULE,
+        type: 'string',
+      },
+      {
+        key: 'category',
+        name: strings.CATEGORY,
+        type: 'string',
+      },
+      {
+        key: 'type',
+        name: strings.TYPE,
+        type: 'string',
+      }
+    );
+
+    return baseColumns;
+  };
 
 const defaultSearchOrder: SearchSortOrder = {
   field: 'status',
@@ -101,6 +117,7 @@ const DeliverablesTable = ({
   searchAndSort,
   tableId,
   iconFilters,
+  projectId,
 }: DeliverablesTableProps) => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
@@ -135,11 +152,11 @@ const DeliverablesTable = ({
   const isAllowedReadDeliverable = isAllowed('READ_DELIVERABLE', { organization: selectedOrganization });
 
   const getFilterProjectName = useCallback(
-    (projectId: number | string) => {
+    (_projectId: number | string) => {
       return (
         (participantId
-          ? selectedParticipant?.projects?.find((p) => p.projectId === Number(projectId))?.projectId
-          : projectsFilterOptions?.find((p) => p.id === Number(projectId))?.name) || ''
+          ? selectedParticipant?.projects?.find((p) => p.projectId === Number(_projectId))?.projectId
+          : projectsFilterOptions?.find((p) => p.id === Number(_projectId))?.name) || ''
       );
     },
     [participantId, projectsFilterOptions, selectedParticipant?.projects]
@@ -196,7 +213,7 @@ const DeliverablesTable = ({
       })) ||
       projectsFilterOptions ||
       [];
-    if (isAcceleratorRoute && availableProjects && availableProjects.length > 0) {
+    if (isAcceleratorRoute && availableProjects && availableProjects.length > 0 && !projectId) {
       const paramValue = projectParam
         ? availableProjects.find((project) => project.id.toString() === projectParam)
         : undefined;
@@ -220,6 +237,7 @@ const DeliverablesTable = ({
     projectsFilterOptions,
     selectedParticipant?.projects,
     projectParam,
+    projectId,
   ]);
 
   const dispatchSearchRequest = useCallback(
@@ -280,7 +298,7 @@ const DeliverablesTable = ({
 
   return (
     <TableWithSearchFilters
-      columns={columns(isAcceleratorRoute ?? false)}
+      columns={columns(isAcceleratorRoute ?? false, projectId)}
       defaultSearchOrder={defaultSearchOrder}
       dispatchSearchRequest={dispatchSearchRequest}
       extraTableFilters={extraTableFilters}

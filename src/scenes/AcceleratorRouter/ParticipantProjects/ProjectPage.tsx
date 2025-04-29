@@ -13,6 +13,7 @@ import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import { useParticipantProjectData } from './ParticipantProjectContext';
+import ProjectDeliverablesView from './ProjectDeliverablesView';
 import ProjectProfileView from './ProjectProfileView';
 import { useVotingData } from './Voting/VotingContext';
 
@@ -37,6 +38,7 @@ const ProjectPage = () => {
     if (!activeLocale) {
       return [];
     }
+
     return [
       {
         id: 'projectProfile',
@@ -51,9 +53,16 @@ const ProjectPage = () => {
         ),
       },
       {
+        id: 'projectDeliverables',
+        label: strings.DELIVERABLES,
+        children: <ProjectDeliverablesView projectId={projectData.projectId} />,
+      },
+      {
         id: 'plantsDashboard',
         label: strings.PLANTS_DASHBOARD,
-        children: <PlantsDashboardView />,
+        children: (
+          <PlantsDashboardView projectId={projectData.projectId} organizationId={projectApplication?.organizationId} />
+        ),
       },
     ];
   }, [activeLocale, projectData, projectApplication, projectScore, phaseVotes]);
@@ -67,21 +76,23 @@ const ProjectPage = () => {
 
   const rightComponent = useMemo(
     () => (
-      <Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'>
-        {isAllowedEdit && (
-          <Button
-            id='editProject'
-            icon='iconEdit'
-            label={strings.EDIT_PROJECT}
-            priority='primary'
-            onClick={() => goToParticipantProjectEdit(projectData.projectId)}
-            size='medium'
-            type='productive'
-          />
-        )}
+      <Box display='flex' flexDirection='column' justifyContent='center' minHeight={80}>
+        <Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'>
+          {activeTab === 'projectProfile' && isAllowedEdit && (
+            <Button
+              id='editProject'
+              icon='iconEdit'
+              label={strings.EDIT_PROJECT}
+              priority='primary'
+              onClick={() => goToParticipantProjectEdit(projectData.projectId)}
+              size='medium'
+              type='productive'
+            />
+          )}
+        </Box>
       </Box>
     ),
-    [goToParticipantProjectEdit, isAllowedEdit, projectData.projectId, theme]
+    [activeTab, goToParticipantProjectEdit, isAllowedEdit, projectData.projectId, theme]
   );
 
   const projectViewTitle = (

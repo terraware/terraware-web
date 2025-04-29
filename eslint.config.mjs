@@ -37,7 +37,7 @@ export default fixupConfigRules([
   {
     files: ['**/*.ts', '**/*.tsx'],
 
-    ignores: ['**/*.test.ts'],
+    ignores: ['**/*.test.ts', 'generated-schema.ts'],
 
     plugins: {
       jsdoc,

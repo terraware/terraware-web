@@ -190,7 +190,7 @@ export const requestUpdateAcceleratorReport = createAsyncThunk(
       return response.data;
     }
 
-    return rejectWithValue(strings.GENERIC_ERROR);
+    return rejectWithValue(response.error || strings.GENERIC_ERROR);
   }
 );
 

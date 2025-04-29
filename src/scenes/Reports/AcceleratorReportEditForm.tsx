@@ -24,6 +24,7 @@ import {
   ReportSystemMetric,
 } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
 
 type AcceleratorReportEditFormProps = {
   report: AcceleratorReport;
@@ -42,6 +43,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
   const [record, , onChange] = useForm<AcceleratorReport>(report);
   const [saveReportRequestId, setSaveReportRequestId] = useState('');
   const saveReportResponse = useAppSelector(selectUpdateAcceleratorReport(saveReportRequestId));
+  const snackbar = useSnackbar();
 
   const saveReport = () => {
     const request = dispatch(
@@ -56,7 +58,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
 
   useEffect(() => {
     if (saveReportResponse?.status === 'error') {
-      return;
+      snackbar.toastError();
     }
     if (saveReportResponse?.status === 'success') {
       goToAcceleratorReport(Number(reportId), Number(projectId));

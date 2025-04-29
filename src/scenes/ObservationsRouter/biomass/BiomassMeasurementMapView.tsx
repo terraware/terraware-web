@@ -1,13 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
-import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import { PlantingSiteMap } from 'src/components/Map';
 import MapDateSelect from 'src/components/common/MapDateSelect';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
-import { selectPlantingSiteObservations } from 'src/redux/features/observations/observationsSelectors';
+import { selectPlantingSiteAdHocObservations } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSiteHistory } from 'src/redux/features/tracking/trackingSelectors';
 import { requestGetPlantingSiteHistory } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -17,7 +16,6 @@ import strings from 'src/strings';
 import { MapObject, MapSourceBaseData, MapSourceProperties } from 'src/types/Map';
 import { AdHocObservationResults, Observation } from 'src/types/Observations';
 import { PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type BiomassMeasurementMapViewProps = {
   hideDate?: boolean;
@@ -32,21 +30,19 @@ export default function BiomassMeasurementMapView({
 }: BiomassMeasurementMapViewProps): JSX.Element {
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
-  const defaultTimeZone = useDefaultTimeZone();
 
   const observationHistory = useAppSelector((state) => selectPlantingSiteHistory(state, requestId));
 
   const [plantingSiteHistory, setPlantingSiteHistory] = useState<PlantingSiteHistory>();
 
   const observations: Observation[] | undefined = useAppSelector((state) =>
-    selectPlantingSiteObservations(state, selectedPlantingSite.id)
+    selectPlantingSiteAdHocObservations(state, selectedPlantingSite.id)
   );
 
   const observationsDates = useMemo(() => {
     const uniqueDates: Set<string> = new Set();
     observationsResults?.forEach((obs) => {
-      const timeZone = selectedPlantingSite?.timeZone ?? defaultTimeZone.get().id;
-      const dateToUse = obs.completedTime ? getDateDisplayValue(obs.completedTime, timeZone) : obs.startDate;
+      const dateToUse = obs.completedTime || obs.startDate;
       uniqueDates.add(dateToUse);
     });
 
@@ -81,8 +77,7 @@ export default function BiomassMeasurementMapView({
   const selectedObservation = useMemo(
     () =>
       observationsResults?.find((obs) => {
-        const timeZone = selectedPlantingSite?.timeZone ?? defaultTimeZone.get().id;
-        const dateToCheck = obs.completedTime ? getDateDisplayValue(obs.completedTime, timeZone) : obs.startDate;
+        const dateToCheck = obs.completedTime || obs.startDate;
         return dateToCheck === selectedObservationDate;
       }),
     [observationsResults, selectedObservationDate]
