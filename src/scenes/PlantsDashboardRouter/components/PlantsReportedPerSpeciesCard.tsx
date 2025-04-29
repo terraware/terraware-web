@@ -23,10 +23,12 @@ type PlantsReportedPerSpeciesCardProps = {
 export default function PlantsReportedPerSpeciesCard({
   plantingSiteId,
   newVersion,
-}: PlantsReportedPerSpeciesCardProps): JSX.Element {
+}: PlantsReportedPerSpeciesCardProps): JSX.Element | undefined {
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
 
-  if (!plantingSite?.plantingZones?.length) {
+  if (!plantingSite) {
+    return undefined;
+  } else if (!plantingSite.plantingZones?.length) {
     return <SiteWithoutZonesCard plantingSiteId={plantingSiteId} newVersion={newVersion} />;
   } else {
     return <SiteWithZonesCard plantingSiteId={plantingSiteId} newVersion={newVersion} />;
@@ -89,16 +91,19 @@ const SiteWithoutZonesCard = ({
 
   const plantings = useAppSelector((state) => selectPlantingsForSite(state, plantingSiteId));
 
-  useEffect(() => {
+  const speciesQuantities = useMemo(() => {
     const transformedPlantings = plantings?.map((planting) => ({
       plants: Number(planting['numPlants(raw)']),
       scientificName: planting.species.scientificName,
     }));
-    const speciesQuantities: Record<string, number> = calculateSpeciesQuantities(transformedPlantings, newVersion);
+    return calculateSpeciesQuantities(transformedPlantings, newVersion);
+  }, [plantings, newVersion]);
+
+  useEffect(() => {
     setLabels(Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)));
     setValues(Object.values(speciesQuantities));
     setTooltipTitles(Object.keys(speciesQuantities));
-  }, [plantings]);
+  }, [speciesQuantities]);
 
   return (
     <ChartData
@@ -123,7 +128,7 @@ const SiteWithZonesCard = ({
   const [values, setValues] = useState<number[]>();
   const [tooltipTitles, setTooltipTitles] = useState<string[]>();
 
-  useEffect(() => {
+  const speciesQuantities = useMemo(() => {
     if (populationSelector) {
       const transformedPlantings = populationSelector
         .flatMap((zone) =>
@@ -135,16 +140,17 @@ const SiteWithZonesCard = ({
           )
         )
         .filter((tp) => tp !== undefined);
-      const speciesQuantities: Record<string, number> = calculateSpeciesQuantities(transformedPlantings, newVersion);
-      setLabels(Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)));
-      setValues(Object.values(speciesQuantities));
-      setTooltipTitles(Object.keys(speciesQuantities));
+      return calculateSpeciesQuantities(transformedPlantings, newVersion);
     } else {
-      setLabels([]);
-      setValues([]);
-      setTooltipTitles([]);
+      return [];
     }
-  }, [populationSelector]);
+  }, [populationSelector, newVersion]);
+
+  useEffect(() => {
+    setLabels(Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)));
+    setValues(Object.values(speciesQuantities));
+    setTooltipTitles(Object.keys(speciesQuantities));
+  }, [speciesQuantities]);
 
   return (
     <ChartData
@@ -165,19 +171,18 @@ type ChartDataProps = {
   newVersion?: boolean;
 };
 
-const ChartData = ({ plantingSiteId, tooltipTitles, labels, values, newVersion }: ChartDataProps): JSX.Element => {
+const ChartData = ({
+  plantingSiteId,
+  tooltipTitles,
+  labels,
+  values,
+  newVersion,
+}: ChartDataProps): JSX.Element | undefined => {
   const theme = useTheme();
 
   const chartData = useMemo(() => {
     if (!labels?.length || !values?.length) {
-      return {
-        labels: [],
-        datasets: [
-          {
-            values: [],
-          },
-        ],
-      };
+      return undefined;
     }
 
     return {
@@ -189,6 +194,10 @@ const ChartData = ({ plantingSiteId, tooltipTitles, labels, values, newVersion }
       ],
     };
   }, [labels, values]);
+
+  if (!chartData) {
+    return undefined;
+  }
 
   return newVersion ? (
     <Box>
@@ -206,14 +215,7 @@ const ChartData = ({ plantingSiteId, tooltipTitles, labels, values, newVersion }
         <PieChart
           key={`${plantingSiteId}_${values?.length}`}
           chartId='plantsBySpecies'
-          chartData={{
-            labels: labels ?? [],
-            datasets: [
-              {
-                values: values ?? [],
-              },
-            ],
-          }}
+          chartData={chartData}
           maxWidth='100%'
         />
       </Box>
