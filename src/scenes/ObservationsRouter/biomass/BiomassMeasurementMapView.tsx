@@ -7,7 +7,7 @@ import { PlantingSiteMap } from 'src/components/Map';
 import MapDateSelect from 'src/components/common/MapDateSelect';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
-import { selectPlantingSiteObservations } from 'src/redux/features/observations/observationsSelectors';
+import { selectPlantingSiteAdHocObservations } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSiteHistory } from 'src/redux/features/tracking/trackingSelectors';
 import { requestGetPlantingSiteHistory } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -39,7 +39,7 @@ export default function BiomassMeasurementMapView({
   const [plantingSiteHistory, setPlantingSiteHistory] = useState<PlantingSiteHistory>();
 
   const observations: Observation[] | undefined = useAppSelector((state) =>
-    selectPlantingSiteObservations(state, selectedPlantingSite.id)
+    selectPlantingSiteAdHocObservations(state, selectedPlantingSite.id)
   );
 
   const observationsDates = useMemo(() => {
