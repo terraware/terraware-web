@@ -97,7 +97,7 @@ const ProjectMap = ({ application, countryCode, md }: ProjectMapProps) => {
   }, [application?.boundary, countryCode, countryMapOptions]);
 
   return (
-    <Grid item md={md || 12} paddingLeft={theme.spacing(1)}>
+    <Grid item md={md || 12} paddingX={theme.spacing(1)}>
       <Box display='flex' minHeight={'400px'} justifyContent={'center'} alignContent={'center'}>
         {mapElement}
       </Box>

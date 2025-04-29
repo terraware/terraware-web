@@ -5,7 +5,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { ProjectFieldProps, renderFieldValue } from '.';
 import GridEntryWrapper from './GridEntryWrapper';
 
-const InvertedCard = ({ label, md, value, backgroundColor }: ProjectFieldProps) => {
+const InvertedCard = ({ label, md, value, backgroundColor, units }: ProjectFieldProps) => {
   const theme = useTheme();
 
   return (
@@ -13,15 +13,13 @@ const InvertedCard = ({ label, md, value, backgroundColor }: ProjectFieldProps) 
       <Box
         borderRadius={theme.spacing(1)}
         textAlign={'left'}
-        margin={`0 ${theme.spacing(2)}`}
+        margin={`0 ${theme.spacing(1)}`}
         padding={`${theme.spacing(2, 2)}`}
-        sx={{
-          backgroundColor: backgroundColor,
-        }}
+        sx={{ backgroundColor }}
       >
         <Grid container alignContent={'left'}>
           <Grid item xs={12}>
-            {renderFieldValue(value)}
+            {renderFieldValue(value, units)}
             <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={600} marginTop={theme.spacing(1)}>
               {label}
             </Typography>

@@ -7,12 +7,14 @@ import CohortBadge from 'src/components/ProjectField/CohortBadge';
 import ProjectProfileFooter from 'src/components/ProjectField/Footer';
 import ProjectFieldInlineMeta from 'src/components/ProjectField/InlineMeta';
 import InvertedCard from 'src/components/ProjectField/InvertedCard';
+import LandUseModelTypeCard from 'src/components/ProjectField/LandUseModelTypeCard';
 import ProjectFigureLabel from 'src/components/ProjectField/ProjectFigureLabel';
 import ProjectMap from 'src/components/ProjectField/ProjectMap';
 import ProjectOverviewCard from 'src/components/ProjectField/ProjectOverviewCard';
 import ProjectProfileImage from 'src/components/ProjectField/ProjectProfileImage';
 import ProjectScoreLink from 'src/components/ProjectField/ProjectScoreLink';
 import VotingDecisionLink from 'src/components/ProjectField/VotingDecisionLink';
+import Co2HectareYear from 'src/components/Units/Co2HectareYear';
 import Card from 'src/components/common/Card';
 import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
@@ -57,13 +59,18 @@ const ProjectProfileView = ({
     [participantProject?.cohortPhase]
   );
 
+  const isPhaseZeroOrApplication = useMemo(
+    () => [undefined, 'Phase 0 - Due Diligence', 'Application', 'Pre-Screen'].includes(participantProject?.cohortPhase),
+    [participantProject?.cohortPhase]
+  );
+
   const projectSize = useMemo(() => {
     const getCard = (label: string, value: number | undefined) => (
       <InvertedCard
         md={12}
         backgroundColor={theme.palette.TwClrBaseGray100}
         label={label}
-        value={value ? strings.formatString(strings.X_HA, numericFormatter.format(value))?.toString() : 'N/A'}
+        value={value && strings.formatString(strings.X_HA, numericFormatter.format(value))?.toString()}
       />
     );
     switch (participantProject?.cohortPhase) {
@@ -148,7 +155,7 @@ const ProjectProfileView = ({
         </Grid>
       </Grid>
 
-      <Grid container padding={theme.spacing(2, 2, 0, 0)}>
+      <Grid container paddingTop={theme.spacing(2)}>
         {project && participantProject?.projectHighlightPhotoValueId && (
           <ProjectProfileImage
             projectId={project.id}
@@ -171,6 +178,55 @@ const ProjectProfileView = ({
             md={participantProject?.projectHighlightPhotoValueId ? 6 : 12}
           />
         )}
+      </Grid>
+
+      <Grid container>
+        <LandUseModelTypeCard
+          modelHectares={participantProject?.landUseModelHectares}
+          numericFormatter={numericFormatter}
+        />
+      </Grid>
+
+      <Grid container>
+        {isPhaseZeroOrApplication && (
+          <InvertedCard
+            md={4}
+            label={strings.MIN_MAX_CARBON_ACCUMULATION}
+            value={
+              participantProject?.minCarbonAccumulation &&
+              participantProject?.maxCarbonAccumulation &&
+              `${participantProject.minCarbonAccumulation}-${participantProject.maxCarbonAccumulation}`
+            }
+            backgroundColor={theme.palette.TwClrBaseGray050}
+            units={<Co2HectareYear />}
+          />
+        )}
+        {!isPhaseZeroOrApplication && (
+          <InvertedCard
+            md={4}
+            label={strings.ACCUMULATION_RATE}
+            value={participantProject?.accumulationRate}
+            backgroundColor={theme.palette.TwClrBaseGray050}
+          />
+        )}
+        <InvertedCard
+          md={4}
+          label={strings.TOTAL_VCU_40YRS}
+          value={participantProject?.totalVCU && `${numericFormatter.format(participantProject.totalVCU)}`}
+          units={'t'}
+          backgroundColor={theme.palette.TwClrBaseGray050}
+        />
+        <InvertedCard
+          md={4}
+          label={strings.ESTIMATED_BUDGET}
+          value={
+            participantProject?.perHectareBudget &&
+            strings
+              .formatString(strings.USD_PER_HECTARE, numericFormatter.format(participantProject.perHectareBudget))
+              ?.toString()
+          }
+          backgroundColor={theme.palette.TwClrBaseGray050}
+        />
       </Grid>
 
       <ProjectProfileFooter project={project} projectMeta={projectMeta} />

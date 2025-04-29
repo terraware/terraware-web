@@ -298,7 +298,7 @@ const SingleView = () => {
                 </Typography>
               </Grid>
               <ProjectFieldDisplay
-                label={strings.MIN_MAX_CARBON_ACCUMULATION}
+                label={strings.MIN_MAX_CARBON_ACCUMULATION_UNITS}
                 value={
                   participantProject?.minCarbonAccumulation && participantProject?.maxCarbonAccumulation
                     ? `${participantProject.minCarbonAccumulation}-${participantProject.maxCarbonAccumulation}`

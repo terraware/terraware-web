@@ -63,7 +63,7 @@ const MinMaxCarbonTextfield = ({ height, onChange, valueMax, valueMin }: MinMaxC
             lineHeight: '20px',
           }}
         >
-          {strings.MIN_MAX_CARBON_ACCUMULATION}
+          {strings.MIN_MAX_CARBON_ACCUMULATION_UNITS}
         </Typography>
         <Box display='flex' alignItems='center' paddingX={theme.spacing(2)}>
           <Textfield
