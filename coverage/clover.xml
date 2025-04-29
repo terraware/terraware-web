@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1745970177272" clover="3.2.0">
-  <project timestamp="1745970177272" name="All files">
-    <metrics statements="30233" coveredstatements="1274" conditionals="20597" coveredconditionals="386" methods="9304" coveredmethods="209" elements="60134" coveredelements="1869" complexity="0" loc="30233" ncloc="30233" packages="256" files="1244" classes="1244"/>
+<coverage generated="1745970838976" clover="3.2.0">
+  <project timestamp="1745970838976" name="All files">
+    <metrics statements="30234" coveredstatements="1274" conditionals="20601" coveredconditionals="386" methods="9304" coveredmethods="209" elements="60139" coveredelements="1869" complexity="0" loc="30234" ncloc="30234" packages="256" files="1244" classes="1244"/>
     <package name="src">
       <metrics statements="177" coveredstatements="8" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -21451,7 +21451,7 @@
       </file>
     </package>
     <package name="src.scenes.DeliverablesRouter">
-      <metrics statements="102" coveredstatements="0" conditionals="81" coveredconditionals="0" methods="26" coveredmethods="0"/>
+      <metrics statements="103" coveredstatements="0" conditionals="85" coveredconditionals="0" methods="26" coveredmethods="0"/>
       <file name="DeliverablePage.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/DeliverablesRouter/DeliverablePage.tsx">
         <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
@@ -21510,7 +21510,7 @@
         <line num="139" count="0" type="stmt"/>
       </file>
       <file name="DeliverablesList.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/DeliverablesRouter/DeliverablesList.tsx">
-        <metrics statements="37" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <metrics statements="38" coveredstatements="0" conditionals="40" coveredconditionals="0" methods="10" coveredmethods="0"/>
         <line num="30" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
@@ -21547,7 +21547,8 @@
         <line num="117" count="0" type="stmt"/>
         <line num="123" count="0" type="stmt"/>
         <line num="125" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="158" count="0" type="stmt"/>
+        <line num="158" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="160" count="0" type="stmt"/>
       </file>
       <file name="QuestionsDeliverableEditView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/DeliverablesRouter/QuestionsDeliverableEditView.tsx">
         <metrics statements="10" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
