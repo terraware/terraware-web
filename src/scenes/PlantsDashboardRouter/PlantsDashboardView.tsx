@@ -37,7 +37,12 @@ import PlantingSiteTrendsCard from './components/PlantingSiteTrendsCard';
 import PlantsAndSpeciesCard from './components/PlantsAndSpeciesCard';
 import ZoneLevelDataMap from './components/ZoneLevelDataMap';
 
-export default function PlantsDashboardView(): JSX.Element {
+type PlantsDashboardViewProps = {
+  projectId?: number;
+  organizationId?: number;
+};
+
+export default function PlantsDashboardView({ projectId, organizationId }: PlantsDashboardViewProps): JSX.Element {
   const org = useOrganization();
   const { isMobile } = useDeviceInfo();
   const dispatch = useAppDispatch();
@@ -48,6 +53,11 @@ export default function PlantsDashboardView(): JSX.Element {
   const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
   const summaries = useObservationSummaries(selectedPlantingSiteId);
 
+  const organizationIdToUse = useMemo(
+    () => (organizationId ? organizationId : org.selectedOrganization.id),
+    [organizationId, org.selectedOrganization.id]
+  );
+
   const messageStyles = {
     margin: '0 auto',
     maxWidth: '800px',
@@ -55,7 +65,12 @@ export default function PlantsDashboardView(): JSX.Element {
     width: isMobile ? 'auto' : '800px',
   };
 
-  const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSiteId(site.id), [setSelectedPlantingSiteId]);
+  const onSelect = useCallback(
+    (site: PlantingSite) => {
+      setSelectedPlantingSiteId(site.id);
+    },
+    [setSelectedPlantingSiteId]
+  );
   const onPreferences = useCallback(
     (preferences: Record<string, unknown>) => setPlantsDashboardPreferences(preferences),
     [setPlantsDashboardPreferences]
@@ -95,19 +110,19 @@ export default function PlantsDashboardView(): JSX.Element {
   }, [latestObservation, plantingSites, selectedPlantingSiteId]);
 
   useEffect(() => {
-    dispatch(requestObservations(org.selectedOrganization.id));
-    dispatch(requestObservationsResults(org.selectedOrganization.id));
-    dispatch(requestSpecies(org.selectedOrganization.id));
-    dispatch(requestPlantings(org.selectedOrganization.id));
-    dispatch(requestPlantingSitesSearchResults(org.selectedOrganization.id));
-  }, [dispatch, org.selectedOrganization.id]);
+    dispatch(requestObservations(organizationIdToUse));
+    dispatch(requestObservationsResults(organizationIdToUse));
+    dispatch(requestSpecies(organizationIdToUse));
+    dispatch(requestPlantings(organizationIdToUse));
+    dispatch(requestPlantingSitesSearchResults(organizationIdToUse));
+  }, [dispatch, organizationIdToUse]);
 
   useEffect(() => {
     if (selectedPlantingSiteId !== -1) {
-      dispatch(requestSitePopulation(org.selectedOrganization.id, selectedPlantingSiteId));
+      dispatch(requestSitePopulation(organizationIdToUse, selectedPlantingSiteId));
       dispatch(requestSiteReportedPlants(selectedPlantingSiteId));
     }
-  }, [dispatch, org.selectedOrganization.id, selectedPlantingSiteId]);
+  }, [dispatch, organizationIdToUse, selectedPlantingSiteId]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>
@@ -357,13 +372,19 @@ export default function PlantsDashboardView(): JSX.Element {
       title={strings.DASHBOARD}
       text={latestObservationId ? getDashboardSubhead() : undefined}
       onSelect={onSelect}
-      pagePath={APP_PATHS.PLANTING_SITE_DASHBOARD}
+      pagePath={
+        projectId
+          ? APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', projectId.toString())
+          : APP_PATHS.PLANTING_SITE_DASHBOARD
+      }
       lastVisitedPreferenceName='plants.dashboard.lastVisitedPlantingSite'
       plantsSitePreferences={plantsDashboardPreferences}
       setPlantsSitePreferences={onPreferences}
       newHeader={true}
       showGeometryNote={geometryChangedNote}
       latestObservationId={latestObservationId}
+      projectId={projectId}
+      organizationId={organizationId}
     >
       {selectedPlantingSiteId !== -1 ? (
         <Grid container spacing={3} alignItems='flex-start' height='fit-content'>

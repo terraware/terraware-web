@@ -60,7 +60,9 @@ const ProjectPage = () => {
       {
         id: 'plantsDashboard',
         label: strings.PLANTS_DASHBOARD,
-        children: <PlantsDashboardView />,
+        children: (
+          <PlantsDashboardView projectId={projectData.projectId} organizationId={projectApplication?.organizationId} />
+        ),
       },
     ];
   }, [activeLocale, projectData, projectApplication, projectScore, phaseVotes]);
