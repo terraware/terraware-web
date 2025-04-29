@@ -40,12 +40,12 @@ const ProjectMap = ({ application, countryCode, md }: ProjectMapProps) => {
           entities: [
             {
               properties: {
-                id: id,
-                name: name,
-                type: type,
+                id,
+                name,
+                type,
               },
               boundary: coordinates,
-              id: id,
+              id,
             },
           ],
           id: 'boundary',
