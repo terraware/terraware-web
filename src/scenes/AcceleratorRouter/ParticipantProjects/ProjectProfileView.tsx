@@ -10,6 +10,7 @@ import ProjectProfileFooter from 'src/components/ProjectField/Footer';
 import ProjectFieldInlineMeta from 'src/components/ProjectField/InlineMeta';
 import InvertedCard from 'src/components/ProjectField/InvertedCard';
 import LandUseModelTypeCard from 'src/components/ProjectField/LandUseModelTypeCard';
+import ProjectFieldLink from 'src/components/ProjectField/Link';
 import ProjectFigureLabel from 'src/components/ProjectField/ProjectFigureLabel';
 import ProjectMap from 'src/components/ProjectField/ProjectMap';
 import ProjectOverviewCard from 'src/components/ProjectField/ProjectOverviewCard';
@@ -277,7 +278,7 @@ const ProjectProfileView = ({
           </Grid>
         </>
       )}
-      {projectReports && (
+      {projectReports?.length > 0 && (
         <Grid container marginY={theme.spacing(2)} marginLeft={theme.spacing(1)}>
           {lastSubmittedReport && lastSubmittedReport.submittedTime && (
             <Grid item marginRight={theme.spacing(3)}>
@@ -397,6 +398,63 @@ const ProjectProfileView = ({
             />
           </>
         )}
+      </Grid>
+
+      <Grid container>
+        <Box
+          marginX={theme.spacing(2)}
+          border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+          borderRadius={theme.spacing(1)}
+          width={'100%'}
+          padding={theme.spacing(2)}
+        >
+          <Typography fontSize='16px' fontWeight={600} lineHeight='24px' component={'span'}>
+            {strings.PROJECT_LINKS}
+          </Typography>
+          {projectApplication && (
+            <ProjectFieldLink
+              value={APP_PATHS.ACCELERATOR_APPLICATION.replace(':applicationId', projectApplication.id.toString())}
+              label={strings.APPLICATION}
+            />
+          )}
+          {participantProject?.dealName && (
+            <ProjectFieldLink
+              value={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}?dealName=${participantProject.dealName}`}
+              label={strings.DOCUMENTS}
+            />
+          )}
+          {project && (
+            <ProjectFieldLink
+              value={`${APP_PATHS.ACCELERATOR_DELIVERABLES}?projectId=${project.id}`}
+              label={strings.DELIVERABLES}
+            />
+          )}
+          {project && projectReports?.length > 0 && (
+            <ProjectFieldLink
+              value={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', project.id.toString())}
+              label={strings.REPORTS}
+            />
+          )}
+
+          <Box paddingTop={theme.spacing(1)}>
+            <Typography fontSize='16px' fontWeight={600} lineHeight='24px' component={'span'}>
+              {strings.EXTERNAL_PROJECT_LINKS}
+            </Typography>
+            <ProjectFieldLink value={participantProject?.googleFolderUrl} label={strings.GDRIVE} />
+            <ProjectFieldLink value={participantProject?.hubSpotUrl} label={strings.HUBSPOT} />
+            <ProjectFieldLink value={participantProject?.gisReportsLink} label={strings.GIS_REPORT} />
+            <ProjectFieldLink value={participantProject?.verraLink} label={strings.VERRA} />
+            <ProjectFieldLink value={participantProject?.riskTrackerLink} label={strings.RISK_TRACKER} />
+            {project && isAllowedViewScoreAndVoting && (
+              <ProjectFieldLink
+                value={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
+                label={strings.SCORING}
+              />
+            )}
+            <ProjectFieldLink value={participantProject?.clickUpLink} label={strings.CLICK_UP} />
+            <ProjectFieldLink value={participantProject?.slackLink} label={strings.SLACK} />
+          </Box>
+        </Box>
       </Grid>
 
       <ProjectProfileFooter project={project} projectMeta={projectMeta} />
