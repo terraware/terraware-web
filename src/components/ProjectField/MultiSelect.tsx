@@ -11,9 +11,19 @@ type ProjectFieldMultiSelectProps = {
   onChange: (id: string, values: string[]) => void;
   options: Map<string, string>;
   values?: string[];
+  md?: number;
+  height?: string;
 };
 
-const ProjectFieldMultiSelect = ({ id, label, onChange, options, values }: ProjectFieldMultiSelectProps) => {
+const ProjectFieldMultiSelect = ({
+  id,
+  label,
+  onChange,
+  options,
+  values,
+  md,
+  height,
+}: ProjectFieldMultiSelectProps) => {
   const theme = useTheme();
 
   const [localValues, setLocalValues] = useState<string[]>([]);
@@ -41,7 +51,7 @@ const ProjectFieldMultiSelect = ({ id, label, onChange, options, values }: Proje
   }, [values]);
 
   return (
-    <GridEntryWrapper height={'100px'}>
+    <GridEntryWrapper height={height} md={md}>
       <Box paddingX={theme.spacing(2)}>
         <MultiSelect<string, string>
           id={id}

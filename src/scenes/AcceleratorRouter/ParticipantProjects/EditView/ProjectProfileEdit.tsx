@@ -4,26 +4,17 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
 
 import PhotoChooser, { PhotoWithAttributes } from 'src/components/DocumentProducer/EditImagesModal/PhotoSelector';
-import ApplicationStatusCard from 'src/components/ProjectField/ApplicationStatusCard';
 import CountrySelect from 'src/components/ProjectField/CountrySelect';
 import GridEntryWrapper from 'src/components/ProjectField/GridEntryWrapper';
 import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
-import ProjectFieldMeta from 'src/components/ProjectField/Meta';
 import MinMaxCarbonTextfield from 'src/components/ProjectField/MinMaxCarbonTextfield';
-import PhaseScoreCard from 'src/components/ProjectField/PhaseScoreCard';
 import ProjectProfileImage from 'src/components/ProjectField/ProjectProfileImage';
-import RegionDisplay from 'src/components/ProjectField/RegionDisplay';
 import ProjectFieldTextAreaEdit from 'src/components/ProjectField/TextAreaEdit';
 import ProjectFieldTextfield from 'src/components/ProjectField/Textfield';
-import VotingDecisionCard from 'src/components/ProjectField/VotingDecisionCard';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
-import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
-import useListCohortModules from 'src/hooks/useListCohortModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import useProjectScore from 'src/hooks/useProjectScore';
 import { useLocalization, useUser } from 'src/providers';
-import { useApplicationData } from 'src/providers/Application/Context';
 import { requestAssignTerraformationContact } from 'src/redux/features/accelerator/acceleratorAsyncThunks';
 import { selectAssignTerraformationContact } from 'src/redux/features/accelerator/acceleratorSelectors';
 import { selectUploadImageValue } from 'src/redux/features/documentProducer/values/valuesSelector';
@@ -41,12 +32,12 @@ import { requestUpdateParticipantProject } from 'src/redux/features/participantP
 import { selectParticipantProjectUpdateRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { LAND_USE_MODEL_TYPES } from 'src/types/ParticipantProject';
 import { OrganizationUser } from 'src/types/User';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useParticipantProjectData } from '../ParticipantProjectContext';
-import { useVotingData } from '../Voting/VotingContext';
 
 const HighlightPhotoStableId = '551';
 const ZoneFigureStableId = '525';
@@ -56,14 +47,9 @@ const ProjectProfileEdit = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const { crumbs, participantProject, project, projectId, projectMeta, organization, reload } =
-    useParticipantProjectData();
-  const { projectScore } = useProjectScore(projectId);
-  const { phaseVotes } = useVotingData();
+  const { participantProject, project, projectId, organization, reload } = useParticipantProjectData();
   const { goToParticipantProject } = useNavigateTo();
   const { isAllowed } = useUser();
-  const { getApplicationByProjectId } = useApplicationData();
-  const { cohortModules, listCohortModules } = useListCohortModules();
 
   // Participant project (accelerator data) form record and update request
   const [participantProjectRequestId, setParticipantProjectRequestId] = useState<string>('');
@@ -101,13 +87,6 @@ const ProjectProfileEdit = () => {
   const [mapPhoto, setMapPhoto] = useState<PhotoWithAttributes>();
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
-  const isAllowedEditScoreAndVoting = isAllowed('UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING');
-
-  useEffect(() => {
-    if (project && project.cohortId) {
-      void listCohortModules(project.cohortId);
-    }
-  }, [project, listCohortModules]);
 
   const redirectToProjectView = useCallback(() => {
     reload();
@@ -208,11 +187,6 @@ const ProjectProfileEdit = () => {
       setGlobalUsersOptions(userOptions);
     }
   }, [listUsersRequest]);
-
-  const projectApplication = useMemo(
-    () => getApplicationByProjectId(projectId),
-    [getApplicationByProjectId, projectId]
-  );
 
   const onChangeCountry = useCallback(
     (countryCode?: string, region?: string) => {
@@ -319,228 +293,302 @@ const ProjectProfileEdit = () => {
     }
   }, [organization]);
 
+  const onChangeLandUseHectares = (type: string, hectares: string) => {
+    const updated = { ...participantProjectRecord?.landUseModelHectares, [type]: Number(hectares) };
+    onChangeParticipantProject('landUseModelHectares', updated);
+  };
+
+  const onChangeLandUseTypes = (_: string, types: string[]) => {
+    const typesToRemove = Object.keys(participantProjectRecord?.landUseModelHectares || {}).filter(
+      (type) => !types.includes(type)
+    );
+    const updatedModelHectares = { ...(participantProjectRecord?.landUseModelHectares || {}) };
+    typesToRemove.forEach((type) => {
+      delete updatedModelHectares[type];
+    });
+    onChangeParticipantProject('landUseModelHectares', updatedModelHectares);
+    onChangeParticipantProject('landUseModelTypes', types);
+  };
+
   const globalUsersWithNoOwner = useMemo(() => {
     const ownerId = organizationUsers?.find((orgUsr) => orgUsr.role === 'Owner')?.id;
     return globalUsersOptions?.filter((opt) => opt.value.toString() !== ownerId?.toString()) || [];
   }, [organizationUsers, globalUsersOptions]);
 
+  const sortedSelectedModelTypes = useMemo(() => {
+    return LAND_USE_MODEL_TYPES.filter((type) => participantProjectRecord?.landUseModelTypes?.includes(type));
+  }, [participantProjectRecord?.landUseModelTypes]);
+
+  const isPhaseZeroOrApplication = useMemo(
+    () => [undefined, 'Phase 0 - Due Diligence', 'Application', 'Pre-Screen'].includes(participantProject?.cohortPhase),
+    [participantProject?.cohortPhase]
+  );
+
+  const isPhaseOne = useMemo(
+    () => participantProject?.cohortPhase === 'Phase 1 - Feasibility Study',
+    [participantProject?.cohortPhase]
+  );
+
+  const isPhaseTwoPlus = useMemo(
+    () =>
+      participantProject?.cohortPhase &&
+      ['Phase 2 - Plan and Scale', 'Phase 3 - Implement and Monitor'].includes(participantProject.cohortPhase),
+    [participantProject?.cohortPhase]
+  );
+
   return (
-    <PageWithModuleTimeline
-      title={participantProject?.dealName}
-      crumbs={crumbs}
-      hierarchicalCrumbs={false}
-      cohortPhase={project?.cohortPhase}
-      modules={cohortModules ?? []}
+    <PageForm
+      busy={[
+        participantProjectUpdateResponse?.status,
+        assignContactResponse?.status,
+        uploadImagesResponse?.status,
+      ].includes('pending')}
+      cancelID='cancelNewParticipantProject'
+      onCancel={handleOnCancel}
+      onSave={handleSave}
+      saveID='createNewParticipantProject'
     >
-      <PageForm
-        busy={[
-          participantProjectUpdateResponse?.status,
-          assignContactResponse?.status,
-          uploadImagesResponse?.status,
-        ].includes('pending')}
-        cancelID='cancelNewParticipantProject'
-        onCancel={handleOnCancel}
-        onSave={handleSave}
-        saveID='createNewParticipantProject'
+      <Box margin={theme.spacing(2, 3)}>
+        <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
+          {participantProject?.dealName}
+        </Typography>
+      </Box>
+      <Card
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          flexGrow: 1,
+          marginBottom: theme.spacing(3),
+          marginRight: theme.spacing(3),
+          padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
+        }}
       >
-        <Card
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            flexGrow: 1,
-            marginBottom: theme.spacing(3),
-            padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
-          }}
-        >
-          <Grid container>
-            <Grid item xs={12}>
-              <ProjectFieldTextfield
-                height='auto'
-                id={'dealName'}
-                md={12}
-                label={strings.DEAL_NAME}
-                onChange={onChangeParticipantProject}
-                value={participantProjectRecord?.dealName}
-              />
-            </Grid>
-            {projectApplication && (
-              <ApplicationStatusCard
-                application={projectApplication}
-                md={!isAllowedEditScoreAndVoting ? 12 : undefined}
-              />
-            )}
-            {isAllowedEditScoreAndVoting && (
-              <>
-                <PhaseScoreCard md={!projectApplication?.id ? 6 : undefined} score={projectScore} />
-                <VotingDecisionCard md={!projectApplication?.id ? 6 : undefined} phaseVotes={phaseVotes} />
-              </>
-            )}
+        <Grid container>
+          <Grid item xs={6}>
             <ProjectFieldTextfield
-              id={'fileNaming'}
-              label={strings.FILE_NAMING}
+              height='auto'
+              id={'dealName'}
+              md={12}
+              label={strings.DEAL_NAME}
               onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.fileNaming}
-            />
-            <GridEntryWrapper height={'100px'}>
-              <Box paddingX={theme.spacing(2)}>
-                <Dropdown
-                  id='projectLead'
-                  placeholder={strings.SELECT}
-                  selectedValue={tfContact?.value}
-                  options={globalUsersWithNoOwner}
-                  onChange={(value: string) => {
-                    setTfContact(
-                      globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString())
-                    );
-                  }}
-                  hideClearIcon={true}
-                  label={strings.PROJECT_LEAD}
-                  fullWidth
-                  autocomplete
-                />
-              </Box>
-            </GridEntryWrapper>
-            <CountrySelect
-              id={'countryCode'}
-              label={strings.COUNTRY}
-              onChange={onChangeCountry}
-              region={participantProjectRecord?.region}
-              value={participantProjectRecord?.countryCode}
-            />
-            <RegionDisplay label={strings.REGION} value={participantProjectRecord?.region} />
-            <LandUseMultiSelect
-              id={'landUseModelTypes'}
-              label={strings.LAND_USE_MODEL_TYPE}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.landUseModelTypes}
-            />
-            <ProjectFieldTextfield
-              id={'numNativeSpecies'}
-              label={strings.NUMBER_OF_NATIVE_SPECIES}
-              onChange={onChangeParticipantProject}
-              type={'number'}
-              value={participantProjectRecord?.numNativeSpecies}
-            />
-            <ProjectFieldTextfield
-              id={'applicationReforestableLand'}
-              label={strings.APPLICATION_RESTORABLE_LAND}
-              onChange={onChangeParticipantProject}
-              type={'number'}
-              value={participantProjectRecord?.applicationReforestableLand}
-            />
-            <ProjectFieldTextfield
-              id={'confirmedReforestableLand'}
-              label={strings.CONFIRMED_RESTORABLE_LAND}
-              onChange={onChangeParticipantProject}
-              type={'number'}
-              value={participantProjectRecord?.confirmedReforestableLand}
-            />
-            <ProjectFieldTextfield
-              id={'totalExpansionPotential'}
-              label={strings.TOTAL_EXPANSION_POTENTIAL}
-              onChange={onChangeParticipantProject}
-              type={'number'}
-              value={participantProjectRecord?.totalExpansionPotential}
-            />
-            <ProjectFieldTextfield
-              id={'perHectareBudget'}
-              label={strings.PER_HECTARE_ESTIMATED_BUDGET}
-              onChange={onChangeParticipantProject}
-              type={'number'}
-              value={participantProjectRecord?.perHectareBudget}
-            />
-            <ProjectFieldTextfield
-              id={'hubSpotUrl'}
-              label={strings.HUBSPOT_LINK}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.hubSpotUrl}
-            />
-            <ProjectFieldMeta
-              date={project?.createdTime}
-              dateLabel={strings.CREATED_ON}
-              userId={project?.createdBy}
-              userName={projectMeta?.createdByUserName}
-              userLabel={strings.BY}
-            />
-            <ProjectFieldMeta
-              date={project?.modifiedTime}
-              dateLabel={strings.LAST_MODIFIED_ON}
-              userId={project?.modifiedBy}
-              userName={projectMeta?.modifiedByUserName}
-              userLabel={strings.BY}
+              value={participantProjectRecord?.dealName}
             />
           </Grid>
-          <Grid container>
-            <Grid item xs={12} margin={`0 ${theme.spacing(2)}`}>
+          <GridEntryWrapper md={6}>
+            <Box paddingX={theme.spacing(2)}>
+              <Dropdown
+                id='projectLead'
+                placeholder={strings.SELECT}
+                selectedValue={tfContact?.value}
+                options={globalUsersWithNoOwner}
+                onChange={(value: string) => {
+                  setTfContact(
+                    globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString())
+                  );
+                }}
+                hideClearIcon={true}
+                label={strings.PROJECT_LEAD}
+                fullWidth
+                autocomplete
+              />
+            </Box>
+          </GridEntryWrapper>
+          <ProjectFieldTextAreaEdit
+            id={'dealDescription'}
+            height={'180'}
+            label={strings.PROJECT_OVERVIEW}
+            onChange={onChangeParticipantProject}
+            value={participantProjectRecord?.dealDescription}
+          />
+          <Grid item md={6} display={'flex'} flexDirection={'column'}>
+            <Box width={'100%'}>
+              <CountrySelect
+                id={'countryCode'}
+                md={12}
+                label={strings.COUNTRY}
+                onChange={onChangeCountry}
+                region={participantProjectRecord?.region}
+                value={participantProjectRecord?.countryCode}
+              />
+              {isPhaseZeroOrApplication && (
+                <ProjectFieldTextfield
+                  id={'applicationReforestableLand'}
+                  md={12}
+                  label={strings.ELIGIBLE_AREA_HA}
+                  onChange={onChangeParticipantProject}
+                  type={'number'}
+                  value={participantProjectRecord?.applicationReforestableLand}
+                />
+              )}
+              {isPhaseOne && (
+                <ProjectFieldTextfield
+                  id={'minProjectArea'}
+                  md={12}
+                  label={strings.MIN_PROJECT_AREA_HA}
+                  onChange={onChangeParticipantProject}
+                  type={'number'}
+                  value={participantProjectRecord?.minProjectArea}
+                />
+              )}
+              {isPhaseTwoPlus && (
+                <ProjectFieldTextfield
+                  id={'projectArea'}
+                  md={12}
+                  label={strings.PROJECT_AREA_HA}
+                  onChange={onChangeParticipantProject}
+                  type={'number'}
+                  value={participantProjectRecord?.projectArea}
+                />
+              )}
+            </Box>
+          </Grid>
+          <Grid item md={12}>
+            <LandUseMultiSelect
+              id={'landUseModelTypes'}
+              md={6}
+              label={strings.LAND_USE_MODEL_TYPE}
+              onChange={onChangeLandUseTypes}
+              value={sortedSelectedModelTypes}
+            />
+          </Grid>
+          {sortedSelectedModelTypes?.map((landUseModelType) => (
+            <ProjectFieldTextfield
+              id={landUseModelType}
+              key={landUseModelType}
+              md={4}
+              label={strings.formatString(strings.X_HECTARES_HA, landUseModelType) as string}
+              onChange={onChangeLandUseHectares}
+              type={'number'}
+              value={participantProjectRecord?.landUseModelHectares?.[landUseModelType]}
+            />
+          ))}
+
+          <Box marginX={theme.spacing(2)} width={'100%'}>
+            <Grid item xs={12} marginTop={theme.spacing(2)}>
+              <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
+                {strings.LAND_DATA}
+              </Typography>
+            </Grid>
+          </Box>
+
+          {/* TODO add tooltip to these */}
+          <ProjectFieldTextfield
+            id={'projectArea'}
+            md={12}
+            label={strings.ELIGIBLE_AREA_HA}
+            onChange={onChangeParticipantProject}
+            type={'number'}
+            value={participantProjectRecord?.applicationReforestableLand}
+          />
+          <ProjectFieldTextfield
+            id={'numNativeSpecies'}
+            label={strings.NUMBER_OF_NATIVE_SPECIES}
+            onChange={onChangeParticipantProject}
+            type={'number'}
+            value={participantProjectRecord?.numNativeSpecies}
+          />
+          <ProjectFieldTextfield
+            id={'applicationReforestableLand'}
+            label={strings.APPLICATION_RESTORABLE_LAND}
+            onChange={onChangeParticipantProject}
+            type={'number'}
+            value={participantProjectRecord?.applicationReforestableLand}
+          />
+          <ProjectFieldTextfield
+            id={'confirmedReforestableLand'}
+            label={strings.CONFIRMED_RESTORABLE_LAND}
+            onChange={onChangeParticipantProject}
+            type={'number'}
+            value={participantProjectRecord?.confirmedReforestableLand}
+          />
+          <ProjectFieldTextfield
+            id={'totalExpansionPotential'}
+            label={strings.TOTAL_EXPANSION_POTENTIAL}
+            onChange={onChangeParticipantProject}
+            type={'number'}
+            value={participantProjectRecord?.totalExpansionPotential}
+          />
+
+          <Box marginX={theme.spacing(2)} width={'100%'}>
+            <Grid item xs={12} marginTop={theme.spacing(2)}>
               <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
                 {strings.CARBON}
               </Typography>
             </Grid>
-            <MinMaxCarbonTextfield
-              label={strings.MIN_MAX_CARBON_ACCUMULATION_UNITS}
-              onChange={onChangeParticipantProject}
-              valueMax={participantProjectRecord?.maxCarbonAccumulation}
-              valueMin={participantProjectRecord?.minCarbonAccumulation}
-            />
-            <ProjectFieldTextfield
-              id={'carbonCapacity'}
-              label={strings.CARBON_CAPACITY_TC02_HA}
-              onChange={onChangeParticipantProject}
-              type={'number'}
-              value={participantProject?.carbonCapacity}
-            />
-            <ProjectFieldTextfield
-              id={'annualCarbon'}
-              label={strings.ANNUAL_CARBON_T}
-              onChange={onChangeParticipantProject}
-              type={'number'}
-              value={participantProject?.annualCarbon}
-            />
-            <ProjectFieldTextfield
-              id={'totalCarbon'}
-              label={strings.TOTAL_CARBON_T}
-              onChange={onChangeParticipantProject}
-              type={'number'}
-              value={participantProject?.totalCarbon}
-            />
-          </Grid>
-        </Card>
-        <Card
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            flexGrow: 1,
-            marginBottom: theme.spacing(3),
-            padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
-          }}
-        >
-          <Grid container>
-            <ProjectFieldTextAreaEdit
-              id={'dealDescription'}
-              label={strings.DEAL_DESCRIPTION}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.dealDescription}
-            />
-            <ProjectFieldTextAreaEdit
-              id={'investmentThesis'}
-              label={strings.INVESTMENT_THESIS}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.investmentThesis}
-            />
-            <ProjectFieldTextAreaEdit
-              id={'failureRisk'}
-              label={strings.FAILURE_RISK}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.failureRisk}
-            />
-            <ProjectFieldTextAreaEdit
-              id={'whatNeedsToBeTrue'}
-              label={strings.WHAT_NEEDS_TO_BE_TRUE}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.whatNeedsToBeTrue}
-            />
-          </Grid>
-        </Card>
+          </Box>
+          <MinMaxCarbonTextfield
+            label={strings.MIN_MAX_CARBON_ACCUMULATION_UNITS}
+            onChange={onChangeParticipantProject}
+            valueMax={participantProjectRecord?.maxCarbonAccumulation}
+            valueMin={participantProjectRecord?.minCarbonAccumulation}
+          />
+
+          <ProjectFieldTextfield
+            id={'perHectareBudget'}
+            label={strings.PER_HECTARE_ESTIMATED_BUDGET}
+            onChange={onChangeParticipantProject}
+            type={'number'}
+            value={participantProjectRecord?.perHectareBudget}
+          />
+
+          <Box marginX={theme.spacing(2)} width={'100%'}>
+            <Grid item xs={12} marginTop={theme.spacing(2)}>
+              <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
+                {strings.PROJECT_LINKS}
+              </Typography>
+            </Grid>
+          </Box>
+
+          <ProjectFieldTextfield
+            id={'googleFolderUrl'}
+            md={4}
+            label={strings.GDRIVE_LINK}
+            onChange={onChangeParticipantProject}
+            value={participantProjectRecord?.googleFolderUrl}
+          />
+          <ProjectFieldTextfield
+            id={'verraLink'}
+            md={4}
+            label={strings.VERRA_LINK}
+            onChange={onChangeParticipantProject}
+            value={participantProjectRecord?.verraLink}
+          />
+          <ProjectFieldTextfield
+            id={'clickUpLink'}
+            md={4}
+            label={strings.CLICK_UP_LINK}
+            onChange={onChangeParticipantProject}
+            value={participantProjectRecord?.clickUpLink}
+          />
+          <ProjectFieldTextfield
+            id={'hubSpotUrl'}
+            md={4}
+            label={strings.HUBSPOT_LINK}
+            onChange={onChangeParticipantProject}
+            value={participantProjectRecord?.hubSpotUrl}
+          />
+          <ProjectFieldTextfield
+            id={'riskTrackerLink'}
+            md={4}
+            label={strings.RISK_TRACKER_LINK}
+            onChange={onChangeParticipantProject}
+            value={participantProjectRecord?.riskTrackerLink}
+          />
+          <ProjectFieldTextfield
+            id={'slackLink'}
+            md={4}
+            label={strings.SLACK_LINK}
+            onChange={onChangeParticipantProject}
+            value={participantProjectRecord?.slackLink}
+          />
+          <ProjectFieldTextfield
+            id={'gisReportsLink'}
+            md={4}
+            label={strings.GIS_REPORT_LINK}
+            onChange={onChangeParticipantProject}
+            value={participantProjectRecord?.gisReportsLink}
+          />
+        </Grid>
         <Grid container>
           <Grid item md={6}>
             <PhotoChooser
@@ -585,8 +633,8 @@ const ProjectProfileEdit = () => {
             />
           )}
         </Grid>
-      </PageForm>
-    </PageWithModuleTimeline>
+      </Card>
+    </PageForm>
   );
 };
 export default ProjectProfileEdit;

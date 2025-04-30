@@ -13,7 +13,7 @@ export type Props = Omit<ProjectFieldEditProps, 'onChange'> & {
   region?: Region;
 };
 
-const CountrySelect = ({ id, label, onChange, region, value }: Props) => {
+const CountrySelect = ({ id, label, onChange, region, value, md }: Props) => {
   const { countries } = useLocalization();
 
   const handleChange = useCallback(
@@ -41,7 +41,7 @@ const CountrySelect = ({ id, label, onChange, region, value }: Props) => {
     }
   }, [countries, onChange, region, value]);
 
-  return <ProjectFieldSelect id={id} label={label} onChange={handleChange} value={value} options={options} />;
+  return <ProjectFieldSelect id={id} md={md} label={label} onChange={handleChange} value={value} options={options} />;
 };
 
 export default CountrySelect;

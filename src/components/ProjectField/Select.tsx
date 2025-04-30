@@ -10,7 +10,7 @@ type ProjectFieldSelectProps = ProjectFieldEditProps & {
   options: DropdownItem[];
 };
 
-const ProjectFieldSelect = ({ id, label, onChange, value, options }: ProjectFieldSelectProps) => {
+const ProjectFieldSelect = ({ id, label, onChange, value, options, md }: ProjectFieldSelectProps) => {
   const theme = useTheme();
 
   const [localValue, setLocalValue] = useState<string | undefined>();
@@ -28,7 +28,7 @@ const ProjectFieldSelect = ({ id, label, onChange, value, options }: ProjectFiel
   }, [value]);
 
   return (
-    <GridEntryWrapper height={'100px'}>
+    <GridEntryWrapper height={'100px'} md={md}>
       <Box paddingX={theme.spacing(2)}>
         <Dropdown
           id={id}
