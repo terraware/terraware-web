@@ -65,22 +65,6 @@ const ProjectProfileEdit = () => {
   const { getApplicationByProjectId } = useApplicationData();
   const { cohortModules, listCohortModules } = useListCohortModules();
 
-  useEffect(() => {
-    if (project && project.cohortId) {
-      void listCohortModules(project.cohortId);
-    }
-  }, [project, listCohortModules]);
-
-  const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
-  const isAllowedEditScoreAndVoting = isAllowed('UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING');
-
-  const [requestsInProgress, setRequestsInProgress] = useState(false);
-  const [initiatedRequests, setInitiatedRequests] = useState({
-    participantProject: false,
-    assignTfContact: false,
-    uploadImages: false,
-  });
-
   // Participant project (accelerator data) form record and update request
   const [participantProjectRequestId, setParticipantProjectRequestId] = useState<string>('');
   const participantProjectUpdateResponse = useAppSelector(
@@ -88,6 +72,13 @@ const ProjectProfileEdit = () => {
   );
   const [participantProjectRecord, setParticipantProjectRecord, onChangeParticipantProject] =
     useForm(participantProject);
+
+  const [requestsInProgress, setRequestsInProgress] = useState(false);
+  const [initiatedRequests, setInitiatedRequests] = useState({
+    participantProject: false,
+    assignTfContact: false,
+    uploadImages: false,
+  });
 
   const [organizationUsersRequestId, setOrganizationUsersRequestId] = useState<string>('');
   const [listUsersRequestId, setListUsersRequestId] = useState('');
@@ -109,6 +100,15 @@ const ProjectProfileEdit = () => {
   const [mainPhoto, setMainPhoto] = useState<PhotoWithAttributes>();
   const [mapPhoto, setMapPhoto] = useState<PhotoWithAttributes>();
 
+  const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
+  const isAllowedEditScoreAndVoting = isAllowed('UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING');
+
+  useEffect(() => {
+    if (project && project.cohortId) {
+      void listCohortModules(project.cohortId);
+    }
+  }, [project, listCohortModules]);
+
   const redirectToProjectView = useCallback(() => {
     reload();
     snackbar.toastSuccess(strings.CHANGES_SAVED, strings.SAVED);
@@ -127,7 +127,9 @@ const ProjectProfileEdit = () => {
   }, [photoValues]);
 
   useEffect(() => {
-    if (!requestsInProgress) return;
+    if (!requestsInProgress) {
+      return;
+    }
 
     const isComplete = (status: string | undefined, wasInitiated: boolean) =>
       !wasInitiated || status === 'success' || status === 'error';
@@ -186,15 +188,15 @@ const ProjectProfileEdit = () => {
   }, [organization?.tfContactUser, globalUsersOptions]);
 
   useEffect(() => {
-    const listUsersRequest = dispatch(requestListGlobalRolesUsers({ locale: activeLocale }));
+    const request = dispatch(requestListGlobalRolesUsers({ locale: activeLocale }));
     void dispatch(requestListSpecificVariables(photoVariableStableIds));
     void dispatch(
       requestListSpecificVariablesValues({
-        projectId: projectId,
+        projectId,
         variablesStableIds: photoVariableStableIds,
       })
     );
-    setListUsersRequestId(listUsersRequest.requestId);
+    setListUsersRequestId(request.requestId);
   }, [activeLocale, dispatch]);
 
   useEffect(() => {
@@ -219,6 +221,20 @@ const ProjectProfileEdit = () => {
     },
     [onChangeParticipantProject]
   );
+
+  const saveTFContact = useCallback(() => {
+    if (project?.organizationId && tfContact) {
+      const assignRequest = dispatch(
+        requestAssignTerraformationContact({
+          organizationId: project?.organizationId,
+          terraformationContactId: tfContact?.value as number,
+        })
+      );
+      setAssignTfContactRequestId(assignRequest.requestId);
+      return true;
+    }
+    return false;
+  }, [tfContact, dispatch, project?.organizationId]);
 
   const handleSave = useCallback(() => {
     if (!photoVariableIds) {
@@ -274,21 +290,7 @@ const ProjectProfileEdit = () => {
     }
 
     setInitiatedRequests(newInitiatedRequests);
-  }, [participantProjectRecord, dispatch, projectId, mainPhoto, mapPhoto, photoVariableIds]);
-
-  const saveTFContact = useCallback(() => {
-    if (project?.organizationId && tfContact) {
-      const assignRequest = dispatch(
-        requestAssignTerraformationContact({
-          organizationId: project?.organizationId,
-          terraformationContactId: tfContact?.value,
-        })
-      );
-      setAssignTfContactRequestId(assignRequest.requestId);
-      return true;
-    }
-    return false;
-  }, [tfContact, dispatch, project?.organizationId]);
+  }, [participantProjectRecord, dispatch, projectId, mainPhoto, mapPhoto, photoVariableIds, saveTFContact]);
 
   const handleOnCancel = useCallback(() => goToParticipantProject(projectId), [goToParticipantProject, projectId]);
 
