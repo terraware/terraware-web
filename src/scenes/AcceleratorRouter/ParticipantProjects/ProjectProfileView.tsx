@@ -480,7 +480,13 @@ const ProjectProfileView = ({
           </Grid>
           {fundingEntities?.length > 0 &&
             fundingEntities.map((e, i) => (
-              <Typography key={`entity-${i}`} fontSize='20px' fontWeight={600} lineHeight='28px'>
+              <Typography
+                key={`entity-${i}`}
+                fontSize='20px'
+                fontWeight={600}
+                lineHeight='28px'
+                paddingBottom={theme.spacing(1)}
+              >
                 {e.name}
               </Typography>
             ))}
