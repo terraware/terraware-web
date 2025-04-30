@@ -25,7 +25,7 @@ export default function PlantsDashboardEmptyMessage(): JSX.Element {
       }}
     >
       <Box paddingRight={2} display={'flex'} alignItems={'center'}>
-        <img src='/assets/planting-site-map.svg' />
+        <img src='/assets/planting-site-map.svg' alt={strings.PLANTS_DASHBOARD_ICON} />
       </Box>
       <Box>
         <Typography fontSize={'20px'} fontWeight={600}>

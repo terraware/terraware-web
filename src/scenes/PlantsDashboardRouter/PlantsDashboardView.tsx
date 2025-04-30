@@ -16,6 +16,7 @@ import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
 import { selectPlantingSite, selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import {
+  requestPlantingSites,
   requestPlantingSitesSearchResults,
   requestSitePopulation,
   requestSiteReportedPlants,
@@ -126,6 +127,12 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     dispatch(requestPlantings(organizationIdToUse));
     dispatch(requestPlantingSitesSearchResults(organizationIdToUse));
   }, [dispatch, organizationIdToUse]);
+
+  useEffect(() => {
+    if (organizationId) {
+      dispatch(requestPlantingSites(organizationId));
+    }
+  }, [organizationId]);
 
   useEffect(() => {
     if (selectedPlantingSiteId !== -1) {
@@ -352,7 +359,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
 
   const getDashboardSubhead = useCallback(() => {
     if (selectedPlantingSiteId === -1) {
-      return strings.FIRST_ADD_PLANTING_SITE;
+      return '';
     }
 
     const earliestDate = summaries?.[0]?.earliestObservationTime
