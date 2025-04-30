@@ -13,7 +13,7 @@ type ProjectFieldSelectProps = ProjectFieldEditProps & {
 const ProjectFieldSelect = ({ id, label, onChange, value, options, md }: ProjectFieldSelectProps) => {
   const theme = useTheme();
 
-  const [localValue, setLocalValue] = useState<string | undefined>();
+  const [localValue, setLocalValue] = useState<string | number | undefined>();
 
   const handleOnChange = useCallback(
     (_value: string) => {
@@ -24,7 +24,7 @@ const ProjectFieldSelect = ({ id, label, onChange, value, options, md }: Project
   );
 
   useEffect(() => {
-    setLocalValue(`${value}`);
+    setLocalValue(value);
   }, [value]);
 
   return (

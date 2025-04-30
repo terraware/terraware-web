@@ -12,6 +12,7 @@ import ProjectProfileImage from 'src/components/ProjectField/ProjectProfileImage
 import SdgMultiSelect from 'src/components/ProjectField/SdgMultiSelect';
 import ProjectFieldTextAreaEdit from 'src/components/ProjectField/TextAreaEdit';
 import ProjectFieldTextfield from 'src/components/ProjectField/Textfield';
+import VariableSelect from 'src/components/ProjectField/VariableSelect';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -35,6 +36,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { LAND_USE_MODEL_TYPES } from 'src/types/ParticipantProject';
 import { OrganizationUser } from 'src/types/User';
+import { SelectVariable, VariableWithValues } from 'src/types/documentProducer/Variable';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -42,7 +44,9 @@ import { useParticipantProjectData } from '../ParticipantProjectContext';
 
 const HighlightPhotoStableId = '551';
 const ZoneFigureStableId = '525';
-const photoVariableStableIds = [HighlightPhotoStableId, ZoneFigureStableId];
+const standardStableId = '350';
+const methodologyNumberStableId = '351';
+const variableStableIds = [HighlightPhotoStableId, ZoneFigureStableId, standardStableId, methodologyNumberStableId];
 
 const ProjectProfileEdit = () => {
   const dispatch = useAppDispatch();
@@ -76,10 +80,10 @@ const ProjectProfileEdit = () => {
   const assignContactResponse = useAppSelector(selectAssignTerraformationContact(assignTfContactRequestId));
   const response = useAppSelector(selectOrganizationUsers(organizationUsersRequestId));
 
-  const photoValues = useAppSelector((state) =>
-    selectSpecificVariablesWithValues(state, photoVariableStableIds, projectId)
+  const variableValues = useAppSelector((state) =>
+    selectSpecificVariablesWithValues(state, variableStableIds, projectId)
   );
-  const [photoVariableIds, setPhotoVariableIds] = useState<Record<string, number>>();
+  const [stableToVariable, setStableToVariable] = useState<Record<string, VariableWithValues>>();
   const { activeLocale } = useLocalization();
   const [globalUsersOptions, setGlobalUsersOptions] = useState<DropdownItem[]>();
   const [tfContact, setTfContact] = useState<DropdownItem>();
@@ -96,15 +100,15 @@ const ProjectProfileEdit = () => {
   }, [reload, snackbar, goToParticipantProject, projectId]);
 
   useEffect(() => {
-    if (photoValues.length > 0) {
-      setPhotoVariableIds(
-        photoValues.reduce<Record<string, number>>((map, variableWithValues) => {
-          map[variableWithValues.stableId] = variableWithValues.id;
+    if (variableValues.length > 0) {
+      setStableToVariable(
+        variableValues.reduce<Record<string, VariableWithValues>>((map, variableWithValues) => {
+          map[variableWithValues.stableId] = variableWithValues;
           return map;
         }, {})
       );
     }
-  }, [photoValues]);
+  }, [variableValues]);
 
   useEffect(() => {
     if (!requestsInProgress) {
@@ -169,11 +173,11 @@ const ProjectProfileEdit = () => {
 
   useEffect(() => {
     const request = dispatch(requestListGlobalRolesUsers({ locale: activeLocale }));
-    void dispatch(requestListSpecificVariables(photoVariableStableIds));
+    void dispatch(requestListSpecificVariables(variableStableIds));
     void dispatch(
       requestListSpecificVariablesValues({
         projectId,
-        variablesStableIds: photoVariableStableIds,
+        variablesStableIds: variableStableIds,
       })
     );
     setListUsersRequestId(request.requestId);
@@ -212,7 +216,7 @@ const ProjectProfileEdit = () => {
   }, [tfContact, dispatch, project?.organizationId]);
 
   const handleSave = useCallback(() => {
-    if (!photoVariableIds) {
+    if (!stableToVariable) {
       snackbar.toastError("Can't save until page is fully loaded.");
       return;
     }
@@ -233,11 +237,11 @@ const ProjectProfileEdit = () => {
       saveTFContact();
       newInitiatedRequests.assignTfContact = true;
     }
-    if ((mainPhoto || mapPhoto) && photoVariableIds) {
+    if ((mainPhoto || mapPhoto) && stableToVariable) {
       const imageValues = [];
       if (mainPhoto) {
         imageValues.push({
-          variableId: photoVariableIds[HighlightPhotoStableId],
+          variableId: stableToVariable[HighlightPhotoStableId].id,
           file: mainPhoto.file,
           caption: '',
           citation: '',
@@ -246,7 +250,7 @@ const ProjectProfileEdit = () => {
       }
       if (mapPhoto) {
         imageValues.push({
-          variableId: photoVariableIds[ZoneFigureStableId],
+          variableId: stableToVariable[ZoneFigureStableId].id,
           file: mapPhoto.file,
           caption: '',
           citation: '',
@@ -265,7 +269,7 @@ const ProjectProfileEdit = () => {
     }
 
     setInitiatedRequests(newInitiatedRequests);
-  }, [participantProjectRecord, dispatch, projectId, mainPhoto, mapPhoto, photoVariableIds, saveTFContact]);
+  }, [participantProjectRecord, dispatch, projectId, mainPhoto, mapPhoto, stableToVariable, saveTFContact]);
 
   const handleOnCancel = useCallback(() => goToParticipantProject(projectId), [goToParticipantProject, projectId]);
 
@@ -536,19 +540,21 @@ const ProjectProfileEdit = () => {
               valueMax={participantProjectRecord?.maxCarbonAccumulation}
               valueMin={participantProjectRecord?.minCarbonAccumulation}
             />
-            <ProjectFieldTextfield
+            <VariableSelect
               id={'standard'}
               md={4}
               label={strings.STANDARD}
               onChange={onChangeParticipantProject}
               value={participantProjectRecord?.standard}
+              options={(stableToVariable?.[standardStableId] as SelectVariable)?.options}
             />
-            <ProjectFieldTextfield
+            <VariableSelect
               id={'methodologyNumber'}
               md={4}
               label={strings.METHODOLOGY_NUMBER}
               onChange={onChangeParticipantProject}
               value={participantProjectRecord?.methodologyNumber}
+              options={(stableToVariable?.[methodologyNumberStableId] as SelectVariable)?.options}
             />
 
             <Box marginX={theme.spacing(2)} width={'100%'}>
