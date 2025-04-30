@@ -1,3 +1,4 @@
+f705bd3a3c9 SW-6838 Added missing deps to render callbacks (#3916)
 53fd3d69389 Updated translations from Phrase (#3917)
 1a640132a9a Add useProjectReports hook (#3897)
 39320302ea1 SW-6812: Add Deliverables tab to Project Profile in Console (Follow-up) (#3915)
