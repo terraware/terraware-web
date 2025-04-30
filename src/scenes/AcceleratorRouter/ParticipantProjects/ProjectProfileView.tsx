@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import ApplicationStatusLink from 'src/components/ProjectField/ApplicationStatusLink';
 import CohortBadge from 'src/components/ProjectField/CohortBadge';
@@ -13,9 +14,13 @@ import ProjectMap from 'src/components/ProjectField/ProjectMap';
 import ProjectOverviewCard from 'src/components/ProjectField/ProjectOverviewCard';
 import ProjectProfileImage from 'src/components/ProjectField/ProjectProfileImage';
 import ProjectScoreLink from 'src/components/ProjectField/ProjectScoreLink';
+import ReportMetricCard from 'src/components/ProjectField/ReportMetricCard';
 import VotingDecisionLink from 'src/components/ProjectField/VotingDecisionLink';
 import Co2HectareYear from 'src/components/Units/Co2HectareYear';
 import Card from 'src/components/common/Card';
+import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
+import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
@@ -25,6 +30,7 @@ import { Project, ProjectMeta } from 'src/types/Project';
 import { Score } from 'src/types/Score';
 import { PhaseVotes } from 'src/types/Votes';
 import { getCountryByCode } from 'src/utils/country';
+import { formatNumberScale } from 'src/utils/numbers';
 import { useNumberFormatter } from 'src/utils/useNumber';
 
 type ProjectProfileViewProps = {
@@ -50,6 +56,7 @@ const ProjectProfileView = ({
   const numberFormatter = useNumberFormatter();
   const { isAllowed } = useUser();
   const { activeLocale, countries } = useLocalization();
+  const { acceleratorReports: projectReports } = useProjectReports(project?.id);
 
   const numericFormatter = useMemo(() => numberFormatter(activeLocale), [activeLocale, numberFormatter]);
   const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
@@ -91,6 +98,21 @@ const ProjectProfileView = ({
     participantProject?.minProjectArea,
     participantProject?.applicationReforestableLand,
   ]);
+
+  const lastSubmittedReport = useMemo(() => {
+    if (projectReports?.length > 0) {
+      const submittedReports = projectReports
+        .filter((r) => ['Submitted', 'Approved'].includes(r.status) && !!r.submittedTime)
+        .toSorted((a, b) => {
+          const timeA = a.submittedTime ? new Date(a.submittedTime).getTime() : 0;
+          const timeB = b.submittedTime ? new Date(b.submittedTime).getTime() : 0;
+          return timeB - timeA;
+        });
+      if (submittedReports.length > 0) {
+        return submittedReports[0];
+      }
+    }
+  }, [projectReports]);
 
   return (
     <Card
@@ -212,7 +234,7 @@ const ProjectProfileView = ({
         <InvertedCard
           md={4}
           label={strings.TOTAL_VCU_40YRS}
-          value={participantProject?.totalVCU && `${numericFormatter.format(participantProject.totalVCU)}`}
+          value={participantProject?.totalVCU && numericFormatter.format(participantProject.totalVCU)}
           units={'t'}
           backgroundColor={theme.palette.TwClrBaseGray050}
         />
@@ -228,6 +250,52 @@ const ProjectProfileView = ({
           backgroundColor={theme.palette.TwClrBaseGray050}
         />
       </Grid>
+
+      {lastSubmittedReport && (
+        <>
+          <Grid container>
+            <ReportMetricCard
+              label={strings.TOTAL_PLANTED}
+              metrics={lastSubmittedReport.systemMetrics}
+              metricName={'Hectares Planted'}
+              units={'ha'}
+            />
+            <ReportMetricCard
+              label={strings.TOTAL_PLANTED}
+              metrics={lastSubmittedReport.systemMetrics}
+              metricName={'Trees Planted'}
+              units={strings.PLANTS}
+              formatter={(value) => formatNumberScale(value, 1)}
+            />
+            <ReportMetricCard
+              label={strings.TOTAL_PLANTED}
+              metrics={lastSubmittedReport.systemMetrics}
+              metricName={'Species Planted'}
+              units={strings.SPECIES}
+            />
+          </Grid>
+        </>
+      )}
+      {projectReports && (
+        <Grid container marginY={theme.spacing(2)} marginLeft={theme.spacing(1)}>
+          {lastSubmittedReport && lastSubmittedReport.submittedTime && (
+            <Grid item marginRight={theme.spacing(3)}>
+              <Typography fontWeight={500}>
+                {strings.formatString(
+                  strings.LAST_REPORT_SUBMITTED,
+                  getDateDisplayValue(lastSubmittedReport.submittedTime)
+                )}
+              </Typography>
+            </Grid>
+          )}
+
+          <Grid item>
+            <Link to={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', (project?.id || '').toString())}>
+              {strings.VIEW_REPORTS}
+            </Link>
+          </Grid>
+        </Grid>
+      )}
 
       <ProjectProfileFooter project={project} projectMeta={projectMeta} />
     </Card>

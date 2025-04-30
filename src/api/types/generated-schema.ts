@@ -8289,7 +8289,7 @@ export interface components {
         };
         ReportSystemMetricEntriesPayload: {
             /** @enum {string} */
-            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate";
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted";
             /**
              * Format: int32
              * @description If set to null, system metric entry will use Terraware data value.
@@ -8308,7 +8308,7 @@ export interface components {
             description?: string;
             isPublishable: boolean;
             /** @enum {string} */
-            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate";
+            metric: "Seeds Collected" | 'Seedlings' | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted";
             /** Format: int32 */
             overrideValue?: number;
             progressNotes?: string;
@@ -8725,7 +8725,7 @@ export interface components {
             component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             description: string;
             /** @enum {string} */
-            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate";
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted";
             name: string;
             reference: string;
             /** @enum {string} */
@@ -11550,7 +11550,7 @@ export interface operations {
     refreshAcceleratorReportSystemMetrics: {
         parameters: {
             query: {
-                metrics: ("Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate")[];
+                metrics: ("Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted")[];
             };
             header?: never;
             path: {
