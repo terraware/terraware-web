@@ -1,3 +1,4 @@
+c601efe6f36 SW-6781 Add cards and data for submitted reports to Project Profile (#3898)
 f705bd3a3c9 SW-6838 Added missing deps to render callbacks (#3916)
 53fd3d69389 Updated translations from Phrase (#3917)
 1a640132a9a Add useProjectReports hook (#3897)
