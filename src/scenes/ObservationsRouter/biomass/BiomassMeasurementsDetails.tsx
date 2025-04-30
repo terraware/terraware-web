@@ -60,6 +60,9 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
 
   const gridSize = isMobile ? 12 : 4;
 
+  const swCoordinatesLat = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[0];
+  const swCoordinatesLong = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[1];
+
   const data: Record<string, any>[] = useMemo(() => {
     return [
       { label: strings.DATE, value: getDateDisplayValue(monitoringPlot?.completedTime || '', timeZone) },
@@ -115,8 +118,9 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
       },
       { label: strings.FIELD_NOTES, value: monitoringPlot?.notes || '- -' },
       {
-        label: '',
-        value: undefined,
+        label: strings.PLOT_LOCATION,
+        value: `${String(strings.formatString(String(strings.SW_CORNER_LATITUDE), String(swCoordinatesLat)))}\n${String(strings.formatString(String(strings.SW_CORNER_LONGITUDE), String(swCoordinatesLong)))}`,
+        text: true,
       },
     ];
   }, [activeLocale, biomassMeasurements, defaultTimeZone, plantingSite]);
