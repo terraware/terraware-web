@@ -331,23 +331,6 @@ const ProjectProfileEdit = () => {
     return LAND_USE_MODEL_TYPES.filter((type) => participantProjectRecord?.landUseModelTypes?.includes(type));
   }, [participantProjectRecord?.landUseModelTypes]);
 
-  // const isPhaseZeroOrApplication = useMemo(
-  //   () => [undefined, 'Phase 0 - Due Diligence', 'Application', 'Pre-Screen'].includes(participantProject?.cohortPhase),
-  //   [participantProject?.cohortPhase]
-  // );
-  //
-  // const isPhaseOne = useMemo(
-  //   () => participantProject?.cohortPhase === 'Phase 1 - Feasibility Study',
-  //   [participantProject?.cohortPhase]
-  // );
-  //
-  // const isPhaseTwoPlus = useMemo(
-  //   () =>
-  //     participantProject?.cohortPhase &&
-  //     ['Phase 2 - Plan and Scale', 'Phase 3 - Implement and Monitor'].includes(participantProject.cohortPhase),
-  //   [participantProject?.cohortPhase]
-  // );
-
   return (
     <Grid container paddingRight={theme.spacing(3)}>
       <PageForm
