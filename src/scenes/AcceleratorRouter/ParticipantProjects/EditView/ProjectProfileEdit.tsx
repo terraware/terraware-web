@@ -9,6 +9,7 @@ import GridEntryWrapper from 'src/components/ProjectField/GridEntryWrapper';
 import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
 import MinMaxCarbonTextfield from 'src/components/ProjectField/MinMaxCarbonTextfield';
 import ProjectProfileImage from 'src/components/ProjectField/ProjectProfileImage';
+import SdgMultiSelect from 'src/components/ProjectField/SdgMultiSelect';
 import ProjectFieldTextAreaEdit from 'src/components/ProjectField/TextAreaEdit';
 import ProjectFieldTextfield from 'src/components/ProjectField/Textfield';
 import Card from 'src/components/common/Card';
@@ -212,7 +213,7 @@ const ProjectProfileEdit = () => {
 
   const handleSave = useCallback(() => {
     if (!photoVariableIds) {
-      console.warn("Photo Variable Ids not yet retrieved; can't save yet");
+      snackbar.toastError("Can't save until page is fully loaded.");
       return;
     }
     setRequestsInProgress(true);
@@ -308,6 +309,13 @@ const ProjectProfileEdit = () => {
     });
     onChangeParticipantProject('landUseModelHectares', updatedModelHectares);
     onChangeParticipantProject('landUseModelTypes', types);
+  };
+
+  const onChangeSdgList = (id: string, newList: string[]) => {
+    onChangeParticipantProject(
+      id,
+      newList.map((item) => Number(item))
+    );
   };
 
   const globalUsersWithNoOwner = useMemo(() => {
@@ -600,7 +608,18 @@ const ProjectProfileEdit = () => {
               onChange={onChangeParticipantProject}
               value={participantProjectRecord?.gisReportsLink}
             />
+
+            <Grid container>
+              <SdgMultiSelect
+                id={'sdgList'}
+                md={6}
+                label={strings.UN_SDG}
+                onChange={onChangeSdgList}
+                value={participantProjectRecord?.sdgList}
+              />
+            </Grid>
           </Grid>
+
           <Grid container>
             <Grid item md={6}>
               <PhotoChooser
