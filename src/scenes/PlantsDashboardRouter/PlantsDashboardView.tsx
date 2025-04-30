@@ -203,7 +203,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
         </Grid>
       </>
     ),
-    [selectedPlantingSiteId, getLatestObservationLink]
+    [selectedPlantingSiteId, getLatestObservationLink, hasObservations]
   );
 
   const renderTotalPlantsAndSpecies = useCallback(
@@ -305,7 +305,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
         </Grid>
       </>
     ),
-    [selectedPlantingSiteId, getLatestObservationLink]
+    [selectedPlantingSiteId, getLatestObservationLink, hasObservations]
   );
 
   const renderSimpleSiteMap = useCallback(
