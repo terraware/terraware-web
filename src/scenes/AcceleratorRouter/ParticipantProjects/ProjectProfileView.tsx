@@ -16,6 +16,7 @@ import ProjectMap from 'src/components/ProjectField/ProjectMap';
 import ProjectOverviewCard from 'src/components/ProjectField/ProjectOverviewCard';
 import ProjectProfileImage from 'src/components/ProjectField/ProjectProfileImage';
 import ProjectScoreLink from 'src/components/ProjectField/ProjectScoreLink';
+import ProjectSdgDisplay from 'src/components/ProjectField/ProjectSdgDisplay';
 import ReportMetricCard from 'src/components/ProjectField/ReportMetricCard';
 import VotingDecisionLink from 'src/components/ProjectField/VotingDecisionLink';
 import Co2HectareYear from 'src/components/Units/Co2HectareYear';
@@ -454,6 +455,17 @@ const ProjectProfileView = ({
             <ProjectFieldLink value={participantProject?.clickUpLink} label={strings.CLICK_UP} />
             <ProjectFieldLink value={participantProject?.slackLink} label={strings.SLACK} />
           </Box>
+        </Box>
+      </Grid>
+
+      <Grid container>
+        <Box marginX={theme.spacing(2)} width={'100%'}>
+          <Grid item xs={12} marginY={theme.spacing(2)}>
+            <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
+              {strings.UN_SDG}
+            </Typography>
+          </Grid>
+          {participantProject?.sdgList && <ProjectSdgDisplay sdgList={participantProject.sdgList} />}
         </Box>
       </Grid>
 
