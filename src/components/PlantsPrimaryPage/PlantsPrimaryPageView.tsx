@@ -13,6 +13,8 @@ import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
+import PlantsDashbordEmptyMessage from '../emptyStatePages/PlantsDashbordEmptyMessage';
+
 export type ButtonProps = {
   title: string;
   onClick: () => void;
@@ -48,6 +50,7 @@ export default function PlantsPrimaryPageView({
   showGeometryNote,
   latestObservationId,
   projectId,
+  isEmptyState,
 }: PlantsPrimaryPageViewProps): JSX.Element {
   const theme = useTheme();
   const { isMobile, isDesktop } = useDeviceInfo();
@@ -197,6 +200,7 @@ export default function PlantsPrimaryPageView({
           </Grid>
         </PageHeaderWrapper>
       )}
+      {isEmptyState && <PlantsDashbordEmptyMessage />}
       <Grid item xs={12}>
         <PageSnackbar />
       </Grid>

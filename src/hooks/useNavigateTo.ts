@@ -273,6 +273,7 @@ export default function useNavigateTo() {
 
       goToPlantingSiteView: (plantingSiteId: number) =>
         navigate(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', `${plantingSiteId}`)),
+      goToPlantingSitesView: (newSite: boolean) => navigate(`${APP_PATHS.PLANTING_SITES}${newSite ? '?new=true' : ''}`),
 
       goToSettings: () => navigate(APP_PATHS.SETTINGS),
 
