@@ -13,7 +13,7 @@ import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
-import PlantsDashbordEmptyMessage from '../emptyStatePages/PlantsDashbordEmptyMessage';
+import PlantsDashboardEmptyMessage from '../emptyStatePages/PlantsDashboardEmptyMessage';
 
 export type ButtonProps = {
   title: string;
@@ -200,7 +200,7 @@ export default function PlantsPrimaryPageView({
           </Grid>
         </PageHeaderWrapper>
       )}
-      {isEmptyState && <PlantsDashbordEmptyMessage />}
+      {isEmptyState && <PlantsDashboardEmptyMessage />}
       <Grid item xs={12}>
         <PageSnackbar />
       </Grid>

@@ -8,7 +8,7 @@ import { useOrganization } from 'src/providers';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
 
-export default function PlantsDashbordEmptyMessage(): JSX.Element {
+export default function PlantsDashboardEmptyMessage(): JSX.Element {
   const { goToPlantingSitesView } = useNavigateTo();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
