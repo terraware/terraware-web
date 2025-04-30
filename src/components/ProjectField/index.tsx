@@ -28,6 +28,7 @@ export interface ProjectFieldEditProps {
   height?: string;
   id: string;
   label: string;
+  tooltip?: string;
   onChange: (id: string, value: string) => void;
   md?: number;
   // Defaults to 'text'
