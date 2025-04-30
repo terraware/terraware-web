@@ -482,12 +482,12 @@ const ProjectProfileEdit = () => {
             </Box>
 
             <ProjectFieldTextfield
-              id={'applicationReforestableLand'}
+              id={'confirmedReforestableLand'}
               md={4}
               label={strings.ELIGIBLE_AREA_HA}
               onChange={onChangeParticipantProject}
               type={'number'}
-              value={participantProjectRecord?.applicationReforestableLand}
+              value={participantProjectRecord?.confirmedReforestableLand}
               tooltip={strings.ELIGIBLE_AREA_DESCRIPTION}
             />
             <ProjectFieldTextfield
