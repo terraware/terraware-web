@@ -391,7 +391,6 @@ const ProjectProfileEdit = () => {
             </GridEntryWrapper>
             <ProjectFieldTextAreaEdit
               id={'dealDescription'}
-              height={'180'}
               label={strings.PROJECT_OVERVIEW}
               onChange={onChangeParticipantProject}
               value={participantProjectRecord?.dealDescription}
@@ -428,33 +427,6 @@ const ProjectProfileEdit = () => {
                 value={participantProjectRecord?.landUseModelHectares?.[landUseModelType]}
               />
             ))}
-
-            <Grid container>
-              <ProjectFieldTextfield
-                id={'accumulationRate'}
-                md={4}
-                label={strings.ACCUMULATION_RATE_UNITS}
-                onChange={onChangeParticipantProject}
-                type={'number'}
-                value={participantProjectRecord?.accumulationRate}
-              />
-              <ProjectFieldTextfield
-                id={'totalVCU'}
-                md={4}
-                label={strings.TOTAL_VCU_T_40YRS}
-                onChange={onChangeParticipantProject}
-                type={'number'}
-                value={participantProjectRecord?.totalVCU}
-              />
-              <ProjectFieldTextfield
-                id={'perHectareBudget'}
-                md={4}
-                label={strings.PER_HECTARE_ESTIMATED_BUDGET}
-                onChange={onChangeParticipantProject}
-                type={'number'}
-                value={participantProjectRecord?.perHectareBudget}
-              />
-            </Grid>
 
             <Box marginX={theme.spacing(2)} width={'100%'}>
               <Grid item xs={12} marginTop={theme.spacing(2)}>
@@ -522,6 +494,30 @@ const ProjectProfileEdit = () => {
               onChange={onChangeParticipantProject}
               valueMax={participantProjectRecord?.maxCarbonAccumulation}
               valueMin={participantProjectRecord?.minCarbonAccumulation}
+            />
+            <ProjectFieldTextfield
+              id={'totalVCU'}
+              md={4}
+              label={strings.TOTAL_VCU_T_40YRS}
+              onChange={onChangeParticipantProject}
+              type={'number'}
+              value={participantProjectRecord?.totalVCU}
+            />
+            <ProjectFieldTextfield
+              id={'perHectareBudget'}
+              md={4}
+              label={strings.PER_HECTARE_ESTIMATED_BUDGET}
+              onChange={onChangeParticipantProject}
+              type={'number'}
+              value={participantProjectRecord?.perHectareBudget}
+            />
+            <ProjectFieldTextfield
+              id={'accumulationRate'}
+              md={4}
+              label={strings.ACCUMULATION_RATE_UNITS}
+              onChange={onChangeParticipantProject}
+              type={'number'}
+              value={participantProjectRecord?.accumulationRate}
             />
             <VariableSelect
               id={'standard'}
