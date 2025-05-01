@@ -46,7 +46,7 @@ export default function LocaleSelector({
               reloadUser();
             };
 
-            updateUserLocale();
+            void updateUserLocale();
           }
         };
 

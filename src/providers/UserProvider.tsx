@@ -38,7 +38,7 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
       setUserPreferences(response.preferences ?? {});
     };
 
-    getUserPreferences();
+    void getUserPreferences();
   }, [setUserPreferences]);
 
   const reloadUser = useCallback(() => {
@@ -67,7 +67,7 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
       }
     };
 
-    populateUser();
+    void populateUser();
   }, [setUser, userAnalyticsState?.gtmInstrumented, dispatch]);
 
   const updateUserCookieConsent = useCallback(

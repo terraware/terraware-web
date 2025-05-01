@@ -19,7 +19,7 @@ export const useSeedBankSummary = () => {
       };
 
       // Update summary information
-      populateSummary();
+      void populateSummary();
 
       // Update interval that keeps summary up to date
       if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {
@@ -28,7 +28,7 @@ export const useSeedBankSummary = () => {
             // Clear an existing interval when the facilityId changes
             clearInterval(currInterval);
           }
-          return setInterval(populateSummary, API_PULL_INTERVAL);
+          return setInterval(() => void populateSummary(), API_PULL_INTERVAL);
         });
       }
     }

@@ -22,7 +22,7 @@ export default function CookieConsentBanner() {
   const [visible, setVisible] = useState(false);
 
   const setUserCookieConsent = useCallback((consent: boolean) => {
-    updateUserCookieConsent(consent);
+    void updateUserCookieConsent(consent);
     setVisible(false);
     setConfirmed(true);
   }, []);

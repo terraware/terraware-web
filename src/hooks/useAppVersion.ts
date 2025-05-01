@@ -17,11 +17,11 @@ export const useAppVersion = () => {
     clearInterval(checkInterval);
 
     // trigger initial request
-    dispatch(requestAppVersion());
+    void dispatch(requestAppVersion());
 
     // setup a interval check for new versions
     checkInterval = setInterval(() => {
-      dispatch(requestAppVersion());
+      void dispatch(requestAppVersion());
     }, ONE_MINUTE_INTERVAL_MS);
   }, [dispatch]);
 };

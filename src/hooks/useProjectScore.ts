@@ -16,7 +16,7 @@ const useProjectScore = (projectId: number) => {
   const [projectScore, setProjectScore] = useState<Score>();
 
   const getProjectScore = useCallback(() => {
-    dispatch(requestProjectScore(projectId));
+    void dispatch(requestProjectScore(projectId));
   }, [dispatch, projectId]);
 
   const updateProjectScore = useCallback(

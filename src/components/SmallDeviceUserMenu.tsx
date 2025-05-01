@@ -128,7 +128,7 @@ export default function SmallDeviceUserMenu({
         open={newOrganizationModalOpened}
         onCancel={onCloseCreateOrganizationModal}
         onSuccess={(organization: Organization) => {
-          reloadOrganizations();
+          void reloadOrganizations();
           redirectAndNotify(organization);
         }}
       />

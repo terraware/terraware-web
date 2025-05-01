@@ -121,7 +121,7 @@ const updateUser = async (user: User, options: UpdateOptions = {}): Promise<Resp
     await PreferencesService.updateUserCookieConsentPreferences({ cookiesConsented: user.cookiesConsented });
   }
 
-  getUser();
+  void getUser();
 
   if (user.timeZone && !options.skipAcknowledgeTimeZone) {
     await PreferencesService.updateUserPreferences({ timeZoneAcknowledgedOnMs: Date.now() });

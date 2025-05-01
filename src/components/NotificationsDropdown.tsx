@@ -90,12 +90,12 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
 
   useEffect(() => {
     // Update notifications now.
-    populateNotifications();
+    void populateNotifications();
 
     // Create interval to fetch future notifications.
     let interval: ReturnType<typeof setInterval>;
     if (!process.env.REACT_APP_DISABLE_RECURRENT_REQUESTS) {
-      interval = setInterval(populateNotifications, API_PULL_INTERVAL);
+      interval = setInterval(() => void populateNotifications(), API_PULL_INTERVAL);
     }
 
     // Clean up existing interval.
@@ -225,7 +225,9 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
               <NotificationItem
                 key={notification.id}
                 notification={notification}
-                markAsRead={markAsRead}
+                markAsRead={(read, id, close, individualMarkAsRead) =>
+                  void markAsRead(read, id, close, individualMarkAsRead)
+                }
                 reloadOrganizationData={reloadOrganizationData}
               />
             ))}
@@ -297,7 +299,7 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
       id={`notification${id}`}
       button
       className={criticality}
-      onClick={() => onNotificationClick(true, true)}
+      onClick={() => void onNotificationClick(true, true)}
       component={Link}
       to={localUrl}
       onMouseEnter={onMouseEnter}
@@ -396,7 +398,10 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
           />
         )}
         {(inFocus || (isRead && !isDesktop)) && (
-          <NotificationItemMenu markAsRead={onNotificationClick} notification={notification} />
+          <NotificationItemMenu
+            markAsRead={(read, close) => void onNotificationClick(read, close)}
+            notification={notification}
+          />
         )}
       </ListItem>
     </ListItem>
