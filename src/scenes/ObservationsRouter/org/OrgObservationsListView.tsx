@@ -205,7 +205,7 @@ export default function OrgObservationsListView({
 
   const goToRescheduleObservation = useCallback(
     (observationId: number) => {
-      navigate(APP_PATHS.RESCHEDULE_OBSERVATION.replace(':observationId', observationId.toString()));
+      void navigate(APP_PATHS.RESCHEDULE_OBSERVATION.replace(':observationId', observationId.toString()));
     },
     [navigate]
   );

@@ -124,7 +124,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
 
   useEffect(() => {
     if (!monitoringPlot) {
-      navigate(APP_PATHS.OBSERVATIONS);
+      void navigate(APP_PATHS.OBSERVATIONS);
     }
   }, [navigate, monitoringPlot]);
 

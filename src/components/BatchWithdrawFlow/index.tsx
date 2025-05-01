@@ -183,9 +183,9 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
 
   const goToInventory = () => {
     if (sourcePage && sourcePage.startsWith(APP_PATHS.INVENTORY)) {
-      navigate({ pathname: sourcePage });
+      void navigate({ pathname: sourcePage });
     } else {
-      navigate({ pathname: APP_PATHS.INVENTORY });
+      void navigate({ pathname: APP_PATHS.INVENTORY });
     }
   };
 

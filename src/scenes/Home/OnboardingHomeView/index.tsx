@@ -110,7 +110,7 @@ const OnboardingHomeView = () => {
             buttonProps: {
               label: strings.ADD_PEOPLE,
               onClick: () => {
-                navigate(APP_PATHS.PEOPLE_NEW);
+                void navigate(APP_PATHS.PEOPLE_NEW);
               },
             },
             secondaryButtonProps: {
@@ -128,7 +128,7 @@ const OnboardingHomeView = () => {
             buttonProps: {
               label: strings.ADD_SPECIES,
               onClick: () => {
-                navigate(APP_PATHS.SPECIES_NEW);
+                void navigate(APP_PATHS.SPECIES_NEW);
               },
             },
 
@@ -144,7 +144,7 @@ const OnboardingHomeView = () => {
               buttonProps: {
                 label: strings.ADD_SPECIES,
                 onClick: () => {
-                  navigate(APP_PATHS.SPECIES_NEW);
+                  void navigate(APP_PATHS.SPECIES_NEW);
                 },
               },
               icon: 'species' as IconName,

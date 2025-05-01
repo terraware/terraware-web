@@ -97,7 +97,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
         : selectedRows.filter((r) => r.species_id).map((row) => `batchId=${row.batchId}`);
     const searchParams = origin === 'Species' ? speciesIds.join('&') : batchIds.join('&');
 
-    navigate({
+    void navigate({
       pathname: path,
       search: `?${searchParams}&source=${window.location.pathname}`,
     });

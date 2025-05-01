@@ -60,7 +60,7 @@ export default function ReportView(): JSX.Element {
 
       if (lockResult.requestSucceeded && reportId) {
         // then navigate to editing
-        navigate({ pathname: APP_PATHS.SEED_FUND_REPORTS_EDIT.replace(':reportId', reportId) });
+        void navigate({ pathname: APP_PATHS.SEED_FUND_REPORTS_EDIT.replace(':reportId', reportId) });
       } else {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_EDIT);
       }

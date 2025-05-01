@@ -94,7 +94,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
 
   useEffect(() => {
     if (plantingSites?.length === 0) {
-      navigate(APP_PATHS.HOME);
+      void navigate(APP_PATHS.HOME);
     }
   }, [navigate, plantingSites?.length]);
 

@@ -51,7 +51,7 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
     const newSeedBankLocation = {
       pathname: APP_PATHS.SEED_BANKS_NEW,
     };
-    navigate(newSeedBankLocation);
+    void navigate(newSeedBankLocation);
   };
 
   const clearSearch = () => {

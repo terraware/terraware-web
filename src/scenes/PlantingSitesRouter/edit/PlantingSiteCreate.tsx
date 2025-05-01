@@ -76,7 +76,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     const plantingSitesLocation = {
       pathname: APP_PATHS.PLANTING_SITES + (id && id !== -1 ? `/${id}` : ''),
     };
-    navigate(plantingSitesLocation);
+    void navigate(plantingSitesLocation);
   };
 
   const onSave = () =>

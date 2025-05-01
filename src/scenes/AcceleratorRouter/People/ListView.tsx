@@ -89,7 +89,7 @@ const PeopleView = () => {
   const deleteRolesRequest = useAppSelector(selectGlobalRolesUsersRemoveRequest(deleteRolesRequestId));
 
   const goToAddPerson = useCallback(() => {
-    navigate({ pathname: APP_PATHS.ACCELERATOR_PERSON_NEW });
+    void navigate({ pathname: APP_PATHS.ACCELERATOR_PERSON_NEW });
   }, [navigate]);
 
   const dispatchSearchRequest = useCallback(

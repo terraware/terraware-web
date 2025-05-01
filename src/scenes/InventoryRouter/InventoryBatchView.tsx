@@ -101,7 +101,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
   const onTabChange = useCallback(
     (newTab: string) => {
       query.set('tab', newTab);
-      navigate(getLocation(location.pathname, location, query.toString()));
+      void navigate(getLocation(location.pathname, location, query.toString()));
     },
     [query, navigate, location]
   );
@@ -179,7 +179,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
               <Button
                 label={strings.WITHDRAW}
                 onClick={() =>
-                  navigate({
+                  void navigate({
                     pathname: APP_PATHS.BATCH_WITHDRAW,
                     search: `?batchId=${batchId.toString()}&source=${window.location.pathname}`,
                   })

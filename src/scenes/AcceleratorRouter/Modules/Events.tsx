@@ -91,7 +91,7 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
                   id='edit'
                   label={strings.EDIT}
                   onClick={() =>
-                    navigate({
+                    void navigate({
                       pathname: APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT.replace(':moduleId', `${module.id}`),
                       search: '?type=live',
                     })
@@ -127,7 +127,7 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
                   id='edit'
                   label={strings.EDIT}
                   onClick={() =>
-                    navigate({
+                    void navigate({
                       pathname: APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT.replace(':moduleId', `${module.id}`),
                       search: '?type=one-on-one',
                     })
@@ -163,7 +163,7 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
                   id='edit'
                   label={strings.EDIT}
                   onClick={() =>
-                    navigate({
+                    void navigate({
                       pathname: APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT.replace(':moduleId', `${module.id}`),
                       search: '?type=recorded',
                     })
@@ -199,7 +199,7 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
                   id='edit'
                   label={strings.EDIT}
                   onClick={() =>
-                    navigate({
+                    void navigate({
                       pathname: APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT.replace(':moduleId', `${module.id}`),
                       search: '?type=workshop',
                     })

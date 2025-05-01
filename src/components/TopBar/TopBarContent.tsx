@@ -72,7 +72,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
 
   const handleTopBarClick = () => {
     mixpanel?.track(MIXPANEL_EVENTS.TOP_BAR_HOME);
-    navigate(APP_PATHS.HOME);
+    void navigate(APP_PATHS.HOME);
   };
 
   return isDesktop ? (

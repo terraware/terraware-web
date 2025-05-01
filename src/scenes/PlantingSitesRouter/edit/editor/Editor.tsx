@@ -155,9 +155,9 @@ export default function Editor(props: EditorProps): JSX.Element {
 
   const goToPlantingSites = () => {
     if (plantingSite.id !== -1) {
-      navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${plantingSite.id}`));
+      void navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${plantingSite.id}`));
     } else {
-      navigate(APP_PATHS.PLANTING_SITES);
+      void navigate(APP_PATHS.PLANTING_SITES);
     }
   };
 

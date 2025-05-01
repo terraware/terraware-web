@@ -101,7 +101,7 @@ export default function SpeciesEditView(): JSX.Element {
       const speciesLocation = {
         pathname: APP_PATHS.SPECIES_DETAILS.replace(':speciesId', speciesId.toString()),
       };
-      navigate(speciesLocation);
+      void navigate(speciesLocation);
     }
   };
 
@@ -111,7 +111,7 @@ export default function SpeciesEditView(): JSX.Element {
       if (speciesResponse.requestSucceeded) {
         setSpecies(speciesResponse.species);
       } else {
-        navigate(APP_PATHS.SPECIES);
+        void navigate(APP_PATHS.SPECIES);
       }
     };
     if (selectedOrganization && selectedOrganization.id !== -1 && speciesId) {

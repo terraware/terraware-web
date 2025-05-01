@@ -24,7 +24,7 @@ const DeleteFundingEntityModal = ({ onClose, open, fundingEntity }: DeleteFundin
   const deleteHandler = async () => {
     const response = await FundingEntityService.deleteFundingEntity(fundingEntity.id);
     if (response.requestSucceeded) {
-      navigate(APP_PATHS.ACCELERATOR_FUNDING_ENTITIES);
+      void navigate(APP_PATHS.ACCELERATOR_FUNDING_ENTITIES);
     } else {
       snackbar.toastError();
     }

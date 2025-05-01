@@ -126,7 +126,7 @@ export default function ObservationPlantingZone(): JSX.Element {
 
   useEffect(() => {
     if (!plantingZone) {
-      navigate(
+      void navigate(
         APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', `${plantingSiteId}`).replace(
           ':observationId',
           `${observationId}`

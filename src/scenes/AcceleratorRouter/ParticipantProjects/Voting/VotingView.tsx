@@ -29,7 +29,7 @@ const VotingView = () => {
       return;
     }
     // keep query state for edit view
-    navigate(
+    void navigate(
       getLocation(
         APP_PATHS.ACCELERATOR_PROJECT_VOTES_EDIT.replace(':projectId', `${project.id}`),
         location,

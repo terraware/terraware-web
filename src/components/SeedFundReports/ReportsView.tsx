@@ -58,11 +58,11 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
 
       switch (newTab) {
         case 'reports': {
-          navigate(APP_PATHS.SEED_FUND_REPORTS);
+          void navigate(APP_PATHS.SEED_FUND_REPORTS);
           break;
         }
         case 'settings': {
-          navigate(APP_PATHS.SEED_FUND_REPORTS_SETTINGS);
+          void navigate(APP_PATHS.SEED_FUND_REPORTS_SETTINGS);
         }
       }
     },

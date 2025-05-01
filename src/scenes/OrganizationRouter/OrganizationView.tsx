@@ -45,7 +45,7 @@ export default function OrganizationView(): JSX.Element {
     const editOrganizationLocation = {
       pathname: APP_PATHS.ORGANIZATION_EDIT,
     };
-    navigate(editOrganizationLocation);
+    void navigate(editOrganizationLocation);
   };
 
   const organizationState = () => {

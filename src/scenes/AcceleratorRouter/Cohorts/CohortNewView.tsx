@@ -22,12 +22,12 @@ export default function CohortNewView(): JSX.Element {
   });
 
   const goToCohortsList = useCallback(() => {
-    navigate({ pathname: APP_PATHS.ACCELERATOR_COHORTS });
+    void navigate({ pathname: APP_PATHS.ACCELERATOR_COHORTS });
   }, [navigate]);
 
   const goToCohortView = useCallback(
     (cohortId: number) => {
-      navigate({ pathname: APP_PATHS.ACCELERATOR_COHORTS_VIEW.replace(':cohortId', `${cohortId}`) });
+      void navigate({ pathname: APP_PATHS.ACCELERATOR_COHORTS_VIEW.replace(':cohortId', `${cohortId}`) });
     },
     [navigate]
   );

@@ -42,7 +42,7 @@ export default function DocumentsView(): JSX.Element | null {
   }, [availableProjects, query.get('dealName')]);
 
   const resetFilter = useCallback(() => {
-    navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+    void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
   }, [location, query]);
 
   const PageHeaderLeftComponent = useMemo(

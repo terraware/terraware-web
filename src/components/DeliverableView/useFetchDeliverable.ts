@@ -41,7 +41,7 @@ export default function useFetchDeliverable({ deliverableId, projectId }: Props)
   const deliverableData = useAppSelector(selectDeliverableData(deliverableId, projectId));
 
   const goToDeliverables = useCallback(() => {
-    navigate(isAcceleratorRoute ? APP_PATHS.ACCELERATOR_DELIVERABLES : APP_PATHS.DELIVERABLES);
+    void navigate(isAcceleratorRoute ? APP_PATHS.ACCELERATOR_DELIVERABLES : APP_PATHS.DELIVERABLES);
   }, [navigate, isAcceleratorRoute]);
 
   useEffect(() => {

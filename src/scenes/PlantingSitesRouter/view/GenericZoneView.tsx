@@ -81,11 +81,11 @@ export default function GenericZoneView({
   );
 
   if (!plantingSite) {
-    navigate(APP_PATHS.PLANTING_SITES);
+    void navigate(APP_PATHS.PLANTING_SITES);
   }
 
   if (!plantingZone && plantingSiteId) {
-    navigate(siteViewUrl.replace(':plantingSiteId', plantingSiteId));
+    void navigate(siteViewUrl.replace(':plantingSiteId', plantingSiteId));
   }
 
   const crumbs: Crumb[] = useMemo(

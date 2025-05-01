@@ -54,13 +54,13 @@ export default function InventoryCreateView(): JSX.Element {
   );
 
   const goToInventory = useCallback(() => {
-    navigate(inventoryLocation);
+    void navigate(inventoryLocation);
   }, [navigate, inventoryLocation]);
 
   useEffect(() => {
     if (batchesRequest?.status === 'success') {
       setBusy(false);
-      navigate(inventoryLocation, { replace: true });
+      void navigate(inventoryLocation, { replace: true });
 
       const batchId = batchesRequest?.data?.batch?.id;
       const facilityId = batchesRequest?.data?.batch?.facilityId;
@@ -69,18 +69,18 @@ export default function InventoryCreateView(): JSX.Element {
       // we can assume the batchId, facilityId and speciesId will be valid upon a successful create
 
       if (originInventoryViewType === InventoryListTypes.BATCHES_BY_NURSERY) {
-        navigate({
+        void navigate({
           pathname: APP_PATHS.INVENTORY_BATCH_FOR_NURSERY.replace(':nurseryId', `${facilityId}`).replace(
             ':batchId',
             `${batchId}`
           ),
         });
       } else if (originInventoryViewType === InventoryListTypes.BATCHES_BY_BATCH) {
-        navigate({
+        void navigate({
           pathname: APP_PATHS.INVENTORY_BATCH.replace(':batchId', `${batchId}`),
         });
       } else {
-        navigate({
+        void navigate({
           pathname: APP_PATHS.INVENTORY_BATCH_FOR_SPECIES.replace(':speciesId', `${speciesId}`).replace(
             ':batchId',
             `${batchId}`

@@ -39,7 +39,7 @@ export default function PageCard(props: PageCardProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
 
   const goToPage = () => {
-    navigate({ pathname: link });
+    void navigate({ pathname: link });
   };
 
   const handleOnClick = () => {

@@ -38,7 +38,7 @@ export default function InventoryForNurseryView(): JSX.Element {
     } else {
       query.set('batch', batchNum);
     }
-    navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+    void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
   };
 
   return (

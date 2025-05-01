@@ -47,7 +47,7 @@ const DeliverableView = () => {
     if (_source) {
       setSource(_source);
       query.delete('source');
-      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+      void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
     }
   }, [query]);
 

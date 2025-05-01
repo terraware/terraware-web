@@ -57,7 +57,7 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
 
   useEffect(() => {
     if (!details) {
-      navigate(APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', `${plantingSiteId}`));
+      void navigate(APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', `${plantingSiteId}`));
     }
   }, [details, navigate, plantingSiteId]);
 

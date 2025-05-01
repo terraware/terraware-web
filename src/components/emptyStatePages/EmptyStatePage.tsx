@@ -46,7 +46,7 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
     const newLocation = {
       pathname: content.linkLocation,
     };
-    navigate(newLocation);
+    void navigate(newLocation);
   };
 
   const downloadCsvTemplateHandler = () => {
@@ -92,7 +92,7 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
         buttonText: strings.ADD_SPECIES,
         buttonIcon: 'plus',
         onClickButton: () => {
-          navigate(APP_PATHS.SPECIES_NEW);
+          void navigate(APP_PATHS.SPECIES_NEW);
         },
       },
     ],
@@ -121,7 +121,7 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
         buttonText: strings.ADD_INVENTORY,
         buttonIcon: 'plus',
         onClickButton: () => {
-          navigate(APP_PATHS.INVENTORY_NEW);
+          void navigate(APP_PATHS.INVENTORY_NEW);
         },
       },
     ],
@@ -222,7 +222,7 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
       if (reloadData) {
         reloadData();
       }
-      navigate({ pathname: APP_PATHS.SPECIES, search: '?checkData' });
+      void navigate({ pathname: APP_PATHS.SPECIES, search: '?checkData' });
     }
     setImportSpeciesModalOpened(false);
     if (snackbarMessage) {
@@ -235,7 +235,7 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
       if (reloadData) {
         reloadData();
       }
-      navigate(APP_PATHS.INVENTORY);
+      void navigate(APP_PATHS.INVENTORY);
     }
     setImportInventoryModalOpened(false);
     if (snackbarMessage) {

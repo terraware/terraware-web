@@ -22,7 +22,7 @@ export default function FunderRouter() {
 
   useEffect(() => {
     if (navigate && user && user.userType !== 'Funder') {
-      navigate(APP_PATHS.HOME);
+      void navigate(APP_PATHS.HOME);
     }
   }, [navigate, user]);
 

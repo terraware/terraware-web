@@ -30,7 +30,7 @@ export default function useDraftPlantingSiteGet({ draftId }: Props): Response {
   const draftResult = useAppSelector(selectDraftPlantingSiteGet(draftId));
 
   const goToPlantingSites = useCallback(() => {
-    navigate(APP_PATHS.PLANTING_SITES);
+    void navigate(APP_PATHS.PLANTING_SITES);
   }, [navigate]);
 
   useEffect(() => {

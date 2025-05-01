@@ -159,7 +159,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
       await PreferencesService.updateUserPreferences({ inventoryListType: newTab });
       reloadUserPreferences();
       query.set('tab', newTab);
-      navigate(getLocation(location.pathname, location, query.toString()));
+      void navigate(getLocation(location.pathname, location, query.toString()));
     },
     [query, navigate, location, reloadUserPreferences]
   );
@@ -172,7 +172,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
     const appPathLocation = {
       pathname: appPath,
     };
-    navigate(appPathLocation);
+    void navigate(appPathLocation);
   };
 
   const onCloseDownloadReportModal = () => {

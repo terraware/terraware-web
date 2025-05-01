@@ -78,7 +78,7 @@ const CohortsListView = ({ filterModifiers, extraTableFilters }: CohortsListView
     const newProjectLocation = {
       pathname: APP_PATHS.ACCELERATOR_COHORTS_NEW,
     };
-    navigate(newProjectLocation);
+    void navigate(newProjectLocation);
   }, [navigate]);
 
   const dispatchSearchRequest = useCallback(

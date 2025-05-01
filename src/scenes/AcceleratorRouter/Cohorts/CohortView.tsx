@@ -43,7 +43,7 @@ const CohortView = () => {
 
   const goToEditCohort = useCallback(() => {
     if (pathParams.cohortId) {
-      navigate(getLocation(APP_PATHS.ACCELERATOR_COHORTS_EDIT.replace(':cohortId', pathParams.cohortId), location));
+      void navigate(getLocation(APP_PATHS.ACCELERATOR_COHORTS_EDIT.replace(':cohortId', pathParams.cohortId), location));
     }
   }, [navigate, location, pathParams.cohortId]);
 

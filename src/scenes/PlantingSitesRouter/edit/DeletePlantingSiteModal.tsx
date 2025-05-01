@@ -31,7 +31,7 @@ export default function DeletePlantingSiteModal(props: DeletePlantingSiteModalPr
     setBusy(false);
     if (response.requestSucceeded) {
       snackbar.toastSuccess(strings.PLANTING_SITE_DELETED);
-      navigate(APP_PATHS.PLANTING_SITES);
+      void navigate(APP_PATHS.PLANTING_SITES);
     } else {
       snackbar.toastError();
     }

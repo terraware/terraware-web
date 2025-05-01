@@ -34,7 +34,7 @@ const VotingProvider = ({ children }: Props): JSX.Element => {
   const [votingData, setVotingData] = useState<VotingData>({ project });
 
   const goToProjects = useCallback(() => {
-    navigate({ pathname: APP_PATHS.ACCELERATOR_OVERVIEW }); // TODO switch to project management lists page
+    void navigate({ pathname: APP_PATHS.ACCELERATOR_OVERVIEW }); // TODO switch to project management lists page
   }, [navigate]);
 
   // Redirect to project management list page if projectId is invalid.

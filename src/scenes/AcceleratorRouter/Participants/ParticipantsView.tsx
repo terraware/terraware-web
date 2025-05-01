@@ -55,7 +55,7 @@ export default function ParticipantsView(): JSX.Element {
   }, [participant, listCohortModules]);
 
   const goToEdit = useCallback(() => {
-    navigate(APP_PATHS.ACCELERATOR_PARTICIPANTS_EDIT.replace(':participantId', `${participantId}`));
+    void navigate(APP_PATHS.ACCELERATOR_PARTICIPANTS_EDIT.replace(':participantId', `${participantId}`));
   }, [navigate, participantId]);
 
   const onOptionItemClick = useCallback((optionItem: DropdownItem) => {

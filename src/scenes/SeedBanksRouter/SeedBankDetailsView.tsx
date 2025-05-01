@@ -36,7 +36,7 @@ export default function SeedBankDetailsView(): JSX.Element {
       if (selectedSeedBank) {
         setSeedBank(selectedSeedBank);
       } else {
-        navigate(APP_PATHS.SEED_BANKS);
+        void navigate(APP_PATHS.SEED_BANKS);
       }
     }
   }, [seedBankId, selectedOrganization, navigate]);
@@ -46,7 +46,7 @@ export default function SeedBankDetailsView(): JSX.Element {
       const editSeedBankLocation = {
         pathname: APP_PATHS.SEED_BANKS_EDIT.replace(':seedBankId', seedBankId),
       };
-      navigate(editSeedBankLocation);
+      void navigate(editSeedBankLocation);
     }
   };
 

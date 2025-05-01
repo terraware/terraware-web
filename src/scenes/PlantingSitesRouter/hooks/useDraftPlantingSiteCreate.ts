@@ -66,10 +66,10 @@ export default function useDraftPlantingSiteCreate(): Response {
   useEffect(() => {
     if (draftResult?.status === 'success' && draftResult?.data && draftRequest) {
       const id = draftResult.data;
-      navigate(APP_PATHS.PLANTING_SITES_DRAFT_EDIT.replace(':plantingSiteId', `${id}`), { replace: true });
+      void navigate(APP_PATHS.PLANTING_SITES_DRAFT_EDIT.replace(':plantingSiteId', `${id}`), { replace: true });
       if (redirect) {
         snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
-        navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${id}`));
+        void navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${id}`));
       } else {
         setCreatedDraft({
           ...draftRequest,

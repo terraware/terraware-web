@@ -61,7 +61,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
       if (speciesResponse.requestSucceeded) {
         setSpecies(speciesResponse.species);
       } else {
-        navigate(APP_PATHS.SPECIES);
+        void navigate(APP_PATHS.SPECIES);
       }
     };
     if (selectedOrganization && selectedOrganization.id !== -1) {
@@ -74,7 +74,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
       const editSpeciesLocation = {
         pathname: APP_PATHS.SPECIES_EDIT.replace(':speciesId', speciesId),
       };
-      navigate(editSpeciesLocation);
+      void navigate(editSpeciesLocation);
     }
   };
 
@@ -95,7 +95,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
         reloadData();
       }
       setDeleteSpeciesModalOpen(false);
-      navigate(APP_PATHS.SPECIES);
+      void navigate(APP_PATHS.SPECIES);
     }
   };
 

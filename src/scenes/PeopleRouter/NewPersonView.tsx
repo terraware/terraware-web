@@ -70,11 +70,11 @@ export default function PersonView(): JSX.Element {
   };
 
   const goToPeople = () => {
-    navigate({ pathname: APP_PATHS.PEOPLE });
+    void navigate({ pathname: APP_PATHS.PEOPLE });
   };
 
   const goToViewPerson = (userId: string) => {
-    navigate({ pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', userId) });
+    void navigate({ pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', userId) });
   };
 
   const saveUser = async () => {
@@ -138,7 +138,7 @@ export default function PersonView(): JSX.Element {
         const profileLocation = {
           pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', profile.id.toString()),
         };
-        navigate(profileLocation);
+        void navigate(profileLocation);
       }
     }
   };

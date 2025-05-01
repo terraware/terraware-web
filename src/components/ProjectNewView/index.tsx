@@ -49,7 +49,7 @@ export default function ProjectNewView({ reloadData }: ProjectNewViewProps): JSX
   const [projectPlantingSites, setProjectPlantingSites] = useState<PlantingSiteSearchResult[]>([]);
 
   const goToProjects = useCallback(() => {
-    navigate({ pathname: APP_PATHS.PROJECTS });
+    void navigate({ pathname: APP_PATHS.PROJECTS });
   }, [navigate]);
 
   const saveProject = useCallback(async () => {

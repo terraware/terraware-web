@@ -179,7 +179,7 @@ const MyAccountForm = ({
     if (backToView) {
       backToView();
     } else {
-      navigate(APP_PATHS.MY_ACCOUNT);
+      void navigate(APP_PATHS.MY_ACCOUNT);
     }
   };
 
@@ -218,7 +218,7 @@ const MyAccountForm = ({
       if (backToView) {
         backToView();
       } else {
-        navigate(APP_PATHS.MY_ACCOUNT);
+        void navigate(APP_PATHS.MY_ACCOUNT);
       }
     }
   };
@@ -270,7 +270,7 @@ const MyAccountForm = ({
     if (backToView) {
       backToView();
     } else {
-      navigate(APP_PATHS.MY_ACCOUNT);
+      void navigate(APP_PATHS.MY_ACCOUNT);
     }
   };
 
@@ -287,7 +287,7 @@ const MyAccountForm = ({
       } else {
         snackbar.toastError();
       }
-      navigate(APP_PATHS.HOME);
+      void navigate(APP_PATHS.HOME);
     }
   };
 

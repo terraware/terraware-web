@@ -301,7 +301,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     }
 
     if ((facilityId && selectedOrganization) || subLocationName) {
-      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+      void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       setSearchCriteria(newSearchCriteria);
 
       // add seed bank and sub-location columns to show the filtered values as needed
@@ -470,7 +470,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         // eslint-disable-next-line no-restricted-globals
         state: { from: location.pathname },
       };
-      navigate(seedCollectionLocation);
+      void navigate(seedCollectionLocation);
     }
   };
 
@@ -518,14 +518,14 @@ export default function Database(props: DatabaseProps): JSX.Element {
   };
 
   const handleViewCollections = () => {
-    navigate(APP_PATHS.CHECKIN);
+    void navigate(APP_PATHS.CHECKIN);
   };
 
   const goTo = (appPath: string) => {
     const appPathLocation = {
       pathname: appPath,
     };
-    navigate(appPathLocation);
+    void navigate(appPathLocation);
   };
 
   const onSeedBankForImportSelected = (selectedFacilityOnModal: Facility | undefined) => {

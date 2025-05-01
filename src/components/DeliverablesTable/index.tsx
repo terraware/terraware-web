@@ -165,7 +165,7 @@ const DeliverablesTable = ({
   const removeParam = () => {
     if (projectParam) {
       query.delete('projectId');
-      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+      void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
     }
   };
 

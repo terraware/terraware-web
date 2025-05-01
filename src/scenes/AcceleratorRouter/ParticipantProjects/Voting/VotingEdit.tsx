@@ -37,7 +37,7 @@ const VotingEdit = () => {
     if (!project) {
       return;
     }
-    navigate(
+    void navigate(
       getLocation(
         APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${project.id}`),
         location,

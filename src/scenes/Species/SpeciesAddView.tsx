@@ -56,7 +56,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
       if (response.requestSucceeded) {
         if (response.speciesId) {
           reloadData();
-          navigate(APP_PATHS.SPECIES_DETAILS.replace(':speciesId', response.speciesId.toString()));
+          void navigate(APP_PATHS.SPECIES_DETAILS.replace(':speciesId', response.speciesId.toString()));
         }
       } else {
         if (response.error === SpeciesRequestError.PreexistingSpecies) {

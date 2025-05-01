@@ -144,7 +144,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   }, [selectedOrganization]);
 
   const onWithdrawalClicked = (withdrawal: any) => {
-    navigate({
+    void navigate({
       pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', withdrawal.delivery_id),
     });
   };
@@ -242,7 +242,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   useEffect(() => {
     if (siteParam) {
       query.delete('siteName');
-      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+      void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       setFilters((curr) => ({
         ...curr,
         destinationName: {
@@ -258,7 +258,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   useEffect(() => {
     if (subzoneParam) {
       query.delete('subzoneName');
-      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+      void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       setFilters((curr) => ({
         ...curr,
         plantingSubzoneNames: {

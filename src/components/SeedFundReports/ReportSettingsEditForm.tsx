@@ -41,7 +41,7 @@ const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEd
         return;
       }
 
-      navigate(APP_PATHS.SEED_FUND_REPORTS_SETTINGS);
+      void navigate(APP_PATHS.SEED_FUND_REPORTS_SETTINGS);
     }
   }, [navigate, localReportsSettings, selectedOrganization.id, snackbar]);
 

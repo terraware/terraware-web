@@ -212,14 +212,14 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     const batch = batches.find((b) => b.batchNumber === openBatchNumber);
     if (batch) {
       if (origin === 'Nursery') {
-        navigate({
+        void navigate({
           pathname: APP_PATHS.INVENTORY_BATCH_FOR_NURSERY.replace(':nurseryId', `${originId}`).replace(
             ':batchId',
             `${batch.id}`
           ),
         });
       } else {
-        navigate({
+        void navigate({
           pathname: APP_PATHS.INVENTORY_BATCH_FOR_SPECIES.replace(':speciesId', `${originId}`).replace(
             ':batchId',
             `${batch.id}`
@@ -261,7 +261,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
 
   const onBatchSelected = (batch: any, fromColumn?: string) => {
     if (fromColumn === 'withdraw') {
-      navigate({
+      void navigate({
         pathname: APP_PATHS.BATCH_WITHDRAW,
         search: `?batchId=${batch.id.toString()}&source=${window.location.pathname}`,
       });
@@ -276,7 +276,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
         to = APP_PATHS.INVENTORY_BATCH_FOR_SPECIES.replace(':speciesId', `${originId}`);
       }
 
-      navigate(to.replace(':batchId', batch.id));
+      void navigate(to.replace(':batchId', batch.id));
     }
   };
 
@@ -286,7 +286,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   };
 
   const bulkWithdrawSelectedRows = () => {
-    navigate({
+    void navigate({
       pathname: APP_PATHS.BATCH_WITHDRAW,
       search: getSelectedRowsAsQueryParams(),
     });

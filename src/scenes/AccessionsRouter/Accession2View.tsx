@@ -179,7 +179,7 @@ export default function Accession2View(): JSX.Element {
 
   const handleChange = (newValue: string) => {
     query.set('tab', newValue);
-    navigate(getLocation(location.pathname, location, query.toString()));
+    void navigate(getLocation(location.pathname, location, query.toString()));
   };
 
   const linkStyle = {

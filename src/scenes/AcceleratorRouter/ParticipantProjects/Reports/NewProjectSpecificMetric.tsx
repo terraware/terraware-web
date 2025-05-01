@@ -61,7 +61,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
   }, [createProjectMetricResponse]);
 
   const goToProjectReports = () => {
-    navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId)}?tab=settings`);
+    void navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId)}?tab=settings`);
   };
 
   const [newMetric, , onChange] = useForm<NewMetric>({

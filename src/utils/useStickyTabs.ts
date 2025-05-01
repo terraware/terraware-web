@@ -43,7 +43,7 @@ const useStickyTabs = ({ defaultTab, tabs, viewIdentifier, keepQuery = true }: S
     (newTab: string) => {
       query.set('tab', newTab);
       const emptyQuery = tab === newTab ? query.toString() : new URLSearchParams(`tab=${newTab}`);
-      navigate(getLocation(location.pathname, location, keepQuery ? query.toString() : emptyQuery.toString()));
+      void navigate(getLocation(location.pathname, location, keepQuery ? query.toString() : emptyQuery.toString()));
       writeTabToSession(viewIdentifier, newTab);
     },
     [navigate, location, query, viewIdentifier, keepQuery]

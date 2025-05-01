@@ -33,7 +33,7 @@ export default function DeleteDraftPlantingSiteModal(props: Props): JSX.Element 
   useEffect(() => {
     if (result?.status === 'success') {
       snackbar.toastSuccess(strings.PLANTING_SITE_DELETED);
-      navigate(APP_PATHS.PLANTING_SITES);
+      void navigate(APP_PATHS.PLANTING_SITES);
     } else if (result?.status === 'error') {
       snackbar.toastError();
     }

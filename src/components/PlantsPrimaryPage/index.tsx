@@ -118,7 +118,7 @@ export default function PlantsPrimaryPage({
           onSelect(site);
           setSelectedPlantingSite(site);
         } else {
-          navigate(pagePath.replace(':plantingSiteId', site.id.toString()));
+          void navigate(pagePath.replace(':plantingSiteId', site.id.toString()));
         }
       }
     },

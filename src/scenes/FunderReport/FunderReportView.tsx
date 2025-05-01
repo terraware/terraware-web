@@ -57,7 +57,7 @@ const FunderReportView = () => {
         const found = reports?.find((r) => r.reportId.toString() === query.get('reportId'));
         setSelectedReport(found || reports[0]);
         query.delete('reportId');
-        navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+        void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       } else {
         setSelectedReport(reports[0]);
       }

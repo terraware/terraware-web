@@ -25,7 +25,7 @@ export default function DeleteAccessionModal(props: DeleteAccessionModalProps): 
   const deleteHandler = async () => {
     const response = await AccessionService.deleteAccession(accession.id);
     if (response.requestSucceeded) {
-      navigate(APP_PATHS.ACCESSIONS);
+      void navigate(APP_PATHS.ACCESSIONS);
     } else {
       snackbar.toastError();
     }

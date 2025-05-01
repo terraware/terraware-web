@@ -36,7 +36,7 @@ export default function NurseryDetailsView(): JSX.Element {
       if (selectedNursery) {
         setNursery(selectedNursery);
       } else {
-        navigate(APP_PATHS.NURSERIES);
+        void navigate(APP_PATHS.NURSERIES);
       }
     }
   }, [nurseryId, selectedOrganization, navigate]);
@@ -46,7 +46,7 @@ export default function NurseryDetailsView(): JSX.Element {
       const editNurseryLocation = {
         pathname: APP_PATHS.NURSERIES_EDIT.replace(':nurseryId', nurseryId),
       };
-      navigate(editNurseryLocation);
+      void navigate(editNurseryLocation);
     }
   };
 

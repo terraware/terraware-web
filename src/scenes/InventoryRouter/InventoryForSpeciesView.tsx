@@ -54,7 +54,7 @@ export default function InventoryForSpeciesView(props: InventoryForSpeciesViewPr
     } else {
       query.set('batch', batchNum);
     }
-    navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+    void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
   };
 
   return (

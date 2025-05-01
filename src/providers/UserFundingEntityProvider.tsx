@@ -63,7 +63,7 @@ export default function UserFundingEntityProvider({ children }: UserFundingEntit
           window.location.reload();
         }
       } else {
-        navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
+        void navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
       }
     }
   }, [entityAPIRequestStatus]);

@@ -468,7 +468,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     if (shouldCheckData) {
       query.delete('checkData');
       setCheckDataModalOpen(true);
-      navigate({ pathname: APP_PATHS.SPECIES, search: query.toString() }, { replace: true });
+      void navigate({ pathname: APP_PATHS.SPECIES, search: query.toString() }, { replace: true });
     }
   }, [query, setCheckDataModalOpen, navigate]);
 
@@ -477,7 +477,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   }, [onApplyFilters]);
 
   const onNewSpecies = () => {
-    navigate(APP_PATHS.SPECIES_NEW);
+    void navigate(APP_PATHS.SPECIES_NEW);
   };
 
   const onChangeSearch = (id: string, value: unknown) => {

@@ -52,7 +52,7 @@ export default function ObservationMonitoringPlot(): JSX.Element {
       {
         plantingSiteId: Number(plantingSiteId),
         observationId: Number(observationId),
-        plantingZoneName: plantingZoneName,
+        plantingZoneName,
         monitoringPlotId: Number(monitoringPlotId),
       },
       defaultTimeZone.get().id
@@ -122,7 +122,7 @@ export default function ObservationMonitoringPlot(): JSX.Element {
 
   useEffect(() => {
     if (plantingZoneName && !monitoringPlot) {
-      navigate(
+      void navigate(
         APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS.replace(':plantingSiteId', Number(plantingSiteId).toString())
           .replace(':observationId', Number(observationId).toString())
           .replace(':plantingZoneName', encodeURIComponent(plantingZoneName))

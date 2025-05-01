@@ -91,7 +91,7 @@ export default function SeedBankView(): JSX.Element {
     const sitesLocation = {
       pathname: APP_PATHS.SEED_BANKS + (id ? `/${id}` : ''),
     };
-    navigate(sitesLocation);
+    void navigate(sitesLocation);
   };
 
   const saveSeedBank = async () => {

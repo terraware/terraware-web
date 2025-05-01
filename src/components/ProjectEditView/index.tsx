@@ -44,7 +44,7 @@ export default function ProjectEditView(): JSX.Element {
 
   const goToProject = useCallback(() => {
     if (pathParams.projectId) {
-      navigate(getLocation(APP_PATHS.PROJECT_VIEW.replace(':projectId', pathParams.projectId), location));
+      void navigate(getLocation(APP_PATHS.PROJECT_VIEW.replace(':projectId', pathParams.projectId), location));
     }
   }, [navigate, location, pathParams.projectId]);
 

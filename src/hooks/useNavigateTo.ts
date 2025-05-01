@@ -11,15 +11,15 @@ export default function useNavigateTo() {
   return useMemo(
     () => ({
       goToAccelerator: () => {
-        navigate({ pathname: APP_PATHS.ACCELERATOR });
+        void navigate({ pathname: APP_PATHS.ACCELERATOR });
       },
 
       goToAcceleratorApplication: (applicationId: number) => {
-        navigate({ pathname: APP_PATHS.ACCELERATOR_APPLICATION.replace(':applicationId', `${applicationId}`) });
+        void navigate({ pathname: APP_PATHS.ACCELERATOR_APPLICATION.replace(':applicationId', `${applicationId}`) });
       },
 
       goToAcceleratorApplicationDeliverable: (applicationId: number, deliverableId: number) => {
-        navigate({
+        void navigate({
           pathname: APP_PATHS.ACCELERATOR_APPLICATION_DELIVERABLE.replace(':applicationId', `${applicationId}`).replace(
             ':deliverableId',
             `${deliverableId}`
@@ -28,79 +28,79 @@ export default function useNavigateTo() {
       },
 
       goToAcceleratorApplicationMap: (applicationId: number) => {
-        navigate({ pathname: APP_PATHS.ACCELERATOR_APPLICATION_MAP.replace(':applicationId', `${applicationId}`) });
+        void navigate({ pathname: APP_PATHS.ACCELERATOR_APPLICATION_MAP.replace(':applicationId', `${applicationId}`) });
       },
 
       goToAcceleratorProject: (projectId: number) => {
-        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`) });
+        void navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`) });
       },
 
       goToAcceleratorProjectScore: (projectId: number) => {
-        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${projectId}`) });
+        void navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${projectId}`) });
       },
 
       goToAcceleratorProjectScoreEdit: (projectId: number) => {
-        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_SCORES_EDIT.replace(':projectId', `${projectId}`) });
+        void navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_SCORES_EDIT.replace(':projectId', `${projectId}`) });
       },
 
       goToAcceleratorProjectVote: (projectId: number) => {
-        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`) });
+        void navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`) });
       },
 
       goToAcceleratorProjectVoteEdit: (projectId: number) => {
-        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES_EDIT.replace(':projectId', `${projectId}`) });
+        void navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES_EDIT.replace(':projectId', `${projectId}`) });
       },
 
       goToAcceleratorReport: (reportId: number, projectId: number) =>
-        navigate({
+        void navigate({
           pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', `${reportId}`).replace(':projectId', `${projectId}`),
         }),
 
       goToAcceleratorReportEdit: (reportId: number, projectId: number) =>
-        navigate({
+        void navigate({
           pathname: APP_PATHS.REPORTS_EDIT.replace(':reportId', `${reportId}`).replace(':projectId', `${projectId}`),
         }),
 
       goToApplication: (applicationId: number) => {
-        navigate({ pathname: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${applicationId}`) });
+        void navigate({ pathname: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${applicationId}`) });
       },
 
       goToApplicationList: () => {
-        navigate({ pathname: APP_PATHS.APPLICATIONS });
+        void navigate({ pathname: APP_PATHS.APPLICATIONS });
       },
 
       goToApplicationMap: (applicationId: number) => {
-        navigate({
+        void navigate({
           pathname: APP_PATHS.APPLICATION_MAP.replace(':applicationId', `${applicationId}`),
         });
       },
 
       goToApplicationMapUpdate: (applicationId: number) => {
-        navigate({
+        void navigate({
           pathname: APP_PATHS.APPLICATION_MAP_UPDATE.replace(':applicationId', `${applicationId}`),
         });
       },
 
       goToApplicationPrescreen: (applicationId: number) => {
-        navigate({
+        void navigate({
           pathname: APP_PATHS.APPLICATION_PRESCREEN.replace(':applicationId', `${applicationId}`),
         });
       },
 
       goToApplicationPrescreenResult: (applicationId: number) => {
-        navigate({
+        void navigate({
           pathname: APP_PATHS.APPLICATION_PRESCREEN_RESULT.replace(':applicationId', `${applicationId}`),
         });
       },
 
       goToApplicationReview: (applicationId: number) => {
-        navigate({
+        void navigate({
           pathname: APP_PATHS.APPLICATION_REVIEW.replace(':applicationId', `${applicationId}`),
         });
       },
 
       goToApplicationSection: (applicationId: number, sectionId: number) => {
-        navigate({
+        void navigate({
           pathname: APP_PATHS.APPLICATION_SECTION.replace(':applicationId', `${applicationId}`).replace(
             ':sectionId',
             `${sectionId}`
@@ -109,7 +109,7 @@ export default function useNavigateTo() {
       },
 
       goToApplicationSectionDeliverable: (applicationId: number, sectionId: number, deliverableId: number) => {
-        navigate({
+        void navigate({
           pathname: APP_PATHS.APPLICATION_SECTION_DELIVERABLE.replace(':applicationId', `${applicationId}`)
             .replace(':sectionId', `${sectionId}`)
             .replace(':deliverableId', `${deliverableId}`),
@@ -122,7 +122,7 @@ export default function useNavigateTo() {
         deliverableId: number,
         variableId?: number
       ) => {
-        navigate({
+        void navigate({
           pathname: APP_PATHS.APPLICATION_SECTION_DELIVERABLE_EDIT.replace(':applicationId', `${applicationId}`)
             .replace(':sectionId', `${sectionId}`)
             .replace(':deliverableId', `${deliverableId}`),
@@ -131,13 +131,13 @@ export default function useNavigateTo() {
       },
 
       goToContactUsForm: (requestType: SupportRequestType) => {
-        navigate({
+        void navigate({
           pathname: APP_PATHS.HELP_SUPPORT_FORM.replace(':requestType', getSupportRequestSubpath(requestType)),
         });
       },
 
       goToDeliverable: (deliverableId: number, projectId: number) =>
-        navigate({
+        void navigate({
           pathname: APP_PATHS.DELIVERABLE_VIEW.replace(':deliverableId', `${deliverableId}`).replace(
             ':projectId',
             `${projectId}`
@@ -145,7 +145,7 @@ export default function useNavigateTo() {
         }),
 
       goToDeliverableEdit: (deliverableId: number, projectId: number, variableId?: number) =>
-        navigate({
+        void navigate({
           pathname: APP_PATHS.DELIVERABLE_EDIT.replace(':deliverableId', `${deliverableId}`).replace(
             ':projectId',
             `${projectId}`
@@ -154,38 +154,38 @@ export default function useNavigateTo() {
         }),
 
       goToDocuments: () =>
-        navigate({
+        void navigate({
           pathname: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS,
         }),
 
       goToDocumentNew: () =>
-        navigate({
+        void navigate({
           pathname: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW,
         }),
 
       goToEditFundingEntity: (fundingEntityId: number | string) =>
-        navigate(APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_EDIT.replace(':fundingEntityId', `${fundingEntityId}`)),
+        void navigate(APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_EDIT.replace(':fundingEntityId', `${fundingEntityId}`)),
 
       goToFundingEntities: () => navigate({ pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES }),
 
       goToFundingEntity: (fundingEntityId: number | string) =>
-        navigate({
+        void navigate({
           pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_VIEW.replace(':fundingEntityId', String(fundingEntityId)),
         }),
 
       goToNewFundingEntity: () => navigate({ pathname: APP_PATHS.ACCELERATOR_FUNDING_ENTITIES_NEW }),
 
       goToHelpSupport: () => {
-        navigate({ pathname: APP_PATHS.HELP_SUPPORT });
+        void navigate({ pathname: APP_PATHS.HELP_SUPPORT });
       },
 
       goToHome: () =>
-        navigate({
+        void navigate({
           pathname: APP_PATHS.HOME,
         }),
 
       goToModule: (projectId: number, moduleId: number) => {
-        navigate({
+        void navigate({
           pathname: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
         });
         window.scrollTo(0, 0);
@@ -203,55 +203,55 @@ export default function useNavigateTo() {
             return;
         }
 
-        navigate({
+        void navigate({
           pathname: pathname.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
         });
       },
 
       goToModuleEventSession: (projectId: number, moduleId: number, sessionId: number) =>
-        navigate({
+        void navigate({
           pathname: APP_PATHS.PROJECT_MODULE_SESSION.replace(':projectId', `${projectId}`)
             .replace(':moduleId', `${moduleId}`)
             .replace(':sessionId', `${sessionId}`),
         }),
 
       goToModules: (projectId: number) =>
-        navigate({
+        void navigate({
           pathname: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`),
         }),
 
       goToNewAccession: () => {
-        navigate({
+        void navigate({
           pathname: APP_PATHS.ACCESSIONS2_NEW,
         });
         window.scrollTo(0, 0);
       },
 
       goToParticipant: (participantId: number) =>
-        navigate({
+        void navigate({
           pathname: APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW.replace(':participantId', `${participantId}`),
         }),
 
       goToParticipantsList: () =>
-        navigate({
+        void navigate({
           pathname: APP_PATHS.ACCELERATOR_OVERVIEW,
           search: 'tab=participants',
         }),
 
       goToParticipantProject: (projectId: number) =>
-        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`) }),
+        void navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`) }),
 
       goToParticipantProjectEdit: (projectId: number) =>
-        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_EDIT.replace(':projectId', `${projectId}`) }),
+        void navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_EDIT.replace(':projectId', `${projectId}`) }),
 
       goToParticipantProjectList: () =>
-        navigate({
+        void navigate({
           pathname: APP_PATHS.ACCELERATOR_OVERVIEW,
           search: 'tab=projects',
         }),
 
       goToParticipantProjectSpecies: (deliverableId: number, projectId: number, participantProjectSpeciesId: number) =>
-        navigate({
+        void navigate({
           pathname: APP_PATHS.ACCELERATOR_SPECIES.replace(
             ':participantProjectSpeciesId',
             `${participantProjectSpeciesId}`
@@ -265,23 +265,23 @@ export default function useNavigateTo() {
         projectId: number,
         participantProjectSpeciesId: number
       ) =>
-        navigate(
+        void navigate(
           APP_PATHS.ACCELERATOR_SPECIES_EDIT.replace(':participantProjectSpeciesId', `${participantProjectSpeciesId}`)
             .replace(':projectId', `${projectId}`)
             .replace(':deliverableId', `${deliverableId}`)
         ),
 
       goToPlantingSiteView: (plantingSiteId: number) =>
-        navigate(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', `${plantingSiteId}`)),
+        void navigate(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', `${plantingSiteId}`)),
       goToPlantingSitesView: (newSite: boolean) => navigate(`${APP_PATHS.PLANTING_SITES}${newSite ? '?new=true' : ''}`),
 
       goToSettings: () => navigate(APP_PATHS.SETTINGS),
 
       goToAcceleratorEditReportSettings: (projectId: string) =>
-        navigate(APP_PATHS.ACCELERATOR_PROJECT_REPORTS_EDIT.replace(':projectId', projectId)),
+        void navigate(APP_PATHS.ACCELERATOR_PROJECT_REPORTS_EDIT.replace(':projectId', projectId)),
 
       goToNewProjectMetric: (projectId: string) =>
-        navigate(APP_PATHS.ACCELERATOR_PROJECT_REPORTS_METRICS_NEW.replace(':projectId', projectId)),
+        void navigate(APP_PATHS.ACCELERATOR_PROJECT_REPORTS_METRICS_NEW.replace(':projectId', projectId)),
     }),
     [navigate]
   );

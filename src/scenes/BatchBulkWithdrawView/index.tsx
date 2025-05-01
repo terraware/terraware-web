@@ -21,7 +21,7 @@ export default function BatchBulkWithdrawView(props: BatchBulkWithdrawViewProps)
       setSource(query.get('source'));
     } else {
       // invalid url params
-      navigate({ pathname: APP_PATHS.INVENTORY });
+      void navigate({ pathname: APP_PATHS.INVENTORY });
     }
   }, [query, navigate]);
 

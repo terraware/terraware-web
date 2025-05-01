@@ -96,7 +96,7 @@ export default function useDraftPlantingSiteUpdate(): Response {
     if (draftResult?.status === 'success' && draftRequest) {
       if (redirect) {
         snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
-        navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${draftRequest.draft.id}`));
+        void navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${draftRequest.draft.id}`));
       } else {
         setUpdatedDraft(draftRequest);
       }

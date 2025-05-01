@@ -75,7 +75,7 @@ export default function CheckIn(): JSX.Element {
         reloadData();
         setCheckInAllConfirmationDialogOpen(false);
         snackbar.toastSuccess(strings.ALL_ACCESSIONS_CHECKED_IN);
-        navigate(APP_PATHS.ACCESSIONS);
+        void navigate(APP_PATHS.ACCESSIONS);
       } catch (e) {
         setBusy(false);
         snackbar.toastError();
@@ -111,7 +111,7 @@ export default function CheckIn(): JSX.Element {
       // eslint-disable-next-line no-restricted-globals
       state: { from: location.pathname },
     };
-    navigate(accessionLocation);
+    void navigate(accessionLocation);
   };
 
   const pendingAccessionsById = transformPendingAccessions();

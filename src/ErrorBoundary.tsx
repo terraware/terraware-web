@@ -24,7 +24,7 @@ const ErrorBoundary = (props: Props) => {
         if (isDesktop) {
           props.setShowNavBar?.(true);
         }
-        navigate(APP_PATHS.HOME);
+        void navigate(APP_PATHS.HOME);
       }}
     >
       {props.children}

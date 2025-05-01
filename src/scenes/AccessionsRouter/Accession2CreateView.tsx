@@ -129,7 +129,7 @@ export default function CreateAccession(): JSX.Element | null {
   };
 
   const goToAccessions = () => {
-    navigate(accessionsDatabase);
+    void navigate(accessionsDatabase);
   };
 
   const hasErrors = () => {
@@ -149,8 +149,8 @@ export default function CreateAccession(): JSX.Element | null {
         await SeedBankService.uploadAccessionPhotos(response.id, photos);
       }
 
-      navigate(accessionsDatabase, { replace: true });
-      navigate({
+      void navigate(accessionsDatabase, { replace: true });
+      void navigate({
         pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', response.id.toString()),
       });
     } else {

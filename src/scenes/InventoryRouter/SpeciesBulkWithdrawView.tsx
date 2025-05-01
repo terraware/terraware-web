@@ -25,7 +25,7 @@ export default function SpeciesBulkWithdrawView(props: SpeciesBulkWithdrawViewCo
       setSource(query.get('source'));
     } else {
       // return to inventory page if we came here from some bad url (no valid species)
-      navigate({ pathname: APP_PATHS.INVENTORY });
+      void navigate({ pathname: APP_PATHS.INVENTORY });
     }
   }, [query, navigate]);
 
@@ -41,7 +41,7 @@ export default function SpeciesBulkWithdrawView(props: SpeciesBulkWithdrawViewCo
           setBatchIds(ids);
         } else {
           // return to inventory page if we came here from some bad url (no valid species)
-          navigate({ pathname: APP_PATHS.INVENTORY });
+          void navigate({ pathname: APP_PATHS.INVENTORY });
         }
       }
     };

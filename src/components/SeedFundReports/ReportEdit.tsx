@@ -154,7 +154,7 @@ export default function ReportEdit(): JSX.Element {
 
       // then navigate to view
       if (reportId) {
-        navigate({ pathname: APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', reportId) });
+        void navigate({ pathname: APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', reportId) });
       }
     }
   };
@@ -351,7 +351,10 @@ export default function ReportEdit(): JSX.Element {
         const submitResult = await SeedFundReportService.submitReport(reportIdInt);
         if (submitResult.requestSucceeded && reportId && selectedOrganization.id !== -1) {
           reloadOrganizations(selectedOrganization.id);
-          navigate({ pathname: APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', reportId) }, { replace: true });
+          void navigate(
+            { pathname: APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', reportId) },
+            { replace: true }
+          );
         } else {
           snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SUBMIT);
         }
@@ -394,7 +397,7 @@ export default function ReportEdit(): JSX.Element {
 
   const redirectToReportView = () => {
     if (reportId) {
-      navigate(APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', reportId));
+      void navigate(APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', reportId));
     }
   };
 

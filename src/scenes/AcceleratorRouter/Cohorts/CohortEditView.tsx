@@ -68,7 +68,7 @@ export default function CohortEditView(): JSX.Element {
   );
 
   const goToCohortView = useCallback(() => {
-    navigate({ pathname: APP_PATHS.ACCELERATOR_COHORTS_VIEW.replace(':cohortId', `${cohortId}`) });
+    void navigate({ pathname: APP_PATHS.ACCELERATOR_COHORTS_VIEW.replace(':cohortId', `${cohortId}`) });
   }, [navigate, cohortId]);
 
   useEffect(() => {

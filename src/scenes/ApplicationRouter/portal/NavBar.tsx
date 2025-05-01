@@ -36,7 +36,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
     (path: string) => {
       closeNavBar();
       if (path && selectedApplication) {
-        navigate(path.replace(':applicationId', `${selectedApplication.id}`));
+        void navigate(path.replace(':applicationId', `${selectedApplication.id}`));
       }
     },
     [selectedApplication]

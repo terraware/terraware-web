@@ -40,14 +40,14 @@ export default function TerrawareRouter(props: TerrawareRouterProps) {
 
   useEffect(() => {
     if (userFundingEntity && !MINIMAL_FUNDER_ROUTES.some((path) => !!matchPath(path, location.pathname))) {
-      navigate(APP_PATHS.FUNDER_HOME);
+      void navigate(APP_PATHS.FUNDER_HOME);
     }
     if (
       organizations?.length === 0 &&
       !MINIMAL_USER_ROUTES.some((path) => !!matchPath(path, location.pathname)) &&
       !userFundingEntity
     ) {
-      navigate(APP_PATHS.WELCOME);
+      void navigate(APP_PATHS.WELCOME);
     }
   }, [navigate, location, userFundingEntity, organizations]);
 

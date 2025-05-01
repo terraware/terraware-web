@@ -50,7 +50,7 @@ export default function NurseriesListView({ organization }: NurseriesListProps):
     const newNurseryLocation = {
       pathname: APP_PATHS.NURSERIES_NEW,
     };
-    navigate(newNurseryLocation);
+    void navigate(newNurseryLocation);
   };
 
   const clearSearch = () => {

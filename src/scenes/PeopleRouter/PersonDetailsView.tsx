@@ -35,7 +35,7 @@ export default function PersonDetailsView(): JSX.Element {
           if (selectedUser) {
             setPerson(selectedUser);
           } else {
-            navigate(APP_PATHS.PEOPLE);
+            void navigate(APP_PATHS.PEOPLE);
           }
         }
       };
@@ -54,7 +54,7 @@ export default function PersonDetailsView(): JSX.Element {
       const newLocation = {
         pathname: APP_PATHS.PEOPLE_EDIT.replace(':personId', personId),
       };
-      navigate(newLocation);
+      void navigate(newLocation);
     }
   };
 

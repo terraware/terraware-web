@@ -166,7 +166,7 @@ export default function PeopleListView(): JSX.Element {
     const newPersonLocation = {
       pathname: APP_PATHS.PEOPLE_NEW,
     };
-    navigate(newPersonLocation);
+    void navigate(newPersonLocation);
   };
 
   const openDeleteOrgModal = () => {
@@ -245,7 +245,7 @@ export default function PeopleListView(): JSX.Element {
       } else {
         snackbar.toastError();
       }
-      navigate(APP_PATHS.PEOPLE);
+      void navigate(APP_PATHS.PEOPLE);
     }
   };
 
@@ -281,7 +281,7 @@ export default function PeopleListView(): JSX.Element {
       } else {
         snackbar.toastError();
       }
-      navigate(APP_PATHS.HOME);
+      void navigate(APP_PATHS.HOME);
     }
   };
 

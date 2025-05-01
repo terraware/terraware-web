@@ -45,7 +45,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const closeAndNavigateTo = (path: string) => {
     closeNavBar();
     if (path) {
-      navigate(path);
+      void navigate(path);
     }
   };
 

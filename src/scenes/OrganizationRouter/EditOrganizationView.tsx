@@ -73,7 +73,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
     const organizationLocation = {
       pathname: APP_PATHS.ORGANIZATION,
     };
-    navigate(organizationLocation);
+    void navigate(organizationLocation);
   };
 
   const saveOrganization = async () => {

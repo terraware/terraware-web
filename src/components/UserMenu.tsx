@@ -35,7 +35,7 @@ export default function UserMenu(): JSX.Element {
         break;
       }
       default: {
-        navigate(selectedItem.value);
+        void navigate(selectedItem.value);
         break;
       }
     }

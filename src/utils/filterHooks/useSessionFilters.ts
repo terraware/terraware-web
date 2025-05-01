@@ -30,7 +30,7 @@ export const useSessionFilters = (viewIdentifier?: string) => {
 
         resetQuery(query, viewIdentifier);
         writeFiltersToQuery(query, viewIdentifier, filters);
-        navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+        void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       }
     },
     [navigate, location, query, viewIdentifier]
@@ -56,7 +56,7 @@ export const useSessionFilters = (viewIdentifier?: string) => {
       writeFiltersToSession(viewIdentifier, mergedFilters);
 
       writeFiltersToQuery(query, viewIdentifier, mergedFilters);
-      navigate(getLocation(location.pathname, location, query.toString()));
+      void navigate(getLocation(location.pathname, location, query.toString()));
 
       setIsInitialized(true);
     }

@@ -41,7 +41,7 @@ export default function NurseryPlantingsAndWithdrawalsView({ reloadTracking }: N
   const onTabChange = useCallback(
     (newTab: string) => {
       query.set('tab', newTab);
-      navigate(getLocation(location.pathname, location, query.toString()));
+      void navigate(getLocation(location.pathname, location, query.toString()));
     },
     [query, navigate, location]
   );

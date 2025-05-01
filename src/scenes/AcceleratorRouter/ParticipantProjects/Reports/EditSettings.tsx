@@ -64,7 +64,7 @@ export default function EditSettings(): JSX.Element {
   }, [updateReportConfigResponse]);
 
   const goToProjectReports = () => {
-    navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId.toString())}?tab=settings`);
+    void navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId.toString())}?tab=settings`);
   };
 
   const [newConfig, , onChange] = useForm<NewAcceleratorReportConfig>({

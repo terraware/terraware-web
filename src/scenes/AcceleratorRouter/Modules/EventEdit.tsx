@@ -85,7 +85,7 @@ export default function EventEditView(): JSX.Element {
   }, [responseDelete]);
 
   const goToEvent = () => {
-    navigate(APP_PATHS.ACCELERATOR_MODULE_CONTENT.replace(':moduleId', moduleId || ''));
+    void navigate(APP_PATHS.ACCELERATOR_MODULE_CONTENT.replace(':moduleId', moduleId || ''));
   };
 
   const save = () => {

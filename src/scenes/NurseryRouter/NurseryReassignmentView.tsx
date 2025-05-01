@@ -126,7 +126,7 @@ export default function NurseryReassignmentView(): JSX.Element {
 
   const goToWithdrawals = () => {
     const withdrawalId = query.has('fromWithdrawal') ? delivery?.withdrawalId : undefined;
-    navigate({ pathname: APP_PATHS.NURSERY_WITHDRAWALS + (withdrawalId ? `/${withdrawalId}` : '') });
+    void navigate({ pathname: APP_PATHS.NURSERY_WITHDRAWALS + (withdrawalId ? `/${withdrawalId}` : '') });
   };
 
   const reassign = async () => {

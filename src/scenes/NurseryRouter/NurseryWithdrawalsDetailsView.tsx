@@ -126,7 +126,7 @@ export default function NurseryWithdrawalsDetailsView({
 
   const handleReassign = () => {
     if (delivery) {
-      navigate({
+      void navigate({
         pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', delivery.id.toString()),
         search: '?fromWithdrawal',
       });

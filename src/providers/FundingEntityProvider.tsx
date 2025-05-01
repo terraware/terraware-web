@@ -47,7 +47,7 @@ export default function FundingEntityProvider({ children }: FundingEntityProvide
 
   useEffect(() => {
     if (pathParamExists()) {
-      dispatch(requestFundingEntity(pathFundingEntityId));
+      void dispatch(requestFundingEntity(pathFundingEntityId));
     }
   }, [pathFundingEntityId, dispatch]);
 
@@ -74,7 +74,7 @@ export default function FundingEntityProvider({ children }: FundingEntityProvide
           window.location.reload();
         }
       } else {
-        navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
+        void navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
       }
     }
   }, [entityAPIRequestStatus]);

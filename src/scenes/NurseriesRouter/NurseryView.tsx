@@ -91,7 +91,7 @@ export default function NurseryView(): JSX.Element {
     const nurseriesLocation = {
       pathname: APP_PATHS.NURSERIES + (id ? `/${id}` : ''),
     };
-    navigate(nurseriesLocation);
+    void navigate(nurseriesLocation);
   };
 
   const saveNursery = async () => {

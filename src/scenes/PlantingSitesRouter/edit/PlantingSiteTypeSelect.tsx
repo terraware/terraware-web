@@ -19,7 +19,7 @@ export default function PlantingSiteTypeSelect(props: PlantingSiteTypeSelectProp
       pathname: appPath,
       search,
     };
-    navigate(appPathLocation);
+    void navigate(appPathLocation);
   };
 
   return (

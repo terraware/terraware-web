@@ -64,15 +64,15 @@ export default function PlantingSiteZoneView(): JSX.Element {
   );
 
   if (!plantingSite) {
-    navigate(APP_PATHS.PLANTING_SITES);
+    void navigate(APP_PATHS.PLANTING_SITES);
   }
 
   if (plantingSiteId && !plantingZone) {
-    navigate(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSiteId));
+    void navigate(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSiteId));
   }
 
   if (zoneId && plantingSiteId && !plantingZone?.plantingSubzones.length) {
-    navigate(APP_PATHS.PLANTING_SITES_ZONE_VIEW.replace(':plantingSiteId', plantingSiteId).replace(':zoneId', zoneId));
+    void navigate(APP_PATHS.PLANTING_SITES_ZONE_VIEW.replace(':plantingSiteId', plantingSiteId).replace(':zoneId', zoneId));
   }
 
   const crumbs: Crumb[] = useMemo(

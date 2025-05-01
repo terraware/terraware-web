@@ -64,7 +64,7 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
       const editPlantingSiteLocation = {
         pathname: editUrl.replace(':plantingSiteId', `${plantingSite.id}`),
       };
-      navigate(editPlantingSiteLocation);
+      void navigate(editPlantingSiteLocation);
     }
   };
 

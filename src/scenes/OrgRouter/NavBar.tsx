@@ -91,7 +91,7 @@ export default function NavBar({
     (path: string) => {
       closeNavBar();
       if (path) {
-        navigate(path);
+        void navigate(path);
       }
     },
     [closeNavBar, navigate]

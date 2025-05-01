@@ -16,7 +16,7 @@ const PreSetupView = () => {
   const theme = useTheme();
 
   const goToSettings = () => {
-    navigate({
+    void navigate({
       pathname: APP_PATHS.SEED_FUND_REPORTS_SETTINGS_EDIT,
     });
   };

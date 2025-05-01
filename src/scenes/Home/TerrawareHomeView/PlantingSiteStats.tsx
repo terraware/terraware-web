@@ -254,7 +254,7 @@ export const PlantingSiteStats = () => {
           <Grid item xs={primaryGridSize} sx={{ textAlign: isDesktop ? 'left' : 'center' }}>
             <Link
               onClick={() => {
-                navigate(`${APP_PATHS.PLANTS_DASHBOARD}/${selectedPlantingSiteId}`);
+                void navigate(`${APP_PATHS.PLANTS_DASHBOARD}/${selectedPlantingSiteId}`);
               }}
               style={{ textWrap: 'wrap', textAlign: 'left' }}
             >
@@ -267,7 +267,7 @@ export const PlantingSiteStats = () => {
                   id='add-planting-site'
                   large={false}
                   onClick={() => {
-                    navigate(`${APP_PATHS.PLANTING_SITES}?new=true`);
+                    void navigate(`${APP_PATHS.PLANTING_SITES}?new=true`);
                   }}
                   text={strings.ADD_PLANTING_SITE}
                 />

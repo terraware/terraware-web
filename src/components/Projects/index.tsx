@@ -70,7 +70,7 @@ export default function ProjectsList(): JSX.Element {
     const newProjectLocation = {
       pathname: APP_PATHS.PROJECTS_NEW,
     };
-    navigate(newProjectLocation);
+    void navigate(newProjectLocation);
   };
 
   const clearSearch = () => {
