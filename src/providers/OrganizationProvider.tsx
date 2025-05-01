@@ -85,7 +85,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   }, [selectedOrganization]);
 
   const redirectAndNotify = (organization: Organization) => {
-    navigate({ pathname: APP_PATHS.HOME, search: `organizationId=${organization.id}&newOrg=true` });
+    void navigate({ pathname: APP_PATHS.HOME, search: `organizationId=${organization.id}&newOrg=true` });
   };
 
   useEffect(() => {
@@ -129,7 +129,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
           }
           if (queryOrganizationId !== orgToUse.id.toString()) {
             query.set('organizationId', orgToUse.id.toString());
-            navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+            void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
           }
         }
       }
@@ -137,7 +137,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       if (queryOrganizationId && (!orgToUse || isAcceleratorRoute)) {
         // user does not belong to any orgs, clear the url param org id
         query.delete('organizationId');
-        navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+        void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       }
     }
   }, [
@@ -170,7 +170,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
           window.location.reload();
         }
       } else {
-        navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
+        void navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
       }
     }
   }, [orgAPIRequestStatus]);

@@ -134,7 +134,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   };
 
   const goToSettings = () => {
-    navigate({ pathname: APP_PATHS.MY_ACCOUNT });
+    void navigate({ pathname: APP_PATHS.MY_ACCOUNT });
     onPopoverClose();
   };
 
