@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import Page from 'src/components/Page';
 import TitleBar from 'src/components/common/TitleBar';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 
 import { IconButton, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';

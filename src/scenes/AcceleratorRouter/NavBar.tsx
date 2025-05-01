@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
-import { useMatch, useNavigate } from 'react-router-dom';
+import { useMatch, useNavigate } from 'react-router';
 
 import { NavSection } from '@terraware/web-components';
 

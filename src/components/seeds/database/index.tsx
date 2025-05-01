@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 
 import { Box, CircularProgress, Container, Grid, useTheme } from '@mui/material';
 import { DropdownItem, Message } from '@terraware/web-components';

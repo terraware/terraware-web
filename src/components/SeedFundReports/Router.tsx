@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 
 import ReportSettingsEdit from 'src/components/SeedFundReports/ReportSettingsEdit';
 import ReportsView from 'src/components/SeedFundReports/ReportsView';

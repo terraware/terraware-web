@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 
 import { CircularProgress } from '@mui/material';
 import { Option } from '@terraware/web-components/components/table/types';

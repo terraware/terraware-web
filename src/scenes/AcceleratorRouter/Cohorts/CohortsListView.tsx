@@ -1,5 +1,5 @@
 import React, { ReactNode, useCallback, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { Box, Card, Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';

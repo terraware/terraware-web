@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 
 import { Box, Snackbar as SnackbarUI } from '@mui/material';
 import { Button, Message } from '@terraware/web-components';

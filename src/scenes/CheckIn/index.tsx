@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { Box, Container, Grid, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';

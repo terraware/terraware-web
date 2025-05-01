@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { Grid } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
 import { Statuses } from 'src/redux/features/asyncUtils';

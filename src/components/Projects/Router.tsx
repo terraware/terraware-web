@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 
 import ProjectEditView from 'src/components/ProjectEditView';
 import ProjectNewView from 'src/components/ProjectNewView';

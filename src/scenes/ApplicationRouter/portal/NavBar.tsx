@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { matchPath, useMatch, useNavigate } from 'react-router-dom';
+import { matchPath, useMatch, useNavigate } from 'react-router';
 
 import { NavSection, theme } from '@terraware/web-components';
 

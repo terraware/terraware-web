@@ -1,4 +1,5 @@
-import React, { Route, Routes } from 'react-router-dom';
+import React from 'react';
+import { Route, Routes } from 'react-router';
 
 import DocumentProducerProvider from 'src/providers/DocumentProducer/Provider';
 
