@@ -6,7 +6,7 @@ describe('formatNumberScale', () => {
     expect(formatNumberScale('not a number')).toBe('not a number');
     expect(formatNumberScale('')).toBe('');
     expect(formatNumberScale(undefined)).toBe('');
-  })
+  });
 
   test('numbers', () => {
     expect(formatNumberScale(12000000)).toBe('12M');

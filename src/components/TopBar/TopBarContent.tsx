@@ -67,7 +67,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
 
   const onHandleLogout = () => {
     mixpanel?.reset();
-    window.location.href = `/sso/logout`;
+    window.location.href = '/sso/logout';
   };
 
   const handleTopBarClick = () => {
@@ -112,7 +112,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         />
         {userFundingEntity && <SettingsLink />}
         <div style={separatorStyles} />
-        <UserMenu hasOrganizations={organizations && organizations.length > 0} />
+        <UserMenu />
       </Box>
     </>
   ) : (

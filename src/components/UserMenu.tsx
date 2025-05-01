@@ -11,11 +11,7 @@ import { useUser } from 'src/providers';
 import strings from 'src/strings';
 import useEnvironment from 'src/utils/useEnvironment';
 
-type UserMenuProps = {
-  hasOrganizations?: boolean;
-};
-
-export default function UserMenu({}: UserMenuProps): JSX.Element {
+export default function UserMenu(): JSX.Element {
   const theme = useTheme();
   const { user } = useUser();
   const { isProduction } = useEnvironment();

@@ -31,7 +31,10 @@ export default function FundingEntityProvider({ children }: FundingEntityProvide
   const getFundingEntityRequest = useAppSelector(selectFundingEntityRequest(pathFundingEntityId));
   const [fundingEntityData, setFundingEntityData] = useState<ProvidedFundingEntityData>({
     fundingEntity: undefined,
-    reload: () => {},
+    reload: () => {
+      // default no-op implementation
+      return;
+    },
   });
 
   const pathParamExists = () => !isNaN(pathFundingEntityId) && pathFundingEntityId !== -1;
