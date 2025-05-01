@@ -20,6 +20,7 @@ export type MapGeometry = number[][][][];
 
 /**
  * Example of a boundary:
+ * ```json
  * [
  *   [
  *     [
@@ -50,6 +51,7 @@ export type MapGeometry = number[][][][];
  *     ]
  *   ]
  * ]
+ * ```
  */
 
 export type MapSourceProperties = { [key: string]: any };
