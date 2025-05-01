@@ -72,7 +72,9 @@ export default function PlantingSiteZoneView(): JSX.Element {
   }
 
   if (zoneId && plantingSiteId && !plantingZone?.plantingSubzones.length) {
-    void navigate(APP_PATHS.PLANTING_SITES_ZONE_VIEW.replace(':plantingSiteId', plantingSiteId).replace(':zoneId', zoneId));
+    void navigate(
+      APP_PATHS.PLANTING_SITES_ZONE_VIEW.replace(':plantingSiteId', plantingSiteId).replace(':zoneId', zoneId)
+    );
   }
 
   const crumbs: Crumb[] = useMemo(

@@ -28,7 +28,9 @@ export default function useNavigateTo() {
       },
 
       goToAcceleratorApplicationMap: (applicationId: number) => {
-        void navigate({ pathname: APP_PATHS.ACCELERATOR_APPLICATION_MAP.replace(':applicationId', `${applicationId}`) });
+        void navigate({
+          pathname: APP_PATHS.ACCELERATOR_APPLICATION_MAP.replace(':applicationId', `${applicationId}`),
+        });
       },
 
       goToAcceleratorProject: (projectId: number) => {
