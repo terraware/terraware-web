@@ -144,14 +144,10 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
   const contextRenderer = useMemo(
     () =>
       // eslint-disable-next-line react/display-name
-      (entity: MapSourceProperties): JSX.Element | null => {
-        if (!latestObservation) {
-          return null;
-        }
-
+      (entity: MapSourceProperties): JSX.Element => {
         const entityZoneId = Number(entity.id);
-
         let properties: TooltipProperty[] = [];
+
         const zoneObservation = latestObservation?.plantingZones.find(
           (zoneResult) => zoneResult.plantingZoneId === entityZoneId
         );
@@ -160,9 +156,9 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
           properties = [
             {
               key: strings.AREA_HA,
-              value: findZoneArea(entity.id as number) || 0,
+              value: findZoneArea(entity.id as number) || strings.UNKNOWN,
             },
-            { key: strings.NO_PLANTS, value: '' },
+            { key: strings.NOT_OBSERVED, value: '' },
           ];
         } else if (zoneProgress[entityZoneId] && zoneStats[entityZoneId]) {
           const lastZoneSummary = lastSummary?.plantingZones.find((pz) => pz.plantingZoneId === entity.id);
