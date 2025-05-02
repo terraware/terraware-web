@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Grid, Typography } from '@mui/material';
@@ -28,7 +28,6 @@ import {
   ReviewManyAcceleratorReportMetricsRequest,
   SystemMetricName,
 } from 'src/types/AcceleratorReport';
-import { isAcceleratorAdmin } from 'src/utils/acl';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -47,7 +46,7 @@ export default function EditAcceleratorReportTargetsModal({
   reports,
   row,
 }: EditTargetsModalProp): JSX.Element {
-  const { user } = useUser();
+  const { isAllowed } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { currentParticipantProject } = useParticipantData();
   const dispatch = useAppDispatch();
@@ -61,6 +60,8 @@ export default function EditAcceleratorReportTargetsModal({
 
   const updateReportMetricsResponse = useAppSelector(selectReviewManyAcceleratorReportMetrics(reviewRequestId));
   const updateReportsResponse = useAppSelector(selectUpdateManyAcceleratorReports(updateRequestId));
+
+  const isAllowedReviewReportTargets = useMemo(() => isAllowed('REVIEW_REPORTS_TARGETS'), [isAllowed]);
 
   useEffect(() => {
     if (updateReportMetricsResponse?.status === 'error') {
@@ -129,7 +130,7 @@ export default function EditAcceleratorReportTargetsModal({
       projectId,
     };
 
-    if (user && isAcceleratorAdmin(user)) {
+    if (isAllowedReviewReportTargets) {
       const reviewRequest = dispatch(requestReviewManyAcceleratorReportMetrics(requestPayload));
       setReviewRequestId(reviewRequest.requestId);
     } else {

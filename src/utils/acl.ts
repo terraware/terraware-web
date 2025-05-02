@@ -24,6 +24,7 @@ import { isAdmin, isManagerOrHigher, isMember } from './organization';
 type PermissionAcceleratorReports =
   | 'EDIT_REPORTS'
   | 'READ_REPORTS'
+  | 'REVIEW_REPORTS_TARGETS'
   | 'UPDATE_REPORTS_SETTINGS'
   | 'UPDATE_REPORTS_TARGETS';
 type PermissionApplication =
@@ -77,7 +78,7 @@ const TFExpertPlus: UserGlobalRoles = [...AcceleratorAdminPlus, GLOBAL_ROLE_TF_E
 const ReadOnlyPlus: UserGlobalRoles = [...TFExpertPlus, GLOBAL_ROLE_READ_ONLY];
 
 const isSuperAdmin = (user: User): boolean => user.globalRoles.includes(GLOBAL_ROLE_SUPER_ADMIN);
-export const isAcceleratorAdmin = (user: User): boolean =>
+const isAcceleratorAdmin = (user: User): boolean =>
   isSuperAdmin(user) || user.globalRoles.includes(GLOBAL_ROLE_ACCELERATOR_ADMIN);
 const isReadOnlyOrHigher = (user: User): boolean => ReadOnlyPlus.some((role) => user.globalRoles.includes(role));
 
@@ -151,6 +152,13 @@ const isAllowedReadReports: PermissionCheckFn<ReadReportsMetadata> = (
 };
 
 /**
+ * Function related to reviewing accelerator reports targets
+ */
+const isAllowedReviewReportsTargets: PermissionCheckFn = (user: User): boolean => {
+  return isAcceleratorAdmin(user);
+};
+
+/**
  * Function related to updating accelerator report targets, since the permission also applies to
  * org roles, we need to check the passed-in organization
  */
@@ -191,6 +199,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   READ_PARTICIPANT_PROJECT: ReadOnlyPlus,
   READ_REPORTS: isAllowedReadReports,
   READ_SUBMISSION_DOCUMENT: ReadOnlyPlus,
+  REVIEW_REPORTS_TARGETS: isAllowedReviewReportsTargets,
   UPDATE_APPLICATION_INTERNAL_COMMENTS: TFExpertPlus,
   UPDATE_APPLICATION_STATUS: TFExpertPlus,
   UPDATE_COHORTS: AcceleratorAdminPlus,
