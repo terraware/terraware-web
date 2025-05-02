@@ -12,14 +12,12 @@ import MapDateSelect from 'src/components/common/MapDateSelect';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import { useOrganization } from 'src/providers';
 import {
   searchAdHocObservations,
   searchObservations,
   selectPlantingSiteAdHocObservations,
   selectPlantingSiteObservations,
 } from 'src/redux/features/observations/observationsSelectors';
-import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { selectPlantingSiteHistory } from 'src/redux/features/tracking/trackingSelectors';
 import { requestGetPlantingSiteHistory } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -162,7 +160,6 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
   const [selectedObservationDate, setSelectedObservationDate] = useState<string | undefined>();
   const defaultTimeZone = useDefaultTimeZone();
   const timeZone = plantingSite.timeZone ?? defaultTimeZone.get().id;
-  const { selectedOrganization } = useOrganization();
   const dispatch = useAppDispatch();
   const [selectedObservation, setSelectedObservation] = useState<ObservationResults>();
   const [selectedAdHocObservation, setSelectedAdHocObservation] = useState<AdHocObservationResults>();
@@ -186,30 +183,24 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
   }, []);
 
   useEffect(() => {
-    void dispatch(requestObservationsResults(selectedOrganization.id));
-    void dispatch(requestObservations(selectedOrganization.id));
-  }, [dispatch, selectedOrganization.id]);
-
-  useEffect(() => {
     if (observationHistory?.status === 'success') {
       setPlantingSiteHistory(observationHistory.data);
     }
   }, [observationHistory]);
 
   const observationsResults = useAppSelector((state) =>
-    searchObservations(state, plantingSite.id, defaultTimeZone.get().id, '', [], status)
+    searchObservations(state, plantingSite.id, timeZone, '', [], status)
   );
 
-  const adHocObservationsResults = useAppSelector((state) =>
-    searchAdHocObservations(state, plantingSite.id, defaultTimeZone.get().id, '')
+  const adHocObservationResults = useAppSelector((state) =>
+    searchAdHocObservations(state, plantingSite.id, timeZone, '')
   );
 
   const observationsDates = useMemo(() => {
     const uniqueDates = new Set(observationsResults?.map((obs) => obs.completedDate || obs.startDate));
     uniqueDates.add(getTodaysDateFormatted());
 
-    adHocObservationsResults?.forEach((obs) => {
-      const timeZone = plantingSite?.timeZone ?? defaultTimeZone.get().id;
+    adHocObservationResults?.forEach((obs) => {
       const dateToUse = obs.completedTime ? getDateDisplayValue(obs.completedTime, timeZone) : obs.startDate;
       uniqueDates.add(dateToUse);
     });
@@ -218,7 +209,7 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
       ?.filter((time) => time)
       ?.map((time) => time)
       ?.sort((a, b) => (Date.parse(a) > Date.parse(b) ? 1 : -1));
-  }, [observationsResults, adHocObservationsResults]);
+  }, [observationsResults, adHocObservationResults]);
 
   useEffect(() => {
     if (observationsDates) {
@@ -242,14 +233,13 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
 
     setSelectedObservation(selObservation);
 
-    const selAdHocObservation = adHocObservationsResults?.find((obs) => {
-      const timeZone = plantingSite?.timeZone ?? defaultTimeZone.get().id;
+    const selAdHocObservation = adHocObservationResults?.find((obs) => {
       const dateToCheck = obs.completedTime ? getDateDisplayValue(obs.completedTime, timeZone) : obs.startDate;
       return dateToCheck === selectedObservationDate;
     });
 
     setSelectedAdHocObservation(selAdHocObservation);
-  }, [observationsResults, adHocObservationsResults, plantingSite, selectedObservationDate]);
+  }, [observationsResults, adHocObservationResults, plantingSite, selectedObservationDate, timeZone]);
 
   const layerOptionLabels: Record<MapLayer, string> = {
     'Planting Site': strings.PLANTING_SITE,

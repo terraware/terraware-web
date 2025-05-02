@@ -89,7 +89,7 @@ const scheduleObservationsColumn = (): TableColumnType[] => [
 export type OrgObservationsListViewProps = {
   plantingSiteId: number;
   observationsResults?: ObservationResults[];
-  adHocObservationsResults?: AdHocObservationResults[];
+  adHocObservationResults?: AdHocObservationResults[];
   reload: () => void;
   selectedPlotSelection?: string;
   timeZone: string;
@@ -97,7 +97,7 @@ export type OrgObservationsListViewProps = {
 
 export default function OrgObservationsListView({
   observationsResults,
-  adHocObservationsResults,
+  adHocObservationResults,
   plantingSiteId,
   reload,
   selectedPlotSelection,
@@ -264,7 +264,7 @@ export default function OrgObservationsListView({
         <Table
           id='org-ad-hoc-observations-table'
           columns={adHocColumns}
-          rows={adHocObservationsResults || []}
+          rows={adHocObservationResults || []}
           orderBy='observationDate'
           Renderer={AdHocObservationsRenderer(timeZone)}
         />

@@ -3,14 +3,12 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Typography, useTheme } from '@mui/material';
 
 import { PlantingSiteMap } from 'src/components/Map';
-import { useOrganization } from 'src/providers';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { requestUpdatePlantingCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
 import {
   selectUpdatePlantingCompleted,
   selectZonesHaveStatistics,
 } from 'src/redux/features/plantings/plantingsSelectors';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import StatsWarningDialog from 'src/scenes/NurseryRouter/StatsWarningModal';
 import { MapService } from 'src/services';
@@ -30,21 +28,23 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
-  const org = useOrganization();
   const defaultTimeZone = useDefaultTimeZone();
-  const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const [mapData, setMapData] = useState<MapData | undefined>();
-  const [dispatching, setDispatching] = useState(false);
   const [requestId, setRequestId] = useState<string>('');
   const updateStatus = useAppSelector((state) => selectUpdatePlantingCompleted(state, requestId));
   const [focusEntities, setFocusEntities] = useState<{ sourceId: string; id: number }[]>([]);
 
+  const { plantingSite, setSelectedPlantingSite } = usePlantingSiteData();
   const [zoneIdSelected, setZoneIdSelected] = useState<number>(-1);
   const [statsWarningDialogProps, setStatsWarningDialogProps] = useState<{ id: number; val: boolean } | undefined>();
 
   const selectedZoneHasStats = useAppSelector((state) =>
     selectZonesHaveStatistics(state, { [plantingSiteId]: new Set([zoneIdSelected]) }, defaultTimeZone.get().id)
   );
+
+  useEffect(() => {
+    setSelectedPlantingSite(plantingSiteId);
+  }, [plantingSiteId, setSelectedPlantingSite]);
 
   useEffect(() => {
     if (!mapData?.site?.entities || plantingSite?.id !== mapData.site.entities[0]?.id) {
@@ -56,7 +56,6 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
         setFocusEntities([]);
       }
     }
-    setDispatching(false);
   }, [plantingSite, mapData?.site?.entities]);
 
   const subzonesAreaHa: Record<number, number> = useMemo(() => {
@@ -78,12 +77,6 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
       });
     return result;
   }, [plantingSite]);
-
-  useEffect(() => {
-    if (plantingSiteId !== -1) {
-      void dispatch(requestSitePopulation(org.selectedOrganization.id, plantingSiteId));
-    }
-  }, [dispatch, org.selectedOrganization.id, plantingSiteId]);
 
   useEffect(() => {
     if (updateStatus) {
@@ -108,7 +101,6 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
       );
       setRequestId(request.requestId);
       setFocusEntities([]);
-      setDispatching(true);
     },
     [dispatch]
   );
@@ -147,13 +139,13 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
         contextRenderer={{
           render: (properties: MapSourceProperties) => (
             <PlantingProgressMapDialog
-              id={properties.id}
+              subzoneId={properties.id}
               subzoneName={properties.fullName}
               subzoneAreaHa={subzonesAreaHa[properties.id]}
               siteName={plantingSite?.name || ''}
               plantingComplete={subzonesComplete[properties.id]}
               onUpdatePlantingComplete={updatePlantingComplete}
-              busy={dispatching}
+              busy={updateStatus.status === 'pending'}
             />
           ),
           anchor: 'bottom',

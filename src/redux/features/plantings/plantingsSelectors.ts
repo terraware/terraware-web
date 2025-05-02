@@ -157,10 +157,10 @@ export const searchPlantingProgress = createSelector(
 );
 
 export const selectUpdatePlantingCompleted = (state: RootState, requestId: string) =>
-  (state.updatePlantingCompleted as any)[requestId];
+  state.updatePlantingCompleted[requestId];
 
 export const selectUpdatePlantingsCompleted = (state: RootState, requestId: string) =>
-  (state.updatePlantingsCompleted as any)[requestId];
+  state.updatePlantingsCompleted[requestId];
 
 export const selectZonesHaveStatistics = createSelector(
   [

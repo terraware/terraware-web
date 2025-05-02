@@ -1,14 +1,12 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
-import { useUser } from 'src/providers';
 import strings from 'src/strings';
 import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Species } from 'src/types/Species';
 import { batchToSpecies } from 'src/utils/batch';
-import { useNumberFormatter } from 'src/utils/useNumber';
 
 import WithdrawalRenderer from './WithdrawalRenderer';
 
@@ -43,12 +41,7 @@ export default function NonOutplantWithdrawalTable({
   withdrawal,
   batches,
 }: NonOutplantWithdrawalTableProps): JSX.Element {
-  const { user } = useUser();
-  const numberFormatter = useNumberFormatter();
-  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
-  const [rowData, setRowData] = useState<SpeciesWithdrawal[]>([]);
-
-  useEffect(() => {
+  const rowData = useMemo(() => {
     // get map of batch id to species id - for correlation
     // the withdrawal details hold a batch id but no species id
     // the batches details has the species id
@@ -80,9 +73,11 @@ export default function NonOutplantWithdrawalTable({
         });
       }
 
-      setRowData(batchesMap);
+      return batchesMap;
+    } else {
+      return [];
     }
-  }, [species, batches, withdrawal, numericFormatter]);
+  }, [species, batches, withdrawal]);
 
   return (
     <Table

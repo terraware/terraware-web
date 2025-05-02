@@ -12,7 +12,7 @@ import {
   selectObservationsResultsError,
 } from 'src/redux/features/observations/observationsSelectors';
 import {
-  requestAdHocObservationsResults,
+  requestAdHocObservationResults,
   requestObservations,
   requestObservationsResults,
 } from 'src/redux/features/observations/observationsThunks';
@@ -68,10 +68,10 @@ export default function ObservationsRouter(): JSX.Element {
       selectedOrganization.id !== -1
     ) {
       setDispatched(true);
-      void dispatch(requestObservationsResults(selectedOrganization.id));
-      void dispatch(requestAdHocObservationsResults(selectedOrganization.id));
-      void dispatch(requestObservations(selectedOrganization.id));
-      void dispatch(requestObservations(selectedOrganization.id, true));
+      dispatch(requestObservationsResults(selectedOrganization.id));
+      dispatch(requestAdHocObservationResults(selectedOrganization.id));
+      dispatch(requestObservations(selectedOrganization.id));
+      dispatch(requestObservations(selectedOrganization.id, true));
     }
   }, [dispatch, selectedOrganization.id, speciesResponse?.data?.species, plantingSites, dispatched]);
 

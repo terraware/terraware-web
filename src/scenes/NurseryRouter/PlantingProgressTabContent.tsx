@@ -24,11 +24,7 @@ import PlantingProgressMap from './PlantingProgressMap';
 
 const initialView: View = 'list';
 
-type PlantingProgressProps = {
-  reloadTracking: () => void;
-};
-
-export default function PlantingProgress({ reloadTracking }: PlantingProgressProps): JSX.Element {
+export default function PlantingProgress(): JSX.Element {
   const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
@@ -114,10 +110,9 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
 
   const reloadTrackingAndObservations = useCallback(() => {
     if (selectedOrganization.id !== -1) {
-      reloadTracking();
       void dispatch(requestObservationsResults(selectedOrganization.id));
     }
-  }, [selectedOrganization.id, dispatch, reloadTracking]);
+  }, [selectedOrganization.id, dispatch]);
 
   const plantingSitesNames = useAppSelector((state) => selectPlantingSitesNames(state));
 

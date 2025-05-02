@@ -32,7 +32,7 @@ export default function ScheduleObservation(): JSX.Element {
   const plantingSites = useAppSelector(selectObservationSchedulableSitesWithPlantReportData) ?? [];
   const result = useAppSelector((state) => selectScheduleObservation(state, requestId));
 
-  const scheduleObservation = async () => {
+  const scheduleObservation = useCallback(() => {
     setValidate(true);
     if (!hasErrors && plantingSiteId && startDate && endDate) {
       const dispatched = dispatch(
@@ -40,8 +40,7 @@ export default function ScheduleObservation(): JSX.Element {
       );
       setRequestId(dispatched.requestId);
     }
-    return Promise.resolve(true);
-  };
+  }, [dispatch, hasErrors, startDate, endDate, plantingSiteId, selectedSubzones]);
 
   const goToObservations = useCallback(() => navigate(APP_PATHS.OBSERVATIONS), [navigate]);
 

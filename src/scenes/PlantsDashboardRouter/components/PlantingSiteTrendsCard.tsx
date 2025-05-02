@@ -6,22 +6,15 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
 import Chart, { ChartData } from 'src/components/common/Chart/Chart';
-import useObservationSummaries from 'src/hooks/useObservationSummaries';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
 
-type PlantingSiteTrendsCardProps = {
-  plantingSiteId: number;
-};
-
-export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteTrendsCardProps): JSX.Element {
+export default function PlantingSiteTrendsCard(): JSX.Element {
   const theme = useTheme();
-  const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const [zonesOptions, setZoneOptions] = useState<DropdownItem[]>();
   const [selectedPlantsPerHaZone, setSelectedPlantsPerHaZone] = useState<number>();
   const [selectedMortalityZone, setSelectedMortalityZone] = useState<number>();
-  const summaries = useObservationSummaries(plantingSiteId);
+  const { plantingSite, observationSummaries } = usePlantingSiteData();
   const { isDesktop, isMobile } = useDeviceInfo();
 
   useEffect(() => {
@@ -34,7 +27,7 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
   }, [plantingSite]);
 
   const plantsChartData: ChartData = useMemo(() => {
-    const filteredSummaries = summaries?.filter((sc) => {
+    const filteredSummaries = observationSummaries?.filter((sc) => {
       const zone = sc.plantingZones.find((pz) => pz.plantingZoneId === selectedPlantsPerHaZone);
       if (zone?.plantingDensity !== undefined) {
         return true;
@@ -82,10 +75,10 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
         },
       ],
     };
-  }, [summaries, selectedPlantsPerHaZone]);
+  }, [observationSummaries, selectedPlantsPerHaZone]);
 
   const mortalityChartData: ChartData = useMemo(() => {
-    const filteredSummaries = summaries?.filter((sc) => {
+    const filteredSummaries = observationSummaries?.filter((sc) => {
       const zone = sc.plantingZones.find((pz) => pz.plantingZoneId === selectedPlantsPerHaZone);
       if (zone?.mortalityRate !== undefined) {
         return true;
@@ -107,7 +100,7 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
         },
       ],
     };
-  }, [summaries, selectedMortalityZone]);
+  }, [observationSummaries, selectedMortalityZone]);
 
   return (
     <Card

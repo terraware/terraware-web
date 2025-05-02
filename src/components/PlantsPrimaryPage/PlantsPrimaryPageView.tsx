@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 
 import { Box, CircularProgress, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, IconName, Message } from '@terraware/web-components';
@@ -55,25 +55,23 @@ export default function PlantsPrimaryPageView({
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const isRolledUpView = useMemo(() => {
-    return projectId !== undefined && selectedPlantingSiteId === -2;
+    return projectId !== undefined && selectedPlantingSiteId === -1;
   }, [projectId, selectedPlantingSiteId]);
 
-  const onChangePlantingSiteId = (siteId: any) => {
-    const selectedPlantingSite = plantingSites?.find((ps) => ps.id === siteId);
-    if (selectedPlantingSite) {
-      onSelect(selectedPlantingSite);
-    } else if (siteId === -2) {
-      onSelect(undefined);
-    }
-  };
+  const onChangePlantingSiteId = useCallback(
+    (siteId: number) => {
+      const selectedPlantingSite = plantingSites?.find((ps) => ps.id === siteId);
+      if (selectedPlantingSite) {
+        onSelect(selectedPlantingSite);
+      }
+    },
+    [onSelect, plantingSites]
+  );
 
-  const options = useMemo(() => {
-    const optionsToReturn = plantingSites?.map((site) => ({ label: site.name, value: site.id })) ?? [];
-    if (optionsToReturn.length !== 1 && projectId) {
-      optionsToReturn.unshift({ label: strings.ALL_PLANTING_SITES, value: -2 });
-    }
-    return optionsToReturn;
-  }, [plantingSites, projectId]);
+  const options = useMemo(
+    () => plantingSites?.map((site) => ({ label: site.name, value: site.id })) ?? [],
+    [plantingSites]
+  );
 
   const totalArea = useMemo(() => {
     return plantingSites?.reduce((sum, site) => sum + (site?.areaHa ?? 0), 0) || 0;
@@ -123,7 +121,7 @@ export default function PlantsPrimaryPageView({
               <Dropdown
                 placeholder={strings.SELECT}
                 id='planting-site-selector'
-                onChange={onChangePlantingSiteId}
+                onChange={(newValue) => onChangePlantingSiteId(Number(newValue))}
                 options={options}
                 selectedValue={selectedPlantingSiteId}
                 fullWidth

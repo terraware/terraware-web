@@ -7,11 +7,10 @@ import { ObservationsService } from 'src/services';
 import strings from 'src/strings';
 
 import {
+  setAdHocObservationResultsAction,
   setAdHocObservationsAction,
-  setAdHocObservationsResultsAction,
   setObservationsAction,
   setObservationsResultsAction,
-  setPlantingSiteObservationsResultsAction,
 } from './observationsSlice';
 
 /**
@@ -31,7 +30,7 @@ export const requestObservationsResults = createAsyncThunk(
         return;
       }
 
-      const response = await ObservationsService.listObservationsResults(organizationId);
+      const response = await ObservationsService.listObservationResults(organizationId);
       if (response && response.requestSucceeded) {
         const { error, observations } = response;
         dispatch(
@@ -51,34 +50,6 @@ export const requestObservationsResults = createAsyncThunk(
     }
   }
 );
-
-/**
- * Fetch planting site observation results
- */
-export const requestPlantingSiteObservationsResults = (
-  organizationId: number,
-  plantingSiteId: number,
-  adHoc?: boolean
-) => {
-  return async (dispatch: Dispatch, _getState: () => RootState) => {
-    try {
-      const response = adHoc
-        ? await ObservationsService.listAdHocObservationsResults(organizationId, plantingSiteId)
-        : await ObservationsService.listObservationsResults(organizationId, plantingSiteId);
-      const { error, observations } = response;
-      dispatch(
-        setPlantingSiteObservationsResultsAction({
-          plantingSiteId,
-          data: { error, observations },
-        })
-      );
-    } catch (e) {
-      // should not happen, the response above captures any http request errors
-      // eslint-disable-next-line no-console
-      console.error('Error dispatching planting site observations results', e);
-    }
-  };
-};
 
 /**
  * Fetch observations
@@ -109,7 +80,7 @@ export const requestObservations = (organizationId: number, adHoc?: boolean) => 
   };
 };
 
-export const requestGetPlantingSiteObservationsSummaries = createAsyncThunk(
+export const requestPlantingSiteObservationSummaries = createAsyncThunk(
   'observations/summaries',
   async (plantingSiteId: number, { rejectWithValue }) => {
     const response = await ObservationsService.getPlantingSiteObservationsSummaries(plantingSiteId);
@@ -122,16 +93,68 @@ export const requestGetPlantingSiteObservationsSummaries = createAsyncThunk(
   }
 );
 
+export const requestPlantingSiteObservations = createAsyncThunk(
+  'observations/site',
+  async (request: { plantingSiteId: number }, { rejectWithValue }) => {
+    const response = await ObservationsService.listPlantingSiteObservations(request.plantingSiteId);
+
+    if (response !== null && response.requestSucceeded && response?.data?.observations !== undefined) {
+      return response.data.observations;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestPlantingSiteObservationResults = createAsyncThunk(
+  'observations/siteResults',
+  async (request: { plantingSiteId: number }, { rejectWithValue }) => {
+    const response = await ObservationsService.listPlantingSiteObservationResults(request.plantingSiteId);
+
+    if (response !== null && response.requestSucceeded && response?.data?.observations !== undefined) {
+      return response.data.observations;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestPlantingSiteAdHocObservations = createAsyncThunk(
+  'observations/siteAdHoc',
+  async (request: { plantingSiteId: number }, { rejectWithValue }) => {
+    const response = await ObservationsService.listPlantingSiteAdHocObservations(request.plantingSiteId);
+
+    if (response !== null && response.requestSucceeded && response?.data?.observations !== undefined) {
+      return response.data.observations;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestPlantingSiteAdHocObservationResults = createAsyncThunk(
+  'observations/siteAdHocResults',
+  async (request: { plantingSiteId: number }, { rejectWithValue }) => {
+    const response = await ObservationsService.listPlantingSiteObservationResults(request.plantingSiteId);
+
+    if (response !== null && response.requestSucceeded && response?.data?.observations !== undefined) {
+      return response.data.observations;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
 /**
  * Fetch observation results
  */
-export const requestAdHocObservationsResults = (organizationId: number) => {
+export const requestAdHocObservationResults = (organizationId: number) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
-      const response = await ObservationsService.listAdHocObservationsResults(organizationId);
+      const response = await ObservationsService.listAdHocObservationResults(organizationId);
       const { error, observations } = response;
       dispatch(
-        setAdHocObservationsResultsAction({
+        setAdHocObservationResultsAction({
           error,
           observations,
         })

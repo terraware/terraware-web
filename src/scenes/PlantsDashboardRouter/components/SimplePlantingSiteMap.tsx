@@ -3,9 +3,7 @@ import React, { CSSProperties, useMemo } from 'react';
 import { Box, CircularProgress } from '@mui/material';
 
 import { PlantingSiteMap } from 'src/components/Map';
-import { useOrganization } from 'src/providers';
-import { selectOrgPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { MapService } from 'src/services';
 
 type SimplePlantingSiteMapProps = {
@@ -14,13 +12,9 @@ type SimplePlantingSiteMapProps = {
   style?: CSSProperties;
 };
 
-export default function SimplePlantingSiteMap({
-  plantingSiteId,
-  hideAllControls,
-  style,
-}: SimplePlantingSiteMapProps): JSX.Element {
-  const { selectedOrganization } = useOrganization();
-  const plantingSite = useAppSelector((state) => selectOrgPlantingSite(state, plantingSiteId, selectedOrganization.id));
+export default function SimplePlantingSiteMap({ hideAllControls, style }: SimplePlantingSiteMapProps): JSX.Element {
+  const { plantingSite } = usePlantingSiteData();
+
   const mapData = useMemo(() => {
     if (!plantingSite?.boundary) {
       return undefined;

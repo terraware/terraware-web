@@ -3,23 +3,14 @@ import React, { Box, Typography, useTheme } from '@mui/material';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useLocalization } from 'src/providers';
-import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
 import { getShortDate } from 'src/utils/dateFormatter';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-type TotalMortalityRateCardProps = {
-  plantingSiteId: number;
-};
-
-export default function TotalMortalityRateCard({ plantingSiteId }: TotalMortalityRateCardProps): JSX.Element {
+export default function TotalMortalityRateCard(): JSX.Element {
   const theme = useTheme();
   const locale = useLocalization();
-  const defaultTimeZone = useDefaultTimeZone();
-  const observation = useAppSelector((state) =>
-    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
-  );
+  const { latestObservation } = usePlantingSiteData();
 
   return (
     <OverviewItemCard
@@ -29,12 +20,12 @@ export default function TotalMortalityRateCard({ plantingSiteId }: TotalMortalit
           <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)}>
             {strings.formatString(
               strings.MORTALITY_RATE_CARD_TITLE,
-              observation?.completedTime ? getShortDate(observation.completedTime, locale.activeLocale) : ''
+              latestObservation?.completedTime ? getShortDate(latestObservation.completedTime, locale.activeLocale) : ''
             )}
           </Typography>
           <Box display='flex' sx={{ flexFlow: 'row wrap' }}>
             <Typography fontSize='84px' fontWeight={600} lineHeight={1}>
-              {observation?.mortalityRate ? <FormattedNumber value={observation?.mortalityRate} /> : '--'}
+              {latestObservation?.mortalityRate ? <FormattedNumber value={latestObservation?.mortalityRate} /> : '--'}
             </Typography>
             <Typography fontSize='84px' fontWeight={600} lineHeight={1}>
               %

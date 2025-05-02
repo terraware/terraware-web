@@ -4,28 +4,15 @@ import { Box, useTheme } from '@mui/material';
 
 import BarChart from 'src/components/common/Chart/BarChart';
 import { ChartDataset } from 'src/components/common/Chart/Chart';
-import useObservationSummaries from 'src/hooks/useObservationSummaries';
-import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
 import { truncate } from 'src/utils/text';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const MAX_ZONE_NAME_LENGTH = 20;
 
-type PlantingDensityPerZoneCardProps = {
-  plantingSiteId: number;
-};
-
-export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingDensityPerZoneCardProps): JSX.Element {
+export default function PlantingDensityPerZoneCard(): JSX.Element {
   const theme = useTheme();
-  const defaultTimeZone = useDefaultTimeZone();
-  const observation = useAppSelector((state) =>
-    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
-  );
-  const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
-  const summaries = useObservationSummaries(plantingSiteId);
+  const { plantingSite, observationSummaries } = usePlantingSiteData();
   const [labels, setLabels] = useState<string[]>();
   const [targets, setTargets] = useState<(number | null)[]>();
   const [actuals, setActuals] = useState<(number | null)[]>();
@@ -37,8 +24,10 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
       plantingSite.plantingZones?.forEach((zone) => {
         zoneDensities[zone.name] = [zone.targetPlantingDensity];
 
-        if (summaries && summaries.length > 0) {
-          const zoneFromObs = summaries[0].plantingZones.find((obsZone) => obsZone.plantingZoneId === zone.id);
+        if (observationSummaries && observationSummaries.length > 0) {
+          const zoneFromObs = observationSummaries[0].plantingZones.find(
+            (obsZone) => obsZone.plantingZoneId === zone.id
+          );
           zoneDensities[zone.name].push(zoneFromObs?.plantingDensity ?? null);
         }
       });
@@ -52,7 +41,7 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
       setActuals([]);
       setTooltipTitles([]);
     }
-  }, [plantingSite, observation, summaries]);
+  }, [plantingSite, observationSummaries]);
 
   const chartData = useMemo(() => {
     if (!labels?.length || !targets?.length) {
@@ -111,6 +100,7 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
           }}
           customTooltipLabel={(tooltipItem) => {
             const v = tooltipItem.dataset.data[tooltipItem.dataIndex];
+            // eslint-disable-next-line @typescript-eslint/no-base-to-string
             return Array.isArray(v) ? v[0].toString() : v ? v.toString() : '';
           }}
           customLegend

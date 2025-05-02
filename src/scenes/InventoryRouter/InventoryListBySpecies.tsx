@@ -150,10 +150,10 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
         updatedResult = nextResults?.map((uR) => {
           return {
             ...uR,
-            germinatingQuantity: numericFormatter.format(uR.germinatingQuantity),
-            notReadyQuantity: numericFormatter.format(uR.notReadyQuantity),
-            readyQuantity: numericFormatter.format(uR.readyQuantity),
-            totalQuantity: numericFormatter.format(uR.totalQuantity),
+            germinatingQuantity: numericFormatter.format(Number(uR.germinatingQuantity)),
+            notReadyQuantity: numericFormatter.format(Number(uR.notReadyQuantity)),
+            readyQuantity: numericFormatter.format(Number(uR.readyQuantity)),
+            totalQuantity: numericFormatter.format(Number(uR.totalQuantity)),
           };
         });
       } else {

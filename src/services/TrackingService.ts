@@ -6,7 +6,7 @@ import {
   ValidatePlantingSiteResponsePayload,
 } from 'src/types/PlantingSite';
 import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
-import { Delivery, PlantingSite, PlantingSiteReportedPlants } from 'src/types/Tracking';
+import { Delivery, PlantingSite } from 'src/types/Tracking';
 import { MonitoringPlotSearchResult, PlantingSiteSearchResult } from 'src/types/Tracking';
 
 import { isArray } from '../types/utils';
@@ -24,6 +24,7 @@ const DELIVERY_ENDPOINT = '/api/v1/tracking/deliveries/{id}';
 const REASSIGN_ENDPOINT = '/api/v1/tracking/deliveries/{id}/reassign';
 const REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/{id}/reportedPlants';
 const PLANTING_SITE_HISTORY_ENDPOINT = '/api/v1/tracking/sites/{id}/history/{historyId}';
+const PLANTING_SITE_HISTORIES_ENDPOINT = '/api/v1/tracking/sites/{id}/history';
 
 type ListPlantingSitesResponsePayload =
   paths[typeof PLANTING_SITES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -67,12 +68,11 @@ export type PlantingSitePutRequestBody =
 export type ReassignPostRequestBody =
   paths[typeof REASSIGN_ENDPOINT]['post']['requestBody']['content']['application/json'];
 
-export type SiteReportedPlantsData = {
-  site?: PlantingSiteReportedPlants;
-};
-
 export type GetPlantingSiteHistoryPayload =
   paths[typeof PLANTING_SITE_HISTORY_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+export type ListPlantingSiteHistoriesPayload =
+  paths[typeof PLANTING_SITE_HISTORIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 const httpPlantingSites = HttpService.root(PLANTING_SITES_ENDPOINT);
 const httpPlantingSitesValidate = HttpService.root(PLANTING_SITES_VALIDATE_ENDPOINT);
@@ -248,18 +248,12 @@ const getTotalPlantsInSite = async (organizationId: number, siteId: number): Pro
 /**
  * Get Reported Plants by Planting Site
  */
-const getReportedPlants = async (plantingSiteId: number): Promise<SiteReportedPlantsData & Response> => {
-  const response: SiteReportedPlantsData & Response = await HttpService.root(REPORTED_PLANTS_ENDPOINT).get<
-    PlantingSiteReportedPlantsPayload,
-    SiteReportedPlantsData
-  >(
-    {
-      urlReplacements: {
-        '{id}': plantingSiteId.toString(),
-      },
+const getReportedPlants = async (plantingSiteId: number): Promise<Response2<PlantingSiteReportedPlantsPayload>> => {
+  const response = await HttpService.root(REPORTED_PLANTS_ENDPOINT).get2<PlantingSiteReportedPlantsPayload>({
+    urlReplacements: {
+      '{id}': plantingSiteId.toString(),
     },
-    (data) => ({ site: data?.site })
-  );
+  });
 
   return response;
 };
@@ -276,6 +270,18 @@ async function searchPlantingSites(
     field: 'name',
     direction: 'Ascending',
   } as SearchSortOrder;
+
+  const additionalSearchNodes: SearchNodePayload[] = [];
+
+  if (searchField) {
+    if (isArray(searchField)) {
+      for (const field of searchField) {
+        additionalSearchNodes.push(field);
+      }
+    } else {
+      additionalSearchNodes.push(searchField);
+    }
+  }
 
   const params: SearchRequestPayload = {
     fields: [
@@ -302,20 +308,11 @@ async function searchPlantingSites(
           operation: 'field',
           values: [organizationId],
         },
+        ...additionalSearchNodes,
       ],
     },
     count: 0,
   };
-
-  if (searchField) {
-    if (isArray(searchField)) {
-      for (const field of searchField) {
-        params.search.children.push(field);
-      }
-    } else {
-      params.search.children.push(searchField);
-    }
-  }
 
   return (await SearchService.search(params)) as PlantingSiteSearchResult[];
 }
@@ -369,6 +366,14 @@ const getPlantingSiteHistory = async (
   ).get2<GetPlantingSiteHistoryPayload>();
 };
 
+const listPlantingSiteHistories = async (
+  plantingSiteId: number
+): Promise<Response2<ListPlantingSiteHistoriesPayload>> => {
+  return HttpService.root(
+    PLANTING_SITE_HISTORIES_ENDPOINT.replace('{id}', plantingSiteId.toString())
+  ).get2<ListPlantingSiteHistoriesPayload>();
+};
+
 /**
  * Exported functions
  */
@@ -387,6 +392,7 @@ const TrackingService = {
   searchPlantingSites,
   updatePlantingSite,
   getPlantingSiteHistory,
+  listPlantingSiteHistories,
 };
 
 export default TrackingService;

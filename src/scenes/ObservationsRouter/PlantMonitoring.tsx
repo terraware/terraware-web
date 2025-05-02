@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -7,13 +7,11 @@ import Card from 'src/components/common/Card';
 import { View } from 'src/components/common/ListMapSelector';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
-import { useOrganization } from 'src/providers';
 import {
-  selectAdHocObservationsResults,
+  selectAdHocObservationResults,
   selectObservationsResults,
 } from 'src/redux/features/observations/observationsSelectors';
-import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppSelector } from 'src/redux/store';
 import ObservationsDataView from 'src/scenes/ObservationsRouter/ObservationsDataView';
 import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
@@ -28,9 +26,7 @@ export type PlantMonitoringProps = SearchProps & {
 };
 
 export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Element {
-  const dispatch = useAppDispatch();
   const { selectedPlantingSite } = props;
-  const { selectedOrganization } = useOrganization();
   const [view, setView] = useState<View>('list');
   const theme = useTheme();
 
@@ -49,24 +45,18 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
     });
   }, [allObservationsResults, selectedPlantingSite]);
 
-  const allAdHocObservationsResults = useAppSelector(selectAdHocObservationsResults);
-  const adHocObservationsResults = useMemo(() => {
-    if (!allAdHocObservationsResults || !selectedPlantingSite?.id) {
+  const allAdHocObservationResults = useAppSelector(selectAdHocObservationResults);
+  const adHocObservationResults = useMemo(() => {
+    if (!allAdHocObservationResults || !selectedPlantingSite?.id) {
       return [];
     }
 
-    return allAdHocObservationsResults?.filter((observationResult) => {
+    return allAdHocObservationResults?.filter((observationResult) => {
       const matchesSite =
         selectedPlantingSite.id !== -1 ? observationResult.plantingSiteId === selectedPlantingSite.id : true;
       return matchesSite;
     });
-  }, [allAdHocObservationsResults, selectedPlantingSite]);
-
-  useEffect(() => {
-    if (selectedOrganization.id !== -1) {
-      void dispatch(requestPlantings(selectedOrganization.id));
-    }
-  }, [dispatch, selectedOrganization.id]);
+  }, [allAdHocObservationResults, selectedPlantingSite]);
 
   return (
     <Card>
@@ -112,11 +102,11 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
         )}
       </Box>
       {(selectedPlotSelection === 'assigned' && observationsResults === undefined) ||
-      (selectedPlotSelection === 'adHoc' && adHocObservationsResults === undefined) ? (
+      (selectedPlotSelection === 'adHoc' && adHocObservationResults === undefined) ? (
         <CircularProgress sx={{ margin: 'auto' }} />
       ) : selectedPlantingSite &&
         ((selectedPlotSelection === 'assigned' && observationsResults?.length) ||
-          (selectedPlotSelection === 'adHoc' && adHocObservationsResults?.length)) ? (
+          (selectedPlotSelection === 'adHoc' && adHocObservationResults?.length)) ? (
         <ObservationsDataView
           selectedPlantingSiteId={selectedPlantingSite.id}
           setView={setView}

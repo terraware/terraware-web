@@ -9,27 +9,20 @@ import ProgressChart from 'src/components/common/Chart/ProgressChart';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
 
 import PlantingDensityPerZoneCard from './PlantingDensityPerZoneCard';
 import PlantingSiteDensityCard from './PlantingSiteDensityCard';
 
 type PlantingDensityCardProps = {
-  plantingSiteId: number;
-  sitePlantingComplete: boolean;
   hasObservations: boolean;
 };
 
-export default function PlantingDensityCard({
-  plantingSiteId,
-  hasObservations,
-}: PlantingDensityCardProps): JSX.Element {
+export default function PlantingDensityCard({ hasObservations }: PlantingDensityCardProps): JSX.Element {
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
-
-  const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
+  const { plantingSite } = usePlantingSiteData();
 
   const totalArea = plantingSite?.areaHa ?? 0;
   const totalPlantedArea = useMemo(() => {
@@ -108,7 +101,7 @@ export default function PlantingDensityCard({
               </Tooltip>
             </Box>
             <Box paddingTop={2}>
-              <PlantingSiteDensityCard plantingSiteId={plantingSiteId} />
+              <PlantingSiteDensityCard />
             </Box>
           </Box>
           <div style={separatorStyles} />
@@ -126,7 +119,7 @@ export default function PlantingDensityCard({
           </Tooltip>
         </Box>
         <Box paddingTop={1}>
-          <PlantingDensityPerZoneCard plantingSiteId={plantingSiteId} />
+          <PlantingDensityPerZoneCard />
         </Box>
       </Box>
     </Card>

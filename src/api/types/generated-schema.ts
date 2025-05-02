@@ -3598,7 +3598,7 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        /** Updates information about a planting subzone. */
+        /** Updates the planting-completed state of a planting subzone. */
         put: operations["updatePlantingSubzone"];
         post?: never;
         delete?: never;
@@ -7774,6 +7774,7 @@ export interface components {
             plantsSinceLastObservation: number;
             /** Format: int32 */
             progressPercent?: number;
+            species: components["schemas"]["ReportedSpeciesPayload"][];
             /** Format: int32 */
             totalPlants: number;
         };
@@ -7823,7 +7824,12 @@ export interface components {
             /** Format: int64 */
             id: number;
             /** Format: int32 */
+            plantsSinceLastObservation: number;
+            species: components["schemas"]["ReportedSpeciesPayload"][];
+            /** Format: int32 */
             totalPlants: number;
+            /** Format: int32 */
+            totalSpecies: number;
         };
         PlantingSubzoneSpeciesPayload: {
             commonName?: string;
@@ -7915,8 +7921,11 @@ export interface components {
             plantsSinceLastObservation: number;
             /** Format: int32 */
             progressPercent: number;
+            species: components["schemas"]["ReportedSpeciesPayload"][];
             /** Format: int32 */
             totalPlants: number;
+            /** Format: int32 */
+            totalSpecies: number;
         };
         Point: Omit<WithRequired<components["schemas"]["Geometry"], "type">, "type"> & {
             /**
@@ -8366,6 +8375,14 @@ export interface components {
             /** @enum {string} */
             type: "Activity" | "Output" | "Outcome" | "Impact";
             underperformanceJustification?: string;
+        };
+        ReportedSpeciesPayload: {
+            /** Format: int64 */
+            id: number;
+            /** Format: int32 */
+            plantsSinceLastObservation: number;
+            /** Format: int32 */
+            totalPlants: number;
         };
         RescheduleObservationRequestPayload: {
             /**
