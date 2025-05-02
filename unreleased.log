@@ -1,3 +1,4 @@
+6603c213e12 Clean reports table when changing project and no results (#3929)
 b769c0471f7 SW-6819 Edit Page text/dropdown fields (#3922)
 e406dcaaf04 Fix empty-function, empty-object, object-shorthand linting issues (#3924)
 b4f5e1954e1 Fix jsdoc-indentation linting issues (#3923)
