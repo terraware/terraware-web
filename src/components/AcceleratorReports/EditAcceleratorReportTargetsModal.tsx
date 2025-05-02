@@ -22,6 +22,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import {
   AcceleratorReport,
+  ReportProjectMetricEntries,
   ReportStandardMetricEntries,
   ReportSystemMetricEntries,
   ReviewAcceleratorReportMetricsRequest,
@@ -167,7 +168,11 @@ export default function EditAcceleratorReportTargetsModal({
               ...reportMetric,
               ...metric,
             };
-            const metrics = reportClone?.[metricType as keyof AcceleratorReport] as any[];
+            const metrics = reportClone?.[metricType as keyof AcceleratorReport] as (
+              | ReportProjectMetricEntries
+              | ReportStandardMetricEntries
+              | ReportSystemMetricEntries
+            )[];
             metrics[reportMetricIndex] = reportMetricUpdate;
           });
         });
