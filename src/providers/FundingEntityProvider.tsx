@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
 import { requestFundingEntity } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';

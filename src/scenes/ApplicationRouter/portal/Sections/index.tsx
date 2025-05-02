@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import { APP_PATHS } from 'src/constants';

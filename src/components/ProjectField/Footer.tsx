@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Grid } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 
 import strings from 'src/strings';
 import { Project, ProjectMeta } from 'src/types/Project';
@@ -13,8 +13,10 @@ type ProjectProfileFooterProps = {
 };
 
 const ProjectProfileFooter = ({ project, projectMeta }: ProjectProfileFooterProps) => {
+  const theme = useTheme();
+
   return (
-    <Grid container>
+    <Grid container paddingTop={theme.spacing(1)}>
       <ProjectFieldInlineMeta
         date={project?.createdTime}
         dateLabel={strings.CREATED_ON}

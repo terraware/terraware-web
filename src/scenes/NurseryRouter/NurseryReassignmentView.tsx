@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 
 import { Box, CircularProgress, Grid, useTheme } from '@mui/material';
 import { ErrorBox, TableColumnType } from '@terraware/web-components';

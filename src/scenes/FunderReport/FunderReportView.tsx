@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { SelectT } from '@terraware/web-components';

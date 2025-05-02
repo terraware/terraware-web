@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { useTheme } from '@mui/material';
 import { DropdownItem, PopoverMenu } from '@terraware/web-components';

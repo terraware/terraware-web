@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import { Grid } from '@mui/material';
 import { Checkbox, Dropdown } from '@terraware/web-components';

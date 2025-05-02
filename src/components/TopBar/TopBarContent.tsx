@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { Box, Grid, IconButton, useTheme } from '@mui/material';
 import { Svg } from '@terraware/web-components';

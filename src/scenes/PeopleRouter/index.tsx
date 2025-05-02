@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 
 import NewPersonView from 'src/scenes/PeopleRouter/NewPersonView';
 import PeopleListView from 'src/scenes/PeopleRouter/PeopleListView';

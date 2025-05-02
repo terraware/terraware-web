@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
 import { DeliverableWithOverdue } from 'src/types/Deliverables';

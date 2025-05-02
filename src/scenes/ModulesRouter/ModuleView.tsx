@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import { DateTime } from 'luxon';
 

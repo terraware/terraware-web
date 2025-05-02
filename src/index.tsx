@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes } from 'react-router';
 
 import { ThemeProvider } from '@mui/material';
 
@@ -22,12 +22,7 @@ root.render(
   // of the HTML which is later parsed by PagedJS
   // <React.StrictMode>
   <React.Suspense fallback={strings.LOADING}>
-    <Router
-      future={{
-        v7_relativeSplatPath: true,
-        v7_startTransition: true,
-      }}
-    >
+    <Router>
       <Routes>
         <Route
           path={APP_PATHS.ERROR}

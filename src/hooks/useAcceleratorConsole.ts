@@ -1,4 +1,4 @@
-import { useMatch } from 'react-router-dom';
+import { useMatch } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
 import { useUser } from 'src/providers';

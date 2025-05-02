@@ -1,5 +1,5 @@
 import React, { CSSProperties, MouseEvent, ReactNode, SyntheticEvent } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router';
 
 import { Link as MuiLink, useTheme } from '@mui/material';
 

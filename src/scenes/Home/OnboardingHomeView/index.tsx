@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { Box, Container, Grid, Typography } from '@mui/material';
 import { IconName } from '@terraware/web-components';

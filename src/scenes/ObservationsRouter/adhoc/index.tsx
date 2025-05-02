@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 
 import { Box, Grid, Tooltip, Typography, useTheme } from '@mui/material';
 import { Icon, Textfield } from '@terraware/web-components';
@@ -66,6 +66,9 @@ export default function ObservationMonitoringPlot(): JSX.Element {
   const data: Record<string, any>[] = useMemo(() => {
     const handleMissingData = (num?: number) => (!monitoringPlot?.completedTime && !num ? '' : num);
 
+    const swCoordinatesLat = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[0];
+    const swCoordinatesLong = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[1];
+
     return [
       { label: strings.DATE, value: monitoringPlot?.completedDate },
       {
@@ -97,6 +100,11 @@ export default function ObservationMonitoringPlot(): JSX.Element {
         value: monitoringPlot?.conditions.map((condition) => getConditionString(condition)).join(', ') || '- -',
       },
       { label: strings.FIELD_NOTES, value: monitoringPlot?.notes || '- -', text: true },
+      {
+        label: strings.PLOT_LOCATION,
+        value: `${String(strings.formatString(String(strings.SW_CORNER_LATITUDE), String(swCoordinatesLat)))}\n${String(strings.formatString(String(strings.SW_CORNER_LONGITUDE), String(swCoordinatesLong)))}`,
+        text: true,
+      },
     ];
   }, [activeLocale, defaultTimeZone, monitoringPlot, plantingSite]);
 

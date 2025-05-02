@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 import { Box } from '@mui/material';
 import { Select, TableColumnType } from '@terraware/web-components';

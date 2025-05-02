@@ -81,7 +81,13 @@ export type NewMetric = components['schemas']['NewMetricPayload'];
 
 export type AcceleratorReport = components['schemas']['AcceleratorReportPayload'];
 
-export type SystemMetricName = 'Mortality Rate' | 'Seedlings' | 'Seeds Collected' | 'Trees Planted' | 'Species Planted';
+export type SystemMetricName =
+  | 'Mortality Rate'
+  | 'Seedlings'
+  | 'Seeds Collected'
+  | 'Trees Planted'
+  | 'Species Planted'
+  | 'Hectares Planted';
 export type AcceleratorReportStatus = components['schemas']['AcceleratorReportPayload']['status'];
 export const AcceleratorReportStatuses: AcceleratorReportStatus[] = [
   'Not Submitted',

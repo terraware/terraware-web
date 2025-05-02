@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
 import { SiteType } from 'src/types/PlantingSite';
