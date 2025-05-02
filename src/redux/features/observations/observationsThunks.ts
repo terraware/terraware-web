@@ -7,10 +7,10 @@ import { ObservationsService } from 'src/services';
 import strings from 'src/strings';
 
 import {
+  setAdHocObservationResultsAction,
   setAdHocObservationsAction,
   setObservationsAction,
   setObservationsResultsAction,
-  setadHocObservationResultsAction,
 } from './observationsSlice';
 
 /**
@@ -154,7 +154,7 @@ export const requestAdHocObservationResults = (organizationId: number) => {
       const response = await ObservationsService.listAdHocObservationResults(organizationId);
       const { error, observations } = response;
       dispatch(
-        setadHocObservationResultsAction({
+        setAdHocObservationResultsAction({
           error,
           observations,
         })

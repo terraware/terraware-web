@@ -23,6 +23,7 @@ import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/S
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { isAfter } from 'src/utils/dateUtils';
+
 import MortalityRateCard from './components/MortalityRateCard';
 import PlantingDensityCard from './components/PlantingDensityCard';
 import PlantingSiteTrendsCard from './components/PlantingSiteTrendsCard';

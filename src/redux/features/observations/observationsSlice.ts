@@ -181,7 +181,7 @@ export const adHocObservationResultsSlice = createSlice({
   name: 'adHocobservationResultsSlice',
   initialState: initialAdHocResultsState,
   reducers: {
-    setadHocObservationResultsAction: (state, action: PayloadAction<AdHocResultsData>) => {
+    setAdHocObservationResultsAction: (state, action: PayloadAction<AdHocResultsData>) => {
       const data: AdHocResultsData = action.payload;
       state.error = data.error;
       state.observations = data.observations;
@@ -189,7 +189,7 @@ export const adHocObservationResultsSlice = createSlice({
   },
 });
 
-export const { setadHocObservationResultsAction } = adHocObservationResultsSlice.actions;
+export const { setAdHocObservationResultsAction } = adHocObservationResultsSlice.actions;
 
 const initialStatePlantingSiteObservations: { [key: string]: StatusT<Observation[]> } = {};
 export const plantingSiteObservationsSlice = createSlice({
