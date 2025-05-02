@@ -32,6 +32,11 @@ export default function PhotoSelectorWithPreview(props: PhotoSelectorWithPreview
 
   useEffect(() => {
     onPhotoChanged(fileData);
+    return () => {
+      if (fileData) {
+        URL.revokeObjectURL(fileData.url);
+      }
+    };
   }, [fileData, onPhotoChanged]);
 
   const handleSetFiles = (files: File[]) => {
