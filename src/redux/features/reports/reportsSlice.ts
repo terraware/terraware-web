@@ -164,7 +164,7 @@ const projectMetricUpdateSlice = createSlice({
 });
 
 /**
- * Update Accelerator Reports Metrics
+ * Update Accelerator Report Metrics
  */
 const initialReviewManyAcceleratorReportMetrics: { [key: string]: StatusT<number> } = {};
 
