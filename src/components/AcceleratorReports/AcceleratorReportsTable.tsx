@@ -122,6 +122,8 @@ export default function AcceleratorReportsTable(): JSX.Element {
           });
         return reports || [];
       });
+    } else {
+      setAcceleratorReports([]);
     }
   }, [projectReports]);
 
