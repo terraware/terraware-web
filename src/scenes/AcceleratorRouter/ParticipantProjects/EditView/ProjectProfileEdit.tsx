@@ -611,7 +611,7 @@ const ProjectProfileEdit = () => {
                 title={'Main Photo'}
                 onPhotosChanged={(value) => setMainPhoto(value[0])}
                 uploadText={strings.UPLOAD_PHOTO}
-                uploadDescription={strings.UPLOAD_PHOTO_DESCRIPTION}
+                uploadDescription={strings.UPLOAD_PHOTO_DESCR_LANDSCAPE_3_2}
                 chooseFileText={strings.CHOOSE_FILE}
                 replaceFileText={strings.REPLACE_FILE}
                 includeCaption={false}
@@ -633,7 +633,7 @@ const ProjectProfileEdit = () => {
                 title={'Map Photo'}
                 onPhotosChanged={(value) => setMapPhoto(value[0])}
                 uploadText={strings.UPLOAD_PHOTO}
-                uploadDescription={strings.UPLOAD_PHOTO_DESCRIPTION}
+                uploadDescription={strings.UPLOAD_PHOTO_DESCR_LANDSCAPE_3_2}
                 chooseFileText={strings.CHOOSE_FILE}
                 replaceFileText={strings.REPLACE_FILE}
                 includeCaption={false}
