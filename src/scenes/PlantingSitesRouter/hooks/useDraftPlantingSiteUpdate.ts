@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { APP_PATHS } from 'src/constants';
 import { Statuses } from 'src/redux/features/asyncUtils';
@@ -42,7 +42,7 @@ export type Response = {
  */
 export default function useDraftPlantingSiteUpdate(): Response {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
 
   const [draftRequest, setDraftRequest] = useState<Data>();
@@ -96,7 +96,7 @@ export default function useDraftPlantingSiteUpdate(): Response {
     if (draftResult?.status === 'success' && draftRequest) {
       if (redirect) {
         snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
-        void navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${draftRequest.draft.id}`));
+        navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${draftRequest.draft.id}`));
       } else {
         setUpdatedDraft(draftRequest);
       }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner, FormButton } from '@terraware/web-components';
@@ -32,7 +33,7 @@ export default function ReportEdit(): JSX.Element {
   const { user } = useUser();
   const theme = useTheme();
 
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
 
   const snackbar = useSnackbar();
 
@@ -154,7 +155,7 @@ export default function ReportEdit(): JSX.Element {
 
       // then navigate to view
       if (reportId) {
-        void navigate({ pathname: APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', reportId) });
+        navigate({ pathname: APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', reportId) });
       }
     }
   };
@@ -351,7 +352,7 @@ export default function ReportEdit(): JSX.Element {
         const submitResult = await SeedFundReportService.submitReport(reportIdInt);
         if (submitResult.requestSucceeded && reportId && selectedOrganization.id !== -1) {
           reloadOrganizations(selectedOrganization.id);
-          void navigate(
+          navigate(
             { pathname: APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', reportId) },
             { replace: true }
           );
@@ -397,7 +398,7 @@ export default function ReportEdit(): JSX.Element {
 
   const redirectToReportView = () => {
     if (reportId) {
-      void navigate(APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', reportId));
+      navigate(APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', reportId));
     }
   };
 

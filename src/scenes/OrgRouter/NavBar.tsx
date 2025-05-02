@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
-import { useMatch, useNavigate } from 'react-router';
+import { useMatch } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
@@ -45,7 +46,7 @@ export default function NavBar({
   const dispatch = useAppDispatch();
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
   const { isDesktop, isMobile } = useDeviceInfo();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const mixpanel = useMixpanel();
   const isReportsEnabled = isEnabled('Assigning and Collecting Reports');
 
@@ -91,7 +92,7 @@ export default function NavBar({
     (path: string) => {
       closeNavBar();
       if (path) {
-        void navigate(path);
+        navigate(path);
       }
     },
     [closeNavBar, navigate]

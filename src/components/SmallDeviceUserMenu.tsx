@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import {
   Box,
@@ -40,7 +40,7 @@ export default function SmallDeviceUserMenu({
     useOrganization();
   const { user } = useUser();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
@@ -68,7 +68,7 @@ export default function SmallDeviceUserMenu({
   };
 
   const navigateTo = (url: string) => {
-    void navigate(url);
+    navigate(url);
   };
 
   const handleToggle = () => {
@@ -101,7 +101,7 @@ export default function SmallDeviceUserMenu({
   const selectOrganization = (newlySelectedOrg: Organization) => {
     setSelectedOrganization((currentlySelectedOrg: Organization | undefined) => {
       if (newlySelectedOrg.id !== currentlySelectedOrg?.id) {
-        void navigate({ pathname: APP_PATHS.HOME, search: `organizationId=${newlySelectedOrg.id}` });
+        navigate({ pathname: APP_PATHS.HOME, search: `organizationId=${newlySelectedOrg.id}` });
       }
       return newlySelectedOrg;
     });

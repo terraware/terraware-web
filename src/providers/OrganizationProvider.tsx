@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
@@ -33,7 +33,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const [orgPreferenceForId, setOrgPreferenceForId] = useState<number>(defaultSelectedOrg.id);
   const [orgAPIRequestStatus, setOrgAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
   const [organizations, setOrganizations] = useState<Organization[]>();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const query = useQuery();
   const location = useStateLocation();
   const { user, userPreferences, updateUserPreferences, bootstrapped: userBootstrapped } = useUser();
@@ -85,7 +85,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   }, [selectedOrganization]);
 
   const redirectAndNotify = (organization: Organization) => {
-    void navigate({ pathname: APP_PATHS.HOME, search: `organizationId=${organization.id}&newOrg=true` });
+    navigate({ pathname: APP_PATHS.HOME, search: `organizationId=${organization.id}&newOrg=true` });
   };
 
   useEffect(() => {
@@ -129,7 +129,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
           }
           if (queryOrganizationId !== orgToUse.id.toString()) {
             query.set('organizationId', orgToUse.id.toString());
-            void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+            navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
           }
         }
       }
@@ -137,7 +137,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       if (queryOrganizationId && (!orgToUse || isAcceleratorRoute)) {
         // user does not belong to any orgs, clear the url param org id
         query.delete('organizationId');
-        void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+        navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       }
     }
   }, [
@@ -170,7 +170,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
           window.location.reload();
         }
       } else {
-        void navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
+        navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
       }
     }
   }, [orgAPIRequestStatus]);

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -107,7 +107,7 @@ export default function OrgObservationsListView({
   const { activeLocale } = useLocalization();
   const [results, setResults] = useState<any>([]);
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
   const [endObservationModalOpened, setEndObservationModalOpened] = useState(false);
   const [selectedObservation, setSelectedObservation] = useState<any>();
@@ -205,7 +205,7 @@ export default function OrgObservationsListView({
 
   const goToRescheduleObservation = useCallback(
     (observationId: number) => {
-      void navigate(APP_PATHS.RESCHEDULE_OBSERVATION.replace(':observationId', observationId.toString()));
+      navigate(APP_PATHS.RESCHEDULE_OBSERVATION.replace(':observationId', observationId.toString()));
     },
     [navigate]
   );

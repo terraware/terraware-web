@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
-import { matchPath, useMatch, useNavigate } from 'react-router';
+import { matchPath, useMatch } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { NavSection, theme } from '@terraware/web-components';
 
@@ -19,7 +20,7 @@ type NavBarProps = {
 };
 export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarProps): JSX.Element | null {
   const { isDesktop } = useDeviceInfo();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
 
   const { applicationSections, selectedApplication } = useApplicationData();
 
@@ -36,7 +37,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
     (path: string) => {
       closeNavBar();
       if (path && selectedApplication) {
-        void navigate(path.replace(':applicationId', `${selectedApplication.id}`));
+        navigate(path.replace(':applicationId', `${selectedApplication.id}`));
       }
     },
     [selectedApplication]

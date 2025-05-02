@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
@@ -18,7 +18,7 @@ import PersonForm from './PersonForm';
 
 const NewView = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const updatePerson = useUpdatePerson();
 

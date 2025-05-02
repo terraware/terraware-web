@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -49,7 +50,7 @@ export default function ObservationPlantingZone(): JSX.Element {
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const defaultTimeZone = useDefaultTimeZone();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const params = useParams<{
     plantingSiteId: string;
     observationId: string;
@@ -126,7 +127,7 @@ export default function ObservationPlantingZone(): JSX.Element {
 
   useEffect(() => {
     if (!plantingZone) {
-      void navigate(
+      navigate(
         APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', `${plantingSiteId}`).replace(
           ':observationId',
           `${observationId}`

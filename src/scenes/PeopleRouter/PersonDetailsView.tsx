@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
@@ -21,7 +22,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 export default function PersonDetailsView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { personId } = useParams<{ personId: string }>();
   const [person, setPerson] = useState<OrganizationUser>();
   const { isMobile } = useDeviceInfo();
@@ -35,7 +36,7 @@ export default function PersonDetailsView(): JSX.Element {
           if (selectedUser) {
             setPerson(selectedUser);
           } else {
-            void navigate(APP_PATHS.PEOPLE);
+            navigate(APP_PATHS.PEOPLE);
           }
         }
       };
@@ -54,7 +55,7 @@ export default function PersonDetailsView(): JSX.Element {
       const newLocation = {
         pathname: APP_PATHS.PEOPLE_EDIT.replace(':personId', personId),
       };
-      void navigate(newLocation);
+      navigate(newLocation);
     }
   };
 

@@ -2,7 +2,7 @@
  * Nursery plantings and withdrawals
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Tabs } from '@terraware/web-components';
@@ -30,7 +30,7 @@ export default function NurseryPlantingsAndWithdrawalsView({ reloadTracking }: N
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const query = useQuery();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const contentRef = useRef(null);
   const dispatch = useAppDispatch();
@@ -41,7 +41,7 @@ export default function NurseryPlantingsAndWithdrawalsView({ reloadTracking }: N
   const onTabChange = useCallback(
     (newTab: string) => {
       query.set('tab', newTab);
-      void navigate(getLocation(location.pathname, location, query.toString()));
+      navigate(getLocation(location.pathname, location, query.toString()));
     },
     [query, navigate, location]
   );

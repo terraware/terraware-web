@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -49,7 +49,7 @@ export default function CreateAccession(): JSX.Element | null {
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
@@ -129,7 +129,7 @@ export default function CreateAccession(): JSX.Element | null {
   };
 
   const goToAccessions = () => {
-    void navigate(accessionsDatabase);
+    navigate(accessionsDatabase);
   };
 
   const hasErrors = () => {
@@ -149,8 +149,8 @@ export default function CreateAccession(): JSX.Element | null {
         await SeedBankService.uploadAccessionPhotos(response.id, photos);
       }
 
-      void navigate(accessionsDatabase, { replace: true });
-      void navigate({
+      navigate(accessionsDatabase, { replace: true });
+      navigate({
         pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', response.id.toString()),
       });
     } else {

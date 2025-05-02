@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Grid } from '@mui/material';
 import { SortOrder } from '@terraware/web-components';
@@ -49,7 +49,7 @@ const columns = (): TableColumnType[] => [
 export default function NurseryWithdrawalsTable(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const query = useQuery();
   const subzoneParam = query.get('subzoneName');
@@ -144,7 +144,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   }, [selectedOrganization]);
 
   const onWithdrawalClicked = (withdrawal: any) => {
-    void navigate({
+    navigate({
       pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', withdrawal.delivery_id),
     });
   };
@@ -242,7 +242,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   useEffect(() => {
     if (siteParam) {
       query.delete('siteName');
-      void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       setFilters((curr) => ({
         ...curr,
         destinationName: {
@@ -258,7 +258,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   useEffect(() => {
     if (subzoneParam) {
       query.delete('subzoneName');
-      void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       setFilters((curr) => ({
         ...curr,
         plantingSubzoneNames: {

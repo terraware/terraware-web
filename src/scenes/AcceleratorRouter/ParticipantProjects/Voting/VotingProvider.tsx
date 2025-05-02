@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { APP_PATHS } from 'src/constants';
 import { selectProject } from 'src/redux/features/projects/projectsSelectors';
@@ -17,7 +18,7 @@ export type Props = {
 };
 
 const VotingProvider = ({ children }: Props): JSX.Element => {
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const query = useQuery();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
@@ -34,7 +35,7 @@ const VotingProvider = ({ children }: Props): JSX.Element => {
   const [votingData, setVotingData] = useState<VotingData>({ project });
 
   const goToProjects = useCallback(() => {
-    void navigate({ pathname: APP_PATHS.ACCELERATOR_OVERVIEW }); // TODO switch to project management lists page
+    navigate({ pathname: APP_PATHS.ACCELERATOR_OVERVIEW }); // TODO switch to project management lists page
   }, [navigate]);
 
   // Redirect to project management list page if projectId is invalid.

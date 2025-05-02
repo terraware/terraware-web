@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
@@ -35,11 +35,11 @@ const stopBubblingEvent = (event?: React.MouseEvent) => {
 export default function PageCard(props: PageCardProps): JSX.Element {
   const { cardIsClickable = true, description, icon, id, link, linkStyle, linkText, name, onClick } = props;
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
 
   const goToPage = () => {
-    void navigate({ pathname: link });
+    navigate({ pathname: link });
   };
 
   const handleOnClick = () => {

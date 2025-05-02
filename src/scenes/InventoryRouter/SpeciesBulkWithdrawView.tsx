@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import BatchWithdrawFlow from 'src/components/BatchWithdrawFlow';
 import { APP_PATHS } from 'src/constants';
@@ -16,7 +16,7 @@ export default function SpeciesBulkWithdrawView(props: SpeciesBulkWithdrawViewCo
   const [speciesIds, setSpeciesIds] = useState<string[]>();
   const [batchIds, setBatchIds] = useState<string[]>();
   const [source, setSource] = useState<string | null>();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const query = useQuery();
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function SpeciesBulkWithdrawView(props: SpeciesBulkWithdrawViewCo
       setSource(query.get('source'));
     } else {
       // return to inventory page if we came here from some bad url (no valid species)
-      void navigate({ pathname: APP_PATHS.INVENTORY });
+      navigate({ pathname: APP_PATHS.INVENTORY });
     }
   }, [query, navigate]);
 
@@ -41,7 +41,7 @@ export default function SpeciesBulkWithdrawView(props: SpeciesBulkWithdrawViewCo
           setBatchIds(ids);
         } else {
           // return to inventory page if we came here from some bad url (no valid species)
-          void navigate({ pathname: APP_PATHS.INVENTORY });
+          navigate({ pathname: APP_PATHS.INVENTORY });
         }
       }
     };

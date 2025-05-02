@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, Link as LinkMUI, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, Icon, Tabs } from '@terraware/web-components';
@@ -49,7 +50,7 @@ export default function Accession2View(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { userPreferences } = useUser();
   const query = useQuery();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const { accessionId } = useParams<{ accessionId: string }>();
   const [accession, setAccession] = useState<Accession>();
@@ -179,7 +180,7 @@ export default function Accession2View(): JSX.Element {
 
   const handleChange = (newValue: string) => {
     query.set('tab', newValue);
-    void navigate(getLocation(location.pathname, location, query.toString()));
+    navigate(getLocation(location.pathname, location, query.toString()));
   };
 
   const linkStyle = {

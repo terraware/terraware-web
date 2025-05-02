@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Tabs } from '@terraware/web-components';
@@ -50,7 +51,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
   const batch = useAppSelector(selectBatch(batchId || -1));
   const tab = initializeTab(query.get('tab'));
   const [activeTab, setActiveTab] = useState<string>(tab);
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const [inventorySpecies, setInventorySpecies] = useState<Species>();
   const [inventoryNursery, setInventoryNursery] = useState<Facility>();
@@ -101,7 +102,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
   const onTabChange = useCallback(
     (newTab: string) => {
       query.set('tab', newTab);
-      void navigate(getLocation(location.pathname, location, query.toString()));
+      navigate(getLocation(location.pathname, location, query.toString()));
     },
     [query, navigate, location]
   );
@@ -179,7 +180,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
               <Button
                 label={strings.WITHDRAW}
                 onClick={() =>
-                  void navigate({
+                  navigate({
                     pathname: APP_PATHS.BATCH_WITHDRAW,
                     search: `?batchId=${batchId.toString()}&source=${window.location.pathname}`,
                   })

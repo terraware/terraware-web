@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import {
   Badge,
@@ -56,7 +57,7 @@ type NotificationsDropdownProps = {
 
 export default function NotificationsDropdown(props: NotificationsDropdownProps): JSX.Element {
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { organizationId, reloadOrganizationData } = props;
   // notificationsInterval value is only being used when it is set.
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
@@ -134,7 +135,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   };
 
   const goToSettings = () => {
-    void navigate({ pathname: APP_PATHS.MY_ACCOUNT });
+    navigate({ pathname: APP_PATHS.MY_ACCOUNT });
     onPopoverClose();
   };
 

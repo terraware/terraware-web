@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { DateTime } from 'luxon';
@@ -31,7 +32,7 @@ import EventsTable from './EventsTable';
 
 export default function EventEditView(): JSX.Element {
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { moduleId } = useParams<{ moduleId: string }>();
 
   const { events, module } = useGetModule(Number(moduleId));
@@ -85,7 +86,7 @@ export default function EventEditView(): JSX.Element {
   }, [responseDelete]);
 
   const goToEvent = () => {
-    void navigate(APP_PATHS.ACCELERATOR_MODULE_CONTENT.replace(':moduleId', moduleId || ''));
+    navigate(APP_PATHS.ACCELERATOR_MODULE_CONTENT.replace(':moduleId', moduleId || ''));
   };
 
   const save = () => {

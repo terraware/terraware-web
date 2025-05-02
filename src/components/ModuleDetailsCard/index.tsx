@@ -45,7 +45,7 @@ const MODULE_CONTENTS = (module: ModuleDetails, navigate: (type: ModuleContentTy
       type: 'additionalResources',
       label: strings.ADDITIONAL_RESOURCES,
       onClick: (type) => {
-        void navigate(type);
+        navigate(type);
       },
     });
   }
@@ -55,7 +55,7 @@ const MODULE_CONTENTS = (module: ModuleDetails, navigate: (type: ModuleContentTy
       type: 'preparationMaterials',
       label: strings.PREPARATION_MATERIALS,
       onClick: (type) => {
-        void navigate(type);
+        navigate(type);
       },
     });
   }

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, List, ListItem, Typography, useTheme } from '@mui/material';
 import { DropdownItem } from '@terraware/web-components';
@@ -44,7 +44,7 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
 }: GenericSiteViewProps<T>): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const tz = useLocationTimeZone().get(plantingSite);
   const [plantingSeasons, setPlantingSeasons] = useState<PlantingSeason[]>([]);
   const [search, setSearch] = useState<string>('');
@@ -64,7 +64,7 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
       const editPlantingSiteLocation = {
         pathname: editUrl.replace(':plantingSiteId', `${plantingSite.id}`),
       };
-      void navigate(editPlantingSiteLocation);
+      navigate(editPlantingSiteLocation);
     }
   };
 

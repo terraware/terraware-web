@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, CircularProgress, Container, Grid, useTheme } from '@mui/material';
 import { DropdownItem, Message } from '@terraware/web-components';
@@ -95,7 +96,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const { reloadUserPreferences } = useUser();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const query = useQuery();
   const location = useStateLocation();
   const { sessionFilters, setSessionFilters } = useSessionFilters('accessions');
@@ -301,7 +302,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     }
 
     if ((facilityId && selectedOrganization) || subLocationName) {
-      void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       setSearchCriteria(newSearchCriteria);
 
       // add seed bank and sub-location columns to show the filtered values as needed
@@ -470,7 +471,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         // eslint-disable-next-line no-restricted-globals
         state: { from: location.pathname },
       };
-      void navigate(seedCollectionLocation);
+      navigate(seedCollectionLocation);
     }
   };
 
@@ -518,14 +519,14 @@ export default function Database(props: DatabaseProps): JSX.Element {
   };
 
   const handleViewCollections = () => {
-    void navigate(APP_PATHS.CHECKIN);
+    navigate(APP_PATHS.CHECKIN);
   };
 
   const goTo = (appPath: string) => {
     const appPathLocation = {
       pathname: appPath,
     };
-    void navigate(appPathLocation);
+    navigate(appPathLocation);
   };
 
   const onSeedBankForImportSelected = (selectedFacilityOnModal: Facility | undefined) => {

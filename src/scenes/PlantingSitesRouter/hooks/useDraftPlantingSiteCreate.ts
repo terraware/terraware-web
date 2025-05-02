@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { APP_PATHS } from 'src/constants';
 import { Statuses } from 'src/redux/features/asyncUtils';
@@ -37,7 +37,7 @@ export type Response = {
  */
 export default function useDraftPlantingSiteCreate(): Response {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
 
   const [createdDraft, setCreatedDraft] = useState<Data | undefined>();
@@ -66,10 +66,10 @@ export default function useDraftPlantingSiteCreate(): Response {
   useEffect(() => {
     if (draftResult?.status === 'success' && draftResult?.data && draftRequest) {
       const id = draftResult.data;
-      void navigate(APP_PATHS.PLANTING_SITES_DRAFT_EDIT.replace(':plantingSiteId', `${id}`), { replace: true });
+      navigate(APP_PATHS.PLANTING_SITES_DRAFT_EDIT.replace(':plantingSiteId', `${id}`), { replace: true });
       if (redirect) {
         snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
-        void navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${id}`));
+        navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${id}`));
       } else {
         setCreatedDraft({
           ...draftRequest,

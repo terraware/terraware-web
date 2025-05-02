@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Container, Grid, List, ListItem, Typography, useTheme } from '@mui/material';
 import { Message, TableColumnType, Tabs } from '@terraware/web-components';
@@ -45,7 +45,7 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
 
   const reportsSettings = useAppSelector(selectReportsSettings);
 
@@ -58,11 +58,11 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
 
       switch (newTab) {
         case 'reports': {
-          void navigate(APP_PATHS.SEED_FUND_REPORTS);
+          navigate(APP_PATHS.SEED_FUND_REPORTS);
           break;
         }
         case 'settings': {
-          void navigate(APP_PATHS.SEED_FUND_REPORTS_SETTINGS);
+          navigate(APP_PATHS.SEED_FUND_REPORTS_SETTINGS);
         }
       }
     },

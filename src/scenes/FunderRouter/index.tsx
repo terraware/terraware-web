@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { Route, Routes, useNavigate } from 'react-router';
+import { Route, Routes } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box } from '@mui/material';
 
@@ -10,7 +11,7 @@ import FunderHome from 'src/scenes/FunderHome';
 
 export default function FunderRouter() {
   const { user } = useUser();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
 
   const contentStyles = {
     height: '100%',
@@ -22,7 +23,7 @@ export default function FunderRouter() {
 
   useEffect(() => {
     if (navigate && user && user.userType !== 'Funder') {
-      void navigate(APP_PATHS.HOME);
+      navigate(APP_PATHS.HOME);
     }
   }, [navigate, user]);
 

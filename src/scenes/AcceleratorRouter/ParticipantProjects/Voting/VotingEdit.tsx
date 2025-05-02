@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, useTheme } from '@mui/material';
 
@@ -20,7 +20,7 @@ import { useVotingData } from './VotingContext';
 import VotingWrapper from './VotingWrapper';
 
 const VotingEdit = () => {
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const query = useQuery();
   const dispatch = useAppDispatch();
@@ -37,7 +37,7 @@ const VotingEdit = () => {
     if (!project) {
       return;
     }
-    void navigate(
+    navigate(
       getLocation(
         APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${project.id}`),
         location,

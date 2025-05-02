@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, Tooltip, Typography, useTheme } from '@mui/material';
 import { Icon, Textfield } from '@terraware/web-components';
@@ -30,7 +31,7 @@ export default function ObservationMonitoringPlot(): JSX.Element {
     monitoringPlotId: string;
   }>();
   const defaultTimeZone = useDefaultTimeZone();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
@@ -122,7 +123,7 @@ export default function ObservationMonitoringPlot(): JSX.Element {
 
   useEffect(() => {
     if (plantingZoneName && !monitoringPlot) {
-      void navigate(
+      navigate(
         APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS.replace(':plantingSiteId', Number(plantingSiteId).toString())
           .replace(':observationId', Number(observationId).toString())
           .replace(':plantingZoneName', encodeURIComponent(plantingZoneName))

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Typography } from '@mui/material';
 import { BusySpinner, theme } from '@terraware/web-components';
@@ -44,7 +44,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   const [showEmptyBatchesModalFor, setShowEmptyBatchesModalFor] = useState<NurseryWithdrawal | null>(null);
   const [filterProjectId, setFilterProjectId] = useState<number>();
   const snackbar = useSnackbar();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
 
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
@@ -183,9 +183,9 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
 
   const goToInventory = () => {
     if (sourcePage && sourcePage.startsWith(APP_PATHS.INVENTORY)) {
-      void navigate({ pathname: sourcePage });
+      navigate({ pathname: sourcePage });
     } else {
-      void navigate({ pathname: APP_PATHS.INVENTORY });
+      navigate({ pathname: APP_PATHS.INVENTORY });
     }
   };
 

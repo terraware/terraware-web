@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, useTheme } from '@mui/material';
 import { TableRowType } from '@terraware/web-components';
@@ -75,7 +75,7 @@ const PeopleView = () => {
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
 
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [globalRoleUsers, setGlobalRoleUsers] = useState<UserWithGlobalRoles[]>([]);
@@ -89,7 +89,7 @@ const PeopleView = () => {
   const deleteRolesRequest = useAppSelector(selectGlobalRolesUsersRemoveRequest(deleteRolesRequestId));
 
   const goToAddPerson = useCallback(() => {
-    void navigate({ pathname: APP_PATHS.ACCELERATOR_PERSON_NEW });
+    navigate({ pathname: APP_PATHS.ACCELERATOR_PERSON_NEW });
   }, [navigate]);
 
   const dispatchSearchRequest = useCallback(

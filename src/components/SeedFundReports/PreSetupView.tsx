@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Container, useTheme } from '@mui/material';
 
@@ -11,12 +11,12 @@ import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const PreSetupView = () => {
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
   const goToSettings = () => {
-    void navigate({
+    navigate({
       pathname: APP_PATHS.SEED_FUND_REPORTS_SETTINGS_EDIT,
     });
   };

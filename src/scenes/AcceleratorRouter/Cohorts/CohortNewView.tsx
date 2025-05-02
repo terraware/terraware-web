@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
@@ -12,7 +12,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import CohortForm from './CohortForm';
 
 export default function CohortNewView(): JSX.Element {
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const [isBusy, setIsBusy] = useState<boolean>(false);
   const snackbar = useSnackbar();
 
@@ -22,12 +22,12 @@ export default function CohortNewView(): JSX.Element {
   });
 
   const goToCohortsList = useCallback(() => {
-    void navigate({ pathname: APP_PATHS.ACCELERATOR_COHORTS });
+    navigate({ pathname: APP_PATHS.ACCELERATOR_COHORTS });
   }, [navigate]);
 
   const goToCohortView = useCallback(
     (cohortId: number) => {
-      void navigate({ pathname: APP_PATHS.ACCELERATOR_COHORTS_VIEW.replace(':cohortId', `${cohortId}`) });
+      navigate({ pathname: APP_PATHS.ACCELERATOR_COHORTS_VIEW.replace(':cohortId', `${cohortId}`) });
     },
     [navigate]
   );

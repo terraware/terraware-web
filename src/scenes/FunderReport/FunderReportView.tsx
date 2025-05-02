@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { SelectT } from '@terraware/web-components';
@@ -30,7 +30,7 @@ const FunderReportView = () => {
   const [selectedReport, setSelectedReport] = useState<PublishedReport>();
   const query = useQuery();
   const location = useStateLocation();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { isDesktop, isMobile } = useDeviceInfo();
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const FunderReportView = () => {
         const found = reports?.find((r) => r.reportId.toString() === query.get('reportId'));
         setSelectedReport(found || reports[0]);
         query.delete('reportId');
-        void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+        navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       } else {
         setSelectedReport(reports[0]);
       }

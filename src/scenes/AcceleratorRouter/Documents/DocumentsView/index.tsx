@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 import { IconName, Separator } from '@terraware/web-components';
@@ -16,7 +16,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import DocumentsTable from './DocumentsTable';
 
 export default function DocumentsView(): JSX.Element | null {
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const { goToDocumentNew } = useNavigateTo();
   const { activeLocale } = useLocalization();
@@ -42,7 +42,7 @@ export default function DocumentsView(): JSX.Element | null {
   }, [availableProjects, query.get('dealName')]);
 
   const resetFilter = useCallback(() => {
-    void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+    navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
   }, [location, query]);
 
   const PageHeaderLeftComponent = useMemo(

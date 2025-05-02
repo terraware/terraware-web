@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 
@@ -20,7 +21,7 @@ import { getNurseryName } from './FilterUtils';
 
 export default function InventoryForNurseryView(): JSX.Element {
   const query = useQuery();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const pathParams = useParams<{ nurseryId: string }>();
   const { selectedOrganization } = useOrganization();
@@ -38,7 +39,7 @@ export default function InventoryForNurseryView(): JSX.Element {
     } else {
       query.set('batch', batchNum);
     }
-    void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+    navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -16,7 +16,7 @@ import { useVotingData } from './VotingContext';
 import VotingWrapper from './VotingWrapper';
 
 const VotingView = () => {
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const query = useQuery();
   const { activeLocale } = useLocalization();
@@ -29,7 +29,7 @@ const VotingView = () => {
       return;
     }
     // keep query state for edit view
-    void navigate(
+    navigate(
       getLocation(
         APP_PATHS.ACCELERATOR_PROJECT_VOTES_EDIT.replace(':projectId', `${project.id}`),
         location,

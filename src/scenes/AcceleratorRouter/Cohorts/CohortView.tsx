@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, useTheme } from '@mui/material';
 
@@ -21,7 +22,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 const CohortView = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
@@ -43,7 +44,7 @@ const CohortView = () => {
 
   const goToEditCohort = useCallback(() => {
     if (pathParams.cohortId) {
-      void navigate(
+      navigate(
         getLocation(APP_PATHS.ACCELERATOR_COHORTS_EDIT.replace(':cohortId', pathParams.cohortId), location)
       );
     }

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, GridProps, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
@@ -38,7 +39,7 @@ type SpeciesDetailViewProps = {
 export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps): JSX.Element {
   const theme = useTheme();
   const [species, setSpecies] = useState<Species>();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
   const { speciesId } = useParams<{ speciesId: string }>();
@@ -61,7 +62,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
       if (speciesResponse.requestSucceeded) {
         setSpecies(speciesResponse.species);
       } else {
-        void navigate(APP_PATHS.SPECIES);
+        navigate(APP_PATHS.SPECIES);
       }
     };
     if (selectedOrganization && selectedOrganization.id !== -1) {
@@ -74,7 +75,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
       const editSpeciesLocation = {
         pathname: APP_PATHS.SPECIES_EDIT.replace(':speciesId', speciesId),
       };
-      void navigate(editSpeciesLocation);
+      navigate(editSpeciesLocation);
     }
   };
 
@@ -95,7 +96,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
         reloadData();
       }
       setDeleteSpeciesModalOpen(false);
-      void navigate(APP_PATHS.SPECIES);
+      navigate(APP_PATHS.SPECIES);
     }
   };
 

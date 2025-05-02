@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Container, useTheme } from '@mui/material';
 
@@ -39,14 +39,14 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
 
   const goToNewLocation = () => {
     const newLocation = {
       pathname: content.linkLocation,
     };
-    void navigate(newLocation);
+    navigate(newLocation);
   };
 
   const downloadCsvTemplateHandler = () => {
@@ -92,7 +92,7 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
         buttonText: strings.ADD_SPECIES,
         buttonIcon: 'plus',
         onClickButton: () => {
-          void navigate(APP_PATHS.SPECIES_NEW);
+          navigate(APP_PATHS.SPECIES_NEW);
         },
       },
     ],
@@ -121,7 +121,7 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
         buttonText: strings.ADD_INVENTORY,
         buttonIcon: 'plus',
         onClickButton: () => {
-          void navigate(APP_PATHS.INVENTORY_NEW);
+          navigate(APP_PATHS.INVENTORY_NEW);
         },
       },
     ],
@@ -222,7 +222,7 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
       if (reloadData) {
         reloadData();
       }
-      void navigate({ pathname: APP_PATHS.SPECIES, search: '?checkData' });
+      navigate({ pathname: APP_PATHS.SPECIES, search: '?checkData' });
     }
     setImportSpeciesModalOpened(false);
     if (snackbarMessage) {
@@ -235,7 +235,7 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
       if (reloadData) {
         reloadData();
       }
-      void navigate(APP_PATHS.INVENTORY);
+      navigate(APP_PATHS.INVENTORY);
     }
     setImportInventoryModalOpened(false);
     if (snackbarMessage) {

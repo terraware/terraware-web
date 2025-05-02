@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { useTheme } from '@mui/material';
 import { DropdownItem, PopoverMenu } from '@terraware/web-components';
@@ -15,7 +15,7 @@ export default function UserMenu(): JSX.Element {
   const theme = useTheme();
   const { user } = useUser();
   const { isProduction } = useEnvironment();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const docLinks = useDocLinks();
   const mixpanel = useMixpanel();
 
@@ -35,7 +35,7 @@ export default function UserMenu(): JSX.Element {
         break;
       }
       default: {
-        void navigate(selectedItem.value);
+        navigate(selectedItem.value);
         break;
       }
     }

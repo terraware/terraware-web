@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import _ from 'lodash';
 
@@ -64,7 +65,7 @@ export default function PlantsPrimaryPage({
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
 
@@ -118,7 +119,7 @@ export default function PlantsPrimaryPage({
           onSelect(site);
           setSelectedPlantingSite(site);
         } else {
-          void navigate(pagePath.replace(':plantingSiteId', site.id.toString()));
+          navigate(pagePath.replace(':plantingSiteId', site.id.toString()));
         }
       }
     },

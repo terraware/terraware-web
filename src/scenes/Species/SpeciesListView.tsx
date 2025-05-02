@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { DropdownItem, SortOrder } from '@terraware/web-components';
@@ -76,7 +76,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [results, setResults] = useState<SpeciesSearchResultRow[]>();
   const query = useQuery();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const projects = useAppSelector(selectProjects);
   const { orgHasParticipants } = useParticipantData();
 
@@ -468,7 +468,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     if (shouldCheckData) {
       query.delete('checkData');
       setCheckDataModalOpen(true);
-      void navigate({ pathname: APP_PATHS.SPECIES, search: query.toString() }, { replace: true });
+      navigate({ pathname: APP_PATHS.SPECIES, search: query.toString() }, { replace: true });
     }
   }, [query, setCheckDataModalOpen, navigate]);
 
@@ -477,7 +477,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   }, [onApplyFilters]);
 
   const onNewSpecies = () => {
-    void navigate(APP_PATHS.SPECIES_NEW);
+    navigate(APP_PATHS.SPECIES_NEW);
   };
 
   const onChangeSearch = (id: string, value: unknown) => {

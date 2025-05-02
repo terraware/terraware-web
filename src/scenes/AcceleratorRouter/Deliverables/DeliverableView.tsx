@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem } from '@terraware/web-components';
@@ -34,7 +34,7 @@ const DeliverableView = () => {
 
   const query = useQuery();
   const location = useStateLocation();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
   const { status: requestStatus, update } = useUpdateDeliverable();
   const theme = useTheme();
@@ -47,7 +47,7 @@ const DeliverableView = () => {
     if (_source) {
       setSource(_source);
       query.delete('source');
-      void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
     }
   }, [query]);
 

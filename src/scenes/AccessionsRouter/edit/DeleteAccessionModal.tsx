@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Typography } from '@mui/material';
 
@@ -19,13 +19,13 @@ export interface DeleteAccessionModalProps {
 
 export default function DeleteAccessionModal(props: DeleteAccessionModalProps): JSX.Element {
   const { onClose, open, accession } = props;
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
 
   const deleteHandler = async () => {
     const response = await AccessionService.deleteAccession(accession.id);
     if (response.requestSucceeded) {
-      void navigate(APP_PATHS.ACCESSIONS);
+      navigate(APP_PATHS.ACCESSIONS);
     } else {
       snackbar.toastError();
     }

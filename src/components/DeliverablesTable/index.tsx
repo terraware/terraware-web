@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { TableColumnType } from '@terraware/web-components';
 
@@ -130,7 +130,7 @@ const DeliverablesTable = ({
   const deliverablesSearchRequest = useAppSelector(selectDeliverablesSearchRequest(deliverablesSearchRequestId));
   const query = useQuery();
   const projectParam = query.get('projectId');
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const mixpanel = useMixpanel();
 
@@ -165,7 +165,7 @@ const DeliverablesTable = ({
   const removeParam = () => {
     if (projectParam) {
       query.delete('projectId');
-      void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
     }
   };
 

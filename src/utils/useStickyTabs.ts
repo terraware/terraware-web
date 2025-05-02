@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Tab } from '@terraware/web-components';
 
@@ -33,7 +33,7 @@ const writeTabToSession = (viewIdentifier: string, tab: string): void => {
 
 const useStickyTabs = ({ defaultTab, tabs, viewIdentifier, keepQuery = true }: StickyTabsProps) => {
   const location = useStateLocation();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const query = useQuery();
   const tab = query.get('tab');
 
@@ -43,7 +43,7 @@ const useStickyTabs = ({ defaultTab, tabs, viewIdentifier, keepQuery = true }: S
     (newTab: string) => {
       query.set('tab', newTab);
       const emptyQuery = tab === newTab ? query.toString() : new URLSearchParams(`tab=${newTab}`);
-      void navigate(getLocation(location.pathname, location, keepQuery ? query.toString() : emptyQuery.toString()));
+      navigate(getLocation(location.pathname, location, keepQuery ? query.toString() : emptyQuery.toString()));
       writeTabToSession(viewIdentifier, newTab);
     },
     [navigate, location, query, viewIdentifier, keepQuery]

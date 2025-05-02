@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import BatchWithdrawFlow from 'src/components/BatchWithdrawFlow';
 import { APP_PATHS } from 'src/constants';
@@ -13,7 +13,7 @@ export default function BatchBulkWithdrawView(props: BatchBulkWithdrawViewProps)
   const [batchIds, setBatchIds] = useState<string[]>();
   const [source, setSource] = useState<string | null>();
   const query = useQuery();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
 
   useEffect(() => {
     if (query.getAll('batchId').length > 0) {
@@ -21,7 +21,7 @@ export default function BatchBulkWithdrawView(props: BatchBulkWithdrawViewProps)
       setSource(query.get('source'));
     } else {
       // invalid url params
-      void navigate({ pathname: APP_PATHS.INVENTORY });
+      navigate({ pathname: APP_PATHS.INVENTORY });
     }
   }, [query, navigate]);
 

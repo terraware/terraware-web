@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { APP_PATHS } from 'src/constants';
 import { requestFundingEntity } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
@@ -26,7 +27,7 @@ export default function FundingEntityProvider({ children }: FundingEntityProvide
   const pathFundingEntityId = Number(pathParams.fundingEntityId);
   const dispatch = useAppDispatch();
   const [entityAPIRequestStatus, setEntityAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { isDev, isStaging } = useEnvironment();
   const getFundingEntityRequest = useAppSelector(selectFundingEntityRequest(pathFundingEntityId));
   const [fundingEntityData, setFundingEntityData] = useState<ProvidedFundingEntityData>({
@@ -74,7 +75,7 @@ export default function FundingEntityProvider({ children }: FundingEntityProvide
           window.location.reload();
         }
       } else {
-        void navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
+        navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
       }
     }
   }, [entityAPIRequestStatus]);

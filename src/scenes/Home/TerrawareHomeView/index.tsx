@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Container, Grid, Typography } from '@mui/material';
 import { IconName } from '@terraware/web-components';
@@ -37,7 +37,7 @@ const TerrawareHomeView = () => {
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
   const { isTablet, isMobile, isDesktop } = useDeviceInfo();
   const mixpanel = useMixpanel();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const dispatch = useAppDispatch();
   const { goToNewAccession } = useNavigateTo();
   const plantingSites = useAppSelector(selectPlantingSites);
@@ -118,13 +118,13 @@ const TerrawareHomeView = () => {
           ? {
               label: strings.ADD_SPECIES,
               onClick: () => {
-                void navigate(APP_PATHS.SPECIES_NEW);
+                navigate(APP_PATHS.SPECIES_NEW);
               },
             }
           : {
               label: strings.VIEW_SPECIES_LIST,
               onClick: () => {
-                void navigate(APP_PATHS.SPECIES);
+                navigate(APP_PATHS.SPECIES);
               },
             },
         icon: 'species' as IconName,
@@ -166,7 +166,7 @@ const TerrawareHomeView = () => {
           {
             label: strings.TOTAL_ACTIVE_ACCESSIONS,
             linkOnClick: () => {
-              void navigate(APP_PATHS.SEEDS_DASHBOARD);
+              navigate(APP_PATHS.SEEDS_DASHBOARD);
             },
             linkText: strings.VIEW_FULL_DASHBOARD,
             value: numericFormatter.format(seedBankSummary?.value?.activeAccessions ?? 0),
@@ -204,7 +204,7 @@ const TerrawareHomeView = () => {
             label: strings.TOTAL_WITHDRAWN_FOR_PLANTING,
             value: numericFormatter.format(orgNurserySummary?.totalWithdrawn ?? 0),
             linkOnClick: () => {
-              void navigate(APP_PATHS.NURSERY_WITHDRAWALS);
+              navigate(APP_PATHS.NURSERY_WITHDRAWALS);
             },
             linkText: strings.VIEW_PLANTING_PROGRESS,
           },
@@ -218,7 +218,7 @@ const TerrawareHomeView = () => {
         buttonProps: {
           label: strings.ADD_PLANTING_SITE,
           onClick: () => {
-            void navigate(`${APP_PATHS.PLANTING_SITES}?new=true`);
+            navigate(`${APP_PATHS.PLANTING_SITES}?new=true`);
           },
         },
         icon: 'iconRestorationSite' as IconName,

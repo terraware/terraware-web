@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Grid, useTheme } from '@mui/material';
 
@@ -18,7 +18,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { usePersonData } from './PersonContext';
 
 const SingleView = () => {
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();

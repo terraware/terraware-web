@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
@@ -31,7 +31,7 @@ export type Response = {
 export default function useFetchDeliverable({ deliverableId, projectId }: Props): Response {
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const snackbar = useSnackbar();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const dispatch = useAppDispatch();
 
   const [requestId, setRequestId] = useState('');
@@ -41,7 +41,7 @@ export default function useFetchDeliverable({ deliverableId, projectId }: Props)
   const deliverableData = useAppSelector(selectDeliverableData(deliverableId, projectId));
 
   const goToDeliverables = useCallback(() => {
-    void navigate(isAcceleratorRoute ? APP_PATHS.ACCELERATOR_DELIVERABLES : APP_PATHS.DELIVERABLES);
+    navigate(isAcceleratorRoute ? APP_PATHS.ACCELERATOR_DELIVERABLES : APP_PATHS.DELIVERABLES);
   }, [navigate, isAcceleratorRoute]);
 
   useEffect(() => {

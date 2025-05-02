@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Typography } from '@mui/material';
 
@@ -18,13 +18,13 @@ export interface DeleteFundingEntityModalProps {
 }
 
 const DeleteFundingEntityModal = ({ onClose, open, fundingEntity }: DeleteFundingEntityModalProps): JSX.Element => {
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
 
   const deleteHandler = async () => {
     const response = await FundingEntityService.deleteFundingEntity(fundingEntity.id);
     if (response.requestSucceeded) {
-      void navigate(APP_PATHS.ACCELERATOR_FUNDING_ENTITIES);
+      navigate(APP_PATHS.ACCELERATOR_FUNDING_ENTITIES);
     } else {
       snackbar.toastError();
     }

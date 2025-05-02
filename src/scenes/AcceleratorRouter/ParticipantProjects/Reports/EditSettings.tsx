@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -29,7 +30,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 export default function EditSettings(): JSX.Element {
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = String(pathParams.projectId);
   const dispatch = useAppDispatch();
@@ -64,7 +65,7 @@ export default function EditSettings(): JSX.Element {
   }, [updateReportConfigResponse]);
 
   const goToProjectReports = () => {
-    void navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId.toString())}?tab=settings`);
+    navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId.toString())}?tab=settings`);
   };
 
   const [newConfig, , onChange] = useForm<NewAcceleratorReportConfig>({

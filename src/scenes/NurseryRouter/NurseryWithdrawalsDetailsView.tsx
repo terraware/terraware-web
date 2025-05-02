@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Message, Tabs } from '@terraware/web-components';
@@ -57,7 +58,7 @@ export default function NurseryWithdrawalsDetailsView({
   const contentRef = useRef(null);
   const snackbar = useSnackbar();
   const { OUTPLANT, NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
 
   const [withdrawal, setWithdrawal] = useState<NurseryWithdrawal | undefined>(undefined);
   const [withdrawalSummary, setWithdrawalSummary] = useState<WithdrawalSummary | undefined>(undefined);
@@ -126,7 +127,7 @@ export default function NurseryWithdrawalsDetailsView({
 
   const handleReassign = () => {
     if (delivery) {
-      void navigate({
+      navigate({
         pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', delivery.id.toString()),
         search: '?fromWithdrawal',
       });

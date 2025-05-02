@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { MultiPolygon } from 'geojson';
@@ -33,7 +34,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
   const theme = useTheme();
   const { reloadPlantingSites } = props;
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
   const [loaded, setLoaded] = useState(false);
   const [onValidate, setOnValidate] = useState<((hasErrors: boolean) => void) | undefined>(undefined);
@@ -76,7 +77,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     const plantingSitesLocation = {
       pathname: APP_PATHS.PLANTING_SITES + (id && id !== -1 ? `/${id}` : ''),
     };
-    void navigate(plantingSitesLocation);
+    navigate(plantingSitesLocation);
   };
 
   const onSave = () =>

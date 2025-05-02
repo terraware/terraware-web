@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
@@ -50,7 +51,7 @@ export default function SeedBankView(): JSX.Element {
   });
   const { seedBankId } = useParams<{ seedBankId: string }>();
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility | null>();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
   const gridSize = () => {
     if (isMobile) {
@@ -91,7 +92,7 @@ export default function SeedBankView(): JSX.Element {
     const sitesLocation = {
       pathname: APP_PATHS.SEED_BANKS + (id ? `/${id}` : ''),
     };
-    void navigate(sitesLocation);
+    navigate(sitesLocation);
   };
 
   const saveSeedBank = async () => {

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Typography } from '@mui/material';
 
@@ -19,7 +20,7 @@ export default function ProjectEditView(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const snackbar = useSnackbar();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
@@ -44,7 +45,7 @@ export default function ProjectEditView(): JSX.Element {
 
   const goToProject = useCallback(() => {
     if (pathParams.projectId) {
-      void navigate(getLocation(APP_PATHS.PROJECT_VIEW.replace(':projectId', pathParams.projectId), location));
+      navigate(getLocation(APP_PATHS.PROJECT_VIEW.replace(':projectId', pathParams.projectId), location));
     }
   }, [navigate, location, pathParams.projectId]);
 

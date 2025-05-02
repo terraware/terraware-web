@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box } from '@mui/material';
 import { Tabs } from '@terraware/web-components';
@@ -33,7 +33,7 @@ export type ObservationsHomeProps = SearchProps & {
 };
 
 export default function ObservationsHome(props: ObservationsHomeProps): JSX.Element {
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
@@ -94,7 +94,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
 
   useEffect(() => {
     if (plantingSites?.length === 0) {
-      void navigate(APP_PATHS.HOME);
+      navigate(APP_PATHS.HOME);
     }
   }, [navigate, plantingSites?.length]);
 

@@ -1,5 +1,5 @@
 import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, TableColumnType } from '@terraware/web-components';
@@ -55,7 +55,7 @@ const defaultSearchOrder: SearchSortOrder = {
 };
 
 export default function ParticipantList(): JSX.Element {
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
   const { isMobile } = useDeviceInfo();
@@ -109,7 +109,7 @@ export default function ParticipantList(): JSX.Element {
   );
 
   const goToNewParticipant = useCallback(() => {
-    void navigate(APP_PATHS.ACCELERATOR_PARTICIPANTS_NEW);
+    navigate(APP_PATHS.ACCELERATOR_PARTICIPANTS_NEW);
   }, [navigate]);
 
   const cohorts = useMemo<Record<string, string>>(

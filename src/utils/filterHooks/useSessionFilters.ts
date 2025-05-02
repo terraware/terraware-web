@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import {
   FiltersType,
@@ -14,7 +14,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 export const useSessionFilters = (viewIdentifier?: string) => {
   const location = useStateLocation();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const query = useQuery();
 
   const [localFilters, setLocalFilters] = useState<FiltersType>();
@@ -30,7 +30,7 @@ export const useSessionFilters = (viewIdentifier?: string) => {
 
         resetQuery(query, viewIdentifier);
         writeFiltersToQuery(query, viewIdentifier, filters);
-        void navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+        navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       }
     },
     [navigate, location, query, viewIdentifier]
@@ -56,7 +56,7 @@ export const useSessionFilters = (viewIdentifier?: string) => {
       writeFiltersToSession(viewIdentifier, mergedFilters);
 
       writeFiltersToQuery(query, viewIdentifier, mergedFilters);
-      void navigate(getLocation(location.pathname, location, query.toString()));
+      navigate(getLocation(location.pathname, location, query.toString()));
 
       setIsInitialized(true);
     }

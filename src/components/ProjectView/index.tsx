@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Grid } from '@mui/material';
 import { DropdownItem } from '@terraware/web-components';
@@ -25,7 +26,7 @@ export default function ProjectView(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const snackbar = useSnackbar();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
@@ -60,7 +61,7 @@ export default function ProjectView(): JSX.Element {
 
   const goToEditProject = useCallback(() => {
     if (pathParams.projectId) {
-      void navigate(getLocation(APP_PATHS.PROJECT_EDIT.replace(':projectId', pathParams.projectId), location));
+      navigate(getLocation(APP_PATHS.PROJECT_EDIT.replace(':projectId', pathParams.projectId), location));
     }
   }, [navigate, location, pathParams.projectId]);
 

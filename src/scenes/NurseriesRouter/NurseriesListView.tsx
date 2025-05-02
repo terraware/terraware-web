@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, TableColumnType } from '@terraware/web-components';
@@ -40,7 +40,7 @@ export default function NurseriesListView({ organization }: NurseriesListProps):
   const timeZones = useTimeZones();
   const defaultTimeZone = useDefaultTimeZone().get();
   const { isMobile } = useDeviceInfo();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [results, setResults] = useState<Facility[]>();
@@ -50,7 +50,7 @@ export default function NurseriesListView({ organization }: NurseriesListProps):
     const newNurseryLocation = {
       pathname: APP_PATHS.NURSERIES_NEW,
     };
-    void navigate(newNurseryLocation);
+    navigate(newNurseryLocation);
   };
 
   const clearSearch = () => {

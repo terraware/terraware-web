@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, IconButton, useTheme } from '@mui/material';
 import { Svg } from '@terraware/web-components';
@@ -29,7 +29,7 @@ type TopBarProps = {
 };
 
 export default function TopBarContent(props: TopBarProps): JSX.Element | null {
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const theme = useTheme();
   const { selectedOrganization, organizations, reloadOrganizations } = useOrganization();
   const { userFundingEntity } = useUserFundingEntity();
@@ -72,7 +72,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
 
   const handleTopBarClick = () => {
     mixpanel?.track(MIXPANEL_EVENTS.TOP_BAR_HOME);
-    void navigate(APP_PATHS.HOME);
+    navigate(APP_PATHS.HOME);
   };
 
   return isDesktop ? (

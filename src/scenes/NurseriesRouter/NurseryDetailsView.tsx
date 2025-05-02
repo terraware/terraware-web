@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 
@@ -23,7 +24,7 @@ export default function NurseryDetailsView(): JSX.Element {
   const theme = useTheme();
   const { nurseryId } = useParams<{ nurseryId: string }>();
   const [nursery, setNursery] = useState<Facility>();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const tz = useLocationTimeZone().get(nursery);
 
   useEffect(() => {
@@ -36,7 +37,7 @@ export default function NurseryDetailsView(): JSX.Element {
       if (selectedNursery) {
         setNursery(selectedNursery);
       } else {
-        void navigate(APP_PATHS.NURSERIES);
+        navigate(APP_PATHS.NURSERIES);
       }
     }
   }, [nurseryId, selectedOrganization, navigate]);
@@ -46,7 +47,7 @@ export default function NurseryDetailsView(): JSX.Element {
       const editNurseryLocation = {
         pathname: APP_PATHS.NURSERIES_EDIT.replace(':nurseryId', nurseryId),
       };
-      void navigate(editNurseryLocation);
+      navigate(editNurseryLocation);
     }
   };
 

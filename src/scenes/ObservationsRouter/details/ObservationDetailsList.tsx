@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { TableColumnType } from '@terraware/web-components';
 
@@ -31,7 +32,7 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
   const { ...searchProps }: SearchProps = props;
 
   const defaultTimeZone = useDefaultTimeZone();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const params = useParams<{
     plantingSiteId: string;
     observationId: string;
@@ -57,7 +58,7 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
 
   useEffect(() => {
     if (!details) {
-      void navigate(APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', `${plantingSiteId}`));
+      navigate(APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', `${plantingSiteId}`));
     }
   }, [details, navigate, plantingSiteId]);
 

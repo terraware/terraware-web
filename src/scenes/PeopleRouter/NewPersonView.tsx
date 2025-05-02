@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -22,7 +23,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 export default function PersonView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const [emailError, setEmailError] = useState('');
   const snackbar = useSnackbar();
   const [repeatedEmail, setRepeatedEmail] = useState('');
@@ -70,11 +71,11 @@ export default function PersonView(): JSX.Element {
   };
 
   const goToPeople = () => {
-    void navigate({ pathname: APP_PATHS.PEOPLE });
+    navigate({ pathname: APP_PATHS.PEOPLE });
   };
 
   const goToViewPerson = (userId: string) => {
-    void navigate({ pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', userId) });
+    navigate({ pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', userId) });
   };
 
   const saveUser = async () => {
@@ -138,7 +139,7 @@ export default function PersonView(): JSX.Element {
         const profileLocation = {
           pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', profile.id.toString()),
         };
-        void navigate(profileLocation);
+        navigate(profileLocation);
       }
     }
   };

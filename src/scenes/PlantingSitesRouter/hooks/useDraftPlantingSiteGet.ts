@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { APP_PATHS } from 'src/constants';
 import { Statuses } from 'src/redux/features/asyncUtils';
@@ -25,12 +25,12 @@ export type Response = {
  */
 export default function useDraftPlantingSiteGet({ draftId }: Props): Response {
   const snackbar = useSnackbar();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const dispatch = useAppDispatch();
   const draftResult = useAppSelector(selectDraftPlantingSiteGet(draftId));
 
   const goToPlantingSites = useCallback(() => {
-    void navigate(APP_PATHS.PLANTING_SITES);
+    navigate(APP_PATHS.PLANTING_SITES);
   }, [navigate]);
 
   useEffect(() => {

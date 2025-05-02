@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -38,7 +39,7 @@ export const metricComponentOptions = () => {
 
 export default function NewProjectSpecificMetric(): JSX.Element {
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = String(pathParams.projectId);
   const dispatch = useAppDispatch();
@@ -61,7 +62,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
   }, [createProjectMetricResponse]);
 
   const goToProjectReports = () => {
-    void navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId)}?tab=settings`);
+    navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId)}?tab=settings`);
   };
 
   const [newMetric, , onChange] = useForm<NewMetric>({

@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -64,7 +65,7 @@ export default function GenericZoneView({
   zoneSelector,
 }: Props): JSX.Element {
   const [search, setSearch] = useState<string>('');
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { plantingSiteId, zoneId } = useParams<{ plantingSiteId: string; zoneId: string }>();
 
   const plantingSite = useAppSelector((state) => siteSelector(state, Number(plantingSiteId)));
@@ -81,11 +82,11 @@ export default function GenericZoneView({
   );
 
   if (!plantingSite) {
-    void navigate(APP_PATHS.PLANTING_SITES);
+    navigate(APP_PATHS.PLANTING_SITES);
   }
 
   if (!plantingZone && plantingSiteId) {
-    void navigate(siteViewUrl.replace(':plantingSiteId', plantingSiteId));
+    navigate(siteViewUrl.replace(':plantingSiteId', plantingSiteId));
   }
 
   const crumbs: Crumb[] = useMemo(

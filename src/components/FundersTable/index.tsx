@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { TableRowType } from '@terraware/web-components';
 
@@ -56,7 +56,7 @@ type FundersTableProps = {
 const FundersTable = ({ fundingEntityId }: FundersTableProps) => {
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { isAllowed } = useUser();
 
   const [listFundersRequestId, setListFundersRequestId] = useState<string>('');

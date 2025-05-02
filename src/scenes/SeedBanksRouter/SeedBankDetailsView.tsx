@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 
@@ -23,7 +24,7 @@ export default function SeedBankDetailsView(): JSX.Element {
   const theme = useTheme();
   const { seedBankId } = useParams<{ seedBankId: string }>();
   const [seedBank, setSeedBank] = useState<Facility>();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const tz = useLocationTimeZone().get(seedBank);
 
   useEffect(() => {
@@ -36,7 +37,7 @@ export default function SeedBankDetailsView(): JSX.Element {
       if (selectedSeedBank) {
         setSeedBank(selectedSeedBank);
       } else {
-        void navigate(APP_PATHS.SEED_BANKS);
+        navigate(APP_PATHS.SEED_BANKS);
       }
     }
   }, [seedBankId, selectedOrganization, navigate]);
@@ -46,7 +47,7 @@ export default function SeedBankDetailsView(): JSX.Element {
       const editSeedBankLocation = {
         pathname: APP_PATHS.SEED_BANKS_EDIT.replace(':seedBankId', seedBankId),
       };
-      void navigate(editSeedBankLocation);
+      navigate(editSeedBankLocation);
     }
   };
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, Message } from '@terraware/web-components';
@@ -67,7 +67,7 @@ export default function Editor(props: EditorProps): JSX.Element {
   const { siteEditStep, siteType } = site;
   const { activeLocale } = useLocalization();
   const contentRef = useRef(null);
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 
@@ -155,9 +155,9 @@ export default function Editor(props: EditorProps): JSX.Element {
 
   const goToPlantingSites = () => {
     if (plantingSite.id !== -1) {
-      void navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${plantingSite.id}`));
+      navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${plantingSite.id}`));
     } else {
-      void navigate(APP_PATHS.PLANTING_SITES);
+      navigate(APP_PATHS.PLANTING_SITES);
     }
   };
 

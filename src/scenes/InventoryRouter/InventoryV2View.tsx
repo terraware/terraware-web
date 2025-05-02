@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, Tabs } from '@terraware/web-components';
@@ -135,7 +135,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const { hasNurseries, hasSpecies } = props;
   const [importInventoryModalOpen, setImportInventoryModalOpen] = useState(false);
@@ -159,7 +159,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
       await PreferencesService.updateUserPreferences({ inventoryListType: newTab });
       reloadUserPreferences();
       query.set('tab', newTab);
-      void navigate(getLocation(location.pathname, location, query.toString()));
+      navigate(getLocation(location.pathname, location, query.toString()));
     },
     [query, navigate, location, reloadUserPreferences]
   );
@@ -172,7 +172,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
     const appPathLocation = {
       pathname: appPath,
     };
-    void navigate(appPathLocation);
+    navigate(appPathLocation);
   };
 
   const onCloseDownloadReportModal = () => {

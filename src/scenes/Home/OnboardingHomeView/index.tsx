@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Container, Grid, Typography } from '@mui/material';
 import { IconName } from '@terraware/web-components';
@@ -31,7 +31,7 @@ const OnboardingHomeView = () => {
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
   const { isMobile, isDesktop } = useDeviceInfo();
   const mixpanel = useMixpanel();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const dispatch = useAppDispatch();
   const [people, setPeople] = useState<OrganizationUser[]>();
   const [allSpecies, setAllSpecies] = useState<Species[]>();
@@ -110,7 +110,7 @@ const OnboardingHomeView = () => {
             buttonProps: {
               label: strings.ADD_PEOPLE,
               onClick: () => {
-                void navigate(APP_PATHS.PEOPLE_NEW);
+                navigate(APP_PATHS.PEOPLE_NEW);
               },
             },
             secondaryButtonProps: {
@@ -128,7 +128,7 @@ const OnboardingHomeView = () => {
             buttonProps: {
               label: strings.ADD_SPECIES,
               onClick: () => {
-                void navigate(APP_PATHS.SPECIES_NEW);
+                navigate(APP_PATHS.SPECIES_NEW);
               },
             },
 
@@ -144,7 +144,7 @@ const OnboardingHomeView = () => {
               buttonProps: {
                 label: strings.ADD_SPECIES,
                 onClick: () => {
-                  void navigate(APP_PATHS.SPECIES_NEW);
+                  navigate(APP_PATHS.SPECIES_NEW);
                 },
               },
               icon: 'species' as IconName,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, TableColumnType } from '@terraware/web-components';
@@ -61,7 +61,7 @@ const columns = (): TableColumnType[] => [
 
 export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX.Element {
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
 
   const liveSessions = events?.filter((ev) => ev.type === 'Live Session');
   const oneOnOneSessions = events?.filter((ev) => ev.type === 'One-on-One Session');
@@ -91,7 +91,7 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
                   id='edit'
                   label={strings.EDIT}
                   onClick={() =>
-                    void navigate({
+                    navigate({
                       pathname: APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT.replace(':moduleId', `${module.id}`),
                       search: '?type=live',
                     })
@@ -127,7 +127,7 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
                   id='edit'
                   label={strings.EDIT}
                   onClick={() =>
-                    void navigate({
+                    navigate({
                       pathname: APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT.replace(':moduleId', `${module.id}`),
                       search: '?type=one-on-one',
                     })
@@ -163,7 +163,7 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
                   id='edit'
                   label={strings.EDIT}
                   onClick={() =>
-                    void navigate({
+                    navigate({
                       pathname: APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT.replace(':moduleId', `${module.id}`),
                       search: '?type=recorded',
                     })
@@ -199,7 +199,7 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
                   id='edit'
                   label={strings.EDIT}
                   onClick={() =>
-                    void navigate({
+                    navigate({
                       pathname: APP_PATHS.ACCELERATOR_MODULE_EVENTS_EDIT.replace(':moduleId', `${module.id}`),
                       search: '?type=workshop',
                     })

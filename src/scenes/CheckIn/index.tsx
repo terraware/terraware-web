@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Container, Grid, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
@@ -27,7 +27,7 @@ export default function CheckIn(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
   const contentRef = useRef(null);
@@ -75,7 +75,7 @@ export default function CheckIn(): JSX.Element {
         reloadData();
         setCheckInAllConfirmationDialogOpen(false);
         snackbar.toastSuccess(strings.ALL_ACCESSIONS_CHECKED_IN);
-        void navigate(APP_PATHS.ACCESSIONS);
+        navigate(APP_PATHS.ACCESSIONS);
       } catch (e) {
         setBusy(false);
         snackbar.toastError();
@@ -111,7 +111,7 @@ export default function CheckIn(): JSX.Element {
       // eslint-disable-next-line no-restricted-globals
       state: { from: location.pathname },
     };
-    void navigate(accessionLocation);
+    navigate(accessionLocation);
   };
 
   const pendingAccessionsById = transformPendingAccessions();

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
@@ -37,7 +37,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
   const [record, setRecord, onChange] = useForm<Species>(initSpecies());
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
   const [isBusy, setIsBusy] = useState<boolean>(false);
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
@@ -56,7 +56,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
       if (response.requestSucceeded) {
         if (response.speciesId) {
           reloadData();
-          void navigate(APP_PATHS.SPECIES_DETAILS.replace(':speciesId', response.speciesId.toString()));
+          navigate(APP_PATHS.SPECIES_DETAILS.replace(':speciesId', response.speciesId.toString()));
         }
       } else {
         if (response.error === SpeciesRequestError.PreexistingSpecies) {

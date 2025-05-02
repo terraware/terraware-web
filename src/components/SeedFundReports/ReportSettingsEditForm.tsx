@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Grid } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -21,7 +21,7 @@ interface ReportSettingsEditFormProps {
 const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEditFormProps) => {
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
 
   const [localReportsSettings, setLocalReportsSettings] = useState(reportsSettings);
@@ -41,7 +41,7 @@ const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEd
         return;
       }
 
-      void navigate(APP_PATHS.SEED_FUND_REPORTS_SETTINGS);
+      navigate(APP_PATHS.SEED_FUND_REPORTS_SETTINGS);
     }
   }, [navigate, localReportsSettings, selectedOrganization.id, snackbar]);
 

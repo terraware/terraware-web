@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Grid, useTheme } from '@mui/material';
 
@@ -40,7 +40,7 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
   const timeZones = useTimeZones();
   const defaultTimeZone = useDefaultTimeZone().get();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [results, setResults] = useState<Facility[]>([]);
@@ -51,7 +51,7 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
     const newSeedBankLocation = {
       pathname: APP_PATHS.SEED_BANKS_NEW,
     };
-    void navigate(newSeedBankLocation);
+    navigate(newSeedBankLocation);
   };
 
   const clearSearch = () => {

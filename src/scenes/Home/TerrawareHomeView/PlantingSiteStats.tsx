@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
@@ -32,7 +32,7 @@ export const PlantingSiteStats = () => {
   const numberFormatter = useNumberFormatter();
   const { isDesktop } = useDeviceInfo();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { selectedOrganization } = useOrganization();
   const plantingSites = useAppSelector(selectOrgPlantingSites(selectedOrganization.id));
   const { token } = useMapboxToken();
@@ -254,7 +254,7 @@ export const PlantingSiteStats = () => {
           <Grid item xs={primaryGridSize} sx={{ textAlign: isDesktop ? 'left' : 'center' }}>
             <Link
               onClick={() => {
-                void navigate(`${APP_PATHS.PLANTS_DASHBOARD}/${selectedPlantingSiteId}`);
+                navigate(`${APP_PATHS.PLANTS_DASHBOARD}/${selectedPlantingSiteId}`);
               }}
               style={{ textWrap: 'wrap', textAlign: 'left' }}
             >
@@ -267,7 +267,7 @@ export const PlantingSiteStats = () => {
                   id='add-planting-site'
                   large={false}
                   onClick={() => {
-                    void navigate(`${APP_PATHS.PLANTING_SITES}?new=true`);
+                    navigate(`${APP_PATHS.PLANTING_SITES}?new=true`);
                   }}
                   text={strings.ADD_PLANTING_SITE}
                 />

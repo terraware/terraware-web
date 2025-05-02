@@ -1,5 +1,6 @@
 import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem, Textfield } from '@terraware/web-components';
@@ -34,7 +35,7 @@ type ProjectsByOrg = {
 };
 
 export default function ParticipantsView(): JSX.Element {
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
@@ -55,7 +56,7 @@ export default function ParticipantsView(): JSX.Element {
   }, [participant, listCohortModules]);
 
   const goToEdit = useCallback(() => {
-    void navigate(APP_PATHS.ACCELERATOR_PARTICIPANTS_EDIT.replace(':participantId', `${participantId}`));
+    navigate(APP_PATHS.ACCELERATOR_PARTICIPANTS_EDIT.replace(':participantId', `${participantId}`));
   }, [navigate, participantId]);
 
   const onOptionItemClick = useCallback((optionItem: DropdownItem) => {

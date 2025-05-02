@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -23,7 +24,7 @@ export default function ReportView(): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
 
   const snackbar = useSnackbar();
 
@@ -60,7 +61,7 @@ export default function ReportView(): JSX.Element {
 
       if (lockResult.requestSucceeded && reportId) {
         // then navigate to editing
-        void navigate({ pathname: APP_PATHS.SEED_FUND_REPORTS_EDIT.replace(':reportId', reportId) });
+        navigate({ pathname: APP_PATHS.SEED_FUND_REPORTS_EDIT.replace(':reportId', reportId) });
       } else {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_EDIT);
       }

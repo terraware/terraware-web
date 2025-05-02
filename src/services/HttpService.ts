@@ -108,11 +108,11 @@ const replace = (url: string, request: Request) => {
  * Service with bare bones http function calls
  */
 function RequestsHandler(url: string = '') {
-  async function get<I extends ServerData, O>(request: GetRequest, transform: (i?: I) => O): Promise<O & Response> {
+  const get = async <I extends ServerData, O>(request: GetRequest, transform: (i?: I) => O): Promise<O & Response> => {
     const { params, headers } = request;
 
     return await handleRequest(axios.get<I>(replace(url, request), { params, headers }), transform);
-  }
+  };
 
   const get2 = async <T extends ServerData>(request: GetRequest = {}): Promise<Response2<T>> => {
     const { params, headers } = request;

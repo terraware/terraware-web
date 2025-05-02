@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
@@ -45,7 +46,7 @@ function initSpecies(species?: Species): Species {
 export default function SpeciesEditView(): JSX.Element {
   const theme = useTheme();
   const [species, setSpecies] = useState<Species>();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
   const { speciesId } = useParams<{ speciesId: string }>();
@@ -101,7 +102,7 @@ export default function SpeciesEditView(): JSX.Element {
       const speciesLocation = {
         pathname: APP_PATHS.SPECIES_DETAILS.replace(':speciesId', speciesId.toString()),
       };
-      void navigate(speciesLocation);
+      navigate(speciesLocation);
     }
   };
 
@@ -111,7 +112,7 @@ export default function SpeciesEditView(): JSX.Element {
       if (speciesResponse.requestSucceeded) {
         setSpecies(speciesResponse.species);
       } else {
-        void navigate(APP_PATHS.SPECIES);
+        navigate(APP_PATHS.SPECIES);
       }
     };
     if (selectedOrganization && selectedOrganization.id !== -1 && speciesId) {

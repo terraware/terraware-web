@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -39,7 +40,7 @@ const columns = (): TableColumnType[] => [
 
 export default function PlantingSiteZoneView(): JSX.Element {
   const [search, setSearch] = useState<string>('');
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const defaultTimeZone = useDefaultTimeZone();
 
   const { plantingSiteId, zoneId, subzoneId } = useParams<{
@@ -64,15 +65,15 @@ export default function PlantingSiteZoneView(): JSX.Element {
   );
 
   if (!plantingSite) {
-    void navigate(APP_PATHS.PLANTING_SITES);
+    navigate(APP_PATHS.PLANTING_SITES);
   }
 
   if (plantingSiteId && !plantingZone) {
-    void navigate(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSiteId));
+    navigate(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSiteId));
   }
 
   if (zoneId && plantingSiteId && !plantingZone?.plantingSubzones.length) {
-    void navigate(
+    navigate(
       APP_PATHS.PLANTING_SITES_ZONE_VIEW.replace(':plantingSiteId', plantingSiteId).replace(':zoneId', zoneId)
     );
   }

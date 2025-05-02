@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
@@ -92,7 +92,7 @@ const MyAccountForm = ({
   const theme = useTheme();
   const [selectedRows, setSelectedRows] = useState<PersonOrganization[]>([]);
   const [personOrganizations, setPersonOrganizations] = useState<PersonOrganization[]>([]);
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const [record, setRecord, onChange] = useForm<User>(user);
   const [openDeleteAccountModal, setOpenDeleteAccountModal] = useState<boolean>(false);
   const [removedOrg, setRemovedOrg] = useState<Organization>();
@@ -179,7 +179,7 @@ const MyAccountForm = ({
     if (backToView) {
       backToView();
     } else {
-      void navigate(APP_PATHS.MY_ACCOUNT);
+      navigate(APP_PATHS.MY_ACCOUNT);
     }
   };
 
@@ -218,7 +218,7 @@ const MyAccountForm = ({
       if (backToView) {
         backToView();
       } else {
-        void navigate(APP_PATHS.MY_ACCOUNT);
+        navigate(APP_PATHS.MY_ACCOUNT);
       }
     }
   };
@@ -270,7 +270,7 @@ const MyAccountForm = ({
     if (backToView) {
       backToView();
     } else {
-      void navigate(APP_PATHS.MY_ACCOUNT);
+      navigate(APP_PATHS.MY_ACCOUNT);
     }
   };
 
@@ -287,7 +287,7 @@ const MyAccountForm = ({
       } else {
         snackbar.toastError();
       }
-      void navigate(APP_PATHS.HOME);
+      navigate(APP_PATHS.HOME);
     }
   };
 
