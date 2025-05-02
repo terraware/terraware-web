@@ -165,6 +165,7 @@ export default function InventoryTests() {
     await expect(page.locator('#row1-ready')).toContainText('0');
     await expect(page.locator('#row1-total')).toContainText('15');
     await page.getByRole('link', { name: 'Withdrawal History' }).click();
+    await page.waitForTimeout(1000); //Wait for navigation
     await expect(page.locator('#row1-speciesScientificNames')).toContainText('Coconut');
     await expect(page.getByRole('cell', { name: '15', exact: true })).toBeVisible();
   });
@@ -208,6 +209,7 @@ export default function InventoryTests() {
     await expect(page.locator('#row1-ready')).toBeVisible();
     await expect(page.getByRole('cell', { name: '150' })).toBeVisible();
     await page.getByRole('link', { name: '-2-2-002' }).click();
+    await page.waitForTimeout(1000); //Wait for navigation
     await expect(page.getByText('Germinating Quantity 450')).toBeVisible();
     await expect(page.getByText('Not Ready Quantity 50')).toBeVisible();
     await expect(page.getByText('Ready Quantity 50', { exact: true })).toBeVisible();
