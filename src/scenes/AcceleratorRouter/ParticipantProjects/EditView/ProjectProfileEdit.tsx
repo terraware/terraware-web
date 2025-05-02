@@ -4,26 +4,19 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
 
 import PhotoChooser, { PhotoWithAttributes } from 'src/components/DocumentProducer/EditImagesModal/PhotoSelector';
-import ApplicationStatusCard from 'src/components/ProjectField/ApplicationStatusCard';
 import CountrySelect from 'src/components/ProjectField/CountrySelect';
 import GridEntryWrapper from 'src/components/ProjectField/GridEntryWrapper';
 import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
-import ProjectFieldMeta from 'src/components/ProjectField/Meta';
 import MinMaxCarbonTextfield from 'src/components/ProjectField/MinMaxCarbonTextfield';
-import PhaseScoreCard from 'src/components/ProjectField/PhaseScoreCard';
 import ProjectProfileImage from 'src/components/ProjectField/ProjectProfileImage';
-import RegionDisplay from 'src/components/ProjectField/RegionDisplay';
+import SdgMultiSelect from 'src/components/ProjectField/SdgMultiSelect';
 import ProjectFieldTextAreaEdit from 'src/components/ProjectField/TextAreaEdit';
 import ProjectFieldTextfield from 'src/components/ProjectField/Textfield';
-import VotingDecisionCard from 'src/components/ProjectField/VotingDecisionCard';
+import VariableSelect from 'src/components/ProjectField/VariableSelect';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
-import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
-import useListCohortModules from 'src/hooks/useListCohortModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import useProjectScore from 'src/hooks/useProjectScore';
 import { useLocalization, useUser } from 'src/providers';
-import { useApplicationData } from 'src/providers/Application/Context';
 import { requestAssignTerraformationContact } from 'src/redux/features/accelerator/acceleratorAsyncThunks';
 import { selectAssignTerraformationContact } from 'src/redux/features/accelerator/acceleratorSelectors';
 import { selectUploadImageValue } from 'src/redux/features/documentProducer/values/valuesSelector';
@@ -41,45 +34,27 @@ import { requestUpdateParticipantProject } from 'src/redux/features/participantP
 import { selectParticipantProjectUpdateRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { LAND_USE_MODEL_TYPES } from 'src/types/ParticipantProject';
 import { OrganizationUser } from 'src/types/User';
+import { SelectVariable, VariableWithValues } from 'src/types/documentProducer/Variable';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useParticipantProjectData } from '../ParticipantProjectContext';
-import { useVotingData } from '../Voting/VotingContext';
 
 const HighlightPhotoStableId = '551';
 const ZoneFigureStableId = '525';
-const photoVariableStableIds = [HighlightPhotoStableId, ZoneFigureStableId];
+const standardStableId = '350';
+const methodologyNumberStableId = '351';
+const variableStableIds = [HighlightPhotoStableId, ZoneFigureStableId, standardStableId, methodologyNumberStableId];
 
 const ProjectProfileEdit = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const { crumbs, participantProject, project, projectId, projectMeta, organization, reload } =
-    useParticipantProjectData();
-  const { projectScore } = useProjectScore(projectId);
-  const { phaseVotes } = useVotingData();
+  const { participantProject, project, projectId, organization, reload } = useParticipantProjectData();
   const { goToParticipantProject } = useNavigateTo();
   const { isAllowed } = useUser();
-  const { getApplicationByProjectId } = useApplicationData();
-  const { cohortModules, listCohortModules } = useListCohortModules();
-
-  useEffect(() => {
-    if (project && project.cohortId) {
-      void listCohortModules(project.cohortId);
-    }
-  }, [project, listCohortModules]);
-
-  const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
-  const isAllowedEditScoreAndVoting = isAllowed('UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING');
-
-  const [requestsInProgress, setRequestsInProgress] = useState(false);
-  const [initiatedRequests, setInitiatedRequests] = useState({
-    participantProject: false,
-    assignTfContact: false,
-    uploadImages: false,
-  });
 
   // Participant project (accelerator data) form record and update request
   const [participantProjectRequestId, setParticipantProjectRequestId] = useState<string>('');
@@ -88,6 +63,13 @@ const ProjectProfileEdit = () => {
   );
   const [participantProjectRecord, setParticipantProjectRecord, onChangeParticipantProject] =
     useForm(participantProject);
+
+  const [requestsInProgress, setRequestsInProgress] = useState(false);
+  const [initiatedRequests, setInitiatedRequests] = useState({
+    participantProject: false,
+    assignTfContact: false,
+    uploadImages: false,
+  });
 
   const [organizationUsersRequestId, setOrganizationUsersRequestId] = useState<string>('');
   const [listUsersRequestId, setListUsersRequestId] = useState('');
@@ -98,16 +80,18 @@ const ProjectProfileEdit = () => {
   const assignContactResponse = useAppSelector(selectAssignTerraformationContact(assignTfContactRequestId));
   const response = useAppSelector(selectOrganizationUsers(organizationUsersRequestId));
 
-  const photoValues = useAppSelector((state) =>
-    selectSpecificVariablesWithValues(state, photoVariableStableIds, projectId)
+  const variableValues = useAppSelector((state) =>
+    selectSpecificVariablesWithValues(state, variableStableIds, projectId)
   );
-  const [photoVariableIds, setPhotoVariableIds] = useState<Record<string, number>>();
+  const [stableToVariable, setStableToVariable] = useState<Record<string, VariableWithValues>>();
   const { activeLocale } = useLocalization();
   const [globalUsersOptions, setGlobalUsersOptions] = useState<DropdownItem[]>();
   const [tfContact, setTfContact] = useState<DropdownItem>();
   const [organizationUsers, setOrganizationUsers] = useState<OrganizationUser[]>();
   const [mainPhoto, setMainPhoto] = useState<PhotoWithAttributes>();
   const [mapPhoto, setMapPhoto] = useState<PhotoWithAttributes>();
+
+  const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
 
   const redirectToProjectView = useCallback(() => {
     reload();
@@ -116,18 +100,20 @@ const ProjectProfileEdit = () => {
   }, [reload, snackbar, goToParticipantProject, projectId]);
 
   useEffect(() => {
-    if (photoValues.length > 0) {
-      setPhotoVariableIds(
-        photoValues.reduce<Record<string, number>>((map, variableWithValues) => {
-          map[variableWithValues.stableId] = variableWithValues.id;
+    if (variableValues.length > 0) {
+      setStableToVariable(
+        variableValues.reduce<Record<string, VariableWithValues>>((map, variableWithValues) => {
+          map[variableWithValues.stableId] = variableWithValues;
           return map;
         }, {})
       );
     }
-  }, [photoValues]);
+  }, [variableValues]);
 
   useEffect(() => {
-    if (!requestsInProgress) return;
+    if (!requestsInProgress) {
+      return;
+    }
 
     const isComplete = (status: string | undefined, wasInitiated: boolean) =>
       !wasInitiated || status === 'success' || status === 'error';
@@ -186,15 +172,15 @@ const ProjectProfileEdit = () => {
   }, [organization?.tfContactUser, globalUsersOptions]);
 
   useEffect(() => {
-    const listUsersRequest = dispatch(requestListGlobalRolesUsers({ locale: activeLocale }));
-    void dispatch(requestListSpecificVariables(photoVariableStableIds));
+    const request = dispatch(requestListGlobalRolesUsers({ locale: activeLocale }));
+    void dispatch(requestListSpecificVariables(variableStableIds));
     void dispatch(
       requestListSpecificVariablesValues({
-        projectId: projectId,
-        variablesStableIds: photoVariableStableIds,
+        projectId,
+        variablesStableIds: variableStableIds,
       })
     );
-    setListUsersRequestId(listUsersRequest.requestId);
+    setListUsersRequestId(request.requestId);
   }, [activeLocale, dispatch]);
 
   useEffect(() => {
@@ -207,11 +193,6 @@ const ProjectProfileEdit = () => {
     }
   }, [listUsersRequest]);
 
-  const projectApplication = useMemo(
-    () => getApplicationByProjectId(projectId),
-    [getApplicationByProjectId, projectId]
-  );
-
   const onChangeCountry = useCallback(
     (countryCode?: string, region?: string) => {
       onChangeParticipantProject('countryCode', countryCode);
@@ -220,9 +201,23 @@ const ProjectProfileEdit = () => {
     [onChangeParticipantProject]
   );
 
+  const saveTFContact = useCallback(() => {
+    if (project?.organizationId && tfContact) {
+      const assignRequest = dispatch(
+        requestAssignTerraformationContact({
+          organizationId: project?.organizationId,
+          terraformationContactId: tfContact?.value as number,
+        })
+      );
+      setAssignTfContactRequestId(assignRequest.requestId);
+      return true;
+    }
+    return false;
+  }, [tfContact, dispatch, project?.organizationId]);
+
   const handleSave = useCallback(() => {
-    if (!photoVariableIds) {
-      console.warn("Photo Variable Ids not yet retrieved; can't save yet");
+    if (!stableToVariable) {
+      snackbar.toastError("Can't save until page is fully loaded.");
       return;
     }
     setRequestsInProgress(true);
@@ -242,11 +237,11 @@ const ProjectProfileEdit = () => {
       saveTFContact();
       newInitiatedRequests.assignTfContact = true;
     }
-    if ((mainPhoto || mapPhoto) && photoVariableIds) {
+    if ((mainPhoto || mapPhoto) && stableToVariable) {
       const imageValues = [];
       if (mainPhoto) {
         imageValues.push({
-          variableId: photoVariableIds[HighlightPhotoStableId],
+          variableId: stableToVariable[HighlightPhotoStableId].id,
           file: mainPhoto.file,
           caption: '',
           citation: '',
@@ -255,7 +250,7 @@ const ProjectProfileEdit = () => {
       }
       if (mapPhoto) {
         imageValues.push({
-          variableId: photoVariableIds[ZoneFigureStableId],
+          variableId: stableToVariable[ZoneFigureStableId].id,
           file: mapPhoto.file,
           caption: '',
           citation: '',
@@ -274,21 +269,7 @@ const ProjectProfileEdit = () => {
     }
 
     setInitiatedRequests(newInitiatedRequests);
-  }, [participantProjectRecord, dispatch, projectId, mainPhoto, mapPhoto, photoVariableIds]);
-
-  const saveTFContact = useCallback(() => {
-    if (project?.organizationId && tfContact) {
-      const assignRequest = dispatch(
-        requestAssignTerraformationContact({
-          organizationId: project?.organizationId,
-          terraformationContactId: tfContact?.value,
-        })
-      );
-      setAssignTfContactRequestId(assignRequest.requestId);
-      return true;
-    }
-    return false;
-  }, [tfContact, dispatch, project?.organizationId]);
+  }, [participantProjectRecord, dispatch, projectId, mainPhoto, mapPhoto, stableToVariable, saveTFContact]);
 
   const handleOnCancel = useCallback(() => goToParticipantProject(projectId), [goToParticipantProject, projectId]);
 
@@ -317,19 +298,41 @@ const ProjectProfileEdit = () => {
     }
   }, [organization]);
 
+  const onChangeLandUseHectares = (type: string, hectares: string) => {
+    const updated = { ...participantProjectRecord?.landUseModelHectares, [type]: Number(hectares) };
+    onChangeParticipantProject('landUseModelHectares', updated);
+  };
+
+  const onChangeLandUseTypes = (_: string, types: string[]) => {
+    const typesToRemove = Object.keys(participantProjectRecord?.landUseModelHectares || {}).filter(
+      (type) => !types.includes(type)
+    );
+    const updatedModelHectares = { ...(participantProjectRecord?.landUseModelHectares || {}) };
+    typesToRemove.forEach((type) => {
+      delete updatedModelHectares[type];
+    });
+    onChangeParticipantProject('landUseModelHectares', updatedModelHectares);
+    onChangeParticipantProject('landUseModelTypes', types);
+  };
+
+  const onChangeSdgList = (id: string, newList: string[]) => {
+    onChangeParticipantProject(
+      id,
+      newList.map((item) => Number(item))
+    );
+  };
+
   const globalUsersWithNoOwner = useMemo(() => {
     const ownerId = organizationUsers?.find((orgUsr) => orgUsr.role === 'Owner')?.id;
     return globalUsersOptions?.filter((opt) => opt.value.toString() !== ownerId?.toString()) || [];
   }, [organizationUsers, globalUsersOptions]);
 
+  const sortedSelectedModelTypes = useMemo(() => {
+    return LAND_USE_MODEL_TYPES.filter((type) => participantProjectRecord?.landUseModelTypes?.includes(type));
+  }, [participantProjectRecord?.landUseModelTypes]);
+
   return (
-    <PageWithModuleTimeline
-      title={participantProject?.dealName}
-      crumbs={crumbs}
-      hierarchicalCrumbs={false}
-      cohortPhase={project?.cohortPhase}
-      modules={cohortModules ?? []}
-    >
+    <Grid container paddingRight={theme.spacing(3)}>
       <PageForm
         busy={[
           participantProjectUpdateResponse?.status,
@@ -341,17 +344,23 @@ const ProjectProfileEdit = () => {
         onSave={handleSave}
         saveID='createNewParticipantProject'
       >
+        <Box margin={theme.spacing(2, 3)}>
+          <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
+            {participantProject?.dealName}
+          </Typography>
+        </Box>
         <Card
           style={{
             display: 'flex',
             flexDirection: 'column',
             flexGrow: 1,
             marginBottom: theme.spacing(3),
+            marginRight: theme.spacing(3),
             padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
           }}
         >
           <Grid container>
-            <Grid item xs={12}>
+            <Grid item xs={6}>
               <ProjectFieldTextfield
                 height='auto'
                 id={'dealName'}
@@ -361,25 +370,7 @@ const ProjectProfileEdit = () => {
                 value={participantProjectRecord?.dealName}
               />
             </Grid>
-            {projectApplication && (
-              <ApplicationStatusCard
-                application={projectApplication}
-                md={!isAllowedEditScoreAndVoting ? 12 : undefined}
-              />
-            )}
-            {isAllowedEditScoreAndVoting && (
-              <>
-                <PhaseScoreCard md={!projectApplication?.id ? 6 : undefined} score={projectScore} />
-                <VotingDecisionCard md={!projectApplication?.id ? 6 : undefined} phaseVotes={phaseVotes} />
-              </>
-            )}
-            <ProjectFieldTextfield
-              id={'fileNaming'}
-              label={strings.FILE_NAMING}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.fileNaming}
-            />
-            <GridEntryWrapper height={'100px'}>
+            <GridEntryWrapper md={6}>
               <Box paddingX={theme.spacing(2)}>
                 <Dropdown
                   id='projectLead'
@@ -398,193 +389,269 @@ const ProjectProfileEdit = () => {
                 />
               </Box>
             </GridEntryWrapper>
-            <CountrySelect
-              id={'countryCode'}
-              label={strings.COUNTRY}
-              onChange={onChangeCountry}
-              region={participantProjectRecord?.region}
-              value={participantProjectRecord?.countryCode}
-            />
-            <RegionDisplay label={strings.REGION} value={participantProjectRecord?.region} />
-            <LandUseMultiSelect
-              id={'landUseModelTypes'}
-              label={strings.LAND_USE_MODEL_TYPE}
+            <ProjectFieldTextAreaEdit
+              id={'dealDescription'}
+              label={strings.PROJECT_OVERVIEW}
               onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.landUseModelTypes}
+              value={participantProjectRecord?.dealDescription}
+            />
+            <Grid item md={6} display={'flex'} flexDirection={'column'}>
+              <Box width={'100%'}>
+                <CountrySelect
+                  id={'countryCode'}
+                  md={12}
+                  label={strings.COUNTRY}
+                  onChange={onChangeCountry}
+                  region={participantProjectRecord?.region}
+                  value={participantProjectRecord?.countryCode}
+                />
+              </Box>
+            </Grid>
+            <Grid item md={12}>
+              <LandUseMultiSelect
+                id={'landUseModelTypes'}
+                md={6}
+                label={strings.LAND_USE_MODEL_TYPE}
+                onChange={onChangeLandUseTypes}
+                value={sortedSelectedModelTypes}
+              />
+            </Grid>
+            {sortedSelectedModelTypes?.map((landUseModelType) => (
+              <ProjectFieldTextfield
+                id={landUseModelType}
+                key={landUseModelType}
+                md={4}
+                label={strings.formatString(strings.X_HECTARES_HA, landUseModelType) as string}
+                onChange={onChangeLandUseHectares}
+                type={'number'}
+                value={participantProjectRecord?.landUseModelHectares?.[landUseModelType]}
+              />
+            ))}
+
+            <Box marginX={theme.spacing(2)} width={'100%'}>
+              <Grid item xs={12} marginTop={theme.spacing(2)}>
+                <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
+                  {strings.LAND_DATA}
+                </Typography>
+              </Grid>
+            </Box>
+
+            <ProjectFieldTextfield
+              id={'confirmedReforestableLand'}
+              md={4}
+              label={strings.ELIGIBLE_AREA_HA}
+              onChange={onChangeParticipantProject}
+              type={'number'}
+              value={participantProjectRecord?.confirmedReforestableLand}
+              tooltip={strings.ELIGIBLE_AREA_DESCRIPTION}
+            />
+            <ProjectFieldTextfield
+              id={'projectArea'}
+              md={4}
+              label={strings.PROJECT_AREA_HA}
+              onChange={onChangeParticipantProject}
+              type={'number'}
+              value={participantProjectRecord?.projectArea}
+              tooltip={strings.PROJECT_AREA_DESCRIPTION}
             />
             <ProjectFieldTextfield
               id={'numNativeSpecies'}
+              md={4}
               label={strings.NUMBER_OF_NATIVE_SPECIES}
               onChange={onChangeParticipantProject}
               type={'number'}
               value={participantProjectRecord?.numNativeSpecies}
             />
             <ProjectFieldTextfield
-              id={'applicationReforestableLand'}
-              label={strings.APPLICATION_RESTORABLE_LAND}
+              id={'minProjectArea'}
+              md={4}
+              label={strings.MIN_PROJECT_AREA_HA}
               onChange={onChangeParticipantProject}
               type={'number'}
-              value={participantProjectRecord?.applicationReforestableLand}
-            />
-            <ProjectFieldTextfield
-              id={'confirmedReforestableLand'}
-              label={strings.CONFIRMED_RESTORABLE_LAND}
-              onChange={onChangeParticipantProject}
-              type={'number'}
-              value={participantProjectRecord?.confirmedReforestableLand}
+              value={participantProjectRecord?.minProjectArea}
+              tooltip={strings.MIN_PROJECT_AREA_DESCRIPTION}
             />
             <ProjectFieldTextfield
               id={'totalExpansionPotential'}
-              label={strings.TOTAL_EXPANSION_POTENTIAL}
+              md={4}
+              label={strings.EXPANSION_POTENTIAL_HA}
               onChange={onChangeParticipantProject}
               type={'number'}
               value={participantProjectRecord?.totalExpansionPotential}
+              tooltip={strings.EXPANSION_POTENTIAL_DESCRIPTION}
             />
-            <ProjectFieldTextfield
-              id={'perHectareBudget'}
-              label={strings.PER_HECTARE_ESTIMATED_BUDGET}
-              onChange={onChangeParticipantProject}
-              type={'number'}
-              value={participantProjectRecord?.perHectareBudget}
-            />
-            <ProjectFieldTextfield
-              id={'hubSpotUrl'}
-              label={strings.HUBSPOT_LINK}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.hubSpotUrl}
-            />
-            <ProjectFieldMeta
-              date={project?.createdTime}
-              dateLabel={strings.CREATED_ON}
-              userId={project?.createdBy}
-              userName={projectMeta?.createdByUserName}
-              userLabel={strings.BY}
-            />
-            <ProjectFieldMeta
-              date={project?.modifiedTime}
-              dateLabel={strings.LAST_MODIFIED_ON}
-              userId={project?.modifiedBy}
-              userName={projectMeta?.modifiedByUserName}
-              userLabel={strings.BY}
-            />
-          </Grid>
-          <Grid container>
-            <Grid item xs={12} margin={`0 ${theme.spacing(2)}`}>
-              <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
-                {strings.CARBON}
-              </Typography>
-            </Grid>
+
+            <Box marginX={theme.spacing(2)} width={'100%'}>
+              <Grid item xs={12} marginTop={theme.spacing(2)}>
+                <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
+                  {strings.CARBON}
+                </Typography>
+              </Grid>
+            </Box>
             <MinMaxCarbonTextfield
+              md={4}
               label={strings.MIN_MAX_CARBON_ACCUMULATION_UNITS}
               onChange={onChangeParticipantProject}
               valueMax={participantProjectRecord?.maxCarbonAccumulation}
               valueMin={participantProjectRecord?.minCarbonAccumulation}
             />
             <ProjectFieldTextfield
-              id={'carbonCapacity'}
-              label={strings.CARBON_CAPACITY_TC02_HA}
+              id={'totalVCU'}
+              md={4}
+              label={strings.TOTAL_VCU_T_40YRS}
               onChange={onChangeParticipantProject}
               type={'number'}
-              value={participantProject?.carbonCapacity}
+              value={participantProjectRecord?.totalVCU}
             />
             <ProjectFieldTextfield
-              id={'annualCarbon'}
-              label={strings.ANNUAL_CARBON_T}
+              id={'perHectareBudget'}
+              md={4}
+              label={strings.PER_HECTARE_ESTIMATED_BUDGET}
               onChange={onChangeParticipantProject}
               type={'number'}
-              value={participantProject?.annualCarbon}
+              value={participantProjectRecord?.perHectareBudget}
             />
             <ProjectFieldTextfield
-              id={'totalCarbon'}
-              label={strings.TOTAL_CARBON_T}
+              id={'accumulationRate'}
+              md={4}
+              label={strings.ACCUMULATION_RATE_UNITS}
               onChange={onChangeParticipantProject}
               type={'number'}
-              value={participantProject?.totalCarbon}
+              value={participantProjectRecord?.accumulationRate}
             />
+            <VariableSelect
+              id={'standard'}
+              md={4}
+              label={strings.STANDARD}
+              onChange={onChangeParticipantProject}
+              value={participantProjectRecord?.standard}
+              options={(stableToVariable?.[standardStableId] as SelectVariable)?.options}
+            />
+            <VariableSelect
+              id={'methodologyNumber'}
+              md={4}
+              label={strings.METHODOLOGY_NUMBER}
+              onChange={onChangeParticipantProject}
+              value={participantProjectRecord?.methodologyNumber}
+              options={(stableToVariable?.[methodologyNumberStableId] as SelectVariable)?.options}
+            />
+
+            <Box marginX={theme.spacing(2)} width={'100%'}>
+              <Grid item xs={12} marginTop={theme.spacing(2)}>
+                <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
+                  {strings.PROJECT_LINKS}
+                </Typography>
+              </Grid>
+            </Box>
+
+            <ProjectFieldTextfield
+              id={'googleFolderUrl'}
+              md={4}
+              label={strings.GDRIVE_LINK}
+              onChange={onChangeParticipantProject}
+              value={participantProjectRecord?.googleFolderUrl}
+            />
+            <ProjectFieldTextfield
+              id={'verraLink'}
+              md={4}
+              label={strings.VERRA_LINK}
+              onChange={onChangeParticipantProject}
+              value={participantProjectRecord?.verraLink}
+            />
+            <ProjectFieldTextfield
+              id={'clickUpLink'}
+              md={4}
+              label={strings.CLICK_UP_LINK}
+              onChange={onChangeParticipantProject}
+              value={participantProjectRecord?.clickUpLink}
+            />
+            <ProjectFieldTextfield
+              id={'hubSpotUrl'}
+              md={4}
+              label={strings.HUBSPOT_LINK}
+              onChange={onChangeParticipantProject}
+              value={participantProjectRecord?.hubSpotUrl}
+            />
+            <ProjectFieldTextfield
+              id={'riskTrackerLink'}
+              md={4}
+              label={strings.RISK_TRACKER_LINK}
+              onChange={onChangeParticipantProject}
+              value={participantProjectRecord?.riskTrackerLink}
+            />
+            <ProjectFieldTextfield
+              id={'slackLink'}
+              md={4}
+              label={strings.SLACK_LINK}
+              onChange={onChangeParticipantProject}
+              value={participantProjectRecord?.slackLink}
+            />
+            <ProjectFieldTextfield
+              id={'gisReportsLink'}
+              md={4}
+              label={strings.GIS_REPORT_LINK}
+              onChange={onChangeParticipantProject}
+              value={participantProjectRecord?.gisReportsLink}
+            />
+
+            <Grid container>
+              <SdgMultiSelect
+                id={'sdgList'}
+                md={6}
+                label={strings.UN_SDG}
+                onChange={onChangeSdgList}
+                value={participantProjectRecord?.sdgList}
+              />
+            </Grid>
           </Grid>
-        </Card>
-        <Card
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            flexGrow: 1,
-            marginBottom: theme.spacing(3),
-            padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
-          }}
-        >
+
           <Grid container>
-            <ProjectFieldTextAreaEdit
-              id={'dealDescription'}
-              label={strings.DEAL_DESCRIPTION}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.dealDescription}
-            />
-            <ProjectFieldTextAreaEdit
-              id={'investmentThesis'}
-              label={strings.INVESTMENT_THESIS}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.investmentThesis}
-            />
-            <ProjectFieldTextAreaEdit
-              id={'failureRisk'}
-              label={strings.FAILURE_RISK}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.failureRisk}
-            />
-            <ProjectFieldTextAreaEdit
-              id={'whatNeedsToBeTrue'}
-              label={strings.WHAT_NEEDS_TO_BE_TRUE}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.whatNeedsToBeTrue}
-            />
+            <Grid item md={6}>
+              <PhotoChooser
+                title={'Main Photo'}
+                onPhotosChanged={(value) => setMainPhoto(value[0])}
+                uploadText={strings.UPLOAD_PHOTO}
+                uploadDescription={strings.UPLOAD_PHOTO_DESCRIPTION}
+                chooseFileText={strings.CHOOSE_FILE}
+                replaceFileText={strings.REPLACE_FILE}
+                includeCaption={false}
+                includeCitation={false}
+                multipleSelection={false}
+              />
+            </Grid>
+            {participantProject?.projectHighlightPhotoValueId && (
+              <ProjectProfileImage
+                projectId={projectId}
+                imageValueId={participantProject.projectHighlightPhotoValueId}
+                alt={strings.PROJECT_HIGHLIGHT_IMAGE}
+              />
+            )}
+          </Grid>
+          <Grid container>
+            <Grid item md={6}>
+              <PhotoChooser
+                title={'Map Photo'}
+                onPhotosChanged={(value) => setMapPhoto(value[0])}
+                uploadText={strings.UPLOAD_PHOTO}
+                uploadDescription={strings.UPLOAD_PHOTO_DESCRIPTION}
+                chooseFileText={strings.CHOOSE_FILE}
+                replaceFileText={strings.REPLACE_FILE}
+                includeCaption={false}
+                includeCitation={false}
+                multipleSelection={false}
+              />
+            </Grid>
+            {participantProject?.projectZoneFigureValueId && (
+              <ProjectProfileImage
+                projectId={projectId}
+                imageValueId={participantProject.projectZoneFigureValueId}
+                alt={strings.PROJECT_ZONE_FIGURE}
+              />
+            )}
           </Grid>
         </Card>
-        <Grid container>
-          <Grid item md={6}>
-            <PhotoChooser
-              title={'Main Photo'}
-              onPhotosChanged={(value) => setMainPhoto(value[0])}
-              uploadText={strings.UPLOAD_PHOTO}
-              uploadDescription={strings.UPLOAD_PHOTO_DESCRIPTION}
-              chooseFileText={strings.CHOOSE_FILE}
-              replaceFileText={strings.REPLACE_FILE}
-              includeCaption={false}
-              includeCitation={false}
-              multipleSelection={false}
-            />
-          </Grid>
-          {participantProject?.projectHighlightPhotoValueId && (
-            <ProjectProfileImage
-              projectId={projectId}
-              imageValueId={participantProject.projectHighlightPhotoValueId}
-              alt={strings.PROJECT_HIGHLIGHT_IMAGE}
-            />
-          )}
-        </Grid>
-        <Grid container>
-          <Grid item md={6}>
-            <PhotoChooser
-              title={'Map Photo'}
-              onPhotosChanged={(value) => setMapPhoto(value[0])}
-              uploadText={strings.UPLOAD_PHOTO}
-              uploadDescription={strings.UPLOAD_PHOTO_DESCRIPTION}
-              chooseFileText={strings.CHOOSE_FILE}
-              replaceFileText={strings.REPLACE_FILE}
-              includeCaption={false}
-              includeCitation={false}
-              multipleSelection={false}
-            />
-          </Grid>
-          {participantProject?.projectZoneFigureValueId && (
-            <ProjectProfileImage
-              projectId={projectId}
-              imageValueId={participantProject.projectZoneFigureValueId}
-              alt={strings.PROJECT_ZONE_FIGURE}
-            />
-          )}
-        </Grid>
       </PageForm>
-    </PageWithModuleTimeline>
+    </Grid>
   );
 };
 export default ProjectProfileEdit;

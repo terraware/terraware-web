@@ -95,13 +95,13 @@ const ProjectProfileView = ({
       case 'Pre-Screen':
       case 'Phase 0 - Due Diligence':
       default:
-        return getCard(strings.ELIGIBLE_AREA, participantProject?.applicationReforestableLand);
+        return getCard(strings.ELIGIBLE_AREA, participantProject?.confirmedReforestableLand);
     }
   }, [
     participantProject?.cohortPhase,
     participantProject?.projectArea,
     participantProject?.minProjectArea,
-    participantProject?.applicationReforestableLand,
+    participantProject?.confirmedReforestableLand,
   ]);
 
   const lastSubmittedReport = useMemo(() => {

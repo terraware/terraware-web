@@ -10,10 +10,10 @@ type ProjectFieldSelectProps = ProjectFieldEditProps & {
   options: DropdownItem[];
 };
 
-const ProjectFieldSelect = ({ id, label, onChange, value, options }: ProjectFieldSelectProps) => {
+const ProjectFieldSelect = ({ id, label, onChange, value, options, md }: ProjectFieldSelectProps) => {
   const theme = useTheme();
 
-  const [localValue, setLocalValue] = useState<string | undefined>();
+  const [localValue, setLocalValue] = useState<string | number | undefined>();
 
   const handleOnChange = useCallback(
     (_value: string) => {
@@ -24,11 +24,11 @@ const ProjectFieldSelect = ({ id, label, onChange, value, options }: ProjectFiel
   );
 
   useEffect(() => {
-    setLocalValue(`${value}`);
+    setLocalValue(value);
   }, [value]);
 
   return (
-    <GridEntryWrapper height={'100px'}>
+    <GridEntryWrapper height={'100px'} md={md}>
       <Box paddingX={theme.spacing(2)}>
         <Dropdown
           id={id}

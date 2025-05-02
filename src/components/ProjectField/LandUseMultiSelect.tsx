@@ -10,13 +10,23 @@ type LandUseMultiSelectProps = Omit<ProjectFieldEditProps, 'onChange' | 'value'>
   value: string[] | undefined;
 };
 
-const LandUseMultiSelect = ({ id, label, onChange, value }: LandUseMultiSelectProps) => {
+const LandUseMultiSelect = ({ id, label, onChange, value, md, height }: LandUseMultiSelectProps) => {
   const options = useMemo(
     (): Map<string, string> => new Map(LAND_USE_MODEL_TYPES.map((_value) => [getLandUseModelType(_value), _value])),
     []
   );
 
-  return <ProjectFieldMultiSelect id={id} label={label} onChange={onChange} values={value} options={options} />;
+  return (
+    <ProjectFieldMultiSelect
+      id={id}
+      md={md}
+      height={height}
+      label={label}
+      onChange={onChange}
+      values={value}
+      options={options}
+    />
+  );
 };
 
 export default LandUseMultiSelect;

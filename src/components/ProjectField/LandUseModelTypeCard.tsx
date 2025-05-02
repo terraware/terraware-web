@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import { useTheme } from '@mui/material';
 
 import strings from 'src/strings';
+import { LAND_USE_MODEL_TYPES } from 'src/types/ParticipantProject';
 
 import InvertedCard from './InvertedCard';
 
@@ -19,9 +20,11 @@ const LandUseModelTypeCard = ({ modelHectares, numericFormatter }: LandUseModelT
       return;
     }
     const output: string[] = [];
-    for (const [type, hectares] of Object.entries(modelHectares)) {
-      if (hectares > 0) {
-        output.push(`${type} (${strings.formatString(strings.X_HA, numericFormatter.format(hectares))?.toString()})`);
+    for (const type of LAND_USE_MODEL_TYPES) {
+      if (modelHectares[type] > 0) {
+        output.push(
+          `${type} (${strings.formatString(strings.X_HA, numericFormatter.format(modelHectares[type]))?.toString()})`
+        );
       }
     }
     return output.join('/');

@@ -14,9 +14,10 @@ type MinMaxCarbonTextFieldProps = {
   onChange: (id: string, value: string) => void;
   valueMax?: EditFieldValue;
   valueMin?: EditFieldValue;
+  md?: number;
 };
 
-const MinMaxCarbonTextfield = ({ height, onChange, valueMax, valueMin }: MinMaxCarbonTextFieldProps) => {
+const MinMaxCarbonTextfield = ({ height, onChange, valueMax, valueMin, md }: MinMaxCarbonTextFieldProps) => {
   const theme = useTheme();
 
   const [minLocalValue, setMinLocalValue] = useState<string | undefined>();
@@ -51,7 +52,7 @@ const MinMaxCarbonTextfield = ({ height, onChange, valueMax, valueMin }: MinMaxC
   }, [valueMax]);
 
   return (
-    <GridEntryWrapper height={height}>
+    <GridEntryWrapper height={height} md={md}>
       <>
         <Typography
           component='label'
