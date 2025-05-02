@@ -36,6 +36,7 @@ const FUNDING_ENTITIES_LIST_ENDPOINT = '/api/v1/funder/entities';
 const FUNDING_ENTITY_ENDPOINT = '/api/v1/funder/entities/{fundingEntityId}';
 const FUNDING_ENTITY_USERS_ENDPOINT = '/api/v1/funder/entities/{fundingEntityId}/users';
 const USER_FUNDING_ENTITY_ENDPOINT = '/api/v1/funder/entities/users/{userId}';
+const PROJECT_FUNDING_ENTITY_ENDPOINT = '/api/v1/funder/entities/projects/{projectId}';
 const FUNDER_REPORTS_ENDPOINT = '/api/v1/funder/reports/projects/{projectId}';
 
 type FundingEntitiesServerResponse =
@@ -67,6 +68,7 @@ const httpFundingEntity = HttpService.root(FUNDING_ENTITY_ENDPOINT);
 const httpFundingEntityUsers = HttpService.root(FUNDING_ENTITY_USERS_ENDPOINT);
 const httpFundingEntities = HttpService.root(FUNDING_ENTITIES_LIST_ENDPOINT);
 const httpFunderReports = HttpService.root(FUNDER_REPORTS_ENDPOINT);
+const httpProjectFundingEntities = HttpService.root(PROJECT_FUNDING_ENTITY_ENDPOINT);
 
 const getUserFundingEntity = async (userId: number): Promise<UserFundingEntityResponse> => {
   const response: UserFundingEntityResponse = await httpUserFundingEntity.get<
@@ -192,6 +194,19 @@ const listFunderReports = async (projectId: number): Promise<Response2<ListFunde
   });
 };
 
+const listForProject = async (projectId: number): Promise<FundingEntitiesResponse> => {
+  return await httpProjectFundingEntities.get<FundingEntitiesServerResponse, FundingEntitiesData>(
+    {
+      urlReplacements: {
+        '{projectId}': projectId.toString(),
+      },
+    },
+    (data) => ({
+      fundingEntities: data?.fundingEntities || [],
+    })
+  );
+};
+
 const FundingEntityService = {
   getUserFundingEntity,
   get,
@@ -203,6 +218,7 @@ const FundingEntityService = {
   inviteFunder,
   deleteFunders,
   listFunderReports,
+  listForProject,
 };
 
 export default FundingEntityService;
