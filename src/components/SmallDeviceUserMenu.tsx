@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useEffect, useRef } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import {
   Box,
@@ -18,6 +17,7 @@ import {
 } from '@mui/material';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';

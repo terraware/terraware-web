@@ -1,5 +1,4 @@
 import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, TableColumnType } from '@terraware/web-components';
@@ -10,6 +9,7 @@ import ExportCsvModal from 'src/components/common/ExportCsvModal';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
 import { requestListParticipants } from 'src/redux/features/participants/participantsAsyncThunks';
 import { selectParticipantListRequest } from 'src/redux/features/participants/participantsSelectors';

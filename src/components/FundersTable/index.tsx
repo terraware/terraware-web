@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { TableRowType } from '@terraware/web-components';
 
@@ -7,6 +6,7 @@ import ClientSideFilterTable from 'src/components/Tables/ClientSideFilterTable';
 import Button from 'src/components/common/button/Button';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUser } from 'src/providers';
 import { requestDeleteFunders, requestListFunders } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
 import {

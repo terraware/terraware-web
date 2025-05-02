@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Grid } from '@mui/material';
 import { DropdownItem } from '@terraware/web-components';
@@ -13,6 +12,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { requestProjectDelete } from 'src/redux/features/projects/projectsAsyncThunks';
 import { selectProject, selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';

@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, CircularProgress, Grid, useTheme } from '@mui/material';
 import { ErrorBox, TableColumnType } from '@terraware/web-components';
@@ -14,6 +13,7 @@ import TfMain from 'src/components/common/TfMain';
 import TitleDescription from 'src/components/common/TitleDescription';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
 import { useUser } from 'src/providers';
 import { SpeciesService, TrackingService } from 'src/services';

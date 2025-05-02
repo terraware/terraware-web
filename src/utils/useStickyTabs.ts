@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Tab } from '@terraware/web-components';
+
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import useQuery from './useQuery';
 import useStateLocation, { getLocation } from './useStateLocation';

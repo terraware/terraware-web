@@ -1,10 +1,10 @@
 import React from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import strings from 'src/strings';
 
 import Button from './components/common/button/Button';

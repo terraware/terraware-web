@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { UserWithInternalnterests } from 'src/scenes/AcceleratorRouter/People/UserWithInternalInterests';
 import useUpdatePerson from 'src/scenes/AcceleratorRouter/People/useUpdatePerson';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';

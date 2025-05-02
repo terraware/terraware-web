@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, useTheme } from '@mui/material';
 
@@ -12,6 +11,7 @@ import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import useListCohortModules from 'src/hooks/useListCohortModules';
 import useListModules from 'src/hooks/useListModules';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
 import { requestCohort } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
@@ -44,9 +44,7 @@ const CohortView = () => {
 
   const goToEditCohort = useCallback(() => {
     if (pathParams.cohortId) {
-      navigate(
-        getLocation(APP_PATHS.ACCELERATOR_COHORTS_EDIT.replace(':cohortId', pathParams.cohortId), location)
-      );
+      navigate(getLocation(APP_PATHS.ACCELERATOR_COHORTS_EDIT.replace(':cohortId', pathParams.cohortId), location));
     }
   }, [navigate, location, pathParams.cohortId]);
 

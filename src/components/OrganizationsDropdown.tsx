@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { DropdownItem, PopoverMenu } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';

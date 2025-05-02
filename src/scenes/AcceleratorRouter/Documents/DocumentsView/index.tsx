@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 import { IconName, Separator } from '@terraware/web-components';
@@ -8,6 +7,7 @@ import Page from 'src/components/Page';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipants } from 'src/hooks/useParticipants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import useQuery from 'src/utils/useQuery';

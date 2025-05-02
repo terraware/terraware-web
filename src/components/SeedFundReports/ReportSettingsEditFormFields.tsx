@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox } from '@terraware/web-components';
 
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';

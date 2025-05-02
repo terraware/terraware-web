@@ -1,9 +1,9 @@
 import React from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
 import Button from 'src/components/common/button/Button';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import stopPropagation from 'src/utils/stopPropagationEvent';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 

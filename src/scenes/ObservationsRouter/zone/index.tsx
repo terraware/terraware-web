@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -10,6 +9,7 @@ import { FilterField } from 'src/components/common/FilterGroup';
 import Search, { SearchFiltersProps } from 'src/components/common/SearchFiltersWrapper';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { searchObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
 import { has25mPlots } from 'src/redux/features/observations/utils';

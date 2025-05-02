@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Container, useTheme } from '@mui/material';
 
@@ -7,6 +6,7 @@ import PageHeader from 'src/components/PageHeader';
 import TfMain from 'src/components/common/TfMain';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 

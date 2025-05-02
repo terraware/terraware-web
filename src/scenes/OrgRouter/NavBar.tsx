@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 import { useMatch } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
@@ -16,6 +15,7 @@ import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';

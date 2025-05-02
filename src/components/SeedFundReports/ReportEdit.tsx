@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner, FormButton } from '@terraware/web-components';
@@ -18,6 +17,7 @@ import SubmitConfirmationDialog from 'src/components/SeedFundReports/SubmitConfi
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization, useUser } from 'src/providers';
 import SeedFundReportService from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
@@ -352,10 +352,7 @@ export default function ReportEdit(): JSX.Element {
         const submitResult = await SeedFundReportService.submitReport(reportIdInt);
         if (submitResult.requestSucceeded && reportId && selectedOrganization.id !== -1) {
           reloadOrganizations(selectedOrganization.id);
-          navigate(
-            { pathname: APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', reportId) },
-            { replace: true }
-          );
+          navigate({ pathname: APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', reportId) }, { replace: true });
         } else {
           snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SUBMIT);
         }

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, IconButton, useTheme } from '@mui/material';
 import { Svg } from '@terraware/web-components';
@@ -18,6 +17,7 @@ import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import useFunderPortal from 'src/hooks/useFunderPortal';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser, useUserFundingEntity } from 'src/providers/hooks';
 import useDeviceInfo from 'src/utils/useDeviceInfo';

@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, useTheme } from '@mui/material';
 import { TableRowType } from '@terraware/web-components';
@@ -9,6 +8,7 @@ import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
 import Button from 'src/components/common/button/Button';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import {
   requestDeleteGlobalRolesForUsers,

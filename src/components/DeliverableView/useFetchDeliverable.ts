@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import { requestGetDeliverable } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import {

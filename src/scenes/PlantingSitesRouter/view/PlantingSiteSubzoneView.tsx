@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -14,6 +13,7 @@ import Table from 'src/components/common/table';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { searchPlantingSiteMonitoringPlots } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
@@ -73,9 +73,7 @@ export default function PlantingSiteZoneView(): JSX.Element {
   }
 
   if (zoneId && plantingSiteId && !plantingZone?.plantingSubzones.length) {
-    navigate(
-      APP_PATHS.PLANTING_SITES_ZONE_VIEW.replace(':plantingSiteId', plantingSiteId).replace(':zoneId', zoneId)
-    );
+    navigate(APP_PATHS.PLANTING_SITES_ZONE_VIEW.replace(':plantingSiteId', plantingSiteId).replace(':zoneId', zoneId));
   }
 
   const crumbs: Crumb[] = useMemo(

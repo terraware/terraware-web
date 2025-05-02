@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -14,6 +13,7 @@ import Table from 'src/components/common/table';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { RootState } from 'src/redux/rootReducer';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';

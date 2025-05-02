@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { matchPath } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization, useUserFundingEntity } from 'src/providers';
 import NoOrgRouter from 'src/scenes/NoOrgRouter';
 import OrgRouter from 'src/scenes/OrgRouter';

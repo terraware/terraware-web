@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, CircularProgress, Container, Grid, SxProps, Typography, useTheme } from '@mui/material';
 import Cookies from 'cookies-js';
@@ -12,6 +11,7 @@ import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
 import { APP_PATHS } from 'src/constants';
 import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import AccessionByStatus from 'src/scenes/SeedsDashboard/AccessionByStatus';
 import SummaryPaper from 'src/scenes/SeedsDashboard/SummaryPaper';

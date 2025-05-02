@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, Tabs } from '@terraware/web-components';
@@ -11,6 +10,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization, useUser } from 'src/providers';
 import { PreferencesService } from 'src/services';
 import NurseryInventoryService, { SearchInventoryParams } from 'src/services/NurseryInventoryService';

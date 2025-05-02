@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
@@ -9,6 +8,7 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import DatePicker from 'src/components/common/DatePicker';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import NurserySubLocations from 'src/scenes/NurseriesRouter/NurserySubLocations';
 import { FacilityService, SubLocationService } from 'src/services';

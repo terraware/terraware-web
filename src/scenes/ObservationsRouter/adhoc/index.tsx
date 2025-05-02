@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, Tooltip, Typography, useTheme } from '@mui/material';
 import { Icon, Textfield } from '@terraware/web-components';
@@ -8,6 +7,7 @@ import { Icon, Textfield } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { selectObservationMonitoringPlot } from 'src/redux/features/observations/observationMonitoringPlotSelectors';
 import { selectObservationsResults } from 'src/redux/features/observations/observationsSelectors';

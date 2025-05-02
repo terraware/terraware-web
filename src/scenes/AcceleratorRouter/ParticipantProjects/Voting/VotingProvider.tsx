@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { selectProject } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjectVotesGet } from 'src/redux/features/votes/votesAsyncThunks';
 import { selectProjectVotes } from 'src/redux/features/votes/votesSelectors';

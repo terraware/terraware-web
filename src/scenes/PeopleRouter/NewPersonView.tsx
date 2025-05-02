@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -11,6 +10,7 @@ import PageForm from 'src/components/common/PageForm';
 import TextField from 'src/components/common/Textfield/Textfield';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS, EMAIL_REGEX } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';

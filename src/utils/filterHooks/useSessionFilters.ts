@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import {
   FiltersType,
   getFiltersFromQuery,

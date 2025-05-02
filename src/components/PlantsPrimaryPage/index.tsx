@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import _ from 'lodash';
 
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { CachedUserService, PreferencesService, TrackingService } from 'src/services';
 import strings from 'src/strings';

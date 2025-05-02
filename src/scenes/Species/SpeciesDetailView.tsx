@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, GridProps, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
@@ -11,6 +10,7 @@ import BackToLink from 'src/components/common/BackToLink';
 import Checkbox from 'src/components/common/Checkbox';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useOrganization } from 'src/providers/hooks';
 import { SpeciesService } from 'src/services';

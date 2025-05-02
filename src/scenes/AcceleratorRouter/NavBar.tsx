@@ -1,7 +1,6 @@
 import React from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 import { useMatch } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { NavSection } from '@terraware/web-components';
 
@@ -11,6 +10,7 @@ import NavItem from 'src/components/common/Navbar/NavItem';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useUser } from 'src/providers';
 import strings from 'src/strings';

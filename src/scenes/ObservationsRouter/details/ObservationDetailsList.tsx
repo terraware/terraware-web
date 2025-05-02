@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { TableColumnType } from '@terraware/web-components';
 
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import {
   searchObservationDetails,
   selectDetailsZoneNames,

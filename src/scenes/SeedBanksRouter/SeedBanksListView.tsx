@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Grid, useTheme } from '@mui/material';
 
@@ -13,6 +12,7 @@ import Table from 'src/components/common/table';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useTimeZones } from 'src/providers';
 import { FacilityService } from 'src/services';
 import strings from 'src/strings';

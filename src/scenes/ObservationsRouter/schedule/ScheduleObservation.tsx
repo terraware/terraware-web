@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
 import { requestScheduleObservation } from 'src/redux/features/observations/observationsAsyncThunks';
 import { selectScheduleObservation } from 'src/redux/features/observations/observationsSelectors';

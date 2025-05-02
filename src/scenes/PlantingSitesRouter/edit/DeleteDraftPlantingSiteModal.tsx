@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Typography } from '@mui/material';
 import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { selectDraftPlantingSiteEdit } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSelectors';
 import { requestDeleteDraft } from 'src/redux/features/draftPlantingSite/draftPlantingSiteThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';

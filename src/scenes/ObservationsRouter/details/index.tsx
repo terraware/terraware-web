@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Grid } from '@mui/material';
 import _ from 'lodash';
@@ -10,6 +9,7 @@ import { View } from 'src/components/common/ListMapSelector';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
   searchObservationDetails,

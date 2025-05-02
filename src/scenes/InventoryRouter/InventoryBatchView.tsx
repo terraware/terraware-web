@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Tabs } from '@terraware/web-components';
@@ -10,6 +9,7 @@ import BackToLink from 'src/components/common/BackToLink';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
 import { requestFetchBatch } from 'src/redux/features/batches/batchesAsyncThunks';
 import { selectBatch } from 'src/redux/features/batches/batchesSelectors';

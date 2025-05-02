@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -12,6 +11,7 @@ import DatePicker from 'src/components/common/DatePicker';
 import PageForm from 'src/components/common/PageForm';
 import TextField from 'src/components/common/Textfield/Textfield';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import {
   selectCreateReportConfig,
   selectProjectReportConfig,

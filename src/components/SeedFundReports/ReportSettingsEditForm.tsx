@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Grid } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
 import ReportSettingsService, { ReportsSettings } from 'src/services/ReportSettingsService';
 import useSnackbar from 'src/utils/useSnackbar';

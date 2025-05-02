@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box } from '@mui/material';
 import { Tabs } from '@terraware/web-components';
@@ -8,6 +7,7 @@ import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import { ButtonProps } from 'src/components/PlantsPrimaryPage/PlantsPrimaryPageView';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import {

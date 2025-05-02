@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import {
   Badge,
@@ -18,6 +17,7 @@ import { Button, Tooltip } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { NotificationsService } from 'src/services';
 import { NotificationsResponse } from 'src/services/NotificationsService';
 import strings from 'src/strings';

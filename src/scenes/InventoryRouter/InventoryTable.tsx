@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -9,6 +8,7 @@ import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton'
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import Search from 'src/scenes/InventoryRouter/Search';

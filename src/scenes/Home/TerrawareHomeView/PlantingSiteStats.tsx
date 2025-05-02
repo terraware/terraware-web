@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
@@ -9,6 +8,7 @@ import AddLink from 'src/components/common/AddLink';
 import Link from 'src/components/common/Link';
 import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';

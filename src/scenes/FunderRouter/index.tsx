@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box } from '@mui/material';
 
 import ErrorBoundary from 'src/ErrorBoundary';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUser } from 'src/providers';
 import FunderHome from 'src/scenes/FunderHome';
 

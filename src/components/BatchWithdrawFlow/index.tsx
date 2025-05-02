@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Typography } from '@mui/material';
 import { BusySpinner, theme } from '@terraware/web-components';
@@ -7,6 +6,7 @@ import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import { NurseryBatchService, NurseryWithdrawalService } from 'src/services';
 import strings from 'src/strings';

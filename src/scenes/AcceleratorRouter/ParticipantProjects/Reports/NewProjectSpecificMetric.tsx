@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -12,6 +11,7 @@ import Checkbox from 'src/components/common/Checkbox';
 import PageForm from 'src/components/common/PageForm';
 import TextField from 'src/components/common/Textfield/Textfield';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { selectCreateProjectMetric } from 'src/redux/features/reports/reportsSelectors';
 import { requestCreateProjectMetric, requestProjectReportConfig } from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';

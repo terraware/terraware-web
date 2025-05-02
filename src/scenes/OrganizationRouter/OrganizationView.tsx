@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
@@ -9,6 +8,7 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization, useTimeZones } from 'src/providers/hooks';
 import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';

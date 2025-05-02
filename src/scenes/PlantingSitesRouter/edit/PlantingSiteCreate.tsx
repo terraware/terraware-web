@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { MultiPolygon } from 'geojson';
@@ -12,6 +11,7 @@ import { View } from 'src/components/common/ListMapSelector';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import { searchPlantingSiteZones } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';

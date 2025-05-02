@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { requestSearchUserByEmail } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUserByEmailRequest } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';

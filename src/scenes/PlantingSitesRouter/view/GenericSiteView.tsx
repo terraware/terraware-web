@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, List, ListItem, Typography, useTheme } from '@mui/material';
 import { DropdownItem } from '@terraware/web-components';
@@ -15,6 +14,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import TooltipButton from 'src/components/common/button/TooltipButton';
 import { APP_PATHS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { RootState } from 'src/redux/rootReducer';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';

@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import CohortService from 'src/services/CohortService';
 import strings from 'src/strings';
 import { CreateCohortRequestPayload } from 'src/types/Cohort';

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -13,6 +12,7 @@ import Textfield from 'src/components/common/Textfield/Textfield';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import SeedBankService, { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import strings from 'src/strings';

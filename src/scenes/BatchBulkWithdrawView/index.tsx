@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import BatchWithdrawFlow from 'src/components/BatchWithdrawFlow';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useQuery from 'src/utils/useQuery';
 
 type BatchBulkWithdrawViewProps = {

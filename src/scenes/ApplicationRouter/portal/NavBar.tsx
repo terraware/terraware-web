@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
 import { matchPath, useMatch } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { NavSection, theme } from '@terraware/web-components';
 
@@ -9,6 +8,7 @@ import NavFooter from 'src/components/common/Navbar/NavFooter';
 import NavItem from 'src/components/common/Navbar/NavItem';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 

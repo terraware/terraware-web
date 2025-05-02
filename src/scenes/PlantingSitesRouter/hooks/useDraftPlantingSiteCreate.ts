@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import { selectDraftPlantingSiteCreate } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSelectors';
 import { requestCreateDraft } from 'src/redux/features/draftPlantingSite/draftPlantingSiteThunks';

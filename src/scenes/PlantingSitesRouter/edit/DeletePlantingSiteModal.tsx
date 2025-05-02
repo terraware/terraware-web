@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Typography } from '@mui/material';
 import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
 
 import TextWithLink from 'src/components/common/TextWithLink';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import { TrackingService } from 'src/services';

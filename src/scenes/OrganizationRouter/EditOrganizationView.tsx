@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -9,6 +8,7 @@ import RegionSelector from 'src/components/RegionSelector';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useTimeZones } from 'src/providers';
 import { OrganizationService } from 'src/services';
 import strings from 'src/strings';

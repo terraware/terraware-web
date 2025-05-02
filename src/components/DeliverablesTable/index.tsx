@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { TableColumnType } from '@terraware/web-components';
 
 import { FilterConfig, FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
 import { useParticipants } from 'src/hooks/useParticipants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';

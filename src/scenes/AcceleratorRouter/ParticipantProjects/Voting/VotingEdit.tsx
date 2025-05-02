@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, useTheme } from '@mui/material';
 
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { requestProjectVotesUpdate } from 'src/redux/features/votes/votesAsyncThunks';
 import { selectProjectVotesEditRequest } from 'src/redux/features/votes/votesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';

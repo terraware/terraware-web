@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Grid, useTheme } from '@mui/material';
 
@@ -13,6 +12,7 @@ import Table from 'src/components/common/table';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import AssignNewOwnerDialog from 'src/scenes/MyAccountRouter/AssignNewOwnerModal';
 import DeleteOrgDialog from 'src/scenes/MyAccountRouter/DeleteOrgModal';

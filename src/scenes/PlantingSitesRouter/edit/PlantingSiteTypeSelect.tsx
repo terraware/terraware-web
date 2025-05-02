@@ -1,7 +1,7 @@
 import React from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { SiteType } from 'src/types/PlantingSite';
 
 import PlantingSiteSelectTypeModal2 from './PlantingSiteSelectTypeModal2';

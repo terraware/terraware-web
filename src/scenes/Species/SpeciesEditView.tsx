@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
@@ -10,6 +9,7 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import {
   requestAddManyParticipantProjectSpecies,

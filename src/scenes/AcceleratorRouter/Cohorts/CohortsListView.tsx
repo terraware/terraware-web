@@ -1,5 +1,4 @@
 import React, { ReactNode, useCallback, useMemo, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Card, Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -8,6 +7,7 @@ import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
 import { requestCohorts } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohorts } from 'src/redux/features/cohorts/cohortsSelectors';

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { requestFundingEntityForUser } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
 import { selectUserFundingEntityRequest } from 'src/redux/features/funder/fundingEntitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';

@@ -1,11 +1,11 @@
 import React from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Typography } from '@mui/material';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import FundingEntityService from 'src/services/FundingEntityService';
 import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';

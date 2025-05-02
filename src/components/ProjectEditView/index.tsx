@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Typography } from '@mui/material';
 
 import ProjectForm from 'src/components/ProjectNewView/flow/ProjectForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { requestProjectUpdate } from 'src/redux/features/projects/projectsAsyncThunks';
 import { selectProject, selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
 import { requestProject } from 'src/redux/features/projects/projectsThunks';

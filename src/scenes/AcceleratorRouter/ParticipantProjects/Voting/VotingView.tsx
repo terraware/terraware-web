@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';

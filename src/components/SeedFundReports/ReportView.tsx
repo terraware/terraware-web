@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -11,6 +10,7 @@ import useReportFiles from 'src/components/SeedFundReports/useReportFiles';
 import BackToLink from 'src/components/common/BackToLink';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import SeedFundReportService from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
 import { Report } from 'src/types/Report';

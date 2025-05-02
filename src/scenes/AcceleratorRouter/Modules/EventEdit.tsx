@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { DateTime } from 'luxon';
@@ -10,6 +9,7 @@ import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import useGetModule from 'src/hooks/useGetModule';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import {
   requestCreateModuleEvent,
   requestEventDeleteMany,

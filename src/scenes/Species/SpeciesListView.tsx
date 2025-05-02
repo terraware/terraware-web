@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { DropdownItem, SortOrder } from '@terraware/web-components';
@@ -25,6 +24,7 @@ import { OrderPreserveableTable as Table } from 'src/components/common/table';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
