@@ -133,6 +133,10 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   const updateReportResponse = useAppSelector(selectReviewAcceleratorReport(requestId));
   const snackbar = useSnackbar();
 
+  useEffect(() => {
+    setChallengeMitigations(report?.challenges || []);
+  }, [report?.challenges]);
+
   const getNonEmptyChallenges = useCallback(() => {
     return challengeMitigations.filter((s) => !!s.challenge || !!s.mitigationPlan);
   }, [challengeMitigations]);
@@ -147,7 +151,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
     // report, and having this useEffect update challengeMitigations again. This check ensures we're only setting it
     // from report when needed
     if ((!getNonEmptyChallenges() || getNonEmptyChallenges().length === 0) && report?.challenges) {
-      setChallengeMitigations(report.challenges || []);
+      setChallengeMitigations(report?.challenges ?? []);
     }
   }, [report?.challenges]);
 
