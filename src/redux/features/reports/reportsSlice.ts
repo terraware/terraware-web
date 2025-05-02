@@ -192,6 +192,20 @@ const reviewAcceleratorReportMetricSlice = createSlice({
 });
 
 /**
+ * Update Accelerator Reports
+ */
+const initialUpdateManyAcceleratorReports: { [key: string]: StatusT<number> } = {};
+
+const updateManyAcceleratorReportsSlice = createSlice({
+  name: 'updateManyAcceleratorReportsSlice',
+  initialState: initialUpdateManyAcceleratorReports,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestReviewManyAcceleratorReportMetrics)(builder);
+  },
+});
+
+/**
  * Update Accelerator Report
  */
 const initialReviewAcceleratorReport: { [key: string]: StatusT<number> } = {};
@@ -276,6 +290,7 @@ const reportsReducers = {
   refreshAcceleratorReportSystemMetrics: refreshAcceleratorReportSystemMetricsSlice.reducer,
   submitAcceleratorReport: submitAcceleratorReportSlice.reducer,
   updateAcceleratorReport: updateAcceleratorReportSlice.reducer,
+  updateManyAcceleratorReports: updateManyAcceleratorReportsSlice.reducer,
   publishAcceleratorReport: publishAcceleratorReportSlice.reducer,
 };
 

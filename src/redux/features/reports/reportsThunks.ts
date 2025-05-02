@@ -181,6 +181,28 @@ export const requestListAcceleratorReports = createAsyncThunk(
   }
 );
 
+type UpdateManyAcceleratorReportsRequest = {
+  requests: UpdateAcceleratorReportParams[];
+};
+
+export const requestUpdateManyAcceleratorReports = createAsyncThunk(
+  'reviewAcceleratorReportMetrics',
+  async (request: UpdateManyAcceleratorReportsRequest, { rejectWithValue }) => {
+    const { requests } = request;
+
+    const promises = requests.map((iRequest: UpdateAcceleratorReportParams) => {
+      return AcceleratorReportService.updateAcceleratorReport(iRequest);
+    });
+
+    const results = await Promise.all(promises);
+
+    if (results.every((result) => result && result?.requestSucceeded)) {
+      return true;
+    }
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
 export const requestUpdateAcceleratorReport = createAsyncThunk(
   'updateProjectMetric',
   async (request: UpdateAcceleratorReportParams, { rejectWithValue }) => {
