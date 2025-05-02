@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { TableColumnType } from '@terraware/web-components';
 
@@ -38,7 +38,6 @@ export default function OutplantWithdrawalTable({
   const { user } = useUser();
   const numberFormatter = useNumberFormatter();
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
-  const [rowData, setRowData] = useState<{ [p: string]: unknown }[]>([]);
 
   type BatchesRow = {
     name?: string;
@@ -49,7 +48,7 @@ export default function OutplantWithdrawalTable({
     toSubzone: string;
   };
 
-  useEffect(() => {
+  const rowData = useMemo(() => {
     if (batches) {
       const batchToSpeciesMap = batchToSpecies(batches);
 
@@ -107,7 +106,9 @@ export default function OutplantWithdrawalTable({
         });
       }
 
-      setRowData(batchesMap);
+      return batchesMap;
+    } else {
+      return [];
     }
   }, [delivery, species, subzoneNames, numericFormatter, batches, withdrawal?.batchWithdrawals]);
 
