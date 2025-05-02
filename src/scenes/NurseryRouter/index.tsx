@@ -1,36 +1,21 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { Route, Routes } from 'react-router';
 
-import { useLocalization, useOrganization } from 'src/providers';
+import { useOrganization } from 'src/providers';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import NurseryPlantingsAndWithdrawalsView from 'src/scenes/NurseryRouter/NurseryPlantingsAndWithdrawalsView';
 import NurseryReassignmentView from 'src/scenes/NurseryRouter/NurseryReassignmentView';
 import NurseryWithdrawalsDetailsView from 'src/scenes/NurseryRouter/NurseryWithdrawalsDetailsView';
-import { PlantingSite } from 'src/types/Tracking';
-import { isPlaceholderOrg } from 'src/utils/organization';
 
 const NurseryRouter = () => {
   const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
-  const { activeLocale } = useLocalization();
-
   const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
-  const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
 
-  const [plantingSubzoneNames, setPlantingSubzoneNames] = useState<Record<number, string>>({});
-
-  const reloadTracking = useCallback(() => {
-    const populatePlantingSites = () => {
-      if (!isPlaceholderOrg(selectedOrganization.id)) {
-        void dispatch(requestPlantingSites(selectedOrganization.id));
-      }
-    };
-    populatePlantingSites();
-  }, [dispatch, selectedOrganization.id, activeLocale]);
+  const { allPlantingSites } = usePlantingSiteData();
 
   const reloadSpecies = useCallback(() => {
     if (selectedOrganization.id !== -1) {
@@ -44,9 +29,9 @@ const NurseryRouter = () => {
     }
   }, [speciesResponse?.data?.species, reloadSpecies]);
 
-  useEffect(() => {
+  const plantingSubzoneNames = useMemo(() => {
     const subzones: Record<number, string> = {};
-    for (const plantingSite of plantingSites ?? []) {
+    for (const plantingSite of allPlantingSites ?? []) {
       for (const plantingZone of plantingSite.plantingZones ?? []) {
         for (const subzone of plantingZone.plantingSubzones ?? []) {
           subzones[subzone.id] = plantingZone.name + '-' + subzone.name;
@@ -54,12 +39,12 @@ const NurseryRouter = () => {
       }
     }
 
-    setPlantingSubzoneNames(subzones);
-  }, [plantingSites]);
+    return subzones;
+  }, [allPlantingSites]);
 
   return (
     <Routes>
-      <Route path={'/withdrawals'} element={<NurseryPlantingsAndWithdrawalsView reloadTracking={reloadTracking} />} />
+      <Route path={'/withdrawals'} element={<NurseryPlantingsAndWithdrawalsView />} />
       <Route
         path={'/withdrawals/:withdrawalId'}
         element={

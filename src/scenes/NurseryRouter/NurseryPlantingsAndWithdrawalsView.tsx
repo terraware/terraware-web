@@ -21,11 +21,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import NurseryWithdrawals from './NurseryWithdrawalsTabContent';
 import PlantingProgress from './PlantingProgressTabContent';
 
-type NurseryWithdrawalsProps = {
-  reloadTracking: () => void;
-};
-
-export default function NurseryPlantingsAndWithdrawalsView({ reloadTracking }: NurseryWithdrawalsProps): JSX.Element {
+export default function NurseryPlantingsAndWithdrawalsView(): JSX.Element {
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
@@ -104,7 +100,7 @@ export default function NurseryPlantingsAndWithdrawalsView({ reloadTracking }: N
                 {
                   id: 'planting_progress',
                   label: strings.PLANTING_PROGRESS,
-                  children: <PlantingProgress reloadTracking={reloadTracking} />,
+                  children: <PlantingProgress />,
                 },
                 { id: 'withdrawal_history', label: strings.WITHDRAWAL_HISTORY, children: <NurseryWithdrawals /> },
               ]}

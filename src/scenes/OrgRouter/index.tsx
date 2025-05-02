@@ -255,7 +255,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
                   path={APP_PATHS.PLANTING_SITES + '/*'}
                   element={<PlantingSites reloadTracking={reloadPlantingSites} />}
                 />
-                <Route path={'/nursery/*'} element={<NurseryRouter />} />
+                <Route path={APP_PATHS.NURSERY + '/*'} element={<NurseryRouter />} />
                 <Route path={APP_PATHS.HELP_SUPPORT + '/*'} element={<HelpSupportRouter />} />
                 <Route path={APP_PATHS.MY_ACCOUNT + '/*'} element={<MyAccountRouter />} />
                 <Route path={APP_PATHS.REPORTS + '/*'} element={<AcceleratorReportsRouter />} />
