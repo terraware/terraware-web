@@ -2,21 +2,33 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Grid, Typography } from '@mui/material';
+import _ from 'lodash';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { selectReviewManyAcceleratorReportMetrics } from 'src/redux/features/reports/reportsSelectors';
-import { requestReviewManyAcceleratorReportMetrics } from 'src/redux/features/reports/reportsThunks';
+import { useUser } from 'src/providers/hooks';
+import {
+  selectReviewManyAcceleratorReportMetrics,
+  selectUpdateManyAcceleratorReports,
+} from 'src/redux/features/reports/reportsSelectors';
+import {
+  requestReviewManyAcceleratorReportMetrics,
+  requestUpdateManyAcceleratorReports,
+} from 'src/redux/features/reports/reportsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import {
+  AcceleratorReport,
+  ReportStandardMetricEntries,
+  ReportSystemMetricEntries,
   ReviewAcceleratorReportMetricsRequest,
   ReviewManyAcceleratorReportMetricsRequest,
   SystemMetricName,
 } from 'src/types/AcceleratorReport';
+import { isAcceleratorAdmin } from 'src/utils/acl';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -25,21 +37,30 @@ import { RowMetric } from './AcceleratorReportTargetsTable';
 export interface EditTargetsModalProp {
   onClose: () => void;
   reload: () => void;
+  reports: AcceleratorReport[];
   row: RowMetric;
 }
 
-export default function EditAcceleratorReportTargetsModal(props: EditTargetsModalProp): JSX.Element {
+export default function EditAcceleratorReportTargetsModal({
+  onClose,
+  reload,
+  reports,
+  row,
+}: EditTargetsModalProp): JSX.Element {
+  const { user } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { currentParticipantProject } = useParticipantData();
-  const { onClose, row, reload } = props;
-  const [requestId, setRequestId] = useState<string>('');
   const dispatch = useAppDispatch();
-  const updateReportMetricsResponse = useAppSelector(selectReviewManyAcceleratorReportMetrics(requestId));
   const snackbar = useSnackbar();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = isAcceleratorRoute ? Number(pathParams.projectId) : currentParticipantProject?.id;
 
   const [record, , onChange] = useForm<RowMetric>(row);
+  const [reviewRequestId, setReviewRequestId] = useState<string>('');
+  const [updateRequestId, setUpdateRequestId] = useState<string>('');
+
+  const updateReportMetricsResponse = useAppSelector(selectReviewManyAcceleratorReportMetrics(reviewRequestId));
+  const updateReportsResponse = useAppSelector(selectUpdateManyAcceleratorReports(updateRequestId));
 
   useEffect(() => {
     if (updateReportMetricsResponse?.status === 'error') {
@@ -50,6 +71,16 @@ export default function EditAcceleratorReportTargetsModal(props: EditTargetsModa
       reload();
     }
   }, [updateReportMetricsResponse, snackbar]);
+
+  useEffect(() => {
+    if (updateReportsResponse?.status === 'error') {
+      snackbar.toastError();
+    } else if (updateReportsResponse?.status === 'success') {
+      onClose();
+      snackbar.toastSuccess(strings.CHANGES_SAVED);
+      reload();
+    }
+  }, [updateReportsResponse, snackbar]);
 
   const save = () => {
     if (!projectId) {
@@ -98,8 +129,60 @@ export default function EditAcceleratorReportTargetsModal(props: EditTargetsModa
       projectId,
     };
 
-    const request = dispatch(requestReviewManyAcceleratorReportMetrics(requestPayload));
-    setRequestId(request.requestId);
+    if (user && isAcceleratorAdmin(user)) {
+      const reviewRequest = dispatch(requestReviewManyAcceleratorReportMetrics(requestPayload));
+      setReviewRequestId(reviewRequest.requestId);
+    } else {
+      const updateManyReportsRequests = requests.map((request) => {
+        const report = reports.find((r) => r.id === request.reportId);
+        const reportClone = _.cloneDeep(report);
+
+        ['projectMetrics', 'standardMetrics', 'systemMetrics'].forEach((metricType) => {
+          const requestMetrics = request[metricType as keyof ReviewAcceleratorReportMetricsRequest];
+          if (!Array.isArray(requestMetrics)) {
+            return;
+          }
+
+          requestMetrics.forEach((metric) => {
+            const reportMetrics = reportClone?.[metricType as keyof AcceleratorReport];
+            if (!Array.isArray(reportMetrics)) {
+              return;
+            }
+
+            const reportMetricIndex =
+              metricType === 'systemMetrics'
+                ? reportMetrics.findIndex(
+                    (m) => (m as ReportSystemMetricEntries).metric === (metric as ReportSystemMetricEntries).metric
+                  )
+                : reportMetrics.findIndex(
+                    (m) => (m as ReportStandardMetricEntries).id === (metric as ReportStandardMetricEntries).id
+                  );
+            const reportMetric = reportMetrics[reportMetricIndex];
+            if (typeof reportMetric !== 'object' || typeof metric !== 'object') {
+              return;
+            }
+
+            const reportMetricUpdate = {
+              ...reportMetric,
+              ...metric,
+            };
+            const metrics = reportClone?.[metricType as keyof AcceleratorReport] as any[];
+            metrics[reportMetricIndex] = reportMetricUpdate;
+          });
+        });
+
+        return {
+          projectId,
+          report: reportClone as AcceleratorReport,
+          reportId: request.reportId,
+        };
+      });
+
+      const updateRequest = dispatch(
+        requestUpdateManyAcceleratorReports({ requests: updateManyReportsRequests.filter(Boolean) })
+      );
+      setUpdateRequestId(updateRequest.requestId);
+    }
   };
 
   return (

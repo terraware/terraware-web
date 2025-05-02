@@ -77,7 +77,7 @@ const TFExpertPlus: UserGlobalRoles = [...AcceleratorAdminPlus, GLOBAL_ROLE_TF_E
 const ReadOnlyPlus: UserGlobalRoles = [...TFExpertPlus, GLOBAL_ROLE_READ_ONLY];
 
 const isSuperAdmin = (user: User): boolean => user.globalRoles.includes(GLOBAL_ROLE_SUPER_ADMIN);
-const isAcceleratorAdmin = (user: User): boolean =>
+export const isAcceleratorAdmin = (user: User): boolean =>
   isSuperAdmin(user) || user.globalRoles.includes(GLOBAL_ROLE_ACCELERATOR_ADMIN);
 const isReadOnlyOrHigher = (user: User): boolean => ReadOnlyPlus.some((role) => user.globalRoles.includes(role));
 

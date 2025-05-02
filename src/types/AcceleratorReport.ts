@@ -32,6 +32,12 @@ export type ReportStandardMetric = components['schemas']['ReportStandardMetricPa
 
 export type ReportSystemMetric = components['schemas']['ReportSystemMetricPayload'];
 
+export type ReportProjectMetricEntries = components['schemas']['ReportProjectMetricEntriesPayload'];
+
+export type ReportStandardMetricEntries = components['schemas']['ReportStandardMetricEntriesPayload'];
+
+export type ReportSystemMetricEntries = components['schemas']['ReportSystemMetricEntriesPayload'];
+
 export type CreateProjectMetricRequestPayload = components['schemas']['CreateProjectMetricRequestPayload'];
 
 export type UpdateProjectMetricRequestPayload = components['schemas']['UpdateProjectMetricRequestPayload'];

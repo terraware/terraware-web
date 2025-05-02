@@ -283,6 +283,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         <EditAcceleratorReportTargetsModal
           onClose={() => setEditOpenModal(false)}
           reload={reload}
+          reports={allReports}
           row={selectedMetric}
         />
       )}

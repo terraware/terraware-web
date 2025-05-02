@@ -164,7 +164,7 @@ const projectMetricUpdateSlice = createSlice({
 });
 
 /**
- * Update Accelerator Report Metrics
+ * Update Accelerator Reports Metrics
  */
 const initialReviewManyAcceleratorReportMetrics: { [key: string]: StatusT<number> } = {};
 
@@ -188,6 +188,20 @@ const reviewAcceleratorReportMetricSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     buildReducers(requestReviewAcceleratorReportMetric)(builder);
+  },
+});
+
+/**
+ * Update Accelerator Reports
+ */
+const initialUpdateManyAcceleratorReports: { [key: string]: StatusT<number> } = {};
+
+const updateManyAcceleratorReportsSlice = createSlice({
+  name: 'updateManyAcceleratorReportsSlice',
+  initialState: initialUpdateManyAcceleratorReports,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestReviewManyAcceleratorReportMetrics)(builder);
   },
 });
 
@@ -276,6 +290,7 @@ const reportsReducers = {
   refreshAcceleratorReportSystemMetrics: refreshAcceleratorReportSystemMetricsSlice.reducer,
   submitAcceleratorReport: submitAcceleratorReportSlice.reducer,
   updateAcceleratorReport: updateAcceleratorReportSlice.reducer,
+  updateManyAcceleratorReports: updateManyAcceleratorReportsSlice.reducer,
   publishAcceleratorReport: publishAcceleratorReportSlice.reducer,
 };
 
