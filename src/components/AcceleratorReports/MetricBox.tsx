@@ -118,6 +118,7 @@ const MetricBox = ({
       return {
         systemMetrics: [
           {
+            ...record,
             metric: record.metric as SystemMetricName,
             overrideValue: record.overrideValue,
             ...baseMetric,
@@ -130,6 +131,7 @@ const MetricBox = ({
       return {
         standardMetrics: [
           {
+            ...record,
             id: record.id,
             value: record.value,
             ...baseMetric,
@@ -142,6 +144,7 @@ const MetricBox = ({
       return {
         projectMetrics: [
           {
+            ...record,
             id: record.id,
             value: record.value,
             ...baseMetric,
