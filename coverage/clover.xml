@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1746203206767" clover="3.2.0">
-  <project timestamp="1746203206767" name="All files">
+<coverage generated="1746205210982" clover="3.2.0">
+  <project timestamp="1746205210982" name="All files">
     <metrics statements="30269" coveredstatements="1274" conditionals="20651" coveredconditionals="386" methods="9322" coveredmethods="209" elements="60242" coveredelements="1869" complexity="0" loc="30269" ncloc="30269" packages="257" files="1250" classes="1250"/>
     <package name="src">
       <metrics statements="177" coveredstatements="8" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -33528,7 +33528,7 @@
       </file>
       <file name="Map.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/Map.ts">
         <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="162" count="0" type="stmt"/>
+        <line num="164" count="0" type="stmt"/>
       </file>
       <file name="Module.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/Module.ts">
         <metrics statements="15" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -34279,32 +34279,32 @@
         <line num="203" count="9" type="cond" truecount="2" falsecount="0"/>
         <line num="204" count="4" type="stmt"/>
         <line num="207" count="9" type="stmt"/>
-        <line num="228" count="2" type="stmt"/>
-        <line num="233" count="23" type="stmt"/>
-        <line num="235" count="23" type="cond" truecount="2" falsecount="0"/>
-        <line num="236" count="43" type="stmt"/>
-        <line num="239" count="23" type="cond" truecount="2" falsecount="0"/>
-        <line num="240" count="9" type="stmt"/>
-        <line num="241" count="9" type="stmt"/>
-        <line num="244" count="23" type="stmt"/>
-        <line num="261" count="2" type="stmt"/>
-        <line num="265" count="6" type="cond" truecount="1" falsecount="1"/>
-        <line num="266" count="0" type="stmt"/>
-        <line num="269" count="6" type="stmt"/>
-        <line num="271" count="6" type="cond" truecount="2" falsecount="0"/>
-        <line num="272" count="2" type="cond" truecount="3" falsecount="1"/>
-        <line num="273" count="0" type="stmt"/>
-        <line num="276" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="277" count="1" type="stmt"/>
-        <line num="281" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="282" count="1" type="stmt"/>
-        <line num="287" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="288" count="1" type="stmt"/>
-        <line num="289" count="1" type="stmt"/>
-        <line num="293" count="3" type="cond" truecount="1" falsecount="1"/>
-        <line num="294" count="3" type="stmt"/>
+        <line num="230" count="2" type="stmt"/>
+        <line num="235" count="23" type="stmt"/>
+        <line num="237" count="23" type="cond" truecount="2" falsecount="0"/>
+        <line num="238" count="43" type="stmt"/>
+        <line num="241" count="23" type="cond" truecount="2" falsecount="0"/>
+        <line num="242" count="9" type="stmt"/>
+        <line num="243" count="9" type="stmt"/>
+        <line num="246" count="23" type="stmt"/>
+        <line num="263" count="2" type="stmt"/>
+        <line num="267" count="6" type="cond" truecount="1" falsecount="1"/>
+        <line num="268" count="0" type="stmt"/>
+        <line num="271" count="6" type="stmt"/>
+        <line num="273" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="274" count="2" type="cond" truecount="3" falsecount="1"/>
+        <line num="275" count="0" type="stmt"/>
+        <line num="278" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="279" count="1" type="stmt"/>
+        <line num="283" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="284" count="1" type="stmt"/>
+        <line num="289" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="290" count="1" type="stmt"/>
+        <line num="291" count="1" type="stmt"/>
+        <line num="295" count="3" type="cond" truecount="1" falsecount="1"/>
         <line num="296" count="3" type="stmt"/>
-        <line num="300" count="0" type="stmt"/>
+        <line num="298" count="3" type="stmt"/>
+        <line num="302" count="0" type="stmt"/>
       </file>
       <file name="stopPropagationEvent.tsx" path="/home/runner/work/terraware-web/terraware-web/src/utils/stopPropagationEvent.tsx">
         <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
