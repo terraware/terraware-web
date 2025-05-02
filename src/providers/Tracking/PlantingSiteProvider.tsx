@@ -116,14 +116,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
   }, [adHocResultsResponse]);
 
   useEffect(() => {
-    if (adHocResultsResponse) {
-      if (adHocResultsResponse.status === 'success') {
-        setAdHocObservationResults(adHocResultsResponse.data ?? []);
-      }
-    }
-  }, [adHocResultsResponse]);
-
-  useEffect(() => {
     if (summariesResponse) {
       if (summariesResponse.status === 'success') {
         setObservationSummaries(summariesResponse.data ?? []);
