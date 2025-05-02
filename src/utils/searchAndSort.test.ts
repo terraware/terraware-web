@@ -25,39 +25,47 @@ type MockResultWithSubProperties = {
   name?: string;
   subObject?: MockResult;
   subsets?: MockResult[];
-}
+};
 
 describe('splitTrigrams', () => {
   it('should split a string into trigrams in the same way postgres does', () => {
     /**
+     * ```
      * select show_trgm('cat');
      *         show_trgm
      * -------------------------
      * {'  c',' ca','at ',cat}
+     * ```
      */
     expect(splitTrigrams('cat')).toEqual(new Set(['  c', ' ca', 'at ', 'cat']));
 
     /**
+     * ```
      * select show_trgm('foo|bar');
      *                   show_trgm
      * -----------------------------------------------
      * {'  b','  f',' ba',' fo','ar ',bar,foo,'oo '}
+     * ```
      */
     expect(splitTrigrams('foo|bar')).toEqual(new Set(['  b', '  f', ' ba', ' fo', 'ar ', 'bar', 'foo', 'oo ']));
 
     /**
+     * ```
      * select show_trgm('olyolyoxenfree');
      *                           show_trgm
      * -------------------------------------------------------------
      * {'  o',' ol','ee ',enf,fre,lyo,nfr,oly,oxe,ree,xen,yol,yox}
+     * ```
      */
     expect(splitTrigrams('olyolyoxenfree')).toEqual(new Set(['  o', ' ol', 'ee ', 'enf', 'fre', 'lyo', 'nfr', 'oly', 'oxe', 'ree', 'xen', 'yol', 'yox']));
 
     /**
+     * ```
      * select show_trgm('sam');
      *         show_trgm
      * -------------------------
      * {'  s',' sa','am ',sam}
+     * ```
      */
     expect(splitTrigrams('sam')).toEqual(new Set(['  s', ' sa', 'am ', 'sam']));
   });
@@ -66,26 +74,32 @@ describe('splitTrigrams', () => {
 describe('trigramWordSimilarity', () => {
   it('should calculate the trigram word similarity same way postgres does', () => {
     /**
+     * ```
      * SELECT word_similarity('sam', 'sampson road');
      *  word_similarity
      * -----------------
      *            0.75
+     * ```
      */
     expect(trigramWordSimilarity('sam', 'sampson')).toEqual(0.375);
 
     /**
+     * ```
      * SELECT word_similarity('sampson', 'sam');
      * word_similarity
      * -----------------
      *           0.375
+     * ```
      */
     expect(trigramWordSimilarity('sampson', 'sam')).toEqual(0.375);
 
     /**
+     * ```
      * SELECT word_similarity('andro', 'project andromeda');
      * word_similarity
      * -----------------
      *       0.8333333
+     * ```
      */
     expect(trigramWordSimilarity('andro', 'project andromeda')).toEqual(0.2777777777777778);
 
@@ -99,12 +113,15 @@ describe('trigramWordSimilarity', () => {
      * search here.
      */
     /**
+     * ```
      * SELECT word_similarity('pronect', 'pripro');
      * word_similarity
      * -----------------
      *       0.27272728
+     * ```
      */
     /**
+     * ```
      * SELECT UNNEST(show_trgm('pronect')) INTERSECT SELECT UNNEST(show_trgm('pripro'));
      * unnest
      * --------
@@ -129,6 +146,7 @@ describe('trigramWordSimilarity', () => {
      * one
      * ect
      * (12 rows)
+     * ```
      */
     expect(trigramWordSimilarity('pronect', 'pripro')).toEqual(0.375);
   });
@@ -952,7 +970,7 @@ describe('searchAndSort', () => {
           },
         },
       },
-    ]
+    ];
 
     expect(searchAndSort(results, search)).toEqual(filteredResults);
   });

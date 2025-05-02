@@ -219,11 +219,13 @@ export type SearchAndSortFn<T extends Record<string, unknown>> = (
  * @param results         The list of results you want to search and sort
  * @param search          (optional) The SearchNodePayload which contains filter conditions to apply to the results
  * @param sortOrderConfig (optional) The sort order configuration contains:
+ * ```md
  *    - a `locale`, used for sorting strings,
  *    - the `sortOrder` which defines the field and order
  *    - (optional) a list of `numberFields`, used to sort applicable fields numerically
  *      - fields not supplied will be sorted as strings
  *      - can be used to cast a string to a number, useful for SearchElementResponse numbers which come back as strings
+ * ```
  */
 export const searchAndSort = <T extends Record<string, unknown>>(
   results: T[],

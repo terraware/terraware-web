@@ -50,10 +50,10 @@ const httpSearchValues = HttpService.root(SEARCH_VALUES_ENDPOINT);
  * organization ID.
  *
  * @param criteria Search criteria in the type of SearchCriteria, which is used by the application,
- *   or an array of SearchNodePayload
+ * or an array of SearchNodePayload
  * @param organizationId ID of organization to search.
  * @return SearchNodePayload suitable for use in a search request. This will currently always be
- *   an AndNodePayload.
+ * an AndNodePayload.
  */
 function convertToSearchNodePayload(
   criteria: SearchCriteria | SearchNodePayload[],

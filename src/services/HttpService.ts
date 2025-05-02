@@ -193,17 +193,17 @@ const HttpUtils = {
  *
  * Usage examples:
  *
- *   // with url context
- *   const someService = HttpService.root('/someapi');
- *   someService.get({ params: { key: value }).then(...);
- *   someService.post({ entity: { name: 'some name' } });
+ * // with url context
+ * const someService = HttpService.root('/someapi');
+ * someService.get({ params: { key: value }).then(...);
+ * someService.post({ entity: { name: 'some name' } });
  *
- *   // without url context
- *   const genericService = HttpService;
- *   genericService.post({ url: '/api/{id}', replacements: { '{id}': 123 }, entity: { name: 'some name' });
+ * // without url context
+ * const genericService = HttpService;
+ * genericService.post({ url: '/api/{id}', replacements: { '{id}': 123 }, entity: { name: 'some name' });
  *
- *   // utils
- *   HttpService.setDefaultHeaders({ header-name: <header-value> });
+ * // utils
+ * HttpService.setDefaultHeaders({ header-name: <header-value> });
  */
 const HttpService = {
   // http api, closure with url context

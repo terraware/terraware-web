@@ -27,17 +27,18 @@ export default fixupConfigRules([
       'plugin:@typescript-eslint/recommended-requiring-type-checking',
       'plugin:react/recommended',
       'plugin:jest-react/recommended',
+      // 'plugin:storybook/recommended',
       'prettier'
     )
     .map((config) => ({
       ...config,
       files: ['**/*.ts', '**/*.tsx'],
-      ignores: ['**/*.test.ts'],
+      ignores: ['**/generated-schema.ts'],
     })),
   {
     files: ['**/*.ts', '**/*.tsx'],
 
-    ignores: ['**/*.test.ts', 'generated-schema.ts'],
+    ignores: ['**/generated-schema.ts'],
 
     plugins: {
       jsdoc,
@@ -136,7 +137,7 @@ export default fixupConfigRules([
       ],
 
       '@typescript-eslint/naming-convention': [
-        'off',
+        'error',
         {
           selector: 'variable',
           format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
