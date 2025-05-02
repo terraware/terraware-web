@@ -25,7 +25,7 @@ export type PlantsPrimaryPageViewProps = {
   actionButton?: ButtonProps;
   children: React.ReactNode; // primary content for this page
   isEmptyState?: boolean; // optional boolean to indicate this is an empty state view
-  onSelect: (plantingSite: PlantingSite) => void; // planting site selected, id of -1 refers to All
+  onSelect: (plantingSite: PlantingSite | undefined) => void; // planting site selected, id of -1 refers to All
   plantingSites: PlantingSite[] | undefined;
   selectedPlantingSiteId?: number;
   style?: Record<string, string | number>;
@@ -54,17 +54,30 @@ export default function PlantsPrimaryPageView({
   const contentRef = useRef(null);
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
+  const isRolledUpView = useMemo(() => {
+    return projectId !== undefined && selectedPlantingSiteId === -2;
+  }, [projectId, selectedPlantingSiteId]);
+
   const onChangePlantingSiteId = (siteId: any) => {
     const selectedPlantingSite = plantingSites?.find((ps) => ps.id === siteId);
     if (selectedPlantingSite) {
       onSelect(selectedPlantingSite);
+    } else if (siteId === -2) {
+      onSelect(undefined);
     }
   };
 
-  const options = useMemo(
-    () => plantingSites?.map((site) => ({ label: site.name, value: site.id })) ?? [],
-    [plantingSites]
-  );
+  const options = useMemo(() => {
+    const optionsToReturn = plantingSites?.map((site) => ({ label: site.name, value: site.id })) ?? [];
+    if (projectId) {
+      optionsToReturn.unshift({ label: strings.ALL_PLANTING_SITES, value: -2 });
+    }
+    return optionsToReturn;
+  }, [plantingSites, projectId]);
+
+  const totalArea = useMemo(() => {
+    return plantingSites?.reduce((sum, site) => sum + (site?.areaHa ?? 0), 0) || 0;
+  }, [plantingSites]);
 
   if (!plantingSites || (plantingSites.length && !selectedPlantingSiteId)) {
     return (
@@ -83,7 +96,7 @@ export default function PlantsPrimaryPageView({
             <Message
               body={
                 <span>
-                  <b>{strings.PLEASE_NOTE}</b>{' '}
+                  <b>{strings.PLEASE_NOTE}</b>
                   {strings.formatString(
                     strings.GEOMETRY_CHANGED_WARNING_MESSAGE,
                     <Link
@@ -122,7 +135,9 @@ export default function PlantsPrimaryPageView({
                 <Typography fontSize='28px' fontWeight={600}>
                   {strings.formatString(
                     strings.X_HA,
-                    plantingSites.find((ps) => ps.id === selectedPlantingSiteId)?.areaHa?.toString() || ''
+                    isRolledUpView
+                      ? totalArea
+                      : plantingSites.find((ps) => ps.id === selectedPlantingSiteId)?.areaHa?.toString() || ''
                   )}
                 </Typography>
               </Box>

@@ -120,6 +120,15 @@ export default function PlantsPrimaryPage({
         } else {
           navigate(pagePath.replace(':plantingSiteId', site.id.toString()));
         }
+      } else {
+        const emptySite = {
+          id: -2,
+          name: '',
+          organizationId: 0,
+          plantingSeasons: [],
+        };
+        setSelectedPlantingSite(emptySite);
+        onSelect(emptySite);
       }
     },
     [navigate, pagePath, projectId]
@@ -186,6 +195,7 @@ export default function PlantsPrimaryPage({
       newHeader={newHeader}
       showGeometryNote={showGeometryNote}
       latestObservationId={latestObservationId}
+      projectId={projectId}
     />
   );
 }
