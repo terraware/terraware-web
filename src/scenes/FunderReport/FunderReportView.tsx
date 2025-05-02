@@ -232,7 +232,7 @@ const FunderReportView = () => {
           )}
         </>
       )}
-      {selectedReport?.achievements && (
+      {selectedProjectId && selectedReport?.achievements && (
         <Box width='100%'>
           <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
             {strings.ACHIEVEMENTS}
@@ -242,11 +242,11 @@ const FunderReportView = () => {
               borderRadius: '8px',
             }}
           >
-            <AchievementsBox report={selectedReport} projectId={'28'} noTitle />
+            <AchievementsBox report={selectedReport} projectId={selectedProjectId.toString()} noTitle />
           </Card>
         </Box>
       )}
-      {selectedReport?.challenges && (
+      {selectedProjectId && selectedReport?.challenges && (
         <Box width='100%'>
           <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
             {strings.CHALLENGES_AND_MITIGATION_PLAN}
@@ -256,7 +256,7 @@ const FunderReportView = () => {
               borderRadius: '8px',
             }}
           >
-            <ChallengesMitigationBox report={selectedReport} projectId={'28'} noTitle />
+            <ChallengesMitigationBox report={selectedReport} projectId={selectedProjectId.toString()} noTitle />
           </Card>
         </Box>
       )}

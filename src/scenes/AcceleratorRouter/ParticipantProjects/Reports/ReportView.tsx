@@ -81,8 +81,8 @@ const ReportView = () => {
         reportId: Number(reportId),
         review: {
           status: 'Approved',
-          achievements: [],
-          challenges: [],
+          achievements: selectedReport?.achievements ?? [],
+          challenges: selectedReport?.challenges ?? [],
         },
       })
     );

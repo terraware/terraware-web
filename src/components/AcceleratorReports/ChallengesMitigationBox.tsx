@@ -143,11 +143,14 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   }, [challengeMitigations]);
 
   useEffect(() => {
+    if (!editing) {
+      setChallengeMitigations(report?.challenges || []);
+    }
     // For participant editing, react can't keep up with setting challengeMitigations, then calling onChange on the
     // report, and having this useEffect update challengeMitigations again. This check ensures we're only setting it
     // from report when needed
-    if ((!getNonEmptyChallenges() || getNonEmptyChallenges().length === 0) && report?.challenges) {
-      setChallengeMitigations(report.challenges || []);
+    if (((editing && !getNonEmptyChallenges()) || getNonEmptyChallenges().length === 0) && report?.challenges) {
+      setChallengeMitigations(report?.challenges ?? []);
     }
   }, [report?.challenges]);
 
