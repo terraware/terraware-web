@@ -81,7 +81,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       }
     };
 
-    getOrgPreferences();
+    void getOrgPreferences();
   }, [selectedOrganization]);
 
   const redirectAndNotify = (organization: Organization) => {
@@ -89,7 +89,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   };
 
   useEffect(() => {
-    reloadOrganizations();
+    void reloadOrganizations();
   }, [reloadOrganizations]);
 
   useEffect(() => {
@@ -154,7 +154,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
 
   useEffect(() => {
     if (selectedOrganization?.id && userPreferences.lastVisitedOrg !== selectedOrganization.id) {
-      updateUserPreferences({ lastVisitedOrg: selectedOrganization.id });
+      void updateUserPreferences({ lastVisitedOrg: selectedOrganization.id });
     }
   }, [selectedOrganization?.id, updateUserPreferences, userPreferences.lastVisitedOrg]);
 

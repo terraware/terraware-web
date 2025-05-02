@@ -172,7 +172,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
           onClick={onCancelWrapper}
           key='button-1'
         />,
-        <Button id='saveCreateOrg' label={strings.SAVE} onClick={saveOrganization} key='button-2' />,
+        <Button id='saveCreateOrg' label={strings.SAVE} onClick={() => void saveOrganization()} key='button-2' />,
       ]}
     >
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>

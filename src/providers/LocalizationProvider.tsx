@@ -85,7 +85,7 @@ export default function LocalizationProvider({
       setActiveLocale(selectedLocale);
     };
 
-    fetchStrings();
+    void fetchStrings();
   }, [selectedLocale, setActiveLocale, supportedLocales]);
 
   const context: ProvidedLocalizationData = {

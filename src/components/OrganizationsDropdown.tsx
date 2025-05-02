@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { DropdownItem, PopoverMenu } from '@terraware/web-components';
 
@@ -44,15 +44,20 @@ export default function OrganizationsDropdown(): JSX.Element {
     }
   };
 
+  const handleSuccess = useCallback(
+    async (organization: Organization) => {
+      await reloadOrganizations(organization.id);
+      redirectAndNotify(organization);
+    },
+    [reloadOrganizations, redirectAndNotify]
+  );
+
   return (
     <div>
       <AddNewOrganizationModal
         open={newOrganizationModalOpened}
         onCancel={onCloseCreateOrganizationModal}
-        onSuccess={async (organization: Organization) => {
-          await reloadOrganizations(organization.id);
-          redirectAndNotify(organization);
-        }}
+        onSuccess={(organization) => void handleSuccess(organization)}
       />
       <PopoverMenu
         anchor={<p style={{ fontSize: '16px' }}>{selectedOrganization.name}</p>}
