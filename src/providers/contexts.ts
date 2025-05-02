@@ -80,5 +80,8 @@ export const UserFundingEntityContext = createContext<ProvidedUserFundingEntityD
 
 export const FundingEntityContext = createContext<ProvidedFundingEntityData>({
   fundingEntity: undefined,
-  reload: () => {},
+  reload: () => {
+    // default no-op implementation
+    return;
+  },
 });

@@ -166,7 +166,7 @@ const deleteFundingEntity = async (fundingEntityId: number): Promise<Response> =
 
 const inviteFunder = async (fundingEntityId: number, email: string): Promise<InviteFunderResponse> => {
   const serverResponse: Response = await httpFundingEntityUsers.post({
-    entity: { email: email },
+    entity: { email },
     urlReplacements: {
       '{fundingEntityId}': fundingEntityId.toString(),
     },
