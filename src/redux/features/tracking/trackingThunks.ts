@@ -106,7 +106,7 @@ export const requestSiteReportedPlants = (plantingSiteId: number) => {
 };
 
 export const requestGetPlantingSiteHistory = createAsyncThunk(
-  'observations/summaries',
+  'plantingSite/history',
   async (request: { plantingSiteId: number; historyId: number }, { rejectWithValue }) => {
     const response = await TrackingService.getPlantingSiteHistory(request.plantingSiteId, request.historyId);
 

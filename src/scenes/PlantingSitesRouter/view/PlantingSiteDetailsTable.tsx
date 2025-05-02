@@ -132,31 +132,31 @@ export default function PlantingSiteDetailsTable({
 
   const timeZone = plantingSite.timeZone ?? defaultTimeZone.get().id;
 
-  const allAdHocObservationsResults = useAppSelector((state) =>
+  const alladHocObservationResults = useAppSelector((state) =>
     searchAdHocObservations(state, plantingSite.id, defaultTimeZone.get().id)
   );
 
-  const monitoringAdHocObservationsResults = useMemo(() => {
-    if (!allAdHocObservationsResults || !plantingSite.id) {
+  const monitoringadHocObservationResults = useMemo(() => {
+    if (!alladHocObservationResults || !plantingSite.id) {
       return [];
     }
 
-    return allAdHocObservationsResults?.filter((observationResult) => {
+    return alladHocObservationResults?.filter((observationResult) => {
       const isMonitoring = observationResult.type === 'Monitoring';
       return isMonitoring;
     });
-  }, [allAdHocObservationsResults, plantingSite]);
+  }, [alladHocObservationResults, plantingSite]);
 
-  const biomassAdHocObservationsResults = useMemo(() => {
-    if (!allAdHocObservationsResults || !plantingSite.id) {
+  const biomassadHocObservationResults = useMemo(() => {
+    if (!alladHocObservationResults || !plantingSite.id) {
       return [];
     }
 
-    return allAdHocObservationsResults?.filter((observationResult) => {
+    return alladHocObservationResults?.filter((observationResult) => {
       const isBiomass = observationResult.type === 'Biomass Measurements';
       return isBiomass;
     });
-  }, [allAdHocObservationsResults, plantingSite]);
+  }, [alladHocObservationResults, plantingSite]);
 
   return (
     <Box>
@@ -173,7 +173,7 @@ export default function PlantingSiteDetailsTable({
         <Table
           id='planting-site-ad-hoc-details-table'
           columns={adHocColumns}
-          rows={monitoringAdHocObservationsResults}
+          rows={monitoringadHocObservationResults}
           orderBy='name'
           Renderer={DetailsRenderer(timeZone, plantingSite.id, zoneViewUrl)}
         />
@@ -182,7 +182,7 @@ export default function PlantingSiteDetailsTable({
         <Table
           id='planting-site-ad-hoc-details-table'
           columns={biomassColumns}
-          rows={biomassAdHocObservationsResults}
+          rows={biomassadHocObservationResults}
           orderBy='name'
           Renderer={BiomassRenderer(timeZone)}
         />

@@ -9,8 +9,8 @@ import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { useOrganization } from 'src/providers';
 import {
-  selectAdHocObservationsResults,
   selectObservationsResults,
+  selectadHocObservationResults,
 } from 'src/redux/features/observations/observationsSelectors';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -49,18 +49,18 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
     });
   }, [allObservationsResults, selectedPlantingSite]);
 
-  const allAdHocObservationsResults = useAppSelector(selectAdHocObservationsResults);
-  const adHocObservationsResults = useMemo(() => {
-    if (!allAdHocObservationsResults || !selectedPlantingSite?.id) {
+  const alladHocObservationResults = useAppSelector(selectadHocObservationResults);
+  const adHocObservationResults = useMemo(() => {
+    if (!alladHocObservationResults || !selectedPlantingSite?.id) {
       return [];
     }
 
-    return allAdHocObservationsResults?.filter((observationResult) => {
+    return alladHocObservationResults?.filter((observationResult) => {
       const matchesSite =
         selectedPlantingSite.id !== -1 ? observationResult.plantingSiteId === selectedPlantingSite.id : true;
       return matchesSite;
     });
-  }, [allAdHocObservationsResults, selectedPlantingSite]);
+  }, [alladHocObservationResults, selectedPlantingSite]);
 
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
@@ -112,11 +112,11 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
         )}
       </Box>
       {(selectedPlotSelection === 'assigned' && observationsResults === undefined) ||
-      (selectedPlotSelection === 'adHoc' && adHocObservationsResults === undefined) ? (
+      (selectedPlotSelection === 'adHoc' && adHocObservationResults === undefined) ? (
         <CircularProgress sx={{ margin: 'auto' }} />
       ) : selectedPlantingSite &&
         ((selectedPlotSelection === 'assigned' && observationsResults?.length) ||
-          (selectedPlotSelection === 'adHoc' && adHocObservationsResults?.length)) ? (
+          (selectedPlotSelection === 'adHoc' && adHocObservationResults?.length)) ? (
         <ObservationsDataView
           selectedPlantingSiteId={selectedPlantingSite.id}
           setView={setView}

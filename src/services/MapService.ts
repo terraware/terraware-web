@@ -162,6 +162,25 @@ const extractPlantingSite = (site: MinimalPlantingSite): MapSourceBaseData => {
 };
 
 /**
+ * Transform planting site geometry data into UI model
+ */
+const extractPlantingSiteFromHistory = (site: MinimalPlantingSite, history: PlantingSiteHistory): MapSourceBaseData => {
+  const { name, description } = site;
+  const { id, boundary } = history;
+
+  return {
+    entities: [
+      {
+        properties: { id, name, description, type: 'site' },
+        boundary: getPolygons(boundary),
+        id,
+      },
+    ],
+    id: 'sites',
+  };
+};
+
+/**
  * Transform zones geometry data into UI model
  */
 const extractPlantingZones = (site: MinimalPlantingSite): MapSourceBaseData => {
@@ -182,9 +201,49 @@ const extractPlantingZones = (site: MinimalPlantingSite): MapSourceBaseData => {
 };
 
 /**
+ * Transform zones geometry data into UI model
+ */
+const extractPlantingZonesFromHistory = (site: PlantingSiteHistory): MapSourceBaseData => {
+  const zonesData =
+    site.plantingZones?.map((zone) => {
+      const { id, name, boundary } = zone;
+      return {
+        properties: { id, name, type: 'zone', recency: 0 },
+        boundary: getPolygons(boundary),
+        id,
+      };
+    }) || [];
+
+  return {
+    entities: zonesData,
+    id: 'zones',
+  };
+};
+
+/**
  * Transform subzones geometry data into UI model
  */
 const extractSubzones = (site: MinimalPlantingSite): MapSourceBaseData => {
+  const allPlantingSubzonesData =
+    site.plantingZones?.flatMap((zone) => {
+      const { plantingSubzones } = zone;
+      return plantingSubzones.map((subzone) => {
+        const { id, name, fullName, boundary } = subzone;
+        return {
+          properties: { id, name, fullName, type: 'subzone', zoneId: zone.id },
+          boundary: getPolygons(boundary),
+          id,
+        };
+      });
+    }) || [];
+
+  return {
+    entities: allPlantingSubzonesData.flatMap((f) => f),
+    id: 'subzones',
+  };
+};
+
+const extractSubzonesFromHistory = (site: PlantingSiteHistory): MapSourceBaseData => {
   const allPlantingSubzonesData =
     site.plantingZones?.flatMap((zone) => {
       const { plantingSubzones } = zone;
@@ -232,6 +291,20 @@ const getMapDataFromPlantingSite = (plantingSite: PlantingSite): MapData => {
     site: extractPlantingSite(plantingSite),
     zone: extractPlantingZones(plantingSite),
     subzone: extractSubzones(plantingSite),
+    permanentPlot: undefined,
+    temporaryPlot: undefined,
+    adHocPlot: undefined,
+  };
+};
+
+/**
+ * Extract Planting Site, Zones, Subzones from planting site data
+ */
+const getMapDataFromPlantingSiteFromHistory = (plantingSite: PlantingSite, history: PlantingSiteHistory): MapData => {
+  return {
+    site: extractPlantingSiteFromHistory(plantingSite, history),
+    zone: extractPlantingZonesFromHistory(history),
+    subzone: extractSubzonesFromHistory(history),
     permanentPlot: undefined,
     temporaryPlot: undefined,
     adHocPlot: undefined,
@@ -412,13 +485,17 @@ const MapService = {
   getMapboxToken,
   getBoundingBox,
   getMapDataFromPlantingSite,
+  getMapDataFromPlantingSiteFromHistory,
   getMapDataFromObservation,
   getMapDataFromAggregation,
   getPlantingSiteBoundingBox,
   getMapEntityGeometry,
   extractPlantingSite,
+  extractPlantingSiteFromHistory,
   extractPlantingZones,
+  extractPlantingZonesFromHistory,
   extractSubzones,
+  extractSubzonesFromHistory,
 };
 
 export default MapService;

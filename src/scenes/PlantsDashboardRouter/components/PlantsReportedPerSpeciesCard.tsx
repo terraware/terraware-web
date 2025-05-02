@@ -6,9 +6,9 @@ import { Icon, Tooltip } from '@terraware/web-components';
 import BarChart from 'src/components/common/Chart/BarChart';
 import PieChart from 'src/components/common/Chart/PieChart';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
 import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { truncate } from 'src/utils/text';
@@ -16,22 +16,20 @@ import { truncate } from 'src/utils/text';
 const MAX_SPECIES_NAME_LENGTH = 20;
 
 type PlantsReportedPerSpeciesCardProps = {
-  plantingSiteId: number;
   newVersion?: boolean;
 };
 
 export default function PlantsReportedPerSpeciesCard({
-  plantingSiteId,
   newVersion,
 }: PlantsReportedPerSpeciesCardProps): JSX.Element | undefined {
-  const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
+  const { plantingSite } = usePlantingSiteData();
 
   if (!plantingSite) {
     return undefined;
   } else if (!plantingSite.plantingZones?.length) {
-    return <SiteWithoutZonesCard plantingSiteId={plantingSiteId} newVersion={newVersion} />;
+    return <SiteWithoutZonesCard plantingSiteId={plantingSite.id} newVersion={newVersion} />;
   } else {
-    return <SiteWithZonesCard plantingSiteId={plantingSiteId} newVersion={newVersion} />;
+    return <SiteWithZonesCard plantingSiteId={plantingSite.id} newVersion={newVersion} />;
   }
 }
 
@@ -41,11 +39,11 @@ const calculateSpeciesQuantities = (plantings: { plants: number; scientificName:
     const { scientificName, plants } = planting;
     if (newVersion) {
       if (!speciesQuantities[scientificName] && Object.keys(speciesQuantities).length >= 4) {
-        const minSpecies = Object.keys(speciesQuantities).reduce((minSpecies, sp) => {
-          if (sp !== strings.OTHER_SPECIES && speciesQuantities[sp] < speciesQuantities[minSpecies]) {
+        const minSpecies = Object.keys(speciesQuantities).reduce((currentMin, sp) => {
+          if (sp !== strings.OTHER_SPECIES && speciesQuantities[sp] < speciesQuantities[currentMin]) {
             return sp;
           }
-          return minSpecies;
+          return currentMin;
         }, Object.keys(speciesQuantities)[0]);
 
         if (plants > speciesQuantities[minSpecies]) {

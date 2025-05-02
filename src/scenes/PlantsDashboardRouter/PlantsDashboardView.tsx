@@ -5,18 +5,15 @@ import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/ut
 import { DateTime } from 'luxon';
 
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
+import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
-import useObservationSummaries from 'src/hooks/useObservationSummaries';
 import { useOrganization } from 'src/providers';
-import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
-import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
-import { selectPlantingSite, selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import {
-  requestPlantingSites,
   requestPlantingSitesSearchResults,
   requestSitePopulation,
   requestSiteReportedPlants,
@@ -26,9 +23,6 @@ import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/S
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import { isAfter } from 'src/utils/dateUtils';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-
-import FormattedNumber from '../../components/common/FormattedNumber';
 import MortalityRateCard from './components/MortalityRateCard';
 import PlantingDensityCard from './components/PlantingDensityCard';
 import PlantingSiteTrendsCard from './components/PlantingSiteTrendsCard';
@@ -41,18 +35,13 @@ type PlantsDashboardViewProps = {
 };
 
 export default function PlantsDashboardView({ projectId, organizationId }: PlantsDashboardViewProps): JSX.Element {
-  const org = useOrganization();
+  const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const dispatch = useAppDispatch();
-  const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState(-1);
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<Record<string, unknown>>();
   const theme = useTheme();
-  const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
-  const summaries = useObservationSummaries(selectedPlantingSiteId);
-  const defaultTimeZone = useDefaultTimeZone();
-  const latestObservation = useAppSelector((state) =>
-    selectLatestObservation(state, selectedPlantingSiteId, defaultTimeZone.get().id)
-  );
+
+  const { plantingSite, setSelectedPlantingSite, latestObservation, observationSummaries } = usePlantingSiteData();
 
   const hasObservations = useMemo(() => !!latestObservation, [latestObservation]);
 
@@ -67,25 +56,18 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     return population > 0;
   }, [populationResults]);
 
-  const plantingSiteResult = useAppSelector((state) => selectPlantingSite(state, selectedPlantingSiteId));
   const sitePlantingComplete = useMemo(() => {
     return (
-      plantingSiteResult?.plantingZones
-        ?.flatMap((zone) => zone.plantingSubzones)
-        ?.every((sz) => sz.plantingCompleted) ?? false
+      plantingSite?.plantingZones?.flatMap((zone) => zone.plantingSubzones)?.every((sz) => sz.plantingCompleted) ??
+      false
     );
-  }, [plantingSiteResult]);
-
-  const organizationIdToUse = useMemo(
-    () => (organizationId ? organizationId : org.selectedOrganization.id),
-    [organizationId, org.selectedOrganization.id]
-  );
+  }, [plantingSite]);
 
   const onSelect = useCallback(
     (site: PlantingSite) => {
-      setSelectedPlantingSiteId(site.id);
+      setSelectedPlantingSite(site.id);
     },
-    [setSelectedPlantingSiteId]
+    [setSelectedPlantingSite]
   );
   const onPreferences = useCallback(
     (preferences: Record<string, unknown>) => setPlantsDashboardPreferences(preferences),
@@ -97,49 +79,31 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
   }, [latestObservation]);
 
   const geometryChangedNote = useMemo(() => {
-    if (selectedPlantingSiteId !== -1 && latestObservation) {
-      const pSite = plantingSites?.find((ps) => ps.id === selectedPlantingSiteId);
-      if (pSite?.plantingZones?.length && pSite?.plantingZones?.length > 0) {
-        const maxModifiedTime = pSite.plantingZones.reduce(
-          (acc, zone) => (isAfter(zone.boundaryModifiedTime, acc) ? zone.boundaryModifiedTime : acc),
-          pSite.plantingZones[0].boundaryModifiedTime
-        );
-        const maxModifiedDate = DateTime.fromISO(maxModifiedTime).toFormat('yyyy-MM-dd');
-
-        if (
-          (latestObservation.completedTime && isAfter(maxModifiedTime, latestObservation.completedTime)) ||
-          (!latestObservation.completedTime && isAfter(maxModifiedDate, latestObservation.startDate))
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      }
+    if (latestObservation?.completedTime && plantingSite?.plantingZones?.length) {
+      const siteBoundaryModifiedTime = plantingSite.plantingZones.reduce(
+        (maxTime, zone) => (isAfter(zone.boundaryModifiedTime, maxTime) ? zone.boundaryModifiedTime : maxTime),
+        plantingSite.plantingZones[0].boundaryModifiedTime
+      );
+      return isAfter(siteBoundaryModifiedTime, latestObservation.completedTime);
     } else {
       return false;
     }
-  }, [latestObservation, plantingSites, selectedPlantingSiteId]);
+  }, [latestObservation, plantingSite]);
 
   useEffect(() => {
-    dispatch(requestObservations(organizationIdToUse));
-    dispatch(requestObservationsResults(organizationIdToUse));
-    dispatch(requestSpecies(organizationIdToUse));
-    dispatch(requestPlantings(organizationIdToUse));
-    dispatch(requestPlantingSitesSearchResults(organizationIdToUse));
-  }, [dispatch, organizationIdToUse]);
+    const orgId = organizationId ?? selectedOrganization.id;
+    void dispatch(requestSpecies(orgId));
+    void dispatch(requestPlantings(orgId));
+    void dispatch(requestPlantingSitesSearchResults(orgId));
+  }, [dispatch, organizationId, selectedOrganization]);
 
   useEffect(() => {
-    if (organizationId) {
-      dispatch(requestPlantingSites(organizationId));
+    if (plantingSite?.id) {
+      const orgId = organizationId ?? selectedOrganization.id;
+      void dispatch(requestSitePopulation(orgId, plantingSite?.id));
+      void dispatch(requestSiteReportedPlants(plantingSite?.id));
     }
-  }, [organizationId]);
-
-  useEffect(() => {
-    if (selectedPlantingSiteId !== -1) {
-      dispatch(requestSitePopulation(organizationIdToUse, selectedPlantingSiteId));
-      dispatch(requestSiteReportedPlants(selectedPlantingSiteId));
-    }
-  }, [dispatch, organizationIdToUse, selectedPlantingSiteId]);
+  }, [dispatch, organizationId, plantingSite, selectedOrganization]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>
@@ -157,10 +121,10 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
       (acc, plot) => (isAfter(plot.completedTime, acc) ? plot.completedTime : acc),
       allMonitoringPlots[0].completedTime
     );
-    return latestObservation?.completedTime ? (
+    return plantingSite && latestObservation?.completedTime ? (
       <Link
         fontSize={'16px'}
-        to={APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', selectedPlantingSiteId.toString()).replace(
+        to={APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', plantingSite?.id.toString()).replace(
           ':observationId',
           latestObservation.observationId.toString()
         )}
@@ -176,177 +140,179 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
   }, [latestObservation]);
 
   const renderMortalityRate = useCallback(
-    () => (
-      <>
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: isMobile ? 'flex-start' : 'center',
-              flexDirection: isMobile ? 'column' : 'row',
-            }}
-          >
-            <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
-              {strings.MORTALITY_RATE}
-            </Typography>
-            {hasObservations && (
-              <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
-            )}
-          </Box>
-        </Grid>
-        <Grid item xs={12}>
-          <MortalityRateCard plantingSiteId={selectedPlantingSiteId} />
-        </Grid>
-      </>
-    ),
-    [selectedPlantingSiteId, getLatestObservationLink, hasObservations]
+    () =>
+      plantingSite ? (
+        <>
+          <Grid item xs={12}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: isMobile ? 'flex-start' : 'center',
+                flexDirection: isMobile ? 'column' : 'row',
+              }}
+            >
+              <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
+                {strings.MORTALITY_RATE}
+              </Typography>
+              {hasObservations && (
+                <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
+              )}
+            </Box>
+          </Grid>
+          <Grid item xs={12}>
+            <MortalityRateCard />
+          </Grid>
+        </>
+      ) : undefined,
+    [plantingSite, getLatestObservationLink, hasObservations]
   );
 
   const renderTotalPlantsAndSpecies = useCallback(
-    () => (
-      <>
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: isMobile ? 'flex-start' : 'center',
-              flexDirection: isMobile ? 'column' : 'row',
-            }}
-          >
-            <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
-              {strings.PLANTS_AND_SPECIES_STATISTICS}
-            </Typography>
-          </Box>
-        </Grid>
-        <Grid item xs={12}>
-          <PlantsAndSpeciesCard plantingSiteId={selectedPlantingSiteId} hasReportedPlants={hasReportedPlants} />
-        </Grid>
-      </>
-    ),
-    [selectedPlantingSiteId, hasReportedPlants]
+    () =>
+      plantingSite ? (
+        <>
+          <Grid item xs={12}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: isMobile ? 'flex-start' : 'center',
+                flexDirection: isMobile ? 'column' : 'row',
+              }}
+            >
+              <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
+                {strings.PLANTS_AND_SPECIES_STATISTICS}
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12}>
+            <PlantsAndSpeciesCard plantingSiteId={plantingSite.id} hasReportedPlants={hasReportedPlants} />
+          </Grid>
+        </>
+      ) : undefined,
+    [plantingSite, hasReportedPlants]
   );
 
   const renderPlantingProgressAndDensity = useCallback(
-    () => (
-      <>
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: isMobile ? 'flex-start' : 'center',
-              flexDirection: isMobile ? 'column' : 'row',
-            }}
-          >
-            <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
-              {strings.PLANTING_DENSITY}
-            </Typography>
-            {hasObservations && (
-              <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
-            )}
-          </Box>
-        </Grid>
-        <Grid item xs={12}>
-          <PlantingDensityCard
-            plantingSiteId={selectedPlantingSiteId}
-            sitePlantingComplete={sitePlantingComplete}
-            hasObservations={hasObservations}
-          />
-        </Grid>
-      </>
-    ),
-    [selectedPlantingSiteId, sitePlantingComplete, hasObservations, getLatestObservationLink]
+    () =>
+      plantingSite ? (
+        <>
+          <Grid item xs={12}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: isMobile ? 'flex-start' : 'center',
+                flexDirection: isMobile ? 'column' : 'row',
+              }}
+            >
+              <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
+                {strings.PLANTING_DENSITY}
+              </Typography>
+              {hasObservations && (
+                <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
+              )}
+            </Box>
+          </Grid>
+          <Grid item xs={12}>
+            <PlantingDensityCard hasObservations={hasObservations} />
+          </Grid>
+        </>
+      ) : undefined,
+    [plantingSite, sitePlantingComplete, hasObservations, getLatestObservationLink]
   );
 
   const renderPlantingSiteTrends = useCallback(
-    () => (
-      <>
-        <Grid item xs={12}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
-              {strings.ZONE_TRENDS}
-            </Typography>
+    () =>
+      plantingSite ? (
+        <>
+          <Grid item xs={12}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
+                {strings.ZONE_TRENDS}
+              </Typography>
 
-            <Typography>{strings.ALL_OBSERVATIONS}</Typography>
-          </Box>
-        </Grid>
-        <Grid item xs={12}>
-          <PlantingSiteTrendsCard plantingSiteId={selectedPlantingSiteId} />
-        </Grid>
-      </>
-    ),
-    [selectedPlantingSiteId]
+              <Typography>{strings.ALL_OBSERVATIONS}</Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12}>
+            <PlantingSiteTrendsCard />
+          </Grid>
+        </>
+      ) : undefined,
+    [plantingSite]
   );
 
   const renderZoneLevelData = useCallback(
-    () => (
-      <>
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: isMobile ? 'flex-start' : 'center',
-              flexDirection: isMobile ? 'column' : 'row',
-            }}
-          >
-            <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
-              {strings.SITE_MAP}
-            </Typography>
-            {hasObservations && (
-              <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
-            )}
-          </Box>
-        </Grid>
-        <Grid item xs={12}>
-          <ZoneLevelDataMap plantingSiteId={selectedPlantingSiteId} />
-        </Grid>
-      </>
-    ),
-    [selectedPlantingSiteId, getLatestObservationLink, hasObservations]
+    () =>
+      plantingSite ? (
+        <>
+          <Grid item xs={12}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: isMobile ? 'flex-start' : 'center',
+                flexDirection: isMobile ? 'column' : 'row',
+              }}
+            >
+              <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
+                {strings.SITE_MAP}
+              </Typography>
+              {hasObservations && (
+                <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
+              )}
+            </Box>
+          </Grid>
+          <Grid item xs={12}>
+            <ZoneLevelDataMap plantingSiteId={plantingSite.id} />
+          </Grid>
+        </>
+      ) : undefined,
+    [plantingSite, getLatestObservationLink, hasObservations]
   );
 
   const renderSimpleSiteMap = useCallback(
-    () => (
-      <>
-        {sectionHeader(strings.SITE_MAP)}
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              background: theme.palette.TwClrBg,
-              borderRadius: '24px',
-              padding: theme.spacing(3),
-              gap: theme.spacing(3),
-            }}
-          >
-            <SimplePlantingSiteMap plantingSiteId={selectedPlantingSiteId} />
-          </Box>
-        </Grid>
-      </>
-    ),
-    [selectedPlantingSiteId]
+    () =>
+      plantingSite ? (
+        <>
+          {sectionHeader(strings.SITE_MAP)}
+          <Grid item xs={12}>
+            <Box
+              sx={{
+                background: theme.palette.TwClrBg,
+                borderRadius: '24px',
+                padding: theme.spacing(3),
+                gap: theme.spacing(3),
+              }}
+            >
+              <SimplePlantingSiteMap plantingSiteId={plantingSite.id} />
+            </Box>
+          </Grid>
+        </>
+      ) : undefined,
+    [plantingSite]
   );
 
   const hasPolygons = useMemo(
-    () => !!plantingSiteResult && !!plantingSiteResult.boundary && plantingSiteResult.boundary.coordinates?.length > 0,
-    [plantingSiteResult]
+    () => !!plantingSite && !!plantingSite.boundary && plantingSite.boundary.coordinates?.length > 0,
+    [plantingSite]
   );
 
   const hasPlantingZones = useMemo(
-    () => !!plantingSiteResult && !!plantingSiteResult.plantingZones && plantingSiteResult.plantingZones.length > 0,
-    [plantingSiteResult]
+    () => !!plantingSite && !!plantingSite.plantingZones && plantingSite.plantingZones.length > 0,
+    [plantingSite]
   );
 
-  const getSummariesHectares = useCallback(() => {
+  const summariesHectares = useMemo(() => {
     const totalSquareMeters =
-      summaries?.[0]?.plantingZones
+      observationSummaries?.[0]?.plantingZones
         .flatMap((pz) =>
           pz.plantingSubzones.flatMap((psz) => psz.monitoringPlots.map((mp) => mp.sizeMeters * mp.sizeMeters))
         )
         .reduce((acc, area) => acc + area, 0) ?? 0;
 
     return totalSquareMeters * SQ_M_TO_HECTARES;
-  }, [summaries]);
+  }, [observationSummaries]);
 
-  const getObservationHectares = useCallback(() => {
+  const observationHectares = useMemo(() => {
     const totalSquareMeters =
       latestObservation?.plantingZones
         .flatMap((pz) =>
@@ -358,31 +324,37 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
   }, [latestObservation]);
 
   const getDashboardSubhead = useCallback(() => {
-    if (selectedPlantingSiteId === -1) {
-      return '';
+    if (!plantingSite) {
+      return strings.FIRST_ADD_PLANTING_SITE;
     }
 
-    const earliestDate = summaries?.[0]?.earliestObservationTime
-      ? getDateDisplayValue(summaries[0].earliestObservationTime)
+    const earliestDate = observationSummaries?.[0]?.earliestObservationTime
+      ? getDateDisplayValue(observationSummaries[0].earliestObservationTime)
       : undefined;
-    const latestDate = summaries?.[0]?.latestObservationTime
-      ? getDateDisplayValue(summaries[0].latestObservationTime)
+    const latestDate = observationSummaries?.[0]?.latestObservationTime
+      ? getDateDisplayValue(observationSummaries[0].latestObservationTime)
       : undefined;
     return !earliestDate || !latestDate || earliestDate === latestDate
       ? (strings.formatString(
           strings.DASHBOARD_HEADER_TEXT_SINGLE_OBSERVATION,
-          <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={getObservationHectares()} />)}</b>,
+          <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={observationHectares} />)}</b>,
           <b>{getLatestObservationLink()}</b>
         ) as string)
       : (strings.formatString(
           strings.DASHBOARD_HEADER_TEXT_V2,
-          <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={getSummariesHectares()} />)}</b>,
+          <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={summariesHectares} />)}</b>,
           <b>
-            {summaries?.[0]?.earliestObservationTime ? getDateDisplayValue(summaries[0].earliestObservationTime) : ''}
+            {observationSummaries?.[0]?.earliestObservationTime
+              ? getDateDisplayValue(observationSummaries[0].earliestObservationTime)
+              : ''}
           </b>,
-          <b>{summaries?.[0]?.latestObservationTime ? getDateDisplayValue(summaries[0].latestObservationTime) : ''}</b>
+          <b>
+            {observationSummaries?.[0]?.latestObservationTime
+              ? getDateDisplayValue(observationSummaries[0].latestObservationTime)
+              : ''}
+          </b>
         ) as string);
-  }, [selectedPlantingSiteId, summaries]);
+  }, [plantingSite, observationSummaries, observationHectares]);
 
   return (
     <PlantsPrimaryPage
@@ -402,7 +374,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
       latestObservationId={latestObservationId}
       projectId={projectId}
       organizationId={organizationId}
-      isEmptyState={selectedPlantingSiteId === -1}
+      isEmptyState={plantingSite === undefined}
     >
       <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
         {renderTotalPlantsAndSpecies()}

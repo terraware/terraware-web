@@ -87,13 +87,13 @@ export default function PlantsAndSpeciesCard({
       {hasReportedPlants && (
         <>
           <Box flexBasis='100%'>
-            <PlantsReportedPerSpeciesCard plantingSiteId={plantingSiteId} newVersion />
+            <PlantsReportedPerSpeciesCard newVersion />
           </Box>
           <div style={separatorStyles} />
         </>
       )}
       <Box flexBasis='100%'>
-        <NumberOfSpeciesPlantedCard plantingSiteId={plantingSiteId} newVersion />
+        <NumberOfSpeciesPlantedCard newVersion />
       </Box>
     </Card>
   );

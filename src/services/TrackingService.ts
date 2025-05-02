@@ -277,6 +277,18 @@ async function searchPlantingSites(
     direction: 'Ascending',
   } as SearchSortOrder;
 
+  const additionalSearchNodes: SearchNodePayload[] = [];
+
+  if (searchField) {
+    if (isArray(searchField)) {
+      for (const field of searchField) {
+        additionalSearchNodes.push(field);
+      }
+    } else {
+      additionalSearchNodes.push(searchField);
+    }
+  }
+
   const params: SearchRequestPayload = {
     fields: [
       'boundary',
@@ -302,20 +314,11 @@ async function searchPlantingSites(
           operation: 'field',
           values: [organizationId],
         },
+        ...additionalSearchNodes,
       ],
     },
     count: 0,
   };
-
-  if (searchField) {
-    if (isArray(searchField)) {
-      for (const field of searchField) {
-        params.search.children.push(field);
-      }
-    } else {
-      params.search.children.push(searchField);
-    }
-  }
 
   return (await SearchService.search(params)) as PlantingSiteSearchResult[];
 }

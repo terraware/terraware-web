@@ -26,14 +26,14 @@ import { regexMatch } from 'src/utils/search';
 type ObservationMapViewProps = SearchProps & {
   hideDate?: boolean;
   observationsResults?: ObservationResults[];
-  adHocObservationsResults?: AdHocObservationResults[];
+  adHocObservationResults?: AdHocObservationResults[];
   selectedPlantingSite: PlantingSite;
 };
 
 export default function ObservationMapView({
   hideDate,
   observationsResults,
-  adHocObservationsResults,
+  adHocObservationResults,
   search,
   filtersProps,
   selectedPlantingSite,
@@ -57,7 +57,7 @@ export default function ObservationMapView({
 
   const observationsDates = useMemo(() => {
     const uniqueDates = new Set(observationsResults?.map((obs) => obs.completedTime || obs.startDate));
-    adHocObservationsResults?.forEach((obs) => {
+    adHocObservationResults?.forEach((obs) => {
       const dateToUse = obs.completedTime ? obs.completedTime : obs.startDate;
       uniqueDates.add(dateToUse);
     });
@@ -66,7 +66,7 @@ export default function ObservationMapView({
       ?.filter((time) => time)
       ?.map((time) => time)
       ?.sort((a, b) => (Date.parse(a) > Date.parse(b) ? 1 : -1));
-  }, [observationsResults, adHocObservationsResults]);
+  }, [observationsResults, adHocObservationResults]);
 
   const [selectedObservationDate, setSelectedObservationDate] = useState<string | undefined>();
 
@@ -98,13 +98,13 @@ export default function ObservationMapView({
 
     setSelectedObservation(selObservation);
 
-    const selAdHocObservation = adHocObservationsResults?.find((obs) => {
+    const selAdHocObservation = adHocObservationResults?.find((obs) => {
       const dateToCheck = obs.completedTime ? obs.completedTime : obs.startDate;
       return dateToCheck === selectedObservationDate;
     });
 
     setSelectedAdHocObservation(selAdHocObservation);
-  }, [observationsResults, adHocObservationsResults, selectedPlantingSite, selectedObservationDate]);
+  }, [observationsResults, adHocObservationResults, selectedPlantingSite, selectedObservationDate]);
 
   const observationData = useMemo(() => {
     let observationToUse = selectedObservation || selectedAdHocObservation;

@@ -14,7 +14,7 @@ type OverviewItemCardProps = {
   handleEdit?: () => void;
   title?: string;
   titleInfoTooltip?: React.ReactNode;
-  contents: JSX.Element | string | number | null;
+  contents?: JSX.Element | string | number | null;
   className?: string;
   grid?: boolean;
   sx?: SxProps;

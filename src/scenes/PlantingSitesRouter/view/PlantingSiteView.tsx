@@ -6,7 +6,7 @@ import { BusySpinner } from '@terraware/web-components';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
-import { requestAdHocObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { requestAdHocObservationResults } from 'src/redux/features/observations/observationsThunks';
 import { searchPlantingSiteZones } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { requestPlantingSite } from 'src/redux/features/tracking/trackingThunks';
@@ -28,7 +28,7 @@ export default function PlantingSiteView(): JSX.Element {
     const siteId = Number(plantingSiteId);
     if (!isNaN(siteId)) {
       dispatch(requestPlantingSite(siteId, activeLocale));
-      dispatch(requestAdHocObservationsResults(selectedOrganization.id));
+      dispatch(requestAdHocObservationResults(selectedOrganization.id));
     }
   }, [activeLocale, dispatch, plantingSiteId]);
 

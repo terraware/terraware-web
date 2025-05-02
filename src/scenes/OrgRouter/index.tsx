@@ -10,6 +10,7 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import ApplicationProvider from 'src/providers/Application';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
+import PlantingSiteProvider from 'src/providers/Tracking/PlantingSiteProvider';
 import { selectHasObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
@@ -190,86 +191,88 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   return (
     <ApplicationProvider>
       <ParticipantProvider>
-        {type !== 'desktop' ? (
-          <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
-            <Box sx={navBarOpened}>
-              <NavBar
-                setShowNavBar={setShowNavBar}
-                withdrawalCreated={withdrawalCreated}
-                hasPlantingSites={selectedOrgHasPlantingSites()}
-              />
-            </Box>
-          </Slide>
-        ) : (
-          <NavBar
-            setShowNavBar={setShowNavBar}
-            backgroundTransparent={viewHasBackgroundImage()}
-            withdrawalCreated={withdrawalCreated}
-            hasPlantingSites={selectedOrgHasPlantingSites()}
-          />
-        )}
-        <Box
-          sx={type === 'desktop' || showNavBar ? { ...contentStyles, ...contentWithNavBar } : contentStyles}
-          className='scrollable-content'
-        >
-          <ErrorBoundary setShowNavBar={setShowNavBar}>
-            <Routes>
-              {/* Routes, in order of their appearance down the side NavBar */}
-              <Route path={APP_PATHS.HOME} element={<Home selectedOrgHasSpecies={selectedOrgHasSpecies} />} />
-              <Route path={APP_PATHS.SEEDS_DASHBOARD} element={<SeedsDashboard />} />
-              <Route path={APP_PATHS.CHECKIN} element={<CheckIn />} />
-              <Route
-                path={APP_PATHS.ACCESSIONS + '/*'}
-                element={<AccessionsRouter setWithdrawalCreated={setWithdrawalCreated} />}
-              />
-              <Route path={APP_PATHS.SPECIES + '/*'} element={<SpeciesRouter />} />
-              <Route path={APP_PATHS.ORGANIZATION + '/*'} element={<OrganizationRouter />} />
-              <Route path={APP_PATHS.PEOPLE + '/*'} element={<PeopleRouter />} />
-              {/* modules router *must* come before the projects router,
+        <PlantingSiteProvider>
+          {type !== 'desktop' ? (
+            <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
+              <Box sx={navBarOpened}>
+                <NavBar
+                  setShowNavBar={setShowNavBar}
+                  withdrawalCreated={withdrawalCreated}
+                  hasPlantingSites={selectedOrgHasPlantingSites()}
+                />
+              </Box>
+            </Slide>
+          ) : (
+            <NavBar
+              setShowNavBar={setShowNavBar}
+              backgroundTransparent={viewHasBackgroundImage()}
+              withdrawalCreated={withdrawalCreated}
+              hasPlantingSites={selectedOrgHasPlantingSites()}
+            />
+          )}
+          <Box
+            sx={type === 'desktop' || showNavBar ? { ...contentStyles, ...contentWithNavBar } : contentStyles}
+            className='scrollable-content'
+          >
+            <ErrorBoundary setShowNavBar={setShowNavBar}>
+              <Routes>
+                {/* Routes, in order of their appearance down the side NavBar */}
+                <Route path={APP_PATHS.HOME} element={<Home selectedOrgHasSpecies={selectedOrgHasSpecies} />} />
+                <Route path={APP_PATHS.SEEDS_DASHBOARD} element={<SeedsDashboard />} />
+                <Route path={APP_PATHS.CHECKIN} element={<CheckIn />} />
+                <Route
+                  path={APP_PATHS.ACCESSIONS + '/*'}
+                  element={<AccessionsRouter setWithdrawalCreated={setWithdrawalCreated} />}
+                />
+                <Route path={APP_PATHS.SPECIES + '/*'} element={<SpeciesRouter />} />
+                <Route path={APP_PATHS.ORGANIZATION + '/*'} element={<OrganizationRouter />} />
+                <Route path={APP_PATHS.PEOPLE + '/*'} element={<PeopleRouter />} />
+                {/* modules router *must* come before the projects router,
             or else the path will be picked up by the projects router */}
-              <Route path={APP_PATHS.PROJECT_MODULES + '/*'} element={<ModulesRouter />} />
-              <Route
-                path={APP_PATHS.PROJECTS + '/*'}
-                element={
-                  <ProjectsRouter
-                    reloadProjects={reloadProjects}
-                    isPlaceholderOrg={() => isPlaceholderOrg(selectedOrganization.id)}
-                    selectedOrgHasProjects={selectedOrgHasProjects}
-                  />
-                }
-              />
-              <Route path={APP_PATHS.SEED_BANKS + '/*'} element={<SeedBanksRouter />} />
-              <Route path={APP_PATHS.NURSERIES + '/*'} element={<NurseriesRouter />} />
-              <Route path={APP_PATHS.PLANTS_DASHBOARD + '/*'} element={<PlantsDashboardRouter />} />
-              <Route
-                path={APP_PATHS.INVENTORY + '/*'}
-                element={<InventoryRouter setWithdrawalCreated={setWithdrawalCreated} />}
-              />
-              <Route
-                path={APP_PATHS.BATCH_WITHDRAW}
-                element={<BatchBulkWithdrawView withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />}
-              />
-              <Route
-                path={APP_PATHS.PLANTING_SITES + '/*'}
-                element={<PlantingSites reloadTracking={reloadPlantingSites} />}
-              />
-              <Route path={'/nursery/*'} element={<NurseryRouter />} />
-              <Route path={APP_PATHS.HELP_SUPPORT + '/*'} element={<HelpSupportRouter />} />
-              <Route path={APP_PATHS.MY_ACCOUNT + '/*'} element={<MyAccountRouter />} />
-              <Route path={APP_PATHS.REPORTS + '/*'} element={<AcceleratorReportsRouter />} />
-              <Route path={APP_PATHS.SEED_FUND_REPORTS + '/*'} element={<SeedFundReportsRouter />} />
-              <Route path={APP_PATHS.OBSERVATIONS + '/*'} element={<ObservationsRouter />} />
-              <Route path={APP_PATHS.DELIVERABLES + '/*'} element={<DeliverablesRouter />} />
-              <Route path={APP_PATHS.APPLICATIONS + '/*'} element={<ApplicationRouter />} />
+                <Route path={APP_PATHS.PROJECT_MODULES + '/*'} element={<ModulesRouter />} />
+                <Route
+                  path={APP_PATHS.PROJECTS + '/*'}
+                  element={
+                    <ProjectsRouter
+                      reloadProjects={reloadProjects}
+                      isPlaceholderOrg={() => isPlaceholderOrg(selectedOrganization.id)}
+                      selectedOrgHasProjects={selectedOrgHasProjects}
+                    />
+                  }
+                />
+                <Route path={APP_PATHS.SEED_BANKS + '/*'} element={<SeedBanksRouter />} />
+                <Route path={APP_PATHS.NURSERIES + '/*'} element={<NurseriesRouter />} />
+                <Route path={APP_PATHS.PLANTS_DASHBOARD + '/*'} element={<PlantsDashboardRouter />} />
+                <Route
+                  path={APP_PATHS.INVENTORY + '/*'}
+                  element={<InventoryRouter setWithdrawalCreated={setWithdrawalCreated} />}
+                />
+                <Route
+                  path={APP_PATHS.BATCH_WITHDRAW}
+                  element={<BatchBulkWithdrawView withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />}
+                />
+                <Route
+                  path={APP_PATHS.PLANTING_SITES + '/*'}
+                  element={<PlantingSites reloadTracking={reloadPlantingSites} />}
+                />
+                <Route path={'/nursery/*'} element={<NurseryRouter />} />
+                <Route path={APP_PATHS.HELP_SUPPORT + '/*'} element={<HelpSupportRouter />} />
+                <Route path={APP_PATHS.MY_ACCOUNT + '/*'} element={<MyAccountRouter />} />
+                <Route path={APP_PATHS.REPORTS + '/*'} element={<AcceleratorReportsRouter />} />
+                <Route path={APP_PATHS.SEED_FUND_REPORTS + '/*'} element={<SeedFundReportsRouter />} />
+                <Route path={APP_PATHS.OBSERVATIONS + '/*'} element={<ObservationsRouter />} />
+                <Route path={APP_PATHS.DELIVERABLES + '/*'} element={<DeliverablesRouter />} />
+                <Route path={APP_PATHS.APPLICATIONS + '/*'} element={<ApplicationRouter />} />
 
-              {!isProduction && (
-                <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />
-              )}
+                {!isProduction && (
+                  <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />
+                )}
 
-              <Route path='*' element={<Navigate to={APP_PATHS.HOME} />} />
-            </Routes>
-          </ErrorBoundary>
-        </Box>
+                <Route path='*' element={<Navigate to={APP_PATHS.HOME} />} />
+              </Routes>
+            </ErrorBoundary>
+          </Box>
+        </PlantingSiteProvider>
       </ParticipantProvider>
     </ApplicationProvider>
   );

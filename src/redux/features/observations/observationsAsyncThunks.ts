@@ -4,7 +4,6 @@ import { ObservationsService, Response } from 'src/services';
 import strings from 'src/strings';
 import {
   ReplaceObservationPlotRequestPayload,
-  ReplaceObservationPlotResponsePayload,
   RescheduleObservationRequestPayload,
   ScheduleObservationRequestPayload,
 } from 'src/types/Observations';
@@ -47,13 +46,9 @@ export type ReplaceObservationPlotRequest = {
 export const requestReplaceObservationPlot = createAsyncThunk(
   'replaceObservationPlot',
   async ({ observationId, plotId, request }: ReplaceObservationPlotRequest, { rejectWithValue }) => {
-    const response: Response & ReplaceObservationPlotResponsePayload = await ObservationsService.replaceObservationPlot(
-      observationId,
-      plotId,
-      request
-    );
-    if (response.requestSucceeded) {
-      const { addedMonitoringPlotIds, removedMonitoringPlotIds } = response;
+    const response = await ObservationsService.replaceObservationPlot(observationId, plotId, request);
+    if (response.requestSucceeded && response.data) {
+      const { addedMonitoringPlotIds, removedMonitoringPlotIds } = response.data;
       return { addedMonitoringPlotIds, removedMonitoringPlotIds };
     }
 

@@ -3,30 +3,24 @@ import React from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import useObservationSummaries from 'src/hooks/useObservationSummaries';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import strings from 'src/strings';
 import { ObservationSpeciesResultsPayload } from 'src/types/Observations';
 
-type HighestAndLowestMortalityRateSpeciesCardProps = {
-  plantingSiteId: number;
-};
-
-export default function HighestAndLowestMortalityRateSpeciesCard({
-  plantingSiteId,
-}: HighestAndLowestMortalityRateSpeciesCardProps): JSX.Element {
+export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element {
   const theme = useTheme();
-  const summaries = useObservationSummaries(plantingSiteId);
+  const { observationSummaries } = usePlantingSiteData();
 
   const { availableSpecies } = useSpecies();
 
-  let highestMortalityRate: number | undefined = undefined;
+  let highestMortalityRate: number | undefined;
   let highestSpecies = '';
 
   let lowestMortalityRate = 100;
   let lowestSpecies = '';
 
-  summaries?.[0]?.species.forEach((sp: ObservationSpeciesResultsPayload) => {
+  observationSummaries?.[0]?.species.forEach((sp: ObservationSpeciesResultsPayload) => {
     if (
       sp.mortalityRate !== undefined &&
       sp.mortalityRate !== null &&
@@ -38,7 +32,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
     }
   });
 
-  summaries?.[0]?.species.forEach((sp: ObservationSpeciesResultsPayload) => {
+  observationSummaries?.[0]?.species.forEach((sp: ObservationSpeciesResultsPayload) => {
     if (sp.mortalityRate !== undefined && sp.mortalityRate !== null && sp.mortalityRate < lowestMortalityRate) {
       lowestMortalityRate = sp.mortalityRate;
       lowestSpecies =

@@ -4,12 +4,16 @@ import { findLocaleDetails, supportedLocales } from 'src/strings/locales';
 
 const getLocaleToUse = (locale?: string) => (locale === 'gx' ? 'fr' : locale || 'en');
 
+type NumberFomatter = (locale?: string | null) => {
+  format: (num: number) => string;
+};
+
 /**
  * formatter
  */
-export const useNumberFormatter = (): any => {
-  const formatter = (locale?: string): any => {
-    let localeToUse = getLocaleToUse(locale);
+export const useNumberFormatter = (): NumberFomatter => {
+  const formatter = (locale?: string | null): { format: (num: number) => string } => {
+    let localeToUse = getLocaleToUse(locale ?? undefined);
     if (locale && supportedLocales) {
       const localeDetails = findLocaleDetails(supportedLocales, locale);
       localeToUse = localeDetails.id;
@@ -20,5 +24,5 @@ export const useNumberFormatter = (): any => {
     return { format };
   };
 
-  return useMemo(() => formatter, []);
+  return useMemo(() => formatter, [formatter]);
 };

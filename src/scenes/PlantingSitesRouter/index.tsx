@@ -4,14 +4,9 @@ import { Route, Routes, useParams } from 'react-router';
 import { CircularProgress } from '@mui/material';
 
 import { useOrganization } from 'src/providers';
-import { requestPlantingSiteObservationsResults } from 'src/redux/features/observations/observationsThunks';
-import {
-  selectPlantingSiteObservationsResults,
-  selectPlantingSiteObservationsResultsError,
-} from 'src/redux/features/observations/plantingSiteDetailsSelectors';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
-import { selectPlantingSites, selectPlantingSitesError } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppDispatch } from 'src/redux/store';
 
 import PlantingSiteCreate from './edit/PlantingSiteCreate';
 import PlantingSiteDraftCreate from './edit/PlantingSiteDraftCreate';
@@ -44,31 +39,24 @@ export default function PlantingSites({ reloadTracking }: PlantingSitesProps): J
 export function PlantingSitesRouter({ reloadTracking }: PlantingSitesProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
+
+  const { allPlantingSites, setSelectedPlantingSite } = usePlantingSiteData();
+
   const dispatch = useAppDispatch();
-
-  const observationsResults = useAppSelector((state) =>
-    selectPlantingSiteObservationsResults(state, Number(plantingSiteId))
-  );
-  const observationsResultsError = useAppSelector((state) =>
-    selectPlantingSiteObservationsResultsError(state, Number(plantingSiteId))
-  );
-
-  const plantingSites = useAppSelector(selectPlantingSites);
-  const plantingSitesError = useAppSelector(selectPlantingSitesError);
 
   useEffect(() => {
     const siteId = Number(plantingSiteId);
     if (!isNaN(siteId) && selectedOrganization.id !== -1) {
-      dispatch(requestPlantingSiteObservationsResults(selectedOrganization.id, siteId));
-      dispatch(requestPlantings(selectedOrganization.id));
+      setSelectedPlantingSite(siteId);
+
+      // This dispatch is required for a hasPlantings attribute for deleting a site
+      // TODO: move plantings into usePlantingSite hook
+      void dispatch(requestPlantings(selectedOrganization.id));
     }
-  }, [dispatch, selectedOrganization.id, plantingSiteId]);
+  }, [dispatch, selectedOrganization.id, plantingSiteId, setSelectedPlantingSite]);
 
   // show spinner while initializing data
-  if (
-    (observationsResults === undefined && !observationsResultsError) ||
-    (plantingSites === undefined && !plantingSitesError)
-  ) {
+  if (allPlantingSites === undefined) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
 

@@ -7,38 +7,36 @@ import BarChart from 'src/components/common/Chart/BarChart';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useUser } from 'src/providers';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
 import { selectDefaultSpecies } from 'src/redux/features/species/speciesSelectors';
 import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { useNumberFormatter } from 'src/utils/useNumber';
 
 type NumberOfSpeciesPlantedCardProps = {
-  plantingSiteId: number;
   newVersion?: boolean;
 };
 
 export default function NumberOfSpeciesPlantedCard({
-  plantingSiteId,
   newVersion,
 }: NumberOfSpeciesPlantedCardProps): JSX.Element | undefined {
-  const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
+  const { plantingSite } = usePlantingSiteData();
 
   if (!plantingSite) {
     return undefined;
   } else if (!plantingSite.plantingZones?.length) {
-    return <SiteWithoutZonesCard plantingSiteId={plantingSiteId} newVersion={newVersion} />;
+    return <SiteWithoutZonesCard plantingSiteId={plantingSite.id} newVersion={newVersion} />;
   } else {
-    return <SiteWithZonesCard plantingSiteId={plantingSiteId} newVersion={newVersion} />;
+    return <SiteWithZonesCard newVersion={newVersion} />;
   }
 }
 
 const SiteWithoutZonesCard = ({
   plantingSiteId,
   newVersion,
-}: NumberOfSpeciesPlantedCardProps): JSX.Element | undefined => {
+}: NumberOfSpeciesPlantedCardProps & { plantingSiteId: number }): JSX.Element | undefined => {
   const [totalSpecies, setTotalSpecies] = useState<number>();
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();

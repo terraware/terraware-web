@@ -18,7 +18,7 @@ export type PlantsPrimaryPageProps = {
   children: React.ReactNode; // primary content for this page
   isEmptyState?: boolean; // optional boolean to indicate this is an empty state view
   lastVisitedPreferenceName: string;
-  onSelect: (plantingSite: PlantingSite) => void; // planting site selected, id of -1 refers to All
+  onSelect?: (plantingSite: PlantingSite) => void; // planting site selected, id of -1 refers to All
   pagePath: string;
   plantsSitePreferences?: Record<string, unknown>;
   // this is to allow redux based components to pass in already selected data
@@ -116,7 +116,7 @@ export default function PlantsPrimaryPage({
     (site: PlantingSite | undefined) => {
       if (site) {
         if (projectId) {
-          onSelect(site);
+          onSelect?.(site);
           setSelectedPlantingSite(site);
         } else {
           navigate(pagePath.replace(':plantingSiteId', site.id.toString()));
@@ -163,7 +163,7 @@ export default function PlantsPrimaryPage({
 
         if (plantingSiteToUse.id.toString() === plantingSiteId) {
           setSelectedPlantingSite(plantingSiteToUse);
-          onSelect(plantingSiteToUse);
+          onSelect?.(plantingSiteToUse);
         } else {
           setActivePlantingSite(plantingSiteToUse);
         }
