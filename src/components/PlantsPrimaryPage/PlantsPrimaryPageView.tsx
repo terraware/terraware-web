@@ -1,17 +1,19 @@
 import React, { useMemo, useRef } from 'react';
 
 import { Box, CircularProgress, Grid, Typography, useTheme } from '@mui/material';
-import { Button, Dropdown, IconName, Message } from '@terraware/web-components';
+import { Dropdown, IconName, Message } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
+
+import PlantsDashboardEmptyMessage from '../emptyStatePages/PlantsDashboardEmptyMessage';
 
 export type ButtonProps = {
   title: string;
@@ -36,22 +38,21 @@ export type PlantsPrimaryPageViewProps = {
 };
 
 export default function PlantsPrimaryPageView({
-  actionButton,
   children,
   onSelect,
   plantingSites,
   selectedPlantingSiteId,
   style,
   text,
-  title,
-  newHeader,
   showGeometryNote,
   latestObservationId,
   projectId,
+  isEmptyState,
 }: PlantsPrimaryPageViewProps): JSX.Element {
   const theme = useTheme();
-  const { isMobile, isDesktop } = useDeviceInfo();
+  const { isDesktop } = useDeviceInfo();
   const contentRef = useRef(null);
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const onChangePlantingSiteId = (siteId: any) => {
     const selectedPlantingSite = plantingSites?.find((ps) => ps.id === siteId);
@@ -76,127 +77,65 @@ export default function PlantsPrimaryPageView({
   const Wrapper = projectId ? Box : TfMain;
   return (
     <Wrapper>
-      {newHeader && plantingSites.length > 0 ? (
-        <>
-          {showGeometryNote && selectedPlantingSiteId && latestObservationId && (
-            <Box marginBottom={theme.spacing(4)}>
-              <Message
-                body={
-                  <span>
-                    <b>{strings.PLEASE_NOTE}</b>{' '}
-                    {strings.formatString(
-                      strings.GEOMETRY_CHANGED_WARNING_MESSAGE,
-                      <Link
-                        fontSize={'16px'}
-                        to={`${APP_PATHS.OBSERVATION_DETAILS.replace(
-                          ':plantingSiteId',
-                          selectedPlantingSiteId.toString()
-                        ).replace(':observationId', latestObservationId.toString())}?map=true`}
-                        target='_blank'
-                      >
-                        {strings.HAS_CHANGED}
-                      </Link>
-                    )}
-                  </span>
-                }
-                priority='info'
-                type='page'
-              />
-            </Box>
-          )}
-          <Card radius={'8px'} style={{ 'margin-bottom': '32px' }}>
-            <Grid container alignItems={'center'} spacing={4}>
-              <Grid item xs={isDesktop ? 3 : 12}>
-                <Dropdown
-                  placeholder={strings.SELECT}
-                  id='planting-site-selector'
-                  onChange={onChangePlantingSiteId}
-                  options={options}
-                  selectedValue={selectedPlantingSiteId}
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={isDesktop ? 3 : 12}>
-                <Box>
-                  <Typography fontWeight={600}>{strings.TOTAL_PLANTING_AREA}</Typography>
-                  <Typography fontSize='28px' fontWeight={600}>
-                    {strings.formatString(
-                      strings.X_HA,
-                      plantingSites.find((ps) => ps.id === selectedPlantingSiteId)?.areaHa?.toString() || ''
-                    )}
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={isDesktop ? 6 : 12}>
-                <Typography fontSize='16px' marginTop={theme.spacing(1)}>
-                  {text}
-                </Typography>
-              </Grid>
-            </Grid>
-          </Card>
-        </>
-      ) : (
-        <PageHeaderWrapper nextElement={contentRef.current}>
-          <Grid item xs={12} paddingLeft={theme.spacing(3)} marginBottom={theme.spacing(4)}>
-            <Grid item xs={12} display={isMobile ? 'block' : 'flex'} alignItems='center'>
-              <Box display='flex' alignItems='center'>
-                <Typography sx={{ fontSize: '24px', fontWeight: 600, alignItems: 'center' }}>{title}</Typography>
-                {actionButton && isMobile && (
-                  <Box marginLeft='auto' display='flex'>
-                    <Button
-                      id={`${actionButton.title}_id}`}
-                      icon={actionButton.icon}
-                      onClick={actionButton.onClick}
-                      size='medium'
-                    />
-                  </Box>
-                )}
-              </Box>
-              {plantingSites.length > 0 && (
-                <>
-                  {!isMobile && (
-                    <Box
-                      sx={{
-                        margin: theme.spacing(0, 2),
-                        width: '1px',
-                        height: '32px',
-                        backgroundColor: theme.palette.TwClrBgTertiary,
-                      }}
-                    />
+      <>
+        {showGeometryNote && selectedPlantingSiteId && latestObservationId && (
+          <Box marginBottom={theme.spacing(4)}>
+            <Message
+              body={
+                <span>
+                  <b>{strings.PLEASE_NOTE}</b>{' '}
+                  {strings.formatString(
+                    strings.GEOMETRY_CHANGED_WARNING_MESSAGE,
+                    <Link
+                      fontSize={'16px'}
+                      to={`${APP_PATHS.OBSERVATION_DETAILS.replace(
+                        ':plantingSiteId',
+                        selectedPlantingSiteId.toString()
+                      ).replace(':observationId', latestObservationId.toString())}?map=true`}
+                      target='_blank'
+                    >
+                      {strings.HAS_CHANGED}
+                    </Link>
                   )}
-                  <Box display='flex' alignItems='center' padding={theme.spacing(2, 0)}>
-                    <Typography sx={{ paddingRight: 1, fontSize: '16px', fontWeight: 500 }}>
-                      {strings.PLANTING_SITE}
-                    </Typography>
-                    <Dropdown
-                      placeholder={strings.SELECT}
-                      id='planting-site-selector'
-                      onChange={onChangePlantingSiteId}
-                      options={options}
-                      selectedValue={selectedPlantingSiteId}
-                    />
-                  </Box>
-                </>
-              )}
-              {actionButton && !isMobile && (
-                <Box marginLeft='auto' display='flex'>
-                  <Button
-                    id={`${actionButton.title}_id}`}
-                    label={actionButton.title}
-                    onClick={actionButton.onClick}
-                    size='medium'
-                  />
-                </Box>
-              )}
+                </span>
+              }
+              priority='info'
+              type='page'
+            />
+          </Box>
+        )}
+        <Card radius={'8px'} style={{ 'margin-bottom': '32px' }}>
+          <Grid container alignItems={'center'} spacing={4}>
+            <Grid item xs={isDesktop ? 3 : 12}>
+              <Dropdown
+                placeholder={strings.SELECT}
+                id='planting-site-selector'
+                onChange={onChangePlantingSiteId}
+                options={options}
+                selectedValue={selectedPlantingSiteId}
+                fullWidth
+              />
             </Grid>
-            {text && (
-              <Typography fontSize='14px' marginTop={theme.spacing(1)}>
+            <Grid item xs={isDesktop ? 3 : 12}>
+              <Box>
+                <Typography fontWeight={600}>{strings.TOTAL_PLANTING_AREA}</Typography>
+                <Typography fontSize='28px' fontWeight={600}>
+                  {strings.formatString(
+                    strings.X_HA,
+                    plantingSites.find((ps) => ps.id === selectedPlantingSiteId)?.areaHa?.toString() || ''
+                  )}
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={isDesktop ? 6 : 12}>
+              <Typography fontSize='16px' marginTop={theme.spacing(1)}>
                 {text}
               </Typography>
-            )}
+            </Grid>
           </Grid>
-        </PageHeaderWrapper>
-      )}
+        </Card>
+      </>
+      {isEmptyState && !isAcceleratorRoute && <PlantsDashboardEmptyMessage />}
       <Grid item xs={12}>
         <PageSnackbar />
       </Grid>
