@@ -151,53 +151,66 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
         const zoneObservation = latestObservation?.plantingZones.find(
           (zoneResult) => zoneResult.plantingZoneId === entityZoneId
         );
+        const zoneStat = zoneStats[entityZoneId];
 
-        if (!zoneStats[entityZoneId]?.reportedPlants) {
+        if (!zoneStat) {
           properties = [
             {
               key: strings.AREA_HA,
               value: findZoneArea(entity.id as number) || strings.UNKNOWN,
             },
-            { key: strings.NOT_OBSERVED, value: '' },
+            { key: strings.NO_PLANTS, value: '' },
           ];
         } else if (zoneProgress[entityZoneId] && zoneStats[entityZoneId]) {
           const lastZoneSummary = lastSummary?.plantingZones.find((pz) => pz.plantingZoneId === entity.id);
-          properties = [
-            {
-              key: strings.AREA_HA,
-              value: lastZoneSummary?.areaHa ?? findZoneArea(entityZoneId) ?? strings.UNKNOWN,
-            },
-            {
-              key: strings.MORTALITY_RATE,
-              value: lastZoneSummary?.mortalityRate ? `${lastZoneSummary.mortalityRate}%` : strings.UNKNOWN,
-            },
-            {
-              key: strings.PLANTING_DENSITY,
-              value: lastZoneSummary?.plantingDensity
-                ? `${lastZoneSummary?.plantingDensity} ${strings.PLANTS_PER_HECTARE}`
-                : strings.UNKNOWN,
-            },
-            {
-              key: strings.PLANTED_PLANTS,
-              value: zoneStats[entityZoneId]?.reportedPlants
-                ? `${zoneStats[entityZoneId]?.reportedPlants}`
-                : strings.UNKNOWN,
-            },
-            {
-              key: strings.OBSERVED_PLANTS,
-              value: lastZoneSummary?.totalPlants ? `${lastZoneSummary?.totalPlants}` : strings.UNKNOWN,
-            },
-            {
-              key: strings.PLANTED_SPECIES,
-              value: zoneStats[entityZoneId]?.reportedSpecies
-                ? `${zoneStats[entityZoneId].reportedSpecies}`
-                : strings.UNKNOWN,
-            },
-            {
-              key: strings.OBSERVED_SPECIES,
-              value: lastZoneSummary?.totalSpecies ? `${lastZoneSummary?.totalSpecies}` : strings.UNKNOWN,
-            },
-          ];
+          if (lastZoneSummary) {
+            properties = [
+              {
+                key: strings.AREA_HA,
+                value: lastZoneSummary?.areaHa ?? findZoneArea(entityZoneId) ?? strings.UNKNOWN,
+              },
+              {
+                key: strings.MORTALITY_RATE,
+                value: `${lastZoneSummary.mortalityRate}%`,
+              },
+              {
+                key: strings.PLANTING_DENSITY,
+                value: `${lastZoneSummary.plantingDensity} ${strings.PLANTS_PER_HECTARE}`,
+              },
+              {
+                key: strings.PLANTED_PLANTS,
+                value: `${zoneStat.reportedPlants}`,
+              },
+              {
+                key: strings.OBSERVED_PLANTS,
+                value: `${lastZoneSummary?.totalPlants}`,
+              },
+              {
+                key: strings.PLANTED_SPECIES,
+                value: `${zoneStat.reportedSpecies}`,
+              },
+              {
+                key: strings.OBSERVED_SPECIES,
+                value: `${lastZoneSummary?.totalSpecies}`,
+              },
+            ];
+          } else {
+            properties = [
+              {
+                key: strings.AREA_HA,
+                value: findZoneArea(entity.id as number) || strings.UNKNOWN,
+              },
+              {
+                key: strings.PLANTED_PLANTS,
+                value: `${zoneStat.reportedPlants}`,
+              },
+              {
+                key: strings.PLANTED_SPECIES,
+                value: `${zoneStat.reportedSpecies}`,
+              },
+              { key: strings.NOT_OBSERVED, value: '' },
+            ];
+          }
         }
 
         return (
