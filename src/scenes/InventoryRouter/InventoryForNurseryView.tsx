@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 
@@ -9,6 +9,7 @@ import Card from 'src/components/common/Card';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
 import InventorySeedlingsTableForNursery from 'src/scenes/InventoryRouter/view/InventorySeedlingsTableForNursery';
 import InventorySummaryForNursery from 'src/scenes/InventoryRouter/view/InventorySummaryForNursery';
@@ -20,7 +21,7 @@ import { getNurseryName } from './FilterUtils';
 
 export default function InventoryForNurseryView(): JSX.Element {
   const query = useQuery();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const pathParams = useParams<{ nurseryId: string }>();
   const { selectedOrganization } = useOrganization();

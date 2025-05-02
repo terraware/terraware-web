@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
@@ -19,6 +18,7 @@ import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useDocLinks } from 'src/docLinks';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useTimeZones, useUser } from 'src/providers';
 import { OrganizationService, OrganizationUserService, PreferencesService, UserService } from 'src/services';
 import strings from 'src/strings';
@@ -92,7 +92,7 @@ const MyAccountForm = ({
   const theme = useTheme();
   const [selectedRows, setSelectedRows] = useState<PersonOrganization[]>([]);
   const [personOrganizations, setPersonOrganizations] = useState<PersonOrganization[]>([]);
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const [record, setRecord, onChange] = useForm<User>(user);
   const [openDeleteAccountModal, setOpenDeleteAccountModal] = useState<boolean>(false);
   const [removedOrg, setRemovedOrg] = useState<Organization>();

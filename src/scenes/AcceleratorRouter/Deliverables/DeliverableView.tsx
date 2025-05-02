@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import { Box, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem } from '@terraware/web-components';
@@ -13,6 +12,7 @@ import TitleBar from 'src/components/DeliverableView/TitleBar';
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
 import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
 import strings from 'src/strings';
@@ -34,7 +34,7 @@ const DeliverableView = () => {
 
   const query = useQuery();
   const location = useStateLocation();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
   const { status: requestStatus, update } = useUpdateDeliverable();
   const theme = useTheme();

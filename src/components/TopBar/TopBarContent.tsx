@@ -1,6 +1,5 @@
 import React from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
-import { useNavigate } from 'react-router';
 
 import { Box, Grid, IconButton, useTheme } from '@mui/material';
 import { Svg } from '@terraware/web-components';
@@ -18,6 +17,7 @@ import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import useFunderPortal from 'src/hooks/useFunderPortal';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser, useUserFundingEntity } from 'src/providers/hooks';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -29,7 +29,7 @@ type TopBarProps = {
 };
 
 export default function TopBarContent(props: TopBarProps): JSX.Element | null {
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const theme = useTheme();
   const { selectedOrganization, organizations, reloadOrganizations } = useOrganization();
   const { userFundingEntity } = useUserFundingEntity();

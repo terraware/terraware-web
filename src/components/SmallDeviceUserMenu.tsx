@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router';
 
 import {
   Box,
@@ -18,6 +17,7 @@ import {
 } from '@mui/material';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';
@@ -40,7 +40,7 @@ export default function SmallDeviceUserMenu({
     useOrganization();
   const { user } = useUser();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);

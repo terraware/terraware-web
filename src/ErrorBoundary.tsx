@@ -1,8 +1,9 @@
 import React, { ReactNode } from 'react';
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
-import { useNavigate } from 'react-router';
 
 import { useDeviceInfo } from '@terraware/web-components/utils';
+
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import ErrorContent from './ErrorContent';
 import { APP_PATHS } from './constants';
@@ -13,7 +14,7 @@ interface Props {
 }
 
 const ErrorBoundary = (props: Props) => {
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { isDesktop } = useDeviceInfo();
 
   return (

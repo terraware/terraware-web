@@ -1,12 +1,13 @@
 import { useMemo } from 'react';
-import { useNavigate } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
 import { ModuleContentType } from 'src/types/Module';
 import { SupportRequestType, getSupportRequestSubpath } from 'src/types/Support';
 
+import { useSyncNavigate } from './useSyncNavigate';
+
 export default function useNavigateTo() {
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
 
   return useMemo(
     () => ({
@@ -28,7 +29,9 @@ export default function useNavigateTo() {
       },
 
       goToAcceleratorApplicationMap: (applicationId: number) => {
-        navigate({ pathname: APP_PATHS.ACCELERATOR_APPLICATION_MAP.replace(':applicationId', `${applicationId}`) });
+        navigate({
+          pathname: APP_PATHS.ACCELERATOR_APPLICATION_MAP.replace(':applicationId', `${applicationId}`),
+        });
       },
 
       goToAcceleratorProject: (projectId: number) => {

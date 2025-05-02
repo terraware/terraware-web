@@ -1,10 +1,10 @@
 import React from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
-import { useNavigate } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import strings from 'src/strings';
 
 import Button from './components/common/button/Button';
@@ -16,7 +16,7 @@ interface ErrorContentProps {
 
 export default function ErrorContent({ text, inApp }: ErrorContentProps) {
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { resetBoundary } = useErrorBoundary();
 
   return (

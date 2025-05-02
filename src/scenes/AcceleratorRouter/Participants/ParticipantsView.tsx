@@ -1,5 +1,5 @@
 import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem, Textfield } from '@terraware/web-components';
@@ -14,6 +14,7 @@ import { APP_PATHS } from 'src/constants';
 import useListCohortModules from 'src/hooks/useListCohortModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipant } from 'src/hooks/useParticipant';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
 import { requestGetParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
@@ -34,7 +35,7 @@ type ProjectsByOrg = {
 };
 
 export default function ParticipantsView(): JSX.Element {
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();

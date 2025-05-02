@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { Box, Grid, useTheme } from '@mui/material';
 
@@ -11,6 +11,7 @@ import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import useListCohortModules from 'src/hooks/useListCohortModules';
 import useListModules from 'src/hooks/useListModules';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
 import { requestCohort } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
@@ -21,7 +22,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 const CohortView = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();

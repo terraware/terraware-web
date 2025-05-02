@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router';
 
 import { Grid, useTheme } from '@mui/material';
 
@@ -9,6 +8,7 @@ import Card from 'src/components/common/Card';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import { getHighestGlobalRole } from 'src/types/GlobalRoles';
@@ -18,7 +18,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { usePersonData } from './PersonContext';
 
 const SingleView = () => {
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();

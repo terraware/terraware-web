@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { TableColumnType } from '@terraware/web-components';
 
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import {
   searchObservationDetails,
   selectDetailsZoneNames,
@@ -31,7 +32,7 @@ const ObservationDetailsList = (props: SearchProps): JSX.Element => {
   const { ...searchProps }: SearchProps = props;
 
   const defaultTimeZone = useDefaultTimeZone();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const params = useParams<{
     plantingSiteId: string;
     observationId: string;

@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -9,6 +8,7 @@ import RegionSelector from 'src/components/RegionSelector';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useTimeZones } from 'src/providers';
 import { OrganizationService } from 'src/services';
 import strings from 'src/strings';
@@ -38,7 +38,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
   const [organizationTypeError, setOrganizationTypeError] = useState('');
   const [organizationTypeDetailsError, setOrganizationTypeDetailsError] = useState('');
   const [requireSubdivision, setRequireSubdivisions] = useState(!!organization.countrySubdivisionCode);
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
   const timeZones = useTimeZones();
   const defaultTimeZone = useUserTimeZone()?.id || getUTC(timeZones).id;

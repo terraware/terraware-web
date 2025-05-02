@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
 import { requestRescheduleObservation } from 'src/redux/features/observations/observationsAsyncThunks';
 import { selectObservations } from 'src/redux/features/observations/observationsSelectors';
@@ -16,7 +17,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import ScheduleObservationForm from './ScheduleObservationForm';
 
 export default function ScheduleObservation(): JSX.Element {
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();

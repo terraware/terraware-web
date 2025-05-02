@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 
 import BackToLink from 'src/components/common/BackToLink';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import { FacilityService } from 'src/services';
 import strings from 'src/strings';
@@ -23,7 +24,7 @@ export default function NurseryDetailsView(): JSX.Element {
   const theme = useTheme();
   const { nurseryId } = useParams<{ nurseryId: string }>();
   const [nursery, setNursery] = useState<Facility>();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const tz = useLocationTimeZone().get(nursery);
 
   useEffect(() => {

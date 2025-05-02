@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -11,6 +11,7 @@ import DatePicker from 'src/components/common/DatePicker';
 import PageForm from 'src/components/common/PageForm';
 import TextField from 'src/components/common/Textfield/Textfield';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import {
   selectCreateReportConfig,
   selectProjectReportConfig,
@@ -29,7 +30,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 export default function EditSettings(): JSX.Element {
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = String(pathParams.projectId);
   const dispatch = useAppDispatch();

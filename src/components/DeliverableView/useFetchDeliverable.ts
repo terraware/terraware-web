@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import { requestGetDeliverable } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import {
@@ -31,7 +31,7 @@ export type Response = {
 export default function useFetchDeliverable({ deliverableId, projectId }: Props): Response {
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const snackbar = useSnackbar();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const dispatch = useAppDispatch();
 
   const [requestId, setRequestId] = useState('');

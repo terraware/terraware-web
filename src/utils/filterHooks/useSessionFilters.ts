@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
 
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import {
   FiltersType,
   getFiltersFromQuery,
@@ -14,7 +14,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 export const useSessionFilters = (viewIdentifier?: string) => {
   const location = useStateLocation();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const query = useQuery();
 
   const [localFilters, setLocalFilters] = useState<FiltersType>();

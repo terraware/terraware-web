@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { DateTime } from 'luxon';
@@ -9,6 +9,7 @@ import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import useGetModule from 'src/hooks/useGetModule';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import {
   requestCreateModuleEvent,
   requestEventDeleteMany,
@@ -31,7 +32,7 @@ import EventsTable from './EventsTable';
 
 export default function EventEditView(): JSX.Element {
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { moduleId } = useParams<{ moduleId: string }>();
 
   const { events, module } = useGetModule(Number(moduleId));

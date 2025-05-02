@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox } from '@terraware/web-components';
 
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
@@ -30,7 +30,7 @@ interface ReportsSettingsCheckboxConfig {
 const ReportSettingsEditFormFields = ({ isEditing, onChange, reportsSettings }: ReportSettingsEditFormFieldsProps) => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { selectedOrganization } = useOrganization();
 
   const projects = useAppSelector(selectProjects);

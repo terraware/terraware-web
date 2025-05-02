@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import { Box, Container, useTheme } from '@mui/material';
 
@@ -8,6 +7,7 @@ import EmptyMessage from 'src/components/common/EmptyMessage';
 import { IconName } from 'src/components/common/icon/icons';
 import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import ImportInventoryModal, { downloadInventoryCsvTemplate } from 'src/scenes/InventoryRouter/ImportInventoryModal';
 import PlantingSiteTypeSelect from 'src/scenes/PlantingSitesRouter/edit/PlantingSiteTypeSelect';
@@ -39,7 +39,7 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
 
   const goToNewLocation = () => {

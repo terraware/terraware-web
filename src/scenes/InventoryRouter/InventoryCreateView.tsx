@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUser } from 'src/providers';
 import { SavableBatch, requestSaveBatch } from 'src/redux/features/batches/batchesAsyncThunks';
 import { selectBatchesRequest } from 'src/redux/features/batches/batchesSelectors';
@@ -18,7 +18,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 export default function InventoryCreateView(): JSX.Element {
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
   const { userPreferences } = useUser();
   const originInventoryViewType: InventoryListType =

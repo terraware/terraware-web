@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, TableColumnType } from '@terraware/web-components';
@@ -7,6 +6,7 @@ import { Button, TableColumnType } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import EventsCellRenderer from 'src/scenes/AcceleratorRouter/Modules/EventsCellRenderer';
 import strings from 'src/strings';
 import { Module, ModuleEvent } from 'src/types/Module';
@@ -61,7 +61,7 @@ const columns = (): TableColumnType[] => [
 
 export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX.Element {
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
 
   const liveSessions = events?.filter((ev) => ev.type === 'Live Session');
   const oneOnOneSessions = events?.filter((ev) => ev.type === 'One-on-One Session');

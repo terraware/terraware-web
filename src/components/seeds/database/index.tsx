@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
 
 import { Box, CircularProgress, Container, Grid, useTheme } from '@mui/material';
 import { DropdownItem, Message } from '@terraware/web-components';
@@ -19,6 +19,7 @@ import { BaseTable as Table } from 'src/components/common/table';
 import { SortOrder as Order } from 'src/components/common/table/sort';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import { selectMessage } from 'src/redux/features/message/messageSelectors';
 import { sendMessage } from 'src/redux/features/message/messageSlice';
@@ -95,7 +96,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const { reloadUserPreferences } = useUser();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const query = useQuery();
   const location = useStateLocation();
   const { sessionFilters, setSessionFilters } = useSessionFilters('accessions');

@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
-import { useNavigate } from 'react-router';
 
 import { Box, Container, Grid, Typography } from '@mui/material';
 import { IconName } from '@terraware/web-components';
@@ -14,6 +13,7 @@ import { ACCELERATOR_LINK, APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useOrgNurserySummary } from 'src/hooks/useOrgNurserySummary';
 import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
@@ -37,7 +37,7 @@ const TerrawareHomeView = () => {
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
   const { isTablet, isMobile, isDesktop } = useDeviceInfo();
   const mixpanel = useMixpanel();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const dispatch = useAppDispatch();
   const { goToNewAccession } = useNavigateTo();
   const plantingSites = useAppSelector(selectPlantingSites);

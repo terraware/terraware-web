@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import { DropdownItem, PopoverMenu } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
@@ -13,7 +13,7 @@ import AddNewOrganizationModal from './AddNewOrganizationModal';
 export default function OrganizationsDropdown(): JSX.Element {
   const { selectedOrganization, setSelectedOrganization, organizations, redirectAndNotify, reloadOrganizations } =
     useOrganization();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
 
   const selectOrganization = (newlySelectedOrg: Organization) => {

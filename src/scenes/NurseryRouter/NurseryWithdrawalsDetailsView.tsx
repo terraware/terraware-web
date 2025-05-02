@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Message, Tabs } from '@terraware/web-components';
@@ -10,6 +10,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { NurseryWithdrawalService } from 'src/services';
 import strings from 'src/strings';
@@ -57,7 +58,7 @@ export default function NurseryWithdrawalsDetailsView({
   const contentRef = useRef(null);
   const snackbar = useSnackbar();
   const { OUTPLANT, NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
 
   const [withdrawal, setWithdrawal] = useState<NurseryWithdrawal | undefined>(undefined);
   const [withdrawalSummary, setWithdrawalSummary] = useState<WithdrawalSummary | undefined>(undefined);

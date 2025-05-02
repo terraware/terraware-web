@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { matchPath, useMatch, useNavigate } from 'react-router';
+import { matchPath, useMatch } from 'react-router';
 
 import { NavSection, theme } from '@terraware/web-components';
 
@@ -8,6 +8,7 @@ import NavFooter from 'src/components/common/Navbar/NavFooter';
 import NavItem from 'src/components/common/Navbar/NavItem';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -19,7 +20,7 @@ type NavBarProps = {
 };
 export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarProps): JSX.Element | null {
   const { isDesktop } = useDeviceInfo();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
 
   const { applicationSections, selectedApplication } = useApplicationData();
 

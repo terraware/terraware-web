@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import { Grid } from '@mui/material';
 import { SortOrder } from '@terraware/web-components';
@@ -12,6 +11,7 @@ import SearchFiltersWrapper, {
 } from 'src/components/common/SearchFiltersWrapper';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppSelector } from 'src/redux/store';
@@ -49,7 +49,7 @@ const columns = (): TableColumnType[] => [
 export default function NurseryWithdrawalsTable(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const query = useQuery();
   const subzoneParam = query.get('subzoneName');

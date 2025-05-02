@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -9,6 +9,7 @@ import { FilterField } from 'src/components/common/FilterGroup';
 import Search, { SearchFiltersProps } from 'src/components/common/SearchFiltersWrapper';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { searchObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
 import { has25mPlots } from 'src/redux/features/observations/utils';
@@ -49,7 +50,7 @@ export default function ObservationPlantingZone(): JSX.Element {
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const defaultTimeZone = useDefaultTimeZone();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const params = useParams<{
     plantingSiteId: string;
     observationId: string;

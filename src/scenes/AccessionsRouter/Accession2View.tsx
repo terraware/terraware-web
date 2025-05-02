@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { Box, Grid, Link as LinkMUI, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, Icon, Tabs } from '@terraware/web-components';
@@ -13,6 +13,7 @@ import BackToLink from 'src/components/common/BackToLink';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
 import { AccessionService, FacilityService } from 'src/services';
@@ -49,7 +50,7 @@ export default function Accession2View(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { userPreferences } = useUser();
   const query = useQuery();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const { accessionId } = useParams<{ accessionId: string }>();
   const [accession, setAccession] = useState<Accession>();

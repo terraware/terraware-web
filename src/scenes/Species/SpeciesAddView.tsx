@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
@@ -8,6 +7,7 @@ import { DateTime } from 'luxon';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
 import { SpeciesService } from 'src/services';
@@ -37,7 +37,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
   const [record, setRecord, onChange] = useForm<Species>(initSpecies());
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
   const [isBusy, setIsBusy] = useState<boolean>(false);
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 

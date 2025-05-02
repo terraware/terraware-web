@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { selectProject } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjectVotesGet } from 'src/redux/features/votes/votesAsyncThunks';
 import { selectProjectVotes } from 'src/redux/features/votes/votesSelectors';
@@ -17,7 +18,7 @@ export type Props = {
 };
 
 const VotingProvider = ({ children }: Props): JSX.Element => {
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const query = useQuery();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();

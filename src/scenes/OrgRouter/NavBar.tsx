@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
-import { useMatch, useNavigate } from 'react-router';
+import { useMatch } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
@@ -15,6 +15,7 @@ import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
@@ -45,7 +46,7 @@ export default function NavBar({
   const dispatch = useAppDispatch();
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
   const { isDesktop, isMobile } = useDeviceInfo();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const mixpanel = useMixpanel();
   const isReportsEnabled = isEnabled('Assigning and Collecting Reports');
 

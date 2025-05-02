@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
-import { useNavigate } from 'react-router';
 
 import { Box, Container, Grid, Typography } from '@mui/material';
 import { IconName } from '@terraware/web-components';
@@ -10,6 +9,7 @@ import PageHeader from 'src/components/PageHeader';
 import Link from 'src/components/common/Link';
 import TfMain from 'src/components/common/TfMain';
 import { ACCELERATOR_LINK, APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser } from 'src/providers';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
@@ -31,7 +31,7 @@ const OnboardingHomeView = () => {
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
   const { isMobile, isDesktop } = useDeviceInfo();
   const mixpanel = useMixpanel();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const dispatch = useAppDispatch();
   const [people, setPeople] = useState<OrganizationUser[]>();
   const [allSpecies, setAllSpecies] = useState<Species[]>();

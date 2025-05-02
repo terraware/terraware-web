@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { SelectT } from '@terraware/web-components';
@@ -9,6 +8,7 @@ import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
 import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
 import Card from 'src/components/common/Card';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUserFundingEntity } from 'src/providers';
 import { requestListFunderReports } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
 import { selectListFunderReports } from 'src/redux/features/funder/fundingEntitiesSelectors';
@@ -30,7 +30,7 @@ const FunderReportView = () => {
   const [selectedReport, setSelectedReport] = useState<PublishedReport>();
   const query = useQuery();
   const location = useStateLocation();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { isDesktop, isMobile } = useDeviceInfo();
 
   useEffect(() => {

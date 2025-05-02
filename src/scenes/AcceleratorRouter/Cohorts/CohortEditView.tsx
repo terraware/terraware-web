@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import {
   requestDeleteManyCohortModule,
   requestUpdateManyCohortModule,
@@ -23,7 +24,7 @@ import CohortForm from './CohortForm';
 
 export default function CohortEditView(): JSX.Element {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
 
   const pathParams = useParams<{ cohortId: string }>();

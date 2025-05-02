@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { matchPath, useNavigate } from 'react-router';
+import { matchPath } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization, useUserFundingEntity } from 'src/providers';
 import NoOrgRouter from 'src/scenes/NoOrgRouter';
 import OrgRouter from 'src/scenes/OrgRouter';
@@ -35,7 +36,7 @@ const MINIMAL_FUNDER_ROUTES: string[] = [
 export default function TerrawareRouter(props: TerrawareRouterProps) {
   const { userFundingEntity } = useUserFundingEntity();
   const { organizations } = useOrganization();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
 
   useEffect(() => {

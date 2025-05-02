@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import { Box, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -7,6 +6,7 @@ import sanitize from 'sanitize-filename';
 
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { requestAbandonObservation } from 'src/redux/features/observations/observationsAsyncThunks';
 import {
@@ -107,7 +107,7 @@ export default function OrgObservationsListView({
   const { activeLocale } = useLocalization();
   const [results, setResults] = useState<any>([]);
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
   const [endObservationModalOpened, setEndObservationModalOpened] = useState(false);
   const [selectedObservation, setSelectedObservation] = useState<any>();

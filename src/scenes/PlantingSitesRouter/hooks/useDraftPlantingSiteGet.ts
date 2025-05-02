@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import { selectDraftPlantingSiteGet } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSelectors';
 import { requestGetDraft } from 'src/redux/features/draftPlantingSite/draftPlantingSiteThunks';
@@ -25,7 +25,7 @@ export type Response = {
  */
 export default function useDraftPlantingSiteGet({ draftId }: Props): Response {
   const snackbar = useSnackbar();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const dispatch = useAppDispatch();
   const draftResult = useAppSelector(selectDraftPlantingSiteGet(draftId));
 

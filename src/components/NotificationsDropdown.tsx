@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
 
 import {
   Badge,
@@ -17,6 +17,7 @@ import { Button, Tooltip } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { NotificationsService } from 'src/services';
 import { NotificationsResponse } from 'src/services/NotificationsService';
 import strings from 'src/strings';
@@ -56,7 +57,7 @@ type NotificationsDropdownProps = {
 
 export default function NotificationsDropdown(props: NotificationsDropdownProps): JSX.Element {
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { organizationId, reloadOrganizationData } = props;
   // notificationsInterval value is only being used when it is set.
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);

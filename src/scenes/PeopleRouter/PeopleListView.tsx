@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import { Grid, useTheme } from '@mui/material';
 
@@ -13,6 +12,7 @@ import Table from 'src/components/common/table';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import AssignNewOwnerDialog from 'src/scenes/MyAccountRouter/AssignNewOwnerModal';
 import DeleteOrgDialog from 'src/scenes/MyAccountRouter/DeleteOrgModal';
@@ -46,7 +46,7 @@ export default function PeopleListView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
   const { user } = useUser();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const [selectedPeopleRows, setSelectedPeopleRows] = useState<OrganizationUser[]>([]);
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
   const [removePeopleModalOpened, setRemovePeopleModalOpened] = useState(false);

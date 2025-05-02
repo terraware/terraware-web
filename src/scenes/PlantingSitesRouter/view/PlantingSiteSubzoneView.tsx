@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { Box } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -13,6 +13,7 @@ import Table from 'src/components/common/table';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { searchPlantingSiteMonitoringPlots } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
@@ -39,7 +40,7 @@ const columns = (): TableColumnType[] => [
 
 export default function PlantingSiteZoneView(): JSX.Element {
   const [search, setSearch] = useState<string>('');
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const defaultTimeZone = useDefaultTimeZone();
 
   const { plantingSiteId, zoneId, subzoneId } = useParams<{

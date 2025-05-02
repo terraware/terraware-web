@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import BatchWithdrawFlow from 'src/components/BatchWithdrawFlow';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
 import { NurseryBatchService } from 'src/services';
 import useQuery from 'src/utils/useQuery';
@@ -16,7 +16,7 @@ export default function SpeciesBulkWithdrawView(props: SpeciesBulkWithdrawViewCo
   const [speciesIds, setSpeciesIds] = useState<string[]>();
   const [batchIds, setBatchIds] = useState<string[]>();
   const [source, setSource] = useState<string | null>();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const query = useQuery();
 
   useEffect(() => {

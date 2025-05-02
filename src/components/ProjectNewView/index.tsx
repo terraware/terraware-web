@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import { Typography } from '@mui/material';
 import { FormButton, theme } from '@terraware/web-components';
 
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import { SearchResponseBatches } from 'src/services/NurseryBatchService';
 import ProjectsService from 'src/services/ProjectsService';
@@ -32,7 +32,7 @@ type ProjectNewViewProps = {
 export default function ProjectNewView({ reloadData }: ProjectNewViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const snackbar = useSnackbar();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
 
   const [record, setRecord] = useForm<CreateProjectRequest>({
     name: '',

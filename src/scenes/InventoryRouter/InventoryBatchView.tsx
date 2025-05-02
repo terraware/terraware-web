@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Tabs } from '@terraware/web-components';
@@ -9,6 +9,7 @@ import BackToLink from 'src/components/common/BackToLink';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
 import { requestFetchBatch } from 'src/redux/features/batches/batchesAsyncThunks';
 import { selectBatch } from 'src/redux/features/batches/batchesSelectors';
@@ -50,7 +51,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
   const batch = useAppSelector(selectBatch(batchId || -1));
   const tab = initializeTab(query.get('tab'));
   const [activeTab, setActiveTab] = useState<string>(tab);
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const [inventorySpecies, setInventorySpecies] = useState<Species>();
   const [inventoryNursery, setInventoryNursery] = useState<Facility>();

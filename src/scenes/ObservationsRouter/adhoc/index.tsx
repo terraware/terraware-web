@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { Box, Grid, Tooltip, Typography, useTheme } from '@mui/material';
 import { Icon, Textfield } from '@terraware/web-components';
@@ -7,6 +7,7 @@ import { Icon, Textfield } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { selectObservationMonitoringPlot } from 'src/redux/features/observations/observationMonitoringPlotSelectors';
 import { selectObservationsResults } from 'src/redux/features/observations/observationsSelectors';
@@ -30,7 +31,7 @@ export default function ObservationMonitoringPlot(): JSX.Element {
     monitoringPlotId: string;
   }>();
   const defaultTimeZone = useDefaultTimeZone();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
@@ -52,7 +53,7 @@ export default function ObservationMonitoringPlot(): JSX.Element {
       {
         plantingSiteId: Number(plantingSiteId),
         observationId: Number(observationId),
-        plantingZoneName: plantingZoneName,
+        plantingZoneName,
         monitoringPlotId: Number(monitoringPlotId),
       },
       defaultTimeZone.get().id

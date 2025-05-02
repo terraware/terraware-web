@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import CohortService from 'src/services/CohortService';
 import strings from 'src/strings';
 import { CreateCohortRequestPayload } from 'src/types/Cohort';
@@ -12,7 +12,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import CohortForm from './CohortForm';
 
 export default function CohortNewView(): JSX.Element {
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const [isBusy, setIsBusy] = useState<boolean>(false);
   const snackbar = useSnackbar();
 

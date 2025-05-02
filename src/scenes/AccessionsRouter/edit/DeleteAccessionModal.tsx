@@ -1,11 +1,11 @@
 import React from 'react';
-import { useNavigate } from 'react-router';
 
 import { Typography } from '@mui/material';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import AccessionService from 'src/services/AccessionService';
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
@@ -19,7 +19,7 @@ export interface DeleteAccessionModalProps {
 
 export default function DeleteAccessionModal(props: DeleteAccessionModalProps): JSX.Element {
   const { onClose, open, accession } = props;
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
 
   const deleteHandler = async () => {

@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import { Grid, useTheme } from '@mui/material';
 
@@ -13,6 +12,7 @@ import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import ProjectsService from 'src/services/ProjectsService';
 import strings from 'src/strings';
@@ -31,7 +31,7 @@ const columns = (): TableColumnType[] => [
 export default function ProjectsList(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [results, setResults] = useState<Project[]>();

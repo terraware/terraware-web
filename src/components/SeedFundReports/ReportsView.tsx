@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import { Box, Container, Grid, List, ListItem, Typography, useTheme } from '@mui/material';
 import { Message, TableColumnType, Tabs } from '@terraware/web-components';
@@ -12,6 +11,7 @@ import ReportsCellRenderer from 'src/components/SeedFundReports/TableCellRendere
 import TfMain from 'src/components/common/TfMain';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
 import { selectReportsSettings } from 'src/redux/features/reportsSettings/reportsSettingsSelectors';
 import { requestReportsSettings } from 'src/redux/features/reportsSettings/reportsSettingsThunks';
@@ -45,7 +45,7 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
 
   const reportsSettings = useAppSelector(selectReportsSettings);
 

@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, Message } from '@terraware/web-components';
@@ -10,6 +9,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TextWithLink from 'src/components/common/TextWithLink';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import useDraftPlantingSiteCreate from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteCreate';
 import useDraftPlantingSiteUpdate from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteUpdate';
@@ -67,7 +67,7 @@ export default function Editor(props: EditorProps): JSX.Element {
   const { siteEditStep, siteType } = site;
   const { activeLocale } = useLocalization();
   const contentRef = useRef(null);
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 

@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import ProjectFieldTextAreaDisplay from 'src/components/ProjectField/TextAreaDisplay';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import strings from 'src/strings';
@@ -26,7 +26,7 @@ const ApplicationReview = ({ application }: ApplicationReviewProps) => {
   const color = getApplicationStatusColor(application.status, theme);
 
   const { reload } = useApplicationData();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
 
   const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false);
 

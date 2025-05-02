@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
-import { Route, Routes, useNavigate } from 'react-router';
+import { Route, Routes } from 'react-router';
 
 import { Box } from '@mui/material';
 
 import ErrorBoundary from 'src/ErrorBoundary';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUser } from 'src/providers';
 import FunderHome from 'src/scenes/FunderHome';
 
 export default function FunderRouter() {
   const { user } = useUser();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
 
   const contentStyles = {
     height: '100%',

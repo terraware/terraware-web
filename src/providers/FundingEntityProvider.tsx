@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { requestFundingEntity } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
 import { selectFundingEntityRequest } from 'src/redux/features/funder/fundingEntitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -26,7 +27,7 @@ export default function FundingEntityProvider({ children }: FundingEntityProvide
   const pathFundingEntityId = Number(pathParams.fundingEntityId);
   const dispatch = useAppDispatch();
   const [entityAPIRequestStatus, setEntityAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { isDev, isStaging } = useEnvironment();
   const getFundingEntityRequest = useAppSelector(selectFundingEntityRequest(pathFundingEntityId));
   const [fundingEntityData, setFundingEntityData] = useState<ProvidedFundingEntityData>({
@@ -47,7 +48,7 @@ export default function FundingEntityProvider({ children }: FundingEntityProvide
 
   useEffect(() => {
     if (pathParamExists()) {
-      dispatch(requestFundingEntity(pathFundingEntityId));
+      void dispatch(requestFundingEntity(pathFundingEntityId));
     }
   }, [pathFundingEntityId, dispatch]);
 

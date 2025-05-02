@@ -1,7 +1,7 @@
 import React from 'react';
-import { useNavigate } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { SiteType } from 'src/types/PlantingSite';
 
 import PlantingSiteSelectTypeModal2 from './PlantingSiteSelectTypeModal2';
@@ -12,7 +12,7 @@ export type PlantingSiteTypeSelectProps = {
 
 export default function PlantingSiteTypeSelect(props: PlantingSiteTypeSelectProps): JSX.Element {
   const { onClose } = props;
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
 
   const goTo = (appPath: string, search?: string) => {
     const appPathLocation = {

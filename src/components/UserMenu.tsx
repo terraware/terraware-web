@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
-import { useNavigate } from 'react-router';
 
 import { useTheme } from '@mui/material';
 import { DropdownItem, PopoverMenu } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
 import { useDocLinks } from 'src/docLinks';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUser } from 'src/providers';
 import strings from 'src/strings';
 import useEnvironment from 'src/utils/useEnvironment';
@@ -15,7 +15,7 @@ export default function UserMenu(): JSX.Element {
   const theme = useTheme();
   const { user } = useUser();
   const { isProduction } = useEnvironment();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const docLinks = useDocLinks();
   const mixpanel = useMixpanel();
 

@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo } from 'react';
-import { useNavigate } from 'react-router';
 
 import { Box, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -16,7 +16,7 @@ import { useVotingData } from './VotingContext';
 import VotingWrapper from './VotingWrapper';
 
 const VotingView = () => {
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const query = useQuery();
   const { activeLocale } = useLocalization();

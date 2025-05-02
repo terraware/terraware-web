@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
-import { useMatch, useNavigate } from 'react-router';
+import { useMatch } from 'react-router';
 
 import { NavSection } from '@terraware/web-components';
 
@@ -10,6 +10,7 @@ import NavItem from 'src/components/common/Navbar/NavItem';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useUser } from 'src/providers';
 import strings from 'src/strings';
@@ -21,7 +22,7 @@ type NavBarProps = {
 };
 export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarProps): JSX.Element | null {
   const { isDesktop } = useDeviceInfo();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { isAllowed } = useUser();
   const mixpanel = useMixpanel();
 

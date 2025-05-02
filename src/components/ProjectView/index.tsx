@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { Grid } from '@mui/material';
 import { DropdownItem } from '@terraware/web-components';
@@ -12,6 +12,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { requestProjectDelete } from 'src/redux/features/projects/projectsAsyncThunks';
 import { selectProject, selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
@@ -25,7 +26,7 @@ export default function ProjectView(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const snackbar = useSnackbar();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const location = useStateLocation();
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();

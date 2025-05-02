@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { requestFundingEntityForUser } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
 import { selectUserFundingEntityRequest } from 'src/redux/features/funder/fundingEntitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -26,7 +26,7 @@ export default function UserFundingEntityProvider({ children }: UserFundingEntit
   const { user, bootstrapped: userBootstrapped } = useUser();
   const dispatch = useAppDispatch();
   const [entityAPIRequestStatus, setEntityAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { isDev, isStaging } = useEnvironment();
   const getUserFundingEntityRequest = useAppSelector(selectUserFundingEntityRequest(user?.id));
   const [fundingEntityData, setFundingEntityData] = useState<ProvidedUserFundingEntityData>({

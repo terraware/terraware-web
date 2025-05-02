@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
@@ -8,6 +8,7 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import DatePicker from 'src/components/common/DatePicker';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import NurserySubLocations from 'src/scenes/NurseriesRouter/NurserySubLocations';
 import { FacilityService, SubLocationService } from 'src/services';
@@ -48,7 +49,7 @@ export default function NurseryView(): JSX.Element {
   });
   const { nurseryId } = useParams<{ nurseryId: string }>();
   const [selectedNursery, setSelectedNursery] = useState<Facility | null>();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
   const gridSize = () => {
     if (isMobile) {

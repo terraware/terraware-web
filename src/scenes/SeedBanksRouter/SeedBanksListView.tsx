@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
 
 import { Grid, useTheme } from '@mui/material';
 
@@ -13,6 +12,7 @@ import Table from 'src/components/common/table';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useTimeZones } from 'src/providers';
 import { FacilityService } from 'src/services';
 import strings from 'src/strings';
@@ -40,7 +40,7 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
   const timeZones = useTimeZones();
   const defaultTimeZone = useDefaultTimeZone().get();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [results, setResults] = useState<Facility[]>([]);

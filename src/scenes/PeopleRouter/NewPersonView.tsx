@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -10,6 +10,7 @@ import PageForm from 'src/components/common/PageForm';
 import TextField from 'src/components/common/Textfield/Textfield';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS, EMAIL_REGEX } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
@@ -22,7 +23,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 export default function PersonView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
   const [emailError, setEmailError] = useState('');
   const snackbar = useSnackbar();
   const [repeatedEmail, setRepeatedEmail] = useState('');

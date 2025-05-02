@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner, FormButton } from '@terraware/web-components';
@@ -17,6 +17,7 @@ import SubmitConfirmationDialog from 'src/components/SeedFundReports/SubmitConfi
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization, useUser } from 'src/providers';
 import SeedFundReportService from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
@@ -32,7 +33,7 @@ export default function ReportEdit(): JSX.Element {
   const { user } = useUser();
   const theme = useTheme();
 
-  const navigate = useNavigate();
+  const navigate = useSyncNavigate();
 
   const snackbar = useSnackbar();
 
