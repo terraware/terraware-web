@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Route, Routes, useParams } from 'react-router-dom';
+import { Route, Routes, useParams } from 'react-router';
 
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import PlantsDashboardView from 'src/scenes/PlantsDashboardRouter/PlantsDashboardView';
