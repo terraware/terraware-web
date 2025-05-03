@@ -243,7 +243,9 @@ const DeliverablesTable = ({
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
       const listRequest: ListDeliverablesRequestParams = {};
-      if (organizationId !== -1) {
+      if (projectId) {
+        listRequest.projectId = projectId;
+      } else if (organizationId !== -1) {
         listRequest.organizationId = organizationId;
       }
 
@@ -258,7 +260,7 @@ const DeliverablesTable = ({
       );
       setDeliverablesSearchRequestId(request.requestId);
     },
-    [dispatch, organizationId, searchAndSort]
+    [dispatch, organizationId, projectId, searchAndSort]
   );
 
   const _deliverables = useMemo(
