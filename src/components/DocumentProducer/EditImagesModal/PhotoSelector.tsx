@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Button, ErrorBox, Textfield } from '@terraware/web-components';
-import { useDeviceInfo } from '@terraware/web-components/utils';
+import { ErrorBox, Textfield } from '@terraware/web-components';
 
 import PhotoDragDrop, { PhotoDragDropProps } from 'src/components/Photo/PhotoDragDrop';
+import PhotoPreview from 'src/components/Photo/PhotoPreview';
 import strings from 'src/strings';
 
 export type PhotoChooserErrorType = {
@@ -42,7 +42,6 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
     includeCitation = true,
     ...dragDropProps
   } = props;
-  const { isMobile } = useDeviceInfo();
   const [files, setFiles] = useState<File[]>([]);
   const [filesData, setFilesData] = useState<PhotoWithAttributesAndUrl[]>([]);
   const theme = useTheme();
@@ -145,39 +144,12 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
           <Box display='flex' flexDirection='row' flexWrap='wrap' marginBottom={theme.spacing(2)}>
             {filesData.map((fileData, index) => (
               <Box display='flex' width='100%' key={`photo-${index}`}>
-                <Box
-                  key={index}
-                  position='relative'
-                  height={122}
-                  width={122}
-                  marginRight={isMobile ? theme.spacing(2) : theme.spacing(3)}
-                  marginTop={theme.spacing(1)}
-                  border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
-                >
-                  <Button
-                    icon='iconTrashCan'
-                    onClick={() => removeFileAtIndex(index)}
-                    size='small'
-                    style={{
-                      position: 'absolute',
-                      top: -10,
-                      right: -10,
-                      backgroundColor: theme.palette.TwClrBgDanger,
-                    }}
-                  />
-                  <img
-                    height='120px'
-                    src={fileData.url}
-                    alt={files[index]?.name}
-                    style={{
-                      margin: 'auto auto',
-                      objectFit: 'contain',
-                      display: 'flex',
-                      maxWidth: '120px',
-                      maxHeight: '120px',
-                    }}
-                  />
-                </Box>
+                <PhotoPreview
+                  imgUrl={fileData.url}
+                  includeTrashIcon={true}
+                  onTrashClick={() => removeFileAtIndex(index)}
+                  imgAlt={files[index]?.name}
+                />
 
                 {(includeCaption || includeCitation) && (
                   <Box width='100%'>

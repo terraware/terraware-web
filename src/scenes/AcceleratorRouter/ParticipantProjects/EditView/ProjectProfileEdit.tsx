@@ -3,12 +3,11 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
 
-import PhotoChooser, { PhotoWithAttributes } from 'src/components/DocumentProducer/EditImagesModal/PhotoSelector';
+import PhotoSelectorWithPreview, { FileWithUrl } from 'src/components/Photo/PhotoSelectorWithPreview';
 import CountrySelect from 'src/components/ProjectField/CountrySelect';
 import GridEntryWrapper from 'src/components/ProjectField/GridEntryWrapper';
 import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
 import MinMaxCarbonTextfield from 'src/components/ProjectField/MinMaxCarbonTextfield';
-import ProjectProfileImage from 'src/components/ProjectField/ProjectProfileImage';
 import SdgMultiSelect from 'src/components/ProjectField/SdgMultiSelect';
 import ProjectFieldTextAreaEdit from 'src/components/ProjectField/TextAreaEdit';
 import ProjectFieldTextfield from 'src/components/ProjectField/Textfield';
@@ -37,6 +36,7 @@ import strings from 'src/strings';
 import { LAND_USE_MODEL_TYPES } from 'src/types/ParticipantProject';
 import { OrganizationUser } from 'src/types/User';
 import { SelectVariable, VariableWithValues } from 'src/types/documentProducer/Variable';
+import { getImagePath } from 'src/utils/images';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -88,8 +88,8 @@ const ProjectProfileEdit = () => {
   const [globalUsersOptions, setGlobalUsersOptions] = useState<DropdownItem[]>();
   const [tfContact, setTfContact] = useState<DropdownItem>();
   const [organizationUsers, setOrganizationUsers] = useState<OrganizationUser[]>();
-  const [mainPhoto, setMainPhoto] = useState<PhotoWithAttributes>();
-  const [mapPhoto, setMapPhoto] = useState<PhotoWithAttributes>();
+  const [mainPhoto, setMainPhoto] = useState<FileWithUrl>();
+  const [mapPhoto, setMapPhoto] = useState<FileWithUrl>();
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
 
@@ -607,47 +607,39 @@ const ProjectProfileEdit = () => {
 
           <Grid container>
             <Grid item md={6}>
-              <PhotoChooser
+              <PhotoSelectorWithPreview
                 title={'Main Photo'}
-                onPhotosChanged={(value) => setMainPhoto(value[0])}
+                onPhotoChanged={setMainPhoto}
                 uploadText={strings.UPLOAD_PHOTO}
                 uploadDescription={strings.UPLOAD_PHOTO_DESCR_LANDSCAPE_3_2}
                 chooseFileText={strings.CHOOSE_FILE}
                 replaceFileText={strings.REPLACE_FILE}
-                includeCaption={false}
-                includeCitation={false}
-                multipleSelection={false}
+                previewUrl={
+                  mainPhoto?.url ||
+                  (participantProject?.projectHighlightPhotoValueId &&
+                    getImagePath(projectId, participantProject.projectHighlightPhotoValueId)) ||
+                  undefined
+                }
               />
             </Grid>
-            {participantProject?.projectHighlightPhotoValueId && (
-              <ProjectProfileImage
-                projectId={projectId}
-                imageValueId={participantProject.projectHighlightPhotoValueId}
-                alt={strings.PROJECT_HIGHLIGHT_IMAGE}
-              />
-            )}
           </Grid>
           <Grid container>
             <Grid item md={6}>
-              <PhotoChooser
+              <PhotoSelectorWithPreview
                 title={'Map Photo'}
-                onPhotosChanged={(value) => setMapPhoto(value[0])}
+                onPhotoChanged={setMapPhoto}
                 uploadText={strings.UPLOAD_PHOTO}
                 uploadDescription={strings.UPLOAD_PHOTO_DESCR_LANDSCAPE_3_2}
                 chooseFileText={strings.CHOOSE_FILE}
                 replaceFileText={strings.REPLACE_FILE}
-                includeCaption={false}
-                includeCitation={false}
-                multipleSelection={false}
+                previewUrl={
+                  mapPhoto?.url ||
+                  (participantProject?.projectZoneFigureValueId &&
+                    getImagePath(projectId, participantProject.projectZoneFigureValueId)) ||
+                  undefined
+                }
               />
             </Grid>
-            {participantProject?.projectZoneFigureValueId && (
-              <ProjectProfileImage
-                projectId={projectId}
-                imageValueId={participantProject.projectZoneFigureValueId}
-                alt={strings.PROJECT_ZONE_FIGURE}
-              />
-            )}
           </Grid>
         </Card>
       </PageForm>
