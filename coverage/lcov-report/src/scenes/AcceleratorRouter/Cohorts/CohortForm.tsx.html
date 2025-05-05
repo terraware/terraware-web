@@ -264,7 +264,11 @@
 <a name='L199'></a><a href='#L199'>199</a>
 <a name='L200'></a><a href='#L200'>200</a>
 <a name='L201'></a><a href='#L201'>201</a>
-<a name='L202'></a><a href='#L202'>202</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a>
+<a name='L205'></a><a href='#L205'>205</a>
+<a name='L206'></a><a href='#L206'>206</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -320,20 +324,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -479,7 +487,7 @@ import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import CohortModulesTable from 'src/scenes/AcceleratorRouter/Cohorts/CohortModulesTable';
 import strings from 'src/strings';
-import { CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
+import { CohortPhaseType, CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
 import { CohortModule } from 'src/types/Module';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 &nbsp;
@@ -520,7 +528,10 @@ export default function <span class="fstat-no" title="function not covered" >Coh
     }
   }, [cohortId, dispatch, listCohortModules, listModules]);
 &nbsp;
-  const currentPhaseDropdownOptions = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+  const currentPhaseDropdownOptions = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span>: {</span>
+    label: string;
+    value: CohortPhaseType;
+  }[] =&gt; {
 <span class="cstat-no" title="statement not covered" >    if (!activeLocale) {</span>
 <span class="cstat-no" title="statement not covered" >      return [];</span>
     }
@@ -536,6 +547,7 @@ export default function <span class="fstat-no" title="function not covered" >Coh
   const updateField = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(f</span>ield: keyof T, value: any) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setLocalRecord(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
       ...prev,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       [field]: value,
     }));
   };
@@ -568,7 +580,7 @@ export default function <span class="fstat-no" title="function not covered" >Coh
     );
 &nbsp;
     const toUpdate = <span class="cstat-no" title="statement not covered" >pendingCohortModules.filter(<span class="fstat-no" title="function not covered" >(n</span>ewModule) =&gt; {</span>
-      const oldModule = <span class="cstat-no" title="statement not covered" >cohortModules.find(<span class="fstat-no" title="function not covered" >(o</span>ldModule) =&gt; <span class="cstat-no" title="statement not covered" >oldModule.id === newModule.id)</span>;</span>
+      const oldModule = <span class="cstat-no" title="statement not covered" >cohortModules.find(<span class="fstat-no" title="function not covered" >(m</span>odule) =&gt; <span class="cstat-no" title="statement not covered" >module.id === newModule.id)</span>;</span>
 <span class="cstat-no" title="statement not covered" >      return (</span>
         oldModule !== undefined &amp;&amp;
         !(
@@ -586,7 +598,7 @@ export default function <span class="fstat-no" title="function not covered" >Coh
       [...toAdd, ...toUpdate],
       toDelete
     );
-  }, [cohortModules, pendingCohortModules, onSave]);
+  }, [cohortModules, localRecord, pendingCohortModules, onSave]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     // update local record when cohort changes
@@ -597,7 +609,7 @@ export default function <span class="fstat-no" title="function not covered" >Coh
     const userIds = <span class="cstat-no" title="statement not covered" >new Set([cohort?.createdBy, cohort?.modifiedBy]);</span>
 <span class="cstat-no" title="statement not covered" >    userIds.forEach(<span class="fstat-no" title="function not covered" >(u</span>serId) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (userId) {</span>
-<span class="cstat-no" title="statement not covered" >        dispatch(requestGetUser(userId));</span>
+<span class="cstat-no" title="statement not covered" >        void dispatch(requestGetUser(userId));</span>
       }
     });
   }, [dispatch, cohort?.createdBy, cohort?.modifiedBy]);
@@ -673,7 +685,7 @@ export default function <span class="fstat-no" title="function not covered" >Coh
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-05T19:46:53.371Z
+                at 2025-05-05T21:09:49.460Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
