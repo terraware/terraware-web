@@ -26,6 +26,7 @@ import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/common/use
 import ObservationsService from 'src/services/ObservationsService';
 import strings from 'src/strings';
 import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
+import downloadZipFile from 'src/utils/downloadZipFile';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type BiomassMeasurementDetailsProps = {
@@ -185,10 +186,10 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
     if (observation) {
       const content = await fetchContent(observation.observationId);
 
-      if (content != null && plantingSite != null) {
+      if (content !== null && plantingSite) {
         const fileName = sanitize(`${plantingSite.name}-${observation?.startDate}-${fileNameSuffix}.csv`);
 
-        const encodedUri = `data:text/csv;charset=utf-8,` + encodeURIComponent(content);
+        const encodedUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(content);
 
         const link = document.createElement('a');
         link.setAttribute('href', encodedUri);
@@ -210,6 +211,29 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
     await downloadCsv(strings.TREES_AND_SHRUBS, ObservationsService.exportBiomassTreesShrubsCsv);
   }, [observation, plantingSite]);
 
+  const exportAllCsvs = useCallback(async () => {
+    if (observation && plantingSite) {
+      await downloadZipFile({
+        dirName: sanitize(`${plantingSite.name}-${observation.startDate}`),
+        files: [
+          {
+            fileName: strings.BIOMASS_MONITORING,
+            content: () => ObservationsService.exportBiomassDetailsCsv(observation.observationId),
+          },
+          {
+            fileName: strings.SPECIES,
+            content: () => ObservationsService.exportBiomassSpeciesCsv(observation.observationId),
+          },
+          {
+            fileName: strings.TREES_AND_SHRUBS,
+            content: () => ObservationsService.exportBiomassTreesShrubsCsv(observation.observationId),
+          },
+        ],
+        suffix: '.csv',
+      });
+    }
+  }, [observation, plantingSite]);
+
   const onSaveMergedSpecies = useOnSaveMergedSpecies({
     observationId,
     reload,
@@ -224,6 +248,11 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
       rightComponent={
         <OptionsMenu
           optionItems={[
+            {
+              label: strings.EXPORT_ALL_ZIP,
+              value: 'exportAll',
+              onClick: exportAllCsvs,
+            },
             {
               label: strings.EXPORT_BIOMASS_MONITORING_DETAILS_CSV,
               value: 'exportDetails',
