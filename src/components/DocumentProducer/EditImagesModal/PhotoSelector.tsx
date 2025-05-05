@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Button, ErrorBox, Icon, Textfield } from '@terraware/web-components';
+import { Button, ErrorBox, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import PhotoDragDrop, { PhotoDragDropProps } from 'src/components/Photo/PhotoDragDrop';
 import strings from 'src/strings';
 
 export type PhotoChooserErrorType = {
@@ -11,20 +12,11 @@ export type PhotoChooserErrorType = {
   text: string;
 };
 
-export type PhotoChooserProps = {
+export type PhotoChooserProps = Omit<PhotoDragDropProps, 'files' | 'setFiles'> & {
   title?: string;
   description?: string | string[];
   onPhotosChanged: (photos: PhotoWithAttributes[]) => void;
-  multipleSelection?: boolean;
   error?: PhotoChooserErrorType;
-  selectedFile?: any;
-  uploadText?: string;
-  uploadDescription?: string;
-  uploadMobileDescription?: string;
-  photoSelectedText?: string;
-  chooseFileText?: string;
-  replaceFileText?: string;
-  maxPhotos?: number;
   includeCaption?: boolean;
   includeCitation?: boolean;
 };
@@ -46,44 +38,15 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
     onPhotosChanged,
     multipleSelection,
     error,
-    selectedFile,
-    uploadText = strings.UPLOAD_PHOTOS,
-    uploadMobileDescription = strings.UPLOAD_PHOTO_DESCRIPTION,
-    uploadDescription,
-    photoSelectedText,
-    chooseFileText = strings.CHOOSE_FILE,
-    replaceFileText = strings.REPLACE_FILE,
-    maxPhotos,
     includeCaption = true,
     includeCitation = true,
+    ...dragDropProps
   } = props;
   const { isMobile } = useDeviceInfo();
   const [files, setFiles] = useState<File[]>([]);
   const [filesData, setFilesData] = useState<PhotoWithAttributesAndUrl[]>([]);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const divRef = useRef<HTMLDivElement>(null);
   const theme = useTheme();
-  const [editing, setEditing] = useState<boolean>(false);
   const [filesDataChanged, setFilesDataChanged] = useState<boolean>(false);
-
-  useEffect(() => {
-    setEditing(!!selectedFile);
-  }, [selectedFile]);
-
-  const addFiles = (fileList: FileList) => {
-    const newFiles: File[] = [];
-
-    for (let i = 0; i < fileList.length; i++) {
-      const fileItem = fileList.item(i);
-      if (fileItem) {
-        newFiles.push(fileItem);
-      }
-    }
-
-    if (newFiles.length) {
-      updateSelection([...files, ...newFiles].slice(0, maxPhotos));
-    }
-  };
 
   const removeFileAtIndex = (index: number) => {
     const filesList = [...files];
@@ -93,29 +56,6 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
 
   const updateSelection = (selected: File[]) => {
     setFiles(selected);
-  };
-
-  const dropHandler = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    addFiles(event.dataTransfer.files);
-  };
-
-  const enableDropping = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-  };
-
-  const onChooseFileHandler = () => {
-    inputRef.current?.click();
-    divRef.current?.focus();
-  };
-
-  const onFileChosen = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (editing) {
-      setEditing(false);
-    }
-    if (event.currentTarget.files) {
-      addFiles(event.currentTarget.files);
-    }
   };
 
   useEffect(() => {
@@ -170,7 +110,6 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
 
   return (
     <Box
-      ref={divRef}
       tabIndex={0}
       sx={{
         backgroundColor: theme.palette.TwClrBg,
@@ -271,52 +210,8 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
           </Box>
         )}
       </Box>
-      <Box
-        onDrop={dropHandler}
-        onDragOver={enableDropping}
-        border={`1px dashed ${theme.palette.TwClrBrdrTertiary}`}
-        borderRadius={theme.spacing(2)}
-        display='flex'
-        flexDirection='column'
-        alignItems='center'
-        padding={theme.spacing(3)}
-        sx={{ background: theme.palette.TwClrBg }}
-      >
-        <Icon
-          name='blobbyGrayIconImage'
-          size='xlarge'
-          style={{
-            height: '120px',
-            width: '120px',
-          }}
-        />
-        <Typography color={theme.palette.TwClrTxt} fontSize={14} fontWeight={600} margin={theme.spacing(0, 0, 1)}>
-          {!editing && (files.length > 0 && !multipleSelection ? files[0].name : uploadText)}
-        </Typography>
-        <Typography color={theme.palette.TwClrTxt} fontSize={12} fontWeight={400} margin={0}>
-          {(editing || files.length > 0) && !multipleSelection
-            ? photoSelectedText
-            : isMobile && uploadMobileDescription
-              ? uploadMobileDescription
-              : uploadDescription}
-        </Typography>
-        <input
-          type='file'
-          ref={inputRef}
-          onChange={onFileChosen}
-          accept='image/jpeg,image/png'
-          multiple={multipleSelection || false}
-          style={{ display: 'none' }}
-        />
-        <Button
-          onClick={onChooseFileHandler}
-          disabled={maxPhotos !== undefined ? files.length >= maxPhotos : false}
-          label={!multipleSelection && (files.length === 1 || editing) ? replaceFileText : chooseFileText}
-          priority='secondary'
-          type='passive'
-          style={{ marginTop: theme.spacing(3) }}
-        />
-      </Box>
+
+      <PhotoDragDrop {...dragDropProps} multipleSelection={multipleSelection} files={files} setFiles={setFiles} />
     </Box>
   );
 }
