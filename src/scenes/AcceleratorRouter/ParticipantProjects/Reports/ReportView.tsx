@@ -80,6 +80,7 @@ const ReportView = () => {
         projectId: Number(projectId),
         reportId: Number(reportId),
         review: {
+          ...selectedReport,
           status: 'Approved',
           achievements: selectedReport?.achievements ?? [],
           challenges: selectedReport?.challenges ?? [],
