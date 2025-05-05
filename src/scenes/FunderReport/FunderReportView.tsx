@@ -129,7 +129,9 @@ const FunderReportView = () => {
           <Typography fontSize={20} fontWeight={600}>
             {strings.HIGHLIGHTS}
           </Typography>
-          <Typography marginTop={3}>{selectedReport?.highlights}</Typography>
+          <Typography marginTop={3} whiteSpace={'pre-line'}>
+            {selectedReport?.highlights}
+          </Typography>
         </Card>
         <Card
           style={{
