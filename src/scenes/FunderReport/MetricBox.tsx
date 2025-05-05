@@ -68,7 +68,7 @@ const MetricBox = ({ metric, index, year, quarter, lastIndex }: MetricBoxProps) 
       </Box>
       {'progressNotes' in metric && (
         <Box>
-          <Typography fontWeight={500} fontSize='20px' marginTop={1}>
+          <Typography fontWeight={600} fontSize='16px' marginTop={1}>
             {strings.PROGRESS_NOTES}
           </Typography>
           <Typography fontWeight={400}>{metric.progressNotes}</Typography>
