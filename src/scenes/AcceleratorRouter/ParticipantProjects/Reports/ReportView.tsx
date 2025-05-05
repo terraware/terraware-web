@@ -111,6 +111,7 @@ const ReportView = () => {
     }
     if (approveReportResponse?.status === 'success') {
       reload();
+      setShowApproveDialog(false);
     }
   }, [approveReportResponse]);
 
@@ -120,6 +121,7 @@ const ReportView = () => {
     }
     if (rejectReportResponse?.status === 'success') {
       reload();
+      setShowRejectDialog(false);
     }
   }, [rejectReportResponse]);
 
@@ -131,6 +133,7 @@ const ReportView = () => {
     if (publishReportResponse?.status === 'success') {
       snackbar.toastSuccess(strings.REPORT_PUBLISHED);
       reload();
+      setShowPublishModal(false);
     }
   }, [publishReportResponse]);
 
