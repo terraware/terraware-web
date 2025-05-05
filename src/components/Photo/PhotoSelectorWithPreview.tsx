@@ -120,11 +120,11 @@ export default function PhotoSelectorWithPreview({
           />
         )}
 
-        {/* <Grid item md={8}>*/}
         <PlacementWrapper placedObject={preview} objectPlacement={previewPlacement || 'top-start'}>
-          <PhotoDragDrop {...dragDropProps} files={fileData ? [fileData.file] : []} setFiles={handleSetFiles} />
+          <Box width={'100%'}>
+            <PhotoDragDrop {...dragDropProps} files={fileData ? [fileData.file] : []} setFiles={handleSetFiles} />
+          </Box>
         </PlacementWrapper>
-        {/* </Grid>*/}
       </Box>
     </Box>
   );

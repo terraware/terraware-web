@@ -620,7 +620,7 @@ const ProjectProfileEdit = () => {
                     getImagePath(projectId, participantProject.projectHighlightPhotoValueId)) ||
                   undefined
                 }
-                previewPlacement={'left'}
+                previewPlacement={'right'}
               />
             </Grid>
           </Grid>
