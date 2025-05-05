@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1746472284645" clover="3.2.0">
-  <project timestamp="1746472284645" name="All files">
+<coverage generated="1746474414071" clover="3.2.0">
+  <project timestamp="1746474414071" name="All files">
     <metrics statements="30410" coveredstatements="1276" conditionals="20716" coveredconditionals="386" methods="9372" coveredmethods="209" elements="60498" coveredelements="1871" complexity="0" loc="30410" ncloc="30410" packages="258" files="1257" classes="1257"/>
     <package name="src">
       <metrics statements="177" coveredstatements="8" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -18013,8 +18013,8 @@
         <line num="36" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
-        <line num="48" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
       </file>
       <file name="NewProjectSpecificMetric.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/Reports/NewProjectSpecificMetric.tsx">
         <metrics statements="36" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="14" coveredmethods="0"/>
@@ -21810,9 +21810,9 @@
         <line num="114" count="0" type="stmt"/>
         <line num="115" count="0" type="stmt"/>
         <line num="116" count="0" type="stmt"/>
-        <line num="176" count="0" type="stmt"/>
-        <line num="198" count="0" type="stmt"/>
-        <line num="220" count="0" type="stmt"/>
+        <line num="178" count="0" type="stmt"/>
+        <line num="200" count="0" type="stmt"/>
+        <line num="222" count="0" type="stmt"/>
       </file>
       <file name="MetricBox.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/FunderReport/MetricBox.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="1" coveredmethods="0"/>

@@ -1,3 +1,5 @@
+39c416833a7 SW-6878 Selecting "Not Needed" in Document Status dialog causes error (#3949)
+4b2498636e2 SW-6847 Highlights text in Funder Report not showing line breaks (#3948)
 913ce068139 Progress Notes styles (#3947)
 0ca16ba08ac Updated translations from Phrase (#3946)
 1eb3291ffad SW-6242 SW-6840 Export all biomass CSVs (#3935)
