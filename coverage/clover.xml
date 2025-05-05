@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1746458905507" clover="3.2.0">
-  <project timestamp="1746458905507" name="All files">
-    <metrics statements="30358" coveredstatements="1276" conditionals="20676" coveredconditionals="386" methods="9359" coveredmethods="209" elements="60393" coveredelements="1871" complexity="0" loc="30358" ncloc="30358" packages="258" files="1254" classes="1254"/>
+<coverage generated="1746459366054" clover="3.2.0">
+  <project timestamp="1746459366054" name="All files">
+    <metrics statements="30379" coveredstatements="1276" conditionals="20702" coveredconditionals="386" methods="9365" coveredmethods="209" elements="60446" coveredelements="1871" complexity="0" loc="30379" ncloc="30379" packages="258" files="1256" classes="1256"/>
     <package name="src">
       <metrics statements="177" coveredstatements="8" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -3104,54 +3104,53 @@
       </file>
     </package>
     <package name="src.components.DocumentProducer.EditImagesModal">
-      <metrics statements="118" coveredstatements="0" conditionals="71" coveredconditionals="0" methods="34" coveredmethods="0"/>
+      <metrics statements="117" coveredstatements="0" conditionals="69" coveredconditionals="0" methods="34" coveredmethods="0"/>
       <file name="PhotoSelector.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DocumentProducer/EditImagesModal/PhotoSelector.tsx">
-        <metrics statements="45" coveredstatements="0" conditionals="27" coveredconditionals="0" methods="14" coveredmethods="0"/>
+        <metrics statements="44" coveredstatements="0" conditionals="25" coveredconditionals="0" methods="14" coveredmethods="0"/>
         <line num="44" count="0" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
         <line num="61" count="0" type="stmt"/>
         <line num="62" count="0" type="stmt"/>
         <line num="63" count="0" type="stmt"/>
-        <line num="64" count="0" type="stmt"/>
-        <line num="72" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="71" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="72" count="0" type="stmt"/>
         <line num="73" count="0" type="stmt"/>
-        <line num="74" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
         <line num="76" count="0" type="stmt"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="79" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="78" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="79" count="0" type="stmt"/>
         <line num="80" count="0" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
         <line num="83" count="0" type="stmt"/>
-        <line num="84" count="0" type="stmt"/>
-        <line num="88" count="0" type="stmt"/>
-        <line num="90" count="0" type="stmt"/>
-        <line num="94" count="0" type="stmt"/>
-        <line num="95" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="96" count="0" type="stmt"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="93" count="0" type="stmt"/>
+        <line num="94" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="95" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
         <line num="99" count="0" type="stmt"/>
-        <line num="100" count="0" type="stmt"/>
+        <line num="102" count="0" type="stmt"/>
         <line num="103" count="0" type="stmt"/>
         <line num="104" count="0" type="stmt"/>
         <line num="105" count="0" type="stmt"/>
         <line num="106" count="0" type="stmt"/>
         <line num="107" count="0" type="stmt"/>
-        <line num="108" count="0" type="stmt"/>
-        <line num="111" count="0" type="stmt"/>
-        <line num="128" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="147" count="0" type="stmt"/>
-        <line num="159" count="0" type="stmt"/>
-        <line num="191" count="0" type="stmt"/>
-        <line num="202" count="0" type="stmt"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="127" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="146" count="0" type="stmt"/>
+        <line num="150" count="0" type="stmt"/>
+        <line num="163" count="0" type="stmt"/>
+        <line num="174" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DocumentProducer/EditImagesModal/index.tsx">
         <metrics statements="73" coveredstatements="0" conditionals="44" coveredconditionals="0" methods="20" coveredmethods="0"/>
@@ -5304,7 +5303,7 @@
       </file>
     </package>
     <package name="src.components.Photo">
-      <metrics statements="26" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="6" coveredmethods="0"/>
+      <metrics statements="50" coveredstatements="0" conditionals="60" coveredconditionals="0" methods="14" coveredmethods="0"/>
       <file name="PhotoDragDrop.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Photo/PhotoDragDrop.tsx">
         <metrics statements="26" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="22" count="0" type="stmt"/>
@@ -5333,6 +5332,36 @@
         <line num="70" count="0" type="stmt"/>
         <line num="71" count="0" type="stmt"/>
         <line num="74" count="0" type="stmt"/>
+      </file>
+      <file name="PhotoPreview.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Photo/PhotoPreview.tsx">
+        <metrics statements="4" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+      </file>
+      <file name="PhotoSelectorWithPreview.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Photo/PhotoSelectorWithPreview.tsx">
+        <metrics statements="20" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="36" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="72" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="96" count="0" type="stmt"/>
+        <line num="104" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.PlantsPrimaryPage">
@@ -17609,14 +17638,14 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.ParticipantProjects.EditView">
-      <metrics statements="250" coveredstatements="0" conditionals="109" coveredconditionals="0" methods="64" coveredmethods="0"/>
+      <metrics statements="248" coveredstatements="0" conditionals="113" coveredconditionals="0" methods="62" coveredmethods="0"/>
       <file name="EditNameConfirm.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/EditView/EditNameConfirm.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="13" count="0" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
       </file>
       <file name="ProjectProfileEdit.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/EditView/ProjectProfileEdit.tsx">
-        <metrics statements="156" coveredstatements="0" conditionals="63" coveredconditionals="0" methods="39" coveredmethods="0"/>
+        <metrics statements="154" coveredstatements="0" conditionals="67" coveredconditionals="0" methods="37" coveredmethods="0"/>
         <line num="45" count="0" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
@@ -17771,8 +17800,6 @@
         <line num="381" count="0" type="stmt"/>
         <line num="382" count="0" type="stmt"/>
         <line num="420" count="0" type="stmt"/>
-        <line num="612" count="0" type="stmt"/>
-        <line num="634" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/EditView/index.tsx">
         <metrics statements="92" coveredstatements="0" conditionals="46" coveredconditionals="0" methods="24" coveredmethods="0"/>

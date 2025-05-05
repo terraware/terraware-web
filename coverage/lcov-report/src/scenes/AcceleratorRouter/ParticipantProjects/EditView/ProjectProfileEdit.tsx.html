@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/161</span>
+                <span class='fraction'>0/159</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/63</span>
+                <span class='fraction'>0/67</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/156</span>
+                <span class='fraction'>0/154</span>
             </div>
         
             
@@ -712,15 +712,7 @@
 <a name='L647'></a><a href='#L647'>647</a>
 <a name='L648'></a><a href='#L648'>648</a>
 <a name='L649'></a><a href='#L649'>649</a>
-<a name='L650'></a><a href='#L650'>650</a>
-<a name='L651'></a><a href='#L651'>651</a>
-<a name='L652'></a><a href='#L652'>652</a>
-<a name='L653'></a><a href='#L653'>653</a>
-<a name='L654'></a><a href='#L654'>654</a>
-<a name='L655'></a><a href='#L655'>655</a>
-<a name='L656'></a><a href='#L656'>656</a>
-<a name='L657'></a><a href='#L657'>657</a>
-<a name='L658'></a><a href='#L658'>658</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L650'></a><a href='#L650'>650</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1331,10 +1323,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1350,10 +1338,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1382,12 +1366,11 @@
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
 &nbsp;
-import PhotoChooser, { PhotoWithAttributes } from 'src/components/DocumentProducer/EditImagesModal/PhotoSelector';
+import PhotoSelectorWithPreview, { FileWithUrl } from 'src/components/Photo/PhotoSelectorWithPreview';
 import CountrySelect from 'src/components/ProjectField/CountrySelect';
 import GridEntryWrapper from 'src/components/ProjectField/GridEntryWrapper';
 import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
 import MinMaxCarbonTextfield from 'src/components/ProjectField/MinMaxCarbonTextfield';
-import ProjectProfileImage from 'src/components/ProjectField/ProjectProfileImage';
 import SdgMultiSelect from 'src/components/ProjectField/SdgMultiSelect';
 import ProjectFieldTextAreaEdit from 'src/components/ProjectField/TextAreaEdit';
 import ProjectFieldTextfield from 'src/components/ProjectField/Textfield';
@@ -1416,6 +1399,7 @@ import strings from 'src/strings';
 import { LAND_USE_MODEL_TYPES } from 'src/types/ParticipantProject';
 import { OrganizationUser } from 'src/types/User';
 import { SelectVariable, VariableWithValues } from 'src/types/documentProducer/Variable';
+import { getImagePath } from 'src/utils/images';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
@@ -1467,8 +1451,8 @@ const ProjectProfileEdit = <span class="cstat-no" title="statement not covered" 
   const [globalUsersOptions, setGlobalUsersOptions] = <span class="cstat-no" title="statement not covered" >useState&lt;DropdownItem[]&gt;();</span>
   const [tfContact, setTfContact] = <span class="cstat-no" title="statement not covered" >useState&lt;DropdownItem&gt;();</span>
   const [organizationUsers, setOrganizationUsers] = <span class="cstat-no" title="statement not covered" >useState&lt;OrganizationUser[]&gt;();</span>
-  const [mainPhoto, setMainPhoto] = <span class="cstat-no" title="statement not covered" >useState&lt;PhotoWithAttributes&gt;();</span>
-  const [mapPhoto, setMapPhoto] = <span class="cstat-no" title="statement not covered" >useState&lt;PhotoWithAttributes&gt;();</span>
+  const [mainPhoto, setMainPhoto] = <span class="cstat-no" title="statement not covered" >useState&lt;FileWithUrl&gt;();</span>
+  const [mapPhoto, setMapPhoto] = <span class="cstat-no" title="statement not covered" >useState&lt;FileWithUrl&gt;();</span>
 &nbsp;
   const isAllowedEdit = <span class="cstat-no" title="statement not covered" >isAllowed('UPDATE_PARTICIPANT_PROJECT');</span>
 &nbsp;
@@ -1986,47 +1970,39 @@ const ProjectProfileEdit = <span class="cstat-no" title="statement not covered" 
 &nbsp;
           &lt;Grid container&gt;
             &lt;Grid item md={6}&gt;
-              &lt;PhotoChooser
+              &lt;PhotoSelectorWithPreview
                 title={'Main Photo'}
-                onPhotosChanged={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >setMainPhoto(value[0])}</span>
+                onPhotoChanged={setMainPhoto}
                 uploadText={strings.UPLOAD_PHOTO}
                 uploadDescription={strings.UPLOAD_PHOTO_DESCR_LANDSCAPE_3_2}
                 chooseFileText={strings.CHOOSE_FILE}
                 replaceFileText={strings.REPLACE_FILE}
-                includeCaption={false}
-                includeCitation={false}
-                multipleSelection={false}
+                previewUrl={
+                  mainPhoto?.url ||
+                  (participantProject?.projectHighlightPhotoValueId &amp;&amp;
+                    getImagePath(projectId, participantProject.projectHighlightPhotoValueId)) ||
+                  undefined
+                }
               /&gt;
             &lt;/Grid&gt;
-            {participantProject?.projectHighlightPhotoValueId &amp;&amp; (
-              &lt;ProjectProfileImage
-                projectId={projectId}
-                imageValueId={participantProject.projectHighlightPhotoValueId}
-                alt={strings.PROJECT_HIGHLIGHT_IMAGE}
-              /&gt;
-            )}
           &lt;/Grid&gt;
           &lt;Grid container&gt;
             &lt;Grid item md={6}&gt;
-              &lt;PhotoChooser
+              &lt;PhotoSelectorWithPreview
                 title={'Map Photo'}
-                onPhotosChanged={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >setMapPhoto(value[0])}</span>
+                onPhotoChanged={setMapPhoto}
                 uploadText={strings.UPLOAD_PHOTO}
                 uploadDescription={strings.UPLOAD_PHOTO_DESCR_LANDSCAPE_3_2}
                 chooseFileText={strings.CHOOSE_FILE}
                 replaceFileText={strings.REPLACE_FILE}
-                includeCaption={false}
-                includeCitation={false}
-                multipleSelection={false}
+                previewUrl={
+                  mapPhoto?.url ||
+                  (participantProject?.projectZoneFigureValueId &amp;&amp;
+                    getImagePath(projectId, participantProject.projectZoneFigureValueId)) ||
+                  undefined
+                }
               /&gt;
             &lt;/Grid&gt;
-            {participantProject?.projectZoneFigureValueId &amp;&amp; (
-              &lt;ProjectProfileImage
-                projectId={projectId}
-                imageValueId={participantProject.projectZoneFigureValueId}
-                alt={strings.PROJECT_ZONE_FIGURE}
-              /&gt;
-            )}
           &lt;/Grid&gt;
         &lt;/Card&gt;
       &lt;/PageForm&gt;
@@ -2041,7 +2017,7 @@ export default ProjectProfileEdit;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-05T15:28:24.805Z
+                at 2025-05-05T15:36:05.346Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
