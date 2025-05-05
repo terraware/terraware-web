@@ -186,10 +186,11 @@ const ReportView = () => {
             {
               label: strings.PUBLISH,
               value: 'publish',
+              disabled: selectedReport?.status !== 'Approved',
             },
           ]
         : [],
-    [activeLocale]
+    [activeLocale, selectedReport?.status]
   );
 
   const callToAction = useMemo(() => {
