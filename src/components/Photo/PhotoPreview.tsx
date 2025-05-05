@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Box, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
-import { useDeviceInfo } from '@terraware/web-components/utils';
 
 type PhotoPreviewProps = {
   imgUrl: string;
@@ -13,17 +12,9 @@ type PhotoPreviewProps = {
 
 const PhotoPreview = ({ imgUrl, imgAlt, includeTrashIcon, onTrashClick }: PhotoPreviewProps) => {
   const theme = useTheme();
-  const { isMobile } = useDeviceInfo();
 
   return (
-    <Box
-      position='relative'
-      height={122}
-      width={122}
-      marginRight={isMobile ? theme.spacing(2) : theme.spacing(3)}
-      marginTop={theme.spacing(1)}
-      border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
-    >
+    <Box position='relative' height={122} width={122} border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}>
       {includeTrashIcon && (
         <Button
           icon='iconTrashCan'

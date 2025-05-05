@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { ErrorBox, Textfield } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PhotoDragDrop, { PhotoDragDropProps } from 'src/components/Photo/PhotoDragDrop';
 import PhotoPreview from 'src/components/Photo/PhotoPreview';
@@ -46,6 +47,7 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
   const [filesData, setFilesData] = useState<PhotoWithAttributesAndUrl[]>([]);
   const theme = useTheme();
   const [filesDataChanged, setFilesDataChanged] = useState<boolean>(false);
+  const { isMobile } = useDeviceInfo();
 
   const removeFileAtIndex = (index: number) => {
     const filesList = [...files];
@@ -144,12 +146,14 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
           <Box display='flex' flexDirection='row' flexWrap='wrap' marginBottom={theme.spacing(2)}>
             {filesData.map((fileData, index) => (
               <Box display='flex' width='100%' key={`photo-${index}`}>
-                <PhotoPreview
-                  imgUrl={fileData.url}
-                  includeTrashIcon={true}
-                  onTrashClick={() => removeFileAtIndex(index)}
-                  imgAlt={files[index]?.name}
-                />
+                <Box marginRight={isMobile ? theme.spacing(2) : theme.spacing(3)} marginTop={theme.spacing(1)}>
+                  <PhotoPreview
+                    imgUrl={fileData.url}
+                    includeTrashIcon={true}
+                    onTrashClick={() => removeFileAtIndex(index)}
+                    imgAlt={files[index]?.name}
+                  />
+                </Box>
 
                 {(includeCaption || includeCitation) && (
                   <Box width='100%'>

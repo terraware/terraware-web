@@ -606,7 +606,7 @@ const ProjectProfileEdit = () => {
           </Grid>
 
           <Grid container>
-            <Grid item md={6}>
+            <Grid item md={12}>
               <PhotoSelectorWithPreview
                 title={'Main Photo'}
                 onPhotoChanged={setMainPhoto}
@@ -620,11 +620,12 @@ const ProjectProfileEdit = () => {
                     getImagePath(projectId, participantProject.projectHighlightPhotoValueId)) ||
                   undefined
                 }
+                previewPlacement={'left'}
               />
             </Grid>
           </Grid>
           <Grid container>
-            <Grid item md={6}>
+            <Grid item md={12}>
               <PhotoSelectorWithPreview
                 title={'Map Photo'}
                 onPhotoChanged={setMapPhoto}
@@ -638,6 +639,7 @@ const ProjectProfileEdit = () => {
                     getImagePath(projectId, participantProject.projectZoneFigureValueId)) ||
                   undefined
                 }
+                previewPlacement={'right'}
               />
             </Grid>
           </Grid>

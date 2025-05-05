@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, TooltipProps, Typography, useTheme } from '@mui/material';
 import { ErrorBox } from '@terraware/web-components';
 
 import PhotoDragDrop, { PhotoDragDropProps } from 'src/components/Photo/PhotoDragDrop';
+import PlacementWrapper from 'src/components/common/PlacementWrapper';
 
 import PhotoPreview from './PhotoPreview';
 
@@ -18,6 +19,7 @@ export type PhotoSelectorWithPreviewProps = Omit<PhotoDragDropProps, 'files' | '
   onPhotoChanged: (photo?: FileWithUrl) => void;
   error?: PhotoSelectorWithPreviewErrorType;
   previewUrl?: string;
+  previewPlacement?: TooltipProps['placement'];
 };
 
 export type FileWithUrl = {
@@ -25,8 +27,15 @@ export type FileWithUrl = {
   url: string;
 };
 
-export default function PhotoSelectorWithPreview(props: PhotoSelectorWithPreviewProps): JSX.Element {
-  const { title, description, onPhotoChanged, error, previewUrl, ...dragDropProps } = props;
+export default function PhotoSelectorWithPreview({
+  title,
+  description,
+  onPhotoChanged,
+  error,
+  previewUrl,
+  previewPlacement = 'top-start',
+  ...dragDropProps
+}: PhotoSelectorWithPreviewProps): JSX.Element {
   const [fileData, setFileData] = useState<FileWithUrl | undefined>();
   const theme = useTheme();
 
@@ -39,18 +48,43 @@ export default function PhotoSelectorWithPreview(props: PhotoSelectorWithPreview
     };
   }, [fileData, onPhotoChanged]);
 
-  const handleSetFiles = (files: File[]) => {
-    if (files.length > 0) {
+  const handleSetFiles = useCallback(
+    (files: File[]) => {
       if (fileData) {
         URL.revokeObjectURL(fileData.url);
       }
-      const file = files[0];
-      const fileUrl = URL.createObjectURL(file);
-      setFileData({ file, url: fileUrl });
-    } else {
-      setFileData(undefined);
-    }
-  };
+      if (files.length > 0) {
+        const file = files[0];
+        const fileUrl = URL.createObjectURL(file);
+        setFileData({ file, url: fileUrl });
+      } else {
+        setFileData(undefined);
+      }
+    },
+    [fileData]
+  );
+
+  const preview = useMemo(
+    () =>
+      fileData ? (
+        <PhotoPreview
+          imgUrl={fileData.url}
+          imgAlt={fileData.file.name}
+          includeTrashIcon={true}
+          onTrashClick={() => handleSetFiles([])}
+        />
+      ) : (
+        previewUrl && (
+          <PhotoPreview
+            imgUrl={previewUrl}
+            imgAlt={''}
+            includeTrashIcon={false}
+            onTrashClick={() => handleSetFiles([])}
+          />
+        )
+      ),
+    [fileData, previewUrl, handleSetFiles]
+  );
 
   return (
     <Box
@@ -86,30 +120,12 @@ export default function PhotoSelectorWithPreview(props: PhotoSelectorWithPreview
           />
         )}
 
-        <Box display='flex' flexDirection='row' flexWrap='wrap' marginBottom={theme.spacing(2)}>
-          <Box display='flex' width='100%'>
-            {fileData ? (
-              <PhotoPreview
-                imgUrl={fileData.url}
-                imgAlt={fileData.file.name}
-                includeTrashIcon={true}
-                onTrashClick={() => handleSetFiles([])}
-              />
-            ) : (
-              previewUrl && (
-                <PhotoPreview
-                  imgUrl={previewUrl}
-                  imgAlt={''}
-                  includeTrashIcon={false}
-                  onTrashClick={() => handleSetFiles([])}
-                />
-              )
-            )}
-          </Box>
-        </Box>
+        {/* <Grid item md={8}>*/}
+        <PlacementWrapper placedObject={preview} objectPlacement={previewPlacement || 'top-start'}>
+          <PhotoDragDrop {...dragDropProps} files={fileData ? [fileData.file] : []} setFiles={handleSetFiles} />
+        </PlacementWrapper>
+        {/* </Grid>*/}
       </Box>
-
-      <PhotoDragDrop {...dragDropProps} files={fileData ? [fileData.file] : []} setFiles={handleSetFiles} />
     </Box>
   );
 }
