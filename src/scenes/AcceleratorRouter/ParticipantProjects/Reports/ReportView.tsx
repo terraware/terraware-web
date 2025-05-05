@@ -74,37 +74,42 @@ const ReportView = () => {
     setShowPublishModal(false);
   };
 
-  const approveReport = () => {
-    const request = dispatch(
-      requestReviewAcceleratorReport({
-        projectId: Number(projectId),
-        reportId: Number(reportId),
-        review: {
-          ...selectedReport,
-          status: 'Approved',
-          achievements: selectedReport?.achievements ?? [],
-          challenges: selectedReport?.challenges ?? [],
-        },
-      })
-    );
-    setApproveRequestId(request.requestId);
-  };
+  const approveReport = useCallback(() => {
+    if (selectedReport) {
+      const request = dispatch(
+        requestReviewAcceleratorReport({
+          projectId: Number(projectId),
+          reportId: Number(reportId),
+          review: {
+            ...selectedReport,
+            feedback: undefined,
+            status: 'Approved',
+          },
+        })
+      );
+      setApproveRequestId(request.requestId);
+    }
+  }, [selectedReport]);
 
-  const rejectReport = (feedback?: string) => {
-    const request = dispatch(
-      requestReviewAcceleratorReport({
-        projectId: Number(projectId),
-        reportId: Number(reportId),
-        review: {
-          status: 'Needs Update',
-          feedback,
-          achievements: [],
-          challenges: [],
-        },
-      })
-    );
-    setRejectRequestId(request.requestId);
-  };
+  const rejectReport = useCallback(
+    (feedback?: string) => {
+      if (selectedReport) {
+        const request = dispatch(
+          requestReviewAcceleratorReport({
+            projectId: Number(projectId),
+            reportId: Number(reportId),
+            review: {
+              ...selectedReport,
+              status: 'Needs Update',
+              feedback,
+            },
+          })
+        );
+        setRejectRequestId(request.requestId);
+      }
+    },
+    [selectedReport]
+  );
 
   useEffect(() => {
     if (approveReportResponse?.status === 'error') {
