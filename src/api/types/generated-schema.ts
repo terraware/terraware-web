@@ -1618,6 +1618,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/funder/entities/projects/{projectId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets the Funding Entities that a specific project is tied to */
+        get: operations["getProjectFundingEntities"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/funder/entities/users/{userId}": {
         parameters: {
             query?: never;
@@ -3514,6 +3531,23 @@ export interface paths {
          * @description Planting site should not have any plantings.
          */
         delete: operations["deletePlantingSite"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tracking/sites/{id}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lists all older versions of a planting site. */
+        get: operations["listPlantingSiteHistories"];
+        put?: never;
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -6582,6 +6616,10 @@ export interface components {
             photos: components["schemas"]["ListPhotosResponseElement"][];
             status: components["schemas"]["SuccessOrError"];
         };
+        ListPlantingSiteHistoriesResponsePayload: {
+            histories: components["schemas"]["PlantingSiteHistoryPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
         ListPlantingSitesResponsePayload: {
             sites: components["schemas"]["PlantingSitePayload"][];
             status: components["schemas"]["SuccessOrError"];
@@ -7373,6 +7411,7 @@ export interface components {
         };
         ObservationResultsPayload: {
             adHocPlot?: components["schemas"]["ObservationMonitoringPlotResultsPayload"];
+            areaHa?: number;
             biomassMeasurements?: components["schemas"]["ExistingBiomassMeasurementPayload"];
             /** Format: date-time */
             completedTime?: string;
@@ -7396,6 +7435,8 @@ export interface components {
             plantingDensity: number;
             /** Format: int32 */
             plantingDensityStdDev?: number;
+            /** Format: int64 */
+            plantingSiteHistoryId?: number;
             /** Format: int64 */
             plantingSiteId: number;
             plantingZones: components["schemas"]["ObservationPlantingZoneResultsPayload"][];
@@ -8022,6 +8063,7 @@ export interface components {
             component: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             description?: string;
             name: string;
+            progressNotes?: string;
             reference: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely";
@@ -8308,7 +8350,7 @@ export interface components {
             description?: string;
             isPublishable: boolean;
             /** @enum {string} */
-            metric: "Seeds Collected" | 'Seedlings' | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted";
+            metric: "Seeds Collected" | "Seedlings" | "Trees Planted" | "Species Planted" | "Mortality Rate" | "Hectares Planted";
             /** Format: int32 */
             overrideValue?: number;
             progressNotes?: string;
@@ -13393,6 +13435,28 @@ export interface operations {
             };
         };
     };
+    getProjectFundingEntities: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListFundingEntitiesPayload"];
+                };
+            };
+        };
+    };
     getFundingEntity_1: {
         parameters: {
             query?: never;
@@ -17537,6 +17601,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    listPlantingSiteHistories: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListPlantingSiteHistoriesResponsePayload"];
                 };
             };
         };
