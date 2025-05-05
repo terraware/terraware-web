@@ -12,7 +12,7 @@ import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import CohortModulesTable from 'src/scenes/AcceleratorRouter/Cohorts/CohortModulesTable';
 import strings from 'src/strings';
-import { CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
+import { CohortPhaseType, CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
 import { CohortModule } from 'src/types/Module';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -53,7 +53,10 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
     }
   }, [cohortId, dispatch, listCohortModules, listModules]);
 
-  const currentPhaseDropdownOptions = useMemo(() => {
+  const currentPhaseDropdownOptions = useMemo((): {
+    label: string;
+    value: CohortPhaseType;
+  }[] => {
     if (!activeLocale) {
       return [];
     }
@@ -69,6 +72,7 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
   const updateField = (field: keyof T, value: any) => {
     setLocalRecord((prev) => ({
       ...prev,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       [field]: value,
     }));
   };
@@ -101,7 +105,7 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
     );
 
     const toUpdate = pendingCohortModules.filter((newModule) => {
-      const oldModule = cohortModules.find((oldModule) => oldModule.id === newModule.id);
+      const oldModule = cohortModules.find((module) => module.id === newModule.id);
       return (
         oldModule !== undefined &&
         !(
@@ -119,7 +123,7 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
       [...toAdd, ...toUpdate],
       toDelete
     );
-  }, [cohortModules, pendingCohortModules, onSave]);
+  }, [cohortModules, localRecord, pendingCohortModules, onSave]);
 
   useEffect(() => {
     // update local record when cohort changes
@@ -130,7 +134,7 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
     const userIds = new Set([cohort?.createdBy, cohort?.modifiedBy]);
     userIds.forEach((userId) => {
       if (userId) {
-        dispatch(requestGetUser(userId));
+        void dispatch(requestGetUser(userId));
       }
     });
   }, [dispatch, cohort?.createdBy, cohort?.modifiedBy]);
