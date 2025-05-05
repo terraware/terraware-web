@@ -42,7 +42,12 @@ const Metadata = (props: MetadataProps): JSX.Element => {
       requestReviewAcceleratorReport({
         reportId: report.id,
         projectId: Number(projectId),
-        review: { internalComment: internalComment, status: status, achievements: [], challenges: [] },
+        review: {
+          internalComment,
+          status,
+          achievements: report.achievements,
+          challenges: report.challenges,
+        },
       })
     );
     setRequestId(request.requestId);
