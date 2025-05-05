@@ -1,3 +1,6 @@
+9cbe1c553e6 SW-6870 Data in Highlights field disappears in Report Form in Console when approved (#3945)
+7a627263099 SW-6869 Don't allow Publishing before Approve (#3944)
+9f7786213d6 SW-6868 Request Update dialog does not disappear after clicking Request Update button (#3943)
 018e99a6d72 SW-6820 Create PhotoDragDrop component in prep for new selector, update description text (#3933)
 1b7bff4d868 Update dependency slate-dom to ^0.114.0 (#3938)
 d83b4b92a1d Update dependency slate to ^0.114.0 (#3937)
