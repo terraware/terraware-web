@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1746547127579" clover="3.2.0">
-  <project timestamp="1746547127579" name="All files">
-    <metrics statements="30417" coveredstatements="1276" conditionals="20720" coveredconditionals="386" methods="9374" coveredmethods="209" elements="60511" coveredelements="1871" complexity="0" loc="30417" ncloc="30417" packages="258" files="1257" classes="1257"/>
+<coverage generated="1746557472924" clover="3.2.0">
+  <project timestamp="1746557472924" name="All files">
+    <metrics statements="30419" coveredstatements="1276" conditionals="20722" coveredconditionals="386" methods="9374" coveredmethods="209" elements="60515" coveredelements="1871" complexity="0" loc="30419" ncloc="30419" packages="258" files="1257" classes="1257"/>
     <package name="src">
       <metrics statements="177" coveredstatements="8" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -2673,7 +2673,7 @@
       </file>
     </package>
     <package name="src.components.DeliverablesTable">
-      <metrics statements="92" coveredstatements="0" conditionals="86" coveredconditionals="0" methods="29" coveredmethods="0"/>
+      <metrics statements="94" coveredstatements="0" conditionals="88" coveredconditionals="0" methods="29" coveredmethods="0"/>
       <file name="DeliverableCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverablesTable/DeliverableCellRenderer.tsx">
         <metrics statements="17" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
@@ -2695,7 +2695,7 @@
         <line num="67" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverablesTable/index.tsx">
-        <metrics statements="75" coveredstatements="0" conditionals="72" coveredconditionals="0" methods="27" coveredmethods="0"/>
+        <metrics statements="77" coveredstatements="0" conditionals="74" coveredconditionals="0" methods="27" coveredmethods="0"/>
         <line num="43" count="0" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
         <line num="45" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -2756,21 +2756,23 @@
         <line num="245" count="0" type="stmt"/>
         <line num="246" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="247" count="0" type="stmt"/>
-        <line num="250" count="0" type="stmt"/>
-        <line num="259" count="0" type="stmt"/>
-        <line num="264" count="0" type="stmt"/>
+        <line num="248" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="249" count="0" type="stmt"/>
+        <line num="252" count="0" type="stmt"/>
+        <line num="261" count="0" type="stmt"/>
         <line num="266" count="0" type="stmt"/>
-        <line num="274" count="0" type="stmt"/>
-        <line num="276" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="277" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="281" count="0" type="stmt"/>
-        <line num="282" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="283" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="284" count="0" type="stmt"/>
-        <line num="288" count="0" type="stmt"/>
-        <line num="290" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="291" count="0" type="stmt"/>
-        <line num="299" count="0" type="stmt"/>
+        <line num="268" count="0" type="stmt"/>
+        <line num="276" count="0" type="stmt"/>
+        <line num="278" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="279" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="283" count="0" type="stmt"/>
+        <line num="284" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="285" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="286" count="0" type="stmt"/>
+        <line num="290" count="0" type="stmt"/>
+        <line num="292" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="293" count="0" type="stmt"/>
+        <line num="301" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.DocumentProducer.DeliverableDisplayVariableValue">
