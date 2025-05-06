@@ -34,6 +34,7 @@ const MetricBox = ({ metric, index, year, quarter, lastIndex }: MetricBoxProps) 
       borderBottom={isDesktop || lastIndex ? 'none' : `1px solid ${theme.palette.TwClrBrdrTertiary}`}
       marginRight={3}
       paddingBottom={isDesktop ? 0 : 3}
+      paddingRight={isDesktop ? 3 : 0}
     >
       <Box display={'flex'} alignItems={'center'}>
         <Typography fontSize='20px' fontWeight={600} paddingRight={'10px'}>
