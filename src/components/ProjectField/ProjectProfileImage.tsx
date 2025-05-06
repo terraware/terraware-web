@@ -14,22 +14,34 @@ type ProjectProfileImageProps = {
 const ProjectProfileImage = ({ projectId, imageValueId, alt, label }: ProjectProfileImageProps) => {
   const theme = useTheme();
   return (
-    <Grid item md={6} maxHeight={400} paddingX={theme.spacing(1)}>
+    <Grid item md={6} sx={{ paddingX: theme.spacing(1) }}>
       <Box
-        maxHeight={400}
-        overflow={'hidden'}
-        borderRadius={theme.spacing(1)}
-        position={'relative'}
-        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        sx={{
+          overflow: 'hidden',
+          borderRadius: theme.spacing(1),
+          position: 'relative',
+          width: '100%',
+          paddingTop: '66.67%', // 3:2 ratio
+        }}
       >
-        <img
+        <Box
+          component={'img'}
           src={getImagePath(projectId, imageValueId)}
           alt={alt}
-          style={{ width: '100%', objectFit: 'cover', borderRadius: theme.spacing(1) }}
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            borderRadius: theme.spacing(1),
+          }}
         />
         {label && (
-          <div
-            style={{
+          <Box
+            sx={{
               height: 'max-content',
               width: 'max-content',
               position: 'absolute',
@@ -39,7 +51,7 @@ const ProjectProfileImage = ({ projectId, imageValueId, alt, label }: ProjectPro
             }}
           >
             {label}
-          </div>
+          </Box>
         )}
       </Box>
     </Grid>

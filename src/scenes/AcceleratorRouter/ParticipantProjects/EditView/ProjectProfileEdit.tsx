@@ -615,12 +615,13 @@ const ProjectProfileEdit = () => {
                 chooseFileText={strings.CHOOSE_FILE}
                 replaceFileText={strings.REPLACE_FILE}
                 previewUrl={
-                  mainPhoto?.url ||
                   (participantProject?.projectHighlightPhotoValueId &&
                     getImagePath(projectId, participantProject.projectHighlightPhotoValueId)) ||
                   undefined
                 }
                 previewPlacement={'right'}
+                previewWidth={375}
+                previewAspectRatio={2 / 3}
               />
             </Grid>
           </Grid>
@@ -634,12 +635,13 @@ const ProjectProfileEdit = () => {
                 chooseFileText={strings.CHOOSE_FILE}
                 replaceFileText={strings.REPLACE_FILE}
                 previewUrl={
-                  mapPhoto?.url ||
                   (participantProject?.projectZoneFigureValueId &&
                     getImagePath(projectId, participantProject.projectZoneFigureValueId)) ||
                   undefined
                 }
                 previewPlacement={'right'}
+                previewWidth={375}
+                previewAspectRatio={2 / 3}
               />
             </Grid>
           </Grid>
