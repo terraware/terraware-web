@@ -72,7 +72,7 @@ export default function PlantsPrimaryPage({
       ? plantingSitesData
       : plantingSitesData.filter((site) => site.id !== -1);
     const projectSites = projectId
-      ? sitesWithAll.filter((site) => site.projectId === projectId || site.id !== -1)
+      ? sitesWithAll.filter((site) => site.projectId === projectId || site.id === -1)
       : sitesWithAll;
     return projectSites;
   }, [plantingSitesData, allowAllAsSiteSelection, selectedOrganization, projectId]);
