@@ -102,7 +102,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     void dispatch(requestSpecies(orgId));
     void dispatch(requestPlantings(orgId));
     void dispatch(requestPlantingSitesSearchResults(orgId));
-    setAcceleratorOrganizationId(organizationId);
+    setAcceleratorOrganizationId(orgId);
   }, [dispatch, organizationId, selectedOrganization]);
 
   useEffect(() => {
