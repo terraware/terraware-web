@@ -20,6 +20,8 @@ export type PhotoSelectorWithPreviewProps = Omit<PhotoDragDropProps, 'files' | '
   error?: PhotoSelectorWithPreviewErrorType;
   previewUrl?: string;
   previewPlacement?: TooltipProps['placement'];
+  previewWidth?: number;
+  previewAspectRatio?: number;
 };
 
 export type FileWithUrl = {
@@ -34,6 +36,8 @@ export default function PhotoSelectorWithPreview({
   error,
   previewUrl,
   previewPlacement = 'top-start',
+  previewWidth,
+  previewAspectRatio,
   ...dragDropProps
 }: PhotoSelectorWithPreviewProps): JSX.Element {
   const [fileData, setFileData] = useState<FileWithUrl | undefined>();
@@ -64,27 +68,18 @@ export default function PhotoSelectorWithPreview({
     [fileData]
   );
 
-  const preview = useMemo(
-    () =>
-      fileData ? (
-        <PhotoPreview
-          imgUrl={fileData.url}
-          imgAlt={fileData.file.name}
-          includeTrashIcon={true}
-          onTrashClick={() => handleSetFiles([])}
-        />
-      ) : (
-        previewUrl && (
-          <PhotoPreview
-            imgUrl={previewUrl}
-            imgAlt={''}
-            includeTrashIcon={false}
-            onTrashClick={() => handleSetFiles([])}
-          />
-        )
-      ),
-    [fileData, previewUrl, handleSetFiles]
-  );
+  const preview = useMemo(() => {
+    const args = {
+      imageWidth: previewWidth,
+      aspectRatio: previewAspectRatio,
+      onTrashClick: () => handleSetFiles([]),
+    };
+    return fileData ? (
+      <PhotoPreview imgUrl={fileData.url} imgAlt={fileData.file.name} includeTrashIcon={true} {...args} />
+    ) : (
+      previewUrl && <PhotoPreview imgUrl={previewUrl} imgAlt={''} includeTrashIcon={false} {...args} />
+    );
+  }, [fileData, previewUrl, handleSetFiles]);
 
   return (
     <Box

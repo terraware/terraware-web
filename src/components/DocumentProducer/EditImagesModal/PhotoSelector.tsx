@@ -20,6 +20,7 @@ export type PhotoChooserProps = Omit<PhotoDragDropProps, 'files' | 'setFiles'> &
   error?: PhotoChooserErrorType;
   includeCaption?: boolean;
   includeCitation?: boolean;
+  previewWidth?: number;
 };
 
 export type PhotoWithAttributes = {
@@ -41,6 +42,7 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
     error,
     includeCaption = true,
     includeCitation = true,
+    previewWidth = 120,
     ...dragDropProps
   } = props;
   const [files, setFiles] = useState<File[]>([]);
@@ -150,6 +152,7 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
                   <PhotoPreview
                     imgUrl={fileData.url}
                     includeTrashIcon={true}
+                    imageWidth={previewWidth || 120}
                     onTrashClick={() => removeFileAtIndex(index)}
                     imgAlt={files[index]?.name}
                   />

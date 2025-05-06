@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
-import { Box, useTheme } from '@mui/material';
+import { Box, SxProps, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 type PhotoPreviewProps = {
@@ -8,13 +8,46 @@ type PhotoPreviewProps = {
   imgAlt?: string;
   includeTrashIcon: boolean;
   onTrashClick: () => void;
+  imageWidth?: number;
+  aspectRatio?: number; // height / width
 };
 
-const PhotoPreview = ({ imgUrl, imgAlt, includeTrashIcon, onTrashClick }: PhotoPreviewProps) => {
+const PhotoPreview = ({
+  imgUrl,
+  imgAlt,
+  imageWidth,
+  aspectRatio,
+  includeTrashIcon,
+  onTrashClick,
+}: PhotoPreviewProps) => {
   const theme = useTheme();
 
+  const imgSx = useMemo((): SxProps => {
+    if (aspectRatio) {
+      return {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '100%',
+        objectFit: 'cover',
+      };
+    } else {
+      return {
+        objectFit: 'contain',
+        width: imageWidth ? imageWidth : '100%',
+        display: 'flex',
+      };
+    }
+  }, [aspectRatio, imageWidth]);
+
   return (
-    <Box position='relative' height={122} width={122} border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}>
+    <Box
+      position='relative'
+      width={imageWidth ? imageWidth + 2 : 122}
+      height={aspectRatio && imageWidth ? aspectRatio * imageWidth + 2 : 122}
+      border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+    >
       {includeTrashIcon && (
         <Button
           icon='iconTrashCan'
@@ -25,21 +58,30 @@ const PhotoPreview = ({ imgUrl, imgAlt, includeTrashIcon, onTrashClick }: PhotoP
             top: -10,
             right: -10,
             backgroundColor: theme.palette.TwClrBgDanger,
+            zIndex: 1000,
           }}
         />
       )}
-      <img
-        height='120px'
-        src={imgUrl}
-        alt={imgAlt}
-        style={{
-          margin: 'auto auto',
-          objectFit: 'contain',
-          display: 'flex',
-          maxWidth: '120px',
-          maxHeight: '120px',
+      <Box
+        sx={{
+          overflow: 'hidden',
+          position: 'relative',
+          width: '100%',
+          height: '100%',
+          paddingTop: aspectRatio && `${aspectRatio * 100}%`,
         }}
-      />
+      >
+        <Box
+          component={'img'}
+          src={imgUrl}
+          alt={imgAlt}
+          sx={{
+            margin: 'auto auto',
+            height: '100%',
+            ...imgSx,
+          }}
+        />
+      </Box>
     </Box>
   );
 };
