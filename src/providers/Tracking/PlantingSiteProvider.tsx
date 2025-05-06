@@ -65,7 +65,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
     const orgId = isAcceleratorRoute ? acceleratorOrganizationId : selectedOrganization.id;
     if (activeLocale && orgId) {
       return {
-        name: strings.ALL,
+        name: strings.ALL_PLANTING_SITES,
         id: -1,
         organizationId: orgId,
         plantingSeasons: [],

@@ -55,7 +55,7 @@ export default function PlantsPrimaryPageView({
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const isRolledUpView = useMemo(() => {
-    return projectId !== undefined && selectedPlantingSiteId === -2;
+    return projectId !== undefined && selectedPlantingSiteId === -1;
   }, [projectId, selectedPlantingSiteId]);
 
   const onChangePlantingSiteId = useCallback(
