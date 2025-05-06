@@ -58,7 +58,7 @@ export default function PhotoSelectorWithPreview({
         URL.revokeObjectURL(fileData.url);
       }
       if (files.length > 0) {
-        const file = files[0];
+        const file = files[files.length - 1];
         const fileUrl = URL.createObjectURL(file);
         setFileData({ file, url: fileUrl });
       } else {
@@ -117,7 +117,12 @@ export default function PhotoSelectorWithPreview({
 
         <PlacementWrapper placedObject={preview} objectPlacement={previewPlacement || 'top-start'}>
           <Box width={'100%'}>
-            <PhotoDragDrop {...dragDropProps} files={fileData ? [fileData.file] : []} setFiles={handleSetFiles} />
+            <PhotoDragDrop
+              {...dragDropProps}
+              multipleSelection={false}
+              files={fileData ? [fileData.file] : []}
+              setFiles={handleSetFiles}
+            />
           </Box>
         </PlacementWrapper>
       </Box>
