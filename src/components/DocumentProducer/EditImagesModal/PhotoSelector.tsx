@@ -152,7 +152,7 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
                   <PhotoPreview
                     imgUrl={fileData.url}
                     includeTrashIcon={true}
-                    imageWidth={previewWidth || 120}
+                    imageWidth={previewWidth}
                     onTrashClick={() => removeFileAtIndex(index)}
                     imgAlt={files[index]?.name}
                   />
