@@ -6,8 +6,10 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { isReportSystemMetric } from 'src/components/AcceleratorReports/MetricBox';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
+import { useUser } from 'src/providers';
 import strings from 'src/strings';
 import { PublishedReportMetric } from 'src/types/AcceleratorReport';
+import { useNumberFormatter } from 'src/utils/useNumber';
 
 type MetricBoxProps = {
   metric: PublishedReportMetric;
@@ -20,6 +22,9 @@ type MetricBoxProps = {
 const MetricBox = ({ metric, index, year, quarter, lastIndex }: MetricBoxProps) => {
   const { isDesktop } = useDeviceInfo();
   const theme = useTheme();
+  const { user } = useUser();
+  const numberFormatter = useNumberFormatter();
+  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
   const addPercentSign = useMemo(() => {
     return metric.name === 'Mortality Rate' ? '%' : '';
@@ -54,7 +59,7 @@ const MetricBox = ({ metric, index, year, quarter, lastIndex }: MetricBoxProps) 
             {year} {strings.TARGET}
           </Typography>
           <Typography fontSize={'24px'} fontWeight={600}>
-            {metric.target?.toLocaleString()} {metric.target ? addPercentSign : ''}
+            {numericFormatter.format(metric.target)} {metric.target ? addPercentSign : ''}
           </Typography>
         </Box>
         <Box flex='0 0 50%'>
@@ -62,7 +67,7 @@ const MetricBox = ({ metric, index, year, quarter, lastIndex }: MetricBoxProps) 
             {quarter} {strings.PROGRESS}
           </Typography>
           <Typography fontSize={'24px'} fontWeight={600}>
-            {metric.value?.toLocaleString()} {metric.value ? addPercentSign : ''}
+            {numericFormatter.format(metric.value)} {metric.value ? addPercentSign : ''}
           </Typography>
         </Box>
       </Box>
