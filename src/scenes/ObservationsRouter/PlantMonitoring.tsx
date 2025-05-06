@@ -9,8 +9,8 @@ import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { useOrganization } from 'src/providers';
 import {
+  selectAdHocObservationResults,
   selectObservationsResults,
-  selectadHocObservationResults,
 } from 'src/redux/features/observations/observationsSelectors';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -49,7 +49,7 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
     });
   }, [allObservationsResults, selectedPlantingSite]);
 
-  const alladHocObservationResults = useAppSelector(selectadHocObservationResults);
+  const alladHocObservationResults = useAppSelector(selectAdHocObservationResults);
   const adHocObservationResults = useMemo(() => {
     if (!alladHocObservationResults || !selectedPlantingSite?.id) {
       return [];

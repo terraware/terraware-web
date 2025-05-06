@@ -11,7 +11,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
-import { selectadHocObservationResults } from 'src/redux/features/observations/observationsSelectors';
+import { selectAdHocObservationResults } from 'src/redux/features/observations/observationsSelectors';
 import { getConditionString } from 'src/redux/features/observations/utils';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
@@ -47,7 +47,7 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const alladHocObservationResults = useAppSelector(selectadHocObservationResults);
+  const alladHocObservationResults = useAppSelector(selectAdHocObservationResults);
   const observation = alladHocObservationResults?.find(
     (obsResult) => obsResult?.observationId.toString() === observationId?.toString()
   );

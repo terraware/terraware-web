@@ -12,7 +12,7 @@ import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
-import { selectadHocObservationResults } from 'src/redux/features/observations/observationsSelectors';
+import { selectAdHocObservationResults } from 'src/redux/features/observations/observationsSelectors';
 import { getConditionString } from 'src/redux/features/observations/utils';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
@@ -41,7 +41,7 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
   }>();
   const theme = useTheme();
   const { activeLocale } = useLocalization();
-  const alladHocObservationResults = useAppSelector(selectadHocObservationResults);
+  const alladHocObservationResults = useAppSelector(selectAdHocObservationResults);
   const defaultTimeZone = useDefaultTimeZone();
   const { isMobile } = useDeviceInfo();
 

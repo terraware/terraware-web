@@ -1,6 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import {
+  selectPlantingSiteAdHocObservationResultsRequest,
+  selectPlantingSiteAdHocObservationsRequest,
   selectPlantingSiteObservationResultsRequest,
   selectPlantingSiteObservationSummaries,
   selectPlantingSiteObservationsRequest,
@@ -27,7 +30,10 @@ export type Props = {
 
 const PlantingSiteProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
+
   const { selectedOrganization } = useOrganization();
+  const [acceleratorOrganizationId, setAcceleratorOrganizationId] = useState<number>();
   const [plantingSite, _setSelectedPlantingSite] = useState<PlantingSite>();
   const plantingSitesResults = useAppSelector(selectPlantingSites);
   const [observationsRequestId, setObservationsRequestId] = useState<string>('');
@@ -44,14 +50,19 @@ const PlantingSiteProvider = ({ children }: Props) => {
 
   const observationsResponse = useAppSelector(selectPlantingSiteObservationsRequest(observationsRequestId));
   const resultsResponse = useAppSelector(selectPlantingSiteObservationResultsRequest(resultsRequestId));
-  const adHocObservationsResponse = useAppSelector(selectPlantingSiteObservationsRequest(adHocObservationsRequestId));
-  const adHocResultsResponse = useAppSelector(selectPlantingSiteObservationResultsRequest(adHocResultsRequestId));
+  const adHocObservationsResponse = useAppSelector(
+    selectPlantingSiteAdHocObservationsRequest(adHocObservationsRequestId)
+  );
+  const adHocResultsResponse = useAppSelector(selectPlantingSiteAdHocObservationResultsRequest(adHocResultsRequestId));
   const summariesResponse = useAppSelector(selectPlantingSiteObservationSummaries(summariesRequestId));
 
   useEffect(() => {
-    void dispatch(requestPlantingSites(selectedOrganization.id));
-    _setSelectedPlantingSite(undefined);
-  }, [selectedOrganization]);
+    const orgId = isAcceleratorRoute ? acceleratorOrganizationId : selectedOrganization.id;
+    if (orgId) {
+      void dispatch(requestPlantingSites(orgId));
+      _setSelectedPlantingSite(undefined);
+    }
+  }, [isAcceleratorRoute, acceleratorOrganizationId, selectedOrganization]);
 
   const allPlantingSites = useMemo(() => plantingSitesResults ?? [], [plantingSitesResults]);
 
@@ -134,6 +145,8 @@ const PlantingSiteProvider = ({ children }: Props) => {
 
   const value = useMemo(
     (): PlantingSiteData => ({
+      acceleratorOrganizationId,
+      setAcceleratorOrganizationId,
       allPlantingSites,
       plantingSite,
       plantingSiteHistories: [],
@@ -146,6 +159,8 @@ const PlantingSiteProvider = ({ children }: Props) => {
       latestObservation,
     }),
     [
+      acceleratorOrganizationId,
+      setAcceleratorOrganizationId,
       allPlantingSites,
       plantingSite,
       adHocObservations,

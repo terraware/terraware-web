@@ -42,7 +42,13 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<Record<string, unknown>>();
   const theme = useTheme();
 
-  const { plantingSite, setSelectedPlantingSite, latestObservation, observationSummaries } = usePlantingSiteData();
+  const {
+    setAcceleratorOrganizationId,
+    plantingSite,
+    setSelectedPlantingSite,
+    latestObservation,
+    observationSummaries,
+  } = usePlantingSiteData();
 
   const hasObservations = useMemo(() => !!latestObservation, [latestObservation]);
 
@@ -96,6 +102,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     void dispatch(requestSpecies(orgId));
     void dispatch(requestPlantings(orgId));
     void dispatch(requestPlantingSitesSearchResults(orgId));
+    setAcceleratorOrganizationId(organizationId);
   }, [dispatch, organizationId, selectedOrganization]);
 
   useEffect(() => {

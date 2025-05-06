@@ -4,6 +4,9 @@ import { Observation, ObservationResultsPayload, ObservationSummary } from 'src/
 import { PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
 
 export type PlantingSiteData = {
+  acceleratorOrganizationId?: number;
+  setAcceleratorOrganizationId: (organizationId: number) => void;
+
   allPlantingSites?: PlantingSite[];
 
   plantingSite?: PlantingSite;
@@ -21,6 +24,8 @@ export type PlantingSiteData = {
 
 // default values pointing to nothing
 export const PlantingSiteContext = createContext<PlantingSiteData>({
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  setAcceleratorOrganizationId: () => {},
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setSelectedPlantingSite: () => {},
 });

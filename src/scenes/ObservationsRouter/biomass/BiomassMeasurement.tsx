@@ -11,7 +11,7 @@ import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent'
 import { useOrganization } from 'src/providers';
 import {
   searchAdHocObservations,
-  selectadHocObservationResults,
+  selectAdHocObservationResults,
 } from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import { AllPlantingSitesMapView } from 'src/scenes/ObservationsRouter/ObservationsDataView';
@@ -33,7 +33,7 @@ export default function BiomassMeasurement(props: BiomassMeasurementProps): JSX.
   const defaultTimeZone = useDefaultTimeZone();
   const { selectedPlantingSite } = props;
   const { ...searchProps }: SearchProps = props;
-  const unfilteredResults = useAppSelector(selectadHocObservationResults);
+  const unfilteredResults = useAppSelector(selectAdHocObservationResults);
   const unfilteredObservationsResults = useMemo(() => {
     if (!unfilteredResults || !selectedPlantingSite?.id) {
       return [];
