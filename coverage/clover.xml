@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1746482396344" clover="3.2.0">
-  <project timestamp="1746482396344" name="All files">
-    <metrics statements="30412" coveredstatements="1276" conditionals="20716" coveredconditionals="386" methods="9372" coveredmethods="209" elements="60500" coveredelements="1871" complexity="0" loc="30412" ncloc="30412" packages="258" files="1257" classes="1257"/>
+<coverage generated="1746545446792" clover="3.2.0">
+  <project timestamp="1746545446792" name="All files">
+    <metrics statements="30412" coveredstatements="1276" conditionals="20718" coveredconditionals="386" methods="9372" coveredmethods="209" elements="60502" coveredelements="1871" complexity="0" loc="30412" ncloc="30412" packages="258" files="1257" classes="1257"/>
     <package name="src">
       <metrics statements="177" coveredstatements="8" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -21763,7 +21763,7 @@
       </file>
     </package>
     <package name="src.scenes.FunderReport">
-      <metrics statements="53" coveredstatements="0" conditionals="80" coveredconditionals="0" methods="20" coveredmethods="0"/>
+      <metrics statements="53" coveredstatements="0" conditionals="82" coveredconditionals="0" methods="20" coveredmethods="0"/>
       <file name="FunderReportView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/FunderReport/FunderReportView.tsx">
         <metrics statements="49" coveredstatements="0" conditionals="58" coveredconditionals="0" methods="19" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
@@ -21817,7 +21817,7 @@
         <line num="222" count="0" type="stmt"/>
       </file>
       <file name="MetricBox.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/FunderReport/MetricBox.tsx">
-        <metrics statements="4" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <metrics statements="4" coveredstatements="0" conditionals="24" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>

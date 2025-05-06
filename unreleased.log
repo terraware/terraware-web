@@ -1,3 +1,4 @@
+e1792fea97e SW-6884 Need spacing between sections (#3955)
 2a2ad0aefaf SW-6879 Do not overwrite fields when reviewing report (#3953)
 2a6bf2d4b98 SW-6875 Added callback deps for updating phase (#3952)
 39c416833a7 SW-6878 Selecting "Not Needed" in Document Status dialog causes error (#3949)
