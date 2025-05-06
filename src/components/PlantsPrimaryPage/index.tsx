@@ -68,12 +68,12 @@ export default function PlantsPrimaryPage({
   }, [plantsSitePreferences, lastVisitedPreferenceName, selectedOrganization.id]);
 
   const plantingSitesList = useMemo((): PlantingSite[] => {
-    if (allowAllAsSiteSelection) {
-      return plantingSitesData;
-    } else {
-      return plantingSitesData.filter((site) => site.id !== -1);
-    }
-  }, [plantingSitesData, allowAllAsSiteSelection, selectedOrganization]);
+    const sitesWithAll = allowAllAsSiteSelection
+      ? plantingSitesData
+      : plantingSitesData.filter((site) => site.id !== -1);
+    const projectSites = projectId ? sitesWithAll.filter((site) => site.projectId === projectId) : sitesWithAll;
+    return projectSites;
+  }, [plantingSitesData, allowAllAsSiteSelection, selectedOrganization, projectId]);
 
   const setActivePlantingSite = useCallback(
     (site: PlantingSite | undefined) => {
