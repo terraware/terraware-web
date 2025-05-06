@@ -1,3 +1,6 @@
+6f7c8cd80a6 SW-6832 Use -2 id for rolled up view (#3956)
+b70bb6d22ab SW-6888 Spacing on top of metrics too large (#3960)
+db8ba9debd8 SW-6887 Highlight disappears when adding internal comments (#3959)
 f50539262df SW-6812: Add Deliverables tab to Project Profile in Console (Follow-up #2) (#3939)
 76b9ee17bb8 Updated translations from Phrase (#3950)
 89d3e16b836 SW-6881 % sign not showing for System Metric Mortality Rate numbers (#3954)
