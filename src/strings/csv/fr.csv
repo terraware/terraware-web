@@ -627,6 +627,7 @@ EXPANSION_POTENTIAL_DESCRIPTION,"Terrain éligible non encore sécurisé par des
 EXPANSION_POTENTIAL_HA,Potentiel d'expansion (ha),
 EXPERIENCE_AND_UNDERSTANDING,Expérience et compréhension,
 EXPORT,Exporter,
+EXPORT_ALL_ZIP,Tout exporter (ZIP),
 EXPORT_BIOMASS_MONITORING_DETAILS_CSV,Exporter les Détails de la Surveillance de la Biomasse (CSV),
 EXPORT_LOCATIONS,Exporter les emplacements,
 EXPORT_LOCATIONS_DISABLED_TOOLTIP,Les emplacements des parcelles sont déterminés au début de l'observation,

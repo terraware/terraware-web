@@ -627,6 +627,7 @@ EXPANSION_POTENTIAL_DESCRIPTION,"Terrenos elegibles aún no protegidos mediante 
 EXPANSION_POTENTIAL_HA,Potencial de expansión (ha),
 EXPERIENCE_AND_UNDERSTANDING,Experiencia y comprensión,
 EXPORT,Exportar,
+EXPORT_ALL_ZIP,Exportar todo (ZIP),
 EXPORT_BIOMASS_MONITORING_DETAILS_CSV,Exportar detalles del monitoreo de biomasa (CSV),
 EXPORT_LOCATIONS,Exportar ubicaciones,
 EXPORT_LOCATIONS_DISABLED_TOOLTIP,Las ubicaciones de las parcelas se determinan al comienzo de la observación,
