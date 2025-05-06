@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
@@ -145,10 +145,12 @@
 <a name='L80'></a><a href='#L80'>80</a>
 <a name='L81'></a><a href='#L81'>81</a>
 <a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -173,6 +175,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -227,7 +237,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo } from 'react';
 &nbsp;
 import { Box, Tooltip, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
@@ -235,16 +245,13 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 &nbsp;
 import { isReportSystemMetric } from 'src/components/AcceleratorReports/MetricBox';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
+import { useUser } from 'src/providers';
 import strings from 'src/strings';
-import {
-  PublishedReportMetric,
-  ReportProjectMetric,
-  ReportStandardMetric,
-  ReportSystemMetric,
-} from 'src/types/AcceleratorReport';
+import { PublishedReportMetric } from 'src/types/AcceleratorReport';
+import { useNumberFormatter } from 'src/utils/useNumber';
 &nbsp;
 type MetricBoxProps = {
-  metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric | PublishedReportMetric;
+  metric: PublishedReportMetric;
   index: number;
   year: string;
   quarter?: string;
@@ -254,6 +261,14 @@ type MetricBoxProps = {
 const MetricBox = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> metric, index, year, quarter, lastIndex }: MetricBoxProps) =&gt; {</span>
   const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+  const { user } = <span class="cstat-no" title="statement not covered" >useUser();</span>
+  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter();</span>
+  const numericFormatter = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >numberFormatter(user?.locale),</span> [numberFormatter, user?.locale]);</span>
+&nbsp;
+  const addPercentSign = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    return metric.name === 'Mortality Rate' ? '%' : '';</span>
+  }, [metric]);
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Box
       flexBasis={'calc(50% - 24px)'}
@@ -284,7 +299,7 @@ const MetricBox = <span class="cstat-no" title="statement not covered" ><span cl
             {year} {strings.TARGET}
           &lt;/Typography&gt;
           &lt;Typography fontSize={'24px'} fontWeight={600}&gt;
-            {metric.target}
+            {numericFormatter.format(metric.target)} {metric.target ? addPercentSign : ''}
           &lt;/Typography&gt;
         &lt;/Box&gt;
         &lt;Box flex='0 0 50%'&gt;
@@ -292,7 +307,7 @@ const MetricBox = <span class="cstat-no" title="statement not covered" ><span cl
             {quarter} {strings.PROGRESS}
           &lt;/Typography&gt;
           &lt;Typography fontSize={'24px'} fontWeight={600}&gt;
-            {isReportSystemMetric(metric) ? metric.overrideValue || metric.systemValue : metric.value}
+            {numericFormatter.format(metric.value)} {metric.value ? addPercentSign : ''}
           &lt;/Typography&gt;
         &lt;/Box&gt;
       &lt;/Box&gt;
@@ -316,7 +331,7 @@ export default MetricBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-06T15:30:46.097Z
+                at 2025-05-06T15:58:46.886Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

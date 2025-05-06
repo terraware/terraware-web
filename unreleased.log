@@ -1,3 +1,5 @@
+76b9ee17bb8 Updated translations from Phrase (#3950)
+89d3e16b836 SW-6881 % sign not showing for System Metric Mortality Rate numbers (#3954)
 e1792fea97e SW-6884 Need spacing between sections (#3955)
 2a2ad0aefaf SW-6879 Do not overwrite fields when reviewing report (#3953)
 2a6bf2d4b98 SW-6875 Added callback deps for updating phase (#3952)
