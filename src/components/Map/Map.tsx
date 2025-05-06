@@ -112,7 +112,8 @@ export default function Map(props: MapProps): JSX.Element {
     // `firstVisible` detects when the box containing the map is first visible in the viewport. The map should only be
     // rendered if `firstVisible` is true. This accounts for cases in which the map is initially rendered hidden, and
     // is improperly resized when it first becomes visible.
-    setFirstVisible((fv) => fv || visible);
+    // A timeout was added to fix non-static height maps, which were also improperly resized on initial render.
+    setTimeout(() => setFirstVisible((fv) => fv || visible), 200);
   }, [visible]);
 
   const loadImages = useCallback(
