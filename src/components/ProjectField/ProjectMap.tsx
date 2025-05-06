@@ -73,12 +73,13 @@ const ProjectMap = ({ application, countryCode, md }: ProjectMapProps) => {
   }, [application, getRenderAttributes]);
 
   const mapElement = useMemo(() => {
+    const style = { height: '100%', width: '100%', borderRadius: theme.spacing(1) };
     if (application?.boundary) {
       return (
         <GenericMap
           options={appBoundaryMapOptions}
           mapViewStyle={'Satellite'}
-          style={{ height: '100%', width: '100%', borderRadius: theme.spacing(1) }}
+          style={style}
           hideAllControls={true}
           bottomRightLabel={<ProjectFigureLabel labelText={strings.APPLICATION_SITE_BOUNDARY} />}
         />
@@ -88,7 +89,7 @@ const ProjectMap = ({ application, countryCode, md }: ProjectMapProps) => {
         <GenericMap
           options={countryMapOptions}
           mapViewStyle={'Light'}
-          style={{ height: '100%', width: '100%', borderRadius: theme.spacing(1) }}
+          style={style}
           hideAllControls={true}
           bottomRightLabel={<ProjectFigureLabel labelText={strings.COUNTRY_ONLY} />}
         />
@@ -98,7 +99,7 @@ const ProjectMap = ({ application, countryCode, md }: ProjectMapProps) => {
 
   return (
     <Grid item md={md || 12} paddingX={theme.spacing(1)}>
-      <Box display='flex' minHeight={'400px'} justifyContent={'center'} alignContent={'center'}>
+      <Box sx={{ display: 'flex', width: '100%', height: '100%', justifyContent: 'center', alignContent: 'center' }}>
         {mapElement}
       </Box>
     </Grid>
