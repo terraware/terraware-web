@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, Tooltip, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
@@ -7,15 +7,10 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import { isReportSystemMetric } from 'src/components/AcceleratorReports/MetricBox';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
 import strings from 'src/strings';
-import {
-  PublishedReportMetric,
-  ReportProjectMetric,
-  ReportStandardMetric,
-  ReportSystemMetric,
-} from 'src/types/AcceleratorReport';
+import { PublishedReportMetric } from 'src/types/AcceleratorReport';
 
 type MetricBoxProps = {
-  metric: ReportProjectMetric | ReportSystemMetric | ReportStandardMetric | PublishedReportMetric;
+  metric: PublishedReportMetric;
   index: number;
   year: string;
   quarter?: string;
@@ -25,6 +20,11 @@ type MetricBoxProps = {
 const MetricBox = ({ metric, index, year, quarter, lastIndex }: MetricBoxProps) => {
   const { isDesktop } = useDeviceInfo();
   const theme = useTheme();
+
+  const addPercentSign = useMemo(() => {
+    return metric.name === 'Mortality Rate' ? '%' : '';
+  }, [metric]);
+
   return (
     <Box
       flexBasis={'calc(50% - 24px)'}
@@ -54,7 +54,7 @@ const MetricBox = ({ metric, index, year, quarter, lastIndex }: MetricBoxProps) 
             {year} {strings.TARGET}
           </Typography>
           <Typography fontSize={'24px'} fontWeight={600}>
-            {metric.target}
+            {metric.target} {metric.target ? addPercentSign : ''}
           </Typography>
         </Box>
         <Box flex='0 0 50%'>
@@ -62,7 +62,7 @@ const MetricBox = ({ metric, index, year, quarter, lastIndex }: MetricBoxProps) 
             {quarter} {strings.PROGRESS}
           </Typography>
           <Typography fontSize={'24px'} fontWeight={600}>
-            {isReportSystemMetric(metric) ? metric.overrideValue || metric.systemValue : metric.value}
+            {metric.value} {metric.value ? addPercentSign : ''}
           </Typography>
         </Box>
       </Box>
