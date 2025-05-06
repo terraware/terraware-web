@@ -39,7 +39,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
@@ -232,19 +232,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -253,6 +243,20 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -261,19 +265,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -300,6 +295,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -347,6 +347,8 @@ export type PhotoSelectorWithPreviewProps = Omit&lt;PhotoDragDropProps, 'files' 
   error?: PhotoSelectorWithPreviewErrorType;
   previewUrl?: string;
   previewPlacement?: TooltipProps['placement'];
+  previewWidth?: number;
+  previewAspectRatio?: number;
 };
 &nbsp;
 export type FileWithUrl = {
@@ -361,6 +363,8 @@ export default function <span class="fstat-no" title="function not covered" >Pho
   error,
   previewUrl,
   previewPlacement = <span class="branch-0 cbranch-no" title="branch not covered" >'top-start',</span>
+  previewWidth,
+  previewAspectRatio,
   ...dragDropProps
 }: PhotoSelectorWithPreviewProps): JSX.Element {
   const [fileData, setFileData] = <span class="cstat-no" title="statement not covered" >useState&lt;FileWithUrl | undefined&gt;();</span>
@@ -381,7 +385,7 @@ export default function <span class="fstat-no" title="function not covered" >Pho
 <span class="cstat-no" title="statement not covered" >        URL.revokeObjectURL(fileData.url);</span>
       }
 <span class="cstat-no" title="statement not covered" >      if (files.length &gt; 0) {</span>
-        const file = <span class="cstat-no" title="statement not covered" >files[0];</span>
+        const file = <span class="cstat-no" title="statement not covered" >files[files.length - 1];</span>
         const fileUrl = <span class="cstat-no" title="statement not covered" >URL.createObjectURL(file);</span>
 <span class="cstat-no" title="statement not covered" >        setFileData({ file, url: fileUrl });</span>
       } else {
@@ -391,27 +395,18 @@ export default function <span class="fstat-no" title="function not covered" >Pho
     [fileData]
   );
 &nbsp;
-  const preview = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >      fileData ? (</span>
-        &lt;PhotoPreview
-          imgUrl={fileData.url}
-          imgAlt={fileData.file.name}
-          includeTrashIcon={true}
-          onTrashClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >handleSetFiles([])}</span>
-        /&gt;
-      ) : (
-        previewUrl &amp;&amp; (
-          &lt;PhotoPreview
-            imgUrl={previewUrl}
-            imgAlt={''}
-            includeTrashIcon={false}
-            onTrashClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >handleSetFiles([])}</span>
-          /&gt;
-        )
-      ),
-    [fileData, previewUrl, handleSetFiles]
-  );
+  const preview = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const args = <span class="cstat-no" title="statement not covered" >{</span>
+      imageWidth: previewWidth,
+      aspectRatio: previewAspectRatio,
+      onTrashClick: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >handleSetFiles([]),</span>
+    };
+<span class="cstat-no" title="statement not covered" >    return fileData ? (</span>
+      &lt;PhotoPreview imgUrl={fileData.url} imgAlt={fileData.file.name} includeTrashIcon={true} {...args} /&gt;
+    ) : (
+      previewUrl &amp;&amp; &lt;PhotoPreview imgUrl={previewUrl} imgAlt={''} includeTrashIcon={false} {...args} /&gt;
+    );
+  }, [fileData, previewUrl, handleSetFiles]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Box
@@ -449,7 +444,12 @@ export default function <span class="fstat-no" title="function not covered" >Pho
 &nbsp;
         &lt;PlacementWrapper placedObject={preview} objectPlacement={previewPlacement || 'top-start'}&gt;
           &lt;Box width={'100%'}&gt;
-            &lt;PhotoDragDrop {...dragDropProps} files={fileData ? [fileData.file] : []} setFiles={handleSetFiles} /&gt;
+            &lt;PhotoDragDrop
+              {...dragDropProps}
+              multipleSelection={false}
+              files={fileData ? [fileData.file] : []}
+              setFiles={handleSetFiles}
+            /&gt;
           &lt;/Box&gt;
         &lt;/PlacementWrapper&gt;
       &lt;/Box&gt;
@@ -463,7 +463,7 @@ export default function <span class="fstat-no" title="function not covered" >Pho
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-06T21:27:34.577Z
+                at 2025-05-06T21:42:24.764Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

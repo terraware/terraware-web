@@ -1,3 +1,4 @@
+e085fbe7b3c SW-6820 Make Project Profile images display consistently with aspect ratio of 3:2 (#3957)
 5fe0bc07e87 Allow placement of preview photo (#3951)
 6f7c8cd80a6 SW-6832 Use -2 id for rolled up view (#3956)
 b70bb6d22ab SW-6888 Spacing on top of metrics too large (#3960)
