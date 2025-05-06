@@ -6,7 +6,6 @@ import _ from 'lodash';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import { CachedUserService, PreferencesService } from 'src/services';
-import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
 import PlantsPrimaryPageView, { ButtonProps } from './PlantsPrimaryPageView';
@@ -17,7 +16,6 @@ export type PlantsPrimaryPageProps = {
   children: React.ReactNode; // primary content for this page
   isEmptyState?: boolean; // optional boolean to indicate this is an empty state view
   lastVisitedPreferenceName: string;
-  onSelect?: (plantingSite: PlantingSite) => void; // planting site selected, id of -1 refers to All
   pagePath: string;
   plantsSitePreferences?: Record<string, unknown>;
   plantingSitesData: PlantingSite[];
@@ -30,14 +28,8 @@ export type PlantsPrimaryPageProps = {
   latestObservationId?: number;
   projectId?: number;
   organizationId?: number;
+  onSelect: (plantingSiteId: number) => void;
 };
-
-const allSitesOption = (organizationId: number): PlantingSite => ({
-  name: strings.ALL,
-  id: -1,
-  organizationId,
-  plantingSeasons: [],
-});
 
 export default function PlantsPrimaryPage({
   actionButton,
@@ -45,7 +37,6 @@ export default function PlantsPrimaryPage({
   children,
   isEmptyState,
   lastVisitedPreferenceName,
-  onSelect,
   pagePath,
   plantsSitePreferences,
   plantingSitesData,
@@ -58,6 +49,7 @@ export default function PlantsPrimaryPage({
   latestObservationId,
   projectId,
   organizationId,
+  onSelect,
 }: PlantsPrimaryPageProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
@@ -77,30 +69,21 @@ export default function PlantsPrimaryPage({
 
   const plantingSitesList = useMemo((): PlantingSite[] => {
     if (allowAllAsSiteSelection) {
-      return [allSitesOption(selectedOrganization.id), ...plantingSitesData];
-    } else {
       return plantingSitesData;
+    } else {
+      return plantingSitesData.filter((site) => site.id !== -1);
     }
   }, [plantingSitesData, allowAllAsSiteSelection, selectedOrganization]);
 
   const setActivePlantingSite = useCallback(
     (site: PlantingSite | undefined) => {
       if (site) {
-        if (projectId) {
-          onSelect?.(site);
-          setSelectedPlantingSite(site);
-        } else {
+        setSelectedPlantingSite(site);
+        if (projectId === undefined) {
           navigate(pagePath.replace(':plantingSiteId', site.id.toString()));
         }
       } else {
-        const emptySite = {
-          id: -2,
-          name: '',
-          organizationId: 0,
-          plantingSeasons: [],
-        };
-        setSelectedPlantingSite(emptySite);
-        onSelect?.(emptySite);
+        setSelectedPlantingSite(undefined);
       }
     },
     [navigate, pagePath, projectId, setSelectedPlantingSite]
@@ -135,9 +118,8 @@ export default function PlantsPrimaryPage({
           setPlantsSitePreferences({ plantingSiteId: nextPlantingSiteId });
         }
 
-        if (nextPlantingSiteId === paramPlantingSiteId) {
+        if (nextPlantingSiteId === plantingSiteIdToUse) {
           setSelectedPlantingSite(nextPlantingSite);
-          onSelect?.(nextPlantingSite);
         } else {
           setActivePlantingSite(nextPlantingSite);
         }
@@ -146,7 +128,6 @@ export default function PlantsPrimaryPage({
 
     void initializePlantingSite();
   }, [
-    onSelect,
     plantingSitesList,
     plantingSiteId,
     setActivePlantingSite,
@@ -155,6 +136,12 @@ export default function PlantsPrimaryPage({
     setPlantsSitePreferences,
     organizationId,
   ]);
+
+  useEffect(() => {
+    if (selectedPlantingSite) {
+      onSelect(selectedPlantingSite.id);
+    }
+  }, [selectedPlantingSite, onSelect]);
 
   return (
     <PlantsPrimaryPageView

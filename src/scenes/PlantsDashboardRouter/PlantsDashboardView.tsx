@@ -21,7 +21,6 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
-import { PlantingSite } from 'src/types/Tracking';
 import { isAfter } from 'src/utils/dateUtils';
 
 import MortalityRateCard from './components/MortalityRateCard';
@@ -44,9 +43,9 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
 
   const {
     setAcceleratorOrganizationId,
+    setSelectedPlantingSite,
     allPlantingSites,
     plantingSite,
-    setSelectedPlantingSite,
     latestObservation,
     observationSummaries,
   } = usePlantingSiteData();
@@ -71,12 +70,6 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     );
   }, [plantingSite]);
 
-  const onSelect = useCallback(
-    (site: PlantingSite) => {
-      setSelectedPlantingSite(site.id);
-    },
-    [setSelectedPlantingSite]
-  );
   const onPreferences = useCallback(
     (preferences: Record<string, unknown>) => setPlantsDashboardPreferences(preferences),
     [setPlantsDashboardPreferences]
@@ -365,11 +358,17 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
         ) as string);
   }, [plantingSite, observationSummaries, observationHectares]);
 
+  const onSelect = useCallback(
+    (plantingSiteId: number) => {
+      setSelectedPlantingSite(plantingSiteId);
+    },
+    [setSelectedPlantingSite]
+  );
+
   return (
     <PlantsPrimaryPage
       title={strings.DASHBOARD}
       text={latestObservationId ? getDashboardSubhead() : undefined}
-      onSelect={onSelect}
       pagePath={
         projectId
           ? APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', projectId.toString())
@@ -385,6 +384,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
       projectId={projectId}
       organizationId={organizationId}
       isEmptyState={plantingSite === undefined}
+      onSelect={onSelect}
     >
       <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
         {renderTotalPlantsAndSpecies()}

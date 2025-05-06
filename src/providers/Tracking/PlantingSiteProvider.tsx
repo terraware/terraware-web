@@ -18,10 +18,11 @@ import {
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
 import { Observation, ObservationResultsPayload, ObservationSummary } from 'src/types/Observations';
 import { PlantingSite } from 'src/types/Tracking';
 
-import { useOrganization } from '../hooks';
+import { useLocalization, useOrganization } from '../hooks';
 import { PlantingSiteContext, PlantingSiteData } from './PlantingSiteContext';
 
 export type Props = {
@@ -31,6 +32,7 @@ export type Props = {
 const PlantingSiteProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { activeLocale } = useLocalization();
 
   const { selectedOrganization } = useOrganization();
   const [acceleratorOrganizationId, setAcceleratorOrganizationId] = useState<number>();
@@ -56,15 +58,30 @@ const PlantingSiteProvider = ({ children }: Props) => {
   const adHocResultsResponse = useAppSelector(selectPlantingSiteAdHocObservationResultsRequest(adHocResultsRequestId));
   const summariesResponse = useAppSelector(selectPlantingSiteObservationSummaries(summariesRequestId));
 
+  const allSitesOption = useMemo(() => {
+    const orgId = isAcceleratorRoute ? acceleratorOrganizationId : selectedOrganization.id;
+    if (activeLocale && orgId) {
+      return {
+        name: strings.ALL,
+        id: -1,
+        organizationId: orgId,
+        plantingSeasons: [],
+      };
+    }
+  }, [activeLocale, isAcceleratorRoute, acceleratorOrganizationId, selectedOrganization]);
+
   useEffect(() => {
     const orgId = isAcceleratorRoute ? acceleratorOrganizationId : selectedOrganization.id;
     if (orgId) {
       void dispatch(requestPlantingSites(orgId));
       _setSelectedPlantingSite(undefined);
     }
-  }, [isAcceleratorRoute, acceleratorOrganizationId, selectedOrganization]);
+  }, [dispatch, isAcceleratorRoute, acceleratorOrganizationId, selectedOrganization, _setSelectedPlantingSite]);
 
-  const allPlantingSites = useMemo(() => plantingSitesResults ?? [], [plantingSitesResults]);
+  const allPlantingSites = useMemo(
+    () => (plantingSitesResults && allSitesOption ? [...plantingSitesResults, allSitesOption] : []),
+    [plantingSitesResults]
+  );
 
   // Function to select a planting site
   const setSelectedPlantingSite = useCallback(
