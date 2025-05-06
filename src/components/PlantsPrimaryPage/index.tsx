@@ -84,7 +84,7 @@ export default function PlantsPrimaryPage({
     const populatePlantingSites = async () => {
       let plantingSitesList: PlantingSite[] | undefined = plantingSitesData;
       if (plantingSitesList === undefined && (selectedOrganization.id !== -1 || organizationId)) {
-        const orgIdToUse = selectedOrganization.id !== -1 ? selectedOrganization.id : organizationId;
+        const orgIdToUse = organizationId ? organizationId : selectedOrganization.id;
         const serverResponse = await TrackingService.listPlantingSites(orgIdToUse ?? -1, undefined, activeLocale);
         if (serverResponse.requestSucceeded) {
           plantingSitesList = projectId
@@ -121,6 +121,15 @@ export default function PlantsPrimaryPage({
         } else {
           navigate(pagePath.replace(':plantingSiteId', site.id.toString()));
         }
+      } else {
+        const emptySite = {
+          id: -2,
+          name: '',
+          organizationId: 0,
+          plantingSeasons: [],
+        };
+        setSelectedPlantingSite(emptySite);
+        onSelect(emptySite);
       }
     },
     [navigate, pagePath, projectId]
@@ -187,6 +196,7 @@ export default function PlantsPrimaryPage({
       newHeader={newHeader}
       showGeometryNote={showGeometryNote}
       latestObservationId={latestObservationId}
+      projectId={projectId}
     />
   );
 }
