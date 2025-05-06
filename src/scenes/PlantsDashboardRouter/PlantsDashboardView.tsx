@@ -8,6 +8,7 @@ import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
@@ -28,7 +29,6 @@ import PlantingDensityCard from './components/PlantingDensityCard';
 import PlantingSiteTrendsCard from './components/PlantingSiteTrendsCard';
 import PlantsAndSpeciesCard from './components/PlantsAndSpeciesCard';
 import ZoneLevelDataMap from './components/ZoneLevelDataMap';
-import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 
 type PlantsDashboardViewProps = {
   projectId?: number;
