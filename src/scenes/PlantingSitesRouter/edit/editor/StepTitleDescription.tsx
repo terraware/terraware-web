@@ -59,7 +59,7 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
   const onClose = (dontShowAgain?: boolean) => {
     setShowModal(false);
     if (dontShowAgain && !!dontShowAgainPreferenceName) {
-      updateUserPreferences({ ...userPreferences, [dontShowAgainPreferenceName]: true });
+      void updateUserPreferences({ ...userPreferences, [dontShowAgainPreferenceName]: true });
     }
   };
 

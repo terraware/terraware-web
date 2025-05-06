@@ -23,7 +23,7 @@ const MyAccountRouter = ({ className, hasNav }: Props) => {
             edit={true}
             hasNav={hasNav}
             organizations={organizations}
-            reloadData={reloadOrganizations}
+            reloadData={() => void reloadOrganizations()}
           />
         }
       />

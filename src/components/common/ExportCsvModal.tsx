@@ -51,7 +51,7 @@ export default function ExportCsvModal(props: ExportCsvModalProps): JSX.Element 
           key='button-1'
           id='cancelDownloadReport'
         />,
-        <Button label={strings.EXPORT} onClick={handleOk} key='button-2' id='downloadButton' />,
+        <Button label={strings.EXPORT} onClick={() => void handleOk()} key='button-2' id='downloadButton' />,
       ]}
       message={strings.DOWNLOAD_REPORT_DESCRIPTION}
     >

@@ -72,7 +72,7 @@ const AccessionsView = ({}: AccessionsViewProps) => {
       setDisplayColumnNames={setAccessionsDisplayColumns}
       hasSeedBanks={selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')}
       hasSpecies={(speciesResponse?.data?.species || []).length > 0}
-      reloadData={reloadOrganizations}
+      reloadData={() => void reloadOrganizations()}
     />
   );
 };

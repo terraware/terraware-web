@@ -109,7 +109,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
 
   const fetchBatch = useCallback(() => {
     if (batchId) {
-      dispatch(requestFetchBatch({ batchId }));
+      void dispatch(requestFetchBatch({ batchId }));
     }
   }, [batchId, dispatch]);
 

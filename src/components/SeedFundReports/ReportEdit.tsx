@@ -108,7 +108,7 @@ export default function ReportEdit(): JSX.Element {
       }
     };
 
-    const interval = setInterval(getReport, 60000);
+    const interval = setInterval(() => void getReport(), 60000);
 
     // Clean up existing interval.
     return () => {
@@ -351,7 +351,7 @@ export default function ReportEdit(): JSX.Element {
         await updatePhotos(report.id);
         const submitResult = await SeedFundReportService.submitReport(reportIdInt);
         if (submitResult.requestSucceeded && reportId && selectedOrganization.id !== -1) {
-          reloadOrganizations(selectedOrganization.id);
+          void reloadOrganizations(selectedOrganization.id);
           navigate({ pathname: APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', reportId) }, { replace: true });
         } else {
           snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SUBMIT);
@@ -380,7 +380,7 @@ export default function ReportEdit(): JSX.Element {
     rightButtons.push({
       id: 'backToQuarterly',
       text: strings.BACK,
-      onClick: handleBack,
+      onClick: () => void handleBack(),
       disabled: false,
       buttonType: 'passive',
     });
@@ -388,7 +388,7 @@ export default function ReportEdit(): JSX.Element {
   rightButtons.push({
     id: 'saveAndCloseReport',
     text: strings.REPORT_SAVE_AND_CLOSE,
-    onClick: () => gotoReportView(true),
+    onClick: () => void gotoReportView(true),
     disabled: false,
     buttonType: 'passive',
   });
@@ -495,7 +495,7 @@ export default function ReportEdit(): JSX.Element {
       <SubmitConfirmationDialog
         open={confirmSubmitDialogOpen}
         onClose={() => setConfirmSubmitDialogOpen(false)}
-        onSubmit={submitReport}
+        onSubmit={() => void submitReport()}
       />
       {busyState && <BusySpinner withSkrim={true} />}
       <Box padding={theme.spacing(3)}>
@@ -507,8 +507,14 @@ export default function ReportEdit(): JSX.Element {
         <PageForm
           cancelID='cancelEdits'
           saveID='submitReport'
-          onCancel={() => gotoReportView(false)}
-          onSave={report.isAnnual ? (showAnnual ? handleSubmitButton : handleSaveAndNext) : handleSubmitButton}
+          onCancel={() => void gotoReportView(false)}
+          onSave={() =>
+            report.isAnnual
+              ? showAnnual
+                ? void handleSubmitButton()
+                : void handleSaveAndNext()
+              : void handleSubmitButton()
+          }
           saveButtonText={
             report.isAnnual ? (showAnnual ? strings.REPORT_SUBMIT : strings.SAVE_AND_NEXT) : strings.REPORT_SUBMIT
           }

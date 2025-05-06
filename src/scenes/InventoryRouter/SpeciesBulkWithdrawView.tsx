@@ -46,7 +46,7 @@ export default function SpeciesBulkWithdrawView(props: SpeciesBulkWithdrawViewCo
       }
     };
 
-    populateResults();
+    void populateResults();
   }, [speciesIds, navigate, selectedOrganization.id]);
 
   return batchIds ? (

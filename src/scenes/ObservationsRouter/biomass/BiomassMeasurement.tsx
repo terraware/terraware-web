@@ -110,7 +110,7 @@ export default function BiomassMeasurement(props: BiomassMeasurementProps): JSX.
             )
           }
           onView={setView}
-          search={<Search {...searchProps} filtersProps={undefined} onExport={exportObservationsList} />}
+          search={<Search {...searchProps} filtersProps={undefined} onExport={() => void exportObservationsList()} />}
           style={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}
         />
       ) : (

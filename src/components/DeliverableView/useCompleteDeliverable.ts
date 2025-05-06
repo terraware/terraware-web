@@ -69,7 +69,7 @@ export default function useCompleteDeliverable(): Response {
       if (isApplicationConsole || isApplicationPortal) {
         reload();
       } else {
-        dispatch(requestGetDeliverable({ deliverableId: lastRequest.id, projectId: lastRequest.projectId }));
+        void dispatch(requestGetDeliverable({ deliverableId: lastRequest.id, projectId: lastRequest.projectId }));
       }
     }
   }, [dispatch, isApplicationConsole, isApplicationPortal, lastRequest, reload, result, snackbar]);

@@ -78,7 +78,7 @@ export const requestUpdateParticipant = createAsyncThunk(
     const response: Response = await ParticipantsService.update(participantId, request);
 
     if (response && response.requestSucceeded) {
-      dispatch(requestGetParticipant(participantId));
+      void dispatch(requestGetParticipant(participantId));
       return true;
     }
 

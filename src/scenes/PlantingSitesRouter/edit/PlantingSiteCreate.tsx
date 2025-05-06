@@ -151,7 +151,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
         cancelID='cancelCreatePlantingSite'
         saveID='saveCreatePlantingSite'
         onCancel={() => goToPlantingSite(record.id)}
-        onSave={onSave}
+        onSave={() => void onSave()}
         style={{
           display: 'flex',
           flexGrow: 1,

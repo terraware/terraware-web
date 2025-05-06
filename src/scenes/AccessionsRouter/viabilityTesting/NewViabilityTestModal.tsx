@@ -91,7 +91,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
           setUsers(response.users);
         }
       };
-      getOrgUsers();
+      void getOrgUsers();
     }
   }, [selectedOrganization]);
 
@@ -497,7 +497,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             priority='secondary'
             key='button-1'
           />,
-          <Button id='saveNewViabilityTest' onClick={saveTest} label={strings.SAVE} key='button-2' />,
+          <Button id='saveNewViabilityTest' onClick={() => void saveTest()} label={strings.SAVE} key='button-2' />,
         ]}
         scrolled={true}
       >

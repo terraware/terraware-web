@@ -124,7 +124,12 @@ export default function OrganizationView({ organization, reloadOrganizationData 
 
   return (
     <TfMain>
-      <PageForm cancelID='cancelEditOrg' saveID='saveEditOrg' onCancel={goToOrganization} onSave={saveOrganization}>
+      <PageForm
+        cancelID='cancelEditOrg'
+        saveID='saveEditOrg'
+        onCancel={goToOrganization}
+        onSave={() => void saveOrganization()}
+      >
         <Box margin={theme.spacing(0, 3, 4, 3)}>
           <Box display='flex' flexDirection='column' justifyContent='space-between' marginBottom={theme.spacing(1)}>
             <Typography margin={0} fontSize='24px' fontWeight={600}>

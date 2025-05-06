@@ -73,7 +73,7 @@ export default function ReportsSettings(): JSX.Element {
 
   useEffect(() => {
     if (projectId) {
-      dispatch(requestProjectReportConfig(projectId));
+      void dispatch(requestProjectReportConfig(projectId));
     }
   }, [projectId]);
 

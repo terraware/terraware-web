@@ -82,7 +82,7 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
       }
     };
 
-    refreshSearch();
+    void refreshSearch();
   }, [debouncedSearchTerm, organization, timeZones, defaultTimeZone]);
 
   return (

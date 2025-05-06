@@ -42,7 +42,7 @@ export default function CohortEditView(): JSX.Element {
 
   useEffect(() => {
     if (!cohort) {
-      dispatch(requestCohort({ cohortId }));
+      void dispatch(requestCohort({ cohortId }));
     }
   }, [cohortId, cohort, dispatch]);
 
@@ -97,7 +97,7 @@ export default function CohortEditView(): JSX.Element {
     ) {
       // If all non-null requests are successful, show success snackbar and navigate.
       snackbar.toastSuccess(strings.CHANGES_SAVED, strings.SAVED);
-      dispatch(requestCohort({ cohortId }));
+      void dispatch(requestCohort({ cohortId }));
       goToCohortView();
     }
   }, [

@@ -84,7 +84,7 @@ export default function ReplaceObservationPlotModal(props: ReplaceObservationPlo
       setAddedPlotIds(addedMonitoringPlotIds);
       setRemovedPlotIds(removedMonitoringPlotIds);
       snackbar.toastSuccess(strings.REASSIGNMENT_REQUEST_SENT);
-      dispatch(requestObservationsResults(selectedOrganization.id));
+      void dispatch(requestObservationsResults(selectedOrganization.id));
       const dispatched = dispatch(
         requestMonitoringPlots({
           plantingSiteId,

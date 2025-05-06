@@ -114,7 +114,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
           setUsers(response.users);
         }
       };
-      getOrgUsers();
+      void getOrgUsers();
     }
   }, [selectedOrganization]);
 
@@ -264,7 +264,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
         />,
         <Button
           id='saveWithdraw'
-          onClick={saveWithdrawal}
+          onClick={() => void saveWithdrawal()}
           label={strings.WITHDRAW}
           key='button-2'
           disabled={!withdrawalValid}

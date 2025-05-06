@@ -44,7 +44,7 @@ const VotingProvider = ({ children }: Props): JSX.Element => {
     if (isNaN(projectId)) {
       goToProjects();
     } else {
-      dispatch(requestProjectVotesGet(projectId));
+      void dispatch(requestProjectVotesGet(projectId));
     }
   }, [dispatch, goToProjects, projectId]);
 

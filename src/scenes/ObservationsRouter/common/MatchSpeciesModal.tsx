@@ -14,6 +14,7 @@ import { MergeOtherSpeciesPayload } from 'src/types/Species';
 import useForm from 'src/utils/useForm';
 
 export type MergeOtherSpeciesPayloadPartial = Partial<MergeOtherSpeciesPayload>;
+
 export interface MatchSpeciesModalProps {
   onClose: () => void;
   onSave: (mergeOtherSpeciesPayloads: MergeOtherSpeciesPayloadPartial[]) => void;
@@ -33,7 +34,7 @@ export default function MatchSpeciesModal(props: MatchSpeciesModalProps): JSX.El
 
   useEffect(() => {
     if (!speciesResponse?.data?.species && selectedOrganization.id !== -1) {
-      dispatch(requestSpecies(selectedOrganization.id));
+      void dispatch(requestSpecies(selectedOrganization.id));
     }
   }, [dispatch, speciesResponse?.data?.species, selectedOrganization]);
 

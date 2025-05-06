@@ -46,7 +46,7 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
     // close the modal and refresh deliverable even in case of error, there may have been partial successes
     onClose();
     if (!isApplicationPortal) {
-      dispatch(requestGetDeliverable({ deliverableId: deliverable.id, projectId: deliverable.projectId }));
+      void dispatch(requestGetDeliverable({ deliverableId: deliverable.id, projectId: deliverable.projectId }));
     } else {
       reload();
     }

@@ -53,7 +53,7 @@ export default function DeleteAccountModal({ onCancel }: DeleteAccountModalProps
             label={strings.DELETE_ACCOUNT}
             icon='iconTrashCan'
             type='destructive'
-            onClick={deleteUser}
+            onClick={() => void deleteUser()}
             size='medium'
             key='button-2'
           />,

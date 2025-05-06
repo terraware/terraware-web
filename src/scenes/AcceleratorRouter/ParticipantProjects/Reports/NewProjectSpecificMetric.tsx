@@ -49,7 +49,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
 
   useEffect(() => {
     if (projectId) {
-      dispatch(requestProjectReportConfig(projectId));
+      void dispatch(requestProjectReportConfig(projectId));
     }
   }, [projectId]);
 

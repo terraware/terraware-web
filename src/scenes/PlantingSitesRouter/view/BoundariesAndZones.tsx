@@ -186,8 +186,8 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
   }, []);
 
   useEffect(() => {
-    dispatch(requestObservationsResults(selectedOrganization.id));
-    dispatch(requestObservations(selectedOrganization.id));
+    void dispatch(requestObservationsResults(selectedOrganization.id));
+    void dispatch(requestObservations(selectedOrganization.id));
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {

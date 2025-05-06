@@ -114,7 +114,7 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
           id='saveChangeQuantity'
           label={strings.SAVE}
           type='productive'
-          onClick={onSubmit}
+          onClick={() => void onSubmit()}
           size='medium'
           key='button-2'
         />,

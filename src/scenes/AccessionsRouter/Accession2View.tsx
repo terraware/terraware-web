@@ -122,7 +122,7 @@ export default function Accession2View(): JSX.Element {
     };
 
     if (accessionId !== undefined) {
-      populateAccession();
+      void populateAccession();
     } else {
       setAccession(undefined);
     }
@@ -522,7 +522,7 @@ export default function Accession2View(): JSX.Element {
               {!isMobile && userCanEdit && (
                 <Box display='flex' alignItems='center'>
                   {accession && isAwaitingCheckin ? (
-                    <Button onClick={() => checkInAccession()} label={strings.CHECK_IN} size='small' />
+                    <Button onClick={() => void checkInAccession()} label={strings.CHECK_IN} size='small' />
                   ) : (
                     renderWithdrawalButton()
                   )}
@@ -538,7 +538,7 @@ export default function Accession2View(): JSX.Element {
                 <Box paddingLeft={2} width='100%'>
                   {accession && isAwaitingCheckin ? (
                     <Button
-                      onClick={() => checkInAccession()}
+                      onClick={() => void checkInAccession()}
                       label={strings.CHECK_IN}
                       size='medium'
                       style={fullSizeButtonStyles}
@@ -624,7 +624,7 @@ export default function Accession2View(): JSX.Element {
               entity={accession}
               reloadData={reloadData}
               projectAssignPayloadCreator={() => ({ accessionIds: [accession.id] })}
-              onUnAssign={onProjectUnAssign}
+              onUnAssign={() => void onProjectUnAssign()}
             />
           </Grid>
         )}

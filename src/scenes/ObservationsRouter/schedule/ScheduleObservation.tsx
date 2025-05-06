@@ -51,7 +51,7 @@ export default function ScheduleObservation(): JSX.Element {
 
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
-      dispatch(requestPlantings(selectedOrganization.id));
+      void dispatch(requestPlantings(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization.id]);
 
@@ -67,7 +67,7 @@ export default function ScheduleObservation(): JSX.Element {
       snackbar.toastError();
     } else if (result?.status === 'success' && selectedOrganization.id !== -1) {
       snackbar.toastSuccess(strings.OBSERVATION_SCHEDULED);
-      dispatch(requestObservations(selectedOrganization.id));
+      void dispatch(requestObservations(selectedOrganization.id));
       goToObservations();
     }
   }, [dispatch, goToObservations, selectedOrganization.id, snackbar, result?.status]);
@@ -90,7 +90,7 @@ export default function ScheduleObservation(): JSX.Element {
       onEndDate={(date) => setEndDate(date)}
       onErrors={onErrors}
       onPlantingSiteId={(id) => setPlantingSiteId(id)}
-      onSave={scheduleObservation}
+      onSave={() => void scheduleObservation()}
       onStartDate={(date) => setStartDate(date)}
       saveID='scheduleObservation'
       selectedPlantingSite={selectedPlantingSite}

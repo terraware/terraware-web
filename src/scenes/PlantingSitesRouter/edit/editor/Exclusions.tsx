@@ -135,7 +135,7 @@ export default function Exclusions({ onValidate, site }: ExclusionsProps): JSX.E
       <EditableMap
         editableBoundary={exclusions}
         errorAnnotations={exclusionsData?.errorAnnotations}
-        onEditableBoundaryChanged={onEditableBoundaryChanged}
+        onEditableBoundaryChanged={(editableBoundary) => void onEditableBoundaryChanged(editableBoundary)}
         onRedo={redo}
         onUndo={undo}
         readOnlyBoundary={readOnlyBoundary}

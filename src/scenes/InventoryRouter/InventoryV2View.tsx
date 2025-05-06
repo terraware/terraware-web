@@ -313,7 +313,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
         {isOnboarded ? (
           <Tabs
             activeTab={activeTab}
-            onTabChange={onTabChange}
+            onTabChange={(newTab) => void onTabChange(newTab)}
             tabs={[
               {
                 id: InventoryListTypes.BATCHES_BY_SPECIES,

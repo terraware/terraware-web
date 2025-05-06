@@ -59,8 +59,8 @@ export function PlantingSitesRouter({ reloadTracking }: PlantingSitesProps): JSX
   useEffect(() => {
     const siteId = Number(plantingSiteId);
     if (!isNaN(siteId) && selectedOrganization.id !== -1) {
-      dispatch(requestPlantingSiteObservationsResults(selectedOrganization.id, siteId));
-      dispatch(requestPlantings(selectedOrganization.id));
+      void dispatch(requestPlantingSiteObservationsResults(selectedOrganization.id, siteId));
+      void dispatch(requestPlantings(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization.id, plantingSiteId]);
 

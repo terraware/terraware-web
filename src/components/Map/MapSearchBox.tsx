@@ -77,7 +77,7 @@ const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
         clear();
       }
     } else {
-      fetchSuggestions(debouncedValue);
+      void fetchSuggestions(debouncedValue);
     }
   }, [clear, debouncedValue, fetchSuggestions, suggestText]);
 
@@ -92,7 +92,7 @@ const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
       } else {
         // When user selects from the dropdown option
         setValue(value.label);
-        onSelectSuggestion(value.value);
+        void onSelectSuggestion(value.value);
       }
     },
     [setValue, onSelectSuggestion]

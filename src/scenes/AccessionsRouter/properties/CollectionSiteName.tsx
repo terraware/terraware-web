@@ -22,7 +22,7 @@ export default function CollectionSiteName({ collectionSiteName = '', onChange }
       const populateCollectionSiteNames = async () => {
         setOptions(await SeedBankService.getCollectionSiteNames(selectedOrganization.id));
       };
-      populateCollectionSiteNames();
+      void populateCollectionSiteNames();
     }
   }, [selectedOrganization]);
 

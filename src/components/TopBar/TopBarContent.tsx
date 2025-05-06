@@ -108,7 +108,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         <KnowledgeBaseLink />
         <NotificationsDropdown
           organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}
-          reloadOrganizationData={reloadOrganizations}
+          reloadOrganizationData={() => void reloadOrganizations()}
         />
         {userFundingEntity && <SettingsLink />}
         <div style={separatorStyles} />
@@ -149,7 +149,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         <KnowledgeBaseLink />
         <NotificationsDropdown
           organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}
-          reloadOrganizationData={reloadOrganizations}
+          reloadOrganizationData={() => void reloadOrganizations()}
         />
         <SmallDeviceUserMenu onLogout={onHandleLogout} hasOrganizations={organizations && organizations.length > 0} />
       </Grid>

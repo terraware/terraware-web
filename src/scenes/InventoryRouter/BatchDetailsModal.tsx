@@ -97,7 +97,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
       }
     };
 
-    getPhotos();
+    void getPhotos();
   }, [batch, snackbar]);
 
   useEffect(() => {
@@ -211,7 +211,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
           priority='secondary'
           key='button-1'
         />,
-        <Button id='saveBatchDetails' onClick={saveBatch} label={strings.SAVE} key='button-2' />,
+        <Button id='saveBatchDetails' onClick={() => void saveBatch()} label={strings.SAVE} key='button-2' />,
       ]}
       scrolled={true}
     >

@@ -152,7 +152,7 @@ export function OrderPreserveableTable<T extends TableRowType>(
     ...tableProps,
     id,
     columns,
-    onReorderEnd: reorderHandler,
+    onReorderEnd: (reorderedColumns) => void reorderHandler(reorderedColumns),
   });
 }
 

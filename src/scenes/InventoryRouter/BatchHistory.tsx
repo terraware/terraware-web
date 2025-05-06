@@ -121,7 +121,7 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
           setUsers(usersById);
         }
       };
-      fetchUsers();
+      void fetchUsers();
     }
   }, [selectedOrganization.id]);
 
@@ -205,7 +205,7 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
         }
       };
 
-      fetchResults();
+      void fetchResults();
     }
   }, [users, batchId, findPreviousEvent, nurseryName, filters, search]);
 

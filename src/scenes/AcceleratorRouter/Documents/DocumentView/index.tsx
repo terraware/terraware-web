@@ -127,7 +127,12 @@ export default function DocumentView(): JSX.Element {
             priority='secondary'
             onClick={onDismissUpgradeManifest}
           />,
-          <Button key='upgrade-manifest' label={strings.UPDATE} priority='primary' onClick={onUpgradeManifest} />,
+          <Button
+            key='upgrade-manifest'
+            label={strings.UPDATE}
+            priority='primary'
+            onClick={() => void onUpgradeManifest()}
+          />,
         ]}
       />
       <Box

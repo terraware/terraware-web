@@ -292,7 +292,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       result.rare = { partial: false, values: [strings.YES, strings.NO] };
       setFilterOptions(result);
     };
-    getApiSearchResults();
+    void getApiSearchResults();
   }, [selectedOrganization, results]);
 
   const [selectedColumns, setSelectedColumns] = useForm(columns);
@@ -473,7 +473,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   }, [query, setCheckDataModalOpen, navigate]);
 
   useEffect(() => {
-    onApplyFilters();
+    void onApplyFilters();
   }, [onApplyFilters]);
 
   const onNewSpecies = () => {
@@ -522,7 +522,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     } else {
       setSelectedColumns(columns);
     }
-    onApplyFilters(true);
+    void onApplyFilters(true);
   };
 
   const reloadDataProblemsHandler = async () => {

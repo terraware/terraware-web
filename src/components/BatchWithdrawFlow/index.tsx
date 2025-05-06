@@ -219,7 +219,9 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
           filterProjectId={filterProjectId}
         />
       )}
-      {flowState === 'photos' && <AddPhotos onNext={withdraw} onCancel={goToInventory} saveText={strings.WITHDRAW} />}
+      {flowState === 'photos' && (
+        <AddPhotos onNext={(photos) => void withdraw(photos)} onCancel={goToInventory} saveText={strings.WITHDRAW} />
+      )}
       <EmptyBatchesInfoModal
         open={showEmptyBatchesModalFor !== null}
         onClose={() => onWithdrawSuccess(showEmptyBatchesModalFor)}

@@ -76,7 +76,7 @@ const OverviewItemCardSubLocations = (props: OverviewItemCardSubLocationsProps) 
         setBatch(nextBatch);
       }
       // Since we've updated the batch, we want to make sure any consumers are updated
-      dispatch(requestFetchBatch({ batchId: batch.id }));
+      void dispatch(requestFetchBatch({ batchId: batch.id }));
     } else if (batchesRequest?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }

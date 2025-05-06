@@ -49,7 +49,7 @@ export const requestUpdateGlobalRolesUser = createAsyncThunk(
 
     const response: Response = await GlobalRolesService.update(user, globalRoles);
     if (response && response.requestSucceeded) {
-      dispatch(requestGetUser(user.id));
+      void dispatch(requestGetUser(user.id));
       return user.id;
     }
 

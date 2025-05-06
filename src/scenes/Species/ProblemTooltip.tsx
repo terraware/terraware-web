@@ -62,12 +62,12 @@ export default function ProblemTooltip({
 
   const handleIgnore = (problemId: number, e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e?.stopPropagation();
-    ignoreFix(problemId);
+    void ignoreFix(problemId);
   };
 
   const handleAccept = (problemId: number, e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e?.stopPropagation();
-    acceptFix(problemId);
+    void acceptFix(problemId);
   };
 
   const handleEdit = (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {

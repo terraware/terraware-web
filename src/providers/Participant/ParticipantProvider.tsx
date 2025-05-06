@@ -63,7 +63,7 @@ const ParticipantProvider = ({ children }: Props) => {
       setOrgHasModules(undefined);
       setOrgHasParticipants(undefined);
       setParticipantProjects([]);
-      dispatch(requestProjects(selectedOrganization.id, activeLocale));
+      void dispatch(requestProjects(selectedOrganization.id, activeLocale));
     }
   }, [activeLocale, dispatch, selectedOrganization]);
 

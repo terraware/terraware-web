@@ -68,7 +68,7 @@ export default function MultiLineComponentNonEditable({
 
   useEffect(() => {
     if (ownerId && ownerId !== -1) {
-      dispatch(requestGetUser(ownerId));
+      void dispatch(requestGetUser(ownerId));
     }
   }, [ownerId]);
 

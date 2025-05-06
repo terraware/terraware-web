@@ -431,7 +431,7 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
         errorAnnotations={subzonesData?.errorAnnotations}
         featureSelectorOnClick={featureSelectorOnClick}
         isSliceTool
-        onEditableBoundaryChanged={onEditableBoundaryChanged}
+        onEditableBoundaryChanged={(editableBoundary) => void onEditableBoundaryChanged(editableBoundary)}
         onRedo={redo}
         onUndo={undo}
         overridePopupInfo={overridePopupInfo}

@@ -24,7 +24,7 @@ export const requestUpdateUserInternalInterests = createAsyncThunk(
 
     const response = await UserInternalInterestsService.update(user, internalInterests);
     if (response && response.requestSucceeded) {
-      dispatch(requestGetUserInternalInterests(user.id));
+      void dispatch(requestGetUserInternalInterests(user.id));
       return user.id;
     }
 

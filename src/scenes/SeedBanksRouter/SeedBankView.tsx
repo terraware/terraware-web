@@ -130,7 +130,7 @@ export default function SeedBankView(): JSX.Element {
         if (editedSubLocations) {
           await SubLocationService.saveEditedSubLocations(selectedSeedBank.id, editedSubLocations);
         }
-        reloadOrganizations(selectedOrganization.id);
+        void reloadOrganizations(selectedOrganization.id);
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
         snackbar.toastError();
@@ -175,7 +175,7 @@ export default function SeedBankView(): JSX.Element {
         cancelID='cancelCreateSeedBank'
         saveID='saveCreateSeedBank'
         onCancel={() => goToSeedBank(selectedSeedBank?.id)}
-        onSave={saveSeedBank}
+        onSave={() => void saveSeedBank()}
       >
         <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
           <Typography fontSize='24px' fontWeight={600}>

@@ -112,7 +112,7 @@ export default function NurseryWithdrawalsDetailsView({
       }
     };
 
-    updateWithdrawal();
+    void updateWithdrawal();
   }, [selectedOrganization, withdrawalId, snackbar, reload]);
 
   const contentPanelProps = {

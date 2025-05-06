@@ -56,7 +56,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
     };
 
     if (batch) {
-      getPhotos();
+      void getPhotos();
     }
   }, [batch, snackbar]);
 

@@ -81,7 +81,7 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
 
   useEffect(() => {
     if (plantingSiteId !== -1) {
-      dispatch(requestSitePopulation(org.selectedOrganization.id, plantingSiteId));
+      void dispatch(requestSitePopulation(org.selectedOrganization.id, plantingSiteId));
     }
   }, [dispatch, org.selectedOrganization.id, plantingSiteId]);
 

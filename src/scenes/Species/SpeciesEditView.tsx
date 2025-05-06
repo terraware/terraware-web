@@ -116,7 +116,7 @@ export default function SpeciesEditView(): JSX.Element {
       }
     };
     if (selectedOrganization && selectedOrganization.id !== -1 && speciesId) {
-      getSpecies();
+      void getSpecies();
     }
   }, [speciesId, selectedOrganization, navigate]);
 
@@ -184,7 +184,7 @@ export default function SpeciesEditView(): JSX.Element {
         cancelID='cancelEditSpecies'
         saveID='saveEditSpecies'
         onCancel={() => goToSpecies(species?.id)}
-        onSave={saveSpecies}
+        onSave={() => void saveSpecies()}
       >
         <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
           <Typography fontSize='24px' fontWeight={600}>

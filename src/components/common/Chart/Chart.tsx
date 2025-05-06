@@ -214,7 +214,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
           };
         }
       };
-      createChart();
+      void createChart();
     }
   }, [locale]);
 

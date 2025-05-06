@@ -140,8 +140,8 @@ export default function SpeciesDetailsForm({
     };
 
     if (userSearched) {
-      getOptionsForTyped();
-      getDetails();
+      void getOptionsForTyped();
+      void getDetails();
     }
   }, [debouncedSearchTerm, setRecord, userSearched]);
 

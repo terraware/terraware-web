@@ -27,6 +27,7 @@ function initSpecies(species?: Species): Species {
     }
   );
 }
+
 type SpeciesAddViewProps = {
   reloadData: () => void;
 };
@@ -73,7 +74,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
         cancelID='cancelAddSpecies'
         saveID='saveAddSpecies'
         onCancel={() => navigate(APP_PATHS.SPECIES)}
-        onSave={createNewSpecies}
+        onSave={() => void createNewSpecies()}
       >
         <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 'bold', paddingLeft: theme.spacing(3) }}>
           {strings.ADD_SPECIES}

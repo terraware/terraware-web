@@ -68,7 +68,7 @@ export default function UserNotification(): Notification | null {
       }
     };
 
-    initializeTimeZones();
+    void initializeTimeZones();
   }, [reloadUser, user, userPreferences, timeZones]);
 
   useEffect(() => {
@@ -91,7 +91,7 @@ export default function UserNotification(): Notification | null {
       setUnitNotification(!featureNotificationExpired(userUnit.unitsAcknowledgedOnMs));
     };
 
-    initializeWeightUnits();
+    void initializeWeightUnits();
   }, [user, userPreferences, reloadUserPreferences]);
 
   return useMemo(() => {

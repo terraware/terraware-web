@@ -62,7 +62,7 @@ export default function PersonView(): JSX.Element {
           setPersonSelectedToEdit(response.users.find((user) => user.id === parseInt(personId, 10)));
         }
       };
-      populatePeople();
+      void populatePeople();
     }
   }, [selectedOrganization, personId]);
 
@@ -124,7 +124,7 @@ export default function PersonView(): JSX.Element {
 
     if (successMessage) {
       snackbar.toastSuccess(successMessage);
-      reloadOrganizations();
+      void reloadOrganizations();
       goToViewPerson(userId.toString());
     } else {
       snackbar.toastError();
@@ -179,7 +179,7 @@ export default function PersonView(): JSX.Element {
   // TODO: Handle the case where we cannot find the requested person to edit in the list of people.
   return (
     <TfMain>
-      <PageForm cancelID='cancelNewPerson' saveID='saveNewPerson' onCancel={goToPeople} onSave={() => saveUser()}>
+      <PageForm cancelID='cancelNewPerson' saveID='saveNewPerson' onCancel={goToPeople} onSave={() => void saveUser()}>
         <Grid container marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
           <Grid item xs={12}>
             <h2 style={{ marginBottom: '8px' }}>

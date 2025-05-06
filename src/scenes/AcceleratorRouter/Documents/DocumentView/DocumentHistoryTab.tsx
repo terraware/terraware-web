@@ -84,7 +84,7 @@ const DocumentHistoryTab = (): JSX.Element => {
     const userIds = tableRows.map((row) => row.createdBy);
     userIds.forEach((userId) => {
       if (!userIdsRequested.includes(userId) && !newUserIdsRequested.includes(userId)) {
-        dispatch(requestGetUser(userId));
+        void dispatch(requestGetUser(userId));
         newUserIdsRequested.push(userId);
       }
     });
@@ -94,7 +94,7 @@ const DocumentHistoryTab = (): JSX.Element => {
   useEffect(() => {
     // TODO should these be admin users? TF accelerator users?
     // dispatch(requestListUsers());
-    dispatch(requestListHistory(documentId));
+    void dispatch(requestListHistory(documentId));
   }, [dispatch, documentId]);
 
   const props = {

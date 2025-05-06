@@ -20,7 +20,9 @@ const NoOrgRouter = () => {
       <Route path={APP_PATHS.SETTINGS} element={<SettingsPage />} />
       <Route path={APP_PATHS.WELCOME} element={<NoOrgLandingPage />} />
       <Route path={`${APP_PATHS.APPLICATIONS}/*`} element={<NoOrgApplicationLandingPage />} />
-      {!isProduction && <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />}
+      {!isProduction && (
+        <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={() => void reloadPreferences()} />} />
+      )}
       <Route path={`${APP_PATHS.HELP_SUPPORT}/*`} element={<HelpSupportRouter />} />
       <Route path={`${APP_PATHS.HOME}/*`} element={<NoOrgLandingPage />} />
       <Route path='*' element={<Navigate to={APP_PATHS.WELCOME} />} />

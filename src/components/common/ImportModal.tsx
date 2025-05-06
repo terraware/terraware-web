@@ -249,7 +249,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
             if (response.id) {
               setUploadId(response.id);
               setLoading(true);
-              setUploadInterval(setInterval(() => getFileStatus(response.id), 2000));
+              setUploadInterval(setInterval(() => void getFileStatus(response.id), 2000));
             }
           }
         }
@@ -275,7 +275,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
         setFileStatus(undefined);
         setWarning(false);
         setLoading(true);
-        setUploadInterval(setInterval(() => getFileStatus(uploadId), 2000));
+        setUploadInterval(setInterval(() => void getFileStatus(uploadId), 2000));
       }
     }
   };
@@ -315,7 +315,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
             key='mb-1'
             style={spacingStyles}
           />,
-          <Button onClick={importDataHandler} label={strings.IMPORT} key='mb-2' />,
+          <Button onClick={() => void importDataHandler()} label={strings.IMPORT} key='mb-2' />,
         ];
       }
     }
@@ -351,14 +351,14 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
         warning
           ? [
               <Button
-                onClick={() => resolveSpeciesUploadHandler(true)}
+                onClick={() => void resolveSpeciesUploadHandler(true)}
                 label={strings.REPLACE}
                 priority='secondary'
                 type='passive'
                 key='button-1'
               />,
               <Button
-                onClick={() => resolveSpeciesUploadHandler(false)}
+                onClick={() => void resolveSpeciesUploadHandler(false)}
                 label={strings.KEEP_ORIGINAL}
                 priority='secondary'
                 type='passive'
@@ -419,7 +419,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
               <Link
                 fontSize='12px'
                 onClick={() => {
-                  downloadCsvTemplateHandler(templateApi);
+                  void downloadCsvTemplateHandler(templateApi);
                 }}
               >
                 {strings.DOWNLOAD_CSV_TEMPLATE}

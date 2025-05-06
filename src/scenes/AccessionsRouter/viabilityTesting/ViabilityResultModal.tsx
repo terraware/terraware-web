@@ -66,7 +66,12 @@ export default function ViabilityResultModal(props: ViabilityResultModalProps): 
           priority='secondary'
           key='button-1'
         />,
-        <Button id='saveViabilityResult' onClick={saveResult} label={strings.APPLY_RESULT} key='button-2' />,
+        <Button
+          id='saveViabilityResult'
+          onClick={() => void saveResult()}
+          label={strings.APPLY_RESULT}
+          key='button-2'
+        />,
       ]}
       scrolled={true}
     >

@@ -51,7 +51,7 @@ export default function ModuleDetails({ moduleId, module }: ModuleDetailsProps):
 
   useEffect(() => {
     if (module?.id) {
-      dispatch(requestListModuleCohorts(moduleId));
+      void dispatch(requestListModuleCohorts(moduleId));
     }
   }, [module?.id]);
 

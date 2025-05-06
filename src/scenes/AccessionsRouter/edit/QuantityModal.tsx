@@ -49,6 +49,7 @@ function UnitsSelector(props: UnitsSelectorProps): JSX.Element {
     />
   );
 }
+
 export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const { onClose, open, accession, reload, statusEdit } = props;
 
@@ -263,7 +264,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
           />,
           <Button
             id='saveQuantity'
-            onClick={saveQuantity}
+            onClick={() => void saveQuantity()}
             label={strings.SAVE}
             key='button-2'
             disabled={!hasChanged}

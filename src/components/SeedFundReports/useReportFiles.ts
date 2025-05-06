@@ -31,7 +31,7 @@ export default function useReportFiles(
       }
     };
 
-    getFiles();
+    void getFiles();
   }, [report, snackbar, setUpdatedReportFiles]);
 
   return initialReportFiles;

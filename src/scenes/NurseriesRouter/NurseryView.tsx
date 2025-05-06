@@ -132,7 +132,7 @@ export default function NurseryView(): JSX.Element {
       if (selectedNursery && editedSubLocations) {
         await SubLocationService.saveEditedSubLocations(id as number, editedSubLocations);
       }
-      reloadOrganizations(selectedOrganization.id);
+      void reloadOrganizations(selectedOrganization.id);
       snackbar.toastSuccess(selectedNursery ? strings.CHANGES_SAVED : strings.NURSERY_ADDED);
       if (!selectedNursery) {
         id = (response as CreateFacilityResponse).facilityId || undefined;
@@ -176,7 +176,7 @@ export default function NurseryView(): JSX.Element {
         cancelID='cancelCreateNursery'
         saveID='saveCreateNursery'
         onCancel={() => goToNursery(selectedNursery?.id)}
-        onSave={saveNursery}
+        onSave={() => void saveNursery()}
       >
         <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
           <Typography fontSize='24px' fontWeight={600}>

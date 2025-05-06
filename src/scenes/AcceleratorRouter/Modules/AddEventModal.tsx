@@ -67,7 +67,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
 
   useEffect(() => {
     if (module?.id) {
-      dispatch(requestListModuleCohorts(moduleId.toString()));
+      void dispatch(requestListModuleCohorts(moduleId.toString()));
     }
   }, [module?.id]);
 

@@ -147,7 +147,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
 
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
-      dispatch(requestObservationsResults(selectedOrganization.id));
+      void dispatch(requestObservationsResults(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization.id]);
 

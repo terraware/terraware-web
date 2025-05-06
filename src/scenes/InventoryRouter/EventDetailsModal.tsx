@@ -45,7 +45,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
       }
     };
     if (selectedEvent.type === 'IncomingWithdrawal' && !relatedBatch) {
-      fetchRelatedBatch();
+      void fetchRelatedBatch();
     }
   }, [selectedEvent, relatedBatch]);
 

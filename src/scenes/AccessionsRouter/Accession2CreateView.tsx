@@ -166,7 +166,7 @@ export default function CreateAccession(): JSX.Element | null {
         cancelID='cancelCreateAccession'
         saveID='saveCreateAccession'
         onCancel={goToAccessions}
-        onSave={saveAccession}
+        onSave={() => void saveAccession()}
         saveButtonText={strings.SAVE}
       >
         <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 600, marginBottom: theme.spacing(4) }}>
