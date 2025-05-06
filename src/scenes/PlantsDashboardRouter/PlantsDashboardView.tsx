@@ -28,6 +28,7 @@ import PlantingDensityCard from './components/PlantingDensityCard';
 import PlantingSiteTrendsCard from './components/PlantingSiteTrendsCard';
 import PlantsAndSpeciesCard from './components/PlantsAndSpeciesCard';
 import ZoneLevelDataMap from './components/ZoneLevelDataMap';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 
 type PlantsDashboardViewProps = {
   projectId?: number;
@@ -40,6 +41,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
   const dispatch = useAppDispatch();
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<Record<string, unknown>>();
   const theme = useTheme();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const {
     setAcceleratorOrganizationId,
@@ -385,6 +387,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
       organizationId={organizationId}
       isEmptyState={plantingSite === undefined}
       onSelect={onSelect}
+      allowAllAsSiteSelection={isAcceleratorRoute}
     >
       <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
         {renderTotalPlantsAndSpecies()}
