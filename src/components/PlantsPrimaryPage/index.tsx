@@ -83,7 +83,7 @@ export default function PlantsPrimaryPage({
     const populatePlantingSites = async () => {
       let plantingSitesList: PlantingSite[] | undefined = plantingSitesData;
       if (plantingSitesList === undefined && (selectedOrganization.id !== -1 || organizationId)) {
-        const orgIdToUse = selectedOrganization.id !== -1 ? selectedOrganization.id : organizationId;
+        const orgIdToUse = organizationId ? organizationId : selectedOrganization.id;
         const serverResponse = await TrackingService.listPlantingSites(orgIdToUse ?? -1, undefined, activeLocale);
         if (serverResponse.requestSucceeded) {
           plantingSitesList = projectId

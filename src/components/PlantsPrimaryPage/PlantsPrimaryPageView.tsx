@@ -25,7 +25,7 @@ export type PlantsPrimaryPageViewProps = {
   actionButton?: ButtonProps;
   children: React.ReactNode; // primary content for this page
   isEmptyState?: boolean; // optional boolean to indicate this is an empty state view
-  onSelect: (plantingSite: PlantingSite | undefined) => void; // planting site selected, id of -1 refers to All
+  onSelect: (plantingSite?: PlantingSite) => void; // planting site selected, id of -1 refers to All
   plantingSites: PlantingSite[] | undefined;
   selectedPlantingSiteId?: number;
   style?: Record<string, string | number>;
@@ -69,7 +69,7 @@ export default function PlantsPrimaryPageView({
 
   const options = useMemo(() => {
     const optionsToReturn = plantingSites?.map((site) => ({ label: site.name, value: site.id })) ?? [];
-    if (projectId) {
+    if (optionsToReturn.length !== 1 && projectId) {
       optionsToReturn.unshift({ label: strings.ALL_PLANTING_SITES, value: -2 });
     }
     return optionsToReturn;
