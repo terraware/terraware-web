@@ -44,6 +44,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
 
   const {
     setAcceleratorOrganizationId,
+    allPlantingSites,
     plantingSite,
     setSelectedPlantingSite,
     latestObservation,
@@ -103,7 +104,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     void dispatch(requestPlantings(orgId));
     void dispatch(requestPlantingSitesSearchResults(orgId));
     setAcceleratorOrganizationId(orgId);
-  }, [dispatch, organizationId, selectedOrganization]);
+  }, [dispatch, organizationId, selectedOrganization, setAcceleratorOrganizationId]);
 
   useEffect(() => {
     if (plantingSite?.id) {
@@ -375,6 +376,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
           : APP_PATHS.PLANTING_SITE_DASHBOARD
       }
       lastVisitedPreferenceName='plants.dashboard.lastVisitedPlantingSite'
+      plantingSitesData={allPlantingSites ?? []}
       plantsSitePreferences={plantsDashboardPreferences}
       setPlantsSitePreferences={onPreferences}
       newHeader={true}

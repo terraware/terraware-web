@@ -9,13 +9,13 @@ import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import {
   selectObservationSchedulableSites,
   selectUpcomingObservations,
 } from 'src/redux/features/observations/observationsUtilsSelectors';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import BiomassMeasurement from 'src/scenes/ObservationsRouter/biomass/BiomassMeasurement';
 import strings from 'src/strings';
@@ -39,7 +39,8 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [plantsSitePreferences, setPlantsSitePreferences] = useState<Record<string, unknown>>();
-  const plantingSites = useAppSelector(selectPlantingSites);
+
+  const { allPlantingSites } = usePlantingSiteData();
 
   const tabs = useMemo(() => {
     if (!activeLocale) {
@@ -93,14 +94,14 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   );
 
   useEffect(() => {
-    if (plantingSites?.length === 0) {
+    if (allPlantingSites?.length === 0) {
       navigate(APP_PATHS.HOME);
     }
-  }, [navigate, plantingSites?.length]);
+  }, [navigate, allPlantingSites?.length]);
 
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
-      dispatch(requestPlantings(selectedOrganization.id));
+      void dispatch(requestPlantings(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization.id]);
 
@@ -119,10 +120,11 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
     <PlantsPrimaryPage
       actionButton={actionButton}
       allowAllAsSiteSelection={true}
-      isEmptyState={!plantingSites?.length || !observationsResults?.length}
+      isEmptyState={!allPlantingSites?.length || !observationsResults?.length}
       lastVisitedPreferenceName='plants.observations.lastVisitedPlantingSite'
       onSelect={onSelect}
       pagePath={APP_PATHS.OBSERVATIONS_SITE}
+      plantingSitesData={allPlantingSites ?? []}
       plantsSitePreferences={plantsSitePreferences}
       setPlantsSitePreferences={onPreferences}
       style={{ display: 'flex', flexGrow: 1, flexDirection: 'column' }}
