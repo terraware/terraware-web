@@ -37,21 +37,23 @@ const Metadata = (props: MetadataProps): JSX.Element => {
     }
   }, [reviewAcceleratorReportResponse, snackbar]);
 
-  const onUpdateInternalComment = useCallback((internalComment: string, status: AcceleratorReportStatus) => {
-    const request = dispatch(
-      requestReviewAcceleratorReport({
-        reportId: report.id,
-        projectId: Number(projectId),
-        review: {
-          internalComment,
-          status,
-          achievements: report.achievements,
-          challenges: report.challenges,
-        },
-      })
-    );
-    setRequestId(request.requestId);
-  }, []);
+  const onUpdateInternalComment = useCallback(
+    (internalComment: string, status: AcceleratorReportStatus) => {
+      const request = dispatch(
+        requestReviewAcceleratorReport({
+          reportId: report.id,
+          projectId: Number(projectId),
+          review: {
+            ...report,
+            internalComment,
+            status,
+          },
+        })
+      );
+      setRequestId(request.requestId);
+    },
+    [report]
+  );
 
   return (
     <Box display='flex' flexDirection='column'>
