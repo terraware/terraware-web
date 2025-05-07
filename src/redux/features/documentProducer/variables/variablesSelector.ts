@@ -59,7 +59,7 @@ export const searchVariables = createCachedSelector(
 )((state: RootState, documentId: number | undefined, query: string) => query);
 
 export const selectGetVariable = createCachedSelector(
-  (state: RootState, variableId: number) => state.documentProducerAllVariables['all'],
+  (state: RootState, variableId: number) => state.documentProducerAllVariables.all,
   (state: RootState, variableId: number) => variableId,
   (response, variableId) => {
     if (response?.data) {
@@ -232,7 +232,7 @@ const associateNonSectionVariableValues = (
 };
 
 export const selectAllVariablesWithValues = createCachedSelector(
-  (state: RootState, projectId: number | undefined, maxValueId?: number) => state.documentProducerAllVariables['all'],
+  (state: RootState, projectId: number | undefined, maxValueId?: number) => state.documentProducerAllVariables.all,
   (state: RootState, projectId: number | undefined, maxValueId?: number) =>
     state.documentProducerVariableValuesList[variableListCompositeKeyFn({ projectId, maxValueId })],
   (variableList, valueList): AsyncRequestT<VariableWithValues[]> | undefined => {

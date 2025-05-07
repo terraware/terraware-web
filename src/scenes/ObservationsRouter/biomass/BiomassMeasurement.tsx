@@ -73,7 +73,7 @@ export default function BiomassMeasurement(props: BiomassMeasurementProps): JSX.
       const siteName = selectedPlantingSite?.name ?? organization.selectedOrganization.name;
       const fileName = sanitize(`${siteName}-${strings.BIOMASS_MONITORING}.csv`);
 
-      const encodedUri = `data:text/csv;charset=utf-8,` + encodeURIComponent(content);
+      const encodedUri = 'data:text/csv;charset=utf-8,' + encodeURIComponent(content);
 
       const link = document.createElement('a');
       link.setAttribute('href', encodedUri);

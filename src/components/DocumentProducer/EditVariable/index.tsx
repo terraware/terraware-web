@@ -165,7 +165,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
               operations: [
                 { operation: 'Update', valueId: valueIdToUpdate, value: newValue, existingValueId: valueIdToUpdate },
               ],
-              projectId: projectId,
+              projectId,
               updateStatuses: false,
             })
           );
@@ -174,7 +174,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
           const request = dispatch(
             requestUpdateVariableValues({
               operations: [{ operation: 'Append', variableId: variable.id, value: newValue }],
-              projectId: projectId,
+              projectId,
               updateStatuses: false,
             })
           );

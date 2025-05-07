@@ -279,7 +279,7 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
         const requestObservationHistory = dispatch(
           requestGetPlantingSiteHistory({
             plantingSiteId: plantingSite.id,
-            historyId: historyId,
+            historyId,
           })
         );
         setRequestId(requestObservationHistory.requestId);

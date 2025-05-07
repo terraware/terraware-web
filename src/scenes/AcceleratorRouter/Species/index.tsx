@@ -56,7 +56,7 @@ export default function SpeciesDetailView(): JSX.Element {
     currentParticipantProjectSpecies &&
       update(undefined, {
         ...currentParticipantProjectSpecies,
-        feedback: feedback,
+        feedback,
         submissionStatus: 'Rejected',
       });
 

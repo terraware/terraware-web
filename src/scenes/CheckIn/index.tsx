@@ -108,7 +108,6 @@ export default function CheckIn(): JSX.Element {
   const goToAccession = (id: string) => {
     const accessionLocation = {
       pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', id),
-      // eslint-disable-next-line no-restricted-globals
       state: { from: location.pathname },
     };
     navigate(accessionLocation);

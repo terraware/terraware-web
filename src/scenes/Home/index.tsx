@@ -34,7 +34,7 @@ export default function Home({ selectedOrgHasSpecies }: { selectedOrgHasSpecies:
       return <Page isLoading={true} />;
     }
 
-    if ((people?.length === 1 && !orgPreferences['singlePersonOrg']) || !selectedOrgHasSpecies()) {
+    if ((people?.length === 1 && !orgPreferences.singlePersonOrg) || !selectedOrgHasSpecies()) {
       return <OnboardingHomeView />;
     } else {
       return orgHasModules && isManagerOrHigher(selectedOrganization) ? <ParticipantHomeView /> : <TerrawareHomeView />;

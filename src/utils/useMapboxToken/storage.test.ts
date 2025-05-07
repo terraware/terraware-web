@@ -1,4 +1,4 @@
-import { getTokenFromSession, MAPBOX_SESSION_KEY, MAPBOX_TOKEN_TTL_MS, writeTokenToSession } from "./storage";
+import { getTokenFromSession, MAPBOX_SESSION_KEY, writeTokenToSession } from './storage';
 
 describe('getTokenFromSession', () => {
   afterAll(() => {
@@ -11,8 +11,8 @@ describe('getTokenFromSession', () => {
       JSON.stringify({
         // Expires in the future
         expiresAt: Date.now() + 10,
-        token: 'test-token'
-      })
+        token: 'test-token',
+      }),
     );
 
     expect(getTokenFromSession()).toEqual('test-token');
@@ -24,8 +24,8 @@ describe('getTokenFromSession', () => {
       JSON.stringify({
         // Already expired
         expiresAt: Date.now() - 10,
-        token: 'test-token'
-      })
+        token: 'test-token',
+      }),
     );
 
     expect(getTokenFromSession()).toEqual('');
@@ -40,19 +40,19 @@ describe('getTokenFromSession', () => {
 
     sessionStorage.setItem(MAPBOX_SESSION_KEY, JSON.stringify({
       some: 'other',
-      json: 'object'
+      json: 'object',
     }));
     expect(getTokenFromSession()).toEqual('');
 
     sessionStorage.setItem(MAPBOX_SESSION_KEY, JSON.stringify({
       expiresAt: Date.now() + 10,
-      token: undefined
+      token: undefined,
     }));
     expect(getTokenFromSession()).toEqual('');
 
     sessionStorage.setItem(MAPBOX_SESSION_KEY, JSON.stringify({
       expiresAt: Date.now() + 10,
-      token: true
+      token: true,
     }));
     expect(getTokenFromSession()).toEqual('');
   });

@@ -13,18 +13,14 @@ if (process.env.REACT_APP_DELAY_QUERIES === 'true') {
         return Reflect.get(target, prop, receiver);
       }
 
-      return async (...args: any[]) =>
-        (
-          // eslint-disable-next-line no-sequences
-          await delay(1500), target[prop](...args)
-        );
+      return async (...args: any[]) => (await delay(1500), target[prop](...args));
     },
   };
 }
 
 axios.defaults.withCredentials = true;
 
-/*eslint no-restricted-globals: ["off", "location"]*/
+/* eslint no-restricted-globals: ["off", "location"]*/
 axios.interceptors.response.use(
   (response) => response,
   (error) => {

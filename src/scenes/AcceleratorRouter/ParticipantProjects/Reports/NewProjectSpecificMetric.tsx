@@ -78,7 +78,7 @@ export default function NewProjectSpecificMetric(): JSX.Element {
       setValidate(true);
       return;
     }
-    const request = dispatch(requestCreateProjectMetric({ metric: newMetric, projectId: projectId }));
+    const request = dispatch(requestCreateProjectMetric({ metric: newMetric, projectId }));
     setRequestId(request.requestId);
   };
 

@@ -28,7 +28,7 @@ export default function useUpdatePerson(): Response {
     (user: UserWithInternalnterests) => {
       const categoriesRequest = dispatch(
         requestUpdateUserInternalInterests({
-          user: user,
+          user,
           internalInterests: user.internalInterests,
         })
       );
@@ -37,7 +37,7 @@ export default function useUpdatePerson(): Response {
 
       const globalRolesRequest = dispatch(
         requestUpdateGlobalRolesUser({
-          user: user,
+          user,
           globalRoles: user.globalRoles,
         })
       );

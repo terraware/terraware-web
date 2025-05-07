@@ -57,7 +57,7 @@ const VotingEdit = () => {
     }
 
     const updatedVotes = votes.filter(({ conditionalInfo, userId, voteOption }) => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-extra-non-null-assertion, @typescript-eslint/no-unnecessary-type-assertion
+      // eslint-disable-next-line @typescript-eslint/no-extra-non-null-assertion, @typescript-eslint/no-unnecessary-type-assertion
       const orignal = phaseVotes.votes.find((originalVote) => originalVote.userId === userId)!!;
       return !(orignal.conditionalInfo === conditionalInfo && orignal.voteOption === voteOption);
     });

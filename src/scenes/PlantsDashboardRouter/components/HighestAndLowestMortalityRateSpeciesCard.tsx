@@ -20,7 +20,7 @@ export default function HighestAndLowestMortalityRateSpeciesCard({
 
   const { availableSpecies } = useSpecies();
 
-  let highestMortalityRate: number | undefined = undefined;
+  let highestMortalityRate: number | undefined;
   let highestSpecies = '';
 
   let lowestMortalityRate = 100;

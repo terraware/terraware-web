@@ -374,7 +374,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
     record?.testResults?.forEach((_tr, index) => {
       setIndividualError(`recordingDate${index}`, '');
     });
-    setIndividualError(`seedsTested`, '');
+    setIndividualError('seedsTested', '');
     setIndividualError('totalSeedsTested', '');
   };
 

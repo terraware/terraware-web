@@ -137,7 +137,7 @@ export default function NurseryView(): JSX.Element {
       if (!selectedNursery) {
         id = (response as CreateFacilityResponse).facilityId || undefined;
       }
-      setNavigateToNursery({ navigate: true, id: id });
+      setNavigateToNursery({ navigate: true, id });
     } else {
       snackbar.toastError();
     }

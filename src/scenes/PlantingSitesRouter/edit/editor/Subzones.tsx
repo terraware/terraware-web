@@ -209,7 +209,6 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
         type: 'FeatureCollection',
         features: Object.keys(subzones ?? {}).flatMap((key: string) => {
           const zoneId = Number(key);
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           const data = subzones![zoneId];
           return data.features.map((feature: Feature) =>
             toIdentifiableFeature(feature, subzoneIdGenerator, { parentId: zoneId })

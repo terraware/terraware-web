@@ -493,7 +493,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       {isCatalytic && (
         <Grid item xs={mediumItemGridWidth()}>
           <Textfield
-            id={`catalytic-detail`}
+            id={'catalytic-detail'}
             type='textarea'
             label={strings.CATALYTIC_DETAIL_INSTRUCTIONS}
             display={!editable}

@@ -149,7 +149,7 @@ export default function SeedBankView(): JSX.Element {
         snackbar.toastError();
       }
     }
-    setNavigateToSeedBank({ navigate: true, id: id });
+    setNavigateToSeedBank({ navigate: true, id });
   };
 
   const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {

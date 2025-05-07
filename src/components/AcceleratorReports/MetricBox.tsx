@@ -166,7 +166,7 @@ const MetricBox = ({
       requestReviewAcceleratorReportMetric({
         metric: getUpdateBody(),
         projectId: Number(projectId),
-        reportId: reportId,
+        reportId,
       })
     );
     setRequestId(request.requestId);

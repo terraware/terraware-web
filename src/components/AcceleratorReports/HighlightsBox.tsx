@@ -49,7 +49,7 @@ const HighlightsBox = (props: ReportBoxProps) => {
         requestReviewAcceleratorReport({
           review: {
             ...report,
-            highlights: highlights,
+            highlights,
             achievements: report?.achievements || [],
             challenges: report?.challenges || [],
             status: report?.status || 'Not Submitted',

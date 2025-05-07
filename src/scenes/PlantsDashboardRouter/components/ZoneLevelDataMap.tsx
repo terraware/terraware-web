@@ -105,7 +105,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
         const requestObservationHistory = dispatch(
           requestGetPlantingSiteHistory({
             plantingSiteId: plantingSite.id,
-            historyId: historyId,
+            historyId,
           })
         );
         setRequestId(requestObservationHistory.requestId);

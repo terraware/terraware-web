@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-extra-non-null-assertion */
-
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from 'react';
 
 import { Box, Typography } from '@mui/material';

@@ -80,7 +80,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   useEffect(() => {
     setRecord((prev) => ({
       ...prev,
-      projectId: projectId,
+      projectId,
     }));
   }, []);
 

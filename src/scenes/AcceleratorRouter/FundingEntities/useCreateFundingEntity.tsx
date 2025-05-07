@@ -24,7 +24,7 @@ export default function useCreateFundingEntity(): Response {
     (fundingEntity: FundingEntity) => {
       const request = dispatch(
         requestCreateFundingEntity({
-          fundingEntity: fundingEntity,
+          fundingEntity,
         })
       );
 

@@ -83,7 +83,7 @@ export default function ModuleContentView() {
   return (
     <>
       {openUploadModal && <UploadModulesModal open={openUploadModal} onClose={() => setOpenUploadModal(false)} />}
-      <PageListView {...listViewProps}></PageListView>
+      <PageListView {...listViewProps} />
     </>
   );
 }

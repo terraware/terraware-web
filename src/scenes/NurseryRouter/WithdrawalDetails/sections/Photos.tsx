@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-
 /* eslint-disable @typescript-eslint/no-extra-non-null-assertion */
 import React, { useEffect, useState } from 'react';
 

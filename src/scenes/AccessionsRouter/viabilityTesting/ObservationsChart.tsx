@@ -121,7 +121,6 @@ export default function ObservationsChart({ observations }: Props): JSX.Element 
 
       return () => chartRef.current?.destroy();
     }
-    // eslint-disable-next-line
   }, [activeLocale, observations]);
 
   return <canvas id='myChart' ref={canvasRef} style={{ height: '180px' }} />;

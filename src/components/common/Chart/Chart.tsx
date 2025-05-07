@@ -216,7 +216,6 @@ function ChartContent(props: ChartContentProps): JSX.Element {
       };
       createChart();
     }
-    // eslint-disable-next-line
   }, [locale]);
 
   useEffect(() => {

@@ -54,7 +54,7 @@ export default function TitlePage({
       <div id='title-page-content-footer'>
         <h2>
           {isoDate}
-          <br></br>
+          <br />
           {strings.VERSION_PREVIEW}
         </h2>
       </div>

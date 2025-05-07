@@ -79,10 +79,10 @@ export default function EditSettings(): JSX.Element {
       ? dispatch(
           requestUpdateReportConfig({
             config: newConfig,
-            projectId: projectId,
+            projectId,
           })
         )
-      : dispatch(requestCreateReportConfig({ config: newConfig, projectId: projectId }));
+      : dispatch(requestCreateReportConfig({ config: newConfig, projectId }));
     setRequestId(request.requestId);
   };
 
