@@ -141,7 +141,6 @@ export default function SeedBankView(): JSX.Element {
         subLocationNames: editedSubLocations?.map((l) => l.name as string),
       });
       if (response.requestSucceeded) {
-        // eslint-disable-next-line @typescript-eslint/await-thenable
         await reloadOrganizations(selectedOrganization.id);
         snackbar.toastSuccess(strings.SEED_BANK_ADDED);
         id = response.facilityId || undefined;
