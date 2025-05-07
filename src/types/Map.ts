@@ -155,6 +155,7 @@ export type MapControl = {
   topRightMapControl?: React.ReactNode;
   bottomLeftMapControl?: React.ReactNode;
   hideAllControls?: boolean;
+  disableZoom?: boolean;
 };
 
 /**

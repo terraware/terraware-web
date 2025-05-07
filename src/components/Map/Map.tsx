@@ -88,6 +88,7 @@ export default function Map(props: MapProps): JSX.Element {
     topRightMapControl,
     bottomLeftMapControl,
     hideAllControls,
+    disableZoom,
     mapViewStyle: initialMapViewStyle,
   } = props;
   const theme = useTheme();
@@ -464,6 +465,8 @@ export default function Map(props: MapProps): JSX.Element {
               event.target.resize();
             }
           }}
+          scrollZoom={!disableZoom}
+          doubleClickZoom={!disableZoom}
         >
           {mapSources}
           {!hideAllControls && (

@@ -91,6 +91,7 @@ const ProjectMap = ({ application, countryCode, md }: ProjectMapProps) => {
           mapViewStyle={'Light'}
           style={style}
           hideAllControls={true}
+          disableZoom={true}
           bottomRightLabel={<ProjectFigureLabel labelText={strings.COUNTRY_ONLY} />}
         />
       );
