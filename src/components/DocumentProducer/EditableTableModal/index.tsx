@@ -105,7 +105,7 @@ const EditableTableEdit = ({
     }
     const update: UpdateVariableValuesRequestWithProjectId = {
       operations: [],
-      projectId: projectId,
+      projectId,
     };
 
     initialCellValues.forEach((row) => {

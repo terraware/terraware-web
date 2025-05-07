@@ -468,7 +468,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
     if (row.id) {
       const seedCollectionLocation = {
         pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', row.id),
-        // eslint-disable-next-line no-restricted-globals
         state: { from: location.pathname },
       };
       navigate(seedCollectionLocation);

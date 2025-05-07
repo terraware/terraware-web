@@ -17,7 +17,7 @@ const useTableDensity = (): Response => {
   const { updateUserPreferences, userPreferences, reloadUserPreferences } = useUser();
 
   const [tableDensity, _setTableDensity] = useState<TableDensityType>(
-    (userPreferences['tableDensity'] as TableDensityType) ?? 'comfortable'
+    (userPreferences.tableDensity as TableDensityType) ?? 'comfortable'
   );
 
   const saveTableDensityToUserPreferences = (newDensity: TableDensityType) => {
@@ -27,11 +27,11 @@ const useTableDensity = (): Response => {
 
   useEffect(() => {
     // Load table density from userPreference. Set state if different.
-    const newTableDensity = (userPreferences['tableDensity'] ?? 'comfortable') as TableDensityType;
+    const newTableDensity = (userPreferences.tableDensity ?? 'comfortable') as TableDensityType;
     if (tableDensity !== newTableDensity) {
       _setTableDensity(newTableDensity);
     }
-  }, [userPreferences['tableDensity']]);
+  }, [userPreferences.tableDensity]);
 
   const setTableDensity = useCallback((density: TableDensityType) => {
     _setTableDensity(density);

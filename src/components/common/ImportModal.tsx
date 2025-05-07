@@ -52,7 +52,7 @@ export const downloadCsvTemplateHandler = async (templateApi: () => Promise<any>
   const encodedUri = encodeURI(csvContent);
   const link = document.createElement('a');
   link.setAttribute('href', encodedUri);
-  link.setAttribute('download', `template.csv`);
+  link.setAttribute('download', 'template.csv');
   link.click();
 };
 

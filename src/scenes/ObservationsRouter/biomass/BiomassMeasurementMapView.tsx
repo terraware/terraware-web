@@ -94,7 +94,7 @@ export default function BiomassMeasurementMapView({
         const requestObservationHistory = dispatch(
           requestGetPlantingSiteHistory({
             plantingSiteId: selectedPlantingSite.id,
-            historyId: historyId,
+            historyId,
           })
         );
         setRequestId(requestObservationHistory.requestId);

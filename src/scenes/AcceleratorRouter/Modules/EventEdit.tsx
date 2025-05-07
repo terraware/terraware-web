@@ -146,7 +146,7 @@ export default function EventEditView(): JSX.Element {
   };
 
   const getTitleForType = () => {
-    //type: 'One-on-One Session' | 'Workshop' | 'Live Session' | 'Recorded Session';
+    // type: 'One-on-One Session' | 'Workshop' | 'Live Session' | 'Recorded Session';
     switch (eventType) {
       case 'one-on-one': {
         return strings.ONE_ON_ONE_SESSION;

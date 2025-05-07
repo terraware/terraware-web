@@ -111,7 +111,7 @@ export default function Filters(props: Props): JSX.Element {
         result.push({
           id: col.key,
           label: col.name,
-          value: filter.values.join(`, `),
+          value: filter.values.join(', '),
         } as PillListItem<string>);
       }
     }
@@ -244,7 +244,7 @@ export default function Filters(props: Props): JSX.Element {
                   {`${preExpFilterColumn.name}${numPreExpSelected > 0 ? ' (' + numPreExpSelected + ')' : ''}`}
                 </Typography>
                 <Icon
-                  name={Boolean(preExpAnchorEls[preExpFilterColumn.key]) ? 'chevronUp' : 'chevronDown'}
+                  name={preExpAnchorEls[preExpFilterColumn.key] ? 'chevronUp' : 'chevronDown'}
                   style={{ height: '24px', width: '24px' }}
                 />
               </Box>

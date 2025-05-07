@@ -23,7 +23,7 @@ export default function useUpdateFundingEntity(): Response {
     (fundingEntity: FundingEntity) => {
       const request = dispatch(
         requestUpdateFundingEntity({
-          fundingEntity: fundingEntity,
+          fundingEntity,
         })
       );
 

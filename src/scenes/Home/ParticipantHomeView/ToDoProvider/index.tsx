@@ -36,9 +36,9 @@ const ToDoProvider = ({ children }: Props) => {
   const toDoEventsRequest = useAppSelector(selectProjectToDoEvents(eventsRequestId));
 
   const [toDoData, setToDoData] = useState<ToDoData>({
-    projectId: projectId,
-    toDoItems: toDoItems,
-    upcomingItems: upcomingItems,
+    projectId,
+    toDoItems,
+    upcomingItems,
   });
 
   useEffect(() => {
@@ -96,9 +96,9 @@ const ToDoProvider = ({ children }: Props) => {
 
   useEffect(() => {
     setToDoData({
-      projectId: projectId,
-      toDoItems: toDoItems,
-      upcomingItems: upcomingItems,
+      projectId,
+      toDoItems,
+      upcomingItems,
     });
   }, [projectId, toDoItems, upcomingItems]);
 

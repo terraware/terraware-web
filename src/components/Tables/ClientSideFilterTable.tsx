@@ -195,7 +195,7 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
       searchOrderConfig = {
         locale: activeLocale,
         sortOrder: searchSortOrder,
-        numberFields: numberFields,
+        numberFields,
       };
     }
 

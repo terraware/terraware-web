@@ -122,7 +122,7 @@ const OnboardingHomeView = () => {
             icon: 'person' as IconName,
             title: strings.ADD_PEOPLE,
             subtitle: strings.ADD_PEOPLE_ONBOARDING_DESCRIPTION,
-            enabled: !isLoadingInitialData && people?.length === 1 && !orgPreferences['singlePersonOrg'],
+            enabled: !isLoadingInitialData && people?.length === 1 && !orgPreferences.singlePersonOrg,
           },
           {
             buttonProps: {

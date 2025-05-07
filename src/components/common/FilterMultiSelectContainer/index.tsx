@@ -129,7 +129,7 @@ export default function FilterMultiSelectContainer<T extends Record<string, (str
       >
         <Typography>{label}</Typography>
         <Icon
-          name={Boolean(anchorEl) ? 'chevronUp' : 'chevronDown'}
+          name={anchorEl ? 'chevronUp' : 'chevronDown'}
           style={{
             height: '24px',
             width: '24px',

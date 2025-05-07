@@ -15,7 +15,7 @@ export default function NurserySubLocations({ nurseryId, onEdit }: NurserySubLoc
       `${APP_PATHS.INVENTORY}/?`,
       `subLocationName=${encodeURIComponent(locationName)}`,
       `facilityId=${facilityId}`,
-      `tab=batches_by_batch`,
+      'tab=batches_by_batch',
     ].join('&');
   }, []);
 

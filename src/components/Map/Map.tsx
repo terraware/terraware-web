@@ -39,7 +39,6 @@ import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
 import { getMapDrawingLayer } from './utils';
 
 const mapboxImpl: any = mapboxgl;
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 mapboxImpl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default; /* eslint-disable-line */
 
 type FeatureStateId = Record<string, Record<string, number | undefined>>;

@@ -188,7 +188,7 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
             </Box>
           </Grid>
         )}
-        {module && module.eventDescriptions['Workshop'] !== undefined && (
+        {module && module.eventDescriptions.Workshop !== undefined && (
           <Grid item xs={12}>
             <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={1}>
               <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
@@ -212,7 +212,7 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
                 />
               )}
             </Box>
-            <Box dangerouslySetInnerHTML={{ __html: module.eventDescriptions['Workshop'] }} />
+            <Box dangerouslySetInnerHTML={{ __html: module.eventDescriptions.Workshop }} />
             <Box marginTop={2}>
               <Table
                 rows={workshops || []}

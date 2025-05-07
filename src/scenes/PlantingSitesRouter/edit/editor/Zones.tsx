@@ -158,7 +158,6 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
     return [
       ...exclusionsBoundary,
       {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         data: { type: 'FeatureCollection', features: [toFeature(site.boundary!, {}, site.id)] },
         id: 'site',
         renderProperties: getRenderAttributes('site'),

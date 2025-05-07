@@ -105,7 +105,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
         const requestObservationHistory = dispatch(
           requestGetPlantingSiteHistory({
             plantingSiteId: plantingSite.id,
-            historyId: historyId,
+            historyId,
           })
         );
         setRequestId(requestObservationHistory.requestId);
@@ -146,7 +146,9 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
   const [legends, setLegends] = useState<MapLegendGroup[]>([]);
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1) dispatch(requestObservationsResults(selectedOrganization.id));
+    if (selectedOrganization.id !== -1) {
+      dispatch(requestObservationsResults(selectedOrganization.id));
+    }
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {

@@ -53,7 +53,7 @@ export default function EditMetricModal(props: EditMetricModalProps): JSX.Elemen
     const request = dispatch(
       requestUpdateProjectMetric({
         metric: record,
-        projectId: projectId,
+        projectId,
         metricId: projectMetric.id,
       })
     );

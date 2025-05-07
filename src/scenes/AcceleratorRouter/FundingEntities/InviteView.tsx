@@ -60,7 +60,9 @@ const InviteView = () => {
   }, [dispatch, snackbar, record.email, fundingEntityId]);
 
   useEffect(() => {
-    if (!inviteFunderResponse || inviteFunderResponse.status === 'pending') return;
+    if (!inviteFunderResponse || inviteFunderResponse.status === 'pending') {
+      return;
+    }
 
     if (inviteFunderResponse.status === 'error') {
       setEmailError(inviteFunderResponse.data as string);

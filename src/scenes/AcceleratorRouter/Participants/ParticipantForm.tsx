@@ -195,7 +195,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
       sections.push({
         id: index + 1,
         org: acceleratorOrgs.find((org) => org.projects.some((proj) => proj.id === projectId)),
-        projectId: projectId,
+        projectId,
         projectDetails: { projectId, landUseModelTypes: [] },
       });
     });

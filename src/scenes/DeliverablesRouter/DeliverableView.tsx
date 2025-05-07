@@ -89,7 +89,7 @@ const DeliverableView = (): JSX.Element => {
               goToDeliverableEdit(
                 deliverable.id,
                 deliverable.projectId,
-                Boolean(scrolledBeyondViewport && variableId) ? Number(variableId) : undefined
+                scrolledBeyondViewport && variableId ? Number(variableId) : undefined
               );
             }}
             size='medium'

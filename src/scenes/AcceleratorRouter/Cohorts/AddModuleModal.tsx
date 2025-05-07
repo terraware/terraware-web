@@ -52,7 +52,7 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
           title: record.title,
           startDate: record.startDate,
           endDate: record.endDate,
-          isActive: isActive,
+          isActive,
         });
       }
     }

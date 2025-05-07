@@ -24,11 +24,11 @@ export default function MapIcon({ centerAligned, icon }: MapIconProps): JSX.Elem
   };
 
   if (icon === 'polygon') {
-    return <button className={`mapbox-gl-draw_polygon mapbox-gl-draw_ctrl-draw-btn`} style={iconStyles} />;
+    return <button className={'mapbox-gl-draw_polygon mapbox-gl-draw_ctrl-draw-btn'} style={iconStyles} />;
   }
 
   if (icon === 'trash') {
-    return <button className={`mapbox-gl-draw_trash mapbox-gl-draw_ctrl-draw-btn`} style={iconStyles} />;
+    return <button className={'mapbox-gl-draw_trash mapbox-gl-draw_ctrl-draw-btn'} style={iconStyles} />;
   }
 
   return <Icon name='iconSlice' style={iconStyles} />;

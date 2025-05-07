@@ -61,7 +61,7 @@ export default function PreviewDocument({ projectName }: PreviewDocumentProps): 
         <img width='205px' src='assets/logo-tw.svg' alt='Terraware logo' />
       </div>
 
-      <div className='header-right'></div>
+      <div className='header-right' />
 
       <div className='footer-left'>
         <p>

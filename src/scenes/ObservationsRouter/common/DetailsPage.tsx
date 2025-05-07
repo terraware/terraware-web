@@ -37,7 +37,7 @@ export default function DetailsPage({
       {
         plantingSiteId: Number(plantingSiteId),
         observationId: Number(observationId),
-        plantingZoneName: plantingZoneName,
+        plantingZoneName,
       },
       defaultTimeZone.get().id
     )

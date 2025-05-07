@@ -353,7 +353,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
             >
               <img
                 src={`${photoUrl}?maxHeight=120`}
-                alt={`new`}
+                alt={'new'}
                 style={{
                   margin: 'auto auto',
                   objectFit: 'contain',

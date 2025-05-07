@@ -167,7 +167,7 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
       {
         ...site,
         boundary: newBoundary,
-        plantingZones: plantingZones,
+        plantingZones,
       },
       'site_boundary',
       []

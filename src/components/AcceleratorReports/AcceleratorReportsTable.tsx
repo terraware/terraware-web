@@ -179,7 +179,7 @@ export default function AcceleratorReportsTable(): JSX.Element {
         setYearFilter(currentYear.toString());
       } else {
         const futureYears = allReportYears.filter((year) => year > currentYear).sort((a, b) => a - b);
-        if (!!futureYears.length) {
+        if (futureYears.length) {
           setYearFilter(futureYears[0].toString());
         } else {
           const pastYears = allReportYears.filter((year) => year < currentYear).sort((a, b) => b - a);

@@ -23,7 +23,7 @@ export default function DeleteAccountModal({ onCancel }: DeleteAccountModalProps
     const response = await UserService.deleteUser();
     if (response.requestSucceeded) {
       mixpanel?.reset();
-      window.location.href = `/sso/logout`;
+      window.location.href = '/sso/logout';
     } else {
       setBusy(false);
       snackbar.toastError(strings.DELETE_ACCOUNT_ERROR);

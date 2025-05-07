@@ -46,7 +46,6 @@ export default function ParticipantsNew(): JSX.Element {
     if (result?.status === 'error') {
       snackbar.toastError();
     } else if (result?.status === 'success') {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       goToParticipant(result.data!.id);
       snackbar.toastSuccess(strings.CHANGES_SAVED);
     }

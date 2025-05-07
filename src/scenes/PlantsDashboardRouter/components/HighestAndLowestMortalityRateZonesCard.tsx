@@ -19,7 +19,7 @@ export default function TotalMortalityRateCard({
   const theme = useTheme();
   const summaries = useObservationSummaries(plantingSiteId);
 
-  let highestMortalityRate: number | undefined = undefined;
+  let highestMortalityRate: number | undefined;
   let highestZoneId: number;
 
   let lowestMortalityRate = 100;
