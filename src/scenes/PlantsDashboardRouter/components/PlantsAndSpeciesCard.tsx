@@ -35,7 +35,7 @@ export default function PlantsAndSpeciesCard({
   const siteReportedPlants = useAppSelector((state) => selectSiteReportedPlants(state, plantingSiteId));
   const theme = useTheme();
   const plantings = useAppSelector((state) => selectPlantingsForSite(state, plantingSiteId));
-  const allPlantings = useAppSelector((state) => selectPlantings(state));
+  const allPlantings = useAppSelector(selectPlantings);
   const [totalSpecies, setTotalSpecies] = useState<number>();
   const { isDesktop } = useDeviceInfo();
   const { activeLocale } = useLocalization();
