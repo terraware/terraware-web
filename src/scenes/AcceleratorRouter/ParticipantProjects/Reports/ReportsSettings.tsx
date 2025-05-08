@@ -173,7 +173,7 @@ export default function ReportsSettings(): JSX.Element {
         title={strings.SETTINGS}
         rightComponent={
           isAllowed('UPDATE_REPORTS_SETTINGS') && (
-            <Button icon='iconEdit' onClick={goToEditSettings} priority='secondary' />
+            <Button icon='iconEdit' onClick={goToEditSettings} priority='secondary' label={strings.EDIT_SETTINGS} />
           )
         }
       >
