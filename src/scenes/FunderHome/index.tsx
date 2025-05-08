@@ -7,19 +7,40 @@ import TfMain from 'src/components/common/TfMain';
 import { useLocalization, useUserFundingEntity } from 'src/providers';
 import { requestListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
 import { selectListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
+import { requestGetFunderProject } from 'src/redux/features/funder/projects/funderProjectsAsyncThunks';
+import { selectFunderProjectRequest } from 'src/redux/features/funder/projects/funderProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import FunderReportView from 'src/scenes/FunderReport/FunderReportView';
 import strings from 'src/strings';
 import { PublishedReport } from 'src/types/AcceleratorReport';
+import { FunderProjectDetails } from 'src/types/FunderProject';
+import useSnackbar from 'src/utils/useSnackbar';
 import useStickyTabs from 'src/utils/useStickyTabs';
+
+import ProjectProfileView from '../AcceleratorRouter/ParticipantProjects/ProjectProfileView';
 
 export default function FunderHome() {
   const { activeLocale } = useLocalization();
+  const dispatch = useAppDispatch();
+  const snackbar = useSnackbar();
   const { userFundingEntity } = useUserFundingEntity();
   const [selectedProjectId, setSelectedProjectId] = useState<number>();
-  const dispatch = useAppDispatch();
+  const [projectDetails, setProjectDetails] = useState<FunderProjectDetails>();
+  const getFunderProjectResult = useAppSelector(selectFunderProjectRequest(selectedProjectId || -1));
   const reportsResponse = useAppSelector(selectListFunderReports(selectedProjectId?.toString() ?? ''));
   const [reports, setReports] = useState<PublishedReport[]>();
+
+  useEffect(() => {
+    if (!getFunderProjectResult) {
+      return;
+    }
+
+    if (getFunderProjectResult.status === 'error') {
+      snackbar.toastError(strings.GENERIC_ERROR);
+    } else if (getFunderProjectResult.status === 'success' && getFunderProjectResult.data) {
+      setProjectDetails(getFunderProjectResult.data);
+    }
+  }, [getFunderProjectResult, snackbar]);
 
   useEffect(() => {
     if ((userFundingEntity?.projects?.length ?? 0) > 0) {
@@ -28,10 +49,11 @@ export default function FunderHome() {
   }, [userFundingEntity]);
 
   useEffect(() => {
-    if (selectedProjectId) {
+    if (selectedProjectId && selectedProjectId !== -1) {
+      void dispatch(requestGetFunderProject(selectedProjectId));
       void dispatch(requestListFunderReports(selectedProjectId));
     }
-  }, [selectedProjectId]);
+  }, [dispatch, selectedProjectId]);
 
   useEffect(() => {
     if (reportsResponse?.status === 'success') {
@@ -47,7 +69,7 @@ export default function FunderHome() {
       {
         id: 'projectProfile',
         label: strings.PROJECT_PROFILE,
-        children: <Box>Project Profile</Box>,
+        children: <ProjectProfileView funderView={true} projectDetails={projectDetails} />,
       },
       {
         id: 'report',
@@ -61,7 +83,7 @@ export default function FunderHome() {
         ),
       },
     ];
-  }, [activeLocale, userFundingEntity, selectedProjectId, reports]);
+  }, [activeLocale, userFundingEntity, projectDetails, selectedProjectId, reports]);
 
   const { activeTab, onTabChange } = useStickyTabs({
     defaultTab: 'projectProfile',
