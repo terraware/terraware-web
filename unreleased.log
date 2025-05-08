@@ -1,3 +1,5 @@
+8d068906030 SW-6832 Total plants and species for rolled up view (#3966)
+96a576e4d2b SW-6876 Add Empty State for SDG and Funding Entities (#3970)
 848a9f139ad Run yarn lint --fix to fix simple lint issues (#3965)
 ecde4df2914 Disable project map zoom for country map only (#3961)
 6885e03df27 Updated translations from Phrase (#3962)
