@@ -219,7 +219,12 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
           </Box>
         </Grid>
         <Grid item xs={12}>
-          <PlantsAndSpeciesCard plantingSiteId={selectedPlantingSiteId} hasReportedPlants={hasReportedPlants} />
+          <PlantsAndSpeciesCard
+            plantingSiteId={selectedPlantingSiteId}
+            hasReportedPlants={hasReportedPlants}
+            organizationId={organizationIdToUse}
+            projectId={projectId}
+          />
         </Grid>
       </>
     ),
@@ -406,9 +411,9 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     >
       <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
         {renderTotalPlantsAndSpecies()}
-        {hasObservations && renderMortalityRate()}
-        {renderPlantingProgressAndDensity()}
-        {hasObservations && renderPlantingSiteTrends()}
+        {hasObservations && selectedPlantingSiteId !== -2 && renderMortalityRate()}
+        {selectedPlantingSiteId !== -2 && renderPlantingProgressAndDensity()}
+        {hasObservations && selectedPlantingSiteId !== -2 && renderPlantingSiteTrends()}
         {hasPlantingZones && renderZoneLevelData()}
         {hasPolygons && !hasPlantingZones && renderSimpleSiteMap()}
       </Grid>
