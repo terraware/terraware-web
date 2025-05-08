@@ -145,7 +145,7 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
               siteName={plantingSite?.name || ''}
               plantingComplete={subzonesComplete[properties.id]}
               onUpdatePlantingComplete={updatePlantingComplete}
-              busy={updateStatus.status === 'pending'}
+              busy={updateStatus?.status === 'pending'}
             />
           ),
           anchor: 'bottom',
