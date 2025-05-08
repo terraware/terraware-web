@@ -235,6 +235,7 @@ const ProjectProfileView = ({
             label={strings.ACCUMULATION_RATE}
             value={participantProject?.accumulationRate}
             backgroundColor={theme.palette.TwClrBaseGray050}
+            units={<Co2HectareYear />}
           />
         )}
         <InvertedCard
@@ -282,29 +283,36 @@ const ProjectProfileView = ({
           </Grid>
         </>
       )}
-      {projectReports?.length > 0 && (
-        <Grid container marginY={theme.spacing(2)} marginLeft={theme.spacing(1)}>
-          {lastSubmittedReport && lastSubmittedReport.submittedTime && (
-            <Grid item marginRight={theme.spacing(3)}>
-              <Typography fontWeight={500}>
-                {strings.formatString(
-                  strings.LAST_REPORT_SUBMITTED,
-                  getDateDisplayValue(lastSubmittedReport.submittedTime)
-                )}
-              </Typography>
-            </Grid>
-          )}
+      <Grid container marginY={theme.spacing(2)} marginLeft={theme.spacing(1)}>
+        {projectReports?.length > 0 && (
+          <>
+            {lastSubmittedReport && lastSubmittedReport.submittedTime && (
+              <Grid item marginRight={theme.spacing(3)} marginLeft={theme.spacing(1)}>
+                <Typography fontWeight={500}>
+                  {strings.formatString(
+                    strings.LAST_REPORT_SUBMITTED,
+                    getDateDisplayValue(lastSubmittedReport.submittedTime)
+                  )}
+                </Typography>
+              </Grid>
+            )}
 
-          <Grid item>
-            <Link to={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', (project?.id || '').toString())}>
-              {strings.VIEW_REPORTS}
-            </Link>
-          </Grid>
-        </Grid>
-      )}
+            <Grid item>
+              <Link to={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', (project?.id || '').toString())}>
+                {strings.VIEW_REPORTS}
+              </Link>
+            </Grid>
+          </>
+        )}
+      </Grid>
 
       <Grid container>
-        <Box marginX={theme.spacing(2)} borderTop={`1px solid ${theme.palette.TwClrBrdrTertiary}`} width={'100%'}>
+        <Box
+          marginX={theme.spacing(1)}
+          paddingX={theme.spacing(1)}
+          borderTop={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+          width={'100%'}
+        >
           <Grid item xs={12} marginTop={theme.spacing(2)}>
             <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
               {strings.LAND_DATA}
@@ -433,7 +441,7 @@ const ProjectProfileView = ({
               label={strings.DELIVERABLES}
             />
           )}
-          {project && projectReports?.length > 0 && (
+          {project && (
             <ProjectFieldLink
               value={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', project.id.toString())}
               label={strings.REPORTS}
