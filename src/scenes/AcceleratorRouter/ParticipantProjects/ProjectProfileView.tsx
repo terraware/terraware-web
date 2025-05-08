@@ -467,19 +467,19 @@ const ProjectProfileView = ({
               {strings.UN_SDG}
             </Typography>
           </Grid>
-          {participantProject?.sdgList && <ProjectSdgDisplay sdgList={participantProject.sdgList} />}
+          <ProjectSdgDisplay sdgList={participantProject?.sdgList} />
         </Box>
       </Grid>
 
-      <Grid container>
-        <Box marginX={theme.spacing(2)} width={'100%'}>
-          <Grid item xs={12} marginY={theme.spacing(2)}>
-            <Typography fontSize='16px' fontWeight={600} lineHeight='24px'>
-              {strings.FUNDING_ENTITIES}
-            </Typography>
-          </Grid>
-          {fundingEntities?.length > 0 &&
-            fundingEntities.map((e, i) => (
+      {fundingEntities?.length > 0 && (
+        <Grid container>
+          <Box marginX={theme.spacing(2)} width={'100%'}>
+            <Grid item xs={12} marginY={theme.spacing(2)}>
+              <Typography fontSize='16px' fontWeight={600} lineHeight='24px'>
+                {strings.FUNDING_ENTITIES}
+              </Typography>
+            </Grid>
+            {fundingEntities.map((e, i) => (
               <Typography
                 key={`entity-${i}`}
                 fontSize='20px'
@@ -490,8 +490,9 @@ const ProjectProfileView = ({
                 {e.name}
               </Typography>
             ))}
-        </Box>
-      </Grid>
+          </Box>
+        </Grid>
+      )}
 
       <ProjectProfileFooter project={project} projectMeta={projectMeta} />
     </Card>
