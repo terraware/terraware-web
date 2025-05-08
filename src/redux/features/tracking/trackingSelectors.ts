@@ -30,6 +30,13 @@ export const selectOrgPlantingSite = (state: RootState, plantingSiteId: number, 
 export const selectSiteReportedPlants = (state: RootState, plantingSiteId: number) =>
   state.siteReportedPlantsResults[plantingSiteId]?.site;
 
+export const selectMultipleSitesTotalPlants = (state: RootState, plantingSiteIds: string[]) => {
+  return plantingSiteIds.reduce((total, psId) => {
+    const siteData = state.siteReportedPlantsResults[+psId]?.site;
+    return total + (siteData?.totalPlants ?? 0);
+  }, 0);
+};
+
 export const selectSiteReportedPlantsError = (state: RootState, plantingSiteId: number) =>
   state.siteReportedPlantsResults[plantingSiteId]?.error;
 
