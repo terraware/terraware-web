@@ -8,11 +8,14 @@ import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUser } from 'src/providers';
-import { requestDeleteFunders, requestListFunders } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
+import {
+  requestDeleteFunders,
+  requestListFunders,
+} from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
 import {
   selectDeleteFundersRequest,
   selectListFundersRequest,
-} from 'src/redux/features/funder/fundingEntitiesSelectors';
+} from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Funder } from 'src/types/FundingEntity';

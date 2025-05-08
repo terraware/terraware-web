@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { InviteFunderResponse } from 'src/services/FundingEntityService';
+import { InviteFunderResponse } from 'src/services/funder/FundingEntityService';
 import { PublishedReport } from 'src/types/AcceleratorReport';
 import { Funder, FundingEntity } from 'src/types/FundingEntity';
 

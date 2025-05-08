@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { requestFundingEntityForUser } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
-import { selectUserFundingEntityRequest } from 'src/redux/features/funder/fundingEntitiesSelectors';
+import { requestFundingEntityForUser } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
+import { selectUserFundingEntityRequest } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import useEnvironment from 'src/utils/useEnvironment';

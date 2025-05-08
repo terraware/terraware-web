@@ -1,16 +1,43 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
 import { Tabs } from '@terraware/web-components';
 
 import TfMain from 'src/components/common/TfMain';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUserFundingEntity } from 'src/providers';
+import { requestListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
+import { selectListFunderReports } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import FunderReportView from 'src/scenes/FunderReport/FunderReportView';
 import strings from 'src/strings';
+import { PublishedReport } from 'src/types/AcceleratorReport';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 export default function FunderHome() {
   const { activeLocale } = useLocalization();
+  const { userFundingEntity } = useUserFundingEntity();
+  const [selectedProjectId, setSelectedProjectId] = useState<number>();
+  const dispatch = useAppDispatch();
+  const reportsResponse = useAppSelector(selectListFunderReports(selectedProjectId?.toString() ?? ''));
+  const [reports, setReports] = useState<PublishedReport[]>();
+
+  useEffect(() => {
+    if ((userFundingEntity?.projects?.length ?? 0) > 0) {
+      setSelectedProjectId(userFundingEntity?.projects?.[0].projectId);
+    }
+  }, [userFundingEntity]);
+
+  useEffect(() => {
+    if (selectedProjectId) {
+      void dispatch(requestListFunderReports(selectedProjectId));
+    }
+  }, [selectedProjectId]);
+
+  useEffect(() => {
+    if (reportsResponse?.status === 'success') {
+      setReports(reportsResponse.data);
+    }
+  }, [reportsResponse]);
 
   const tabs = useMemo(() => {
     if (!activeLocale) {
@@ -25,10 +52,16 @@ export default function FunderHome() {
       {
         id: 'report',
         label: strings.REPORT,
-        children: <FunderReportView />,
+        children: (
+          <FunderReportView
+            selectedProjectId={selectedProjectId}
+            reports={reports}
+            userFundingEntity={userFundingEntity}
+          />
+        ),
       },
     ];
-  }, [activeLocale]);
+  }, [activeLocale, userFundingEntity]);
 
   const { activeTab, onTabChange } = useStickyTabs({
     defaultTab: 'projectProfile',
