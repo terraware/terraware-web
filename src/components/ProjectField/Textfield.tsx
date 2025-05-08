@@ -20,7 +20,7 @@ const ProjectFieldTextfield = ({ height, id, label, onChange, type, value, md, t
   );
 
   useEffect(() => {
-    if (value) {
+    if (value !== undefined) {
       setLocalValue(`${value}`);
     }
   }, [value]);
