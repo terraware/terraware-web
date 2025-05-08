@@ -1690,6 +1690,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/funder/projects/{projectId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets project detail information displayable to funders */
+        get: operations["getProject_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/funder/reports/projects/{projectId}": {
         parameters: {
             query?: never;
@@ -5847,6 +5864,35 @@ export interface components {
             /** Format: int64 */
             userId: number;
         };
+        FunderProjectDetailsPayload: {
+            accumulationRate?: number;
+            annualCarbon?: number;
+            confirmedReforestableLand?: number;
+            countryCode?: string;
+            dealDescription?: string;
+            dealName?: string;
+            landUseModelHectares: {
+                [key: string]: number;
+            };
+            methodologyNumber?: string;
+            minProjectArea?: number;
+            /** Format: int32 */
+            numNativeSpecies?: number;
+            perHectareBudget?: number;
+            projectArea?: number;
+            /** Format: int64 */
+            projectHighlightPhotoValueId?: number;
+            /** Format: int64 */
+            projectId: number;
+            /** Format: int64 */
+            projectZoneFigureValueId?: number;
+            sdgList: ("1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17")[];
+            standard?: string;
+            totalExpansionPotential?: number;
+            totalVCU?: number;
+            /** Format: uri */
+            verraLink?: string;
+        };
         FundingEntityPayload: {
             /** Format: int64 */
             id: number;
@@ -5970,6 +6016,10 @@ export interface components {
         };
         GetFundingEntityResponsePayload: {
             fundingEntity: components["schemas"]["FundingEntityPayload"];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        GetFundingProjectResponsePayload: {
+            details: components["schemas"]["FunderProjectDetailsPayload"];
             status: components["schemas"]["SuccessOrError"];
         };
         GetMapboxTokenResponsePayload: {
@@ -13645,6 +13695,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    getProject_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetFundingProjectResponsePayload"];
                 };
             };
         };
