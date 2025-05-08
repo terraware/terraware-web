@@ -21,11 +21,13 @@ const OrgObservationsRenderer =
     goToRescheduleObservation: (observationId: number) => void,
     exportObservationCsv: (observationId: number) => void,
     exportObservationGpx: (observationId: number) => void,
+    exportObservationResults: (observationId: number) => void,
     openEndObservationModal: (observationId: Observation) => void
   ) =>
   // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
+    const observationId = Number(row.observationId);
 
     const getTruncatedNames = (inputNames: string) => {
       const names = inputNames.split('\r');
@@ -85,7 +87,7 @@ const OrgObservationsRenderer =
               disabled: exportDisabled,
               label: `${strings.EXPORT_LOCATIONS} (${strings.CSV_FILE})`,
               onClick: () => {
-                exportObservationCsv(row.observationId);
+                exportObservationCsv(observationId);
               },
               tooltip: exportDisabled ? strings.EXPORT_LOCATIONS_DISABLED_TOOLTIP : undefined,
             },
@@ -93,15 +95,22 @@ const OrgObservationsRenderer =
               disabled: exportDisabled,
               label: `${strings.EXPORT_LOCATIONS} (${strings.GPX_FILE})`,
               onClick: () => {
-                exportObservationGpx(row.observationId);
+                exportObservationGpx(observationId);
               },
               tooltip: exportDisabled ? strings.EXPORT_LOCATIONS_DISABLED_TOOLTIP : undefined,
+            },
+            {
+              disabled: exportDisabled,
+              label: strings.EXPORT_RESULTS,
+              onClick: () => {
+                exportObservationResults(observationId);
+              },
             },
             {
               disabled: row.state === 'Completed' || row.hasObservedPermanentPlots || row.hasObservedTemporaryPlots,
               label: strings.RESCHEDULE,
               onClick: () => {
-                goToRescheduleObservation(row.observationId);
+                goToRescheduleObservation(observationId);
               },
             },
             {

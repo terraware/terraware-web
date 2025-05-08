@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Grid } from '@mui/material';
@@ -25,6 +25,7 @@ import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
 import MatchSpeciesModal from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
 import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/common/UnrecognizedSpeciesPageMessage';
 import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/common/useOnSaveMergedSpecies';
+import exportObservationResults from 'src/scenes/ObservationsRouter/details/exportObservationResults';
 import strings from 'src/strings';
 import { ObservationState } from 'src/types/Observations';
 import { FieldOptionsMap } from 'src/types/Search';
@@ -209,6 +210,12 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
 
   const onSaveMergedSpecies = useOnSaveMergedSpecies({ observationId, reload, setShowMatchSpeciesModal });
 
+  const onExportObservationResults = useCallback(() => {
+    if (selectedObservationResults && selectedObservationResults.length > 0) {
+      void exportObservationResults({ observationResults: selectedObservationResults[0] });
+    }
+  }, [selectedObservationResults]);
+
   return (
     <DetailsPage
       title={title}
@@ -264,7 +271,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
                 />
               }
               onView={setView}
-              search={<Search {...searchProps} />}
+              search={<Search {...searchProps} onExport={onExportObservationResults} />}
               style={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}
             />
           )}
