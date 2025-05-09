@@ -1,3 +1,4 @@
+3b4061f41db Disabled no-unsafe-* linting rules and removed manual disabling of them for lines (#3975)
 bd28211460a SW-6837 Added PlantingSiteProvider to replace sporadic dispatches and selectors (#3927)
 5bbf48705bb Fix no-floating-promises and no-misused-promise linting issues (#3964)
 3505a400a40 SW-6807: Project Org Admin should be able to edit metric targets (Follow-up #2) (#3973)
