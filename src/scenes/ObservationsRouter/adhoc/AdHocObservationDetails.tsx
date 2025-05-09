@@ -34,7 +34,7 @@ type AdHocObservationDetailsProps = {
   reload: () => void;
 };
 
-export default function AdHocObservationDetails(props: AdHocObservationDetailsProps): JSX.Element {
+export default function AdHocObservationDetails(props: AdHocObservationDetailsProps): JSX.Element | undefined {
   const { reload } = props;
   const { plantingSiteId, observationId, monitoringPlotId } = useParams<{
     plantingSiteId: string;
@@ -151,11 +151,15 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
 
   const onSaveMergedSpecies = useOnSaveMergedSpecies({ observationId, reload, setShowMatchSpeciesModal });
 
+  if (!plantingSiteId || !observationId) {
+    return undefined;
+  }
+
   return (
     <DetailsPage
       title={monitoringPlot?.monitoringPlotNumber?.toString() ?? ''}
-      plantingSiteId={plantingSiteId}
-      observationId={observationId}
+      plantingSiteId={Number(plantingSiteId)}
+      observationId={Number(observationId)}
       rightComponent={
         <OptionsMenu
           onOptionItemClick={() => setShowMatchSpeciesModal(true)}
@@ -192,7 +196,9 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
                 <Grid key={index} item xs={gridSize} marginTop={2}>
                   <Textfield
                     id={`plot-observation-${index}`}
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     label={datum.label}
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     value={datum.value}
                     type={datum.text ? 'textarea' : 'text'}
                     preserveNewlines={true}

@@ -9,7 +9,7 @@ import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useUser } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
-import { selectDefaultSpecies } from 'src/redux/features/species/speciesSelectors';
+import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { useNumberFormatter } from 'src/utils/useNumber';
@@ -82,21 +82,23 @@ const SiteWithoutZonesCard = ({
 };
 
 const SiteWithZonesCard = ({ newVersion }: NumberOfSpeciesPlantedCardProps): JSX.Element => {
-  const speciesSelector = useAppSelector((state) => selectDefaultSpecies(state));
-  const { plantingSiteReportedPlants } = usePlantingSiteData();
+  const { plantingSite, plantingSiteReportedPlants } = usePlantingSiteData();
+  const speciesSelector = useAppSelector(selectSpecies(plantingSite?.organizationId ?? -1));
 
   const totalSpecies = useMemo(() => plantingSiteReportedPlants?.species.length ?? 0, [plantingSiteReportedPlants]);
   const labels = [strings.RARE, strings.ENDANGERED, strings.OTHER];
 
+  const orgSpecies = useMemo(() => speciesSelector?.data?.species, [speciesSelector]);
+
   const values = useMemo(() => {
-    if (plantingSiteReportedPlants?.species) {
+    if (plantingSiteReportedPlants?.species && orgSpecies) {
       const speciesByCategory: Record<string, number> = {
         [strings.RARE]: 0,
         [strings.ENDANGERED]: 0,
         [strings.OTHER]: 0,
       };
       plantingSiteReportedPlants.species.forEach((reportedSpecies) => {
-        const species = speciesSelector?.find((s) => s.id === reportedSpecies.id);
+        const species = orgSpecies.find((s) => s.id === reportedSpecies.id);
         if (species) {
           let endangered = false;
           let rare = false;
@@ -120,7 +122,7 @@ const SiteWithZonesCard = ({ newVersion }: NumberOfSpeciesPlantedCardProps): JSX
     } else {
       return [];
     }
-  }, [plantingSiteReportedPlants, speciesSelector, totalSpecies]);
+  }, [plantingSiteReportedPlants, orgSpecies, totalSpecies]);
 
   return <ChartData labels={labels} values={values} totalSpecies={totalSpecies} newVersion={newVersion} />;
 };

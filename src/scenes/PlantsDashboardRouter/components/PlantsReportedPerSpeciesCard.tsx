@@ -8,7 +8,7 @@ import PieChart from 'src/components/common/Chart/PieChart';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
-import { selectDefaultSpecies } from 'src/redux/features/species/speciesSelectors';
+import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { truncate } from 'src/utils/text';
@@ -121,17 +121,19 @@ const SiteWithZonesCard = ({
   plantingSiteId: number;
   newVersion?: boolean;
 }): JSX.Element => {
-  const speciesSelector = useAppSelector((state) => selectDefaultSpecies(state));
-  const { plantingSiteReportedPlants } = usePlantingSiteData();
+  const { plantingSite, plantingSiteReportedPlants } = usePlantingSiteData();
+  const speciesSelector = useAppSelector(selectSpecies(plantingSite?.organizationId ?? -1));
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
   const [tooltipTitles, setTooltipTitles] = useState<string[]>();
 
+  const orgSpecies = useMemo(() => speciesSelector?.data?.species, [speciesSelector]);
+
   const speciesQuantities = useMemo(() => {
-    if (plantingSiteReportedPlants && speciesSelector) {
+    if (plantingSiteReportedPlants && orgSpecies) {
       const transformedPlantings = plantingSiteReportedPlants.species
         .map((population) => {
-          const speciesName = speciesSelector.find((species) => species.id === population.id)?.scientificName ?? '';
+          const speciesName = orgSpecies.find((species) => species.id === population.id)?.scientificName ?? '';
           return {
             plants: population.totalPlants,
             scientificName: speciesName,
@@ -142,7 +144,7 @@ const SiteWithZonesCard = ({
     } else {
       return [];
     }
-  }, [plantingSiteReportedPlants, speciesSelector, newVersion]);
+  }, [plantingSiteReportedPlants, orgSpecies, newVersion]);
 
   useEffect(() => {
     setLabels(Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)));

@@ -213,6 +213,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     <DetailsPage
       title={title}
       plantingSiteId={plantingSiteId}
+      observationId={observationId}
       rightComponent={
         <OptionsMenu
           onOptionItemClick={() => setShowMatchSpeciesModal(true)}
