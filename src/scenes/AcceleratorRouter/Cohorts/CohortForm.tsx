@@ -72,7 +72,6 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
   const updateField = (field: keyof T, value: any) => {
     setLocalRecord((prev) => ({
       ...prev,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       [field]: value,
     }));
   };

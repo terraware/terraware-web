@@ -98,11 +98,9 @@ export default function PlantsPrimaryPage({
         if (selectedOrganization.id !== -1) {
           const response = CachedUserService.getUserOrgPreferences(selectedOrganization.id);
           if (response[lastVisitedPreferenceName]) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             lastVisitedPlantingSite = response[lastVisitedPreferenceName];
           }
         }
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         const lastPlantingSiteId = Number(lastVisitedPlantingSite.plantingSiteId);
         const paramPlantingSiteId = plantingSiteId ? Number(plantingSiteId) : undefined;
 

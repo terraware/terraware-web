@@ -36,7 +36,6 @@ const TerrawareHomeView = () => {
   const { user } = useUser();
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
   const { isTablet, isMobile, isDesktop } = useDeviceInfo();
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const mixpanel = useMixpanel();
   const navigate = useSyncNavigate();
   const dispatch = useAppDispatch();

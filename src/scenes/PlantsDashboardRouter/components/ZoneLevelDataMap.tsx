@@ -234,7 +234,6 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
 
         return (
           <MapTooltip
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             title={zoneObservation?.name ?? entity.name}
             subtitle={''} // TODO calculate latest observation per zone
             properties={properties}
