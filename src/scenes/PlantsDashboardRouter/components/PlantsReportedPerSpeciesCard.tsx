@@ -11,6 +11,7 @@ import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopul
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { PlantingSite } from 'src/types/Tracking';
 import { truncate } from 'src/utils/text';
 
 const MAX_SPECIES_NAME_LENGTH = 20;
@@ -18,6 +19,7 @@ const MAX_SPECIES_NAME_LENGTH = 20;
 type PlantsReportedPerSpeciesCardProps = {
   plantingSiteId: number;
   newVersion?: boolean;
+  plantingSites?: PlantingSite[];
 };
 
 export default function PlantsReportedPerSpeciesCard({
