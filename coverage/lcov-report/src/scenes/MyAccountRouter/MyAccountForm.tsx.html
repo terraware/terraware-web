@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/163</span>
+                <span class='fraction'>0/167</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/155</span>
+                <span class='fraction'>0/159</span>
             </div>
         
             
@@ -978,6 +978,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -985,6 +986,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -997,17 +1005,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1407,7 +1407,7 @@ const MyAccountForm = <span class="cstat-no" title="statement not covered" ><spa
         }
       }
     };
-<span class="cstat-no" title="statement not covered" >    populatePeople();</span>
+<span class="cstat-no" title="statement not covered" >    void populatePeople();</span>
   }, [removedOrg, user.id]);
 &nbsp;
   const removeSelectedOrgs = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -1574,7 +1574,7 @@ const MyAccountForm = <span class="cstat-no" title="statement not covered" ><spa
       cancelID='cancelAccountChange'
       saveID='saveAccountChange'
       onCancel={onCancel}
-      onSave={saveChanges}
+      onSave={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >void saveChanges()}</span>
       hideEdit={!edit}
       desktopOffset={desktopOffset}
     &gt;
@@ -1583,14 +1583,14 @@ const MyAccountForm = <span class="cstat-no" title="statement not covered" ><spa
           &lt;LeaveOrganizationDialog
             open={leaveOrganizationModalOpened}
             onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setLeaveOrganizationModalOpened(false)}</span>
-            onSubmit={leaveOrgHandler}
+            onSubmit={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >void leaveOrgHandler()}</span>
             orgName={removedOrg.name}
           /&gt;
           &lt;AssignNewOwnerDialog
             open={assignNewOwnerModalOpened}
             onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setAssignNewOwnerModalOpened(false)}</span>
             people={orgPeople || []}
-            onSubmit={saveChanges}
+            onSubmit={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >void saveChanges()}</span>
             setNewOwner={setNewOwner}
             selectedOwner={newOwner}
           /&gt;
@@ -1603,7 +1603,7 @@ const MyAccountForm = <span class="cstat-no" title="statement not covered" ><spa
             open={deleteOrgModalOpened}
             onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setDeleteOrgModalOpened(false)}</span>
             orgName={removedOrg.name}
-            onSubmit={deleteOrgHandler}
+            onSubmit={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >void deleteOrgHandler()}</span>
           /&gt;
         &lt;/&gt;
       )}
@@ -1858,7 +1858,7 @@ export default MyAccountForm;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-09T19:45:09.677Z
+                at 2025-05-09T20:09:37.157Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

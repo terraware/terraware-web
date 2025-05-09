@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/56</span>
+                <span class='fraction'>0/57</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/56</span>
+                <span class='fraction'>0/57</span>
             </div>
         
             
@@ -306,9 +306,7 @@
 <a name='L241'></a><a href='#L241'>241</a>
 <a name='L242'></a><a href='#L242'>242</a>
 <a name='L243'></a><a href='#L243'>243</a>
-<a name='L244'></a><a href='#L244'>244</a>
-<a name='L245'></a><a href='#L245'>245</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L244'></a><a href='#L244'>244</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -525,7 +523,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -570,8 +568,7 @@ import { useAppDispatch } from 'src/redux/store';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import CTACard from 'src/scenes/Home/CTACard';
 import OnboardingCard, { OnboardingCardRow } from 'src/scenes/Home/OnboardingHomeView/OnboardingCard';
-import { PreferencesService, SpeciesService } from 'src/services';
-import { OrganizationUserService } from 'src/services';
+import { OrganizationUserService, PreferencesService, SpeciesService } from 'src/services';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { OrganizationUser } from 'src/types/User';
@@ -616,7 +613,7 @@ const OnboardingHomeView = <span class="cstat-no" title="statement not covered" 
         }
       }
     };
-<span class="cstat-no" title="statement not covered" >    populatePeople();</span>
+<span class="cstat-no" title="statement not covered" >    void populatePeople();</span>
   }, [selectedOrganization]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -633,8 +630,8 @@ const OnboardingHomeView = <span class="cstat-no" title="statement not covered" 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    dispatch(requestObservations(selectedOrganization.id));</span>
-<span class="cstat-no" title="statement not covered" >    dispatch(requestObservationsResults(selectedOrganization.id));</span>
+<span class="cstat-no" title="statement not covered" >    void dispatch(requestObservations(selectedOrganization.id));</span>
+<span class="cstat-no" title="statement not covered" >    void dispatch(requestObservationsResults(selectedOrganization.id));</span>
   }, [dispatch, selectedOrganization.id]);
 &nbsp;
   const isLoadingInitialData = <span class="cstat-no" title="statement not covered" >useMemo(</span>
@@ -669,7 +666,7 @@ const OnboardingHomeView = <span class="cstat-no" title="statement not covered" 
             secondaryButtonProps: {
               label: strings.I_AM_THE_ONLY_PERSON,
               onClick: <span class="fstat-no" title="function not covered" >()</span> =&gt; {
-<span class="cstat-no" title="statement not covered" >                markAsComplete();</span>
+<span class="cstat-no" title="statement not covered" >                void markAsComplete();</span>
               },
             },
             icon: 'person' as IconName,
@@ -769,7 +766,7 @@ const OnboardingHomeView = <span class="cstat-no" title="statement not covered" 
                             )}
                           &lt;/Typography&gt;
 &nbsp;
-                          &lt;Link fontSize='16px' fontWeight={400} onClick={dismissAcceleratorCard}&gt;
+                          &lt;Link fontSize='16px' fontWeight={400} onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >void dismissAcceleratorCard()}</span>&gt;
                             {strings.DISMISS}
                           &lt;/Link&gt;
                         &lt;/Box&gt;,
@@ -802,7 +799,7 @@ export default OnboardingHomeView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-09T19:45:09.677Z
+                at 2025-05-09T20:09:37.157Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
