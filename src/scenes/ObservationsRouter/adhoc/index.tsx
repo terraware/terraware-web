@@ -187,9 +187,7 @@ export default function ObservationMonitoringPlot(): JSX.Element | undefined {
                 <Grid key={index} item xs={gridSize} marginTop={2}>
                   <Textfield
                     id={`plot-observation-${index}`}
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     label={datum.label}
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     value={datum.value}
                     type={datum.text ? 'textarea' : 'text'}
                     preserveNewlines={true}
