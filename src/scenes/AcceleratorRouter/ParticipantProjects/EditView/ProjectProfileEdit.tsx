@@ -300,6 +300,9 @@ const ProjectProfileEdit = () => {
 
   const onChangeLandUseHectares = (type: string, hectares: string) => {
     const updated = { ...participantProjectRecord?.landUseModelHectares, [type]: Number(hectares) };
+    if (hectares === '') {
+      delete updated[type];
+    }
     onChangeParticipantProject('landUseModelHectares', updated);
   };
 

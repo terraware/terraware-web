@@ -3,16 +3,17 @@ import React, { useMemo } from 'react';
 import { useTheme } from '@mui/material';
 
 import strings from 'src/strings';
-import { LAND_USE_MODEL_TYPES } from 'src/types/ParticipantProject';
+import { LAND_USE_MODEL_TYPES, LandUseModelType } from 'src/types/ParticipantProject';
 
 import InvertedCard from './InvertedCard';
 
 type LandUseModelTypeCardProps = {
+  selectedTypes?: LandUseModelType[];
   modelHectares?: { [key: string]: number };
   numericFormatter?: any;
 };
 
-const LandUseModelTypeCard = ({ modelHectares, numericFormatter }: LandUseModelTypeCardProps) => {
+const LandUseModelTypeCard = ({ selectedTypes, modelHectares, numericFormatter }: LandUseModelTypeCardProps) => {
   const theme = useTheme();
 
   const value = useMemo(() => {
@@ -21,11 +22,14 @@ const LandUseModelTypeCard = ({ modelHectares, numericFormatter }: LandUseModelT
     }
     const output: string[] = [];
     for (const type of LAND_USE_MODEL_TYPES) {
-      if (modelHectares[type] > 0) {
-        output.push(
-          `${type} (${strings.formatString(strings.X_HA, numericFormatter.format(modelHectares[type]))?.toString()})`
-        );
+      if (!selectedTypes?.includes(type)) {
+        continue;
       }
+      let hectaresString = '--';
+      if (modelHectares[type] >= 0) {
+        hectaresString = strings.formatString(strings.X_HA, numericFormatter.format(modelHectares[type]))?.toString();
+      }
+      output.push(`${type} (${hectaresString})`);
     }
     return output.join('/');
   }, [modelHectares]);

@@ -209,6 +209,7 @@ const ProjectProfileView = ({
 
       <Grid container>
         <LandUseModelTypeCard
+          selectedTypes={participantProject?.landUseModelTypes}
           modelHectares={participantProject?.landUseModelHectares}
           numericFormatter={numericFormatter}
         />
