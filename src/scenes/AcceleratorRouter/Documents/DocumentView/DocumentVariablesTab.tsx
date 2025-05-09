@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { CellRenderer, RendererProps, TableColumnType } from '@terraware/web-components';
 
@@ -7,7 +7,7 @@ import PageContent from 'src/components/DocumentProducer/PageContent';
 import TableContent from 'src/components/DocumentProducer/TableContent';
 import VariableHistoryModal from 'src/components/Variables/VariableHistoryModal';
 import Link from 'src/components/common/Link';
-import { useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
 import strings from 'src/strings';
 import { SelectOptionPayload, VariableWithValues } from 'src/types/documentProducer/Variable';
@@ -20,13 +20,6 @@ import {
   VariableValueTextValue,
 } from 'src/types/documentProducer/VariableValue';
 import { fuzzyMatch } from 'src/utils/searchAndSort';
-
-const tableColumns: TableColumnType[] = [
-  { key: 'name', name: strings.NAME, type: 'string' },
-  { key: 'type', name: strings.TYPE, type: 'string' },
-  { key: 'values', name: strings.VALUE, type: 'string' },
-  { key: 'instances', name: strings.INSTANCES, type: 'string' },
-];
 
 type TableRow = VariableWithValues & { instances: number };
 
@@ -90,6 +83,7 @@ const filterSearch =
     searchValue ? fuzzyMatch(searchValue, variable.name.toLowerCase()) : true;
 
 const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.Element => {
+  const activeLocale = useLocalization();
   const { allVariables, documentSectionVariables, getUsedSections, projectId, reload } = useDocumentProducerData();
 
   const [tableRows, setTableRows] = useState<TableRow[]>([]);
@@ -100,6 +94,19 @@ const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.E
   const [selectedVariable, setSelectedVariable] = useState<VariableWithValues>();
   const [sectionsUsed, setSectionsUsed] = useState<string[]>([]);
   const { isAllowed } = useUser();
+
+  const tableColumns = useMemo((): TableColumnType[] => {
+    if (!activeLocale) {
+      return [];
+    }
+
+    return [
+      { key: 'name', name: strings.NAME, type: 'string' },
+      { key: 'type', name: strings.TYPE, type: 'string' },
+      { key: 'values', name: strings.VALUE, type: 'string' },
+      { key: 'instances', name: strings.INSTANCES, type: 'string' },
+    ];
+  }, [activeLocale]);
 
   useEffect(() => {
     setVariables(

@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import DocumentProducerProvider from 'src/providers/DocumentProducer/Provider';
 import ProjectProvider from 'src/providers/Project/ProjectProvider';
 
 import EditView from './EditView';
@@ -20,14 +21,16 @@ const ParticipantProjectsRouter = () => {
     <ProjectProvider>
       <VotingProvider>
         <ParticipantProjectProvider>
-          <Routes>
-            <Route path={'edit'} element={isEnabled('New Project Profile') ? <ProjectProfileEdit /> : <EditView />} />
-            <Route path={''} element={isEnabled('New Project Profile') ? <ProjectPage /> : <SingleView />} />
-            <Route path={'votes/*'} element={<Voting />} />
-            <Route path={'scores/*'} element={<Scoring />} />
-            <Route path={'reports/*'} element={<Reports />} />
-            <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_OVERVIEW} />} />
-          </Routes>
+          <DocumentProducerProvider>
+            <Routes>
+              <Route path={'edit'} element={isEnabled('New Project Profile') ? <ProjectProfileEdit /> : <EditView />} />
+              <Route path={''} element={isEnabled('New Project Profile') ? <ProjectPage /> : <SingleView />} />
+              <Route path={'votes/*'} element={<Voting />} />
+              <Route path={'scores/*'} element={<Scoring />} />
+              <Route path={'reports/*'} element={<Reports />} />
+              <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_OVERVIEW} />} />
+            </Routes>
+          </DocumentProducerProvider>
         </ParticipantProjectProvider>
       </VotingProvider>
     </ProjectProvider>

@@ -16,6 +16,7 @@ import { useParticipantProjectData } from './ParticipantProjectContext';
 import ProjectDeliverablesView from './ProjectDeliverablesView';
 import ProjectDocumentsView from './ProjectDocumentsView';
 import ProjectProfileView from './ProjectProfileView';
+import ProjectVariablesView from './ProjectVariablesView';
 import { useVotingData } from './Voting/VotingContext';
 
 const ProjectPage = () => {
@@ -62,6 +63,11 @@ const ProjectPage = () => {
         id: 'projectDocuments',
         label: strings.DOCUMENTS,
         children: <ProjectDocumentsView projectId={projectData.projectId} />,
+      },
+      {
+        id: 'variables',
+        label: strings.VARIABLES,
+        children: <ProjectVariablesView projectId={projectData.projectId} />,
       },
       {
         id: 'plantsDashboard',
