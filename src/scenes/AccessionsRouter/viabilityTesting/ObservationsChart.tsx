@@ -117,7 +117,7 @@ export default function ObservationsChart({ observations }: Props): JSX.Element 
           });
         }
       };
-      createChart();
+      void createChart();
 
       return () => chartRef.current?.destroy();
     }

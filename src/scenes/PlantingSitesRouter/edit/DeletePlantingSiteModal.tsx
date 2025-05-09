@@ -56,7 +56,7 @@ export default function DeletePlantingSiteModal(props: DeletePlantingSiteModalPr
           />,
           <Button
             id='saveDeletePlantingSite'
-            onClick={deleteHandler}
+            onClick={() => void deleteHandler()}
             type='destructive'
             label={strings.DELETE}
             key='button-2'

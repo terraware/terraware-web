@@ -47,7 +47,7 @@ export default function ViewPhotos({ reportId, onPhotoRemove, editable }: Photos
       }
     };
 
-    getPhotos();
+    void getPhotos();
   }, [reportId, snackbar]);
 
   const closeHandler = () => {

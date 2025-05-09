@@ -467,7 +467,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
         setSpeciesMap(speciesNamesMap);
       };
 
-      fetchSpecies();
+      void fetchSpecies();
     }
   }, [selectedOrganization.id]);
 

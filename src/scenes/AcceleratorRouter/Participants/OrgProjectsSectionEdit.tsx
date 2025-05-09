@@ -77,7 +77,7 @@ const OrgProjectsSectionEdit = ({
   useEffect(() => {
     if (section.projectId.toString() !== '-1') {
       setSelectedProject(section.projectId.toString());
-      dispatch(requestGetParticipantProject(section.projectId));
+      void dispatch(requestGetParticipantProject(section.projectId));
     }
   }, [section.projectId, projectOptions]);
 

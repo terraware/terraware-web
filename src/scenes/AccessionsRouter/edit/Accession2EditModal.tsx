@@ -137,7 +137,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
           id='saveEditAccession'
           key='button-2'
           label={strings.SAVE}
-          onClick={saveAccession}
+          onClick={() => void saveAccession()}
         />,
       ]}
       onClose={() => !loading && onCloseHandler()}

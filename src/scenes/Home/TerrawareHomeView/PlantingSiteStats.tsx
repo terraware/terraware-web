@@ -71,13 +71,13 @@ export const PlantingSiteStats = () => {
 
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
-      dispatch(requestPlantings(selectedOrganization.id));
+      void dispatch(requestPlantings(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization.id]);
 
   useEffect(() => {
     if (selectedPlantingSiteId && selectedOrganization.id !== -1) {
-      dispatch(requestSitePopulation(selectedOrganization.id, selectedPlantingSiteId));
+      void dispatch(requestSitePopulation(selectedOrganization.id, selectedPlantingSiteId));
     }
   }, [selectedPlantingSiteId, selectedOrganization.id, dispatch]);
 

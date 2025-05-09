@@ -47,7 +47,7 @@ export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.El
       }
       setSubLocations([]);
     };
-    setLocation();
+    void setLocation();
   }, [activeLocale, record.facilityId]);
 
   return (

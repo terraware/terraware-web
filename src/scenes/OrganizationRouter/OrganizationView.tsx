@@ -37,7 +37,7 @@ export default function OrganizationView(): JSX.Element {
           setPeople(response.users);
         }
       };
-      populatePeople();
+      void populatePeople();
     }
   }, [selectedOrganization]);
 

@@ -162,7 +162,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
 
   useEffect(() => {
     if (!speciesResponse?.data?.species && selectedOrganization.id !== -1) {
-      dispatch(requestSpecies(selectedOrganization.id));
+      void dispatch(requestSpecies(selectedOrganization.id));
     }
   }, [dispatch, speciesResponse?.data?.species, selectedOrganization]);
 

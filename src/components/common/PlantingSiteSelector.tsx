@@ -45,9 +45,9 @@ export default function PlantingSiteSelector({ onChange, hideNoBoundary }: Plant
   useEffect(() => {
     if (plantingSites && (selectedPlantingSiteId === undefined || selectedPlantingSiteId === -1)) {
       if (orgPreferences.lastPlantingSiteSelected) {
-        updateSelection(orgPreferences.lastPlantingSiteSelected);
+        void updateSelection(orgPreferences.lastPlantingSiteSelected);
       } else {
-        updateSelection(plantingSites[0]?.id);
+        void updateSelection(plantingSites[0]?.id);
       }
     }
   }, [plantingSites, selectedPlantingSiteId, updateSelection, orgPreferences.lastPlantingSiteSelected]);
@@ -55,7 +55,7 @@ export default function PlantingSiteSelector({ onChange, hideNoBoundary }: Plant
   return (
     <Dropdown
       placeholder={strings.SELECT}
-      onChange={updateSelection}
+      onChange={(newValue) => void updateSelection(newValue)}
       options={options}
       selectedValue={selectedPlantingSiteId}
     />

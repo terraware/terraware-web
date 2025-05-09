@@ -150,7 +150,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   };
 
   const reload = () => {
-    onApplyFilters();
+    void onApplyFilters();
   };
 
   const getSearchChildren = useCallback(() => {

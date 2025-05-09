@@ -24,7 +24,7 @@ export default function Preview({ close }: PreviewProps) {
 
   useEffect(() => {
     if (projectId !== -1) {
-      dispatch(requestProject(projectId));
+      void dispatch(requestProject(projectId));
     }
   }, [dispatch, projectId]);
 

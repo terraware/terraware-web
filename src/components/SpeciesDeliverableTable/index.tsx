@@ -71,7 +71,7 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
   }, [deliverable.projectId]);
 
   const reload = () => {
-    dispatch(requestListParticipantProjectSpecies(deliverable.projectId));
+    void dispatch(requestListParticipantProjectSpecies(deliverable.projectId));
     reloadSpeciesDeliverableSearch();
   };
 

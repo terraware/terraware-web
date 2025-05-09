@@ -156,7 +156,7 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
         </Box>
       ) : (
         <Container maxWidth={false} sx={{ padding: '32px 0' }}>
-          <EmptyStatePage pageName={'Inventory'} reloadData={onApplyFilters} />
+          <EmptyStatePage pageName={'Inventory'} reloadData={() => void onApplyFilters()} />
         </Container>
       )}
     </Card>

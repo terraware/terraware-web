@@ -81,7 +81,7 @@ const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEd
       cancelID='cancelReportsSettings'
       saveID='saveReportsSettings'
       onCancel={() => navigate(APP_PATHS.SEED_FUND_REPORTS_SETTINGS)}
-      onSave={onSave}
+      onSave={() => void onSave()}
       busy={isBusy}
     >
       <Grid container justifyContent={'center'}>

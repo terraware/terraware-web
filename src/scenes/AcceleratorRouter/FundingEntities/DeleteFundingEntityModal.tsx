@@ -47,7 +47,7 @@ const DeleteFundingEntityModal = ({ onClose, open, fundingEntity }: DeleteFundin
         />,
         <Button
           id='saveDeleteFundingEntity'
-          onClick={deleteHandler}
+          onClick={() => void deleteHandler()}
           type='destructive'
           label={strings.DELETE}
           key='button-2'

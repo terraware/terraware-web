@@ -21,7 +21,7 @@ export const requestProjectVotesUpdate = createAsyncThunk(
     const response: Response = await VotesService.setProjectVotes(request.projectId, request.payload);
 
     if (response.requestSucceeded) {
-      dispatch(requestProjectVotesGet(request.projectId));
+      void dispatch(requestProjectVotesGet(request.projectId));
       return true;
     }
 

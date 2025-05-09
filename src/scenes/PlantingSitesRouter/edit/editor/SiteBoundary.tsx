@@ -193,7 +193,7 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
       <EditableMap
         editableBoundary={siteBoundaryData?.siteBoundary}
         errorAnnotations={errorAnnotations}
-        onEditableBoundaryChanged={onEditableBoundaryChanged}
+        onEditableBoundaryChanged={(editableBoundary) => void onEditableBoundaryChanged(editableBoundary)}
         onRedo={redo}
         onUndo={undo}
         setMode={setMode}

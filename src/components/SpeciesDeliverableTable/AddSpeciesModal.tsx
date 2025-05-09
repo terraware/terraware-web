@@ -64,7 +64,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
 
   useEffect(() => {
     if (!speciesResponse?.data?.species && selectedOrganization.id !== -1) {
-      dispatch(requestSpecies(selectedOrganization.id));
+      void dispatch(requestSpecies(selectedOrganization.id));
     }
   }, [speciesResponse?.data?.species, selectedOrganization]);
 

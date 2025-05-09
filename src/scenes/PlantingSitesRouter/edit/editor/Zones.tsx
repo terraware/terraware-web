@@ -354,7 +354,7 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
         errorAnnotations={zonesData?.errorAnnotations}
         featureSelectorOnClick={featureSelectorOnClick}
         isSliceTool
-        onEditableBoundaryChanged={onEditableBoundaryChanged}
+        onEditableBoundaryChanged={(editableBoundary) => void onEditableBoundaryChanged(editableBoundary)}
         onRedo={redo}
         onUndo={undo}
         overridePopupInfo={overridePopupInfo}

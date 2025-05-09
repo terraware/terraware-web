@@ -62,7 +62,7 @@ export default function ProjectsList(): JSX.Element {
     };
 
     if (activeLocale) {
-      refreshSearch();
+      void refreshSearch();
     }
   }, [debouncedSearchTerm, search, activeLocale]);
 

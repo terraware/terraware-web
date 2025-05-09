@@ -62,7 +62,7 @@ export default function OrganizationNotification(): Notification | null {
       }
 
       if (orgTz.updated) {
-        reloadOrganizations();
+        void reloadOrganizations();
       }
 
       if (!orgTz.updated) {
@@ -70,7 +70,7 @@ export default function OrganizationNotification(): Notification | null {
       }
     };
 
-    initializeTimeZones();
+    void initializeTimeZones();
   }, [reloadOrganizations, reloadUser, selectedOrganization, user, userPreferences, timeZones]);
 
   return useMemo(() => {

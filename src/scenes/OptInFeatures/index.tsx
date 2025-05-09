@@ -46,7 +46,7 @@ export default function OptInFeaturesView({ refresh }: OptInFeaturesViewProps): 
     };
 
     if (!preferences) {
-      loadPreferences();
+      void loadPreferences();
     }
   });
 
@@ -143,7 +143,7 @@ export default function OptInFeaturesView({ refresh }: OptInFeaturesViewProps): 
                       <Switch
                         disabled={f.enabled}
                         checked={preferences[f.preferenceName] === true}
-                        onChange={(event) => savePreference(f, event.target.checked)}
+                        onChange={(event) => void savePreference(f, event.target.checked)}
                       />
                       &nbsp;{f.name}
                       {f.enabled ? ' (Feature Ungated)' : ''}

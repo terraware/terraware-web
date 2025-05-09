@@ -96,7 +96,7 @@ export default function EndDryingReminderModal(props: EndDryingReminderModalProp
           priority='secondary'
           key='button-1'
         />,
-        <Button id='saveDryingReminder' onClick={saveState} label={strings.SET_REMINDER} key='button-2' />,
+        <Button id='saveDryingReminder' onClick={() => void saveState()} label={strings.SET_REMINDER} key='button-2' />,
       ]}
     >
       <Grid item xs={12} textAlign='left'>

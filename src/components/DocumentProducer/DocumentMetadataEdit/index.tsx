@@ -85,12 +85,12 @@ const DocumentMetadataEdit = ({
     // reset projectId when participant changes
     setProjectId?.('');
     if (participant.id) {
-      dispatch(requestGetParticipant(participant.id));
+      void dispatch(requestGetParticipant(participant.id));
     }
   }, [participant]);
 
   useEffect(() => {
-    dispatch(requestListDocumentTemplates());
+    void dispatch(requestListDocumentTemplates());
     const request = dispatch(requestListGlobalRolesUsers({ locale: activeLocale }));
     setListUsersRequestId(request.requestId);
   }, [activeLocale, dispatch]);

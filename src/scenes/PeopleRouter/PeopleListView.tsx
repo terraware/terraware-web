@@ -149,7 +149,7 @@ export default function PeopleListView(): JSX.Element {
     };
 
     if (activeLocale) {
-      refreshSearch();
+      void refreshSearch();
     }
   }, [debouncedSearchTerm, search, activeLocale]);
 
@@ -159,7 +159,7 @@ export default function PeopleListView(): JSX.Element {
       setTotalUsers(users.length);
     };
 
-    findTotalUsers();
+    void findTotalUsers();
   }, [search]);
 
   const goToNewPerson = () => {
@@ -239,7 +239,7 @@ export default function PeopleListView(): JSX.Element {
         setRemovePeopleModalOpened(false);
         setSelectedPeopleRows([]);
         if (reloadOrganizations) {
-          reloadOrganizations();
+          void reloadOrganizations();
         }
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
@@ -275,7 +275,7 @@ export default function PeopleListView(): JSX.Element {
       const deleteOrgResponse = await OrganizationService.deleteOrganization(selectedOrganization.id);
       if (allRemoved && deleteOrgResponse.requestSucceeded) {
         if (reloadOrganizations) {
-          reloadOrganizations();
+          void reloadOrganizations();
         }
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
@@ -305,14 +305,14 @@ export default function PeopleListView(): JSX.Element {
           <RemovePeopleDialog
             open={removePeopleModalOpened}
             onClose={() => setRemovePeopleModalOpened(false)}
-            onSubmit={removePeopleHandler}
+            onSubmit={() => void removePeopleHandler()}
             removedPeople={selectedPeopleRows}
           />
           <AssignNewOwnerDialog
             open={assignNewOwnerModalOpened}
             onClose={() => setAssignNewOwnerModalOpened(false)}
             people={orgPeople || []}
-            onSubmit={removeSelectedPeopleFromOrg}
+            onSubmit={() => void removeSelectedPeopleFromOrg()}
             setNewOwner={setNewOwner}
             selectedOwner={newOwner}
           />
@@ -324,7 +324,7 @@ export default function PeopleListView(): JSX.Element {
           <DeleteOrgDialog
             open={deleteOrgModalOpened}
             onClose={() => setDeleteOrgModalOpened(false)}
-            onSubmit={deleteOrgHandler}
+            onSubmit={() => void deleteOrgHandler()}
             orgName={selectedOrganization.name || ''}
           />
         </>
@@ -408,7 +408,7 @@ export default function PeopleListView(): JSX.Element {
                         {
                           buttonType: 'destructive',
                           ...(!isMobile && { buttonText: strings.REMOVE }),
-                          onButtonClick: removeSelectedPeopleFromOrg,
+                          onButtonClick: () => void removeSelectedPeopleFromOrg(),
                           icon: 'iconTrashCan',
                           disabled: isRemovingTFContact,
                           tooltipTitle: isRemovingTFContact ? strings.CANNOT_REMOVE_TF_CONTACT : undefined,

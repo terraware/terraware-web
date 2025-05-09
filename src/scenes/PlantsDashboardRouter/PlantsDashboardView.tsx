@@ -121,23 +121,23 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
   }, [latestObservation, plantingSites, selectedPlantingSiteId]);
 
   useEffect(() => {
-    dispatch(requestObservations(organizationIdToUse));
-    dispatch(requestObservationsResults(organizationIdToUse));
-    dispatch(requestSpecies(organizationIdToUse));
-    dispatch(requestPlantings(organizationIdToUse));
-    dispatch(requestPlantingSitesSearchResults(organizationIdToUse));
+    void dispatch(requestObservations(organizationIdToUse));
+    void dispatch(requestObservationsResults(organizationIdToUse));
+    void dispatch(requestSpecies(organizationIdToUse));
+    void dispatch(requestPlantings(organizationIdToUse));
+    void dispatch(requestPlantingSitesSearchResults(organizationIdToUse));
   }, [dispatch, organizationIdToUse]);
 
   useEffect(() => {
     if (organizationId) {
-      dispatch(requestPlantingSites(organizationId));
+      void dispatch(requestPlantingSites(organizationId));
     }
   }, [organizationId]);
 
   useEffect(() => {
     if (selectedPlantingSiteId !== -1) {
-      dispatch(requestSitePopulation(organizationIdToUse, selectedPlantingSiteId));
-      dispatch(requestSiteReportedPlants(selectedPlantingSiteId));
+      void dispatch(requestSitePopulation(organizationIdToUse, selectedPlantingSiteId));
+      void dispatch(requestSiteReportedPlants(selectedPlantingSiteId));
     }
   }, [dispatch, organizationIdToUse, selectedPlantingSiteId]);
 

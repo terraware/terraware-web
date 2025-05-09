@@ -48,7 +48,7 @@ export default function DeleteViabilityTestModal(props: DeleteViabilityTestModal
         />,
         <Button
           id='deleteViabilityTest'
-          onClick={deleteHandler}
+          onClick={() => void deleteHandler()}
           type='destructive'
           label={strings.DELETE}
           key='button-2'

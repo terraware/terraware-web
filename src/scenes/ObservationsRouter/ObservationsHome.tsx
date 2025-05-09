@@ -100,7 +100,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
 
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
-      dispatch(requestPlantings(selectedOrganization.id));
+      void dispatch(requestPlantings(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization.id]);
 

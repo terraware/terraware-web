@@ -118,7 +118,7 @@ export const requestUpdateParticipantProjectSpecies = createAsyncThunk(
     const response = await ParticipantProjectSpeciesService.update(participantProjectSpecies);
 
     if (response && response.requestSucceeded && response.data) {
-      dispatch(requestGetParticipantProjectSpecies(participantProjectSpecies.id));
+      void dispatch(requestGetParticipantProjectSpecies(participantProjectSpecies.id));
       return true;
     }
 

@@ -27,8 +27,8 @@ export default function PlantingSiteView(): JSX.Element {
   useEffect(() => {
     const siteId = Number(plantingSiteId);
     if (!isNaN(siteId)) {
-      dispatch(requestPlantingSite(siteId, activeLocale));
-      dispatch(requestAdHocObservationsResults(selectedOrganization.id));
+      void dispatch(requestPlantingSite(siteId, activeLocale));
+      void dispatch(requestAdHocObservationsResults(selectedOrganization.id));
     }
   }, [activeLocale, dispatch, plantingSiteId]);
 

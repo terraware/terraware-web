@@ -40,7 +40,7 @@ export default function PersonDetailsView(): JSX.Element {
           }
         }
       };
-      populatePersonData();
+      void populatePersonData();
     }
   }, [personId, selectedOrganization, navigate]);
 

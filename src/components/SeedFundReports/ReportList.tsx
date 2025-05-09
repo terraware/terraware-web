@@ -34,7 +34,7 @@ export default function ReportList(): JSX.Element {
         setResults(reportsResults.reports || []);
       };
 
-      refreshSearch();
+      void refreshSearch();
     }
   }, [selectedOrganization.id]);
 

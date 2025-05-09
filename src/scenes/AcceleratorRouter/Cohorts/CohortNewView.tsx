@@ -63,7 +63,7 @@ export default function CohortNewView(): JSX.Element {
   const onCohortSaved = useCallback(
     (cohort: CreateCohortRequestPayload) => {
       setRecord(cohort);
-      createNewCohort(cohort);
+      void createNewCohort(cohort);
     },
     [setRecord, createNewCohort]
   );

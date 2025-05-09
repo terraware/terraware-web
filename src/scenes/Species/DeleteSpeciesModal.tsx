@@ -41,7 +41,7 @@ export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JS
       };
 
       if (open) {
-        fetchInUseSpecies();
+        void fetchInUseSpecies();
       }
     }
   }, [selectedOrganization.id, open, onClose, snackbar]);

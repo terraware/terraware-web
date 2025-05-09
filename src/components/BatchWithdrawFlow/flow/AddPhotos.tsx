@@ -32,7 +32,7 @@ export default function AddPhotos(props: AddPhotosProps): JSX.Element {
       cancelID='cancelAddPhotos'
       saveID='saveAddPhotos'
       onCancel={onCancel}
-      onSave={onNextHandler}
+      onSave={() => void onNextHandler()}
       saveButtonText={saveText}
     >
       <Container

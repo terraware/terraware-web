@@ -24,7 +24,7 @@ import TextField from '../../components/common/Textfield/Textfield';
 
 type OrganizationViewProps = {
   organization: Organization;
-  reloadOrganizationData: (id: number) => void;
+  reloadOrganizationData: (id: number) => Promise<void>;
 };
 
 export default function OrganizationView({ organization, reloadOrganizationData }: OrganizationViewProps): JSX.Element {
@@ -108,7 +108,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
     const response = await OrganizationService.updateOrganization(organizationRecord);
     if (response.requestSucceeded) {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
-      reloadOrganizationData(organizationRecord.id);
+      await reloadOrganizationData(organizationRecord.id);
     } else {
       snackbar.toastError();
     }
@@ -124,7 +124,12 @@ export default function OrganizationView({ organization, reloadOrganizationData 
 
   return (
     <TfMain>
-      <PageForm cancelID='cancelEditOrg' saveID='saveEditOrg' onCancel={goToOrganization} onSave={saveOrganization}>
+      <PageForm
+        cancelID='cancelEditOrg'
+        saveID='saveEditOrg'
+        onCancel={goToOrganization}
+        onSave={() => void saveOrganization()}
+      >
         <Box margin={theme.spacing(0, 3, 4, 3)}>
           <Box display='flex' flexDirection='column' justifyContent='space-between' marginBottom={theme.spacing(1)}>
             <Typography margin={0} fontSize='24px' fontWeight={600}>

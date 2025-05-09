@@ -21,7 +21,7 @@ const useTableDensity = (): Response => {
   );
 
   const saveTableDensityToUserPreferences = (newDensity: TableDensityType) => {
-    updateUserPreferences({ tableDensity: newDensity });
+    void updateUserPreferences({ tableDensity: newDensity });
     reloadUserPreferences();
   };
 

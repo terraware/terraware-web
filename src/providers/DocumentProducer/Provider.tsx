@@ -73,20 +73,20 @@ const DocumentProducerProvider = ({ children }: Props) => {
   const isLoading = status === 'pending';
 
   useEffect(() => {
-    dispatch(requestListDocumentTemplates());
-    dispatch(requestListAllVariables());
+    void dispatch(requestListDocumentTemplates());
+    void dispatch(requestListAllVariables());
   }, [dispatch]);
 
   const reloadDocument = useCallback(() => {
     if (documentId !== -1) {
-      dispatch(requestGetDocument(documentId));
+      void dispatch(requestGetDocument(documentId));
     }
   }, [dispatch, documentId]);
 
   const loadDocument = useCallback(() => {
     if (documentId !== -1) {
-      dispatch(requestGetDocument(documentId));
-      dispatch(requestListDocumentVariables(documentId));
+      void dispatch(requestGetDocument(documentId));
+      void dispatch(requestListDocumentVariables(documentId));
     }
   }, [dispatch, documentId]);
 
@@ -96,8 +96,8 @@ const DocumentProducerProvider = ({ children }: Props) => {
 
   const loadVariables = useCallback(() => {
     if (projectId !== -1) {
-      dispatch(requestListVariablesOwners(projectId));
-      dispatch(requestListVariablesValues({ projectId }));
+      void dispatch(requestListVariablesOwners(projectId));
+      void dispatch(requestListVariablesValues({ projectId }));
     }
   }, [dispatch, projectId]);
 
@@ -112,7 +112,7 @@ const DocumentProducerProvider = ({ children }: Props) => {
 
   const reloadVariables = useCallback(() => {
     if (projectId !== -1) {
-      dispatch(requestListVariablesValues({ projectId }));
+      void dispatch(requestListVariablesValues({ projectId }));
     }
   }, [dispatch, projectId]);
 

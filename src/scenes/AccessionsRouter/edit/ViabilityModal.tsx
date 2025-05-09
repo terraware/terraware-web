@@ -82,7 +82,7 @@ export default function ViabilityDialog(props: ViabilityDialogProps): JSX.Elemen
             priority='secondary'
             key='button-1'
           />,
-          <Button id='saveEditViabilityTest' onClick={saveQuantity} label={strings.SAVE} key='button-2' />,
+          <Button id='saveEditViabilityTest' onClick={() => void saveQuantity()} label={strings.SAVE} key='button-2' />,
         ]}
       >
         <Grid container spacing={2} textAlign='left'>

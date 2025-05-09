@@ -52,7 +52,7 @@ const StyledIcon = styled(Icon)(({ theme }) => ({
 
 type NotificationsDropdownProps = {
   organizationId?: number;
-  reloadOrganizationData: (selectedOrgId?: number) => void;
+  reloadOrganizationData: (selectedOrgId?: number) => Promise<void>;
 };
 
 export default function NotificationsDropdown(props: NotificationsDropdownProps): JSX.Element {
@@ -253,7 +253,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
 type NotificationItemProps = {
   notification: Notification;
   markAsRead: (read: boolean, id: number, close?: boolean, individualMarkAsRead?: () => void) => void;
-  reloadOrganizationData: (selectedOrgId?: number) => void;
+  reloadOrganizationData: (selectedOrgId?: number) => Promise<void>;
 };
 
 function NotificationItem(props: NotificationItemProps): JSX.Element {
@@ -267,7 +267,6 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
   const onNotificationClick = async (read: boolean, close?: boolean) => {
     if (close && localUrl.startsWith('/home')) {
       const orgId: string | null = new URL(localUrl, window.location.origin).searchParams.get('organizationId');
-      // eslint-disable-next-line @typescript-eslint/await-thenable
       await reloadOrganizationData(orgId ? parseInt(orgId, 10) : undefined);
     }
     markAsRead(read, id, close, notification.markAsRead);

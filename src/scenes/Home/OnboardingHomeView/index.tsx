@@ -17,8 +17,7 @@ import { useAppDispatch } from 'src/redux/store';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import CTACard from 'src/scenes/Home/CTACard';
 import OnboardingCard, { OnboardingCardRow } from 'src/scenes/Home/OnboardingHomeView/OnboardingCard';
-import { PreferencesService, SpeciesService } from 'src/services';
-import { OrganizationUserService } from 'src/services';
+import { OrganizationUserService, PreferencesService, SpeciesService } from 'src/services';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { OrganizationUser } from 'src/types/User';
@@ -63,7 +62,7 @@ const OnboardingHomeView = () => {
         }
       }
     };
-    populatePeople();
+    void populatePeople();
   }, [selectedOrganization]);
 
   useEffect(() => {
@@ -80,8 +79,8 @@ const OnboardingHomeView = () => {
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    dispatch(requestObservations(selectedOrganization.id));
-    dispatch(requestObservationsResults(selectedOrganization.id));
+    void dispatch(requestObservations(selectedOrganization.id));
+    void dispatch(requestObservationsResults(selectedOrganization.id));
   }, [dispatch, selectedOrganization.id]);
 
   const isLoadingInitialData = useMemo(
@@ -116,7 +115,7 @@ const OnboardingHomeView = () => {
             secondaryButtonProps: {
               label: strings.I_AM_THE_ONLY_PERSON,
               onClick: () => {
-                markAsComplete();
+                void markAsComplete();
               },
             },
             icon: 'person' as IconName,
@@ -216,7 +215,7 @@ const OnboardingHomeView = () => {
                             )}
                           </Typography>
 
-                          <Link fontSize='16px' fontWeight={400} onClick={dismissAcceleratorCard}>
+                          <Link fontSize='16px' fontWeight={400} onClick={() => void dismissAcceleratorCard()}>
                             {strings.DISMISS}
                           </Link>
                         </Box>,

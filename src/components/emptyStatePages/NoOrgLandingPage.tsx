@@ -53,7 +53,7 @@ export default function NoOrgLandingPage(): JSX.Element {
           open={isOrgModalOpen}
           onCancel={() => setIsOrgModalOpen(false)}
           onSuccess={(organization: Organization) => {
-            reloadOrganizations();
+            void reloadOrganizations();
             redirectAndNotify(organization);
           }}
         />

@@ -58,8 +58,8 @@ const TerrawareHomeView = () => {
 
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
-      dispatch(requestObservations(selectedOrganization.id));
-      dispatch(requestObservationsResults(selectedOrganization.id));
+      void dispatch(requestObservations(selectedOrganization.id));
+      void dispatch(requestObservationsResults(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization.id]);
 
@@ -306,7 +306,7 @@ const TerrawareHomeView = () => {
                             )}
                           </Typography>
 
-                          <Link fontSize='16px' fontWeight={400} onClick={dismissAcceleratorCard}>
+                          <Link fontSize='16px' fontWeight={400} onClick={() => void dismissAcceleratorCard()}>
                             {strings.DISMISS}
                           </Link>
                         </Box>,

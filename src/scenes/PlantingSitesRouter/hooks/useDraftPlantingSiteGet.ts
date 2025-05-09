@@ -35,7 +35,7 @@ export default function useDraftPlantingSiteGet({ draftId }: Props): Response {
 
   useEffect(() => {
     if (!isNaN(draftId)) {
-      dispatch(requestGetDraft(draftId));
+      void dispatch(requestGetDraft(draftId));
     } else {
       goToPlantingSites();
     }

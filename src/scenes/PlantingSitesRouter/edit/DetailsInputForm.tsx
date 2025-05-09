@@ -76,13 +76,13 @@ export default function DetailsInputForm<T extends MinimalPlantingSite>({
 
   useEffect(() => {
     if (!plantingSites && selectedOrganization.id !== -1) {
-      dispatch(requestPlantingSites(selectedOrganization.id));
+      void dispatch(requestPlantingSites(selectedOrganization.id));
     }
   }, [activeLocale, dispatch, plantingSites, selectedOrganization.id]);
 
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
-      dispatch(requestSearchDrafts(selectedOrganization.id));
+      void dispatch(requestSearchDrafts(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization.id]);
 

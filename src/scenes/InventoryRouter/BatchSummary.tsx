@@ -74,7 +74,7 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
             entity={batch}
             reloadData={reloadData}
             projectAssignPayloadCreator={() => ({ batchIds: [batch.id] })}
-            onUnAssign={onProjectUnAssign}
+            onUnAssign={() => void onProjectUnAssign()}
           />
         </Grid>
       )}

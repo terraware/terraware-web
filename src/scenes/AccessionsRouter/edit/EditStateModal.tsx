@@ -66,7 +66,7 @@ export default function EditStateModal(props: EditStateModalProps): JSX.Element 
         />,
         <Button
           id='saveEditState'
-          onClick={saveState}
+          onClick={() => void saveState()}
           label={strings.SAVE}
           key='button-2'
           disabled={accession.state === record.state}

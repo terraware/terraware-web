@@ -26,7 +26,7 @@ export default function Collectors2({ collectors = [''], onChange }: Props): JSX
       const populateCollectors = async () => {
         setCollectorsOpt(await SeedBankService.getCollectors(selectedOrganization.id));
       };
-      populateCollectors();
+      void populateCollectors();
     }
   }, [selectedOrganization]);
 

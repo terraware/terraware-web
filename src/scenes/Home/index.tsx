@@ -26,7 +26,7 @@ export default function Home({ selectedOrgHasSpecies }: { selectedOrgHasSpecies:
         }
       }
     };
-    populatePeople();
+    void populatePeople();
   }, [selectedOrganization]);
 
   const homeScreen = useMemo((): JSX.Element => {

@@ -135,7 +135,7 @@ export default function PlantingSitesList(): JSX.Element {
   }, [debouncedSearchTerm, filters.projectIds, searchData]);
 
   useEffect(() => {
-    onSearch();
+    void onSearch();
   }, [selectedOrganization, onSearch]);
 
   if (plantingSites && filtersEmpty() && !plantingSites.length) {

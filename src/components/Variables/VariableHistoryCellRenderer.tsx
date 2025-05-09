@@ -46,7 +46,7 @@ const VariableHistoryCellRenderer = (props: RendererProps<TableRowType>): JSX.El
 
   useEffect(() => {
     if (!userResult && tableRow.editedBy && tableRow.editedBy !== -1) {
-      dispatch(requestGetUser(tableRow.editedBy));
+      void dispatch(requestGetUser(tableRow.editedBy));
     }
   }, [dispatch, tableRow, userResult]);
 

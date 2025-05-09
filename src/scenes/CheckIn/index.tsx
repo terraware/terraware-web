@@ -42,7 +42,7 @@ export default function CheckIn(): JSX.Element {
         setPendingAccessions(await SeedBankService.getPendingAccessions(selectedOrganization.id));
       }
     };
-    populatePendingAccessions();
+    void populatePendingAccessions();
   }, [selectedOrganization]);
 
   useEffect(() => {
@@ -120,7 +120,7 @@ export default function CheckIn(): JSX.Element {
       <CheckInAllConfirmationDialog
         open={checkInAllConfirmationDialogOpen}
         onCancel={() => setCheckInAllConfirmationDialogOpen(false)}
-        onSubmit={checkInAllAccessions}
+        onSubmit={() => void checkInAllAccessions()}
       />
       {busy && <BusySpinner withSkrim={true} />}
       <PageHeaderWrapper nextElement={contentRef.current}>
@@ -182,7 +182,7 @@ export default function CheckIn(): JSX.Element {
                           />
                           {userCanEdit && (
                             <Button
-                              onClick={() => checkInAccession(result as Accession)}
+                              onClick={() => void checkInAccession(result as Accession)}
                               id='checkInCollection'
                               label={strings.CHECK_IN}
                               priority='secondary'
@@ -248,7 +248,7 @@ export default function CheckIn(): JSX.Element {
                           />
                           {userCanEdit && (
                             <Button
-                              onClick={() => checkInAccession(result as Accession)}
+                              onClick={() => void checkInAccession(result as Accession)}
                               id='checkInCollection'
                               label={strings.CHECK_IN}
                               priority='secondary'

@@ -43,7 +43,7 @@ export default function ParticipantsNew(): JSX.Element {
       const request = dispatch(requestUpdateParticipant({ participantId, request: updateRequest }));
       setRequestId(request.requestId);
       projectsDetails.forEach((pd) => {
-        dispatch(requestUpdateParticipantProject(pd));
+        void dispatch(requestUpdateParticipantProject(pd));
       });
     },
     [dispatch, participantId]

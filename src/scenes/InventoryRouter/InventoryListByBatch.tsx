@@ -196,7 +196,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
           setSearchSortOrder={onSearchSortOrder}
           isPresorted={!!searchSortOrder}
           columns={columns}
-          reloadData={onApplyFilters}
+          reloadData={() => void onApplyFilters()}
           origin='Batches'
           allowSelectionProjectAssign
         />
@@ -212,7 +212,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
         </Box>
       ) : (
         <Container maxWidth={false} sx={{ padding: '32px 0' }}>
-          <EmptyStatePage pageName={'Inventory'} reloadData={onApplyFilters} />
+          <EmptyStatePage pageName={'Inventory'} reloadData={() => void onApplyFilters()} />
         </Container>
       )}
     </Card>

@@ -48,7 +48,7 @@ export default function useSubmitDeliverable(): Response {
     } else if (result?.status === 'success') {
       snackbar.toastSuccess(strings.DELIVERABLE_SUBMITTED);
       // refresh deliverable data in store
-      dispatch(requestGetDeliverable({ deliverableId: lastRequest.id, projectId: lastRequest.projectId }));
+      void dispatch(requestGetDeliverable({ deliverableId: lastRequest.id, projectId: lastRequest.projectId }));
     }
   }, [dispatch, lastRequest, result, snackbar]);
 

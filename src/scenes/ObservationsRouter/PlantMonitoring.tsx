@@ -64,7 +64,7 @@ export default function PlantMonitoring(props: PlantMonitoringProps): JSX.Elemen
 
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
-      dispatch(requestPlantings(selectedOrganization.id));
+      void dispatch(requestPlantings(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization.id]);
 

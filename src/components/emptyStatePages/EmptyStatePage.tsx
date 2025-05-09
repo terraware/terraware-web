@@ -50,11 +50,11 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
   };
 
   const downloadCsvTemplateHandler = () => {
-    downloadCsvTemplate();
+    void downloadCsvTemplate();
   };
 
   const downloadInventoryCsvTemplateHandler = () => {
-    downloadInventoryCsvTemplate();
+    void downloadInventoryCsvTemplate();
   };
 
   const [importSpeciesModalOpened, setImportSpeciesModalOpened] = useState(false);

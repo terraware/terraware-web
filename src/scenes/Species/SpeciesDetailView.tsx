@@ -66,7 +66,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
       }
     };
     if (selectedOrganization && selectedOrganization.id !== -1) {
-      getSpecies();
+      void getSpecies();
     }
   }, [speciesId, selectedOrganization, navigate]);
 
@@ -317,7 +317,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
         <DeleteSpeciesModal
           open={deleteSpeciesModalOpen}
           onClose={() => setDeleteSpeciesModalOpen(false)}
-          onSubmit={(toDelete: number) => deleteSelectedSpecies(toDelete)}
+          onSubmit={(toDelete: number) => void deleteSelectedSpecies(toDelete)}
           speciesToDelete={species}
         />
       )}

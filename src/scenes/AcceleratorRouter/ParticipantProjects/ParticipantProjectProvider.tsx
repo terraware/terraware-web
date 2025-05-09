@@ -81,7 +81,7 @@ const ParticipantProjectProvider = ({ children }: Props) => {
     const userIds = new Set([project?.createdBy, project?.modifiedBy]);
     userIds.forEach((userId) => {
       if (userId) {
-        dispatch(requestGetUser(userId));
+        void dispatch(requestGetUser(userId));
       }
     });
   }, [dispatch, project?.createdBy, project?.modifiedBy]);

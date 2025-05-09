@@ -41,7 +41,7 @@ export default function Photos({ withdrawalId }: PhotosSectionProps): JSX.Elemen
     };
 
     if (withdrawalId) {
-      getPhotos();
+      void getPhotos();
     }
   }, [withdrawalId, snackbar]);
 

@@ -48,7 +48,7 @@ export default function DeleteAccessionModal(props: DeleteAccessionModalProps): 
         />,
         <Button
           id='saveDeleteAccession'
-          onClick={deleteHandler}
+          onClick={() => void deleteHandler()}
           type='destructive'
           label={strings.DELETE}
           key='button-2'

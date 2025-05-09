@@ -80,7 +80,7 @@ export default function NurseriesListView({ organization }: NurseriesListProps):
         setResults(transformedResults);
       }
     };
-    refreshSearch();
+    void refreshSearch();
   }, [debouncedSearchTerm, organization, timeZones, defaultTimeZone]);
 
   return (

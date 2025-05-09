@@ -251,22 +251,22 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
             {
               label: strings.EXPORT_ALL_ZIP,
               value: 'exportAll',
-              onClick: exportAllCsvs,
+              onClick: () => void exportAllCsvs(),
             },
             {
               label: strings.EXPORT_BIOMASS_MONITORING_DETAILS_CSV,
               value: 'exportDetails',
-              onClick: exportDetailsCsv,
+              onClick: () => void exportDetailsCsv(),
             },
             {
               label: strings.EXPORT_SPECIES_CSV,
               value: 'exportSpecies',
-              onClick: exportSpeciesCsv,
+              onClick: () => void exportSpeciesCsv(),
             },
             {
               label: strings.EXPORT_TREES_AND_SHRUBS_CSV,
               value: 'exportTreesAndShrubs',
-              onClick: exportTreesShrubsCsv,
+              onClick: () => void exportTreesShrubsCsv(),
             },
             {
               label: strings.MATCH_UNRECOGNIZED_SPECIES,

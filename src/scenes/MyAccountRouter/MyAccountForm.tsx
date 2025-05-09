@@ -150,7 +150,7 @@ const MyAccountForm = ({
         }
       }
     };
-    populatePeople();
+    void populatePeople();
   }, [removedOrg, user.id]);
 
   const removeSelectedOrgs = () => {
@@ -317,7 +317,7 @@ const MyAccountForm = ({
       cancelID='cancelAccountChange'
       saveID='saveAccountChange'
       onCancel={onCancel}
-      onSave={saveChanges}
+      onSave={() => void saveChanges()}
       hideEdit={!edit}
       desktopOffset={desktopOffset}
     >
@@ -326,14 +326,14 @@ const MyAccountForm = ({
           <LeaveOrganizationDialog
             open={leaveOrganizationModalOpened}
             onClose={() => setLeaveOrganizationModalOpened(false)}
-            onSubmit={leaveOrgHandler}
+            onSubmit={() => void leaveOrgHandler()}
             orgName={removedOrg.name}
           />
           <AssignNewOwnerDialog
             open={assignNewOwnerModalOpened}
             onClose={() => setAssignNewOwnerModalOpened(false)}
             people={orgPeople || []}
-            onSubmit={saveChanges}
+            onSubmit={() => void saveChanges()}
             setNewOwner={setNewOwner}
             selectedOwner={newOwner}
           />
@@ -346,7 +346,7 @@ const MyAccountForm = ({
             open={deleteOrgModalOpened}
             onClose={() => setDeleteOrgModalOpened(false)}
             orgName={removedOrg.name}
-            onSubmit={deleteOrgHandler}
+            onSubmit={() => void deleteOrgHandler()}
           />
         </>
       )}

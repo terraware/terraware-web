@@ -279,8 +279,8 @@ export default function OrgObservationsListView({
             theme,
             activeLocale,
             goToRescheduleObservation,
-            (observationId: number) => exportObservation(observationId, 'csv'),
-            (observationId: number) => exportObservation(observationId, 'gpx'),
+            (observationId: number) => void exportObservation(observationId, 'csv'),
+            (observationId: number) => void exportObservation(observationId, 'gpx'),
             (observation: any) => {
               endObservation(observation);
             }

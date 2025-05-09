@@ -175,7 +175,7 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
   }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, numericFormatter, setReportData]);
 
   useEffect(() => {
-    onApplyFilters();
+    void onApplyFilters();
   }, [filters, onApplyFilters]);
 
   return (
@@ -214,7 +214,7 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
         </Box>
       ) : (
         <Container maxWidth={false} sx={{ padding: '32px 0' }}>
-          <EmptyStatePage pageName={'Inventory'} reloadData={onApplyFilters} />
+          <EmptyStatePage pageName={'Inventory'} reloadData={() => void onApplyFilters()} />
         </Container>
       )}
     </Card>

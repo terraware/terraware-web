@@ -74,7 +74,7 @@ export default function NurseryReassignmentView(): JSX.Element {
         }
       };
 
-      populateSpecies();
+      void populateSpecies();
     }
   }, [selectedOrganization, snackbar]);
 
@@ -92,7 +92,7 @@ export default function NurseryReassignmentView(): JSX.Element {
       }
     };
 
-    populateDelivery();
+    void populateDelivery();
   }, [deliveryId, snackbar]);
 
   // populate zones
@@ -122,7 +122,7 @@ export default function NurseryReassignmentView(): JSX.Element {
       }
     };
 
-    populateZones();
+    void populateZones();
   }, [delivery, snackbar]);
 
   const goToWithdrawals = () => {
@@ -250,7 +250,7 @@ export default function NurseryReassignmentView(): JSX.Element {
           cancelID='cancelNurseryReassignment'
           saveID='saveNurseryReassignment'
           onCancel={goToWithdrawals}
-          onSave={reassign}
+          onSave={() => void reassign()}
           saveButtonText={strings.REASSIGN}
         >
           <Box

@@ -83,7 +83,7 @@ export default function SubLocations({
     };
 
     if (facilityId) {
-      fetchSubLocations();
+      void fetchSubLocations();
     } else if (isSeedbank) {
       setSubLocations(DEFAULT_SUB_LOCATIONS().map((name, index) => subLocationWith(name, index, facilityType)));
     }

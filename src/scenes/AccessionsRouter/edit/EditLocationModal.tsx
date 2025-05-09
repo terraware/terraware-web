@@ -55,7 +55,7 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
         }
       }
     };
-    setLocations();
+    void setLocations();
   }, [activeLocale, record.facilityId]);
 
   const saveLocation = async () => {
@@ -95,7 +95,7 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
           priority='secondary'
           key='button-1'
         />,
-        <Button id='saveEditLocation' onClick={saveLocation} label={strings.SAVE} key='button-2' />,
+        <Button id='saveEditLocation' onClick={() => void saveLocation()} label={strings.SAVE} key='button-2' />,
       ]}
     >
       <Grid item xs={12} textAlign='left'>

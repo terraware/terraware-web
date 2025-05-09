@@ -73,7 +73,7 @@ export default function PlantsPrimaryPage({
     if (plantsSitePreferences && selectedOrganization.id !== -1) {
       const response = CachedUserService.getUserOrgPreferences(selectedOrganization.id);
       if (!_.isEqual(response[lastVisitedPreferenceName], plantsSitePreferences)) {
-        PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
+        void PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
           [lastVisitedPreferenceName]: plantsSitePreferences,
         });
       }
@@ -101,7 +101,7 @@ export default function PlantsPrimaryPage({
           : plantingSitesList ?? [];
       setPlantingSites(plantingSitesList);
     };
-    populatePlantingSites();
+    void populatePlantingSites();
   }, [
     selectedOrganization.id,
     snackbar,
@@ -154,7 +154,7 @@ export default function PlantsPrimaryPage({
         if (selectedOrganization.id !== -1) {
           if (plantingSiteToUse.id !== lastVisitedPlantingSite.plantingSiteId) {
             lastVisitedPlantingSite = { plantingSiteId: plantingSiteToUse.id };
-            PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
+            void PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
               [lastVisitedPreferenceName]: lastVisitedPlantingSite,
             });
           }

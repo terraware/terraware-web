@@ -69,7 +69,7 @@ const ApplicationMap = () => {
     if (!activeLocale || !selectedApplication) {
       return undefined;
     }
-    return <Button label={strings.EXPORT_PROJECT_BOUNDARY} onClick={() => onExport()} />;
+    return <Button label={strings.EXPORT_PROJECT_BOUNDARY} onClick={() => void onExport()} />;
   }, [activeLocale, selectedApplication]);
 
   if (!selectedApplication) {

@@ -56,7 +56,7 @@ export default function ObservationsRouter(): JSX.Element {
 
   useEffect(() => {
     if (selectedOrganization.id !== -1 && !['pending', 'success'].includes(speciesResponse?.status || '')) {
-      dispatch(requestSpecies(selectedOrganization.id));
+      void dispatch(requestSpecies(selectedOrganization.id));
     }
   }, [dispatch, selectedOrganization.id]);
 
@@ -68,10 +68,10 @@ export default function ObservationsRouter(): JSX.Element {
       selectedOrganization.id !== -1
     ) {
       setDispatched(true);
-      dispatch(requestObservationsResults(selectedOrganization.id));
-      dispatch(requestAdHocObservationsResults(selectedOrganization.id));
-      dispatch(requestObservations(selectedOrganization.id));
-      dispatch(requestObservations(selectedOrganization.id, true));
+      void dispatch(requestObservationsResults(selectedOrganization.id));
+      void dispatch(requestAdHocObservationsResults(selectedOrganization.id));
+      void dispatch(requestObservations(selectedOrganization.id));
+      void dispatch(requestObservations(selectedOrganization.id, true));
     }
   }, [dispatch, selectedOrganization.id, speciesResponse?.data?.species, plantingSites, dispatched]);
 

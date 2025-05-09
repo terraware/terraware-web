@@ -34,8 +34,8 @@ const DocumentMetadata = ({ document, documentTemplate }: DocumentMetadataProps)
   }, [modifiedBySelector]);
 
   useEffect(() => {
-    dispatch(requestGetUser(ownedBy));
-    dispatch(requestGetUser(modifiedBy));
+    void dispatch(requestGetUser(ownedBy));
+    void dispatch(requestGetUser(modifiedBy));
   }, [dispatch, ownedBy, modifiedBy]);
 
   const modifiedByName = useMemo(() => getUserDisplayName(modifiedByUser), [modifiedByUser]);

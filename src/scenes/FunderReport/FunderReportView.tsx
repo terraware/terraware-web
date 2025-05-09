@@ -41,7 +41,7 @@ const FunderReportView = () => {
 
   useEffect(() => {
     if (selectedProjectId) {
-      dispatch(requestListFunderReports(selectedProjectId));
+      void dispatch(requestListFunderReports(selectedProjectId));
     }
   }, [selectedProjectId]);
 

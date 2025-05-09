@@ -72,8 +72,8 @@ export default function ScheduleObservation(): JSX.Element {
       snackbar.toastError();
     } else if (result?.status === 'success' && selectedOrganization.id !== -1) {
       snackbar.toastSuccess(strings.OBSERVATION_RESCHEDULED);
-      dispatch(requestObservations(selectedOrganization.id));
-      dispatch(requestObservationsResults(selectedOrganization.id));
+      void dispatch(requestObservations(selectedOrganization.id));
+      void dispatch(requestObservationsResults(selectedOrganization.id));
       goToObservations();
     }
   }, [dispatch, goToObservations, selectedOrganization.id, snackbar, result?.status]);
@@ -93,7 +93,7 @@ export default function ScheduleObservation(): JSX.Element {
       cancelID='cancelRescheduleObservation'
       saveID='rescheduleObservation'
       onCancel={() => goToObservations()}
-      onSave={rescheduleObservation}
+      onSave={() => void rescheduleObservation()}
       status={result?.status}
     />
   );
