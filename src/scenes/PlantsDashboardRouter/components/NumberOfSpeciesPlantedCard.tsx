@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -7,24 +8,31 @@ import BarChart from 'src/components/common/Chart/BarChart';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useUser } from 'src/providers';
-import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
+import { selectPlantings, selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
 import { selectDefaultSpecies } from 'src/redux/features/species/speciesSelectors';
 import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { PlantingSite } from 'src/types/Tracking';
 import { useNumberFormatter } from 'src/utils/useNumber';
 
 type NumberOfSpeciesPlantedCardProps = {
   plantingSiteId: number;
   newVersion?: boolean;
+  plantingSites?: PlantingSite[];
 };
 
 export default function NumberOfSpeciesPlantedCard({
   plantingSiteId,
   newVersion,
+  plantingSites,
 }: NumberOfSpeciesPlantedCardProps): JSX.Element | undefined {
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
+
+  if (plantingSites) {
+    return <RolledUpNumberOfSpecies plantingSites={plantingSites} />;
+  }
 
   if (!plantingSite) {
     return undefined;
@@ -34,6 +42,84 @@ export default function NumberOfSpeciesPlantedCard({
     return <SiteWithZonesCard plantingSiteId={plantingSiteId} newVersion={newVersion} />;
   }
 }
+
+const RolledUpNumberOfSpecies = ({ plantingSites }: { plantingSites?: PlantingSite[] }): JSX.Element | undefined => {
+  const [totalSpecies, setTotalSpecies] = useState<number>();
+  const [labels, setLabels] = useState<string[]>();
+  const [values, setValues] = useState<number[]>();
+
+  // const allPlantings = useAppSelector(selectPlantings);
+
+  // we need an api to select all population of the org
+  // const populationSelector = useAppSelector((state) => selectMultipleSitesPopulationZones(state));
+
+  useEffect(() => {
+    // const speciesNames: Set<string> = new Set();
+    // const speciesByCategory: Record<string, number> = {
+    //   [strings.RARE]: 0,
+    //   [strings.ENDANGERED]: 0,
+    //   [strings.OTHER]: 0,
+    // };
+    // TODO when populationSelector exist
+    // plantingSites?.forEach((ps) => {
+    //   if (ps.plantingZones?.length) {
+    //     populationSelector?.forEach((zone) =>
+    //       zone.plantingSubzones?.forEach((subzone) =>
+    //         subzone.populations?.forEach((population) => {
+    //           if (speciesNames.includes(population.species_scientificName)) {
+    //             return;
+    //           }
+    //           speciesNames.push(population.species_scientificName);
+    //           const species = speciesSelector?.find((s) => s.scientificName === population.species_scientificName);
+    //           if (species) {
+    //             let endangered = false;
+    //             let rare = false;
+    //             if (species.conservationCategory === 'EN' || species.conservationCategory === 'CR') {
+    //               endangered = true;
+    //             }
+    //             if (species.rare) {
+    //               rare = true;
+    //             }
+    //             speciesByCategory[strings.RARE] += rare ? 1 : 0;
+    //             speciesByCategory[strings.ENDANGERED] += endangered ? 1 : 0;
+    //             speciesByCategory[strings.OTHER] += !(rare || endangered) ? 1 : 0;
+    //           }
+    //         })
+    //       )
+    //     );
+    // } else {
+    //   const psPlantings = allPlantings?.filter(
+    //     (planting) => planting.plantingSite.id.toString() === ps.id.toString()
+    //   );
+    //   psPlantings?.forEach((planting) => {
+    //     const { rare, conservationCategory, scientificName } = planting.species;
+    //     let endangered = false;
+    //     let isRare = false;
+    //     if (conservationCategory === 'EN' || conservationCategory === 'CR') {
+    //       endangered = true;
+    //     }
+    //     if (rare === 'true') {
+    //       isRare = true;
+    //     }
+    //     speciesByCategory[strings.RARE] += isRare ? 1 : 0;
+    //     speciesByCategory[strings.ENDANGERED] += endangered ? 1 : 0;
+    //     speciesByCategory[strings.OTHER] += !(rare || endangered) ? 1 : 0;
+    //     speciesNames.add(scientificName);
+    //   });
+    // }
+    // });
+    // const speciesCount = speciesNames.size;
+    // setTotalSpecies(speciesCount);
+    // setLabels(Object.keys(speciesByCategory));
+    // setValues(
+    //   Object.values(speciesByCategory).map((cat) =>
+    //     speciesCount > 0 ? Number(((cat * 100) / speciesCount).toFixed(2)) : 0
+    //   )
+    // );
+  }, [plantingSites]);
+
+  return <ChartData labels={labels} values={values} totalSpecies={totalSpecies} />;
+};
 
 const SiteWithoutZonesCard = ({
   plantingSiteId,

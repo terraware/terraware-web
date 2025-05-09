@@ -30,6 +30,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import FormattedNumber from '../../components/common/FormattedNumber';
 import MortalityRateCard from './components/MortalityRateCard';
+import MultiplePlantingSiteMap from './components/MultiplePlantingSiteMap';
 import PlantingDensityCard from './components/PlantingDensityCard';
 import PlantingSiteTrendsCard from './components/PlantingSiteTrendsCard';
 import PlantsAndSpeciesCard from './components/PlantsAndSpeciesCard';
@@ -330,6 +331,26 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     [selectedPlantingSiteId]
   );
 
+  const renderMapWithSites = useCallback(() => {
+    return (
+      <>
+        {sectionHeader(strings.PROJECT_AREA_MAP)}
+        <Grid item xs={12}>
+          <Box
+            sx={{
+              background: theme.palette.TwClrBg,
+              borderRadius: '24px',
+              padding: theme.spacing(3),
+              gap: theme.spacing(3),
+            }}
+          >
+            <MultiplePlantingSiteMap projectId={projectId!} organizationId={organizationIdToUse} />
+          </Box>
+        </Grid>
+      </>
+    );
+  }, [projectId, organizationIdToUse]);
+
   const hasPolygons = useMemo(
     () => !!plantingSiteResult && !!plantingSiteResult.boundary && plantingSiteResult.boundary.coordinates?.length > 0,
     [plantingSiteResult]
@@ -414,8 +435,9 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
         {hasObservations && selectedPlantingSiteId !== -2 && renderMortalityRate()}
         {selectedPlantingSiteId !== -2 && renderPlantingProgressAndDensity()}
         {hasObservations && selectedPlantingSiteId !== -2 && renderPlantingSiteTrends()}
-        {hasPlantingZones && renderZoneLevelData()}
-        {hasPolygons && !hasPlantingZones && renderSimpleSiteMap()}
+        {selectedPlantingSiteId !== -2 && hasPlantingZones && renderZoneLevelData()}
+        {selectedPlantingSiteId !== -2 && hasPolygons && !hasPlantingZones && renderSimpleSiteMap()}
+        {selectedPlantingSiteId.toString() === '-2' && projectId && renderMapWithSites()}
       </Grid>
     </PlantsPrimaryPage>
   );

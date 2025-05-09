@@ -15,6 +15,7 @@ import {
 import { useAppSelector } from 'src/redux/store';
 import { TrackingService } from 'src/services';
 import strings from 'src/strings';
+import { PlantingSite } from 'src/types/Tracking';
 
 import NumberOfSpeciesPlantedCard from './NumberOfSpeciesPlantedCard';
 import PlantsReportedPerSpeciesCard from './PlantsReportedPerSpeciesCard';
@@ -39,8 +40,13 @@ export default function PlantsAndSpeciesCard({
   const [totalSpecies, setTotalSpecies] = useState<number>();
   const { isDesktop } = useDeviceInfo();
   const { activeLocale } = useLocalization();
-  const [plantingSitesIds, setPlantingSitesIds] = useState<string[]>();
-  const projectTotalPlants = useAppSelector((state) => selectMultipleSitesTotalPlants(state, plantingSitesIds ?? []));
+  const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
+
+  const plantingSiteIds = useMemo(() => {
+    return plantingSites?.map((ps) => ps.id.toString());
+  }, [plantingSites]);
+
+  const projectTotalPlants = useAppSelector((state) => selectMultipleSitesTotalPlants(state, plantingSiteIds ?? []));
 
   const isRolledUpView = useMemo(() => {
     return plantingSiteId === -2 && projectId;
@@ -50,11 +56,9 @@ export default function PlantsAndSpeciesCard({
     const populatePlantingSites = async () => {
       const serverResponse = await TrackingService.listPlantingSites(organizationId, undefined, activeLocale);
       if (serverResponse.requestSucceeded) {
-        const plantingSitesList = projectId
-          ? serverResponse.sites?.filter((ps) => ps.projectId === projectId).map((ps) => ps.id.toString())
-          : [];
+        const plantingSitesList = projectId ? serverResponse.sites?.filter((ps) => ps.projectId === projectId) : [];
 
-        setPlantingSitesIds(plantingSitesList);
+        setPlantingSites(plantingSitesList);
       }
     };
     if (isRolledUpView) {
@@ -66,7 +70,7 @@ export default function PlantsAndSpeciesCard({
     const speciesNames: Set<string> = new Set();
 
     if (isRolledUpView) {
-      const projectPlantings = allPlantings?.filter((planting) => plantingSitesIds?.includes(planting.plantingSite.id));
+      const projectPlantings = allPlantings?.filter((planting) => plantingSiteIds?.includes(planting.plantingSite.id));
       projectPlantings?.forEach((planting) => {
         const { scientificName } = planting.species;
         speciesNames.add(scientificName);
@@ -80,7 +84,7 @@ export default function PlantsAndSpeciesCard({
 
     const speciesCount = speciesNames.size;
     setTotalSpecies(speciesCount);
-  }, [plantings, allPlantings, isRolledUpView, plantingSitesIds]);
+  }, [plantings, allPlantings, isRolledUpView, plantingSiteIds]);
 
   const separatorStyles = {
     width: '1px',
@@ -128,13 +132,13 @@ export default function PlantsAndSpeciesCard({
       {hasReportedPlants && (
         <>
           <Box flexBasis='100%'>
-            <PlantsReportedPerSpeciesCard plantingSiteId={plantingSiteId} newVersion />
+            <PlantsReportedPerSpeciesCard plantingSiteId={plantingSiteId} newVersion plantingSites={plantingSites} />
           </Box>
           <div style={separatorStyles} />
         </>
       )}
       <Box flexBasis='100%'>
-        <NumberOfSpeciesPlantedCard plantingSiteId={plantingSiteId} newVersion />
+        <NumberOfSpeciesPlantedCard plantingSiteId={plantingSiteId} newVersion plantingSites={plantingSites} />
       </Box>
     </Card>
   );
