@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { requestProjectFundingEntities } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
-import { selectProjectFundingEntities } from 'src/redux/features/funder/fundingEntitiesSelectors';
+import { requestProjectFundingEntities } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
+import { selectProjectFundingEntities } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { FundingEntity } from 'src/types/FundingEntity';
 

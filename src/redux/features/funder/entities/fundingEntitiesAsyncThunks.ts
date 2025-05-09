@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import FundingEntityService from 'src/services/FundingEntityService';
+import FundingEntityService from 'src/services/funder/FundingEntityService';
 import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
 

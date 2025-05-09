@@ -11,7 +11,7 @@ import deliverablesReducers from './features/deliverables/deliverablesSlice';
 import documentProducerReducers from './features/documentProducer';
 import draftPlantingSiteReducers from './features/draftPlantingSite/draftPlantingSiteSlice';
 import eventReducers from './features/events/eventsSlice';
-import fundingEntitiesReducers from './features/funder/fundingEntitiesSlice';
+import fundingEntitiesReducers from './features/funder/entities/fundingEntitiesSlice';
 import globalRolesReducers from './features/globalRoles/globalRolesSlice';
 import locationReducers from './features/location/locationSlice';
 import messageReducers from './features/message/messageSlice';

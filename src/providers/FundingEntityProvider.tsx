@@ -3,8 +3,8 @@ import { useParams } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { requestFundingEntity } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
-import { selectFundingEntityRequest } from 'src/redux/features/funder/fundingEntitiesSelectors';
+import { requestFundingEntity } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
+import { selectFundingEntityRequest } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import useEnvironment from 'src/utils/useEnvironment';
