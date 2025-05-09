@@ -140,41 +140,17 @@ export default function EditAcceleratorReportTargetsModal({
         const reportClone = _.cloneDeep(report);
 
         ['projectMetrics', 'standardMetrics', 'systemMetrics'].forEach((metricType) => {
+          const reportMetrics = reportClone?.[metricType as keyof AcceleratorReport] as (
+            | ReportProjectMetricEntries
+            | ReportStandardMetricEntries
+            | ReportSystemMetricEntries
+          )[];
           const requestMetrics = request[metricType as keyof ReviewAcceleratorReportMetricsRequest];
-          if (!Array.isArray(requestMetrics)) {
+          if (!Array.isArray(reportMetrics) || !Array.isArray(requestMetrics)) {
             return;
           }
 
-          requestMetrics.forEach((metric) => {
-            const reportMetrics = reportClone?.[metricType as keyof AcceleratorReport];
-            if (!Array.isArray(reportMetrics)) {
-              return;
-            }
-
-            const reportMetricIndex =
-              metricType === 'systemMetrics'
-                ? reportMetrics.findIndex(
-                    (m) => (m as ReportSystemMetricEntries).metric === (metric as ReportSystemMetricEntries).metric
-                  )
-                : reportMetrics.findIndex(
-                    (m) => (m as ReportStandardMetricEntries).id === (metric as ReportStandardMetricEntries).id
-                  );
-            const reportMetric = reportMetrics[reportMetricIndex];
-            if (typeof reportMetric !== 'object' || typeof metric !== 'object') {
-              return;
-            }
-
-            const reportMetricUpdate = {
-              ...reportMetric,
-              ...metric,
-            };
-            const metrics = reportClone?.[metricType as keyof AcceleratorReport] as (
-              | ReportProjectMetricEntries
-              | ReportStandardMetricEntries
-              | ReportSystemMetricEntries
-            )[];
-            metrics[reportMetricIndex] = reportMetricUpdate;
-          });
+          reportMetrics.splice(0, reportMetrics.length, ...requestMetrics);
         });
 
         return {
