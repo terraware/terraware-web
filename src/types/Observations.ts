@@ -32,6 +32,7 @@ export type ObservationResults = Omit<ObservationResultsPayload, 'species'> &
     plantingSiteName: string;
     plantingZones: ObservationPlantingZoneResults[];
     species: ObservationSpeciesResults[];
+    timeZone: string;
     totalPlants: number;
     hasObservedPermanentPlots: boolean;
     hasObservedTemporaryPlots: boolean;

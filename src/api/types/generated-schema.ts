@@ -7477,6 +7477,21 @@ export interface components {
             speciesName?: string;
             /**
              * Format: int32
+             * @description Number of dead plants observed in this observation.
+             */
+            totalDead: number;
+            /**
+             * Format: int32
+             * @description Number of existing plants observed in this observation.
+             */
+            totalExisting: number;
+            /**
+             * Format: int32
+             * @description Number of live plants observed in this observation, not including existing plants.
+             */
+            totalLive: number;
+            /**
+             * Format: int32
              * @description Total number of live and existing plants of this species.
              */
             totalPlants: number;

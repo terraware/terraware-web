@@ -15,6 +15,7 @@ import {
 } from 'src/redux/features/observations/observationsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AdHocObservationsRenderer from 'src/scenes/ObservationsRouter/adhoc/AdHocObservationsRenderer';
+import exportObservationResults from 'src/scenes/ObservationsRouter/details/exportObservationResults';
 import { ObservationsService } from 'src/services';
 import strings from 'src/strings';
 import {
@@ -203,6 +204,16 @@ export default function OrgObservationsListView({
     [observations]
   );
 
+  const onExportObservationResults = useCallback(
+    (observationId: number) => {
+      const observation = (observationsResults ?? []).find((item) => item.observationId === observationId);
+      if (observation !== undefined) {
+        void exportObservationResults({ observationResults: observation });
+      }
+    },
+    [observationsResults]
+  );
+
   const goToRescheduleObservation = useCallback(
     (observationId: number) => {
       navigate(APP_PATHS.RESCHEDULE_OBSERVATION.replace(':observationId', observationId.toString()));
@@ -281,6 +292,7 @@ export default function OrgObservationsListView({
             goToRescheduleObservation,
             (observationId: number) => void exportObservation(observationId, 'csv'),
             (observationId: number) => void exportObservation(observationId, 'gpx'),
+            (observationId: number) => onExportObservationResults(observationId),
             (observation: any) => {
               endObservation(observation);
             }

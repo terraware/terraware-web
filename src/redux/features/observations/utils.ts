@@ -128,8 +128,9 @@ export const mergeObservations = (
     .map((observation: ObservationResultsPayload): ObservationResults => {
       const { plantingSiteId } = observation;
       const site = sites[plantingSiteId];
+      const timeZone = site.timeZone ?? defaultTimeZone;
 
-      const mergedZones = mergeZones(observation.plantingZones, species, site.timeZone ?? defaultTimeZone);
+      const mergedZones = mergeZones(observation.plantingZones, species, timeZone);
 
       return {
         ...observation,
@@ -139,6 +140,7 @@ export const mergeObservations = (
         startDate: getDateDisplayValue(observation.startDate, site.timeZone),
         plantingZones: mergedZones,
         species: mergeSpecies(observation.species, species),
+        timeZone,
         totalPlants: observation.plantingZones.reduce((acc, curr) => acc + curr.totalPlants, 0),
         hasObservedPermanentPlots: mergedZones.some((zone) => zone.hasObservedPermanentPlots),
         hasObservedTemporaryPlots: mergedZones.some((zone) => zone.hasObservedTemporaryPlots),
