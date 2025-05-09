@@ -216,7 +216,7 @@ const ProjectProfileView = ({
 
       <Grid container>
         <LandUseModelTypeCard
-          selectedTypes={participantProject?.landUseModelTypes}
+          selectedTypes={projectDetails?.landUseModelTypes}
           modelHectares={projectDetails?.landUseModelHectares}
           numericFormatter={numericFormatter}
         />
@@ -306,11 +306,11 @@ const ProjectProfileView = ({
 
             <Grid item>
               <Link
-              to={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(
-                ':projectId',
-                (projectDetails?.projectId || '').toString()
-              )}
-            >
+                to={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(
+                  ':projectId',
+                  (projectDetails?.projectId || '').toString()
+                )}
+              >
                 {strings.VIEW_REPORTS}
               </Link>
             </Grid>

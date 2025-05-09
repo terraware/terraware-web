@@ -3511,6 +3511,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tracking/sites/reportedPlants": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Lists the total number of plants planted at a planting site and in each planting zone.
+         * @description The totals are based on nursery withdrawals.
+         */
+        get: operations["listPlantingSiteReportedPlants"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/tracking/sites/validate": {
         parameters: {
             query?: never;
@@ -5874,6 +5894,7 @@ export interface components {
             landUseModelHectares: {
                 [key: string]: number;
             };
+            landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
             methodologyNumber?: string;
             minProjectArea?: number;
             /** Format: int32 */
@@ -6668,6 +6689,10 @@ export interface components {
         };
         ListPlantingSiteHistoriesResponsePayload: {
             histories: components["schemas"]["PlantingSiteHistoryPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        ListPlantingSiteReportedPlantsResponsePayload: {
+            sites: components["schemas"]["PlantingSiteReportedPlantsPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         ListPlantingSitesResponsePayload: {
@@ -7496,6 +7521,8 @@ export interface components {
             /** @enum {string} */
             state: "Upcoming" | "InProgress" | "Completed" | "Overdue" | "Abandoned";
             /** Format: int32 */
+            totalPlants: number;
+            /** Format: int32 */
             totalSpecies: number;
             /** @enum {string} */
             type: "Monitoring" | "Biomass Measurements";
@@ -7525,6 +7552,21 @@ export interface components {
             speciesId?: number;
             /** @description If certainty is Other, the user-supplied name of the species. Null if certainty is Known or Unknown. */
             speciesName?: string;
+            /**
+             * Format: int32
+             * @description Number of dead plants observed in this observation.
+             */
+            totalDead: number;
+            /**
+             * Format: int32
+             * @description Number of existing plants observed in this observation.
+             */
+            totalExisting: number;
+            /**
+             * Format: int32
+             * @description Number of live plants observed in this observation, not including existing plants.
+             */
+            totalLive: number;
             /**
              * Format: int32
              * @description Total number of live and existing plants of this species.
@@ -17587,6 +17629,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CreatePlantingSiteResponsePayload"];
+                };
+            };
+        };
+    };
+    listPlantingSiteReportedPlants: {
+        parameters: {
+            query: {
+                organizationId: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListPlantingSiteReportedPlantsResponsePayload"];
                 };
             };
         };
