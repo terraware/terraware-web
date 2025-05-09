@@ -55,12 +55,12 @@ const ProjectPage = () => {
         ),
       },
       {
-        id: 'projectDeliverables',
+        id: 'deliverables',
         label: strings.DELIVERABLES,
         children: <ProjectDeliverablesView projectId={projectData.projectId} />,
       },
       {
-        id: 'projectDocuments',
+        id: 'documents',
         label: strings.DOCUMENTS,
         children: <ProjectDocumentsView projectId={projectData.projectId} />,
       },
@@ -105,7 +105,7 @@ const ProjectPage = () => {
             />
           )}
 
-          {activeTab === 'projectDocuments' && (
+          {activeTab === 'documents' && (
             <Button
               icon='plus'
               id='createDocument'
