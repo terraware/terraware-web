@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/161</span>
+                <span class='fraction'>0/160</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/37</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/156</span>
+                <span class='fraction'>0/155</span>
             </div>
         
             
@@ -717,9 +717,7 @@
 <a name='L652'></a><a href='#L652'>652</a>
 <a name='L653'></a><a href='#L653'>653</a>
 <a name='L654'></a><a href='#L654'>654</a>
-<a name='L655'></a><a href='#L655'>655</a>
-<a name='L656'></a><a href='#L656'>656</a>
-<a name='L657'></a><a href='#L657'>657</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L655'></a><a href='#L655'>655</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -952,11 +950,21 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -990,15 +998,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1015,7 +1017,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1024,18 +1025,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1410,7 +1406,7 @@ import { requestUpdateParticipantProject } from 'src/redux/features/participantP
 import { selectParticipantProjectUpdateRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { LAND_USE_MODEL_TYPES } from 'src/types/ParticipantProject';
+import { LAND_USE_MODEL_TYPES, ParticipantProject } from 'src/types/ParticipantProject';
 import { OrganizationUser } from 'src/types/User';
 import { SelectVariable, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { getImagePath } from 'src/utils/images';
@@ -1605,8 +1601,18 @@ const ProjectProfileEdit = <span class="cstat-no" title="statement not covered" 
       uploadImages: false,
     };
 &nbsp;
+    const updatedRecord = <span class="cstat-no" title="statement not covered" >{ ...participantProjectRecord } as ParticipantProject;</span>
+    const typesToRemove = <span class="cstat-no" title="statement not covered" >Object.keys(participantProjectRecord?.landUseModelHectares || {}).filter(</span>
+<span class="fstat-no" title="function not covered" >      (t</span>ype) =&gt; <span class="cstat-no" title="statement not covered" >!(updatedRecord.landUseModelTypes as string[]).includes(type)</span>
+    );
+    const updatedModelHectares = <span class="cstat-no" title="statement not covered" >{ ...(participantProjectRecord?.landUseModelHectares || {}) };</span>
+<span class="cstat-no" title="statement not covered" >    typesToRemove.forEach(<span class="fstat-no" title="function not covered" >(t</span>ype) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      delete updatedModelHectares[type];</span>
+    });
+<span class="cstat-no" title="statement not covered" >    updatedRecord.landUseModelHectares = updatedModelHectares;</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    if (participantProjectRecord) {</span>
-      const dispatched = <span class="cstat-no" title="statement not covered" >dispatch(requestUpdateParticipantProject(participantProjectRecord));</span>
+      const dispatched = <span class="cstat-no" title="statement not covered" >dispatch(requestUpdateParticipantProject(updatedRecord));</span>
 <span class="cstat-no" title="statement not covered" >      setParticipantProjectRequestId(dispatched.requestId);</span>
 <span class="cstat-no" title="statement not covered" >      newInitiatedRequests.participantProject = true;</span>
     }
@@ -1681,18 +1687,6 @@ const ProjectProfileEdit = <span class="cstat-no" title="statement not covered" 
 <span class="cstat-no" title="statement not covered" >      delete updated[type];</span>
     }
 <span class="cstat-no" title="statement not covered" >    onChangeParticipantProject('landUseModelHectares', updated);</span>
-  };
-&nbsp;
-  const onChangeLandUseTypes = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(_</span>: string, types: string[]) =&gt; {</span>
-    const typesToRemove = <span class="cstat-no" title="statement not covered" >Object.keys(participantProjectRecord?.landUseModelHectares || {}).filter(</span>
-<span class="fstat-no" title="function not covered" >      (t</span>ype) =&gt; <span class="cstat-no" title="statement not covered" >!types.includes(type)</span>
-    );
-    const updatedModelHectares = <span class="cstat-no" title="statement not covered" >{ ...(participantProjectRecord?.landUseModelHectares || {}) };</span>
-<span class="cstat-no" title="statement not covered" >    typesToRemove.forEach(<span class="fstat-no" title="function not covered" >(t</span>ype) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      delete updatedModelHectares[type];</span>
-    });
-<span class="cstat-no" title="statement not covered" >    onChangeParticipantProject('landUseModelHectares', updatedModelHectares);</span>
-<span class="cstat-no" title="statement not covered" >    onChangeParticipantProject('landUseModelTypes', types);</span>
   };
 &nbsp;
   const onChangeSdgList = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>d: string, newList: string[]) =&gt; {</span>
@@ -1792,7 +1786,7 @@ const ProjectProfileEdit = <span class="cstat-no" title="statement not covered" 
                 id={'landUseModelTypes'}
                 md={6}
                 label={strings.LAND_USE_MODEL_TYPE}
-                onChange={onChangeLandUseTypes}
+                onChange={onChangeParticipantProject}
                 value={sortedSelectedModelTypes}
               /&gt;
             &lt;/Grid&gt;
@@ -2038,7 +2032,7 @@ export default ProjectProfileEdit;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-09T15:21:12.584Z
+                at 2025-05-09T15:35:14.805Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/92</span>
+                <span class='fraction'>0/91</span>
             </div>
         
             
@@ -566,7 +566,15 @@
 <a name='L501'></a><a href='#L501'>501</a>
 <a name='L502'></a><a href='#L502'>502</a>
 <a name='L503'></a><a href='#L503'>503</a>
-<a name='L504'></a><a href='#L504'>504</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L504'></a><a href='#L504'>504</a>
+<a name='L505'></a><a href='#L505'>505</a>
+<a name='L506'></a><a href='#L506'>506</a>
+<a name='L507'></a><a href='#L507'>507</a>
+<a name='L508'></a><a href='#L508'>508</a>
+<a name='L509'></a><a href='#L509'>509</a>
+<a name='L510'></a><a href='#L510'>510</a>
+<a name='L511'></a><a href='#L511'>511</a>
+<a name='L512'></a><a href='#L512'>512</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -839,7 +847,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1306,6 +1322,7 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
             label={strings.ACCUMULATION_RATE}
             value={participantProject?.accumulationRate}
             backgroundColor={theme.palette.TwClrBaseGray050}
+            units={&lt;Co2HectareYear /&gt;}
           /&gt;
         )}
         &lt;InvertedCard
@@ -1353,29 +1370,36 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
           &lt;/Grid&gt;
         &lt;/&gt;
       )}
-      {projectReports?.length &gt; 0 &amp;&amp; (
-        &lt;Grid container marginY={theme.spacing(2)} marginLeft={theme.spacing(1)}&gt;
-          {lastSubmittedReport &amp;&amp; lastSubmittedReport.submittedTime &amp;&amp; (
-            &lt;Grid item marginRight={theme.spacing(3)}&gt;
-              &lt;Typography fontWeight={500}&gt;
-                {strings.formatString(
-                  strings.LAST_REPORT_SUBMITTED,
-                  getDateDisplayValue(lastSubmittedReport.submittedTime)
-                )}
-              &lt;/Typography&gt;
-            &lt;/Grid&gt;
-          )}
+      &lt;Grid container marginY={theme.spacing(2)} marginLeft={theme.spacing(1)}&gt;
+        {projectReports?.length &gt; 0 &amp;&amp; (
+          &lt;&gt;
+            {lastSubmittedReport &amp;&amp; lastSubmittedReport.submittedTime &amp;&amp; (
+              &lt;Grid item marginRight={theme.spacing(3)} marginLeft={theme.spacing(1)}&gt;
+                &lt;Typography fontWeight={500}&gt;
+                  {strings.formatString(
+                    strings.LAST_REPORT_SUBMITTED,
+                    getDateDisplayValue(lastSubmittedReport.submittedTime)
+                  )}
+                &lt;/Typography&gt;
+              &lt;/Grid&gt;
+            )}
 &nbsp;
-          &lt;Grid item&gt;
-            &lt;Link to={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', (project?.id || '').toString())}&gt;
-              {strings.VIEW_REPORTS}
-            &lt;/Link&gt;
-          &lt;/Grid&gt;
-        &lt;/Grid&gt;
-      )}
+            &lt;Grid item&gt;
+              &lt;Link to={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', (project?.id || '').toString())}&gt;
+                {strings.VIEW_REPORTS}
+              &lt;/Link&gt;
+            &lt;/Grid&gt;
+          &lt;/&gt;
+        )}
+      &lt;/Grid&gt;
 &nbsp;
       &lt;Grid container&gt;
-        &lt;Box marginX={theme.spacing(2)} borderTop={`1px solid ${theme.palette.TwClrBrdrTertiary}`} width={'100%'}&gt;
+        &lt;Box
+          marginX={theme.spacing(1)}
+          paddingX={theme.spacing(1)}
+          borderTop={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+          width={'100%'}
+        &gt;
           &lt;Grid item xs={12} marginTop={theme.spacing(2)}&gt;
             &lt;Typography fontSize='20px' fontWeight={600} lineHeight='28px'&gt;
               {strings.LAND_DATA}
@@ -1504,7 +1528,7 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
               label={strings.DELIVERABLES}
             /&gt;
           )}
-          {project &amp;&amp; projectReports?.length &gt; 0 &amp;&amp; (
+          {project &amp;&amp; (
             &lt;ProjectFieldLink
               value={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', project.id.toString())}
               label={strings.REPORTS}
@@ -1579,7 +1603,7 @@ export default ProjectProfileView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-09T15:21:12.584Z
+                at 2025-05-09T15:35:14.805Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
