@@ -143,28 +143,25 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     [plantingSite, getLatestObservationLink, hasObservations]
   );
 
-  const renderTotalPlantsAndSpecies = useCallback(
-    () => (
-      <>
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: isMobile ? 'flex-start' : 'center',
-              flexDirection: isMobile ? 'column' : 'row',
-            }}
-          >
-            <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
-              {strings.PLANTS_AND_SPECIES_STATISTICS}
-            </Typography>
-          </Box>
-        </Grid>
-        <Grid item xs={12}>
-          <PlantsAndSpeciesCard />
-        </Grid>
-      </>
-    ),
-    []
+  const renderTotalPlantsAndSpecies = () => (
+    <>
+      <Grid item xs={12}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: isMobile ? 'flex-start' : 'center',
+            flexDirection: isMobile ? 'column' : 'row',
+          }}
+        >
+          <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
+            {strings.PLANTS_AND_SPECIES_STATISTICS}
+          </Typography>
+        </Box>
+      </Grid>
+      <Grid item xs={12}>
+        <PlantsAndSpeciesCard />
+      </Grid>
+    </>
   );
 
   const renderPlantingProgressAndDensity = useCallback(

@@ -132,58 +132,44 @@ const PlantingSiteProvider = ({ children }: Props) => {
   }, [dispatch, plantingSite]);
 
   useEffect(() => {
-    if (observationsResponse) {
-      if (observationsResponse.status === 'success') {
-        setObservations(observationsResponse.data ?? []);
-      }
+    if (observationsResponse?.status === 'success') {
+      setObservations(observationsResponse.data ?? []);
     }
   }, [observationsResponse]);
 
   useEffect(() => {
-    if (resultsResponse) {
-      if (resultsResponse.status === 'success') {
-        setObservationResults(resultsResponse.data ?? []);
-      }
+    if (resultsResponse?.status === 'success') {
+      setObservationResults(resultsResponse.data ?? []);
     }
   }, [resultsResponse]);
 
   useEffect(() => {
-    if (adHocObservationsResponse) {
-      if (adHocObservationsResponse.status === 'success') {
-        setAdHocObservations(adHocObservationsResponse.data ?? []);
-      }
+    if (adHocObservationsResponse?.status === 'success') {
+      setAdHocObservations(adHocObservationsResponse.data ?? []);
     }
   }, [adHocObservationsResponse]);
 
   useEffect(() => {
-    if (adHocResultsResponse) {
-      if (adHocResultsResponse.status === 'success') {
-        setAdHocObservationResults(adHocResultsResponse.data ?? []);
-      }
+    if (adHocResultsResponse?.status === 'success') {
+      setAdHocObservationResults(adHocResultsResponse.data ?? []);
     }
   }, [adHocResultsResponse]);
 
   useEffect(() => {
-    if (summariesResponse) {
-      if (summariesResponse.status === 'success') {
-        setObservationSummaries(summariesResponse.data ?? []);
-      }
+    if (summariesResponse?.status === 'success') {
+      setObservationSummaries(summariesResponse.data ?? []);
     }
   }, [summariesResponse]);
 
   useEffect(() => {
-    if (historiesResponse) {
-      if (historiesResponse.status === 'success') {
-        setHistories(historiesResponse.data ?? []);
-      }
+    if (historiesResponse?.status === 'success') {
+      setHistories(historiesResponse.data ?? []);
     }
   }, [historiesResponse]);
 
   useEffect(() => {
-    if (reportedPlantsResponse) {
-      if (reportedPlantsResponse.status === 'success') {
-        setReportedPlants(reportedPlantsResponse.data);
-      }
+    if (reportedPlantsResponse?.status === 'success') {
+      setReportedPlants(reportedPlantsResponse.data);
     }
   }, [reportedPlantsResponse]);
 
