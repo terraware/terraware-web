@@ -3,6 +3,7 @@ import {
   Observation,
   ObservationResultsPayload,
   ReplaceObservationPlotRequestPayload,
+  ReplaceObservationPlotResponseFullPayload,
   ReplaceObservationPlotResponsePayload,
   RescheduleObservationRequestPayload,
   ScheduleObservationRequestPayload,
@@ -15,18 +16,24 @@ import SearchService from './SearchService';
  * Tracking observations related services
  */
 
-const OBSERVATIONS_RESULTS_ENDPOINT = '/api/v1/tracking/observations/results';
-const OBSERVATIONS_ENDPOINT = '/api/v1/tracking/observations';
 const AD_HOC_OBSERVATIONS_ENDPOINT = '/api/v1/tracking/observations/adHoc';
+const AD_HOC_OBSERVATION_RESULTS_ENDPOINT = '/api/v1/tracking/observations/adHoc/results';
+const OBSERVATIONS_ENDPOINT = '/api/v1/tracking/observations';
+const OBSERVATION_RESULTS_ENDPOINT = '/api/v1/tracking/observations/results';
 const OBSERVATION_ENDPOINT = '/api/v1/tracking/observations/{observationId}';
 const OBSERVATION_EXPORT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots';
 const REPLACE_OBSERVATION_PLOT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/replace';
 const PLANTING_SITE_OBSERVATIONS_SUMMARIES_ENDPOINT = '/api/v1/tracking/observations/results/summaries';
 const ABANDON_OBSERVATION_ENDPOINT = '/api/v1/tracking/observations/{observationId}/abandon';
-const AD_HOC_OBSERVATIONS_RESULTS_ENDPOINT = '/api/v1/tracking/observations/adHoc/results';
 
-type ObservationsResultsResponsePayload =
-  paths[typeof OBSERVATIONS_RESULTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+type AdHocObservationsPayload =
+  paths[typeof AD_HOC_OBSERVATIONS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+type AdHocObservationResultsPayload =
+  paths[typeof AD_HOC_OBSERVATION_RESULTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+type ObservationResultsResponsePayload =
+  paths[typeof OBSERVATION_RESULTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 type ObservationsResponsePayload =
   paths[typeof OBSERVATIONS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -37,7 +44,7 @@ export type GetPlantingSiteObservationSummariesPayload =
 /**
  * exported response type
  */
-export type ObservationsResultsData = {
+export type ObservationResultsData = {
   observations: ObservationResultsPayload[];
 };
 
@@ -45,12 +52,12 @@ export type ObservationsData = {
   observations: Observation[];
 };
 
-const httpObservationsResults = HttpService.root(OBSERVATIONS_RESULTS_ENDPOINT);
-const httpObservations = HttpService.root(OBSERVATIONS_ENDPOINT);
 const httpAdHocObservations = HttpService.root(AD_HOC_OBSERVATIONS_ENDPOINT);
+const httpAdHocObservationResults = HttpService.root(AD_HOC_OBSERVATION_RESULTS_ENDPOINT);
+const httpObservationResults = HttpService.root(OBSERVATION_RESULTS_ENDPOINT);
+const httpObservations = HttpService.root(OBSERVATIONS_ENDPOINT);
 const httpObservation = HttpService.root(OBSERVATION_ENDPOINT);
 const httpObservationExport = HttpService.root(OBSERVATION_EXPORT_ENDPOINT);
-const httpAdHocObservationsResults = HttpService.root(AD_HOC_OBSERVATIONS_RESULTS_ENDPOINT);
 
 const exportCsv = async (observationId: number): Promise<any> => {
   return SearchService.searchCsv({
@@ -227,14 +234,14 @@ const exportGpx = async (observationId: number): Promise<any> => {
 /**
  * List all observations results
  */
-const listObservationsResults = async (
+const listObservationResults = async (
   organizationId: number,
   plantingSiteId?: number
-): Promise<ObservationsResultsData & Response> => {
+): Promise<ObservationResultsData & Response> => {
   const params: Record<string, string> = plantingSiteId ? { plantingSiteId: plantingSiteId.toString() } : {};
-  const response: ObservationsResultsData & Response = await httpObservationsResults.get<
-    ObservationsResultsResponsePayload,
-    ObservationsResultsData
+  const response: ObservationResultsData & Response = await httpObservationResults.get<
+    ObservationResultsResponsePayload,
+    ObservationResultsData
   >(
     {
       params: {
@@ -260,6 +267,57 @@ const listObservations = async (organizationId: number): Promise<ObservationsDat
     },
     (data) => ({ observations: data?.observations ?? [] })
   );
+
+  return response;
+};
+
+/**
+ * List planting site observations results
+ */
+const listPlantingSiteObservationResults = async (
+  plantingSiteId: number
+): Promise<Response2<ObservationResultsResponsePayload>> => {
+  const response = await httpObservationResults.get2<ObservationResultsResponsePayload>({
+    params: {
+      plantingSiteId: plantingSiteId.toString(),
+    },
+  });
+
+  return response;
+};
+
+const listPlantingSiteObservations = async (
+  plantingSiteId: number
+): Promise<Response2<ObservationsResponsePayload>> => {
+  const response = await httpObservations.get2<ObservationsResponsePayload>({
+    params: {
+      plantingSiteId: plantingSiteId.toString(),
+    },
+  });
+
+  return response;
+};
+
+const listPlantingSiteAdHocObservations = async (
+  plantingSiteId: number
+): Promise<Response2<AdHocObservationsPayload>> => {
+  const response = await httpAdHocObservations.get2<ObservationsResponsePayload>({
+    params: {
+      plantingSiteId: plantingSiteId.toString(),
+    },
+  });
+
+  return response;
+};
+
+const listPlantingSiteAdHocObservationResults = async (
+  plantingSiteId: number
+): Promise<Response2<AdHocObservationResultsPayload>> => {
+  const response = await httpAdHocObservationResults.get2<AdHocObservationResultsPayload>({
+    params: {
+      plantingSiteId: plantingSiteId.toString(),
+    },
+  });
 
   return response;
 };
@@ -298,20 +356,14 @@ const replaceObservationPlot = async (
   observationId: number,
   plotId: number,
   request: ReplaceObservationPlotRequestPayload
-): Promise<Response & ReplaceObservationPlotResponsePayload> => {
-  const serverResponse: Response = await HttpService.root(REPLACE_OBSERVATION_PLOT_ENDPOINT).post({
+): Promise<Response2<ReplaceObservationPlotResponsePayload>> => {
+  return await HttpService.root(REPLACE_OBSERVATION_PLOT_ENDPOINT).post2<ReplaceObservationPlotResponseFullPayload>({
     urlReplacements: {
       '{observationId}': observationId.toString(),
       '{plotId}': plotId.toString(),
     },
     entity: request,
   });
-
-  return {
-    ...serverResponse,
-    addedMonitoringPlotIds: serverResponse.data?.addedMonitoringPlotIds ?? [],
-    removedMonitoringPlotIds: serverResponse.data?.removedMonitoringPlotIds ?? [],
-  };
 };
 
 const getPlantingSiteObservationsSummaries = async (
@@ -334,14 +386,14 @@ const abandonObservation = async (observationId: number): Promise<Response> => {
   });
 };
 
-const listAdHocObservationsResults = async (
+const listAdHocObservationResults = async (
   organizationId: number,
   plantingSiteId?: number
-): Promise<ObservationsResultsData & Response> => {
+): Promise<ObservationResultsData & Response> => {
   const params: Record<string, string> = plantingSiteId ? { plantingSiteId: plantingSiteId.toString() } : {};
-  const response: ObservationsResultsData & Response = await httpAdHocObservationsResults.get<
-    ObservationsResultsResponsePayload,
-    ObservationsResultsData
+  const response: ObservationResultsData & Response = await httpAdHocObservationResults.get<
+    ObservationResultsResponsePayload,
+    ObservationResultsData
   >(
     {
       params: {
@@ -365,7 +417,7 @@ const ObservationsService = {
   exportBiomassTreesShrubsCsv,
   exportCsv,
   exportGpx,
-  listObservationsResults,
+  listObservationResults,
   listObservations,
   listAdHocObservations,
   replaceObservationPlot,
@@ -373,7 +425,11 @@ const ObservationsService = {
   scheduleObservation,
   getPlantingSiteObservationsSummaries,
   abandonObservation,
-  listAdHocObservationsResults,
+  listAdHocObservationResults,
+  listPlantingSiteObservationResults,
+  listPlantingSiteObservations,
+  listPlantingSiteAdHocObservations,
+  listPlantingSiteAdHocObservationResults,
 };
 
 export default ObservationsService;

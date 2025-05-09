@@ -103,6 +103,7 @@ export enum APP_PATHS {
   NURSERIES_EDIT = '/nurseries/:nurseryId/edit',
   NURSERIES_NEW = '/nurseries/new',
   NURSERIES_VIEW = '/nurseries/:nurseryId',
+  NURSERY = '/nursery',
   NURSERY_REASSIGNMENT = '/nursery/reassignment/:deliveryId',
   NURSERY_WITHDRAWALS = '/nursery/withdrawals',
   NURSERY_WITHDRAWALS_DETAILS = '/nursery/withdrawals/:withdrawalId',

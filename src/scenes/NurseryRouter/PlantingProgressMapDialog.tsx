@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -6,12 +6,14 @@ import { Button } from '@terraware/web-components';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
-import { selectSubzoneSpeciesPopulations } from 'src/redux/features/tracking/sitePopulationSelector';
+import { useOrganization } from 'src/providers';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
+import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 
 type PlantingProgressMapDialogProps = {
-  id: number;
+  subzoneId: number;
   subzoneName: string;
   subzoneAreaHa: number;
   siteName: string;
@@ -21,7 +23,7 @@ type PlantingProgressMapDialogProps = {
 };
 
 export default function PlantingProgressMapDialog({
-  id,
+  subzoneId,
   subzoneName,
   subzoneAreaHa,
   siteName,
@@ -30,10 +32,36 @@ export default function PlantingProgressMapDialog({
   busy,
 }: PlantingProgressMapDialogProps): JSX.Element {
   const theme = useTheme();
-  const species = useAppSelector((state) => selectSubzoneSpeciesPopulations(state, id));
+  const { selectedOrganization } = useOrganization();
+  const { plantingSiteReportedPlants } = usePlantingSiteData();
+  const species = useAppSelector(selectSpecies(selectedOrganization.id));
+
+  const subzoneReportedPlants = useMemo(() => {
+    if (!plantingSiteReportedPlants) {
+      return undefined;
+    }
+    const subzones = plantingSiteReportedPlants.plantingZones.flatMap((zone) => zone.plantingSubzones);
+    return subzones.find((subzone) => subzone.id === subzoneId);
+  }, [plantingSiteReportedPlants, subzoneId]);
+
   const totalPlants = useMemo(() => {
-    return Object.values(species).reduce((prev, curr) => prev + curr, 0);
-  }, [species]);
+    if (subzoneReportedPlants) {
+      return subzoneReportedPlants.species.reduce((acc, reportedSpecies) => acc + reportedSpecies.totalPlants, 0);
+    } else {
+      return 0;
+    }
+  }, [subzoneReportedPlants]);
+
+  const getSpeciesName = useCallback(
+    (speciesId: number) => {
+      if (!species.data?.species) {
+        return '';
+      }
+
+      return species.data.species.find((s) => s.id === speciesId)?.scientificName ?? '';
+    },
+    [species]
+  );
 
   const getWithdrawalHistoryLink = () => {
     const filterParam = `subzoneName=${encodeURIComponent(subzoneName)}&siteName=${encodeURIComponent(siteName)}`;
@@ -76,15 +104,17 @@ export default function PlantingProgressMapDialog({
           <FormattedNumber value={totalPlants} />
           &nbsp;{strings.SEEDLINGS_SENT}
         </Typography>
+
         <ul style={{ margin: 0, paddingLeft: theme.spacing(3) }}>
-          {Object.keys(species).map((speciesName) => (
-            <li key={speciesName}>
-              <Typography fontSize='16px' fontWeight={400}>
-                <FormattedNumber value={species[speciesName]} />
-                &nbsp;{speciesName}
-              </Typography>
-            </li>
-          ))}
+          {subzoneReportedPlants &&
+            subzoneReportedPlants.species?.map((reportedSpecies) => (
+              <li key={reportedSpecies.id}>
+                <Typography fontSize='16px' fontWeight={400}>
+                  <FormattedNumber value={reportedSpecies.totalPlants} />
+                  &nbsp;{getSpeciesName(reportedSpecies.id)}
+                </Typography>
+              </li>
+            ))}
         </ul>
         {getWithdrawalHistoryLink()}
       </Box>
@@ -99,7 +129,7 @@ export default function PlantingProgressMapDialog({
         }}
       >
         <Button
-          onClick={() => onUpdatePlantingComplete(id, !plantingComplete)}
+          onClick={() => onUpdatePlantingComplete(subzoneId, !plantingComplete)}
           label={plantingComplete ? strings.UNDO_PLANTING_COMPLETE : strings.SET_PLANTING_COMPLETE}
           type={plantingComplete ? 'passive' : 'productive'}
           disabled={busy}

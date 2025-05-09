@@ -54,20 +54,20 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
     )
   );
 
-  const allAdHocObservationsResults = useAppSelector((state) =>
+  const allAdHocObservationResults = useAppSelector((state) =>
     searchAdHocObservations(state, selectedPlantingSiteId, defaultTimeZone.get().id, searchProps.search)
   );
 
-  const adHocObservationsResults = useMemo(() => {
-    if (!allAdHocObservationsResults || !selectedPlantingSite?.id) {
+  const adHocObservationResults = useMemo(() => {
+    if (!allAdHocObservationResults || !selectedPlantingSite?.id) {
       return [];
     }
 
-    return allAdHocObservationsResults?.filter((observationResult) => {
+    return allAdHocObservationResults?.filter((observationResult) => {
       const isMonitoring = observationResult.type === 'Monitoring';
       return isMonitoring;
     });
-  }, [allAdHocObservationsResults, selectedPlantingSite]);
+  }, [allAdHocObservationResults, selectedPlantingSite]);
 
   const zoneNames = useAppSelector((state) =>
     selectObservationsZoneNames(state, selectedPlantingSiteId, searchProps.filtersProps?.filters.status?.values)
@@ -92,7 +92,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
       list={
         <OrgObservationsListView
           observationsResults={observationsResults}
-          adHocObservationsResults={adHocObservationsResults}
+          adHocObservationResults={adHocObservationResults}
           plantingSiteId={selectedPlantingSiteId}
           reload={reload}
           selectedPlotSelection={selectedPlotSelection}
@@ -103,7 +103,7 @@ export default function ObservationsDataView(props: ObservationsDataViewProps): 
         selectedPlantingSite && selectedPlantingSiteId !== -1 ? (
           <ObservationMapView
             observationsResults={observationsResults}
-            adHocObservationsResults={adHocObservationsResults}
+            adHocObservationResults={adHocObservationResults}
             selectedPlantingSite={selectedPlantingSite}
             {...searchProps}
           />

@@ -4,25 +4,16 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import HighestAndLowestMortalityRateSpeciesCard from './HighestAndLowestMortalityRateSpeciesCard';
 import HighestAndLowestMortalityRateZonesCard from './HighestAndLowestMortalityRateZonesCard';
 import LiveDeadPlantsPerSpeciesCard from './LiveDeadPlantsPerSpeciesCard';
 
-type MortalityRateCardProps = {
-  plantingSiteId: number;
-};
-
-export default function MortalityRateCard({ plantingSiteId }: MortalityRateCardProps): JSX.Element {
+export default function MortalityRateCard(): JSX.Element {
   const theme = useTheme();
-  const defaultTimeZone = useDefaultTimeZone();
-  const observation = useAppSelector((state) =>
-    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
-  );
+  const { latestObservation } = usePlantingSiteData();
   const { isDesktop } = useDeviceInfo();
 
   const separatorStyles = {
@@ -51,15 +42,19 @@ export default function MortalityRateCard({ plantingSiteId }: MortalityRateCardP
         </Box>
         <Box display='flex' sx={{ flexFlow: 'row wrap' }} marginTop={1}>
           <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
-            {observation?.mortalityRate !== undefined ? <FormattedNumber value={observation.mortalityRate} /> : '-'}
+            {latestObservation?.mortalityRate !== undefined ? (
+              <FormattedNumber value={latestObservation.mortalityRate} />
+            ) : (
+              '-'
+            )}
           </Typography>
-          {observation?.mortalityRate !== undefined && (
+          {latestObservation?.mortalityRate !== undefined && (
             <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
               %
             </Typography>
           )}
         </Box>
-        {observation?.mortalityRate === undefined && (
+        {latestObservation?.mortalityRate === undefined && (
           <Box display={'flex'}>
             <Box paddingRight={0.5}>
               <Icon name='warning' fillColor={theme.palette.TwClrIcnWarning} size='medium' />
@@ -83,7 +78,7 @@ export default function MortalityRateCard({ plantingSiteId }: MortalityRateCardP
           </Tooltip>
         </Box>
         <Box paddingTop={2}>
-          <HighestAndLowestMortalityRateZonesCard plantingSiteId={plantingSiteId} />
+          <HighestAndLowestMortalityRateZonesCard />
         </Box>
       </Box>
       <div style={separatorStyles} />
@@ -99,7 +94,7 @@ export default function MortalityRateCard({ plantingSiteId }: MortalityRateCardP
           </Tooltip>
         </Box>
         <Box paddingTop={2}>
-          <HighestAndLowestMortalityRateSpeciesCard plantingSiteId={plantingSiteId} />
+          <HighestAndLowestMortalityRateSpeciesCard />
         </Box>
       </Box>
       <div style={separatorStyles} />
@@ -115,7 +110,7 @@ export default function MortalityRateCard({ plantingSiteId }: MortalityRateCardP
           </Tooltip>
         </Box>
         <Box paddingTop={2}>
-          <LiveDeadPlantsPerSpeciesCard plantingSiteId={plantingSiteId} />
+          <LiveDeadPlantsPerSpeciesCard />
         </Box>
       </Box>
     </Card>

@@ -3,7 +3,6 @@ import { createSelector } from '@reduxjs/toolkit';
 import { selectPlantings } from 'src/redux/features/plantings/plantingsSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { RootState } from 'src/redux/rootReducer';
-import { SiteReportedPlantsData } from 'src/services/TrackingService';
 import {
   PlantingSite,
   PlantingSiteSubzoneWithReportedPlants,
@@ -68,7 +67,7 @@ export const selectObservationSchedulableSitesWithPlantReportData = createSelect
   ],
   (plantingSites, reportedPlantsResults): PlantingSiteWithReportedPlants[] => {
     return plantingSites.map((plantingSite): PlantingSiteWithReportedPlants => {
-      const plantsResults: SiteReportedPlantsData['site'] | undefined = reportedPlantsResults[plantingSite.id]?.site;
+      const plantsResults = reportedPlantsResults[plantingSite.id]?.site;
       if (!plantsResults) {
         return plantingSite as PlantingSiteWithReportedPlants;
       }
@@ -93,7 +92,7 @@ export const selectObservationSchedulableSitesWithPlantReportData = createSelect
 
               return {
                 ...subzone,
-                totalPlants: plantsResultsSubzone.totalPlants,
+                ...plantsResultsSubzone,
               };
             }),
           };

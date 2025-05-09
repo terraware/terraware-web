@@ -9,18 +9,16 @@ import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import {
   selectObservationSchedulableSites,
   selectUpcomingObservations,
 } from 'src/redux/features/observations/observationsUtilsSelectors';
-import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppSelector } from 'src/redux/store';
 import BiomassMeasurement from 'src/scenes/ObservationsRouter/biomass/BiomassMeasurement';
 import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
-import { PlantingSite } from 'src/types/Tracking';
 import { isAdmin } from 'src/utils/organization';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
@@ -34,12 +32,11 @@ export type ObservationsHomeProps = SearchProps & {
 
 export default function ObservationsHome(props: ObservationsHomeProps): JSX.Element {
   const navigate = useSyncNavigate();
-  const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [plantsSitePreferences, setPlantsSitePreferences] = useState<Record<string, unknown>>();
-  const plantingSites = useAppSelector(selectPlantingSites);
+
+  const { allPlantingSites, plantingSite, setSelectedPlantingSite } = usePlantingSiteData();
 
   const tabs = useMemo(() => {
     if (!activeLocale) {
@@ -49,15 +46,15 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
       {
         id: 'plantMonitoring',
         label: strings.PLANT_MONITORING,
-        children: <PlantMonitoring {...props} selectedPlantingSite={selectedPlantingSite} />,
+        children: <PlantMonitoring {...props} selectedPlantingSite={plantingSite} />,
       },
       {
         id: 'biomassMeasurements',
         label: strings.BIOMASS_MONITORING,
-        children: <BiomassMeasurement {...props} selectedPlantingSite={selectedPlantingSite} />,
+        children: <BiomassMeasurement {...props} selectedPlantingSite={plantingSite} />,
       },
     ];
-  }, [activeLocale, selectedPlantingSite, props]);
+  }, [activeLocale, plantingSite, props]);
 
   const { activeTab, onTabChange } = useStickyTabs({
     defaultTab: 'plantMonitoring',
@@ -67,17 +64,16 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   });
   const allObservationsResults = useAppSelector(selectObservationsResults);
   const observationsResults = useMemo(() => {
-    if (!allObservationsResults || !selectedPlantingSite?.id) {
+    if (!allObservationsResults || !plantingSite?.id) {
       return [];
     }
 
     return allObservationsResults?.filter((observationResult) => {
-      const matchesSite =
-        selectedPlantingSite.id !== -1 ? observationResult.plantingSiteId === selectedPlantingSite.id : true;
+      const matchesSite = plantingSite.id !== -1 ? observationResult.plantingSiteId === plantingSite.id : true;
       const matchesState = ['Abandoned', 'Completed', 'Overdue', 'InProgress'].indexOf(observationResult.state) !== -1;
       return matchesSite && matchesState;
     });
-  }, [allObservationsResults, selectedPlantingSite]);
+  }, [allObservationsResults, plantingSite]);
 
   // get upcoming observations for notifications
   const upcomingObservations = useAppSelector(selectUpcomingObservations);
@@ -85,24 +81,16 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   const newObservationsSchedulable = useAppSelector(selectObservationSchedulableSites).length;
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
 
-  const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSite(site), [setSelectedPlantingSite]);
-
   const onPreferences = useCallback(
     (preferences: Record<string, unknown>) => setPlantsSitePreferences(preferences),
     [setPlantsSitePreferences]
   );
 
   useEffect(() => {
-    if (plantingSites?.length === 0) {
+    if (allPlantingSites?.length === 0) {
       navigate(APP_PATHS.HOME);
     }
-  }, [navigate, plantingSites?.length]);
-
-  useEffect(() => {
-    if (selectedOrganization.id !== -1) {
-      void dispatch(requestPlantings(selectedOrganization.id));
-    }
-  }, [dispatch, selectedOrganization.id]);
+  }, [navigate, allPlantingSites?.length]);
 
   const actionButton = useMemo<ButtonProps | undefined>(() => {
     if (!activeLocale || !newObservationsSchedulable || !scheduleObservationsEnabled) {
@@ -119,14 +107,15 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
     <PlantsPrimaryPage
       actionButton={actionButton}
       allowAllAsSiteSelection={true}
-      isEmptyState={!plantingSites?.length || !observationsResults?.length}
+      isEmptyState={!allPlantingSites?.length || !observationsResults?.length}
       lastVisitedPreferenceName='plants.observations.lastVisitedPlantingSite'
-      onSelect={onSelect}
       pagePath={APP_PATHS.OBSERVATIONS_SITE}
+      plantingSitesData={allPlantingSites ?? []}
       plantsSitePreferences={plantsSitePreferences}
       setPlantsSitePreferences={onPreferences}
       style={{ display: 'flex', flexGrow: 1, flexDirection: 'column' }}
       title={strings.OBSERVATIONS}
+      onSelect={setSelectedPlantingSite}
     >
       <Box display='flex' flexGrow={1} flexDirection='column'>
         <ObservationsEventsNotification events={upcomingObservations} />

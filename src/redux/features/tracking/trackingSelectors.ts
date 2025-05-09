@@ -40,19 +40,12 @@ export const selectMultipleSitesTotalPlants = (state: RootState, plantingSiteIds
 export const selectSiteReportedPlantsError = (state: RootState, plantingSiteId: number) =>
   state.siteReportedPlantsResults[plantingSiteId]?.error;
 
-export const selectZoneProgress = createCachedSelector(
-  (state: RootState, plantingSiteId: number) => selectPlantingSite(state, plantingSiteId),
-  (state: RootState, plantingSiteId: number) => selectSiteReportedPlants(state, plantingSiteId),
-  (plantingSite, reportedPlants) => {
-    const zoneProgress: Record<number, { name: string; progress: number; targetDensity: number }> = {};
-    plantingSite?.plantingZones?.forEach((zone) => {
-      const percentProgress = reportedPlants?.plantingZones?.find((z) => z.id === zone.id)?.progressPercent ?? 0;
-      zoneProgress[zone.id] = { name: zone.name, progress: percentProgress, targetDensity: zone.targetPlantingDensity };
-    });
-    return zoneProgress;
-  }
-)((state: RootState, plantingSiteId: number) => `${plantingSiteId}`);
-
 export const selectMonitoringPlots = (state: RootState, requestId: string) => state.monitoringPlots[requestId];
 
 export const selectPlantingSiteHistory = (state: RootState, requestId: string) => state.plantingSiteHistory[requestId];
+
+export const selectPlantingSiteHistories = (requestId: string) => (state: RootState) =>
+  state.plantingSiteHistories[requestId];
+
+export const selectPlantingSiteReportedPlants = (requestId: string) => (state: RootState) =>
+  state.plantingSiteReportedPlants[requestId];

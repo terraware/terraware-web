@@ -1,14 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import _ from 'lodash';
 
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { CachedUserService, PreferencesService, TrackingService } from 'src/services';
-import strings from 'src/strings';
+import { useOrganization } from 'src/providers/hooks';
+import { CachedUserService, PreferencesService } from 'src/services';
 import { PlantingSite } from 'src/types/Tracking';
-import useSnackbar from 'src/utils/useSnackbar';
 
 import PlantsPrimaryPageView, { ButtonProps } from './PlantsPrimaryPageView';
 
@@ -18,11 +16,9 @@ export type PlantsPrimaryPageProps = {
   children: React.ReactNode; // primary content for this page
   isEmptyState?: boolean; // optional boolean to indicate this is an empty state view
   lastVisitedPreferenceName: string;
-  onSelect: (plantingSite: PlantingSite) => void; // planting site selected, id of -1 refers to All
   pagePath: string;
   plantsSitePreferences?: Record<string, unknown>;
-  // this is to allow redux based components to pass in already selected data
-  plantingSitesData?: PlantingSite[];
+  plantingSitesData: PlantingSite[];
   setPlantsSitePreferences: (preferences: Record<string, unknown>) => void;
   style?: Record<string, string | number>;
   title: string;
@@ -32,14 +28,8 @@ export type PlantsPrimaryPageProps = {
   latestObservationId?: number;
   projectId?: number;
   organizationId?: number;
+  onSelect: (plantingSiteId: number) => void;
 };
-
-const allSitesOption = (organizationId: number): PlantingSite => ({
-  name: strings.ALL,
-  id: -1,
-  organizationId,
-  plantingSeasons: [],
-});
 
 export default function PlantsPrimaryPage({
   actionButton,
@@ -47,7 +37,6 @@ export default function PlantsPrimaryPage({
   children,
   isEmptyState,
   lastVisitedPreferenceName,
-  onSelect,
   pagePath,
   plantsSitePreferences,
   plantingSitesData,
@@ -60,14 +49,12 @@ export default function PlantsPrimaryPage({
   latestObservationId,
   projectId,
   organizationId,
+  onSelect,
 }: PlantsPrimaryPageProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
-  const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const navigate = useSyncNavigate();
-  const snackbar = useSnackbar();
-  const { activeLocale } = useLocalization();
 
   useEffect(() => {
     if (plantsSitePreferences && selectedOrganization.id !== -1) {
@@ -80,99 +67,70 @@ export default function PlantsPrimaryPage({
     }
   }, [plantsSitePreferences, lastVisitedPreferenceName, selectedOrganization.id]);
 
-  useEffect(() => {
-    const populatePlantingSites = async () => {
-      let plantingSitesList: PlantingSite[] | undefined = plantingSitesData;
-      if (plantingSitesList === undefined && (selectedOrganization.id !== -1 || organizationId)) {
-        const orgIdToUse = organizationId ? organizationId : selectedOrganization.id;
-        const serverResponse = await TrackingService.listPlantingSites(orgIdToUse ?? -1, undefined, activeLocale);
-        if (serverResponse.requestSucceeded) {
-          plantingSitesList = projectId
-            ? serverResponse.sites?.filter((ps) => ps.projectId === projectId)
-            : serverResponse.sites;
-        } else {
-          snackbar.toastError();
-          return;
-        }
-      }
-      plantingSitesList =
-        allowAllAsSiteSelection && plantingSitesList?.length
-          ? [allSitesOption(selectedOrganization.id), ...plantingSitesList]
-          : plantingSitesList ?? [];
-      setPlantingSites(plantingSitesList);
-    };
-    void populatePlantingSites();
-  }, [
-    selectedOrganization.id,
-    snackbar,
-    allowAllAsSiteSelection,
-    plantingSitesData,
-    activeLocale,
-    projectId,
-    organizationId,
-  ]);
+  const plantingSitesList = useMemo((): PlantingSite[] => {
+    const sitesWithAll = allowAllAsSiteSelection
+      ? plantingSitesData
+      : plantingSitesData.filter((site) => site.id !== -1);
+    const projectSites = projectId
+      ? sitesWithAll.filter((site) => site.projectId === projectId || site.id === -1)
+      : sitesWithAll;
+    return projectSites.toSorted((a, b) => a.id - b.id);
+  }, [plantingSitesData, allowAllAsSiteSelection, selectedOrganization, projectId]);
 
   const setActivePlantingSite = useCallback(
     (site: PlantingSite | undefined) => {
       if (site) {
-        if (projectId) {
-          onSelect(site);
-          setSelectedPlantingSite(site);
-        } else {
+        setSelectedPlantingSite(site);
+        if (projectId === undefined) {
           navigate(pagePath.replace(':plantingSiteId', site.id.toString()));
         }
       } else {
-        const emptySite = {
-          id: -2,
-          name: '',
-          organizationId: 0,
-          plantingSeasons: [],
-        };
-        setSelectedPlantingSite(emptySite);
-        onSelect(emptySite);
+        setSelectedPlantingSite(undefined);
       }
     },
-    [navigate, pagePath, projectId]
+    [navigate, pagePath, projectId, setSelectedPlantingSite]
   );
 
   useEffect(() => {
-    const initializePlantingSite = () => {
-      if (plantingSites && plantingSites.length) {
+    const initializePlantingSite = async () => {
+      if (plantingSitesList && plantingSitesList.length) {
         let lastVisitedPlantingSite: any = {};
         if (selectedOrganization.id !== -1) {
           const response = CachedUserService.getUserOrgPreferences(selectedOrganization.id);
           if (response[lastVisitedPreferenceName]) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             lastVisitedPlantingSite = response[lastVisitedPreferenceName];
           }
         }
-        const plantingSiteIdToUse = plantingSiteId || lastVisitedPlantingSite.plantingSiteId;
-        const requestedPlantingSite = plantingSites.find(
-          (plantingSite) => plantingSite?.id === parseInt(plantingSiteIdToUse, 10)
-        );
-        const plantingSiteToUse = requestedPlantingSite || plantingSites[0];
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        const lastPlantingSiteId = Number(lastVisitedPlantingSite.plantingSiteId);
+        const paramPlantingSiteId = plantingSiteId ? Number(plantingSiteId) : undefined;
+
+        const plantingSiteIdToUse = paramPlantingSiteId ?? lastPlantingSiteId;
+        const nextPlantingSite =
+          plantingSitesList.find((plantingSite) => plantingSite?.id === plantingSiteIdToUse) ?? plantingSitesList[0];
+        const nextPlantingSiteId = nextPlantingSite.id;
 
         if (selectedOrganization.id !== -1) {
-          if (plantingSiteToUse.id !== lastVisitedPlantingSite.plantingSiteId) {
-            lastVisitedPlantingSite = { plantingSiteId: plantingSiteToUse.id };
-            void PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
-              [lastVisitedPreferenceName]: lastVisitedPlantingSite,
+          if (nextPlantingSiteId !== lastPlantingSiteId) {
+            await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
+              [lastVisitedPreferenceName]: { plantingSiteId: nextPlantingSiteId },
             });
           }
-          setPlantsSitePreferences(lastVisitedPlantingSite);
+          setPlantsSitePreferences({ plantingSiteId: nextPlantingSiteId });
         }
 
-        if (plantingSiteToUse.id.toString() === plantingSiteId) {
-          setSelectedPlantingSite(plantingSiteToUse);
-          onSelect(plantingSiteToUse);
+        if (nextPlantingSiteId === plantingSiteIdToUse) {
+          setSelectedPlantingSite(nextPlantingSite);
         } else {
-          setActivePlantingSite(plantingSiteToUse);
+          setActivePlantingSite(nextPlantingSite);
         }
       }
     };
-    initializePlantingSite();
+
+    void initializePlantingSite();
   }, [
-    onSelect,
-    plantingSites,
+    plantingSitesList,
     plantingSiteId,
     setActivePlantingSite,
     selectedOrganization.id,
@@ -181,6 +139,12 @@ export default function PlantsPrimaryPage({
     organizationId,
   ]);
 
+  useEffect(() => {
+    if (selectedPlantingSite) {
+      onSelect(selectedPlantingSite.id);
+    }
+  }, [selectedPlantingSite, onSelect]);
+
   return (
     <PlantsPrimaryPageView
       actionButton={actionButton}
@@ -188,7 +152,7 @@ export default function PlantsPrimaryPage({
       children={children}
       isEmptyState={isEmptyState}
       onSelect={setActivePlantingSite}
-      plantingSites={plantingSites}
+      plantingSites={plantingSitesList}
       selectedPlantingSiteId={selectedPlantingSite?.id}
       style={style}
       title={title}

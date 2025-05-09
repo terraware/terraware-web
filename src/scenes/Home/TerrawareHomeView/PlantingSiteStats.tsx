@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
-import { useDeviceInfo } from '@terraware/web-components/utils';
+import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
 import AddLink from 'src/components/common/AddLink';
 import Link from 'src/components/common/Link';
@@ -10,20 +10,12 @@ import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
-import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
-import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
-import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
-import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
-import { selectOrgPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import { requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
-import { PlantingSite } from 'src/types/Tracking';
 import { isAdmin } from 'src/utils/organization';
 import useMapboxToken from 'src/utils/useMapboxToken';
 import { useNumberFormatter } from 'src/utils/useNumber';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import StatsCardItem from './StatsCardItem';
 
@@ -34,31 +26,20 @@ export const PlantingSiteStats = () => {
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const { selectedOrganization } = useOrganization();
-  const plantingSites = useAppSelector(selectOrgPlantingSites(selectedOrganization.id));
   const { token } = useMapboxToken();
-  const defaultTimeZone = useDefaultTimeZone();
 
-  const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>();
-  const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
-  const [totalPlants, setTotalPlants] = useState(0);
-  const [totalSpecies, setTotalSpecies] = useState<number>();
+  const { allPlantingSites, plantingSite, setSelectedPlantingSite, latestObservation, plantingSiteReportedPlants } =
+    usePlantingSiteData();
   const { countries } = useLocalization();
-  const dispatch = useAppDispatch();
 
   const numericFormatter = useMemo(() => numberFormatter(activeLocale), [activeLocale, numberFormatter]);
-
-  const observation = useAppSelector((state) =>
-    selectLatestObservation(state, selectedPlantingSiteId || -1, defaultTimeZone.get().id, selectedOrganization.id)
-  );
-  const plantings = useAppSelector((state) => selectPlantingsForSite(state, selectedPlantingSiteId || -1));
-  const populationSelector = useAppSelector((state) => selectSitePopulationZones(state));
 
   const primaryGridSize = useMemo(() => (isDesktop ? 6 : 12), [isDesktop]);
 
   const plantingCompleteArea = useMemo(() => {
     let total = 0;
-    if (selectedPlantingSite?.plantingZones) {
-      selectedPlantingSite.plantingZones.forEach((zone) => {
+    if (plantingSite?.plantingZones) {
+      plantingSite.plantingZones.forEach((zone) => {
         zone.plantingSubzones.forEach((subzone) => {
           if (subzone.plantingCompleted) {
             total += subzone.areaHa;
@@ -67,51 +48,20 @@ export const PlantingSiteStats = () => {
       });
     }
     return total;
-  }, [selectedPlantingSite]);
+  }, [plantingSite]);
 
-  useEffect(() => {
-    if (selectedOrganization.id !== -1) {
-      void dispatch(requestPlantings(selectedOrganization.id));
+  const latestObservationCompletedTime = useMemo(() => {
+    if (latestObservation?.completedTime && plantingSite) {
+      return getDateDisplayValue(latestObservation.completedTime, plantingSite.timeZone);
+    } else {
+      return '';
     }
-  }, [dispatch, selectedOrganization.id]);
+  }, [latestObservation, plantingSite]);
 
-  useEffect(() => {
-    if (selectedPlantingSiteId && selectedOrganization.id !== -1) {
-      void dispatch(requestSitePopulation(selectedOrganization.id, selectedPlantingSiteId));
-    }
-  }, [selectedPlantingSiteId, selectedOrganization.id, dispatch]);
+  const totalPlants = useMemo(() => plantingSiteReportedPlants?.totalPlants ?? 0, [plantingSiteReportedPlants]);
+  const totalSpecies = useMemo(() => plantingSiteReportedPlants?.species?.length ?? 0, [plantingSiteReportedPlants]);
 
-  // auto-select planting site when selectedPlantingSiteId is set
-  useEffect(() => {
-    if (selectedPlantingSiteId) {
-      setSelectedPlantingSite(plantingSites?.find((site) => site.id === selectedPlantingSiteId));
-    }
-  }, [plantingSites, selectedPlantingSiteId]);
-
-  useEffect(() => {
-    if (populationSelector) {
-      const populations = populationSelector
-        .flatMap((zone) => zone.plantingSubzones)
-        .flatMap((sz) => sz.populations)
-        .filter((pop) => pop !== undefined);
-      const sum = populations.reduce((acc, pop) => +pop['totalPlants(raw)'] + acc, 0);
-      setTotalPlants(sum);
-    }
-  }, [populationSelector]);
-
-  useEffect(() => {
-    const speciesNames: Set<string> = new Set();
-
-    plantings.forEach((planting) => {
-      const { scientificName } = planting.species;
-      speciesNames.add(scientificName);
-    });
-
-    const speciesCount = speciesNames.size;
-    setTotalSpecies(speciesCount);
-  }, [plantings]);
-
-  if (!plantingSites?.length) {
+  if (!allPlantingSites?.length) {
     return <></>;
   }
 
@@ -180,7 +130,7 @@ export const PlantingSiteStats = () => {
             </Typography>
             <PlantingSiteSelector
               onChange={(plantingSiteId) => {
-                setSelectedPlantingSiteId(plantingSiteId);
+                setSelectedPlantingSite(plantingSiteId);
               }}
               hideNoBoundary
             />
@@ -190,7 +140,7 @@ export const PlantingSiteStats = () => {
             <StatsCardItem
               label={strings.LOCATION}
               showLink={false}
-              value={countries.find((c) => c.code === selectedPlantingSite?.countryCode)?.name}
+              value={countries.find((c) => c.code === plantingSite?.countryCode)?.name}
             />
           </Grid>
 
@@ -200,8 +150,8 @@ export const PlantingSiteStats = () => {
               showLink={false}
               showBorder={!isDesktop}
               value={
-                selectedPlantingSite?.areaHa
-                  ? strings.formatString(strings.X_HA, numericFormatter.format(selectedPlantingSite.areaHa))?.toString()
+                plantingSite?.areaHa
+                  ? strings.formatString(strings.X_HA, numericFormatter.format(plantingSite.areaHa))?.toString()
                   : undefined
               }
             />
@@ -211,7 +161,7 @@ export const PlantingSiteStats = () => {
             <StatsCardItem
               label={strings.DATE_OF_LAST_OBSERVATION}
               showLink={false}
-              value={observation?.completedDate}
+              value={latestObservationCompletedTime}
             />
           </Grid>
 
@@ -220,7 +170,7 @@ export const PlantingSiteStats = () => {
               label={strings.MORTALITY_RATE}
               showBorder={!isDesktop}
               showLink={false}
-              value={observation?.mortalityRate ? `${observation.mortalityRate}%` : ''}
+              value={latestObservation?.mortalityRate ? `${latestObservation.mortalityRate}%` : ''}
             />
           </Grid>
 
@@ -254,7 +204,7 @@ export const PlantingSiteStats = () => {
           <Grid item xs={primaryGridSize} sx={{ textAlign: isDesktop ? 'left' : 'center' }}>
             <Link
               onClick={() => {
-                navigate(`${APP_PATHS.PLANTS_DASHBOARD}/${selectedPlantingSiteId}`);
+                navigate(`${APP_PATHS.PLANTS_DASHBOARD}/${plantingSite?.id}`);
               }}
               style={{ textWrap: 'wrap', textAlign: 'left' }}
             >
@@ -295,9 +245,9 @@ export const PlantingSiteStats = () => {
             width: '100%',
           }}
         >
-          {token && selectedPlantingSiteId && selectedPlantingSite?.boundary && (
+          {token && plantingSite && plantingSite.boundary && (
             <SimplePlantingSiteMap
-              plantingSiteId={selectedPlantingSiteId}
+              plantingSiteId={plantingSite.id}
               hideAllControls={true}
               style={{ borderRadius: '0 8px 8px 0' }}
             />

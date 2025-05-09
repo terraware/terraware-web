@@ -11,7 +11,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
-import { selectAdHocObservationsResults } from 'src/redux/features/observations/observationsSelectors';
+import { selectAdHocObservationResults } from 'src/redux/features/observations/observationsSelectors';
 import { getConditionString } from 'src/redux/features/observations/utils';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
@@ -34,7 +34,7 @@ type AdHocObservationDetailsProps = {
   reload: () => void;
 };
 
-export default function AdHocObservationDetails(props: AdHocObservationDetailsProps): JSX.Element {
+export default function AdHocObservationDetails(props: AdHocObservationDetailsProps): JSX.Element | undefined {
   const { reload } = props;
   const { plantingSiteId, observationId, monitoringPlotId } = useParams<{
     plantingSiteId: string;
@@ -47,8 +47,8 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const allAdHocObservationsResults = useAppSelector(selectAdHocObservationsResults);
-  const observation = allAdHocObservationsResults?.find(
+  const allAdHocObservationResults = useAppSelector(selectAdHocObservationResults);
+  const observation = allAdHocObservationResults?.find(
     (obsResult) => obsResult?.observationId.toString() === observationId?.toString()
   );
   const { availableSpecies } = useSpecies();
@@ -151,11 +151,15 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
 
   const onSaveMergedSpecies = useOnSaveMergedSpecies({ observationId, reload, setShowMatchSpeciesModal });
 
+  if (!plantingSiteId || !observationId) {
+    return undefined;
+  }
+
   return (
     <DetailsPage
       title={monitoringPlot?.monitoringPlotNumber?.toString() ?? ''}
-      plantingSiteId={plantingSiteId}
-      observationId={observationId}
+      plantingSiteId={Number(plantingSiteId)}
+      observationId={Number(observationId)}
       rightComponent={
         <OptionsMenu
           onOptionItemClick={() => setShowMatchSpeciesModal(true)}
@@ -192,7 +196,9 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
                 <Grid key={index} item xs={gridSize} marginTop={2}>
                   <Textfield
                     id={`plot-observation-${index}`}
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     label={datum.label}
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     value={datum.value}
                     type={datum.text ? 'textarea' : 'text'}
                     preserveNewlines={true}

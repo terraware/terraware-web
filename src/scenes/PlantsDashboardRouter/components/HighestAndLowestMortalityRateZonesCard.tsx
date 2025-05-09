@@ -3,21 +3,15 @@ import React from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import useObservationSummaries from 'src/hooks/useObservationSummaries';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingZone } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PlantingZoneObservationSummary } from 'src/types/Observations';
 
-type HighestAndLowestMortalityRateCardProps = {
-  plantingSiteId: number;
-};
-
-export default function TotalMortalityRateCard({
-  plantingSiteId,
-}: HighestAndLowestMortalityRateCardProps): JSX.Element {
+export default function TotalMortalityRateCard(): JSX.Element {
   const theme = useTheme();
-  const summaries = useObservationSummaries(plantingSiteId);
+  const { observationSummaries, plantingSite } = usePlantingSiteData();
 
   let highestMortalityRate: number | undefined;
   let highestZoneId: number;
@@ -25,7 +19,7 @@ export default function TotalMortalityRateCard({
   let lowestMortalityRate = 100;
   let lowestZoneId: number;
 
-  summaries?.[0]?.plantingZones.forEach((zone: PlantingZoneObservationSummary) => {
+  observationSummaries?.[0]?.plantingZones.forEach((zone: PlantingZoneObservationSummary) => {
     if (
       zone.mortalityRate !== undefined &&
       zone.mortalityRate !== null &&
@@ -36,7 +30,7 @@ export default function TotalMortalityRateCard({
     }
   });
 
-  summaries?.[0]?.plantingZones.forEach((zone: PlantingZoneObservationSummary) => {
+  observationSummaries?.[0]?.plantingZones.forEach((zone: PlantingZoneObservationSummary) => {
     if (
       zone.mortalityRate !== undefined &&
       zone.mortalityRate !== null &&
@@ -49,10 +43,12 @@ export default function TotalMortalityRateCard({
   });
 
   const highestPlantingZone = useAppSelector((state) =>
-    selectPlantingZone(state, plantingSiteId, Number(highestZoneId))
+    selectPlantingZone(state, plantingSite?.id || -1, Number(highestZoneId))
   );
 
-  const lowestPlantingZone = useAppSelector((state) => selectPlantingZone(state, plantingSiteId, Number(lowestZoneId)));
+  const lowestPlantingZone = useAppSelector((state) =>
+    selectPlantingZone(state, plantingSite?.id || -1, Number(lowestZoneId))
+  );
 
   return (
     <Box>

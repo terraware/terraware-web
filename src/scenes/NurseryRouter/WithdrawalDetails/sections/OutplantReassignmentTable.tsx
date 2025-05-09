@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { TableColumnType } from '@terraware/web-components';
 
@@ -35,9 +35,7 @@ export default function OutplantReassignmentTable({
   const numberFormatter = useNumberFormatter();
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
-  const [rowData, setRowData] = useState<{ [p: string]: unknown }[]>([]);
-
-  useEffect(() => {
+  const rowData = useMemo(() => {
     // get list of distinct species
     const speciesList =
       delivery?.plantings?.reduce<number[]>(
@@ -75,7 +73,7 @@ export default function OutplantReassignmentTable({
       }
     }
 
-    setRowData(rows);
+    return rows;
   }, [delivery, species, subzoneNames, withdrawalNotes, numericFormatter]);
 
   return <Table id='outplant-reassignment-table' columns={columns} rows={rowData} orderBy={'name'} />;

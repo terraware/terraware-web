@@ -8,10 +8,10 @@ import strings from 'src/strings';
 import { ObservationResultsPayload } from 'src/types/Observations';
 
 export type BiomassMeasurementListProps = {
-  adHocObservationsResults?: ObservationResultsPayload[];
+  adHocObservationResults?: ObservationResultsPayload[];
 };
 
-export default function BiomassMeasurementList({ adHocObservationsResults }: BiomassMeasurementListProps): JSX.Element {
+export default function BiomassMeasurementList({ adHocObservationResults }: BiomassMeasurementListProps): JSX.Element {
   const columns = (): TableColumnType[] => {
     return [
       {
@@ -51,7 +51,7 @@ export default function BiomassMeasurementList({ adHocObservationsResults }: Bio
     <Table
       id='biomass-measurement-table'
       columns={columns}
-      rows={adHocObservationsResults || []}
+      rows={adHocObservationResults || []}
       orderBy='startDate'
       showTopBar={true}
       Renderer={BiomassMeasurementRenderer}
