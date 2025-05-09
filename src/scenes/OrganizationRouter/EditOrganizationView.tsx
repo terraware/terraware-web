@@ -24,7 +24,7 @@ import TextField from '../../components/common/Textfield/Textfield';
 
 type OrganizationViewProps = {
   organization: Organization;
-  reloadOrganizationData: (id: number) => void;
+  reloadOrganizationData: (id: number) => Promise<void>;
 };
 
 export default function OrganizationView({ organization, reloadOrganizationData }: OrganizationViewProps): JSX.Element {
@@ -108,7 +108,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
     const response = await OrganizationService.updateOrganization(organizationRecord);
     if (response.requestSucceeded) {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
-      reloadOrganizationData(organizationRecord.id);
+      await reloadOrganizationData(organizationRecord.id);
     } else {
       snackbar.toastError();
     }
