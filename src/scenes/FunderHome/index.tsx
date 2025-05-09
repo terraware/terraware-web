@@ -61,7 +61,7 @@ export default function FunderHome() {
         ),
       },
     ];
-  }, [activeLocale, userFundingEntity, selectedProjectId]);
+  }, [activeLocale, userFundingEntity, selectedProjectId, reports]);
 
   const { activeTab, onTabChange } = useStickyTabs({
     defaultTab: 'projectProfile',
