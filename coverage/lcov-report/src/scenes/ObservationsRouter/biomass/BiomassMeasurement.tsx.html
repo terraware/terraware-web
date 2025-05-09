@@ -324,7 +324,7 @@ import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent'
 import { useOrganization } from 'src/providers';
 import {
   searchAdHocObservations,
-  selectAdHocObservationsResults,
+  selectAdHocObservationResults,
 } from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import { AllPlantingSitesMapView } from 'src/scenes/ObservationsRouter/ObservationsDataView';
@@ -346,7 +346,7 @@ export default function <span class="fstat-no" title="function not covered" >Bio
   const defaultTimeZone = <span class="cstat-no" title="statement not covered" >useDefaultTimeZone();</span>
   const { selectedPlantingSite } = <span class="cstat-no" title="statement not covered" >props;</span>
   const { ...searchProps }: SearchProps = <span class="cstat-no" title="statement not covered" >props;</span>
-  const unfilteredResults = <span class="cstat-no" title="statement not covered" >useAppSelector(selectAdHocObservationsResults);</span>
+  const unfilteredResults = <span class="cstat-no" title="statement not covered" >useAppSelector(selectAdHocObservationResults);</span>
   const unfilteredObservationsResults = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!unfilteredResults || !selectedPlantingSite?.id) {</span>
 <span class="cstat-no" title="statement not covered" >      return [];</span>
@@ -360,21 +360,21 @@ export default function <span class="fstat-no" title="function not covered" >Bio
     });
   }, [unfilteredResults, selectedPlantingSite]);
 &nbsp;
-  const allAdHocObservationsResults = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
+  const allAdHocObservationResults = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >    searchAdHocObservations(state, selectedPlantingSite?.id || -1, defaultTimeZone.get().id, searchProps.search)</span>
   );
-  const adHocObservationsResults = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!allAdHocObservationsResults || !selectedPlantingSite?.id) {</span>
+  const adHocObservationResults = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (!allAdHocObservationResults || !selectedPlantingSite?.id) {</span>
 <span class="cstat-no" title="statement not covered" >      return [];</span>
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return allAdHocObservationsResults?.filter(<span class="fstat-no" title="function not covered" >(o</span>bservationResult) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    return allAdHocObservationResults?.filter(<span class="fstat-no" title="function not covered" >(o</span>bservationResult) =&gt; {</span>
       const matchesSite =
 <span class="cstat-no" title="statement not covered" >        selectedPlantingSite.id !== -1 ? observationResult.plantingSiteId === selectedPlantingSite.id : true;</span>
       const isBiomassMeasurement = <span class="cstat-no" title="statement not covered" >observationResult.type === 'Biomass Measurements';</span>
 <span class="cstat-no" title="statement not covered" >      return matchesSite &amp;&amp; isBiomassMeasurement;</span>
     });
-  }, [allAdHocObservationsResults, selectedPlantingSite]);
+  }, [allAdHocObservationResults, selectedPlantingSite]);
 &nbsp;
   const exportObservationsList = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
     const content = <span class="cstat-no" title="statement not covered" >await ObservationsService.exportBiomassObservationsCsv(</span>
@@ -411,11 +411,11 @@ export default function <span class="fstat-no" title="function not covered" >Bio
       {unfilteredObservationsResults &amp;&amp; unfilteredObservationsResults.length &gt; 0 ? (
         &lt;ListMapView
           initialView='list'
-          list={&lt;BiomassMeasurementList adHocObservationsResults={adHocObservationsResults} /&gt;}
+          list={&lt;BiomassMeasurementList adHocObservationResults={adHocObservationResults} /&gt;}
           map={
             selectedPlantingSite &amp;&amp; selectedPlantingSite.id !== -1 ? (
               &lt;BiomassMeasurementMapView
-                observationsResults={adHocObservationsResults}
+                observationsResults={adHocObservationResults}
                 selectedPlantingSite={selectedPlantingSite}
               /&gt;
             ) : (
@@ -442,7 +442,7 @@ export default function <span class="fstat-no" title="function not covered" >Bio
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-09T20:09:37.157Z
+                at 2025-05-09T21:48:03.405Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

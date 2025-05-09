@@ -159,18 +159,7 @@
 <a name='L94'></a><a href='#L94'>94</a>
 <a name='L95'></a><a href='#L95'>95</a>
 <a name='L96'></a><a href='#L96'>96</a>
-<a name='L97'></a><a href='#L97'>97</a>
-<a name='L98'></a><a href='#L98'>98</a>
-<a name='L99'></a><a href='#L99'>99</a>
-<a name='L100'></a><a href='#L100'>100</a>
-<a name='L101'></a><a href='#L101'>101</a>
-<a name='L102'></a><a href='#L102'>102</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L97'></a><a href='#L97'>97</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -194,6 +183,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -271,17 +261,11 @@ import { Box } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 &nbsp;
 import PieChart from 'src/components/common/Chart/PieChart';
-import useObservationSummaries from 'src/hooks/useObservationSummaries';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import strings from 'src/strings';
 &nbsp;
-type LiveDeadPlantsPerSpeciesCardProps = {
-  plantingSiteId: number;
-};
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >LiveDeadPlantsPerSpeciesCard(</span>{
-  plantingSiteId,
-}: LiveDeadPlantsPerSpeciesCardProps): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >LiveDeadPlantsPerSpeciesCard(</span>): JSX.Element {
   const [labels, setLabels] = <span class="cstat-no" title="statement not covered" >useState&lt;string[]&gt;();</span>
   const [values, setValues] = <span class="cstat-no" title="statement not covered" >useState&lt;number[]&gt;();</span>
   const [selectedSpecies, setSelectedSpecies] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;();</span>
@@ -294,10 +278,11 @@ export default function <span class="fstat-no" title="function not covered" >Liv
     }[]
   &gt;();
   const [showChart, setShowChart] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
-  const summaries = <span class="cstat-no" title="statement not covered" >useObservationSummaries(plantingSiteId);</span>
+  const { observationSummaries } = <span class="cstat-no" title="statement not covered" >usePlantingSiteData();</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (availableSpecies &amp;&amp; summaries?.[0]) {</span>
-      const speciesNames = <span class="cstat-no" title="statement not covered" >summaries[0].species</span>
+<span class="cstat-no" title="statement not covered" >    if (availableSpecies &amp;&amp; observationSummaries?.[0]) {</span>
+      const speciesNames = <span class="cstat-no" title="statement not covered" >observationSummaries[0].species</span>
         .filter(<span class="fstat-no" title="function not covered" >(s</span>p) =&gt; <span class="cstat-no" title="statement not covered" >sp.cumulativeDead !== 0 || sp.permanentLive !== 0)</span>
         .map(<span class="fstat-no" title="function not covered" >(s</span>p) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
           label:
@@ -311,12 +296,12 @@ export default function <span class="fstat-no" title="function not covered" >Liv
 <span class="cstat-no" title="statement not covered" >        setSelectedSpecies(speciesNames[0].value);</span>
       }
     }
-  }, [summaries, availableSpecies]);
+  }, [observationSummaries, availableSpecies]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (selectedSpecies) {</span>
 <span class="cstat-no" title="statement not covered" >      setLabels([strings.LIVE, strings.DEAD]);</span>
-      const selectedObservationSpecies = <span class="cstat-no" title="statement not covered" >summaries?.[0]?.species.find(</span>
+      const selectedObservationSpecies = <span class="cstat-no" title="statement not covered" >observationSummaries?.[0]?.species.find(</span>
 <span class="fstat-no" title="function not covered" >        (s</span>p) =&gt; <span class="cstat-no" title="statement not covered" >sp.speciesId?.toString() === selectedSpecies</span>
       );
 &nbsp;
@@ -330,7 +315,7 @@ export default function <span class="fstat-no" title="function not covered" >Liv
 <span class="cstat-no" title="statement not covered" >      setLabels([]);</span>
 <span class="cstat-no" title="statement not covered" >      setValues([]);</span>
     }
-  }, [selectedSpecies, summaries]);
+  }, [selectedSpecies, observationSummaries]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Box display='flex' flexDirection='column'&gt;
@@ -373,7 +358,7 @@ export default function <span class="fstat-no" title="function not covered" >Liv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-09T20:09:37.157Z
+                at 2025-05-09T21:48:03.405Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/38</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
@@ -175,21 +175,7 @@
 <a name='L110'></a><a href='#L110'>110</a>
 <a name='L111'></a><a href='#L111'>111</a>
 <a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a>
-<a name='L114'></a><a href='#L114'>114</a>
-<a name='L115'></a><a href='#L115'>115</a>
-<a name='L116'></a><a href='#L116'>116</a>
-<a name='L117'></a><a href='#L117'>117</a>
-<a name='L118'></a><a href='#L118'>118</a>
-<a name='L119'></a><a href='#L119'>119</a>
-<a name='L120'></a><a href='#L120'>120</a>
-<a name='L121'></a><a href='#L121'>121</a>
-<a name='L122'></a><a href='#L122'>122</a>
-<a name='L123'></a><a href='#L123'>123</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L113'></a><a href='#L113'>113</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -201,15 +187,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -226,6 +203,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -298,6 +277,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -313,28 +293,15 @@ import { Box, useTheme } from '@mui/material';
 &nbsp;
 import BarChart from 'src/components/common/Chart/BarChart';
 import { ChartDataset } from 'src/components/common/Chart/Chart';
-import useObservationSummaries from 'src/hooks/useObservationSummaries';
-import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
 import { truncate } from 'src/utils/text';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 &nbsp;
 const MAX_ZONE_NAME_LENGTH = <span class="cstat-no" title="statement not covered" >20;</span>
 &nbsp;
-type PlantingDensityPerZoneCardProps = {
-  plantingSiteId: number;
-};
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >PlantingDensityPerZoneCard(</span>{ plantingSiteId }: PlantingDensityPerZoneCardProps): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >PlantingDensityPerZoneCard(</span>): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const defaultTimeZone = <span class="cstat-no" title="statement not covered" >useDefaultTimeZone();</span>
-  const observation = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)</span>
-  );
-  const plantingSite = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectPlantingSite(state, plantingSiteId))</span>;</span>
-  const summaries = <span class="cstat-no" title="statement not covered" >useObservationSummaries(plantingSiteId);</span>
+  const { plantingSite, observationSummaries } = <span class="cstat-no" title="statement not covered" >usePlantingSiteData();</span>
   const [labels, setLabels] = <span class="cstat-no" title="statement not covered" >useState&lt;string[]&gt;();</span>
   const [targets, setTargets] = <span class="cstat-no" title="statement not covered" >useState&lt;(number | null)[]&gt;();</span>
   const [actuals, setActuals] = <span class="cstat-no" title="statement not covered" >useState&lt;(number | null)[]&gt;();</span>
@@ -346,8 +313,10 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 <span class="cstat-no" title="statement not covered" >      plantingSite.plantingZones?.forEach(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        zoneDensities[zone.name] = [zone.targetPlantingDensity];</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        if (summaries &amp;&amp; summaries.length &gt; 0) {</span>
-          const zoneFromObs = <span class="cstat-no" title="statement not covered" >summaries[0].plantingZones.find(<span class="fstat-no" title="function not covered" >(o</span>bsZone) =&gt; <span class="cstat-no" title="statement not covered" >obsZone.plantingZoneId === zone.id)</span>;</span>
+<span class="cstat-no" title="statement not covered" >        if (observationSummaries &amp;&amp; observationSummaries.length &gt; 0) {</span>
+          const zoneFromObs = <span class="cstat-no" title="statement not covered" >observationSummaries[0].plantingZones.find(</span>
+<span class="fstat-no" title="function not covered" >            (o</span>bsZone) =&gt; <span class="cstat-no" title="statement not covered" >obsZone.plantingZoneId === zone.id</span>
+          );
 <span class="cstat-no" title="statement not covered" >          zoneDensities[zone.name].push(zoneFromObs?.plantingDensity ?? null);</span>
         }
       });
@@ -361,7 +330,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 <span class="cstat-no" title="statement not covered" >      setActuals([]);</span>
 <span class="cstat-no" title="statement not covered" >      setTooltipTitles([]);</span>
     }
-  }, [plantingSite, observation, summaries]);
+  }, [plantingSite, observationSummaries]);
 &nbsp;
   const chartData = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!labels?.length || !targets?.length) {</span>
@@ -420,6 +389,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
           }}
           customTooltipLabel={<span class="fstat-no" title="function not covered" >(t</span>ooltipItem) =&gt; {
             const v = <span class="cstat-no" title="statement not covered" >tooltipItem.dataset.data[tooltipItem.dataIndex];</span>
+            // eslint-disable-next-line @typescript-eslint/no-base-to-string
 <span class="cstat-no" title="statement not covered" >            return Array.isArray(v) ? v[0].toString() : v ? v.toString() : '';</span>
           }}
           customLegend
@@ -436,7 +406,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-09T20:09:37.157Z
+                at 2025-05-09T21:48:03.405Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

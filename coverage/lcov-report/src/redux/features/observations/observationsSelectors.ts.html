@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/123</span>
+                <span class='fraction'>0/136</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/79</span>
+                <span class='fraction'>0/88</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/111</span>
+                <span class='fraction'>0/118</span>
             </div>
         
             
@@ -348,7 +348,18 @@
 <a name='L283'></a><a href='#L283'>283</a>
 <a name='L284'></a><a href='#L284'>284</a>
 <a name='L285'></a><a href='#L285'>285</a>
-<a name='L286'></a><a href='#L286'>286</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L286'></a><a href='#L286'>286</a>
+<a name='L287'></a><a href='#L287'>287</a>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a>
+<a name='L290'></a><a href='#L290'>290</a>
+<a name='L291'></a><a href='#L291'>291</a>
+<a name='L292'></a><a href='#L292'>292</a>
+<a name='L293'></a><a href='#L293'>293</a>
+<a name='L294'></a><a href='#L294'>294</a>
+<a name='L295'></a><a href='#L295'>295</a>
+<a name='L296'></a><a href='#L296'>296</a>
+<a name='L297'></a><a href='#L297'>297</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -592,15 +603,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -609,10 +626,15 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -693,8 +715,8 @@ export const selectPlantingSiteObservationsResults = <span class="cstat-no" titl
   }
 )(<span class="fstat-no" title="function not covered" >(s</span>tate, plantingSiteId: number, status?: ObservationState[]) =&gt; <span class="cstat-no" title="statement not covered" >`${plantingSiteId}_${status?.join(',')}`)</span>;
 &nbsp;
-export const selectPlantingSiteAdHocObservationsResults = <span class="cstat-no" title="statement not covered" >createCachedSelector(</span>
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, plantingSiteId: number) =&gt; <span class="cstat-no" title="statement not covered" >selectAdHocObservationsResults(state),</span>
+export const selectPlantingSiteAdHocObservationResults = <span class="cstat-no" title="statement not covered" >createCachedSelector(</span>
+<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, plantingSiteId: number) =&gt; <span class="cstat-no" title="statement not covered" >selectAdHocObservationResults(state),</span>
 <span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, plantingSiteId: number) =&gt; <span class="cstat-no" title="statement not covered" >plantingSiteId,</span>
 <span class="fstat-no" title="function not covered" >  (o</span>bservationsResults, plantingSiteId) =&gt; {
 <span class="cstat-no" title="statement not covered" >    if (plantingSiteId === -1) {</span>
@@ -738,7 +760,7 @@ export const selectMergedPlantingSiteObservations = <span class="cstat-no" title
 &nbsp;
 export const selectMergedPlantingSiteAdHocObservations = <span class="cstat-no" title="statement not covered" >createCachedSelector(</span>
 <span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, plantingSiteId: number, defaultTimeZone: string) =&gt;
-<span class="cstat-no" title="statement not covered" >    selectPlantingSiteAdHocObservationsResults(state, plantingSiteId),</span>
+<span class="cstat-no" title="statement not covered" >    selectPlantingSiteAdHocObservationResults(state, plantingSiteId),</span>
 <span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, plantingSiteId: number, defaultTimeZone: string) =&gt; <span class="cstat-no" title="statement not covered" >selectPlantingSites(state),</span>
 <span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, plantingSiteId: number, defaultTimeZone: string) =&gt; <span class="cstat-no" title="statement not covered" >defaultTimeZone,</span>
 &nbsp;
@@ -876,16 +898,15 @@ export const selectLatestObservation = <span class="cstat-no" title="statement n
 &nbsp;
 // scheduling selectors
 &nbsp;
-export const selectScheduleObservation = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState, requestId: string) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  (state.scheduleObservation as any)[requestId];</span>
+export const selectScheduleObservation = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState, requestId: string) =&gt; <span class="cstat-no" title="statement not covered" >state.scheduleObservation[requestId];</span></span>
 &nbsp;
 export const selectRescheduleObservation = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState, requestId: string) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  (state.rescheduleObservation as any)[requestId];</span>
+<span class="cstat-no" title="statement not covered" >  state.rescheduleObservation[requestId];</span>
 &nbsp;
 // replace observation plot selectors
 &nbsp;
 export const selectReplaceObservationPlot = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState, requestId: string) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  (state.replaceObservationPlot as any)[requestId];</span>
+<span class="cstat-no" title="statement not covered" >  state.replaceObservationPlot[requestId];</span>
 &nbsp;
 // get the current observation for a planting site
 export const selectCurrentObservation = <span class="cstat-no" title="statement not covered" >createCachedSelector(</span>
@@ -901,12 +922,24 @@ export const selectNextObservation = <span class="cstat-no" title="statement not
 <span class="fstat-no" title="function not covered" >  (o</span>bservationsResults: ObservationResults[] | undefined) =&gt; <span class="cstat-no" title="statement not covered" >observationsResults?.[0]</span>
 )(<span class="fstat-no" title="function not covered" >(s</span>tate: RootState, plantingSiteId: number, defaultTimeZoneId: string) =&gt; <span class="cstat-no" title="statement not covered" >`${plantingSiteId}-${defaultTimeZoneId}`)</span>;
 &nbsp;
-export const selectPlantingSiteObservationsSummaries = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState, requestId: string) =&gt;</span>
+export const selectPlantingSiteObservationSummaries = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
 <span class="cstat-no" title="statement not covered" >  state.plantingSiteObservationsSummaries[requestId];</span>
+&nbsp;
+export const selectPlantingSiteObservationsRequest = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
+<span class="cstat-no" title="statement not covered" >  state.plantingSiteObservations[requestId];</span>
+&nbsp;
+export const selectPlantingSiteObservationResultsRequest = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
+<span class="cstat-no" title="statement not covered" >  state.plantingSiteObservationResults[requestId];</span>
+&nbsp;
+export const selectPlantingSiteAdHocObservationsRequest = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
+<span class="cstat-no" title="statement not covered" >  state.plantingSiteAdHocObservations[requestId];</span>
+&nbsp;
+export const selectPlantingSiteAdHocObservationResultsRequest = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span></span>
+<span class="cstat-no" title="statement not covered" >  state.plantingSiteAdHocObservationResults[requestId];</span>
 &nbsp;
 export const selectAbandonObservation = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState, requestId: string) =&gt; <span class="cstat-no" title="statement not covered" >state.abandonObservation[requestId];</span></span>
 &nbsp;
-export const selectAdHocObservationsResults = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.adHocObservationsResults?.observations;</span></span>
+export const selectAdHocObservationResults = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.adHocObservationResults?.observations;</span></span>
 &nbsp;
 export const searchAdHocObservations = <span class="cstat-no" title="statement not covered" >createCachedSelector(</span>
 <span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, plantingSiteId: number, defaultTimeZone: string, search: string) =&gt; <span class="cstat-no" title="statement not covered" >search,</span>
@@ -925,7 +958,7 @@ export const searchAdHocObservations = <span class="cstat-no" title="statement n
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-09T20:09:37.157Z
+                at 2025-05-09T21:48:03.405Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

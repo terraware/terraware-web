@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/55</span>
+                <span class='fraction'>0/57</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/53</span>
+                <span class='fraction'>0/57</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/52</span>
+                <span class='fraction'>0/54</span>
             </div>
         
             
@@ -290,7 +290,13 @@
 <a name='L225'></a><a href='#L225'>225</a>
 <a name='L226'></a><a href='#L226'>226</a>
 <a name='L227'></a><a href='#L227'>227</a>
-<a name='L228'></a><a href='#L228'>228</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L228'></a><a href='#L228'>228</a>
+<a name='L229'></a><a href='#L229'>229</a>
+<a name='L230'></a><a href='#L230'>230</a>
+<a name='L231'></a><a href='#L231'>231</a>
+<a name='L232'></a><a href='#L232'>232</a>
+<a name='L233'></a><a href='#L233'>233</a>
+<a name='L234'></a><a href='#L234'>234</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -444,6 +450,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -482,6 +492,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -530,7 +542,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
-import { selectAdHocObservationsResults } from 'src/redux/features/observations/observationsSelectors';
+import { selectAdHocObservationResults } from 'src/redux/features/observations/observationsSelectors';
 import { getConditionString } from 'src/redux/features/observations/utils';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
@@ -553,7 +565,7 @@ type AdHocObservationDetailsProps = {
   reload: () =&gt; void;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >AdHocObservationDetails(</span>props: AdHocObservationDetailsProps): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >AdHocObservationDetails(</span>props: AdHocObservationDetailsProps): JSX.Element | undefined {
   const { reload } = <span class="cstat-no" title="statement not covered" >props;</span>
   const { plantingSiteId, observationId, monitoringPlotId } = <span class="cstat-no" title="statement not covered" >useParams&lt;{</span>
     plantingSiteId: string;
@@ -566,8 +578,8 @@ export default function <span class="fstat-no" title="function not covered" >AdH
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-  const allAdHocObservationsResults = <span class="cstat-no" title="statement not covered" >useAppSelector(selectAdHocObservationsResults);</span>
-  const observation = <span class="cstat-no" title="statement not covered" >allAdHocObservationsResults?.find(</span>
+  const allAdHocObservationResults = <span class="cstat-no" title="statement not covered" >useAppSelector(selectAdHocObservationResults);</span>
+  const observation = <span class="cstat-no" title="statement not covered" >allAdHocObservationResults?.find(</span>
 <span class="fstat-no" title="function not covered" >    (o</span>bsResult) =&gt; <span class="cstat-no" title="statement not covered" >obsResult?.observationId.toString() === observationId?.toString()</span>
   );
   const { availableSpecies } = <span class="cstat-no" title="statement not covered" >useSpecies();</span>
@@ -670,11 +682,15 @@ export default function <span class="fstat-no" title="function not covered" >AdH
 &nbsp;
   const onSaveMergedSpecies = <span class="cstat-no" title="statement not covered" >useOnSaveMergedSpecies({ observationId, reload, setShowMatchSpeciesModal });</span>
 &nbsp;
+<span class="cstat-no" title="statement not covered" >  if (!plantingSiteId || !observationId) {</span>
+<span class="cstat-no" title="statement not covered" >    return undefined;</span>
+  }
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;DetailsPage
       title={monitoringPlot?.monitoringPlotNumber?.toString() ?? ''}
-      plantingSiteId={plantingSiteId}
-      observationId={observationId}
+      plantingSiteId={Number(plantingSiteId)}
+      observationId={Number(observationId)}
       rightComponent={
         &lt;OptionsMenu
           onOptionItemClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setShowMatchSpeciesModal(true)}</span>
@@ -711,7 +727,9 @@ export default function <span class="fstat-no" title="function not covered" >AdH
 <span class="cstat-no" title="statement not covered" >                &lt;Grid key={index} item xs={gridSize} marginTop={2}&gt;</span>
                   &lt;Textfield
                     id={`plot-observation-${index}`}
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     label={datum.label}
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     value={datum.value}
                     type={datum.text ? 'textarea' : 'text'}
                     preserveNewlines={true}
@@ -751,7 +769,7 @@ export default function <span class="fstat-no" title="function not covered" >AdH
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-09T20:09:37.157Z
+                at 2025-05-09T21:48:03.405Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
@@ -125,25 +125,7 @@
 <a name='L60'></a><a href='#L60'>60</a>
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a>
-<a name='L78'></a><a href='#L78'>78</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -161,18 +143,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -217,39 +187,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo } from 'react';
 import { Route, Routes } from 'react-router';
 &nbsp;
-import { useLocalization, useOrganization } from 'src/providers';
+import { useOrganization } from 'src/providers';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import NurseryPlantingsAndWithdrawalsView from 'src/scenes/NurseryRouter/NurseryPlantingsAndWithdrawalsView';
 import NurseryReassignmentView from 'src/scenes/NurseryRouter/NurseryReassignmentView';
 import NurseryWithdrawalsDetailsView from 'src/scenes/NurseryRouter/NurseryWithdrawalsDetailsView';
-import { PlantingSite } from 'src/types/Tracking';
-import { isPlaceholderOrg } from 'src/utils/organization';
 &nbsp;
 const NurseryRouter = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-  const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-&nbsp;
   const speciesResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSpecies(selectedOrganization.id));</span>
-  const plantingSites: PlantingSite[] | undefined = <span class="cstat-no" title="statement not covered" >useAppSelector(selectPlantingSites);</span>
 &nbsp;
-  const [plantingSubzoneNames, setPlantingSubzoneNames] = <span class="cstat-no" title="statement not covered" >useState&lt;Record&lt;number, string&gt;&gt;({});</span>
-&nbsp;
-  const reloadTracking = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const populatePlantingSites = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      if (!isPlaceholderOrg(selectedOrganization.id)) {</span>
-<span class="cstat-no" title="statement not covered" >        void dispatch(requestPlantingSites(selectedOrganization.id));</span>
-      }
-    };
-<span class="cstat-no" title="statement not covered" >    populatePlantingSites();</span>
-  }, [dispatch, selectedOrganization.id, activeLocale]);
+  const { allPlantingSites } = <span class="cstat-no" title="statement not covered" >usePlantingSiteData();</span>
 &nbsp;
   const reloadSpecies = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (selectedOrganization.id !== -1) {</span>
@@ -263,9 +218,9 @@ const NurseryRouter = <span class="cstat-no" title="statement not covered" ><spa
     }
   }, [speciesResponse?.data?.species, reloadSpecies]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+  const plantingSubzoneNames = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const subzones: Record&lt;number, string&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
-<span class="cstat-no" title="statement not covered" >    for (const plantingSite of plantingSites ?? []) {</span>
+<span class="cstat-no" title="statement not covered" >    for (const plantingSite of allPlantingSites ?? []) {</span>
 <span class="cstat-no" title="statement not covered" >      for (const plantingZone of plantingSite.plantingZones ?? []) {</span>
 <span class="cstat-no" title="statement not covered" >        for (const subzone of plantingZone.plantingSubzones ?? []) {</span>
 <span class="cstat-no" title="statement not covered" >          subzones[subzone.id] = plantingZone.name + '-' + subzone.name;</span>
@@ -273,12 +228,12 @@ const NurseryRouter = <span class="cstat-no" title="statement not covered" ><spa
       }
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    setPlantingSubzoneNames(subzones);</span>
-  }, [plantingSites]);
+<span class="cstat-no" title="statement not covered" >    return subzones;</span>
+  }, [allPlantingSites]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Routes&gt;
-      &lt;Route path={'/withdrawals'} element={&lt;NurseryPlantingsAndWithdrawalsView reloadTracking={reloadTracking} /&gt;} /&gt;
+      &lt;Route path={'/withdrawals'} element={&lt;NurseryPlantingsAndWithdrawalsView /&gt;} /&gt;
       &lt;Route
         path={'/withdrawals/:withdrawalId'}
         element={
@@ -301,7 +256,7 @@ export default NurseryRouter;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-09T20:09:37.157Z
+                at 2025-05-09T21:48:03.405Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
