@@ -33,7 +33,7 @@ import { requestUpdateParticipantProject } from 'src/redux/features/participantP
 import { selectParticipantProjectUpdateRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { LAND_USE_MODEL_TYPES } from 'src/types/ParticipantProject';
+import { LAND_USE_MODEL_TYPES, ParticipantProject } from 'src/types/ParticipantProject';
 import { OrganizationUser } from 'src/types/User';
 import { SelectVariable, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { getImagePath } from 'src/utils/images';
@@ -228,8 +228,18 @@ const ProjectProfileEdit = () => {
       uploadImages: false,
     };
 
+    const updatedRecord = { ...participantProjectRecord } as ParticipantProject;
+    const typesToRemove = Object.keys(participantProjectRecord?.landUseModelHectares || {}).filter(
+      (type) => !(updatedRecord.landUseModelTypes as string[]).includes(type)
+    );
+    const updatedModelHectares = { ...(participantProjectRecord?.landUseModelHectares || {}) };
+    typesToRemove.forEach((type) => {
+      delete updatedModelHectares[type];
+    });
+    updatedRecord.landUseModelHectares = updatedModelHectares;
+
     if (participantProjectRecord) {
-      const dispatched = dispatch(requestUpdateParticipantProject(participantProjectRecord));
+      const dispatched = dispatch(requestUpdateParticipantProject(updatedRecord));
       setParticipantProjectRequestId(dispatched.requestId);
       newInitiatedRequests.participantProject = true;
     }
@@ -304,18 +314,6 @@ const ProjectProfileEdit = () => {
       delete updated[type];
     }
     onChangeParticipantProject('landUseModelHectares', updated);
-  };
-
-  const onChangeLandUseTypes = (_: string, types: string[]) => {
-    const typesToRemove = Object.keys(participantProjectRecord?.landUseModelHectares || {}).filter(
-      (type) => !types.includes(type)
-    );
-    const updatedModelHectares = { ...(participantProjectRecord?.landUseModelHectares || {}) };
-    typesToRemove.forEach((type) => {
-      delete updatedModelHectares[type];
-    });
-    onChangeParticipantProject('landUseModelHectares', updatedModelHectares);
-    onChangeParticipantProject('landUseModelTypes', types);
   };
 
   const onChangeSdgList = (id: string, newList: string[]) => {
@@ -415,7 +413,7 @@ const ProjectProfileEdit = () => {
                 id={'landUseModelTypes'}
                 md={6}
                 label={strings.LAND_USE_MODEL_TYPE}
-                onChange={onChangeLandUseTypes}
+                onChange={onChangeParticipantProject}
                 value={sortedSelectedModelTypes}
               />
             </Grid>
