@@ -60,7 +60,8 @@ const MetricBox = ({ metric, index, year, quarter, lastIndex }: MetricBoxProps) 
             {year} {strings.TARGET}
           </Typography>
           <Typography fontSize={'24px'} fontWeight={600}>
-            {metric.target && numericFormatter.format(metric.target)} {metric.target ? addPercentSign : ''}
+            {metric.target !== undefined && numericFormatter.format(metric.target)}{' '}
+            {metric.target ? addPercentSign : ''}
           </Typography>
         </Box>
         <Box flex='0 0 50%'>
@@ -68,7 +69,7 @@ const MetricBox = ({ metric, index, year, quarter, lastIndex }: MetricBoxProps) 
             {quarter} {strings.PROGRESS}
           </Typography>
           <Typography fontSize={'24px'} fontWeight={600}>
-            {metric.value && numericFormatter.format(metric.value)} {metric.value ? addPercentSign : ''}
+            {metric.value !== undefined && numericFormatter.format(metric.value)} {metric.value ? addPercentSign : ''}
           </Typography>
         </Box>
       </Box>
