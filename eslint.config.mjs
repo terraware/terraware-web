@@ -199,6 +199,13 @@ export default fixupConfigRules([
 
       '@typescript-eslint/typedef': 'off',
       '@typescript-eslint/unified-signatures': 'error',
+
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+
       'arrow-parens': ['error', 'always'],
       'brace-style': ['off', 'off'],
       complexity: 'off',

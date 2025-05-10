@@ -95,8 +95,7 @@ export const requestSiteReportedPlants = (plantingSiteId: number) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
       const response = await TrackingService.getReportedPlants(plantingSiteId);
-      const { error, site } = response;
-      dispatch(setSiteReportedPlantsAction({ plantingSiteId, data: { error, site } }));
+      dispatch(setSiteReportedPlantsAction({ plantingSiteId, data: { site: response.data?.site } }));
     } catch (e) {
       // should not happen, the response above captures any http request errors
       // eslint-disable-next-line no-console
@@ -105,13 +104,39 @@ export const requestSiteReportedPlants = (plantingSiteId: number) => {
   };
 };
 
+export const requestPlantingSiteReportedPlants = createAsyncThunk(
+  'plantingSite/reportedPlants',
+  async (plantingSiteId: number, { rejectWithValue }) => {
+    const response = await TrackingService.getReportedPlants(plantingSiteId);
+
+    if (response !== null && response.requestSucceeded && response?.data?.site !== undefined) {
+      return response.data.site;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
 export const requestGetPlantingSiteHistory = createAsyncThunk(
-  'observations/summaries',
+  'plantingSite/history',
   async (request: { plantingSiteId: number; historyId: number }, { rejectWithValue }) => {
     const response = await TrackingService.getPlantingSiteHistory(request.plantingSiteId, request.historyId);
 
     if (response !== null && response.requestSucceeded && response?.data?.site !== undefined) {
       return response.data.site;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestListPlantingSiteHistories = createAsyncThunk(
+  'plantingSite/histories',
+  async (plantingSiteId: number, { rejectWithValue }) => {
+    const response = await TrackingService.listPlantingSiteHistories(plantingSiteId);
+
+    if (response !== null && response.requestSucceeded && response?.data?.histories !== undefined) {
+      return response.data.histories;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

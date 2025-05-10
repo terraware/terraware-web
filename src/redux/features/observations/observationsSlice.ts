@@ -14,7 +14,13 @@ import {
   requestRescheduleObservation,
   requestScheduleObservation,
 } from './observationsAsyncThunks';
-import { requestGetPlantingSiteObservationsSummaries } from './observationsThunks';
+import {
+  requestPlantingSiteAdHocObservationResults,
+  requestPlantingSiteAdHocObservations,
+  requestPlantingSiteObservationResults,
+  requestPlantingSiteObservationSummaries,
+  requestPlantingSiteObservations,
+} from './observationsThunks';
 
 // Define a type for the slice state
 type ResultsData = {
@@ -146,7 +152,7 @@ export const plantingSiteObservationsSummariesSlice = createSlice({
   initialState: initialStatePlantingSiteObservationsSummaries,
   reducers: {},
   extraReducers: (builder) => {
-    buildReducers(requestGetPlantingSiteObservationsSummaries)(builder);
+    buildReducers(requestPlantingSiteObservationSummaries)(builder);
   },
 });
 
@@ -171,11 +177,11 @@ type AdHocResultsData = {
 // Define the initial state
 const initialAdHocResultsState: AdHocResultsData = {};
 
-export const adHocObservationsResultsSlice = createSlice({
-  name: 'adHocobservationsResultsSlice',
+export const adHocObservationResultsSlice = createSlice({
+  name: 'adHocobservationResultsSlice',
   initialState: initialAdHocResultsState,
   reducers: {
-    setAdHocObservationsResultsAction: (state, action: PayloadAction<AdHocResultsData>) => {
+    setAdHocObservationResultsAction: (state, action: PayloadAction<AdHocResultsData>) => {
       const data: AdHocResultsData = action.payload;
       state.error = data.error;
       state.observations = data.observations;
@@ -183,7 +189,45 @@ export const adHocObservationsResultsSlice = createSlice({
   },
 });
 
-export const { setAdHocObservationsResultsAction } = adHocObservationsResultsSlice.actions;
+export const { setAdHocObservationResultsAction } = adHocObservationResultsSlice.actions;
+
+const initialStatePlantingSiteObservations: { [key: string]: StatusT<Observation[]> } = {};
+export const plantingSiteObservationsSlice = createSlice({
+  name: 'plantingSiteObservationsSlice',
+  initialState: initialStatePlantingSiteObservations,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestPlantingSiteObservations)(builder);
+  },
+});
+
+const initialStatePlantingSiteObservationResults: { [key: string]: StatusT<ObservationResultsPayload[]> } = {};
+export const plantingSiteObservationResultsSlice = createSlice({
+  name: 'plantingSiteObservationResultsSlice',
+  initialState: initialStatePlantingSiteObservationResults,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestPlantingSiteObservationResults)(builder);
+  },
+});
+
+export const plantingSiteAdHocObservationsSlice = createSlice({
+  name: 'plantingSiteAdHocObservationsSlice',
+  initialState: initialStatePlantingSiteObservations,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestPlantingSiteAdHocObservations)(builder);
+  },
+});
+
+export const plantingSiteAdHocObservationResultsSlice = createSlice({
+  name: 'plantingSiteAdHocObservationResultsSlice',
+  initialState: initialStatePlantingSiteObservationResults,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestPlantingSiteAdHocObservationResults)(builder);
+  },
+});
 
 const observationsReducers = {
   observationsResults: observationsResultsSlice.reducer,
@@ -193,9 +237,13 @@ const observationsReducers = {
   scheduleObservation: scheduleObservationSlice.reducer,
   rescheduleObservation: rescheduleObservationSlice.reducer,
   replaceObservationPlot: replaceObservationPlotSlice.reducer,
+  plantingSiteObservationResults: plantingSiteObservationResultsSlice.reducer,
+  plantingSiteObservations: plantingSiteObservationsSlice.reducer,
+  plantingSiteAdHocObservationResults: plantingSiteAdHocObservationResultsSlice.reducer,
+  plantingSiteAdHocObservations: plantingSiteAdHocObservationsSlice.reducer,
   plantingSiteObservationsSummaries: plantingSiteObservationsSummariesSlice.reducer,
   abandonObservation: abandonObservationSlice.reducer,
-  adHocObservationsResults: adHocObservationsResultsSlice.reducer,
+  adHocObservationResults: adHocObservationResultsSlice.reducer,
 };
 
 export default observationsReducers;

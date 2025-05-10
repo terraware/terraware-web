@@ -4,38 +4,31 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import useObservationSummaries from 'src/hooks/useObservationSummaries';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
 
-type PlantingSiteDensityCardProps = {
-  plantingSiteId: number;
-};
-
-export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingSiteDensityCardProps): JSX.Element {
+export default function PlantingSiteDensityCard(): JSX.Element {
   const theme = useTheme();
-  const summaries = useObservationSummaries(plantingSiteId);
-  const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
+  const { plantingSite, observationSummaries } = usePlantingSiteData();
 
   const everySubzoneHasObservation = useMemo(() => {
-    if (!summaries || summaries.length === 0 || !plantingSite) {
+    if (!observationSummaries || observationSummaries.length === 0 || !plantingSite) {
       return true;
     }
 
     const allSubzones = plantingSite.plantingZones?.flatMap((zone) => zone.plantingSubzones);
-    const allSubzonesObserved = summaries[0].plantingZones.flatMap((zone) => zone.plantingSubzones);
+    const allSubzonesObserved = observationSummaries[0].plantingZones.flatMap((zone) => zone.plantingSubzones);
     return allSubzones?.every((subzone) =>
       allSubzonesObserved.find(
         (subzoneObv) => subzoneObv.plantingSubzoneId === subzone.id && subzoneObv.monitoringPlots.length > 0
       )
     );
-  }, [summaries]);
+  }, [observationSummaries, plantingSite]);
 
   return (
     <Box>
       <Typography fontSize='48px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)}>
-        <FormattedNumber value={summaries?.[0]?.plantingDensity ?? 0} />
+        <FormattedNumber value={observationSummaries?.[0]?.plantingDensity ?? 0} />
       </Typography>
       <Typography fontSize='16px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)}>
         {`${strings.PLANTS_PER_HECTARE.charAt(0).toUpperCase()}${strings.PLANTS_PER_HECTARE.slice(1)}`}

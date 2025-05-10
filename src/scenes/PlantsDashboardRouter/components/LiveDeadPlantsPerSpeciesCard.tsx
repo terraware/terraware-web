@@ -4,17 +4,11 @@ import { Box } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 
 import PieChart from 'src/components/common/Chart/PieChart';
-import useObservationSummaries from 'src/hooks/useObservationSummaries';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import strings from 'src/strings';
 
-type LiveDeadPlantsPerSpeciesCardProps = {
-  plantingSiteId: number;
-};
-
-export default function LiveDeadPlantsPerSpeciesCard({
-  plantingSiteId,
-}: LiveDeadPlantsPerSpeciesCardProps): JSX.Element {
+export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
   const [selectedSpecies, setSelectedSpecies] = useState<string>();
@@ -27,10 +21,11 @@ export default function LiveDeadPlantsPerSpeciesCard({
     }[]
   >();
   const [showChart, setShowChart] = useState(false);
-  const summaries = useObservationSummaries(plantingSiteId);
+  const { observationSummaries } = usePlantingSiteData();
+
   useEffect(() => {
-    if (availableSpecies && summaries?.[0]) {
-      const speciesNames = summaries[0].species
+    if (availableSpecies && observationSummaries?.[0]) {
+      const speciesNames = observationSummaries[0].species
         .filter((sp) => sp.cumulativeDead !== 0 || sp.permanentLive !== 0)
         .map((sp) => ({
           label:
@@ -44,12 +39,12 @@ export default function LiveDeadPlantsPerSpeciesCard({
         setSelectedSpecies(speciesNames[0].value);
       }
     }
-  }, [summaries, availableSpecies]);
+  }, [observationSummaries, availableSpecies]);
 
   useEffect(() => {
     if (selectedSpecies) {
       setLabels([strings.LIVE, strings.DEAD]);
-      const selectedObservationSpecies = summaries?.[0]?.species.find(
+      const selectedObservationSpecies = observationSummaries?.[0]?.species.find(
         (sp) => sp.speciesId?.toString() === selectedSpecies
       );
 
@@ -63,7 +58,7 @@ export default function LiveDeadPlantsPerSpeciesCard({
       setLabels([]);
       setValues([]);
     }
-  }, [selectedSpecies, summaries]);
+  }, [selectedSpecies, observationSummaries]);
 
   return (
     <Box display='flex' flexDirection='column'>

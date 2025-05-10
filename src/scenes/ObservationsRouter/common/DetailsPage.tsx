@@ -1,19 +1,18 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
+
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
-import { selectObservationDetails } from 'src/redux/features/observations/observationDetailsSelectors';
-import { selectObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
 import { getShortDate } from 'src/utils/dateFormatter';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type DetailsPageProps = {
-  plantingSiteId?: number | string;
-  observationId?: number | string;
+  plantingSiteId: number;
+  observationId: number;
   plantingZoneName?: string;
   title: string;
   children: React.ReactNode;
@@ -29,30 +28,38 @@ export default function DetailsPage({
   rightComponent,
 }: DetailsPageProps): JSX.Element {
   const { activeLocale } = useLocalization();
-  const defaultTimeZone = useDefaultTimeZone();
 
-  const plantingZone = useAppSelector((state) =>
-    selectObservationPlantingZone(
-      state,
-      {
-        plantingSiteId: Number(plantingSiteId),
-        observationId: Number(observationId),
-        plantingZoneName,
-      },
-      defaultTimeZone.get().id
-    )
-  );
+  const { plantingSite, observations, observationResults, setSelectedPlantingSite } = usePlantingSiteData();
 
-  const details = useAppSelector((state) =>
-    selectObservationDetails(
-      state,
-      {
-        plantingSiteId: Number(plantingSiteId),
-        observationId: Number(observationId),
-      },
-      defaultTimeZone.get().id
-    )
-  );
+  useEffect(() => {
+    if (plantingSite?.id !== plantingSiteId) {
+      setSelectedPlantingSite(plantingSiteId);
+    }
+  }, [plantingSite, plantingSiteId, setSelectedPlantingSite]);
+
+  const plantingZone = useMemo(() => {
+    return plantingSite?.plantingZones?.find((zone) => zone.name === plantingZoneName);
+  }, [plantingSite, plantingZoneName]);
+
+  const observation = useMemo(() => {
+    return observations?.find((item) => item.id === observationId);
+  }, [observations, observationId]);
+
+  const result = useMemo(() => {
+    return observationResults?.find((item) => item.observationId === observationId);
+  }, [observationResults, observationId]);
+
+  const observationDate = useMemo(() => {
+    if (!observation || !plantingSite) {
+      return '';
+    }
+
+    if (result?.completedTime) {
+      return getDateDisplayValue(result.completedTime, plantingSite.timeZone);
+    } else {
+      return observation.endDate;
+    }
+  }, [plantingSite, observation, result]);
 
   const crumbs: Crumb[] = useMemo(() => {
     const data: Crumb[] = [];
@@ -64,8 +71,8 @@ export default function DetailsPage({
       });
 
       if (observationId) {
-        const plantingSiteName = details?.plantingSiteName ?? '';
-        const completionDate = details?.completedDate ? getShortDate(details.completedDate, activeLocale) : '';
+        const plantingSiteName = observation?.plantingSiteName ?? '';
+        const completionDate = getShortDate(observationDate, activeLocale);
         const name = completionDate ? `${completionDate} (${plantingSiteName})` : undefined;
 
         if (observationId && name) {
@@ -92,7 +99,7 @@ export default function DetailsPage({
     }
 
     return data;
-  }, [activeLocale, plantingSiteId, observationId, plantingZoneName, plantingZone, details]);
+  }, [activeLocale, plantingSiteId, observation, observationId, plantingZoneName, plantingZone, observationDate]);
 
   return (
     <Page crumbs={crumbs} title={title} rightComponent={rightComponent}>

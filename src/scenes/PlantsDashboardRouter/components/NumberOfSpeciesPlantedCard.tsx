@@ -7,38 +7,35 @@ import BarChart from 'src/components/common/Chart/BarChart';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useUser } from 'src/providers';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
-import { selectDefaultSpecies } from 'src/redux/features/species/speciesSelectors';
-import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { useNumberFormatter } from 'src/utils/useNumber';
 
 type NumberOfSpeciesPlantedCardProps = {
-  plantingSiteId: number;
   newVersion?: boolean;
 };
 
 export default function NumberOfSpeciesPlantedCard({
-  plantingSiteId,
   newVersion,
 }: NumberOfSpeciesPlantedCardProps): JSX.Element | undefined {
-  const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
+  const { plantingSite } = usePlantingSiteData();
 
   if (!plantingSite) {
     return undefined;
   } else if (!plantingSite.plantingZones?.length) {
-    return <SiteWithoutZonesCard plantingSiteId={plantingSiteId} newVersion={newVersion} />;
+    return <SiteWithoutZonesCard plantingSiteId={plantingSite.id} newVersion={newVersion} />;
   } else {
-    return <SiteWithZonesCard plantingSiteId={plantingSiteId} newVersion={newVersion} />;
+    return <SiteWithZonesCard newVersion={newVersion} />;
   }
 }
 
 const SiteWithoutZonesCard = ({
   plantingSiteId,
   newVersion,
-}: NumberOfSpeciesPlantedCardProps): JSX.Element | undefined => {
+}: NumberOfSpeciesPlantedCardProps & { plantingSiteId: number }): JSX.Element | undefined => {
   const [totalSpecies, setTotalSpecies] = useState<number>();
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
@@ -85,57 +82,47 @@ const SiteWithoutZonesCard = ({
 };
 
 const SiteWithZonesCard = ({ newVersion }: NumberOfSpeciesPlantedCardProps): JSX.Element => {
-  const populationSelector = useAppSelector((state) => selectSitePopulationZones(state));
-  const speciesSelector = useAppSelector((state) => selectDefaultSpecies(state));
-  const [totalSpecies, setTotalSpecies] = useState<number>();
-  const [labels, setLabels] = useState<string[]>();
-  const [values, setValues] = useState<number[]>();
+  const { plantingSite, plantingSiteReportedPlants } = usePlantingSiteData();
+  const speciesSelector = useAppSelector(selectSpecies(plantingSite?.organizationId ?? -1));
 
-  useEffect(() => {
-    if (populationSelector) {
-      const speciesNames: string[] = [];
+  const totalSpecies = useMemo(() => plantingSiteReportedPlants?.species.length ?? 0, [plantingSiteReportedPlants]);
+  const labels = [strings.RARE, strings.ENDANGERED, strings.OTHER];
+
+  const orgSpecies = useMemo(() => speciesSelector?.data?.species, [speciesSelector]);
+
+  const values = useMemo(() => {
+    if (plantingSiteReportedPlants?.species && orgSpecies) {
       const speciesByCategory: Record<string, number> = {
         [strings.RARE]: 0,
         [strings.ENDANGERED]: 0,
         [strings.OTHER]: 0,
       };
-      populationSelector?.forEach((zone) =>
-        zone.plantingSubzones?.forEach((subzone) =>
-          subzone.populations?.forEach((population) => {
-            if (speciesNames.includes(population.species_scientificName)) {
-              return;
-            }
-            speciesNames.push(population.species_scientificName);
-            const species = speciesSelector?.find((s) => s.scientificName === population.species_scientificName);
-            if (species) {
-              let endangered = false;
-              let rare = false;
-              if (species.conservationCategory === 'EN' || species.conservationCategory === 'CR') {
-                endangered = true;
-              }
-              if (species.rare) {
-                rare = true;
-              }
-              speciesByCategory[strings.RARE] += rare ? 1 : 0;
-              speciesByCategory[strings.ENDANGERED] += endangered ? 1 : 0;
-              speciesByCategory[strings.OTHER] += !(rare || endangered) ? 1 : 0;
-            }
-          })
-        )
-      );
-      const speciesCount = speciesNames.length;
-      setTotalSpecies(speciesCount);
-      setLabels(Object.keys(speciesByCategory));
-      setValues(
-        Object.values(speciesByCategory).map((cat) =>
-          speciesCount > 0 ? Number(((cat * 100) / speciesCount).toFixed(2)) : 0
-        )
-      );
+      plantingSiteReportedPlants.species.forEach((reportedSpecies) => {
+        const species = orgSpecies.find((s) => s.id === reportedSpecies.id);
+        if (species) {
+          let endangered = false;
+          let rare = false;
+          if (species.conservationCategory === 'EN' || species.conservationCategory === 'CR') {
+            endangered = true;
+          }
+          if (species.rare) {
+            rare = true;
+          }
+          speciesByCategory[strings.RARE] += rare ? 1 : 0;
+          speciesByCategory[strings.ENDANGERED] += endangered ? 1 : 0;
+          speciesByCategory[strings.OTHER] += !(rare || endangered) ? 1 : 0;
+        }
+      });
+      const result = [
+        speciesByCategory[strings.RARE],
+        speciesByCategory[strings.ENDANGERED],
+        speciesByCategory[strings.OTHER],
+      ];
+      return result.map((value) => (totalSpecies > 0 ? Number(((value * 100) / totalSpecies).toFixed(2)) : 0));
     } else {
-      setLabels([]);
-      setValues([]);
+      return [];
     }
-  }, [populationSelector, speciesSelector]);
+  }, [plantingSiteReportedPlants, orgSpecies, totalSpecies]);
 
   return <ChartData labels={labels} values={values} totalSpecies={totalSpecies} newVersion={newVersion} />;
 };

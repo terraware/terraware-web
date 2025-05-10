@@ -11,7 +11,7 @@ import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent'
 import { useOrganization } from 'src/providers';
 import {
   searchAdHocObservations,
-  selectAdHocObservationsResults,
+  selectAdHocObservationResults,
 } from 'src/redux/features/observations/observationsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import { AllPlantingSitesMapView } from 'src/scenes/ObservationsRouter/ObservationsDataView';
@@ -33,7 +33,7 @@ export default function BiomassMeasurement(props: BiomassMeasurementProps): JSX.
   const defaultTimeZone = useDefaultTimeZone();
   const { selectedPlantingSite } = props;
   const { ...searchProps }: SearchProps = props;
-  const unfilteredResults = useAppSelector(selectAdHocObservationsResults);
+  const unfilteredResults = useAppSelector(selectAdHocObservationResults);
   const unfilteredObservationsResults = useMemo(() => {
     if (!unfilteredResults || !selectedPlantingSite?.id) {
       return [];
@@ -47,21 +47,21 @@ export default function BiomassMeasurement(props: BiomassMeasurementProps): JSX.
     });
   }, [unfilteredResults, selectedPlantingSite]);
 
-  const allAdHocObservationsResults = useAppSelector((state) =>
+  const allAdHocObservationResults = useAppSelector((state) =>
     searchAdHocObservations(state, selectedPlantingSite?.id || -1, defaultTimeZone.get().id, searchProps.search)
   );
-  const adHocObservationsResults = useMemo(() => {
-    if (!allAdHocObservationsResults || !selectedPlantingSite?.id) {
+  const adHocObservationResults = useMemo(() => {
+    if (!allAdHocObservationResults || !selectedPlantingSite?.id) {
       return [];
     }
 
-    return allAdHocObservationsResults?.filter((observationResult) => {
+    return allAdHocObservationResults?.filter((observationResult) => {
       const matchesSite =
         selectedPlantingSite.id !== -1 ? observationResult.plantingSiteId === selectedPlantingSite.id : true;
       const isBiomassMeasurement = observationResult.type === 'Biomass Measurements';
       return matchesSite && isBiomassMeasurement;
     });
-  }, [allAdHocObservationsResults, selectedPlantingSite]);
+  }, [allAdHocObservationResults, selectedPlantingSite]);
 
   const exportObservationsList = useCallback(async () => {
     const content = await ObservationsService.exportBiomassObservationsCsv(
@@ -98,11 +98,11 @@ export default function BiomassMeasurement(props: BiomassMeasurementProps): JSX.
       {unfilteredObservationsResults && unfilteredObservationsResults.length > 0 ? (
         <ListMapView
           initialView='list'
-          list={<BiomassMeasurementList adHocObservationsResults={adHocObservationsResults} />}
+          list={<BiomassMeasurementList adHocObservationResults={adHocObservationResults} />}
           map={
             selectedPlantingSite && selectedPlantingSite.id !== -1 ? (
               <BiomassMeasurementMapView
-                observationsResults={adHocObservationsResults}
+                observationsResults={adHocObservationResults}
                 selectedPlantingSite={selectedPlantingSite}
               />
             ) : (

@@ -23,7 +23,7 @@ import { getShortTime } from 'src/utils/dateFormatter';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-export default function ObservationMonitoringPlot(): JSX.Element {
+export default function ObservationMonitoringPlot(): JSX.Element | undefined {
   const { plantingSiteId, observationId, plantingZoneName, monitoringPlotId } = useParams<{
     plantingSiteId: string;
     observationId: string;
@@ -167,11 +167,15 @@ export default function ObservationMonitoringPlot(): JSX.Element {
     return elements;
   };
 
+  if (!plantingSiteId || !observationId) {
+    return undefined;
+  }
+
   return (
     <DetailsPage
       title={monitoringPlot?.monitoringPlotNumber.toString() ?? ''}
-      plantingSiteId={plantingSiteId}
-      observationId={observationId}
+      plantingSiteId={Number(plantingSiteId)}
+      observationId={Number(observationId)}
       plantingZoneName={plantingZoneName}
     >
       <Grid container>
