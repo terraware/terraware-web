@@ -1,3 +1,4 @@
+6b9aa184361 Fixed bug with formatting date (#3983)
 4179d872551 Updated translations from Phrase (#3980)
 6304b147dac Update dependency react-error-boundary to v6 (#3977)
 b8787c303ff SW-6840 Export observation results (#3976)
