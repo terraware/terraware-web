@@ -10,7 +10,6 @@ import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
 import { useOrganization } from 'src/providers';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch } from 'src/redux/store';
 import SeedFundReportService from 'src/services/SeedFundReportService';
@@ -109,7 +108,6 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
     if (selectedOrganization && selectedOrganization.id !== -1) {
       void dispatch(requestObservations(selectedOrganization.id));
       void dispatch(requestObservationsResults(selectedOrganization.id));
-      void dispatch(requestSpecies(selectedOrganization.id));
       void dispatch(requestPlantings(selectedOrganization.id));
       void dispatch(requestPlantingSitesSearchResults(selectedOrganization.id));
     }

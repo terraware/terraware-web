@@ -14,9 +14,9 @@ import TitleDescription from 'src/components/common/TitleDescription';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useOrganization } from 'src/providers';
 import { useUser } from 'src/providers';
-import { SpeciesService, TrackingService } from 'src/services';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
+import { TrackingService } from 'src/services';
 import strings from 'src/strings';
 import { Delivery } from 'src/types/Tracking';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -41,13 +41,11 @@ export default function NurseryReassignmentView(): JSX.Element {
   const query = useQuery();
   const { user } = useUser();
   const numberFormatter = useNumberFormatter();
-  const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
   const { deliveryId } = useParams<{ deliveryId: string }>();
   const snackbar = useSnackbar();
-  const [speciesMap, setSpeciesMap] = useState<{ [id: string]: string }>();
   const [delivery, setDelivery] = useState<Delivery>();
   const [zones, setZones] = useState<ZoneInfo[]>();
   const [siteName, setSiteName] = useState<string>();
@@ -55,28 +53,8 @@ export default function NurseryReassignmentView(): JSX.Element {
   const [noReassignments, setNoReassignments] = useState<boolean>(false);
   const contentRef = useRef(null);
 
+  const { species } = useSpeciesData();
   const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
-
-  // populate map of species id to scientific name
-  useEffect(() => {
-    if (selectedOrganization.id !== -1) {
-      const populateSpecies = async () => {
-        const speciesResponse = await SpeciesService.getAllSpecies(selectedOrganization.id);
-        if (speciesResponse.requestSucceeded) {
-          setSpeciesMap(
-            speciesResponse.species?.reduce((acc: any, current: any) => {
-              acc[current.id] = current.scientificName;
-              return acc;
-            }, {})
-          );
-        } else {
-          snackbar.toastError();
-        }
-      };
-
-      void populateSpecies();
-    }
-  }, [selectedOrganization, snackbar]);
 
   // populate delivery
   useEffect(() => {
@@ -171,7 +149,7 @@ export default function NurseryReassignmentView(): JSX.Element {
   };
 
   const plantings: ReassignmentRowType[] = useMemo(() => {
-    if (!delivery || !siteName || !speciesMap || !zones) {
+    if (!delivery || !siteName || !zones) {
       return [];
     }
 
@@ -194,7 +172,7 @@ export default function NurseryReassignmentView(): JSX.Element {
 
         return {
           numPlants: planting.numPlants,
-          species: speciesMap[planting.speciesId],
+          species: species.find((_species) => _species.id === planting.speciesId)?.scientificName ?? '',
           siteName,
           originalZone,
           originalSubzone,
@@ -202,7 +180,7 @@ export default function NurseryReassignmentView(): JSX.Element {
         };
       })
       .filter((planting): planting is ReassignmentRowType => !!planting);
-  }, [delivery, siteName, speciesMap, zones, reassignments]);
+  }, [delivery, siteName, species, zones, reassignments]);
 
   const reassignmentRenderer = useMemo(
     () =>

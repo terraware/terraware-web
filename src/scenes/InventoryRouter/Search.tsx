@@ -10,7 +10,6 @@ import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { selectSubLocations } from 'src/redux/features/subLocations/subLocationsSelectors';
 import { requestSubLocations } from 'src/redux/features/subLocations/subLocationsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -205,12 +204,6 @@ export default function Search(props: SearchProps): JSX.Element | null {
     showProjectsFilter,
     showEmptyBatchesFilter,
   ]);
-
-  useEffect(() => {
-    if (origin === 'Nursery' && selectedOrganization.id !== -1) {
-      void dispatch(requestSpecies(selectedOrganization.id));
-    }
-  }, [origin, dispatch, selectedOrganization.id]);
 
   const onRemovePillList = useCallback(
     (filterId: keyof InventoryFiltersUnion) => {

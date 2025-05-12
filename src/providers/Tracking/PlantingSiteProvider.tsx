@@ -15,7 +15,6 @@ import {
   requestPlantingSiteObservationSummaries,
   requestPlantingSiteObservations,
 } from 'src/redux/features/observations/observationsThunks';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import {
   selectPlantingSiteHistories,
   selectPlantingSiteReportedPlants,
@@ -88,7 +87,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
   useEffect(() => {
     const orgId = isAcceleratorRoute ? acceleratorOrganizationId : selectedOrganization.id;
     if (orgId) {
-      void dispatch(requestSpecies(orgId));
       void dispatch(requestPlantingSites(orgId));
       _setSelectedPlantingSite(undefined);
     }

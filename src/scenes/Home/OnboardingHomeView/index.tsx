@@ -12,14 +12,14 @@ import { ACCELERATOR_LINK, APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser } from 'src/providers';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { useAppDispatch } from 'src/redux/store';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import CTACard from 'src/scenes/Home/CTACard';
 import OnboardingCard, { OnboardingCardRow } from 'src/scenes/Home/OnboardingHomeView/OnboardingCard';
-import { OrganizationUserService, PreferencesService, SpeciesService } from 'src/services';
+import { OrganizationUserService, PreferencesService } from 'src/services';
 import strings from 'src/strings';
-import { Species } from 'src/types/Species';
 import { OrganizationUser } from 'src/types/User';
 import { isAdmin, isManagerOrHigher, isOwner } from 'src/utils/organization';
 import useQuery from 'src/utils/useQuery';
@@ -33,10 +33,11 @@ const OnboardingHomeView = () => {
   const navigate = useSyncNavigate();
   const dispatch = useAppDispatch();
   const [people, setPeople] = useState<OrganizationUser[]>();
-  const [allSpecies, setAllSpecies] = useState<Species[]>();
   const [showAcceleratorCard, setShowAcceleratorCard] = useState(true);
   const snackbar = useSnackbar();
   const query = useQuery();
+
+  const { species: allSpecies } = useSpeciesData();
 
   useEffect(() => {
     if (selectedOrganization && query.get('newOrg') === 'true') {
@@ -64,17 +65,6 @@ const OnboardingHomeView = () => {
     };
     void populatePeople();
   }, [selectedOrganization]);
-
-  useEffect(() => {
-    const populateSpecies = async () => {
-      const response = await SpeciesService.getAllSpecies(selectedOrganization.id);
-      if (response.requestSucceeded) {
-        setAllSpecies(response.species);
-      }
-    };
-
-    void populateSpecies();
-  }, [selectedOrganization.id]);
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 
