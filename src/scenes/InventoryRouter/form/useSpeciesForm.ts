@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { Species } from 'src/types/Species';
 
-export const useSpecies = (record?: { speciesId?: number }) => {
+export const useSpeciesForm = (record?: { speciesId?: number }) => {
   const [selectedSpecies, setSelectedSpecies] = useState<Species>();
 
   const { species } = useSpeciesData();

@@ -18,7 +18,7 @@ import SpeciesDropdown from 'src/scenes/InventoryRouter/form/SpeciesDropdown';
 import SubLocationsDropdown from 'src/scenes/InventoryRouter/form/SubLocationsDropdown';
 import { useAccessions } from 'src/scenes/InventoryRouter/form/useAccessions';
 import { useNurseries } from 'src/scenes/InventoryRouter/form/useNurseries';
-import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
+import { useSpeciesForm } from 'src/scenes/InventoryRouter/form/useSpeciesForm';
 import { useSubLocations } from 'src/scenes/InventoryRouter/form/useSubLocations';
 import FacilityService from 'src/services/FacilityService';
 import strings from 'src/strings';
@@ -65,7 +65,7 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
   const speciesId = origin === 'Species' ? originId : record?.speciesId;
 
   const { availableSubLocations } = useSubLocations(facilityId, record);
-  const { selectedSpecies } = useSpecies(record);
+  const { selectedSpecies } = useSpeciesForm(record);
   const { availableAccessions, selectedAccession } = useAccessions(record, selectedSpecies?.id ?? speciesId, true);
   const { availableNurseries } = useNurseries(record);
   const { availableProjects } = useProjects(record);
