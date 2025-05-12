@@ -18,7 +18,7 @@ const SectionDeliverableView = () => {
   const { deliverableId } = useParams<{ deliverableId: string }>();
   const { selectedApplication, applicationDeliverables } = useApplicationData();
 
-  const deliverable = applicationDeliverables.find((deliverable) => deliverable.id === Number(deliverableId));
+  const deliverable = applicationDeliverables.find((_deliverable) => _deliverable.id === Number(deliverableId));
 
   const hideId = useMemo(() => {
     if (!selectedApplication || !deliverable || deliverable.type !== 'Questions') {
@@ -50,11 +50,11 @@ const SectionDeliverableWrapper = () => {
   const { applicationDeliverables, applicationSections, selectedApplication } = useApplicationData();
 
   const section = useMemo(
-    () => applicationSections.find((section) => section.moduleId === Number(sectionId)),
+    () => applicationSections.find((_section) => _section.moduleId === Number(sectionId)),
     [applicationSections, sectionId]
   );
 
-  const deliverable = applicationDeliverables.find((deliverable) => deliverable.id === Number(deliverableId));
+  const deliverable = applicationDeliverables.find((_deliverable) => _deliverable.id === Number(deliverableId));
 
   const crumbs: Crumb[] = useMemo(() => {
     if (!activeLocale || !selectedApplication || !section) {

@@ -76,7 +76,7 @@ const ToDoProvider = ({ children }: Props) => {
       const toDoEvents = sortedEvents.filter((event) => event.getSection() === 'To Do');
       const upcomingEvents = sortedEvents.filter((event) => event.getSection() === 'Upcoming');
 
-      const upcomingItems = [...upcomingDeliverables, ...upcomingEvents].sort(compareToDoItems);
+      const allUpcomingItems = [...upcomingDeliverables, ...upcomingEvents].sort(compareToDoItems);
 
       const maxItems = 6;
       const nextToDoItems: ToDoItem[] = [];
@@ -86,7 +86,7 @@ const ToDoProvider = ({ children }: Props) => {
       nextToDoItems.push(...toDoEvents.splice(0, maxItems - nextToDoItems.length));
 
       if (maxItems - nextToDoItems.length > 0) {
-        nextUpcomingItems.push(...upcomingItems.splice(0, maxItems - nextToDoItems.length));
+        nextUpcomingItems.push(...allUpcomingItems.splice(0, maxItems - nextToDoItems.length));
       }
 
       setToDoItems(nextToDoItems.sort(compareToDoItems));

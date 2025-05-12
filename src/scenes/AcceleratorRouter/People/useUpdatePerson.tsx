@@ -35,14 +35,14 @@ export default function useUpdatePerson(): Response {
 
       setInternalInterestsRequest(categoriesRequest.requestId);
 
-      const globalRolesRequest = dispatch(
+      const rolesRequest = dispatch(
         requestUpdateGlobalRolesUser({
           user,
           globalRoles: user.globalRoles,
         })
       );
 
-      setGlobalRolesRequestId(globalRolesRequest.requestId);
+      setGlobalRolesRequestId(rolesRequest.requestId);
     },
     [dispatch]
   );

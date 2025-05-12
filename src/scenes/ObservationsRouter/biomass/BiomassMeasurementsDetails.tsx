@@ -133,20 +133,20 @@ export default function BiomassMeasurementsDetails(props: BiomassMeasurementDeta
   );
 
   const crumbs: Crumb[] = useMemo(() => {
-    const data: Crumb[] = [];
+    const curmbsData: Crumb[] = [];
 
     if (plantingSiteId) {
-      data.push({
+      curmbsData.push({
         name: strings.OBSERVATIONS,
         to: APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', plantingSiteId?.toString()),
       });
-      data.push({
+      curmbsData.push({
         name: strings.BIOMASS_MONITORING,
         to: `${APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', plantingSiteId?.toString())}&tab=biomassMeasurements`,
       });
     }
 
-    return data;
+    return curmbsData;
   }, [activeLocale, plantingSiteId, observationId]);
   const southwestCornerPhoto = monitoringPlot?.photos
     .filter((photo) => photo.type === 'Plot' && photo.position === 'SouthwestCorner')

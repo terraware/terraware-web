@@ -18,21 +18,21 @@ const CurrentTimeline = ({ steps, currentIndex }: CurrentTimelineProps): JSX.Ele
 
   const { isDesktop } = useDeviceInfo();
 
-  const sliceTimeline = (steps: TimelineStep[], currentIndex: number): TimelineStep[] => {
-    const numSteps = steps.length;
+  const sliceTimeline = (timelineSteps: TimelineStep[], index: number): TimelineStep[] => {
+    const numSteps = timelineSteps.length;
     if (numSteps === 0) {
       return [];
     }
     // If index is at the start
-    if (currentIndex === 0) {
-      return steps.slice(0, Math.min(3, numSteps));
+    if (index === 0) {
+      return timelineSteps.slice(0, Math.min(3, numSteps));
     }
     // If index is at the end
-    if (currentIndex === numSteps - 1) {
-      return steps.slice(Math.max(0, numSteps - 3), numSteps);
+    if (index === numSteps - 1) {
+      return timelineSteps.slice(Math.max(0, numSteps - 3), numSteps);
     }
     // If index is in the middle
-    return steps.slice(Math.max(0, currentIndex - 1), Math.min(currentIndex + 2, numSteps));
+    return timelineSteps.slice(Math.max(0, index - 1), Math.min(index + 2, numSteps));
   };
 
   const displayPhases = sliceTimeline(steps, currentIndex);

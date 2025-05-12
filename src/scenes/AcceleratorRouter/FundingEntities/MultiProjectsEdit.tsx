@@ -72,8 +72,8 @@ const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element => {
               useDealName={true}
               record={{ projectId: project.projectId }}
               setRecord={(setFn) => {
-                const project = setFn({ projectId: -1 });
-                selectProject(index, project.projectId);
+                const _project = setFn({ projectId: -1 });
+                selectProject(index, _project.projectId);
               }}
             />
           </Grid>
