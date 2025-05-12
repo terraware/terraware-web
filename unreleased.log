@@ -1,3 +1,4 @@
+6304b147dac Update dependency react-error-boundary to v6 (#3977)
 b8787c303ff SW-6840 Export observation results (#3976)
 e77da3c9ec3 Update dependency web-vitals to v5 (#3978)
 3b4061f41db Disabled no-unsafe-* linting rules and removed manual disabling of them for lines (#3975)
