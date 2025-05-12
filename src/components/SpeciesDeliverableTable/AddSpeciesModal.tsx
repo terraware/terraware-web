@@ -7,12 +7,11 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { useDocLinks } from 'src/docLinks';
-import { useLocalization, useOrganization } from 'src/providers';
+import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { requestCreateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesCreateRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { CreateParticipantProjectSpeciesRequestPayload } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
@@ -38,11 +37,10 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const { currentParticipantProject } = useParticipantData();
-  const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const docLinks = useDocLinks();
 
-  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
+  const { species } = useSpeciesData();
 
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectParticipantProjectSpeciesCreateRequest(requestId));
@@ -51,22 +49,16 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
 
   const selectableSpecies = useMemo(() => {
     return (
-      speciesResponse?.data?.species?.filter((species) => {
-        return !participantProjectSpecies?.find((_species) => species.id === _species.species.id);
+      species.filter((_species) => {
+        return !participantProjectSpecies?.find((projectSpecies) => _species.id === projectSpecies.species.id);
       }) ?? []
     );
-  }, [speciesResponse?.data?.species, participantProjectSpecies]);
+  }, [species, participantProjectSpecies]);
 
   const [record, setRecord, onChange] = useForm<Partial<CreateParticipantProjectSpeciesRequestPayload>>({
     projectId: -1,
   });
   const { activeLocale } = useLocalization();
-
-  useEffect(() => {
-    if (!speciesResponse?.data?.species && selectedOrganization.id !== -1) {
-      void dispatch(requestSpecies(selectedOrganization.id));
-    }
-  }, [speciesResponse?.data?.species, selectedOrganization]);
 
   useEffect(() => {
     if (result?.status === 'error') {
@@ -185,11 +177,11 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
               a.scientificName.localeCompare(b.scientificName)
             )}
             onChange={onChangeSpecies}
-            selectedValue={speciesResponse?.data?.species?.find((_species) => record?.speciesId === _species.id)}
+            selectedValue={species.find((_species) => record?.speciesId === _species.id)}
             fullWidth={true}
             isEqual={(a: Species, b: Species) => a.id === b.id}
-            renderOption={(species: Species) => species?.scientificName || ''}
-            displayLabel={(species: Species) => species?.scientificName || ''}
+            renderOption={(_species: Species) => _species?.scientificName || ''}
+            displayLabel={(_species: Species) => _species?.scientificName || ''}
             toT={(scientificName: string) => ({ scientificName }) as Species}
             required
             disabled={selectableSpecies.length === 0}

@@ -5,14 +5,10 @@ import Accession2CreateView from 'src/scenes/AccessionsRouter/Accession2CreateVi
 import Accession2View from 'src/scenes/AccessionsRouter/Accession2View';
 import AccessionsView from 'src/scenes/AccessionsRouter/AccessionsView';
 
-interface AccessionsRouterProps {
-  setWithdrawalCreated: (value: boolean) => void;
-}
-
-const AccessionsRouter = ({ setWithdrawalCreated }: AccessionsRouterProps) => {
+const AccessionsRouter = () => {
   return (
     <Routes>
-      <Route path='/*' element={<AccessionsView setWithdrawalCreated={setWithdrawalCreated} />} />
+      <Route path='/*' element={<AccessionsView />} />
       <Route path='/new' element={<Accession2CreateView />} />
       <Route path='/:accessionId' element={<Accession2View />} />
     </Routes>

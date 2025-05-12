@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { useOrganization } from 'src/providers';
-import { selectMergeOtherSpecies, selectSpecies } from 'src/redux/features/species/speciesSelectors';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
+import { selectMergeOtherSpecies } from 'src/redux/features/species/speciesSelectors';
 import { MergeOtherSpeciesRequestData, requestMergeOtherSpecies } from 'src/redux/features/species/speciesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { MergeOtherSpeciesPayloadPartial } from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
@@ -25,30 +25,30 @@ export function useOnSaveMergedSpecies(
 ): (mergedSpeciesPayloads: MergeOtherSpeciesPayloadPartial[]) => void {
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
-  const { selectedOrganization } = useOrganization();
   const [mergeRequestId, setMergeRequestId] = useState<string>('');
   const matchResponse = useAppSelector(selectMergeOtherSpecies(mergeRequestId));
-  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
   const { observationId, reload, setShowMatchSpeciesModal } = props;
+
+  const { species, reload: reloadSpecies } = useSpeciesData();
 
   useEffect(() => {
     if (matchResponse?.status === 'success' && matchResponse?.data && matchResponse.data.length > 0) {
       // Force reload page to show updated data
       reload();
+      reloadSpecies();
       snackbar.toastSuccess([MergedSuccessMessage(matchResponse.data)], strings.SPECIES_MATCHED);
     }
     if (matchResponse?.status === 'error') {
       snackbar.toastError();
     }
-  }, [matchResponse, snackbar]);
+  }, [matchResponse, snackbar, reload, reloadSpecies]);
 
   return useCallback(
     (mergedSpeciesPayloads: MergeOtherSpeciesPayloadPartial[]) => {
       const mergeOtherSpeciesRequestData: MergeOtherSpeciesRequestData[] = mergedSpeciesPayloads
         .filter((sp) => !!sp.otherSpeciesName && !!sp.speciesId)
         .map((sp) => ({
-          newName:
-            speciesResponse?.data?.species?.find((existing) => existing.id === sp.speciesId)?.scientificName || '',
+          newName: species.find((existing) => existing.id === sp.speciesId)?.scientificName || '',
           otherSpeciesName: sp.otherSpeciesName!,
           speciesId: sp.speciesId!,
         }));
@@ -65,6 +65,6 @@ export function useOnSaveMergedSpecies(
 
       setShowMatchSpeciesModal(false);
     },
-    [observationId, dispatch]
+    [observationId, dispatch, species]
   );
 }

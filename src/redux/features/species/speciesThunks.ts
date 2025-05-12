@@ -19,9 +19,9 @@ export const requestSpecies = createAsyncThunk(
       }
 
       const response = await SpeciesService.getAllSpecies(organizationId);
-      if (response && response.requestSucceeded) {
-        const { error, species } = response;
-        dispatch(setSpeciesAction({ error, species, organizationId }));
+      if (response && response.data && response.requestSucceeded) {
+        const { species } = response.data;
+        dispatch(setSpeciesAction({ error: response.error, species, organizationId }));
         return fulfillWithValue(species);
       }
 

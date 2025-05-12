@@ -3,24 +3,17 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Database from 'src/components/seeds/database';
 import { defaultPreset as DefaultColumns } from 'src/components/seeds/database/columns';
 import { useOrganization, useUser } from 'src/providers';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { DEFAULT_SEED_SEARCH_FILTERS, DEFAULT_SEED_SEARCH_SORT_ORDER } from 'src/services/SeedBankService';
 import { SearchCriteria, SearchSortOrder } from 'src/types/Search';
 import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organization';
 
-interface AccessionsViewProps {
-  setWithdrawalCreated: (value: boolean) => void;
-}
-
-const AccessionsView = ({}: AccessionsViewProps) => {
-  const dispatch = useAppDispatch();
+const AccessionsView = () => {
   const { userPreferences } = useUser();
   const { selectedOrganization, reloadOrganizations, orgPreferences } = useOrganization();
   const preferredWeightSystem = userPreferences.preferredWeightSystem as string;
 
-  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
+  const { species } = useSpeciesData();
 
   // seedSearchCriteria describes which criteria to apply when searching accession data.
   const [seedSearchCriteria, setSeedSearchCriteria] = useState<SearchCriteria>(DEFAULT_SEED_SEARCH_FILTERS);
@@ -54,12 +47,6 @@ const AccessionsView = ({}: AccessionsViewProps) => {
     setDefaults();
   }, [setDefaults]);
 
-  useEffect(() => {
-    if (!speciesResponse?.data?.species && selectedOrganization.id !== -1) {
-      void dispatch(requestSpecies(selectedOrganization.id));
-    }
-  }, [dispatch, selectedOrganization.id, speciesResponse?.data?.species]);
-
   return (
     <Database
       searchCriteria={seedSearchCriteria}
@@ -71,7 +58,7 @@ const AccessionsView = ({}: AccessionsViewProps) => {
       displayColumnNames={accessionsDisplayColumns}
       setDisplayColumnNames={setAccessionsDisplayColumns}
       hasSeedBanks={selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')}
-      hasSpecies={(speciesResponse?.data?.species || []).length > 0}
+      hasSpecies={species.length > 0}
       reloadData={() => void reloadOrganizations()}
     />
   );

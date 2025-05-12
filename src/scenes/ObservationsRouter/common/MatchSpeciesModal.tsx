@@ -5,10 +5,6 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import SpeciesSelector from 'src/components/common/SpeciesSelector';
 import Button from 'src/components/common/button/Button';
-import { useOrganization } from 'src/providers';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { MergeOtherSpeciesPayload } from 'src/types/Species';
 import useForm from 'src/utils/useForm';
@@ -23,20 +19,12 @@ export interface MatchSpeciesModalProps {
 
 export default function MatchSpeciesModal(props: MatchSpeciesModalProps): JSX.Element {
   const { onClose, onSave, unrecognizedSpecies } = props;
-  const dispatch = useAppDispatch();
-  const { selectedOrganization } = useOrganization();
-  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
+
   const [records, setRecords] = useForm<MergeOtherSpeciesPayloadPartial[]>(
-    unrecognizedSpecies.map((species) => {
-      return { otherSpeciesName: species };
+    unrecognizedSpecies.map((speciesName) => {
+      return { otherSpeciesName: speciesName };
     })
   );
-
-  useEffect(() => {
-    if (!speciesResponse?.data?.species && selectedOrganization.id !== -1) {
-      void dispatch(requestSpecies(selectedOrganization.id));
-    }
-  }, [dispatch, speciesResponse?.data?.species, selectedOrganization]);
 
   const theme = useTheme();
 
@@ -80,10 +68,10 @@ export default function MatchSpeciesModal(props: MatchSpeciesModalProps): JSX.El
       </Grid>
 
       <Grid container textAlign={'left'}>
-        {unrecognizedSpecies.map((species, index) => (
+        {unrecognizedSpecies.map((speciesName, index) => (
           <MatchSpeciesRow
             key={index}
-            matchSpeciesPayload={{ otherSpeciesName: species }}
+            matchSpeciesPayload={{ otherSpeciesName: speciesName }}
             setRecords={setRecords}
             index={index}
           />
