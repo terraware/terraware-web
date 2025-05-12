@@ -70,11 +70,11 @@ const MapUpdateView = () => {
     ];
   }, [getRenderAttributes, countryBoundaryResult]);
 
-  const findErrors = (boundary: MultiPolygon) => {
-    const boundaryAreaHa = parseFloat((area(boundary) * SQ_M_TO_HECTARES).toFixed(2));
+  const findErrors = (boundaryToCheck: MultiPolygon) => {
+    const boundaryAreaHa = parseFloat((area(boundaryToCheck) * SQ_M_TO_HECTARES).toFixed(2));
 
     const errorText = `${boundaryAreaHa} ${strings.HECTARES}`;
-    return [{ type: 'Feature', geometry: boundary, properties: { errorText, fill: false }, id: -1 } as Feature];
+    return [{ type: 'Feature', geometry: boundaryToCheck, properties: { errorText, fill: false }, id: -1 } as Feature];
   };
 
   /**

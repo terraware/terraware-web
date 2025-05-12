@@ -82,17 +82,17 @@ const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
   }, [clear, debouncedValue, fetchSuggestions, suggestText]);
 
   const onChange = useCallback(
-    (value: string | DropdownItem | undefined) => {
-      if (typeof value === 'string') {
+    (newValue: string | DropdownItem | undefined) => {
+      if (typeof newValue === 'string') {
         // When user types in the search box
-        setValue(value);
-      } else if (value === undefined) {
+        setValue(newValue);
+      } else if (newValue === undefined) {
         // When user clears the value
         setValue('');
       } else {
         // When user selects from the dropdown option
-        setValue(value.label);
-        void onSelectSuggestion(value.value);
+        setValue(newValue.label);
+        void onSelectSuggestion(newValue.value);
       }
     },
     [setValue, onSelectSuggestion]
@@ -118,7 +118,7 @@ const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
       selected={value}
       onChange={onChange}
       placeholder={strings.ENTER_LOCATION}
-      filterOptions={(options) => options} // Do not filter any options
+      filterOptions={(_options) => _options} // Do not filter any options
       freeSolo
     />
   );

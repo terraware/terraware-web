@@ -54,10 +54,10 @@ export default function AddAcceleratorOrganizationModal(props: AddAcceleratorOrg
     onSubmit(selectedOrganization?.value);
   };
 
-  const renderOption = (props: React.HTMLAttributes<HTMLLIElement>, option: ValueType) => {
+  const renderOption = (optionProps: React.HTMLAttributes<HTMLLIElement>, option: ValueType) => {
     const dropdownOption = option as DropdownItem;
     return (
-      <li {...props} key={dropdownOption?.value}>
+      <li {...optionProps} key={dropdownOption?.value}>
         {dropdownOption?.label}
       </li>
     );

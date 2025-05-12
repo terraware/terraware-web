@@ -88,18 +88,18 @@ export default function MultiLineComponentNonEditable({
     }
   }, [updateOwnerResponse]);
 
-  const setStatus = (status: VariableStatusType) => {
-    const request = dispatch(requestUpdateVariableWorkflowDetails({ status, variableId, projectId }));
+  const setStatus = (_status: VariableStatusType) => {
+    const request = dispatch(requestUpdateVariableWorkflowDetails({ status: _status, variableId, projectId }));
     setRequestId(request.requestId);
   };
 
-  const assignOwner = (ownerId?: string) => {
-    if (ownerId) {
+  const assignOwner = (_ownerId?: string) => {
+    if (_ownerId) {
       let assignOwnerRequest;
-      if (ownerId.toString() === '-1') {
+      if (_ownerId.toString() === '-1') {
         assignOwnerRequest = dispatch(requestUpdateVariableOwner({ ownedBy: undefined, variableId, projectId }));
       } else {
-        assignOwnerRequest = dispatch(requestUpdateVariableOwner({ ownedBy: Number(ownerId), variableId, projectId }));
+        assignOwnerRequest = dispatch(requestUpdateVariableOwner({ ownedBy: Number(_ownerId), variableId, projectId }));
       }
 
       setAssignOwnerRequestId(assignOwnerRequest.requestId);

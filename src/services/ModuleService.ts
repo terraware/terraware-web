@@ -49,13 +49,13 @@ const importModules = async (file: File): Promise<ImportModuleResponsePayload> =
 };
 
 const search = async (
-  search?: SearchNodePayload,
+  searchPayload?: SearchNodePayload,
   sortOrder?: SearchSortOrder
 ): Promise<ModuleSearchResult[] | null> => {
   const searchParams: SearchRequestPayload = {
     prefix: 'projects.participant.cohort.cohortModules.module',
     fields: ['id', 'name', 'cohortModules.cohort_id', 'deliverables.id'],
-    search: search ?? { operation: 'and', children: [] },
+    search: searchPayload ?? { operation: 'and', children: [] },
     sortOrder: [sortOrder ?? { field: 'name' }],
     count: 0,
   };
