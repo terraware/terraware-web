@@ -80,7 +80,7 @@ const OrgObservationsRenderer =
 
     if (column.key === 'actionsMenu') {
       const exportDisabled = row.state === 'Upcoming';
-      const tableMenuItem = (
+      const tableMenuItem = observationId ? (
         <TableRowPopupMenu
           menuItems={[
             {
@@ -122,7 +122,7 @@ const OrgObservationsRenderer =
             },
           ]}
         />
-      );
+      ) : null;
 
       return <CellRenderer {...props} value={tableMenuItem} />;
     }
