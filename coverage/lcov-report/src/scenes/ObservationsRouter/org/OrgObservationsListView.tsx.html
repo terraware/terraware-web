@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/72</span>
+                <span class='fraction'>0/78</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/68</span>
+                <span class='fraction'>0/73</span>
             </div>
         
             
@@ -355,7 +355,19 @@
 <a name='L290'></a><a href='#L290'>290</a>
 <a name='L291'></a><a href='#L291'>291</a>
 <a name='L292'></a><a href='#L292'>292</a>
-<a name='L293'></a><a href='#L293'>293</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L293'></a><a href='#L293'>293</a>
+<a name='L294'></a><a href='#L294'>294</a>
+<a name='L295'></a><a href='#L295'>295</a>
+<a name='L296'></a><a href='#L296'>296</a>
+<a name='L297'></a><a href='#L297'>297</a>
+<a name='L298'></a><a href='#L298'>298</a>
+<a name='L299'></a><a href='#L299'>299</a>
+<a name='L300'></a><a href='#L300'>300</a>
+<a name='L301'></a><a href='#L301'>301</a>
+<a name='L302'></a><a href='#L302'>302</a>
+<a name='L303'></a><a href='#L303'>303</a>
+<a name='L304'></a><a href='#L304'>304</a>
+<a name='L305'></a><a href='#L305'>305</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -387,6 +399,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -553,8 +566,18 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -636,6 +659,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -664,6 +688,7 @@ import {
 } from 'src/redux/features/observations/observationsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AdHocObservationsRenderer from 'src/scenes/ObservationsRouter/adhoc/AdHocObservationsRenderer';
+import exportObservationResults from 'src/scenes/ObservationsRouter/details/exportObservationResults';
 import { ObservationsService } from 'src/services';
 import strings from 'src/strings';
 import {
@@ -852,6 +877,16 @@ export default function <span class="fstat-no" title="function not covered" >Org
     [observations]
   );
 &nbsp;
+  const onExportObservationResults = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (o</span>bservationId: number) =&gt; {
+      const observation = <span class="cstat-no" title="statement not covered" >(observationsResults ?? []).find(<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >item.observationId === observationId)</span>;</span>
+<span class="cstat-no" title="statement not covered" >      if (observation !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >        void exportObservationResults({ observationResults: observation });</span>
+      }
+    },
+    [observationsResults]
+  );
+&nbsp;
   const goToRescheduleObservation = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (o</span>bservationId: number) =&gt; {
 <span class="cstat-no" title="statement not covered" >      navigate(APP_PATHS.RESCHEDULE_OBSERVATION.replace(':observationId', observationId.toString()));</span>
@@ -930,6 +965,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
             goToRescheduleObservation,
 <span class="fstat-no" title="function not covered" >            (o</span>bservationId: number) =&gt; <span class="cstat-no" title="statement not covered" >void exportObservation(observationId, 'csv'),</span>
 <span class="fstat-no" title="function not covered" >            (o</span>bservationId: number) =&gt; <span class="cstat-no" title="statement not covered" >void exportObservation(observationId, 'gpx'),</span>
+<span class="fstat-no" title="function not covered" >            (o</span>bservationId: number) =&gt; <span class="cstat-no" title="statement not covered" >onExportObservationResults(observationId),</span>
 <span class="fstat-no" title="function not covered" >            (o</span>bservation: any) =&gt; {
 <span class="cstat-no" title="statement not covered" >              endObservation(observation);</span>
             }
@@ -946,7 +982,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-12T13:28:11.132Z
+                at 2025-05-12T17:56:34.089Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

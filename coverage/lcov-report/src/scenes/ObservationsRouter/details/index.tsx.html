@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/94</span>
+                <span class='fraction'>0/97</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/68</span>
+                <span class='fraction'>0/72</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/86</span>
+                <span class='fraction'>0/89</span>
             </div>
         
             
@@ -338,7 +338,14 @@
 <a name='L273'></a><a href='#L273'>273</a>
 <a name='L274'></a><a href='#L274'>274</a>
 <a name='L275'></a><a href='#L275'>275</a>
-<a name='L276'></a><a href='#L276'>276</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L276'></a><a href='#L276'>276</a>
+<a name='L277'></a><a href='#L277'>277</a>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a>
+<a name='L281'></a><a href='#L281'>281</a>
+<a name='L282'></a><a href='#L282'>282</a>
+<a name='L283'></a><a href='#L283'>283</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -382,6 +389,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -546,8 +554,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -613,7 +627,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useMemo, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 &nbsp;
 import { Grid } from '@mui/material';
@@ -640,6 +654,7 @@ import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
 import MatchSpeciesModal from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
 import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouter/common/UnrecognizedSpeciesPageMessage';
 import { useOnSaveMergedSpecies } from 'src/scenes/ObservationsRouter/common/useOnSaveMergedSpecies';
+import exportObservationResults from 'src/scenes/ObservationsRouter/details/exportObservationResults';
 import strings from 'src/strings';
 import { ObservationState } from 'src/types/Observations';
 import { FieldOptionsMap } from 'src/types/Search';
@@ -824,6 +839,12 @@ export default function <span class="fstat-no" title="function not covered" >Obs
 &nbsp;
   const onSaveMergedSpecies = <span class="cstat-no" title="statement not covered" >useOnSaveMergedSpecies({ observationId, reload, setShowMatchSpeciesModal });</span>
 &nbsp;
+  const onExportObservationResults = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedObservationResults &amp;&amp; selectedObservationResults.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >      void exportObservationResults({ observationResults: selectedObservationResults[0] });</span>
+    }
+  }, [selectedObservationResults]);
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;DetailsPage
       title={title}
@@ -879,7 +900,7 @@ export default function <span class="fstat-no" title="function not covered" >Obs
                 /&gt;
               }
               onView={setView}
-              search={&lt;Search {...searchProps} /&gt;}
+              search={&lt;Search {...searchProps} onExport={onExportObservationResults} /&gt;}
               style={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}
             /&gt;
           )}
@@ -895,7 +916,7 @@ export default function <span class="fstat-no" title="function not covered" >Obs
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-12T13:28:11.132Z
+                at 2025-05-12T17:56:34.089Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
