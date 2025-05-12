@@ -100,7 +100,6 @@ export default function PlantingDensityPerZoneCard(): JSX.Element {
           }}
           customTooltipLabel={(tooltipItem) => {
             const v = tooltipItem.dataset.data[tooltipItem.dataIndex];
-            // eslint-disable-next-line @typescript-eslint/no-base-to-string
             return Array.isArray(v) ? v[0].toString() : v ? v.toString() : '';
           }}
           customLegend

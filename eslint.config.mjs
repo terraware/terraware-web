@@ -206,6 +206,9 @@ export default fixupConfigRules([
       '@typescript-eslint/no-unsafe-call': 'off',
       '@typescript-eslint/no-unsafe-member-access': 'off',
 
+      '@typescript-eslint/no-base-to-string': 'off',
+      '@typescript-eslint/restrict-template-expressions': 'off',
+
       'arrow-parens': ['error', 'always'],
       'brace-style': ['off', 'off'],
       complexity: 'off',

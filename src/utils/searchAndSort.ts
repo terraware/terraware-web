@@ -196,7 +196,6 @@ export const sortResults = <T extends Record<string, unknown>>(
   if (isNumberField) {
     results = results.sort((a, b) => Number(getRawField(a, field)) - Number(getRawField(b, field)));
   } else {
-    // eslint-disable-next-line  @typescript-eslint/no-base-to-string
     results = results.sort((a, b) => `${a[field] || ''}`.localeCompare(`${b[field] || ''}`, locale || undefined));
   }
 
