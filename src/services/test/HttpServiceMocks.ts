@@ -58,12 +58,16 @@ jest.mock('../HttpService', () => {
  * Typing the input as 'any' for easier use.
  */
 const setHttpServiceMocks = (mocks: any) => {
-  const { get, put, post, delete: del } = mocks;
+  const { get, get2, put, put2, post, post2, delete: del, delete2: del2 } = mocks;
   mockHttpService.mockedImpls = {
     get: get as Get,
+    get2: get2 as Get2,
     put: put as Put,
+    put2: put2 as Put2,
     post: post as Post,
+    post2: post2 as Post2,
     delete: del as Delete,
+    delete2: del2 as Delete2,
   };
 };
 
