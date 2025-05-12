@@ -106,9 +106,9 @@ describe('Species service test', () => {
         }),
     });
 
-    const { species } = await SpeciesService.getAllSpecies(1);
+    const response = await SpeciesService.getAllSpecies(1);
 
-    expect(species).toHaveLength(1);
+    expect(response.data?.species).toHaveLength(1);
   });
 
   test('get species details should contain details', async () => {

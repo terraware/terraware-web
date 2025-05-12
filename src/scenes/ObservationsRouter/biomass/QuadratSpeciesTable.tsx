@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
-import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import strings from 'src/strings';
 
 type QuadratSpeciesTableProps = {
@@ -18,7 +18,7 @@ type QuadratSpeciesTableProps = {
 };
 
 export default function QuadratSpeciesTable({ species, quadrat }: QuadratSpeciesTableProps): JSX.Element {
-  const { availableSpecies } = useSpecies();
+  const { species: availableSpecies } = useSpeciesData();
   const columns = (): TableColumnType[] =>
     quadrat
       ? [
@@ -51,7 +51,7 @@ export default function QuadratSpeciesTable({ species, quadrat }: QuadratSpecies
 
   const speciesWithData = useMemo(() => {
     return species?.map((sp) => {
-      const foundSpecies = availableSpecies?.find((avSpecies) => avSpecies.id === sp.speciesId);
+      const foundSpecies = availableSpecies.find((avSpecies) => avSpecies.id === sp.speciesId);
       return {
         ...sp,
         speciesName: foundSpecies?.scientificName || sp.scientificName || sp.speciesName,

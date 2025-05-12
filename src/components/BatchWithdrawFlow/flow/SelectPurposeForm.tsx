@@ -25,9 +25,7 @@ import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useOrganization } from 'src/providers/hooks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
-import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
 import { BatchWithdrawalPayload, NurseryWithdrawalPurposes, NurseryWithdrawalRequest } from 'src/types/Batch';
 import { Facility } from 'src/types/Facility';
@@ -83,12 +81,12 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [selectedZone, setSelectedZone] = useState<ZoneInfo>();
   const [projectRecord, setProjectRecord] = useState<{ projectId?: number }>({});
 
-  const speciesMap = useMemo(() => {
+  const speciesMap = useMemo((): Record<string, string> => {
     return species.reduce((acc, sp) => {
       const { scientificName, commonName } = sp;
       return {
         ...acc,
-        [sp.id.toString()]: commonName ? `${scientificName} (${commonName})` : scientificName,
+        [sp.id]: commonName ? `${scientificName} (${commonName})` : scientificName,
       };
     }, {});
   }, [species]);
