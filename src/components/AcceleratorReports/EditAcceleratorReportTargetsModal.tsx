@@ -151,7 +151,26 @@ export default function EditAcceleratorReportTargetsModal({
             return;
           }
 
-          reportMetrics.splice(0, reportMetrics.length, ...requestMetrics);
+          requestMetrics.forEach((metric) => {
+            const reportMetricIndex =
+              metricType === 'systemMetrics'
+                ? reportMetrics.findIndex(
+                    (m) => (m as ReportSystemMetricEntries).metric === (metric as ReportSystemMetricEntries).metric
+                  )
+                : reportMetrics.findIndex(
+                    (m) => (m as ReportStandardMetricEntries).id === (metric as ReportStandardMetricEntries).id
+                  );
+            const reportMetric = reportMetrics[reportMetricIndex];
+            if (typeof reportMetric !== 'object' || typeof metric !== 'object') {
+              return;
+            }
+
+            const reportMetricUpdate = {
+              ...reportMetric,
+              ...metric,
+            };
+            reportMetrics[reportMetricIndex] = reportMetricUpdate;
+          });
         });
 
         return {
