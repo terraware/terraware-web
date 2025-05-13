@@ -22,6 +22,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import {
   AcceleratorReport,
+  AcceleratorReportStatus,
   ReportProjectMetricEntries,
   ReportStandardMetricEntries,
   ReportSystemMetricEntries,
@@ -167,6 +168,29 @@ export default function EditAcceleratorReportTargetsModal({
     }
   };
 
+  const disabledFields = useMemo(() => {
+    const isFieldDisabled = (reportId?: number) => {
+      return (
+        !reportId ||
+        (!isAllowedReviewReportTargets &&
+          !(reportStatuses[reportId] === 'Not Submitted' || reportStatuses[reportId] === 'Needs Update'))
+      );
+    };
+
+    const reportStatuses: Record<number, AcceleratorReportStatus> = {};
+    reports.forEach((report) => {
+      reportStatuses[report.id] = report.status;
+    });
+
+    return {
+      annualTarget: isFieldDisabled(record.annualReportId),
+      q1Target: isFieldDisabled(record.q1ReportId),
+      q2Target: isFieldDisabled(record.q2ReportId),
+      q3Target: isFieldDisabled(record.q3ReportId),
+      q4Target: isFieldDisabled(record.q4ReportId),
+    };
+  }, [isAllowedReviewReportTargets, record]);
+
   return (
     <DialogBox
       onClose={onClose}
@@ -200,7 +224,7 @@ export default function EditAcceleratorReportTargetsModal({
             type='text'
             onChange={(value) => onChange('annualTarget', value)}
             value={record.annualTarget}
-            disabled={!record.annualReportId}
+            disabled={disabledFields.annualTarget}
           />
         </Grid>
         <Grid item xs={12}>
@@ -210,7 +234,7 @@ export default function EditAcceleratorReportTargetsModal({
             type='text'
             onChange={(value) => onChange('q1Target', value)}
             value={record.q1Target}
-            disabled={!record.q1ReportId}
+            disabled={disabledFields.q1Target}
           />
         </Grid>
         <Grid item xs={12}>
@@ -220,7 +244,7 @@ export default function EditAcceleratorReportTargetsModal({
             type='text'
             onChange={(value) => onChange('q2Target', value)}
             value={record.q2Target}
-            disabled={!record.q2ReportId}
+            disabled={disabledFields.q2Target}
           />
         </Grid>
         <Grid item xs={12}>
@@ -230,7 +254,7 @@ export default function EditAcceleratorReportTargetsModal({
             type='text'
             onChange={(value) => onChange('q3Target', value)}
             value={record.q3Target}
-            disabled={!record.q3ReportId}
+            disabled={disabledFields.q3Target}
           />
         </Grid>
         <Grid item xs={12}>
@@ -240,7 +264,7 @@ export default function EditAcceleratorReportTargetsModal({
             type='text'
             onChange={(value) => onChange('q4Target', value)}
             value={record.q4Target}
-            disabled={!record.q4ReportId}
+            disabled={disabledFields.q4Target}
           />
         </Grid>
       </Grid>
