@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Grid, Typography } from '@mui/material';
@@ -22,7 +22,6 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import {
   AcceleratorReport,
-  AcceleratorReportStatus,
   ReportProjectMetricEntries,
   ReportStandardMetricEntries,
   ReportSystemMetricEntries,
@@ -187,28 +186,21 @@ export default function EditAcceleratorReportTargetsModal({
     }
   };
 
-  const disabledFields = useMemo(() => {
-    const isFieldDisabled = (reportId?: number) => {
-      return (
-        !reportId ||
-        (!isAllowedReviewReportTargets &&
-          !(reportStatuses[reportId] === 'Not Submitted' || reportStatuses[reportId] === 'Needs Update'))
-      );
-    };
+  const isFieldDisabled = useCallback(
+    (reportId?: number) => {
+      if (!reportId) {
+        return true;
+      }
 
-    const reportStatuses: Record<number, AcceleratorReportStatus> = {};
-    reports.forEach((report) => {
-      reportStatuses[report.id] = report.status;
-    });
+      const report = reports.find((r) => r.id === reportId);
+      if (!report) {
+        return true;
+      }
 
-    return {
-      annualTarget: isFieldDisabled(record.annualReportId),
-      q1Target: isFieldDisabled(record.q1ReportId),
-      q2Target: isFieldDisabled(record.q2ReportId),
-      q3Target: isFieldDisabled(record.q3ReportId),
-      q4Target: isFieldDisabled(record.q4ReportId),
-    };
-  }, [isAllowedReviewReportTargets, record]);
+      return !isAllowedReviewReportTargets && !(report.status === 'Not Submitted' || report.status === 'Needs Update');
+    },
+    [reports, isAllowedReviewReportTargets]
+  );
 
   return (
     <DialogBox
@@ -238,52 +230,52 @@ export default function EditAcceleratorReportTargetsModal({
         </Grid>
         <Grid item xs={12}>
           <TextField
+            disabled={isFieldDisabled(record.annualReportId)}
             id='annualTarget'
             label={strings.ANNUAL_TARGET}
             type='text'
             onChange={(value) => onChange('annualTarget', value)}
             value={record.annualTarget}
-            disabled={disabledFields.annualTarget}
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
+            disabled={isFieldDisabled(record.q1ReportId)}
             id='q1Target'
             label={strings.Q1_TARGET}
             type='text'
             onChange={(value) => onChange('q1Target', value)}
             value={record.q1Target}
-            disabled={disabledFields.q1Target}
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
+            disabled={isFieldDisabled(record.q2ReportId)}
             id='q2Target'
             label={strings.Q2_TARGET}
             type='text'
             onChange={(value) => onChange('q2Target', value)}
             value={record.q2Target}
-            disabled={disabledFields.q2Target}
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
+            disabled={isFieldDisabled(record.q3ReportId)}
             id='q3Target'
             label={strings.Q3_TARGET}
             type='text'
             onChange={(value) => onChange('q3Target', value)}
             value={record.q3Target}
-            disabled={disabledFields.q3Target}
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
+            disabled={isFieldDisabled(record.q4ReportId)}
             id='q4Target'
             label={strings.Q4_TARGET}
             type='text'
             onChange={(value) => onChange('q4Target', value)}
             value={record.q4Target}
-            disabled={disabledFields.q4Target}
           />
         </Grid>
       </Grid>
