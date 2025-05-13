@@ -102,6 +102,7 @@ const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.E
 
     return [
       { key: 'name', name: strings.NAME, type: 'string' },
+      { key: 'deliverableQuestion', name: strings.QUESTION, type: 'string' },
       { key: 'type', name: strings.TYPE, type: 'string' },
       { key: 'values', name: strings.VALUE, type: 'string' },
       { key: 'instances', name: strings.INSTANCES, type: 'string' },
