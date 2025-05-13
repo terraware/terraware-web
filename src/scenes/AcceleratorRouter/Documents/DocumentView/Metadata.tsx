@@ -50,8 +50,6 @@ const Metadata = ({ disabled }: { disabled: boolean }): JSX.Element => {
     }
   }, [selector, snackbar]);
 
-  useEffect;
-
   return (
     <Box display='flex' flexDirection='column'>
       {document && (

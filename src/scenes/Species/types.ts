@@ -1,4 +1,4 @@
-import { GrowthForm, Species } from 'src/types/Species';
+import { Species } from 'src/types/Species';
 
 export type SpeciesSearchResultRow = Omit<
   Species,
