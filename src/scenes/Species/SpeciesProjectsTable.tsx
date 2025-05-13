@@ -169,16 +169,16 @@ export default function SpeciesProjectsTable({
     }
   };
 
-  const onCloseRemoveProjects = (reload?: boolean) => {
+  const onCloseRemoveProjects = (shouldReload?: boolean) => {
     setShowRemoveDialog(false);
-    if (reload) {
+    if (shouldReload) {
       setReload(true);
     }
   };
 
-  const onCloseAddToProject = (reload?: boolean) => {
+  const onCloseAddToProject = (shouldReload?: boolean) => {
     setOpenedAddToProjectModal(false);
-    if (reload) {
+    if (shouldReload) {
       setReload(true);
     }
   };

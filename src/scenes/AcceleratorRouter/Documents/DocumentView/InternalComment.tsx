@@ -43,9 +43,9 @@ function InternalComment<T extends { internalComment?: string; status: string }>
     setStatus(entity.status);
   }, [entity.status]);
 
-  const dropdownOptions: DropdownItem[] = DocumentStatuses.map((status) => ({
-    label: status,
-    value: status,
+  const dropdownOptions: DropdownItem[] = DocumentStatuses.map((_status) => ({
+    label: _status,
+    value: _status,
   }));
 
   return (

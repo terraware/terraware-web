@@ -69,6 +69,7 @@
     "cookies-js": "^1.2.3",
     "coordinate-parser": "^1.0.7",
     "date-fns": "^4.0.0",
+    "export-to-csv": "^1.4.0",
     "hex-rgb": "^5.0.0",
     "immer": "^9.0.19",
     "is-hotkey": "^0.2.0",
@@ -80,7 +81,7 @@
     "re-reselect": "^4.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-error-boundary": "^5.0.0",
+    "react-error-boundary": "^6.0.0",
     "react-localization": "^2.0.0",
     "react-map-gl": "^7.0.21",
     "react-mixpanel-browser": "^4.1.0",
@@ -94,7 +95,7 @@
     "slate-react": "^0.114.0",
     "styled-components": "^6.0.0",
     "utm": "^1.1.1",
-    "web-vitals": "^4.0.0",
+    "web-vitals": "^5.0.0",
     "worker-loader": "^3.0.8"
   },
   "eslintConfig": {

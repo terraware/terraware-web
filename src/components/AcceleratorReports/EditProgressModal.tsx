@@ -58,7 +58,7 @@ export default function EditProgressModal(props: EditProgressModalProps): JSX.El
               label={strings.PROGRESS}
               value={newProgress}
               id={'progress'}
-              onChange={(value: any) => setNewProgress(value)}
+              onChange={(newValue: any) => setNewProgress(newValue)}
             />
             {
               <Typography paddingTop={3} paddingLeft={0.5}>

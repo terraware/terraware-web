@@ -43,7 +43,7 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
     if (selectedModule) {
       onSave({ ...selectedModule, ...record });
     } else {
-      const module = unusedModules.find((module) => module.id === record.id);
+      const module = unusedModules.find((_module) => _module.id === record.id);
       if (module !== undefined) {
         const today = Date.now();
         const isActive = startDateDate.valueOf() <= today && today <= endDateDate.valueOf();
