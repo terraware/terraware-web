@@ -183,7 +183,7 @@ export default function EditAcceleratorReportTargetsModal({
 
           return {
             projectId,
-            report: reportClone as AcceleratorReport,
+            report: reportClone,
             reportId: request.reportId,
           };
         })
