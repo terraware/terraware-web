@@ -64,6 +64,14 @@ export default function EditAcceleratorReportTargetsModal({
 
   const isAllowedReviewReportTargets = useMemo(() => isAllowed('REVIEW_REPORTS_TARGETS'), [isAllowed]);
 
+  const reportsById = useMemo(() => {
+    const reportsByIdMap: Record<number, AcceleratorReport> = {};
+    reports.forEach((report) => {
+      reportsByIdMap[report.id] = report;
+    });
+    return reportsByIdMap;
+  }, [reports]);
+
   useEffect(() => {
     if (updateReportMetricsResponse?.status === 'error') {
       snackbar.toastError();
@@ -135,54 +143,65 @@ export default function EditAcceleratorReportTargetsModal({
       const reviewRequest = dispatch(requestReviewManyAcceleratorReportMetrics(requestPayload));
       setReviewRequestId(reviewRequest.requestId);
     } else {
-      const updateManyReportsRequests = requests.map((request) => {
-        const report = reports.find((r) => r.id === request.reportId);
-        const reportClone = _.cloneDeep(report);
+      const updateManyReportsRequests = requests
+        .map((request) => {
+          const report = reportsById[request.reportId];
+          const reportClone = _.cloneDeep(report);
 
-        ['projectMetrics', 'standardMetrics', 'systemMetrics'].forEach((metricType) => {
-          const reportMetrics = reportClone?.[metricType as keyof AcceleratorReport] as (
-            | ReportProjectMetricEntries
-            | ReportStandardMetricEntries
-            | ReportSystemMetricEntries
-          )[];
-          const requestMetrics = request[metricType as keyof ReviewAcceleratorReportMetricsRequest];
-          if (!Array.isArray(reportMetrics) || !Array.isArray(requestMetrics)) {
-            return;
-          }
-
-          requestMetrics.forEach((metric) => {
-            const reportMetricIndex =
-              metricType === 'systemMetrics'
-                ? reportMetrics.findIndex(
-                    (m) => (m as ReportSystemMetricEntries).metric === (metric as ReportSystemMetricEntries).metric
-                  )
-                : reportMetrics.findIndex(
-                    (m) => (m as ReportStandardMetricEntries).id === (metric as ReportStandardMetricEntries).id
-                  );
-            const reportMetric = reportMetrics[reportMetricIndex];
-            if (typeof reportMetric !== 'object' || typeof metric !== 'object') {
+          ['projectMetrics', 'standardMetrics', 'systemMetrics'].forEach((metricType) => {
+            const reportMetrics = reportClone?.[metricType as keyof AcceleratorReport] as (
+              | ReportProjectMetricEntries
+              | ReportStandardMetricEntries
+              | ReportSystemMetricEntries
+            )[];
+            const requestMetrics = request[metricType as keyof ReviewAcceleratorReportMetricsRequest];
+            if (!Array.isArray(reportMetrics) || !Array.isArray(requestMetrics)) {
               return;
             }
 
-            const reportMetricUpdate = {
-              ...reportMetric,
-              ...metric,
-            };
-            reportMetrics[reportMetricIndex] = reportMetricUpdate;
+            requestMetrics.forEach((metric) => {
+              const reportMetricIndex =
+                metricType === 'systemMetrics'
+                  ? reportMetrics.findIndex(
+                      (m) => (m as ReportSystemMetricEntries).metric === (metric as ReportSystemMetricEntries).metric
+                    )
+                  : reportMetrics.findIndex(
+                      (m) => (m as ReportStandardMetricEntries).id === (metric as ReportStandardMetricEntries).id
+                    );
+              const reportMetric = reportMetrics[reportMetricIndex];
+              if (typeof reportMetric !== 'object' || typeof metric !== 'object') {
+                return;
+              }
+
+              const reportMetricUpdate = {
+                ...reportMetric,
+                ...metric,
+              };
+              reportMetrics[reportMetricIndex] = reportMetricUpdate;
+            });
           });
+
+          return {
+            projectId,
+            report: reportClone,
+            reportId: request.reportId,
+          };
+        })
+        .filter((request) => {
+          const report = reportsById[request.reportId];
+          // if request.report is unchanged, we don't need to update
+          if (report && _.isEqual(report, request.report)) {
+            return false;
+          }
+          return true;
         });
 
-        return {
-          projectId,
-          report: reportClone as AcceleratorReport,
-          reportId: request.reportId,
-        };
-      });
-
-      const updateRequest = dispatch(
-        requestUpdateManyAcceleratorReports({ requests: updateManyReportsRequests.filter(Boolean) })
-      );
-      setUpdateRequestId(updateRequest.requestId);
+      if (!updateManyReportsRequests.length) {
+        onClose();
+      } else {
+        const updateRequest = dispatch(requestUpdateManyAcceleratorReports({ requests: updateManyReportsRequests }));
+        setUpdateRequestId(updateRequest.requestId);
+      }
     }
   };
 
@@ -192,14 +211,14 @@ export default function EditAcceleratorReportTargetsModal({
         return true;
       }
 
-      const report = reports.find((r) => r.id === reportId);
+      const report = reportsById[reportId];
       if (!report) {
         return true;
       }
 
       return !isAllowedReviewReportTargets && !(report.status === 'Not Submitted' || report.status === 'Needs Update');
     },
-    [reports, isAllowedReviewReportTargets]
+    [isAllowedReviewReportTargets, reports, reportsById]
   );
 
   return (
