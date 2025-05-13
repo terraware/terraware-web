@@ -14,7 +14,6 @@ export type DetailedPlantingSiteHelpModalProps = {
 
 export default function DetailedPlantingSiteHelpModal(props: DetailedPlantingSiteHelpModalProps): JSX.Element {
   const { open, onClose } = props;
-  APP_PATHS.HELP_SUPPORT_FORM;
 
   return (
     <DialogBox

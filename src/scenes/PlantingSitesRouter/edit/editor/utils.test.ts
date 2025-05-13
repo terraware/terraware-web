@@ -21,7 +21,7 @@ import {
   featureCollection3,
 } from 'src/components/Map/testdata';
 
-const createDraftSiteWith = (cutBoundaries: GeometryFeature[]): DraftPlantingSite => {
+const createDraftSiteWith = (): DraftPlantingSite => {
   return {
     createdBy: 0,
     id: 1,
@@ -36,7 +36,7 @@ const createDraftSiteWith = (cutBoundaries: GeometryFeature[]): DraftPlantingSit
 describe('subzoneNameGenerator', () => {
   const prefix = 'subzone';
 
-  test("should return 'A' when there are no used names", () => {
+  test('should return \'A\' when there are no used names', () => {
     const usedNames = new Set<string>();
     expect(subzoneNameGenerator(usedNames, prefix)).toBe(`${prefix} A`);
   });
@@ -53,7 +53,7 @@ describe('subzoneNameGenerator', () => {
       Array
         .from({ length: 26 }, (_, index) => asciiA + index)
         .map((ascii) => String.fromCharCode(ascii))
-        .map((name) => `${prefix} ${name}`)
+        .map((name) => `${prefix} ${name}`),
     );
     expect(subzoneNameGenerator(usedNames, prefix)).toBe(`${prefix} AA`);
   });
@@ -72,7 +72,7 @@ describe('subzoneNameGenerator', () => {
 describe('zoneNameGenerator', () => {
   const prefix = 'zone';
 
-  test("should return '01' when there are no used names", () => {
+  test('should return \'01\' when there are no used names', () => {
     const usedNames = new Set<string>();
     expect(zoneNameGenerator(usedNames, prefix)).toBe(`${prefix} 01`);
   });
@@ -84,7 +84,7 @@ describe('zoneNameGenerator', () => {
 
   test('should return with no padding in double digits', () => {
     const usedNames = new Set<string>(
-      Array.from({ length: 9 }, (_, index) => `${prefix} 0${index + 1}`)
+      Array.from({ length: 9 }, (_, index) => `${prefix} 0${index + 1}`),
     );
     expect(zoneNameGenerator(usedNames, prefix)).toBe(`${prefix} 10`);
   });
@@ -162,7 +162,7 @@ describe('cutBoundaries', () => {
         source: featureCollection2,
       },
       onSuccess,
-      onError
+      onError,
     );
     expect(success).toBe(0);
     expect(cutBoundaries).toBe(0);
@@ -179,7 +179,7 @@ describe('cutBoundaries', () => {
         source: featureCollection2,
       },
       onSuccess,
-      onError
+      onError,
     );
     expect(success).toBe(1);
     expect(cutBoundaries).toBe(3);
@@ -254,7 +254,7 @@ describe('cutBoundaries', () => {
         source: featureCollection3,
       },
       onSuccess,
-      onError
+      onError,
     );
     expect(success).toBe(0);
     expect(cutBoundaries).toBe(0);

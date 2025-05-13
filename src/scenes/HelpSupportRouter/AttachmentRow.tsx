@@ -70,9 +70,7 @@ const AttachmentRow = ({ attachment, onChange, onRemove }: AttachmentRowProps) =
           priority={'secondary'}
           icon={'iconTrashCan'}
           label={isDesktop ? strings.REMOVE : undefined}
-          onClick={() => {
-            onRemove && onRemove(attachment);
-          }}
+          onClick={() => onRemove && onRemove(attachment)}
         />
       </Grid>
     </Grid>

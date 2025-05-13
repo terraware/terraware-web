@@ -50,7 +50,7 @@ describe('HttpService', () => {
         { headers: {}, params: {} },
         (data) => ({
           value: data?.status,
-        })
+        }),
       );
 
       expect(response.requestSucceeded).toBe(true);
@@ -106,7 +106,7 @@ describe('HttpService', () => {
     test('HttpService.get handles failed requests', async () => {
       axiosGet.mockImplementation(() => Promise.resolve(DUMMY_ERROR(404, 'Not Found')));
 
-      const response: Response = await HttpService.root('/').get({}, (data) => ({}));
+      const response: Response = await HttpService.root('/').get({}, () => ({}));
 
       expect(response.requestSucceeded).toBe(false);
       expect(response.statusCode).toBe(404);
@@ -117,7 +117,7 @@ describe('HttpService', () => {
     test('HttpService.get handles failed requests with url in the method call', async () => {
       axiosGet.mockImplementation(() => Promise.resolve(DUMMY_ERROR(404, 'Not Found')));
 
-      const response: Response = await HttpService.get({ url: '/' }, (data) => ({}));
+      const response: Response = await HttpService.get({ url: '/' }, () => ({}));
 
       expect(response.requestSucceeded).toBe(false);
       expect(response.statusCode).toBe(404);
@@ -160,7 +160,7 @@ describe('HttpService', () => {
     test('HttpService sets search parameters correctly', async () => {
       axiosGet.mockImplementation(() => Promise.resolve(DUMMY_DATA));
 
-      const response: Response = await HttpService.root('/url-name').get({ params: { query: 'value' } }, (data) => ({
+      await HttpService.root('/url-name').get({ params: { query: 'value' } }, (data) => ({
         value: data?.status,
       }));
 
@@ -170,7 +170,7 @@ describe('HttpService', () => {
     test('HttpService sets header values correctly', async () => {
       axiosGet.mockImplementation(() => Promise.resolve(DUMMY_DATA));
 
-      const response: Response = await HttpService.root('/url-name').get({ headers: { auth: 'token' } }, (data) => ({
+      await HttpService.root('/url-name').get({ headers: { auth: 'token' } }, (data) => ({
         value: data?.status,
       }));
 
@@ -180,9 +180,9 @@ describe('HttpService', () => {
     test('HttpService sets url replacements correctly', async () => {
       axiosGet.mockImplementation(() => Promise.resolve(DUMMY_DATA));
 
-      const response: Response = await HttpService.root('/url-name/{id}').get(
+      await HttpService.root('/url-name/{id}').get(
         { urlReplacements: { '{id}': 'idvalue' } },
-        (data) => ({ value: data?.status })
+        (data) => ({ value: data?.status }),
       );
 
       expect(axiosGet).toHaveBeenCalledWith('/url-name/idvalue', { headers: undefined, params: undefined });
@@ -191,7 +191,7 @@ describe('HttpService', () => {
     test('HttpService.{put,post} sets entity content correctly', async () => {
       axiosPost.mockImplementation(() => Promise.resolve(DUMMY_DATA));
 
-      const response: Response = await HttpService.root('/url-name').post({
+      await HttpService.root('/url-name').post({
         entity: { key: 'value' },
         headers: {},
         params: {},
