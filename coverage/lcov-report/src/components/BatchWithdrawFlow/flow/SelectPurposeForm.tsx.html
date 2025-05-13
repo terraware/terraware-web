@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/270</span>
+                <span class='fraction'>0/271</span>
             </div>
         
             
@@ -902,7 +902,12 @@
 <a name='L837'></a><a href='#L837'>837</a>
 <a name='L838'></a><a href='#L838'>838</a>
 <a name='L839'></a><a href='#L839'>839</a>
-<a name='L840'></a><a href='#L840'>840</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L840'></a><a href='#L840'>840</a>
+<a name='L841'></a><a href='#L841'>841</a>
+<a name='L842'></a><a href='#L842'>842</a>
+<a name='L843'></a><a href='#L843'>843</a>
+<a name='L844'></a><a href='#L844'>844</a>
+<a name='L845'></a><a href='#L845'>845</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1295,6 +1300,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1377,6 +1385,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -2098,7 +2108,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
       batchWithdrawals: batches
         .filter(<span class="fstat-no" title="function not covered" >(b</span>atch: SearchResponseElement) =&gt; {
 <span class="cstat-no" title="statement not covered" >          return (</span>
-            `${batch.facility_id}` === selectedNursery?.id.toString() &amp;&amp;
+            `${batch.facility_id as string}` === selectedNursery?.id.toString() &amp;&amp;
             (!isOutplant || Number(batch['readyQuantity(raw)']) &gt; 0)
           );
         })
@@ -2131,8 +2141,11 @@ export default function <span class="fstat-no" title="function not covered" >Sel
 <span class="cstat-no" title="statement not covered" >        return Number(batchData['totalQuantity(raw)']) + Number(batchData['germinatingQuantity(raw)']) &gt; 0;</span>
       })
       .reduce(<span class="fstat-no" title="function not covered" >(a</span>cc: Record&lt;string, DropdownItem&gt;, batch: SearchResponseElement) =&gt; {
-<span class="cstat-no" title="statement not covered" >        if (!acc[`${batch.facility_id}`]) {</span>
-<span class="cstat-no" title="statement not covered" >          acc[`${batch.facility_id}`] = { label: `${batch.facility_name}`, value: batch.facility_id };</span>
+<span class="cstat-no" title="statement not covered" >        if (!acc[`${batch.facility_id as string}`]) {</span>
+<span class="cstat-no" title="statement not covered" >          acc[`${batch.facility_id as string}`] = {</span>
+            label: `${batch.facility_name as string}`,
+            value: batch.facility_id,
+          };
         }
 <span class="cstat-no" title="statement not covered" >        return acc;</span>
       }, {});
@@ -2180,7 +2193,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (localRecord.purpose === OUTPLANT) {</span>
       const hasReadyQuantities = <span class="cstat-no" title="statement not covered" >batches.some(<span class="fstat-no" title="function not covered" >(b</span>atch) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        if (selectedNursery &amp;&amp; `${batch.facility_id}` !== selectedNursery.id.toString()) {</span>
+<span class="cstat-no" title="statement not covered" >        if (selectedNursery &amp;&amp; `${batch.facility_id as string}` !== selectedNursery.id.toString()) {</span>
 <span class="cstat-no" title="statement not covered" >          return false;</span>
         }
 <span class="cstat-no" title="statement not covered" >        return Number(batch['readyQuantity(raw)']) &gt; 0;</span>
@@ -2215,11 +2228,13 @@ export default function <span class="fstat-no" title="function not covered" >Sel
   }, [selectedOrganization.id]);
 &nbsp;
   const batchesFromNursery = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return batches.filter(<span class="fstat-no" title="function not covered" >(b</span>atch) =&gt; <span class="cstat-no" title="statement not covered" >!selectedNursery || `${batch.facility_id}` === selectedNursery.id.toString())</span>;</span>
+<span class="cstat-no" title="statement not covered" >    return batches.filter(</span>
+<span class="fstat-no" title="function not covered" >      (b</span>atch) =&gt; <span class="cstat-no" title="statement not covered" >!selectedNursery || `${batch.facility_id as string}` === selectedNursery.id.toString()</span>
+    );
   }, [batches, selectedNursery]);
 &nbsp;
   const batchSpeciesNames = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const batchSpeciesIds = <span class="cstat-no" title="statement not covered" >batchesFromNursery.map(<span class="fstat-no" title="function not covered" >(b</span>atch) =&gt; <span class="cstat-no" title="statement not covered" >`${batch.species_id}`)</span>;</span>
+    const batchSpeciesIds = <span class="cstat-no" title="statement not covered" >batchesFromNursery.map(<span class="fstat-no" title="function not covered" >(b</span>atch) =&gt; <span class="cstat-no" title="statement not covered" >`${batch.species_id as string}`)</span>;</span>
     const speciesIds: string[] = <span class="cstat-no" title="statement not covered" >Array.from(new Set(batchSpeciesIds));</span>
 <span class="cstat-no" title="statement not covered" >    return speciesIds.map(<span class="fstat-no" title="function not covered" >(s</span>peciesId: string) =&gt; <span class="cstat-no" title="statement not covered" >speciesMap[speciesId] || strings.NAME_UNKNOWN)</span>;</span>
   }, [batchesFromNursery, speciesMap]);
@@ -2587,7 +2602,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-13T18:26:36.657Z
+                at 2025-05-13T18:43:51.238Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
