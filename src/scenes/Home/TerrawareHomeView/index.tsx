@@ -75,7 +75,7 @@ const TerrawareHomeView = () => {
       return undefined;
     }
 
-    const lastModifiedTime = species.sort(
+    const lastModifiedTime = [...species].sort(
       (a, b) => new Date(b.modifiedTime).getTime() - new Date(a.modifiedTime).getTime()
     )[0].modifiedTime;
 
