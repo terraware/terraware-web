@@ -4970,7 +4970,10 @@ export interface components {
              * @description If the draft is associated with a project, its ID.
              */
             projectId?: number;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
         };
         CreateDraftPlantingSiteResponsePayload: {
@@ -4998,7 +5001,10 @@ export interface components {
              */
             organizationId: number;
             subLocationNames?: string[];
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
             /** @enum {string} */
             type: "Seed Bank" | "Desalination" | "Reverse Osmosis" | "Nursery";
@@ -5113,7 +5119,10 @@ export interface components {
             organizationType?: "Government" | "NGO" | "Arboreta" | "Academia" | "ForProfit" | "Other";
             /** @description Non-empty additional description of organization when type is Other. */
             organizationTypeDetails?: string;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
             /** @description Website of organization, no restrictions on format. */
             website?: string;
@@ -5157,7 +5166,10 @@ export interface components {
             plantingZones?: components["schemas"]["NewPlantingZonePayload"][];
             /** Format: int64 */
             projectId?: number;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
         };
         CreatePlantingSiteResponsePayload: {
@@ -5556,7 +5568,10 @@ export interface components {
              * @description If the draft is associated with a project, its ID.
              */
             projectId?: number;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
         };
         EmailVariablePayload: Omit<components["schemas"]["VariablePayload"], "type"> & {
@@ -5844,7 +5859,10 @@ export interface components {
             operationStartedDate?: string;
             /** Format: int64 */
             organizationId: number;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
             /** @enum {string} */
             type: "Seed Bank" | "Desalination" | "Reverse Osmosis" | "Nursery";
@@ -7660,7 +7678,10 @@ export interface components {
              */
             role?: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
             tfContactUser?: components["schemas"]["TerraformationContactUserPayload"];
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
             /**
              * Format: int32
@@ -7855,7 +7876,10 @@ export interface components {
             plantingZones?: components["schemas"]["PlantingZonePayload"][];
             /** Format: int64 */
             projectId?: number;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
         };
         PlantingSiteReportedPlantsPayload: {
@@ -8919,7 +8943,10 @@ export interface components {
             type: "Text";
         };
         TimeZonePayload: {
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             id: string;
             /**
              * @description Long name of time zone, possibly including a city name. This name is guaranteed to be unique across all zones.
@@ -9186,7 +9213,10 @@ export interface components {
              * @description If the draft is associated with a project, its ID.
              */
             projectId?: number;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
         };
         UpdateFacilityRequestPayload: {
@@ -9203,7 +9233,10 @@ export interface components {
             name: string;
             /** Format: date */
             operationStartedDate?: string;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
         };
         UpdateFundingEntityRequestPayload: {
@@ -9257,7 +9290,10 @@ export interface components {
             organizationType?: "Government" | "NGO" | "Arboreta" | "Academia" | "ForProfit" | "Other";
             /** @description Non-empty additional description of organization when type is Other. */
             organizationTypeDetails?: string;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
             website?: string;
         };
@@ -9292,7 +9328,10 @@ export interface components {
             plantingSeasons?: components["schemas"]["UpdatedPlantingSeasonPayload"][];
             /** Format: int64 */
             projectId?: number;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
         };
         UpdatePlantingSubzoneRequestPayload: {
@@ -9438,7 +9477,10 @@ export interface components {
              * @example en
              */
             locale?: string;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
         };
         /** @description Operation that replaces a single existing value with a new one. The new value will have the same list position as the existing one.
@@ -9653,7 +9695,10 @@ export interface components {
              * @example en
              */
             locale?: string;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
             /**
              * @description Type of User. Could be Individual, Funder or DeviceManager
@@ -10086,9 +10131,9 @@ export interface operations {
     };
     listCohorts: {
         parameters: {
-            query: {
+            query?: {
                 /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
-                cohortDepth: "Cohort" | "Participant";
+                cohortDepth?: "Cohort" | "Participant";
             };
             header?: never;
             path?: never;
@@ -10133,9 +10178,9 @@ export interface operations {
     };
     getCohort: {
         parameters: {
-            query: {
+            query?: {
                 /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
-                cohortDepth: "Cohort" | "Participant";
+                cohortDepth?: "Cohort" | "Participant";
             };
             header?: never;
             path: {

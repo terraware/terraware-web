@@ -11,7 +11,6 @@ import {
   setPlantingSiteAction,
   setPlantingSitesAction,
   setPlantingSitesSearchResultsAction,
-  setSitePopulationAction,
   setSiteReportedPlantsAction,
 } from './trackingSlice';
 
@@ -58,23 +57,6 @@ export const requestPlantingSites = createAsyncThunk(
     }
   }
 );
-
-export const requestSitePopulation = (organizationId: number, siteId: number) => {
-  return async (dispatch: Dispatch, _getState: () => RootState) => {
-    try {
-      const response = await TrackingService.getTotalPlantsInZones(organizationId, siteId);
-      if (response) {
-        dispatch(setSitePopulationAction({ error: undefined, zones: response }));
-      } else {
-        dispatch(setSitePopulationAction({ error: 'Error getting site population', zones: undefined }));
-      }
-    } catch (e) {
-      // should not happen, the response above captures any http request errors
-      // eslint-disable-next-line no-console
-      console.error('Error dispatching site population', e);
-    }
-  };
-};
 
 export const requestPlantingSitesSearchResults = (organizationId: number) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
