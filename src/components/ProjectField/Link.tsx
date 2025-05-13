@@ -11,7 +11,7 @@ const ProjectFieldLink = ({ label, value }: ProjectFieldProps) => {
 
   return (
     value && (
-      <Link fontSize={'16px'} to={`${value}`} style={{ paddingLeft: theme.spacing(2) }}>
+      <Link fontSize={'16px'} to={`${value as string}`} style={{ paddingLeft: theme.spacing(2) }}>
         {label}
       </Link>
     )

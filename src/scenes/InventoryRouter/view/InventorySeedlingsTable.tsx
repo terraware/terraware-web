@@ -211,18 +211,19 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   useEffect(() => {
     const batch = batches.find((b) => b.batchNumber === openBatchNumber);
     if (batch) {
+      const batchId = batch.id as number | string;
       if (origin === 'Nursery') {
         navigate({
           pathname: APP_PATHS.INVENTORY_BATCH_FOR_NURSERY.replace(':nurseryId', `${originId}`).replace(
             ':batchId',
-            `${batch.id}`
+            `${batchId}`
           ),
         });
       } else {
         navigate({
           pathname: APP_PATHS.INVENTORY_BATCH_FOR_SPECIES.replace(':speciesId', `${originId}`).replace(
             ':batchId',
-            `${batch.id}`
+            `${batchId}`
           ),
         });
       }

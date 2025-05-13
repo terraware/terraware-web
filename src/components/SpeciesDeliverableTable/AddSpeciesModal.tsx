@@ -109,7 +109,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   const onChangeRationale = (rationale: unknown) => {
     setRecord((prev) => ({
       ...prev,
-      rationale: `${rationale}`,
+      rationale: `${rationale as string}`,
     }));
   };
 

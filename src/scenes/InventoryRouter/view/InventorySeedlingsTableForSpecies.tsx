@@ -110,6 +110,7 @@ export default function InventorySeedlingsTableForSpecies(props: InventorySeedli
       return false;
     }
     const initialNurseryId = selectedRows[0].facilityId;
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     const otherNursery = selectedRows.some((row) => `${row.facilityId}` !== `${initialNurseryId}`);
     return !otherNursery;
   };

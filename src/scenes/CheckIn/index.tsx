@@ -89,7 +89,7 @@ export default function CheckIn(): JSX.Element {
       if (accessionsById[Number(accession.id)]) {
         accessionsById[Number(accession.id)] = {
           ...accessionsById[Number(accession.id)],
-          bagNumber: `${accessionsById[Number(accession.id)].bagNumber}, ${accession.bagNumber}`,
+          bagNumber: `${accessionsById[Number(accession.id)].bagNumber as number}, ${accession.bagNumber as number}`,
         };
       } else {
         accessionsById[Number(accession.id)] = accession;

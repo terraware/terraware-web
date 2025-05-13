@@ -25,7 +25,7 @@ const MinMaxCarbonTextfield = ({ height, onChange, valueMax, valueMin, md }: Min
 
   const handleOnChangeMin = useCallback(
     (_value: unknown) => {
-      setMinLocalValue(`${_value}`);
+      setMinLocalValue(`${_value as string}`);
       onChange('minCarbonAccumulation', _value as string);
     },
     [onChange]
@@ -33,7 +33,7 @@ const MinMaxCarbonTextfield = ({ height, onChange, valueMax, valueMin, md }: Min
 
   const handleOnChangeMax = useCallback(
     (_value: unknown) => {
-      setMaxLocalValue(`${_value}`);
+      setMaxLocalValue(`${_value as string}`);
       onChange('maxCarbonAccumulation', _value as string);
     },
     [onChange]

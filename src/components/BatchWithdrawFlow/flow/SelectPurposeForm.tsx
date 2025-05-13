@@ -355,7 +355,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       batchWithdrawals: batches
         .filter((batch: SearchResponseElement) => {
           return (
-            `${batch.facility_id}` === selectedNursery?.id.toString() &&
+            `${batch.facility_id as string}` === selectedNursery?.id.toString() &&
             (!isOutplant || Number(batch['readyQuantity(raw)']) > 0)
           );
         })
@@ -388,8 +388,11 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
         return Number(batchData['totalQuantity(raw)']) + Number(batchData['germinatingQuantity(raw)']) > 0;
       })
       .reduce((acc: Record<string, DropdownItem>, batch: SearchResponseElement) => {
-        if (!acc[`${batch.facility_id}`]) {
-          acc[`${batch.facility_id}`] = { label: `${batch.facility_name}`, value: batch.facility_id };
+        if (!acc[`${batch.facility_id as string}`]) {
+          acc[`${batch.facility_id as string}`] = {
+            label: `${batch.facility_name as string}`,
+            value: batch.facility_id,
+          };
         }
         return acc;
       }, {});
@@ -437,7 +440,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   useEffect(() => {
     if (localRecord.purpose === OUTPLANT) {
       const hasReadyQuantities = batches.some((batch) => {
-        if (selectedNursery && `${batch.facility_id}` !== selectedNursery.id.toString()) {
+        if (selectedNursery && `${batch.facility_id as string}` !== selectedNursery.id.toString()) {
           return false;
         }
         return Number(batch['readyQuantity(raw)']) > 0;
@@ -472,11 +475,13 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   }, [selectedOrganization.id]);
 
   const batchesFromNursery = useMemo(() => {
-    return batches.filter((batch) => !selectedNursery || `${batch.facility_id}` === selectedNursery.id.toString());
+    return batches.filter(
+      (batch) => !selectedNursery || `${batch.facility_id as string}` === selectedNursery.id.toString()
+    );
   }, [batches, selectedNursery]);
 
   const batchSpeciesNames = useMemo(() => {
-    const batchSpeciesIds = batchesFromNursery.map((batch) => `${batch.species_id}`);
+    const batchSpeciesIds = batchesFromNursery.map((batch) => `${batch.species_id as string}`);
     const speciesIds: string[] = Array.from(new Set(batchSpeciesIds));
     return speciesIds.map((speciesId: string) => speciesMap[speciesId] || strings.NAME_UNKNOWN);
   }, [batchesFromNursery, speciesMap]);
