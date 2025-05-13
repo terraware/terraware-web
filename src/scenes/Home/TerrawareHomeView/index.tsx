@@ -17,9 +17,8 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppSelector } from 'src/redux/store';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import CTACard from 'src/scenes/Home/CTACard';
 import MobileAppCard from 'src/scenes/Home/MobileAppCard';
@@ -38,7 +37,6 @@ const TerrawareHomeView = () => {
   const { isTablet, isMobile, isDesktop } = useDeviceInfo();
   const mixpanel = useMixpanel();
   const navigate = useSyncNavigate();
-  const dispatch = useAppDispatch();
   const { goToNewAccession } = useNavigateTo();
   const plantingSites = useAppSelector(selectPlantingSites);
   const { species } = useSpeciesData();
@@ -55,13 +53,6 @@ const TerrawareHomeView = () => {
       setShowAcceleratorCard(false);
     }
   }, [orgPreferences]);
-
-  useEffect(() => {
-    if (selectedOrganization.id !== -1) {
-      void dispatch(requestObservations(selectedOrganization.id));
-      void dispatch(requestObservationsResults(selectedOrganization.id));
-    }
-  }, [dispatch, selectedOrganization.id]);
 
   const isLoadingInitialData = useMemo(
     () => orgNurserySummary?.requestSucceeded === undefined || seedBankSummary?.requestSucceeded === undefined,

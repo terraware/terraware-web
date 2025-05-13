@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 
 import { Box, Slide, useTheme } from '@mui/material';
@@ -13,11 +13,8 @@ import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import SpeciesProvider from 'src/providers/Species/SpeciesProvider';
 import PlantingSiteProvider from 'src/providers/Tracking/PlantingSiteProvider';
-import { selectHasObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
-import { selectOrgPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AccessionsRouter from 'src/scenes/AccessionsRouter';
 import ApplicationRouter from 'src/scenes/ApplicationRouter';
@@ -43,12 +40,12 @@ import SeedBanksRouter from 'src/scenes/SeedBanksRouter';
 import SeedsDashboard from 'src/scenes/SeedsDashboard';
 import SpeciesRouter from 'src/scenes/Species';
 import { Project } from 'src/types/Project';
-import { PlantingSite } from 'src/types/Tracking';
 import { getRgbaFromHex } from 'src/utils/color';
 import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useEnvironment from 'src/utils/useEnvironment';
 import useStateLocation from 'src/utils/useStateLocation';
+import { useOrgTracking } from 'src/hooks/useOrgTracking';
 
 interface OrgRouterProps {
   showNavBar: boolean;
@@ -66,8 +63,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const theme = useTheme();
 
   const { species } = useSpeciesData();
-  const hasObservationsResults: boolean = useAppSelector(selectHasObservationsResults);
-  const plantingSites: PlantingSite[] | undefined = useAppSelector(selectOrgPlantingSites(selectedOrganization.id));
+  const { plantingSites, observationResults, reload } = useOrgTracking();
   const projects: Project[] | undefined = useAppSelector(selectProjects);
 
   const contentStyles = {
@@ -106,15 +102,6 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
     populateProjects();
   }, [selectedOrganization.id, dispatch, activeLocale]);
 
-  const reloadPlantingSites = useCallback(() => {
-    const populatePlantingSites = () => {
-      if (!isPlaceholderOrg(selectedOrganization.id)) {
-        void dispatch(requestPlantingSites(selectedOrganization.id));
-      }
-    };
-    populatePlantingSites();
-  }, [dispatch, selectedOrganization.id, activeLocale]);
-
   const setDefaults = useCallback(() => {
     if (!isPlaceholderOrg(selectedOrganization.id)) {
       setWithdrawalCreated(false);
@@ -124,10 +111,6 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   useEffect(() => {
     reloadProjects();
   }, [reloadProjects]);
-
-  useEffect(() => {
-    reloadPlantingSites();
-  }, [reloadPlantingSites]);
 
   useEffect(() => {
     setDefaults();
@@ -151,6 +134,10 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
     (): boolean => plantingSites !== undefined && plantingSites.length > 0,
     [plantingSites]
   );
+
+  const hasObservationsResults = useMemo(() => {
+    return observationResults.length > 0;
+  }, [observationResults]);
 
   const viewHasBackgroundImage = useCallback((): boolean => {
     return (
@@ -235,7 +222,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             />
             <Route
               path={APP_PATHS.PLANTING_SITES + '/*'}
-              element={<PlantingSites reloadTracking={reloadPlantingSites} />}
+              element={<PlantingSites reloadTracking={reload} />}
             />
             <Route path={APP_PATHS.NURSERY + '/*'} element={<NurseryRouter />} />
             <Route path={APP_PATHS.HELP_SUPPORT + '/*'} element={<HelpSupportRouter />} />

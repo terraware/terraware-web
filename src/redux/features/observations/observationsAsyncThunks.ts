@@ -9,7 +9,7 @@ import {
 } from 'src/types/Observations';
 
 export const requestScheduleObservation = createAsyncThunk(
-  'scheduleObservation',
+  'observation/schedule',
   async (request: ScheduleObservationRequestPayload, { rejectWithValue }) => {
     const response: Response = await ObservationsService.scheduleObservation(request);
     if (response.requestSucceeded) {
@@ -26,7 +26,7 @@ export type RescheduleRequest = {
 };
 
 export const requestRescheduleObservation = createAsyncThunk(
-  'rescheduleObservation',
+  'observation/reschedule',
   async ({ observationId, request }: RescheduleRequest, { rejectWithValue }) => {
     const response: Response = await ObservationsService.rescheduleObservation(observationId, request);
     if (response.requestSucceeded) {
@@ -44,7 +44,7 @@ export type ReplaceObservationPlotRequest = {
 };
 
 export const requestReplaceObservationPlot = createAsyncThunk(
-  'replaceObservationPlot',
+  'observation/replacePlot',
   async ({ observationId, plotId, request }: ReplaceObservationPlotRequest, { rejectWithValue }) => {
     const response = await ObservationsService.replaceObservationPlot(observationId, plotId, request);
     if (response.requestSucceeded && response.data) {
@@ -57,7 +57,7 @@ export const requestReplaceObservationPlot = createAsyncThunk(
 );
 
 export const requestAbandonObservation = createAsyncThunk(
-  'abandonObservation',
+  'observation/abandon',
   async ({ observationId }: { observationId: number }, { rejectWithValue }) => {
     const response: Response = await ObservationsService.abandonObservation(observationId);
     if (response.requestSucceeded) {
