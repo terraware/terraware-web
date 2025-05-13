@@ -10,7 +10,7 @@ import { getShortDate } from 'src/utils/dateFormatter';
 export default function TotalMortalityRateCard(): JSX.Element {
   const theme = useTheme();
   const locale = useLocalization();
-  const { latestObservation } = usePlantingSiteData();
+  const { latestResult } = usePlantingSiteData();
 
   return (
     <OverviewItemCard
@@ -20,12 +20,12 @@ export default function TotalMortalityRateCard(): JSX.Element {
           <Typography fontSize='16px' fontWeight={600} marginBottom={theme.spacing(5)}>
             {strings.formatString(
               strings.MORTALITY_RATE_CARD_TITLE,
-              latestObservation?.completedTime ? getShortDate(latestObservation.completedTime, locale.activeLocale) : ''
+              latestResult?.completedTime ? getShortDate(latestResult.completedTime, locale.activeLocale) : ''
             )}
           </Typography>
           <Box display='flex' sx={{ flexFlow: 'row wrap' }}>
             <Typography fontSize='84px' fontWeight={600} lineHeight={1}>
-              {latestObservation?.mortalityRate ? <FormattedNumber value={latestObservation?.mortalityRate} /> : '--'}
+              {latestResult?.mortalityRate ? <FormattedNumber value={latestResult?.mortalityRate} /> : '--'}
             </Typography>
             <Typography fontSize='84px' fontWeight={600} lineHeight={1}>
               %
