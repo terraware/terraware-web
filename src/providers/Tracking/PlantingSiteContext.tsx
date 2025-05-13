@@ -24,9 +24,7 @@ export type PlantingSiteData = {
   latestObservation?: Observation;
   nextObservation?: Observation;
 
-  currentResult?: ObservationResultsPayload;
   latestResult?: ObservationResultsPayload;
-  nextResult?: ObservationResultsPayload;
 };
 
 // default values pointing to nothing

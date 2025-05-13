@@ -182,18 +182,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
     );
   }, [observationResults]);
 
-  const currentResult = useMemo(() => {
-    return observationResults?.find(
-      (result) => result.state === 'InProgress' && result.isAdHoc === false && result.type === 'Monitoring'
-    );
-  }, [observationResults]);
-
-  const nextResult = useMemo(() => {
-    return observationResults?.find(
-      (result) => result.state === 'Upcoming' && result.isAdHoc === false && result.type === 'Monitoring'
-    );
-  }, [observationResults]);
-
   const latestObservation = useMemo(() => {
     return observations?.find(
       (observation) =>
@@ -234,9 +222,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
       currentObservation,
       latestObservation,
       nextObservation,
-      currentResult,
       latestResult,
-      nextResult,
     }),
     [
       acceleratorOrganizationId,
@@ -254,9 +240,7 @@ const PlantingSiteProvider = ({ children }: Props) => {
       currentObservation,
       latestObservation,
       nextObservation,
-      currentResult,
       latestResult,
-      nextResult,
     ]
   );
 
