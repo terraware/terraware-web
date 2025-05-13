@@ -75,7 +75,7 @@ const OrgObservationsRenderer =
     }
 
     if (column.key === 'mortalityRate') {
-      return <CellRenderer {...props} value={value !== undefined && value !== null ? `${value}%` : ''} />;
+      return <CellRenderer {...props} value={value !== undefined && value !== null ? `${value as number}%` : ''} />;
     }
 
     if (column.key === 'actionsMenu') {

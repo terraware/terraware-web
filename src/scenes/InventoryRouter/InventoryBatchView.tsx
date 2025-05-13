@@ -126,8 +126,8 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
             origin !== 'Batches'
               ? ` / ${
                   origin === 'Species'
-                    ? strings.formatString(strings.BATCHES_OF, getSpeciesLabel())
-                    : strings.formatString(strings.BATCHES_AT, getNurseryLabel())
+                    ? (strings.formatString(strings.BATCHES_OF, getSpeciesLabel()) as string)
+                    : (strings.formatString(strings.BATCHES_AT, getNurseryLabel()) as string)
                 }`
               : ''
           }`}

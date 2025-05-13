@@ -52,7 +52,10 @@ export default function SearchCellRenderer(props: RendererProps<SearchResponseEl
         index={index}
         column={column}
         value={
-          <Link fontSize='16px' to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', `${row.id}`)}>{`${value}`}</Link>
+          <Link
+            fontSize='16px'
+            to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', `${row.id as string | number}`)}
+          >{`${value as string}`}</Link>
         }
         row={row}
       />
@@ -60,7 +63,7 @@ export default function SearchCellRenderer(props: RendererProps<SearchResponseEl
   }
 
   const numberCell = (units: unknown) => (
-    <CellRenderer index={index} column={column} value={`${value} ${units}`} row={row} />
+    <CellRenderer index={index} column={column} value={`${value as number} ${units as string}`} row={row} />
   );
 
   if (column.key === 'remainingQuantity' && value) {
@@ -83,7 +86,7 @@ export default function SearchCellRenderer(props: RendererProps<SearchResponseEl
   }
 
   if (column.key === 'totalViabilityPercent' && value !== undefined) {
-    return <CellRenderer index={index} column={column} value={`${value}%`} row={row} />;
+    return <CellRenderer index={index} column={column} value={`${value as number}%`} row={row} />;
   }
 
   if (column.key === 'geolocations.coordinates') {

@@ -143,19 +143,17 @@ const TerrawareHomeView = () => {
               label: selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')
                 ? strings.ADD_AN_ACCESSION
                 : strings.SET_UP_SEED_BANK,
-              onClick: () => {
+              onClick: () =>
                 selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')
                   ? navigate(APP_PATHS.ACCESSIONS2_NEW)
-                  : navigate(APP_PATHS.SEED_BANKS_NEW);
-              },
+                  : navigate(APP_PATHS.SEED_BANKS_NEW),
             }
           : {
               label: strings.ADD_AN_ACCESSION,
-              onClick: () => {
+              onClick: () =>
                 selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')
                   ? goToNewAccession()
-                  : navigate(APP_PATHS.ACCESSIONS);
-              },
+                  : navigate(APP_PATHS.ACCESSIONS),
             },
         icon: 'seeds' as IconName,
         statsCardItems: [
@@ -180,19 +178,17 @@ const TerrawareHomeView = () => {
               label: selectedOrgHasFacilityType(selectedOrganization, 'Nursery')
                 ? strings.ADD_INVENTORY
                 : strings.SET_UP_NURSERY,
-              onClick: () => {
+              onClick: () =>
                 selectedOrgHasFacilityType(selectedOrganization, 'Nursery')
                   ? navigate(APP_PATHS.INVENTORY_NEW)
-                  : navigate(APP_PATHS.NURSERIES_NEW);
-              },
+                  : navigate(APP_PATHS.NURSERIES_NEW),
             }
           : {
               label: strings.ADD_INVENTORY,
-              onClick: () => {
+              onClick: () =>
                 selectedOrgHasFacilityType(selectedOrganization, 'Nursery')
                   ? navigate(APP_PATHS.INVENTORY_NEW)
-                  : navigate(APP_PATHS.INVENTORY);
-              },
+                  : navigate(APP_PATHS.INVENTORY),
             },
         icon: 'iconSeedling' as IconName,
         statsCardItems: [

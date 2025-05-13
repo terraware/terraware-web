@@ -13,7 +13,7 @@ const ProjectFieldTextfield = ({ height, id, label, onChange, type, value, md, t
 
   const handleOnChange = useCallback(
     (_value: unknown) => {
-      setLocalValue(`${_value}`);
+      setLocalValue(`${_value as string}`);
       onChange(id, _value as string);
     },
     [id, onChange]

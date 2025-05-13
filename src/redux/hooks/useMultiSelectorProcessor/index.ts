@@ -77,7 +77,7 @@ export const useMultiSelectorProcessor = (
         // Errors for async thunks are currently stored in the async result's data, eventually we
         // should implement an `error` property
         if (onError) {
-          onError(`${data}`);
+          onError(`${data as string}`);
         }
       } else if (status === 'success') {
         if (onData) {

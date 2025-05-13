@@ -49,6 +49,7 @@ export const searchVariables = createCachedSelector(
       return {
         ...response,
         data: dataResponseToReturn.filter((variable: Variable) =>
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           fields.some((field) => `${variable[field as keyof Variable]}`.match(regex))
         ),
       };

@@ -46,12 +46,14 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
       eventToEdit?.projects?.forEach((proj) => {
         if (proj.cohortId && proj.projectId) {
           cohortsIds.add(proj.cohortId);
-          existingProjectsIdsByCohortId[proj.cohortId]
-            ? (existingProjectsIdsByCohortId[proj.cohortId] = [
-                ...existingProjectsIdsByCohortId[proj.cohortId],
-                proj.projectId.toString(),
-              ])
-            : (existingProjectsIdsByCohortId[proj.cohortId] = [proj.projectId.toString()]);
+          if (existingProjectsIdsByCohortId[proj.cohortId]) {
+            existingProjectsIdsByCohortId[proj.cohortId] = [
+              ...existingProjectsIdsByCohortId[proj.cohortId],
+              proj.projectId.toString(),
+            ];
+          } else {
+            existingProjectsIdsByCohortId[proj.cohortId] = [proj.projectId.toString()];
+          }
         }
       });
       setProjectsSections(() => {

@@ -13,7 +13,7 @@ const ProjectFieldTextAreaEdit = ({ id, label, onChange, value, height }: Projec
 
   const handleOnChange = useCallback(
     (_value: unknown) => {
-      setLocalValue(`${_value}`);
+      setLocalValue(`${_value as string}`);
       onChange(id, _value as string);
     },
     [id, onChange]

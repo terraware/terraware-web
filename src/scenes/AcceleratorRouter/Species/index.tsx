@@ -43,22 +43,24 @@ export default function SpeciesDetailView(): JSX.Element {
   }, [isMobile]);
 
   const approveHandler = () => {
-    currentParticipantProjectSpecies &&
+    if (currentParticipantProjectSpecies) {
       update(undefined, {
         ...currentParticipantProjectSpecies,
         submissionStatus: 'Approved',
       });
+    }
 
     setShowApproveDialog(false);
   };
 
   const rejectHandler = (feedback: string) => {
-    currentParticipantProjectSpecies &&
+    if (currentParticipantProjectSpecies) {
       update(undefined, {
         ...currentParticipantProjectSpecies,
         feedback,
         submissionStatus: 'Rejected',
       });
+    }
 
     setShowRejectDialog(false);
   };
@@ -73,11 +75,12 @@ export default function SpeciesDetailView(): JSX.Element {
 
   const onUpdateInternalComment = useCallback(
     (internalComment: string) => {
-      currentParticipantProjectSpecies &&
+      if (currentParticipantProjectSpecies) {
         update(undefined, {
           ...currentParticipantProjectSpecies,
           internalComment,
         });
+      }
     },
     [currentParticipantProjectSpecies]
   );
