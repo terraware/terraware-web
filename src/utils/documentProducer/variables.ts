@@ -56,7 +56,7 @@ export const variableDependencyMet = (variable: VariableWithValues, allVariables
       }
 
       if (isTextVariable(dependsOnVariable)) {
-        return variable.dependencyValue.toLowerCase() === `${rawDependsOnValue}`.toLowerCase();
+        return variable.dependencyValue.toLowerCase() === `${rawDependsOnValue as string}`.toLowerCase();
       }
 
       return variable.dependencyValue == rawDependsOnValue;
@@ -70,7 +70,7 @@ export const variableDependencyMet = (variable: VariableWithValues, allVariables
       return Number(rawDependsOnValue) <= Number(variable.dependencyValue);
     case 'neq':
       if (isTextVariable(dependsOnVariable)) {
-        return variable.dependencyValue.toLowerCase() !== `${rawDependsOnValue}`.toLowerCase();
+        return variable.dependencyValue.toLowerCase() !== `${rawDependsOnValue as string}`.toLowerCase();
       }
       if (isSelectVariable(dependsOnVariable)) {
         const selectDependsOnVariable = dependsOnVariable as SelectVariable;

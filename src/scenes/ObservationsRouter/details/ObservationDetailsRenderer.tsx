@@ -42,7 +42,7 @@ const ObservationDetailsRenderer =
       return (
         <CellRenderer
           {...props}
-          value={value !== undefined && value !== null && row.hasObservedPermanentPlots ? `${value}%` : ''}
+          value={value !== undefined && value !== null && row.hasObservedPermanentPlots ? `${value as number}%` : ''}
         />
       );
     }

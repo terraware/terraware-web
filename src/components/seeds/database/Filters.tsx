@@ -241,7 +241,7 @@ export default function Filters(props: Props): JSX.Element {
                 }}
               >
                 <Typography>
-                  {`${preExpFilterColumn.name}${numPreExpSelected > 0 ? ' (' + numPreExpSelected + ')' : ''}`}
+                  {`${preExpFilterColumn.name as string}${numPreExpSelected > 0 ? ' (' + numPreExpSelected + ')' : ''}`}
                 </Typography>
                 <Icon
                   name={preExpAnchorEls[preExpFilterColumn.key] ? 'chevronUp' : 'chevronDown'}
