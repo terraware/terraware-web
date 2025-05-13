@@ -71,7 +71,7 @@ const TerrawareHomeView = () => {
   const showHomePageOnboardingImprovements = useMemo(() => species.length > 0, [species]);
 
   const speciesLastModifiedDate = useMemo(() => {
-    if (!species.length) {
+    if (!species?.length) {
       return undefined;
     }
 
