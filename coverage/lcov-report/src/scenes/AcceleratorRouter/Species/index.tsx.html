@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/43</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/43</span>
             </div>
         
             
@@ -559,7 +559,10 @@
 <a name='L494'></a><a href='#L494'>494</a>
 <a name='L495'></a><a href='#L495'>495</a>
 <a name='L496'></a><a href='#L496'>496</a>
-<a name='L497'></a><a href='#L497'>497</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L497'></a><a href='#L497'>497</a>
+<a name='L498'></a><a href='#L498'>498</a>
+<a name='L499'></a><a href='#L499'>499</a>
+<a name='L500'></a><a href='#L500'>500</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -605,6 +608,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -616,17 +632,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -634,6 +639,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1100,22 +1106,24 @@ export default function <span class="fstat-no" title="function not covered" >Spe
   }, [isMobile]);
 &nbsp;
   const approveHandler = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    currentParticipantProjectSpecies &amp;&amp;</span>
-      update(undefined, {
+<span class="cstat-no" title="statement not covered" >    if (currentParticipantProjectSpecies) {</span>
+<span class="cstat-no" title="statement not covered" >      update(undefined, {</span>
         ...currentParticipantProjectSpecies,
         submissionStatus: 'Approved',
       });
+    }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    setShowApproveDialog(false);</span>
   };
 &nbsp;
   const rejectHandler = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(f</span>eedback: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    currentParticipantProjectSpecies &amp;&amp;</span>
-      update(undefined, {
+<span class="cstat-no" title="statement not covered" >    if (currentParticipantProjectSpecies) {</span>
+<span class="cstat-no" title="statement not covered" >      update(undefined, {</span>
         ...currentParticipantProjectSpecies,
         feedback,
         submissionStatus: 'Rejected',
       });
+    }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    setShowRejectDialog(false);</span>
   };
@@ -1130,11 +1138,12 @@ export default function <span class="fstat-no" title="function not covered" >Spe
 &nbsp;
   const onUpdateInternalComment = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (i</span>nternalComment: string) =&gt; {
-<span class="cstat-no" title="statement not covered" >      currentParticipantProjectSpecies &amp;&amp;</span>
-        update(undefined, {
+<span class="cstat-no" title="statement not covered" >      if (currentParticipantProjectSpecies) {</span>
+<span class="cstat-no" title="statement not covered" >        update(undefined, {</span>
           ...currentParticipantProjectSpecies,
           internalComment,
         });
+      }
     },
     [currentParticipantProjectSpecies]
   );
@@ -1558,7 +1567,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-13T03:35:25.767Z
+                at 2025-05-13T18:26:36.657Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
