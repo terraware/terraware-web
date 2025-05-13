@@ -89,7 +89,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     </Grid>
   );
 
-  const getlatestResultLink = useCallback(() => {
+  const renderLatestObservationLink = useCallback(() => {
     const allMonitoringPlots = latestResult?.plantingZones.flatMap((pz) =>
       pz.plantingSubzones.flatMap((sz) => sz.monitoringPlots)
     );
@@ -131,7 +131,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
                 {strings.MORTALITY_RATE}
               </Typography>
               {hasObservations && (
-                <Typography>{strings.formatString(strings.AS_OF_X, getlatestResultLink())}</Typography>
+                <Typography>{strings.formatString(strings.AS_OF_X, renderLatestObservationLink())}</Typography>
               )}
             </Box>
           </Grid>
@@ -140,7 +140,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, getlatestResultLink, hasObservations]
+    [plantingSite, renderLatestObservationLink, hasObservations]
   );
 
   const renderTotalPlantsAndSpecies = () => (
@@ -180,7 +180,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
                 {strings.PLANTING_DENSITY}
               </Typography>
               {hasObservations && (
-                <Typography>{strings.formatString(strings.AS_OF_X, getlatestResultLink())}</Typography>
+                <Typography>{strings.formatString(strings.AS_OF_X, renderLatestObservationLink())}</Typography>
               )}
             </Box>
           </Grid>
@@ -189,7 +189,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, sitePlantingComplete, hasObservations, getlatestResultLink]
+    [plantingSite, sitePlantingComplete, hasObservations, renderLatestObservationLink]
   );
 
   const renderPlantingSiteTrends = useCallback(
@@ -229,7 +229,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
                 {strings.SITE_MAP}
               </Typography>
               {hasObservations && (
-                <Typography>{strings.formatString(strings.AS_OF_X, getlatestResultLink())}</Typography>
+                <Typography>{strings.formatString(strings.AS_OF_X, renderLatestObservationLink())}</Typography>
               )}
             </Box>
           </Grid>
@@ -238,7 +238,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, getlatestResultLink, hasObservations]
+    [plantingSite, renderLatestObservationLink, hasObservations]
   );
 
   const renderSimpleSiteMap = useCallback(
@@ -310,7 +310,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
       ? (strings.formatString(
           strings.DASHBOARD_HEADER_TEXT_SINGLE_OBSERVATION,
           <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={observationHectares} />)}</b>,
-          <b>{getlatestResultLink()}</b>
+          <b>{renderLatestObservationLink()}</b>
         ) as string)
       : (strings.formatString(
           strings.DASHBOARD_HEADER_TEXT_V2,
