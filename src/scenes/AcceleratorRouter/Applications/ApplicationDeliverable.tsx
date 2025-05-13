@@ -23,7 +23,7 @@ const ApplicationDeliverable = () => {
   }, [setSelectedApplication, applicationId]);
 
   const deliverable = useMemo(
-    () => applicationDeliverables.find((deliverable) => deliverable.id === Number(deliverableId ?? -1)),
+    () => applicationDeliverables.find((_deliverable) => _deliverable.id === Number(deliverableId ?? -1)),
     [applicationDeliverables, deliverableId]
   );
 

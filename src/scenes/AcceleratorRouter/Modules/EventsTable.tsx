@@ -149,9 +149,9 @@ export default function EventsTable(props: EventsTableProps): JSX.Element {
 
   const deleteEvents = () => {
     if (setEventsToDelete && setEventsToAdd) {
-      const eventsToDelete = selectedRows.filter((sr) => sr.id?.toString() !== '-1');
+      const toDelete = selectedRows.filter((sr) => sr.id?.toString() !== '-1');
       setEventsToDelete((prev) => {
-        return prev ? [...prev, ...eventsToDelete] : eventsToDelete;
+        return prev ? [...prev, ...toDelete] : toDelete;
       });
 
       const newEventsToAdd = eventsToAdd?.filter((etAdd) => !selectedRows.includes(etAdd));

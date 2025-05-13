@@ -8,7 +8,6 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
-import { getShortDate } from 'src/utils/dateFormatter';
 
 type DetailsPageProps = {
   plantingSiteId: number;
@@ -72,8 +71,7 @@ export default function DetailsPage({
 
       if (observationId) {
         const plantingSiteName = observation?.plantingSiteName ?? '';
-        const completionDate = getShortDate(observationDate, activeLocale);
-        const name = completionDate ? `${completionDate} (${plantingSiteName})` : undefined;
+        const name = observationDate ? `${observationDate} (${plantingSiteName})` : undefined;
 
         if (observationId && name) {
           data.push({

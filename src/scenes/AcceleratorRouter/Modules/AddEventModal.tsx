@@ -105,7 +105,9 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
     projectsSections.forEach((ps) =>
       ps.projectIds.forEach((projId) => {
         const foundCohort = availableCohorts?.find((coh) => coh.id === ps.cohort.id);
-        const allCohortProjects = foundCohort?.participants?.flatMap((p) => p.projects.flatMap((p) => p));
+        const allCohortProjects = foundCohort?.participants?.flatMap((participant) =>
+          participant.projects.flatMap((project) => project)
+        );
         const foundProject = allCohortProjects?.find((pr) => pr.id.toString() === projId.toString());
         projectsWithCohort.push({ cohortId: ps.cohort.id, projectId: Number(projId), projectName: foundProject?.name });
       })

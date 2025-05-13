@@ -124,17 +124,17 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
       const index = condition.field.indexOf('.');
       const first = condition.field.substring(0, index);
       const last = condition.field.substring(index + 1);
-      const resultValue = result[first];
+      const firstResult = result[first];
 
-      if (Array.isArray(resultValue)) {
-        return resultValue.some((subItem) =>
+      if (Array.isArray(firstResult)) {
+        return firstResult.some((subItem) =>
           searchConditionMet(subItem, {
             ...condition,
             field: last,
           })
         );
-      } else if (typeof resultValue === 'object') {
-        return searchConditionMet(resultValue as Record<string, unknown>, {
+      } else if (typeof firstResult === 'object') {
+        return searchConditionMet(firstResult as Record<string, unknown>, {
           ...condition,
           field: last,
         });

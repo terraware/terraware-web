@@ -23,7 +23,7 @@ const SectionDeliverableEditView = () => {
     reload(() => goToApplicationSectionDeliverable(Number(applicationId), Number(sectionId), Number(deliverableId)));
   }, [goToApplicationSectionDeliverable, applicationId, deliverableId, reload, sectionId]);
 
-  const deliverable = applicationDeliverables.find((deliverable) => deliverable.id === Number(deliverableId));
+  const deliverable = applicationDeliverables.find((_deliverable) => _deliverable.id === Number(deliverableId));
 
   const hideId = useMemo(() => {
     if (!selectedApplication || !deliverable || deliverable.type !== 'Questions') {
@@ -61,11 +61,11 @@ const SectionDeliverableEditWrapper = () => {
   const { goToApplicationSectionDeliverable } = useNavigateTo();
 
   const section = useMemo(
-    () => applicationSections.find((section) => section.moduleId === Number(sectionId)),
+    () => applicationSections.find((_section) => _section.moduleId === Number(sectionId)),
     [applicationSections, sectionId]
   );
 
-  const deliverable = applicationDeliverables.find((deliverable) => deliverable.id === Number(deliverableId));
+  const deliverable = applicationDeliverables.find((_deliverable) => _deliverable.id === Number(deliverableId));
 
   useEffect(() => {
     if (!selectedApplication || !section || !deliverable) {
