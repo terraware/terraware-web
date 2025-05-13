@@ -1,11 +1,13 @@
 import { test } from '@playwright/test';
 
-import AccessionTests from './accession.spec.ts';
-import InventoryTests from './inventory.spec.ts';
-import LocationTests from './locations.spec.ts';
-import SpeciesTests from './species.spec.ts';
+import AccessionTests from './accession.spec';
+import InventoryTests from './inventory.spec';
+import LocationTests from './locations.spec';
+import SpeciesTests from './species.spec';
+import ProjectProfileTests from './projectProfile.spec';
 
 test.describe(LocationTests);
 test.describe(SpeciesTests);
 test.describe(AccessionTests);
 test.describe(InventoryTests);
+test.describe(ProjectProfileTests);

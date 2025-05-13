@@ -24,23 +24,13 @@ createdb terraware
 psql terraware < dump.sql
 ```
 
-### Deleting ephemeral data
-
-Double-check this to make sure there aren't any new tables with ephemeral data that also need to be cleared. Update this doc if there are.
-
-```sql
-DELETE FROM jobrunr_metadata;
-DELETE FROM jobrunr_recurring_jobs;
-```
-
 ### Dumping the local database
 
-```shell
-pg_dump -O -x -f dump.sql terraware
-```
-
-OR
+Double-check scripts/dump.sh to make sure there aren't any new tables with ephemeral data that also need to be cleared 
+or updated. Update this doc if there are.
 
 ```shell
-docker compose exec postgres pg_dump -O -x -U postgres terraware > dump.sql
+yarn dump:local
+# or 
+yarn dump:docker
 ```

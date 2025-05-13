@@ -2,12 +2,13 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.12 (Debian 13.12-1.pgdg110+1)
--- Dumped by pg_dump version 13.12 (Debian 13.12-1.pgdg110+1)
+-- Dumped from database version 17.4 (Debian 17.4-1.pgdg110+2)
+-- Dumped by pg_dump version 17.4 (Debian 17.4-1.pgdg110+2)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -21,6 +22,20 @@ SET row_security = off;
 --
 
 CREATE SCHEMA accelerator;
+
+
+--
+-- Name: docprod; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA docprod;
+
+
+--
+-- Name: funder; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA funder;
 
 
 --
@@ -76,7 +91,7 @@ CREATE SCHEMA tracking;
 -- Name: natural_numeric; Type: COLLATION; Schema: public; Owner: -
 --
 
-CREATE COLLATION public.natural_numeric (provider = icu, locale = 'en-u-kn-true');
+CREATE COLLATION public.natural_numeric (provider = icu, locale = 'en-u-kn');
 
 
 --
@@ -112,6 +127,20 @@ CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA public;
 --
 
 COMMENT ON EXTENSION fuzzystrmatch IS 'determine similarities and distance between strings';
+
+
+--
+-- Name: hstore; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS hstore WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION hstore; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION hstore IS 'data type for storing sets of (key, value) pairs';
 
 
 --
@@ -185,6 +214,124 @@ COMMENT ON EXTENSION unaccent IS 'text search dictionary that removes accents';
 
 
 --
+-- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
+
+
+--
+-- Name: vector; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS vector WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION vector; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION vector IS 'vector data type and ivfflat and hnsw access methods';
+
+
+--
+-- Name: reject_delete(); Type: FUNCTION; Schema: docprod; Owner: -
+--
+
+CREATE FUNCTION docprod.reject_delete() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    RAISE 'This table does not allow deletes.';
+END;
+$$;
+
+
+--
+-- Name: reject_delete_value(); Type: FUNCTION; Schema: docprod; Owner: -
+--
+
+CREATE FUNCTION docprod.reject_delete_value() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM documents WHERE id = OLD.document_id) THEN
+        RAISE 'This table does not allow deletes.';
+    ELSE
+        -- The entire document is being deleted.
+        RETURN OLD;
+    END IF;
+END;
+$$;
+
+
+--
+-- Name: FUNCTION reject_delete_value(); Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON FUNCTION docprod.reject_delete_value() IS 'Trigger function that rejects deletion of `variable_values` rows unless the entire document is being deleted.';
+
+
+--
+-- Name: reject_delete_value_child(); Type: FUNCTION; Schema: docprod; Owner: -
+--
+
+CREATE FUNCTION docprod.reject_delete_value_child() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM variable_values WHERE id = OLD.variable_value_id) THEN
+        RAISE 'This table does not allow deletes.';
+    ELSE
+        RETURN OLD;
+    END IF;
+END;
+$$;
+
+
+--
+-- Name: reject_update(); Type: FUNCTION; Schema: docprod; Owner: -
+--
+
+CREATE FUNCTION docprod.reject_update() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    RAISE 'This table does not allow updates.';
+END;
+$$;
+
+
+--
+-- Name: reject_update_value(); Type: FUNCTION; Schema: docprod; Owner: -
+--
+
+CREATE FUNCTION docprod.reject_update_value() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    IF (OLD.created_by != -1 AND NEW.created_by = -1
+        AND NOT EXISTS (SELECT 1 FROM users WHERE id = OLD.created_by))
+        OR (OLD.verified_by != -1 AND NEW.verified_by = -1
+            AND NOT EXISTS (SELECT 1 FROM users WHERE id = OLD.verified_by))
+    THEN
+        RAISE 'This table does not allow updates.';
+    ELSE
+        -- This is an update triggered by a user being deleted.
+        RETURN NEW;
+    END IF;
+END;
+$$;
+
+
+--
 -- Name: column_exists(text, text); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -237,6 +384,136 @@ $$;
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
+
+--
+-- Name: application_histories; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.application_histories (
+    id bigint NOT NULL,
+    application_id bigint NOT NULL,
+    modified_by bigint NOT NULL,
+    modified_time timestamp with time zone NOT NULL,
+    application_status_id integer NOT NULL,
+    boundary public.geometry,
+    internal_comment text,
+    feedback text
+);
+
+
+--
+-- Name: TABLE application_histories; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.application_histories IS 'Change histories for accelerator applications. Only includes changes to top-level metadata, not things like changes to variable values.';
+
+
+--
+-- Name: application_histories_id_seq; Type: SEQUENCE; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE accelerator.application_histories ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME accelerator.application_histories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: application_module_statuses; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.application_module_statuses (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE application_module_statuses; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.application_module_statuses IS '(Enum) Possible statuses of individual modules in an application.';
+
+
+--
+-- Name: application_modules; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.application_modules (
+    application_id bigint NOT NULL,
+    module_id bigint NOT NULL,
+    application_module_status_id integer NOT NULL
+);
+
+
+--
+-- Name: TABLE application_modules; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.application_modules IS 'Current states of the modules for individual applications.';
+
+
+--
+-- Name: application_statuses; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.application_statuses (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE application_statuses; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.application_statuses IS '(Enum) Possible statuses for an application to the accelerator program.';
+
+
+--
+-- Name: applications; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.applications (
+    id bigint NOT NULL,
+    project_id bigint NOT NULL,
+    internal_name text NOT NULL,
+    created_by bigint NOT NULL,
+    created_time timestamp with time zone NOT NULL,
+    modified_by bigint NOT NULL,
+    modified_time timestamp with time zone NOT NULL,
+    application_status_id integer NOT NULL,
+    boundary public.geometry,
+    internal_comment text,
+    feedback text,
+    country_code text
+);
+
+
+--
+-- Name: TABLE applications; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.applications IS 'Information about projects that are applying for the accelerator program.';
+
+
+--
+-- Name: applications_id_seq; Type: SEQUENCE; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE accelerator.applications ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME accelerator.applications_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
 
 --
 -- Name: cohort_modules; Type: TABLE; Schema: accelerator; Owner: -
@@ -338,6 +615,23 @@ COMMENT ON TABLE accelerator.deal_stages IS '(Enum) Stages in the deal workflow 
 
 
 --
+-- Name: default_project_leads; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.default_project_leads (
+    region_id integer NOT NULL,
+    project_lead text
+);
+
+
+--
+-- Name: TABLE default_project_leads; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.default_project_leads IS 'Default project leads to use at application submission time based on project region.';
+
+
+--
 -- Name: default_voters; Type: TABLE; Schema: accelerator; Owner: -
 --
 
@@ -359,7 +653,8 @@ COMMENT ON TABLE accelerator.default_voters IS 'Users to automatically be assign
 
 CREATE TABLE accelerator.deliverable_categories (
     id integer NOT NULL,
-    name text NOT NULL
+    name text NOT NULL,
+    internal_interest_id integer NOT NULL
 );
 
 
@@ -368,6 +663,13 @@ CREATE TABLE accelerator.deliverable_categories (
 --
 
 COMMENT ON TABLE accelerator.deliverable_categories IS '(Enum) High-level groups for organizing deliverables.';
+
+
+--
+-- Name: COLUMN deliverable_categories.internal_interest_id; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON COLUMN accelerator.deliverable_categories.internal_interest_id IS 'Internal interest enum that the deliverable category corresponds to.';
 
 
 --
@@ -440,6 +742,24 @@ CREATE TABLE accelerator.deliverable_types (
 --
 
 COMMENT ON TABLE accelerator.deliverable_types IS '(Enum) Types of deliverables for an accelerator module.';
+
+
+--
+-- Name: deliverable_variables; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.deliverable_variables (
+    deliverable_id bigint NOT NULL,
+    variable_id bigint NOT NULL,
+    "position" integer NOT NULL
+);
+
+
+--
+-- Name: TABLE deliverable_variables; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.deliverable_variables IS 'Which variables are associated with which deliverables. Note that this includes variables that have been replaced by newer versions, and the newer versions might be associated with different deliverables.';
 
 
 --
@@ -585,7 +905,7 @@ CREATE TABLE accelerator.events (
     modified_time timestamp with time zone NOT NULL,
     revision integer DEFAULT 1 NOT NULL,
     event_status_id integer NOT NULL,
-    CONSTRAINT times_start_before_end CHECK ((start_time < end_time))
+    CONSTRAINT times_start_before_end CHECK ((start_time <= end_time))
 );
 
 
@@ -611,6 +931,73 @@ ALTER TABLE accelerator.events ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENT
 
 
 --
+-- Name: hubspot_token; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.hubspot_token (
+    refresh_token text NOT NULL
+);
+
+
+--
+-- Name: TABLE hubspot_token; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.hubspot_token IS 'If the server has been authorized to make HubSpot API requests, the refresh token to use to generate new access tokens.';
+
+
+--
+-- Name: internal_interests; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.internal_interests (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE internal_interests; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.internal_interests IS '(Enum) Types of notification categories for internal users.';
+
+
+--
+-- Name: metric_components; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.metric_components (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE metric_components; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.metric_components IS '(Enum) Components of metrics for reports.';
+
+
+--
+-- Name: metric_types; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.metric_types (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE metric_types; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.metric_types IS '(Enum) Types of metrics for reports.';
+
+
+--
 -- Name: modules; Type: TABLE; Schema: accelerator; Owner: -
 --
 
@@ -627,7 +1014,9 @@ CREATE TABLE accelerator.modules (
     workshop_description text,
     one_on_one_session_description text,
     additional_resources text,
-    phase_id integer NOT NULL
+    phase_id integer NOT NULL,
+    "position" integer NOT NULL,
+    recorded_session_description text
 );
 
 
@@ -636,6 +1025,13 @@ CREATE TABLE accelerator.modules (
 --
 
 COMMENT ON TABLE accelerator.modules IS 'Possible steps in the workflow of a cohort phase.';
+
+
+--
+-- Name: COLUMN modules."position"; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON COLUMN accelerator.modules."position" IS 'This model''s ordinal position in the modules spreadsheet. This can be used to present modules in the same order they appear in the spreadsheet.';
 
 
 --
@@ -769,7 +1165,13 @@ CREATE TABLE accelerator.project_accelerator_details (
     project_lead text,
     file_naming text,
     dropbox_folder_path text,
-    google_folder_url text
+    google_folder_url text,
+    carbon_capacity numeric,
+    annual_carbon numeric,
+    total_carbon numeric,
+    hubspot_url text,
+    deal_name text,
+    logframe_url text
 );
 
 
@@ -785,6 +1187,13 @@ COMMENT ON TABLE accelerator.project_accelerator_details IS 'Details about proje
 --
 
 COMMENT ON COLUMN accelerator.project_accelerator_details.file_naming IS 'Identifier that is included in generated filenames. This is often, but not necessarily, the same as the project name.';
+
+
+--
+-- Name: COLUMN project_accelerator_details.logframe_url; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON COLUMN accelerator.project_accelerator_details.logframe_url IS 'Link to the project logical framework, monitoring and evaluation plan, and operational work plan.';
 
 
 --
@@ -875,6 +1284,101 @@ COMMENT ON VIEW accelerator.project_deliverables IS 'Deliverable information for
 
 
 --
+-- Name: project_metrics; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.project_metrics (
+    id bigint NOT NULL,
+    project_id bigint NOT NULL,
+    type_id integer NOT NULL,
+    component_id integer NOT NULL,
+    name text NOT NULL,
+    description text,
+    reference text NOT NULL COLLATE public.natural_numeric,
+    is_publishable boolean NOT NULL
+);
+
+
+--
+-- Name: TABLE project_metrics; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.project_metrics IS 'Metrics specific to one project to report on.';
+
+
+--
+-- Name: project_metrics_id_seq; Type: SEQUENCE; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE accelerator.project_metrics ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME accelerator.project_metrics_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: project_overall_scores; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.project_overall_scores (
+    project_id bigint NOT NULL,
+    overall_score double precision,
+    summary text,
+    details_url text,
+    created_by bigint NOT NULL,
+    created_time timestamp with time zone NOT NULL,
+    modified_by bigint NOT NULL,
+    modified_time timestamp with time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE project_overall_scores; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.project_overall_scores IS 'Overall scores assigned to project by scorers.';
+
+
+--
+-- Name: project_report_configs; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.project_report_configs (
+    id bigint NOT NULL,
+    project_id bigint NOT NULL,
+    report_frequency_id integer NOT NULL,
+    reporting_start_date date NOT NULL,
+    reporting_end_date date NOT NULL,
+    CONSTRAINT project_report_configs_check CHECK ((reporting_end_date > reporting_start_date))
+);
+
+
+--
+-- Name: TABLE project_report_configs; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.project_report_configs IS 'Configurations for accelerator project reports, including reporting dates and reporting frequencies.';
+
+
+--
+-- Name: project_report_configs_id_seq; Type: SEQUENCE; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE accelerator.project_report_configs ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME accelerator.project_report_configs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: project_scores; Type: TABLE; Schema: accelerator; Owner: -
 --
 
@@ -957,6 +1461,273 @@ COMMENT ON COLUMN accelerator.project_votes.vote_option_id IS 'Vote option can b
 
 
 --
+-- Name: report_achievements; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.report_achievements (
+    report_id bigint NOT NULL,
+    "position" integer NOT NULL,
+    achievement text NOT NULL,
+    CONSTRAINT report_achievements_position_check CHECK (("position" >= 0))
+);
+
+
+--
+-- Name: TABLE report_achievements; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.report_achievements IS 'List of achievements for accelerator project reports.';
+
+
+--
+-- Name: report_challenges; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.report_challenges (
+    report_id bigint NOT NULL,
+    "position" integer NOT NULL,
+    challenge text NOT NULL,
+    mitigation_plan text NOT NULL,
+    CONSTRAINT report_challenges_position_check CHECK (("position" >= 0))
+);
+
+
+--
+-- Name: TABLE report_challenges; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.report_challenges IS 'List of challenges and mitigation plans for accelerator project reports.';
+
+
+--
+-- Name: report_frequencies; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.report_frequencies (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE report_frequencies; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.report_frequencies IS '(Enum) Frequencies of accelerator project reports. Acts as the report type as well.';
+
+
+--
+-- Name: report_metric_statuses; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.report_metric_statuses (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE report_metric_statuses; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.report_metric_statuses IS '(Enum) Statuses of accelerator project report metrics.';
+
+
+--
+-- Name: report_project_metrics; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.report_project_metrics (
+    report_id bigint NOT NULL,
+    project_metric_id bigint NOT NULL,
+    target integer,
+    value integer,
+    underperformance_justification text,
+    progress_notes text,
+    modified_by bigint NOT NULL,
+    modified_time timestamp with time zone NOT NULL,
+    status_id integer
+);
+
+
+--
+-- Name: TABLE report_project_metrics; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.report_project_metrics IS 'Report entries of targets and values for project metrics.';
+
+
+--
+-- Name: report_quarters; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.report_quarters (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE report_quarters; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.report_quarters IS '(Enum) Quarters of accelerator project reports.';
+
+
+--
+-- Name: report_standard_metrics; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.report_standard_metrics (
+    report_id bigint NOT NULL,
+    standard_metric_id bigint NOT NULL,
+    target integer,
+    value integer,
+    underperformance_justification text,
+    progress_notes text,
+    modified_by bigint NOT NULL,
+    modified_time timestamp with time zone NOT NULL,
+    status_id integer
+);
+
+
+--
+-- Name: TABLE report_standard_metrics; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.report_standard_metrics IS 'Report entries of targets and values for standard metrics.';
+
+
+--
+-- Name: report_statuses; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.report_statuses (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE report_statuses; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.report_statuses IS '(Enum) Statuses of accelerator project reports.';
+
+
+--
+-- Name: report_system_metrics; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.report_system_metrics (
+    report_id bigint NOT NULL,
+    system_metric_id integer NOT NULL,
+    target integer,
+    system_value integer,
+    system_time timestamp with time zone,
+    override_value integer,
+    underperformance_justification text,
+    progress_notes text,
+    modified_by bigint NOT NULL,
+    modified_time timestamp with time zone NOT NULL,
+    status_id integer,
+    CONSTRAINT system_time CHECK ((((system_value IS NULL) AND (system_time IS NULL)) OR ((system_value IS NOT NULL) AND (system_time IS NOT NULL))))
+);
+
+
+--
+-- Name: TABLE report_system_metrics; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.report_system_metrics IS 'Report entries of targets and values for system metrics.';
+
+
+--
+-- Name: COLUMN report_system_metrics.system_value; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON COLUMN accelerator.report_system_metrics.system_value IS 'Value collected via Terraware data. Null before value is submitted.';
+
+
+--
+-- Name: COLUMN report_system_metrics.system_time; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON COLUMN accelerator.report_system_metrics.system_time IS 'System value recorded time. If null, the value is not recorded yet and a live query of Terraware data should be used instead.';
+
+
+--
+-- Name: COLUMN report_system_metrics.override_value; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON COLUMN accelerator.report_system_metrics.override_value IS 'Value inputted by accelerator admin to override system value. Null for no overrides.';
+
+
+--
+-- Name: reports; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.reports (
+    id bigint NOT NULL,
+    config_id bigint NOT NULL,
+    project_id bigint NOT NULL,
+    status_id integer,
+    start_date date NOT NULL,
+    end_date date NOT NULL,
+    internal_comment text,
+    feedback text,
+    created_by bigint NOT NULL,
+    created_time timestamp with time zone NOT NULL,
+    modified_by bigint NOT NULL,
+    modified_time timestamp with time zone NOT NULL,
+    submitted_by bigint,
+    submitted_time timestamp with time zone,
+    highlights text,
+    report_frequency_id integer NOT NULL,
+    report_quarter_id integer,
+    upcoming_notification_sent_time timestamp with time zone,
+    CONSTRAINT quarterly_report_has_quarter CHECK ((((report_frequency_id = 1) AND (report_quarter_id IS NOT NULL) AND ((report_quarter_id)::numeric = EXTRACT(quarter FROM start_date)) AND ((report_quarter_id)::numeric = EXTRACT(quarter FROM end_date))) OR ((report_frequency_id <> 1) AND (report_quarter_id IS NULL)))),
+    CONSTRAINT reports_check CHECK ((end_date > start_date)),
+    CONSTRAINT submitted_status CHECK ((((status_id = 1) AND (submitted_by IS NULL) AND (submitted_time IS NULL)) OR (((status_id = 2) OR (status_id = 3) OR (status_id = 4)) AND (submitted_by IS NOT NULL) AND (submitted_time IS NOT NULL)) OR (status_id = 5)))
+);
+
+
+--
+-- Name: TABLE reports; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.reports IS 'Accelerator project reports.';
+
+
+--
+-- Name: COLUMN reports.report_frequency_id; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON COLUMN accelerator.reports.report_frequency_id IS 'Frequency of the report, that can determine report data. Must match with frequency of the configuration.';
+
+
+--
+-- Name: COLUMN reports.report_quarter_id; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON COLUMN accelerator.reports.report_quarter_id IS 'Quarter of the report. Must be non-null for quarterly reports and null otherwise.';
+
+
+--
+-- Name: reports_id_seq; Type: SEQUENCE; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE accelerator.reports ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME accelerator.reports_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: score_categories; Type: TABLE; Schema: accelerator; Owner: -
 --
 
@@ -971,6 +1742,42 @@ CREATE TABLE accelerator.score_categories (
 --
 
 COMMENT ON TABLE accelerator.score_categories IS '(Enum) Project score categories.';
+
+
+--
+-- Name: standard_metrics; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.standard_metrics (
+    id bigint NOT NULL,
+    type_id integer NOT NULL,
+    component_id integer NOT NULL,
+    name text NOT NULL,
+    description text,
+    reference text NOT NULL COLLATE public.natural_numeric,
+    is_publishable boolean NOT NULL
+);
+
+
+--
+-- Name: TABLE standard_metrics; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.standard_metrics IS 'Standard non-system metrics for every project to measure in accelerator reports.';
+
+
+--
+-- Name: standard_metrics_id_seq; Type: SEQUENCE; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE accelerator.standard_metrics ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME accelerator.standard_metrics_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
 
 
 --
@@ -1097,6 +1904,61 @@ ALTER TABLE accelerator.submissions ALTER COLUMN id ADD GENERATED BY DEFAULT AS 
 
 
 --
+-- Name: system_metrics; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.system_metrics (
+    id integer NOT NULL,
+    name text NOT NULL,
+    type_id integer NOT NULL,
+    component_id integer NOT NULL,
+    description text,
+    reference text NOT NULL COLLATE public.natural_numeric,
+    is_publishable boolean NOT NULL
+);
+
+
+--
+-- Name: TABLE system_metrics; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.system_metrics IS '(Enum) Accelerator report metrics, for which data are collected from Terraware.';
+
+
+--
+-- Name: system_metrics_id_seq; Type: SEQUENCE; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE accelerator.system_metrics ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME accelerator.system_metrics_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: user_internal_interests; Type: TABLE; Schema: accelerator; Owner: -
+--
+
+CREATE TABLE accelerator.user_internal_interests (
+    user_id bigint NOT NULL,
+    internal_interest_id integer NOT NULL,
+    created_by bigint NOT NULL,
+    created_time timestamp with time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE user_internal_interests; Type: COMMENT; Schema: accelerator; Owner: -
+--
+
+COMMENT ON TABLE accelerator.user_internal_interests IS 'Which internal interest categories are assigned to which internal users. This affects things like which accelerator admins are notified.';
+
+
+--
 -- Name: vote_options; Type: TABLE; Schema: accelerator; Owner: -
 --
 
@@ -1111,6 +1973,1036 @@ CREATE TABLE accelerator.vote_options (
 --
 
 COMMENT ON TABLE accelerator.vote_options IS '(Enum) Available vote options.';
+
+
+--
+-- Name: dependency_conditions; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.dependency_conditions (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE dependency_conditions; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.dependency_conditions IS '(Enum) Types of conditions that can control whether or not a variable is presented to the user.';
+
+
+--
+-- Name: document_saved_versions; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.document_saved_versions (
+    id bigint NOT NULL,
+    document_id bigint NOT NULL,
+    variable_manifest_id bigint NOT NULL,
+    max_variable_value_id bigint NOT NULL,
+    created_by bigint DEFAULT '-1'::integer NOT NULL,
+    created_time timestamp with time zone NOT NULL,
+    name text,
+    is_submitted boolean DEFAULT false NOT NULL,
+    is_accepted boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: TABLE document_saved_versions; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.document_saved_versions IS 'Saved versions of document variable values. A saved version is conceptually just a reference to a particular point in the edit history of the document; to restore that version, we ignore any later edits.';
+
+
+--
+-- Name: document_saved_versions_id_seq; Type: SEQUENCE; Schema: docprod; Owner: -
+--
+
+ALTER TABLE docprod.document_saved_versions ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME docprod.document_saved_versions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: document_statuses; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.document_statuses (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE document_statuses; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.document_statuses IS '(Enum) Current stage of a document''s lifecycle.';
+
+
+--
+-- Name: document_templates; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.document_templates (
+    id bigint NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE document_templates; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.document_templates IS 'Templates for the different types of documents this system can produce.';
+
+
+--
+-- Name: document_templates_id_seq; Type: SEQUENCE; Schema: docprod; Owner: -
+--
+
+ALTER TABLE docprod.document_templates ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME docprod.document_templates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: documents; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.documents (
+    id bigint NOT NULL,
+    document_template_id bigint NOT NULL,
+    variable_manifest_id bigint NOT NULL,
+    project_id bigint NOT NULL,
+    name text NOT NULL,
+    status_id integer NOT NULL,
+    owned_by bigint DEFAULT '-1'::integer NOT NULL,
+    created_by bigint DEFAULT '-1'::integer NOT NULL,
+    created_time timestamp with time zone NOT NULL,
+    modified_by bigint DEFAULT '-1'::integer NOT NULL,
+    modified_time timestamp with time zone NOT NULL,
+    internal_comment text
+);
+
+
+--
+-- Name: TABLE documents; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.documents IS 'Top-level information about documents.';
+
+
+--
+-- Name: documents_id_seq; Type: SEQUENCE; Schema: docprod; Owner: -
+--
+
+ALTER TABLE docprod.documents ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME docprod.documents_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: variable_image_values; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_image_values (
+    variable_value_id bigint NOT NULL,
+    variable_id bigint NOT NULL,
+    variable_type_id integer NOT NULL,
+    file_id bigint NOT NULL,
+    caption text,
+    CONSTRAINT variable_image_values_variable_type_id_check CHECK ((variable_type_id = 4))
+);
+
+
+--
+-- Name: TABLE variable_image_values; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_image_values IS 'Linking table that defines which image files are values of which variables.';
+
+
+--
+-- Name: variable_injection_display_styles; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_injection_display_styles (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE variable_injection_display_styles; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_injection_display_styles IS '(Enum) For injected variables, whether to render them as text fragments that are suitable for including in paragraphs or as separate items on the page. Analogous to the inline/block display styles in CSS. Not applicable to all variable types.';
+
+
+--
+-- Name: variable_link_values; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_link_values (
+    variable_value_id bigint NOT NULL,
+    variable_id bigint NOT NULL,
+    variable_type_id integer NOT NULL,
+    url text NOT NULL,
+    title text,
+    CONSTRAINT variable_link_values_variable_type_id_check CHECK ((variable_type_id = 7))
+);
+
+
+--
+-- Name: TABLE variable_link_values; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_link_values IS 'Type-specific details of the values of link variables.';
+
+
+--
+-- Name: variable_manifest_entries; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_manifest_entries (
+    variable_manifest_id bigint NOT NULL,
+    variable_id bigint NOT NULL,
+    "position" integer NOT NULL
+);
+
+
+--
+-- Name: TABLE variable_manifest_entries; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_manifest_entries IS 'Linking table that defines which variables appear in which manifests and in what order.';
+
+
+--
+-- Name: variable_manifests; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_manifests (
+    id bigint NOT NULL,
+    document_template_id bigint NOT NULL,
+    created_by bigint DEFAULT '-1'::integer NOT NULL,
+    created_time timestamp with time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE variable_manifests; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_manifests IS 'A collection of the definitions of the variables for a document template. This is how we do versioning of variable definitions. Each revision of the variable definitions is represented as a new manifest.';
+
+
+--
+-- Name: variable_manifests_id_seq; Type: SEQUENCE; Schema: docprod; Owner: -
+--
+
+ALTER TABLE docprod.variable_manifests ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME docprod.variable_manifests_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: variable_numbers; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_numbers (
+    variable_id bigint NOT NULL,
+    variable_type_id integer NOT NULL,
+    min_value numeric,
+    max_value numeric,
+    decimal_places integer,
+    CONSTRAINT variable_numbers_variable_type_id_check CHECK ((variable_type_id = 1))
+);
+
+
+--
+-- Name: TABLE variable_numbers; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_numbers IS 'Information about number variables that is not relevant for other variable types.';
+
+
+--
+-- Name: variable_owners; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_owners (
+    project_id bigint NOT NULL,
+    variable_id bigint NOT NULL,
+    owned_by bigint NOT NULL
+);
+
+
+--
+-- Name: TABLE variable_owners; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_owners IS 'Which internal users are responsible for reviewing the values of which variables for which projects.';
+
+
+--
+-- Name: variable_section_default_values; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_section_default_values (
+    id bigint NOT NULL,
+    variable_id bigint NOT NULL,
+    variable_type_id integer NOT NULL,
+    variable_manifest_id bigint NOT NULL,
+    list_position integer NOT NULL,
+    text_value text,
+    used_variable_id bigint,
+    used_variable_type_id integer,
+    usage_type_id integer,
+    display_style_id integer,
+    CONSTRAINT cannot_have_both_text_and_reference CHECK (((text_value IS NULL) OR (used_variable_id IS NULL))),
+    CONSTRAINT cannot_reference_other_sections CHECK (((used_variable_type_id IS NULL) OR (used_variable_type_id <> 8))),
+    CONSTRAINT must_have_text_or_reference CHECK (((text_value IS NOT NULL) OR (used_variable_id IS NOT NULL))),
+    CONSTRAINT variable_section_default_values_variable_type_id_check CHECK ((variable_type_id = 8))
+);
+
+
+--
+-- Name: TABLE variable_section_default_values; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_section_default_values IS 'Section values that are set by default on newly-created documents.';
+
+
+--
+-- Name: variable_section_default_values_id_seq; Type: SEQUENCE; Schema: docprod; Owner: -
+--
+
+ALTER TABLE docprod.variable_section_default_values ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME docprod.variable_section_default_values_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: variable_section_recommendations; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_section_recommendations (
+    section_variable_id bigint NOT NULL,
+    section_variable_type_id integer NOT NULL,
+    recommended_variable_id bigint NOT NULL,
+    variable_manifest_id bigint NOT NULL,
+    CONSTRAINT variable_section_recommendations_section_variable_type_id_check CHECK ((section_variable_type_id = 8))
+);
+
+
+--
+-- Name: TABLE variable_section_recommendations; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_section_recommendations IS 'Which sections recommend using which other variables. Can vary between manifests.';
+
+
+--
+-- Name: variable_section_values; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_section_values (
+    variable_value_id bigint NOT NULL,
+    variable_id bigint NOT NULL,
+    variable_type_id integer NOT NULL,
+    usage_type_id integer,
+    text_value text,
+    used_variable_id bigint,
+    used_variable_type_id integer,
+    display_style_id integer,
+    CONSTRAINT cannot_have_both_text_and_reference CHECK (((text_value IS NULL) OR (used_variable_id IS NULL))),
+    CONSTRAINT cannot_inject_sections CHECK ((NOT ((usage_type_id = 1) AND (used_variable_type_id = 8)))),
+    CONSTRAINT cannot_reference_other_sections CHECK (((used_variable_type_id IS NULL) OR (used_variable_type_id <> 8))),
+    CONSTRAINT injection_has_display_style CHECK (((usage_type_id = 1) = (display_style_id IS NOT NULL))),
+    CONSTRAINT must_have_text_or_reference CHECK (((text_value IS NOT NULL) OR (used_variable_id IS NOT NULL))),
+    CONSTRAINT reference_only_for_figures_and_sections CHECK (((usage_type_id <> 2) OR (used_variable_type_id = ANY (ARRAY[4, 6, 8])))),
+    CONSTRAINT usages_must_have_types CHECK (((used_variable_id IS NULL) = (usage_type_id IS NULL)))
+);
+
+
+--
+-- Name: TABLE variable_section_values; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_section_values IS 'Fragments of the contents of document sections. Each fragment is either a block of text or a usage of a variable; they are assembled in order to render the contents of the section.';
+
+
+--
+-- Name: variable_sections; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_sections (
+    variable_id bigint NOT NULL,
+    variable_type_id integer NOT NULL,
+    parent_variable_id bigint,
+    parent_variable_type_id integer,
+    render_heading boolean DEFAULT true NOT NULL,
+    CONSTRAINT variable_sections_parent_variable_type_id_check CHECK (((parent_variable_type_id IS NULL) OR (parent_variable_type_id = 8))),
+    CONSTRAINT variable_sections_variable_type_id_check CHECK ((variable_type_id = 8))
+);
+
+
+--
+-- Name: TABLE variable_sections; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_sections IS 'Hierarchy of sections that define the structure of the rendered document.';
+
+
+--
+-- Name: COLUMN variable_sections.render_heading; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON COLUMN docprod.variable_sections.render_heading IS 'If false, the title is not included in the rendered document. False in cases where we want a single section to have multiple content blocks; in that case, we add them as child sections with this flag set to false.';
+
+
+--
+-- Name: variable_select_option_values; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_select_option_values (
+    variable_value_id bigint NOT NULL,
+    variable_id bigint NOT NULL,
+    variable_type_id integer NOT NULL,
+    option_id bigint NOT NULL,
+    CONSTRAINT variable_select_option_values_variable_type_id_check CHECK ((variable_type_id = 5))
+);
+
+
+--
+-- Name: TABLE variable_select_option_values; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_select_option_values IS 'The options of a select variable that are selected in a document. Options that are not selected do not appear in this table.';
+
+
+--
+-- Name: variable_select_options; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_select_options (
+    id bigint NOT NULL,
+    variable_id bigint NOT NULL,
+    variable_type_id integer NOT NULL,
+    "position" integer NOT NULL,
+    name text NOT NULL,
+    description text,
+    rendered_text text
+);
+
+
+--
+-- Name: TABLE variable_select_options; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_select_options IS 'Available options for select variables.';
+
+
+--
+-- Name: COLUMN variable_select_options.rendered_text; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON COLUMN docprod.variable_select_options.rendered_text IS 'What text should be rendered in the document when this option is selected. Null if the option''s name should be rendered.';
+
+
+--
+-- Name: variable_select_options_id_seq; Type: SEQUENCE; Schema: docprod; Owner: -
+--
+
+ALTER TABLE docprod.variable_select_options ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME docprod.variable_select_options_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: variable_selects; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_selects (
+    variable_id bigint NOT NULL,
+    variable_type_id integer NOT NULL,
+    is_multiple boolean NOT NULL,
+    CONSTRAINT variable_selects_variable_type_id_check CHECK ((variable_type_id = 5))
+);
+
+
+--
+-- Name: TABLE variable_selects; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_selects IS 'Information about select variables that is not relevant for other variable types. This table only has information about the variable as a whole; the options are in `variable_select_options`.';
+
+
+--
+-- Name: COLUMN variable_selects.is_multiple; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON COLUMN docprod.variable_selects.is_multiple IS 'If true, allow multiple options to be selected. The list of selected options is considered a single value; do not set `variables.is_list` to true unless you want a list of multiple-select variables.';
+
+
+--
+-- Name: variable_table_columns; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_table_columns (
+    variable_id bigint NOT NULL,
+    table_variable_id bigint NOT NULL,
+    table_variable_type_id integer NOT NULL,
+    "position" integer NOT NULL,
+    is_header boolean NOT NULL,
+    CONSTRAINT variable_table_columns_table_variable_type_id_check CHECK ((table_variable_type_id = 6))
+);
+
+
+--
+-- Name: TABLE variable_table_columns; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_table_columns IS 'The order of the columns in a table. Each column must be a variable whose parent is the table.';
+
+
+--
+-- Name: variable_table_styles; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_table_styles (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE variable_table_styles; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_table_styles IS '(Enum) How a table should be rendered visually in the document.';
+
+
+--
+-- Name: variable_tables; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_tables (
+    variable_id bigint NOT NULL,
+    variable_type_id integer NOT NULL,
+    table_style_id integer NOT NULL,
+    CONSTRAINT variable_tables_variable_type_id_check CHECK ((variable_type_id = 6))
+);
+
+
+--
+-- Name: TABLE variable_tables; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_tables IS 'Information about tables that is not relevant for other variable types.';
+
+
+--
+-- Name: variable_text_types; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_text_types (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE variable_text_types; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_text_types IS '(Enum) Types of text stored in a text variable field.';
+
+
+--
+-- Name: variable_texts; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_texts (
+    variable_id bigint NOT NULL,
+    variable_type_id integer NOT NULL,
+    variable_text_type_id integer NOT NULL,
+    CONSTRAINT variable_texts_variable_type_id_check CHECK ((variable_type_id = 2))
+);
+
+
+--
+-- Name: TABLE variable_texts; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_texts IS 'Information about text variables that is not relevant for other variable types.';
+
+
+--
+-- Name: variable_types; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_types (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE variable_types; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_types IS '(Enum) Data types that can be assigned to variables.';
+
+
+--
+-- Name: variable_usage_types; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_usage_types (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE variable_usage_types; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_usage_types IS '(Enum) When a variable is used in a section, whether to inject the value of the variable or the location where the value is injected elsewhere in the doc.';
+
+
+--
+-- Name: variable_value_table_rows; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_value_table_rows (
+    id bigint NOT NULL,
+    variable_value_id bigint NOT NULL,
+    table_row_value_id bigint NOT NULL
+);
+
+
+--
+-- Name: TABLE variable_value_table_rows; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_value_table_rows IS 'Linking table that defines which variable values are in which rows of a table.';
+
+
+--
+-- Name: variable_value_table_rows_id_seq; Type: SEQUENCE; Schema: docprod; Owner: -
+--
+
+ALTER TABLE docprod.variable_value_table_rows ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME docprod.variable_value_table_rows_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: variable_values; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_values (
+    id bigint NOT NULL,
+    project_id bigint NOT NULL,
+    variable_id bigint NOT NULL,
+    variable_type_id integer NOT NULL,
+    list_position integer DEFAULT 0 NOT NULL,
+    created_by bigint DEFAULT '-1'::integer NOT NULL,
+    created_time timestamp with time zone NOT NULL,
+    is_deleted boolean DEFAULT false NOT NULL,
+    number_value numeric,
+    text_value text,
+    date_value date,
+    citation text,
+    CONSTRAINT text_value_is_text_or_email CHECK (((text_value IS NULL) OR (variable_type_id = ANY (ARRAY[2, 9])))),
+    CONSTRAINT variable_values_check CHECK (((number_value IS NULL) OR (variable_type_id = 1)))
+);
+
+
+--
+-- Name: TABLE variable_values; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_values IS 'Insert-only table with all historical and current values of all inputs.';
+
+
+--
+-- Name: COLUMN variable_values.text_value; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON COLUMN docprod.variable_values.text_value IS 'For text or email variables, the variable''s value. May contain newlines if the text variable is multi-line.';
+
+
+--
+-- Name: variable_values_id_seq; Type: SEQUENCE; Schema: docprod; Owner: -
+--
+
+ALTER TABLE docprod.variable_values ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME docprod.variable_values_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: variable_workflow_history; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_workflow_history (
+    id bigint NOT NULL,
+    project_id bigint NOT NULL,
+    variable_id bigint NOT NULL,
+    max_variable_value_id bigint NOT NULL,
+    created_by bigint NOT NULL,
+    created_time timestamp with time zone NOT NULL,
+    variable_workflow_status_id integer NOT NULL,
+    feedback text,
+    internal_comment text
+);
+
+
+--
+-- Name: TABLE variable_workflow_history; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_workflow_history IS 'History of changes to the workflow details for a variable in a project. This table is append-only; edits to the values are represented as new rows, and the row with the highest ID for a given project and variable ID holds the current workflow details for that variable.';
+
+
+--
+-- Name: COLUMN variable_workflow_history.max_variable_value_id; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON COLUMN docprod.variable_workflow_history.max_variable_value_id IS 'The highest variable value ID at the time the workflow operation happened. This is to support fetching the variable value as it existed at the time of the workflow operation. This ID is not required to be a value of the variable referenced by `variable_id` (it can be the maximum value ID for the project as a whole).';
+
+
+--
+-- Name: variable_workflow_history_id_seq; Type: SEQUENCE; Schema: docprod; Owner: -
+--
+
+ALTER TABLE docprod.variable_workflow_history ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME docprod.variable_workflow_history_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: variable_workflow_statuses; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variable_workflow_statuses (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE variable_workflow_statuses; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variable_workflow_statuses IS '(Enum) Workflow statuses of variables in projects. The list of valid statuses depends on the variable type.';
+
+
+--
+-- Name: variables; Type: TABLE; Schema: docprod; Owner: -
+--
+
+CREATE TABLE docprod.variables (
+    id bigint NOT NULL,
+    variable_type_id integer NOT NULL,
+    replaces_variable_id bigint,
+    is_list boolean DEFAULT false NOT NULL,
+    stable_id text NOT NULL,
+    name text NOT NULL,
+    description text,
+    deliverable_question text,
+    dependency_variable_stable_id text,
+    dependency_condition_id integer,
+    dependency_value text,
+    internal_only boolean DEFAULT false NOT NULL,
+    is_required boolean NOT NULL
+);
+
+
+--
+-- Name: TABLE variables; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON TABLE docprod.variables IS 'variables that can be supplied by the user. This table stores the variables themselves, not the values of the variables in a particular document. Type-specific information is in child tables such as `variable_numbers`.';
+
+
+--
+-- Name: COLUMN variables.replaces_variable_id; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON COLUMN docprod.variables.replaces_variable_id IS 'If this is a new version of a variable that existed in a previous manifest version, the ID of the previous version of the variable. This allows the system to automatically migrate values from older variable versions when a document is updated to a new manifest version.';
+
+
+--
+-- Name: COLUMN variables.is_list; Type: COMMENT; Schema: docprod; Owner: -
+--
+
+COMMENT ON COLUMN docprod.variables.is_list IS 'True if this variable is a list of values rather than a single value. If the variable is a table, true if the table can contain multiple rows.';
+
+
+--
+-- Name: variables_id_seq; Type: SEQUENCE; Schema: docprod; Owner: -
+--
+
+ALTER TABLE docprod.variables ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME docprod.variables_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: funding_entities; Type: TABLE; Schema: funder; Owner: -
+--
+
+CREATE TABLE funder.funding_entities (
+    id bigint NOT NULL,
+    name text NOT NULL,
+    created_by bigint NOT NULL,
+    created_time timestamp with time zone NOT NULL,
+    modified_by bigint NOT NULL,
+    modified_time timestamp with time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE funding_entities; Type: COMMENT; Schema: funder; Owner: -
+--
+
+COMMENT ON TABLE funder.funding_entities IS 'Top-level information about Funding Entities for Funders.';
+
+
+--
+-- Name: funding_entities_id_seq; Type: SEQUENCE; Schema: funder; Owner: -
+--
+
+ALTER TABLE funder.funding_entities ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME funder.funding_entities_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: funding_entity_projects; Type: TABLE; Schema: funder; Owner: -
+--
+
+CREATE TABLE funder.funding_entity_projects (
+    funding_entity_id bigint NOT NULL,
+    project_id bigint NOT NULL
+);
+
+
+--
+-- Name: TABLE funding_entity_projects; Type: COMMENT; Schema: funder; Owner: -
+--
+
+COMMENT ON TABLE funder.funding_entity_projects IS 'Which funding entities are associated with which projects.';
+
+
+--
+-- Name: funding_entity_users; Type: TABLE; Schema: funder; Owner: -
+--
+
+CREATE TABLE funder.funding_entity_users (
+    user_id bigint NOT NULL,
+    funding_entity_id bigint NOT NULL
+);
+
+
+--
+-- Name: TABLE funding_entity_users; Type: COMMENT; Schema: funder; Owner: -
+--
+
+COMMENT ON TABLE funder.funding_entity_users IS 'Funding Entity membership.';
+
+
+--
+-- Name: published_report_achievements; Type: TABLE; Schema: funder; Owner: -
+--
+
+CREATE TABLE funder.published_report_achievements (
+    report_id bigint NOT NULL,
+    "position" integer NOT NULL,
+    achievement text NOT NULL,
+    CONSTRAINT published_report_achievements_position_check CHECK (("position" >= 0))
+);
+
+
+--
+-- Name: TABLE published_report_achievements; Type: COMMENT; Schema: funder; Owner: -
+--
+
+COMMENT ON TABLE funder.published_report_achievements IS 'Achievements of published reports.';
+
+
+--
+-- Name: published_report_challenges; Type: TABLE; Schema: funder; Owner: -
+--
+
+CREATE TABLE funder.published_report_challenges (
+    report_id bigint NOT NULL,
+    "position" integer NOT NULL,
+    challenge text NOT NULL,
+    mitigation_plan text NOT NULL,
+    CONSTRAINT published_report_challenges_position_check CHECK (("position" >= 0))
+);
+
+
+--
+-- Name: TABLE published_report_challenges; Type: COMMENT; Schema: funder; Owner: -
+--
+
+COMMENT ON TABLE funder.published_report_challenges IS 'Challenges and mitigation plans of published reports.';
+
+
+--
+-- Name: published_report_project_metrics; Type: TABLE; Schema: funder; Owner: -
+--
+
+CREATE TABLE funder.published_report_project_metrics (
+    report_id bigint NOT NULL,
+    project_metric_id bigint NOT NULL,
+    target integer,
+    value integer,
+    underperformance_justification text,
+    status_id integer,
+    progress_notes text
+);
+
+
+--
+-- Name: TABLE published_report_project_metrics; Type: COMMENT; Schema: funder; Owner: -
+--
+
+COMMENT ON TABLE funder.published_report_project_metrics IS 'Project-specific metrics of published reports.';
+
+
+--
+-- Name: published_report_standard_metrics; Type: TABLE; Schema: funder; Owner: -
+--
+
+CREATE TABLE funder.published_report_standard_metrics (
+    report_id bigint NOT NULL,
+    standard_metric_id bigint NOT NULL,
+    target integer,
+    value integer,
+    underperformance_justification text,
+    status_id integer,
+    progress_notes text
+);
+
+
+--
+-- Name: TABLE published_report_standard_metrics; Type: COMMENT; Schema: funder; Owner: -
+--
+
+COMMENT ON TABLE funder.published_report_standard_metrics IS 'Standard metrics of published reports.';
+
+
+--
+-- Name: published_report_system_metrics; Type: TABLE; Schema: funder; Owner: -
+--
+
+CREATE TABLE funder.published_report_system_metrics (
+    report_id bigint NOT NULL,
+    system_metric_id integer NOT NULL,
+    target integer,
+    value integer,
+    underperformance_justification text,
+    status_id integer,
+    progress_notes text
+);
+
+
+--
+-- Name: TABLE published_report_system_metrics; Type: COMMENT; Schema: funder; Owner: -
+--
+
+COMMENT ON TABLE funder.published_report_system_metrics IS 'System metrics of published reports.';
+
+
+--
+-- Name: published_reports; Type: TABLE; Schema: funder; Owner: -
+--
+
+CREATE TABLE funder.published_reports (
+    report_id bigint NOT NULL,
+    project_id bigint NOT NULL,
+    report_frequency_id integer NOT NULL,
+    report_quarter_id integer,
+    start_date date NOT NULL,
+    end_date date NOT NULL,
+    highlights text,
+    published_by bigint NOT NULL,
+    published_time timestamp with time zone NOT NULL,
+    CONSTRAINT published_reports_check CHECK ((end_date > start_date))
+);
+
+
+--
+-- Name: TABLE published_reports; Type: COMMENT; Schema: funder; Owner: -
+--
+
+COMMENT ON TABLE funder.published_reports IS 'Published reports visible to funders.';
 
 
 --
@@ -1680,31 +3572,31 @@ COMMENT ON COLUMN nursery.batches.total_loss_candidates IS 'Total number of non-
 --
 
 CREATE VIEW nursery.batch_summaries AS
- SELECT b.id,
-    b.organization_id,
-    b.facility_id,
-    b.species_id,
-    b.batch_number,
-    b.added_date,
-    b.ready_quantity,
-    b.not_ready_quantity,
-    b.germinating_quantity,
-    (b.ready_quantity + b.not_ready_quantity) AS total_quantity,
-    b.ready_by_date,
-    b.notes,
-    b.accession_id,
+ SELECT id,
+    organization_id,
+    facility_id,
+    species_id,
+    batch_number,
+    added_date,
+    ready_quantity,
+    not_ready_quantity,
+    germinating_quantity,
+    (ready_quantity + not_ready_quantity) AS total_quantity,
+    ready_by_date,
+    notes,
+    accession_id,
     COALESCE(( SELECT sum((bw.ready_quantity_withdrawn + bw.not_ready_quantity_withdrawn)) AS sum
            FROM nursery.batch_withdrawals bw
           WHERE (b.id = bw.batch_id)), (0)::bigint) AS total_quantity_withdrawn,
-    b.version,
-    b.project_id,
-    b.substrate_id,
-    b.substrate_notes,
-    b.treatment_id,
-    b.treatment_notes,
-    b.germination_rate,
-    b.loss_rate,
-    b.initial_batch_id
+    version,
+    project_id,
+    substrate_id,
+    substrate_notes,
+    treatment_id,
+    treatment_notes,
+    germination_rate,
+    loss_rate,
+    initial_batch_id
    FROM nursery.batches b;
 
 
@@ -1727,16 +3619,16 @@ ALTER TABLE nursery.batches ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY
 --
 
 CREATE VIEW nursery.facility_inventories AS
- SELECT batches.organization_id,
-    batches.species_id,
-    batches.facility_id,
-    sum(batches.ready_quantity) AS ready_quantity,
-    sum(batches.not_ready_quantity) AS not_ready_quantity,
-    sum(batches.germinating_quantity) AS germinating_quantity,
-    sum((batches.ready_quantity + batches.not_ready_quantity)) AS total_quantity
+ SELECT organization_id,
+    species_id,
+    facility_id,
+    sum(ready_quantity) AS ready_quantity,
+    sum(not_ready_quantity) AS not_ready_quantity,
+    sum(germinating_quantity) AS germinating_quantity,
+    sum((ready_quantity + not_ready_quantity)) AS total_quantity
    FROM nursery.batches
-  GROUP BY batches.organization_id, batches.species_id, batches.facility_id
- HAVING (sum(((batches.ready_quantity + batches.not_ready_quantity) + batches.germinating_quantity)) > 0);
+  GROUP BY organization_id, species_id, facility_id
+ HAVING (sum(((ready_quantity + not_ready_quantity) + germinating_quantity)) > 0);
 
 
 --
@@ -1744,16 +3636,16 @@ CREATE VIEW nursery.facility_inventories AS
 --
 
 CREATE VIEW nursery.facility_inventory_totals AS
- SELECT batches.organization_id,
-    batches.facility_id,
-    sum(batches.ready_quantity) AS ready_quantity,
-    sum(batches.not_ready_quantity) AS not_ready_quantity,
-    sum(batches.germinating_quantity) AS germinating_quantity,
-    sum((batches.ready_quantity + batches.not_ready_quantity)) AS total_quantity,
-    count(DISTINCT batches.species_id) AS total_species
+ SELECT organization_id,
+    facility_id,
+    sum(ready_quantity) AS ready_quantity,
+    sum(not_ready_quantity) AS not_ready_quantity,
+    sum(germinating_quantity) AS germinating_quantity,
+    sum((ready_quantity + not_ready_quantity)) AS total_quantity,
+    count(DISTINCT species_id) AS total_species
    FROM nursery.batches
-  WHERE ((batches.ready_quantity > 0) OR (batches.not_ready_quantity > 0) OR (batches.germinating_quantity > 0))
-  GROUP BY batches.organization_id, batches.facility_id;
+  WHERE ((ready_quantity > 0) OR (not_ready_quantity > 0) OR (germinating_quantity > 0))
+  GROUP BY organization_id, facility_id;
 
 
 --
@@ -1761,15 +3653,15 @@ CREATE VIEW nursery.facility_inventory_totals AS
 --
 
 CREATE VIEW nursery.inventories AS
- SELECT batches.organization_id,
-    batches.species_id,
-    sum(batches.ready_quantity) AS ready_quantity,
-    sum(batches.not_ready_quantity) AS not_ready_quantity,
-    sum(batches.germinating_quantity) AS germinating_quantity,
-    sum((batches.ready_quantity + batches.not_ready_quantity)) AS total_quantity
+ SELECT organization_id,
+    species_id,
+    sum(ready_quantity) AS ready_quantity,
+    sum(not_ready_quantity) AS not_ready_quantity,
+    sum(germinating_quantity) AS germinating_quantity,
+    sum((ready_quantity + not_ready_quantity)) AS total_quantity
    FROM nursery.batches
-  GROUP BY batches.organization_id, batches.species_id
- HAVING (sum(((batches.ready_quantity + batches.not_ready_quantity) + batches.germinating_quantity)) > 0);
+  GROUP BY organization_id, species_id
+ HAVING (sum(((ready_quantity + not_ready_quantity) + germinating_quantity)) > 0);
 
 
 --
@@ -1777,11 +3669,11 @@ CREATE VIEW nursery.inventories AS
 --
 
 CREATE VIEW nursery.species_projects AS
- SELECT DISTINCT batches.organization_id,
-    batches.species_id,
-    batches.project_id
+ SELECT DISTINCT organization_id,
+    species_id,
+    project_id
    FROM nursery.batches
-  WHERE ((batches.project_id IS NOT NULL) AND ((batches.germinating_quantity > 0) OR (batches.not_ready_quantity > 0) OR (batches.ready_quantity > 0)));
+  WHERE ((project_id IS NOT NULL) AND ((germinating_quantity > 0) OR (not_ready_quantity > 0) OR (ready_quantity > 0)));
 
 
 --
@@ -2096,6 +3988,7 @@ CREATE TABLE tracking.planting_sites (
     project_id bigint,
     exclusion public.geometry(MultiPolygon),
     grid_origin public.geometry(Point),
+    country_code text,
     CONSTRAINT area_positive CHECK ((area_ha > (0)::numeric)),
     CONSTRAINT planting_sites_description_check CHECK ((description !~ similar_to_escape(' *'::text)))
 );
@@ -2195,6 +4088,8 @@ CREATE TABLE tracking.planting_subzones (
     planting_site_id bigint NOT NULL,
     area_ha numeric NOT NULL,
     planting_completed_time timestamp with time zone,
+    observed_time timestamp with time zone,
+    stable_id text NOT NULL,
     CONSTRAINT area_positive CHECK ((area_ha > (0)::numeric))
 );
 
@@ -2260,6 +4155,20 @@ COMMENT ON COLUMN tracking.planting_subzones.modified_time IS 'When the subzone 
 --
 
 COMMENT ON COLUMN tracking.planting_subzones.planting_site_id IS 'Which planting site this subzone is part of. This is the same as the planting site ID of this subzone''s planting zone, but is duplicated here so it can be used as the target of a foreign key constraint.';
+
+
+--
+-- Name: COLUMN planting_subzones.observed_time; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.planting_subzones.observed_time IS 'When an observation of a monitoring plot in the subzone was most recently completed.';
+
+
+--
+-- Name: COLUMN planting_subzones.stable_id; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.planting_subzones.stable_id IS 'Subzone identifier that doesn''t change even if the subzone is renamed or edited. Defaults to the full name.';
 
 
 --
@@ -2497,6 +4406,76 @@ ALTER TABLE public.automations ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENT
 
 
 --
+-- Name: chat_memory_conversations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chat_memory_conversations (
+    id uuid NOT NULL,
+    created_by bigint NOT NULL,
+    created_time timestamp with time zone NOT NULL,
+    modified_time timestamp with time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE chat_memory_conversations; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.chat_memory_conversations IS 'Information about Ask Terraware conversations.';
+
+
+--
+-- Name: chat_memory_message_types; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chat_memory_message_types (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE chat_memory_message_types; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.chat_memory_message_types IS '(Enum) Message types that can be stored as part of the memory of an LLM chat conversation.';
+
+
+--
+-- Name: chat_memory_messages; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.chat_memory_messages (
+    id bigint NOT NULL,
+    conversation_id uuid NOT NULL,
+    message_type_id integer NOT NULL,
+    created_time timestamp with time zone NOT NULL,
+    content text NOT NULL
+);
+
+
+--
+-- Name: TABLE chat_memory_messages; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.chat_memory_messages IS 'Messages from Ask Terraware conversations. Both questions (prompts to the LLM) and answers (responses from the LLM) are recorded.';
+
+
+--
+-- Name: chat_memory_messages_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+ALTER TABLE public.chat_memory_messages ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME public.chat_memory_messages_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: conservation_categories; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2521,6 +4500,8 @@ CREATE TABLE public.countries (
     code text NOT NULL,
     name text NOT NULL,
     region_id integer NOT NULL,
+    code_alpha3 text NOT NULL,
+    eligible boolean NOT NULL,
     CONSTRAINT countries_code_caps CHECK ((code = upper(code))),
     CONSTRAINT countries_code_length CHECK ((length(code) = 2))
 );
@@ -2537,7 +4518,7 @@ COMMENT ON TABLE public.countries IS 'Country information per ISO-3166.';
 -- Name: COLUMN countries.code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.countries.code IS 'ISO-3166 alpha-2 country code.';
+COMMENT ON COLUMN public.countries.code IS 'ISO-3166 alpha-2 country code. We use this code to refer to countries elsewhere in the data model.';
 
 
 --
@@ -2545,6 +4526,20 @@ COMMENT ON COLUMN public.countries.code IS 'ISO-3166 alpha-2 country code.';
 --
 
 COMMENT ON COLUMN public.countries.name IS 'Name of country in US English.';
+
+
+--
+-- Name: COLUMN countries.code_alpha3; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.countries.code_alpha3 IS 'ISO-3166 alpha-3 country code. This is used in cases where an external system or user needs an alpha-3 code instad of an alpha-2 code, but is treated purely as descriptive data in the data model.';
+
+
+--
+-- Name: COLUMN countries.eligible; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.countries.eligible IS 'If false, projects in this country are ineligible for the accelerator program.';
 
 
 --
@@ -2838,6 +4833,9 @@ CREATE TABLE public.files (
     created_by bigint,
     storage_url text NOT NULL,
     modified_by bigint NOT NULL,
+    file_date date,
+    width integer,
+    height integer,
     CONSTRAINT content_type_cannot_be_empty_string CHECK ((length(content_type) > 0)),
     CONSTRAINT file_name_cannot_be_empty_string CHECK ((length(file_name) > 0))
 );
@@ -3295,15 +5293,15 @@ COMMENT ON TABLE public.timeseries_values IS 'Individual data points on a timese
 --
 
 CREATE VIEW public.latest_timeseries_values AS
- SELECT ordered.timeseries_id,
-    ordered.created_time,
-    ordered.value
+ SELECT timeseries_id,
+    created_time,
+    value
    FROM ( SELECT timeseries_values.timeseries_id,
             timeseries_values.created_time,
             timeseries_values.value,
             row_number() OVER (PARTITION BY timeseries_values.timeseries_id ORDER BY timeseries_values.created_time DESC) AS row_num
            FROM public.timeseries_values) ordered
-  WHERE (ordered.row_num = 1);
+  WHERE (row_num = 1);
 
 
 --
@@ -3638,6 +5636,32 @@ ALTER TABLE public.projects ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY
 
 
 --
+-- Name: rate_limited_events; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.rate_limited_events (
+    event_class text NOT NULL,
+    rate_limit_key jsonb NOT NULL,
+    next_time timestamp with time zone NOT NULL,
+    pending_event jsonb
+);
+
+
+--
+-- Name: TABLE rate_limited_events; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.rate_limited_events IS 'Tracks events such as notifications that should have a minimum interval between instances.';
+
+
+--
+-- Name: COLUMN rate_limited_events.event_class; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.rate_limited_events.event_class IS 'Fully-qualified class name of the event whose rate limit is being tracked.';
+
+
+--
 -- Name: regions; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3655,62 +5679,10 @@ COMMENT ON TABLE public.regions IS '(Enum) Parts of the world where countries ar
 
 
 --
--- Name: report_files; Type: TABLE; Schema: public; Owner: -
+-- Name: seed_fund_reports; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.report_files (
-    file_id bigint NOT NULL,
-    report_id bigint NOT NULL
-);
-
-
---
--- Name: TABLE report_files; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.report_files IS 'Linking table between `reports` and `files` for non-photo files.';
-
-
---
--- Name: report_photos; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.report_photos (
-    report_id bigint NOT NULL,
-    file_id bigint NOT NULL,
-    caption text
-);
-
-
---
--- Name: TABLE report_photos; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.report_photos IS 'Linking table between `reports` and `files` for photos.';
-
-
---
--- Name: report_statuses; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.report_statuses (
-    id integer NOT NULL,
-    name text NOT NULL
-);
-
-
---
--- Name: TABLE report_statuses; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.report_statuses IS '(Enum) Describes where in the workflow each partner report is.';
-
-
---
--- Name: reports; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.reports (
+CREATE TABLE public.seed_fund_reports (
     id bigint NOT NULL,
     organization_id bigint NOT NULL,
     year integer NOT NULL,
@@ -3735,31 +5707,31 @@ CREATE TABLE public.reports (
 
 
 --
--- Name: TABLE reports; Type: COMMENT; Schema: public; Owner: -
+-- Name: TABLE seed_fund_reports; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.reports IS 'Partner-submitted reports about their organizations and projects.';
-
-
---
--- Name: COLUMN reports.project_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.reports.project_id IS 'If this report is for a specific project and the project still exists, the project ID. If the project has been deleted, this will be null but `project_name` will still be populated.';
+COMMENT ON TABLE public.seed_fund_reports IS 'Partner-submitted reports about their organizations and projects.';
 
 
 --
--- Name: COLUMN reports.project_name; Type: COMMENT; Schema: public; Owner: -
+-- Name: COLUMN seed_fund_reports.project_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.reports.project_name IS 'If this report is for a specific project, the name of the project as of the time the report was submitted.';
+COMMENT ON COLUMN public.seed_fund_reports.project_id IS 'If this report is for a specific project and the project still exists, the project ID. If the project has been deleted, this will be null but `project_name` will still be populated.';
+
+
+--
+-- Name: COLUMN seed_fund_reports.project_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.seed_fund_reports.project_name IS 'If this report is for a specific project, the name of the project as of the time the report was submitted.';
 
 
 --
 -- Name: reports_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-ALTER TABLE public.reports ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+ALTER TABLE public.seed_fund_reports ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
     SEQUENCE NAME public.reports_id_seq
     START WITH 1
     INCREMENT BY 1
@@ -3784,6 +5756,58 @@ CREATE TABLE public.roles (
 --
 
 COMMENT ON TABLE public.roles IS '(Enum) Roles a user is allowed to have in an organization.';
+
+
+--
+-- Name: seed_fund_report_files; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.seed_fund_report_files (
+    file_id bigint NOT NULL,
+    report_id bigint NOT NULL
+);
+
+
+--
+-- Name: TABLE seed_fund_report_files; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.seed_fund_report_files IS 'Linking table between `reports` and `files` for non-photo files.';
+
+
+--
+-- Name: seed_fund_report_photos; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.seed_fund_report_photos (
+    report_id bigint NOT NULL,
+    file_id bigint NOT NULL,
+    caption text
+);
+
+
+--
+-- Name: TABLE seed_fund_report_photos; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.seed_fund_report_photos IS 'Linking table between `reports` and `files` for photos.';
+
+
+--
+-- Name: seed_fund_report_statuses; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.seed_fund_report_statuses (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE seed_fund_report_statuses; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.seed_fund_report_statuses IS '(Enum) Describes where in the workflow each partner report is.';
 
 
 --
@@ -4235,6 +6259,7 @@ CREATE TABLE public.timeseries (
     modified_time timestamp with time zone DEFAULT now() NOT NULL,
     created_by bigint NOT NULL,
     modified_by bigint NOT NULL,
+    retention_days integer,
     CONSTRAINT timeseries_decimal_places_check CHECK ((decimal_places >= 0)),
     CONSTRAINT timeseries_units_check CHECK ((units !~ similar_to_escape(' *'::text)))
 );
@@ -4259,6 +6284,13 @@ COMMENT ON COLUMN public.timeseries.units IS 'For numeric timeseries, the units 
 --
 
 COMMENT ON COLUMN public.timeseries.decimal_places IS 'For numeric timeseries, the number of digits after the decimal point to display.';
+
+
+--
+-- Name: COLUMN timeseries.retention_days; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.timeseries.retention_days IS 'If non-null, only retain values for this many days. If null, do not expire old timeseries values.';
 
 
 --
@@ -4579,6 +6611,25 @@ ALTER TABLE public.users ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
     NO MAXVALUE
     CACHE 1
 );
+
+
+--
+-- Name: vector_store; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.vector_store (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    content text,
+    metadata jsonb,
+    embedding public.halfvec(3072) NOT NULL
+);
+
+
+--
+-- Name: TABLE vector_store; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.vector_store IS 'Content snippets and embeddings for use as context in Ask Terraware LLM prompts. This table is used by the Spring AI vector store library, and its structure needs to match what the library expects.';
 
 
 --
@@ -5243,6 +7294,23 @@ ALTER TABLE seedbank.withdrawal_purposes ALTER COLUMN id ADD GENERATED BY DEFAUL
 
 
 --
+-- Name: biomass_forest_types; Type: TABLE; Schema: tracking; Owner: -
+--
+
+CREATE TABLE tracking.biomass_forest_types (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE biomass_forest_types; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON TABLE tracking.biomass_forest_types IS '(Enum) Types for forest in a biomass observation.';
+
+
+--
 -- Name: deliveries_id_seq; Type: SEQUENCE; Schema: tracking; Owner: -
 --
 
@@ -5320,24 +7388,125 @@ ALTER TABLE tracking.draft_planting_sites ALTER COLUMN id ADD GENERATED BY DEFAU
 
 
 --
+-- Name: mangrove_tides; Type: TABLE; Schema: tracking; Owner: -
+--
+
+CREATE TABLE tracking.mangrove_tides (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE mangrove_tides; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON TABLE tracking.mangrove_tides IS '(Enum) High/Low tide at a mangrove during an observation.';
+
+
+--
+-- Name: monitoring_plot_histories; Type: TABLE; Schema: tracking; Owner: -
+--
+
+CREATE TABLE tracking.monitoring_plot_histories (
+    id bigint NOT NULL,
+    monitoring_plot_id bigint NOT NULL,
+    planting_subzone_id bigint,
+    planting_site_id bigint NOT NULL,
+    planting_subzone_history_id bigint,
+    planting_site_history_id bigint NOT NULL,
+    created_by bigint NOT NULL,
+    created_time timestamp with time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE monitoring_plot_histories; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON TABLE tracking.monitoring_plot_histories IS 'Versions of monitoring plots over time. Each time a planting site changes, its monitoring plots are added to this table.';
+
+
+--
+-- Name: COLUMN monitoring_plot_histories.created_by; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.monitoring_plot_histories.created_by IS 'Which user created or edited the monitoring plot or its planting site.';
+
+
+--
+-- Name: COLUMN monitoring_plot_histories.created_time; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.monitoring_plot_histories.created_time IS 'When the monitoring plot was created, edited, or associated with a new planting site history record. May differ from the time when the subzone or planting site was created or edited since plots can be created when observations start.';
+
+
+--
+-- Name: monitoring_plot_histories_id_seq; Type: SEQUENCE; Schema: tracking; Owner: -
+--
+
+ALTER TABLE tracking.monitoring_plot_histories ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME tracking.monitoring_plot_histories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: monitoring_plot_overlaps; Type: TABLE; Schema: tracking; Owner: -
+--
+
+CREATE TABLE tracking.monitoring_plot_overlaps (
+    monitoring_plot_id bigint NOT NULL,
+    overlaps_plot_id bigint NOT NULL,
+    CONSTRAINT newer_overlaps_older CHECK ((overlaps_plot_id < monitoring_plot_id))
+);
+
+
+--
+-- Name: TABLE monitoring_plot_overlaps; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON TABLE tracking.monitoring_plot_overlaps IS 'Which monitoring plots overlap with previously-used monitoring plots. A plot may overlap with multiple older or newer plots.';
+
+
+--
+-- Name: COLUMN monitoring_plot_overlaps.monitoring_plot_id; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.monitoring_plot_overlaps.monitoring_plot_id IS 'ID of the newer monitoring plot.';
+
+
+--
+-- Name: COLUMN monitoring_plot_overlaps.overlaps_plot_id; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.monitoring_plot_overlaps.overlaps_plot_id IS 'ID of the older monitoring plot.';
+
+
+--
 -- Name: monitoring_plots; Type: TABLE; Schema: tracking; Owner: -
 --
 
 CREATE TABLE tracking.monitoring_plots (
     id bigint NOT NULL,
-    planting_subzone_id bigint NOT NULL,
-    name text NOT NULL COLLATE public.natural_numeric,
-    full_name text NOT NULL COLLATE public.natural_numeric,
+    planting_subzone_id bigint,
     created_by bigint NOT NULL,
     created_time timestamp with time zone NOT NULL,
     modified_by bigint NOT NULL,
     modified_time timestamp with time zone NOT NULL,
     boundary public.geometry(Polygon) NOT NULL,
-    permanent_cluster integer,
-    permanent_cluster_subplot integer,
+    permanent_index integer,
     is_available boolean DEFAULT true NOT NULL,
-    CONSTRAINT cluster_has_subplot CHECK ((((permanent_cluster IS NOT NULL) AND (permanent_cluster_subplot IS NOT NULL)) OR ((permanent_cluster IS NULL) AND (permanent_cluster_subplot IS NULL)))),
-    CONSTRAINT subplot_is_valid CHECK (((permanent_cluster_subplot >= 1) AND (permanent_cluster_subplot <= 4)))
+    size_meters integer NOT NULL,
+    planting_site_id bigint NOT NULL,
+    is_ad_hoc boolean NOT NULL,
+    organization_id bigint NOT NULL,
+    plot_number bigint NOT NULL,
+    elevation_meters numeric
 );
 
 
@@ -5352,7 +7521,7 @@ COMMENT ON TABLE tracking.monitoring_plots IS 'Regions within planting subzones 
 -- Name: COLUMN monitoring_plots.planting_subzone_id; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.monitoring_plots.planting_subzone_id IS 'Which planting subzone this monitoring plot is part of.';
+COMMENT ON COLUMN tracking.monitoring_plots.planting_subzone_id IS 'Which planting subzone this monitoring plot is currently part of, if any. May be null if the subzone was edited or removed after the plot was created, or if the plot was created outside the site boundary.';
 
 
 --
@@ -5391,17 +7560,24 @@ COMMENT ON COLUMN tracking.monitoring_plots.boundary IS 'Boundary of the monitor
 
 
 --
--- Name: COLUMN monitoring_plots.permanent_cluster; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: COLUMN monitoring_plots.permanent_index; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.monitoring_plots.permanent_cluster IS 'If this plot is a candidate to be a permanent monitoring plot, its position in the randomized list of plots for the planting zone. Starts at 1 for each planting zone. There are always 4 plots with a given sequence number in a given zone. If null, this plot is not part of a 4-plot cluster but may still be chosen as a temporary monitoring plot.';
+COMMENT ON COLUMN tracking.monitoring_plots.permanent_index IS 'If this plot is a candidate to be a permanent monitoring plot, its position in the randomized list of plots for the planting zone. Starts at 1 for each planting zone. If null, this plot is not currently a candidate for selection as a permanent plot but may still be chosen as a temporary plot.';
 
 
 --
--- Name: COLUMN monitoring_plots.permanent_cluster_subplot; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: COLUMN monitoring_plots.size_meters; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.monitoring_plots.permanent_cluster_subplot IS 'If this plot is a candidate to be a permanent monitoring plot, its ordinal position from 1 to 4 in the 4-plot cluster. 1=southwest, 2=southeast, 3=northeast, 4=northwest.';
+COMMENT ON COLUMN tracking.monitoring_plots.size_meters IS 'Length in meters of one side of the monitoring plot. Plots are always squares, so for a 30x30m plot, this would be 30.';
+
+
+--
+-- Name: COLUMN monitoring_plots.plot_number; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.monitoring_plots.plot_number IS 'User-visible identifier of this plot. Plot numbers are sequential and start at 1 for each organization.';
 
 
 --
@@ -5436,6 +7612,192 @@ COMMENT ON TABLE tracking.observable_conditions IS '(Enum) Conditions that can b
 
 
 --
+-- Name: observation_biomass_details; Type: TABLE; Schema: tracking; Owner: -
+--
+
+CREATE TABLE tracking.observation_biomass_details (
+    observation_id bigint NOT NULL,
+    monitoring_plot_id bigint NOT NULL,
+    description character varying(50),
+    forest_type_id integer NOT NULL,
+    small_trees_count_low integer NOT NULL,
+    small_trees_count_high integer NOT NULL,
+    herbaceous_cover_percent integer NOT NULL,
+    soil_assessment text NOT NULL,
+    water_depth_cm integer,
+    salinity_ppt numeric,
+    ph numeric,
+    tide_id integer,
+    tide_time timestamp with time zone,
+    CONSTRAINT mangrove_required_values CHECK ((((forest_type_id = 1) AND (water_depth_cm IS NULL) AND (salinity_ppt IS NULL) AND (ph IS NULL) AND (tide_id IS NULL) AND (tide_time IS NULL)) OR ((forest_type_id = 2) AND (water_depth_cm IS NOT NULL) AND (salinity_ppt IS NOT NULL) AND (ph IS NOT NULL) AND (tide_id IS NOT NULL) AND (tide_time IS NOT NULL)))),
+    CONSTRAINT observation_biomass_details_check CHECK ((small_trees_count_low <= small_trees_count_high)),
+    CONSTRAINT observation_biomass_details_herbaceous_cover_percent_check CHECK ((((herbaceous_cover_percent)::numeric >= (0)::numeric) AND ((herbaceous_cover_percent)::numeric <= (100)::numeric))),
+    CONSTRAINT observation_biomass_details_ph_check CHECK (((ph >= (0)::numeric) AND (ph <= (14)::numeric))),
+    CONSTRAINT observation_biomass_details_salinity_ppt_check CHECK ((salinity_ppt >= (0)::numeric)),
+    CONSTRAINT observation_biomass_details_small_trees_count_low_check CHECK ((small_trees_count_low >= 0)),
+    CONSTRAINT observation_biomass_details_water_depth_cm_check CHECK (((water_depth_cm)::numeric >= (0)::numeric))
+);
+
+
+--
+-- Name: TABLE observation_biomass_details; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON TABLE tracking.observation_biomass_details IS 'Recorded data for a biomass observation.';
+
+
+--
+-- Name: COLUMN observation_biomass_details.water_depth_cm; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.observation_biomass_details.water_depth_cm IS 'Depth of water in centimeters (cm). Must be non-null if forest type is "Mangrove".';
+
+
+--
+-- Name: COLUMN observation_biomass_details.salinity_ppt; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.observation_biomass_details.salinity_ppt IS 'Salinity of water in parts per thousand (ppt). Must be non-null if forest type is "Mangrove".';
+
+
+--
+-- Name: COLUMN observation_biomass_details.ph; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.observation_biomass_details.ph IS 'Acidity of water in pH. Must only exists if forest type is "Mangrove".';
+
+
+--
+-- Name: COLUMN observation_biomass_details.tide_id; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.observation_biomass_details.tide_id IS 'High/low tide during observation. Must be non-null if forest type is "Mangrove".';
+
+
+--
+-- Name: COLUMN observation_biomass_details.tide_time; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.observation_biomass_details.tide_time IS 'Time when the tide is recorded. Must be non-null if forest type is "Mangrove".';
+
+
+--
+-- Name: observation_biomass_quadrat_details; Type: TABLE; Schema: tracking; Owner: -
+--
+
+CREATE TABLE tracking.observation_biomass_quadrat_details (
+    observation_id bigint NOT NULL,
+    monitoring_plot_id bigint NOT NULL,
+    position_id integer NOT NULL,
+    description text
+);
+
+
+--
+-- Name: TABLE observation_biomass_quadrat_details; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON TABLE tracking.observation_biomass_quadrat_details IS 'Details of a biomass observation at each quadrat of a monitoring plot.';
+
+
+--
+-- Name: observation_biomass_quadrat_species; Type: TABLE; Schema: tracking; Owner: -
+--
+
+CREATE TABLE tracking.observation_biomass_quadrat_species (
+    observation_id bigint NOT NULL,
+    monitoring_plot_id bigint NOT NULL,
+    position_id integer NOT NULL,
+    biomass_species_id bigint NOT NULL,
+    abundance_percent integer NOT NULL,
+    CONSTRAINT observation_biomass_quadrat_species_abundance_percent_check CHECK (((abundance_percent >= 0) AND (abundance_percent <= 100)))
+);
+
+
+--
+-- Name: TABLE observation_biomass_quadrat_species; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON TABLE tracking.observation_biomass_quadrat_species IS 'Herbaceous species at each quadrat of a monitoring plot of a biomass observation';
+
+
+--
+-- Name: observation_biomass_species; Type: TABLE; Schema: tracking; Owner: -
+--
+
+CREATE TABLE tracking.observation_biomass_species (
+    id bigint NOT NULL,
+    observation_id bigint NOT NULL,
+    monitoring_plot_id bigint NOT NULL,
+    species_id bigint,
+    scientific_name text,
+    common_name text,
+    is_invasive boolean NOT NULL,
+    is_threatened boolean NOT NULL,
+    CONSTRAINT species_identifier CHECK ((((species_id IS NOT NULL) AND (scientific_name IS NULL)) OR ((species_id IS NULL) AND (scientific_name IS NOT NULL))))
+);
+
+
+--
+-- Name: TABLE observation_biomass_species; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON TABLE tracking.observation_biomass_species IS 'Herbaceous and tree species data for a biomass observation.';
+
+
+--
+-- Name: COLUMN observation_biomass_species.species_id; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.observation_biomass_species.species_id IS 'The ID of the plant''s species, if known.';
+
+
+--
+-- Name: COLUMN observation_biomass_species.scientific_name; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.observation_biomass_species.scientific_name IS 'The user-supplied scientific name of the plant''s species. Must be provided if ID is null. Null if ID is known.';
+
+
+--
+-- Name: COLUMN observation_biomass_species.common_name; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.observation_biomass_species.common_name IS 'The user-supplied common name of the plant''s species. Null if ID is known.';
+
+
+--
+-- Name: observation_biomass_species_id_seq; Type: SEQUENCE; Schema: tracking; Owner: -
+--
+
+ALTER TABLE tracking.observation_biomass_species ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME tracking.observation_biomass_species_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: observation_photo_types; Type: TABLE; Schema: tracking; Owner: -
+--
+
+CREATE TABLE tracking.observation_photo_types (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE observation_photo_types; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON TABLE tracking.observation_photo_types IS '(Enum) Types of observation plot photo.';
+
+
+--
 -- Name: observation_photos; Type: TABLE; Schema: tracking; Owner: -
 --
 
@@ -5443,8 +7805,9 @@ CREATE TABLE tracking.observation_photos (
     file_id bigint NOT NULL,
     observation_id bigint NOT NULL,
     monitoring_plot_id bigint NOT NULL,
-    position_id integer NOT NULL,
-    gps_coordinates public.geometry(Point)
+    position_id integer,
+    gps_coordinates public.geometry(Point),
+    type_id integer NOT NULL
 );
 
 
@@ -5491,6 +7854,23 @@ COMMENT ON TABLE tracking.observation_plot_positions IS '(Enum) Positions in a m
 
 
 --
+-- Name: observation_plot_statuses; Type: TABLE; Schema: tracking; Owner: -
+--
+
+CREATE TABLE tracking.observation_plot_statuses (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE observation_plot_statuses; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON TABLE tracking.observation_plot_statuses IS '(Enum) The status of an observation plot.';
+
+
+--
 -- Name: observation_plots; Type: TABLE; Schema: tracking; Owner: -
 --
 
@@ -5508,6 +7888,8 @@ CREATE TABLE tracking.observation_plots (
     modified_time timestamp with time zone,
     observed_time timestamp with time zone,
     notes text,
+    status_id integer NOT NULL,
+    monitoring_plot_history_id bigint NOT NULL,
     CONSTRAINT cannot_unclaim_completed_plot CHECK (((completed_by IS NULL) OR ((completed_by IS NOT NULL) AND (claimed_by IS NOT NULL))))
 );
 
@@ -5530,7 +7912,7 @@ COMMENT ON COLUMN tracking.observation_plots.completed_time IS 'Server-generated
 -- Name: COLUMN observation_plots.is_permanent; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.observation_plots.is_permanent IS 'If true, this plot was selected for observation as part of a permanent monitoring plot cluster. If false, this plot was selected as a temporary monitoring plot.';
+COMMENT ON COLUMN tracking.observation_plots.is_permanent IS 'If true, this plot was selected for observation as a permanent monitoring plot. If false, this plot was selected as a temporary monitoring plot.';
 
 
 --
@@ -5538,6 +7920,23 @@ COMMENT ON COLUMN tracking.observation_plots.is_permanent IS 'If true, this plot
 --
 
 COMMENT ON COLUMN tracking.observation_plots.observed_time IS 'Client-supplied observation date and time. This is the time the observation was performed in the field, not the time it was submitted to the server.';
+
+
+--
+-- Name: observation_requested_subzones; Type: TABLE; Schema: tracking; Owner: -
+--
+
+CREATE TABLE tracking.observation_requested_subzones (
+    observation_id bigint NOT NULL,
+    planting_subzone_id bigint NOT NULL
+);
+
+
+--
+-- Name: TABLE observation_requested_subzones; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON TABLE tracking.observation_requested_subzones IS 'If an observation should only cover a specific set of subzones, the subzone IDs are stored here. If an observation is of the entire site (the default), there will be no rows for that observation in this table.';
 
 
 --
@@ -5558,6 +7957,23 @@ COMMENT ON TABLE tracking.observation_states IS '(Enum) Where in the observation
 
 
 --
+-- Name: observation_types; Type: TABLE; Schema: tracking; Owner: -
+--
+
+CREATE TABLE tracking.observation_types (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE observation_types; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON TABLE tracking.observation_types IS '(Enum) Type of observation, currently only used for ad hoc observations.';
+
+
+--
 -- Name: observations; Type: TABLE; Schema: tracking; Owner: -
 --
 
@@ -5570,8 +7986,12 @@ CREATE TABLE tracking.observations (
     completed_time timestamp with time zone,
     state_id integer NOT NULL,
     upcoming_notification_sent_time timestamp with time zone,
-    CONSTRAINT completed_time_and_state CHECK ((((completed_time IS NULL) AND (state_id <> 3)) OR ((completed_time IS NOT NULL) AND (state_id = 3)))),
-    CONSTRAINT end_after_start CHECK ((start_date <= end_date))
+    planting_site_history_id bigint,
+    observation_type_id integer NOT NULL,
+    is_ad_hoc boolean NOT NULL,
+    CONSTRAINT completed_time_and_state CHECK ((((completed_time IS NULL) AND (state_id <> ALL (ARRAY[3, 5]))) OR ((completed_time IS NOT NULL) AND (state_id = ANY (ARRAY[3, 5]))))),
+    CONSTRAINT end_after_start CHECK ((start_date <= end_date)),
+    CONSTRAINT history_id_required_at_start CHECK ((((state_id = 1) AND (planting_site_history_id IS NULL)) OR ((state_id <> 1) AND (planting_site_history_id IS NOT NULL))))
 );
 
 
@@ -5608,6 +8028,13 @@ COMMENT ON COLUMN tracking.observations.completed_time IS 'Server-generated date
 --
 
 COMMENT ON COLUMN tracking.observations.upcoming_notification_sent_time IS 'When the notification that the observation is starting in 1 month was sent. Null if the notification has not been sent yet.';
+
+
+--
+-- Name: COLUMN observations.planting_site_history_id; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.observations.planting_site_history_id IS 'Which version of the planting site map was used for the observation. Null for upcoming observations since monitoring plots are only placed on the map when an observation starts.';
 
 
 --
@@ -5755,6 +8182,54 @@ COMMENT ON COLUMN tracking.observed_site_species_totals.permanent_live IS 'The n
 
 
 --
+-- Name: observed_subzone_species_totals; Type: TABLE; Schema: tracking; Owner: -
+--
+
+CREATE TABLE tracking.observed_subzone_species_totals (
+    observation_id bigint NOT NULL,
+    planting_subzone_id bigint NOT NULL,
+    species_id bigint,
+    species_name text,
+    certainty_id integer NOT NULL,
+    total_live integer DEFAULT 0 NOT NULL,
+    total_dead integer DEFAULT 0 NOT NULL,
+    total_existing integer DEFAULT 0 NOT NULL,
+    mortality_rate integer,
+    cumulative_dead integer DEFAULT 0 NOT NULL,
+    permanent_live integer DEFAULT 0 NOT NULL,
+    CONSTRAINT species_identifier_for_certainty CHECK ((((certainty_id = 1) AND (species_id IS NOT NULL) AND (species_name IS NULL)) OR ((certainty_id = 2) AND (species_id IS NULL) AND (species_name IS NOT NULL)) OR ((certainty_id = 3) AND (species_id IS NULL) AND (species_name IS NULL))))
+);
+
+
+--
+-- Name: TABLE observed_subzone_species_totals; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON TABLE tracking.observed_subzone_species_totals IS 'Aggregated per-planting-subzone, per-species totals of plants recorded during observations.';
+
+
+--
+-- Name: COLUMN observed_subzone_species_totals.mortality_rate; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.observed_subzone_species_totals.mortality_rate IS 'Percentage of plants of the species observed in permanent monitoring plots in the planting subzone, in either the current observation or in previous ones, that were dead.';
+
+
+--
+-- Name: COLUMN observed_subzone_species_totals.cumulative_dead; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.observed_subzone_species_totals.cumulative_dead IS 'Total number of dead plants of the species observed, both in this observation and in all previous ones, in plots in this subzone that are included as permanent plots in this observation.';
+
+
+--
+-- Name: COLUMN observed_subzone_species_totals.permanent_live; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.observed_subzone_species_totals.permanent_live IS 'The number of live and existing plants observed in permanent monitoring plots.';
+
+
+--
 -- Name: observed_zone_species_totals; Type: TABLE; Schema: tracking; Owner: -
 --
 
@@ -5886,7 +8361,8 @@ CREATE TABLE tracking.planting_site_histories (
     created_time timestamp with time zone NOT NULL,
     boundary public.geometry(MultiPolygon) NOT NULL,
     grid_origin public.geometry(Point),
-    exclusion public.geometry(MultiPolygon)
+    exclusion public.geometry(MultiPolygon),
+    area_ha numeric
 );
 
 
@@ -5994,13 +8470,15 @@ CREATE TABLE tracking.planting_zones (
     variance numeric NOT NULL,
     students_t numeric NOT NULL,
     error_margin numeric NOT NULL,
-    num_permanent_clusters integer NOT NULL,
+    num_permanent_plots integer NOT NULL,
     num_temporary_plots integer NOT NULL,
     area_ha numeric NOT NULL,
     target_planting_density numeric DEFAULT 1500 NOT NULL,
-    extra_permanent_clusters integer DEFAULT 0 NOT NULL,
+    boundary_modified_by bigint NOT NULL,
+    boundary_modified_time timestamp with time zone NOT NULL,
+    stable_id text NOT NULL,
     CONSTRAINT area_positive CHECK ((area_ha > (0)::numeric)),
-    CONSTRAINT must_have_permanent_clusters CHECK ((num_permanent_clusters > 0)),
+    CONSTRAINT must_have_permanent_clusters CHECK ((num_permanent_plots > 0)),
     CONSTRAINT must_have_temporary_plots CHECK ((num_temporary_plots > 0)),
     CONSTRAINT positive_target_density CHECK ((target_planting_density > (0)::numeric))
 );
@@ -6063,17 +8541,31 @@ COMMENT ON COLUMN tracking.planting_zones.modified_time IS 'When the planting zo
 
 
 --
--- Name: COLUMN planting_zones.num_permanent_clusters; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: COLUMN planting_zones.num_permanent_plots; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.planting_zones.num_permanent_clusters IS 'Number of permanent clusters to assign to the next observation. This is typically derived from a statistical formula and from `extra_permanent_clusters`.';
+COMMENT ON COLUMN tracking.planting_zones.num_permanent_plots IS 'Number of permanent plots to assign to the next observation. This is typically derived from a statistical formula.';
 
 
 --
--- Name: COLUMN planting_zones.extra_permanent_clusters; Type: COMMENT; Schema: tracking; Owner: -
+-- Name: COLUMN planting_zones.boundary_modified_by; Type: COMMENT; Schema: tracking; Owner: -
 --
 
-COMMENT ON COLUMN tracking.planting_zones.extra_permanent_clusters IS 'Number of clusters to add to observation in addition to the number that is derived from the statistical formula. Typically this is due to additional area being added to a zone after initial creation. This is included in the value of `num_permanent_clusters`, that is, it is an input to the calculation of that column''s value.';
+COMMENT ON COLUMN tracking.planting_zones.boundary_modified_by IS 'Which user most recently edited the planting zone''s boundary.';
+
+
+--
+-- Name: COLUMN planting_zones.boundary_modified_time; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.planting_zones.boundary_modified_time IS 'When the planting zone''s boundary was most recently modified.';
+
+
+--
+-- Name: COLUMN planting_zones.stable_id; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.planting_zones.stable_id IS 'Zone identifier that doesn''t change even if the zone is renamed or edited. Defaults to the zone name.';
 
 
 --
@@ -6081,15 +8573,15 @@ COMMENT ON COLUMN tracking.planting_zones.extra_permanent_clusters IS 'Number of
 --
 
 CREATE VIEW tracking.planting_site_summaries AS
- SELECT ps.id,
-    ps.organization_id,
-    ps.name,
-    ps.description,
-    ps.boundary,
-    ps.created_by,
-    ps.created_time,
-    ps.modified_by,
-    ps.modified_time,
+ SELECT id,
+    organization_id,
+    name,
+    description,
+    boundary,
+    created_by,
+    created_time,
+    modified_by,
+    modified_time,
     ( SELECT count(*) AS count
            FROM tracking.planting_zones pz
           WHERE (ps.id = pz.planting_site_id)) AS num_planting_zones,
@@ -6097,9 +8589,10 @@ CREATE VIEW tracking.planting_site_summaries AS
            FROM (tracking.planting_zones pz
              JOIN tracking.planting_subzones sz ON ((pz.id = sz.planting_zone_id)))
           WHERE (ps.id = pz.planting_site_id)) AS num_planting_subzones,
-    ps.time_zone,
-    ps.project_id,
-    ps.exclusion
+    time_zone,
+    project_id,
+    exclusion,
+    country_code
    FROM tracking.planting_sites ps;
 
 
@@ -6127,7 +8620,9 @@ CREATE TABLE tracking.planting_subzone_histories (
     planting_subzone_id bigint,
     name text NOT NULL,
     full_name text NOT NULL,
-    boundary public.geometry(MultiPolygon) NOT NULL
+    boundary public.geometry(MultiPolygon) NOT NULL,
+    area_ha numeric,
+    stable_id text NOT NULL
 );
 
 
@@ -6197,7 +8692,9 @@ CREATE TABLE tracking.planting_zone_histories (
     planting_site_history_id bigint NOT NULL,
     planting_zone_id bigint,
     name text NOT NULL,
-    boundary public.geometry(MultiPolygon) NOT NULL
+    boundary public.geometry(MultiPolygon) NOT NULL,
+    area_ha numeric,
+    stable_id text NOT NULL
 );
 
 
@@ -6370,6 +8867,139 @@ COMMENT ON TABLE tracking.recorded_species_certainties IS '(Enum) Levels of cert
 
 
 --
+-- Name: recorded_trees; Type: TABLE; Schema: tracking; Owner: -
+--
+
+CREATE TABLE tracking.recorded_trees (
+    id bigint NOT NULL,
+    observation_id bigint NOT NULL,
+    monitoring_plot_id bigint NOT NULL,
+    biomass_species_id bigint NOT NULL,
+    tree_number integer NOT NULL,
+    trunk_number integer NOT NULL,
+    tree_growth_form_id integer NOT NULL,
+    is_dead boolean NOT NULL,
+    diameter_at_breast_height_cm numeric,
+    point_of_measurement_m numeric,
+    height_m numeric,
+    shrub_diameter_cm integer,
+    description text,
+    CONSTRAINT growth_form_specific_data CHECK ((((tree_growth_form_id = 1) AND (diameter_at_breast_height_cm IS NOT NULL) AND (point_of_measurement_m IS NOT NULL) AND (shrub_diameter_cm IS NULL) AND (trunk_number = 1)) OR ((tree_growth_form_id = 2) AND (diameter_at_breast_height_cm IS NULL) AND (point_of_measurement_m IS NULL) AND (height_m IS NULL) AND (shrub_diameter_cm IS NOT NULL) AND (trunk_number = 1)) OR ((tree_growth_form_id = 3) AND (diameter_at_breast_height_cm IS NOT NULL) AND (point_of_measurement_m IS NOT NULL) AND (shrub_diameter_cm IS NULL)))),
+    CONSTRAINT recorded_trees_diameter_at_breast_height_cm_check CHECK ((diameter_at_breast_height_cm >= (0)::numeric)),
+    CONSTRAINT recorded_trees_height_m_check CHECK ((height_m >= (0)::numeric)),
+    CONSTRAINT recorded_trees_point_of_measurement_m_check CHECK ((point_of_measurement_m >= (0)::numeric)),
+    CONSTRAINT recorded_trees_shrub_diameter_cm_check CHECK ((shrub_diameter_cm >= 0)),
+    CONSTRAINT recorded_trees_tree_number_check CHECK ((tree_number >= 1)),
+    CONSTRAINT recorded_trees_trunk_number_check CHECK ((trunk_number >= 1))
+);
+
+
+--
+-- Name: TABLE recorded_trees; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON TABLE tracking.recorded_trees IS 'Recorded trees or shrubs of a biomass observation.';
+
+
+--
+-- Name: COLUMN recorded_trees.tree_number; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON COLUMN tracking.recorded_trees.tree_number IS 'A unique incremental number starting at 1 for accounting trunks at a biomass observation. Defaults to 1 for Trees/Shrubs.';
+
+
+--
+-- Name: recorded_trees_id_seq; Type: SEQUENCE; Schema: tracking; Owner: -
+--
+
+ALTER TABLE tracking.recorded_trees ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME tracking.recorded_trees_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: tree_growth_forms; Type: TABLE; Schema: tracking; Owner: -
+--
+
+CREATE TABLE tracking.tree_growth_forms (
+    id integer NOT NULL,
+    name text NOT NULL
+);
+
+
+--
+-- Name: TABLE tree_growth_forms; Type: COMMENT; Schema: tracking; Owner: -
+--
+
+COMMENT ON TABLE tracking.tree_growth_forms IS '(Enum) Growth form of each species in a biomass observation.';
+
+
+--
+-- Data for Name: application_histories; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.application_histories (id, application_id, modified_by, modified_time, application_status_id, boundary, internal_comment, feedback) FROM stdin;
+1	1	1	2025-05-13 17:29:18.971757+00	1	\N	\N	\N
+2	1	1	2025-05-13 17:29:45.616878+00	1	0106000020E61000000100000001030000000100000005000000A6057AC8805852C080660827C259FF3F077D6C0D655852C04046D0476297FD3F9A5B3F54D64F52C080C21C33D99AFD3FE09FE036144F52C000E7A7B2E64BFF3FA6057AC8805852C080660827C259FF3F	\N	\N
+3	1	1	2025-05-13 17:30:23.755655+00	3	0106000020E61000000100000001030000000100000005000000A6057AC8805852C080660827C259FF3F077D6C0D655852C04046D0476297FD3F9A5B3F54D64F52C080C21C33D99AFD3FE09FE036144F52C000E7A7B2E64BFF3FA6057AC8805852C080660827C259FF3F	\N	\N
+\.
+
+
+--
+-- Data for Name: application_module_statuses; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.application_module_statuses (id, name) FROM stdin;
+1	Incomplete
+2	Complete
+\.
+
+
+--
+-- Data for Name: application_modules; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.application_modules (application_id, module_id, application_module_status_id) FROM stdin;
+1	2	1
+\.
+
+
+--
+-- Data for Name: application_statuses; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.application_statuses (id, name) FROM stdin;
+1	Not Submitted
+2	Failed Pre-screen
+3	Passed Pre-screen
+4	Submitted
+5	Sourcing Team Review
+6	GIS Assessment
+7	Expert Review
+8	Carbon Assessment
+9	P0 Eligible
+10	Accepted
+11	Issue Active
+12	Issue Reassessment
+13	Not Eligible
+\.
+
+
+--
+-- Data for Name: applications; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.applications (id, project_id, internal_name, created_by, created_time, modified_by, modified_time, application_status_id, boundary, internal_comment, feedback, country_code) FROM stdin;
+1	1	COL_Terraformation (staging)	1	2025-05-13 17:29:18.971757+00	1	2025-05-13 17:30:23.755655+00	3	0106000020E61000000100000001030000000100000005000000A6057AC8805852C080660827C259FF3F077D6C0D655852C04046D0476297FD3F9A5B3F54D64F52C080C21C33D99AFD3FE09FE036144F52C000E7A7B2E64BFF3FA6057AC8805852C080660827C259FF3F	\N	\N	CO
+\.
+
+
+--
 -- Data for Name: cohort_modules; Type: TABLE DATA; Schema: accelerator; Owner: -
 --
 
@@ -6386,6 +9016,8 @@ COPY accelerator.cohort_phases (id, name) FROM stdin;
 1	Phase 1 - Feasibility Study
 2	Phase 2 - Plan and Scale
 3	Phase 3 - Implement and Monitor
+100	Pre-Screen
+101	Application
 \.
 
 
@@ -6422,6 +9054,14 @@ COPY accelerator.deal_stages (id, name, pipeline_id) FROM stdin;
 
 
 --
+-- Data for Name: default_project_leads; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.default_project_leads (region_id, project_lead) FROM stdin;
+\.
+
+
+--
 -- Data for Name: default_voters; Type: TABLE DATA; Schema: accelerator; Owner: -
 --
 
@@ -6433,15 +9073,15 @@ COPY accelerator.default_voters (user_id) FROM stdin;
 -- Data for Name: deliverable_categories; Type: TABLE DATA; Schema: accelerator; Owner: -
 --
 
-COPY accelerator.deliverable_categories (id, name) FROM stdin;
-1	Compliance
-2	Financial Viability
-3	GIS
-4	Carbon Eligibility
-5	Stakeholders and Community Impact
-6	Proposed Restoration Activities
-7	Verra Non-Permanence Risk Tool (NPRT)
-8	Supplemental Files
+COPY accelerator.deliverable_categories (id, name, internal_interest_id) FROM stdin;
+1	Compliance	1
+2	Financial Viability	2
+3	GIS	3
+4	Carbon Eligibility	4
+5	Stakeholders and Community Impact	5
+6	Proposed Restoration Activities	6
+7	Verra Non-Permanence Risk Tool (NPRT)	7
+8	Supplemental Files	8
 \.
 
 
@@ -6458,6 +9098,7 @@ COPY accelerator.deliverable_cohort_due_dates (deliverable_id, cohort_id, due_da
 --
 
 COPY accelerator.deliverable_documents (deliverable_id, deliverable_type_id, template_url) FROM stdin;
+68	1	\N
 \.
 
 
@@ -6476,6 +9117,39 @@ COPY accelerator.deliverable_project_due_dates (deliverable_id, project_id, due_
 COPY accelerator.deliverable_types (id, name) FROM stdin;
 1	Document
 2	Species
+3	Questions
+\.
+
+
+--
+-- Data for Name: deliverable_variables; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.deliverable_variables (deliverable_id, variable_id, "position") FROM stdin;
+102	1	0
+102	3	1
+102	4	2
+102	5	3
+102	7	4
+102	8	5
+102	9	6
+102	10	7
+102	11	8
+102	12	9
+102	13	10
+102	14	11
+102	15	12
+102	16	13
+102	17	14
+102	18	15
+102	19	16
+102	20	17
+102	21	18
+102	22	19
+102	23	20
+102	24	21
+102	25	22
+102	26	23
 \.
 
 
@@ -6484,6 +9158,8 @@ COPY accelerator.deliverable_types (id, name) FROM stdin;
 --
 
 COPY accelerator.deliverables (id, deliverable_category_id, deliverable_type_id, module_id, "position", created_by, created_time, modified_by, modified_time, name, description_html, is_sensitive, is_required) FROM stdin;
+68	3	1	2	2	1	2025-05-13 17:28:36.446224+00	1	2025-05-13 17:28:36.446224+00	Pre-screen Project Boundary	<p><strong>Where are these planting sites located?</strong></p>\n<p>Please upload a shapefile (including at least the .shp, .shx, and .dbf files) or a kml file of the boundaries of the project area. KML is a file format used to display geographic data in an Earth browser such as Google Earth. The shapefile should be reflective of the areas in which you&#39;d like to plant. The number of hectares given in the shapefile should match (or be reasonably close to) the number of hectares you state in the application. </p>\n<p>If you do not have a shapefile, you can either go back to the previous screen and draw your project boundaries or follow the instructions given in <a target="_blank" href="https://www.loom.com/share/ab4baf6a49704910987ea5f7e1e547a0?sid=7dd0b280-f673-4596-9e75-a9c97ad13661">this video</a> from our GIS team then upload the file here. To upload many files as one, please zip them, then upload the zipped file. </p>	f	t
+102	6	3	2	3	1	2025-05-13 17:28:36.446224+00	1	2025-05-13 17:28:36.446224+00	Pre-screen Questions	<p>Answer the following questions below and then click Save at the bottom of the screen at any time to save your progress. In order to complete the form, please provide answers for all required fields marked with an * . Once completed, you’ll be instructed to submit all requirements to see if you qualify for the Accelerator Program.</p>	f	t
 \.
 
 
@@ -6494,6 +9170,7 @@ COPY accelerator.deliverables (id, deliverable_category_id, deliverable_type_id,
 COPY accelerator.document_stores (id, name) FROM stdin;
 1	Dropbox
 2	Google
+3	External
 \.
 
 
@@ -6525,6 +9202,7 @@ COPY accelerator.event_types (id, name) FROM stdin;
 1	One-on-One Session
 2	Workshop
 3	Live Session
+4	Recorded Session
 \.
 
 
@@ -6537,10 +9215,60 @@ COPY accelerator.events (id, module_id, event_type_id, meeting_url, slides_url, 
 
 
 --
+-- Data for Name: hubspot_token; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.hubspot_token (refresh_token) FROM stdin;
+\.
+
+
+--
+-- Data for Name: internal_interests; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.internal_interests (id, name) FROM stdin;
+1	Compliance
+2	Financial Viability
+3	GIS
+4	Carbon Eligibility
+5	Stakeholders and Community Impact
+6	Proposed Restoration Activities
+7	Verra Non-Permanence Risk Tool (NPRT)
+8	Supplemental Files
+101	Sourcing
+\.
+
+
+--
+-- Data for Name: metric_components; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.metric_components (id, name) FROM stdin;
+1	Project Objectives
+2	Climate
+3	Community
+4	Biodiversity
+\.
+
+
+--
+-- Data for Name: metric_types; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.metric_types (id, name) FROM stdin;
+1	Activity
+2	Output
+3	Outcome
+4	Impact
+\.
+
+
+--
 -- Data for Name: modules; Type: TABLE DATA; Schema: accelerator; Owner: -
 --
 
-COPY accelerator.modules (id, name, created_by, created_time, modified_by, modified_time, overview, preparation_materials, live_session_description, workshop_description, one_on_one_session_description, additional_resources, phase_id) FROM stdin;
+COPY accelerator.modules (id, name, created_by, created_time, modified_by, modified_time, overview, preparation_materials, live_session_description, workshop_description, one_on_one_session_description, additional_resources, phase_id, "position", recorded_session_description) FROM stdin;
+2	Pre-screen	1	2025-05-13 17:28:26.861918+00	1	2025-05-13 17:28:26.861918+00	<p>Draw your proposed project site map and complete the Pre-screen questions to determine if you qualify for our Accelerator Program. Here are some of the primary criteria by which we select participants. Please visit our <a target="_blank" href="https://www.terraformation.com/accelerator">website</a> for a more details on criteria and which projects we prioritize.</p>\n<ul>\n<li>3,000 hectares of land in priority countries: Kenya, Ghana, or Colombia</li>\n<li>15,000 ha or more of land in non-priority countries</li>\n<li>Long-term access and rights to reforest land for at least 40 years</li>\n<li>Projects should plant at least 10 native tree species, or 3+ species in the case of mangrove projects (native species preferred)</li>\n</ul>	\N	\N	\N	\N	\N	100	2	\N
 \.
 
 
@@ -6575,7 +9303,32 @@ COPY accelerator.pipelines (id, name) FROM stdin;
 -- Data for Name: project_accelerator_details; Type: TABLE DATA; Schema: accelerator; Owner: -
 --
 
-COPY accelerator.project_accelerator_details (project_id, pipeline_id, deal_stage_id, application_reforestable_land, confirmed_reforestable_land, total_expansion_potential, num_native_species, min_carbon_accumulation, max_carbon_accumulation, per_hectare_budget, num_communities, investment_thesis, failure_risk, what_needs_to_be_true, deal_description, project_lead, file_naming, dropbox_folder_path, google_folder_url) FROM stdin;
+COPY accelerator.project_accelerator_details (project_id, pipeline_id, deal_stage_id, application_reforestable_land, confirmed_reforestable_land, total_expansion_potential, num_native_species, min_carbon_accumulation, max_carbon_accumulation, per_hectare_budget, num_communities, investment_thesis, failure_risk, what_needs_to_be_true, deal_description, project_lead, file_naming, dropbox_folder_path, google_folder_url, carbon_capacity, annual_carbon, total_carbon, hubspot_url, deal_name, logframe_url) FROM stdin;
+1	\N	\N	18647.0	\N	\N	15	\N	\N	\N	\N	\N	\N	\N	\N	\N	COL_Terraformation (staging)	\N	https://drive.google.com/drive/folders/1	\N	\N	\N	\N	COL_Terraformation (staging)	\N
+\.
+
+
+--
+-- Data for Name: project_metrics; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.project_metrics (id, project_id, type_id, component_id, name, description, reference, is_publishable) FROM stdin;
+\.
+
+
+--
+-- Data for Name: project_overall_scores; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.project_overall_scores (project_id, overall_score, summary, details_url, created_by, created_time, modified_by, modified_time) FROM stdin;
+\.
+
+
+--
+-- Data for Name: project_report_configs; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.project_report_configs (id, project_id, report_frequency_id, reporting_start_date, reporting_end_date) FROM stdin;
 \.
 
 
@@ -6604,6 +9357,100 @@ COPY accelerator.project_votes (user_id, project_id, phase_id, vote_option_id, c
 
 
 --
+-- Data for Name: report_achievements; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.report_achievements (report_id, "position", achievement) FROM stdin;
+\.
+
+
+--
+-- Data for Name: report_challenges; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.report_challenges (report_id, "position", challenge, mitigation_plan) FROM stdin;
+\.
+
+
+--
+-- Data for Name: report_frequencies; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.report_frequencies (id, name) FROM stdin;
+1	Quarterly
+2	Annual
+\.
+
+
+--
+-- Data for Name: report_metric_statuses; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.report_metric_statuses (id, name) FROM stdin;
+1	Achieved
+2	On-Track
+3	Unlikely
+\.
+
+
+--
+-- Data for Name: report_project_metrics; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.report_project_metrics (report_id, project_metric_id, target, value, underperformance_justification, progress_notes, modified_by, modified_time, status_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: report_quarters; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.report_quarters (id, name) FROM stdin;
+1	Q1
+2	Q2
+3	Q3
+4	Q4
+\.
+
+
+--
+-- Data for Name: report_standard_metrics; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.report_standard_metrics (report_id, standard_metric_id, target, value, underperformance_justification, progress_notes, modified_by, modified_time, status_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: report_statuses; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.report_statuses (id, name) FROM stdin;
+1	Not Submitted
+2	Submitted
+3	Approved
+4	Needs Update
+5	Not Needed
+\.
+
+
+--
+-- Data for Name: report_system_metrics; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.report_system_metrics (report_id, system_metric_id, target, system_value, system_time, override_value, underperformance_justification, progress_notes, modified_by, modified_time, status_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: reports; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.reports (id, config_id, project_id, status_id, start_date, end_date, internal_comment, feedback, created_by, created_time, modified_by, modified_time, submitted_by, submitted_time, highlights, report_frequency_id, report_quarter_id, upcoming_notification_sent_time) FROM stdin;
+\.
+
+
+--
 -- Data for Name: score_categories; Type: TABLE DATA; Schema: accelerator; Owner: -
 --
 
@@ -6612,7 +9459,7 @@ COPY accelerator.score_categories (id, name) FROM stdin;
 2	Finance
 3	Forestry
 4	Legal
-5	Community
+5	Social Impact
 6	GIS
 7	Climate Impact
 8	Expansion Potential
@@ -6620,6 +9467,14 @@ COPY accelerator.score_categories (id, name) FROM stdin;
 10	Operational Capacity
 11	Responsiveness and Attention to Detail
 12	Values Alignment
+\.
+
+
+--
+-- Data for Name: standard_metrics; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.standard_metrics (id, type_id, component_id, name, description, reference, is_publishable) FROM stdin;
 \.
 
 
@@ -6650,6 +9505,7 @@ COPY accelerator.submission_statuses (id, name) FROM stdin;
 4	Approved
 5	Rejected
 6	Not Needed
+7	Completed
 \.
 
 
@@ -6658,6 +9514,29 @@ COPY accelerator.submission_statuses (id, name) FROM stdin;
 --
 
 COPY accelerator.submissions (id, project_id, deliverable_id, submission_status_id, created_by, created_time, modified_by, modified_time, internal_comment, feedback) FROM stdin;
+1	1	102	7	1	2025-05-13 17:30:16.176756+00	1	2025-05-13 17:30:16.176756+00	\N	\N
+\.
+
+
+--
+-- Data for Name: system_metrics; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.system_metrics (id, name, type_id, component_id, description, reference, is_publishable) FROM stdin;
+1	Seeds Collected	2	2	Total seed count checked-into accessions.	1.1	f
+2	Seedlings	2	2	Plants in the nursery, including those provided by partners, where available. Not applicable for mangrove projects (input 0).	1.2	t
+3	Trees Planted	2	2	Total trees (and plants) planted in the field.	1.3	t
+4	Species Planted	2	2	Total species of the plants/trees planted.	1.4	t
+5	Mortality Rate	3	2	Mortality rate of plantings.	2	t
+6	Hectares Planted	2	2	This is the hectares marked as “Planting Complete” within the Project Area.	1.1.1.1	t
+\.
+
+
+--
+-- Data for Name: user_internal_interests; Type: TABLE DATA; Schema: accelerator; Owner: -
+--
+
+COPY accelerator.user_internal_interests (user_id, internal_interest_id, created_by, created_time) FROM stdin;
 \.
 
 
@@ -6669,6 +9548,717 @@ COPY accelerator.vote_options (id, name) FROM stdin;
 1	No
 2	Conditional
 3	Yes
+\.
+
+
+--
+-- Data for Name: dependency_conditions; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.dependency_conditions (id, name) FROM stdin;
+1	eq
+2	gt
+3	gte
+4	lt
+5	lte
+6	neq
+\.
+
+
+--
+-- Data for Name: document_saved_versions; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.document_saved_versions (id, document_id, variable_manifest_id, max_variable_value_id, created_by, created_time, name, is_submitted, is_accepted) FROM stdin;
+\.
+
+
+--
+-- Data for Name: document_statuses; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.document_statuses (id, name) FROM stdin;
+1	Draft
+2	Locked
+3	Published
+4	Ready
+5	Submitted
+\.
+
+
+--
+-- Data for Name: document_templates; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.document_templates (id, name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: documents; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.documents (id, document_template_id, variable_manifest_id, project_id, name, status_id, owned_by, created_by, created_time, modified_by, modified_time, internal_comment) FROM stdin;
+\.
+
+
+--
+-- Data for Name: variable_image_values; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_image_values (variable_value_id, variable_id, variable_type_id, file_id, caption) FROM stdin;
+\.
+
+
+--
+-- Data for Name: variable_injection_display_styles; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_injection_display_styles (id, name) FROM stdin;
+1	Inline
+2	Block
+\.
+
+
+--
+-- Data for Name: variable_link_values; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_link_values (variable_value_id, variable_id, variable_type_id, url, title) FROM stdin;
+\.
+
+
+--
+-- Data for Name: variable_manifest_entries; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_manifest_entries (variable_manifest_id, variable_id, "position") FROM stdin;
+\.
+
+
+--
+-- Data for Name: variable_manifests; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_manifests (id, document_template_id, created_by, created_time) FROM stdin;
+\.
+
+
+--
+-- Data for Name: variable_numbers; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_numbers (variable_id, variable_type_id, min_value, max_value, decimal_places) FROM stdin;
+2	1	\N	\N	\N
+4	1	\N	\N	\N
+5	1	\N	\N	\N
+7	1	\N	\N	\N
+8	1	\N	\N	\N
+9	1	\N	\N	\N
+10	1	\N	\N	\N
+11	1	\N	\N	\N
+12	1	\N	\N	\N
+13	1	\N	\N	\N
+14	1	\N	\N	\N
+15	1	\N	\N	\N
+16	1	\N	\N	\N
+17	1	\N	\N	\N
+18	1	\N	\N	\N
+19	1	\N	\N	\N
+20	1	\N	\N	\N
+21	1	\N	\N	\N
+23	1	\N	\N	\N
+24	1	\N	\N	\N
+26	1	\N	\N	\N
+30	1	\N	\N	\N
+33	1	\N	\N	\N
+34	1	\N	\N	\N
+35	1	\N	\N	\N
+36	1	\N	\N	\N
+37	1	\N	\N	\N
+38	1	\N	\N	\N
+39	1	\N	\N	\N
+40	1	\N	\N	\N
+45	1	\N	\N	\N
+49	1	\N	\N	\N
+\.
+
+
+--
+-- Data for Name: variable_owners; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_owners (project_id, variable_id, owned_by) FROM stdin;
+\.
+
+
+--
+-- Data for Name: variable_section_default_values; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_section_default_values (id, variable_id, variable_type_id, variable_manifest_id, list_position, text_value, used_variable_id, used_variable_type_id, usage_type_id, display_style_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: variable_section_recommendations; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_section_recommendations (section_variable_id, section_variable_type_id, recommended_variable_id, variable_manifest_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: variable_section_values; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_section_values (variable_value_id, variable_id, variable_type_id, usage_type_id, text_value, used_variable_id, used_variable_type_id, display_style_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: variable_sections; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_sections (variable_id, variable_type_id, parent_variable_id, parent_variable_type_id, render_heading) FROM stdin;
+\.
+
+
+--
+-- Data for Name: variable_select_option_values; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_select_option_values (variable_value_id, variable_id, variable_type_id, option_id) FROM stdin;
+2	1	5	37
+4	3	5	197
+8	25	5	209
+10	6	5	200
+\.
+
+
+--
+-- Data for Name: variable_select_options; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_select_options (id, variable_id, variable_type_id, "position", name, description, rendered_text) FROM stdin;
+1	1	5	1	Afghanistan	\N	\N
+2	1	5	2	Albania	\N	\N
+3	1	5	3	Algeria	\N	\N
+4	1	5	4	Andorra	\N	\N
+5	1	5	5	Angola	\N	\N
+6	1	5	6	Antigua and Barbuda	\N	\N
+7	1	5	7	Argentina	\N	\N
+8	1	5	8	Armenia	\N	\N
+9	1	5	9	Australia	\N	\N
+10	1	5	10	Austria	\N	\N
+11	1	5	11	Azerbaijan	\N	\N
+12	1	5	12	Bahamas	\N	\N
+13	1	5	13	Bahrain	\N	\N
+14	1	5	14	Bangladesh	\N	\N
+15	1	5	15	Barbados	\N	\N
+16	1	5	16	Belarus	\N	\N
+17	1	5	17	Belgium	\N	\N
+18	1	5	18	Belize	\N	\N
+19	1	5	19	Benin	\N	\N
+20	1	5	20	Bhutan	\N	\N
+21	1	5	21	Bolivia	\N	\N
+22	1	5	22	Bosnia and Herzegovina	\N	\N
+23	1	5	23	Botswana	\N	\N
+24	1	5	24	Brazil	\N	\N
+25	1	5	25	Brunei	\N	\N
+26	1	5	26	Bulgaria	\N	\N
+27	1	5	27	Burkina Faso	\N	\N
+28	1	5	28	Burundi	\N	\N
+29	1	5	29	Cabo Verde	\N	\N
+30	1	5	30	Cambodia	\N	\N
+31	1	5	31	Cameroon	\N	\N
+32	1	5	32	Canada	\N	\N
+33	1	5	33	Central African Republic	\N	\N
+34	1	5	34	Chad	\N	\N
+35	1	5	35	Chile	\N	\N
+36	1	5	36	China	\N	\N
+37	1	5	37	Colombia	\N	\N
+38	1	5	38	Comoros	\N	\N
+39	1	5	39	Congo, Democratic Republic of the	\N	\N
+40	1	5	40	Congo, Republic of the	\N	\N
+41	1	5	41	Costa Rica	\N	\N
+42	1	5	42	Côte d'Ivoire	\N	\N
+43	1	5	43	Croatia	\N	\N
+44	1	5	44	Cuba	\N	\N
+45	1	5	45	Cyprus	\N	\N
+46	1	5	46	Czech Republic	\N	\N
+47	1	5	47	Denmark	\N	\N
+48	1	5	48	Djibouti	\N	\N
+49	1	5	49	Dominica	\N	\N
+50	1	5	50	Dominican Republic	\N	\N
+51	1	5	51	Ecuador	\N	\N
+52	1	5	52	Egypt	\N	\N
+53	1	5	53	El Salvador	\N	\N
+54	1	5	54	Equatorial Guinea	\N	\N
+55	1	5	55	Eritrea	\N	\N
+56	1	5	56	Estonia	\N	\N
+57	1	5	57	Eswatini	\N	\N
+58	1	5	58	Ethiopia	\N	\N
+59	1	5	59	Fiji	\N	\N
+60	1	5	60	Finland	\N	\N
+61	1	5	61	France	\N	\N
+62	1	5	62	Gabon	\N	\N
+63	1	5	63	Gambia	\N	\N
+64	1	5	64	Georgia	\N	\N
+65	1	5	65	Germany	\N	\N
+66	1	5	66	Ghana	\N	\N
+67	1	5	67	Greece	\N	\N
+68	1	5	68	Grenada	\N	\N
+69	1	5	69	Guatemala	\N	\N
+70	1	5	70	Guinea	\N	\N
+71	1	5	71	Guinea-Bissau	\N	\N
+72	1	5	72	Guyana	\N	\N
+73	1	5	73	Haiti	\N	\N
+74	1	5	74	Honduras	\N	\N
+75	1	5	75	Hungary	\N	\N
+76	1	5	76	Iceland	\N	\N
+77	1	5	77	India	\N	\N
+78	1	5	78	Indonesia	\N	\N
+79	1	5	79	Iran	\N	\N
+80	1	5	80	Iraq	\N	\N
+81	1	5	81	Ireland	\N	\N
+82	1	5	82	Israel	\N	\N
+83	1	5	83	Italy	\N	\N
+84	1	5	84	Jamaica	\N	\N
+85	1	5	85	Japan	\N	\N
+86	1	5	86	Jordan	\N	\N
+87	1	5	87	Kazakhstan	\N	\N
+88	1	5	88	Kenya	\N	\N
+89	1	5	89	Kiribati	\N	\N
+90	1	5	90	Korea, North	\N	\N
+91	1	5	91	Korea, South	\N	\N
+92	1	5	92	Kosovo	\N	\N
+93	1	5	93	Kuwait	\N	\N
+94	1	5	94	Kyrgyzstan	\N	\N
+95	1	5	95	Laos	\N	\N
+96	1	5	96	Latvia	\N	\N
+97	1	5	97	Lebanon	\N	\N
+98	1	5	98	Lesotho	\N	\N
+99	1	5	99	Liberia	\N	\N
+100	1	5	100	Libya	\N	\N
+101	1	5	101	Liechtenstein	\N	\N
+102	1	5	102	Lithuania	\N	\N
+103	1	5	103	Luxembourg	\N	\N
+104	1	5	104	Madagascar	\N	\N
+105	1	5	105	Malawi	\N	\N
+106	1	5	106	Malaysia	\N	\N
+107	1	5	107	Maldives	\N	\N
+108	1	5	108	Mali	\N	\N
+109	1	5	109	Malta	\N	\N
+110	1	5	110	Marshall Islands	\N	\N
+111	1	5	111	Mauritania	\N	\N
+112	1	5	112	Mauritius	\N	\N
+113	1	5	113	Mexico	\N	\N
+114	1	5	114	Micronesia	\N	\N
+115	1	5	115	Moldova	\N	\N
+116	1	5	116	Monaco	\N	\N
+117	1	5	117	Mongolia	\N	\N
+118	1	5	118	Montenegro	\N	\N
+119	1	5	119	Morocco	\N	\N
+120	1	5	120	Mozambique	\N	\N
+121	1	5	121	Myanmar (Burma)	\N	\N
+122	1	5	122	Namibia	\N	\N
+123	1	5	123	Nauru	\N	\N
+124	1	5	124	Nepal	\N	\N
+125	1	5	125	Netherlands	\N	\N
+126	1	5	126	New Zealand	\N	\N
+127	1	5	127	Nicaragua	\N	\N
+128	1	5	128	Niger	\N	\N
+129	1	5	129	Nigeria	\N	\N
+130	1	5	130	North Macedonia	\N	\N
+131	1	5	131	Norway	\N	\N
+132	1	5	132	Oman	\N	\N
+133	1	5	133	Pakistan	\N	\N
+134	1	5	134	Palau	\N	\N
+135	1	5	135	Panama	\N	\N
+136	1	5	136	Papua New Guinea	\N	\N
+137	1	5	137	Paraguay	\N	\N
+138	1	5	138	Peru	\N	\N
+139	1	5	139	Philippines	\N	\N
+140	1	5	140	Poland	\N	\N
+141	1	5	141	Portugal	\N	\N
+142	1	5	142	Qatar	\N	\N
+143	1	5	143	Romania	\N	\N
+144	1	5	144	Russia	\N	\N
+145	1	5	145	Rwanda	\N	\N
+146	1	5	146	Saint Kitts and Nevis	\N	\N
+147	1	5	147	Saint Lucia	\N	\N
+148	1	5	148	Saint Vincent and the Grenadines	\N	\N
+149	1	5	149	Samoa	\N	\N
+150	1	5	150	San Marino	\N	\N
+151	1	5	151	Sao Tome and Principe	\N	\N
+152	1	5	152	Saudi Arabia	\N	\N
+153	1	5	153	Senegal	\N	\N
+154	1	5	154	Serbia	\N	\N
+155	1	5	155	Seychelles	\N	\N
+156	1	5	156	Sierra Leone	\N	\N
+157	1	5	157	Singapore	\N	\N
+158	1	5	158	Slovakia	\N	\N
+159	1	5	159	Slovenia	\N	\N
+160	1	5	160	Solomon Islands	\N	\N
+161	1	5	161	Somalia	\N	\N
+162	1	5	162	South Africa	\N	\N
+163	1	5	163	South Sudan	\N	\N
+164	1	5	164	Spain	\N	\N
+165	1	5	165	Sri Lanka	\N	\N
+166	1	5	166	Sudan	\N	\N
+167	1	5	167	Suriname	\N	\N
+168	1	5	168	Sweden	\N	\N
+169	1	5	169	Switzerland	\N	\N
+170	1	5	170	Syria	\N	\N
+171	1	5	171	Taiwan	\N	\N
+172	1	5	172	Tajikistan	\N	\N
+173	1	5	173	Tanzania	\N	\N
+174	1	5	174	Thailand	\N	\N
+175	1	5	175	Timor-Leste	\N	\N
+176	1	5	176	Togo	\N	\N
+177	1	5	177	Tonga	\N	\N
+178	1	5	178	Trinidad and Tobago	\N	\N
+179	1	5	179	Tunisia	\N	\N
+180	1	5	180	Turkey	\N	\N
+181	1	5	181	Turkmenistan	\N	\N
+182	1	5	182	Tuvalu	\N	\N
+183	1	5	183	Uganda	\N	\N
+184	1	5	184	Ukraine	\N	\N
+185	1	5	185	United Arab Emirates	\N	\N
+186	1	5	186	United Kingdom	\N	\N
+187	1	5	187	United States	\N	\N
+188	1	5	188	Uruguay	\N	\N
+189	1	5	189	Uzbekistan	\N	\N
+190	1	5	190	Vanuatu	\N	\N
+191	1	5	191	Vatican City	\N	\N
+192	1	5	192	Venezuela	\N	\N
+193	1	5	193	Vietnam	\N	\N
+194	1	5	194	Yemen	\N	\N
+195	1	5	195	Zambia	\N	\N
+196	1	5	196	Zimbabwe	\N	\N
+197	3	5	1	Terrestrial	\N	\N
+198	3	5	2	Mangrove	\N	\N
+199	3	5	3	Mixed	\N	\N
+200	6	5	1	Native Forest	\N	\N
+201	6	5	2	Monoculture	\N	\N
+202	6	5	3	Sustainable Timber	\N	\N
+203	6	5	4	Other Timber	\N	\N
+204	6	5	5	Mangroves	\N	\N
+205	6	5	6	Agroforestry	\N	\N
+206	6	5	7	Silvopasture	\N	\N
+207	6	5	8	Other Land-Use Model	\N	\N
+208	25	5	1	Yes	\N	do
+209	25	5	2	No	\N	do not
+210	31	5	1	VCS	\N	\N
+211	31	5	2	VCS & CCB	\N	\N
+212	31	5	3	Gold Standard	\N	\N
+213	31	5	4	Plan Vivo	\N	\N
+214	31	5	5	Other	\N	\N
+215	32	5	1	VM0033	\N	\N
+216	32	5	2	VM0047	\N	\N
+217	32	5	3	Other	\N	\N
+218	50	5	1	1: No Poverty	\N	\N
+219	50	5	2	2: Zero Hunger	\N	\N
+220	50	5	3	3: Good Health and Well-Being	\N	\N
+221	50	5	4	4: Quality Education	\N	\N
+222	50	5	5	5: Gender Equality	\N	\N
+223	50	5	6	6: Clean Water and Sanitation	\N	\N
+224	50	5	7	7: Affordable and Clean Energy	\N	\N
+225	50	5	8	8: Decent Work and Economic Growth	\N	\N
+226	50	5	9	9: Industry, Innovation and Infrastructure	\N	\N
+227	50	5	10	10: Reduced Inequalities	\N	\N
+228	50	5	11	11: Sustainable Cities and Economies	\N	\N
+229	50	5	12	12: Responsible Consumption and Production	\N	\N
+230	50	5	13	13: Climate Action	\N	\N
+231	50	5	14	14: Life Below Water	\N	\N
+232	50	5	15	15: Life on Land	\N	\N
+233	50	5	16	16: Peace, Justice, and Strong Institutions	\N	\N
+234	50	5	17	17: Partnerships for the Goals	\N	\N
+\.
+
+
+--
+-- Data for Name: variable_selects; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_selects (variable_id, variable_type_id, is_multiple) FROM stdin;
+1	5	f
+3	5	f
+6	5	t
+25	5	f
+31	5	f
+32	5	f
+50	5	t
+\.
+
+
+--
+-- Data for Name: variable_table_columns; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_table_columns (variable_id, table_variable_id, table_variable_type_id, "position", is_header) FROM stdin;
+\.
+
+
+--
+-- Data for Name: variable_table_styles; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_table_styles (id, name) FROM stdin;
+1	Horizontal
+2	Vertical
+\.
+
+
+--
+-- Data for Name: variable_tables; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_tables (variable_id, variable_type_id, table_style_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: variable_text_types; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_text_types (id, name) FROM stdin;
+1	SingleLine
+2	MultiLine
+\.
+
+
+--
+-- Data for Name: variable_texts; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_texts (variable_id, variable_type_id, variable_text_type_id) FROM stdin;
+22	2	1
+27	2	1
+29	2	1
+41	2	2
+42	2	2
+43	2	2
+44	2	2
+47	2	1
+\.
+
+
+--
+-- Data for Name: variable_types; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_types (id, name) FROM stdin;
+1	Number
+2	Text
+3	Date
+4	Image
+5	Select
+6	Table
+7	Link
+8	Section
+9	Email
+\.
+
+
+--
+-- Data for Name: variable_usage_types; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_usage_types (id, name) FROM stdin;
+1	Injection
+2	Reference
+\.
+
+
+--
+-- Data for Name: variable_value_table_rows; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_value_table_rows (id, variable_value_id, table_row_value_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: variable_values; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_values (id, project_id, variable_id, variable_type_id, list_position, created_by, created_time, is_deleted, number_value, text_value, date_value, citation) FROM stdin;
+1	1	47	2	0	2	2025-05-13 17:29:19.289785+00	f	\N	XXX_Terraformation (staging)	\N	\N
+2	1	1	5	0	2	2025-05-13 17:29:46.097009+00	f	\N	\N	\N	\N
+3	1	47	2	0	2	2025-05-13 17:29:46.133749+00	f	\N	COL_Terraformation (staging)	\N	\N
+4	1	3	5	0	1	2025-05-13 17:30:16.225572+00	f	\N	\N	\N	\N
+5	1	7	1	0	1	2025-05-13 17:30:16.246132+00	f	10000	\N	\N	\N
+6	1	8	1	0	1	2025-05-13 17:30:16.248673+00	f	500	\N	\N	\N
+7	1	24	1	0	1	2025-05-13 17:30:16.250363+00	f	15	\N	\N	\N
+8	1	25	5	0	1	2025-05-13 17:30:16.252385+00	f	\N	\N	\N	\N
+9	1	2	1	0	2	2025-05-13 17:30:23.836848+00	f	18647.0	\N	\N	\N
+10	1	6	5	0	2	2025-05-13 17:30:23.845891+00	f	\N	\N	\N	\N
+\.
+
+
+--
+-- Data for Name: variable_workflow_history; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_workflow_history (id, project_id, variable_id, max_variable_value_id, created_by, created_time, variable_workflow_status_id, feedback, internal_comment) FROM stdin;
+1	1	3	8	2	2025-05-13 17:30:16.322035+00	2	\N	\N
+2	1	7	8	2	2025-05-13 17:30:16.373204+00	2	\N	\N
+3	1	8	8	2	2025-05-13 17:30:16.377395+00	2	\N	\N
+4	1	24	8	2	2025-05-13 17:30:16.38151+00	2	\N	\N
+5	1	25	8	2	2025-05-13 17:30:16.385038+00	2	\N	\N
+\.
+
+
+--
+-- Data for Name: variable_workflow_statuses; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variable_workflow_statuses (id, name) FROM stdin;
+1	Not Submitted
+2	In Review
+3	Needs Translation
+4	Approved
+5	Rejected
+6	Not Needed
+7	Incomplete
+8	Complete
+\.
+
+
+--
+-- Data for Name: variables; Type: TABLE DATA; Schema: docprod; Owner: -
+--
+
+COPY docprod.variables (id, variable_type_id, replaces_variable_id, is_list, stable_id, name, description, deliverable_question, dependency_variable_stable_id, dependency_condition_id, dependency_value, internal_only, is_required) FROM stdin;
+1	5	\N	f	1	Country	Country where the project described in this application will occur.	In what country is your proposed reforestation project?	\N	\N	\N	f	t
+2	1	\N	f	2	Application Reforestable Land	\N	\N	\N	\N	\N	f	f
+3	5	\N	f	3	Terrestrial, Mangrove, or Mixed	\N	Is your project a terrestrial project or mangrove project?	\N	\N	\N	f	t
+4	1	\N	f	34	Percentage of project mangrove	Please ensure the percentages for mangrove and terrestrial add up to 100%. 	What percentage of the project will be mangrove?	3	1	Mixed	f	t
+5	1	\N	f	35	Percentage of project terrestrial	Please ensure the percentages for mangrove and terrestrial add up to 100%. 	What percentage of the project will be terrestrial?	3	1	Mixed	f	t
+6	5	\N	f	4	Land Use Types	\N	For your proposed project, what are the anticipated land-use models?	\N	\N	\N	f	f
+7	1	\N	f	5	Land Use Model: Native Forest (ha)	Native biodiverse forest planted or regenerated towards the goal of restoring something closer to the original natural forest.	How many hectares do you plan to use for Native Forest?	\N	\N	\N	f	f
+8	1	\N	f	6	Planting Density: Native Forest (trees per ha)	\N	What is your target tree planting density for Native Forest? (trees per hectare)	5	2	0	f	t
+9	1	\N	f	7	Land Use Model: Monoculture (ha)	Stands of any one species (native or not) planted with the goal of providing a commodity or service (e.g. wood, fruit, carbon credits, soil retention, shade). Note that projects planning to use more than 10% of their reforestable area for "Monoculture" are not eligible for the Accelerator.	How many hectares do you plan to use for Monoculture?	\N	\N	\N	f	f
+10	1	\N	f	8	Planting Density: Monoculture (trees per ha)	\N	What is your target tree planting density for Monoculture? (trees per hectare)	7	2	0	f	t
+11	1	\N	f	9	Land Use Model: Sustainable Timber (ha)	Stands of native trees planted or regenerated for potential use as timber after 30 years or more. Note that areas to be harvested for timber in less than 30 years should be counted under the "Other Timber" category. Note that projects planning to use more than 10% of their reforestable area for "Sustainable Timber" must also have a robust management plan for this section. Please submit this at the end of the application, under "Supplemental Files."	How many hectares do you plan to use for Sustainable Timber?	\N	\N	\N	f	f
+12	1	\N	f	10	Planting Density: Sustainable Timber (trees per ha)	\N	What is your target tree planting density for Sustainable Timber? (trees per hectare)	9	2	0	f	t
+13	1	\N	f	11	Land Use Model: Other Timber (ha)	Any stands planted or regenerated for eventual use as timber that will be harvested in less than 30 years. Note that projects planning to use more than 10% of their reforestable area for "Other TImber" are not eligible for the Accelerator.	How many hectares do you plan to use for Other Timber?	\N	\N	\N	f	f
+14	1	\N	f	12	Planting Density: Other Timber (trees per ha)	\N	What is your target tree planting density for Other Timber? (trees per hectare)	11	2	0	f	t
+15	1	\N	f	13	Land Use Model: Mangroves (ha)	Planted or regenerated forest dominated by mangrove species.	How many hectares do you plan to use for Mangroves?	\N	\N	\N	f	f
+16	1	\N	f	14	Planting Density: Mangroves (trees per ha)	\N	What is your target tree planting density for Mangroves? (trees per hectare)	13	2	0	f	t
+17	1	\N	f	15	Land Use Model: Agroforestry (ha)	Planted or regenerated forest supplemented with plantings primarily to produce agricultural crops and other non-timber forest products (e.g. medicinal plants, honey, etc.). 	How many hectares do you plan to use for Agroforestry?	\N	\N	\N	f	f
+18	1	\N	f	16	Planting Density: Agroforestry (trees per ha)	\N	What is your target tree planting density for Agroforestry? (trees per hectare)	15	2	0	f	t
+19	1	\N	f	17	Land Use Model: Silvopasture (ha)	Sparse planted or regenerated forests that serve as pasture for domestic animals (e.g. cattle, goats, sheep, etc.).	How many hectares do you plan to use for Silvopasture?	\N	\N	\N	f	f
+20	1	\N	f	18	Planting Density: Silvopasture (trees per ha)	\N	What is your target tree planting density for Silvopasture? (trees per hectare)	17	2	0	f	t
+21	1	\N	f	19	Land Use Model: Other Land-Use Model (ha)	\N	How many hectares do you plan to use for other land-use models?	\N	\N	\N	f	f
+22	2	\N	f	21	Other Land-Use Model: Explained	\N	Please provide more information on what other land-use models you plan to use. 	19	2	0	f	t
+23	1	\N	f	20	Planting Density: Other Land-Use Model (trees per ha)	\N	What is your target tree planting density for other land-use models? (trees per hectare)	19	2	0	f	t
+24	1	\N	f	22	Number of Native Species To Be Planted	Native species are those that exist in the project area naturally as opposed to having been brought there at some point by humans. Note that project's must plant at least 10 native tree species in terrestrial forests, or at least 3 in mangrove forests, to be considered eligible for the Accelerator.	How many native tree species do you intend to use in your restoration?	\N	\N	\N	f	t
+25	5	\N	f	23	Has Expansion Potential	\N	If this project is successful, is there potential to expand your reforestation efforts to other nearby land parcels?	\N	\N	\N	f	t
+26	1	\N	f	24	Total Expansion Potential (ha)	Number value only. If not sure, add approximate amount.	If so, how much more land could be added? (ha)	23	1	Yes	f	t
+27	2	\N	f	25	Name of main contact	Name of the person of your organization responsible for a potential partnership with us.	Full name of main contact	\N	\N	\N	f	t
+28	9	\N	f	26	Email of main contact	Email of the person of your organization responsible for a potential partnership with us.	Email of main contact	\N	\N	\N	f	t
+29	2	\N	f	27	Website	Paste the link to your website - if you don't have a website, please mark "N/A."	Website	\N	\N	\N	f	t
+30	1	\N	f	205	Project Zone area (ha)	\N	Project Zone area (ha)	\N	\N	\N	t	f
+31	5	\N	f	350	Standard Name	\N	Standard Name	\N	\N	\N	t	f
+32	5	\N	f	351	Methodology Number	\N	Methodology Number	\N	\N	\N	t	f
+33	1	\N	f	283	Total VCUs (40 yrs)	\N	What percentage of the carbon is accumulated in the first 40 years?	\N	\N	\N	t	f
+34	1	\N	f	429	TF Restorable Land (ha)	\N	TF Restorable Land (ha)	\N	\N	\N	f	f
+35	1	\N	f	430	Per Hectare Estimated Budget (USD)	\N	Per Hectare Estimated Budget (USD)	\N	\N	\N	f	f
+36	1	\N	f	431	Min Carbon Accumulation (CO2/ha/yr)	\N	Min Carbon Accumulation (CO2/ha/yr)	\N	\N	\N	f	f
+37	1	\N	f	432	Max Carbon Accumulation (CO2/ha/yr)	\N	Max Carbon Accumulation (CO2/ha/yr)	\N	\N	\N	f	f
+38	1	\N	f	433	Carbon Capacity (tCO2/ha)	\N	Carbon Capacity (tCO2/ha)	\N	\N	\N	f	f
+39	1	\N	f	434	Annual VCUs (t)	\N	Annual Carbon (t)	\N	\N	\N	f	f
+40	1	\N	f	435	Total Carbon (t)	\N	Total Carbon (t)	\N	\N	\N	f	f
+41	2	\N	f	436	Project Description	\N	Deal Description	\N	\N	\N	f	f
+42	2	\N	f	437	Investment Thesis	\N	Investment Thesis	\N	\N	\N	f	f
+43	2	\N	f	438	Failure Risk	\N	Failure Risk	\N	\N	\N	f	f
+44	2	\N	f	439	What Needs To Be True	\N	What Needs To Be True	\N	\N	\N	f	f
+45	1	\N	f	369	Carbon Accumulation Rate	\N	Current Carbon Accumulation Rate (CO2/ha/yr)	\N	\N	\N	f	f
+46	7	\N	f	471	Verra Link	\N	Verra Link	\N	\N	\N	f	f
+47	2	\N	f	472	Deal Name	\N	Deal Name	\N	\N	\N	f	f
+48	4	\N	t	525	Project Zone Figure	Provide a map of the project zone including:\n- Boundaries of the project zone, which is defined as the area encompassing the project area(s) in which project activities that directly affect land and associated resources, including activities such as those related to provision of alternate livelihoods and community development, are implemented. \n- Location of communities  \n- Boundaries of the project area(s), which is defined as the area(s) where project activities aim to generate net climate benefits.\n- Any spatially identifiable high conservation value (HCV) areas already known\n- For grouped projects, specify potential project areas and communities that may be included in the project at a future verification.	Provide a map of the project zone	\N	\N	\N	f	f
+49	1	\N	f	545	Minimum Project Area	\N	Minimum Project Area	\N	\N	\N	f	f
+50	5	\N	f	546	SDGs	\N	Please select SDGs 	\N	\N	\N	f	f
+51	7	\N	f	547	GIS Reports Link	\N	GIS Reports Link	\N	\N	\N	f	f
+52	7	\N	f	548	Risk Tracker Link	\N	Risk Tracker Link	\N	\N	\N	f	f
+53	7	\N	f	549	ClickUp Link	\N	ClickUp Link	\N	\N	\N	f	f
+54	7	\N	f	550	Slack Link	\N	Slack Link	\N	\N	\N	f	f
+55	4	\N	f	551	Project Highlight Photo	\N	Project Highlight Photo	\N	\N	\N	f	f
+\.
+
+
+--
+-- Data for Name: funding_entities; Type: TABLE DATA; Schema: funder; Owner: -
+--
+
+COPY funder.funding_entities (id, name, created_by, created_time, modified_by, modified_time) FROM stdin;
+\.
+
+
+--
+-- Data for Name: funding_entity_projects; Type: TABLE DATA; Schema: funder; Owner: -
+--
+
+COPY funder.funding_entity_projects (funding_entity_id, project_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: funding_entity_users; Type: TABLE DATA; Schema: funder; Owner: -
+--
+
+COPY funder.funding_entity_users (user_id, funding_entity_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: published_report_achievements; Type: TABLE DATA; Schema: funder; Owner: -
+--
+
+COPY funder.published_report_achievements (report_id, "position", achievement) FROM stdin;
+\.
+
+
+--
+-- Data for Name: published_report_challenges; Type: TABLE DATA; Schema: funder; Owner: -
+--
+
+COPY funder.published_report_challenges (report_id, "position", challenge, mitigation_plan) FROM stdin;
+\.
+
+
+--
+-- Data for Name: published_report_project_metrics; Type: TABLE DATA; Schema: funder; Owner: -
+--
+
+COPY funder.published_report_project_metrics (report_id, project_metric_id, target, value, underperformance_justification, status_id, progress_notes) FROM stdin;
+\.
+
+
+--
+-- Data for Name: published_report_standard_metrics; Type: TABLE DATA; Schema: funder; Owner: -
+--
+
+COPY funder.published_report_standard_metrics (report_id, standard_metric_id, target, value, underperformance_justification, status_id, progress_notes) FROM stdin;
+\.
+
+
+--
+-- Data for Name: published_report_system_metrics; Type: TABLE DATA; Schema: funder; Owner: -
+--
+
+COPY funder.published_report_system_metrics (report_id, system_metric_id, target, value, underperformance_justification, status_id, progress_notes) FROM stdin;
+\.
+
+
+--
+-- Data for Name: published_reports; Type: TABLE DATA; Schema: funder; Owner: -
+--
+
+COPY funder.published_reports (report_id, project_id, report_frequency_id, report_quarter_id, start_date, end_date, highlights, published_by, published_time) FROM stdin;
 \.
 
 
@@ -6801,6 +10391,34 @@ COPY public.automations (id, facility_id, name, description, created_time, modif
 
 
 --
+-- Data for Name: chat_memory_conversations; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.chat_memory_conversations (id, created_by, created_time, modified_time) FROM stdin;
+\.
+
+
+--
+-- Data for Name: chat_memory_message_types; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.chat_memory_message_types (id, name) FROM stdin;
+1	Assistant
+2	System
+3	ToolResponse
+4	User
+\.
+
+
+--
+-- Data for Name: chat_memory_messages; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.chat_memory_messages (id, conversation_id, message_type_id, created_time, content) FROM stdin;
+\.
+
+
+--
 -- Data for Name: conservation_categories; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -6821,256 +10439,256 @@ VU	Vulnerable
 -- Data for Name: countries; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.countries (code, name, region_id) FROM stdin;
-AD	Andorra	3
-AE	United Arab Emirates	5
-AF	Afghanistan	8
-AG	Antigua and Barbuda	4
-AI	Anguilla	4
-AL	Albania	3
-AM	Armenia	3
-AO	Angola	9
-AQ	Antarctica	1
-AR	Argentina	4
-AS	American Samoa	7
-AT	Austria	3
-AU	Australia	7
-AW	Aruba	4
-AX	Åland Islands	3
-AZ	Azerbaijan	3
-BA	Bosnia and Herzegovina	3
-BB	Barbados	4
-BD	Bangladesh	8
-BE	Belgium	3
-BF	Burkina Faso	9
-BG	Bulgaria	3
-BH	Bahrain	5
-BI	Burundi	9
-BJ	Benin	9
-BL	St. Barthélemy	4
-BM	Bermuda	6
-BN	Brunei	2
-BO	Bolivia	4
-BQ	Caribbean Netherlands	4
-BR	Brazil	4
-BS	Bahamas	4
-BT	Bhutan	8
-BV	Bouvet Island	1
-BW	Botswana	9
-BY	Belarus	3
-BZ	Belize	4
-CA	Canada	6
-CC	Cocos (Keeling) Islands	7
-CD	Congo - Kinshasa	9
-CF	Central African Republic	9
-CG	Congo - Brazzaville	9
-CH	Switzerland	3
-CI	Côte d’Ivoire	9
-CK	Cook Islands	7
-CL	Chile	4
-CM	Cameroon	9
-CN	China	2
-CO	Colombia	4
-CR	Costa Rica	4
-CU	Cuba	4
-CV	Cape Verde	9
-CW	Curaçao	4
-CX	Christmas Island	7
-CY	Cyprus	3
-CZ	Czech Republic	3
-DE	Germany	3
-DJ	Djibouti	9
-DK	Denmark	3
-DM	Dominica	4
-DO	Dominican Republic	4
-DZ	Algeria	5
-EC	Ecuador	4
-EE	Estonia	3
-EG	Egypt	5
-EH	Western Sahara	5
-ER	Eritrea	9
-ES	Spain	3
-ET	Ethiopia	9
-FI	Finland	3
-FJ	Fiji	7
-FK	Falkland Islands	4
-FM	Micronesia	7
-FO	Faroe Islands	3
-FR	France	3
-GA	Gabon	9
-GB	United Kingdom	3
-GD	Grenada	4
-GE	Georgia	3
-GF	French Guiana	4
-GG	Guernsey	3
-GH	Ghana	9
-GI	Gibraltar	3
-GL	Greenland	6
-GM	Gambia	9
-GN	Guinea	9
-GP	Guadeloupe	4
-GQ	Equatorial Guinea	9
-GR	Greece	3
-GS	South Georgia & South Sandwich Islands	1
-GT	Guatemala	4
-GU	Guam	7
-GW	Guinea-Bissau	9
-GY	Guyana	4
-HK	Hong Kong SAR China	2
-HM	Heard & McDonald Islands	1
-HN	Honduras	4
-HR	Croatia	3
-HT	Haiti	4
-HU	Hungary	3
-ID	Indonesia	2
-IE	Ireland	3
-IL	Israel	5
-IM	Isle of Man	3
-IN	India	8
-IO	British Indian Ocean Territory	8
-IQ	Iraq	5
-IR	Iran	5
-IS	Iceland	3
-IT	Italy	3
-JE	Jersey	3
-JM	Jamaica	4
-JO	Jordan	5
-JP	Japan	2
-KE	Kenya	9
-KG	Kyrgyzstan	3
-KH	Cambodia	2
-KI	Kiribati	7
-KM	Comoros	9
-KN	Saint Kitts and Nevis	4
-KP	North Korea	2
-KR	South Korea	2
-KW	Kuwait	5
-KY	Cayman Islands	4
-KZ	Kazakhstan	3
-LA	Laos	2
-LB	Lebanon	5
-LC	Saint Lucia	4
-LI	Liechtenstein	3
-LK	Sri Lanka	8
-LR	Liberia	9
-LS	Lesotho	9
-LT	Lithuania	3
-LU	Luxembourg	3
-LV	Latvia	3
-LY	Libya	5
-MA	Morocco	5
-MC	Monaco	3
-MD	Moldova	3
-ME	Montenegro	3
-MF	St. Martin	4
-MG	Madagascar	9
-MH	Marshall Islands	7
-MK	North Macedonia	3
-ML	Mali	9
-MM	Myanmar	2
-MN	Mongolia	2
-MO	Macao SAR China	2
-MP	Northern Mariana Islands	7
-MQ	Martinique	4
-MR	Mauritania	9
-MS	Montserrat	4
-MT	Malta	3
-MU	Mauritius	9
-MV	Maldives	8
-MW	Malawi	9
-MX	Mexico	4
-MY	Malaysia	2
-MZ	Mozambique	9
-NA	Namibia	9
-NC	New Caledonia	7
-NE	Niger	9
-NF	Norfolk Island	7
-NG	Nigeria	9
-NI	Nicaragua	4
-NL	Netherlands	3
-NO	Norway	3
-NP	Nepal	8
-NR	Nauru	7
-NU	Niue	7
-NZ	New Zealand	7
-OM	Oman	5
-PA	Panama	4
-PE	Peru	4
-PF	French Polynesia	7
-PG	Papua New Guinea	7
-PH	Philippines	2
-PK	Pakistan	8
-PL	Poland	3
-PM	St. Pierre & Miquelon	6
-PN	Pitcairn Islands	7
-PR	Puerto Rico	4
-PS	Palestinian Territories	5
-PT	Portugal	3
-PW	Palau	7
-PY	Paraguay	4
-QA	Qatar	5
-RE	Réunion	9
-RO	Romania	3
-RS	Serbia	3
-RU	Russia	3
-RW	Rwanda	9
-SA	Saudi Arabia	5
-SB	Solomon Islands	7
-SC	Seychelles	9
-SD	Sudan	9
-SE	Sweden	3
-SG	Singapore	2
-SH	St. Helena	9
-SI	Slovenia	3
-SJ	Svalbard & Jan Mayen	3
-SK	Slovakia	3
-SL	Sierra Leone	9
-SM	San Marino	3
-SN	Senegal	9
-SO	Somalia	9
-SR	Suriname	4
-SS	South Sudan	9
-ST	Sao Tome and Principe	9
-SV	El Salvador	4
-SX	Sint Maarten	4
-SY	Syria	5
-SZ	Eswatini	9
-TC	Turks & Caicos Islands	4
-TD	Chad	9
-TF	French Southern Territories	1
-TG	Togo	9
-TH	Thailand	2
-TJ	Tajikistan	3
-TK	Tokelau	7
-TL	East Timor	2
-TM	Turkmenistan	3
-TN	Tunisia	5
-TO	Tonga	7
-TR	Turkey	3
-TT	Trinidad and Tobago	4
-TV	Tuvalu	7
-TW	Taiwan	2
-TZ	Tanzania	9
-UA	Ukraine	3
-UG	Uganda	9
-UM	U.S. Outlying Islands	7
-US	United States	6
-UY	Uruguay	4
-UZ	Uzbekistan	3
-VA	Vatican City (Holy See)	3
-VC	Saint Vincent and the Grenadines	4
-VE	Venezuela	4
-VG	British Virgin Islands	4
-VI	U.S. Virgin Islands	4
-VN	Vietnam	2
-VU	Vanuatu	7
-WF	Wallis & Futuna	7
-WS	Samoa	7
-YE	Yemen	5
-YT	Mayotte	9
-ZA	South Africa	9
-ZM	Zambia	9
-ZW	Zimbabwe	9
+COPY public.countries (code, name, region_id, code_alpha3, eligible) FROM stdin;
+ET	Ethiopia	9	ETH	f
+FI	Finland	3	FIN	f
+FJ	Fiji	7	FJI	t
+FK	Falkland Islands	4	FLK	f
+FM	Micronesia	7	FSM	t
+FO	Faroe Islands	3	FRO	f
+FR	France	3	FRA	f
+GA	Gabon	9	GAB	t
+GB	United Kingdom	3	GBR	f
+GD	Grenada	4	GRD	t
+GE	Georgia	3	GEO	f
+GF	French Guiana	4	GUF	t
+GG	Guernsey	3	GGY	f
+GH	Ghana	9	GHA	t
+GI	Gibraltar	3	GIB	f
+GL	Greenland	6	GRL	f
+GM	Gambia	9	GMB	t
+GN	Guinea	9	GIN	t
+GP	Guadeloupe	4	GLP	t
+GQ	Equatorial Guinea	9	GNQ	t
+GR	Greece	3	GRC	f
+GS	South Georgia & South Sandwich Islands	1	SGS	f
+GT	Guatemala	4	GTM	t
+GU	Guam	7	GUM	t
+GW	Guinea-Bissau	9	GNB	t
+GY	Guyana	4	GUY	t
+HK	Hong Kong SAR China	2	HKG	t
+HM	Heard & McDonald Islands	1	HMD	f
+HN	Honduras	4	HND	t
+HR	Croatia	3	HRV	f
+HT	Haiti	4	HTI	t
+HU	Hungary	3	HUN	f
+ID	Indonesia	2	IDN	t
+IE	Ireland	3	IRL	f
+IL	Israel	5	ISR	f
+IM	Isle of Man	3	IMN	f
+IN	India	8	IND	t
+IO	British Indian Ocean Territory	8	IOT	t
+IQ	Iraq	5	IRQ	f
+IR	Iran	5	IRN	f
+IS	Iceland	3	ISL	f
+IT	Italy	3	ITA	f
+JE	Jersey	3	JEY	f
+JM	Jamaica	4	JAM	t
+JO	Jordan	5	JOR	t
+JP	Japan	2	JPN	t
+KE	Kenya	9	KEN	t
+KG	Kyrgyzstan	3	KGZ	f
+KH	Cambodia	2	KHM	t
+KI	Kiribati	7	KIR	t
+KM	Comoros	9	COM	t
+KN	Saint Kitts and Nevis	4	KNA	t
+KP	North Korea	2	PRK	f
+KR	South Korea	2	KOR	f
+KW	Kuwait	5	KWT	f
+KY	Cayman Islands	4	CYM	t
+KZ	Kazakhstan	3	KAZ	f
+LA	Laos	2	LAO	t
+LB	Lebanon	5	LBN	f
+LC	Saint Lucia	4	LCA	t
+LI	Liechtenstein	3	LIE	f
+LK	Sri Lanka	8	LKA	t
+LR	Liberia	9	LBR	t
+LS	Lesotho	9	LSO	t
+LT	Lithuania	3	LTU	f
+LU	Luxembourg	3	LUX	f
+LV	Latvia	3	LVA	f
+LY	Libya	5	LBY	f
+MA	Morocco	5	MAR	f
+MC	Monaco	3	MCO	f
+MD	Moldova	3	MDA	f
+ME	Montenegro	3	MNE	f
+MF	St. Martin	4	MAF	f
+MG	Madagascar	9	MDG	t
+MH	Marshall Islands	7	MHL	t
+MK	North Macedonia	3	MKD	f
+ML	Mali	9	MLI	f
+MM	Myanmar	2	MMR	f
+MN	Mongolia	2	MNG	f
+MO	Macao SAR China	2	MAC	t
+MP	Northern Mariana Islands	7	MNP	t
+MQ	Martinique	4	MTQ	t
+MR	Mauritania	9	MRT	t
+MS	Montserrat	4	MSR	t
+MT	Malta	3	MLT	f
+MU	Mauritius	9	MUS	t
+MV	Maldives	8	MDV	t
+MW	Malawi	9	MWI	t
+MX	Mexico	4	MEX	t
+MY	Malaysia	2	MYS	t
+MZ	Mozambique	9	MOZ	t
+NA	Namibia	9	NAM	f
+NC	New Caledonia	7	NCL	t
+NE	Niger	9	NER	f
+NF	Norfolk Island	7	NFK	t
+NG	Nigeria	9	NGA	t
+NI	Nicaragua	4	NIC	f
+NL	Netherlands	3	NLD	f
+NO	Norway	3	NOR	f
+NP	Nepal	8	NPL	t
+NR	Nauru	7	NRU	t
+NU	Niue	7	NIU	t
+NZ	New Zealand	7	NZL	t
+OM	Oman	5	OMN	f
+PA	Panama	4	PAN	t
+PE	Peru	4	PER	t
+PF	French Polynesia	7	PYF	t
+PG	Papua New Guinea	7	PNG	t
+PH	Philippines	2	PHL	t
+PK	Pakistan	8	PAK	f
+PL	Poland	3	POL	f
+PM	St. Pierre & Miquelon	6	SPM	f
+PN	Pitcairn Islands	7	PCN	t
+PR	Puerto Rico	4	PRI	t
+PS	Palestinian Territories	5	PSE	f
+PT	Portugal	3	PRT	f
+PW	Palau	7	PLW	t
+PY	Paraguay	4	PRY	t
+QA	Qatar	5	QAT	f
+RE	Réunion	9	REU	t
+RO	Romania	3	ROU	f
+RS	Serbia	3	SRB	f
+RU	Russia	3	RUS	f
+RW	Rwanda	9	RWA	t
+SA	Saudi Arabia	5	SAU	f
+SB	Solomon Islands	7	SLB	t
+SC	Seychelles	9	SYC	t
+SD	Sudan	9	SDN	f
+SE	Sweden	3	SWE	f
+SG	Singapore	2	SGP	t
+SH	St. Helena	9	SHN	f
+SI	Slovenia	3	SVN	f
+SJ	Svalbard & Jan Mayen	3	SJM	f
+SK	Slovakia	3	SVK	f
+SL	Sierra Leone	9	SLE	t
+SM	San Marino	3	SMR	f
+SN	Senegal	9	SEN	t
+SO	Somalia	9	SOM	t
+SR	Suriname	4	SUR	t
+SS	South Sudan	9	SSD	t
+ST	Sao Tome and Principe	9	STP	t
+SV	El Salvador	4	SLV	t
+SX	Sint Maarten	4	SXM	f
+SY	Syria	5	SYR	f
+SZ	Eswatini	9	SWZ	t
+AD	Andorra	3	AND	f
+AE	United Arab Emirates	5	ARE	f
+AF	Afghanistan	8	AFG	f
+AG	Antigua and Barbuda	4	ATG	t
+AI	Anguilla	4	AIA	t
+AL	Albania	3	ALB	f
+AM	Armenia	3	ARM	t
+AO	Angola	9	AGO	t
+AQ	Antarctica	1	ATA	f
+AR	Argentina	4	ARG	t
+AS	American Samoa	7	ASM	t
+AT	Austria	3	AUT	f
+AU	Australia	7	AUS	t
+AW	Aruba	4	ABW	t
+AX	Åland Islands	3	ALA	f
+AZ	Azerbaijan	3	AZE	t
+BA	Bosnia and Herzegovina	3	BIH	t
+BB	Barbados	4	BRB	t
+BD	Bangladesh	8	BGD	t
+BE	Belgium	3	BEL	f
+BF	Burkina Faso	9	BFA	t
+BG	Bulgaria	3	BGR	f
+BH	Bahrain	5	BHR	f
+BI	Burundi	9	BDI	t
+BJ	Benin	9	BEN	t
+BL	St. Barthélemy	4	BLM	t
+BM	Bermuda	6	BMU	t
+BN	Brunei	2	BRN	t
+BO	Bolivia	4	BOL	f
+BQ	Caribbean Netherlands	4	BES	t
+BR	Brazil	4	BRA	t
+BS	Bahamas	4	BHS	t
+BT	Bhutan	8	BTN	t
+BV	Bouvet Island	1	BVT	f
+BW	Botswana	9	BWA	t
+BY	Belarus	3	BLR	f
+BZ	Belize	4	BLZ	t
+CA	Canada	6	CAN	f
+CC	Cocos (Keeling, true) Islands	7	CCK	t
+CD	Congo, Democratic Republic of the	9	COD	f
+CF	Central African Republic	9	CAF	f
+CG	Congo - Brazzaville	9	COG	t
+CH	Switzerland	3	CHE	f
+CI	Côte d'Ivoire	9	CIV	t
+CK	Cook Islands	7	COK	t
+CL	Chile	4	CHL	t
+CM	Cameroon	9	CMR	t
+CN	China	2	CHN	f
+CO	Colombia	4	COL	t
+CR	Costa Rica	4	CRI	t
+CU	Cuba	4	CUB	f
+CV	Cape Verde	9	CPV	t
+CW	Curaçao	4	CUW	t
+CX	Christmas Island	7	CXR	t
+CY	Cyprus	3	CYP	f
+CZ	Czech Republic	3	CZE	f
+DE	Germany	3	DEU	f
+DJ	Djibouti	9	DJI	f
+DK	Denmark	3	DNK	f
+DM	Dominica	4	DMA	t
+DO	Dominican Republic	4	DOM	t
+DZ	Algeria	5	DZA	f
+EC	Ecuador	4	ECU	f
+EE	Estonia	3	EST	f
+EG	Egypt	5	EGY	f
+EH	Western Sahara	5	ESH	f
+ER	Eritrea	9	ERI	f
+ES	Spain	3	ESP	f
+TC	Turks & Caicos Islands	4	TCA	t
+TD	Chad	9	TCD	t
+TF	French Southern Territories	1	ATF	f
+TG	Togo	9	TGO	t
+TH	Thailand	2	THA	t
+TJ	Tajikistan	3	TJK	f
+TK	Tokelau	7	TKL	t
+TL	East Timor	2	TLS	t
+TM	Turkmenistan	3	TKM	f
+TN	Tunisia	5	TUN	f
+TO	Tonga	7	TON	t
+TR	Turkey	3	TUR	f
+TT	Trinidad and Tobago	4	TTO	t
+TV	Tuvalu	7	TUV	t
+TW	Taiwan	2	TWN	t
+TZ	Tanzania	9	TZA	t
+UA	Ukraine	3	UKR	f
+UG	Uganda	9	UGA	t
+UM	U.S. Outlying Islands	7	UMI	t
+US	United States	6	USA	t
+UY	Uruguay	4	URY	t
+UZ	Uzbekistan	3	UZB	f
+VA	Vatican City (Holy See, false)	3	VAT	t
+VC	Saint Vincent and the Grenadines	4	VCT	t
+VE	Venezuela	4	VEN	f
+VG	British Virgin Islands	4	VGB	t
+VI	U.S. Virgin Islands	4	VIR	t
+VN	Vietnam	2	VNM	t
+VU	Vanuatu	7	VUT	t
+WF	Wallis & Futuna	7	WLF	t
+WS	Samoa	7	WSM	t
+YE	Yemen	5	YEM	f
+YT	Mayotte	9	MYT	t
+ZA	South Africa	9	ZAF	t
+ZM	Zambia	9	ZMB	t
+ZW	Zimbabwe	9	ZWE	f
 \.
 
 
@@ -7200,10 +10818,10 @@ COPY public.ecosystem_types (id, name) FROM stdin;
 --
 
 COPY public.facilities (id, type_id, name, created_time, modified_time, created_by, modified_by, max_idle_minutes, last_timeseries_time, idle_after_time, idle_since_time, description, connection_state_id, organization_id, time_zone, last_notification_date, next_notification_time, build_started_date, build_completed_date, operation_started_date, capacity, facility_number) FROM stdin;
-100	1	Seed Bank	2022-02-04 17:48:28.616331+00	2022-02-04 17:48:28.616331+00	1	1	30	\N	\N	2022-01-01 00:00:00+00	\N	1	1	\N	2024-06-11	2024-06-12 00:01:00+00	\N	\N	\N	\N	1
-101	1	garage	2022-02-04 17:48:28.616331+00	2022-02-04 17:48:28.616331+00	1	1	30	\N	\N	2022-01-01 00:00:00+00	\N	1	1	\N	2024-06-11	2024-06-12 00:01:00+00	\N	\N	\N	\N	2
-102	1	Test facility	2022-02-04 17:48:28.616331+00	2022-02-04 17:48:28.616331+00	1	1	30	\N	\N	2022-01-01 00:00:00+00	\N	1	1	\N	2024-06-11	2024-06-12 00:01:00+00	\N	\N	\N	\N	3
-103	4	Nursery	2024-03-05 04:06:31.354789+00	2024-03-05 04:06:31.354802+00	1	1	30	\N	\N	\N	My First Nursery!	1	1	\N	2024-06-11	2024-06-12 00:01:00+00	\N	\N	\N	\N	1
+100	1	Seed Bank	2022-02-04 17:48:28.616331+00	2022-02-04 17:48:28.616331+00	1	1	30	\N	\N	2022-01-01 00:00:00+00	\N	1	1	\N	2025-05-13	2025-05-14 00:01:00+00	\N	\N	\N	\N	1
+101	1	garage	2022-02-04 17:48:28.616331+00	2022-02-04 17:48:28.616331+00	1	1	30	\N	\N	2022-01-01 00:00:00+00	\N	1	1	\N	2025-05-13	2025-05-14 00:01:00+00	\N	\N	\N	\N	2
+102	1	Test facility	2022-02-04 17:48:28.616331+00	2022-02-04 17:48:28.616331+00	1	1	30	\N	\N	2022-01-01 00:00:00+00	\N	1	1	\N	2025-05-13	2025-05-14 00:01:00+00	\N	\N	\N	\N	3
+103	4	Nursery	2024-03-05 04:06:31.354789+00	2024-03-05 04:06:31.354802+00	1	1	30	\N	\N	\N	My First Nursery!	1	1	\N	2025-05-13	2025-05-14 00:01:00+00	\N	\N	\N	\N	1
 \.
 
 
@@ -7234,9 +10852,9 @@ COPY public.facility_types (id, name) FROM stdin;
 -- Data for Name: files; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.files (id, file_name, content_type, size, created_time, modified_time, created_by, storage_url, modified_by) FROM stdin;
-1001	accession1.jpg	image/jpeg	6441	2021-02-12 18:36:15.842405+00	2021-02-12 18:36:15.842405+00	1	file:///100/A/A/F/AAF4D49R3E/accession1.jpg	1
-1002	accession2.jpg	image/jpeg	6539	2021-02-12 18:36:15.903768+00	2021-02-12 18:36:15.903768+00	1	file:///100/A/A/F/AAF4D49R3E/accession2.jpg	1
+COPY public.files (id, file_name, content_type, size, created_time, modified_time, created_by, storage_url, modified_by, file_date, width, height) FROM stdin;
+1001	accession1.jpg	image/jpeg	6441	2021-02-12 18:36:15.842405+00	2021-02-12 18:36:15.842405+00	1	file:///100/A/A/F/AAF4D49R3E/accession1.jpg	1	\N	\N	\N
+1002	accession2.jpg	image/jpeg	6539	2021-02-12 18:36:15.903768+00	2021-02-12 18:36:15.903768+00	1	file:///100/A/A/F/AAF4D49R3E/accession2.jpg	1	\N	\N	\N
 \.
 
 
@@ -7385,7 +11003,6 @@ COPY public.flyway_schema_history (installed_rank, version, description, type, s
 138	131	UsersDeletedTime	SQL	V131__UsersDeletedTime.sql	2089678073	koreth	2022-10-25 10:51:42.555975	1	t
 139	132	OrganizationsCascadeDeletes	SQL	V132__OrganizationsCascadeDeletes.sql	-923301449	koreth	2022-10-25 10:51:42.559694	9	t
 140	133	ValidateTimeseriesValues	SQL	V133__ValidateTimeseriesValues.sql	-1948613537	koreth	2022-10-25 10:51:42.57221	1	t
-141	134	ViabilityTestsCut	SQL	V134__ViabilityTestsCut.sql	1403559516	koreth	2022-10-25 10:51:42.576172	2	t
 142	135	DropAccessionSpeciesDetails	SQL	V135__DropAccessionSpeciesDetails.sql	685714510	koreth	2022-10-25 10:51:42.581345	2	t
 143	136	DeleteCleaningState	SQL	V136__DeleteCleaningState.sql	1067859440	koreth	2022-10-25 10:51:42.586739	1	t
 144	137	UploadsFacilityId	SQL	V137__UploadsFacilityId.sql	-1581707590	koreth	2022-10-25 10:51:42.591227	1	t
@@ -7543,6 +11160,107 @@ COPY public.flyway_schema_history (installed_rank, version, description, type, s
 296	\N	Comments	SQL	R__Comments.sql	114638363	postgres	2024-06-11 21:50:39.700078	54	t
 297	\N	Countries	SQL	R__Countries.sql	-778652569	postgres	2024-06-11 21:50:39.79532	10	t
 298	\N	TypeCodes	SQL	R__TypeCodes.sql	578191174	postgres	2024-06-11 21:50:39.820851	59	t
+141	134	ViabilityTestsCut	SQL	V134__ViabilityTestsCut.sql	-1518961202	koreth	2022-10-25 10:51:42.576172	2	t
+299	282	DocumentProducerTables	SQL	0250/V282__DocumentProducerTables.sql	2053500342	ihudson	2025-05-13 10:27:36.900119	570	t
+300	283	VariableWorkflowHistory	SQL	0250/V283__VariableWorkflowHistory.sql	171150018	ihudson	2025-05-13 10:27:37.499035	54	t
+301	284	UserDeliverableCategories	SQL	0250/V284__UserDeliverableCategories.sql	2063227015	ihudson	2025-05-13 10:27:37.57239	19	t
+302	285	DocProdDefaultSectionValues	SQL	0250/V285__DocProdDefaultSectionValues.sql	1996126139	ihudson	2025-05-13 10:27:37.606793	25	t
+303	286	CountriesAlpha3	SQL	0250/V286__CountriesAlpha3.sql	-827919827	ihudson	2025-05-13 10:27:37.646069	25	t
+304	287	Applications	SQL	0250/V287__Applications.sql	-83061638	ihudson	2025-05-13 10:27:37.680677	89	t
+305	288	ApplicationsUniqueInternalName	SQL	0250/V288__ApplicationsUniqueInternalName.sql	-883246226	ihudson	2025-05-13 10:27:37.780189	4	t
+306	289	DefaultProjectLeads	SQL	0250/V289__DefaultProjectLeads.sql	-1046160378	ihudson	2025-05-13 10:27:37.790284	13	t
+307	290	ApplicationModulesPK	SQL	0250/V290__ApplicationModulesPK.sql	739618851	ihudson	2025-05-13 10:27:37.807633	4	t
+308	291	ModulesPosition	SQL	0250/V291__ModulesPosition.sql	1663492124	ihudson	2025-05-13 10:27:37.816172	5	t
+309	292	AcceleratorDetailsColumns	SQL	0250/V292__AcceleratorDetailsColumns.sql	-133350834	ihudson	2025-05-13 10:27:37.826308	1	t
+310	293	ApplicationInternalName	SQL	0250/V293__ApplicationInternalName.sql	-1783893912	ihudson	2025-05-13 10:27:37.832999	29	t
+311	294	ModuleRecordedSession	SQL	0250/V294__ModuleRecordedSession.sql	1179528531	ihudson	2025-05-13 10:27:37.86749	3	t
+312	295	VariableRequired	SQL	0250/V295__VariableRequired.sql	727460166	ihudson	2025-05-13 10:27:37.875696	7	t
+313	296	ObservationRequestedSubzones	SQL	0250/V296__ObservationRequestedSubzones.sql	2100651927	ihudson	2025-05-13 10:27:37.889346	12	t
+314	297	AcceleratorHubSpot	SQL	0250/V297__AcceleratorHubSpot.sql	1543291551	ihudson	2025-05-13 10:27:37.906668	1	t
+315	298	ApplicationCountryCode	SQL	0250/V298__ApplicationCountryCode.sql	21991249	ihudson	2025-05-13 10:27:37.914078	4	t
+316	299	RemoveModuleDateContraints	SQL	0250/V299__RemoveModuleDateContraints.sql	-2016083516	ihudson	2025-05-13 10:27:37.92418	4	t
+317	300	DocumentsInternalComment	SQL	0300/V300__DocumentsInternalComment.sql	-2031996540	ihudson	2025-05-13 10:27:37.936109	1	t
+318	301	InternalInterests	SQL	0300/V301__InternalInterests.sql	-247370575	ihudson	2025-05-13 10:27:37.941641	11	t
+319	302	DeliverableInternalInterestMapping	SQL	0300/V302__DeliverableInternalInterestMapping.sql	1295728239	ihudson	2025-05-13 10:27:37.959621	17	t
+320	303	UserInternalInterests	SQL	0300/V303__UserInternalInterests.sql	1445470991	ihudson	2025-05-13 10:27:37.98383	21	t
+321	304	VariableNumbersDecimalPlaces	SQL	0300/V304__VariableNumbersDecimalPlaces.sql	-1393456086	ihudson	2025-05-13 10:27:38.022653	4	t
+322	305	CountriesIndexByName	SQL	0300/V305__CountriesIndexByName.sql	-812676012	ihudson	2025-05-13 10:27:38.032433	4	t
+323	306	HubSpotToken	SQL	0300/V306__HubSpotToken.sql	-736473405	ihudson	2025-05-13 10:27:38.042669	6	t
+324	307	RateLimitedEvents	SQL	0300/V307__RateLimitedEvents.sql	-1486027101	ihudson	2025-05-13 10:27:38.054866	9	t
+325	308	UsedVariableIndex	SQL	0300/V308__UsedVariableIndex.sql	293784844	ihudson	2025-05-13 10:27:38.070156	3	t
+326	309	DeliverableVariables	SQL	0300/V309__DeliverableVariables.sql	-1137937274	ihudson	2025-05-13 10:27:38.081504	10	t
+327	310	MonitoringPlotSize	SQL	0300/V310__MonitoringPlotSize.sql	-1491849227	ihudson	2025-05-13 10:27:38.097034	5	t
+328	311	MonitoringPlotOverlaps	SQL	0300/V311__MonitoringPlotOverlaps.sql	845654248	ihudson	2025-05-13 10:27:38.108062	10	t
+329	312	PlantingSiteCountry	SQL	0300/V312__PlantingSiteCountry.sql	1303525692	ihudson	2025-05-13 10:27:38.125569	11	t
+330	313	ReduceTemporaryPlots	SQL	0300/V313__ReduceTemporaryPlots.sql	-1918897146	ihudson	2025-05-13 10:27:38.14309	4	t
+331	314	ObservationStatuses	SQL	0300/V314__ObservationStatuses.sql	-765759624	ihudson	2025-05-13 10:27:38.153526	20	t
+332	315	ObservationsStateConstraint	SQL	0300/V315__ObservationsStateConstraint.sql	-217065854	ihudson	2025-05-13 10:27:38.179624	3	t
+333	316	MonitoringPlotSite	SQL	0300/V316__MonitoringPlotSite.sql	564939861	ihudson	2025-05-13 10:27:38.188208	16	t
+334	317	MonitoringPlotHistories	SQL	0300/V317__MonitoringPlotHistories.sql	-2005989909	ihudson	2025-05-13 10:27:38.20909	56	t
+335	318	DeferrableHistoryFKs	SQL	0300/V318__DeferrableHistoryFKs.sql	1816011069	ihudson	2025-05-13 10:27:38.272669	2	t
+336	319	ObservationPlotHistory	SQL	0300/V319__ObservationPlotHistory.sql	347308099	ihudson	2025-05-13 10:27:38.280436	17	t
+337	320	ProjectOverallScores	SQL	0300/V320__ProjectOverallScores.sql	-1087312674	ihudson	2025-05-13 10:27:38.302052	14	t
+338	321	DeletedProjectReport	SQL	0300/V321__DeletedProjectReport.sql	193022866	ihudson	2025-05-13 10:27:38.320618	7	t
+339	322	MonitoringPlotNullSubzone	SQL	0300/V322__MonitoringPlotNullSubzone.sql	-2071846150	ihudson	2025-05-13 10:27:38.334343	9	t
+340	323	ObservationsSiteHistory	SQL	0300/V323__ObservationsSiteHistory.sql	-702862646	ihudson	2025-05-13 10:27:38.347769	29	t
+341	324	EmailVariable	SQL	0300/V324__EmailVariable.sql	1789165098	ihudson	2025-05-13 10:27:38.381803	2	t
+342	325	ReducePermanentPlots	SQL	0300/V325__ReducePermanentPlots.sql	-1898314725	ihudson	2025-05-13 10:27:38.394224	1	t
+343	326	AdHocPlots	SQL	0300/V326__AdHocPlots.sql	-1322449027	ihudson	2025-05-13 10:27:38.40032	35	t
+344	327	IdentifierSequencesCascade	SQL	0300/V327__IdentifierSequencesCascade.sql	1141670533	ihudson	2025-05-13 10:27:38.442558	8	t
+345	328	MonitoringPlotNumbers	SQL	0300/V328__MonitoringPlotNumbers.sql	2046704212	ihudson	2025-05-13 10:27:38.455987	40	t
+346	329	BackfillWholeBatchWithdrawals	SQL	0300/V329__BackfillWholeBatchWithdrawals.sql	-1089181959	ihudson	2025-05-13 10:27:38.503442	58	t
+347	330	DropMonitoringPlotName	SQL	0300/V330__DropMonitoringPlotName.sql	-173823138	ihudson	2025-05-13 10:27:38.569324	2	t
+348	331	ObservationSubzoneSpecies	SQL	0300/V331__ObservationSubzoneSpecies.sql	167658249	ihudson	2025-05-13 10:27:38.580117	53	t
+349	332	ObservationPlotPhotoType	SQL	0300/V332__ObservationPlotPhotoType.sql	-1582625697	ihudson	2025-05-13 10:27:38.63895	29	t
+350	333	ObservationPlotBiomassDetails	SQL	0300/V333__ObservationPlotBiomassDetails.sql	186161421	ihudson	2025-05-13 10:27:38.673436	111	t
+351	334	ObservationBiomassTypes	SQL	0300/V334__ObservationBiomassTypes.sql	2085494008	ihudson	2025-05-13 10:27:38.794681	93	t
+352	335	ZoneBoundaryModified	SQL	0300/V335__ZoneBoundaryModified.sql	-699824714	ihudson	2025-05-13 10:27:38.92534	12	t
+353	336	SubzoneObservedTime	SQL	0300/V336__SubzoneObservedTime.sql	160184367	ihudson	2025-05-13 10:27:38.94269	5	t
+354	337	ObservationPhotosPosition	SQL	0300/V337__ObservationPhotosPosition.sql	-731879409	ihudson	2025-05-13 10:27:38.956007	1	t
+355	338	BiomassSpecies	SQL	0300/V338__BiomassSpecies.sql	52455676	ihudson	2025-05-13 10:27:38.962743	89	t
+356	339	SeedFundReports	SQL	0300/V339__SeedFundReports.sql	1542104165	ihudson	2025-05-13 10:27:39.068847	5	t
+357	340	AcceleratorReportsConfigs	SQL	0300/V340__AcceleratorReportsConfigs.sql	1345142166	ihudson	2025-05-13 10:27:39.081697	143	t
+358	341	BiomassTreeTrunks	SQL	0300/V341__BiomassTreeTrunks.sql	1498430157	ihudson	2025-05-13 10:27:39.235898	53	t
+359	342	BiomassTreeConstraintUpdate	SQL	0300/V342__BiomassTreeConstraintUpdate.sql	387598370	ihudson	2025-05-13 10:27:39.314995	4	t
+360	343	FullSiteObservationSubzones	SQL	0300/V343__FullSiteObservationSubzones.sql	-1277044171	ihudson	2025-05-13 10:27:39.325305	7	t
+361	344	ReportStandardMetrics	SQL	0300/V344__ReportStandardMetrics.sql	662641632	ihudson	2025-05-13 10:27:39.33764	56	t
+362	345	ObservationsCompletedTime	SQL	0300/V345__ObservationsCompletedTime.sql	996837803	ihudson	2025-05-13 10:27:39.398983	1	t
+363	346	ReportProjectMetrics	SQL	0300/V346__ReportProjectMetrics.sql	-722274235	ihudson	2025-05-13 10:27:39.40502	43	t
+364	347	ReportCollate	SQL	0300/V347__ReportCollate.sql	1402273259	ihudson	2025-05-13 10:27:39.453113	1	t
+365	348	UpdateApplicationStatuses	SQL	0300/V348__UpdateApplicationStatuses.sql	188912986	ihudson	2025-05-13 10:27:39.460649	7	t
+366	349	IssueActiveStatus	SQL	0300/V349__IssueActiveStatus.sql	356411821	ihudson	2025-05-13 10:27:39.473312	1	t
+367	350	FundingEntities	SQL	0350/V350__FundingEntities.sql	-1041333041	ihudson	2025-05-13 10:27:39.478677	30	t
+368	351	FundingEntityProjectsPrimary	SQL	0350/V351__FundingEntityProjectsPrimary.sql	1323148919	ihudson	2025-05-13 10:27:39.515256	3	t
+369	352	SystemMetrics	SQL	0350/V352__SystemMetrics.sql	-107347749	ihudson	2025-05-13 10:27:39.52299	13	t
+370	353	UniqueReportConfigs	SQL	0350/V353__UniqueReportConfigs.sql	947194718	ihudson	2025-05-13 10:27:39.539967	7	t
+371	354	ReportMetricStatuses	SQL	0350/V354__ReportMetricStatuses.sql	-1200925741	ihudson	2025-05-13 10:27:39.553054	6	t
+372	355	ReportMetricsFieldsRename	SQL	0350/V355__ReportMetricsFieldsRename.sql	-202333691	ihudson	2025-05-13 10:27:39.563618	1	t
+373	356	ReportHightlight	SQL	0350/V356__ReportHightlight.sql	1614678588	ihudson	2025-05-13 10:27:39.568315	0	t
+374	357	AskTerraware	SQL	0350/V357__AskTerraware.sql	-2100431519	ihudson	2025-05-13 10:27:39.573166	183	t
+375	358	ReportAchievementsAndChallenges	SQL	0350/V358__ReportAchievementsAndChallenges.sql	-1077202215	ihudson	2025-05-13 10:27:39.762064	29	t
+376	359	BiomassDecriptionConstraints	SQL	0350/V359__BiomassDecriptionConstraints.sql	-89287193	ihudson	2025-05-13 10:27:39.798692	20	t
+377	360	LongerBiomassDescription	SQL	0350/V360__LongerBiomassDescription.sql	1621366292	ihudson	2025-05-13 10:27:39.830464	1	t
+378	361	AcceleratorDealNameColumn	SQL	0350/V361__AcceleratorDealNameColumn.sql	-451295744	ihudson	2025-05-13 10:27:39.836079	14	t
+379	362	ReportQuarters	SQL	0350/V362__ReportQuarters.sql	-1919035577	ihudson	2025-05-13 10:27:39.855405	39	t
+380	363	DealNameMigrations	SQL	0350/V363__DealNameMigrations.sql	1636058044	ihudson	2025-05-13 10:27:39.900663	5	t
+381	364	HistoriesArea	SQL	0350/V364__HistoriesArea.sql	-1792074295	ihudson	2025-05-13 10:27:39.915409	1	t
+382	365	ProjectOperationalPlanUrl	SQL	0350/V365__ProjectOperationalPlanUrl.sql	852240329	ihudson	2025-05-13 10:27:39.922214	1	t
+383	366	MetricPublishable	SQL	0350/V366__MetricPublishable.sql	-2090757852	ihudson	2025-05-13 10:27:39.929519	16	t
+384	367	FunderReports	SQL	0350/V367__FunderReports.sql	-1006089543	ihudson	2025-05-13 10:27:39.952848	81	t
+385	368	ReportsNotifications	SQL	0350/V368__ReportsNotifications.sql	-487530916	ihudson	2025-05-13 10:27:40.042139	1	t
+386	369	DropExtraPermanentClusters	SQL	0350/V369__DropExtraPermanentClusters.sql	821193111	ihudson	2025-05-13 10:27:40.0497	1	t
+387	370	DropPermanentClusterSubplot	SQL	0350/V370__DropPermanentClusterSubplot.sql	-1348442995	ihudson	2025-05-13 10:27:40.055162	1	t
+388	371	PublishReportMetricStatus	SQL	0350/V371__PublishReportMetricStatus.sql	-1355019701	ihudson	2025-05-13 10:27:40.06092	1	t
+389	372	NumPermanentPlots	SQL	0350/V372__NumPermanentPlots.sql	-1947892818	ihudson	2025-05-13 10:27:40.067306	1	t
+390	373	PlotElevationData	SQL	0350/V373__PlotElevationData.sql	-1669331019	ihudson	2025-05-13 10:27:40.07223	0	t
+391	374	PermanentIndex	SQL	0350/V374__PermanentIndex.sql	131159411	ihudson	2025-05-13 10:27:40.076435	0	t
+392	375	TrackingStableId	SQL	0350/V375__TrackingStableId.sql	79632755	ihudson	2025-05-13 10:27:40.080966	17	t
+393	376	VectorStoreLargerEmbedding	SQL	0350/V376__VectorStoreLargerEmbedding.sql	-1205724760	ihudson	2025-05-13 10:27:40.102119	23	t
+394	377	PublishableProgressNotes	SQL	0350/V377__PublishableProgressNotes.sql	-1891241495	ihudson	2025-05-13 10:27:40.135884	1	t
+395	378	TimeseriesRetention	SQL	0350/V378__TimeseriesRetention.sql	-999189316	ihudson	2025-05-13 10:27:40.142636	1	t
+396	\N	Comments	SQL	R__Comments.sql	1968888313	ihudson	2025-05-13 10:27:40.148878	54	t
+397	\N	Countries	SQL	R__Countries.sql	1430440513	ihudson	2025-05-13 10:27:40.217241	10	t
+398	\N	TypeCodes	SQL	R__TypeCodes.sql	286456408	ihudson	2025-05-13 10:27:40.232243	148	t
 \.
 
 
@@ -7646,7 +11364,7 @@ COPY public.internal_tags (id, name, description, is_system, created_by, created
 --
 
 COPY public.jobrunr_backgroundjobservers (id, workerpoolsize, pollintervalinseconds, firstheartbeat, lastheartbeat, running, systemtotalmemory, systemfreememory, systemcpuload, processmaxmemory, processfreememory, processallocatedmemory, processcpuload, deletesucceededjobsafter, permanentlydeletejobsafter, name) FROM stdin;
-ae600158-5ec5-4cb8-9284-62479154888f	160	15	2024-06-11 21:50:43.472363	2024-06-11 22:50:03.652626	1	8221683712	5272993792	0.01	2057306112	1859678216	197627896	0.01	PT36H	PT72H	c839ed6df710
+a8576c95-b14d-446f-adb3-ccd75567c0c1	224	15	2025-05-13 17:27:46.217013	2025-05-13 17:30:46.340469	1	25769803776	224854016	0.14	6442450944	6170416480	272034464	0.14	PT36H	PT72H	Isaacs-TF-MBP.attlocal.net
 \.
 
 
@@ -7655,92 +11373,87 @@ ae600158-5ec5-4cb8-9284-62479154888f	160	15	2024-06-11 21:50:43.472363	2024-06-1
 --
 
 COPY public.jobrunr_jobs (id, version, jobasjson, jobsignature, state, createdat, updatedat, scheduledat, recurringjobid) FROM stdin;
-01900953-3102-785f-99eb-e5e122fbf098	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900953-3102-785f-99eb-e5e122fbf098","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:02:45.377645588Z","scheduledAt":"2024-06-11T22:03:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:02:45.396805588Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:03:00.203435636Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:03:00.203435636Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:03:00.219951678Z","latencyDuration":14.806630048,"processDuration":0.016498417}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:02:45.377646	2024-06-11 22:03:00.219952	\N	FacilityService.scanForIdleFacilities
-01900954-1b9d-781c-b8a9-c5e257aae26a	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900954-1b9d-781c-b8a9-c5e257aae26a","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:03:45.436940879Z","scheduledAt":"2024-06-11T22:04:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:03:45.479988921Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:04:00.247394220Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:04:00.247394220Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:04:00.260413636Z","latencyDuration":14.767405299,"processDuration":0.013010041}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:03:45.436941	2024-06-11 22:04:00.260414	\N	FacilityService.scanForIdleFacilities
-01900955-0662-7ec9-818c-d54c390484af	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900955-0662-7ec9-818c-d54c390484af","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:04:45.538283129Z","scheduledAt":"2024-06-11T22:05:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:04:45.558313171Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:05:00.290553345Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:05:00.290553345Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:05:00.311695636Z","latencyDuration":14.732240174,"processDuration":0.021123958}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:04:45.538283	2024-06-11 22:05:00.311696	\N	FacilityService.scanForIdleFacilities
-01900956-db94-7c8b-aa84-63aa939ac4bf	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900956-db94-7c8b-aa84-63aa939ac4bf","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:06:45.652133088Z","scheduledAt":"2024-06-11T22:07:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:06:45.666407463Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:07:00.392659553Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:07:00.392659553Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:07:00.433743470Z","latencyDuration":14.726252090,"processDuration":0.041063167}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:06:45.652133	2024-06-11 22:07:00.433743	\N	FacilityService.scanForIdleFacilities
-01900955-f103-767e-a491-aa569b54a8cd	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900955-f103-767e-a491-aa569b54a8cd","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:05:45.602991129Z","scheduledAt":"2024-06-11T22:06:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:05:45.620260504Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:06:00.344118261Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:06:00.344118261Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:06:00.364761845Z","latencyDuration":14.723857757,"processDuration":0.020620750}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:05:45.602991	2024-06-11 22:06:00.364762	\N	FacilityService.scanForIdleFacilities
-0190095e-30e3-7e9e-b2d3-337ecd04b262	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"0190095e-30e3-7e9e-b2d3-337ecd04b262","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:14:46.243924755Z","scheduledAt":"2024-06-11T22:15:00Z","recurringJobId":"ObservationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.ObservationScheduler.transitionObservations()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:14:46.278670671Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:15:00.873507887Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:15:00.873507887Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:15:01.008071262Z","latencyDuration":14.594837216,"processDuration":0.134562083}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"ObservationScheduler"}	com.terraformation.backend.daily.ObservationScheduler.transitionObservations()	SUCCEEDED	2024-06-11 22:14:46.243925	2024-06-11 22:15:01.008071	\N	ObservationScheduler
-01900950-7131-78ac-a8d6-bfa4b5752782	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900950-7131-78ac-a8d6-bfa4b5752782","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:59:45.201327796Z","scheduledAt":"2024-06-11T22:00:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:59:45.221435379Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:00:00.022705970Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:00:00.022705970Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:00:00.040394761Z","latencyDuration":14.801270591,"processDuration":0.017674416}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 21:59:45.201328	2024-06-11 22:00:00.040395	\N	FacilityService.scanForIdleFacilities
-01900950-7134-72e7-9efc-a385ae7ad959	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"01900950-7134-72e7-9efc-a385ae7ad959","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:59:45.204427587Z","scheduledAt":"2024-06-11T22:00:00Z","recurringJobId":"NotificationScanner","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.NotificationScanner.sendNotifications()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:59:45.221452754Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:00:00.022720470Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:00:00.022720470Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:00:00.226108386Z","latencyDuration":14.801267716,"processDuration":0.203386500}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"NotificationScanner"}	com.terraformation.backend.daily.NotificationScanner.sendNotifications()	SUCCEEDED	2024-06-11 21:59:45.204428	2024-06-11 22:00:00.226108	\N	NotificationScanner
-01900957-c636-74bc-8c2a-f45a31b981f5	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900957-c636-74bc-8c2a-f45a31b981f5","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:07:45.717630004Z","scheduledAt":"2024-06-11T22:08:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:07:45.767563296Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:08:00.449582928Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:08:00.449582928Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:08:00.483092428Z","latencyDuration":14.682019632,"processDuration":0.033484000}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:07:45.71763	2024-06-11 22:08:00.483092	\N	FacilityService.scanForIdleFacilities
-01900958-b104-7cdd-a833-bb100ed5d678	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900958-b104-7cdd-a833-bb100ed5d678","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:08:45.828159338Z","scheduledAt":"2024-06-11T22:09:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:08:45.849757504Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:09:00.490274886Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:09:00.490274886Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:09:00.500107178Z","latencyDuration":14.640517382,"processDuration":0.009819959}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:08:45.828159	2024-06-11 22:09:00.500107	\N	FacilityService.scanForIdleFacilities
-01900959-9bb4-7480-8b19-d8891a2c0c51	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900959-9bb4-7480-8b19-d8891a2c0c51","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:09:45.908288254Z","scheduledAt":"2024-06-11T22:10:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:09:45.923821296Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:10:00.519956720Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:10:00.519956720Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:10:00.532776845Z","latencyDuration":14.596135424,"processDuration":0.012808875}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:09:45.908288	2024-06-11 22:10:00.532777	\N	FacilityService.scanForIdleFacilities
-01900961-db5b-7e1a-b0a1-669a07156b6b	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900961-db5b-7e1a-b0a1-669a07156b6b","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:18:46.490686046Z","scheduledAt":"2024-06-11T22:19:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:18:46.517951546Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:19:01.119434012Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:19:01.119434012Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:19:01.131894470Z","latencyDuration":14.601482466,"processDuration":0.012448708}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:18:46.490686	2024-06-11 22:19:01.131894	\N	FacilityService.scanForIdleFacilities
-0190095a-8650-7cfd-b953-f94202235b2b	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190095a-8650-7cfd-b953-f94202235b2b","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:10:45.968199046Z","scheduledAt":"2024-06-11T22:11:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:10:45.990842671Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:11:00.622610845Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:11:00.622610845Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:11:00.639456678Z","latencyDuration":14.631768174,"processDuration":0.016822041}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:10:45.968199	2024-06-11 22:11:00.639457	\N	FacilityService.scanForIdleFacilities
-01900972-5af5-7f61-b999-374f7498a38a	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900972-5af5-7f61-b999-374f7498a38a","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:36:47.732212922Z","scheduledAt":"2024-06-11T22:37:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:36:47.755383797Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:37:02.294549179Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:37:02.294549179Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:37:02.347921679Z","latencyDuration":14.539165382,"processDuration":0.053358291}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:36:47.732213	2024-06-11 22:37:02.347922	\N	FacilityService.scanForIdleFacilities
-0190095f-1b86-75fb-82f6-c7084af5a743	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190095f-1b86-75fb-82f6-c7084af5a743","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:15:46.309907005Z","scheduledAt":"2024-06-11T22:16:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:15:46.349879755Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:16:00.946161845Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:16:00.946161845Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:16:00.983999387Z","latencyDuration":14.596282090,"processDuration":0.037812333}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:15:46.309907	2024-06-11 22:16:00.983999	\N	FacilityService.scanForIdleFacilities
-b19bd79f-7259-49d2-b556-43cf3059a567	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"b19bd79f-7259-49d2-b556-43cf3059a567","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-03-06T18:51:49.543495628Z","scheduledAt":"2024-03-06T18:52:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-03-06T18:51:49.590519920Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-03-06T18:51:49.609688545Z","serverId":"ec489033-b434-4f14-8f08-eefe8f2dac34","serverName":"a832224d98d0","updatedAt":"2024-03-06T18:51:49.609688545Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-03-06T18:51:49.658282962Z","latencyDuration":0.019168625,"processDuration":0.048591250},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2024-06-11T21:51:44.756793546Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-03-06 18:51:49.543496	2024-06-11 21:51:44.756794	\N	FacilityService.scanForIdleFacilities
-e49ae8e1-5ea0-44df-8752-5eb763d59bf1	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"e49ae8e1-5ea0-44df-8752-5eb763d59bf1","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-03-06T18:52:49.732717045Z","scheduledAt":"2024-03-06T18:53:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-03-06T18:52:49.751239170Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-03-06T18:52:49.765612379Z","serverId":"ec489033-b434-4f14-8f08-eefe8f2dac34","serverName":"a832224d98d0","updatedAt":"2024-03-06T18:52:49.765612379Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-03-06T18:52:49.773783254Z","latencyDuration":0.014373209,"processDuration":0.008169166},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2024-06-11T21:51:44.757248754Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-03-06 18:52:49.732717	2024-06-11 21:51:44.757249	\N	FacilityService.scanForIdleFacilities
-5ed2847c-c294-4e1e-8b09-0c418bc87965	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"5ed2847c-c294-4e1e-8b09-0c418bc87965","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-03-06T18:53:49.899381420Z","scheduledAt":"2024-03-06T18:54:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-03-06T18:53:49.942237045Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-03-06T18:53:49.953472337Z","serverId":"ec489033-b434-4f14-8f08-eefe8f2dac34","serverName":"a832224d98d0","updatedAt":"2024-03-06T18:53:49.953472337Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-03-06T18:53:49.966461254Z","latencyDuration":0.011235292,"processDuration":0.012987333},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2024-06-11T21:51:44.757255879Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-03-06 18:53:49.899381	2024-06-11 21:51:44.757256	\N	FacilityService.scanForIdleFacilities
-2a43d872-a46d-43fd-a7c6-6b8287b182d8	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"2a43d872-a46d-43fd-a7c6-6b8287b182d8","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-03-06T18:54:50.050499129Z","scheduledAt":"2024-03-06T18:55:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-03-06T18:54:50.082617754Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-03-06T18:54:50.096893170Z","serverId":"ec489033-b434-4f14-8f08-eefe8f2dac34","serverName":"a832224d98d0","updatedAt":"2024-03-06T18:54:50.096893170Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-03-06T18:54:50.107034629Z","latencyDuration":0.014275416,"processDuration":0.010139834},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2024-06-11T21:51:44.757258337Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-03-06 18:54:50.050499	2024-06-11 21:51:44.757258	\N	FacilityService.scanForIdleFacilities
-eff88685-fcd0-4f97-aba8-bc7ca7f1a186	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"eff88685-fcd0-4f97-aba8-bc7ca7f1a186","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-03-06T18:55:50.271214462Z","scheduledAt":"2024-03-06T18:56:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-03-06T18:55:50.296840087Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-03-06T18:55:50.309711920Z","serverId":"ec489033-b434-4f14-8f08-eefe8f2dac34","serverName":"a832224d98d0","updatedAt":"2024-03-06T18:55:50.309711920Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-03-06T18:55:50.323264212Z","latencyDuration":0.012871833,"processDuration":0.013550875},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2024-06-11T21:51:44.757260546Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-03-06 18:55:50.271214	2024-06-11 21:51:44.757261	\N	FacilityService.scanForIdleFacilities
-1ea2cf9d-2c00-4352-bb70-ff5ad2d994bb	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"1ea2cf9d-2c00-4352-bb70-ff5ad2d994bb","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-03-06T18:56:50.405684295Z","scheduledAt":"2024-03-06T18:57:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-03-06T18:56:50.443357670Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-03-06T18:56:50.461559920Z","serverId":"ec489033-b434-4f14-8f08-eefe8f2dac34","serverName":"a832224d98d0","updatedAt":"2024-03-06T18:56:50.461559920Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-03-06T18:56:50.482509004Z","latencyDuration":0.018202250,"processDuration":0.020946709},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2024-06-11T21:51:44.757262712Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-03-06 18:56:50.405684	2024-06-11 21:51:44.757263	\N	FacilityService.scanForIdleFacilities
-96f8c575-7829-43ba-8c87-137ec81e6567	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"96f8c575-7829-43ba-8c87-137ec81e6567","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-03-06T18:57:50.602268421Z","scheduledAt":"2024-03-06T18:58:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-03-06T18:57:50.654586796Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-03-06T18:57:50.671300671Z","serverId":"ec489033-b434-4f14-8f08-eefe8f2dac34","serverName":"a832224d98d0","updatedAt":"2024-03-06T18:57:50.671300671Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-03-06T18:57:50.683234296Z","latencyDuration":0.016713875,"processDuration":0.011932416},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2024-06-11T21:51:44.757264921Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-03-06 18:57:50.602268	2024-06-11 21:51:44.757265	\N	FacilityService.scanForIdleFacilities
-88108e87-30e5-4b00-a8eb-929d24ce3341	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"88108e87-30e5-4b00-a8eb-929d24ce3341","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-03-06T18:58:50.789459671Z","scheduledAt":"2024-03-06T18:59:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-03-06T18:58:50.826320462Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-03-06T18:58:50.842222254Z","serverId":"ec489033-b434-4f14-8f08-eefe8f2dac34","serverName":"a832224d98d0","updatedAt":"2024-03-06T18:58:50.842222254Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-03-06T18:58:50.851963879Z","latencyDuration":0.015901792,"processDuration":0.009740625},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2024-06-11T21:51:44.757267046Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-03-06 18:58:50.78946	2024-06-11 21:51:44.757267	\N	FacilityService.scanForIdleFacilities
-ac8d4149-e1e3-4122-bc5c-a5543534b262	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"ac8d4149-e1e3-4122-bc5c-a5543534b262","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-03-06T18:59:50.951820129Z","scheduledAt":"2024-03-06T19:00:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-03-06T18:59:51.002509921Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-03-06T18:59:51.030502587Z","serverId":"ec489033-b434-4f14-8f08-eefe8f2dac34","serverName":"a832224d98d0","updatedAt":"2024-03-06T18:59:51.030502587Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-03-06T18:59:51.046889379Z","latencyDuration":0.027992666,"processDuration":0.016385459},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2024-06-11T21:51:44.757269212Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-03-06 18:59:50.95182	2024-06-11 21:51:44.757269	\N	FacilityService.scanForIdleFacilities
-844e3f70-7367-4c47-9ecb-2a1cf0b0dfef	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"844e3f70-7367-4c47-9ecb-2a1cf0b0dfef","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-03-06T18:59:50.971714337Z","scheduledAt":"2024-03-06T19:00:00Z","recurringJobId":"ObservationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.ObservationScheduler.transitionObservations()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-03-06T18:59:51.002515837Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-03-06T18:59:51.056286879Z","serverId":"ec489033-b434-4f14-8f08-eefe8f2dac34","serverName":"a832224d98d0","updatedAt":"2024-03-06T18:59:51.056286879Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-03-06T18:59:51.309117129Z","latencyDuration":0.053771042,"processDuration":0.252828542},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2024-06-11T21:51:44.757271337Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"ObservationScheduler"}	com.terraformation.backend.daily.ObservationScheduler.transitionObservations()	DELETED	2024-03-06 18:59:50.971714	2024-06-11 21:51:44.757271	\N	ObservationScheduler
-7732764b-f467-4a75-8ee8-01f2e4190f5e	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"7732764b-f467-4a75-8ee8-01f2e4190f5e","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-03-06T18:59:50.968565129Z","scheduledAt":"2024-03-06T19:00:00Z","recurringJobId":"NotificationScanner","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.NotificationScanner.sendNotifications()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-03-06T18:59:51.002515046Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-03-06T18:59:51.030491671Z","serverId":"ec489033-b434-4f14-8f08-eefe8f2dac34","serverName":"a832224d98d0","updatedAt":"2024-03-06T18:59:51.030491671Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-03-06T18:59:51.334244963Z","latencyDuration":0.027976625,"processDuration":0.303751750},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2024-06-11T21:51:44.757273379Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"NotificationScanner"}	com.terraformation.backend.daily.NotificationScanner.sendNotifications()	DELETED	2024-03-06 18:59:50.968565	2024-06-11 21:51:44.757273	\N	NotificationScanner
-aad30fad-a744-4953-b38b-714be8d5b8c5	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"aad30fad-a744-4953-b38b-714be8d5b8c5","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-03-06T18:59:50.974134129Z","scheduledAt":"2024-03-06T19:00:00Z","recurringJobId":"PlantingSeasonScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-03-06T18:59:51.002516462Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-03-06T18:59:51.056407087Z","serverId":"ec489033-b434-4f14-8f08-eefe8f2dac34","serverName":"a832224d98d0","updatedAt":"2024-03-06T18:59:51.056407087Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-03-06T18:59:51.488864254Z","latencyDuration":0.053890625,"processDuration":0.432455792},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2024-06-11T21:51:44.757275587Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"PlantingSeasonScheduler"}	com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()	DELETED	2024-03-06 18:59:50.974134	2024-06-11 21:51:44.757276	\N	PlantingSeasonScheduler
-60b18ae8-afa0-464f-b834-b370c1552fae	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"60b18ae8-afa0-464f-b834-b370c1552fae","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-03-06T19:00:51.137570254Z","scheduledAt":"2024-03-06T19:01:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-03-06T19:00:51.176764296Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-03-06T19:00:51.190480462Z","serverId":"ec489033-b434-4f14-8f08-eefe8f2dac34","serverName":"a832224d98d0","updatedAt":"2024-03-06T19:00:51.190480462Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-03-06T19:00:51.219711879Z","latencyDuration":0.013716166,"processDuration":0.029230000},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2024-06-11T21:51:44.757277754Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-03-06 19:00:51.13757	2024-06-11 21:51:44.757278	\N	FacilityService.scanForIdleFacilities
-99eb660a-b1a5-4092-8c37-43ff40890b6b	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"99eb660a-b1a5-4092-8c37-43ff40890b6b","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-03-06T19:01:51.294560629Z","scheduledAt":"2024-03-06T19:02:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-03-06T19:01:51.336546962Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-03-06T19:01:51.348529754Z","serverId":"ec489033-b434-4f14-8f08-eefe8f2dac34","serverName":"a832224d98d0","updatedAt":"2024-03-06T19:01:51.348529754Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-03-06T19:01:51.380443088Z","latencyDuration":0.011982792,"processDuration":0.031912250},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2024-06-11T21:51:44.757279879Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-03-06 19:01:51.294561	2024-06-11 21:51:44.75728	\N	FacilityService.scanForIdleFacilities
-94f1199a-235d-43ec-81d6-9ec09030d964	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"94f1199a-235d-43ec-81d6-9ec09030d964","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-03-06T19:02:51.474623838Z","scheduledAt":"2024-03-06T19:03:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-03-06T19:02:51.521167838Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-03-06T19:02:51.533145046Z","serverId":"ec489033-b434-4f14-8f08-eefe8f2dac34","serverName":"a832224d98d0","updatedAt":"2024-03-06T19:02:51.533145046Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-03-06T19:02:51.552681129Z","latencyDuration":0.011977208,"processDuration":0.019534250},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2024-06-11T21:51:44.757282004Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-03-06 19:02:51.474624	2024-06-11 21:51:44.757282	\N	FacilityService.scanForIdleFacilities
-0190095b-7102-75b9-9039-867218cef837	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190095b-7102-75b9-9039-867218cef837","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:11:46.049404796Z","scheduledAt":"2024-06-11T22:12:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:11:46.073638046Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:12:00.681834511Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:12:00.681834511Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:12:00.696822011Z","latencyDuration":14.608196465,"processDuration":0.014971084}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:11:46.049405	2024-06-11 22:12:00.696822	\N	FacilityService.scanForIdleFacilities
-01900949-56ef-728d-b7cb-951c8c9e3bc0	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900949-56ef-728d-b7cb-951c8c9e3bc0","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:51:59.726788428Z","scheduledAt":"2024-06-11T21:52:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:51:59.752237094Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T21:52:14.593651087Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T21:52:14.593651087Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T21:52:14.712644004Z","latencyDuration":14.841413993,"processDuration":0.118989709}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 21:51:59.726788	2024-06-11 21:52:14.712644	\N	FacilityService.scanForIdleFacilities
-01900962-c60b-7d07-9abb-887e9a5c1992	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900962-c60b-7d07-9abb-887e9a5c1992","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:19:46.571352546Z","scheduledAt":"2024-06-11T22:20:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:19:46.591366546Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:20:01.180400887Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:20:01.180400887Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:20:01.196447595Z","latencyDuration":14.589034341,"processDuration":0.016025208}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:19:46.571353	2024-06-11 22:20:01.196448	\N	FacilityService.scanForIdleFacilities
-0190094a-4187-780d-8c29-c800e8643c7a	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190094a-4187-780d-8c29-c800e8643c7a","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:52:59.783236053Z","scheduledAt":"2024-06-11T21:53:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:52:59.803251261Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T21:53:14.671941254Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T21:53:14.671941254Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T21:53:14.694106212Z","latencyDuration":14.868689993,"processDuration":0.022145667}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 21:52:59.783236	2024-06-11 21:53:14.694106	\N	FacilityService.scanForIdleFacilities
-0190096b-f068-7ec6-9a4b-f86a5fa1fef6	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"0190096b-f068-7ec6-9a4b-f86a5fa1fef6","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:29:47.240794880Z","scheduledAt":"2024-06-11T22:30:00Z","recurringJobId":"NotificationScanner","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.NotificationScanner.sendNotifications()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:29:47.276686047Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:30:01.926849429Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:30:01.926849429Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:30:01.979087387Z","latencyDuration":14.650163382,"processDuration":0.052236041}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"NotificationScanner"}	com.terraformation.backend.daily.NotificationScanner.sendNotifications()	SUCCEEDED	2024-06-11 22:29:47.240795	2024-06-11 22:30:01.979087	\N	NotificationScanner
-0190094b-2bfd-7783-9971-fbda7822d23b	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190094b-2bfd-7783-9971-fbda7822d23b","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:53:59.805226928Z","scheduledAt":"2024-06-11T21:54:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:53:59.824443969Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T21:54:14.696080837Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T21:54:14.696080837Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T21:54:14.714283629Z","latencyDuration":14.871636868,"processDuration":0.018200792}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 21:53:59.805227	2024-06-11 21:54:14.714284	\N	FacilityService.scanForIdleFacilities
-0190095c-5bab-78ab-9855-723b1c95c04f	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190095c-5bab-78ab-9855-723b1c95c04f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:12:46.123303421Z","scheduledAt":"2024-06-11T22:13:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:12:46.137563755Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:13:00.741558053Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:13:00.741558053Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:13:00.756218512Z","latencyDuration":14.603994298,"processDuration":0.014641167}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:12:46.123303	2024-06-11 22:13:00.756219	\N	FacilityService.scanForIdleFacilities
-0190094c-1685-78d7-9368-4ba47761adef	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190094c-1685-78d7-9368-4ba47761adef","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:54:59.845475803Z","scheduledAt":"2024-06-11T21:55:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:54:59.861175094Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T21:55:14.743975462Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T21:55:14.743975462Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T21:55:14.796730004Z","latencyDuration":14.882800368,"processDuration":0.052747000}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 21:54:59.845476	2024-06-11 21:55:14.79673	\N	FacilityService.scanForIdleFacilities
-01900963-b0ed-7aef-acfa-e942e6a3689a	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900963-b0ed-7aef-acfa-e942e6a3689a","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:20:46.701236713Z","scheduledAt":"2024-06-11T22:21:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:20:46.737751505Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:21:01.345170595Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:21:01.345170595Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:21:01.375738095Z","latencyDuration":14.607419090,"processDuration":0.030555583}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:20:46.701237	2024-06-11 22:21:01.375738	\N	FacilityService.scanForIdleFacilities
-0190094d-0113-73b2-a4fc-50b7905248dc	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190094d-0113-73b2-a4fc-50b7905248dc","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:55:59.891125178Z","scheduledAt":"2024-06-11T21:56:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:55:59.908876011Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T21:56:14.803593837Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T21:56:14.803593837Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T21:56:14.819873379Z","latencyDuration":14.894717826,"processDuration":0.016277834}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 21:55:59.891125	2024-06-11 21:56:14.819873	\N	FacilityService.scanForIdleFacilities
-0190095d-4647-7b1c-bb9d-131cbda7e05d	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190095d-4647-7b1c-bb9d-131cbda7e05d","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:13:46.182962546Z","scheduledAt":"2024-06-11T22:14:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:13:46.198452088Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:14:00.801491887Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:14:00.801491887Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:14:00.827939137Z","latencyDuration":14.603039799,"processDuration":0.026410041}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:13:46.182963	2024-06-11 22:14:00.827939	\N	FacilityService.scanForIdleFacilities
-0190096b-05d4-7617-9c18-389d9fd0ec9b	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190096b-05d4-7617-9c18-389d9fd0ec9b","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:28:47.187494838Z","scheduledAt":"2024-06-11T22:29:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:28:47.199544797Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:29:01.873823595Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:29:01.873823595Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:29:01.892782637Z","latencyDuration":14.674278798,"processDuration":0.018948125}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:28:47.187495	2024-06-11 22:29:01.892783	\N	FacilityService.scanForIdleFacilities
-0190094d-eba7-733f-a953-e53beb08e807	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190094d-eba7-733f-a953-e53beb08e807","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:56:59.942818636Z","scheduledAt":"2024-06-11T21:57:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:56:59.966598720Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T21:57:14.864379462Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T21:57:14.864379462Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T21:57:14.881957462Z","latencyDuration":14.897780742,"processDuration":0.017560167}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 21:56:59.942819	2024-06-11 21:57:14.881957	\N	FacilityService.scanForIdleFacilities
-0190094e-d663-7234-8b9b-19dd69b7f1d7	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190094e-d663-7234-8b9b-19dd69b7f1d7","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:58:00.035163428Z","scheduledAt":"2024-06-11T21:58:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:58:00.085165761Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T21:58:14.918263462Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T21:58:14.918263462Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T21:58:14.936731504Z","latencyDuration":14.833097701,"processDuration":0.018460792}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 21:58:00.035163	2024-06-11 21:58:14.936732	\N	FacilityService.scanForIdleFacilities
-0190094f-868a-7313-b6f1-52baa19879f8	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190094f-868a-7313-b6f1-52baa19879f8","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:58:45.129919796Z","scheduledAt":"2024-06-11T21:59:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:58:45.148531962Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T21:58:59.974253136Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T21:58:59.974253136Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T21:59:00.032103136Z","latencyDuration":14.825721174,"processDuration":0.057837417}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 21:58:45.12992	2024-06-11 21:59:00.032103	\N	FacilityService.scanForIdleFacilities
-01900964-9ba6-7b80-b09f-880ba10f1e75	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900964-9ba6-7b80-b09f-880ba10f1e75","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:21:46.789852255Z","scheduledAt":"2024-06-11T22:22:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:21:46.811806463Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:22:01.399902012Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:22:01.399902012Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:22:01.422707553Z","latencyDuration":14.588095549,"processDuration":0.022789708}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:21:46.789852	2024-06-11 22:22:01.422708	\N	FacilityService.scanForIdleFacilities
-0190095e-30e3-7e9e-b2d3-337ecd04b261	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"0190095e-30e3-7e9e-b2d3-337ecd04b261","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:14:46.243015588Z","scheduledAt":"2024-06-11T22:15:00Z","recurringJobId":"NotificationScanner","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.NotificationScanner.sendNotifications()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:14:46.278669880Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:15:00.873477303Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:15:00.873477303Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:15:00.928075678Z","latencyDuration":14.594807423,"processDuration":0.054597584}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"NotificationScanner"}	com.terraformation.backend.daily.NotificationScanner.sendNotifications()	SUCCEEDED	2024-06-11 22:14:46.243016	2024-06-11 22:15:00.928076	\N	NotificationScanner
-01900950-7136-73c0-a08e-1f1d8c44acd6	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"01900950-7136-73c0-a08e-1f1d8c44acd6","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:59:45.206178004Z","scheduledAt":"2024-06-11T22:00:00Z","recurringJobId":"ObservationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.ObservationScheduler.transitionObservations()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:59:45.221453504Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:00:00.022721720Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:00:00.022721720Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:00:00.222400678Z","latencyDuration":14.801268216,"processDuration":0.199675166}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"ObservationScheduler"}	com.terraformation.backend.daily.ObservationScheduler.transitionObservations()	SUCCEEDED	2024-06-11 21:59:45.206178	2024-06-11 22:00:00.222401	\N	ObservationScheduler
-01900950-7137-7091-a22e-72f42c4f4aa6	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"01900950-7137-7091-a22e-72f42c4f4aa6","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:59:45.207124379Z","scheduledAt":"2024-06-11T22:00:00Z","recurringJobId":"PlantingSeasonScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:59:45.221454087Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:00:00.022723095Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:00:00.022723095Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:00:00.377666803Z","latencyDuration":14.801269008,"processDuration":0.354942333}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"PlantingSeasonScheduler"}	com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()	SUCCEEDED	2024-06-11 21:59:45.207124	2024-06-11 22:00:00.377667	\N	PlantingSeasonScheduler
-0190095e-30e0-76ad-9e74-c2a9917c1ffe	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190095e-30e0-76ad-9e74-c2a9917c1ffe","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:14:46.239264630Z","scheduledAt":"2024-06-11T22:15:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:14:46.278643213Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:15:00.873253345Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:15:00.873253345Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:15:00.921034720Z","latencyDuration":14.594610132,"processDuration":0.047692417}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:14:46.239265	2024-06-11 22:15:00.921035	\N	FacilityService.scanForIdleFacilities
-01900978-c58b-74f8-9b0e-bea8a566bde6	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900978-c58b-74f8-9b0e-bea8a566bde6","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:43:48.234649089Z","scheduledAt":"2024-06-11T22:44:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:43:48.261695505Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:44:02.668842804Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:44:02.668842804Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:44:02.678468012Z","latencyDuration":14.407147299,"processDuration":0.009610625}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:43:48.234649	2024-06-11 22:44:02.678468	\N	FacilityService.scanForIdleFacilities
-01900951-5bc7-7397-8644-ec89a5599df2	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900951-5bc7-7397-8644-ec89a5599df2","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:00:45.255253254Z","scheduledAt":"2024-06-11T22:01:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:00:45.284333171Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:01:00.075897636Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:01:00.075897636Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:01:00.106005678Z","latencyDuration":14.791564465,"processDuration":0.029956750}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:00:45.255253	2024-06-11 22:01:00.106006	\N	FacilityService.scanForIdleFacilities
-01900965-8642-76ad-865d-fcd7c85c11f2	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900965-8642-76ad-865d-fcd7c85c11f2","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:22:46.849862630Z","scheduledAt":"2024-06-11T22:23:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:22:46.868590130Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:23:01.453419470Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:23:01.453419470Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:23:01.504480178Z","latencyDuration":14.584829340,"processDuration":0.051048917}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:22:46.849863	2024-06-11 22:23:01.50448	\N	FacilityService.scanForIdleFacilities
-0190095e-30e4-754c-8c6f-b2721ee5b175	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"0190095e-30e4-754c-8c6f-b2721ee5b175","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:14:46.244442838Z","scheduledAt":"2024-06-11T22:15:00Z","recurringJobId":"PlantingSeasonScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:14:46.278671296Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:15:00.873510928Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:15:00.873510928Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:15:00.954580637Z","latencyDuration":14.594839632,"processDuration":0.081068167}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"PlantingSeasonScheduler"}	com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()	SUCCEEDED	2024-06-11 22:14:46.244443	2024-06-11 22:15:00.954581	\N	PlantingSeasonScheduler
-01900952-466b-71ae-bffd-f2d272f759c0	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900952-466b-71ae-bffd-f2d272f759c0","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:01:45.323453421Z","scheduledAt":"2024-06-11T22:02:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:01:45.342915713Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:02:00.157100553Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:02:00.157100553Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:02:00.173268636Z","latencyDuration":14.814184840,"processDuration":0.016145292}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:01:45.323453	2024-06-11 22:02:00.173269	\N	FacilityService.scanForIdleFacilities
-01900960-062b-76d6-bf03-e72949f2c997	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900960-062b-76d6-bf03-e72949f2c997","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:16:46.378099213Z","scheduledAt":"2024-06-11T22:17:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:16:46.391410130Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:17:00.994479428Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:17:00.994479428Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:17:01.007465928Z","latencyDuration":14.603069298,"processDuration":0.012979667}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:16:46.378099	2024-06-11 22:17:01.007466	\N	FacilityService.scanForIdleFacilities
-01900966-70d1-7469-92d1-62f824f5361d	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900966-70d1-7469-92d1-62f824f5361d","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:23:46.896623172Z","scheduledAt":"2024-06-11T22:24:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:23:46.911092088Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:24:01.528583678Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:24:01.528583678Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:24:01.539609887Z","latencyDuration":14.617491590,"processDuration":0.011011125}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:23:46.896623	2024-06-11 22:24:01.53961	\N	FacilityService.scanForIdleFacilities
-01900967-5b61-70b1-affc-f6be0ac377e5	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900967-5b61-70b1-affc-f6be0ac377e5","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:24:46.944941797Z","scheduledAt":"2024-06-11T22:25:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:24:46.956948255Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:25:01.574359137Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:25:01.574359137Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:25:01.600971595Z","latencyDuration":14.617410882,"processDuration":0.026598417}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:24:46.944942	2024-06-11 22:25:01.600972	\N	FacilityService.scanForIdleFacilities
-0190096a-1b2f-7c89-91bc-2926b50c51f4	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190096a-1b2f-7c89-91bc-2926b50c51f4","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:27:47.117526922Z","scheduledAt":"2024-06-11T22:28:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:27:47.141726672Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:28:01.806991929Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:28:01.806991929Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:28:01.878090554Z","latencyDuration":14.665265257,"processDuration":0.071086875}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:27:47.117527	2024-06-11 22:28:01.878091	\N	FacilityService.scanForIdleFacilities
-01900960-f0c1-7733-8f56-321621ddcbe6	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900960-f0c1-7733-8f56-321621ddcbe6","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:17:46.432530505Z","scheduledAt":"2024-06-11T22:18:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:17:46.447403463Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:18:01.054490220Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:18:01.054490220Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:18:01.072869095Z","latencyDuration":14.607086757,"processDuration":0.018377500}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:17:46.432531	2024-06-11 22:18:01.072869	\N	FacilityService.scanForIdleFacilities
-01900973-459b-753a-81d1-79ca94c251ab	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900973-459b-753a-81d1-79ca94c251ab","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:37:47.802762464Z","scheduledAt":"2024-06-11T22:38:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:37:47.818178422Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:38:02.355022970Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:38:02.355022970Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:38:02.381236679Z","latencyDuration":14.536844548,"processDuration":0.026191917}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:37:47.802762	2024-06-11 22:38:02.381237	\N	FacilityService.scanForIdleFacilities
-01900968-45f7-7bd0-975d-5a74af6b51ff	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900968-45f7-7bd0-975d-5a74af6b51ff","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:25:46.996808380Z","scheduledAt":"2024-06-11T22:26:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:25:47.021532130Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:26:01.631022429Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:26:01.631022429Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:26:01.661494012Z","latencyDuration":14.609490299,"processDuration":0.030459333}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:25:46.996808	2024-06-11 22:26:01.661494	\N	FacilityService.scanForIdleFacilities
-01900969-3093-7ade-9b94-b69125753b0a	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900969-3093-7ade-9b94-b69125753b0a","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:26:47.058571880Z","scheduledAt":"2024-06-11T22:27:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:26:47.072638422Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:27:01.698489595Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:27:01.698489595Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:27:01.787477512Z","latencyDuration":14.625851173,"processDuration":0.088972292}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:26:47.058572	2024-06-11 22:27:01.787478	\N	FacilityService.scanForIdleFacilities
-0190096b-f069-7210-809d-c5012a202869	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"0190096b-f069-7210-809d-c5012a202869","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:29:47.241320547Z","scheduledAt":"2024-06-11T22:30:00Z","recurringJobId":"PlantingSeasonScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:29:47.276687338Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:30:01.926850595Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:30:01.926850595Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:30:02.059961262Z","latencyDuration":14.650163257,"processDuration":0.133108542}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"PlantingSeasonScheduler"}	com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()	SUCCEEDED	2024-06-11 22:29:47.241321	2024-06-11 22:30:02.059961	\N	PlantingSeasonScheduler
-0190096b-f069-7210-809d-c5012a202868	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"0190096b-f069-7210-809d-c5012a202868","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:29:47.241084255Z","scheduledAt":"2024-06-11T22:30:00Z","recurringJobId":"ObservationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.ObservationScheduler.transitionObservations()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:29:47.276686797Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:30:01.926850095Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:30:01.926850095Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:30:02.074593595Z","latencyDuration":14.650163298,"processDuration":0.147742250}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"ObservationScheduler"}	com.terraformation.backend.daily.ObservationScheduler.transitionObservations()	SUCCEEDED	2024-06-11 22:29:47.241084	2024-06-11 22:30:02.074594	\N	ObservationScheduler
-01900974-3035-7392-b25f-1b91d880b846	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900974-3035-7392-b25f-1b91d880b846","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:38:47.861566505Z","scheduledAt":"2024-06-11T22:39:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:38:47.889911297Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:39:02.418807596Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:39:02.418807596Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:39:02.460665304Z","latencyDuration":14.528896299,"processDuration":0.041804333}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:38:47.861567	2024-06-11 22:39:02.460665	\N	FacilityService.scanForIdleFacilities
-0190096b-f066-7cab-b995-3da704f2ecb7	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190096b-f066-7cab-b995-3da704f2ecb7","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:29:47.237602463Z","scheduledAt":"2024-06-11T22:30:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:29:47.276680213Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:30:01.926816179Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:30:01.926816179Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:30:01.965095429Z","latencyDuration":14.650135966,"processDuration":0.038252375}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:29:47.237602	2024-06-11 22:30:01.965095	\N	FacilityService.scanForIdleFacilities
-01900975-1af7-7f97-ad25-2c025584bb92	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900975-1af7-7f97-ad25-2c025584bb92","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:39:47.958479130Z","scheduledAt":"2024-06-11T22:40:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:39:47.981057380Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:40:02.484658137Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:40:02.484658137Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:40:02.511417179Z","latencyDuration":14.503600757,"processDuration":0.026737709}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:39:47.958479	2024-06-11 22:40:02.511417	\N	FacilityService.scanForIdleFacilities
-0190096c-db07-7958-9b7b-23295da5461d	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190096c-db07-7958-9b7b-23295da5461d","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:30:47.302391338Z","scheduledAt":"2024-06-11T22:31:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:30:47.347746505Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:31:02.009400262Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:31:02.009400262Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:31:02.029947262Z","latencyDuration":14.661653757,"processDuration":0.020518750}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:30:47.302391	2024-06-11 22:31:02.029947	\N	FacilityService.scanForIdleFacilities
-0190096d-c5b4-76d9-b05e-85358908630b	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190096d-c5b4-76d9-b05e-85358908630b","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:31:47.378678755Z","scheduledAt":"2024-06-11T22:32:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:31:47.423079172Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:32:02.102219054Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:32:02.102219054Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:32:02.112492887Z","latencyDuration":14.679139882,"processDuration":0.010263833}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:31:47.378679	2024-06-11 22:32:02.112493	\N	FacilityService.scanForIdleFacilities
-01900976-05aa-7d85-817d-7de61901cff4	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900976-05aa-7d85-817d-7de61901cff4","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:40:48.041569214Z","scheduledAt":"2024-06-11T22:41:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:40:48.064794255Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:41:02.528351887Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:41:02.528351887Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:41:02.553713637Z","latencyDuration":14.463557632,"processDuration":0.025342792}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:40:48.041569	2024-06-11 22:41:02.553714	\N	FacilityService.scanForIdleFacilities
-0190096e-b068-7ebf-b5b0-9a46e80e0835	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190096e-b068-7ebf-b5b0-9a46e80e0835","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:32:47.463133463Z","scheduledAt":"2024-06-11T22:33:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:32:47.484613505Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:33:02.133925262Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:33:02.133925262Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:33:02.147435845Z","latencyDuration":14.649311757,"processDuration":0.013497792}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:32:47.463133	2024-06-11 22:33:02.147436	\N	FacilityService.scanForIdleFacilities
-0190096f-9b04-7de9-b7ea-87ba8188eb0a	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190096f-9b04-7de9-b7ea-87ba8188eb0a","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:33:47.524215588Z","scheduledAt":"2024-06-11T22:34:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:33:47.561472088Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:34:02.167346345Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:34:02.167346345Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:34:02.176957679Z","latencyDuration":14.605874257,"processDuration":0.009601292}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:33:47.524216	2024-06-11 22:34:02.176958	\N	FacilityService.scanForIdleFacilities
-01900976-f057-796e-8758-aae43e59aa5d	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900976-f057-796e-8758-aae43e59aa5d","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:41:48.118944422Z","scheduledAt":"2024-06-11T22:42:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:41:48.133305630Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:42:02.567831304Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:42:02.567831304Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:42:02.591150596Z","latencyDuration":14.434525674,"processDuration":0.023297792}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:41:48.118944	2024-06-11 22:42:02.591151	\N	FacilityService.scanForIdleFacilities
-01900970-85a9-78ef-901d-c5e2bd6c9e0a	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900970-85a9-78ef-901d-c5e2bd6c9e0a","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:34:47.592561630Z","scheduledAt":"2024-06-11T22:35:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:34:47.609730380Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:35:02.200919012Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:35:02.200919012Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:35:02.223344387Z","latencyDuration":14.591188632,"processDuration":0.022402583}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:34:47.592562	2024-06-11 22:35:02.223344	\N	FacilityService.scanForIdleFacilities
-01900971-7056-7765-88d0-93f7e3c827af	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900971-7056-7765-88d0-93f7e3c827af","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:35:47.669752755Z","scheduledAt":"2024-06-11T22:36:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:35:47.697565964Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:36:02.240279304Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:36:02.240279304Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:36:02.266122429Z","latencyDuration":14.542713340,"processDuration":0.025826125}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:35:47.669753	2024-06-11 22:36:02.266122	\N	FacilityService.scanForIdleFacilities
-01900977-daf1-783d-9196-5a39f42812ef	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900977-daf1-783d-9196-5a39f42812ef","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:42:48.176602797Z","scheduledAt":"2024-06-11T22:43:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:42:48.199665172Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:43:02.613212137Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:43:02.613212137Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:43:02.653283762Z","latencyDuration":14.413546965,"processDuration":0.040030917}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:42:48.176603	2024-06-11 22:43:02.653284	\N	FacilityService.scanForIdleFacilities
-01900979-b034-7628-9b98-431fbb38f668	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"01900979-b034-7628-9b98-431fbb38f668","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:44:48.308034880Z","scheduledAt":"2024-06-11T22:45:00Z","recurringJobId":"ObservationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.ObservationScheduler.transitionObservations()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:44:48.336981464Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:45:02.711312554Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:45:02.711312554Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:45:02.780882387Z","latencyDuration":14.374331090,"processDuration":0.069568583}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"ObservationScheduler"}	com.terraformation.backend.daily.ObservationScheduler.transitionObservations()	SUCCEEDED	2024-06-11 22:44:48.308035	2024-06-11 22:45:02.780882	\N	ObservationScheduler
-01900979-b033-782e-bd2d-81fcd67fe96f	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"01900979-b033-782e-bd2d-81fcd67fe96f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:44:48.307109380Z","scheduledAt":"2024-06-11T22:45:00Z","recurringJobId":"NotificationScanner","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.NotificationScanner.sendNotifications()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:44:48.336980714Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:45:02.711311387Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:45:02.711311387Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:45:02.737193971Z","latencyDuration":14.374330673,"processDuration":0.025881750}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"NotificationScanner"}	com.terraformation.backend.daily.NotificationScanner.sendNotifications()	SUCCEEDED	2024-06-11 22:44:48.307109	2024-06-11 22:45:02.737194	\N	NotificationScanner
-01900979-b02f-7e44-9be1-7fb0457b4eb5	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900979-b02f-7e44-9be1-7fb0457b4eb5","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:44:48.302234672Z","scheduledAt":"2024-06-11T22:45:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:44:48.336972172Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:45:02.711303596Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:45:02.711303596Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:45:02.735590262Z","latencyDuration":14.374331424,"processDuration":0.024254708}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:44:48.302235	2024-06-11 22:45:02.73559	\N	FacilityService.scanForIdleFacilities
-01900979-b034-7628-9b98-431fbb38f669	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"01900979-b034-7628-9b98-431fbb38f669","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:44:48.308561172Z","scheduledAt":"2024-06-11T22:45:00Z","recurringJobId":"PlantingSeasonScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:44:48.336982130Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:45:02.711313637Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:45:02.711313637Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:45:02.820501512Z","latencyDuration":14.374331507,"processDuration":0.109186459}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"PlantingSeasonScheduler"}	com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()	SUCCEEDED	2024-06-11 22:44:48.308561	2024-06-11 22:45:02.820502	\N	PlantingSeasonScheduler
-0190097a-9adb-7150-9c42-bc813830fc1c	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190097a-9adb-7150-9c42-bc813830fc1c","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:45:48.378170047Z","scheduledAt":"2024-06-11T22:46:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:45:48.406121214Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:46:02.808488887Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:46:02.808488887Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:46:02.830049679Z","latencyDuration":14.402367673,"processDuration":0.021548625}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:45:48.37817	2024-06-11 22:46:02.83005	\N	FacilityService.scanForIdleFacilities
-0190097b-857f-7ef8-9f35-0193cb9db34e	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190097b-857f-7ef8-9f35-0193cb9db34e","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:46:48.446619880Z","scheduledAt":"2024-06-11T22:47:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:46:48.478711630Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:47:02.852196179Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:47:02.852196179Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:47:02.870636137Z","latencyDuration":14.373484549,"processDuration":0.018421792}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:46:48.44662	2024-06-11 22:47:02.870636	\N	FacilityService.scanForIdleFacilities
-0190097c-701b-7b62-a529-0d4a383fb974	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190097c-701b-7b62-a529-0d4a383fb974","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:47:48.506574172Z","scheduledAt":"2024-06-11T22:48:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:47:48.522229256Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:48:02.893880637Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:48:02.893880637Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:48:02.913790637Z","latencyDuration":14.371651381,"processDuration":0.019882750}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:47:48.506574	2024-06-11 22:48:02.913791	\N	FacilityService.scanForIdleFacilities
-0190097d-5ab1-7ccb-9030-72ca66a08552	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190097d-5ab1-7ccb-9030-72ca66a08552","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:48:48.560325589Z","scheduledAt":"2024-06-11T22:49:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:48:48.586774464Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:49:02.940344721Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:49:02.940344721Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:49:02.961849012Z","latencyDuration":14.353570257,"processDuration":0.021476541}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:48:48.560326	2024-06-11 22:49:02.961849	\N	FacilityService.scanForIdleFacilities
-0190097e-4555-72aa-b637-e55fa02881e4	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190097e-4555-72aa-b637-e55fa02881e4","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:49:48.628804089Z","scheduledAt":"2024-06-11T22:50:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:49:48.656519047Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:50:02.989492762Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:50:02.989492762Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:50:03.009650471Z","latencyDuration":14.332973715,"processDuration":0.020126542}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2024-06-11 22:49:48.628804	2024-06-11 22:50:03.00965	\N	FacilityService.scanForIdleFacilities
+0196cab2-0841-7893-9d75-2e352f0bf125	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cab2-0841-7893-9d75-2e352f0bf125","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T17:29:47.329422Z","scheduledAt":"2025-05-13T17:30:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T17:29:47.344883Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T17:30:02.337112Z","serverId":"a8576c95-b14d-446f-adb3-ccd75567c0c1","serverName":"Isaacs-TF-MBP.attlocal.net","updatedAt":"2025-05-13T17:30:02.337112Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T17:30:02.346930Z","latencyDuration":14.992229000,"processDuration":0.009815000}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-13 17:29:47.329422	2025-05-13 17:30:02.34693	\N	RateLimitedEventPublisher.scanPendingEvents
+0196cab2-0848-7fbd-a1cd-caf4b20e9727	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cab2-0848-7fbd-a1cd-caf4b20e9727","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T17:29:47.336457Z","scheduledAt":"2025-05-13T17:30:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T17:29:47.344894Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T17:30:02.337120Z","serverId":"a8576c95-b14d-446f-adb3-ccd75567c0c1","serverName":"Isaacs-TF-MBP.attlocal.net","updatedAt":"2025-05-13T17:30:02.337120Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T17:30:02.346886Z","latencyDuration":14.992226000,"processDuration":0.009763000}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-13 17:29:47.336457	2025-05-13 17:30:02.346886	\N	FacilityService.scanForIdleFacilities
+0196cab2-084a-7de5-be37-2f8337e73806	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"0196cab2-084a-7de5-be37-2f8337e73806","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T17:29:47.338515Z","scheduledAt":"2025-05-13T17:30:00Z","recurringJobId":"PlantingSeasonScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T17:29:47.344900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T17:30:02.337125Z","serverId":"a8576c95-b14d-446f-adb3-ccd75567c0c1","serverName":"Isaacs-TF-MBP.attlocal.net","updatedAt":"2025-05-13T17:30:02.337125Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T17:30:02.391362Z","latencyDuration":14.992225000,"processDuration":0.054220000}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"PlantingSeasonScheduler"}	com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()	SUCCEEDED	2025-05-13 17:29:47.338515	2025-05-13 17:30:02.391362	\N	PlantingSeasonScheduler
+0196cab2-084a-7de5-be37-2f8337e73805	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"0196cab2-084a-7de5-be37-2f8337e73805","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T17:29:47.338057Z","scheduledAt":"2025-05-13T17:30:00Z","recurringJobId":"ObservationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.ObservationScheduler.transitionObservations()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T17:29:47.344900Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T17:30:02.337124Z","serverId":"a8576c95-b14d-446f-adb3-ccd75567c0c1","serverName":"Isaacs-TF-MBP.attlocal.net","updatedAt":"2025-05-13T17:30:02.337124Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T17:30:02.397087Z","latencyDuration":14.992224000,"processDuration":0.059961000}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"ObservationScheduler"}	com.terraformation.backend.daily.ObservationScheduler.transitionObservations()	SUCCEEDED	2025-05-13 17:29:47.338057	2025-05-13 17:30:02.397087	\N	ObservationScheduler
+0196cab2-0849-76c2-a1c9-cc479600d595	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"0196cab2-0849-76c2-a1c9-cc479600d595","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T17:29:47.337575Z","scheduledAt":"2025-05-13T17:30:00Z","recurringJobId":"NotificationScanner","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.NotificationScanner.sendNotifications()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T17:29:47.344899Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T17:30:02.337123Z","serverId":"a8576c95-b14d-446f-adb3-ccd75567c0c1","serverName":"Isaacs-TF-MBP.attlocal.net","updatedAt":"2025-05-13T17:30:02.337123Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T17:30:02.417989Z","latencyDuration":14.992224000,"processDuration":0.080862000}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"NotificationScanner"}	com.terraformation.backend.daily.NotificationScanner.sendNotifications()	SUCCEEDED	2025-05-13 17:29:47.337575	2025-05-13 17:30:02.417989	\N	NotificationScanner
+0196cab1-1db0-7dc9-8b15-516996b3e941	4	{"version":4,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cab1-1db0-7dc9-8b15-516996b3e941","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T17:28:47.279919Z","scheduledAt":"2025-05-13T17:29:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T17:28:47.300977Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T17:29:02.279832Z","serverId":"a8576c95-b14d-446f-adb3-ccd75567c0c1","serverName":"Isaacs-TF-MBP.attlocal.net","updatedAt":"2025-05-13T17:29:02.279832Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T17:29:02.339239Z","latencyDuration":14.978855000,"processDuration":0.059403000}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	SUCCEEDED	2025-05-13 17:28:47.279919	2025-05-13 17:29:02.339239	\N	RateLimitedEventPublisher.scanPendingEvents
+0196cab2-0849-76c2-a1c9-cc479600d594	4	{"version":4,"jobSignature":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)","jobName":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.MonitoringPlotElevationScheduler","methodName":"updatePlotElevation","jobParameters":[{"className":"int","actualClassName":"java.lang.Integer","object":50}],"cacheable":true},"id":"0196cab2-0849-76c2-a1c9-cc479600d594","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T17:29:47.337025Z","scheduledAt":"2025-05-13T17:30:00Z","recurringJobId":"MonitoringPlotElevationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(50)'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T17:29:47.344899Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T17:30:02.337122Z","serverId":"a8576c95-b14d-446f-adb3-ccd75567c0c1","serverName":"Isaacs-TF-MBP.attlocal.net","updatedAt":"2025-05-13T17:30:02.337122Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T17:30:02.354689Z","latencyDuration":14.992223000,"processDuration":0.017564000}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"MonitoringPlotElevationScheduler"}	com.terraformation.backend.daily.MonitoringPlotElevationScheduler.updatePlotElevation(java.lang.Integer)	SUCCEEDED	2025-05-13 17:29:47.337025	2025-05-13 17:30:02.354689	\N	MonitoringPlotElevationScheduler
+0196cab2-f2f0-79ea-8024-8faa5e16fac4	2	{"version":2,"jobSignature":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()","jobName":"RateLimitedEventPublisher.scanPendingEvents","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl","methodName":"scanPendingEvents","jobParameters":[],"cacheable":true},"id":"0196cab2-f2f0-79ea-8024-8faa5e16fac4","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T17:30:47.408797Z","scheduledAt":"2025-05-13T17:31:00Z","recurringJobId":"RateLimitedEventPublisher.scanPendingEvents","reason":"Scheduled by recurring job 'RateLimitedEventPublisher.scanPendingEvents'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T17:30:47.415581Z"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap"},"recurringJobId":"RateLimitedEventPublisher.scanPendingEvents"}	com.terraformation.backend.ratelimit.RateLimitedEventPublisherImpl.scanPendingEvents()	ENQUEUED	2025-05-13 17:30:47.408797	2025-05-13 17:30:47.415581	\N	RateLimitedEventPublisher.scanPendingEvents
+0196cab2-f2f2-74c4-b121-aa124209dc9f	2	{"version":2,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cab2-f2f2-74c4-b121-aa124209dc9f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T17:30:47.410447Z","scheduledAt":"2025-05-13T17:31:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T17:30:47.415594Z"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap"},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	ENQUEUED	2025-05-13 17:30:47.410447	2025-05-13 17:30:47.415594	\N	FacilityService.scanForIdleFacilities
+0196cab1-1db2-780d-a659-53fdcdedec14	4	{"version":4,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0196cab1-1db2-780d-a659-53fdcdedec14","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2025-05-13T17:28:47.282032Z","scheduledAt":"2025-05-13T17:29:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2025-05-13T17:28:47.301192Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2025-05-13T17:29:02.279862Z","serverId":"a8576c95-b14d-446f-adb3-ccd75567c0c1","serverName":"Isaacs-TF-MBP.attlocal.net","updatedAt":"2025-05-13T17:29:02.279862Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2025-05-13T17:29:02.343575Z","latencyDuration":14.978670000,"processDuration":0.063711000}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	SUCCEEDED	2025-05-13 17:28:47.282032	2025-05-13 17:29:02.343575	\N	FacilityService.scanForIdleFacilities
+0190097d-5ab1-7ccb-9030-72ca66a08552	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190097d-5ab1-7ccb-9030-72ca66a08552","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:48:48.560325589Z","scheduledAt":"2024-06-11T22:49:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:48:48.586774464Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:49:02.940344721Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:49:02.940344721Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:49:02.961849012Z","latencyDuration":14.353570257,"processDuration":0.021476541},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.316037Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:48:48.560326	2025-05-13 17:28:47.316037	\N	FacilityService.scanForIdleFacilities
+0190097e-4555-72aa-b637-e55fa02881e4	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190097e-4555-72aa-b637-e55fa02881e4","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:49:48.628804089Z","scheduledAt":"2024-06-11T22:50:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:49:48.656519047Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:50:02.989492762Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:50:02.989492762Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:50:03.009650471Z","latencyDuration":14.332973715,"processDuration":0.020126542},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.316039Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:49:48.628804	2025-05-13 17:28:47.316039	\N	FacilityService.scanForIdleFacilities
+01900949-56ef-728d-b7cb-951c8c9e3bc0	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900949-56ef-728d-b7cb-951c8c9e3bc0","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:51:59.726788428Z","scheduledAt":"2024-06-11T21:52:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:51:59.752237094Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T21:52:14.593651087Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T21:52:14.593651087Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T21:52:14.712644004Z","latencyDuration":14.841413993,"processDuration":0.118989709},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315877Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 21:51:59.726788	2025-05-13 17:28:47.315877	\N	FacilityService.scanForIdleFacilities
+0190094a-4187-780d-8c29-c800e8643c7a	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190094a-4187-780d-8c29-c800e8643c7a","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:52:59.783236053Z","scheduledAt":"2024-06-11T21:53:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:52:59.803251261Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T21:53:14.671941254Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T21:53:14.671941254Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T21:53:14.694106212Z","latencyDuration":14.868689993,"processDuration":0.022145667},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315888Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 21:52:59.783236	2025-05-13 17:28:47.315888	\N	FacilityService.scanForIdleFacilities
+0190094b-2bfd-7783-9971-fbda7822d23b	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190094b-2bfd-7783-9971-fbda7822d23b","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:53:59.805226928Z","scheduledAt":"2024-06-11T21:54:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:53:59.824443969Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T21:54:14.696080837Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T21:54:14.696080837Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T21:54:14.714283629Z","latencyDuration":14.871636868,"processDuration":0.018200792},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315892Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 21:53:59.805227	2025-05-13 17:28:47.315892	\N	FacilityService.scanForIdleFacilities
+0190094c-1685-78d7-9368-4ba47761adef	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190094c-1685-78d7-9368-4ba47761adef","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:54:59.845475803Z","scheduledAt":"2024-06-11T21:55:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:54:59.861175094Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T21:55:14.743975462Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T21:55:14.743975462Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T21:55:14.796730004Z","latencyDuration":14.882800368,"processDuration":0.052747000},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315894Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 21:54:59.845476	2025-05-13 17:28:47.315894	\N	FacilityService.scanForIdleFacilities
+0190094d-0113-73b2-a4fc-50b7905248dc	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190094d-0113-73b2-a4fc-50b7905248dc","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:55:59.891125178Z","scheduledAt":"2024-06-11T21:56:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:55:59.908876011Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T21:56:14.803593837Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T21:56:14.803593837Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T21:56:14.819873379Z","latencyDuration":14.894717826,"processDuration":0.016277834},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315896Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 21:55:59.891125	2025-05-13 17:28:47.315896	\N	FacilityService.scanForIdleFacilities
+0190094d-eba7-733f-a953-e53beb08e807	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190094d-eba7-733f-a953-e53beb08e807","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:56:59.942818636Z","scheduledAt":"2024-06-11T21:57:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:56:59.966598720Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T21:57:14.864379462Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T21:57:14.864379462Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T21:57:14.881957462Z","latencyDuration":14.897780742,"processDuration":0.017560167},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315899Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 21:56:59.942819	2025-05-13 17:28:47.315899	\N	FacilityService.scanForIdleFacilities
+0190094e-d663-7234-8b9b-19dd69b7f1d7	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190094e-d663-7234-8b9b-19dd69b7f1d7","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:58:00.035163428Z","scheduledAt":"2024-06-11T21:58:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:58:00.085165761Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T21:58:14.918263462Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T21:58:14.918263462Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T21:58:14.936731504Z","latencyDuration":14.833097701,"processDuration":0.018460792},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315901Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 21:58:00.035163	2025-05-13 17:28:47.315901	\N	FacilityService.scanForIdleFacilities
+0190094f-868a-7313-b6f1-52baa19879f8	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190094f-868a-7313-b6f1-52baa19879f8","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:58:45.129919796Z","scheduledAt":"2024-06-11T21:59:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:58:45.148531962Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T21:58:59.974253136Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T21:58:59.974253136Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T21:59:00.032103136Z","latencyDuration":14.825721174,"processDuration":0.057837417},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315903Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 21:58:45.12992	2025-05-13 17:28:47.315903	\N	FacilityService.scanForIdleFacilities
+01900950-7131-78ac-a8d6-bfa4b5752782	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900950-7131-78ac-a8d6-bfa4b5752782","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:59:45.201327796Z","scheduledAt":"2024-06-11T22:00:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:59:45.221435379Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:00:00.022705970Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:00:00.022705970Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:00:00.040394761Z","latencyDuration":14.801270591,"processDuration":0.017674416},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315905Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 21:59:45.201328	2025-05-13 17:28:47.315905	\N	FacilityService.scanForIdleFacilities
+01900950-7136-73c0-a08e-1f1d8c44acd6	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"01900950-7136-73c0-a08e-1f1d8c44acd6","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:59:45.206178004Z","scheduledAt":"2024-06-11T22:00:00Z","recurringJobId":"ObservationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.ObservationScheduler.transitionObservations()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:59:45.221453504Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:00:00.022721720Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:00:00.022721720Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:00:00.222400678Z","latencyDuration":14.801268216,"processDuration":0.199675166},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315907Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"ObservationScheduler"}	com.terraformation.backend.daily.ObservationScheduler.transitionObservations()	DELETED	2024-06-11 21:59:45.206178	2025-05-13 17:28:47.315907	\N	ObservationScheduler
+01900950-7134-72e7-9efc-a385ae7ad959	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"01900950-7134-72e7-9efc-a385ae7ad959","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:59:45.204427587Z","scheduledAt":"2024-06-11T22:00:00Z","recurringJobId":"NotificationScanner","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.NotificationScanner.sendNotifications()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:59:45.221452754Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:00:00.022720470Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:00:00.022720470Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:00:00.226108386Z","latencyDuration":14.801267716,"processDuration":0.203386500},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315909Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"NotificationScanner"}	com.terraformation.backend.daily.NotificationScanner.sendNotifications()	DELETED	2024-06-11 21:59:45.204428	2025-05-13 17:28:47.315909	\N	NotificationScanner
+01900950-7137-7091-a22e-72f42c4f4aa6	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"01900950-7137-7091-a22e-72f42c4f4aa6","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T21:59:45.207124379Z","scheduledAt":"2024-06-11T22:00:00Z","recurringJobId":"PlantingSeasonScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T21:59:45.221454087Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:00:00.022723095Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:00:00.022723095Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:00:00.377666803Z","latencyDuration":14.801269008,"processDuration":0.354942333},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315911Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"PlantingSeasonScheduler"}	com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()	DELETED	2024-06-11 21:59:45.207124	2025-05-13 17:28:47.315911	\N	PlantingSeasonScheduler
+01900951-5bc7-7397-8644-ec89a5599df2	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900951-5bc7-7397-8644-ec89a5599df2","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:00:45.255253254Z","scheduledAt":"2024-06-11T22:01:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:00:45.284333171Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:01:00.075897636Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:01:00.075897636Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:01:00.106005678Z","latencyDuration":14.791564465,"processDuration":0.029956750},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315914Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:00:45.255253	2025-05-13 17:28:47.315914	\N	FacilityService.scanForIdleFacilities
+01900952-466b-71ae-bffd-f2d272f759c0	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900952-466b-71ae-bffd-f2d272f759c0","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:01:45.323453421Z","scheduledAt":"2024-06-11T22:02:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:01:45.342915713Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:02:00.157100553Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:02:00.157100553Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:02:00.173268636Z","latencyDuration":14.814184840,"processDuration":0.016145292},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315916Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:01:45.323453	2025-05-13 17:28:47.315916	\N	FacilityService.scanForIdleFacilities
+01900953-3102-785f-99eb-e5e122fbf098	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900953-3102-785f-99eb-e5e122fbf098","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:02:45.377645588Z","scheduledAt":"2024-06-11T22:03:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:02:45.396805588Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:03:00.203435636Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:03:00.203435636Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:03:00.219951678Z","latencyDuration":14.806630048,"processDuration":0.016498417},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315918Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:02:45.377646	2025-05-13 17:28:47.315918	\N	FacilityService.scanForIdleFacilities
+01900954-1b9d-781c-b8a9-c5e257aae26a	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900954-1b9d-781c-b8a9-c5e257aae26a","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:03:45.436940879Z","scheduledAt":"2024-06-11T22:04:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:03:45.479988921Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:04:00.247394220Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:04:00.247394220Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:04:00.260413636Z","latencyDuration":14.767405299,"processDuration":0.013010041},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315920Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:03:45.436941	2025-05-13 17:28:47.31592	\N	FacilityService.scanForIdleFacilities
+01900955-0662-7ec9-818c-d54c390484af	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900955-0662-7ec9-818c-d54c390484af","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:04:45.538283129Z","scheduledAt":"2024-06-11T22:05:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:04:45.558313171Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:05:00.290553345Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:05:00.290553345Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:05:00.311695636Z","latencyDuration":14.732240174,"processDuration":0.021123958},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315922Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:04:45.538283	2025-05-13 17:28:47.315922	\N	FacilityService.scanForIdleFacilities
+01900955-f103-767e-a491-aa569b54a8cd	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900955-f103-767e-a491-aa569b54a8cd","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:05:45.602991129Z","scheduledAt":"2024-06-11T22:06:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:05:45.620260504Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:06:00.344118261Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:06:00.344118261Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:06:00.364761845Z","latencyDuration":14.723857757,"processDuration":0.020620750},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315925Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:05:45.602991	2025-05-13 17:28:47.315925	\N	FacilityService.scanForIdleFacilities
+01900956-db94-7c8b-aa84-63aa939ac4bf	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900956-db94-7c8b-aa84-63aa939ac4bf","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:06:45.652133088Z","scheduledAt":"2024-06-11T22:07:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:06:45.666407463Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:07:00.392659553Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:07:00.392659553Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:07:00.433743470Z","latencyDuration":14.726252090,"processDuration":0.041063167},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315927Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:06:45.652133	2025-05-13 17:28:47.315927	\N	FacilityService.scanForIdleFacilities
+01900957-c636-74bc-8c2a-f45a31b981f5	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900957-c636-74bc-8c2a-f45a31b981f5","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:07:45.717630004Z","scheduledAt":"2024-06-11T22:08:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:07:45.767563296Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:08:00.449582928Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:08:00.449582928Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:08:00.483092428Z","latencyDuration":14.682019632,"processDuration":0.033484000},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315929Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:07:45.71763	2025-05-13 17:28:47.315929	\N	FacilityService.scanForIdleFacilities
+01900958-b104-7cdd-a833-bb100ed5d678	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900958-b104-7cdd-a833-bb100ed5d678","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:08:45.828159338Z","scheduledAt":"2024-06-11T22:09:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:08:45.849757504Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:09:00.490274886Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:09:00.490274886Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:09:00.500107178Z","latencyDuration":14.640517382,"processDuration":0.009819959},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315931Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:08:45.828159	2025-05-13 17:28:47.315931	\N	FacilityService.scanForIdleFacilities
+01900959-9bb4-7480-8b19-d8891a2c0c51	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900959-9bb4-7480-8b19-d8891a2c0c51","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:09:45.908288254Z","scheduledAt":"2024-06-11T22:10:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:09:45.923821296Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:10:00.519956720Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:10:00.519956720Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:10:00.532776845Z","latencyDuration":14.596135424,"processDuration":0.012808875},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315933Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:09:45.908288	2025-05-13 17:28:47.315933	\N	FacilityService.scanForIdleFacilities
+0190095a-8650-7cfd-b953-f94202235b2b	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190095a-8650-7cfd-b953-f94202235b2b","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:10:45.968199046Z","scheduledAt":"2024-06-11T22:11:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:10:45.990842671Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:11:00.622610845Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:11:00.622610845Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:11:00.639456678Z","latencyDuration":14.631768174,"processDuration":0.016822041},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315935Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:10:45.968199	2025-05-13 17:28:47.315935	\N	FacilityService.scanForIdleFacilities
+0190095b-7102-75b9-9039-867218cef837	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190095b-7102-75b9-9039-867218cef837","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:11:46.049404796Z","scheduledAt":"2024-06-11T22:12:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:11:46.073638046Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:12:00.681834511Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:12:00.681834511Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:12:00.696822011Z","latencyDuration":14.608196465,"processDuration":0.014971084},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315937Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:11:46.049405	2025-05-13 17:28:47.315937	\N	FacilityService.scanForIdleFacilities
+0190095c-5bab-78ab-9855-723b1c95c04f	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190095c-5bab-78ab-9855-723b1c95c04f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:12:46.123303421Z","scheduledAt":"2024-06-11T22:13:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:12:46.137563755Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:13:00.741558053Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:13:00.741558053Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:13:00.756218512Z","latencyDuration":14.603994298,"processDuration":0.014641167},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315939Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:12:46.123303	2025-05-13 17:28:47.315939	\N	FacilityService.scanForIdleFacilities
+0190095d-4647-7b1c-bb9d-131cbda7e05d	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190095d-4647-7b1c-bb9d-131cbda7e05d","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:13:46.182962546Z","scheduledAt":"2024-06-11T22:14:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:13:46.198452088Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:14:00.801491887Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:14:00.801491887Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:14:00.827939137Z","latencyDuration":14.603039799,"processDuration":0.026410041},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315941Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:13:46.182963	2025-05-13 17:28:47.315941	\N	FacilityService.scanForIdleFacilities
+0190095e-30e0-76ad-9e74-c2a9917c1ffe	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190095e-30e0-76ad-9e74-c2a9917c1ffe","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:14:46.239264630Z","scheduledAt":"2024-06-11T22:15:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:14:46.278643213Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:15:00.873253345Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:15:00.873253345Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:15:00.921034720Z","latencyDuration":14.594610132,"processDuration":0.047692417},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315943Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:14:46.239265	2025-05-13 17:28:47.315943	\N	FacilityService.scanForIdleFacilities
+0190095e-30e3-7e9e-b2d3-337ecd04b261	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"0190095e-30e3-7e9e-b2d3-337ecd04b261","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:14:46.243015588Z","scheduledAt":"2024-06-11T22:15:00Z","recurringJobId":"NotificationScanner","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.NotificationScanner.sendNotifications()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:14:46.278669880Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:15:00.873477303Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:15:00.873477303Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:15:00.928075678Z","latencyDuration":14.594807423,"processDuration":0.054597584},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315945Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"NotificationScanner"}	com.terraformation.backend.daily.NotificationScanner.sendNotifications()	DELETED	2024-06-11 22:14:46.243016	2025-05-13 17:28:47.315945	\N	NotificationScanner
+0190095e-30e4-754c-8c6f-b2721ee5b175	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"0190095e-30e4-754c-8c6f-b2721ee5b175","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:14:46.244442838Z","scheduledAt":"2024-06-11T22:15:00Z","recurringJobId":"PlantingSeasonScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:14:46.278671296Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:15:00.873510928Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:15:00.873510928Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:15:00.954580637Z","latencyDuration":14.594839632,"processDuration":0.081068167},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315947Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"PlantingSeasonScheduler"}	com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()	DELETED	2024-06-11 22:14:46.244443	2025-05-13 17:28:47.315947	\N	PlantingSeasonScheduler
+0190095e-30e3-7e9e-b2d3-337ecd04b262	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"0190095e-30e3-7e9e-b2d3-337ecd04b262","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:14:46.243924755Z","scheduledAt":"2024-06-11T22:15:00Z","recurringJobId":"ObservationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.ObservationScheduler.transitionObservations()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:14:46.278670671Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:15:00.873507887Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:15:00.873507887Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:15:01.008071262Z","latencyDuration":14.594837216,"processDuration":0.134562083},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315949Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"ObservationScheduler"}	com.terraformation.backend.daily.ObservationScheduler.transitionObservations()	DELETED	2024-06-11 22:14:46.243925	2025-05-13 17:28:47.315949	\N	ObservationScheduler
+0190095f-1b86-75fb-82f6-c7084af5a743	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190095f-1b86-75fb-82f6-c7084af5a743","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:15:46.309907005Z","scheduledAt":"2024-06-11T22:16:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:15:46.349879755Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:16:00.946161845Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:16:00.946161845Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:16:00.983999387Z","latencyDuration":14.596282090,"processDuration":0.037812333},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315951Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:15:46.309907	2025-05-13 17:28:47.315951	\N	FacilityService.scanForIdleFacilities
+01900960-062b-76d6-bf03-e72949f2c997	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900960-062b-76d6-bf03-e72949f2c997","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:16:46.378099213Z","scheduledAt":"2024-06-11T22:17:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:16:46.391410130Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:17:00.994479428Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:17:00.994479428Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:17:01.007465928Z","latencyDuration":14.603069298,"processDuration":0.012979667},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315953Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:16:46.378099	2025-05-13 17:28:47.315953	\N	FacilityService.scanForIdleFacilities
+01900960-f0c1-7733-8f56-321621ddcbe6	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900960-f0c1-7733-8f56-321621ddcbe6","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:17:46.432530505Z","scheduledAt":"2024-06-11T22:18:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:17:46.447403463Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:18:01.054490220Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:18:01.054490220Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:18:01.072869095Z","latencyDuration":14.607086757,"processDuration":0.018377500},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315955Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:17:46.432531	2025-05-13 17:28:47.315955	\N	FacilityService.scanForIdleFacilities
+01900961-db5b-7e1a-b0a1-669a07156b6b	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900961-db5b-7e1a-b0a1-669a07156b6b","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:18:46.490686046Z","scheduledAt":"2024-06-11T22:19:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:18:46.517951546Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:19:01.119434012Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:19:01.119434012Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:19:01.131894470Z","latencyDuration":14.601482466,"processDuration":0.012448708},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315957Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:18:46.490686	2025-05-13 17:28:47.315957	\N	FacilityService.scanForIdleFacilities
+01900962-c60b-7d07-9abb-887e9a5c1992	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900962-c60b-7d07-9abb-887e9a5c1992","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:19:46.571352546Z","scheduledAt":"2024-06-11T22:20:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:19:46.591366546Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:20:01.180400887Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:20:01.180400887Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:20:01.196447595Z","latencyDuration":14.589034341,"processDuration":0.016025208},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315959Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:19:46.571353	2025-05-13 17:28:47.315959	\N	FacilityService.scanForIdleFacilities
+01900963-b0ed-7aef-acfa-e942e6a3689a	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900963-b0ed-7aef-acfa-e942e6a3689a","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:20:46.701236713Z","scheduledAt":"2024-06-11T22:21:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:20:46.737751505Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:21:01.345170595Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:21:01.345170595Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:21:01.375738095Z","latencyDuration":14.607419090,"processDuration":0.030555583},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315961Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:20:46.701237	2025-05-13 17:28:47.315961	\N	FacilityService.scanForIdleFacilities
+01900964-9ba6-7b80-b09f-880ba10f1e75	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900964-9ba6-7b80-b09f-880ba10f1e75","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:21:46.789852255Z","scheduledAt":"2024-06-11T22:22:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:21:46.811806463Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:22:01.399902012Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:22:01.399902012Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:22:01.422707553Z","latencyDuration":14.588095549,"processDuration":0.022789708},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315963Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:21:46.789852	2025-05-13 17:28:47.315963	\N	FacilityService.scanForIdleFacilities
+01900965-8642-76ad-865d-fcd7c85c11f2	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900965-8642-76ad-865d-fcd7c85c11f2","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:22:46.849862630Z","scheduledAt":"2024-06-11T22:23:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:22:46.868590130Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:23:01.453419470Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:23:01.453419470Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:23:01.504480178Z","latencyDuration":14.584829340,"processDuration":0.051048917},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315965Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:22:46.849863	2025-05-13 17:28:47.315965	\N	FacilityService.scanForIdleFacilities
+01900966-70d1-7469-92d1-62f824f5361d	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900966-70d1-7469-92d1-62f824f5361d","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:23:46.896623172Z","scheduledAt":"2024-06-11T22:24:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:23:46.911092088Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:24:01.528583678Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:24:01.528583678Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:24:01.539609887Z","latencyDuration":14.617491590,"processDuration":0.011011125},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315967Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:23:46.896623	2025-05-13 17:28:47.315967	\N	FacilityService.scanForIdleFacilities
+01900967-5b61-70b1-affc-f6be0ac377e5	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900967-5b61-70b1-affc-f6be0ac377e5","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:24:46.944941797Z","scheduledAt":"2024-06-11T22:25:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:24:46.956948255Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:25:01.574359137Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:25:01.574359137Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:25:01.600971595Z","latencyDuration":14.617410882,"processDuration":0.026598417},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315972Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:24:46.944942	2025-05-13 17:28:47.315972	\N	FacilityService.scanForIdleFacilities
+01900968-45f7-7bd0-975d-5a74af6b51ff	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900968-45f7-7bd0-975d-5a74af6b51ff","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:25:46.996808380Z","scheduledAt":"2024-06-11T22:26:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:25:47.021532130Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:26:01.631022429Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:26:01.631022429Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:26:01.661494012Z","latencyDuration":14.609490299,"processDuration":0.030459333},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315974Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:25:46.996808	2025-05-13 17:28:47.315974	\N	FacilityService.scanForIdleFacilities
+01900969-3093-7ade-9b94-b69125753b0a	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900969-3093-7ade-9b94-b69125753b0a","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:26:47.058571880Z","scheduledAt":"2024-06-11T22:27:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:26:47.072638422Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:27:01.698489595Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:27:01.698489595Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:27:01.787477512Z","latencyDuration":14.625851173,"processDuration":0.088972292},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315977Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:26:47.058572	2025-05-13 17:28:47.315977	\N	FacilityService.scanForIdleFacilities
+0190096a-1b2f-7c89-91bc-2926b50c51f4	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190096a-1b2f-7c89-91bc-2926b50c51f4","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:27:47.117526922Z","scheduledAt":"2024-06-11T22:28:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:27:47.141726672Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:28:01.806991929Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:28:01.806991929Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:28:01.878090554Z","latencyDuration":14.665265257,"processDuration":0.071086875},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315982Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:27:47.117527	2025-05-13 17:28:47.315982	\N	FacilityService.scanForIdleFacilities
+0190096b-05d4-7617-9c18-389d9fd0ec9b	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190096b-05d4-7617-9c18-389d9fd0ec9b","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:28:47.187494838Z","scheduledAt":"2024-06-11T22:29:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:28:47.199544797Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:29:01.873823595Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:29:01.873823595Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:29:01.892782637Z","latencyDuration":14.674278798,"processDuration":0.018948125},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315984Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:28:47.187495	2025-05-13 17:28:47.315984	\N	FacilityService.scanForIdleFacilities
+0190096b-f066-7cab-b995-3da704f2ecb7	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190096b-f066-7cab-b995-3da704f2ecb7","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:29:47.237602463Z","scheduledAt":"2024-06-11T22:30:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:29:47.276680213Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:30:01.926816179Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:30:01.926816179Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:30:01.965095429Z","latencyDuration":14.650135966,"processDuration":0.038252375},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315986Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:29:47.237602	2025-05-13 17:28:47.315986	\N	FacilityService.scanForIdleFacilities
+0190096b-f068-7ec6-9a4b-f86a5fa1fef6	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"0190096b-f068-7ec6-9a4b-f86a5fa1fef6","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:29:47.240794880Z","scheduledAt":"2024-06-11T22:30:00Z","recurringJobId":"NotificationScanner","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.NotificationScanner.sendNotifications()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:29:47.276686047Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:30:01.926849429Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:30:01.926849429Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:30:01.979087387Z","latencyDuration":14.650163382,"processDuration":0.052236041},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315988Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"NotificationScanner"}	com.terraformation.backend.daily.NotificationScanner.sendNotifications()	DELETED	2024-06-11 22:29:47.240795	2025-05-13 17:28:47.315988	\N	NotificationScanner
+0190096b-f069-7210-809d-c5012a202869	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"0190096b-f069-7210-809d-c5012a202869","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:29:47.241320547Z","scheduledAt":"2024-06-11T22:30:00Z","recurringJobId":"PlantingSeasonScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:29:47.276687338Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:30:01.926850595Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:30:01.926850595Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:30:02.059961262Z","latencyDuration":14.650163257,"processDuration":0.133108542},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315990Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"PlantingSeasonScheduler"}	com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()	DELETED	2024-06-11 22:29:47.241321	2025-05-13 17:28:47.31599	\N	PlantingSeasonScheduler
+0190096b-f069-7210-809d-c5012a202868	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"0190096b-f069-7210-809d-c5012a202868","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:29:47.241084255Z","scheduledAt":"2024-06-11T22:30:00Z","recurringJobId":"ObservationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.ObservationScheduler.transitionObservations()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:29:47.276686797Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:30:01.926850095Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:30:01.926850095Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:30:02.074593595Z","latencyDuration":14.650163298,"processDuration":0.147742250},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315992Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"ObservationScheduler"}	com.terraformation.backend.daily.ObservationScheduler.transitionObservations()	DELETED	2024-06-11 22:29:47.241084	2025-05-13 17:28:47.315992	\N	ObservationScheduler
+0190096c-db07-7958-9b7b-23295da5461d	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190096c-db07-7958-9b7b-23295da5461d","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:30:47.302391338Z","scheduledAt":"2024-06-11T22:31:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:30:47.347746505Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:31:02.009400262Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:31:02.009400262Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:31:02.029947262Z","latencyDuration":14.661653757,"processDuration":0.020518750},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315994Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:30:47.302391	2025-05-13 17:28:47.315994	\N	FacilityService.scanForIdleFacilities
+0190096d-c5b4-76d9-b05e-85358908630b	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190096d-c5b4-76d9-b05e-85358908630b","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:31:47.378678755Z","scheduledAt":"2024-06-11T22:32:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:31:47.423079172Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:32:02.102219054Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:32:02.102219054Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:32:02.112492887Z","latencyDuration":14.679139882,"processDuration":0.010263833},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315996Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:31:47.378679	2025-05-13 17:28:47.315996	\N	FacilityService.scanForIdleFacilities
+0190096e-b068-7ebf-b5b0-9a46e80e0835	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190096e-b068-7ebf-b5b0-9a46e80e0835","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:32:47.463133463Z","scheduledAt":"2024-06-11T22:33:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:32:47.484613505Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:33:02.133925262Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:33:02.133925262Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:33:02.147435845Z","latencyDuration":14.649311757,"processDuration":0.013497792},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.315998Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:32:47.463133	2025-05-13 17:28:47.315998	\N	FacilityService.scanForIdleFacilities
+0190096f-9b04-7de9-b7ea-87ba8188eb0a	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190096f-9b04-7de9-b7ea-87ba8188eb0a","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:33:47.524215588Z","scheduledAt":"2024-06-11T22:34:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:33:47.561472088Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:34:02.167346345Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:34:02.167346345Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:34:02.176957679Z","latencyDuration":14.605874257,"processDuration":0.009601292},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.316Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:33:47.524216	2025-05-13 17:28:47.316	\N	FacilityService.scanForIdleFacilities
+01900970-85a9-78ef-901d-c5e2bd6c9e0a	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900970-85a9-78ef-901d-c5e2bd6c9e0a","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:34:47.592561630Z","scheduledAt":"2024-06-11T22:35:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:34:47.609730380Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:35:02.200919012Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:35:02.200919012Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:35:02.223344387Z","latencyDuration":14.591188632,"processDuration":0.022402583},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.316002Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:34:47.592562	2025-05-13 17:28:47.316002	\N	FacilityService.scanForIdleFacilities
+01900971-7056-7765-88d0-93f7e3c827af	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900971-7056-7765-88d0-93f7e3c827af","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:35:47.669752755Z","scheduledAt":"2024-06-11T22:36:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:35:47.697565964Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:36:02.240279304Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:36:02.240279304Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:36:02.266122429Z","latencyDuration":14.542713340,"processDuration":0.025826125},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.316004Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:35:47.669753	2025-05-13 17:28:47.316004	\N	FacilityService.scanForIdleFacilities
+01900972-5af5-7f61-b999-374f7498a38a	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900972-5af5-7f61-b999-374f7498a38a","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:36:47.732212922Z","scheduledAt":"2024-06-11T22:37:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:36:47.755383797Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:37:02.294549179Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:37:02.294549179Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:37:02.347921679Z","latencyDuration":14.539165382,"processDuration":0.053358291},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.316006Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:36:47.732213	2025-05-13 17:28:47.316006	\N	FacilityService.scanForIdleFacilities
+01900973-459b-753a-81d1-79ca94c251ab	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900973-459b-753a-81d1-79ca94c251ab","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:37:47.802762464Z","scheduledAt":"2024-06-11T22:38:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:37:47.818178422Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:38:02.355022970Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:38:02.355022970Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:38:02.381236679Z","latencyDuration":14.536844548,"processDuration":0.026191917},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.316008Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:37:47.802762	2025-05-13 17:28:47.316008	\N	FacilityService.scanForIdleFacilities
+01900974-3035-7392-b25f-1b91d880b846	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900974-3035-7392-b25f-1b91d880b846","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:38:47.861566505Z","scheduledAt":"2024-06-11T22:39:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:38:47.889911297Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:39:02.418807596Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:39:02.418807596Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:39:02.460665304Z","latencyDuration":14.528896299,"processDuration":0.041804333},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.316010Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:38:47.861567	2025-05-13 17:28:47.31601	\N	FacilityService.scanForIdleFacilities
+01900975-1af7-7f97-ad25-2c025584bb92	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900975-1af7-7f97-ad25-2c025584bb92","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:39:47.958479130Z","scheduledAt":"2024-06-11T22:40:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:39:47.981057380Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:40:02.484658137Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:40:02.484658137Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:40:02.511417179Z","latencyDuration":14.503600757,"processDuration":0.026737709},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.316012Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:39:47.958479	2025-05-13 17:28:47.316012	\N	FacilityService.scanForIdleFacilities
+01900976-05aa-7d85-817d-7de61901cff4	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900976-05aa-7d85-817d-7de61901cff4","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:40:48.041569214Z","scheduledAt":"2024-06-11T22:41:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:40:48.064794255Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:41:02.528351887Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:41:02.528351887Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:41:02.553713637Z","latencyDuration":14.463557632,"processDuration":0.025342792},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.316015Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:40:48.041569	2025-05-13 17:28:47.316015	\N	FacilityService.scanForIdleFacilities
+01900976-f057-796e-8758-aae43e59aa5d	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900976-f057-796e-8758-aae43e59aa5d","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:41:48.118944422Z","scheduledAt":"2024-06-11T22:42:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:41:48.133305630Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:42:02.567831304Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:42:02.567831304Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:42:02.591150596Z","latencyDuration":14.434525674,"processDuration":0.023297792},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.316017Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:41:48.118944	2025-05-13 17:28:47.316017	\N	FacilityService.scanForIdleFacilities
+01900977-daf1-783d-9196-5a39f42812ef	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900977-daf1-783d-9196-5a39f42812ef","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:42:48.176602797Z","scheduledAt":"2024-06-11T22:43:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:42:48.199665172Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:43:02.613212137Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:43:02.613212137Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:43:02.653283762Z","latencyDuration":14.413546965,"processDuration":0.040030917},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.316019Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:42:48.176603	2025-05-13 17:28:47.316019	\N	FacilityService.scanForIdleFacilities
+01900978-c58b-74f8-9b0e-bea8a566bde6	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900978-c58b-74f8-9b0e-bea8a566bde6","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:43:48.234649089Z","scheduledAt":"2024-06-11T22:44:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:43:48.261695505Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:44:02.668842804Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:44:02.668842804Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:44:02.678468012Z","latencyDuration":14.407147299,"processDuration":0.009610625},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.316021Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:43:48.234649	2025-05-13 17:28:47.316021	\N	FacilityService.scanForIdleFacilities
+01900979-b02f-7e44-9be1-7fb0457b4eb5	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"01900979-b02f-7e44-9be1-7fb0457b4eb5","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:44:48.302234672Z","scheduledAt":"2024-06-11T22:45:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:44:48.336972172Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:45:02.711303596Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:45:02.711303596Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:45:02.735590262Z","latencyDuration":14.374331424,"processDuration":0.024254708},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.316023Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:44:48.302235	2025-05-13 17:28:47.316023	\N	FacilityService.scanForIdleFacilities
+01900979-b033-782e-bd2d-81fcd67fe96f	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"01900979-b033-782e-bd2d-81fcd67fe96f","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:44:48.307109380Z","scheduledAt":"2024-06-11T22:45:00Z","recurringJobId":"NotificationScanner","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.NotificationScanner.sendNotifications()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:44:48.336980714Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:45:02.711311387Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:45:02.711311387Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:45:02.737193971Z","latencyDuration":14.374330673,"processDuration":0.025881750},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.316026Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"NotificationScanner"}	com.terraformation.backend.daily.NotificationScanner.sendNotifications()	DELETED	2024-06-11 22:44:48.307109	2025-05-13 17:28:47.316026	\N	NotificationScanner
+01900979-b034-7628-9b98-431fbb38f668	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"01900979-b034-7628-9b98-431fbb38f668","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:44:48.308034880Z","scheduledAt":"2024-06-11T22:45:00Z","recurringJobId":"ObservationScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.ObservationScheduler.transitionObservations()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:44:48.336981464Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:45:02.711312554Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:45:02.711312554Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:45:02.780882387Z","latencyDuration":14.374331090,"processDuration":0.069568583},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.316028Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"ObservationScheduler"}	com.terraformation.backend.daily.ObservationScheduler.transitionObservations()	DELETED	2024-06-11 22:44:48.308035	2025-05-13 17:28:47.316028	\N	ObservationScheduler
+01900979-b034-7628-9b98-431fbb38f669	5	{"version":5,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"01900979-b034-7628-9b98-431fbb38f669","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:44:48.308561172Z","scheduledAt":"2024-06-11T22:45:00Z","recurringJobId":"PlantingSeasonScheduler","reason":"Scheduled by recurring job 'com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:44:48.336982130Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:45:02.711313637Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:45:02.711313637Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:45:02.820501512Z","latencyDuration":14.374331507,"processDuration":0.109186459},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.316030Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"PlantingSeasonScheduler"}	com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()	DELETED	2024-06-11 22:44:48.308561	2025-05-13 17:28:47.31603	\N	PlantingSeasonScheduler
+0190097a-9adb-7150-9c42-bc813830fc1c	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190097a-9adb-7150-9c42-bc813830fc1c","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:45:48.378170047Z","scheduledAt":"2024-06-11T22:46:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:45:48.406121214Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:46:02.808488887Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:46:02.808488887Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:46:02.830049679Z","latencyDuration":14.402367673,"processDuration":0.021548625},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.316032Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:45:48.37817	2025-05-13 17:28:47.316032	\N	FacilityService.scanForIdleFacilities
+0190097b-857f-7ef8-9f35-0193cb9db34e	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190097b-857f-7ef8-9f35-0193cb9db34e","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:46:48.446619880Z","scheduledAt":"2024-06-11T22:47:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:46:48.478711630Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:47:02.852196179Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:47:02.852196179Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:47:02.870636137Z","latencyDuration":14.373484549,"processDuration":0.018421792},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.316034Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:46:48.44662	2025-05-13 17:28:47.316034	\N	FacilityService.scanForIdleFacilities
+0190097c-701b-7b62-a529-0d4a383fb974	5	{"version":5,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"0190097c-701b-7b62-a529-0d4a383fb974","jobHistory":[{"@class":"org.jobrunr.jobs.states.ScheduledState","state":"SCHEDULED","createdAt":"2024-06-11T22:47:48.506574172Z","scheduledAt":"2024-06-11T22:48:00Z","recurringJobId":"FacilityService.scanForIdleFacilities","reason":"Scheduled by recurring job 'FacilityService.scanForIdleFacilities'"},{"@class":"org.jobrunr.jobs.states.EnqueuedState","state":"ENQUEUED","createdAt":"2024-06-11T22:47:48.522229256Z"},{"@class":"org.jobrunr.jobs.states.ProcessingState","state":"PROCESSING","createdAt":"2024-06-11T22:48:02.893880637Z","serverId":"ae600158-5ec5-4cb8-9284-62479154888f","serverName":"c839ed6df710","updatedAt":"2024-06-11T22:48:02.893880637Z"},{"@class":"org.jobrunr.jobs.states.SucceededState","state":"SUCCEEDED","createdAt":"2024-06-11T22:48:02.913790637Z","latencyDuration":14.371651381,"processDuration":0.019882750},{"@class":"org.jobrunr.jobs.states.DeletedState","state":"DELETED","createdAt":"2025-05-13T17:28:47.316035Z","reason":"JobRunr maintenance - deleting succeeded job"}],"metadata":{"@class":"java.util.concurrent.ConcurrentHashMap","jobRunrDashboardLog-3":{"@class":"org.jobrunr.jobs.context.JobDashboardLogger$JobDashboardLogLines","logLines":[]}},"recurringJobId":"FacilityService.scanForIdleFacilities"}	com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()	DELETED	2024-06-11 22:47:48.506574	2025-05-13 17:28:47.316035	\N	FacilityService.scanForIdleFacilities
 \.
 
 
@@ -7749,8 +11462,6 @@ aad30fad-a744-4953-b38b-714be8d5b8c5	5	{"version":5,"jobSignature":"com.terrafor
 --
 
 COPY public.jobrunr_metadata (id, name, owner, value, createdat, updatedat) FROM stdin;
-id-cluster	id	cluster	6a4d1e63-09b1-49f1-943d-0a87c5894c67	2024-03-05 04:05:09.498536	2024-03-05 04:05:09.499759
-database_version-cluster	database_version	cluster	6.0.0	2024-03-05 04:05:09.561464	2024-03-05 04:05:09.569053
 \.
 
 
@@ -7783,11 +11494,6 @@ dae3e0a8-65c9-450a-9575-402c2f06775a	v015__alter_table_backgroundjobserver_add_n
 --
 
 COPY public.jobrunr_recurring_jobs (id, version, jobasjson, createdat) FROM stdin;
-FacilityService.scanForIdleFacilities                                                                                           	1	{"version":0,"jobSignature":"com.terraformation.backend.customer.FacilityService.scanForIdleFacilities()","jobName":"FacilityService.scanForIdleFacilities","amountOfRetries":0,"labels":[],"jobDetails":{"className":"com.terraformation.backend.customer.FacilityService","methodName":"scanForIdleFacilities","jobParameters":[],"cacheable":true},"id":"FacilityService.scanForIdleFacilities","scheduleExpression":"* * * * *","zoneId":"UTC","createdAt":"2024-06-11T21:50:43.314970587Z"}	1718142643314
-DailyTaskRunner                                                                                                                 	1	{"version":0,"jobSignature":"com.terraformation.backend.daily.DailyTaskRunner.runDailyTasks()","jobName":"com.terraformation.backend.daily.DailyTaskRunner.runDailyTasks()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.DailyTaskRunner","methodName":"runDailyTasks","jobParameters":[],"cacheable":true},"id":"DailyTaskRunner","scheduleExpression":"1 0 * * *","zoneId":"Z","createdAt":"2024-06-11T21:50:43.389675503Z"}	1718142643389
-NotificationScanner                                                                                                             	1	{"version":0,"jobSignature":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","jobName":"com.terraformation.backend.daily.NotificationScanner.sendNotifications()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.NotificationScanner","methodName":"sendNotifications","jobParameters":[],"cacheable":true},"id":"NotificationScanner","scheduleExpression":"*/15 * * * *","zoneId":"UTC","createdAt":"2024-06-11T21:50:43.482550337Z"}	1718142643482
-ObservationScheduler                                                                                                            	1	{"version":0,"jobSignature":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","jobName":"com.terraformation.backend.daily.ObservationScheduler.transitionObservations()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.ObservationScheduler","methodName":"transitionObservations","jobParameters":[],"cacheable":true},"id":"ObservationScheduler","scheduleExpression":"*/15 * * * *","zoneId":"UTC","createdAt":"2024-06-11T21:50:43.489750045Z"}	1718142643489
-PlantingSeasonScheduler                                                                                                         	1	{"version":0,"jobSignature":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","jobName":"com.terraformation.backend.daily.PlantingSeasonScheduler.transitionPlantingSeasons()","labels":[],"jobDetails":{"className":"com.terraformation.backend.daily.PlantingSeasonScheduler","methodName":"transitionPlantingSeasons","jobParameters":[],"cacheable":true},"id":"PlantingSeasonScheduler","scheduleExpression":"*/15 * * * *","zoneId":"UTC","createdAt":"2024-06-11T21:50:43.494472795Z"}	1718142643494
 \.
 
 
@@ -7843,7 +11549,7 @@ COPY public.notification_types (id, name, notification_criticality_id) FROM stdi
 13	Unknown Automation Triggered	3
 14	Device Unresponsive	3
 15	Nursery Seedling Batch Ready	1
-16	Report Created	1
+16	Seed Fund Report Created	1
 17	Observation Upcoming	1
 18	Observation Started	1
 19	Schedule Observation	1
@@ -7857,6 +11563,11 @@ COPY public.notification_types (id, name, notification_criticality_id) FROM stdi
 27	Event Reminder	1
 28	Participant Project Species Added To Project	1
 29	Participant Project Species Approved Species Edited	1
+30	Application Submitted	1
+31	Completed Section Variable Updated	1
+32	Accelerator Report Submitted	1
+33	Accelerator Report Upcoming	1
+34	Accelerator Report Published	1
 \.
 
 
@@ -7867,6 +11578,7 @@ COPY public.notification_types (id, name, notification_criticality_id) FROM stdi
 COPY public.notifications (id, notification_type_id, user_id, organization_id, title, body, local_url, created_time, is_read) FROM stdin;
 1	23	1	1	Add your next planting season	It's time to schedule your next planting season	/planting-sites/1	2024-03-06 18:59:51.429206+00	f
 2	23	1	1	Reminder: Add your next planting season	Remember to schedule your next planting season	/planting-sites/1	2024-06-11 22:00:00.332064+00	f
+3	26	1	1	View a deliverable's status	A submitted deliverable was reviewed and its status was updated.	/deliverables/102/submissions/1	2025-05-13 17:30:16.362677+00	f
 \.
 
 
@@ -7946,6 +11658,7 @@ COPY public.plant_material_sourcing_methods (id, name) FROM stdin;
 --
 
 COPY public.project_land_use_model_types (project_id, land_use_model_type_id) FROM stdin;
+1	1
 \.
 
 
@@ -7962,6 +11675,16 @@ COPY public.project_report_settings (project_id, is_enabled) FROM stdin;
 --
 
 COPY public.projects (id, created_by, created_time, modified_by, modified_time, organization_id, name, description, participant_id, country_code) FROM stdin;
+1	1	2025-05-13 17:29:18.930664+00	2	2025-05-13 17:30:23.803872+00	1	Application Project	\N	\N	CO
+\.
+
+
+--
+-- Data for Name: rate_limited_events; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.rate_limited_events (event_class, rate_limit_key, next_time, pending_event) FROM stdin;
+com.terraformation.backend.documentproducer.event.QuestionsDeliverableStatusUpdatedEvent	{"projectId": 1, "deliverableId": 102}	2025-05-13 17:35:16.331164+00	{"projectId": 1, "deliverableId": 102}
 \.
 
 
@@ -7983,42 +11706,6 @@ COPY public.regions (id, name) FROM stdin;
 
 
 --
--- Data for Name: report_files; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY public.report_files (file_id, report_id) FROM stdin;
-\.
-
-
---
--- Data for Name: report_photos; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY public.report_photos (report_id, file_id, caption) FROM stdin;
-\.
-
-
---
--- Data for Name: report_statuses; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY public.report_statuses (id, name) FROM stdin;
-1	New
-2	In Progress
-3	Locked
-4	Submitted
-\.
-
-
---
--- Data for Name: reports; Type: TABLE DATA; Schema: public; Owner: -
---
-
-COPY public.reports (id, organization_id, year, quarter, locked_by, locked_time, modified_by, modified_time, submitted_by, submitted_time, status_id, body, project_id, project_name) FROM stdin;
-\.
-
-
---
 -- Data for Name: roles; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -8028,6 +11715,42 @@ COPY public.roles (id, name) FROM stdin;
 3	Admin
 4	Owner
 5	Terraformation Contact
+\.
+
+
+--
+-- Data for Name: seed_fund_report_files; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.seed_fund_report_files (file_id, report_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: seed_fund_report_photos; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.seed_fund_report_photos (report_id, file_id, caption) FROM stdin;
+\.
+
+
+--
+-- Data for Name: seed_fund_report_statuses; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.seed_fund_report_statuses (id, name) FROM stdin;
+1	New
+2	In Progress
+3	Locked
+4	Submitted
+\.
+
+
+--
+-- Data for Name: seed_fund_reports; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.seed_fund_reports (id, organization_id, year, quarter, locked_by, locked_time, modified_by, modified_time, submitted_by, submitted_time, status_id, body, project_id, project_name) FROM stdin;
 \.
 
 
@@ -8163,7 +11886,7 @@ COPY public.species_successional_groups (species_id, successional_group_id) FROM
 --
 
 COPY public.spring_session (primary_id, session_id, creation_time, last_access_time, max_inactive_interval, expiry_time, principal_name) FROM stdin;
-b84131c0-7bee-4363-827e-291becc06698	276714ad-ab0a-48aa-8ef8-db65ec2e950a	1632267607787	1718142647102	315360000	2033502647102	0d04525c-7933-4cec-9647-7b6ac2642838
+b84131c0-7bee-4363-827e-291becc06698	276714ad-ab0a-48aa-8ef8-db65ec2e950a	1632267607787	1747160013421	315360000	2062520013421	0d04525c-7933-4cec-9647-7b6ac2642838
 \.
 
 
@@ -8832,7 +12555,7 @@ Z
 -- Data for Name: timeseries; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.timeseries (id, type_id, device_id, name, units, decimal_places, created_time, modified_time, created_by, modified_by) FROM stdin;
+COPY public.timeseries (id, type_id, device_id, name, units, decimal_places, created_time, modified_time, created_by, modified_by, retention_days) FROM stdin;
 \.
 
 
@@ -8925,7 +12648,7 @@ COPY public.user_global_roles (user_id, global_role_id) FROM stdin;
 --
 
 COPY public.user_preferences (user_id, organization_id, preferences) FROM stdin;
-1	\N	{"lastVisitedOrg": 1, "preferredWeightSystem": "metric"}
+1	\N	{"lastVisitedOrg": 1, "preferredWeightSystem": "metric", "enable2025ProjectProfile": true, "dont-show-site-boundary-instructions": true}
 \.
 
 
@@ -8937,6 +12660,7 @@ COPY public.user_types (id, name) FROM stdin;
 1	Individual
 3	Device Manager
 4	System
+5	Funder
 \.
 
 
@@ -8946,7 +12670,15 @@ COPY public.user_types (id, name) FROM stdin;
 
 COPY public.users (id, auth_id, email, first_name, last_name, created_time, modified_time, user_type_id, last_activity_time, email_notifications_enabled, deleted_time, time_zone, locale, country_code, cookies_consented, cookies_consented_time) FROM stdin;
 2	DISABLED	system	Terraware	System	2022-10-25 17:51:42.24661+00	2022-10-25 17:51:42.24661+00	4	\N	f	\N	\N	\N	\N	\N	\N
-1	0d04525c-7933-4cec-9647-7b6ac2642838	nobody@terraformation.com	Test	User	2021-12-15 17:59:59.069723+00	2021-12-15 17:59:59.069723+00	1	2024-06-11 21:50:47.113+00	f	\N	Etc/UTC	\N	\N	t	2024-06-11 21:53:16.594086+00
+1	0d04525c-7933-4cec-9647-7b6ac2642838	nobody@terraformation.com	Test	User	2021-12-15 17:59:59.069723+00	2021-12-15 17:59:59.069723+00	1	2025-05-13 18:13:33.428+00	f	\N	Etc/UTC	\N	\N	t	2024-06-11 21:53:16.594086+00
+\.
+
+
+--
+-- Data for Name: vector_store; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.vector_store (id, content, metadata, embedding) FROM stdin;
 \.
 
 
@@ -9217,6 +12949,16 @@ COPY topology.layer (topology_id, layer_id, schema_name, table_name, feature_col
 
 
 --
+-- Data for Name: biomass_forest_types; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.biomass_forest_types (id, name) FROM stdin;
+1	Terrestrial
+2	Mangrove
+\.
+
+
+--
 -- Data for Name: deliveries; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
@@ -9233,10 +12975,36 @@ COPY tracking.draft_planting_sites (id, organization_id, project_id, name, descr
 
 
 --
+-- Data for Name: mangrove_tides; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.mangrove_tides (id, name) FROM stdin;
+1	Low
+2	High
+\.
+
+
+--
+-- Data for Name: monitoring_plot_histories; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.monitoring_plot_histories (id, monitoring_plot_id, planting_subzone_id, planting_site_id, planting_subzone_history_id, planting_site_history_id, created_by, created_time) FROM stdin;
+\.
+
+
+--
+-- Data for Name: monitoring_plot_overlaps; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.monitoring_plot_overlaps (monitoring_plot_id, overlaps_plot_id) FROM stdin;
+\.
+
+
+--
 -- Data for Name: monitoring_plots; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
-COPY tracking.monitoring_plots (id, planting_subzone_id, name, full_name, created_by, created_time, modified_by, modified_time, boundary, permanent_cluster, permanent_cluster_subplot, is_available) FROM stdin;
+COPY tracking.monitoring_plots (id, planting_subzone_id, created_by, created_time, modified_by, modified_time, boundary, permanent_index, is_available, size_meters, planting_site_id, is_ad_hoc, organization_id, plot_number, elevation_meters) FROM stdin;
 \.
 
 
@@ -9256,10 +13024,53 @@ COPY tracking.observable_conditions (id, name) FROM stdin;
 
 
 --
+-- Data for Name: observation_biomass_details; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.observation_biomass_details (observation_id, monitoring_plot_id, description, forest_type_id, small_trees_count_low, small_trees_count_high, herbaceous_cover_percent, soil_assessment, water_depth_cm, salinity_ppt, ph, tide_id, tide_time) FROM stdin;
+\.
+
+
+--
+-- Data for Name: observation_biomass_quadrat_details; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.observation_biomass_quadrat_details (observation_id, monitoring_plot_id, position_id, description) FROM stdin;
+\.
+
+
+--
+-- Data for Name: observation_biomass_quadrat_species; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.observation_biomass_quadrat_species (observation_id, monitoring_plot_id, position_id, biomass_species_id, abundance_percent) FROM stdin;
+\.
+
+
+--
+-- Data for Name: observation_biomass_species; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.observation_biomass_species (id, observation_id, monitoring_plot_id, species_id, scientific_name, common_name, is_invasive, is_threatened) FROM stdin;
+\.
+
+
+--
+-- Data for Name: observation_photo_types; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.observation_photo_types (id, name) FROM stdin;
+1	Plot
+2	Quadrat
+3	Soil
+\.
+
+
+--
 -- Data for Name: observation_photos; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
-COPY tracking.observation_photos (file_id, observation_id, monitoring_plot_id, position_id, gps_coordinates) FROM stdin;
+COPY tracking.observation_photos (file_id, observation_id, monitoring_plot_id, position_id, gps_coordinates, type_id) FROM stdin;
 \.
 
 
@@ -9284,10 +13095,30 @@ COPY tracking.observation_plot_positions (id, name) FROM stdin;
 
 
 --
+-- Data for Name: observation_plot_statuses; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.observation_plot_statuses (id, name) FROM stdin;
+1	Unclaimed
+2	Claimed
+3	Completed
+4	Not Observed
+\.
+
+
+--
 -- Data for Name: observation_plots; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
-COPY tracking.observation_plots (observation_id, monitoring_plot_id, claimed_by, claimed_time, completed_by, completed_time, created_by, created_time, is_permanent, modified_by, modified_time, observed_time, notes) FROM stdin;
+COPY tracking.observation_plots (observation_id, monitoring_plot_id, claimed_by, claimed_time, completed_by, completed_time, created_by, created_time, is_permanent, modified_by, modified_time, observed_time, notes, status_id, monitoring_plot_history_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: observation_requested_subzones; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.observation_requested_subzones (observation_id, planting_subzone_id) FROM stdin;
 \.
 
 
@@ -9300,6 +13131,17 @@ COPY tracking.observation_states (id, name) FROM stdin;
 2	InProgress
 3	Completed
 4	Overdue
+5	Abandoned
+\.
+
+
+--
+-- Data for Name: observation_types; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.observation_types (id, name) FROM stdin;
+1	Monitoring
+2	Biomass Measurements
 \.
 
 
@@ -9307,7 +13149,7 @@ COPY tracking.observation_states (id, name) FROM stdin;
 -- Data for Name: observations; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
-COPY tracking.observations (id, planting_site_id, created_time, start_date, end_date, completed_time, state_id, upcoming_notification_sent_time) FROM stdin;
+COPY tracking.observations (id, planting_site_id, created_time, start_date, end_date, completed_time, state_id, upcoming_notification_sent_time, planting_site_history_id, observation_type_id, is_ad_hoc) FROM stdin;
 \.
 
 
@@ -9336,6 +13178,14 @@ COPY tracking.observed_site_species_totals (observation_id, planting_site_id, sp
 
 
 --
+-- Data for Name: observed_subzone_species_totals; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.observed_subzone_species_totals (observation_id, planting_subzone_id, species_id, species_name, certainty_id, total_live, total_dead, total_existing, mortality_rate, cumulative_dead, permanent_live) FROM stdin;
+\.
+
+
+--
 -- Data for Name: observed_zone_species_totals; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
@@ -9355,8 +13205,8 @@ COPY tracking.planting_seasons (id, planting_site_id, start_date, start_time, en
 -- Data for Name: planting_site_histories; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
-COPY tracking.planting_site_histories (id, planting_site_id, created_by, created_time, boundary, grid_origin, exclusion) FROM stdin;
-1	1	1	2024-03-06 18:56:18.746285+00	0106000020E6100000010000000103000000010000000A0000009AA10A279D5E52C02623D2801A2E3540B0A2E4BF7E5E52C01720C558172F35400D257257055E52C0E83555C52230354051849A399B5D52C03437BAEA1E303540ADEFC023285D52C000AB47E68B2F35405D68E789F35C52C075DDE42FF62D3540893021FA325D52C01631D195552C3540525064146B5E52C025E929772C2C354069731F55925E52C0C5C49FB6642C35409AA10A279D5E52C02623D2801A2E3540	0101000020E61000009AA10A279D5E52C025E929772C2C3540	0106000020E6100000140000000103000000010000004F000000883021FA325D52C01E31D195552C354013982916395D52C0CF5E68C46A2C354079FC35FF3F5D52C0A5A3E28A842C354039BBDD50445D52C0A1D2268AA12C3540969AB179465D52C07E526589BE2C354040401611495D52C0523638FAE12C3540E6E57AA84B5D52C023D334400A2D3540B7382DF44C5D52C011DBC0E9302D3540A6A422FA4F5D52C0394F72685C2D35400384F622525D52C0292C8C67792D35407A7C0D06565D52C0C68C5FADA12D35402422729D585D52C0CEA2A373BB2D3540FDF95CA95E5D52C0276D72ABDB2D35401A98D823655D52C04167E538F22D35403736549E6B5D52C0E8AD7E9B0D2E354083811DCD705D52C088014DC5252E35401793776A765D52C0326217EF3D2E35401B18B02A7B5D52C0B264678A5C2E35404D4A369F7E5D52C082ECDB096B2E35408901F5D3865D52C0A14CE6DD8C2E3540AA9F704E8D5D52C0336401A4A62E3540F2EA397D925D52C0B70AD0BFB62E3540057AE3BDA05D52C004D50E3EE22E35401184543EAA5D52C0680A1B04FC2E3540A195AEDBAF5D52C0D9D340BC0D2F3540F565B0CAB95D52C0C410E6C8322F3540B7A990DCC25D52C09B7A84F24A2F35404BBBEA79C85D52C0ABA1E171592F3540B5A42F23D45D52C0D3AB9770762F354033227FC6DC5D52C01DDF0DC5892F354058453301E85D52C03567E0B59E2F354097812AF6F45D52C08E502A18BA2F3540BCA4DE30005E52C09E9CB241D22F3540F25B9D65085E52C02FB8BEF9E32F3540FAE0D5250D5E52C0BEF99407EC2F3540A1D09BCD145E52C03AF7D5B600303540ED679216105E52C0D3A388190B3035406D54B4480C5E52C09A54E286FA2F3540EED664A5035E52C0BEF99407EC2F3540FCE536DFFB5D52C055D5894FDA2F3540230E4CD3F55D52C021AB976CCD2F3540A590FC2FED5D52C0252D6DDFB62F35409A868BAFE35D52C089A95B27A52F35405ECFCC7ADB5D52C035EF05A8962F354028180E46D35D52C0FD8EF0EF842F3540F2604F11CB5D52C0180FD937732F35404436B2B9C35D52C0756FBF7F612F3540F8EAE88ABE5D52C099126300532F354006FABAC4B65D52C096E725733C2F3540E95B3F4AB05D52C07DFA25902F2F3540F76A1184A85D52C0A3FBA33B1C2F35404A40742CA15D52C03EEFFD11042F35402DA2F8B19A5D52C04B21F34BEA2E354054CA0DA6945D52C0FC1368F7D62E35404B45D5E58F5D52C06721FE77C82E354000FA0BB78A5D52C0C1D4ABEAB12E354070E8B119855D52C021403E6BA32E3540DBD6577C7F5D52C089EEA916902E35404AC5FDDE795D52C061084F89792E3540B7B3A341745D52C02C142CC35F2E35403EBB8C5E705D52C0D65E2CD24A2E3540C3C2757B6C5D52C00646010C312E354033B11BDE665D52C040CA34E2182E35401613A063605D52C05434B8620A2E3540820146C65A5D52C05B582CF2E62D354036B67C97555D52C0A6C053C8CE2D354090101800535D52C0CEA2A373BB2D354000FFBD624D5D52C0B0A37B83892D35408406A77F495D52C04BF39A4B692D35401193C85C4A5D52C06ADF4D77472D3540969AB179465D52C0964296F81B2D354039BBDD50445D52C0DB7E3724FA2C3540DBDB0928425D52C08AAE0425DD2C354079FC35FF3F5D52C027A230B4B92C354047CAAF8A3C5D52C09FF089189B2C354013982916395D52C0579BB1C3872C35403BC03E0A335D52C0835075E07A2C35400E8333D02E5D52C0A687F1ED702C3540883021FA325D52C01E31D195552C35400103000000010000000B000000F0FA48EC595E52C0073835051C2E3540B4215CCF585E52C0AD090C8A1C2E35402AF3343A595E52C0F25092C5192E354059F8ECB0595E52C01E61EF85172E3540B0025D9E5A5E52C0CA059472152E3540F145640E5C5E52C02867A906132E354098F029965D5E52C02843A0E90F2E3540D3C916B35E5E52C0115D06C7102E35402FF385D15D5E52C0CF2DBDED142E3540AAE35D6D5C5E52C0B5FD36B2172E3540F0FA48EC595E52C0073835051C2E35400103000000010000000A00000053DCA3DA4C5E52C0336B9498692E35406A6423944D5E52C03191A1916C2E35403525B0A64D5E52C0AD741FBB6E2E3540D4A6C9CB4D5E52C013F58B3E722E354004E63CB94D5E52C0B7182807762E3540229D30ED4C5E52C0C741B7D6762E3540CF117EE94B5E52C052C30968742E354060CFD7B14B5E52C058802CB4712E3540A1D20AFC4B5E52C01C4ED1D66C2E354053DCA3DA4C5E52C0336B9498692E3540010300000001000000090000002AEB5951335E52C0FC0E3450CB2D354083BB1361345E52C056066413C22D3540B0A3F0E8345E52C056066413C22D3540922E179E355E52C0F0544EBCC22D3540325C8780365E52C0EAA23865C32D3540ECFED0AD365E52C075845FFEC92D3540BF16F425365E52C0599CB145CF2D3540B0A3F0E8345E52C0599CB145CF2D35402AEB5951335E52C0FC0E3450CB2D35400103000000010000001700000071F933B2255E52C0751B816A222F354018297AA2245E52C065953AE1152F3540C7C9EDC1265E52C0F263973D132F3540D93CF1FE275E52C05E3180E6132F35404280AE4B2A5E52C0B1C6C5EB112F3540E2AD1E2E2B5E52C0CFDC50F60D2F354051F3B1882B5E52C072250AAF082F35404BF1DB7A2D5E52C091B4062BFA2E354095BFBF7C305E52C037BDA54AEE2E3540A732C3B9315E52C0B5E6A208E72E354083BB1361345E52C04CDB15BCE32E35405F446408375E52C0E2E5B95FE62E35405F446408375E52C004A26045F02E3540BF16F425365E52C06D57D63AF42E3540C1A79C04315E52C01888D87CFB2E3540B33499C72F5E52C0F73DC367032F35403FEF056D2F5E52C01C8322480F2F3540130729E52E5E52C005D480281B2F3540C33845E32B5E52C0A4D223502C2F354067F75DA4275E52C01BEB0B3B342F3540D1CBC3CF245E52C03F993AE9322F354009B67665235E52C06C3FAF9C2F2F354071F933B2255E52C0751B816A222F35400103000000010000000F0000005C7F3F1A225E52C011E1B27E3F2D3540AB0AF21D235E52C0B16A8C8C392D3540A5DB7DA3245E52C02F9C4DA13A2D3540F66630A7255E52C07337CB77382D35403999D76B245E52C0DFA4F669342D354069D84A59245E52C073BCCF772E2D3540A0AC0929265E52C0332A4D4E2C2D35402B3BEF76275E52C08A6A9F322E2D3540BCC9D4C4285E52C0A5187993362D3540D151547E295E52C0F74F1D5C3A2D3540551C7A6F2A5E52C0772B35A8412D3540F5CC070F295E52C050651CAF482D354092B9D551275E52C0CF1FEC69482D3540F66630A7255E52C04B4E5B9A472D35405C7F3F1A225E52C011E1B27E3F2D35400103000000010000000A0000001F43DEE92D5E52C016F07C39492D3540EF036BFC2D5E52C0A64DF6BC422D3540B1D1C3372F5E52C0D0BC9532422D354062DB5C16305E52C0BB4300103D2D354017E5F5F4305E52C0F74F1D5C3A2D3540AB379B9F325E52C049626F403C2D35407AF827B2325E52C0A64DF6BC422D354050E8283F315E52C05935AD7E492D354073CE90ED2E5E52C0DCD1CE1D4B2D35401F43DEE92D5E52C016F07C39492D35400103000000010000000A0000008EC966303D5E52C01A9D6F1A182D3540D5B6624D3D5E52C010497F80102D3540E36B52C13D5E52C0C72E346F0B2D3540926519573F5E52C0C04ACDF1052D35407497EC95405E52C0FB908EE6082D3540814CDC09415E52C094862C3C0F2D354034AAF078405E52C0C80C54AE172D3540144011913F5E52C00F8D5FB41F2D35408EC966303D5E52C0B22E83531C2D35408EC966303D5E52C01A9D6F1A182D354001030000000100000009000000AC6E3481675E52C0162B1DDC152D35400C41C49E665E52C04F781206062D35400C41C49E665E52C04FD8E26CFF2C35405B0FA8A0695E52C0A3AAF7C3FE2C35407DF5AE1A6C5E52C0BC878F10022D3540440BFC846D5E52C0F3CC419F0C2D3540500DD2926B5E52C001949FD1192D3540BBE137BE685E52C0DDCA4B751C2D3540AC6E3481675E52C0162B1DDC152D354001030000000100000007000000419ACE556A5E52C026AFA003C82D35408EF95A36685E52C0793C0DB7C42D3540BBE137BE685E52C0C0668FC1C02D3540FB3C18836A5E52C07B202723BC2D3540C25265ED6B5E52C0DC7511CCBC2D35405F80D5CF6C5E52C025C4BA6FBF2D3540419ACE556A5E52C026AFA003C82D3540010300000001000000080000002AB69DE9655E52C0D6D24492D22D3540958A0315635E52C0AFD313CFDB2D35402D4746C8605E52C060F6D7DED52D35402D4746C8605E52C0EE587040D12D3540C874B6AA615E52C021531EF9CB2D3540214570BA625E52C026CA49A7CA2D3540B7700A8F655E52C0EE587040D12D35402AB69DE9655E52C0D6D24492D22D354001030000000100000008000000BE72E09C635E52C08D1B6828BA2D3540552F2350615E52C037CA3C7ABB2D354073A4FC9A605E52C037CA3C7ABB2D35407AA6D2A85E5E52C0DA4215E1B42D35407AA6D2A85E5E52C055C46B3DB22D35400ED26C7D615E52C0AF3B2E4DAC2D354007D0966F635E52C07C9DAC42B02D3540BE72E09C635E52C08D1B6828BA2D354001030000000100000008000000E358E716665E52C005435C10A32D35404E2D4D42635E52C04EE89C15A12D3540214570BA625E52C0A386DD1A9F2D3540214570BA625E52C05733747C9A2D3540DCE7B9E7625E52C0DFAE603A932D3540A3FD0652645E52C002334BE3932D3540E358E716665E52C05733747C9A2D3540E358E716665E52C005435C10A32D3540010300000001000000090000006B33CF6B5D5E52C07FB6358C942D3540F8ED3B115D5E52C05A1E1E209D2D3540CB055F895C5E52C0955C87BEA12D3540D60735975A5E52C06F263162A42D35409AAC54D2585E52C04EE89C15A12D3540534F9EFF585E52C03B3CCAD8972D35408FAA7EC45A5E52C0DFAE603A932D3540F8ED3B115D5E52C0022A7691922D35406B33CF6B5D5E52C07FB6358C942D3540010300000001000000590000001CE51A5EEA5D52C0DAA0646C3D2C35400E92C21CEA5D52C0040E7627502C35408D753C8FE95D52C096898F9E5F2C35408D753C8FE95D52C0DB184A45752C35401D04DB52EC5D52C0BD0B7FAC822C35407B2FDB20F25D52C00578832B932C35401A699E35F85D52C055B5B592A02C3540B669552FFD5D52C073C8C609B02C3540546A0C29025E52C0A93DD680BF2C3540A423F4C0055E52C0843BA317D32C3540FADCDB58095E52C083D7871DF52C35403AEB9E9F095E52C0C7BB4DB4082D35405CDC245F045E52C08F41BD72212D3540BEA2614AFE5D52C01B5204CA2C2D3540FA125593F15D52C0781B7A92252D35400E92C21CEA5D52C01D0AB8FB112D354085D76C91DC5D52C09160F364FE2C35409E56DA1AD55D52C0504ED274002D35400A2A6C59C55D52C0EA9F6423172D354026E2E5FDBE5D52C09FF8AFF1312D354087A822E9B85D52C01B7F5C07562D3540297D221BB35D52C0791D8BDD712D3540830A53EBAB5D52C06F04C6AB8C2D35409050B459A35D52C0867416FB962D354019DCBF3C8D5D52C03C4E8654812D3540E1A1452E825D52C0F5137D6E632D3540FD59BFD27B5D52C0BD943929392D3540544CB385805D52C06352751B162D3540F985769A865D52C07E6B1455FC2C3540E1A1452E825D52C0739B0067DD2C3540268451AD775D52C031BB5641B72C3540BBE638A96F5D52C04EA7245B992C3540AA3B14586C5D52C0FAA6BD8C7E2C354021E681AF6A5D52C0C01C80A6602C35403DFA3090695D52C06B4BBA644E2C3540376A989E6C5D52C04143A5FD4D2C3540F9BBEFD46E5D52C0B372C6056D2C3540C11F45C4705D52C0ED5240CC862C3540CE915DFA725D52C070E4633B952C3540E6758E66775D52C0376946CAA72C35407E7645607C5D52C0FCB14649B82C3540544CB385805D52C0A32345C8C82C3540B13EA738855D52C0334EF06EDE2C3540B877B353865D52C060FD7DA6E52C354001F88ED0885D52C061C2C17C012D354079A2FC27875D52C051460BD40C2D354022B00875825D52C06E06CE6A202D354086AF517B7D5D52C060715B19372D3540DA683913815D52C03DBE4B98472D3540EA135E64845D52C08F5A4B0F572D3540C822D8A4895D52C05E8D159E692D35405EEA82838D5D52C0791D8BDD712D3540F3B12D62915D52C0ED9A1115792D354054163A4B985D52C03C4E8654812D3540733377D29D5D52C0A97B4074852D3540D45E77A0A35D52C0CA8BFA93892D3540A5FBD8AAA65D52C0CA8BFA93892D3540F6B4C042AA5D52C038BE974C802D3540CA51224DAD5D52C03515BFC56E2D3540A2609C8DB25D52C022FFA0E7512D3540806F16CEB75D52C0BDB017393B2D3540D528FE65BB5D52C01B5204CA2C2D35402D1BF218C05D52C06CC321431B2D354003F15F3EC45D52C068A4FADB0D2D3540611C600CCA5D52C04FD8E26CFF2C35408DABB5C9D15D52C04AC1A80DF32C3540237360A8D55D52C04AC1A80DF32C35405874CE9BDF5D52C04AC1A80DF32C3540B79FCE69E55D52C0D9ED453DF92C3540DCF5170CEC5D52C0B3139094042D3540F3D94878F05D52C0EC5AD9EB0F2D35400ABE79E4F45D52C0A2EB532B182D354021A2AA50F95D52C099C9DE621F2D35407D949E03FE5D52C06E06CE6A202D3540CE4D869B015E52C059354333192D354097B1DB8A035E52C0BA842CC40A2D35405CDC245F045E52C0E46E3545FA2C3540DCBF9ED1035E52C0BD1E2CCEEA2C35408706B739005E52C069BE4147D92C3540364DCFA1FC5D52C0B0D024D8CA2C35401A699E35F85D52C0E9992659BA2C3540BC3D9E67F25D52C028CCB611B12C354016CBCE37EB5D52C00E3F66BAA52C3540F1748595E45D52C0F2175443962C35408B1079ACDD5D52C0F25C9E9C802C3540B201FF6BD85D52C09DF5D5FD6B2C35409E56DA1AD55D52C04DF0EB6E592C354065BF3287D25D52C0C5A27490402C35401CE51A5EEA5D52C0DAA0646C3D2C35400103000000010000000C0000007F1978A7435D52C0866C0B347E2E3540F83E806D435D52C0EA17D41C712E3540C30674C4435D52C0DAC5696C6F2E3540C30674C4435D52C0FFB12A5B6A2E35406183B033495D52C00E1910EF692E354008C887554A5D52C0B6ABEE88712E3540E9F95A944B5D52C0CD2E7DDE772E3540FAAE4A084C5D52C05BC4146D822E3540C0DA8B384A5D52C03A19918F8C2E3540A9384703455D52C06F1727DF8A2E35407F1978A7435D52C06EF4E8CD852E35407F1978A7435D52C0866C0B347E2E35400103000000010000000D00000078B8E398855D52C037BB655D472F3540FD01230F825D52C03A4D4E06482F3540E38C49C4825D52C08F0D96C93E2F3540D88A73B6845D52C039E0C535362F354054413440885D52C000E3DD4A2E2F3540859A3EF78B5D52C00D9352BC232F35400051FF808F5D52C0FF48AFD6192F354008C22CB0925D52C0F263973D132F3540E04A7D57955D52C018CA5138152F35403F1D0D75945D52C0E2A0AF18212F35402D39DC08905D52C01D213BA72B2F3540859A3EF78B5D52C0F639DD8C352F354078B8E398855D52C037BB655D472F35400103000000010000000E0000001306CF2A7E5D52C09D191BDC572F3540427F5491795D52C080075C65642F354093DEE071775D52C096ED11A26D2F3540538300AD755D52C00C1ECB9C6F2F3540DDCC3F23725D52C0DEC9253B742F3540AFE4629B715D52C03DA96C40722F35404F12D37D725D52C0AF8629F96C2F354071F8D9F7745D52C098B0A26A622F3540C6C89307765D52C06983767A5C2F3540BCC6BDF9775D52C02B194A8A562F354051F257CE7A5D52C0BC4C7BF64D2F35402C7BA8757D5D52C059DE36AF482F354095BE65C27F5D52C07C8DF0A94A2F35401306CF2A7E5D52C09D191BDC572F35400103000000010000000D000000B2750B7A6C5D52C037AA6882792F3540CBEAE4C46B5D52C09B3E1DBF822F354062A72778695D52C045E247AF882F35408C1ED7D0665D52C0F848729F8E2F3540F7F23CFC635D52C080729C8F942F35404E549FEA5F5D52C04B2667239D2F35400486BBE85C5D52C05E0EF06FA02F35409140288E5C5D52C04B2667239D2F3540A82459FA605D52C06E461343912F3540AC958629645D52C045E247AF882F35405F36FA48665D52C08D26D6B9842F354062A72778695D52C0D4B2DA777D2F3540B2750B7A6C5D52C037AA6882792F35400103000000010000000D0000005B0F4B404F5D52C0914600DDBD2F35400F474B124C5D52C044D424CDB92F3540C5DBFEB14D5D52C0857672FEAA2F35400137DF764F5D52C0B6801960A62F35404092BF3B515D52C0FD65C0C1A12F3540B84880C5545D52C0698537759E2F3540071764C7575D52C04B2667239D2F3540168A6704595D52C029564FCC9D2F3540CF2CB131595D52C0C1CAE9B1A72F354094D1D06C575D52C0B2965AA7AB2F3540E5305D4D555D52C08847CB9CAF2F3540EB32335B535D52C017DD3B92B32F35405B0F4B404F5D52C0914600DDBD2F3540
+COPY tracking.planting_site_histories (id, planting_site_id, created_by, created_time, boundary, grid_origin, exclusion, area_ha) FROM stdin;
+1	1	1	2024-03-06 18:56:18.746285+00	0106000020E6100000010000000103000000010000000A0000009AA10A279D5E52C02623D2801A2E3540B0A2E4BF7E5E52C01720C558172F35400D257257055E52C0E83555C52230354051849A399B5D52C03437BAEA1E303540ADEFC023285D52C000AB47E68B2F35405D68E789F35C52C075DDE42FF62D3540893021FA325D52C01631D195552C3540525064146B5E52C025E929772C2C354069731F55925E52C0C5C49FB6642C35409AA10A279D5E52C02623D2801A2E3540	0101000020E61000009AA10A279D5E52C025E929772C2C3540	0106000020E6100000140000000103000000010000004F000000883021FA325D52C01E31D195552C354013982916395D52C0CF5E68C46A2C354079FC35FF3F5D52C0A5A3E28A842C354039BBDD50445D52C0A1D2268AA12C3540969AB179465D52C07E526589BE2C354040401611495D52C0523638FAE12C3540E6E57AA84B5D52C023D334400A2D3540B7382DF44C5D52C011DBC0E9302D3540A6A422FA4F5D52C0394F72685C2D35400384F622525D52C0292C8C67792D35407A7C0D06565D52C0C68C5FADA12D35402422729D585D52C0CEA2A373BB2D3540FDF95CA95E5D52C0276D72ABDB2D35401A98D823655D52C04167E538F22D35403736549E6B5D52C0E8AD7E9B0D2E354083811DCD705D52C088014DC5252E35401793776A765D52C0326217EF3D2E35401B18B02A7B5D52C0B264678A5C2E35404D4A369F7E5D52C082ECDB096B2E35408901F5D3865D52C0A14CE6DD8C2E3540AA9F704E8D5D52C0336401A4A62E3540F2EA397D925D52C0B70AD0BFB62E3540057AE3BDA05D52C004D50E3EE22E35401184543EAA5D52C0680A1B04FC2E3540A195AEDBAF5D52C0D9D340BC0D2F3540F565B0CAB95D52C0C410E6C8322F3540B7A990DCC25D52C09B7A84F24A2F35404BBBEA79C85D52C0ABA1E171592F3540B5A42F23D45D52C0D3AB9770762F354033227FC6DC5D52C01DDF0DC5892F354058453301E85D52C03567E0B59E2F354097812AF6F45D52C08E502A18BA2F3540BCA4DE30005E52C09E9CB241D22F3540F25B9D65085E52C02FB8BEF9E32F3540FAE0D5250D5E52C0BEF99407EC2F3540A1D09BCD145E52C03AF7D5B600303540ED679216105E52C0D3A388190B3035406D54B4480C5E52C09A54E286FA2F3540EED664A5035E52C0BEF99407EC2F3540FCE536DFFB5D52C055D5894FDA2F3540230E4CD3F55D52C021AB976CCD2F3540A590FC2FED5D52C0252D6DDFB62F35409A868BAFE35D52C089A95B27A52F35405ECFCC7ADB5D52C035EF05A8962F354028180E46D35D52C0FD8EF0EF842F3540F2604F11CB5D52C0180FD937732F35404436B2B9C35D52C0756FBF7F612F3540F8EAE88ABE5D52C099126300532F354006FABAC4B65D52C096E725733C2F3540E95B3F4AB05D52C07DFA25902F2F3540F76A1184A85D52C0A3FBA33B1C2F35404A40742CA15D52C03EEFFD11042F35402DA2F8B19A5D52C04B21F34BEA2E354054CA0DA6945D52C0FC1368F7D62E35404B45D5E58F5D52C06721FE77C82E354000FA0BB78A5D52C0C1D4ABEAB12E354070E8B119855D52C021403E6BA32E3540DBD6577C7F5D52C089EEA916902E35404AC5FDDE795D52C061084F89792E3540B7B3A341745D52C02C142CC35F2E35403EBB8C5E705D52C0D65E2CD24A2E3540C3C2757B6C5D52C00646010C312E354033B11BDE665D52C040CA34E2182E35401613A063605D52C05434B8620A2E3540820146C65A5D52C05B582CF2E62D354036B67C97555D52C0A6C053C8CE2D354090101800535D52C0CEA2A373BB2D354000FFBD624D5D52C0B0A37B83892D35408406A77F495D52C04BF39A4B692D35401193C85C4A5D52C06ADF4D77472D3540969AB179465D52C0964296F81B2D354039BBDD50445D52C0DB7E3724FA2C3540DBDB0928425D52C08AAE0425DD2C354079FC35FF3F5D52C027A230B4B92C354047CAAF8A3C5D52C09FF089189B2C354013982916395D52C0579BB1C3872C35403BC03E0A335D52C0835075E07A2C35400E8333D02E5D52C0A687F1ED702C3540883021FA325D52C01E31D195552C35400103000000010000000B000000F0FA48EC595E52C0073835051C2E3540B4215CCF585E52C0AD090C8A1C2E35402AF3343A595E52C0F25092C5192E354059F8ECB0595E52C01E61EF85172E3540B0025D9E5A5E52C0CA059472152E3540F145640E5C5E52C02867A906132E354098F029965D5E52C02843A0E90F2E3540D3C916B35E5E52C0115D06C7102E35402FF385D15D5E52C0CF2DBDED142E3540AAE35D6D5C5E52C0B5FD36B2172E3540F0FA48EC595E52C0073835051C2E35400103000000010000000A00000053DCA3DA4C5E52C0336B9498692E35406A6423944D5E52C03191A1916C2E35403525B0A64D5E52C0AD741FBB6E2E3540D4A6C9CB4D5E52C013F58B3E722E354004E63CB94D5E52C0B7182807762E3540229D30ED4C5E52C0C741B7D6762E3540CF117EE94B5E52C052C30968742E354060CFD7B14B5E52C058802CB4712E3540A1D20AFC4B5E52C01C4ED1D66C2E354053DCA3DA4C5E52C0336B9498692E3540010300000001000000090000002AEB5951335E52C0FC0E3450CB2D354083BB1361345E52C056066413C22D3540B0A3F0E8345E52C056066413C22D3540922E179E355E52C0F0544EBCC22D3540325C8780365E52C0EAA23865C32D3540ECFED0AD365E52C075845FFEC92D3540BF16F425365E52C0599CB145CF2D3540B0A3F0E8345E52C0599CB145CF2D35402AEB5951335E52C0FC0E3450CB2D35400103000000010000001700000071F933B2255E52C0751B816A222F354018297AA2245E52C065953AE1152F3540C7C9EDC1265E52C0F263973D132F3540D93CF1FE275E52C05E3180E6132F35404280AE4B2A5E52C0B1C6C5EB112F3540E2AD1E2E2B5E52C0CFDC50F60D2F354051F3B1882B5E52C072250AAF082F35404BF1DB7A2D5E52C091B4062BFA2E354095BFBF7C305E52C037BDA54AEE2E3540A732C3B9315E52C0B5E6A208E72E354083BB1361345E52C04CDB15BCE32E35405F446408375E52C0E2E5B95FE62E35405F446408375E52C004A26045F02E3540BF16F425365E52C06D57D63AF42E3540C1A79C04315E52C01888D87CFB2E3540B33499C72F5E52C0F73DC367032F35403FEF056D2F5E52C01C8322480F2F3540130729E52E5E52C005D480281B2F3540C33845E32B5E52C0A4D223502C2F354067F75DA4275E52C01BEB0B3B342F3540D1CBC3CF245E52C03F993AE9322F354009B67665235E52C06C3FAF9C2F2F354071F933B2255E52C0751B816A222F35400103000000010000000F0000005C7F3F1A225E52C011E1B27E3F2D3540AB0AF21D235E52C0B16A8C8C392D3540A5DB7DA3245E52C02F9C4DA13A2D3540F66630A7255E52C07337CB77382D35403999D76B245E52C0DFA4F669342D354069D84A59245E52C073BCCF772E2D3540A0AC0929265E52C0332A4D4E2C2D35402B3BEF76275E52C08A6A9F322E2D3540BCC9D4C4285E52C0A5187993362D3540D151547E295E52C0F74F1D5C3A2D3540551C7A6F2A5E52C0772B35A8412D3540F5CC070F295E52C050651CAF482D354092B9D551275E52C0CF1FEC69482D3540F66630A7255E52C04B4E5B9A472D35405C7F3F1A225E52C011E1B27E3F2D35400103000000010000000A0000001F43DEE92D5E52C016F07C39492D3540EF036BFC2D5E52C0A64DF6BC422D3540B1D1C3372F5E52C0D0BC9532422D354062DB5C16305E52C0BB4300103D2D354017E5F5F4305E52C0F74F1D5C3A2D3540AB379B9F325E52C049626F403C2D35407AF827B2325E52C0A64DF6BC422D354050E8283F315E52C05935AD7E492D354073CE90ED2E5E52C0DCD1CE1D4B2D35401F43DEE92D5E52C016F07C39492D35400103000000010000000A0000008EC966303D5E52C01A9D6F1A182D3540D5B6624D3D5E52C010497F80102D3540E36B52C13D5E52C0C72E346F0B2D3540926519573F5E52C0C04ACDF1052D35407497EC95405E52C0FB908EE6082D3540814CDC09415E52C094862C3C0F2D354034AAF078405E52C0C80C54AE172D3540144011913F5E52C00F8D5FB41F2D35408EC966303D5E52C0B22E83531C2D35408EC966303D5E52C01A9D6F1A182D354001030000000100000009000000AC6E3481675E52C0162B1DDC152D35400C41C49E665E52C04F781206062D35400C41C49E665E52C04FD8E26CFF2C35405B0FA8A0695E52C0A3AAF7C3FE2C35407DF5AE1A6C5E52C0BC878F10022D3540440BFC846D5E52C0F3CC419F0C2D3540500DD2926B5E52C001949FD1192D3540BBE137BE685E52C0DDCA4B751C2D3540AC6E3481675E52C0162B1DDC152D354001030000000100000007000000419ACE556A5E52C026AFA003C82D35408EF95A36685E52C0793C0DB7C42D3540BBE137BE685E52C0C0668FC1C02D3540FB3C18836A5E52C07B202723BC2D3540C25265ED6B5E52C0DC7511CCBC2D35405F80D5CF6C5E52C025C4BA6FBF2D3540419ACE556A5E52C026AFA003C82D3540010300000001000000080000002AB69DE9655E52C0D6D24492D22D3540958A0315635E52C0AFD313CFDB2D35402D4746C8605E52C060F6D7DED52D35402D4746C8605E52C0EE587040D12D3540C874B6AA615E52C021531EF9CB2D3540214570BA625E52C026CA49A7CA2D3540B7700A8F655E52C0EE587040D12D35402AB69DE9655E52C0D6D24492D22D354001030000000100000008000000BE72E09C635E52C08D1B6828BA2D3540552F2350615E52C037CA3C7ABB2D354073A4FC9A605E52C037CA3C7ABB2D35407AA6D2A85E5E52C0DA4215E1B42D35407AA6D2A85E5E52C055C46B3DB22D35400ED26C7D615E52C0AF3B2E4DAC2D354007D0966F635E52C07C9DAC42B02D3540BE72E09C635E52C08D1B6828BA2D354001030000000100000008000000E358E716665E52C005435C10A32D35404E2D4D42635E52C04EE89C15A12D3540214570BA625E52C0A386DD1A9F2D3540214570BA625E52C05733747C9A2D3540DCE7B9E7625E52C0DFAE603A932D3540A3FD0652645E52C002334BE3932D3540E358E716665E52C05733747C9A2D3540E358E716665E52C005435C10A32D3540010300000001000000090000006B33CF6B5D5E52C07FB6358C942D3540F8ED3B115D5E52C05A1E1E209D2D3540CB055F895C5E52C0955C87BEA12D3540D60735975A5E52C06F263162A42D35409AAC54D2585E52C04EE89C15A12D3540534F9EFF585E52C03B3CCAD8972D35408FAA7EC45A5E52C0DFAE603A932D3540F8ED3B115D5E52C0022A7691922D35406B33CF6B5D5E52C07FB6358C942D3540010300000001000000590000001CE51A5EEA5D52C0DAA0646C3D2C35400E92C21CEA5D52C0040E7627502C35408D753C8FE95D52C096898F9E5F2C35408D753C8FE95D52C0DB184A45752C35401D04DB52EC5D52C0BD0B7FAC822C35407B2FDB20F25D52C00578832B932C35401A699E35F85D52C055B5B592A02C3540B669552FFD5D52C073C8C609B02C3540546A0C29025E52C0A93DD680BF2C3540A423F4C0055E52C0843BA317D32C3540FADCDB58095E52C083D7871DF52C35403AEB9E9F095E52C0C7BB4DB4082D35405CDC245F045E52C08F41BD72212D3540BEA2614AFE5D52C01B5204CA2C2D3540FA125593F15D52C0781B7A92252D35400E92C21CEA5D52C01D0AB8FB112D354085D76C91DC5D52C09160F364FE2C35409E56DA1AD55D52C0504ED274002D35400A2A6C59C55D52C0EA9F6423172D354026E2E5FDBE5D52C09FF8AFF1312D354087A822E9B85D52C01B7F5C07562D3540297D221BB35D52C0791D8BDD712D3540830A53EBAB5D52C06F04C6AB8C2D35409050B459A35D52C0867416FB962D354019DCBF3C8D5D52C03C4E8654812D3540E1A1452E825D52C0F5137D6E632D3540FD59BFD27B5D52C0BD943929392D3540544CB385805D52C06352751B162D3540F985769A865D52C07E6B1455FC2C3540E1A1452E825D52C0739B0067DD2C3540268451AD775D52C031BB5641B72C3540BBE638A96F5D52C04EA7245B992C3540AA3B14586C5D52C0FAA6BD8C7E2C354021E681AF6A5D52C0C01C80A6602C35403DFA3090695D52C06B4BBA644E2C3540376A989E6C5D52C04143A5FD4D2C3540F9BBEFD46E5D52C0B372C6056D2C3540C11F45C4705D52C0ED5240CC862C3540CE915DFA725D52C070E4633B952C3540E6758E66775D52C0376946CAA72C35407E7645607C5D52C0FCB14649B82C3540544CB385805D52C0A32345C8C82C3540B13EA738855D52C0334EF06EDE2C3540B877B353865D52C060FD7DA6E52C354001F88ED0885D52C061C2C17C012D354079A2FC27875D52C051460BD40C2D354022B00875825D52C06E06CE6A202D354086AF517B7D5D52C060715B19372D3540DA683913815D52C03DBE4B98472D3540EA135E64845D52C08F5A4B0F572D3540C822D8A4895D52C05E8D159E692D35405EEA82838D5D52C0791D8BDD712D3540F3B12D62915D52C0ED9A1115792D354054163A4B985D52C03C4E8654812D3540733377D29D5D52C0A97B4074852D3540D45E77A0A35D52C0CA8BFA93892D3540A5FBD8AAA65D52C0CA8BFA93892D3540F6B4C042AA5D52C038BE974C802D3540CA51224DAD5D52C03515BFC56E2D3540A2609C8DB25D52C022FFA0E7512D3540806F16CEB75D52C0BDB017393B2D3540D528FE65BB5D52C01B5204CA2C2D35402D1BF218C05D52C06CC321431B2D354003F15F3EC45D52C068A4FADB0D2D3540611C600CCA5D52C04FD8E26CFF2C35408DABB5C9D15D52C04AC1A80DF32C3540237360A8D55D52C04AC1A80DF32C35405874CE9BDF5D52C04AC1A80DF32C3540B79FCE69E55D52C0D9ED453DF92C3540DCF5170CEC5D52C0B3139094042D3540F3D94878F05D52C0EC5AD9EB0F2D35400ABE79E4F45D52C0A2EB532B182D354021A2AA50F95D52C099C9DE621F2D35407D949E03FE5D52C06E06CE6A202D3540CE4D869B015E52C059354333192D354097B1DB8A035E52C0BA842CC40A2D35405CDC245F045E52C0E46E3545FA2C3540DCBF9ED1035E52C0BD1E2CCEEA2C35408706B739005E52C069BE4147D92C3540364DCFA1FC5D52C0B0D024D8CA2C35401A699E35F85D52C0E9992659BA2C3540BC3D9E67F25D52C028CCB611B12C354016CBCE37EB5D52C00E3F66BAA52C3540F1748595E45D52C0F2175443962C35408B1079ACDD5D52C0F25C9E9C802C3540B201FF6BD85D52C09DF5D5FD6B2C35409E56DA1AD55D52C04DF0EB6E592C354065BF3287D25D52C0C5A27490402C35401CE51A5EEA5D52C0DAA0646C3D2C35400103000000010000000C0000007F1978A7435D52C0866C0B347E2E3540F83E806D435D52C0EA17D41C712E3540C30674C4435D52C0DAC5696C6F2E3540C30674C4435D52C0FFB12A5B6A2E35406183B033495D52C00E1910EF692E354008C887554A5D52C0B6ABEE88712E3540E9F95A944B5D52C0CD2E7DDE772E3540FAAE4A084C5D52C05BC4146D822E3540C0DA8B384A5D52C03A19918F8C2E3540A9384703455D52C06F1727DF8A2E35407F1978A7435D52C06EF4E8CD852E35407F1978A7435D52C0866C0B347E2E35400103000000010000000D00000078B8E398855D52C037BB655D472F3540FD01230F825D52C03A4D4E06482F3540E38C49C4825D52C08F0D96C93E2F3540D88A73B6845D52C039E0C535362F354054413440885D52C000E3DD4A2E2F3540859A3EF78B5D52C00D9352BC232F35400051FF808F5D52C0FF48AFD6192F354008C22CB0925D52C0F263973D132F3540E04A7D57955D52C018CA5138152F35403F1D0D75945D52C0E2A0AF18212F35402D39DC08905D52C01D213BA72B2F3540859A3EF78B5D52C0F639DD8C352F354078B8E398855D52C037BB655D472F35400103000000010000000E0000001306CF2A7E5D52C09D191BDC572F3540427F5491795D52C080075C65642F354093DEE071775D52C096ED11A26D2F3540538300AD755D52C00C1ECB9C6F2F3540DDCC3F23725D52C0DEC9253B742F3540AFE4629B715D52C03DA96C40722F35404F12D37D725D52C0AF8629F96C2F354071F8D9F7745D52C098B0A26A622F3540C6C89307765D52C06983767A5C2F3540BCC6BDF9775D52C02B194A8A562F354051F257CE7A5D52C0BC4C7BF64D2F35402C7BA8757D5D52C059DE36AF482F354095BE65C27F5D52C07C8DF0A94A2F35401306CF2A7E5D52C09D191BDC572F35400103000000010000000D000000B2750B7A6C5D52C037AA6882792F3540CBEAE4C46B5D52C09B3E1DBF822F354062A72778695D52C045E247AF882F35408C1ED7D0665D52C0F848729F8E2F3540F7F23CFC635D52C080729C8F942F35404E549FEA5F5D52C04B2667239D2F35400486BBE85C5D52C05E0EF06FA02F35409140288E5C5D52C04B2667239D2F3540A82459FA605D52C06E461343912F3540AC958629645D52C045E247AF882F35405F36FA48665D52C08D26D6B9842F354062A72778695D52C0D4B2DA777D2F3540B2750B7A6C5D52C037AA6882792F35400103000000010000000D0000005B0F4B404F5D52C0914600DDBD2F35400F474B124C5D52C044D424CDB92F3540C5DBFEB14D5D52C0857672FEAA2F35400137DF764F5D52C0B6801960A62F35404092BF3B515D52C0FD65C0C1A12F3540B84880C5545D52C0698537759E2F3540071764C7575D52C04B2667239D2F3540168A6704595D52C029564FCC9D2F3540CF2CB131595D52C0C1CAE9B1A72F354094D1D06C575D52C0B2965AA7AB2F3540E5305D4D555D52C08847CB9CAF2F3540EB32335B535D52C017DD3B92B32F35405B0F4B404F5D52C0914600DDBD2F3540	358.1
 \.
 
 
@@ -9382,8 +13232,8 @@ COPY tracking.planting_site_populations (planting_site_id, species_id, total_pla
 -- Data for Name: planting_sites; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
-COPY tracking.planting_sites (id, organization_id, name, description, boundary, created_by, created_time, modified_by, modified_time, time_zone, area_ha, project_id, exclusion, grid_origin) FROM stdin;
-1	1	Planting Site	\N	0106000020E6100000010000000103000000010000000A0000009AA10A279D5E52C02623D2801A2E3540B0A2E4BF7E5E52C01720C558172F35400D257257055E52C0E83555C52230354051849A399B5D52C03437BAEA1E303540ADEFC023285D52C000AB47E68B2F35405D68E789F35C52C075DDE42FF62D3540893021FA325D52C01631D195552C3540525064146B5E52C025E929772C2C354069731F55925E52C0C5C49FB6642C35409AA10A279D5E52C02623D2801A2E3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	\N	374.1	\N	0106000020E6100000140000000103000000010000004F000000883021FA325D52C01E31D195552C354013982916395D52C0CF5E68C46A2C354079FC35FF3F5D52C0A5A3E28A842C354039BBDD50445D52C0A1D2268AA12C3540969AB179465D52C07E526589BE2C354040401611495D52C0523638FAE12C3540E6E57AA84B5D52C023D334400A2D3540B7382DF44C5D52C011DBC0E9302D3540A6A422FA4F5D52C0394F72685C2D35400384F622525D52C0292C8C67792D35407A7C0D06565D52C0C68C5FADA12D35402422729D585D52C0CEA2A373BB2D3540FDF95CA95E5D52C0276D72ABDB2D35401A98D823655D52C04167E538F22D35403736549E6B5D52C0E8AD7E9B0D2E354083811DCD705D52C088014DC5252E35401793776A765D52C0326217EF3D2E35401B18B02A7B5D52C0B264678A5C2E35404D4A369F7E5D52C082ECDB096B2E35408901F5D3865D52C0A14CE6DD8C2E3540AA9F704E8D5D52C0336401A4A62E3540F2EA397D925D52C0B70AD0BFB62E3540057AE3BDA05D52C004D50E3EE22E35401184543EAA5D52C0680A1B04FC2E3540A195AEDBAF5D52C0D9D340BC0D2F3540F565B0CAB95D52C0C410E6C8322F3540B7A990DCC25D52C09B7A84F24A2F35404BBBEA79C85D52C0ABA1E171592F3540B5A42F23D45D52C0D3AB9770762F354033227FC6DC5D52C01DDF0DC5892F354058453301E85D52C03567E0B59E2F354097812AF6F45D52C08E502A18BA2F3540BCA4DE30005E52C09E9CB241D22F3540F25B9D65085E52C02FB8BEF9E32F3540FAE0D5250D5E52C0BEF99407EC2F3540A1D09BCD145E52C03AF7D5B600303540ED679216105E52C0D3A388190B3035406D54B4480C5E52C09A54E286FA2F3540EED664A5035E52C0BEF99407EC2F3540FCE536DFFB5D52C055D5894FDA2F3540230E4CD3F55D52C021AB976CCD2F3540A590FC2FED5D52C0252D6DDFB62F35409A868BAFE35D52C089A95B27A52F35405ECFCC7ADB5D52C035EF05A8962F354028180E46D35D52C0FD8EF0EF842F3540F2604F11CB5D52C0180FD937732F35404436B2B9C35D52C0756FBF7F612F3540F8EAE88ABE5D52C099126300532F354006FABAC4B65D52C096E725733C2F3540E95B3F4AB05D52C07DFA25902F2F3540F76A1184A85D52C0A3FBA33B1C2F35404A40742CA15D52C03EEFFD11042F35402DA2F8B19A5D52C04B21F34BEA2E354054CA0DA6945D52C0FC1368F7D62E35404B45D5E58F5D52C06721FE77C82E354000FA0BB78A5D52C0C1D4ABEAB12E354070E8B119855D52C021403E6BA32E3540DBD6577C7F5D52C089EEA916902E35404AC5FDDE795D52C061084F89792E3540B7B3A341745D52C02C142CC35F2E35403EBB8C5E705D52C0D65E2CD24A2E3540C3C2757B6C5D52C00646010C312E354033B11BDE665D52C040CA34E2182E35401613A063605D52C05434B8620A2E3540820146C65A5D52C05B582CF2E62D354036B67C97555D52C0A6C053C8CE2D354090101800535D52C0CEA2A373BB2D354000FFBD624D5D52C0B0A37B83892D35408406A77F495D52C04BF39A4B692D35401193C85C4A5D52C06ADF4D77472D3540969AB179465D52C0964296F81B2D354039BBDD50445D52C0DB7E3724FA2C3540DBDB0928425D52C08AAE0425DD2C354079FC35FF3F5D52C027A230B4B92C354047CAAF8A3C5D52C09FF089189B2C354013982916395D52C0579BB1C3872C35403BC03E0A335D52C0835075E07A2C35400E8333D02E5D52C0A687F1ED702C3540883021FA325D52C01E31D195552C35400103000000010000000B000000F0FA48EC595E52C0073835051C2E3540B4215CCF585E52C0AD090C8A1C2E35402AF3343A595E52C0F25092C5192E354059F8ECB0595E52C01E61EF85172E3540B0025D9E5A5E52C0CA059472152E3540F145640E5C5E52C02867A906132E354098F029965D5E52C02843A0E90F2E3540D3C916B35E5E52C0115D06C7102E35402FF385D15D5E52C0CF2DBDED142E3540AAE35D6D5C5E52C0B5FD36B2172E3540F0FA48EC595E52C0073835051C2E35400103000000010000000A00000053DCA3DA4C5E52C0336B9498692E35406A6423944D5E52C03191A1916C2E35403525B0A64D5E52C0AD741FBB6E2E3540D4A6C9CB4D5E52C013F58B3E722E354004E63CB94D5E52C0B7182807762E3540229D30ED4C5E52C0C741B7D6762E3540CF117EE94B5E52C052C30968742E354060CFD7B14B5E52C058802CB4712E3540A1D20AFC4B5E52C01C4ED1D66C2E354053DCA3DA4C5E52C0336B9498692E3540010300000001000000090000002AEB5951335E52C0FC0E3450CB2D354083BB1361345E52C056066413C22D3540B0A3F0E8345E52C056066413C22D3540922E179E355E52C0F0544EBCC22D3540325C8780365E52C0EAA23865C32D3540ECFED0AD365E52C075845FFEC92D3540BF16F425365E52C0599CB145CF2D3540B0A3F0E8345E52C0599CB145CF2D35402AEB5951335E52C0FC0E3450CB2D35400103000000010000001700000071F933B2255E52C0751B816A222F354018297AA2245E52C065953AE1152F3540C7C9EDC1265E52C0F263973D132F3540D93CF1FE275E52C05E3180E6132F35404280AE4B2A5E52C0B1C6C5EB112F3540E2AD1E2E2B5E52C0CFDC50F60D2F354051F3B1882B5E52C072250AAF082F35404BF1DB7A2D5E52C091B4062BFA2E354095BFBF7C305E52C037BDA54AEE2E3540A732C3B9315E52C0B5E6A208E72E354083BB1361345E52C04CDB15BCE32E35405F446408375E52C0E2E5B95FE62E35405F446408375E52C004A26045F02E3540BF16F425365E52C06D57D63AF42E3540C1A79C04315E52C01888D87CFB2E3540B33499C72F5E52C0F73DC367032F35403FEF056D2F5E52C01C8322480F2F3540130729E52E5E52C005D480281B2F3540C33845E32B5E52C0A4D223502C2F354067F75DA4275E52C01BEB0B3B342F3540D1CBC3CF245E52C03F993AE9322F354009B67665235E52C06C3FAF9C2F2F354071F933B2255E52C0751B816A222F35400103000000010000000F0000005C7F3F1A225E52C011E1B27E3F2D3540AB0AF21D235E52C0B16A8C8C392D3540A5DB7DA3245E52C02F9C4DA13A2D3540F66630A7255E52C07337CB77382D35403999D76B245E52C0DFA4F669342D354069D84A59245E52C073BCCF772E2D3540A0AC0929265E52C0332A4D4E2C2D35402B3BEF76275E52C08A6A9F322E2D3540BCC9D4C4285E52C0A5187993362D3540D151547E295E52C0F74F1D5C3A2D3540551C7A6F2A5E52C0772B35A8412D3540F5CC070F295E52C050651CAF482D354092B9D551275E52C0CF1FEC69482D3540F66630A7255E52C04B4E5B9A472D35405C7F3F1A225E52C011E1B27E3F2D35400103000000010000000A0000001F43DEE92D5E52C016F07C39492D3540EF036BFC2D5E52C0A64DF6BC422D3540B1D1C3372F5E52C0D0BC9532422D354062DB5C16305E52C0BB4300103D2D354017E5F5F4305E52C0F74F1D5C3A2D3540AB379B9F325E52C049626F403C2D35407AF827B2325E52C0A64DF6BC422D354050E8283F315E52C05935AD7E492D354073CE90ED2E5E52C0DCD1CE1D4B2D35401F43DEE92D5E52C016F07C39492D35400103000000010000000A0000008EC966303D5E52C01A9D6F1A182D3540D5B6624D3D5E52C010497F80102D3540E36B52C13D5E52C0C72E346F0B2D3540926519573F5E52C0C04ACDF1052D35407497EC95405E52C0FB908EE6082D3540814CDC09415E52C094862C3C0F2D354034AAF078405E52C0C80C54AE172D3540144011913F5E52C00F8D5FB41F2D35408EC966303D5E52C0B22E83531C2D35408EC966303D5E52C01A9D6F1A182D354001030000000100000009000000AC6E3481675E52C0162B1DDC152D35400C41C49E665E52C04F781206062D35400C41C49E665E52C04FD8E26CFF2C35405B0FA8A0695E52C0A3AAF7C3FE2C35407DF5AE1A6C5E52C0BC878F10022D3540440BFC846D5E52C0F3CC419F0C2D3540500DD2926B5E52C001949FD1192D3540BBE137BE685E52C0DDCA4B751C2D3540AC6E3481675E52C0162B1DDC152D354001030000000100000007000000419ACE556A5E52C026AFA003C82D35408EF95A36685E52C0793C0DB7C42D3540BBE137BE685E52C0C0668FC1C02D3540FB3C18836A5E52C07B202723BC2D3540C25265ED6B5E52C0DC7511CCBC2D35405F80D5CF6C5E52C025C4BA6FBF2D3540419ACE556A5E52C026AFA003C82D3540010300000001000000080000002AB69DE9655E52C0D6D24492D22D3540958A0315635E52C0AFD313CFDB2D35402D4746C8605E52C060F6D7DED52D35402D4746C8605E52C0EE587040D12D3540C874B6AA615E52C021531EF9CB2D3540214570BA625E52C026CA49A7CA2D3540B7700A8F655E52C0EE587040D12D35402AB69DE9655E52C0D6D24492D22D354001030000000100000008000000BE72E09C635E52C08D1B6828BA2D3540552F2350615E52C037CA3C7ABB2D354073A4FC9A605E52C037CA3C7ABB2D35407AA6D2A85E5E52C0DA4215E1B42D35407AA6D2A85E5E52C055C46B3DB22D35400ED26C7D615E52C0AF3B2E4DAC2D354007D0966F635E52C07C9DAC42B02D3540BE72E09C635E52C08D1B6828BA2D354001030000000100000008000000E358E716665E52C005435C10A32D35404E2D4D42635E52C04EE89C15A12D3540214570BA625E52C0A386DD1A9F2D3540214570BA625E52C05733747C9A2D3540DCE7B9E7625E52C0DFAE603A932D3540A3FD0652645E52C002334BE3932D3540E358E716665E52C05733747C9A2D3540E358E716665E52C005435C10A32D3540010300000001000000090000006B33CF6B5D5E52C07FB6358C942D3540F8ED3B115D5E52C05A1E1E209D2D3540CB055F895C5E52C0955C87BEA12D3540D60735975A5E52C06F263162A42D35409AAC54D2585E52C04EE89C15A12D3540534F9EFF585E52C03B3CCAD8972D35408FAA7EC45A5E52C0DFAE603A932D3540F8ED3B115D5E52C0022A7691922D35406B33CF6B5D5E52C07FB6358C942D3540010300000001000000590000001CE51A5EEA5D52C0DAA0646C3D2C35400E92C21CEA5D52C0040E7627502C35408D753C8FE95D52C096898F9E5F2C35408D753C8FE95D52C0DB184A45752C35401D04DB52EC5D52C0BD0B7FAC822C35407B2FDB20F25D52C00578832B932C35401A699E35F85D52C055B5B592A02C3540B669552FFD5D52C073C8C609B02C3540546A0C29025E52C0A93DD680BF2C3540A423F4C0055E52C0843BA317D32C3540FADCDB58095E52C083D7871DF52C35403AEB9E9F095E52C0C7BB4DB4082D35405CDC245F045E52C08F41BD72212D3540BEA2614AFE5D52C01B5204CA2C2D3540FA125593F15D52C0781B7A92252D35400E92C21CEA5D52C01D0AB8FB112D354085D76C91DC5D52C09160F364FE2C35409E56DA1AD55D52C0504ED274002D35400A2A6C59C55D52C0EA9F6423172D354026E2E5FDBE5D52C09FF8AFF1312D354087A822E9B85D52C01B7F5C07562D3540297D221BB35D52C0791D8BDD712D3540830A53EBAB5D52C06F04C6AB8C2D35409050B459A35D52C0867416FB962D354019DCBF3C8D5D52C03C4E8654812D3540E1A1452E825D52C0F5137D6E632D3540FD59BFD27B5D52C0BD943929392D3540544CB385805D52C06352751B162D3540F985769A865D52C07E6B1455FC2C3540E1A1452E825D52C0739B0067DD2C3540268451AD775D52C031BB5641B72C3540BBE638A96F5D52C04EA7245B992C3540AA3B14586C5D52C0FAA6BD8C7E2C354021E681AF6A5D52C0C01C80A6602C35403DFA3090695D52C06B4BBA644E2C3540376A989E6C5D52C04143A5FD4D2C3540F9BBEFD46E5D52C0B372C6056D2C3540C11F45C4705D52C0ED5240CC862C3540CE915DFA725D52C070E4633B952C3540E6758E66775D52C0376946CAA72C35407E7645607C5D52C0FCB14649B82C3540544CB385805D52C0A32345C8C82C3540B13EA738855D52C0334EF06EDE2C3540B877B353865D52C060FD7DA6E52C354001F88ED0885D52C061C2C17C012D354079A2FC27875D52C051460BD40C2D354022B00875825D52C06E06CE6A202D354086AF517B7D5D52C060715B19372D3540DA683913815D52C03DBE4B98472D3540EA135E64845D52C08F5A4B0F572D3540C822D8A4895D52C05E8D159E692D35405EEA82838D5D52C0791D8BDD712D3540F3B12D62915D52C0ED9A1115792D354054163A4B985D52C03C4E8654812D3540733377D29D5D52C0A97B4074852D3540D45E77A0A35D52C0CA8BFA93892D3540A5FBD8AAA65D52C0CA8BFA93892D3540F6B4C042AA5D52C038BE974C802D3540CA51224DAD5D52C03515BFC56E2D3540A2609C8DB25D52C022FFA0E7512D3540806F16CEB75D52C0BDB017393B2D3540D528FE65BB5D52C01B5204CA2C2D35402D1BF218C05D52C06CC321431B2D354003F15F3EC45D52C068A4FADB0D2D3540611C600CCA5D52C04FD8E26CFF2C35408DABB5C9D15D52C04AC1A80DF32C3540237360A8D55D52C04AC1A80DF32C35405874CE9BDF5D52C04AC1A80DF32C3540B79FCE69E55D52C0D9ED453DF92C3540DCF5170CEC5D52C0B3139094042D3540F3D94878F05D52C0EC5AD9EB0F2D35400ABE79E4F45D52C0A2EB532B182D354021A2AA50F95D52C099C9DE621F2D35407D949E03FE5D52C06E06CE6A202D3540CE4D869B015E52C059354333192D354097B1DB8A035E52C0BA842CC40A2D35405CDC245F045E52C0E46E3545FA2C3540DCBF9ED1035E52C0BD1E2CCEEA2C35408706B739005E52C069BE4147D92C3540364DCFA1FC5D52C0B0D024D8CA2C35401A699E35F85D52C0E9992659BA2C3540BC3D9E67F25D52C028CCB611B12C354016CBCE37EB5D52C00E3F66BAA52C3540F1748595E45D52C0F2175443962C35408B1079ACDD5D52C0F25C9E9C802C3540B201FF6BD85D52C09DF5D5FD6B2C35409E56DA1AD55D52C04DF0EB6E592C354065BF3287D25D52C0C5A27490402C35401CE51A5EEA5D52C0DAA0646C3D2C35400103000000010000000C0000007F1978A7435D52C0866C0B347E2E3540F83E806D435D52C0EA17D41C712E3540C30674C4435D52C0DAC5696C6F2E3540C30674C4435D52C0FFB12A5B6A2E35406183B033495D52C00E1910EF692E354008C887554A5D52C0B6ABEE88712E3540E9F95A944B5D52C0CD2E7DDE772E3540FAAE4A084C5D52C05BC4146D822E3540C0DA8B384A5D52C03A19918F8C2E3540A9384703455D52C06F1727DF8A2E35407F1978A7435D52C06EF4E8CD852E35407F1978A7435D52C0866C0B347E2E35400103000000010000000D00000078B8E398855D52C037BB655D472F3540FD01230F825D52C03A4D4E06482F3540E38C49C4825D52C08F0D96C93E2F3540D88A73B6845D52C039E0C535362F354054413440885D52C000E3DD4A2E2F3540859A3EF78B5D52C00D9352BC232F35400051FF808F5D52C0FF48AFD6192F354008C22CB0925D52C0F263973D132F3540E04A7D57955D52C018CA5138152F35403F1D0D75945D52C0E2A0AF18212F35402D39DC08905D52C01D213BA72B2F3540859A3EF78B5D52C0F639DD8C352F354078B8E398855D52C037BB655D472F35400103000000010000000E0000001306CF2A7E5D52C09D191BDC572F3540427F5491795D52C080075C65642F354093DEE071775D52C096ED11A26D2F3540538300AD755D52C00C1ECB9C6F2F3540DDCC3F23725D52C0DEC9253B742F3540AFE4629B715D52C03DA96C40722F35404F12D37D725D52C0AF8629F96C2F354071F8D9F7745D52C098B0A26A622F3540C6C89307765D52C06983767A5C2F3540BCC6BDF9775D52C02B194A8A562F354051F257CE7A5D52C0BC4C7BF64D2F35402C7BA8757D5D52C059DE36AF482F354095BE65C27F5D52C07C8DF0A94A2F35401306CF2A7E5D52C09D191BDC572F35400103000000010000000D000000B2750B7A6C5D52C037AA6882792F3540CBEAE4C46B5D52C09B3E1DBF822F354062A72778695D52C045E247AF882F35408C1ED7D0665D52C0F848729F8E2F3540F7F23CFC635D52C080729C8F942F35404E549FEA5F5D52C04B2667239D2F35400486BBE85C5D52C05E0EF06FA02F35409140288E5C5D52C04B2667239D2F3540A82459FA605D52C06E461343912F3540AC958629645D52C045E247AF882F35405F36FA48665D52C08D26D6B9842F354062A72778695D52C0D4B2DA777D2F3540B2750B7A6C5D52C037AA6882792F35400103000000010000000D0000005B0F4B404F5D52C0914600DDBD2F35400F474B124C5D52C044D424CDB92F3540C5DBFEB14D5D52C0857672FEAA2F35400137DF764F5D52C0B6801960A62F35404092BF3B515D52C0FD65C0C1A12F3540B84880C5545D52C0698537759E2F3540071764C7575D52C04B2667239D2F3540168A6704595D52C029564FCC9D2F3540CF2CB131595D52C0C1CAE9B1A72F354094D1D06C575D52C0B2965AA7AB2F3540E5305D4D555D52C08847CB9CAF2F3540EB32335B535D52C017DD3B92B32F35405B0F4B404F5D52C0914600DDBD2F3540	0101000020E61000009AA10A279D5E52C025E929772C2C3540
+COPY tracking.planting_sites (id, organization_id, name, description, boundary, created_by, created_time, modified_by, modified_time, time_zone, area_ha, project_id, exclusion, grid_origin, country_code) FROM stdin;
+1	1	Planting Site	\N	0106000020E6100000010000000103000000010000000A0000009AA10A279D5E52C02623D2801A2E3540B0A2E4BF7E5E52C01720C558172F35400D257257055E52C0E83555C52230354051849A399B5D52C03437BAEA1E303540ADEFC023285D52C000AB47E68B2F35405D68E789F35C52C075DDE42FF62D3540893021FA325D52C01631D195552C3540525064146B5E52C025E929772C2C354069731F55925E52C0C5C49FB6642C35409AA10A279D5E52C02623D2801A2E3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	\N	374.1	\N	0106000020E6100000140000000103000000010000004F000000883021FA325D52C01E31D195552C354013982916395D52C0CF5E68C46A2C354079FC35FF3F5D52C0A5A3E28A842C354039BBDD50445D52C0A1D2268AA12C3540969AB179465D52C07E526589BE2C354040401611495D52C0523638FAE12C3540E6E57AA84B5D52C023D334400A2D3540B7382DF44C5D52C011DBC0E9302D3540A6A422FA4F5D52C0394F72685C2D35400384F622525D52C0292C8C67792D35407A7C0D06565D52C0C68C5FADA12D35402422729D585D52C0CEA2A373BB2D3540FDF95CA95E5D52C0276D72ABDB2D35401A98D823655D52C04167E538F22D35403736549E6B5D52C0E8AD7E9B0D2E354083811DCD705D52C088014DC5252E35401793776A765D52C0326217EF3D2E35401B18B02A7B5D52C0B264678A5C2E35404D4A369F7E5D52C082ECDB096B2E35408901F5D3865D52C0A14CE6DD8C2E3540AA9F704E8D5D52C0336401A4A62E3540F2EA397D925D52C0B70AD0BFB62E3540057AE3BDA05D52C004D50E3EE22E35401184543EAA5D52C0680A1B04FC2E3540A195AEDBAF5D52C0D9D340BC0D2F3540F565B0CAB95D52C0C410E6C8322F3540B7A990DCC25D52C09B7A84F24A2F35404BBBEA79C85D52C0ABA1E171592F3540B5A42F23D45D52C0D3AB9770762F354033227FC6DC5D52C01DDF0DC5892F354058453301E85D52C03567E0B59E2F354097812AF6F45D52C08E502A18BA2F3540BCA4DE30005E52C09E9CB241D22F3540F25B9D65085E52C02FB8BEF9E32F3540FAE0D5250D5E52C0BEF99407EC2F3540A1D09BCD145E52C03AF7D5B600303540ED679216105E52C0D3A388190B3035406D54B4480C5E52C09A54E286FA2F3540EED664A5035E52C0BEF99407EC2F3540FCE536DFFB5D52C055D5894FDA2F3540230E4CD3F55D52C021AB976CCD2F3540A590FC2FED5D52C0252D6DDFB62F35409A868BAFE35D52C089A95B27A52F35405ECFCC7ADB5D52C035EF05A8962F354028180E46D35D52C0FD8EF0EF842F3540F2604F11CB5D52C0180FD937732F35404436B2B9C35D52C0756FBF7F612F3540F8EAE88ABE5D52C099126300532F354006FABAC4B65D52C096E725733C2F3540E95B3F4AB05D52C07DFA25902F2F3540F76A1184A85D52C0A3FBA33B1C2F35404A40742CA15D52C03EEFFD11042F35402DA2F8B19A5D52C04B21F34BEA2E354054CA0DA6945D52C0FC1368F7D62E35404B45D5E58F5D52C06721FE77C82E354000FA0BB78A5D52C0C1D4ABEAB12E354070E8B119855D52C021403E6BA32E3540DBD6577C7F5D52C089EEA916902E35404AC5FDDE795D52C061084F89792E3540B7B3A341745D52C02C142CC35F2E35403EBB8C5E705D52C0D65E2CD24A2E3540C3C2757B6C5D52C00646010C312E354033B11BDE665D52C040CA34E2182E35401613A063605D52C05434B8620A2E3540820146C65A5D52C05B582CF2E62D354036B67C97555D52C0A6C053C8CE2D354090101800535D52C0CEA2A373BB2D354000FFBD624D5D52C0B0A37B83892D35408406A77F495D52C04BF39A4B692D35401193C85C4A5D52C06ADF4D77472D3540969AB179465D52C0964296F81B2D354039BBDD50445D52C0DB7E3724FA2C3540DBDB0928425D52C08AAE0425DD2C354079FC35FF3F5D52C027A230B4B92C354047CAAF8A3C5D52C09FF089189B2C354013982916395D52C0579BB1C3872C35403BC03E0A335D52C0835075E07A2C35400E8333D02E5D52C0A687F1ED702C3540883021FA325D52C01E31D195552C35400103000000010000000B000000F0FA48EC595E52C0073835051C2E3540B4215CCF585E52C0AD090C8A1C2E35402AF3343A595E52C0F25092C5192E354059F8ECB0595E52C01E61EF85172E3540B0025D9E5A5E52C0CA059472152E3540F145640E5C5E52C02867A906132E354098F029965D5E52C02843A0E90F2E3540D3C916B35E5E52C0115D06C7102E35402FF385D15D5E52C0CF2DBDED142E3540AAE35D6D5C5E52C0B5FD36B2172E3540F0FA48EC595E52C0073835051C2E35400103000000010000000A00000053DCA3DA4C5E52C0336B9498692E35406A6423944D5E52C03191A1916C2E35403525B0A64D5E52C0AD741FBB6E2E3540D4A6C9CB4D5E52C013F58B3E722E354004E63CB94D5E52C0B7182807762E3540229D30ED4C5E52C0C741B7D6762E3540CF117EE94B5E52C052C30968742E354060CFD7B14B5E52C058802CB4712E3540A1D20AFC4B5E52C01C4ED1D66C2E354053DCA3DA4C5E52C0336B9498692E3540010300000001000000090000002AEB5951335E52C0FC0E3450CB2D354083BB1361345E52C056066413C22D3540B0A3F0E8345E52C056066413C22D3540922E179E355E52C0F0544EBCC22D3540325C8780365E52C0EAA23865C32D3540ECFED0AD365E52C075845FFEC92D3540BF16F425365E52C0599CB145CF2D3540B0A3F0E8345E52C0599CB145CF2D35402AEB5951335E52C0FC0E3450CB2D35400103000000010000001700000071F933B2255E52C0751B816A222F354018297AA2245E52C065953AE1152F3540C7C9EDC1265E52C0F263973D132F3540D93CF1FE275E52C05E3180E6132F35404280AE4B2A5E52C0B1C6C5EB112F3540E2AD1E2E2B5E52C0CFDC50F60D2F354051F3B1882B5E52C072250AAF082F35404BF1DB7A2D5E52C091B4062BFA2E354095BFBF7C305E52C037BDA54AEE2E3540A732C3B9315E52C0B5E6A208E72E354083BB1361345E52C04CDB15BCE32E35405F446408375E52C0E2E5B95FE62E35405F446408375E52C004A26045F02E3540BF16F425365E52C06D57D63AF42E3540C1A79C04315E52C01888D87CFB2E3540B33499C72F5E52C0F73DC367032F35403FEF056D2F5E52C01C8322480F2F3540130729E52E5E52C005D480281B2F3540C33845E32B5E52C0A4D223502C2F354067F75DA4275E52C01BEB0B3B342F3540D1CBC3CF245E52C03F993AE9322F354009B67665235E52C06C3FAF9C2F2F354071F933B2255E52C0751B816A222F35400103000000010000000F0000005C7F3F1A225E52C011E1B27E3F2D3540AB0AF21D235E52C0B16A8C8C392D3540A5DB7DA3245E52C02F9C4DA13A2D3540F66630A7255E52C07337CB77382D35403999D76B245E52C0DFA4F669342D354069D84A59245E52C073BCCF772E2D3540A0AC0929265E52C0332A4D4E2C2D35402B3BEF76275E52C08A6A9F322E2D3540BCC9D4C4285E52C0A5187993362D3540D151547E295E52C0F74F1D5C3A2D3540551C7A6F2A5E52C0772B35A8412D3540F5CC070F295E52C050651CAF482D354092B9D551275E52C0CF1FEC69482D3540F66630A7255E52C04B4E5B9A472D35405C7F3F1A225E52C011E1B27E3F2D35400103000000010000000A0000001F43DEE92D5E52C016F07C39492D3540EF036BFC2D5E52C0A64DF6BC422D3540B1D1C3372F5E52C0D0BC9532422D354062DB5C16305E52C0BB4300103D2D354017E5F5F4305E52C0F74F1D5C3A2D3540AB379B9F325E52C049626F403C2D35407AF827B2325E52C0A64DF6BC422D354050E8283F315E52C05935AD7E492D354073CE90ED2E5E52C0DCD1CE1D4B2D35401F43DEE92D5E52C016F07C39492D35400103000000010000000A0000008EC966303D5E52C01A9D6F1A182D3540D5B6624D3D5E52C010497F80102D3540E36B52C13D5E52C0C72E346F0B2D3540926519573F5E52C0C04ACDF1052D35407497EC95405E52C0FB908EE6082D3540814CDC09415E52C094862C3C0F2D354034AAF078405E52C0C80C54AE172D3540144011913F5E52C00F8D5FB41F2D35408EC966303D5E52C0B22E83531C2D35408EC966303D5E52C01A9D6F1A182D354001030000000100000009000000AC6E3481675E52C0162B1DDC152D35400C41C49E665E52C04F781206062D35400C41C49E665E52C04FD8E26CFF2C35405B0FA8A0695E52C0A3AAF7C3FE2C35407DF5AE1A6C5E52C0BC878F10022D3540440BFC846D5E52C0F3CC419F0C2D3540500DD2926B5E52C001949FD1192D3540BBE137BE685E52C0DDCA4B751C2D3540AC6E3481675E52C0162B1DDC152D354001030000000100000007000000419ACE556A5E52C026AFA003C82D35408EF95A36685E52C0793C0DB7C42D3540BBE137BE685E52C0C0668FC1C02D3540FB3C18836A5E52C07B202723BC2D3540C25265ED6B5E52C0DC7511CCBC2D35405F80D5CF6C5E52C025C4BA6FBF2D3540419ACE556A5E52C026AFA003C82D3540010300000001000000080000002AB69DE9655E52C0D6D24492D22D3540958A0315635E52C0AFD313CFDB2D35402D4746C8605E52C060F6D7DED52D35402D4746C8605E52C0EE587040D12D3540C874B6AA615E52C021531EF9CB2D3540214570BA625E52C026CA49A7CA2D3540B7700A8F655E52C0EE587040D12D35402AB69DE9655E52C0D6D24492D22D354001030000000100000008000000BE72E09C635E52C08D1B6828BA2D3540552F2350615E52C037CA3C7ABB2D354073A4FC9A605E52C037CA3C7ABB2D35407AA6D2A85E5E52C0DA4215E1B42D35407AA6D2A85E5E52C055C46B3DB22D35400ED26C7D615E52C0AF3B2E4DAC2D354007D0966F635E52C07C9DAC42B02D3540BE72E09C635E52C08D1B6828BA2D354001030000000100000008000000E358E716665E52C005435C10A32D35404E2D4D42635E52C04EE89C15A12D3540214570BA625E52C0A386DD1A9F2D3540214570BA625E52C05733747C9A2D3540DCE7B9E7625E52C0DFAE603A932D3540A3FD0652645E52C002334BE3932D3540E358E716665E52C05733747C9A2D3540E358E716665E52C005435C10A32D3540010300000001000000090000006B33CF6B5D5E52C07FB6358C942D3540F8ED3B115D5E52C05A1E1E209D2D3540CB055F895C5E52C0955C87BEA12D3540D60735975A5E52C06F263162A42D35409AAC54D2585E52C04EE89C15A12D3540534F9EFF585E52C03B3CCAD8972D35408FAA7EC45A5E52C0DFAE603A932D3540F8ED3B115D5E52C0022A7691922D35406B33CF6B5D5E52C07FB6358C942D3540010300000001000000590000001CE51A5EEA5D52C0DAA0646C3D2C35400E92C21CEA5D52C0040E7627502C35408D753C8FE95D52C096898F9E5F2C35408D753C8FE95D52C0DB184A45752C35401D04DB52EC5D52C0BD0B7FAC822C35407B2FDB20F25D52C00578832B932C35401A699E35F85D52C055B5B592A02C3540B669552FFD5D52C073C8C609B02C3540546A0C29025E52C0A93DD680BF2C3540A423F4C0055E52C0843BA317D32C3540FADCDB58095E52C083D7871DF52C35403AEB9E9F095E52C0C7BB4DB4082D35405CDC245F045E52C08F41BD72212D3540BEA2614AFE5D52C01B5204CA2C2D3540FA125593F15D52C0781B7A92252D35400E92C21CEA5D52C01D0AB8FB112D354085D76C91DC5D52C09160F364FE2C35409E56DA1AD55D52C0504ED274002D35400A2A6C59C55D52C0EA9F6423172D354026E2E5FDBE5D52C09FF8AFF1312D354087A822E9B85D52C01B7F5C07562D3540297D221BB35D52C0791D8BDD712D3540830A53EBAB5D52C06F04C6AB8C2D35409050B459A35D52C0867416FB962D354019DCBF3C8D5D52C03C4E8654812D3540E1A1452E825D52C0F5137D6E632D3540FD59BFD27B5D52C0BD943929392D3540544CB385805D52C06352751B162D3540F985769A865D52C07E6B1455FC2C3540E1A1452E825D52C0739B0067DD2C3540268451AD775D52C031BB5641B72C3540BBE638A96F5D52C04EA7245B992C3540AA3B14586C5D52C0FAA6BD8C7E2C354021E681AF6A5D52C0C01C80A6602C35403DFA3090695D52C06B4BBA644E2C3540376A989E6C5D52C04143A5FD4D2C3540F9BBEFD46E5D52C0B372C6056D2C3540C11F45C4705D52C0ED5240CC862C3540CE915DFA725D52C070E4633B952C3540E6758E66775D52C0376946CAA72C35407E7645607C5D52C0FCB14649B82C3540544CB385805D52C0A32345C8C82C3540B13EA738855D52C0334EF06EDE2C3540B877B353865D52C060FD7DA6E52C354001F88ED0885D52C061C2C17C012D354079A2FC27875D52C051460BD40C2D354022B00875825D52C06E06CE6A202D354086AF517B7D5D52C060715B19372D3540DA683913815D52C03DBE4B98472D3540EA135E64845D52C08F5A4B0F572D3540C822D8A4895D52C05E8D159E692D35405EEA82838D5D52C0791D8BDD712D3540F3B12D62915D52C0ED9A1115792D354054163A4B985D52C03C4E8654812D3540733377D29D5D52C0A97B4074852D3540D45E77A0A35D52C0CA8BFA93892D3540A5FBD8AAA65D52C0CA8BFA93892D3540F6B4C042AA5D52C038BE974C802D3540CA51224DAD5D52C03515BFC56E2D3540A2609C8DB25D52C022FFA0E7512D3540806F16CEB75D52C0BDB017393B2D3540D528FE65BB5D52C01B5204CA2C2D35402D1BF218C05D52C06CC321431B2D354003F15F3EC45D52C068A4FADB0D2D3540611C600CCA5D52C04FD8E26CFF2C35408DABB5C9D15D52C04AC1A80DF32C3540237360A8D55D52C04AC1A80DF32C35405874CE9BDF5D52C04AC1A80DF32C3540B79FCE69E55D52C0D9ED453DF92C3540DCF5170CEC5D52C0B3139094042D3540F3D94878F05D52C0EC5AD9EB0F2D35400ABE79E4F45D52C0A2EB532B182D354021A2AA50F95D52C099C9DE621F2D35407D949E03FE5D52C06E06CE6A202D3540CE4D869B015E52C059354333192D354097B1DB8A035E52C0BA842CC40A2D35405CDC245F045E52C0E46E3545FA2C3540DCBF9ED1035E52C0BD1E2CCEEA2C35408706B739005E52C069BE4147D92C3540364DCFA1FC5D52C0B0D024D8CA2C35401A699E35F85D52C0E9992659BA2C3540BC3D9E67F25D52C028CCB611B12C354016CBCE37EB5D52C00E3F66BAA52C3540F1748595E45D52C0F2175443962C35408B1079ACDD5D52C0F25C9E9C802C3540B201FF6BD85D52C09DF5D5FD6B2C35409E56DA1AD55D52C04DF0EB6E592C354065BF3287D25D52C0C5A27490402C35401CE51A5EEA5D52C0DAA0646C3D2C35400103000000010000000C0000007F1978A7435D52C0866C0B347E2E3540F83E806D435D52C0EA17D41C712E3540C30674C4435D52C0DAC5696C6F2E3540C30674C4435D52C0FFB12A5B6A2E35406183B033495D52C00E1910EF692E354008C887554A5D52C0B6ABEE88712E3540E9F95A944B5D52C0CD2E7DDE772E3540FAAE4A084C5D52C05BC4146D822E3540C0DA8B384A5D52C03A19918F8C2E3540A9384703455D52C06F1727DF8A2E35407F1978A7435D52C06EF4E8CD852E35407F1978A7435D52C0866C0B347E2E35400103000000010000000D00000078B8E398855D52C037BB655D472F3540FD01230F825D52C03A4D4E06482F3540E38C49C4825D52C08F0D96C93E2F3540D88A73B6845D52C039E0C535362F354054413440885D52C000E3DD4A2E2F3540859A3EF78B5D52C00D9352BC232F35400051FF808F5D52C0FF48AFD6192F354008C22CB0925D52C0F263973D132F3540E04A7D57955D52C018CA5138152F35403F1D0D75945D52C0E2A0AF18212F35402D39DC08905D52C01D213BA72B2F3540859A3EF78B5D52C0F639DD8C352F354078B8E398855D52C037BB655D472F35400103000000010000000E0000001306CF2A7E5D52C09D191BDC572F3540427F5491795D52C080075C65642F354093DEE071775D52C096ED11A26D2F3540538300AD755D52C00C1ECB9C6F2F3540DDCC3F23725D52C0DEC9253B742F3540AFE4629B715D52C03DA96C40722F35404F12D37D725D52C0AF8629F96C2F354071F8D9F7745D52C098B0A26A622F3540C6C89307765D52C06983767A5C2F3540BCC6BDF9775D52C02B194A8A562F354051F257CE7A5D52C0BC4C7BF64D2F35402C7BA8757D5D52C059DE36AF482F354095BE65C27F5D52C07C8DF0A94A2F35401306CF2A7E5D52C09D191BDC572F35400103000000010000000D000000B2750B7A6C5D52C037AA6882792F3540CBEAE4C46B5D52C09B3E1DBF822F354062A72778695D52C045E247AF882F35408C1ED7D0665D52C0F848729F8E2F3540F7F23CFC635D52C080729C8F942F35404E549FEA5F5D52C04B2667239D2F35400486BBE85C5D52C05E0EF06FA02F35409140288E5C5D52C04B2667239D2F3540A82459FA605D52C06E461343912F3540AC958629645D52C045E247AF882F35405F36FA48665D52C08D26D6B9842F354062A72778695D52C0D4B2DA777D2F3540B2750B7A6C5D52C037AA6882792F35400103000000010000000D0000005B0F4B404F5D52C0914600DDBD2F35400F474B124C5D52C044D424CDB92F3540C5DBFEB14D5D52C0857672FEAA2F35400137DF764F5D52C0B6801960A62F35404092BF3B515D52C0FD65C0C1A12F3540B84880C5545D52C0698537759E2F3540071764C7575D52C04B2667239D2F3540168A6704595D52C029564FCC9D2F3540CF2CB131595D52C0C1CAE9B1A72F354094D1D06C575D52C0B2965AA7AB2F3540E5305D4D555D52C08847CB9CAF2F3540EB32335B535D52C017DD3B92B32F35405B0F4B404F5D52C0914600DDBD2F3540	0101000020E61000009AA10A279D5E52C025E929772C2C3540	\N
 \.
 
 
@@ -9391,11 +13241,11 @@ COPY tracking.planting_sites (id, organization_id, name, description, boundary, 
 -- Data for Name: planting_subzone_histories; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
-COPY tracking.planting_subzone_histories (id, planting_zone_history_id, planting_subzone_id, name, full_name, boundary) FROM stdin;
-1	1	4	South	East-South	0106000020E61000000100000001030000000100000008000000BED4DFD7E85D52C0AC8CAD7D102E354057DE2981115D52C06ADA6966312D35409AADF8F9325D52C015105E95552C354013A1B490515E52C051229CD42F2C3540F3FBB312245E52C064E2F13FE62C354013340B1CF95D52C0D2BAB7457D2D3540753C0BD8E85D52C061160B7E102E3540BED4DFD7E85D52C0AC8CAD7D102E3540
-2	1	3	North	East-North	0106000020E610000001000000010300000001000000090000009B4E09D8E85D52C04CAC207E102E35405B6A720CE55D52C0213F4670222E35406E9F5852C95D52C053F0E58AA52E35400BD2B9B7815D52C0C84340344C2F354048061CC34E5D52C0FE94113DBD2F35402CA39223285D52C02E2FA2E58B2F354081EEBD89F35C52C0B8BD712FF62D354014392081115D52C0999CAA66312D35409B4E09D8E85D52C04CAC207E102E3540
-3	2	2	South	West-South	0106000020E6100000010000000103000000010000000B00000069E81991515E52C00D0417D42F2C3540724A13146B5E52C0EAA643762C2C354029B23E146B5E52C0BFFF99762C2C35408A6DCE54925E52C0E382B9B5642C3540CDA4B8269D5E52C0EEE3EB7F1A2E35402CD1098D855E52C08B057CC5DE2E35403FAD35D8E85D52C015396C7E102E354003B7331CF95D52C0E3DA2A467D2D3540E27EDC12245E52C0EC026540E62C3540AD01FC90515E52C0345791D42F2C354069E81991515E52C00D0417D42F2C3540
-4	2	1	North	West-North	0106000020E6100000010000000103000000010000000A0000008AD131D8E85D52C0F5CB937E102E35401B54328D855E52C09424EFC5DE2E3540C11FBCBF7E5E52C03B015258172F35401EA24957055E52C0E417E2C422303540610172399B5D52C02D1947EA1E303540006E47C34E5D52C0C6EB673DBD2F3540F954E2B7815D52C07962B3344C2F35404B198252C95D52C07F0F598BA52E35404AED9A0CE55D52C0BC5EB970222E35408AD131D8E85D52C0F5CB937E102E3540
+COPY tracking.planting_subzone_histories (id, planting_zone_history_id, planting_subzone_id, name, full_name, boundary, area_ha, stable_id) FROM stdin;
+1	1	4	South	East-South	0106000020E61000000100000001030000000100000008000000BED4DFD7E85D52C0AC8CAD7D102E354057DE2981115D52C06ADA6966312D35409AADF8F9325D52C015105E95552C354013A1B490515E52C051229CD42F2C3540F3FBB312245E52C064E2F13FE62C354013340B1CF95D52C0D2BAB7457D2D3540753C0BD8E85D52C061160B7E102E3540BED4DFD7E85D52C0AC8CAD7D102E3540	89.4	East-South
+2	1	3	North	East-North	0106000020E610000001000000010300000001000000090000009B4E09D8E85D52C04CAC207E102E35405B6A720CE55D52C0213F4670222E35406E9F5852C95D52C053F0E58AA52E35400BD2B9B7815D52C0C84340344C2F354048061CC34E5D52C0FE94113DBD2F35402CA39223285D52C02E2FA2E58B2F354081EEBD89F35C52C0B8BD712FF62D354014392081115D52C0999CAA66312D35409B4E09D8E85D52C04CAC207E102E3540	92.8	East-North
+3	2	2	South	West-South	0106000020E6100000010000000103000000010000000B00000069E81991515E52C00D0417D42F2C3540724A13146B5E52C0EAA643762C2C354029B23E146B5E52C0BFFF99762C2C35408A6DCE54925E52C0E382B9B5642C3540CDA4B8269D5E52C0EEE3EB7F1A2E35402CD1098D855E52C08B057CC5DE2E35403FAD35D8E85D52C015396C7E102E354003B7331CF95D52C0E3DA2A467D2D3540E27EDC12245E52C0EC026540E62C3540AD01FC90515E52C0345791D42F2C354069E81991515E52C00D0417D42F2C3540	84.5	West-South
+4	2	1	North	West-North	0106000020E6100000010000000103000000010000000A0000008AD131D8E85D52C0F5CB937E102E35401B54328D855E52C09424EFC5DE2E3540C11FBCBF7E5E52C03B015258172F35401EA24957055E52C0E417E2C422303540610172399B5D52C02D1947EA1E303540006E47C34E5D52C0C6EB673DBD2F3540F954E2B7815D52C07962B3344C2F35404B198252C95D52C07F0F598BA52E35404AED9A0CE55D52C0BC5EB970222E35408AD131D8E85D52C0F5CB937E102E3540	91.3	West-North
 \.
 
 
@@ -9411,11 +13261,11 @@ COPY tracking.planting_subzone_populations (planting_subzone_id, species_id, tot
 -- Data for Name: planting_subzones; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
-COPY tracking.planting_subzones (id, planting_zone_id, name, full_name, boundary, created_by, created_time, modified_by, modified_time, planting_site_id, area_ha, planting_completed_time) FROM stdin;
-1	1	North	West-North	0106000020E6100000010000000103000000010000000A0000008AD131D8E85D52C0F5CB937E102E35401B54328D855E52C09424EFC5DE2E3540C11FBCBF7E5E52C03B015258172F35401EA24957055E52C0E417E2C422303540610172399B5D52C02D1947EA1E303540006E47C34E5D52C0C6EB673DBD2F3540F954E2B7815D52C07962B3344C2F35404B198252C95D52C07F0F598BA52E35404AED9A0CE55D52C0BC5EB970222E35408AD131D8E85D52C0F5CB937E102E3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	1	94.4	\N
-2	1	South	West-South	0106000020E6100000010000000103000000010000000B00000069E81991515E52C00D0417D42F2C3540724A13146B5E52C0EAA643762C2C354029B23E146B5E52C0BFFF99762C2C35408A6DCE54925E52C0E382B9B5642C3540CDA4B8269D5E52C0EEE3EB7F1A2E35402CD1098D855E52C08B057CC5DE2E35403FAD35D8E85D52C015396C7E102E354003B7331CF95D52C0E3DA2A467D2D3540E27EDC12245E52C0EC026540E62C3540AD01FC90515E52C0345791D42F2C354069E81991515E52C00D0417D42F2C3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	1	85.3	\N
-3	2	North	East-North	0106000020E610000001000000010300000001000000090000009B4E09D8E85D52C04CAC207E102E35405B6A720CE55D52C0213F4670222E35406E9F5852C95D52C053F0E58AA52E35400BD2B9B7815D52C0C84340344C2F354048061CC34E5D52C0FE94113DBD2F35402CA39223285D52C02E2FA2E58B2F354081EEBD89F35C52C0B8BD712FF62D354014392081115D52C0999CAA66312D35409B4E09D8E85D52C04CAC207E102E3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	1	97.0	\N
-4	2	South	East-South	0106000020E61000000100000001030000000100000008000000BED4DFD7E85D52C0AC8CAD7D102E354057DE2981115D52C06ADA6966312D35409AADF8F9325D52C015105E95552C354013A1B490515E52C051229CD42F2C3540F3FBB312245E52C064E2F13FE62C354013340B1CF95D52C0D2BAB7457D2D3540753C0BD8E85D52C061160B7E102E3540BED4DFD7E85D52C0AC8CAD7D102E3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	1	97.4	\N
+COPY tracking.planting_subzones (id, planting_zone_id, name, full_name, boundary, created_by, created_time, modified_by, modified_time, planting_site_id, area_ha, planting_completed_time, observed_time, stable_id) FROM stdin;
+1	1	North	West-North	0106000020E6100000010000000103000000010000000A0000008AD131D8E85D52C0F5CB937E102E35401B54328D855E52C09424EFC5DE2E3540C11FBCBF7E5E52C03B015258172F35401EA24957055E52C0E417E2C422303540610172399B5D52C02D1947EA1E303540006E47C34E5D52C0C6EB673DBD2F3540F954E2B7815D52C07962B3344C2F35404B198252C95D52C07F0F598BA52E35404AED9A0CE55D52C0BC5EB970222E35408AD131D8E85D52C0F5CB937E102E3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	1	94.4	\N	\N	West-North
+2	1	South	West-South	0106000020E6100000010000000103000000010000000B00000069E81991515E52C00D0417D42F2C3540724A13146B5E52C0EAA643762C2C354029B23E146B5E52C0BFFF99762C2C35408A6DCE54925E52C0E382B9B5642C3540CDA4B8269D5E52C0EEE3EB7F1A2E35402CD1098D855E52C08B057CC5DE2E35403FAD35D8E85D52C015396C7E102E354003B7331CF95D52C0E3DA2A467D2D3540E27EDC12245E52C0EC026540E62C3540AD01FC90515E52C0345791D42F2C354069E81991515E52C00D0417D42F2C3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	1	85.3	\N	\N	West-South
+3	2	North	East-North	0106000020E610000001000000010300000001000000090000009B4E09D8E85D52C04CAC207E102E35405B6A720CE55D52C0213F4670222E35406E9F5852C95D52C053F0E58AA52E35400BD2B9B7815D52C0C84340344C2F354048061CC34E5D52C0FE94113DBD2F35402CA39223285D52C02E2FA2E58B2F354081EEBD89F35C52C0B8BD712FF62D354014392081115D52C0999CAA66312D35409B4E09D8E85D52C04CAC207E102E3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	1	97.0	\N	\N	East-North
+4	2	South	East-South	0106000020E61000000100000001030000000100000008000000BED4DFD7E85D52C0AC8CAD7D102E354057DE2981115D52C06ADA6966312D35409AADF8F9325D52C015105E95552C354013A1B490515E52C051229CD42F2C3540F3FBB312245E52C064E2F13FE62C354013340B1CF95D52C0D2BAB7457D2D3540753C0BD8E85D52C061160B7E102E3540BED4DFD7E85D52C0AC8CAD7D102E3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	1	97.4	\N	\N	East-South
 \.
 
 
@@ -9435,9 +13285,9 @@ COPY tracking.planting_types (id, name) FROM stdin;
 -- Data for Name: planting_zone_histories; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
-COPY tracking.planting_zone_histories (id, planting_site_history_id, planting_zone_id, name, boundary) FROM stdin;
-1	1	2	East	0106000020E6100000010000000103000000010000000B000000388944C34E5D52C058B3843DBD2F3540BD6C9823285D52C07E8CD4E58B2F354081EEBD89F35C52C0B8BD712FF62D35409AADF8F9325D52C015105E95552C3540AD01FC90515E52C0345791D42F2C3540E27EDC12245E52C0EC026540E62C354003B7331CF95D52C0E3DA2A467D2D35409DDA30D8E85D52C0F5CB937E102E35404B198252C95D52C07F0F598BA52E3540F954E2B7815D52C07962B3344C2F3540388944C34E5D52C058B3843DBD2F3540
-2	1	1	West	0106000020E6100000010000000103000000010000000E000000EFF06FC34E5D52C0180ADB3DBD2F3540E9D70AB8815D52C0248126354C2F35403A9CAA52C95D52C0B42ECC8BA52E354079545AD8E85D52C094EB067F102E3540DE305D1CF95D52C0F6FA9D467D2D3540BFF80513245E52C07423D840E62C3540576B4291515E52C023258AD42F2C354061CD3B146B5E52C003C8B6762C2C354079F0F654925E52C0D0A32CB6642C3540BD27E1269D5E52C08F035F801A2E3540C11FBCBF7E5E52C03B015258172F35401EA24957055E52C0E417E2C422303540610172399B5D52C02D1947EA1E303540EFF06FC34E5D52C0180ADB3DBD2F3540
+COPY tracking.planting_zone_histories (id, planting_site_history_id, planting_zone_id, name, boundary, area_ha, stable_id) FROM stdin;
+1	1	2	East	0106000020E6100000010000000103000000010000000B000000388944C34E5D52C058B3843DBD2F3540BD6C9823285D52C07E8CD4E58B2F354081EEBD89F35C52C0B8BD712FF62D35409AADF8F9325D52C015105E95552C3540AD01FC90515E52C0345791D42F2C3540E27EDC12245E52C0EC026540E62C354003B7331CF95D52C0E3DA2A467D2D35409DDA30D8E85D52C0F5CB937E102E35404B198252C95D52C07F0F598BA52E3540F954E2B7815D52C07962B3344C2F3540388944C34E5D52C058B3843DBD2F3540	182.2	East
+2	1	1	West	0106000020E6100000010000000103000000010000000E000000EFF06FC34E5D52C0180ADB3DBD2F3540E9D70AB8815D52C0248126354C2F35403A9CAA52C95D52C0B42ECC8BA52E354079545AD8E85D52C094EB067F102E3540DE305D1CF95D52C0F6FA9D467D2D3540BFF80513245E52C07423D840E62C3540576B4291515E52C023258AD42F2C354061CD3B146B5E52C003C8B6762C2C354079F0F654925E52C0D0A32CB6642C3540BD27E1269D5E52C08F035F801A2E3540C11FBCBF7E5E52C03B015258172F35401EA24957055E52C0E417E2C422303540610172399B5D52C02D1947EA1E303540EFF06FC34E5D52C0180ADB3DBD2F3540	175.8	West
 \.
 
 
@@ -9453,9 +13303,9 @@ COPY tracking.planting_zone_populations (planting_zone_id, species_id, total_pla
 -- Data for Name: planting_zones; Type: TABLE DATA; Schema: tracking; Owner: -
 --
 
-COPY tracking.planting_zones (id, planting_site_id, name, boundary, created_by, created_time, modified_by, modified_time, variance, students_t, error_margin, num_permanent_clusters, num_temporary_plots, area_ha, target_planting_density, extra_permanent_clusters) FROM stdin;
-1	1	West	0106000020E6100000010000000103000000010000000E000000EFF06FC34E5D52C0180ADB3DBD2F3540E9D70AB8815D52C0248126354C2F35403A9CAA52C95D52C0B42ECC8BA52E354079545AD8E85D52C094EB067F102E3540DE305D1CF95D52C0F6FA9D467D2D3540BFF80513245E52C07423D840E62C3540576B4291515E52C023258AD42F2C354061CD3B146B5E52C003C8B6762C2C354079F0F654925E52C0D0A32CB6642C3540BD27E1269D5E52C08F035F801A2E3540C11FBCBF7E5E52C03B015258172F35401EA24957055E52C0E417E2C422303540610172399B5D52C02D1947EA1E303540EFF06FC34E5D52C0180ADB3DBD2F3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	40000	1.282	100	7	9	179.7	1500	0
-2	1	East	0106000020E6100000010000000103000000010000000B000000388944C34E5D52C058B3843DBD2F3540BD6C9823285D52C07E8CD4E58B2F354081EEBD89F35C52C0B8BD712FF62D35409AADF8F9325D52C015105E95552C3540AD01FC90515E52C0345791D42F2C3540E27EDC12245E52C0EC026540E62C354003B7331CF95D52C0E3DA2A467D2D35409DDA30D8E85D52C0F5CB937E102E35404B198252C95D52C07F0F598BA52E3540F954E2B7815D52C07962B3344C2F3540388944C34E5D52C058B3843DBD2F3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	40000	1.282	100	7	9	194.4	1500	0
+COPY tracking.planting_zones (id, planting_site_id, name, boundary, created_by, created_time, modified_by, modified_time, variance, students_t, error_margin, num_permanent_plots, num_temporary_plots, area_ha, target_planting_density, boundary_modified_by, boundary_modified_time, stable_id) FROM stdin;
+1	1	West	0106000020E6100000010000000103000000010000000E000000EFF06FC34E5D52C0180ADB3DBD2F3540E9D70AB8815D52C0248126354C2F35403A9CAA52C95D52C0B42ECC8BA52E354079545AD8E85D52C094EB067F102E3540DE305D1CF95D52C0F6FA9D467D2D3540BFF80513245E52C07423D840E62C3540576B4291515E52C023258AD42F2C354061CD3B146B5E52C003C8B6762C2C354079F0F654925E52C0D0A32CB6642C3540BD27E1269D5E52C08F035F801A2E3540C11FBCBF7E5E52C03B015258172F35401EA24957055E52C0E417E2C422303540610172399B5D52C02D1947EA1E303540EFF06FC34E5D52C0180ADB3DBD2F3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	40000	1.282	100	5	2	179.7	1500	1	2024-03-06 18:56:18.746285+00	West
+2	1	East	0106000020E6100000010000000103000000010000000B000000388944C34E5D52C058B3843DBD2F3540BD6C9823285D52C07E8CD4E58B2F354081EEBD89F35C52C0B8BD712FF62D35409AADF8F9325D52C015105E95552C3540AD01FC90515E52C0345791D42F2C3540E27EDC12245E52C0EC026540E62C354003B7331CF95D52C0E3DA2A467D2D35409DDA30D8E85D52C0F5CB937E102E35404B198252C95D52C07F0F598BA52E3540F954E2B7815D52C07962B3344C2F3540388944C34E5D52C058B3843DBD2F3540	1	2024-03-06 18:56:18.746285+00	1	2024-03-06 18:56:18.746285+00	40000	1.282	100	5	2	194.4	1500	1	2024-03-06 18:56:18.746285+00	East
 \.
 
 
@@ -9495,6 +13345,39 @@ COPY tracking.recorded_species_certainties (id, name) FROM stdin;
 2	Other
 3	Unknown
 \.
+
+
+--
+-- Data for Name: recorded_trees; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.recorded_trees (id, observation_id, monitoring_plot_id, biomass_species_id, tree_number, trunk_number, tree_growth_form_id, is_dead, diameter_at_breast_height_cm, point_of_measurement_m, height_m, shrub_diameter_cm, description) FROM stdin;
+\.
+
+
+--
+-- Data for Name: tree_growth_forms; Type: TABLE DATA; Schema: tracking; Owner: -
+--
+
+COPY tracking.tree_growth_forms (id, name) FROM stdin;
+1	Tree
+2	Shrub
+3	Trunk
+\.
+
+
+--
+-- Name: application_histories_id_seq; Type: SEQUENCE SET; Schema: accelerator; Owner: -
+--
+
+SELECT pg_catalog.setval('accelerator.application_histories_id_seq', 3, true);
+
+
+--
+-- Name: applications_id_seq; Type: SEQUENCE SET; Schema: accelerator; Owner: -
+--
+
+SELECT pg_catalog.setval('accelerator.applications_id_seq', 1, true);
 
 
 --
@@ -9540,6 +13423,34 @@ SELECT pg_catalog.setval('accelerator.participants_id_seq', 1, false);
 
 
 --
+-- Name: project_metrics_id_seq; Type: SEQUENCE SET; Schema: accelerator; Owner: -
+--
+
+SELECT pg_catalog.setval('accelerator.project_metrics_id_seq', 1, false);
+
+
+--
+-- Name: project_report_configs_id_seq; Type: SEQUENCE SET; Schema: accelerator; Owner: -
+--
+
+SELECT pg_catalog.setval('accelerator.project_report_configs_id_seq', 1, false);
+
+
+--
+-- Name: reports_id_seq; Type: SEQUENCE SET; Schema: accelerator; Owner: -
+--
+
+SELECT pg_catalog.setval('accelerator.reports_id_seq', 1, false);
+
+
+--
+-- Name: standard_metrics_id_seq; Type: SEQUENCE SET; Schema: accelerator; Owner: -
+--
+
+SELECT pg_catalog.setval('accelerator.standard_metrics_id_seq', 1, false);
+
+
+--
 -- Name: submission_documents_id_seq; Type: SEQUENCE SET; Schema: accelerator; Owner: -
 --
 
@@ -9557,7 +13468,91 @@ SELECT pg_catalog.setval('accelerator.submission_snapshots_id_seq', 1, false);
 -- Name: submissions_id_seq; Type: SEQUENCE SET; Schema: accelerator; Owner: -
 --
 
-SELECT pg_catalog.setval('accelerator.submissions_id_seq', 1, false);
+SELECT pg_catalog.setval('accelerator.submissions_id_seq', 1, true);
+
+
+--
+-- Name: system_metrics_id_seq; Type: SEQUENCE SET; Schema: accelerator; Owner: -
+--
+
+SELECT pg_catalog.setval('accelerator.system_metrics_id_seq', 1, false);
+
+
+--
+-- Name: document_saved_versions_id_seq; Type: SEQUENCE SET; Schema: docprod; Owner: -
+--
+
+SELECT pg_catalog.setval('docprod.document_saved_versions_id_seq', 1, false);
+
+
+--
+-- Name: document_templates_id_seq; Type: SEQUENCE SET; Schema: docprod; Owner: -
+--
+
+SELECT pg_catalog.setval('docprod.document_templates_id_seq', 1, false);
+
+
+--
+-- Name: documents_id_seq; Type: SEQUENCE SET; Schema: docprod; Owner: -
+--
+
+SELECT pg_catalog.setval('docprod.documents_id_seq', 1, false);
+
+
+--
+-- Name: variable_manifests_id_seq; Type: SEQUENCE SET; Schema: docprod; Owner: -
+--
+
+SELECT pg_catalog.setval('docprod.variable_manifests_id_seq', 1, false);
+
+
+--
+-- Name: variable_section_default_values_id_seq; Type: SEQUENCE SET; Schema: docprod; Owner: -
+--
+
+SELECT pg_catalog.setval('docprod.variable_section_default_values_id_seq', 1, false);
+
+
+--
+-- Name: variable_select_options_id_seq; Type: SEQUENCE SET; Schema: docprod; Owner: -
+--
+
+SELECT pg_catalog.setval('docprod.variable_select_options_id_seq', 234, true);
+
+
+--
+-- Name: variable_value_table_rows_id_seq; Type: SEQUENCE SET; Schema: docprod; Owner: -
+--
+
+SELECT pg_catalog.setval('docprod.variable_value_table_rows_id_seq', 1, false);
+
+
+--
+-- Name: variable_values_id_seq; Type: SEQUENCE SET; Schema: docprod; Owner: -
+--
+
+SELECT pg_catalog.setval('docprod.variable_values_id_seq', 10, true);
+
+
+--
+-- Name: variable_workflow_history_id_seq; Type: SEQUENCE SET; Schema: docprod; Owner: -
+--
+
+SELECT pg_catalog.setval('docprod.variable_workflow_history_id_seq', 5, true);
+
+
+--
+-- Name: variables_id_seq; Type: SEQUENCE SET; Schema: docprod; Owner: -
+--
+
+SELECT pg_catalog.setval('docprod.variables_id_seq', 55, true);
+
+
+--
+-- Name: funding_entities_id_seq; Type: SEQUENCE SET; Schema: funder; Owner: -
+--
+
+SELECT pg_catalog.setval('funder.funding_entities_id_seq', 1, false);
 
 
 --
@@ -9600,6 +13595,13 @@ SELECT pg_catalog.setval('nursery.withdrawals_id_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('public.automations_id_seq', 1, false);
+
+
+--
+-- Name: chat_memory_messages_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.chat_memory_messages_id_seq', 1, false);
 
 
 --
@@ -9648,7 +13650,7 @@ SELECT pg_catalog.setval('public.internal_tags_id_seq', 10000, false);
 -- Name: notifications_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.notifications_id_seq', 2, true);
+SELECT pg_catalog.setval('public.notifications_id_seq', 3, true);
 
 
 --
@@ -9669,7 +13671,7 @@ SELECT pg_catalog.setval('public.photos_id_seq', 1003, false);
 -- Name: projects_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.projects_id_seq', 1, false);
+SELECT pg_catalog.setval('public.projects_id_seq', 1, true);
 
 
 --
@@ -9690,7 +13692,7 @@ SELECT pg_catalog.setval('public.site_module_id_seq', 103, true);
 -- Name: species_id_seq1; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.species_id_seq1', 8, true);
+SELECT pg_catalog.setval('public.species_id_seq1', 10, true);
 
 
 --
@@ -9834,10 +13836,24 @@ SELECT pg_catalog.setval('tracking.draft_planting_sites_id_seq', 1, false);
 
 
 --
+-- Name: monitoring_plot_histories_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
+--
+
+SELECT pg_catalog.setval('tracking.monitoring_plot_histories_id_seq', 1, false);
+
+
+--
 -- Name: monitoring_plots_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
 --
 
 SELECT pg_catalog.setval('tracking.monitoring_plots_id_seq', 5161, true);
+
+
+--
+-- Name: observation_biomass_species_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
+--
+
+SELECT pg_catalog.setval('tracking.observation_biomass_species_id_seq', 1, false);
 
 
 --
@@ -9925,6 +13941,85 @@ SELECT pg_catalog.setval('tracking.recorded_plants_id_seq', 1, false);
 
 
 --
+-- Name: recorded_trees_id_seq; Type: SEQUENCE SET; Schema: tracking; Owner: -
+--
+
+SELECT pg_catalog.setval('tracking.recorded_trees_id_seq', 1, false);
+
+
+--
+-- Name: application_histories application_histories_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.application_histories
+    ADD CONSTRAINT application_histories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: application_module_statuses application_module_statuses_name_key; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.application_module_statuses
+    ADD CONSTRAINT application_module_statuses_name_key UNIQUE (name);
+
+
+--
+-- Name: application_module_statuses application_module_statuses_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.application_module_statuses
+    ADD CONSTRAINT application_module_statuses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: application_modules application_modules_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.application_modules
+    ADD CONSTRAINT application_modules_pkey PRIMARY KEY (application_id, module_id);
+
+
+--
+-- Name: application_statuses application_statuses_name_key; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.application_statuses
+    ADD CONSTRAINT application_statuses_name_key UNIQUE (name);
+
+
+--
+-- Name: application_statuses application_statuses_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.application_statuses
+    ADD CONSTRAINT application_statuses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: applications applications_internal_name_key; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.applications
+    ADD CONSTRAINT applications_internal_name_key UNIQUE (internal_name);
+
+
+--
+-- Name: applications applications_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.applications
+    ADD CONSTRAINT applications_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: applications applications_project_id_key; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.applications
+    ADD CONSTRAINT applications_project_id_key UNIQUE (project_id);
+
+
+--
 -- Name: cohort_modules cohort_modules_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
 --
 
@@ -9965,14 +14060,6 @@ ALTER TABLE ONLY accelerator.cohorts
 
 
 --
--- Name: cohort_modules dates_no_overlap; Type: CONSTRAINT; Schema: accelerator; Owner: -
---
-
-ALTER TABLE ONLY accelerator.cohort_modules
-    ADD CONSTRAINT dates_no_overlap EXCLUDE USING gist (cohort_id WITH =, daterange(start_date, end_date, '[]'::text) WITH &&);
-
-
---
 -- Name: deal_stages deal_stages_name_key; Type: CONSTRAINT; Schema: accelerator; Owner: -
 --
 
@@ -9986,6 +14073,14 @@ ALTER TABLE ONLY accelerator.deal_stages
 
 ALTER TABLE ONLY accelerator.deal_stages
     ADD CONSTRAINT deal_stages_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: default_project_leads default_project_leads_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.default_project_leads
+    ADD CONSTRAINT default_project_leads_pkey PRIMARY KEY (region_id);
 
 
 --
@@ -10050,6 +14145,14 @@ ALTER TABLE ONLY accelerator.deliverable_types
 
 ALTER TABLE ONLY accelerator.deliverable_types
     ADD CONSTRAINT deliverable_types_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: deliverable_variables deliverable_variables_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.deliverable_variables
+    ADD CONSTRAINT deliverable_variables_pkey PRIMARY KEY (variable_id, deliverable_id);
 
 
 --
@@ -10141,6 +14244,54 @@ ALTER TABLE ONLY accelerator.events
 
 
 --
+-- Name: internal_interests internal_interests_name_key; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.internal_interests
+    ADD CONSTRAINT internal_interests_name_key UNIQUE (name);
+
+
+--
+-- Name: internal_interests internal_interests_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.internal_interests
+    ADD CONSTRAINT internal_interests_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: metric_components metric_components_name_key; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.metric_components
+    ADD CONSTRAINT metric_components_name_key UNIQUE (name);
+
+
+--
+-- Name: metric_components metric_components_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.metric_components
+    ADD CONSTRAINT metric_components_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: metric_types metric_types_name_key; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.metric_types
+    ADD CONSTRAINT metric_types_name_key UNIQUE (name);
+
+
+--
+-- Name: metric_types metric_types_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.metric_types
+    ADD CONSTRAINT metric_types_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: modules modules_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
 --
 
@@ -10213,6 +14364,46 @@ ALTER TABLE ONLY accelerator.project_accelerator_details
 
 
 --
+-- Name: project_metrics project_metrics_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.project_metrics
+    ADD CONSTRAINT project_metrics_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: project_overall_scores project_overall_scores_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.project_overall_scores
+    ADD CONSTRAINT project_overall_scores_pkey PRIMARY KEY (project_id);
+
+
+--
+-- Name: project_report_configs project_report_configs_id_project_id_key; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.project_report_configs
+    ADD CONSTRAINT project_report_configs_id_project_id_key UNIQUE (id, project_id);
+
+
+--
+-- Name: project_report_configs project_report_configs_id_report_frequency_id_key; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.project_report_configs
+    ADD CONSTRAINT project_report_configs_id_report_frequency_id_key UNIQUE (id, report_frequency_id);
+
+
+--
+-- Name: project_report_configs project_report_configs_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.project_report_configs
+    ADD CONSTRAINT project_report_configs_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: project_scores project_scores_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
 --
 
@@ -10237,6 +14428,118 @@ ALTER TABLE ONLY accelerator.project_votes
 
 
 --
+-- Name: report_achievements report_achievements_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_achievements
+    ADD CONSTRAINT report_achievements_pkey PRIMARY KEY (report_id, "position");
+
+
+--
+-- Name: report_challenges report_challenges_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_challenges
+    ADD CONSTRAINT report_challenges_pkey PRIMARY KEY (report_id, "position");
+
+
+--
+-- Name: report_frequencies report_frequencies_name_key; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_frequencies
+    ADD CONSTRAINT report_frequencies_name_key UNIQUE (name);
+
+
+--
+-- Name: report_frequencies report_frequencies_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_frequencies
+    ADD CONSTRAINT report_frequencies_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: report_metric_statuses report_metric_statuses_name_key; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_metric_statuses
+    ADD CONSTRAINT report_metric_statuses_name_key UNIQUE (name);
+
+
+--
+-- Name: report_metric_statuses report_metric_statuses_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_metric_statuses
+    ADD CONSTRAINT report_metric_statuses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: report_project_metrics report_project_metrics_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_project_metrics
+    ADD CONSTRAINT report_project_metrics_pkey PRIMARY KEY (report_id, project_metric_id);
+
+
+--
+-- Name: report_quarters report_quarters_name_key; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_quarters
+    ADD CONSTRAINT report_quarters_name_key UNIQUE (name);
+
+
+--
+-- Name: report_quarters report_quarters_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_quarters
+    ADD CONSTRAINT report_quarters_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: report_standard_metrics report_standard_metrics_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_standard_metrics
+    ADD CONSTRAINT report_standard_metrics_pkey PRIMARY KEY (report_id, standard_metric_id);
+
+
+--
+-- Name: report_statuses report_statuses_name_key; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_statuses
+    ADD CONSTRAINT report_statuses_name_key UNIQUE (name);
+
+
+--
+-- Name: report_statuses report_statuses_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_statuses
+    ADD CONSTRAINT report_statuses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: report_system_metrics report_system_metrics_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_system_metrics
+    ADD CONSTRAINT report_system_metrics_pkey PRIMARY KEY (report_id, system_metric_id);
+
+
+--
+-- Name: reports reports_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.reports
+    ADD CONSTRAINT reports_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: score_categories score_categories_name_key; Type: CONSTRAINT; Schema: accelerator; Owner: -
 --
 
@@ -10250,6 +14553,14 @@ ALTER TABLE ONLY accelerator.score_categories
 
 ALTER TABLE ONLY accelerator.score_categories
     ADD CONSTRAINT score_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: standard_metrics standard_metrics_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.standard_metrics
+    ADD CONSTRAINT standard_metrics_pkey PRIMARY KEY (id);
 
 
 --
@@ -10301,6 +14612,30 @@ ALTER TABLE ONLY accelerator.submissions
 
 
 --
+-- Name: system_metrics system_metrics_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.system_metrics
+    ADD CONSTRAINT system_metrics_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: project_report_configs unique_project_frequency; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.project_report_configs
+    ADD CONSTRAINT unique_project_frequency UNIQUE (project_id, report_frequency_id);
+
+
+--
+-- Name: user_internal_interests user_internal_interests_pkey; Type: CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.user_internal_interests
+    ADD CONSTRAINT user_internal_interests_pkey PRIMARY KEY (user_id, internal_interest_id);
+
+
+--
 -- Name: vote_options vote_options_name_key; Type: CONSTRAINT; Schema: accelerator; Owner: -
 --
 
@@ -10314,6 +14649,510 @@ ALTER TABLE ONLY accelerator.vote_options
 
 ALTER TABLE ONLY accelerator.vote_options
     ADD CONSTRAINT vote_options_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: variables cannot_have_multiple_replacements; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variables
+    ADD CONSTRAINT cannot_have_multiple_replacements UNIQUE (replaces_variable_id);
+
+
+--
+-- Name: dependency_conditions dependency_conditions_name_key; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.dependency_conditions
+    ADD CONSTRAINT dependency_conditions_name_key UNIQUE (name);
+
+
+--
+-- Name: dependency_conditions dependency_conditions_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.dependency_conditions
+    ADD CONSTRAINT dependency_conditions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: document_saved_versions document_saved_versions_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.document_saved_versions
+    ADD CONSTRAINT document_saved_versions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: document_statuses document_statuses_name_key; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.document_statuses
+    ADD CONSTRAINT document_statuses_name_key UNIQUE (name);
+
+
+--
+-- Name: document_statuses document_statuses_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.document_statuses
+    ADD CONSTRAINT document_statuses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: document_templates document_templates_name_key; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.document_templates
+    ADD CONSTRAINT document_templates_name_key UNIQUE (name);
+
+
+--
+-- Name: document_templates document_templates_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.document_templates
+    ADD CONSTRAINT document_templates_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: documents documents_name_key; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.documents
+    ADD CONSTRAINT documents_name_key UNIQUE (name);
+
+
+--
+-- Name: documents documents_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.documents
+    ADD CONSTRAINT documents_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: variable_image_values variable_image_values_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_image_values
+    ADD CONSTRAINT variable_image_values_pkey PRIMARY KEY (variable_value_id);
+
+
+--
+-- Name: variable_injection_display_styles variable_injection_display_styles_name_key; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_injection_display_styles
+    ADD CONSTRAINT variable_injection_display_styles_name_key UNIQUE (name);
+
+
+--
+-- Name: variable_injection_display_styles variable_injection_display_styles_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_injection_display_styles
+    ADD CONSTRAINT variable_injection_display_styles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: variable_link_values variable_link_values_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_link_values
+    ADD CONSTRAINT variable_link_values_pkey PRIMARY KEY (variable_value_id);
+
+
+--
+-- Name: variable_manifest_entries variable_manifest_entries_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_manifest_entries
+    ADD CONSTRAINT variable_manifest_entries_pkey PRIMARY KEY (variable_manifest_id, variable_id);
+
+
+--
+-- Name: variable_manifest_entries variable_manifest_entries_variable_manifest_id_position_key; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_manifest_entries
+    ADD CONSTRAINT variable_manifest_entries_variable_manifest_id_position_key UNIQUE (variable_manifest_id, "position");
+
+
+--
+-- Name: variable_manifests variable_manifests_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_manifests
+    ADD CONSTRAINT variable_manifests_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: variable_numbers variable_numbers_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_numbers
+    ADD CONSTRAINT variable_numbers_pkey PRIMARY KEY (variable_id);
+
+
+--
+-- Name: variable_owners variable_owners_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_owners
+    ADD CONSTRAINT variable_owners_pkey PRIMARY KEY (project_id, variable_id);
+
+
+--
+-- Name: variable_section_default_values variable_section_default_valu_variable_manifest_id_variable_key; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_default_values
+    ADD CONSTRAINT variable_section_default_valu_variable_manifest_id_variable_key UNIQUE (variable_manifest_id, variable_id, list_position);
+
+
+--
+-- Name: variable_section_default_values variable_section_default_values_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_default_values
+    ADD CONSTRAINT variable_section_default_values_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: variable_section_recommendations variable_section_recommendati_recommended_variable_id_varia_key; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_recommendations
+    ADD CONSTRAINT variable_section_recommendati_recommended_variable_id_varia_key UNIQUE (recommended_variable_id, variable_manifest_id, section_variable_id);
+
+
+--
+-- Name: variable_section_recommendations variable_section_recommendations_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_recommendations
+    ADD CONSTRAINT variable_section_recommendations_pkey PRIMARY KEY (section_variable_id, variable_manifest_id, recommended_variable_id);
+
+
+--
+-- Name: variable_section_values variable_section_values_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_values
+    ADD CONSTRAINT variable_section_values_pkey PRIMARY KEY (variable_value_id);
+
+
+--
+-- Name: variable_sections variable_sections_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_sections
+    ADD CONSTRAINT variable_sections_pkey PRIMARY KEY (variable_id);
+
+
+--
+-- Name: variable_select_option_values variable_select_option_values_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_select_option_values
+    ADD CONSTRAINT variable_select_option_values_pkey PRIMARY KEY (variable_value_id, option_id);
+
+
+--
+-- Name: variable_select_options variable_select_options_id_variable_id_key; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_select_options
+    ADD CONSTRAINT variable_select_options_id_variable_id_key UNIQUE (id, variable_id);
+
+
+--
+-- Name: variable_select_options variable_select_options_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_select_options
+    ADD CONSTRAINT variable_select_options_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: variable_selects variable_selects_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_selects
+    ADD CONSTRAINT variable_selects_pkey PRIMARY KEY (variable_id);
+
+
+--
+-- Name: variable_selects variable_selects_variable_id_variable_type_id_key; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_selects
+    ADD CONSTRAINT variable_selects_variable_id_variable_type_id_key UNIQUE (variable_id, variable_type_id);
+
+
+--
+-- Name: variable_table_columns variable_table_columns_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_table_columns
+    ADD CONSTRAINT variable_table_columns_pkey PRIMARY KEY (variable_id);
+
+
+--
+-- Name: variable_table_columns variable_table_columns_table_variable_id_position_key; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_table_columns
+    ADD CONSTRAINT variable_table_columns_table_variable_id_position_key UNIQUE (table_variable_id, "position");
+
+
+--
+-- Name: variable_table_styles variable_table_styles_name_key; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_table_styles
+    ADD CONSTRAINT variable_table_styles_name_key UNIQUE (name);
+
+
+--
+-- Name: variable_table_styles variable_table_styles_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_table_styles
+    ADD CONSTRAINT variable_table_styles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: variable_tables variable_tables_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_tables
+    ADD CONSTRAINT variable_tables_pkey PRIMARY KEY (variable_id);
+
+
+--
+-- Name: variable_tables variable_tables_variable_id_variable_type_id_key; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_tables
+    ADD CONSTRAINT variable_tables_variable_id_variable_type_id_key UNIQUE (variable_id, variable_type_id);
+
+
+--
+-- Name: variable_text_types variable_text_types_name_key; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_text_types
+    ADD CONSTRAINT variable_text_types_name_key UNIQUE (name);
+
+
+--
+-- Name: variable_text_types variable_text_types_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_text_types
+    ADD CONSTRAINT variable_text_types_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: variable_texts variable_texts_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_texts
+    ADD CONSTRAINT variable_texts_pkey PRIMARY KEY (variable_id);
+
+
+--
+-- Name: variable_types variable_types_name_key; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_types
+    ADD CONSTRAINT variable_types_name_key UNIQUE (name);
+
+
+--
+-- Name: variable_types variable_types_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_types
+    ADD CONSTRAINT variable_types_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: variable_usage_types variable_usage_types_name_key; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_usage_types
+    ADD CONSTRAINT variable_usage_types_name_key UNIQUE (name);
+
+
+--
+-- Name: variable_usage_types variable_usage_types_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_usage_types
+    ADD CONSTRAINT variable_usage_types_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: variable_value_table_rows variable_value_table_rows_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_value_table_rows
+    ADD CONSTRAINT variable_value_table_rows_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: variable_value_table_rows variable_value_table_rows_variable_value_id_table_row_value_key; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_value_table_rows
+    ADD CONSTRAINT variable_value_table_rows_variable_value_id_table_row_value_key UNIQUE (variable_value_id, table_row_value_id);
+
+
+--
+-- Name: variable_values variable_values_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_values
+    ADD CONSTRAINT variable_values_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: variable_values variable_values_variable_id_id_key; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_values
+    ADD CONSTRAINT variable_values_variable_id_id_key UNIQUE (variable_id, id);
+
+
+--
+-- Name: variable_values variable_values_variable_id_variable_type_id_id_key; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_values
+    ADD CONSTRAINT variable_values_variable_id_variable_type_id_id_key UNIQUE (variable_id, variable_type_id, id);
+
+
+--
+-- Name: variable_workflow_history variable_workflow_history_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_workflow_history
+    ADD CONSTRAINT variable_workflow_history_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: variable_workflow_statuses variable_workflow_statuses_name_key; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_workflow_statuses
+    ADD CONSTRAINT variable_workflow_statuses_name_key UNIQUE (name);
+
+
+--
+-- Name: variable_workflow_statuses variable_workflow_statuses_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_workflow_statuses
+    ADD CONSTRAINT variable_workflow_statuses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: variables variables_id_variable_type_id_key; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variables
+    ADD CONSTRAINT variables_id_variable_type_id_key UNIQUE (id, variable_type_id);
+
+
+--
+-- Name: variables variables_pkey; Type: CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variables
+    ADD CONSTRAINT variables_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: funding_entities funding_entities_name_key; Type: CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.funding_entities
+    ADD CONSTRAINT funding_entities_name_key UNIQUE (name);
+
+
+--
+-- Name: funding_entities funding_entities_pkey; Type: CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.funding_entities
+    ADD CONSTRAINT funding_entities_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: funding_entity_projects funding_entity_projects_pkey; Type: CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.funding_entity_projects
+    ADD CONSTRAINT funding_entity_projects_pkey PRIMARY KEY (funding_entity_id, project_id);
+
+
+--
+-- Name: funding_entity_users funding_entity_users_pkey; Type: CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.funding_entity_users
+    ADD CONSTRAINT funding_entity_users_pkey PRIMARY KEY (user_id);
+
+
+--
+-- Name: published_report_achievements published_report_achievements_pkey; Type: CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_report_achievements
+    ADD CONSTRAINT published_report_achievements_pkey PRIMARY KEY (report_id, "position");
+
+
+--
+-- Name: published_report_challenges published_report_challenges_pkey; Type: CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_report_challenges
+    ADD CONSTRAINT published_report_challenges_pkey PRIMARY KEY (report_id, "position");
+
+
+--
+-- Name: published_report_project_metrics published_report_project_metrics_pkey; Type: CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_report_project_metrics
+    ADD CONSTRAINT published_report_project_metrics_pkey PRIMARY KEY (report_id, project_metric_id);
+
+
+--
+-- Name: published_report_standard_metrics published_report_standard_metrics_pkey; Type: CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_report_standard_metrics
+    ADD CONSTRAINT published_report_standard_metrics_pkey PRIMARY KEY (report_id, standard_metric_id);
+
+
+--
+-- Name: published_report_system_metrics published_report_system_metrics_pkey; Type: CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_report_system_metrics
+    ADD CONSTRAINT published_report_system_metrics_pkey PRIMARY KEY (report_id, system_metric_id);
+
+
+--
+-- Name: published_reports published_reports_pkey; Type: CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_reports
+    ADD CONSTRAINT published_reports_pkey PRIMARY KEY (report_id);
 
 
 --
@@ -10485,6 +15324,38 @@ ALTER TABLE ONLY public.automations
 
 
 --
+-- Name: chat_memory_conversations chat_memory_conversations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_memory_conversations
+    ADD CONSTRAINT chat_memory_conversations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chat_memory_message_types chat_memory_message_types_name_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_memory_message_types
+    ADD CONSTRAINT chat_memory_message_types_name_key UNIQUE (name);
+
+
+--
+-- Name: chat_memory_message_types chat_memory_message_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_memory_message_types
+    ADD CONSTRAINT chat_memory_message_types_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: chat_memory_messages chat_memory_messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_memory_messages
+    ADD CONSTRAINT chat_memory_messages_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: conservation_categories conservation_categories_name_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10498,6 +15369,22 @@ ALTER TABLE ONLY public.conservation_categories
 
 ALTER TABLE ONLY public.conservation_categories
     ADD CONSTRAINT conservation_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: countries countries_code_alpha3_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.countries
+    ADD CONSTRAINT countries_code_alpha3_key UNIQUE (code_alpha3);
+
+
+--
+-- Name: countries countries_name_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.countries
+    ADD CONSTRAINT countries_name_key UNIQUE (name);
 
 
 --
@@ -10789,18 +15676,18 @@ ALTER TABLE ONLY public.notifications
 
 
 --
--- Name: reports one_org_report_per_quarter; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: seed_fund_reports one_org_report_per_quarter; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.reports
-    ADD CONSTRAINT one_org_report_per_quarter EXCLUDE USING btree (organization_id WITH =, year WITH =, quarter WITH =) WHERE ((project_id IS NULL));
+ALTER TABLE ONLY public.seed_fund_reports
+    ADD CONSTRAINT one_org_report_per_quarter EXCLUDE USING btree (organization_id WITH =, year WITH =, quarter WITH =) WHERE (((project_id IS NULL) AND (project_name IS NULL)));
 
 
 --
--- Name: reports one_project_report_per_quarter; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: seed_fund_reports one_project_report_per_quarter; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.reports
+ALTER TABLE ONLY public.seed_fund_reports
     ADD CONSTRAINT one_project_report_per_quarter UNIQUE (organization_id, project_id, year, quarter);
 
 
@@ -10853,10 +15740,10 @@ ALTER TABLE ONLY public.organization_users
 
 
 --
--- Name: report_photos photo_not_shared_between_reports; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: seed_fund_report_photos photo_not_shared_between_reports; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.report_photos
+ALTER TABLE ONLY public.seed_fund_report_photos
     ADD CONSTRAINT photo_not_shared_between_reports UNIQUE (file_id);
 
 
@@ -10925,6 +15812,14 @@ ALTER TABLE ONLY public.projects
 
 
 --
+-- Name: rate_limited_events rate_limited_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.rate_limited_events
+    ADD CONSTRAINT rate_limited_events_pkey PRIMARY KEY (event_class, rate_limit_key);
+
+
+--
 -- Name: regions regions_name_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10941,42 +15836,42 @@ ALTER TABLE ONLY public.regions
 
 
 --
--- Name: report_files report_files_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: seed_fund_report_files report_files_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.report_files
+ALTER TABLE ONLY public.seed_fund_report_files
     ADD CONSTRAINT report_files_pkey PRIMARY KEY (file_id);
 
 
 --
--- Name: report_photos report_photos_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: seed_fund_report_photos report_photos_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.report_photos
+ALTER TABLE ONLY public.seed_fund_report_photos
     ADD CONSTRAINT report_photos_pkey PRIMARY KEY (report_id, file_id);
 
 
 --
--- Name: report_statuses report_statuses_name_key; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: seed_fund_report_statuses report_statuses_name_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.report_statuses
+ALTER TABLE ONLY public.seed_fund_report_statuses
     ADD CONSTRAINT report_statuses_name_key UNIQUE (name);
 
 
 --
--- Name: report_statuses report_statuses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: seed_fund_report_statuses report_statuses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.report_statuses
+ALTER TABLE ONLY public.seed_fund_report_statuses
     ADD CONSTRAINT report_statuses_pkey PRIMARY KEY (id);
 
 
 --
--- Name: reports reports_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: seed_fund_reports reports_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.reports
+ALTER TABLE ONLY public.seed_fund_reports
     ADD CONSTRAINT reports_pkey PRIMARY KEY (id);
 
 
@@ -11301,6 +16196,14 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: vector_store vector_store_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.vector_store
+    ADD CONSTRAINT vector_store_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: wood_density_levels wood_density_levels_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11477,6 +16380,22 @@ ALTER TABLE ONLY seedbank.withdrawals
 
 
 --
+-- Name: biomass_forest_types biomass_forest_types_name_key; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.biomass_forest_types
+    ADD CONSTRAINT biomass_forest_types_name_key UNIQUE (name);
+
+
+--
+-- Name: biomass_forest_types biomass_forest_types_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.biomass_forest_types
+    ADD CONSTRAINT biomass_forest_types_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: deliveries deliveries_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
 --
 
@@ -11509,19 +16428,51 @@ ALTER TABLE ONLY tracking.draft_planting_sites
 
 
 --
+-- Name: mangrove_tides mangrove_tides_name_key; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.mangrove_tides
+    ADD CONSTRAINT mangrove_tides_name_key UNIQUE (name);
+
+
+--
+-- Name: mangrove_tides mangrove_tides_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.mangrove_tides
+    ADD CONSTRAINT mangrove_tides_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: monitoring_plot_histories monitoring_plot_histories_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.monitoring_plot_histories
+    ADD CONSTRAINT monitoring_plot_histories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: monitoring_plot_overlaps monitoring_plot_overlaps_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.monitoring_plot_overlaps
+    ADD CONSTRAINT monitoring_plot_overlaps_pkey PRIMARY KEY (monitoring_plot_id, overlaps_plot_id);
+
+
+--
+-- Name: monitoring_plots monitoring_plots_organization_id_plot_number_key; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.monitoring_plots
+    ADD CONSTRAINT monitoring_plots_organization_id_plot_number_key UNIQUE (organization_id, plot_number);
+
+
+--
 -- Name: monitoring_plots monitoring_plots_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
 --
 
 ALTER TABLE ONLY tracking.monitoring_plots
     ADD CONSTRAINT monitoring_plots_pkey PRIMARY KEY (id);
-
-
---
--- Name: monitoring_plots monitoring_plots_planting_subzone_id_name_key; Type: CONSTRAINT; Schema: tracking; Owner: -
---
-
-ALTER TABLE ONLY tracking.monitoring_plots
-    ADD CONSTRAINT monitoring_plots_planting_subzone_id_name_key UNIQUE (planting_subzone_id, name);
 
 
 --
@@ -11541,6 +16492,46 @@ ALTER TABLE ONLY tracking.observable_conditions
 
 
 --
+-- Name: observation_biomass_details observation_biomass_details_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_details
+    ADD CONSTRAINT observation_biomass_details_pkey PRIMARY KEY (observation_id, monitoring_plot_id);
+
+
+--
+-- Name: observation_biomass_quadrat_details observation_biomass_quadrat_details_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_quadrat_details
+    ADD CONSTRAINT observation_biomass_quadrat_details_pkey PRIMARY KEY (observation_id, monitoring_plot_id, position_id);
+
+
+--
+-- Name: observation_biomass_quadrat_species observation_biomass_quadrat_species_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_quadrat_species
+    ADD CONSTRAINT observation_biomass_quadrat_species_pkey PRIMARY KEY (observation_id, monitoring_plot_id, position_id, biomass_species_id);
+
+
+--
+-- Name: observation_biomass_species observation_biomass_species_id_observation_id_monitoring_pl_key; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_species
+    ADD CONSTRAINT observation_biomass_species_id_observation_id_monitoring_pl_key UNIQUE (id, observation_id, monitoring_plot_id);
+
+
+--
+-- Name: observation_biomass_species observation_biomass_species_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_species
+    ADD CONSTRAINT observation_biomass_species_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: observation_plot_positions observation_photo_positions_name_key; Type: CONSTRAINT; Schema: tracking; Owner: -
 --
 
@@ -11554,6 +16545,22 @@ ALTER TABLE ONLY tracking.observation_plot_positions
 
 ALTER TABLE ONLY tracking.observation_plot_positions
     ADD CONSTRAINT observation_photo_positions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: observation_photo_types observation_photo_types_name_key; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_photo_types
+    ADD CONSTRAINT observation_photo_types_name_key UNIQUE (name);
+
+
+--
+-- Name: observation_photo_types observation_photo_types_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_photo_types
+    ADD CONSTRAINT observation_photo_types_pkey PRIMARY KEY (id);
 
 
 --
@@ -11573,11 +16580,35 @@ ALTER TABLE ONLY tracking.observation_plot_conditions
 
 
 --
+-- Name: observation_plot_statuses observation_plot_statuses_name_key; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_plot_statuses
+    ADD CONSTRAINT observation_plot_statuses_name_key UNIQUE (name);
+
+
+--
+-- Name: observation_plot_statuses observation_plot_statuses_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_plot_statuses
+    ADD CONSTRAINT observation_plot_statuses_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: observation_plots observation_plots_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
 --
 
 ALTER TABLE ONLY tracking.observation_plots
     ADD CONSTRAINT observation_plots_pkey PRIMARY KEY (observation_id, monitoring_plot_id);
+
+
+--
+-- Name: observation_requested_subzones observation_requested_subzones_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_requested_subzones
+    ADD CONSTRAINT observation_requested_subzones_pkey PRIMARY KEY (observation_id, planting_subzone_id);
 
 
 --
@@ -11594,6 +16625,22 @@ ALTER TABLE ONLY tracking.observation_states
 
 ALTER TABLE ONLY tracking.observation_states
     ADD CONSTRAINT observation_states_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: observation_types observation_types_name_key; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_types
+    ADD CONSTRAINT observation_types_name_key UNIQUE (name);
+
+
+--
+-- Name: observation_types observation_types_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_types
+    ADD CONSTRAINT observation_types_pkey PRIMARY KEY (id);
 
 
 --
@@ -11701,6 +16748,14 @@ ALTER TABLE ONLY tracking.planting_subzone_populations
 
 
 --
+-- Name: planting_subzones planting_subzones_planting_site_id_stable_id_key; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.planting_subzones
+    ADD CONSTRAINT planting_subzones_planting_site_id_stable_id_key UNIQUE (planting_site_id, stable_id);
+
+
+--
 -- Name: planting_types planting_types_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
 --
 
@@ -11746,6 +16801,14 @@ ALTER TABLE ONLY tracking.planting_zones
 
 ALTER TABLE ONLY tracking.planting_zones
     ADD CONSTRAINT planting_zones_planting_site_id_name_key UNIQUE (planting_site_id, name);
+
+
+--
+-- Name: planting_zones planting_zones_planting_site_id_stable_id_key; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.planting_zones
+    ADD CONSTRAINT planting_zones_planting_site_id_stable_id_key UNIQUE (planting_site_id, stable_id);
 
 
 --
@@ -11829,6 +16892,73 @@ ALTER TABLE ONLY tracking.recorded_species_certainties
 
 
 --
+-- Name: recorded_trees recorded_trees_observation_id_tree_number_trunk_number_key; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.recorded_trees
+    ADD CONSTRAINT recorded_trees_observation_id_tree_number_trunk_number_key UNIQUE (observation_id, tree_number, trunk_number);
+
+
+--
+-- Name: recorded_trees recorded_trees_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.recorded_trees
+    ADD CONSTRAINT recorded_trees_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tree_growth_forms tree_growth_forms_name_key; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.tree_growth_forms
+    ADD CONSTRAINT tree_growth_forms_name_key UNIQUE (name);
+
+
+--
+-- Name: tree_growth_forms tree_growth_forms_pkey; Type: CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.tree_growth_forms
+    ADD CONSTRAINT tree_growth_forms_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: application_histories_application_id_idx; Type: INDEX; Schema: accelerator; Owner: -
+--
+
+CREATE INDEX application_histories_application_id_idx ON accelerator.application_histories USING btree (application_id);
+
+
+--
+-- Name: application_histories_modified_by_idx; Type: INDEX; Schema: accelerator; Owner: -
+--
+
+CREATE INDEX application_histories_modified_by_idx ON accelerator.application_histories USING btree (modified_by);
+
+
+--
+-- Name: application_modules_application_id_idx; Type: INDEX; Schema: accelerator; Owner: -
+--
+
+CREATE INDEX application_modules_application_id_idx ON accelerator.application_modules USING btree (application_id);
+
+
+--
+-- Name: applications_created_by_idx; Type: INDEX; Schema: accelerator; Owner: -
+--
+
+CREATE INDEX applications_created_by_idx ON accelerator.applications USING btree (created_by);
+
+
+--
+-- Name: applications_modified_by_idx; Type: INDEX; Schema: accelerator; Owner: -
+--
+
+CREATE INDEX applications_modified_by_idx ON accelerator.applications USING btree (modified_by);
+
+
+--
 -- Name: cohort_modules_cohort_id_idx; Type: INDEX; Schema: accelerator; Owner: -
 --
 
@@ -11864,6 +16994,13 @@ CREATE INDEX cohorts_modified_by_idx ON accelerator.cohorts USING btree (modifie
 
 
 --
+-- Name: hubspot_token_expr_idx; Type: INDEX; Schema: accelerator; Owner: -
+--
+
+CREATE UNIQUE INDEX hubspot_token_expr_idx ON accelerator.hubspot_token USING btree ((0));
+
+
+--
 -- Name: participant_project_species_species_id_idx; Type: INDEX; Schema: accelerator; Owner: -
 --
 
@@ -11892,6 +17029,20 @@ CREATE INDEX participants_modified_by_idx ON accelerator.participants USING btre
 
 
 --
+-- Name: project_metrics_project_id_idx; Type: INDEX; Schema: accelerator; Owner: -
+--
+
+CREATE INDEX project_metrics_project_id_idx ON accelerator.project_metrics USING btree (project_id);
+
+
+--
+-- Name: project_report_configs_project_id_idx; Type: INDEX; Schema: accelerator; Owner: -
+--
+
+CREATE INDEX project_report_configs_project_id_idx ON accelerator.project_report_configs USING btree (project_id);
+
+
+--
 -- Name: project_scores_project_id_idx; Type: INDEX; Schema: accelerator; Owner: -
 --
 
@@ -11910,6 +17061,55 @@ CREATE INDEX project_vote_decisions_project_id_idx ON accelerator.project_vote_d
 --
 
 CREATE INDEX project_votes_project_id_idx ON accelerator.project_votes USING btree (project_id);
+
+
+--
+-- Name: report_project_metrics_project_metric_id_idx; Type: INDEX; Schema: accelerator; Owner: -
+--
+
+CREATE INDEX report_project_metrics_project_metric_id_idx ON accelerator.report_project_metrics USING btree (project_metric_id);
+
+
+--
+-- Name: report_project_metrics_report_id_project_metric_id_idx; Type: INDEX; Schema: accelerator; Owner: -
+--
+
+CREATE INDEX report_project_metrics_report_id_project_metric_id_idx ON accelerator.report_project_metrics USING btree (report_id, project_metric_id);
+
+
+--
+-- Name: report_standard_metrics_report_id_standard_metric_id_idx; Type: INDEX; Schema: accelerator; Owner: -
+--
+
+CREATE INDEX report_standard_metrics_report_id_standard_metric_id_idx ON accelerator.report_standard_metrics USING btree (report_id, standard_metric_id);
+
+
+--
+-- Name: report_standard_metrics_standard_metric_id_idx; Type: INDEX; Schema: accelerator; Owner: -
+--
+
+CREATE INDEX report_standard_metrics_standard_metric_id_idx ON accelerator.report_standard_metrics USING btree (standard_metric_id);
+
+
+--
+-- Name: report_system_metrics_system_metric_id_idx; Type: INDEX; Schema: accelerator; Owner: -
+--
+
+CREATE INDEX report_system_metrics_system_metric_id_idx ON accelerator.report_system_metrics USING btree (system_metric_id);
+
+
+--
+-- Name: reports_end_date_idx; Type: INDEX; Schema: accelerator; Owner: -
+--
+
+CREATE INDEX reports_end_date_idx ON accelerator.reports USING btree (end_date);
+
+
+--
+-- Name: reports_project_id_idx; Type: INDEX; Schema: accelerator; Owner: -
+--
+
+CREATE INDEX reports_project_id_idx ON accelerator.reports USING btree (project_id);
 
 
 --
@@ -11945,6 +17145,125 @@ CREATE INDEX submissions_deliverable_id_idx ON accelerator.submissions USING btr
 --
 
 CREATE INDEX submissions_project_id_idx ON accelerator.submissions USING btree (project_id);
+
+
+--
+-- Name: documents_project_id_idx; Type: INDEX; Schema: docprod; Owner: -
+--
+
+CREATE INDEX documents_project_id_idx ON docprod.documents USING btree (project_id);
+
+
+--
+-- Name: variable_image_values_file_id_idx; Type: INDEX; Schema: docprod; Owner: -
+--
+
+CREATE INDEX variable_image_values_file_id_idx ON docprod.variable_image_values USING btree (file_id);
+
+
+--
+-- Name: variable_owners_owned_by_idx; Type: INDEX; Schema: docprod; Owner: -
+--
+
+CREATE INDEX variable_owners_owned_by_idx ON docprod.variable_owners USING btree (owned_by);
+
+
+--
+-- Name: variable_owners_variable_id_idx; Type: INDEX; Schema: docprod; Owner: -
+--
+
+CREATE INDEX variable_owners_variable_id_idx ON docprod.variable_owners USING btree (variable_id);
+
+
+--
+-- Name: variable_section_default_values_used_variable_id_idx; Type: INDEX; Schema: docprod; Owner: -
+--
+
+CREATE INDEX variable_section_default_values_used_variable_id_idx ON docprod.variable_section_default_values USING btree (used_variable_id);
+
+
+--
+-- Name: variable_section_values_used_variable_id_idx; Type: INDEX; Schema: docprod; Owner: -
+--
+
+CREATE INDEX variable_section_values_used_variable_id_idx ON docprod.variable_section_values USING btree (used_variable_id);
+
+
+--
+-- Name: variable_value_table_rows_table_row_value_id_idx; Type: INDEX; Schema: docprod; Owner: -
+--
+
+CREATE INDEX variable_value_table_rows_table_row_value_id_idx ON docprod.variable_value_table_rows USING btree (table_row_value_id);
+
+
+--
+-- Name: variable_values_project_id_idx; Type: INDEX; Schema: docprod; Owner: -
+--
+
+CREATE INDEX variable_values_project_id_idx ON docprod.variable_values USING btree (project_id);
+
+
+--
+-- Name: variable_workflow_history_created_by_idx; Type: INDEX; Schema: docprod; Owner: -
+--
+
+CREATE INDEX variable_workflow_history_created_by_idx ON docprod.variable_workflow_history USING btree (created_by);
+
+
+--
+-- Name: variable_workflow_history_max_variable_value_id_idx; Type: INDEX; Schema: docprod; Owner: -
+--
+
+CREATE INDEX variable_workflow_history_max_variable_value_id_idx ON docprod.variable_workflow_history USING btree (max_variable_value_id);
+
+
+--
+-- Name: variable_workflow_history_project_id_variable_id_id_idx; Type: INDEX; Schema: docprod; Owner: -
+--
+
+CREATE INDEX variable_workflow_history_project_id_variable_id_id_idx ON docprod.variable_workflow_history USING btree (project_id, variable_id, id DESC);
+
+
+--
+-- Name: variable_workflow_history_variable_id_idx; Type: INDEX; Schema: docprod; Owner: -
+--
+
+CREATE INDEX variable_workflow_history_variable_id_idx ON docprod.variable_workflow_history USING btree (variable_id);
+
+
+--
+-- Name: funding_entity_projects_funding_entity_id_idx; Type: INDEX; Schema: funder; Owner: -
+--
+
+CREATE INDEX funding_entity_projects_funding_entity_id_idx ON funder.funding_entity_projects USING btree (funding_entity_id);
+
+
+--
+-- Name: funding_entity_projects_project_id_idx; Type: INDEX; Schema: funder; Owner: -
+--
+
+CREATE INDEX funding_entity_projects_project_id_idx ON funder.funding_entity_projects USING btree (project_id);
+
+
+--
+-- Name: funding_entity_users_funding_entity_id_idx; Type: INDEX; Schema: funder; Owner: -
+--
+
+CREATE INDEX funding_entity_users_funding_entity_id_idx ON funder.funding_entity_users USING btree (funding_entity_id);
+
+
+--
+-- Name: funding_entity_users_user_id_idx; Type: INDEX; Schema: funder; Owner: -
+--
+
+CREATE INDEX funding_entity_users_user_id_idx ON funder.funding_entity_users USING btree (user_id);
+
+
+--
+-- Name: published_reports_project_id_idx; Type: INDEX; Schema: funder; Owner: -
+--
+
+CREATE INDEX published_reports_project_id_idx ON funder.published_reports USING btree (project_id);
 
 
 --
@@ -12064,6 +17383,13 @@ CREATE INDEX automations_device_id_timeseries_name_idx ON public.automations USI
 --
 
 CREATE INDEX automations_facility_id_name_idx ON public.automations USING btree (facility_id, name);
+
+
+--
+-- Name: chat_memory_messages_conversation_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX chat_memory_messages_conversation_id_idx ON public.chat_memory_messages USING btree (conversation_id);
 
 
 --
@@ -12259,14 +17585,14 @@ CREATE INDEX projects_participant_id_idx ON public.projects USING btree (partici
 -- Name: report_files_report_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX report_files_report_id_idx ON public.report_files USING btree (report_id);
+CREATE INDEX report_files_report_id_idx ON public.seed_fund_report_files USING btree (report_id);
 
 
 --
 -- Name: reports_project_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX reports_project_id_idx ON public.reports USING btree (project_id);
+CREATE INDEX reports_project_id_idx ON public.seed_fund_reports USING btree (project_id);
 
 
 --
@@ -12372,6 +17698,20 @@ CREATE UNIQUE INDEX user_preferences_user_id_idx ON public.user_preferences USIN
 --
 
 CREATE UNIQUE INDEX user_preferences_user_id_organization_id_idx ON public.user_preferences USING btree (user_id, organization_id) WHERE (organization_id IS NOT NULL);
+
+
+--
+-- Name: vector_store_embedding_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX vector_store_embedding_idx ON public.vector_store USING hnsw (embedding public.halfvec_cosine_ops);
+
+
+--
+-- Name: vector_store_expr_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX vector_store_expr_idx ON public.vector_store USING btree (((metadata ->> 'projectId'::text)));
 
 
 --
@@ -12501,6 +17841,111 @@ CREATE INDEX draft_planting_sites_project_id_idx ON tracking.draft_planting_site
 
 
 --
+-- Name: monitoring_plot_histories_created_by_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX monitoring_plot_histories_created_by_idx ON tracking.monitoring_plot_histories USING btree (created_by);
+
+
+--
+-- Name: monitoring_plot_histories_monitoring_plot_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX monitoring_plot_histories_monitoring_plot_id_idx ON tracking.monitoring_plot_histories USING btree (monitoring_plot_id);
+
+
+--
+-- Name: monitoring_plot_histories_planting_site_history_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX monitoring_plot_histories_planting_site_history_id_idx ON tracking.monitoring_plot_histories USING btree (planting_site_history_id);
+
+
+--
+-- Name: monitoring_plot_histories_planting_site_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX monitoring_plot_histories_planting_site_id_idx ON tracking.monitoring_plot_histories USING btree (planting_site_id);
+
+
+--
+-- Name: monitoring_plot_histories_planting_subzone_history_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX monitoring_plot_histories_planting_subzone_history_id_idx ON tracking.monitoring_plot_histories USING btree (planting_subzone_history_id);
+
+
+--
+-- Name: monitoring_plot_histories_planting_subzone_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX monitoring_plot_histories_planting_subzone_id_idx ON tracking.monitoring_plot_histories USING btree (planting_subzone_id);
+
+
+--
+-- Name: monitoring_plot_overlaps_overlaps_plot_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX monitoring_plot_overlaps_overlaps_plot_id_idx ON tracking.monitoring_plot_overlaps USING btree (overlaps_plot_id);
+
+
+--
+-- Name: monitoring_plots_planting_site_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX monitoring_plots_planting_site_id_idx ON tracking.monitoring_plots USING btree (planting_site_id);
+
+
+--
+-- Name: observation_biomass_details_monitoring_plot_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX observation_biomass_details_monitoring_plot_id_idx ON tracking.observation_biomass_details USING btree (monitoring_plot_id);
+
+
+--
+-- Name: observation_biomass_quadrat_details_monitoring_plot_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX observation_biomass_quadrat_details_monitoring_plot_id_idx ON tracking.observation_biomass_quadrat_details USING btree (monitoring_plot_id);
+
+
+--
+-- Name: observation_biomass_quadrat_species_monitoring_plot_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX observation_biomass_quadrat_species_monitoring_plot_id_idx ON tracking.observation_biomass_quadrat_species USING btree (monitoring_plot_id);
+
+
+--
+-- Name: observation_biomass_species_monitoring_plot_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX observation_biomass_species_monitoring_plot_id_idx ON tracking.observation_biomass_species USING btree (monitoring_plot_id);
+
+
+--
+-- Name: observation_biomass_species_observation_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX observation_biomass_species_observation_id_idx ON tracking.observation_biomass_species USING btree (observation_id);
+
+
+--
+-- Name: observation_biomass_species_observation_id_monitoring_plot__idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE UNIQUE INDEX observation_biomass_species_observation_id_monitoring_plot__idx ON tracking.observation_biomass_species USING btree (observation_id, monitoring_plot_id, species_id) WHERE (species_id IS NOT NULL);
+
+
+--
+-- Name: observation_biomass_species_observation_id_monitoring_plot_idx1; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE UNIQUE INDEX observation_biomass_species_observation_id_monitoring_plot_idx1 ON tracking.observation_biomass_species USING btree (observation_id, monitoring_plot_id, scientific_name) WHERE (scientific_name IS NOT NULL);
+
+
+--
 -- Name: observation_photos_file_id_idx; Type: INDEX; Schema: tracking; Owner: -
 --
 
@@ -12522,10 +17967,31 @@ CREATE INDEX observation_plot_conditions_monitoring_plot_id_idx ON tracking.obse
 
 
 --
+-- Name: observation_plots_monitoring_plot_history_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX observation_plots_monitoring_plot_history_id_idx ON tracking.observation_plots USING btree (monitoring_plot_history_id);
+
+
+--
 -- Name: observation_plots_monitoring_plot_id_idx; Type: INDEX; Schema: tracking; Owner: -
 --
 
 CREATE INDEX observation_plots_monitoring_plot_id_idx ON tracking.observation_plots USING btree (monitoring_plot_id);
+
+
+--
+-- Name: observation_requested_subzones_planting_subzone_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX observation_requested_subzones_planting_subzone_id_idx ON tracking.observation_requested_subzones USING btree (planting_subzone_id);
+
+
+--
+-- Name: observations_planting_site_history_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX observations_planting_site_history_id_idx ON tracking.observations USING btree (planting_site_history_id);
 
 
 --
@@ -12617,6 +18083,48 @@ CREATE INDEX observed_site_species_totals_planting_site_id_idx ON tracking.obser
 --
 
 CREATE INDEX observed_site_species_totals_species_id_idx ON tracking.observed_site_species_totals USING btree (species_id);
+
+
+--
+-- Name: observed_subzone_species_tota_observation_id_planting_subz_idx1; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE UNIQUE INDEX observed_subzone_species_tota_observation_id_planting_subz_idx1 ON tracking.observed_subzone_species_totals USING btree (observation_id, planting_subzone_id, species_name) WHERE (species_name IS NOT NULL);
+
+
+--
+-- Name: observed_subzone_species_tota_observation_id_planting_subz_idx2; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE UNIQUE INDEX observed_subzone_species_tota_observation_id_planting_subz_idx2 ON tracking.observed_subzone_species_totals USING btree (observation_id, planting_subzone_id) WHERE ((species_id IS NULL) AND (species_name IS NULL));
+
+
+--
+-- Name: observed_subzone_species_tota_observation_id_planting_subzo_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE UNIQUE INDEX observed_subzone_species_tota_observation_id_planting_subzo_idx ON tracking.observed_subzone_species_totals USING btree (observation_id, planting_subzone_id, species_id) WHERE (species_id IS NOT NULL);
+
+
+--
+-- Name: observed_subzone_species_totals_observation_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX observed_subzone_species_totals_observation_id_idx ON tracking.observed_subzone_species_totals USING btree (observation_id);
+
+
+--
+-- Name: observed_subzone_species_totals_planting_subzone_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX observed_subzone_species_totals_planting_subzone_id_idx ON tracking.observed_subzone_species_totals USING btree (planting_subzone_id);
+
+
+--
+-- Name: observed_subzone_species_totals_species_id_idx; Type: INDEX; Schema: tracking; Owner: -
+--
+
+CREATE INDEX observed_subzone_species_totals_species_id_idx ON tracking.observed_subzone_species_totals USING btree (species_id);
 
 
 --
@@ -12767,6 +18275,164 @@ CREATE INDEX recorded_plants_species_id_idx ON tracking.recorded_plants USING bt
 
 
 --
+-- Name: variable_image_values variable_image_values_no_delete; Type: TRIGGER; Schema: docprod; Owner: -
+--
+
+CREATE TRIGGER variable_image_values_no_delete BEFORE DELETE ON docprod.variable_image_values FOR EACH ROW EXECUTE FUNCTION docprod.reject_delete_value_child();
+
+
+--
+-- Name: variable_image_values variable_image_values_no_update; Type: TRIGGER; Schema: docprod; Owner: -
+--
+
+CREATE TRIGGER variable_image_values_no_update BEFORE UPDATE ON docprod.variable_image_values FOR EACH ROW EXECUTE FUNCTION docprod.reject_update();
+
+
+--
+-- Name: variable_section_values variable_section_values_no_delete; Type: TRIGGER; Schema: docprod; Owner: -
+--
+
+CREATE TRIGGER variable_section_values_no_delete BEFORE DELETE ON docprod.variable_section_values FOR EACH ROW EXECUTE FUNCTION docprod.reject_delete_value_child();
+
+
+--
+-- Name: variable_section_values variable_section_values_no_update; Type: TRIGGER; Schema: docprod; Owner: -
+--
+
+CREATE TRIGGER variable_section_values_no_update BEFORE UPDATE ON docprod.variable_section_values FOR EACH ROW EXECUTE FUNCTION docprod.reject_update();
+
+
+--
+-- Name: variable_select_option_values variable_select_option_values_no_delete; Type: TRIGGER; Schema: docprod; Owner: -
+--
+
+CREATE TRIGGER variable_select_option_values_no_delete BEFORE DELETE ON docprod.variable_select_option_values FOR EACH ROW EXECUTE FUNCTION docprod.reject_delete_value_child();
+
+
+--
+-- Name: variable_select_option_values variable_select_option_values_no_update; Type: TRIGGER; Schema: docprod; Owner: -
+--
+
+CREATE TRIGGER variable_select_option_values_no_update BEFORE UPDATE ON docprod.variable_select_option_values FOR EACH ROW EXECUTE FUNCTION docprod.reject_update();
+
+
+--
+-- Name: variable_values variable_values_no_delete; Type: TRIGGER; Schema: docprod; Owner: -
+--
+
+CREATE TRIGGER variable_values_no_delete BEFORE DELETE ON docprod.variable_values FOR EACH ROW EXECUTE FUNCTION docprod.reject_delete_value();
+
+
+--
+-- Name: variable_values variable_values_no_update; Type: TRIGGER; Schema: docprod; Owner: -
+--
+
+CREATE TRIGGER variable_values_no_update BEFORE UPDATE ON docprod.variable_values FOR EACH ROW EXECUTE FUNCTION docprod.reject_update_value();
+
+
+--
+-- Name: variables variables_no_delete; Type: TRIGGER; Schema: docprod; Owner: -
+--
+
+CREATE TRIGGER variables_no_delete BEFORE DELETE ON docprod.variables FOR EACH ROW EXECUTE FUNCTION docprod.reject_delete();
+
+
+--
+-- Name: variables variables_no_update; Type: TRIGGER; Schema: docprod; Owner: -
+--
+
+CREATE TRIGGER variables_no_update BEFORE UPDATE ON docprod.variables FOR EACH ROW EXECUTE FUNCTION docprod.reject_update();
+
+
+--
+-- Name: application_histories application_histories_application_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.application_histories
+    ADD CONSTRAINT application_histories_application_id_fkey FOREIGN KEY (application_id) REFERENCES accelerator.applications(id) ON DELETE CASCADE;
+
+
+--
+-- Name: application_histories application_histories_application_status_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.application_histories
+    ADD CONSTRAINT application_histories_application_status_id_fkey FOREIGN KEY (application_status_id) REFERENCES accelerator.application_statuses(id);
+
+
+--
+-- Name: application_histories application_histories_modified_by_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.application_histories
+    ADD CONSTRAINT application_histories_modified_by_fkey FOREIGN KEY (modified_by) REFERENCES public.users(id);
+
+
+--
+-- Name: application_modules application_modules_application_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.application_modules
+    ADD CONSTRAINT application_modules_application_id_fkey FOREIGN KEY (application_id) REFERENCES accelerator.applications(id) ON DELETE CASCADE;
+
+
+--
+-- Name: application_modules application_modules_application_module_status_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.application_modules
+    ADD CONSTRAINT application_modules_application_module_status_id_fkey FOREIGN KEY (application_module_status_id) REFERENCES accelerator.application_module_statuses(id);
+
+
+--
+-- Name: application_modules application_modules_module_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.application_modules
+    ADD CONSTRAINT application_modules_module_id_fkey FOREIGN KEY (module_id) REFERENCES accelerator.modules(id);
+
+
+--
+-- Name: applications applications_application_status_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.applications
+    ADD CONSTRAINT applications_application_status_id_fkey FOREIGN KEY (application_status_id) REFERENCES accelerator.application_statuses(id);
+
+
+--
+-- Name: applications applications_country_code_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.applications
+    ADD CONSTRAINT applications_country_code_fkey FOREIGN KEY (country_code) REFERENCES public.countries(code);
+
+
+--
+-- Name: applications applications_created_by_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.applications
+    ADD CONSTRAINT applications_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.users(id);
+
+
+--
+-- Name: applications applications_modified_by_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.applications
+    ADD CONSTRAINT applications_modified_by_fkey FOREIGN KEY (modified_by) REFERENCES public.users(id);
+
+
+--
+-- Name: applications applications_project_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.applications
+    ADD CONSTRAINT applications_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id) ON DELETE CASCADE;
+
+
+--
 -- Name: cohort_modules cohort_modules_cohort_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
 --
 
@@ -12815,11 +18481,27 @@ ALTER TABLE ONLY accelerator.deal_stages
 
 
 --
+-- Name: default_project_leads default_project_leads_region_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.default_project_leads
+    ADD CONSTRAINT default_project_leads_region_id_fkey FOREIGN KEY (region_id) REFERENCES public.regions(id);
+
+
+--
 -- Name: default_voters default_voters_user_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
 --
 
 ALTER TABLE ONLY accelerator.default_voters
     ADD CONSTRAINT default_voters_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: deliverable_categories deliverable_categories_internal_interest_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.deliverable_categories
+    ADD CONSTRAINT deliverable_categories_internal_interest_id_fkey FOREIGN KEY (internal_interest_id) REFERENCES accelerator.internal_interests(id) ON DELETE RESTRICT;
 
 
 --
@@ -12876,6 +18558,22 @@ ALTER TABLE ONLY accelerator.deliverable_project_due_dates
 
 ALTER TABLE ONLY accelerator.deliverable_project_due_dates
     ADD CONSTRAINT deliverable_project_due_dates_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id) ON DELETE CASCADE;
+
+
+--
+-- Name: deliverable_variables deliverable_variables_deliverable_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.deliverable_variables
+    ADD CONSTRAINT deliverable_variables_deliverable_id_fkey FOREIGN KEY (deliverable_id) REFERENCES accelerator.deliverables(id) ON DELETE CASCADE;
+
+
+--
+-- Name: deliverable_variables deliverable_variables_variable_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.deliverable_variables
+    ADD CONSTRAINT deliverable_variables_variable_id_fkey FOREIGN KEY (variable_id) REFERENCES docprod.variables(id) ON DELETE CASCADE;
 
 
 --
@@ -13095,6 +18793,70 @@ ALTER TABLE ONLY accelerator.project_accelerator_details
 
 
 --
+-- Name: project_metrics project_metrics_component_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.project_metrics
+    ADD CONSTRAINT project_metrics_component_id_fkey FOREIGN KEY (component_id) REFERENCES accelerator.metric_components(id);
+
+
+--
+-- Name: project_metrics project_metrics_project_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.project_metrics
+    ADD CONSTRAINT project_metrics_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id) ON DELETE CASCADE;
+
+
+--
+-- Name: project_metrics project_metrics_type_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.project_metrics
+    ADD CONSTRAINT project_metrics_type_id_fkey FOREIGN KEY (type_id) REFERENCES accelerator.metric_types(id);
+
+
+--
+-- Name: project_overall_scores project_overall_scores_created_by_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.project_overall_scores
+    ADD CONSTRAINT project_overall_scores_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.users(id);
+
+
+--
+-- Name: project_overall_scores project_overall_scores_modified_by_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.project_overall_scores
+    ADD CONSTRAINT project_overall_scores_modified_by_fkey FOREIGN KEY (modified_by) REFERENCES public.users(id);
+
+
+--
+-- Name: project_overall_scores project_overall_scores_project_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.project_overall_scores
+    ADD CONSTRAINT project_overall_scores_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id) ON DELETE CASCADE;
+
+
+--
+-- Name: project_report_configs project_report_configs_project_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.project_report_configs
+    ADD CONSTRAINT project_report_configs_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id) ON DELETE CASCADE;
+
+
+--
+-- Name: project_report_configs project_report_configs_report_frequency_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.project_report_configs
+    ADD CONSTRAINT project_report_configs_report_frequency_id_fkey FOREIGN KEY (report_frequency_id) REFERENCES accelerator.report_frequencies(id);
+
+
+--
 -- Name: project_scores project_scores_created_by_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
 --
 
@@ -13207,6 +18969,214 @@ ALTER TABLE ONLY accelerator.project_votes
 
 
 --
+-- Name: report_achievements report_achievements_report_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_achievements
+    ADD CONSTRAINT report_achievements_report_id_fkey FOREIGN KEY (report_id) REFERENCES accelerator.reports(id) ON DELETE CASCADE;
+
+
+--
+-- Name: report_challenges report_challenges_report_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_challenges
+    ADD CONSTRAINT report_challenges_report_id_fkey FOREIGN KEY (report_id) REFERENCES accelerator.reports(id) ON DELETE CASCADE;
+
+
+--
+-- Name: report_project_metrics report_project_metrics_modified_by_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_project_metrics
+    ADD CONSTRAINT report_project_metrics_modified_by_fkey FOREIGN KEY (modified_by) REFERENCES public.users(id);
+
+
+--
+-- Name: report_project_metrics report_project_metrics_project_metric_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_project_metrics
+    ADD CONSTRAINT report_project_metrics_project_metric_id_fkey FOREIGN KEY (project_metric_id) REFERENCES accelerator.project_metrics(id);
+
+
+--
+-- Name: report_project_metrics report_project_metrics_report_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_project_metrics
+    ADD CONSTRAINT report_project_metrics_report_id_fkey FOREIGN KEY (report_id) REFERENCES accelerator.reports(id) ON DELETE CASCADE;
+
+
+--
+-- Name: report_project_metrics report_project_metrics_status_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_project_metrics
+    ADD CONSTRAINT report_project_metrics_status_id_fkey FOREIGN KEY (status_id) REFERENCES accelerator.report_metric_statuses(id);
+
+
+--
+-- Name: report_standard_metrics report_standard_metrics_modified_by_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_standard_metrics
+    ADD CONSTRAINT report_standard_metrics_modified_by_fkey FOREIGN KEY (modified_by) REFERENCES public.users(id);
+
+
+--
+-- Name: report_standard_metrics report_standard_metrics_report_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_standard_metrics
+    ADD CONSTRAINT report_standard_metrics_report_id_fkey FOREIGN KEY (report_id) REFERENCES accelerator.reports(id) ON DELETE CASCADE;
+
+
+--
+-- Name: report_standard_metrics report_standard_metrics_standard_metric_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_standard_metrics
+    ADD CONSTRAINT report_standard_metrics_standard_metric_id_fkey FOREIGN KEY (standard_metric_id) REFERENCES accelerator.standard_metrics(id);
+
+
+--
+-- Name: report_standard_metrics report_standard_metrics_status_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_standard_metrics
+    ADD CONSTRAINT report_standard_metrics_status_id_fkey FOREIGN KEY (status_id) REFERENCES accelerator.report_metric_statuses(id);
+
+
+--
+-- Name: report_system_metrics report_system_metrics_modified_by_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_system_metrics
+    ADD CONSTRAINT report_system_metrics_modified_by_fkey FOREIGN KEY (modified_by) REFERENCES public.users(id);
+
+
+--
+-- Name: report_system_metrics report_system_metrics_report_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_system_metrics
+    ADD CONSTRAINT report_system_metrics_report_id_fkey FOREIGN KEY (report_id) REFERENCES accelerator.reports(id) ON DELETE CASCADE;
+
+
+--
+-- Name: report_system_metrics report_system_metrics_status_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_system_metrics
+    ADD CONSTRAINT report_system_metrics_status_id_fkey FOREIGN KEY (status_id) REFERENCES accelerator.report_metric_statuses(id);
+
+
+--
+-- Name: report_system_metrics report_system_metrics_system_metric_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.report_system_metrics
+    ADD CONSTRAINT report_system_metrics_system_metric_id_fkey FOREIGN KEY (system_metric_id) REFERENCES accelerator.system_metrics(id);
+
+
+--
+-- Name: reports reports_config_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.reports
+    ADD CONSTRAINT reports_config_id_fkey FOREIGN KEY (config_id) REFERENCES accelerator.project_report_configs(id);
+
+
+--
+-- Name: reports reports_config_id_project_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.reports
+    ADD CONSTRAINT reports_config_id_project_id_fkey FOREIGN KEY (config_id, project_id) REFERENCES accelerator.project_report_configs(id, project_id);
+
+
+--
+-- Name: reports reports_config_id_report_frequency_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.reports
+    ADD CONSTRAINT reports_config_id_report_frequency_id_fkey FOREIGN KEY (config_id, report_frequency_id) REFERENCES accelerator.project_report_configs(id, report_frequency_id);
+
+
+--
+-- Name: reports reports_created_by_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.reports
+    ADD CONSTRAINT reports_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.users(id);
+
+
+--
+-- Name: reports reports_modified_by_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.reports
+    ADD CONSTRAINT reports_modified_by_fkey FOREIGN KEY (modified_by) REFERENCES public.users(id);
+
+
+--
+-- Name: reports reports_project_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.reports
+    ADD CONSTRAINT reports_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id) ON DELETE CASCADE;
+
+
+--
+-- Name: reports reports_report_frequency_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.reports
+    ADD CONSTRAINT reports_report_frequency_id_fkey FOREIGN KEY (report_frequency_id) REFERENCES accelerator.report_frequencies(id);
+
+
+--
+-- Name: reports reports_report_quarter_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.reports
+    ADD CONSTRAINT reports_report_quarter_id_fkey FOREIGN KEY (report_quarter_id) REFERENCES accelerator.report_quarters(id);
+
+
+--
+-- Name: reports reports_status_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.reports
+    ADD CONSTRAINT reports_status_id_fkey FOREIGN KEY (status_id) REFERENCES accelerator.report_statuses(id);
+
+
+--
+-- Name: reports reports_submitted_by_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.reports
+    ADD CONSTRAINT reports_submitted_by_fkey FOREIGN KEY (submitted_by) REFERENCES public.users(id);
+
+
+--
+-- Name: standard_metrics standard_metrics_component_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.standard_metrics
+    ADD CONSTRAINT standard_metrics_component_id_fkey FOREIGN KEY (component_id) REFERENCES accelerator.metric_components(id);
+
+
+--
+-- Name: standard_metrics standard_metrics_type_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.standard_metrics
+    ADD CONSTRAINT standard_metrics_type_id_fkey FOREIGN KEY (type_id) REFERENCES accelerator.metric_types(id);
+
+
+--
 -- Name: submission_documents submission_documents_created_by_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
 --
 
@@ -13292,6 +19262,950 @@ ALTER TABLE ONLY accelerator.submissions
 
 ALTER TABLE ONLY accelerator.submissions
     ADD CONSTRAINT submissions_submission_status_id_fkey FOREIGN KEY (submission_status_id) REFERENCES accelerator.submission_statuses(id);
+
+
+--
+-- Name: system_metrics system_metrics_component_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.system_metrics
+    ADD CONSTRAINT system_metrics_component_id_fkey FOREIGN KEY (component_id) REFERENCES accelerator.metric_components(id);
+
+
+--
+-- Name: system_metrics system_metrics_type_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.system_metrics
+    ADD CONSTRAINT system_metrics_type_id_fkey FOREIGN KEY (type_id) REFERENCES accelerator.metric_types(id);
+
+
+--
+-- Name: user_internal_interests user_internal_interests_created_by_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.user_internal_interests
+    ADD CONSTRAINT user_internal_interests_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.users(id);
+
+
+--
+-- Name: user_internal_interests user_internal_interests_internal_interest_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.user_internal_interests
+    ADD CONSTRAINT user_internal_interests_internal_interest_id_fkey FOREIGN KEY (internal_interest_id) REFERENCES accelerator.internal_interests(id) ON DELETE CASCADE;
+
+
+--
+-- Name: user_internal_interests user_internal_interests_user_id_fkey; Type: FK CONSTRAINT; Schema: accelerator; Owner: -
+--
+
+ALTER TABLE ONLY accelerator.user_internal_interests
+    ADD CONSTRAINT user_internal_interests_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id);
+
+
+--
+-- Name: document_saved_versions document_saved_versions_created_by_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.document_saved_versions
+    ADD CONSTRAINT document_saved_versions_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.users(id) ON DELETE SET DEFAULT;
+
+
+--
+-- Name: document_saved_versions document_saved_versions_document_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.document_saved_versions
+    ADD CONSTRAINT document_saved_versions_document_id_fkey FOREIGN KEY (document_id) REFERENCES docprod.documents(id) ON DELETE CASCADE;
+
+
+--
+-- Name: document_saved_versions document_saved_versions_variable_manifest_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.document_saved_versions
+    ADD CONSTRAINT document_saved_versions_variable_manifest_id_fkey FOREIGN KEY (variable_manifest_id) REFERENCES docprod.variable_manifests(id);
+
+
+--
+-- Name: documents documents_created_by_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.documents
+    ADD CONSTRAINT documents_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.users(id) ON DELETE SET DEFAULT;
+
+
+--
+-- Name: documents documents_document_template_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.documents
+    ADD CONSTRAINT documents_document_template_id_fkey FOREIGN KEY (document_template_id) REFERENCES docprod.document_templates(id);
+
+
+--
+-- Name: documents documents_modified_by_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.documents
+    ADD CONSTRAINT documents_modified_by_fkey FOREIGN KEY (modified_by) REFERENCES public.users(id) ON DELETE SET DEFAULT;
+
+
+--
+-- Name: documents documents_owned_by_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.documents
+    ADD CONSTRAINT documents_owned_by_fkey FOREIGN KEY (owned_by) REFERENCES public.users(id) ON DELETE SET DEFAULT;
+
+
+--
+-- Name: documents documents_project_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.documents
+    ADD CONSTRAINT documents_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id);
+
+
+--
+-- Name: documents documents_status_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.documents
+    ADD CONSTRAINT documents_status_id_fkey FOREIGN KEY (status_id) REFERENCES docprod.document_statuses(id);
+
+
+--
+-- Name: documents documents_variable_manifest_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.documents
+    ADD CONSTRAINT documents_variable_manifest_id_fkey FOREIGN KEY (variable_manifest_id) REFERENCES docprod.variable_manifests(id);
+
+
+--
+-- Name: variable_image_values variable_image_values_file_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_image_values
+    ADD CONSTRAINT variable_image_values_file_id_fkey FOREIGN KEY (file_id) REFERENCES public.files(id);
+
+
+--
+-- Name: variable_image_values variable_image_values_variable_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_image_values
+    ADD CONSTRAINT variable_image_values_variable_id_fkey FOREIGN KEY (variable_id) REFERENCES docprod.variables(id);
+
+
+--
+-- Name: variable_image_values variable_image_values_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_image_values
+    ADD CONSTRAINT variable_image_values_variable_type_id_fkey FOREIGN KEY (variable_type_id) REFERENCES docprod.variable_types(id);
+
+
+--
+-- Name: variable_image_values variable_image_values_variable_value_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_image_values
+    ADD CONSTRAINT variable_image_values_variable_value_id_fkey FOREIGN KEY (variable_value_id) REFERENCES docprod.variable_values(id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_image_values variable_image_values_variable_value_id_variable_id_variab_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_image_values
+    ADD CONSTRAINT variable_image_values_variable_value_id_variable_id_variab_fkey FOREIGN KEY (variable_value_id, variable_id, variable_type_id) REFERENCES docprod.variable_values(id, variable_id, variable_type_id);
+
+
+--
+-- Name: variable_link_values variable_link_values_variable_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_link_values
+    ADD CONSTRAINT variable_link_values_variable_id_fkey FOREIGN KEY (variable_id) REFERENCES docprod.variables(id);
+
+
+--
+-- Name: variable_link_values variable_link_values_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_link_values
+    ADD CONSTRAINT variable_link_values_variable_type_id_fkey FOREIGN KEY (variable_type_id) REFERENCES docprod.variable_types(id);
+
+
+--
+-- Name: variable_link_values variable_link_values_variable_value_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_link_values
+    ADD CONSTRAINT variable_link_values_variable_value_id_fkey FOREIGN KEY (variable_value_id) REFERENCES docprod.variable_values(id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_link_values variable_link_values_variable_value_id_variable_id_variabl_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_link_values
+    ADD CONSTRAINT variable_link_values_variable_value_id_variable_id_variabl_fkey FOREIGN KEY (variable_value_id, variable_id, variable_type_id) REFERENCES docprod.variable_values(id, variable_id, variable_type_id);
+
+
+--
+-- Name: variable_manifest_entries variable_manifest_entries_variable_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_manifest_entries
+    ADD CONSTRAINT variable_manifest_entries_variable_id_fkey FOREIGN KEY (variable_id) REFERENCES docprod.variables(id);
+
+
+--
+-- Name: variable_manifest_entries variable_manifest_entries_variable_manifest_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_manifest_entries
+    ADD CONSTRAINT variable_manifest_entries_variable_manifest_id_fkey FOREIGN KEY (variable_manifest_id) REFERENCES docprod.variable_manifests(id);
+
+
+--
+-- Name: variable_manifests variable_manifests_created_by_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_manifests
+    ADD CONSTRAINT variable_manifests_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.users(id) ON DELETE SET DEFAULT;
+
+
+--
+-- Name: variable_manifests variable_manifests_document_template_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_manifests
+    ADD CONSTRAINT variable_manifests_document_template_id_fkey FOREIGN KEY (document_template_id) REFERENCES docprod.document_templates(id);
+
+
+--
+-- Name: variable_numbers variable_numbers_variable_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_numbers
+    ADD CONSTRAINT variable_numbers_variable_id_fkey FOREIGN KEY (variable_id) REFERENCES docprod.variables(id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_numbers variable_numbers_variable_id_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_numbers
+    ADD CONSTRAINT variable_numbers_variable_id_variable_type_id_fkey FOREIGN KEY (variable_id, variable_type_id) REFERENCES docprod.variables(id, variable_type_id);
+
+
+--
+-- Name: variable_numbers variable_numbers_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_numbers
+    ADD CONSTRAINT variable_numbers_variable_type_id_fkey FOREIGN KEY (variable_type_id) REFERENCES docprod.variable_types(id);
+
+
+--
+-- Name: variable_owners variable_owners_owned_by_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_owners
+    ADD CONSTRAINT variable_owners_owned_by_fkey FOREIGN KEY (owned_by) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_owners variable_owners_project_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_owners
+    ADD CONSTRAINT variable_owners_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_owners variable_owners_variable_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_owners
+    ADD CONSTRAINT variable_owners_variable_id_fkey FOREIGN KEY (variable_id) REFERENCES docprod.variables(id);
+
+
+--
+-- Name: variable_section_default_values variable_section_default_valu_used_variable_id_used_variab_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_default_values
+    ADD CONSTRAINT variable_section_default_valu_used_variable_id_used_variab_fkey FOREIGN KEY (used_variable_id, used_variable_type_id) REFERENCES docprod.variables(id, variable_type_id);
+
+
+--
+-- Name: variable_section_default_values variable_section_default_valu_variable_id_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_default_values
+    ADD CONSTRAINT variable_section_default_valu_variable_id_variable_type_id_fkey FOREIGN KEY (variable_id, variable_type_id) REFERENCES docprod.variables(id, variable_type_id);
+
+
+--
+-- Name: variable_section_default_values variable_section_default_values_display_style_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_default_values
+    ADD CONSTRAINT variable_section_default_values_display_style_id_fkey FOREIGN KEY (display_style_id) REFERENCES docprod.variable_injection_display_styles(id);
+
+
+--
+-- Name: variable_section_default_values variable_section_default_values_usage_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_default_values
+    ADD CONSTRAINT variable_section_default_values_usage_type_id_fkey FOREIGN KEY (usage_type_id) REFERENCES docprod.variable_usage_types(id);
+
+
+--
+-- Name: variable_section_default_values variable_section_default_values_used_variable_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_default_values
+    ADD CONSTRAINT variable_section_default_values_used_variable_id_fkey FOREIGN KEY (used_variable_id) REFERENCES docprod.variables(id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_section_default_values variable_section_default_values_used_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_default_values
+    ADD CONSTRAINT variable_section_default_values_used_variable_type_id_fkey FOREIGN KEY (used_variable_type_id) REFERENCES docprod.variable_types(id);
+
+
+--
+-- Name: variable_section_default_values variable_section_default_values_variable_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_default_values
+    ADD CONSTRAINT variable_section_default_values_variable_id_fkey FOREIGN KEY (variable_id) REFERENCES docprod.variables(id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_section_default_values variable_section_default_values_variable_manifest_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_default_values
+    ADD CONSTRAINT variable_section_default_values_variable_manifest_id_fkey FOREIGN KEY (variable_manifest_id) REFERENCES docprod.variable_manifests(id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_section_default_values variable_section_default_values_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_default_values
+    ADD CONSTRAINT variable_section_default_values_variable_type_id_fkey FOREIGN KEY (variable_type_id) REFERENCES docprod.variable_types(id);
+
+
+--
+-- Name: variable_section_recommendations variable_section_recommendations_recommended_variable_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_recommendations
+    ADD CONSTRAINT variable_section_recommendations_recommended_variable_id_fkey FOREIGN KEY (recommended_variable_id) REFERENCES docprod.variables(id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_section_recommendations variable_section_recommendations_section_variable_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_recommendations
+    ADD CONSTRAINT variable_section_recommendations_section_variable_id_fkey FOREIGN KEY (section_variable_id) REFERENCES docprod.variables(id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_section_recommendations variable_section_recommendations_section_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_recommendations
+    ADD CONSTRAINT variable_section_recommendations_section_variable_type_id_fkey FOREIGN KEY (section_variable_type_id) REFERENCES docprod.variable_types(id);
+
+
+--
+-- Name: variable_section_recommendations variable_section_recommendations_variable_manifest_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_recommendations
+    ADD CONSTRAINT variable_section_recommendations_variable_manifest_id_fkey FOREIGN KEY (variable_manifest_id) REFERENCES docprod.variable_manifests(id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_section_values variable_section_values_display_style_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_values
+    ADD CONSTRAINT variable_section_values_display_style_id_fkey FOREIGN KEY (display_style_id) REFERENCES docprod.variable_injection_display_styles(id);
+
+
+--
+-- Name: variable_section_values variable_section_values_usage_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_values
+    ADD CONSTRAINT variable_section_values_usage_type_id_fkey FOREIGN KEY (usage_type_id) REFERENCES docprod.variable_usage_types(id);
+
+
+--
+-- Name: variable_section_values variable_section_values_used_variable_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_values
+    ADD CONSTRAINT variable_section_values_used_variable_id_fkey FOREIGN KEY (used_variable_id) REFERENCES docprod.variables(id);
+
+
+--
+-- Name: variable_section_values variable_section_values_used_variable_id_used_variable_typ_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_values
+    ADD CONSTRAINT variable_section_values_used_variable_id_used_variable_typ_fkey FOREIGN KEY (used_variable_id, used_variable_type_id) REFERENCES docprod.variables(id, variable_type_id);
+
+
+--
+-- Name: variable_section_values variable_section_values_used_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_values
+    ADD CONSTRAINT variable_section_values_used_variable_type_id_fkey FOREIGN KEY (used_variable_type_id) REFERENCES docprod.variable_types(id);
+
+
+--
+-- Name: variable_section_values variable_section_values_variable_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_values
+    ADD CONSTRAINT variable_section_values_variable_id_fkey FOREIGN KEY (variable_id) REFERENCES docprod.variables(id);
+
+
+--
+-- Name: variable_section_values variable_section_values_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_values
+    ADD CONSTRAINT variable_section_values_variable_type_id_fkey FOREIGN KEY (variable_type_id) REFERENCES docprod.variable_types(id);
+
+
+--
+-- Name: variable_section_values variable_section_values_variable_value_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_values
+    ADD CONSTRAINT variable_section_values_variable_value_id_fkey FOREIGN KEY (variable_value_id) REFERENCES docprod.variable_values(id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_section_values variable_section_values_variable_value_id_variable_id_vari_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_section_values
+    ADD CONSTRAINT variable_section_values_variable_value_id_variable_id_vari_fkey FOREIGN KEY (variable_value_id, variable_id, variable_type_id) REFERENCES docprod.variable_values(id, variable_id, variable_type_id);
+
+
+--
+-- Name: variable_sections variable_sections_parent_variable_id_parent_variable_type__fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_sections
+    ADD CONSTRAINT variable_sections_parent_variable_id_parent_variable_type__fkey FOREIGN KEY (parent_variable_id, parent_variable_type_id) REFERENCES docprod.variables(id, variable_type_id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_sections variable_sections_parent_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_sections
+    ADD CONSTRAINT variable_sections_parent_variable_type_id_fkey FOREIGN KEY (parent_variable_type_id) REFERENCES docprod.variable_types(id);
+
+
+--
+-- Name: variable_sections variable_sections_variable_id_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_sections
+    ADD CONSTRAINT variable_sections_variable_id_variable_type_id_fkey FOREIGN KEY (variable_id, variable_type_id) REFERENCES docprod.variables(id, variable_type_id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_sections variable_sections_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_sections
+    ADD CONSTRAINT variable_sections_variable_type_id_fkey FOREIGN KEY (variable_type_id) REFERENCES docprod.variable_types(id);
+
+
+--
+-- Name: variable_select_option_values variable_select_option_values_option_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_select_option_values
+    ADD CONSTRAINT variable_select_option_values_option_id_fkey FOREIGN KEY (option_id) REFERENCES docprod.variable_select_options(id);
+
+
+--
+-- Name: variable_select_option_values variable_select_option_values_option_id_variable_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_select_option_values
+    ADD CONSTRAINT variable_select_option_values_option_id_variable_id_fkey FOREIGN KEY (option_id, variable_id) REFERENCES docprod.variable_select_options(id, variable_id);
+
+
+--
+-- Name: variable_select_option_values variable_select_option_values_variable_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_select_option_values
+    ADD CONSTRAINT variable_select_option_values_variable_id_fkey FOREIGN KEY (variable_id) REFERENCES docprod.variable_selects(variable_id);
+
+
+--
+-- Name: variable_select_option_values variable_select_option_values_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_select_option_values
+    ADD CONSTRAINT variable_select_option_values_variable_type_id_fkey FOREIGN KEY (variable_type_id) REFERENCES docprod.variable_types(id);
+
+
+--
+-- Name: variable_select_option_values variable_select_option_values_variable_value_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_select_option_values
+    ADD CONSTRAINT variable_select_option_values_variable_value_id_fkey FOREIGN KEY (variable_value_id) REFERENCES docprod.variable_values(id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_select_option_values variable_select_option_values_variable_value_id_variable_i_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_select_option_values
+    ADD CONSTRAINT variable_select_option_values_variable_value_id_variable_i_fkey FOREIGN KEY (variable_value_id, variable_id, variable_type_id) REFERENCES docprod.variable_values(id, variable_id, variable_type_id);
+
+
+--
+-- Name: variable_select_options variable_select_options_variable_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_select_options
+    ADD CONSTRAINT variable_select_options_variable_id_fkey FOREIGN KEY (variable_id) REFERENCES docprod.variables(id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_select_options variable_select_options_variable_id_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_select_options
+    ADD CONSTRAINT variable_select_options_variable_id_variable_type_id_fkey FOREIGN KEY (variable_id, variable_type_id) REFERENCES docprod.variable_selects(variable_id, variable_type_id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_select_options variable_select_options_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_select_options
+    ADD CONSTRAINT variable_select_options_variable_type_id_fkey FOREIGN KEY (variable_type_id) REFERENCES docprod.variable_types(id);
+
+
+--
+-- Name: variable_selects variable_selects_variable_id_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_selects
+    ADD CONSTRAINT variable_selects_variable_id_variable_type_id_fkey FOREIGN KEY (variable_id, variable_type_id) REFERENCES docprod.variables(id, variable_type_id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_selects variable_selects_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_selects
+    ADD CONSTRAINT variable_selects_variable_type_id_fkey FOREIGN KEY (variable_type_id) REFERENCES docprod.variable_types(id);
+
+
+--
+-- Name: variable_table_columns variable_table_columns_table_variable_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_table_columns
+    ADD CONSTRAINT variable_table_columns_table_variable_id_fkey FOREIGN KEY (table_variable_id) REFERENCES docprod.variables(id);
+
+
+--
+-- Name: variable_table_columns variable_table_columns_table_variable_id_table_variable_ty_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_table_columns
+    ADD CONSTRAINT variable_table_columns_table_variable_id_table_variable_ty_fkey FOREIGN KEY (table_variable_id, table_variable_type_id) REFERENCES docprod.variable_tables(variable_id, variable_type_id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_table_columns variable_table_columns_table_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_table_columns
+    ADD CONSTRAINT variable_table_columns_table_variable_type_id_fkey FOREIGN KEY (table_variable_type_id) REFERENCES docprod.variable_types(id);
+
+
+--
+-- Name: variable_table_columns variable_table_columns_variable_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_table_columns
+    ADD CONSTRAINT variable_table_columns_variable_id_fkey FOREIGN KEY (variable_id) REFERENCES docprod.variables(id);
+
+
+--
+-- Name: variable_tables variable_tables_table_style_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_tables
+    ADD CONSTRAINT variable_tables_table_style_id_fkey FOREIGN KEY (table_style_id) REFERENCES docprod.variable_table_styles(id);
+
+
+--
+-- Name: variable_tables variable_tables_variable_id_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_tables
+    ADD CONSTRAINT variable_tables_variable_id_variable_type_id_fkey FOREIGN KEY (variable_id, variable_type_id) REFERENCES docprod.variables(id, variable_type_id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_tables variable_tables_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_tables
+    ADD CONSTRAINT variable_tables_variable_type_id_fkey FOREIGN KEY (variable_type_id) REFERENCES docprod.variable_types(id);
+
+
+--
+-- Name: variable_texts variable_texts_variable_id_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_texts
+    ADD CONSTRAINT variable_texts_variable_id_variable_type_id_fkey FOREIGN KEY (variable_id, variable_type_id) REFERENCES docprod.variables(id, variable_type_id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_texts variable_texts_variable_text_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_texts
+    ADD CONSTRAINT variable_texts_variable_text_type_id_fkey FOREIGN KEY (variable_text_type_id) REFERENCES docprod.variable_text_types(id);
+
+
+--
+-- Name: variable_texts variable_texts_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_texts
+    ADD CONSTRAINT variable_texts_variable_type_id_fkey FOREIGN KEY (variable_type_id) REFERENCES docprod.variable_types(id);
+
+
+--
+-- Name: variable_value_table_rows variable_value_table_rows_table_row_value_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_value_table_rows
+    ADD CONSTRAINT variable_value_table_rows_table_row_value_id_fkey FOREIGN KEY (table_row_value_id) REFERENCES docprod.variable_values(id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_value_table_rows variable_value_table_rows_variable_value_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_value_table_rows
+    ADD CONSTRAINT variable_value_table_rows_variable_value_id_fkey FOREIGN KEY (variable_value_id) REFERENCES docprod.variable_values(id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_values variable_values_created_by_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_values
+    ADD CONSTRAINT variable_values_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.users(id) ON DELETE SET DEFAULT;
+
+
+--
+-- Name: variable_values variable_values_project_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_values
+    ADD CONSTRAINT variable_values_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_values variable_values_variable_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_values
+    ADD CONSTRAINT variable_values_variable_id_fkey FOREIGN KEY (variable_id) REFERENCES docprod.variables(id);
+
+
+--
+-- Name: variable_values variable_values_variable_id_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_values
+    ADD CONSTRAINT variable_values_variable_id_variable_type_id_fkey FOREIGN KEY (variable_id, variable_type_id) REFERENCES docprod.variables(id, variable_type_id);
+
+
+--
+-- Name: variable_values variable_values_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_values
+    ADD CONSTRAINT variable_values_variable_type_id_fkey FOREIGN KEY (variable_type_id) REFERENCES docprod.variable_types(id);
+
+
+--
+-- Name: variable_workflow_history variable_workflow_history_created_by_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_workflow_history
+    ADD CONSTRAINT variable_workflow_history_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.users(id);
+
+
+--
+-- Name: variable_workflow_history variable_workflow_history_max_variable_value_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_workflow_history
+    ADD CONSTRAINT variable_workflow_history_max_variable_value_id_fkey FOREIGN KEY (max_variable_value_id) REFERENCES docprod.variable_values(id);
+
+
+--
+-- Name: variable_workflow_history variable_workflow_history_project_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_workflow_history
+    ADD CONSTRAINT variable_workflow_history_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id) ON DELETE CASCADE;
+
+
+--
+-- Name: variable_workflow_history variable_workflow_history_variable_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_workflow_history
+    ADD CONSTRAINT variable_workflow_history_variable_id_fkey FOREIGN KEY (variable_id) REFERENCES docprod.variables(id);
+
+
+--
+-- Name: variable_workflow_history variable_workflow_history_variable_workflow_status_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variable_workflow_history
+    ADD CONSTRAINT variable_workflow_history_variable_workflow_status_id_fkey FOREIGN KEY (variable_workflow_status_id) REFERENCES docprod.variable_workflow_statuses(id);
+
+
+--
+-- Name: variables variables_dependency_condition_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variables
+    ADD CONSTRAINT variables_dependency_condition_id_fkey FOREIGN KEY (dependency_condition_id) REFERENCES docprod.dependency_conditions(id);
+
+
+--
+-- Name: variables variables_replaces_variable_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variables
+    ADD CONSTRAINT variables_replaces_variable_id_fkey FOREIGN KEY (replaces_variable_id) REFERENCES docprod.variables(id) ON DELETE SET NULL;
+
+
+--
+-- Name: variables variables_variable_type_id_fkey; Type: FK CONSTRAINT; Schema: docprod; Owner: -
+--
+
+ALTER TABLE ONLY docprod.variables
+    ADD CONSTRAINT variables_variable_type_id_fkey FOREIGN KEY (variable_type_id) REFERENCES docprod.variable_types(id);
+
+
+--
+-- Name: funding_entities funding_entities_created_by_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.funding_entities
+    ADD CONSTRAINT funding_entities_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.users(id);
+
+
+--
+-- Name: funding_entities funding_entities_modified_by_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.funding_entities
+    ADD CONSTRAINT funding_entities_modified_by_fkey FOREIGN KEY (modified_by) REFERENCES public.users(id);
+
+
+--
+-- Name: funding_entity_projects funding_entity_projects_funding_entity_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.funding_entity_projects
+    ADD CONSTRAINT funding_entity_projects_funding_entity_id_fkey FOREIGN KEY (funding_entity_id) REFERENCES funder.funding_entities(id) ON DELETE CASCADE;
+
+
+--
+-- Name: funding_entity_projects funding_entity_projects_project_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.funding_entity_projects
+    ADD CONSTRAINT funding_entity_projects_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id) ON DELETE CASCADE;
+
+
+--
+-- Name: funding_entity_users funding_entity_users_funding_entity_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.funding_entity_users
+    ADD CONSTRAINT funding_entity_users_funding_entity_id_fkey FOREIGN KEY (funding_entity_id) REFERENCES funder.funding_entities(id) ON DELETE CASCADE;
+
+
+--
+-- Name: funding_entity_users funding_entity_users_user_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.funding_entity_users
+    ADD CONSTRAINT funding_entity_users_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: published_report_achievements published_report_achievements_report_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_report_achievements
+    ADD CONSTRAINT published_report_achievements_report_id_fkey FOREIGN KEY (report_id) REFERENCES funder.published_reports(report_id) ON DELETE CASCADE;
+
+
+--
+-- Name: published_report_challenges published_report_challenges_report_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_report_challenges
+    ADD CONSTRAINT published_report_challenges_report_id_fkey FOREIGN KEY (report_id) REFERENCES funder.published_reports(report_id) ON DELETE CASCADE;
+
+
+--
+-- Name: published_report_project_metrics published_report_project_metrics_project_metric_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_report_project_metrics
+    ADD CONSTRAINT published_report_project_metrics_project_metric_id_fkey FOREIGN KEY (project_metric_id) REFERENCES accelerator.project_metrics(id);
+
+
+--
+-- Name: published_report_project_metrics published_report_project_metrics_report_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_report_project_metrics
+    ADD CONSTRAINT published_report_project_metrics_report_id_fkey FOREIGN KEY (report_id) REFERENCES funder.published_reports(report_id) ON DELETE CASCADE;
+
+
+--
+-- Name: published_report_project_metrics published_report_project_metrics_status_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_report_project_metrics
+    ADD CONSTRAINT published_report_project_metrics_status_id_fkey FOREIGN KEY (status_id) REFERENCES accelerator.report_metric_statuses(id);
+
+
+--
+-- Name: published_report_standard_metrics published_report_standard_metrics_report_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_report_standard_metrics
+    ADD CONSTRAINT published_report_standard_metrics_report_id_fkey FOREIGN KEY (report_id) REFERENCES funder.published_reports(report_id) ON DELETE CASCADE;
+
+
+--
+-- Name: published_report_standard_metrics published_report_standard_metrics_standard_metric_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_report_standard_metrics
+    ADD CONSTRAINT published_report_standard_metrics_standard_metric_id_fkey FOREIGN KEY (standard_metric_id) REFERENCES accelerator.standard_metrics(id);
+
+
+--
+-- Name: published_report_standard_metrics published_report_standard_metrics_status_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_report_standard_metrics
+    ADD CONSTRAINT published_report_standard_metrics_status_id_fkey FOREIGN KEY (status_id) REFERENCES accelerator.report_metric_statuses(id);
+
+
+--
+-- Name: published_report_system_metrics published_report_system_metrics_report_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_report_system_metrics
+    ADD CONSTRAINT published_report_system_metrics_report_id_fkey FOREIGN KEY (report_id) REFERENCES funder.published_reports(report_id) ON DELETE CASCADE;
+
+
+--
+-- Name: published_report_system_metrics published_report_system_metrics_status_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_report_system_metrics
+    ADD CONSTRAINT published_report_system_metrics_status_id_fkey FOREIGN KEY (status_id) REFERENCES accelerator.report_metric_statuses(id);
+
+
+--
+-- Name: published_report_system_metrics published_report_system_metrics_system_metric_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_report_system_metrics
+    ADD CONSTRAINT published_report_system_metrics_system_metric_id_fkey FOREIGN KEY (system_metric_id) REFERENCES accelerator.system_metrics(id);
+
+
+--
+-- Name: published_reports published_reports_project_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_reports
+    ADD CONSTRAINT published_reports_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id) ON DELETE CASCADE;
+
+
+--
+-- Name: published_reports published_reports_published_by_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_reports
+    ADD CONSTRAINT published_reports_published_by_fkey FOREIGN KEY (published_by) REFERENCES public.users(id);
+
+
+--
+-- Name: published_reports published_reports_report_frequency_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_reports
+    ADD CONSTRAINT published_reports_report_frequency_id_fkey FOREIGN KEY (report_frequency_id) REFERENCES accelerator.report_frequencies(id);
+
+
+--
+-- Name: published_reports published_reports_report_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_reports
+    ADD CONSTRAINT published_reports_report_id_fkey FOREIGN KEY (report_id) REFERENCES accelerator.reports(id) ON DELETE CASCADE;
+
+
+--
+-- Name: published_reports published_reports_report_quarter_id_fkey; Type: FK CONSTRAINT; Schema: funder; Owner: -
+--
+
+ALTER TABLE ONLY funder.published_reports
+    ADD CONSTRAINT published_reports_report_quarter_id_fkey FOREIGN KEY (report_quarter_id) REFERENCES accelerator.report_quarters(id);
 
 
 --
@@ -13655,6 +20569,30 @@ ALTER TABLE ONLY public.automations
 
 
 --
+-- Name: chat_memory_conversations chat_memory_conversations_created_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_memory_conversations
+    ADD CONSTRAINT chat_memory_conversations_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.users(id);
+
+
+--
+-- Name: chat_memory_messages chat_memory_messages_conversation_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_memory_messages
+    ADD CONSTRAINT chat_memory_messages_conversation_id_fkey FOREIGN KEY (conversation_id) REFERENCES public.chat_memory_conversations(id) ON DELETE CASCADE;
+
+
+--
+-- Name: chat_memory_messages chat_memory_messages_message_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.chat_memory_messages
+    ADD CONSTRAINT chat_memory_messages_message_type_id_fkey FOREIGN KEY (message_type_id) REFERENCES public.chat_memory_message_types(id);
+
+
+--
 -- Name: countries countries_region_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -13787,7 +20725,7 @@ ALTER TABLE ONLY public.gbif_names
 --
 
 ALTER TABLE ONLY public.identifier_sequences
-    ADD CONSTRAINT identifier_sequences_organization_id_fkey FOREIGN KEY (organization_id) REFERENCES public.organizations(id);
+    ADD CONSTRAINT identifier_sequences_organization_id_fkey FOREIGN KEY (organization_id) REFERENCES public.organizations(id) ON DELETE CASCADE;
 
 
 --
@@ -14055,82 +20993,82 @@ ALTER TABLE ONLY public.projects
 
 
 --
--- Name: report_files report_files_file_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: seed_fund_report_files report_files_file_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.report_files
+ALTER TABLE ONLY public.seed_fund_report_files
     ADD CONSTRAINT report_files_file_id_fkey FOREIGN KEY (file_id) REFERENCES public.files(id) ON DELETE CASCADE;
 
 
 --
--- Name: report_files report_files_report_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: seed_fund_report_files report_files_report_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.report_files
-    ADD CONSTRAINT report_files_report_id_fkey FOREIGN KEY (report_id) REFERENCES public.reports(id);
+ALTER TABLE ONLY public.seed_fund_report_files
+    ADD CONSTRAINT report_files_report_id_fkey FOREIGN KEY (report_id) REFERENCES public.seed_fund_reports(id);
 
 
 --
--- Name: report_photos report_photos_photo_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: seed_fund_report_photos report_photos_photo_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.report_photos
+ALTER TABLE ONLY public.seed_fund_report_photos
     ADD CONSTRAINT report_photos_photo_id_fkey FOREIGN KEY (file_id) REFERENCES public.files(id) ON DELETE CASCADE;
 
 
 --
--- Name: report_photos report_photos_report_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: seed_fund_report_photos report_photos_report_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.report_photos
-    ADD CONSTRAINT report_photos_report_id_fkey FOREIGN KEY (report_id) REFERENCES public.reports(id);
+ALTER TABLE ONLY public.seed_fund_report_photos
+    ADD CONSTRAINT report_photos_report_id_fkey FOREIGN KEY (report_id) REFERENCES public.seed_fund_reports(id);
 
 
 --
--- Name: reports reports_locked_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: seed_fund_reports reports_locked_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.reports
+ALTER TABLE ONLY public.seed_fund_reports
     ADD CONSTRAINT reports_locked_by_fkey FOREIGN KEY (locked_by) REFERENCES public.users(id);
 
 
 --
--- Name: reports reports_modified_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: seed_fund_reports reports_modified_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.reports
+ALTER TABLE ONLY public.seed_fund_reports
     ADD CONSTRAINT reports_modified_by_fkey FOREIGN KEY (modified_by) REFERENCES public.users(id);
 
 
 --
--- Name: reports reports_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: seed_fund_reports reports_organization_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.reports
+ALTER TABLE ONLY public.seed_fund_reports
     ADD CONSTRAINT reports_organization_id_fkey FOREIGN KEY (organization_id) REFERENCES public.organizations(id);
 
 
 --
--- Name: reports reports_project_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: seed_fund_reports reports_project_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.reports
+ALTER TABLE ONLY public.seed_fund_reports
     ADD CONSTRAINT reports_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id) ON DELETE SET NULL;
 
 
 --
--- Name: reports reports_status_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: seed_fund_reports reports_status_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.reports
-    ADD CONSTRAINT reports_status_id_fkey FOREIGN KEY (status_id) REFERENCES public.report_statuses(id);
+ALTER TABLE ONLY public.seed_fund_reports
+    ADD CONSTRAINT reports_status_id_fkey FOREIGN KEY (status_id) REFERENCES public.seed_fund_report_statuses(id);
 
 
 --
--- Name: reports reports_submitted_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: seed_fund_reports reports_submitted_by_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.reports
+ALTER TABLE ONLY public.seed_fund_reports
     ADD CONSTRAINT reports_submitted_by_fkey FOREIGN KEY (submitted_by) REFERENCES public.users(id);
 
 
@@ -14903,6 +21841,70 @@ ALTER TABLE ONLY tracking.draft_planting_sites
 
 
 --
+-- Name: monitoring_plot_histories monitoring_plot_histories_created_by_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.monitoring_plot_histories
+    ADD CONSTRAINT monitoring_plot_histories_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.users(id);
+
+
+--
+-- Name: monitoring_plot_histories monitoring_plot_histories_monitoring_plot_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.monitoring_plot_histories
+    ADD CONSTRAINT monitoring_plot_histories_monitoring_plot_id_fkey FOREIGN KEY (monitoring_plot_id) REFERENCES tracking.monitoring_plots(id) ON DELETE CASCADE;
+
+
+--
+-- Name: monitoring_plot_histories monitoring_plot_histories_planting_site_history_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.monitoring_plot_histories
+    ADD CONSTRAINT monitoring_plot_histories_planting_site_history_id_fkey FOREIGN KEY (planting_site_history_id) REFERENCES tracking.planting_site_histories(id) ON DELETE CASCADE DEFERRABLE;
+
+
+--
+-- Name: monitoring_plot_histories monitoring_plot_histories_planting_site_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.monitoring_plot_histories
+    ADD CONSTRAINT monitoring_plot_histories_planting_site_id_fkey FOREIGN KEY (planting_site_id) REFERENCES tracking.planting_sites(id) ON DELETE CASCADE;
+
+
+--
+-- Name: monitoring_plot_histories monitoring_plot_histories_planting_subzone_history_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.monitoring_plot_histories
+    ADD CONSTRAINT monitoring_plot_histories_planting_subzone_history_id_fkey FOREIGN KEY (planting_subzone_history_id) REFERENCES tracking.planting_subzone_histories(id) ON DELETE CASCADE DEFERRABLE;
+
+
+--
+-- Name: monitoring_plot_histories monitoring_plot_histories_planting_subzone_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.monitoring_plot_histories
+    ADD CONSTRAINT monitoring_plot_histories_planting_subzone_id_fkey FOREIGN KEY (planting_subzone_id) REFERENCES tracking.planting_subzones(id) ON DELETE SET NULL;
+
+
+--
+-- Name: monitoring_plot_overlaps monitoring_plot_overlaps_monitoring_plot_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.monitoring_plot_overlaps
+    ADD CONSTRAINT monitoring_plot_overlaps_monitoring_plot_id_fkey FOREIGN KEY (monitoring_plot_id) REFERENCES tracking.monitoring_plots(id) ON DELETE CASCADE;
+
+
+--
+-- Name: monitoring_plot_overlaps monitoring_plot_overlaps_overlaps_plot_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.monitoring_plot_overlaps
+    ADD CONSTRAINT monitoring_plot_overlaps_overlaps_plot_id_fkey FOREIGN KEY (overlaps_plot_id) REFERENCES tracking.monitoring_plots(id) ON DELETE CASCADE;
+
+
+--
 -- Name: monitoring_plots monitoring_plots_created_by_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
 --
 
@@ -14919,11 +21921,171 @@ ALTER TABLE ONLY tracking.monitoring_plots
 
 
 --
+-- Name: monitoring_plots monitoring_plots_organization_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.monitoring_plots
+    ADD CONSTRAINT monitoring_plots_organization_id_fkey FOREIGN KEY (organization_id) REFERENCES public.organizations(id) ON DELETE CASCADE;
+
+
+--
+-- Name: monitoring_plots monitoring_plots_planting_site_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.monitoring_plots
+    ADD CONSTRAINT monitoring_plots_planting_site_id_fkey FOREIGN KEY (planting_site_id) REFERENCES tracking.planting_sites(id) ON DELETE CASCADE;
+
+
+--
 -- Name: monitoring_plots monitoring_plots_planting_subzone_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
 --
 
 ALTER TABLE ONLY tracking.monitoring_plots
-    ADD CONSTRAINT monitoring_plots_planting_subzone_id_fkey FOREIGN KEY (planting_subzone_id) REFERENCES tracking.planting_subzones(id) ON DELETE CASCADE;
+    ADD CONSTRAINT monitoring_plots_planting_subzone_id_fkey FOREIGN KEY (planting_subzone_id) REFERENCES tracking.planting_subzones(id) ON DELETE SET NULL;
+
+
+--
+-- Name: observation_biomass_details observation_biomass_details_forest_type_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_details
+    ADD CONSTRAINT observation_biomass_details_forest_type_id_fkey FOREIGN KEY (forest_type_id) REFERENCES tracking.biomass_forest_types(id);
+
+
+--
+-- Name: observation_biomass_details observation_biomass_details_monitoring_plot_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_details
+    ADD CONSTRAINT observation_biomass_details_monitoring_plot_id_fkey FOREIGN KEY (monitoring_plot_id) REFERENCES tracking.monitoring_plots(id) ON DELETE CASCADE;
+
+
+--
+-- Name: observation_biomass_details observation_biomass_details_observation_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_details
+    ADD CONSTRAINT observation_biomass_details_observation_id_fkey FOREIGN KEY (observation_id) REFERENCES tracking.observations(id) ON DELETE CASCADE;
+
+
+--
+-- Name: observation_biomass_details observation_biomass_details_observation_id_monitoring_plot_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_details
+    ADD CONSTRAINT observation_biomass_details_observation_id_monitoring_plot_fkey FOREIGN KEY (observation_id, monitoring_plot_id) REFERENCES tracking.observation_plots(observation_id, monitoring_plot_id);
+
+
+--
+-- Name: observation_biomass_details observation_biomass_details_tide_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_details
+    ADD CONSTRAINT observation_biomass_details_tide_id_fkey FOREIGN KEY (tide_id) REFERENCES tracking.mangrove_tides(id);
+
+
+--
+-- Name: observation_biomass_quadrat_details observation_biomass_quadrat_d_observation_id_monitoring_pl_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_quadrat_details
+    ADD CONSTRAINT observation_biomass_quadrat_d_observation_id_monitoring_pl_fkey FOREIGN KEY (observation_id, monitoring_plot_id) REFERENCES tracking.observation_biomass_details(observation_id, monitoring_plot_id) ON DELETE CASCADE;
+
+
+--
+-- Name: observation_biomass_quadrat_details observation_biomass_quadrat_details_monitoring_plot_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_quadrat_details
+    ADD CONSTRAINT observation_biomass_quadrat_details_monitoring_plot_id_fkey FOREIGN KEY (monitoring_plot_id) REFERENCES tracking.monitoring_plots(id) ON DELETE CASCADE;
+
+
+--
+-- Name: observation_biomass_quadrat_details observation_biomass_quadrat_details_observation_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_quadrat_details
+    ADD CONSTRAINT observation_biomass_quadrat_details_observation_id_fkey FOREIGN KEY (observation_id) REFERENCES tracking.observations(id) ON DELETE CASCADE;
+
+
+--
+-- Name: observation_biomass_quadrat_details observation_biomass_quadrat_details_position_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_quadrat_details
+    ADD CONSTRAINT observation_biomass_quadrat_details_position_id_fkey FOREIGN KEY (position_id) REFERENCES tracking.observation_plot_positions(id);
+
+
+--
+-- Name: observation_biomass_quadrat_species observation_biomass_quadrat_s_observation_id_monitoring_pl_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_quadrat_species
+    ADD CONSTRAINT observation_biomass_quadrat_s_observation_id_monitoring_pl_fkey FOREIGN KEY (observation_id, monitoring_plot_id, biomass_species_id) REFERENCES tracking.observation_biomass_species(observation_id, monitoring_plot_id, id) ON DELETE CASCADE;
+
+
+--
+-- Name: observation_biomass_quadrat_species observation_biomass_quadrat_species_biomass_species_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_quadrat_species
+    ADD CONSTRAINT observation_biomass_quadrat_species_biomass_species_id_fkey FOREIGN KEY (biomass_species_id) REFERENCES tracking.observation_biomass_species(id) ON DELETE CASCADE;
+
+
+--
+-- Name: observation_biomass_quadrat_species observation_biomass_quadrat_species_monitoring_plot_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_quadrat_species
+    ADD CONSTRAINT observation_biomass_quadrat_species_monitoring_plot_id_fkey FOREIGN KEY (monitoring_plot_id) REFERENCES tracking.monitoring_plots(id) ON DELETE CASCADE;
+
+
+--
+-- Name: observation_biomass_quadrat_species observation_biomass_quadrat_species_observation_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_quadrat_species
+    ADD CONSTRAINT observation_biomass_quadrat_species_observation_id_fkey FOREIGN KEY (observation_id) REFERENCES tracking.observations(id) ON DELETE CASCADE;
+
+
+--
+-- Name: observation_biomass_quadrat_species observation_biomass_quadrat_species_position_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_quadrat_species
+    ADD CONSTRAINT observation_biomass_quadrat_species_position_id_fkey FOREIGN KEY (position_id) REFERENCES tracking.observation_plot_positions(id);
+
+
+--
+-- Name: observation_biomass_species observation_biomass_species_monitoring_plot_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_species
+    ADD CONSTRAINT observation_biomass_species_monitoring_plot_id_fkey FOREIGN KEY (monitoring_plot_id) REFERENCES tracking.monitoring_plots(id) ON DELETE CASCADE;
+
+
+--
+-- Name: observation_biomass_species observation_biomass_species_observation_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_species
+    ADD CONSTRAINT observation_biomass_species_observation_id_fkey FOREIGN KEY (observation_id) REFERENCES tracking.observations(id) ON DELETE CASCADE;
+
+
+--
+-- Name: observation_biomass_species observation_biomass_species_observation_id_monitoring_plot_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_species
+    ADD CONSTRAINT observation_biomass_species_observation_id_monitoring_plot_fkey FOREIGN KEY (observation_id, monitoring_plot_id) REFERENCES tracking.observation_biomass_details(observation_id, monitoring_plot_id) ON DELETE CASCADE;
+
+
+--
+-- Name: observation_biomass_species observation_biomass_species_species_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_biomass_species
+    ADD CONSTRAINT observation_biomass_species_species_id_fkey FOREIGN KEY (species_id) REFERENCES public.species(id);
 
 
 --
@@ -14964,6 +22126,14 @@ ALTER TABLE ONLY tracking.observation_photos
 
 ALTER TABLE ONLY tracking.observation_photos
     ADD CONSTRAINT observation_photos_position_id_fkey FOREIGN KEY (position_id) REFERENCES tracking.observation_plot_positions(id);
+
+
+--
+-- Name: observation_photos observation_photos_type_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_photos
+    ADD CONSTRAINT observation_photos_type_id_fkey FOREIGN KEY (type_id) REFERENCES tracking.observation_photo_types(id);
 
 
 --
@@ -15023,6 +22193,14 @@ ALTER TABLE ONLY tracking.observation_plots
 
 
 --
+-- Name: observation_plots observation_plots_monitoring_plot_history_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_plots
+    ADD CONSTRAINT observation_plots_monitoring_plot_history_id_fkey FOREIGN KEY (monitoring_plot_history_id) REFERENCES tracking.monitoring_plot_histories(id) ON DELETE CASCADE;
+
+
+--
 -- Name: observation_plots observation_plots_monitoring_plot_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
 --
 
@@ -15036,6 +22214,46 @@ ALTER TABLE ONLY tracking.observation_plots
 
 ALTER TABLE ONLY tracking.observation_plots
     ADD CONSTRAINT observation_plots_observation_id_fkey FOREIGN KEY (observation_id) REFERENCES tracking.observations(id) ON DELETE CASCADE;
+
+
+--
+-- Name: observation_plots observation_plots_status_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_plots
+    ADD CONSTRAINT observation_plots_status_id_fkey FOREIGN KEY (status_id) REFERENCES tracking.observation_plot_statuses(id);
+
+
+--
+-- Name: observation_requested_subzones observation_requested_subzones_observation_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_requested_subzones
+    ADD CONSTRAINT observation_requested_subzones_observation_id_fkey FOREIGN KEY (observation_id) REFERENCES tracking.observations(id) ON DELETE CASCADE;
+
+
+--
+-- Name: observation_requested_subzones observation_requested_subzones_planting_subzone_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observation_requested_subzones
+    ADD CONSTRAINT observation_requested_subzones_planting_subzone_id_fkey FOREIGN KEY (planting_subzone_id) REFERENCES tracking.planting_subzones(id) ON DELETE CASCADE;
+
+
+--
+-- Name: observations observations_observation_type_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observations
+    ADD CONSTRAINT observations_observation_type_id_fkey FOREIGN KEY (observation_type_id) REFERENCES tracking.observation_types(id);
+
+
+--
+-- Name: observations observations_planting_site_history_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observations
+    ADD CONSTRAINT observations_planting_site_history_id_fkey FOREIGN KEY (planting_site_history_id) REFERENCES tracking.planting_site_histories(id) ON DELETE CASCADE;
 
 
 --
@@ -15151,6 +22369,38 @@ ALTER TABLE ONLY tracking.observed_site_species_totals
 
 
 --
+-- Name: observed_subzone_species_totals observed_subzone_species_totals_certainty_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observed_subzone_species_totals
+    ADD CONSTRAINT observed_subzone_species_totals_certainty_id_fkey FOREIGN KEY (certainty_id) REFERENCES tracking.recorded_species_certainties(id);
+
+
+--
+-- Name: observed_subzone_species_totals observed_subzone_species_totals_observation_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observed_subzone_species_totals
+    ADD CONSTRAINT observed_subzone_species_totals_observation_id_fkey FOREIGN KEY (observation_id) REFERENCES tracking.observations(id) ON DELETE CASCADE;
+
+
+--
+-- Name: observed_subzone_species_totals observed_subzone_species_totals_planting_subzone_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observed_subzone_species_totals
+    ADD CONSTRAINT observed_subzone_species_totals_planting_subzone_id_fkey FOREIGN KEY (planting_subzone_id) REFERENCES tracking.planting_subzones(id) ON DELETE CASCADE;
+
+
+--
+-- Name: observed_subzone_species_totals observed_subzone_species_totals_species_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.observed_subzone_species_totals
+    ADD CONSTRAINT observed_subzone_species_totals_species_id_fkey FOREIGN KEY (species_id) REFERENCES public.species(id);
+
+
+--
 -- Name: observed_zone_species_totals observed_zone_species_totals_certainty_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
 --
 
@@ -15239,6 +22489,14 @@ ALTER TABLE ONLY tracking.planting_site_populations
 
 
 --
+-- Name: planting_sites planting_sites_country_code_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.planting_sites
+    ADD CONSTRAINT planting_sites_country_code_fkey FOREIGN KEY (country_code) REFERENCES public.countries(code) ON DELETE SET NULL;
+
+
+--
 -- Name: planting_sites planting_sites_created_by_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
 --
 
@@ -15291,7 +22549,7 @@ ALTER TABLE ONLY tracking.planting_subzone_histories
 --
 
 ALTER TABLE ONLY tracking.planting_subzone_histories
-    ADD CONSTRAINT planting_subzone_histories_planting_zone_history_id_fkey FOREIGN KEY (planting_zone_history_id) REFERENCES tracking.planting_zone_histories(id) ON DELETE CASCADE;
+    ADD CONSTRAINT planting_subzone_histories_planting_zone_history_id_fkey FOREIGN KEY (planting_zone_history_id) REFERENCES tracking.planting_zone_histories(id) ON DELETE CASCADE DEFERRABLE;
 
 
 --
@@ -15315,7 +22573,7 @@ ALTER TABLE ONLY tracking.planting_subzone_populations
 --
 
 ALTER TABLE ONLY tracking.planting_zone_histories
-    ADD CONSTRAINT planting_zone_histories_planting_site_history_id_fkey FOREIGN KEY (planting_site_history_id) REFERENCES tracking.planting_site_histories(id) ON DELETE CASCADE;
+    ADD CONSTRAINT planting_zone_histories_planting_site_history_id_fkey FOREIGN KEY (planting_site_history_id) REFERENCES tracking.planting_site_histories(id) ON DELETE CASCADE DEFERRABLE;
 
 
 --
@@ -15340,6 +22598,14 @@ ALTER TABLE ONLY tracking.planting_zone_populations
 
 ALTER TABLE ONLY tracking.planting_zone_populations
     ADD CONSTRAINT planting_zone_populations_species_id_fkey FOREIGN KEY (species_id) REFERENCES public.species(id) ON DELETE CASCADE;
+
+
+--
+-- Name: planting_zones planting_zones_boundary_modified_by_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.planting_zones
+    ADD CONSTRAINT planting_zones_boundary_modified_by_fkey FOREIGN KEY (boundary_modified_by) REFERENCES public.users(id);
 
 
 --
@@ -15516,6 +22782,46 @@ ALTER TABLE ONLY tracking.recorded_plants
 
 ALTER TABLE ONLY tracking.recorded_plants
     ADD CONSTRAINT recorded_plants_status_id_fkey FOREIGN KEY (status_id) REFERENCES tracking.recorded_plant_statuses(id);
+
+
+--
+-- Name: recorded_trees recorded_trees_biomass_species_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.recorded_trees
+    ADD CONSTRAINT recorded_trees_biomass_species_id_fkey FOREIGN KEY (biomass_species_id) REFERENCES tracking.observation_biomass_species(id) ON DELETE CASCADE;
+
+
+--
+-- Name: recorded_trees recorded_trees_monitoring_plot_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.recorded_trees
+    ADD CONSTRAINT recorded_trees_monitoring_plot_id_fkey FOREIGN KEY (monitoring_plot_id) REFERENCES tracking.monitoring_plots(id) ON DELETE CASCADE;
+
+
+--
+-- Name: recorded_trees recorded_trees_observation_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.recorded_trees
+    ADD CONSTRAINT recorded_trees_observation_id_fkey FOREIGN KEY (observation_id) REFERENCES tracking.observations(id) ON DELETE CASCADE;
+
+
+--
+-- Name: recorded_trees recorded_trees_observation_id_monitoring_plot_id_biomass_s_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.recorded_trees
+    ADD CONSTRAINT recorded_trees_observation_id_monitoring_plot_id_biomass_s_fkey FOREIGN KEY (observation_id, monitoring_plot_id, biomass_species_id) REFERENCES tracking.observation_biomass_species(observation_id, monitoring_plot_id, id) ON DELETE CASCADE;
+
+
+--
+-- Name: recorded_trees recorded_trees_tree_growth_form_id_fkey; Type: FK CONSTRAINT; Schema: tracking; Owner: -
+--
+
+ALTER TABLE ONLY tracking.recorded_trees
+    ADD CONSTRAINT recorded_trees_tree_growth_form_id_fkey FOREIGN KEY (tree_growth_form_id) REFERENCES tracking.tree_growth_forms(id);
 
 
 --
