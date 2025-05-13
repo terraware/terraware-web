@@ -63,8 +63,7 @@ export default function SearchCellRenderer(props: RendererProps<SearchResponseEl
   }
 
   const numberCell = (units: unknown) => (
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    <CellRenderer index={index} column={column} value={`${value as number} ${units}`} row={row} />
+    <CellRenderer index={index} column={column} value={`${value as number} ${units as string}`} row={row} />
   );
 
   if (column.key === 'remainingQuantity' && value) {
