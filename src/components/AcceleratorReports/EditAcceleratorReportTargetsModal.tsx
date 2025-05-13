@@ -64,6 +64,14 @@ export default function EditAcceleratorReportTargetsModal({
 
   const isAllowedReviewReportTargets = useMemo(() => isAllowed('REVIEW_REPORTS_TARGETS'), [isAllowed]);
 
+  const reportsById = useMemo(() => {
+    const reportsByIdMap: Record<number, AcceleratorReport> = {};
+    reports.forEach((report) => {
+      reportsByIdMap[report.id] = report;
+    });
+    return reportsByIdMap;
+  }, [reports]);
+
   useEffect(() => {
     if (updateReportMetricsResponse?.status === 'error') {
       snackbar.toastError();
@@ -137,7 +145,7 @@ export default function EditAcceleratorReportTargetsModal({
     } else {
       const updateManyReportsRequests = requests
         .map((request) => {
-          const report = reports.find((r) => r.id === request.reportId);
+          const report = reportsById[request.reportId];
           const reportClone = _.cloneDeep(report);
 
           ['projectMetrics', 'standardMetrics', 'systemMetrics'].forEach((metricType) => {
@@ -180,7 +188,7 @@ export default function EditAcceleratorReportTargetsModal({
           };
         })
         .filter((request) => {
-          const report = reports.find((r) => r.id === request.reportId);
+          const report = reportsById[request.reportId];
           // if request.report is unchanged, we don't need to update
           if (report && _.isEqual(report, request.report)) {
             return false;
@@ -203,14 +211,14 @@ export default function EditAcceleratorReportTargetsModal({
         return true;
       }
 
-      const report = reports.find((r) => r.id === reportId);
+      const report = reportsById[reportId];
       if (!report) {
         return true;
       }
 
       return !isAllowedReviewReportTargets && !(report.status === 'Not Submitted' || report.status === 'Needs Update');
     },
-    [reports, isAllowedReviewReportTargets]
+    [isAllowedReviewReportTargets, reports, reportsById]
   );
 
   return (
