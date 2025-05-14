@@ -51,7 +51,7 @@ const SectionValue = ({
   switch (value.type) {
     case 'SectionText':
       return <span style={{ fontSize: '16px', whiteSpace: 'pre-wrap' }}>{value.textValue}</span>;
-    case 'SectionVariable':
+    case 'SectionVariable': {
       const reference = value.usageType === 'Reference';
       const variable = allVariables.find((v) => v.id === value.variableId);
       return variable ? (
@@ -62,6 +62,7 @@ const SectionValue = ({
           variable={variable}
         />
       ) : null;
+    }
     default:
       return null;
   }

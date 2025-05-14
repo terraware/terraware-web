@@ -123,7 +123,6 @@ const InviteView = () => {
               <Textfield
                 id='firstName'
                 label={strings.FIRST_NAME}
-                onChange={() => {}}
                 type='text'
                 value={'--'}
                 disabled
@@ -133,7 +132,6 @@ const InviteView = () => {
               <Textfield
                 id='lastName'
                 label={strings.LAST_NAME}
-                onChange={() => {}}
                 type='text'
                 value={'--'}
                 disabled

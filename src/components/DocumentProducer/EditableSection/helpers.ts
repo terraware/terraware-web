@@ -26,7 +26,7 @@ export const editorDisplayVariableWithValues = (
     case 'Table':
       result = `${variable.values.length} ${strings.ENTRIES}`;
       break;
-    case 'Select':
+    case 'Select': {
       const selectedValues = (variable.values[0] as VariableValueSelectValue)?.optionValues;
       result =
         variable.options
@@ -35,6 +35,7 @@ export const editorDisplayVariableWithValues = (
           .join(', ') ||
         (placeholder ?? '');
       break;
+    }
   }
 
   return (result || (placeholder ?? '')) + (reference ? ` (${strings.REFERENCE})` : '');
@@ -64,7 +65,7 @@ export const editorValueFromVariableValue = (
   switch (variableValue.type) {
     case 'SectionText':
       return { text: variableValue.textValue ?? '' } as CustomText;
-    case 'SectionVariable':
+    case 'SectionVariable': {
       const value = allValues.find((v) => v.id === variableValue.variableId);
       return {
         type: 'variable',
@@ -72,6 +73,7 @@ export const editorValueFromVariableValue = (
         children: [{ text: '' }],
         reference: variableValue.usageType === 'Reference',
       } as CustomElement;
+    }
     default:
       return { text: '' } as CustomText;
   }

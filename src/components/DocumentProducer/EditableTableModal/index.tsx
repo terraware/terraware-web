@@ -459,7 +459,7 @@ export const EditableCell = ({ display, id, column, onChange, value }: EditableC
       return (
         <DatePicker id={id} label='' onChange={onChange} value={value as string} aria-label={`${id}-datepicker`} />
       );
-    case 'Select':
+    case 'Select': {
       const options = (column.variable as SelectVariable).options;
       return (
         <Dropdown
@@ -473,6 +473,7 @@ export const EditableCell = ({ display, id, column, onChange, value }: EditableC
           selectStyles={{ optionsContainer: { width: 'auto' } }}
         />
       );
+    }
     default:
       return null;
   }

@@ -59,9 +59,10 @@ export default function DocumentsTable({ projectId }: DocumentsTableProps): JSX.
         );
       case 'status':
         return <CellRenderer {...props} value={<StatusBadge status={props.row.status} />} />;
-      case 'lastSavedVersionId':
+      case 'lastSavedVersionId': {
         const value = props.value ?? '-';
         return <CellRenderer {...props} value={value} />;
+      }
       default:
         return <CellRenderer {...props} />;
     }
