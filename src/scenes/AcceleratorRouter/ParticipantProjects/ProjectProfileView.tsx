@@ -29,6 +29,7 @@ import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
 import { Application } from 'src/types/Application';
+import { FunderProjectDetails } from 'src/types/FunderProject';
 import { ParticipantProject } from 'src/types/ParticipantProject';
 import { Project, ProjectMeta } from 'src/types/Project';
 import { Score } from 'src/types/Score';
@@ -39,29 +40,33 @@ import { useNumberFormatter } from 'src/utils/useNumber';
 
 type ProjectProfileViewProps = {
   participantProject?: ParticipantProject;
+  projectDetails?: ParticipantProject | FunderProjectDetails;
   project?: Project;
   projectMeta?: ProjectMeta;
   organization?: AcceleratorOrg;
   projectApplication?: Application | undefined;
   projectScore?: Score | undefined;
   phaseVotes?: PhaseVotes | undefined;
+  funderView?: boolean;
 };
 
 const ProjectProfileView = ({
   participantProject,
+  projectDetails,
   project,
   projectMeta,
   organization,
   projectApplication,
   projectScore,
   phaseVotes,
+  funderView,
 }: ProjectProfileViewProps) => {
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
   const { isAllowed } = useUser();
   const { activeLocale, countries } = useLocalization();
-  const { acceleratorReports: projectReports } = useProjectReports(project?.id);
-  const { fundingEntities } = useProjectFundingEntities(project?.id);
+  const { acceleratorReports: projectReports } = useProjectReports(projectDetails?.projectId);
+  const { fundingEntities } = useProjectFundingEntities(funderView ? undefined : projectDetails?.projectId);
 
   const numericFormatter = useMemo(() => numberFormatter(activeLocale), [activeLocale, numberFormatter]);
   const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
@@ -87,21 +92,21 @@ const ProjectProfileView = ({
     );
     switch (participantProject?.cohortPhase) {
       case 'Phase 1 - Feasibility Study':
-        return getCard(strings.MIN_PROJECT_AREA, participantProject?.minProjectArea);
+        return getCard(strings.MIN_PROJECT_AREA, projectDetails?.minProjectArea);
       case 'Phase 2 - Plan and Scale':
       case 'Phase 3 - Implement and Monitor':
-        return getCard(strings.PROJECT_AREA, participantProject.projectArea);
+        return getCard(strings.PROJECT_AREA, projectDetails?.projectArea);
       case 'Application':
       case 'Pre-Screen':
       case 'Phase 0 - Due Diligence':
       default:
-        return getCard(strings.ELIGIBLE_AREA, participantProject?.confirmedReforestableLand);
+        return getCard(strings.ELIGIBLE_AREA, projectDetails?.confirmedReforestableLand);
     }
   }, [
     participantProject?.cohortPhase,
-    participantProject?.projectArea,
-    participantProject?.minProjectArea,
-    participantProject?.confirmedReforestableLand,
+    projectDetails?.projectArea,
+    projectDetails?.minProjectArea,
+    projectDetails?.confirmedReforestableLand,
   ]);
 
   const lastSubmittedReport = useMemo(() => {
@@ -143,28 +148,30 @@ const ProjectProfileView = ({
           )}
           {isAllowedViewScoreAndVoting && (
             <>
-              <ProjectScoreLink projectId={project?.id} projectScore={projectScore?.overallScore} />
-              <VotingDecisionLink projectId={project?.id} phaseVotes={phaseVotes} />
+              <ProjectScoreLink projectId={projectDetails?.projectId} projectScore={projectScore?.overallScore} />
+              <VotingDecisionLink projectId={projectDetails?.projectId} phaseVotes={phaseVotes} />
             </>
           )}
         </Box>
-        <Box justifySelf={'flex-end'}>
-          <ProjectFieldInlineMeta
-            userLabel={strings.PROJECT_LEAD}
-            userId={organization?.tfContactUser?.userId}
-            userName={
-              organization?.tfContactUser &&
-              `${organization?.tfContactUser?.firstName} ${organization?.tfContactUser?.lastName}`
-            }
-            fontSize={'16px'}
-            lineHeight={'24px'}
-            fontWeight={500}
-          />
-        </Box>
+        {!funderView && (
+          <Box justifySelf={'flex-end'}>
+            <ProjectFieldInlineMeta
+              userLabel={strings.PROJECT_LEAD}
+              userId={organization?.tfContactUser?.userId}
+              userName={
+                organization?.tfContactUser &&
+                `${organization?.tfContactUser?.firstName} ${organization?.tfContactUser?.lastName}`
+              }
+              fontSize={'16px'}
+              lineHeight={'24px'}
+              fontWeight={500}
+            />
+          </Box>
+        )}
       </Grid>
 
       <Grid container>
-        <ProjectOverviewCard md={9} dealDescription={participantProject?.dealDescription} projectName={project?.name} />
+        <ProjectOverviewCard md={9} dealDescription={projectDetails?.dealDescription} projectName={project?.name} />
         <Grid item md={3}>
           <Box>
             <InvertedCard
@@ -172,9 +179,9 @@ const ProjectProfileView = ({
               backgroundColor={theme.palette.TwClrBaseGray100}
               label={strings.COUNTRY}
               value={
-                countries && participantProject?.countryCode
-                  ? getCountryByCode(countries, participantProject?.countryCode)?.name
-                  : participantProject?.countryCode
+                countries && projectDetails?.countryCode
+                  ? getCountryByCode(countries, projectDetails?.countryCode)?.name
+                  : projectDetails?.countryCode
               }
             />
             {projectSize}
@@ -183,40 +190,40 @@ const ProjectProfileView = ({
       </Grid>
 
       <Grid container paddingTop={theme.spacing(2)}>
-        {project && participantProject?.projectHighlightPhotoValueId && (
+        {projectDetails && projectDetails?.projectHighlightPhotoValueId && (
           <ProjectProfileImage
-            projectId={project.id}
-            imageValueId={participantProject.projectHighlightPhotoValueId}
+            projectId={projectDetails.projectId}
+            imageValueId={projectDetails.projectHighlightPhotoValueId}
             alt={strings.PROJECT_HIGHLIGHT_IMAGE}
           />
         )}
-        {project && participantProject?.projectZoneFigureValueId && (
+        {projectDetails && projectDetails?.projectZoneFigureValueId && (
           <ProjectProfileImage
-            projectId={project.id}
-            imageValueId={participantProject.projectZoneFigureValueId}
+            projectId={projectDetails.projectId}
+            imageValueId={projectDetails.projectZoneFigureValueId}
             alt={strings.PROJECT_ZONE_FIGURE}
             label={<ProjectFigureLabel labelText={strings.PROJECT_ZONE_FIGURE_VARIABLE} />}
           />
         )}
-        {project && !participantProject?.projectZoneFigureValueId && (
+        {projectDetails && !projectDetails?.projectZoneFigureValueId && (
           <ProjectMap
             application={projectApplication}
-            countryCode={participantProject?.countryCode}
-            md={participantProject?.projectHighlightPhotoValueId ? 6 : 12}
+            countryCode={projectDetails?.countryCode}
+            md={projectDetails?.projectHighlightPhotoValueId ? 6 : 12}
           />
         )}
       </Grid>
 
       <Grid container>
         <LandUseModelTypeCard
-          selectedTypes={participantProject?.landUseModelTypes}
-          modelHectares={participantProject?.landUseModelHectares}
+          selectedTypes={projectDetails?.landUseModelTypes}
+          modelHectares={projectDetails?.landUseModelHectares}
           numericFormatter={numericFormatter}
         />
       </Grid>
 
       <Grid container>
-        {isPhaseZeroOrApplication && (
+        {!funderView && isPhaseZeroOrApplication && (
           <InvertedCard
             md={4}
             label={strings.MIN_MAX_CARBON_ACCUMULATION}
@@ -233,7 +240,7 @@ const ProjectProfileView = ({
           <InvertedCard
             md={4}
             label={strings.ACCUMULATION_RATE}
-            value={participantProject?.accumulationRate}
+            value={projectDetails?.accumulationRate}
             backgroundColor={theme.palette.TwClrBaseGray050}
             units={<Co2HectareYear />}
           />
@@ -241,7 +248,7 @@ const ProjectProfileView = ({
         <InvertedCard
           md={4}
           label={strings.TOTAL_VCU_40YRS}
-          value={participantProject?.totalVCU && numericFormatter.format(participantProject.totalVCU)}
+          value={projectDetails?.totalVCU && numericFormatter.format(projectDetails.totalVCU)}
           units={'t'}
           backgroundColor={theme.palette.TwClrBaseGray050}
         />
@@ -249,9 +256,9 @@ const ProjectProfileView = ({
           md={4}
           label={strings.ESTIMATED_BUDGET}
           value={
-            participantProject?.perHectareBudget &&
+            projectDetails?.perHectareBudget &&
             strings
-              .formatString(strings.USD_PER_HECTARE, numericFormatter.format(participantProject.perHectareBudget))
+              .formatString(strings.USD_PER_HECTARE, numericFormatter.format(projectDetails.perHectareBudget))
               ?.toString()
           }
           backgroundColor={theme.palette.TwClrBaseGray050}
@@ -298,7 +305,12 @@ const ProjectProfileView = ({
             )}
 
             <Grid item>
-              <Link to={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', (project?.id || '').toString())}>
+              <Link
+                to={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(
+                  ':projectId',
+                  (projectDetails?.projectId || '').toString()
+                )}
+              >
                 {strings.VIEW_REPORTS}
               </Link>
             </Grid>
@@ -324,9 +336,9 @@ const ProjectProfileView = ({
           height={'64px'}
           md={4}
           value={
-            participantProject?.confirmedReforestableLand &&
+            projectDetails?.confirmedReforestableLand &&
             strings
-              .formatString(strings.X_HA, numericFormatter.format(participantProject.confirmedReforestableLand))
+              .formatString(strings.X_HA, numericFormatter.format(projectDetails.confirmedReforestableLand))
               ?.toString()
           }
           tooltip={strings.ELIGIBLE_AREA_DESCRIPTION}
@@ -336,8 +348,8 @@ const ProjectProfileView = ({
           height={'64px'}
           md={4}
           value={
-            participantProject?.projectArea &&
-            strings.formatString(strings.X_HA, numericFormatter.format(participantProject.projectArea))?.toString()
+            projectDetails?.projectArea &&
+            strings.formatString(strings.X_HA, numericFormatter.format(projectDetails.projectArea))?.toString()
           }
           tooltip={strings.PROJECT_AREA_DESCRIPTION}
         />
@@ -345,15 +357,15 @@ const ProjectProfileView = ({
           label={strings.NATIVE_SPECIES_TO_BE_PLANTED}
           height={'64px'}
           md={4}
-          value={participantProject?.numNativeSpecies}
+          value={projectDetails?.numNativeSpecies}
         />
         <ProjectFieldDisplay
           label={strings.MIN_PROJECT_AREA}
           height={'64px'}
           md={4}
           value={
-            participantProject?.minProjectArea &&
-            strings.formatString(strings.X_HA, numericFormatter.format(participantProject.minProjectArea))?.toString()
+            projectDetails?.minProjectArea &&
+            strings.formatString(strings.X_HA, numericFormatter.format(projectDetails.minProjectArea))?.toString()
           }
           tooltip={strings.MIN_PROJECT_AREA_DESCRIPTION}
         />
@@ -362,9 +374,9 @@ const ProjectProfileView = ({
           height={'64px'}
           md={4}
           value={
-            participantProject?.totalExpansionPotential &&
+            projectDetails?.totalExpansionPotential &&
             strings
-              .formatString(strings.X_HA, numericFormatter.format(participantProject.totalExpansionPotential))
+              .formatString(strings.X_HA, numericFormatter.format(projectDetails.totalExpansionPotential))
               ?.toString()
           }
           tooltip={strings.EXPANSION_POTENTIAL_DESCRIPTION}
@@ -379,34 +391,36 @@ const ProjectProfileView = ({
             </Typography>
           </Grid>
         </Box>
-        {isPhaseZeroOrApplication && (
+        {!funderView && isPhaseZeroOrApplication && (
           <ProjectFieldDisplay
             label={strings.ACCUMULATION_RATE}
             height={'64px'}
             md={4}
-            value={participantProject?.accumulationRate}
+            value={projectDetails?.accumulationRate}
             units={<Co2HectareYear />}
           />
         )}
         {!isPhaseZeroOrApplication && (
           <>
-            <ProjectFieldDisplay
-              label={strings.MIN_MAX_CARBON_ACCUMULATION}
-              height={'64px'}
-              md={4}
-              value={
-                participantProject?.minCarbonAccumulation &&
-                participantProject?.maxCarbonAccumulation &&
-                `${participantProject.minCarbonAccumulation}-${participantProject.maxCarbonAccumulation}`
-              }
-              units={<Co2HectareYear />}
-            />
-            <ProjectFieldDisplay label={strings.STANDARD} height={'64px'} md={4} value={participantProject?.standard} />
+            {!funderView && (
+              <ProjectFieldDisplay
+                label={strings.MIN_MAX_CARBON_ACCUMULATION}
+                height={'64px'}
+                md={4}
+                value={
+                  participantProject?.minCarbonAccumulation &&
+                  participantProject?.maxCarbonAccumulation &&
+                  `${participantProject.minCarbonAccumulation}-${participantProject.maxCarbonAccumulation}`
+                }
+                units={<Co2HectareYear />}
+              />
+            )}
+            <ProjectFieldDisplay label={strings.STANDARD} height={'64px'} md={4} value={projectDetails?.standard} />
             <ProjectFieldDisplay
               label={strings.METHODOLOGY_NUMBER}
               height={'64px'}
               md={4}
-              value={participantProject?.methodologyNumber}
+              value={projectDetails?.methodologyNumber}
             />
           </>
         )}
@@ -420,51 +434,63 @@ const ProjectProfileView = ({
           width={'100%'}
           padding={theme.spacing(2)}
         >
-          <Typography fontSize='16px' fontWeight={600} lineHeight='24px' component={'span'}>
-            {strings.PROJECT_LINKS}
-          </Typography>
-          {projectApplication && (
-            <ProjectFieldLink
-              value={APP_PATHS.ACCELERATOR_APPLICATION.replace(':applicationId', projectApplication.id.toString())}
-              label={strings.APPLICATION}
-            />
-          )}
-          {participantProject?.dealName && (
-            <ProjectFieldLink
-              value={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}?dealName=${participantProject.dealName}`}
-              label={strings.DOCUMENTS}
-            />
-          )}
-          {project && (
-            <ProjectFieldLink
-              value={`${APP_PATHS.ACCELERATOR_DELIVERABLES}?projectId=${project.id}`}
-              label={strings.DELIVERABLES}
-            />
-          )}
-          {project && (
-            <ProjectFieldLink
-              value={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', project.id.toString())}
-              label={strings.REPORTS}
-            />
+          {!funderView && (
+            <>
+              <Typography fontSize='16px' fontWeight={600} lineHeight='24px' component={'span'}>
+                {strings.PROJECT_LINKS}
+              </Typography>
+              {projectApplication && (
+                <ProjectFieldLink
+                  value={APP_PATHS.ACCELERATOR_APPLICATION.replace(':applicationId', projectApplication.id.toString())}
+                  label={strings.APPLICATION}
+                />
+              )}
+              {participantProject?.dealName && (
+                <ProjectFieldLink
+                  value={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}?dealName=${participantProject.dealName}`}
+                  label={strings.DOCUMENTS}
+                />
+              )}
+              {project && (
+                <ProjectFieldLink
+                  value={`${APP_PATHS.ACCELERATOR_DELIVERABLES}?projectId=${project.id}`}
+                  label={strings.DELIVERABLES}
+                />
+              )}
+              {project && (
+                <ProjectFieldLink
+                  value={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', project.id.toString())}
+                  label={strings.REPORTS}
+                />
+              )}
+            </>
           )}
 
           <Box paddingTop={theme.spacing(1)}>
             <Typography fontSize='16px' fontWeight={600} lineHeight='24px' component={'span'}>
               {strings.EXTERNAL_PROJECT_LINKS}
             </Typography>
-            <ProjectFieldLink value={participantProject?.googleFolderUrl} label={strings.GDRIVE} />
-            <ProjectFieldLink value={participantProject?.hubSpotUrl} label={strings.HUBSPOT} />
-            <ProjectFieldLink value={participantProject?.gisReportsLink} label={strings.GIS_REPORT} />
-            <ProjectFieldLink value={participantProject?.verraLink} label={strings.VERRA} />
-            <ProjectFieldLink value={participantProject?.riskTrackerLink} label={strings.RISK_TRACKER} />
-            {project && isAllowedViewScoreAndVoting && (
-              <ProjectFieldLink
-                value={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
-                label={strings.SCORING}
-              />
+            {!funderView && (
+              <>
+                <ProjectFieldLink value={participantProject?.googleFolderUrl} label={strings.GDRIVE} />
+                <ProjectFieldLink value={participantProject?.hubSpotUrl} label={strings.HUBSPOT} />
+                <ProjectFieldLink value={participantProject?.gisReportsLink} label={strings.GIS_REPORT} />
+              </>
             )}
-            <ProjectFieldLink value={participantProject?.clickUpLink} label={strings.CLICK_UP} />
-            <ProjectFieldLink value={participantProject?.slackLink} label={strings.SLACK} />
+            <ProjectFieldLink value={projectDetails?.verraLink} label={strings.VERRA} />
+            {!funderView && (
+              <>
+                <ProjectFieldLink value={participantProject?.riskTrackerLink} label={strings.RISK_TRACKER} />
+                {project && isAllowedViewScoreAndVoting && (
+                  <ProjectFieldLink
+                    value={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
+                    label={strings.SCORING}
+                  />
+                )}
+                <ProjectFieldLink value={participantProject?.clickUpLink} label={strings.CLICK_UP} />
+                <ProjectFieldLink value={participantProject?.slackLink} label={strings.SLACK} />
+              </>
+            )}
           </Box>
         </Box>
       </Grid>
@@ -476,11 +502,11 @@ const ProjectProfileView = ({
               {strings.UN_SDG}
             </Typography>
           </Grid>
-          <ProjectSdgDisplay sdgList={participantProject?.sdgList} />
+          <ProjectSdgDisplay sdgList={projectDetails?.sdgList} />
         </Box>
       </Grid>
 
-      {fundingEntities?.length > 0 && (
+      {!funderView && fundingEntities?.length > 0 && (
         <Grid container>
           <Box marginX={theme.spacing(2)} width={'100%'}>
             <Grid item xs={12} marginY={theme.spacing(2)}>
@@ -503,7 +529,7 @@ const ProjectProfileView = ({
         </Grid>
       )}
 
-      <ProjectProfileFooter project={project} projectMeta={projectMeta} />
+      {!funderView && <ProjectProfileFooter project={project} projectMeta={projectMeta} />}
     </Card>
   );
 };

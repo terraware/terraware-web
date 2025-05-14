@@ -1690,6 +1690,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/funder/projects/{projectId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets project detail information displayable to funders */
+        get: operations["getProject_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/funder/reports/projects/{projectId}": {
         parameters: {
             query?: never;
@@ -3488,6 +3505,26 @@ export interface paths {
         put?: never;
         /** Creates a new planting site. */
         post: operations["createPlantingSite"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tracking/sites/reportedPlants": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Lists the total number of plants planted at a planting site and in each planting zone.
+         * @description The totals are based on nursery withdrawals.
+         */
+        get: operations["listPlantingSiteReportedPlants"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -5847,6 +5884,36 @@ export interface components {
             /** Format: int64 */
             userId: number;
         };
+        FunderProjectDetailsPayload: {
+            accumulationRate?: number;
+            annualCarbon?: number;
+            confirmedReforestableLand?: number;
+            countryCode?: string;
+            dealDescription?: string;
+            dealName?: string;
+            landUseModelHectares: {
+                [key: string]: number;
+            };
+            landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
+            methodologyNumber?: string;
+            minProjectArea?: number;
+            /** Format: int32 */
+            numNativeSpecies?: number;
+            perHectareBudget?: number;
+            projectArea?: number;
+            /** Format: int64 */
+            projectHighlightPhotoValueId?: number;
+            /** Format: int64 */
+            projectId: number;
+            /** Format: int64 */
+            projectZoneFigureValueId?: number;
+            sdgList: ("1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17")[];
+            standard?: string;
+            totalExpansionPotential?: number;
+            totalVCU?: number;
+            /** Format: uri */
+            verraLink?: string;
+        };
         FundingEntityPayload: {
             /** Format: int64 */
             id: number;
@@ -5970,6 +6037,10 @@ export interface components {
         };
         GetFundingEntityResponsePayload: {
             fundingEntity: components["schemas"]["FundingEntityPayload"];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        GetFundingProjectResponsePayload: {
+            details: components["schemas"]["FunderProjectDetailsPayload"];
             status: components["schemas"]["SuccessOrError"];
         };
         GetMapboxTokenResponsePayload: {
@@ -6618,6 +6689,10 @@ export interface components {
         };
         ListPlantingSiteHistoriesResponsePayload: {
             histories: components["schemas"]["PlantingSiteHistoryPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        ListPlantingSiteReportedPlantsResponsePayload: {
+            sites: components["schemas"]["PlantingSiteReportedPlantsPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         ListPlantingSitesResponsePayload: {
@@ -7445,6 +7520,8 @@ export interface components {
             startDate: string;
             /** @enum {string} */
             state: "Upcoming" | "InProgress" | "Completed" | "Overdue" | "Abandoned";
+            /** Format: int32 */
+            totalPlants: number;
             /** Format: int32 */
             totalSpecies: number;
             /** @enum {string} */
@@ -13664,6 +13741,28 @@ export interface operations {
             };
         };
     };
+    getProject_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetFundingProjectResponsePayload"];
+                };
+            };
+        };
+    };
     listPublishedReports: {
         parameters: {
             query?: never;
@@ -17530,6 +17629,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CreatePlantingSiteResponsePayload"];
+                };
+            };
+        };
+    };
+    listPlantingSiteReportedPlants: {
+        parameters: {
+            query: {
+                organizationId: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListPlantingSiteReportedPlantsResponsePayload"];
                 };
             };
         };

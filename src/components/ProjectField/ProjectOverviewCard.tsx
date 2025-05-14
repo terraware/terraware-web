@@ -42,11 +42,13 @@ const ProjectOverviewCard = ({ dealDescription, projectName, md }: ProjectOvervi
                     preserveNewlines
                   />
                 </Box>
-                <Box>
-                  <div>
-                    <strong>{strings.NAME_USED_BY_PROJECT}:</strong>&nbsp;{projectName}
-                  </div>
-                </Box>
+                {projectName && (
+                  <Box>
+                    <div>
+                      <strong>{strings.NAME_USED_BY_PROJECT}:</strong>&nbsp;{projectName}
+                    </div>
+                  </Box>
+                )}
               </>
             )}
           </Grid>

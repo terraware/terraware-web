@@ -47,6 +47,7 @@ const ProjectPage = () => {
         children: (
           <ProjectProfileView
             {...projectData}
+            projectDetails={projectData.participantProject}
             projectApplication={projectApplication}
             projectScore={projectScore}
             phaseVotes={phaseVotes}
