@@ -39,6 +39,8 @@ import { getCountryByCode } from 'src/utils/country';
 import { formatNumberScale } from 'src/utils/numbers';
 import { useNumberFormatter } from 'src/utils/useNumber';
 
+const DEAL_NAME_COUNTRY_CODE_REGEX = /^[A-Z]{3}_/;
+
 type ProjectProfileViewProps = {
   participantProject?: ParticipantProject;
   projectDetails?: ParticipantProject | FunderProjectDetails;
@@ -146,12 +148,12 @@ const ProjectProfileView = ({
   );
 
   const strippedDealName = useMemo(() => {
-    if (projectDetails?.dealName?.startsWith(`${projectDetails?.countryAlpha3}_`)) {
-      return projectDetails?.dealName?.replace(`${projectDetails?.countryAlpha3}_`, '');
+    if (projectDetails?.dealName?.match(DEAL_NAME_COUNTRY_CODE_REGEX)) {
+      return projectDetails?.dealName?.replace(DEAL_NAME_COUNTRY_CODE_REGEX, '');
     } else {
       return projectDetails?.dealName;
     }
-  }, [projectDetails?.dealName, projectDetails?.countryAlpha3]);
+  }, [projectDetails?.dealName]);
 
   return (
     <Card
