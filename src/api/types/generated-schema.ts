@@ -5906,6 +5906,7 @@ export interface components {
             accumulationRate?: number;
             annualCarbon?: number;
             confirmedReforestableLand?: number;
+            countryAlpha3?: string;
             countryCode?: string;
             dealDescription?: string;
             dealName?: string;
@@ -8085,6 +8086,7 @@ export interface components {
             /** @enum {string} */
             cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
             confirmedReforestableLand?: number;
+            countryAlpha3?: string;
             countryCode?: string;
             dealDescription?: string;
             dealName?: string;

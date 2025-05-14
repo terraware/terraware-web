@@ -145,6 +145,14 @@ const ProjectProfileView = ({
     [funderView, lastPublishedReport, lastSubmittedReport]
   );
 
+  const strippedDealName = useMemo(() => {
+    if (projectDetails?.dealName?.startsWith(`${projectDetails?.countryAlpha3}_`)) {
+      return projectDetails?.dealName?.replace(`${projectDetails?.countryAlpha3}_`, '');
+    } else {
+      return projectDetails?.dealName;
+    }
+  }, [projectDetails?.dealName, projectDetails?.countryAlpha3]);
+
   return (
     <Card
       style={{
@@ -156,25 +164,25 @@ const ProjectProfileView = ({
         borderRadius: theme.spacing(1),
       }}
     >
-      <Grid container justifyContent={'space-between'}>
-        <Box display={'flex'} alignItems={'center'}>
-          {isProjectInPhase && (
-            <>
-              <CohortBadge label={participantProject?.cohortName} />
-              <CohortBadge label={participantProject?.cohortPhase} />
-            </>
-          )}
-          {!isProjectInPhase && projectApplication && (
-            <ApplicationStatusLink applicationId={projectApplication.id} status={projectApplication.status} />
-          )}
-          {isAllowedViewScoreAndVoting && (
-            <>
-              <ProjectScoreLink projectId={projectDetails?.projectId} projectScore={projectScore?.overallScore} />
-              <VotingDecisionLink projectId={projectDetails?.projectId} phaseVotes={phaseVotes} />
-            </>
-          )}
-        </Box>
-        {!funderView && (
+      {!funderView && (
+        <Grid container justifyContent={'space-between'}>
+          <Box display={'flex'} alignItems={'center'}>
+            {isProjectInPhase && (
+              <>
+                <CohortBadge label={participantProject?.cohortName} />
+                <CohortBadge label={participantProject?.cohortPhase} />
+              </>
+            )}
+            {!isProjectInPhase && projectApplication && (
+              <ApplicationStatusLink applicationId={projectApplication.id} status={projectApplication.status} />
+            )}
+            {isAllowedViewScoreAndVoting && (
+              <>
+                <ProjectScoreLink projectId={projectDetails?.projectId} projectScore={projectScore?.overallScore} />
+                <VotingDecisionLink projectId={projectDetails?.projectId} phaseVotes={phaseVotes} />
+              </>
+            )}
+          </Box>
           <Box justifySelf={'flex-end'}>
             <ProjectFieldInlineMeta
               userLabel={strings.PROJECT_LEAD}
@@ -188,8 +196,14 @@ const ProjectProfileView = ({
               fontWeight={500}
             />
           </Box>
-        )}
-      </Grid>
+        </Grid>
+      )}
+
+      {funderView && (
+        <Grid container>
+          <InvertedCard md={12} backgroundColor={theme.palette.TwClrBaseGray050} value={strippedDealName} />
+        </Grid>
+      )}
 
       <Grid container>
         <ProjectOverviewCard md={9} dealDescription={projectDetails?.dealDescription} projectName={project?.name} />
@@ -434,13 +448,16 @@ const ProjectProfileView = ({
       </Grid>
 
       <Grid container>
-        <Box marginX={theme.spacing(2)} width={'100%'}>
-          <Grid item xs={12} marginTop={theme.spacing(2)}>
-            <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
-              {strings.CARBON_DATA}
-            </Typography>
-          </Grid>
-        </Box>
+        {((!funderView && isPhaseZeroOrApplication) ||
+          (!isPhaseZeroOrApplication && (projectDetails?.standard || projectDetails?.methodologyNumber))) && (
+          <Box marginX={theme.spacing(2)} width={'100%'}>
+            <Grid item xs={12} marginTop={theme.spacing(2)}>
+              <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
+                {strings.CARBON_DATA}
+              </Typography>
+            </Grid>
+          </Box>
+        )}
         {!funderView && isPhaseZeroOrApplication && (
           <ProjectFieldDisplay
             label={strings.ACCUMULATION_RATE}
@@ -476,74 +493,80 @@ const ProjectProfileView = ({
         )}
       </Grid>
 
-      <Grid container>
-        <Box
-          marginX={theme.spacing(2)}
-          border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
-          borderRadius={theme.spacing(1)}
-          width={'100%'}
-          padding={theme.spacing(2)}
-        >
-          {!funderView && (
-            <>
-              <Typography fontSize='16px' fontWeight={600} lineHeight='24px' component={'span'}>
-                {strings.PROJECT_LINKS}
-              </Typography>
-              {projectApplication && (
-                <ProjectFieldLink
-                  value={APP_PATHS.ACCELERATOR_APPLICATION.replace(':applicationId', projectApplication.id.toString())}
-                  label={strings.APPLICATION}
-                />
-              )}
-              {participantProject?.dealName && (
-                <ProjectFieldLink
-                  value={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}?dealName=${participantProject.dealName}`}
-                  label={strings.DOCUMENTS}
-                />
-              )}
-              {project && (
-                <ProjectFieldLink
-                  value={`${APP_PATHS.ACCELERATOR_DELIVERABLES}?projectId=${project.id}`}
-                  label={strings.DELIVERABLES}
-                />
-              )}
-              {project && isAllowedViewScoreAndVoting && (
+      {((funderView && projectDetails?.verraLink) || !funderView) && (
+        <Grid container>
+          <Box
+            marginX={theme.spacing(2)}
+            border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+            borderRadius={theme.spacing(1)}
+            width={'100%'}
+            padding={theme.spacing(2)}
+          >
+            {!funderView && (
+              <>
+                <Typography fontSize='16px' fontWeight={600} lineHeight='24px' component={'span'}>
+                  {strings.PROJECT_LINKS}
+                </Typography>
+                {projectApplication && (
+                  <ProjectFieldLink
+                    value={APP_PATHS.ACCELERATOR_APPLICATION.replace(
+                      ':applicationId',
+                      projectApplication.id.toString()
+                    )}
+                    label={strings.APPLICATION}
+                  />
+                )}
+                {participantProject?.dealName && (
+                  <ProjectFieldLink
+                    value={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}?dealName=${participantProject.dealName}`}
+                    label={strings.DOCUMENTS}
+                  />
+                )}
+                {project && (
+                  <ProjectFieldLink
+                    value={`${APP_PATHS.ACCELERATOR_DELIVERABLES}?projectId=${project.id}`}
+                    label={strings.DELIVERABLES}
+                  />
+                )}
+                {project && isAllowedViewScoreAndVoting && (
                 <ProjectFieldLink
                   value={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
                   label={strings.SCORING}
                 />
               )}
               {project && (
-                <ProjectFieldLink
-                  value={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', project.id.toString())}
-                  label={strings.REPORTS}
-                />
-              )}
-            </>
-          )}
+                  <ProjectFieldLink
+                    value={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', project.id.toString())}
+                    label={strings.REPORTS}
+                  />
+                )}
+              </>
+            )}
 
-          <Box paddingTop={theme.spacing(1)}>
-            <Typography fontSize='16px' fontWeight={600} lineHeight='24px' component={'span'}>
-              {strings.EXTERNAL_PROJECT_LINKS}
-            </Typography>
-            {!funderView && (
-              <>
-                <ProjectFieldLink value={participantProject?.googleFolderUrl} label={strings.GDRIVE} />
-                <ProjectFieldLink value={participantProject?.hubSpotUrl} label={strings.HUBSPOT} />
-                <ProjectFieldLink value={participantProject?.gisReportsLink} label={strings.GIS_REPORT} />
-              </>
-            )}
-            <ProjectFieldLink value={projectDetails?.verraLink} label={strings.VERRA} />
-            {!funderView && (
-              <>
-                <ProjectFieldLink value={participantProject?.riskTrackerLink} label={strings.RISK_TRACKER} />
-                <ProjectFieldLink value={participantProject?.clickUpLink} label={strings.CLICK_UP} />
-                <ProjectFieldLink value={participantProject?.slackLink} label={strings.SLACK} />
-              </>
-            )}
+            <Box paddingTop={theme.spacing(1)}>
+              <Typography fontSize='16px' fontWeight={600} lineHeight='24px' component={'span'}>
+                {strings.EXTERNAL_PROJECT_LINKS}
+              </Typography>
+              {!funderView && (
+                <>
+                  <ProjectFieldLink value={participantProject?.googleFolderUrl} label={strings.GDRIVE} />
+                  <ProjectFieldLink value={participantProject?.hubSpotUrl} label={strings.HUBSPOT} />
+                  <ProjectFieldLink value={participantProject?.gisReportsLink} label={strings.GIS_REPORT} />
+                </>
+              )}
+              <ProjectFieldLink value={projectDetails?.verraLink} label={strings.VERRA} />
+              {!funderView && (
+                <>
+                  <ProjectFieldLink value={participantProject?.riskTrackerLink} label={strings.RISK_TRACKER} />
+
+                  <ProjectFieldLink value={participantProject?.clickUpLink} label={strings.CLICK_UP} />
+                  <ProjectFieldLink value={participantProject?.slackLink} label={strings.SLACK} />
+                </>
+              )}
+            </Box>
           </Box>
-        </Box>
-      </Grid>
+        </Grid>
+      )}
 
       <Grid container>
         <Box marginX={theme.spacing(2)} width={'100%'}>
