@@ -13,8 +13,9 @@ Generally, the dumps here will be updated by a backend engineer since they'll be
 1. Restore the existing dump to a clean local database.
 2. Run the server locally so it migrates the dumped database.
 3. Shut down the server.
-4. Delete ephemeral data that shouldn't be included in the dump.
-5. Dump the local database.
+   - If using docker, use `docker container stop <server-container-name>`
+4. Run the yarn dump command.
+   - Which also deletes ephemeral data from the database that shouldn't be included in the dump.
 
 ### Restoring the database
 
@@ -34,3 +35,8 @@ yarn dump:local
 # or 
 yarn dump:docker
 ```
+
+### Images
+
+Images can be put into the dump, but should be very small files, and ideally should just use symlinks to existing images.
+Modify the database before dumping in order to point to the `photo-data/test/` folder, so that the images can be committed.
