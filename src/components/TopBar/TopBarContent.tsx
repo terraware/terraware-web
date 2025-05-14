@@ -119,7 +119,10 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
     <Grid
       container
       sx={{
-        background: 'url(/assets/terraware-logo-mobile.svg) no-repeat 32px/105px',
+        background:
+          isFunderRoute || user?.userType === 'Funder'
+            ? 'url(/assets/funder-logo-mobile.svg) no-repeat 0/199px'
+            : 'url(/assets/terraware-logo-mobile.svg) no-repeat 32px/105px',
         display: 'flex',
         alignItems: 'center',
       }}
@@ -151,6 +154,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
           organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}
           reloadOrganizationData={reloadOrganizations}
         />
+        {userFundingEntity && <SettingsLink />}
         <SmallDeviceUserMenu onLogout={onHandleLogout} hasOrganizations={organizations && organizations.length > 0} />
       </Grid>
     </Grid>

@@ -37,6 +37,7 @@ import { Score } from 'src/types/Score';
 import { PhaseVotes } from 'src/types/Votes';
 import { getCountryByCode } from 'src/utils/country';
 import { formatNumberScale } from 'src/utils/numbers';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumber';
 
 const DEAL_NAME_COUNTRY_CODE_REGEX = /^[A-Z]{3}_/;
@@ -72,6 +73,7 @@ const ProjectProfileView = ({
   const { activeLocale, countries } = useLocalization();
   const { acceleratorReports } = useProjectReports(projectDetails?.projectId);
   const { fundingEntities } = useProjectFundingEntities(funderView ? undefined : projectDetails?.projectId);
+  const { isMobile, isTablet } = useDeviceInfo();
 
   const numericFormatter = useMemo(() => numberFormatter(activeLocale), [activeLocale, numberFormatter]);
   const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
@@ -89,7 +91,7 @@ const ProjectProfileView = ({
   const projectSize = useMemo(() => {
     const getCard = (label: string, value: number | undefined) => (
       <InvertedCard
-        md={12}
+        md={isTablet ? 6 : 12}
         backgroundColor={theme.palette.TwClrBaseGray100}
         label={label}
         value={value && strings.formatString(strings.X_HA, numericFormatter.format(value))?.toString()}
@@ -112,6 +114,8 @@ const ProjectProfileView = ({
     projectDetails?.projectArea,
     projectDetails?.minProjectArea,
     projectDetails?.confirmedReforestableLand,
+    isTablet,
+    numericFormatter,
   ]);
 
   const lastSubmittedReport = useMemo(() => {
@@ -208,11 +212,15 @@ const ProjectProfileView = ({
       )}
 
       <Grid container>
-        <ProjectOverviewCard md={9} dealDescription={projectDetails?.dealDescription} projectName={project?.name} />
-        <Grid item md={3}>
-          <Box>
+        <ProjectOverviewCard
+          md={isMobile || isTablet ? 12 : 9}
+          dealDescription={projectDetails?.dealDescription}
+          projectName={project?.name}
+        />
+        <Grid item md={isMobile || isTablet ? 12 : 3} xs={12}>
+          <Grid container>
             <InvertedCard
-              md={12}
+              md={isTablet ? 6 : 12}
               backgroundColor={theme.palette.TwClrBaseGray100}
               label={strings.COUNTRY}
               value={
@@ -222,7 +230,7 @@ const ProjectProfileView = ({
               }
             />
             {projectSize}
-          </Box>
+          </Grid>
         </Grid>
       </Grid>
 
