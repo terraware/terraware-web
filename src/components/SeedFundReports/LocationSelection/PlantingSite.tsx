@@ -10,12 +10,12 @@ import PlantingSiteSpeciesCellRenderer from 'src/components/SeedFundReports/Loca
 import { transformNumericValue } from 'src/components/SeedFundReports/LocationSelection/util';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import Table from 'src/components/common/table';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
 import { ReportPlantingSite } from 'src/types/Report';
 import { GrowthForm } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 
 type PlantingSiteSpecies = {
   id: number;
