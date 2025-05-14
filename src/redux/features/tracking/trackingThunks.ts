@@ -87,7 +87,7 @@ export const requestSiteReportedPlants = (plantingSiteId: number) => {
 };
 
 export const requestPlantingSiteReportedPlants = createAsyncThunk(
-  'plantingSite/reportedPlants',
+  'tracking/siteReportedPlants',
   async (plantingSiteId: number, { rejectWithValue }) => {
     const response = await TrackingService.getReportedPlants(plantingSiteId);
 
@@ -100,7 +100,7 @@ export const requestPlantingSiteReportedPlants = createAsyncThunk(
 );
 
 export const requestGetPlantingSiteHistory = createAsyncThunk(
-  'plantingSite/history',
+  'tracking/siteHistory',
   async (request: { plantingSiteId: number; historyId: number }, { rejectWithValue }) => {
     const response = await TrackingService.getPlantingSiteHistory(request.plantingSiteId, request.historyId);
 
@@ -113,7 +113,7 @@ export const requestGetPlantingSiteHistory = createAsyncThunk(
 );
 
 export const requestListPlantingSiteHistories = createAsyncThunk(
-  'plantingSite/histories',
+  'tracking/siteHistories',
   async (plantingSiteId: number, { rejectWithValue }) => {
     const response = await TrackingService.listPlantingSiteHistories(plantingSiteId);
 
@@ -121,6 +121,27 @@ export const requestListPlantingSiteHistories = createAsyncThunk(
       return response.data.histories;
     }
 
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestListPlantingSites = createAsyncThunk(
+  'tracking/plantingSites',
+  async (organizationId: number, { rejectWithValue }) => {
+    const response = await TrackingService.listPlantingSites(organizationId, true);
+    if (response !== null && response.requestSucceeded && response?.data?.sites !== undefined) {
+      return response.data.sites;
+    }
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+export const requestOrganizationReportedPlants = createAsyncThunk(
+  'tracking/organizationReportedPlants',
+  async (organizationId: number, { rejectWithValue }) => {
+    const response = await TrackingService.listOrganizationReportedPlants(organizationId);
+    if (response !== null && response.requestSucceeded && response?.data?.sites !== undefined) {
+      return response.data.sites;
+    }
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );

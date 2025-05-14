@@ -322,6 +322,57 @@ const listPlantingSiteAdHocObservationResults = async (
   return response;
 };
 
+/**
+ * List organization  observations results
+ */
+const listOrganizationObservationResults = async (
+  organizationId: number
+): Promise<Response2<ObservationResultsResponsePayload>> => {
+  const response = await httpObservationResults.get2<ObservationResultsResponsePayload>({
+    params: {
+      organizationId: organizationId.toString(),
+    },
+  });
+
+  return response;
+};
+
+const listOrganizationObservations = async (
+  organizationId: number
+): Promise<Response2<ObservationsResponsePayload>> => {
+  const response = await httpObservations.get2<ObservationsResponsePayload>({
+    params: {
+      organizationId: organizationId.toString(),
+    },
+  });
+
+  return response;
+};
+
+const listOrganizationAdHocObservations = async (
+  organizationId: number
+): Promise<Response2<AdHocObservationsPayload>> => {
+  const response = await httpAdHocObservations.get2<ObservationsResponsePayload>({
+    params: {
+      organizationId: organizationId.toString(),
+    },
+  });
+
+  return response;
+};
+
+const listOrganizationAdHocObservationResults = async (
+  organizationId: number
+): Promise<Response2<AdHocObservationResultsPayload>> => {
+  const response = await httpAdHocObservationResults.get2<AdHocObservationResultsPayload>({
+    params: {
+      organizationId: organizationId.toString(),
+    },
+  });
+
+  return response;
+};
+
 const listAdHocObservations = async (organizationId: number): Promise<ObservationsData & Response> => {
   const response: ObservationsData & Response = await httpAdHocObservations.get<
     ObservationsResponsePayload,
@@ -426,10 +477,14 @@ const ObservationsService = {
   getPlantingSiteObservationsSummaries,
   abandonObservation,
   listAdHocObservationResults,
-  listPlantingSiteObservationResults,
   listPlantingSiteObservations,
+  listPlantingSiteObservationResults,
   listPlantingSiteAdHocObservations,
   listPlantingSiteAdHocObservationResults,
+  listOrganizationObservations,
+  listOrganizationObservationResults,
+  listOrganizationAdHocObservations,
+  listOrganizationAdHocObservationResults,
 };
 
 export default ObservationsService;
