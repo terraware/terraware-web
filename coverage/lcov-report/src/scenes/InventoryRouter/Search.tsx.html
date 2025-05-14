@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/101</span>
+                <span class='fraction'>0/98</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/114</span>
+                <span class='fraction'>0/110</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/90</span>
+                <span class='fraction'>0/86</span>
             </div>
         
             
@@ -428,17 +428,7 @@
 <a name='L363'></a><a href='#L363'>363</a>
 <a name='L364'></a><a href='#L364'>364</a>
 <a name='L365'></a><a href='#L365'>365</a>
-<a name='L366'></a><a href='#L366'>366</a>
-<a name='L367'></a><a href='#L367'>367</a>
-<a name='L368'></a><a href='#L368'>368</a>
-<a name='L369'></a><a href='#L369'>369</a>
-<a name='L370'></a><a href='#L370'>370</a>
-<a name='L371'></a><a href='#L371'>371</a>
-<a name='L372'></a><a href='#L372'>372</a>
-<a name='L373'></a><a href='#L373'>373</a>
-<a name='L374'></a><a href='#L374'>374</a>
-<a name='L375'></a><a href='#L375'>375</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L366'></a><a href='#L366'>366</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -538,8 +528,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -644,12 +632,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -819,11 +801,10 @@ import { PillList } from '@terraware/web-components';
 &nbsp;
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { selectSubLocations } from 'src/redux/features/subLocations/subLocationsSelectors';
 import { requestSubLocations } from 'src/redux/features/subLocations/subLocationsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -881,7 +862,7 @@ export default function <span class="fstat-no" title="function not covered" >Sea
 &nbsp;
   const origin = <span class="cstat-no" title="statement not covered" >props.origin || 'Species';</span>
 &nbsp;
-  const speciesResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSpecies(selectedOrganization.id));</span>
+  const { species } = <span class="cstat-no" title="statement not covered" >useSpeciesData();</span>
   const projects = <span class="cstat-no" title="statement not covered" >useAppSelector(selectProjects);</span>
   const [nurseries, setNurseries] = <span class="cstat-no" title="statement not covered" >useState&lt;Facility[]&gt;([]);</span>
   const [availableSpecies, setAvailableSpecies] = <span class="cstat-no" title="statement not covered" >useState&lt;Species[]&gt;([]);</span>
@@ -901,7 +882,7 @@ export default function <span class="fstat-no" title="function not covered" >Sea
   }, [dispatch, selectedOrganization.id, activeLocale]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (origin !== 'Nursery' || !speciesResponse?.data?.species?.length) {</span>
+<span class="cstat-no" title="statement not covered" >    if (origin !== 'Nursery' || !species.length) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 &nbsp;
@@ -911,11 +892,9 @@ export default function <span class="fstat-no" title="function not covered" >Sea
 <span class="cstat-no" title="statement not covered" >      setAvailableSpecies([]);</span>
     } else {
       const speciesWithinResults = <span class="cstat-no" title="statement not covered" >new Set(availableSpeciesNames);</span>
-<span class="cstat-no" title="statement not covered" >      setAvailableSpecies(</span>
-        speciesResponse?.data?.species.filter(<span class="fstat-no" title="function not covered" >(s</span>ingleSpecies) =&gt; <span class="cstat-no" title="statement not covered" >speciesWithinResults.has(singleSpecies.scientificName))</span>
-      );
+<span class="cstat-no" title="statement not covered" >      setAvailableSpecies(species.filter(<span class="fstat-no" title="function not covered" >(s</span>ingleSpecies) =&gt; <span class="cstat-no" title="statement not covered" >speciesWithinResults.has(singleSpecies.scientificName))</span>);</span>
     }
-  }, [getResultsSpeciesNames, origin, speciesResponse?.data?.species]);
+  }, [getResultsSpeciesNames, origin, species]);
 &nbsp;
   const subLocations = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSubLocations);</span>
 &nbsp;
@@ -1020,12 +999,6 @@ export default function <span class="fstat-no" title="function not covered" >Sea
     showProjectsFilter,
     showEmptyBatchesFilter,
   ]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (origin === 'Nursery' &amp;&amp; selectedOrganization.id !== -1) {</span>
-<span class="cstat-no" title="statement not covered" >      void dispatch(requestSpecies(selectedOrganization.id));</span>
-    }
-  }, [origin, dispatch, selectedOrganization.id]);
 &nbsp;
   const onRemovePillList = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (f</span>ilterId: keyof InventoryFiltersUnion) =&gt; {
@@ -1192,7 +1165,7 @@ export default function <span class="fstat-no" title="function not covered" >Sea
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-14T18:49:52.397Z
+                at 2025-05-14T19:41:44.723Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

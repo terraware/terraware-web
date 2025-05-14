@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -130,20 +130,7 @@
 <a name='L65'></a><a href='#L65'>65</a>
 <a name='L66'></a><a href='#L66'>66</a>
 <a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a>
-<a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L68'></a><a href='#L68'>68</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -153,13 +140,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -197,12 +177,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -228,24 +202,17 @@
 import Database from 'src/components/seeds/database';
 import { defaultPreset as DefaultColumns } from 'src/components/seeds/database/columns';
 import { useOrganization, useUser } from 'src/providers';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { DEFAULT_SEED_SEARCH_FILTERS, DEFAULT_SEED_SEARCH_SORT_ORDER } from 'src/services/SeedBankService';
 import { SearchCriteria, SearchSortOrder } from 'src/types/Search';
 import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organization';
 &nbsp;
-interface AccessionsViewProps {
-  setWithdrawalCreated: (value: boolean) =&gt; void;
-}
-&nbsp;
-const AccessionsView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span>}: AccessionsViewProps) =&gt; {</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
+const AccessionsView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const { userPreferences } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const { selectedOrganization, reloadOrganizations, orgPreferences } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const preferredWeightSystem = <span class="cstat-no" title="statement not covered" >userPreferences.preferredWeightSystem as string;</span>
 &nbsp;
-  const speciesResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSpecies(selectedOrganization.id));</span>
+  const { species } = <span class="cstat-no" title="statement not covered" >useSpeciesData();</span>
 &nbsp;
   // seedSearchCriteria describes which criteria to apply when searching accession data.
   const [seedSearchCriteria, setSeedSearchCriteria] = <span class="cstat-no" title="statement not covered" >useState&lt;SearchCriteria&gt;(DEFAULT_SEED_SEARCH_FILTERS);</span>
@@ -279,12 +246,6 @@ const AccessionsView = <span class="cstat-no" title="statement not covered" ><sp
 <span class="cstat-no" title="statement not covered" >    setDefaults();</span>
   }, [setDefaults]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!speciesResponse?.data?.species &amp;&amp; selectedOrganization.id !== -1) {</span>
-<span class="cstat-no" title="statement not covered" >      void dispatch(requestSpecies(selectedOrganization.id));</span>
-    }
-  }, [dispatch, selectedOrganization.id, speciesResponse?.data?.species]);
-&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Database
       searchCriteria={seedSearchCriteria}
@@ -296,7 +257,7 @@ const AccessionsView = <span class="cstat-no" title="statement not covered" ><sp
       displayColumnNames={accessionsDisplayColumns}
       setDisplayColumnNames={setAccessionsDisplayColumns}
       hasSeedBanks={selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')}
-      hasSpecies={(speciesResponse?.data?.species || []).length &gt; 0}
+      hasSpecies={species.length &gt; 0}
       reloadData={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >void reloadOrganizations()}</span>
     /&gt;
   );
@@ -310,7 +271,7 @@ export default AccessionsView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-14T18:49:52.397Z
+                at 2025-05-14T19:41:44.723Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">84.21% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>15/15</span>
+                <span class='fraction'>16/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">31.25% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/8</span>
+                <span class='fraction'>5/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>8/8</span>
+                <span class='fraction'>9/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">84.21% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>15/15</span>
+                <span class='fraction'>16/19</span>
             </div>
         
             
@@ -128,7 +128,31 @@
 <a name='L63'></a><a href='#L63'>63</a>
 <a name='L64'></a><a href='#L64'>64</a>
 <a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -158,10 +182,14 @@
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
@@ -188,6 +216,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">17x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -199,15 +231,23 @@
 import HttpService from '../HttpService';
 &nbsp;
 export type Get = jest.MockedFunction&lt;typeof HttpService.get&gt;;
+export type Get2 = jest.MockedFunction&lt;typeof HttpService.get2&gt;;
 export type Put = jest.MockedFunction&lt;typeof HttpService.put&gt;;
+export type Put2 = jest.MockedFunction&lt;typeof HttpService.put2&gt;;
 export type Post = jest.MockedFunction&lt;typeof HttpService.post&gt;;
+export type Post2 = jest.MockedFunction&lt;typeof HttpService.post2&gt;;
 export type Delete = jest.MockedFunction&lt;typeof HttpService.delete&gt;;
+export type Delete2 = jest.MockedFunction&lt;typeof HttpService.delete2&gt;;
 &nbsp;
 export type MockedImpls = {
   get?: Get;
+  get2?: Get2;
   put?: Put;
+  put2?: Put2;
   post?: Post;
+  post2?: Post2;
   delete?: Delete;
+  delete2?: Delete2;
 };
 &nbsp;
 type Mocks = {
@@ -224,9 +264,13 @@ jest.mock('../HttpService', () =&gt; {
 &nbsp;
   const impls = {
     get: (...args: any[]) =&gt; (mockHttpService.mockedImpls?.get ?? <span class="branch-1 cbranch-no" title="branch not covered" >actual.get)</span>(args),
+    get2: (...args: any[]) =&gt; (mockHttpService.mockedImpls?.get2 ?? <span class="branch-1 cbranch-no" title="branch not covered" >actual.get2)</span>(args),
     put: (...args: any[]) =&gt; (mockHttpService.mockedImpls?.put ?? <span class="branch-1 cbranch-no" title="branch not covered" >actual.put)</span>(args),
+    put2: <span class="fstat-no" title="function not covered" >(.</span>..args: any[]) =&gt; <span class="cstat-no" title="statement not covered" >(mockHttpService.mockedImpls?.put2 ?? actual.put2)(args),</span>
     post: (...args: any[]) =&gt; (mockHttpService.mockedImpls?.post ?? <span class="branch-1 cbranch-no" title="branch not covered" >actual.post)</span>(args),
+    post2: <span class="fstat-no" title="function not covered" >(.</span>..args: any[]) =&gt; <span class="cstat-no" title="statement not covered" >(mockHttpService.mockedImpls?.post2 ?? actual.post2)(args),</span>
     delete: (...args: any[]) =&gt; (mockHttpService.mockedImpls?.delete ?? <span class="branch-1 cbranch-no" title="branch not covered" >actual.delete)</span>(args),
+    delete2: <span class="fstat-no" title="function not covered" >(.</span>..args: any[]) =&gt; <span class="cstat-no" title="statement not covered" >(mockHttpService.mockedImpls?.delete2 ?? actual.delete2)(args),</span>
   };
 &nbsp;
   return {
@@ -241,12 +285,16 @@ jest.mock('../HttpService', () =&gt; {
  * Typing the input as 'any' for easier use.
  */
 const setHttpServiceMocks = (mocks: any) =&gt; {
-  const { get, put, post, delete: del } = mocks;
+  const { get, get2, put, put2, post, post2, delete: del, delete2: del2 } = mocks;
   mockHttpService.mockedImpls = {
     get: get as Get,
+    get2: get2 as Get2,
     put: put as Put,
+    put2: put2 as Put2,
     post: post as Post,
+    post2: post2 as Post2,
     delete: del as Delete,
+    delete2: del2 as Delete2,
   };
 };
 &nbsp;
@@ -265,7 +313,7 @@ export { setHttpServiceMocks, clearHttpServiceMocks };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-14T18:49:52.397Z
+                at 2025-05-14T19:41:44.723Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

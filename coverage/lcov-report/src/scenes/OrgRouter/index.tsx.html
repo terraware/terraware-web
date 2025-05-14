@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/56</span>
+                <span class='fraction'>0/53</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/47</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/55</span>
+                <span class='fraction'>0/51</span>
             </div>
         
             
@@ -338,13 +338,7 @@
 <a name='L273'></a><a href='#L273'>273</a>
 <a name='L274'></a><a href='#L274'>274</a>
 <a name='L275'></a><a href='#L275'>275</a>
-<a name='L276'></a><a href='#L276'>276</a>
-<a name='L277'></a><a href='#L277'>277</a>
-<a name='L278'></a><a href='#L278'>278</a>
-<a name='L279'></a><a href='#L279'>279</a>
-<a name='L280'></a><a href='#L280'>280</a>
-<a name='L281'></a><a href='#L281'>281</a>
-<a name='L282'></a><a href='#L282'>282</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L276'></a><a href='#L276'>276</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -446,12 +440,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -486,13 +474,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -576,11 +557,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -612,6 +588,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -637,12 +625,12 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import ApplicationProvider from 'src/providers/Application';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
+import SpeciesProvider from 'src/providers/Species/SpeciesProvider';
 import PlantingSiteProvider from 'src/providers/Tracking/PlantingSiteProvider';
 import { selectHasObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { selectOrgPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -692,7 +680,7 @@ const OrgRouter = <span class="cstat-no" title="statement not covered" ><span cl
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
-  const speciesResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSpecies(selectedOrganization.id));</span>
+  const { species } = <span class="cstat-no" title="statement not covered" >useSpeciesData();</span>
   const hasObservationsResults: boolean = <span class="cstat-no" title="statement not covered" >useAppSelector(selectHasObservationsResults);</span>
   const plantingSites: PlantingSite[] | undefined = <span class="cstat-no" title="statement not covered" >useAppSelector(selectOrgPlantingSites(selectedOrganization.id));</span>
   const projects: Project[] | undefined = <span class="cstat-no" title="statement not covered" >useAppSelector(selectProjects);</span>
@@ -724,12 +712,6 @@ const OrgRouter = <span class="cstat-no" title="statement not covered" ><span cl
 &nbsp;
   const [withdrawalCreated, setWithdrawalCreated] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
 &nbsp;
-  const reloadSpecies = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (selectedOrganization.id !== -1 &amp;&amp; !['pending', 'success'].includes(speciesResponse?.status || '')) {</span>
-<span class="cstat-no" title="statement not covered" >      void dispatch(requestSpecies(selectedOrganization.id));</span>
-    }
-  }, [dispatch, selectedOrganization.id]);
-&nbsp;
   const reloadProjects = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const populateProjects = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (!isPlaceholderOrg(selectedOrganization.id)) {</span>
@@ -755,10 +737,6 @@ const OrgRouter = <span class="cstat-no" title="statement not covered" ><span cl
   }, [selectedOrganization.id]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    reloadSpecies();</span>
-  }, [reloadSpecies]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    reloadProjects();</span>
   }, [reloadProjects]);
 &nbsp;
@@ -770,10 +748,7 @@ const OrgRouter = <span class="cstat-no" title="statement not covered" ><span cl
 <span class="cstat-no" title="statement not covered" >    setDefaults();</span>
   }, [setDefaults]);
 &nbsp;
-  const selectedOrgHasSpecies = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    ()</span>: boolean =&gt; <span class="cstat-no" title="statement not covered" >(speciesResponse?.data?.species || []).length &gt; 0,</span>
-    [speciesResponse?.data?.species]
-  );
+  const selectedOrgHasSpecies = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span>: boolean =&gt; <span class="cstat-no" title="statement not covered" >species.length &gt; 0,</span> [species]);</span>
 &nbsp;
   const selectedOrgHasSeedBanks = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    ()</span>: boolean =&gt; <span class="cstat-no" title="statement not covered" >selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank'),</span>
@@ -816,96 +791,103 @@ const OrgRouter = <span class="cstat-no" title="statement not covered" ><span cl
   ]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;ApplicationProvider&gt;
-      &lt;ParticipantProvider&gt;
-        &lt;PlantingSiteProvider&gt;
-          {type !== 'desktop' ? (
-            &lt;Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit&gt;
-              &lt;Box sx={navBarOpened}&gt;
-                &lt;NavBar
-                  setShowNavBar={setShowNavBar}
-                  withdrawalCreated={withdrawalCreated}
-                  hasPlantingSites={selectedOrgHasPlantingSites()}
-                /&gt;
-              &lt;/Box&gt;
-            &lt;/Slide&gt;
-          ) : (
+    &lt;&gt;
+      {type !== 'desktop' ? (
+        &lt;Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit&gt;
+          &lt;Box sx={navBarOpened}&gt;
             &lt;NavBar
               setShowNavBar={setShowNavBar}
-              backgroundTransparent={viewHasBackgroundImage()}
               withdrawalCreated={withdrawalCreated}
               hasPlantingSites={selectedOrgHasPlantingSites()}
             /&gt;
-          )}
-          &lt;Box
-            sx={type === 'desktop' || showNavBar ? { ...contentStyles, ...contentWithNavBar } : contentStyles}
-            className='scrollable-content'
-          &gt;
-            &lt;ErrorBoundary setShowNavBar={setShowNavBar}&gt;
-              &lt;Routes&gt;
-                {/* Routes, in order of their appearance down the side NavBar */}
-                &lt;Route path={APP_PATHS.HOME} element={&lt;Home selectedOrgHasSpecies={selectedOrgHasSpecies} /&gt;} /&gt;
-                &lt;Route path={APP_PATHS.SEEDS_DASHBOARD} element={&lt;SeedsDashboard /&gt;} /&gt;
-                &lt;Route path={APP_PATHS.CHECKIN} element={&lt;CheckIn /&gt;} /&gt;
-                &lt;Route
-                  path={APP_PATHS.ACCESSIONS + '/*'}
-                  element={&lt;AccessionsRouter setWithdrawalCreated={setWithdrawalCreated} /&gt;}
-                /&gt;
-                &lt;Route path={APP_PATHS.SPECIES + '/*'} element={&lt;SpeciesRouter /&gt;} /&gt;
-                &lt;Route path={APP_PATHS.ORGANIZATION + '/*'} element={&lt;OrganizationRouter /&gt;} /&gt;
-                &lt;Route path={APP_PATHS.PEOPLE + '/*'} element={&lt;PeopleRouter /&gt;} /&gt;
-                {/* modules router *must* come before the projects router,
-            or else the path will be picked up by the projects router */}
-                &lt;Route path={APP_PATHS.PROJECT_MODULES + '/*'} element={&lt;ModulesRouter /&gt;} /&gt;
-                &lt;Route
-                  path={APP_PATHS.PROJECTS + '/*'}
-                  element={
-                    &lt;ProjectsRouter
-                      reloadProjects={reloadProjects}
-                      isPlaceholderOrg={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >isPlaceholderOrg(selectedOrganization.id)}</span>
-                      selectedOrgHasProjects={selectedOrgHasProjects}
-                    /&gt;
-                  }
-                /&gt;
-                &lt;Route path={APP_PATHS.SEED_BANKS + '/*'} element={&lt;SeedBanksRouter /&gt;} /&gt;
-                &lt;Route path={APP_PATHS.NURSERIES + '/*'} element={&lt;NurseriesRouter /&gt;} /&gt;
-                &lt;Route path={APP_PATHS.PLANTS_DASHBOARD + '/*'} element={&lt;PlantsDashboardRouter /&gt;} /&gt;
-                &lt;Route
-                  path={APP_PATHS.INVENTORY + '/*'}
-                  element={&lt;InventoryRouter setWithdrawalCreated={setWithdrawalCreated} /&gt;}
-                /&gt;
-                &lt;Route
-                  path={APP_PATHS.BATCH_WITHDRAW}
-                  element={&lt;BatchBulkWithdrawView withdrawalCreatedCallback={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setWithdrawalCreated(true)}</span> /&gt;}
-                /&gt;
-                &lt;Route
-                  path={APP_PATHS.PLANTING_SITES + '/*'}
-                  element={&lt;PlantingSites reloadTracking={reloadPlantingSites} /&gt;}
-                /&gt;
-                &lt;Route path={APP_PATHS.NURSERY + '/*'} element={&lt;NurseryRouter /&gt;} /&gt;
-                &lt;Route path={APP_PATHS.HELP_SUPPORT + '/*'} element={&lt;HelpSupportRouter /&gt;} /&gt;
-                &lt;Route path={APP_PATHS.MY_ACCOUNT + '/*'} element={&lt;MyAccountRouter /&gt;} /&gt;
-                &lt;Route path={APP_PATHS.REPORTS + '/*'} element={&lt;AcceleratorReportsRouter /&gt;} /&gt;
-                &lt;Route path={APP_PATHS.SEED_FUND_REPORTS + '/*'} element={&lt;SeedFundReportsRouter /&gt;} /&gt;
-                &lt;Route path={APP_PATHS.OBSERVATIONS + '/*'} element={&lt;ObservationsRouter /&gt;} /&gt;
-                &lt;Route path={APP_PATHS.DELIVERABLES + '/*'} element={&lt;DeliverablesRouter /&gt;} /&gt;
-                &lt;Route path={APP_PATHS.APPLICATIONS + '/*'} element={&lt;ApplicationRouter /&gt;} /&gt;
-&nbsp;
-                {!isProduction &amp;&amp; (
-                  &lt;Route path={APP_PATHS.OPT_IN} element={&lt;OptInFeaturesView refresh={reloadPreferences} /&gt;} /&gt;
-                )}
-&nbsp;
-                &lt;Route path='*' element={&lt;Navigate to={APP_PATHS.HOME} /&gt;} /&gt;
-              &lt;/Routes&gt;
-            &lt;/ErrorBoundary&gt;
           &lt;/Box&gt;
-        &lt;/PlantingSiteProvider&gt;
-      &lt;/ParticipantProvider&gt;
-    &lt;/ApplicationProvider&gt;
+        &lt;/Slide&gt;
+      ) : (
+        &lt;NavBar
+          setShowNavBar={setShowNavBar}
+          backgroundTransparent={viewHasBackgroundImage()}
+          withdrawalCreated={withdrawalCreated}
+          hasPlantingSites={selectedOrgHasPlantingSites()}
+        /&gt;
+      )}
+      &lt;Box
+        sx={type === 'desktop' || showNavBar ? { ...contentStyles, ...contentWithNavBar } : contentStyles}
+        className='scrollable-content'
+      &gt;
+        &lt;ErrorBoundary setShowNavBar={setShowNavBar}&gt;
+          &lt;Routes&gt;
+            {/* Routes, in order of their appearance down the side NavBar */}
+            &lt;Route path={APP_PATHS.HOME} element={&lt;Home selectedOrgHasSpecies={selectedOrgHasSpecies} /&gt;} /&gt;
+            &lt;Route path={APP_PATHS.SEEDS_DASHBOARD} element={&lt;SeedsDashboard /&gt;} /&gt;
+            &lt;Route path={APP_PATHS.CHECKIN} element={&lt;CheckIn /&gt;} /&gt;
+            &lt;Route path={APP_PATHS.ACCESSIONS + '/*'} element={&lt;AccessionsRouter /&gt;} /&gt;
+            &lt;Route path={APP_PATHS.SPECIES + '/*'} element={&lt;SpeciesRouter /&gt;} /&gt;
+            &lt;Route path={APP_PATHS.ORGANIZATION + '/*'} element={&lt;OrganizationRouter /&gt;} /&gt;
+            &lt;Route path={APP_PATHS.PEOPLE + '/*'} element={&lt;PeopleRouter /&gt;} /&gt;
+            {/* modules router *must* come before the projects router,
+            or else the path will be picked up by the projects router */}
+            &lt;Route path={APP_PATHS.PROJECT_MODULES + '/*'} element={&lt;ModulesRouter /&gt;} /&gt;
+            &lt;Route
+              path={APP_PATHS.PROJECTS + '/*'}
+              element={
+                &lt;ProjectsRouter
+                  reloadProjects={reloadProjects}
+                  isPlaceholderOrg={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >isPlaceholderOrg(selectedOrganization.id)}</span>
+                  selectedOrgHasProjects={selectedOrgHasProjects}
+                /&gt;
+              }
+            /&gt;
+            &lt;Route path={APP_PATHS.SEED_BANKS + '/*'} element={&lt;SeedBanksRouter /&gt;} /&gt;
+            &lt;Route path={APP_PATHS.NURSERIES + '/*'} element={&lt;NurseriesRouter /&gt;} /&gt;
+            &lt;Route path={APP_PATHS.PLANTS_DASHBOARD + '/*'} element={&lt;PlantsDashboardRouter /&gt;} /&gt;
+            &lt;Route
+              path={APP_PATHS.INVENTORY + '/*'}
+              element={&lt;InventoryRouter setWithdrawalCreated={setWithdrawalCreated} /&gt;}
+            /&gt;
+            &lt;Route
+              path={APP_PATHS.BATCH_WITHDRAW}
+              element={&lt;BatchBulkWithdrawView withdrawalCreatedCallback={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setWithdrawalCreated(true)}</span> /&gt;}
+            /&gt;
+            &lt;Route
+              path={APP_PATHS.PLANTING_SITES + '/*'}
+              element={&lt;PlantingSites reloadTracking={reloadPlantingSites} /&gt;}
+            /&gt;
+            &lt;Route path={APP_PATHS.NURSERY + '/*'} element={&lt;NurseryRouter /&gt;} /&gt;
+            &lt;Route path={APP_PATHS.HELP_SUPPORT + '/*'} element={&lt;HelpSupportRouter /&gt;} /&gt;
+            &lt;Route path={APP_PATHS.MY_ACCOUNT + '/*'} element={&lt;MyAccountRouter /&gt;} /&gt;
+            &lt;Route path={APP_PATHS.REPORTS + '/*'} element={&lt;AcceleratorReportsRouter /&gt;} /&gt;
+            &lt;Route path={APP_PATHS.SEED_FUND_REPORTS + '/*'} element={&lt;SeedFundReportsRouter /&gt;} /&gt;
+            &lt;Route path={APP_PATHS.OBSERVATIONS + '/*'} element={&lt;ObservationsRouter /&gt;} /&gt;
+            &lt;Route path={APP_PATHS.DELIVERABLES + '/*'} element={&lt;DeliverablesRouter /&gt;} /&gt;
+            &lt;Route path={APP_PATHS.APPLICATIONS + '/*'} element={&lt;ApplicationRouter /&gt;} /&gt;
+&nbsp;
+            {!isProduction &amp;&amp; (
+              &lt;Route path={APP_PATHS.OPT_IN} element={&lt;OptInFeaturesView refresh={reloadPreferences} /&gt;} /&gt;
+            )}
+&nbsp;
+            &lt;Route path='*' element={&lt;Navigate to={APP_PATHS.HOME} /&gt;} /&gt;
+          &lt;/Routes&gt;
+        &lt;/ErrorBoundary&gt;
+      &lt;/Box&gt;
+    &lt;/&gt;
   );
 };
 &nbsp;
-export default OrgRouter;
+const OrgRouterWithProviders = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rops: OrgRouterProps) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;SpeciesProvider&gt;
+      &lt;ApplicationProvider&gt;
+        &lt;ParticipantProvider&gt;
+          &lt;PlantingSiteProvider&gt;
+            &lt;OrgRouter {...props} /&gt;
+          &lt;/PlantingSiteProvider&gt;
+        &lt;/ParticipantProvider&gt;
+      &lt;/ApplicationProvider&gt;
+    &lt;/SpeciesProvider&gt;
+  );
+};
+&nbsp;
+export default OrgRouterWithProviders;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -913,7 +895,7 @@ export default OrgRouter;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-14T18:49:52.397Z
+                at 2025-05-14T19:41:44.723Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -154,9 +154,7 @@
 <a name='L89'></a><a href='#L89'>89</a>
 <a name='L90'></a><a href='#L90'>90</a>
 <a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a>
-<a name='L94'></a><a href='#L94'>94</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L92'></a><a href='#L92'>92</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -169,7 +167,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -190,7 +187,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -254,16 +250,15 @@
 import { Box, Typography, useTheme } from '@mui/material';
 &nbsp;
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import strings from 'src/strings';
 import { ObservationSpeciesResultsPayload } from 'src/types/Observations';
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >HighestAndLowestMortalityRateSpeciesCard(</span>): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { observationSummaries } = <span class="cstat-no" title="statement not covered" >usePlantingSiteData();</span>
-&nbsp;
-  const { availableSpecies } = <span class="cstat-no" title="statement not covered" >useSpecies();</span>
+  const { species: availableSpecies } = <span class="cstat-no" title="statement not covered" >useSpeciesData();</span>
 &nbsp;
   let highestMortalityRate: number | undefined;
   let highestSpecies = <span class="cstat-no" title="statement not covered" >'';</span>
@@ -279,15 +274,14 @@ export default function <span class="fstat-no" title="function not covered" >Hig
     ) {
 <span class="cstat-no" title="statement not covered" >      highestMortalityRate = sp.mortalityRate;</span>
 <span class="cstat-no" title="statement not covered" >      highestSpecies =</span>
-        availableSpecies?.find(<span class="fstat-no" title="function not covered" >(s</span>pec) =&gt; <span class="cstat-no" title="statement not covered" >spec.id === sp.speciesId)</span>?.scientificName || sp.speciesName || '';
+        availableSpecies.find(<span class="fstat-no" title="function not covered" >(s</span>pec) =&gt; <span class="cstat-no" title="statement not covered" >spec.id === sp.speciesId)</span>?.scientificName || sp.speciesName || '';
     }
   });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  observationSummaries?.[0]?.species.forEach(<span class="fstat-no" title="function not covered" >(s</span>p: ObservationSpeciesResultsPayload) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (sp.mortalityRate !== undefined &amp;&amp; sp.mortalityRate !== null &amp;&amp; sp.mortalityRate &lt; lowestMortalityRate) {</span>
 <span class="cstat-no" title="statement not covered" >      lowestMortalityRate = sp.mortalityRate;</span>
-<span class="cstat-no" title="statement not covered" >      lowestSpecies =</span>
-        availableSpecies?.find(<span class="fstat-no" title="function not covered" >(s</span>pec) =&gt; <span class="cstat-no" title="statement not covered" >spec.id === sp.speciesId)</span>?.scientificName || sp.speciesName || '';
+<span class="cstat-no" title="statement not covered" >      lowestSpecies = availableSpecies.find(<span class="fstat-no" title="function not covered" >(s</span>pec) =&gt; <span class="cstat-no" title="statement not covered" >spec.id === sp.speciesId)</span>?.scientificName || sp.speciesName || '';</span>
     }
   });
 &nbsp;
@@ -349,7 +343,7 @@ export default function <span class="fstat-no" title="function not covered" >Hig
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-14T18:49:52.397Z
+                at 2025-05-14T19:41:44.723Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

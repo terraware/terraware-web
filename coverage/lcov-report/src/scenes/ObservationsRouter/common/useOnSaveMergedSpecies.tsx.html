@@ -163,26 +163,26 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -205,8 +205,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useEffect, useState } from 'react';
 &nbsp;
-import { useOrganization } from 'src/providers';
-import { selectMergeOtherSpecies, selectSpecies } from 'src/redux/features/species/speciesSelectors';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
+import { selectMergeOtherSpecies } from 'src/redux/features/species/speciesSelectors';
 import { MergeOtherSpeciesRequestData, requestMergeOtherSpecies } from 'src/redux/features/species/speciesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { MergeOtherSpeciesPayloadPartial } from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
@@ -230,30 +230,30 @@ export function <span class="fstat-no" title="function not covered" >useOnSaveMe
 ): (mergedSpeciesPayloads: MergeOtherSpeciesPayloadPartial[]) =&gt; void {
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
-  const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const [mergeRequestId, setMergeRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const matchResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectMergeOtherSpecies(mergeRequestId));</span>
-  const speciesResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSpecies(selectedOrganization.id));</span>
   const { observationId, reload, setShowMatchSpeciesModal } = <span class="cstat-no" title="statement not covered" >props;</span>
+&nbsp;
+  const { species, reload: reloadSpecies } = <span class="cstat-no" title="statement not covered" >useSpeciesData();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (matchResponse?.status === 'success' &amp;&amp; matchResponse?.data &amp;&amp; matchResponse.data.length &gt; 0) {</span>
       // Force reload page to show updated data
 <span class="cstat-no" title="statement not covered" >      reload();</span>
+<span class="cstat-no" title="statement not covered" >      reloadSpecies();</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastSuccess([MergedSuccessMessage(matchResponse.data)], strings.SPECIES_MATCHED);</span>
     }
 <span class="cstat-no" title="statement not covered" >    if (matchResponse?.status === 'error') {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError();</span>
     }
-  }, [matchResponse, snackbar]);
+  }, [matchResponse, snackbar, reload, reloadSpecies]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (m</span>ergedSpeciesPayloads: MergeOtherSpeciesPayloadPartial[]) =&gt; {
       const mergeOtherSpeciesRequestData: MergeOtherSpeciesRequestData[] = <span class="cstat-no" title="statement not covered" >mergedSpeciesPayloads</span>
         .filter(<span class="fstat-no" title="function not covered" >(s</span>p) =&gt; <span class="cstat-no" title="statement not covered" >!!sp.otherSpeciesName &amp;&amp; !!sp.speciesId)</span>
         .map(<span class="fstat-no" title="function not covered" >(s</span>p) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-          newName:
-            speciesResponse?.data?.species?.find(<span class="fstat-no" title="function not covered" >(e</span>xisting) =&gt; <span class="cstat-no" title="statement not covered" >existing.id === sp.speciesId)</span>?.scientificName || '',
+          newName: species.find(<span class="fstat-no" title="function not covered" >(e</span>xisting) =&gt; <span class="cstat-no" title="statement not covered" >existing.id === sp.speciesId)</span>?.scientificName || '',
           otherSpeciesName: sp.otherSpeciesName!,
           speciesId: sp.speciesId!,
         }));
@@ -270,7 +270,7 @@ export function <span class="fstat-no" title="function not covered" >useOnSaveMe
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      setShowMatchSpeciesModal(false);</span>
     },
-    [observationId, dispatch]
+    [observationId, dispatch, species]
   );
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -280,7 +280,7 @@ export function <span class="fstat-no" title="function not covered" >useOnSaveMe
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-14T18:49:52.397Z
+                at 2025-05-14T19:41:44.723Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

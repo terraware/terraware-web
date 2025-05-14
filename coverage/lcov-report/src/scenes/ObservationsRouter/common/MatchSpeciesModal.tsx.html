@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -196,23 +196,7 @@
 <a name='L131'></a><a href='#L131'>131</a>
 <a name='L132'></a><a href='#L132'>132</a>
 <a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a>
-<a name='L135'></a><a href='#L135'>135</a>
-<a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a>
-<a name='L138'></a><a href='#L138'>138</a>
-<a name='L139'></a><a href='#L139'>139</a>
-<a name='L140'></a><a href='#L140'>140</a>
-<a name='L141'></a><a href='#L141'>141</a>
-<a name='L142'></a><a href='#L142'>142</a>
-<a name='L143'></a><a href='#L143'>143</a>
-<a name='L144'></a><a href='#L144'>144</a>
-<a name='L145'></a><a href='#L145'>145</a>
-<a name='L146'></a><a href='#L146'>146</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L134'></a><a href='#L134'>134</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -233,17 +217,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -360,10 +336,6 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import SpeciesSelector from 'src/components/common/SpeciesSelector';
 import Button from 'src/components/common/button/Button';
-import { useOrganization } from 'src/providers';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { MergeOtherSpeciesPayload } from 'src/types/Species';
 import useForm from 'src/utils/useForm';
@@ -378,20 +350,12 @@ export interface MatchSpeciesModalProps {
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >MatchSpeciesModal(</span>props: MatchSpeciesModalProps): JSX.Element {
   const { onClose, onSave, unrecognizedSpecies } = <span class="cstat-no" title="statement not covered" >props;</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-  const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-  const speciesResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSpecies(selectedOrganization.id));</span>
+&nbsp;
   const [records, setRecords] = <span class="cstat-no" title="statement not covered" >useForm&lt;MergeOtherSpeciesPayloadPartial[]&gt;(</span>
-    unrecognizedSpecies.map(<span class="fstat-no" title="function not covered" >(s</span>pecies) =&gt; {
-<span class="cstat-no" title="statement not covered" >      return { otherSpeciesName: species };</span>
+    unrecognizedSpecies.map(<span class="fstat-no" title="function not covered" >(s</span>peciesName) =&gt; {
+<span class="cstat-no" title="statement not covered" >      return { otherSpeciesName: speciesName };</span>
     })
   );
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!speciesResponse?.data?.species &amp;&amp; selectedOrganization.id !== -1) {</span>
-<span class="cstat-no" title="statement not covered" >      void dispatch(requestSpecies(selectedOrganization.id));</span>
-    }
-  }, [dispatch, speciesResponse?.data?.species, selectedOrganization]);
 &nbsp;
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
@@ -435,10 +399,10 @@ export default function <span class="fstat-no" title="function not covered" >Mat
       &lt;/Grid&gt;
 &nbsp;
       &lt;Grid container textAlign={'left'}&gt;
-        {unrecognizedSpecies.map(<span class="fstat-no" title="function not covered" >(s</span>pecies, index) =&gt; (
+        {unrecognizedSpecies.map(<span class="fstat-no" title="function not covered" >(s</span>peciesName, index) =&gt; (
 <span class="cstat-no" title="statement not covered" >          &lt;MatchSpeciesRow</span>
             key={index}
-            matchSpeciesPayload={{ otherSpeciesName: species }}
+            matchSpeciesPayload={{ otherSpeciesName: speciesName }}
             setRecords={setRecords}
             index={index}
           /&gt;
@@ -505,7 +469,7 @@ function <span class="fstat-no" title="function not covered" >MatchSpeciesRow(</
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-14T18:49:52.397Z
+                at 2025-05-14T19:41:44.723Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

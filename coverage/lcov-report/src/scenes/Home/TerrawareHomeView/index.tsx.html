@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/76</span>
+                <span class='fraction'>0/73</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/71</span>
+                <span class='fraction'>0/70</span>
             </div>
         
             
@@ -476,13 +476,7 @@
 <a name='L411'></a><a href='#L411'>411</a>
 <a name='L412'></a><a href='#L412'>412</a>
 <a name='L413'></a><a href='#L413'>413</a>
-<a name='L414'></a><a href='#L414'>414</a>
-<a name='L415'></a><a href='#L415'>415</a>
-<a name='L416'></a><a href='#L416'>416</a>
-<a name='L417'></a><a href='#L417'>417</a>
-<a name='L418'></a><a href='#L418'>418</a>
-<a name='L419'></a><a href='#L419'>419</a>
-<a name='L420'></a><a href='#L420'>420</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L414'></a><a href='#L414'>414</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -548,17 +542,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -919,13 +907,13 @@ import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import CTACard from 'src/scenes/Home/CTACard';
 import MobileAppCard from 'src/scenes/Home/MobileAppCard';
-import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
 import { isAdmin, isManagerOrHigher, selectedOrgHasFacilityType } from 'src/utils/organization';
@@ -944,7 +932,7 @@ const TerrawareHomeView = <span class="cstat-no" title="statement not covered" >
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const { goToNewAccession } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
   const plantingSites = <span class="cstat-no" title="statement not covered" >useAppSelector(selectPlantingSites);</span>
-  const { availableSpecies } = <span class="cstat-no" title="statement not covered" >useSpecies();</span>
+  const { species } = <span class="cstat-no" title="statement not covered" >useSpeciesData();</span>
   const seedBankSummary = <span class="cstat-no" title="statement not covered" >useSeedBankSummary();</span>
   const orgNurserySummary = <span class="cstat-no" title="statement not covered" >useOrgNurserySummary();</span>
   const [showAcceleratorCard, setShowAcceleratorCard] = <span class="cstat-no" title="statement not covered" >useState(true);</span>
@@ -967,29 +955,23 @@ const TerrawareHomeView = <span class="cstat-no" title="statement not covered" >
   }, [dispatch, selectedOrganization.id]);
 &nbsp;
   const isLoadingInitialData = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >      availableSpecies === undefined ||</span>
-      orgNurserySummary?.requestSucceeded === undefined ||
-      seedBankSummary?.requestSucceeded === undefined,
-    [availableSpecies, orgNurserySummary, seedBankSummary]
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >orgNurserySummary?.requestSucceeded === undefined || seedBankSummary?.requestSucceeded === undefined,</span>
+    [orgNurserySummary, seedBankSummary]
   );
 &nbsp;
-  const showHomePageOnboardingImprovements = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >typeof availableSpecies?.length === 'number' &amp;&amp; availableSpecies?.length &gt; 0,</span>
-    [availableSpecies]
-  );
+  const showHomePageOnboardingImprovements = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >species.length &gt; 0,</span> [species]);</span>
 &nbsp;
   const speciesLastModifiedDate = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!availableSpecies?.length) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!species?.length) {</span>
 <span class="cstat-no" title="statement not covered" >      return undefined;</span>
     }
 &nbsp;
-    const lastModifiedTime = <span class="cstat-no" title="statement not covered" >availableSpecies.sort(</span>
+    const lastModifiedTime = <span class="cstat-no" title="statement not covered" >[...species].sort(</span>
 <span class="fstat-no" title="function not covered" >      (a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >new Date(b.modifiedTime).getTime() - new Date(a.modifiedTime).getTime()</span>
     )[0].modifiedTime;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return getDateDisplayValue(lastModifiedTime);</span>
-  }, [availableSpecies]);
+  }, [species]);
 &nbsp;
   const primaryGridSize = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >isMobile ? 12 : 6)</span>, [isMobile]);</span>
 &nbsp;
@@ -1032,7 +1014,7 @@ const TerrawareHomeView = <span class="cstat-no" title="statement not covered" >
             },
         icon: 'species' as IconName,
         statsCardItems: [
-          { label: strings.TOTAL_SPECIES, value: numericFormatter.format(availableSpecies?.length ?? 0) },
+          { label: strings.TOTAL_SPECIES, value: numericFormatter.format(species.length ?? 0) },
           {
             label: strings.SPECIES_LAST_UPDATED,
             value: speciesLastModifiedDate,
@@ -1129,7 +1111,7 @@ const TerrawareHomeView = <span class="cstat-no" title="statement not covered" >
 <span class="cstat-no" title="statement not covered" >    return rows;</span>
   }, [
     activeLocale,
-    availableSpecies,
+    species,
     orgNurserySummary,
     plantingSites,
     seedBankSummary,
@@ -1327,7 +1309,7 @@ export default TerrawareHomeView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-14T18:49:52.397Z
+                at 2025-05-14T19:41:44.723Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
@@ -153,7 +153,22 @@
 <a name='L88'></a><a href='#L88'>88</a>
 <a name='L89'></a><a href='#L89'>89</a>
 <a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -236,7 +251,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -248,7 +278,7 @@
 import { Species } from 'src/types/Species';
 &nbsp;
 import { StatusT, buildReducers } from '../asyncUtils';
-import { requestGetOneSpecies, requestUpdateSpecies } from './speciesAsyncThunks';
+import { requestGetOneSpecies, requestListSpecies, requestUpdateSpecies } from './speciesAsyncThunks';
 import { MergeOtherSpeciesRequestData, requestMergeOtherSpecies } from './speciesThunks';
 &nbsp;
 // Define a type for the slice state
@@ -299,6 +329,20 @@ export const speciesGetOneSlice = <span class="cstat-no" title="statement not co
 });
 &nbsp;
 /**
+ * List Species
+ */
+const initialStateSpeciesList: { [key: string]: StatusT&lt;Species[]&gt; } = <span class="cstat-no" title="statement not covered" >{};</span>
+&nbsp;
+export const speciesListSlice = <span class="cstat-no" title="statement not covered" >createSlice({</span>
+  name: 'speciesListSlice',
+  initialState: initialStateSpeciesList,
+  reducers: {},
+  extraReducers: <span class="fstat-no" title="function not covered" >(b</span>uilder) =&gt; {
+<span class="cstat-no" title="statement not covered" >    buildReducers(requestListSpecies)(builder);</span>
+  },
+});
+&nbsp;
+/**
  * Update Species
  */
 const initialStateSpeciesUpdate: { [key: string]: StatusT&lt;boolean&gt; } = <span class="cstat-no" title="statement not covered" >{};</span>
@@ -328,6 +372,7 @@ export const mergeOtherSpeciesSlice = <span class="cstat-no" title="statement no
 &nbsp;
 const speciesAsyncThunkReducers = <span class="cstat-no" title="statement not covered" >{</span>
   speciesGetOne: speciesGetOneSlice.reducer,
+  speciesList: speciesListSlice.reducer,
   speciesUpdate: speciesUpdateSlice.reducer,
   mergeOtherSpecies: mergeOtherSpeciesSlice.reducer,
 };
@@ -340,7 +385,7 @@ export default speciesAsyncThunkReducers;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-14T18:49:52.397Z
+                at 2025-05-14T19:41:44.723Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

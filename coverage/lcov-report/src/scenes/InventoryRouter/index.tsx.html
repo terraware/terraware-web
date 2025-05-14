@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
@@ -116,31 +116,7 @@
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a>
 <a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L54'></a><a href='#L54'>54</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -160,20 +136,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -207,19 +169,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 import { Route, Routes } from 'react-router';
 &nbsp;
 import { useOrganization } from 'src/providers';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import InventoryBatchView from 'src/scenes/InventoryRouter/InventoryBatchView';
 import InventoryCreateView from 'src/scenes/InventoryRouter/InventoryCreateView';
 import InventoryForNurseryView from 'src/scenes/InventoryRouter/InventoryForNurseryView';
@@ -233,22 +187,8 @@ interface InventoryRouterProps {
 }
 &nbsp;
 const InventoryRouter = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> setWithdrawalCreated }: InventoryRouterProps) =&gt; {</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-&nbsp;
-  const speciesResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSpecies(selectedOrganization.id));</span>
-&nbsp;
-  const reloadSpecies = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (selectedOrganization.id !== -1) {</span>
-<span class="cstat-no" title="statement not covered" >      void dispatch(requestSpecies(selectedOrganization.id));</span>
-    }
-  }, [dispatch, selectedOrganization.id]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!speciesResponse?.data?.species) {</span>
-<span class="cstat-no" title="statement not covered" >      reloadSpecies();</span>
-    }
-  }, [speciesResponse?.data?.species, reloadSpecies]);
+  const { species } = <span class="cstat-no" title="statement not covered" >useSpeciesData();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Routes&gt;
@@ -257,7 +197,7 @@ const InventoryRouter = <span class="cstat-no" title="statement not covered" ><s
         element={
           &lt;InventoryV2View
             hasNurseries={selectedOrgHasFacilityType(selectedOrganization, 'Nursery')}
-            hasSpecies={(speciesResponse?.data?.species || []).length &gt; 0}
+            hasSpecies={species.length &gt; 0}
           /&gt;
         }
       /&gt;
@@ -266,23 +206,17 @@ const InventoryRouter = <span class="cstat-no" title="statement not covered" ><s
         path={'/withdraw'}
         element={&lt;SpeciesBulkWithdrawView withdrawalCreatedCallback={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setWithdrawalCreated(true)}</span> /&gt;}
       /&gt;
-      &lt;Route
-        path={'/batch/:batchId'}
-        element={&lt;InventoryBatchView origin='Batches' species={speciesResponse?.data?.species || []} /&gt;}
-      /&gt;
+      &lt;Route path={'/batch/:batchId'} element={&lt;InventoryBatchView origin='Batches' species={species} /&gt;} /&gt;
       &lt;Route
         path={'/nursery/:nurseryId/batch/:batchId'}
-        element={&lt;InventoryBatchView origin='Nursery' species={speciesResponse?.data?.species || []} /&gt;}
+        element={&lt;InventoryBatchView origin='Nursery' species={species} /&gt;}
       /&gt;
       &lt;Route
         path={'/species/:speciesId/batch/:batchId'}
-        element={&lt;InventoryBatchView origin='Species' species={speciesResponse?.data?.species || []} /&gt;}
+        element={&lt;InventoryBatchView origin='Species' species={species} /&gt;}
       /&gt;
       &lt;Route path={'/nursery/:nurseryId'} element={&lt;InventoryForNurseryView /&gt;} /&gt;
-      &lt;Route
-        path={'/:speciesId'}
-        element={&lt;InventoryForSpeciesView species={speciesResponse?.data?.species || []} /&gt;}
-      /&gt;
+      &lt;Route path={'/:speciesId'} element={&lt;InventoryForSpeciesView species={species} /&gt;} /&gt;
     &lt;/Routes&gt;
   );
 };
@@ -295,7 +229,7 @@ export default InventoryRouter;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-14T18:49:52.397Z
+                at 2025-05-14T19:41:44.723Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

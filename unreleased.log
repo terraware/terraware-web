@@ -1,3 +1,5 @@
+a56db1255a5 Replaced sporadic species dispatch calls with species provider (#3979)
+4a087f2383c SW-6880 Progress Notes text in Funder Portal not showing line breaks or using "see more" feature (#3998)
 06b14fe84ee Replace component with web-components version (#3996)
 8bca7918f97 Replaced seed fund report usages of observation selectors (#3985)
 390773da86c SW-6918 Fix order of sdg list (#3993)
