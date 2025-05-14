@@ -79,8 +79,18 @@ export type DocumentVariablesProps = {
 
 const filterSearch =
   (searchValue: string) =>
-  (variable: VariableWithValues): boolean =>
-    searchValue ? fuzzyMatch(searchValue, variable.name.toLowerCase()) : true;
+  (variable: VariableWithValues): boolean => {
+    if (!searchValue) {
+      return true;
+    }
+
+    // Check if the search value is present in the variable name or deliverable question
+    // Use fuzzy matching for better user experience
+    return (
+      fuzzyMatch(searchValue, variable.name) ||
+      (variable.deliverableQuestion ? fuzzyMatch(searchValue, variable.deliverableQuestion) : false)
+    );
+  };
 
 const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.Element => {
   const activeLocale = useLocalization();
