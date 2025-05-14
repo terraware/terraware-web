@@ -79,7 +79,7 @@ const MetricBox = ({ metric, index, year, quarter, lastIndex }: MetricBoxProps) 
             {strings.PROGRESS_NOTES}
           </Typography>
           <Textfield
-            display={true}
+            display
             preserveNewlines
             id='progressNotes'
             type='textarea'
