@@ -13,11 +13,11 @@ import { AcceleratorReportStatus } from 'src/types/AcceleratorReport';
 
 import AcceleratorReportStatusBadge from './AcceleratorReportStatusBadge';
 
-type AcceleratorReportCellRenderer = {
+type AcceleratorReportCellRendererType = {
   projectId: string;
 };
 
-export default function AcceleratorReportCellRenderer({ projectId }: AcceleratorReportCellRenderer) {
+export default function AcceleratorReportCellRenderer({ projectId }: AcceleratorReportCellRendererType) {
   // eslint-disable-next-line react/display-name
   return (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, index, value } = props;

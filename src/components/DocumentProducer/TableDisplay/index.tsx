@@ -138,9 +138,10 @@ const cellContents = (value: VariableValueValue, col: TableColumn) => {
       return value.dateValue;
     case 'Link':
       return value.title ?? value.url;
-    case 'Select':
+    case 'Select': {
       const options = (col.variable as SelectVariable).options;
       const selectedOption = options.find((opt) => opt.id === value.optionValues[0]);
       return selectedOption?.renderedText ?? selectedOption?.name ?? '';
+    }
   }
 };

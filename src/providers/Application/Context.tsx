@@ -18,9 +18,9 @@ export const ApplicationContext = createContext<ApplicationData>({
   applicationSections: [],
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getApplicationByProjectId: (projectId: number) => undefined,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
   setSelectedApplication: (applicationId: number) => {},
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
   reload: (onReload?: () => void) => {},
 });
 
