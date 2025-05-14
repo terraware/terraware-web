@@ -26,6 +26,7 @@ type ProjectDetails = {
   nativeSpecies?: string;
   expansionPotential?: string;
   accumulationRate?: string;
+  minMaxCarbonAccumulation?: string;
   methodology?: string;
   standard?: string;
   sdgList?: number[];
@@ -34,7 +35,7 @@ type ProjectDetails = {
 };
 
 export default function ProjectProfileTests() {
-  test.skip('View Project Profile for project in application', async ({ page }, testInfo) => {
+  test('View Project Profile for project in application', async ({ page }, testInfo) => {
     await page.goto('http://127.0.0.1:3000');
     await waitFor(page, '#home');
     await page.getByRole('link', { name: 'Accelerator Console' }).click();
@@ -62,6 +63,7 @@ export default function ProjectProfileTests() {
 
     const projectDetails: ProjectDetails = {
       dealName: 'Phase 0 Project Deal',
+      projectName: 'Phase 0 Project',
       overview: 'This is the phase 0 project overview.',
       country: 'Afghanistan',
       topAreaCard: ['1,000 ha', ' Eligible Area'],
@@ -82,28 +84,64 @@ export default function ProjectProfileTests() {
     await validateProjectProfilePage(projectDetails, page);
   });
 
-  test.skip('View Project Profile for project in Phase 1', async ({ page }, testInfo) => {
+  test('View Project Profile for project in Phase 1', async ({ page }, testInfo) => {
     await navigateToProjectProfile('Phase 1 Project Deal', page);
 
     const projectDetails: ProjectDetails = {
       dealName: 'Phase 1 Project Deal',
+      projectName: 'Phase 1 Project',
       overview: 'This is the phase 1 project overview.',
       country: 'Argentina',
-      topAreaCard: ['1,000 ha', ' Min Project Area'],
-      landUseModelHectares: 'Native Forest (12,100 ha)/Monoculture (13,200 ha)/Sustainable Timber (--)',
-      sdgList: [1, 2, 3],
-      additionalPageText: ['Test Cohort Phase 1', 'Phase 1 - Due Diligence', 'Viewing: Country Only'],
-      hiddenText: ['StandardVCS', 'Methodology NumberVM0033'],
+      topAreaCard: ['4,000 ha', ' Minimum Project Area'],
+      landUseModelHectares: 'Other Timber (1,000 ha)/Mangroves (10,000 ha)',
+      topCarbonCard: ['200', 'Accumulation Rate'],
+      totalVcu: '2,400 t',
+      estimatedBudget: '$12,345 per ha',
+      eligibleArea: '2,000 ha',
+      projectArea: '3,000 ha',
+      minProjectArea: '4,000 ha',
+      expansionPotential: '1,200 ha',
+      nativeSpecies: '35',
+      minMaxCarbonAccumulation: '110-220',
+      standard: 'VCS & CCB',
+      methodology: 'VM0047',
+      sdgList: [4, 5, 6],
+      additionalPageText: [
+        'Test Cohort Phase 1',
+        'Phase 1 - Feasibility Study',
+        'Viewing: Project Zone Figure Variable',
+      ],
     };
 
     await validateProjectProfilePage(projectDetails, page);
   });
 
-  test.skip('View Project Profile for project in Phase 2', async ({ page }, testInfo) => {
+  test('View Project Profile for project in Phase 2', async ({ page }, testInfo) => {
     await navigateToProjectProfile('Phase 2 Project Deal', page);
 
-    await expect(page.getByText('Gold Standard', exactOptions)).toBeVisible();
-    await expect(page.getByText('Other', exactOptions)).toBeVisible();
+    const projectDetails: ProjectDetails = {
+      dealName: 'Phase 2 Project Deal',
+      projectName: 'Phase 2 Project',
+      overview: 'This is the phase 2 project overview.',
+      country: 'Guatemala',
+      topAreaCard: ['31,000 ha', ' Project Area'],
+      landUseModelHectares: 'Silvopasture (25,000 ha)/Other Land-Use Model (12 ha)',
+      topCarbonCard: ['1500', 'Accumulation Rate'],
+      totalVcu: '40 t',
+      estimatedBudget: '$16 per ha',
+      eligibleArea: '30,000 ha',
+      projectArea: '31,000 ha',
+      minProjectArea: '25,000 ha',
+      expansionPotential: '6,000 ha',
+      nativeSpecies: '30',
+      minMaxCarbonAccumulation: '1000-2000',
+      standard: 'Gold Standard',
+      methodology: 'Other',
+      sdgList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+      additionalPageText: ['Test Cohort Phase 2', 'Phase 2 - Plan and Scale', 'Viewing: Project Zone Figure Variable'],
+    };
+
+    await validateProjectProfilePage(projectDetails, page);
   });
 
   test.skip('Edit Project Profile', async ({ page }, testInfo) => {
@@ -132,16 +170,24 @@ async function validateProjectProfilePage(projectDetails: ProjectDetails, page: 
   await validateWithPost(' Land Use Model Type', projectDetails.landUseModelHectares);
   projectDetails.topCarbonCard &&
     (await validateWithPost(` tCO2/ha/yr${projectDetails.topCarbonCard[1]}`, projectDetails.topCarbonCard[0]));
-  expect(await page.getByText('Total VCUs (40 yrs)').locator('..').allInnerTexts()).toContain(
-    `${projectDetails.totalVcu}\n\nTotal VCUs (40 yrs)`
-  );
+  projectDetails.totalVcu &&
+    expect(await page.getByText('Total VCUs (40 yrs)').locator('..').allInnerTexts()).toContain(
+      `${projectDetails.totalVcu}\n\nTotal VCUs (40 yrs)`
+    );
   await validateWithPost(' Estimated Budget', projectDetails.estimatedBudget);
   await validateWithPre('Native Species to be Planted', projectDetails.nativeSpecies);
   await validateWithPre('Eligible Area', projectDetails.eligibleArea);
   await validateWithPre('Project Area', projectDetails.projectArea);
   await validateWithPre('Minimum Project Area', projectDetails.minProjectArea);
   await validateWithPre('Expansion Potential', projectDetails.expansionPotential);
-  await validateWithPre('Accumulation Rate', `${projectDetails.accumulationRate} tCO2/ha/yr`);
+  projectDetails.accumulationRate &&
+    (await validateWithPre('Accumulation Rate', `${projectDetails.accumulationRate} tCO2/ha/yr`));
+  projectDetails.minMaxCarbonAccumulation &&
+    (await validateWithPre('Min-Max Carbon Accumulation', `${projectDetails.minMaxCarbonAccumulation} tCO2/ha/yr`));
+  await validateWithPre('Standard', projectDetails.standard);
+  await validateWithPre('Methodology Number', projectDetails.methodology);
+
+  // TODO visible links
 
   if (projectDetails.sdgList) {
     for (const sdg of projectDetails.sdgList) {
