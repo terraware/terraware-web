@@ -24,13 +24,10 @@ export default function LiveTreesPerSpecies({ trees }: LiveTreesPerSpeciesProps)
 
   const chartData = useMemo(
     () => ({
-      labels: Object.keys(species).map((idOrName) => {
-        if (typeof idOrName === 'number') {
-          return availableSpecies.find((_species) => _species.id === idOrName)?.scientificName ?? '';
-        } else {
-          return idOrName;
-        }
-      }),
+      labels: Object.keys(species).map(
+        (speciesId) =>
+          availableSpecies?.find((sp) => sp.id.toString() === speciesId.toString())?.scientificName || speciesId
+      ),
       datasets: [
         {
           values: Object.values(species),
