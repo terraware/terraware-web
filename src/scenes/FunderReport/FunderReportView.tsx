@@ -9,47 +9,27 @@ import ChallengesMitigationBox from 'src/components/AcceleratorReports/Challenge
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
 import Card from 'src/components/common/Card';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useUserFundingEntity } from 'src/providers';
-import { requestListFunderReports } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
-import { selectListFunderReports } from 'src/redux/features/funder/fundingEntitiesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PublishedReport, PublishedReportMetric } from 'src/types/AcceleratorReport';
+import { FundingEntity } from 'src/types/FundingEntity';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import MetricBox from './MetricBox';
 
-const FunderReportView = () => {
+type FunderReportViewProps = {
+  selectedProjectId?: number;
+  reports?: PublishedReport[];
+  userFundingEntity?: FundingEntity;
+};
+
+const FunderReportView = ({ selectedProjectId, reports, userFundingEntity }: FunderReportViewProps) => {
   const theme = useTheme();
-  const { userFundingEntity } = useUserFundingEntity();
-  const [selectedProjectId, setSelectedProjectId] = useState<number>();
-  const dispatch = useAppDispatch();
-  const reportsResponse = useAppSelector(selectListFunderReports(selectedProjectId?.toString() ?? ''));
-  const [reports, setReports] = useState<PublishedReport[]>();
   const [selectedReport, setSelectedReport] = useState<PublishedReport>();
   const query = useQuery();
   const location = useStateLocation();
   const navigate = useSyncNavigate();
   const { isDesktop, isMobile } = useDeviceInfo();
-
-  useEffect(() => {
-    if ((userFundingEntity?.projects?.length ?? 0) > 0) {
-      setSelectedProjectId(userFundingEntity?.projects?.[0].projectId);
-    }
-  }, [userFundingEntity]);
-
-  useEffect(() => {
-    if (selectedProjectId) {
-      void dispatch(requestListFunderReports(selectedProjectId));
-    }
-  }, [selectedProjectId]);
-
-  useEffect(() => {
-    if (reportsResponse?.status === 'success') {
-      setReports(reportsResponse.data);
-    }
-  }, [reportsResponse]);
 
   useEffect(() => {
     if (!selectedReport && reports?.length) {
