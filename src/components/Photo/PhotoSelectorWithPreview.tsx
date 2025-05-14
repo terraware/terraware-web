@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, TooltipProps, Typography, useTheme } from '@mui/material';
-import { ErrorBox } from '@terraware/web-components';
+import { ErrorBox, PlacementWrapper } from '@terraware/web-components';
 
 import PhotoDragDrop, { PhotoDragDropProps } from 'src/components/Photo/PhotoDragDrop';
-import PlacementWrapper from 'src/components/common/PlacementWrapper';
 
 import PhotoPreview from './PhotoPreview';
 
