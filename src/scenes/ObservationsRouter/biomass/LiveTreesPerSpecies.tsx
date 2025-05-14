@@ -9,28 +9,31 @@ export type LiveTreesPerSpeciesProps = {
 };
 
 export default function LiveTreesPerSpecies({ trees }: LiveTreesPerSpeciesProps): JSX.Element {
-  const species: Record<string | number, number> = {};
   const { species: availableSpecies } = useSpeciesData();
 
-  trees?.forEach((tree) => {
-    if (!tree.isDead) {
-      if (tree.speciesId) {
-        species[tree.speciesId] = (species[tree.speciesId] || 0) + 1;
-      } else if (tree.speciesName) {
-        species[tree.speciesName] = (species[tree.speciesName] || 0) + 1;
+  const treeSpecies = useMemo(() => {
+    const _treeSpecies: Record<string | number, number> = {};
+    trees?.forEach((tree) => {
+      if (!tree.isDead) {
+        if (tree.speciesId) {
+          _treeSpecies[tree.speciesId] = (_treeSpecies[tree.speciesId] || 0) + 1;
+        } else if (tree.speciesName) {
+          _treeSpecies[tree.speciesName] = (_treeSpecies[tree.speciesName] || 0) + 1;
+        }
       }
-    }
-  });
+    });
+    return _treeSpecies;
+  }, [trees]);
 
   const chartData = useMemo(
     () => ({
-      labels: Object.keys(species).map(
+      labels: Object.keys(treeSpecies).map(
         (speciesId) =>
           availableSpecies?.find((sp) => sp.id.toString() === speciesId.toString())?.scientificName || speciesId
       ),
       datasets: [
         {
-          values: Object.values(species),
+          values: Object.values(treeSpecies),
         },
       ],
     }),
