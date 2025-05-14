@@ -28,7 +28,7 @@ export const PlantingSiteStats = () => {
   const { selectedOrganization } = useOrganization();
   const { token } = useMapboxToken();
 
-  const { allPlantingSites, plantingSite, setSelectedPlantingSite, latestObservation, plantingSiteReportedPlants } =
+  const { allPlantingSites, plantingSite, setSelectedPlantingSite, latestResult, plantingSiteReportedPlants } =
     usePlantingSiteData();
   const { countries } = useLocalization();
 
@@ -51,12 +51,12 @@ export const PlantingSiteStats = () => {
   }, [plantingSite]);
 
   const latestObservationCompletedTime = useMemo(() => {
-    if (latestObservation?.completedTime && plantingSite) {
-      return getDateDisplayValue(latestObservation.completedTime, plantingSite.timeZone);
+    if (latestResult?.completedTime && plantingSite) {
+      return getDateDisplayValue(latestResult.completedTime, plantingSite.timeZone);
     } else {
       return '';
     }
-  }, [latestObservation, plantingSite]);
+  }, [latestResult, plantingSite]);
 
   const totalPlants = useMemo(() => plantingSiteReportedPlants?.totalPlants ?? 0, [plantingSiteReportedPlants]);
   const totalSpecies = useMemo(() => plantingSiteReportedPlants?.species?.length ?? 0, [plantingSiteReportedPlants]);
@@ -170,7 +170,7 @@ export const PlantingSiteStats = () => {
               label={strings.MORTALITY_RATE}
               showBorder={!isDesktop}
               showLink={false}
-              value={latestObservation?.mortalityRate ? `${latestObservation.mortalityRate}%` : ''}
+              value={latestResult?.mortalityRate ? `${latestResult.mortalityRate}%` : ''}
             />
           </Grid>
 

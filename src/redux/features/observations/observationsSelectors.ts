@@ -251,20 +251,6 @@ export const selectRescheduleObservation = (state: RootState, requestId: string)
 export const selectReplaceObservationPlot = (state: RootState, requestId: string) =>
   state.replaceObservationPlot[requestId];
 
-// get the current observation for a planting site
-export const selectCurrentObservation = createCachedSelector(
-  (state: RootState, plantingSiteId: number, defaultTimeZoneId: string) =>
-    searchObservations(state, plantingSiteId, defaultTimeZoneId, '', [], ['InProgress']),
-  (observationsResults: ObservationResults[] | undefined) => observationsResults?.[0]
-)((state: RootState, plantingSiteId: number, defaultTimeZoneId: string) => `${plantingSiteId}-${defaultTimeZoneId}`);
-
-// get the next observation for a planting site
-export const selectNextObservation = createCachedSelector(
-  (state: RootState, plantingSiteId: number, defaultTimeZoneId: string) =>
-    searchObservations(state, plantingSiteId, defaultTimeZoneId, '', [], ['Upcoming']),
-  (observationsResults: ObservationResults[] | undefined) => observationsResults?.[0]
-)((state: RootState, plantingSiteId: number, defaultTimeZoneId: string) => `${plantingSiteId}-${defaultTimeZoneId}`);
-
 export const selectPlantingSiteObservationSummaries = (requestId: string) => (state: RootState) =>
   state.plantingSiteObservationsSummaries[requestId];
 
