@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/28</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -98,23 +98,7 @@
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a>
-<a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a>
-<a name='L40'></a><a href='#L40'>40</a>
-<a name='L41'></a><a href='#L41'>41</a>
-<a name='L42'></a><a href='#L42'>42</a>
-<a name='L43'></a><a href='#L43'>43</a>
-<a name='L44'></a><a href='#L44'>44</a>
-<a name='L45'></a><a href='#L45'>45</a>
-<a name='L46'></a><a href='#L46'>46</a>
-<a name='L47'></a><a href='#L47'>47</a>
-<a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -136,22 +120,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -191,22 +159,6 @@ export const selectPlantingSitesError = <span class="cstat-no" title="statement 
 export const selectPlantingSite = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState, plantingSiteId: number) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >  selectPlantingSites(state)?.find(<span class="fstat-no" title="function not covered" >(s</span>ite: PlantingSite) =&gt; <span class="cstat-no" title="statement not covered" >site.id === plantingSiteId)</span>;</span>
 &nbsp;
-export const selectOrgPlantingSite = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState, plantingSiteId: number, orgId: number) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  selectOrgPlantingSites(orgId)(state)?.find(<span class="fstat-no" title="function not covered" >(s</span>ite: PlantingSite) =&gt; <span class="cstat-no" title="statement not covered" >site.id === plantingSiteId)</span>;</span>
-&nbsp;
-export const selectSiteReportedPlants = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState, plantingSiteId: number) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  state.siteReportedPlantsResults[plantingSiteId]?.site;</span>
-&nbsp;
-export const selectMultipleSitesTotalPlants = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState, plantingSiteIds: string[]) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  return plantingSiteIds.reduce(<span class="fstat-no" title="function not covered" >(t</span>otal, psId) =&gt; {</span>
-    const siteData = <span class="cstat-no" title="statement not covered" >state.siteReportedPlantsResults[+psId]?.site;</span>
-<span class="cstat-no" title="statement not covered" >    return total + (siteData?.totalPlants ?? 0);</span>
-  }, 0);
-};
-&nbsp;
-export const selectSiteReportedPlantsError = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState, plantingSiteId: number) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  state.siteReportedPlantsResults[plantingSiteId]?.error;</span>
-&nbsp;
 export const selectMonitoringPlots = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState, requestId: string) =&gt; <span class="cstat-no" title="statement not covered" >state.monitoringPlots[requestId];</span></span>
 &nbsp;
 export const selectPlantingSiteHistory = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState, requestId: string) =&gt; <span class="cstat-no" title="statement not covered" >state.plantingSiteHistory[requestId];</span></span>
@@ -223,7 +175,7 @@ export const selectPlantingSiteReportedPlants = <span class="cstat-no" title="st
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-14T18:41:15.583Z
+                at 2025-05-14T18:49:52.397Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

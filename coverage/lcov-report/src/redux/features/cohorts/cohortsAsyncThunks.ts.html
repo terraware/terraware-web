@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/29</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/29</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -154,11 +154,7 @@
 <a name='L89'></a><a href='#L89'>89</a>
 <a name='L90'></a><a href='#L90'>90</a>
 <a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a>
-<a name='L94'></a><a href='#L94'>94</a>
-<a name='L95'></a><a href='#L95'>95</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L92'></a><a href='#L92'>92</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -172,7 +168,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -198,7 +193,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -257,7 +251,6 @@ import { setCohortAction, setCohortsAction } from 'src/redux/features/cohorts/co
 import CohortService, {
   CreateCohortResponsePayload,
   DeleteCohortResponsePayload,
-  ListCohortsRequestDepth,
   UpdateCohortResponsePayload,
 } from 'src/services/CohortService';
 import { Response2 } from 'src/services/HttpService';
@@ -270,15 +263,14 @@ export const requestCohorts = <span class="cstat-no" title="statement not covere
 <span class="fstat-no" title="function not covered" >  as</span>ync (
     request: {
       locale: string | null;
-      depth?: ListCohortsRequestDepth;
       search?: SearchNodePayload;
       searchSortOrder?: SearchSortOrder;
     },
     { dispatch, rejectWithValue }
   ) =&gt; {
-    const { depth, locale, search, searchSortOrder } = <span class="cstat-no" title="statement not covered" >request;</span>
+    const { locale, search, searchSortOrder } = <span class="cstat-no" title="statement not covered" >request;</span>
 &nbsp;
-    const response = <span class="cstat-no" title="statement not covered" >await CohortService.listCohorts(locale, search, searchSortOrder, depth);</span>
+    const response = <span class="cstat-no" title="statement not covered" >await CohortService.listCohorts(locale, search, searchSortOrder);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (response !== null &amp;&amp; response.requestSucceeded &amp;&amp; response?.cohorts !== undefined) {</span>
 <span class="cstat-no" title="statement not covered" >      dispatch(setCohortsAction({ error: response.error, cohorts: response.cohorts }));</span>
@@ -291,9 +283,8 @@ export const requestCohorts = <span class="cstat-no" title="statement not covere
 &nbsp;
 export const requestCohort = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
   'cohorts/get',
-<span class="fstat-no" title="function not covered" >  as</span>ync (request: { cohortId: number; depth?: ListCohortsRequestDepth }, { dispatch, rejectWithValue }) =&gt; {
-    const { depth } = <span class="cstat-no" title="statement not covered" >request;</span>
-    const response: Response2&lt;Cohort&gt; = <span class="cstat-no" title="statement not covered" >await CohortService.getCohort(request.cohortId, depth);</span>
+<span class="fstat-no" title="function not covered" >  as</span>ync (request: { cohortId: number }, { dispatch, rejectWithValue }) =&gt; {
+    const response: Response2&lt;Cohort&gt; = <span class="cstat-no" title="statement not covered" >await CohortService.getCohort(request.cohortId);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (response !== null &amp;&amp; response.requestSucceeded &amp;&amp; response.data !== undefined) {</span>
 <span class="cstat-no" title="statement not covered" >      dispatch(setCohortAction({ error: response.error, cohorts: [response.data] }));</span>
@@ -352,7 +343,7 @@ export const requestCohortDelete = <span class="cstat-no" title="statement not c
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-14T18:41:15.583Z
+                at 2025-05-14T18:49:52.397Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

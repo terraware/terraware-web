@@ -1,3 +1,5 @@
+06b14fe84ee Replace component with web-components version (#3996)
+8bca7918f97 Replaced seed fund report usages of observation selectors (#3985)
 390773da86c SW-6918 Fix order of sdg list (#3993)
 f18bd4cfe8a SW-6851 Info icons 16x16 (#3994)
 c4a6a5de16c Fix some lint issues (#3992)

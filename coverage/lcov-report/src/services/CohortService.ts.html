@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -173,11 +173,7 @@
 <a name='L108'></a><a href='#L108'>108</a>
 <a name='L109'></a><a href='#L109'>109</a>
 <a name='L110'></a><a href='#L110'>110</a>
-<a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a>
-<a name='L114'></a><a href='#L114'>114</a>
-<a name='L115'></a><a href='#L115'>115</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L111'></a><a href='#L111'>111</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -214,8 +210,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -224,7 +218,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -258,7 +251,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -319,8 +311,6 @@ const COHORT_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/
 &nbsp;
 export type ListCohortsResponsePayload =
   paths[typeof COHORTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-export type ListCohortsRequestDepth = paths[typeof COHORTS_ENDPOINT]['get']['parameters']['query']['cohortDepth'];
-&nbsp;
 export type CreateCohortResponsePayload =
   paths[typeof COHORTS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 export type GetCohortResponsePayload =
@@ -340,8 +330,7 @@ const httpCohorts = <span class="cstat-no" title="statement not covered" >HttpSe
 const listCohorts = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (</span>
   locale: string | null,
   search?: SearchNodePayload,
-  searchSortOrder?: SearchSortOrder,
-  cohortDepth: ListCohortsRequestDepth = <span class="branch-0 cbranch-no" title="branch not covered" >'Cohort'</span>
+  searchSortOrder?: SearchSortOrder
 ): Promise&lt;(CohortsData &amp; Response) | null&gt; =&gt; {
   let searchOrderConfig: SearchOrderConfig;
 <span class="cstat-no" title="statement not covered" >  if (searchSortOrder) {</span>
@@ -352,7 +341,7 @@ const listCohorts = <span class="cstat-no" title="statement not covered" ><span 
     };
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return httpCohorts.get&lt;ListCohortsResponsePayload, CohortsData&gt;({ params: { cohortDepth } }, <span class="fstat-no" title="function not covered" >(r</span>esponse) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return httpCohorts.get&lt;ListCohortsResponsePayload, CohortsData&gt;({}, <span class="fstat-no" title="function not covered" >(r</span>esponse) =&gt; {</span>
     const cohorts = <span class="cstat-no" title="statement not covered" >searchAndSort(response?.cohorts || [], search, searchOrderConfig);</span>
     const newCohorts: CohortWithParticipantNum[] = <span class="cstat-no" title="statement not covered" >cohorts.map(<span class="fstat-no" title="function not covered" >(c</span>) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
       ...c,
@@ -370,10 +359,9 @@ const createCohort = <span class="cstat-no" title="statement not covered" ><span
     entity: cohort,
   });
 &nbsp;
-const getCohort = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(c</span>ohortId: number, cohortDepth: ListCohortsRequestDepth = <span class="branch-0 cbranch-no" title="branch not covered" >'Cohort')</span>: Promise&lt;Response2&lt;Cohort&gt;&gt; =&gt;</span>
+const getCohort = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(c</span>ohortId: number): Promise&lt;Response2&lt;Cohort&gt;&gt; =&gt;</span>
 <span class="cstat-no" title="statement not covered" >  httpCohort.get&lt;GetCohortResponsePayload, { data: Cohort | undefined }&gt;(</span>
     {
-      params: { cohortDepth },
       url: COHORT_ENDPOINT,
       urlReplacements: { '{cohortId}': `${cohortId}` },
     },
@@ -412,7 +400,7 @@ export default CohortService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-14T18:41:15.583Z
+                at 2025-05-14T18:49:52.397Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

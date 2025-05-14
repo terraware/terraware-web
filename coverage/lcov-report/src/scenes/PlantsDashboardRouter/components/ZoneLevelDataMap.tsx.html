@@ -359,9 +359,7 @@
 <a name='L294'></a><a href='#L294'>294</a>
 <a name='L295'></a><a href='#L295'>295</a>
 <a name='L296'></a><a href='#L296'>296</a>
-<a name='L297'></a><a href='#L297'>297</a>
-<a name='L298'></a><a href='#L298'>298</a>
-<a name='L299'></a><a href='#L299'>299</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L297'></a><a href='#L297'>297</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -626,9 +624,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -679,7 +675,7 @@ type ZoneLevelDataMapProps = {
 export default function <span class="fstat-no" title="function not covered" >ZoneLevelDataMap(</span>{ plantingSiteId }: ZoneLevelDataMapProps): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
-  const { plantingSite, plantingSiteHistories, plantingSiteReportedPlants, observationSummaries, latestObservation } =
+  const { plantingSite, plantingSiteHistories, plantingSiteReportedPlants, observationSummaries, latestResult } =
 <span class="cstat-no" title="statement not covered" >    usePlantingSiteData();</span>
 &nbsp;
   const zonesProgress = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -766,7 +762,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
         },
       ],
       switch: true,
-      disabled: !latestObservation,
+      disabled: !latestResult,
       checked: true,
     });
 &nbsp;
@@ -782,12 +778,12 @@ export default function <span class="fstat-no" title="function not covered" >Zon
         },
       ],
       switch: true,
-      disabled: !latestObservation,
+      disabled: !latestResult,
       checked: true,
     });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    setLegends(result);</span>
-  }, [latestObservation, theme.palette.TwClrBaseGreen300, theme.palette.TwClrBaseLightGreen300]);
+  }, [latestResult, theme.palette.TwClrBaseGreen300, theme.palette.TwClrBaseLightGreen300]);
 &nbsp;
   const mapData = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span>: MapData | undefined =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!plantingSite?.boundary) {</span>
@@ -795,12 +791,12 @@ export default function <span class="fstat-no" title="function not covered" >Zon
     }
 &nbsp;
     const baseMap = <span class="cstat-no" title="statement not covered" >MapService.getMapDataFromPlantingSite(plantingSite);</span>
-<span class="cstat-no" title="statement not covered" >    if (!latestObservation?.plantingSiteHistoryId || !plantingSiteHistories) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!latestResult?.plantingSiteHistoryId || !plantingSiteHistories) {</span>
 <span class="cstat-no" title="statement not covered" >      return baseMap;</span>
     }
 &nbsp;
     const plantingSiteHistory = <span class="cstat-no" title="statement not covered" >plantingSiteHistories.find(</span>
-<span class="fstat-no" title="function not covered" >      (h</span>istory) =&gt; <span class="cstat-no" title="statement not covered" >history.id === latestObservation.plantingSiteHistoryId</span>
+<span class="fstat-no" title="function not covered" >      (h</span>istory) =&gt; <span class="cstat-no" title="statement not covered" >history.id === latestResult.plantingSiteHistoryId</span>
     );
 <span class="cstat-no" title="statement not covered" >    if (!plantingSiteHistory) {</span>
 <span class="cstat-no" title="statement not covered" >      return baseMap;</span>
@@ -828,7 +824,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
         const entityZoneId = <span class="cstat-no" title="statement not covered" >Number(entity.id);</span>
         let properties: TooltipProperty[] = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
-        const zoneObservation = <span class="cstat-no" title="statement not covered" >latestObservation?.plantingZones.find(</span>
+        const zoneObservation = <span class="cstat-no" title="statement not covered" >latestResult?.plantingZones.find(</span>
 <span class="fstat-no" title="function not covered" >          (z</span>oneResult) =&gt; <span class="cstat-no" title="statement not covered" >zoneResult.plantingZoneId === entityZoneId</span>
         );
         const zoneStat = <span class="cstat-no" title="statement not covered" >zonesStats[entityZoneId];</span>
@@ -901,7 +897,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
           /&gt;
         );
       },
-    [latestObservation, zonesProgress, zonesStats, lastSummary]
+    [latestResult, zonesProgress, zonesStats, lastSummary]
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
@@ -924,9 +920,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
           mapData={mapData}
           style={{ borderRadius: '8px' }}
           layers={['Planting Site', 'Zones', 'Sub-Zones']}
-          showMortalityRateFill={
-            !!latestObservation &amp;&amp; legends.find(<span class="fstat-no" title="function not covered" >(l</span>) =&gt; <span class="cstat-no" title="statement not covered" >l.title === strings.MORTALITY_RATE)</span>?.checked
-          }
+          showMortalityRateFill={!!latestResult &amp;&amp; legends.find(<span class="fstat-no" title="function not covered" >(l</span>) =&gt; <span class="cstat-no" title="statement not covered" >l.title === strings.MORTALITY_RATE)</span>?.checked}
           showRecencyFill={legends.find(<span class="fstat-no" title="function not covered" >(l</span>) =&gt; <span class="cstat-no" title="statement not covered" >l.title === strings.OBSERVATION_RECENCY)</span>?.checked}
           focusEntities={focusEntities}
           contextRenderer={{
@@ -964,7 +958,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-14T18:41:15.583Z
+                at 2025-05-14T18:49:52.397Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

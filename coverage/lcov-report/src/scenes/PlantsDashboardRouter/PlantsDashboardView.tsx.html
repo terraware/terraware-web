@@ -846,11 +846,11 @@ export default function <span class="fstat-no" title="function not covered" >Pla
     setSelectedPlantingSite,
     allPlantingSites,
     plantingSite,
-    latestObservation,
+    latestResult,
     observationSummaries,
   } = <span class="cstat-no" title="statement not covered" >usePlantingSiteData();</span>
 &nbsp;
-  const hasObservations = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >!!latestObservation,</span> [latestObservation]);</span>
+  const hasObservations = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >!!latestResult,</span> [latestResult]);</span>
 &nbsp;
   const sitePlantingComplete = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
@@ -864,21 +864,21 @@ export default function <span class="fstat-no" title="function not covered" >Pla
     [setPlantsDashboardPreferences]
   );
 &nbsp;
-  const latestObservationId = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return latestObservation?.observationId;</span>
-  }, [latestObservation]);
+  const latestResultId = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    return latestResult?.observationId;</span>
+  }, [latestResult]);
 &nbsp;
   const geometryChangedNote = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (latestObservation?.completedTime &amp;&amp; plantingSite?.plantingZones?.length) {</span>
+<span class="cstat-no" title="statement not covered" >    if (latestResult?.completedTime &amp;&amp; plantingSite?.plantingZones?.length) {</span>
       const siteBoundaryModifiedTime = <span class="cstat-no" title="statement not covered" >plantingSite.plantingZones.reduce(</span>
 <span class="fstat-no" title="function not covered" >        (m</span>axTime, zone) =&gt; (<span class="cstat-no" title="statement not covered" >isAfter(zone.boundaryModifiedTime, maxTime) ? zone.boundaryModifiedTime : maxTime)</span>,
         plantingSite.plantingZones[0].boundaryModifiedTime
       );
-<span class="cstat-no" title="statement not covered" >      return isAfter(siteBoundaryModifiedTime, latestObservation.completedTime);</span>
+<span class="cstat-no" title="statement not covered" >      return isAfter(siteBoundaryModifiedTime, latestResult.completedTime);</span>
     } else {
 <span class="cstat-no" title="statement not covered" >      return false;</span>
     }
-  }, [latestObservation, plantingSite]);
+  }, [latestResult, plantingSite]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const orgId = <span class="cstat-no" title="statement not covered" >organizationId ?? selectedOrganization.id;</span>
@@ -894,31 +894,31 @@ export default function <span class="fstat-no" title="function not covered" >Pla
     &lt;/Grid&gt;
   );
 &nbsp;
-  const getLatestObservationLink = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const allMonitoringPlots = <span class="cstat-no" title="statement not covered" >latestObservation?.plantingZones.flatMap(<span class="fstat-no" title="function not covered" >(p</span>z) =&gt;</span>
+  const renderLatestObservationLink = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const allMonitoringPlots = <span class="cstat-no" title="statement not covered" >latestResult?.plantingZones.flatMap(<span class="fstat-no" title="function not covered" >(p</span>z) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >      pz.plantingSubzones.flatMap(<span class="fstat-no" title="function not covered" >(s</span>z) =&gt; <span class="cstat-no" title="statement not covered" >sz.monitoringPlots)</span></span>
     );
     const maxCompletedTime = <span class="cstat-no" title="statement not covered" >allMonitoringPlots?.reduce(</span>
 <span class="fstat-no" title="function not covered" >      (a</span>cc, plot) =&gt; (<span class="cstat-no" title="statement not covered" >isAfter(plot.completedTime, acc) ? plot.completedTime : acc)</span>,
       allMonitoringPlots[0].completedTime
     );
-<span class="cstat-no" title="statement not covered" >    return plantingSite &amp;&amp; latestObservation?.completedTime ? (</span>
+<span class="cstat-no" title="statement not covered" >    return plantingSite &amp;&amp; latestResult?.completedTime ? (</span>
       &lt;Link
         fontSize={'16px'}
         to={APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', plantingSite?.id.toString()).replace(
           ':observationId',
-          latestObservation.observationId.toString()
+          latestResult.observationId.toString()
         )}
       &gt;
         {strings.formatString(
           strings.DATE_OBSERVATION,
-          DateTime.fromISO(maxCompletedTime || latestObservation.completedTime).toFormat('yyyy-MM-dd')
+          DateTime.fromISO(maxCompletedTime || latestResult.completedTime).toFormat('yyyy-MM-dd')
         )}
       &lt;/Link&gt;
     ) : (
       ''
     );
-  }, [latestObservation]);
+  }, [latestResult]);
 &nbsp;
   const renderMortalityRate = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
@@ -936,7 +936,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
                 {strings.MORTALITY_RATE}
               &lt;/Typography&gt;
               {hasObservations &amp;&amp; (
-                &lt;Typography&gt;{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}&lt;/Typography&gt;
+                &lt;Typography&gt;{strings.formatString(strings.AS_OF_X, renderLatestObservationLink())}&lt;/Typography&gt;
               )}
             &lt;/Box&gt;
           &lt;/Grid&gt;
@@ -945,7 +945,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
           &lt;/Grid&gt;
         &lt;/&gt;
       ) : undefined,
-    [plantingSite, getLatestObservationLink, hasObservations]
+    [plantingSite, renderLatestObservationLink, hasObservations]
   );
 &nbsp;
   const renderTotalPlantsAndSpecies = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; (</span>
@@ -985,7 +985,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
                 {strings.PLANTING_DENSITY}
               &lt;/Typography&gt;
               {hasObservations &amp;&amp; (
-                &lt;Typography&gt;{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}&lt;/Typography&gt;
+                &lt;Typography&gt;{strings.formatString(strings.AS_OF_X, renderLatestObservationLink())}&lt;/Typography&gt;
               )}
             &lt;/Box&gt;
           &lt;/Grid&gt;
@@ -994,7 +994,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
           &lt;/Grid&gt;
         &lt;/&gt;
       ) : undefined,
-    [plantingSite, sitePlantingComplete, hasObservations, getLatestObservationLink]
+    [plantingSite, sitePlantingComplete, hasObservations, renderLatestObservationLink]
   );
 &nbsp;
   const renderPlantingSiteTrends = <span class="cstat-no" title="statement not covered" >useCallback(</span>
@@ -1034,7 +1034,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
                 {strings.SITE_MAP}
               &lt;/Typography&gt;
               {hasObservations &amp;&amp; (
-                &lt;Typography&gt;{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}&lt;/Typography&gt;
+                &lt;Typography&gt;{strings.formatString(strings.AS_OF_X, renderLatestObservationLink())}&lt;/Typography&gt;
               )}
             &lt;/Box&gt;
           &lt;/Grid&gt;
@@ -1043,7 +1043,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
           &lt;/Grid&gt;
         &lt;/&gt;
       ) : undefined,
-    [plantingSite, getLatestObservationLink, hasObservations]
+    [plantingSite, renderLatestObservationLink, hasObservations]
   );
 &nbsp;
   const renderSimpleSiteMap = <span class="cstat-no" title="statement not covered" >useCallback(</span>
@@ -1091,14 +1091,14 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 &nbsp;
   const observationHectares = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const totalSquareMeters =
-<span class="cstat-no" title="statement not covered" >      latestObservation?.plantingZones</span>
+<span class="cstat-no" title="statement not covered" >      latestResult?.plantingZones</span>
         .flatMap(<span class="fstat-no" title="function not covered" >(p</span>z) =&gt;
 <span class="cstat-no" title="statement not covered" >          pz.plantingSubzones.flatMap(<span class="fstat-no" title="function not covered" >(p</span>sz) =&gt; <span class="cstat-no" title="statement not covered" >psz.monitoringPlots.map(<span class="fstat-no" title="function not covered" >(m</span>p) =&gt; <span class="cstat-no" title="statement not covered" >mp.sizeMeters * mp.sizeMeters)</span>)</span></span>
         )
         .reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, area) =&gt; <span class="cstat-no" title="statement not covered" >acc + area,</span> 0) ?? 0;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return totalSquareMeters * SQ_M_TO_HECTARES;</span>
-  }, [latestObservation]);
+  }, [latestResult]);
 &nbsp;
   const getDashboardSubhead = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!plantingSite) {</span>
@@ -1115,7 +1115,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
       ? (strings.formatString(
           strings.DASHBOARD_HEADER_TEXT_SINGLE_OBSERVATION,
           &lt;b&gt;{strings.formatString(strings.X_HECTARES, &lt;FormattedNumber value={observationHectares} /&gt;)}&lt;/b&gt;,
-          &lt;b&gt;{getLatestObservationLink()}&lt;/b&gt;
+          &lt;b&gt;{renderLatestObservationLink()}&lt;/b&gt;
         ) as string)
       : (strings.formatString(
           strings.DASHBOARD_HEADER_TEXT_V2,
@@ -1143,7 +1143,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;PlantsPrimaryPage
       title={strings.DASHBOARD}
-      text={latestObservationId ? getDashboardSubhead() : undefined}
+      text={latestResultId ? getDashboardSubhead() : undefined}
       pagePath={
         projectId
           ? APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', projectId.toString())
@@ -1155,7 +1155,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
       setPlantsSitePreferences={onPreferences}
       newHeader={true}
       showGeometryNote={geometryChangedNote}
-      latestObservationId={latestObservationId}
+      latestObservationId={latestResultId}
       projectId={projectId}
       organizationId={organizationId}
       isEmptyState={plantingSite === undefined}
@@ -1180,7 +1180,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-14T18:41:15.583Z
+                at 2025-05-14T18:49:52.397Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
