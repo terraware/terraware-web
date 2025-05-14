@@ -406,55 +406,63 @@ const ProjectProfileView = ({
             </Typography>
           </Grid>
         </Box>
-        <ProjectFieldDisplay
-          label={strings.ELIGIBLE_AREA}
-          height={'64px'}
-          md={4}
-          value={
-            projectDetails?.confirmedReforestableLand &&
-            strings
-              .formatString(strings.X_HA, numericFormatter.format(projectDetails.confirmedReforestableLand))
-              ?.toString()
-          }
-          tooltip={strings.ELIGIBLE_AREA_DESCRIPTION}
-        />
-        <ProjectFieldDisplay
-          label={strings.PROJECT_AREA}
-          height={'64px'}
-          md={4}
-          value={
-            projectDetails?.projectArea &&
-            strings.formatString(strings.X_HA, numericFormatter.format(projectDetails.projectArea))?.toString()
-          }
-          tooltip={strings.PROJECT_AREA_DESCRIPTION}
-        />
+        <Grid item md={isMobile ? 12 : 4}>
+          <Grid container>
+            <ProjectFieldDisplay
+              label={strings.ELIGIBLE_AREA}
+              height={'64px'}
+              md={12}
+              value={
+                projectDetails?.confirmedReforestableLand &&
+                strings
+                  .formatString(strings.X_HA, numericFormatter.format(projectDetails.confirmedReforestableLand))
+                  ?.toString()
+              }
+              tooltip={strings.ELIGIBLE_AREA_DESCRIPTION}
+            />
+            <ProjectFieldDisplay
+              label={strings.MIN_PROJECT_AREA}
+              height={'64px'}
+              md={12}
+              value={
+                projectDetails?.minProjectArea &&
+                strings.formatString(strings.X_HA, numericFormatter.format(projectDetails.minProjectArea))?.toString()
+              }
+              tooltip={strings.MIN_PROJECT_AREA_DESCRIPTION}
+            />
+          </Grid>
+        </Grid>
+        <Grid item md={isMobile ? 12 : 4}>
+          <Grid container>
+            <ProjectFieldDisplay
+              label={strings.PROJECT_AREA}
+              height={'64px'}
+              md={12}
+              value={
+                projectDetails?.projectArea &&
+                strings.formatString(strings.X_HA, numericFormatter.format(projectDetails.projectArea))?.toString()
+              }
+              tooltip={strings.PROJECT_AREA_DESCRIPTION}
+            />
+            <ProjectFieldDisplay
+              label={strings.EXPANSION_POTENTIAL}
+              height={'64px'}
+              md={12}
+              value={
+                projectDetails?.totalExpansionPotential &&
+                strings
+                  .formatString(strings.X_HA, numericFormatter.format(projectDetails.totalExpansionPotential))
+                  ?.toString()
+              }
+              tooltip={strings.EXPANSION_POTENTIAL_DESCRIPTION}
+            />
+          </Grid>
+        </Grid>
         <ProjectFieldDisplay
           label={strings.NATIVE_SPECIES_TO_BE_PLANTED}
           height={'64px'}
           md={4}
           value={projectDetails?.numNativeSpecies}
-        />
-        <ProjectFieldDisplay
-          label={strings.MIN_PROJECT_AREA}
-          height={'64px'}
-          md={4}
-          value={
-            projectDetails?.minProjectArea &&
-            strings.formatString(strings.X_HA, numericFormatter.format(projectDetails.minProjectArea))?.toString()
-          }
-          tooltip={strings.MIN_PROJECT_AREA_DESCRIPTION}
-        />
-        <ProjectFieldDisplay
-          label={strings.EXPANSION_POTENTIAL}
-          height={'64px'}
-          md={4}
-          value={
-            projectDetails?.totalExpansionPotential &&
-            strings
-              .formatString(strings.X_HA, numericFormatter.format(projectDetails.totalExpansionPotential))
-              ?.toString()
-          }
-          tooltip={strings.EXPANSION_POTENTIAL_DESCRIPTION}
         />
       </Grid>
 
