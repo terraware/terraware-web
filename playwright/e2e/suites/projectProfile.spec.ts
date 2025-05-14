@@ -29,6 +29,8 @@ type ProjectDetails = {
   minMaxCarbonAccumulation?: string;
   methodology?: string;
   standard?: string;
+  projectLinksVisible?: string[];
+  projectLinksHidden?: string[];
   sdgList?: number[];
   additionalPageText?: string[];
   hiddenText?: string[];
@@ -51,7 +53,15 @@ export default function ProjectProfileTests() {
       projectName: 'Application Project',
       topAreaCard: ['N/A', ' Eligible Area'],
       landUseModelHectares: 'Native Forest (10,000 ha)',
+      totalVcu: 'N/A',
+      estimatedBudget: 'N/A',
+      eligibleArea: 'N/A',
+      projectArea: 'N/A',
+      minProjectArea: 'N/A',
+      expansionPotential: 'N/A',
       nativeSpecies: '15',
+      projectLinksVisible: ['Application', 'Documents', 'Deliverables', 'Reports', 'GDrive', 'Scoring'],
+      projectLinksHidden: ['HubSpot', 'GIS Report', 'Verra', 'Risk Tracker', 'ClickUp', 'Slack'],
       additionalPageText: ['Passed Pre-screen', 'Viewing: Application Site Boundary', 'None selected'],
     };
 
@@ -77,6 +87,20 @@ export default function ProjectProfileTests() {
       expansionPotential: '1,000 ha',
       accumulationRate: '150',
       sdgList: [1, 2, 3],
+      projectLinksVisible: [
+        'Documents',
+        'Deliverables',
+        'Reports',
+        'GDrive',
+        'HubSpot',
+        'GIS Report',
+        'Verra',
+        'Risk Tracker',
+        'Scoring',
+        'ClickUp',
+        'Slack',
+      ],
+      projectLinksHidden: ['Application'],
       additionalPageText: ['Test Cohort Phase 0', 'Phase 0 - Due Diligence', 'Viewing: Country Only'],
       hiddenText: ['StandardVCS', 'Methodology NumberVM0033'],
     };
@@ -105,6 +129,20 @@ export default function ProjectProfileTests() {
       minMaxCarbonAccumulation: '110-220',
       standard: 'VCS & CCB',
       methodology: 'VM0047',
+      projectLinksVisible: [
+        'Documents',
+        'Deliverables',
+        'Reports',
+        'GDrive',
+        'HubSpot',
+        'GIS Report',
+        'Verra',
+        'Risk Tracker',
+        'Scoring',
+        'ClickUp',
+        'Slack',
+      ],
+      projectLinksHidden: ['Application'],
       sdgList: [4, 5, 6],
       additionalPageText: [
         'Test Cohort Phase 1',
@@ -116,7 +154,7 @@ export default function ProjectProfileTests() {
     await validateProjectProfilePage(projectDetails, page);
   });
 
-  test('View Project Profile for project in Phase 2', async ({ page }, testInfo) => {
+  test('View and Edit Project Profile for project in Phase 2', async ({ page }, testInfo) => {
     await navigateToProjectProfile('Phase 2 Project Deal', page);
 
     const projectDetails: ProjectDetails = {
@@ -137,23 +175,79 @@ export default function ProjectProfileTests() {
       minMaxCarbonAccumulation: '1000-2000',
       standard: 'Gold Standard',
       methodology: 'Other',
+      projectLinksVisible: [
+        'Documents',
+        'Deliverables',
+        'Reports',
+        'GDrive',
+        'HubSpot',
+        'GIS Report',
+        'Verra',
+        'Risk Tracker',
+        'Scoring',
+        'ClickUp',
+        'Slack',
+      ],
+      projectLinksHidden: ['Application'],
       sdgList: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
       additionalPageText: ['Test Cohort Phase 2', 'Phase 2 - Plan and Scale', 'Viewing: Project Zone Figure Variable'],
     };
 
     await validateProjectProfilePage(projectDetails, page);
-  });
 
-  test.skip('Edit Project Profile', async ({ page }, testInfo) => {
-    await navigateToProjectProfile('Phase 2 Project Deal', page);
+    const updatedProjectDetails: ProjectDetails = {
+      ...projectDetails,
+      dealName: projectDetails.dealName + ' Updated',
+      overview: projectDetails.overview + ' Updated',
+      country: 'Canada',
+      landUseModelHectares: 'Monoculture (12 ha)/Silvopasture (25,000 ha)',
+      eligibleArea: '30,001 ha',
+      minMaxCarbonAccumulation: '1001-2002',
+      standard: 'Plan Vivo',
+      projectLinksVisible: projectDetails.projectLinksHidden!!.slice(0, -1), // Remove Slack
+      projectLinksHidden: ['Slack', ...projectDetails.projectLinksHidden!!],
+      sdgList: [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+    };
+
+    await page.getByRole('button', { name: 'Edit Project', ...exactOptions }).click();
+
+    await page.locator('#dealName').getByRole('textbox').fill(updatedProjectDetails.dealName);
+    await page.getByText(projectDetails.overview!!).fill(updatedProjectDetails.overview!!);
+    await page.locator('#countryCode').click();
+    await page
+      .locator('li')
+      .filter({ hasText: /^Canada$/ })
+      .click();
+    await page.getByText('Other Land-Use Model').locator('..').getByLabel('remove').click();
+    await page.locator('#landUseModelTypes').click();
+    await page
+      .locator('li')
+      .filter({ hasText: /^Monoculture$/ })
+      .click();
+    await page.getByText('Land Use Model Type').click();
+    await page.locator('#Monoculture').getByRole('spinbutton').fill('12');
+    await page.locator('#confirmedReforestableLand').getByRole('spinbutton').fill('30001');
+    await page.locator('#minCarbonAccumulation').getByRole('spinbutton').fill('1001');
+    await page.locator('#maxCarbonAccumulation').getByRole('spinbutton').fill('2002');
+    await page.locator('#standard').click();
+    await page
+      .locator('li')
+      .filter({ hasText: /^Plan Vivo$/ })
+      .click();
+    await page.locator('#slackLink').getByRole('textbox').fill('');
+    await page.getByText('7. Affordable and Clean Energy').locator('..').getByLabel('remove').click();
+
+    await page.getByRole('button', { name: 'Save' }).click();
+
+    await validateProjectProfilePage(updatedProjectDetails, page);
   });
 }
 
-async function navigateToProjectProfile(projectDealNam: string, page: Page) {
+async function navigateToProjectProfile(projectDealName: string, page: Page) {
   await page.goto('http://127.0.0.1:3000');
   await waitFor(page, '#home');
   await page.getByRole('link', { name: 'Accelerator Console' }).click();
-  await page.getByRole('link', { name: projectDealNam }).click();
+  await page.getByRole('link', { name: projectDealName }).click();
 }
 
 async function validateProjectProfilePage(projectDetails: ProjectDetails, page: Page) {
@@ -187,7 +281,13 @@ async function validateProjectProfilePage(projectDetails: ProjectDetails, page: 
   await validateWithPre('Standard', projectDetails.standard);
   await validateWithPre('Methodology Number', projectDetails.methodology);
 
-  // TODO visible links
+  for (const link of projectDetails.projectLinksVisible || []) {
+    await expect(page.getByRole('link', { name: link, ...exactOptions })).toBeVisible();
+  }
+
+  for (const link of projectDetails.projectLinksHidden || []) {
+    await expect(page.getByRole('link', { name: link, ...exactOptions })).toBeHidden();
+  }
 
   if (projectDetails.sdgList) {
     for (const sdg of projectDetails.sdgList) {
