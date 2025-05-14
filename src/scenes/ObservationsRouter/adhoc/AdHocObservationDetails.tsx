@@ -10,14 +10,12 @@ import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useLocalization, useOrganization } from 'src/providers';
+import { useLocalization } from 'src/providers';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { selectAdHocObservationResults } from 'src/redux/features/observations/observationsSelectors';
 import { getConditionString } from 'src/redux/features/observations/utils';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
+import { useAppSelector } from 'src/redux/store';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
 import MatchSpeciesModal from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
 import MonitoringPlotPhotos from 'src/scenes/ObservationsRouter/common/MonitoringPlotPhotos';
@@ -46,23 +44,19 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
-  const { selectedOrganization } = useOrganization();
   const allAdHocObservationResults = useAppSelector(selectAdHocObservationResults);
   const observation = allAdHocObservationResults?.find(
     (obsResult) => obsResult?.observationId.toString() === observationId?.toString()
   );
-  const { availableSpecies } = useSpecies();
-  const dispatch = useAppDispatch();
+  const { species } = useSpeciesData();
 
   const [unrecognizedSpecies, setUnrecognizedSpecies] = useState<string[]>([]);
   const [showPageMessage, setShowPageMessage] = useState(false);
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
 
-  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
-
   const monitoringPlot = useMemo(() => {
     const speciesToUse = observation?.adHocPlot?.species.map((sp) => {
-      const foundSpecies = availableSpecies?.find((aSp) => aSp.id === sp.speciesId);
+      const foundSpecies = species.find((_species) => _species.id === sp.speciesId);
       return { ...sp, speciesScientificName: foundSpecies?.scientificName || sp.speciesName || '' };
     });
 
@@ -128,12 +122,6 @@ export default function AdHocObservationDetails(props: AdHocObservationDetailsPr
       navigate(APP_PATHS.OBSERVATIONS);
     }
   }, [navigate, monitoringPlot]);
-
-  useEffect(() => {
-    if (!speciesResponse?.data?.species && selectedOrganization.id !== -1) {
-      void dispatch(requestSpecies(selectedOrganization.id));
-    }
-  }, [dispatch, speciesResponse?.data?.species, selectedOrganization]);
 
   useEffect(() => {
     const speciesWithNoIdMap = _.uniqBy(

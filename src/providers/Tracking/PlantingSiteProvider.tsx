@@ -15,7 +15,6 @@ import {
   requestPlantingSiteObservationSummaries,
   requestPlantingSiteObservations,
 } from 'src/redux/features/observations/observationsThunks';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import {
   selectPlantingSiteHistories,
   selectPlantingSiteReportedPlants,
@@ -88,7 +87,6 @@ const PlantingSiteProvider = ({ children }: Props) => {
   useEffect(() => {
     const orgId = isAcceleratorRoute ? acceleratorOrganizationId : selectedOrganization.id;
     if (orgId) {
-      void dispatch(requestSpecies(orgId));
       void dispatch(requestPlantingSites(orgId));
       _setSelectedPlantingSite(undefined);
     }
@@ -173,12 +171,35 @@ const PlantingSiteProvider = ({ children }: Props) => {
     }
   }, [reportedPlantsResponse]);
 
-  const latestObservation = useMemo(() => {
+  const latestResult = useMemo(() => {
     return observationResults?.find(
       (result) =>
         (result.state === 'Completed' || result.state === 'Abandoned') &&
         result.isAdHoc === false &&
         result.type === 'Monitoring'
+    );
+  }, [observationResults]);
+
+  const latestObservation = useMemo(() => {
+    return observations?.find(
+      (observation) =>
+        (observation.state === 'Completed' || observation.state === 'Abandoned') &&
+        observation.isAdHoc === false &&
+        observation.type === 'Monitoring'
+    );
+  }, [observationResults]);
+
+  const currentObservation = useMemo(() => {
+    return observations?.find(
+      (observation) =>
+        observation.state === 'InProgress' && observation.isAdHoc === false && observation.type === 'Monitoring'
+    );
+  }, [observationResults]);
+
+  const nextObservation = useMemo(() => {
+    return observations?.find(
+      (observation) =>
+        observation.state === 'Upcoming' && observation.isAdHoc === false && observation.type === 'Monitoring'
     );
   }, [observationResults]);
 
@@ -196,7 +217,10 @@ const PlantingSiteProvider = ({ children }: Props) => {
       observationResults,
       observationSummaries,
       setSelectedPlantingSite,
+      currentObservation,
       latestObservation,
+      nextObservation,
+      latestResult,
     }),
     [
       acceleratorOrganizationId,
@@ -211,7 +235,10 @@ const PlantingSiteProvider = ({ children }: Props) => {
       observations,
       observationResults,
       setSelectedPlantingSite,
+      currentObservation,
       latestObservation,
+      nextObservation,
+      latestResult,
     ]
   );
 

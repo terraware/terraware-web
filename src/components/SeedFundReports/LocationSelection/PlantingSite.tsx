@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import { LocationSectionProps } from 'src/components/SeedFundReports/LocationSelection';
 import { InfoField, infoCardStyles } from 'src/components/SeedFundReports/LocationSelection/InfoField';
@@ -9,22 +10,12 @@ import PlantingSiteSpeciesCellRenderer from 'src/components/SeedFundReports/Loca
 import { transformNumericValue } from 'src/components/SeedFundReports/LocationSelection/util';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import Table from 'src/components/common/table';
-import { useOrganization } from 'src/providers';
-import {
-  selectCurrentObservation,
-  selectLatestObservation,
-  selectNextObservation,
-  selectObservation,
-} from 'src/redux/features/observations/observationsSelectors';
-import { selectPlantingSite, selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
-import { requestSiteReportedPlants } from 'src/redux/features/tracking/trackingThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { SpeciesService } from 'src/services';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
 import { ReportPlantingSite } from 'src/types/Report';
-import { GrowthForm, Species } from 'src/types/Species';
+import { GrowthForm } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type PlantingSiteSpecies = {
   id: number;
@@ -59,62 +50,37 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
 
   const { isMobile } = useDeviceInfo();
 
-  const { selectedOrganization } = useOrganization();
-  const dispatch = useAppDispatch();
-  const defaultTimeZone = useDefaultTimeZone();
+  const {
+    plantingSite,
+    setSelectedPlantingSite,
+    plantingSiteReportedPlants,
+    currentObservation,
+    latestResult,
+    nextObservation,
+  } = usePlantingSiteData();
 
-  const defaultTZ = defaultTimeZone.get().id;
+  useEffect(() => {
+    setSelectedPlantingSite(location.id);
+  }, [location]);
 
-  // The calls to satisfy this data are all dispatched in the parent ReportForm component
-  const reportedPlants = useAppSelector((state) => selectSiteReportedPlants(state, location.id));
-  const plantingSite = useAppSelector((state) => selectPlantingSite(state, location.id));
-  const currentObservation = useAppSelector((state) => selectCurrentObservation(state, location.id, defaultTZ));
-  const nextObservation = useAppSelector((state) => selectNextObservation(state, location.id, defaultTZ));
-  const latestObservation = useAppSelector((state) => selectLatestObservation(state, location.id, defaultTZ));
-  const currentObservationData = useAppSelector((state) =>
-    selectObservation(state, location.id, Number(currentObservation?.observationId))
-  );
-  const nextObservationData = useAppSelector((state) =>
-    selectObservation(state, location.id, Number(nextObservation?.observationId))
-  );
-
-  const [allSpecies, setAllSpecies] = useState<Species[]>();
+  const { species: allSpecies } = useSpeciesData();
   const [plantingSiteSpecies, setPlantingSiteSpecies] = useState<PlantingSiteSpecies[]>([]);
   const [plantingDensity, setPlantingDensity] = useState<Record<string, number | string>>();
 
   const smallItemGridWidth = () => (isMobile ? 12 : 4);
 
   useEffect(() => {
-    if (plantingSite?.id) {
-      void dispatch(requestSiteReportedPlants(plantingSite.id));
-    }
-  }, [plantingSite?.id, dispatch]);
-
-  useEffect(() => {
     if (plantingSite) {
       const zoneDensities: Record<string, number | string> = {};
       plantingSite.plantingZones?.forEach((zone) => {
-        if (latestObservation) {
-          const zoneFromObs = latestObservation.plantingZones.find((obsZone) => obsZone.plantingZoneId === zone.id);
+        if (latestResult) {
+          const zoneFromObs = latestResult.plantingZones.find((obsZone) => obsZone.plantingZoneId === zone.id);
           zoneDensities[zone.name] = zoneFromObs?.plantingDensity ?? '';
         }
       });
       setPlantingDensity(zoneDensities);
     }
-  }, [plantingSite, latestObservation]);
-
-  useEffect(() => {
-    if (selectedOrganization.id !== -1) {
-      const populateSpecies = async () => {
-        const response = await SpeciesService.getAllSpecies(selectedOrganization.id);
-        if (response.requestSucceeded) {
-          setAllSpecies(response.species);
-        }
-      };
-
-      void populateSpecies();
-    }
-  }, [selectedOrganization.id, location]);
+  }, [plantingSite, latestResult]);
 
   useEffect(() => {
     if (allSpecies) {
@@ -155,22 +121,22 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   };
 
   const estimatedPlants = useMemo(() => {
-    return latestObservation?.estimatedPlants?.toString();
-  }, [latestObservation?.estimatedPlants]);
+    return latestResult?.estimatedPlants?.toString();
+  }, [latestResult?.estimatedPlants]);
 
   const livePlants = useMemo(() => {
-    return latestObservation?.species.reduce((acc, sp) => (acc = acc + sp.permanentLive), 0);
-  }, [latestObservation]);
+    return latestResult?.species.reduce((acc, sp) => (acc = acc + sp.permanentLive), 0);
+  }, [latestResult]);
 
   const deadPlants = useMemo(() => {
-    return latestObservation?.species.reduce((acc, sp) => (acc = acc + sp.cumulativeDead), 0);
-  }, [latestObservation]);
+    return latestResult?.species.reduce((acc, sp) => (acc = acc + sp.cumulativeDead), 0);
+  }, [latestResult]);
 
   const numberOfPlots = useMemo(() => {
-    return latestObservation?.plantingZones.flatMap((pz) =>
+    return latestResult?.plantingZones.flatMap((pz) =>
       pz.plantingSubzones.flatMap((subzone) => subzone.monitoringPlots)
     ).length;
-  }, [latestObservation]);
+  }, [latestResult]);
 
   const markedAsComplete = useMemo(() => {
     if (plantingSite) {
@@ -209,14 +175,21 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   }, [plantingSite, plantingDensity]);
 
   const currentNextObservationDates = useMemo(() => {
-    if (currentObservationData) {
-      return `${currentObservationData.startDate} - ${currentObservationData.endDate}`;
+    if (currentObservation) {
+      return `${currentObservation.startDate} - ${currentObservation.endDate}`;
     }
-    if (nextObservationData) {
-      return `${nextObservationData.startDate} - ${nextObservationData.endDate}`;
+    if (nextObservation) {
+      return `${nextObservation.startDate} - ${nextObservation.endDate}`;
     }
     return '';
-  }, [currentObservationData, nextObservationData]);
+  }, [currentObservation, nextObservation]);
+
+  const latestObservationDateString = useMemo(() => {
+    if (latestResult?.completedTime && plantingSite) {
+      const completedDate = getDateDisplayValue(latestResult.completedTime, plantingSite.timeZone);
+      return `${latestResult.startDate} - ${completedDate}`;
+    }
+  }, [latestResult, plantingSite]);
 
   return (
     <>
@@ -230,7 +203,9 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
           onChange={(value) => onUpdateLocation('totalPlantingSiteArea', transformNumericValue(value, { min: 0 }))}
           type='text'
           errorText={
-            validate && (location as ReportPlantingSite).totalPlantingSiteArea == null ? strings.REQUIRED_FIELD : ''
+            validate && (location as ReportPlantingSite).totalPlantingSiteArea === undefined
+              ? strings.REQUIRED_FIELD
+              : ''
           }
           tooltipTitle={strings.REPORT_TOTAL_PLANTING_SITE_AREA_INFO}
         />
@@ -246,7 +221,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
           onChange={(value) => onUpdateLocation('totalPlantedArea', transformNumericValue(value, { min: 0 }))}
           type='text'
           errorText={
-            validate && (location as ReportPlantingSite).totalPlantedArea == null ? strings.REQUIRED_FIELD : ''
+            validate && (location as ReportPlantingSite).totalPlantedArea === undefined ? strings.REQUIRED_FIELD : ''
           }
           tooltipTitle={strings.REPORT_TOTAL_PLANTED_AREA_INFO}
         />
@@ -265,7 +240,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
           type='text'
           helper={strings.TOTAL_TREES_PLANTED_HELPER_TEXT}
           errorText={
-            validate && (location as ReportPlantingSite).totalTreesPlanted == null ? strings.REQUIRED_FIELD : ''
+            validate && (location as ReportPlantingSite).totalTreesPlanted === undefined ? strings.REQUIRED_FIELD : ''
           }
           tooltipTitle={strings.REPORT_TOTAL_TREES_PLANTED_INFO}
         />
@@ -282,7 +257,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
           type='text'
           helper={strings.TOTAL_PLANTS_PLANTED_HELPER_TEXT}
           errorText={
-            validate && (location as ReportPlantingSite).totalPlantsPlanted == null ? strings.REQUIRED_FIELD : ''
+            validate && (location as ReportPlantingSite).totalPlantsPlanted === undefined ? strings.REQUIRED_FIELD : ''
           }
           tooltipTitle={strings.REPORT_TOTAL_NON_TREES_PLANTED_INFO}
         />
@@ -304,7 +279,9 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
           editable={editable}
           onChange={(value) => onUpdateLocation('mortalityRate', transformNumericValue(value, { min: 0, max: 100 }))}
           type='text'
-          errorText={validate && (location as ReportPlantingSite).mortalityRate == null ? strings.REQUIRED_FIELD : ''}
+          errorText={
+            validate && (location as ReportPlantingSite).mortalityRate === undefined ? strings.REQUIRED_FIELD : ''
+          }
           tooltipTitle={strings.REPORT_MORTALITY_RATE_INFO}
         />
       </Grid>
@@ -325,13 +302,13 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
         </Grid>
       )}
 
-      {latestObservation && (
+      {latestResult && (
         <>
           <Grid item xs={smallItemGridWidth()}>
             <OverviewItemCard
               isEditable={false}
               title={strings.MOST_RECENT_OBSERVATION}
-              contents={`${latestObservation.startDate} - ${latestObservation.completedDate}`}
+              contents={latestObservationDateString}
               sx={infoCardStyles}
             />
           </Grid>
@@ -339,7 +316,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
             <OverviewItemCard
               isEditable={false}
               title={strings.NUMBER_OF_PLOTS_IN_MOST_RECENT_OBSERVATION}
-              contents={numberOfPlots || ''}
+              contents={numberOfPlots}
               sx={infoCardStyles}
             />
           </Grid>
@@ -355,7 +332,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
             <OverviewItemCard
               isEditable={false}
               title={strings.TOTAL_PLANTS_OBSERVED}
-              contents={latestObservation.totalPlants}
+              contents={latestResult?.totalPlants}
               sx={infoCardStyles}
             />
           </Grid>
@@ -363,7 +340,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
             <OverviewItemCard
               isEditable={false}
               title={strings.LIVE_PLANTS_OBSERVED}
-              contents={livePlants || ''}
+              contents={livePlants}
               sx={infoCardStyles}
             />
           </Grid>
@@ -379,7 +356,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
             <OverviewItemCard
               isEditable={false}
               title={strings.SPECIES_OBSERVED}
-              contents={latestObservation.totalSpecies}
+              contents={latestResult?.totalSpecies}
               sx={infoCardStyles}
             />
           </Grid>
@@ -395,7 +372,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
             <OverviewItemCard
               isEditable={false}
               title={strings.MORTALITY_RATE_PERCENT}
-              contents={latestObservation.mortalityRate ?? null}
+              contents={latestResult.mortalityRate}
               sx={infoCardStyles}
             />
           </Grid>
@@ -404,7 +381,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
               <OverviewItemCard
                 isEditable={false}
                 title={strings.PLANTING_PROGRESS_PERCENT}
-                contents={reportedPlants?.progressPercent || ''}
+                contents={plantingSiteReportedPlants?.progressPercent}
                 sx={infoCardStyles}
               />
             </Grid>
@@ -423,7 +400,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
             <OverviewItemCard
               isEditable={false}
               title={strings.EST_TOTAL_PLANTS_PLANTING_DENSITY_AREA}
-              contents={estimatedPlants ? `${estimatedPlants} ${strings.PLANTS_PER_HECTARE}` : ''}
+              contents={estimatedPlants}
               sx={infoCardStyles}
             />
           </Grid>

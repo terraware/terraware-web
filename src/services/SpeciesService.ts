@@ -4,7 +4,7 @@ import { FieldNodePayload, SearchRequestPayload, SearchResponseElement } from 's
 import { MergeOtherSpeciesPayload, Species, SpeciesDetails, SuggestedSpecies } from 'src/types/Species';
 import { parseSearchTerm } from 'src/utils/search';
 
-import HttpService, { Response, ServerData } from './HttpService';
+import HttpService, { Response, Response2, ServerData } from './HttpService';
 import SearchService from './SearchService';
 
 /**
@@ -188,19 +188,14 @@ const deleteSpecies = async (speciesId: number, organizationId: number): Promise
 /**
  * Get all species
  */
-const getAllSpecies = async (organizationId: number, inUse?: boolean): Promise<AllSpeciesResponse> => {
+const getAllSpecies = async (organizationId: number, inUse?: boolean): Promise<Response2<SpeciesResponsePayload>> => {
   const params: any = { organizationId: organizationId.toString() };
 
   if (inUse) {
     params.inUse = inUse.toString();
   }
 
-  const response: AllSpeciesResponse = await httpSpecies.get<SpeciesResponsePayload, AllSpeciesData>(
-    { params },
-    (data) => ({
-      species: data?.species,
-    })
-  );
+  const response: AllSpeciesResponse = await httpSpecies.get2<SpeciesResponsePayload>({ params });
 
   return response;
 };

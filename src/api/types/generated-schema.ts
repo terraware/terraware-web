@@ -1690,6 +1690,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/funder/projects/{projectId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets project detail information displayable to funders */
+        get: operations["getProject_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/funder/reports/projects/{projectId}": {
         parameters: {
             query?: never;
@@ -3494,6 +3511,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tracking/sites/reportedPlants": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Lists the total number of plants planted at a planting site and in each planting zone.
+         * @description The totals are based on nursery withdrawals.
+         */
+        get: operations["listPlantingSiteReportedPlants"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/tracking/sites/validate": {
         parameters: {
             query?: never;
@@ -4933,7 +4970,10 @@ export interface components {
              * @description If the draft is associated with a project, its ID.
              */
             projectId?: number;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
         };
         CreateDraftPlantingSiteResponsePayload: {
@@ -4961,7 +5001,10 @@ export interface components {
              */
             organizationId: number;
             subLocationNames?: string[];
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
             /** @enum {string} */
             type: "Seed Bank" | "Desalination" | "Reverse Osmosis" | "Nursery";
@@ -5076,7 +5119,10 @@ export interface components {
             organizationType?: "Government" | "NGO" | "Arboreta" | "Academia" | "ForProfit" | "Other";
             /** @description Non-empty additional description of organization when type is Other. */
             organizationTypeDetails?: string;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
             /** @description Website of organization, no restrictions on format. */
             website?: string;
@@ -5120,7 +5166,10 @@ export interface components {
             plantingZones?: components["schemas"]["NewPlantingZonePayload"][];
             /** Format: int64 */
             projectId?: number;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
         };
         CreatePlantingSiteResponsePayload: {
@@ -5519,7 +5568,10 @@ export interface components {
              * @description If the draft is associated with a project, its ID.
              */
             projectId?: number;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
         };
         EmailVariablePayload: Omit<components["schemas"]["VariablePayload"], "type"> & {
@@ -5807,7 +5859,10 @@ export interface components {
             operationStartedDate?: string;
             /** Format: int64 */
             organizationId: number;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
             /** @enum {string} */
             type: "Seed Bank" | "Desalination" | "Reverse Osmosis" | "Nursery";
@@ -5846,6 +5901,36 @@ export interface components {
             lastName?: string;
             /** Format: int64 */
             userId: number;
+        };
+        FunderProjectDetailsPayload: {
+            accumulationRate?: number;
+            annualCarbon?: number;
+            confirmedReforestableLand?: number;
+            countryCode?: string;
+            dealDescription?: string;
+            dealName?: string;
+            landUseModelHectares: {
+                [key: string]: number;
+            };
+            landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
+            methodologyNumber?: string;
+            minProjectArea?: number;
+            /** Format: int32 */
+            numNativeSpecies?: number;
+            perHectareBudget?: number;
+            projectArea?: number;
+            /** Format: int64 */
+            projectHighlightPhotoValueId?: number;
+            /** Format: int64 */
+            projectId: number;
+            /** Format: int64 */
+            projectZoneFigureValueId?: number;
+            sdgList: ("1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17")[];
+            standard?: string;
+            totalExpansionPotential?: number;
+            totalVCU?: number;
+            /** Format: uri */
+            verraLink?: string;
         };
         FundingEntityPayload: {
             /** Format: int64 */
@@ -5970,6 +6055,10 @@ export interface components {
         };
         GetFundingEntityResponsePayload: {
             fundingEntity: components["schemas"]["FundingEntityPayload"];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        GetFundingProjectResponsePayload: {
+            details: components["schemas"]["FunderProjectDetailsPayload"];
             status: components["schemas"]["SuccessOrError"];
         };
         GetMapboxTokenResponsePayload: {
@@ -6618,6 +6707,10 @@ export interface components {
         };
         ListPlantingSiteHistoriesResponsePayload: {
             histories: components["schemas"]["PlantingSiteHistoryPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        ListPlantingSiteReportedPlantsResponsePayload: {
+            sites: components["schemas"]["PlantingSiteReportedPlantsPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         ListPlantingSitesResponsePayload: {
@@ -7446,6 +7539,8 @@ export interface components {
             /** @enum {string} */
             state: "Upcoming" | "InProgress" | "Completed" | "Overdue" | "Abandoned";
             /** Format: int32 */
+            totalPlants: number;
+            /** Format: int32 */
             totalSpecies: number;
             /** @enum {string} */
             type: "Monitoring" | "Biomass Measurements";
@@ -7583,7 +7678,10 @@ export interface components {
              */
             role?: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
             tfContactUser?: components["schemas"]["TerraformationContactUserPayload"];
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
             /**
              * Format: int32
@@ -7778,7 +7876,10 @@ export interface components {
             plantingZones?: components["schemas"]["PlantingZonePayload"][];
             /** Format: int64 */
             projectId?: number;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
         };
         PlantingSiteReportedPlantsPayload: {
@@ -8842,7 +8943,10 @@ export interface components {
             type: "Text";
         };
         TimeZonePayload: {
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             id: string;
             /**
              * @description Long name of time zone, possibly including a city name. This name is guaranteed to be unique across all zones.
@@ -9109,7 +9213,10 @@ export interface components {
              * @description If the draft is associated with a project, its ID.
              */
             projectId?: number;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
         };
         UpdateFacilityRequestPayload: {
@@ -9126,7 +9233,10 @@ export interface components {
             name: string;
             /** Format: date */
             operationStartedDate?: string;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
         };
         UpdateFundingEntityRequestPayload: {
@@ -9180,7 +9290,10 @@ export interface components {
             organizationType?: "Government" | "NGO" | "Arboreta" | "Academia" | "ForProfit" | "Other";
             /** @description Non-empty additional description of organization when type is Other. */
             organizationTypeDetails?: string;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
             website?: string;
         };
@@ -9215,7 +9328,10 @@ export interface components {
             plantingSeasons?: components["schemas"]["UpdatedPlantingSeasonPayload"][];
             /** Format: int64 */
             projectId?: number;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
         };
         UpdatePlantingSubzoneRequestPayload: {
@@ -9361,7 +9477,10 @@ export interface components {
              * @example en
              */
             locale?: string;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
         };
         /** @description Operation that replaces a single existing value with a new one. The new value will have the same list position as the existing one.
@@ -9576,7 +9695,10 @@ export interface components {
              * @example en
              */
             locale?: string;
-            /** @example Europe/Paris */
+            /**
+             * @description Time zone name in IANA tz database format
+             * @example America/New_York
+             */
             timeZone?: string;
             /**
              * @description Type of User. Could be Individual, Funder or DeviceManager
@@ -10009,9 +10131,9 @@ export interface operations {
     };
     listCohorts: {
         parameters: {
-            query: {
+            query?: {
                 /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
-                cohortDepth: "Cohort" | "Participant";
+                cohortDepth?: "Cohort" | "Participant";
             };
             header?: never;
             path?: never;
@@ -10056,9 +10178,9 @@ export interface operations {
     };
     getCohort: {
         parameters: {
-            query: {
+            query?: {
                 /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
-                cohortDepth: "Cohort" | "Participant";
+                cohortDepth?: "Cohort" | "Participant";
             };
             header?: never;
             path: {
@@ -13660,6 +13782,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    getProject_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetFundingProjectResponsePayload"];
                 };
             };
         };
@@ -17530,6 +17674,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CreatePlantingSiteResponsePayload"];
+                };
+            };
+        };
+    };
+    listPlantingSiteReportedPlants: {
+        parameters: {
+            query: {
+                organizationId: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListPlantingSiteReportedPlantsResponsePayload"];
                 };
             };
         };

@@ -1,7 +1,7 @@
 import { paths } from 'src/api/types/generated-schema';
 import { FundingEntity } from 'src/types/FundingEntity';
 
-import HttpService, { Response, Response2 } from './HttpService';
+import HttpService, { Response, Response2 } from '../HttpService';
 
 /**
  * Service for Funding Entity related functionality

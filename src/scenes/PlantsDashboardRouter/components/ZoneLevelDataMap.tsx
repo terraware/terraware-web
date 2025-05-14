@@ -18,7 +18,7 @@ type ZoneLevelDataMapProps = {
 export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapProps): JSX.Element {
   const theme = useTheme();
 
-  const { plantingSite, plantingSiteHistories, plantingSiteReportedPlants, observationSummaries, latestObservation } =
+  const { plantingSite, plantingSiteHistories, plantingSiteReportedPlants, observationSummaries, latestResult } =
     usePlantingSiteData();
 
   const zonesProgress = useMemo(() => {
@@ -105,7 +105,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
         },
       ],
       switch: true,
-      disabled: !latestObservation,
+      disabled: !latestResult,
       checked: true,
     });
 
@@ -121,12 +121,12 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
         },
       ],
       switch: true,
-      disabled: !latestObservation,
+      disabled: !latestResult,
       checked: true,
     });
 
     setLegends(result);
-  }, [latestObservation, theme.palette.TwClrBaseGreen300, theme.palette.TwClrBaseLightGreen300]);
+  }, [latestResult, theme.palette.TwClrBaseGreen300, theme.palette.TwClrBaseLightGreen300]);
 
   const mapData = useMemo((): MapData | undefined => {
     if (!plantingSite?.boundary) {
@@ -134,12 +134,12 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
     }
 
     const baseMap = MapService.getMapDataFromPlantingSite(plantingSite);
-    if (!latestObservation?.plantingSiteHistoryId || !plantingSiteHistories) {
+    if (!latestResult?.plantingSiteHistoryId || !plantingSiteHistories) {
       return baseMap;
     }
 
     const plantingSiteHistory = plantingSiteHistories.find(
-      (history) => history.id === latestObservation.plantingSiteHistoryId
+      (history) => history.id === latestResult.plantingSiteHistoryId
     );
     if (!plantingSiteHistory) {
       return baseMap;
@@ -167,7 +167,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
         const entityZoneId = Number(entity.id);
         let properties: TooltipProperty[] = [];
 
-        const zoneObservation = latestObservation?.plantingZones.find(
+        const zoneObservation = latestResult?.plantingZones.find(
           (zoneResult) => zoneResult.plantingZoneId === entityZoneId
         );
         const zoneStat = zonesStats[entityZoneId];
@@ -240,7 +240,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
           />
         );
       },
-    [latestObservation, zonesProgress, zonesStats, lastSummary]
+    [latestResult, zonesProgress, zonesStats, lastSummary]
   );
 
   return (
@@ -263,9 +263,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
           mapData={mapData}
           style={{ borderRadius: '8px' }}
           layers={['Planting Site', 'Zones', 'Sub-Zones']}
-          showMortalityRateFill={
-            !!latestObservation && legends.find((l) => l.title === strings.MORTALITY_RATE)?.checked
-          }
+          showMortalityRateFill={!!latestResult && legends.find((l) => l.title === strings.MORTALITY_RATE)?.checked}
           showRecencyFill={legends.find((l) => l.title === strings.OBSERVATION_RECENCY)?.checked}
           focusEntities={focusEntities}
           contextRenderer={{

@@ -107,11 +107,11 @@ const DocumentMetadataEdit = ({
   // This probably seems like overkill, I just didn't want to cast value to string in the Textfield onChange.
   // Since it comes back as unknown, use typeguard
   // TODO maybe Textfield should return back an explicit type?
-  function handleTextFieldChange(value: unknown, setter: (value: string) => void): void {
+  const handleTextFieldChange = (value: unknown, setter: (value: string) => void): void => {
     if (isString(value)) {
       setter(value);
     }
-  }
+  };
 
   const FormField = useMemo(
     () =>

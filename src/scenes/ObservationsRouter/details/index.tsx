@@ -10,16 +10,14 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useLocalization, useOrganization } from 'src/providers';
+import { useLocalization } from 'src/providers';
 import {
   searchObservationDetails,
   selectDetailsZoneNames,
 } from 'src/redux/features/observations/observationDetailsSelectors';
 import { searchObservations, selectObservation } from 'src/redux/features/observations/observationsSelectors';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppSelector } from 'src/redux/store';
 import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
 import MatchSpeciesModal from 'src/scenes/ObservationsRouter/common/MatchSpeciesModal';
@@ -47,7 +45,6 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const { ...searchProps }: SearchProps = props;
 
   const { activeLocale } = useLocalization();
-  const { selectedOrganization } = useOrganization();
   const defaultTimeZone = useDefaultTimeZone();
   const navigate = useSyncNavigate();
   const params = useParams<{
@@ -64,7 +61,6 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
   const [showPageMessage, setShowPageMessage] = useState(false);
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
   const [status, setStatus] = useState<ObservationState[]>([]);
-  const dispatch = useAppDispatch();
   const query = useQuery();
 
   useEffect(() => {
@@ -90,7 +86,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
       return [];
     }
 
-    return observationsResults.filter((result) => result.observationId == observationId);
+    return observationsResults.filter((result) => result.observationId === observationId);
   }, [observationsResults, observationId]);
 
   const details = useAppSelector((state) =>
@@ -130,7 +126,6 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     }
   }, [searchProps.filtersProps?.filters.status]);
 
-  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const observation = useAppSelector((state) => selectObservation(state, plantingSiteId, observationId));
   const zoneNames = useAppSelector((state) => selectDetailsZoneNames(state, plantingSiteId, observationId));
@@ -160,12 +155,6 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     }
     return undefined;
   }, [activeLocale, details, observation]);
-
-  useEffect(() => {
-    if (!speciesResponse?.data?.species && selectedOrganization.id !== -1) {
-      void dispatch(requestSpecies(selectedOrganization.id));
-    }
-  }, [dispatch, speciesResponse?.data?.species, selectedOrganization]);
 
   useEffect(() => {
     const speciesWithNoIdMap = _.uniqBy(

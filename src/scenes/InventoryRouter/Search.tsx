@@ -6,11 +6,10 @@ import { PillList } from '@terraware/web-components';
 
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { selectSubLocations } from 'src/redux/features/subLocations/subLocationsSelectors';
 import { requestSubLocations } from 'src/redux/features/subLocations/subLocationsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -68,7 +67,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
 
   const origin = props.origin || 'Species';
 
-  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
+  const { species } = useSpeciesData();
   const projects = useAppSelector(selectProjects);
   const [nurseries, setNurseries] = useState<Facility[]>([]);
   const [availableSpecies, setAvailableSpecies] = useState<Species[]>([]);
@@ -88,7 +87,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
   }, [dispatch, selectedOrganization.id, activeLocale]);
 
   useEffect(() => {
-    if (origin !== 'Nursery' || !speciesResponse?.data?.species?.length) {
+    if (origin !== 'Nursery' || !species.length) {
       return;
     }
 
@@ -98,11 +97,9 @@ export default function Search(props: SearchProps): JSX.Element | null {
       setAvailableSpecies([]);
     } else {
       const speciesWithinResults = new Set(availableSpeciesNames);
-      setAvailableSpecies(
-        speciesResponse?.data?.species.filter((singleSpecies) => speciesWithinResults.has(singleSpecies.scientificName))
-      );
+      setAvailableSpecies(species.filter((singleSpecies) => speciesWithinResults.has(singleSpecies.scientificName)));
     }
-  }, [getResultsSpeciesNames, origin, speciesResponse?.data?.species]);
+  }, [getResultsSpeciesNames, origin, species]);
 
   const subLocations = useAppSelector(selectSubLocations);
 
@@ -207,12 +204,6 @@ export default function Search(props: SearchProps): JSX.Element | null {
     showProjectsFilter,
     showEmptyBatchesFilter,
   ]);
-
-  useEffect(() => {
-    if (origin === 'Nursery' && selectedOrganization.id !== -1) {
-      void dispatch(requestSpecies(selectedOrganization.id));
-    }
-  }, [origin, dispatch, selectedOrganization.id]);
 
   const onRemovePillList = useCallback(
     (filterId: keyof InventoryFiltersUnion) => {

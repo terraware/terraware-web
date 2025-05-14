@@ -20,7 +20,11 @@ export type PlantingSiteData = {
   observationResults?: ObservationResultsPayload[];
   observationSummaries?: ObservationSummary[];
 
-  latestObservation?: ObservationResultsPayload;
+  currentObservation?: Observation;
+  latestObservation?: Observation;
+  nextObservation?: Observation;
+
+  latestResult?: ObservationResultsPayload;
 };
 
 // default values pointing to nothing

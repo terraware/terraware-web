@@ -107,7 +107,7 @@ const SectionEdit = ({
   const renderElement = useCallback(
     (props: any) => {
       switch (props.element.type) {
-        case 'variable':
+        case 'variable': {
           const variable = allVariables.find((v) => v.id === props.element.variableId);
           return (
             <TextVariable
@@ -119,6 +119,7 @@ const SectionEdit = ({
               {...props}
             />
           );
+        }
         default:
           return <TextChunk {...props} />;
       }

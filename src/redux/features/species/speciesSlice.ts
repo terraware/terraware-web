@@ -3,7 +3,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { Species } from 'src/types/Species';
 
 import { StatusT, buildReducers } from '../asyncUtils';
-import { requestGetOneSpecies, requestUpdateSpecies } from './speciesAsyncThunks';
+import { requestGetOneSpecies, requestListSpecies, requestUpdateSpecies } from './speciesAsyncThunks';
 import { MergeOtherSpeciesRequestData, requestMergeOtherSpecies } from './speciesThunks';
 
 // Define a type for the slice state
@@ -54,6 +54,20 @@ export const speciesGetOneSlice = createSlice({
 });
 
 /**
+ * List Species
+ */
+const initialStateSpeciesList: { [key: string]: StatusT<Species[]> } = {};
+
+export const speciesListSlice = createSlice({
+  name: 'speciesListSlice',
+  initialState: initialStateSpeciesList,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestListSpecies)(builder);
+  },
+});
+
+/**
  * Update Species
  */
 const initialStateSpeciesUpdate: { [key: string]: StatusT<boolean> } = {};
@@ -83,6 +97,7 @@ export const mergeOtherSpeciesSlice = createSlice({
 
 const speciesAsyncThunkReducers = {
   speciesGetOne: speciesGetOneSlice.reducer,
+  speciesList: speciesListSlice.reducer,
   speciesUpdate: speciesUpdateSlice.reducer,
   mergeOtherSpecies: mergeOtherSpeciesSlice.reducer,
 };

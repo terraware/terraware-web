@@ -7,9 +7,9 @@ import BarChart from 'src/components/common/Chart/BarChart';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useUser } from 'src/providers';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { useNumberFormatter } from 'src/utils/useNumber';
@@ -82,13 +82,11 @@ const SiteWithoutZonesCard = ({
 };
 
 const SiteWithZonesCard = ({ newVersion }: NumberOfSpeciesPlantedCardProps): JSX.Element => {
-  const { plantingSite, plantingSiteReportedPlants } = usePlantingSiteData();
-  const speciesSelector = useAppSelector(selectSpecies(plantingSite?.organizationId ?? -1));
+  const { plantingSiteReportedPlants } = usePlantingSiteData();
+  const { species: orgSpecies } = useSpeciesData();
 
   const totalSpecies = useMemo(() => plantingSiteReportedPlants?.species.length ?? 0, [plantingSiteReportedPlants]);
   const labels = [strings.RARE, strings.ENDANGERED, strings.OTHER];
-
-  const orgSpecies = useMemo(() => speciesSelector?.data?.species, [speciesSelector]);
 
   const values = useMemo(() => {
     if (plantingSiteReportedPlants?.species && orgSpecies) {

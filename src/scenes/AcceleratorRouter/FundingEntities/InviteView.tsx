@@ -10,8 +10,8 @@ import PageForm from 'src/components/common/PageForm';
 import { EMAIL_REGEX } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useFundingEntity } from 'src/providers';
-import { requestFundingEntityInviteFunder } from 'src/redux/features/funder/fundingEntitiesAsyncThunks';
-import { inviteFunderRequest } from 'src/redux/features/funder/fundingEntitiesSelectors';
+import { requestFundingEntityInviteFunder } from 'src/redux/features/funder/entities/fundingEntitiesAsyncThunks';
+import { inviteFunderRequest } from 'src/redux/features/funder/entities/fundingEntitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Funder } from 'src/types/FundingEntity';
@@ -120,24 +120,10 @@ const InviteView = () => {
               />
             </Grid>
             <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
-              <Textfield
-                id='firstName'
-                label={strings.FIRST_NAME}
-                onChange={() => {}}
-                type='text'
-                value={'--'}
-                disabled
-              />
+              <Textfield id='firstName' label={strings.FIRST_NAME} type='text' value={'--'} disabled />
             </Grid>
             <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
-              <Textfield
-                id='lastName'
-                label={strings.LAST_NAME}
-                onChange={() => {}}
-                type='text'
-                value={'--'}
-                disabled
-              />
+              <Textfield id='lastName' label={strings.LAST_NAME} type='text' value={'--'} disabled />
             </Grid>
           </Card>
         </Container>

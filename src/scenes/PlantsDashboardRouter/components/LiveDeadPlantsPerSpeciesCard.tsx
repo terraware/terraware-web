@@ -4,16 +4,15 @@ import { Box } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 
 import PieChart from 'src/components/common/Chart/PieChart';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import strings from 'src/strings';
 
 export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
   const [selectedSpecies, setSelectedSpecies] = useState<string>();
-
-  const { availableSpecies } = useSpecies();
+  const { species: availableSpecies } = useSpeciesData();
   const [allSpecies, setAllSpecies] = useState<
     {
       label: string;
@@ -24,7 +23,7 @@ export default function LiveDeadPlantsPerSpeciesCard(): JSX.Element {
   const { observationSummaries } = usePlantingSiteData();
 
   useEffect(() => {
-    if (availableSpecies && observationSummaries?.[0]) {
+    if (observationSummaries?.[0]) {
       const speciesNames = observationSummaries[0].species
         .filter((sp) => sp.cumulativeDead !== 0 || sp.permanentLive !== 0)
         .map((sp) => ({

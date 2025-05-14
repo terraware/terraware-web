@@ -11,7 +11,6 @@ import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { useAppDispatch } from 'src/redux/store';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
@@ -41,11 +40,11 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     setSelectedPlantingSite,
     allPlantingSites,
     plantingSite,
-    latestObservation,
+    latestResult,
     observationSummaries,
   } = usePlantingSiteData();
 
-  const hasObservations = useMemo(() => !!latestObservation, [latestObservation]);
+  const hasObservations = useMemo(() => !!latestResult, [latestResult]);
 
   const sitePlantingComplete = useMemo(() => {
     return (
@@ -59,25 +58,24 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     [setPlantsDashboardPreferences]
   );
 
-  const latestObservationId = useMemo(() => {
-    return latestObservation?.observationId;
-  }, [latestObservation]);
+  const latestResultId = useMemo(() => {
+    return latestResult?.observationId;
+  }, [latestResult]);
 
   const geometryChangedNote = useMemo(() => {
-    if (latestObservation?.completedTime && plantingSite?.plantingZones?.length) {
+    if (latestResult?.completedTime && plantingSite?.plantingZones?.length) {
       const siteBoundaryModifiedTime = plantingSite.plantingZones.reduce(
         (maxTime, zone) => (isAfter(zone.boundaryModifiedTime, maxTime) ? zone.boundaryModifiedTime : maxTime),
         plantingSite.plantingZones[0].boundaryModifiedTime
       );
-      return isAfter(siteBoundaryModifiedTime, latestObservation.completedTime);
+      return isAfter(siteBoundaryModifiedTime, latestResult.completedTime);
     } else {
       return false;
     }
-  }, [latestObservation, plantingSite]);
+  }, [latestResult, plantingSite]);
 
   useEffect(() => {
     const orgId = organizationId ?? selectedOrganization.id;
-    void dispatch(requestSpecies(orgId));
     setAcceleratorOrganizationId(orgId);
   }, [dispatch, organizationId, selectedOrganization, setAcceleratorOrganizationId]);
 
@@ -89,31 +87,31 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     </Grid>
   );
 
-  const getLatestObservationLink = useCallback(() => {
-    const allMonitoringPlots = latestObservation?.plantingZones.flatMap((pz) =>
+  const renderLatestObservationLink = useCallback(() => {
+    const allMonitoringPlots = latestResult?.plantingZones.flatMap((pz) =>
       pz.plantingSubzones.flatMap((sz) => sz.monitoringPlots)
     );
     const maxCompletedTime = allMonitoringPlots?.reduce(
       (acc, plot) => (isAfter(plot.completedTime, acc) ? plot.completedTime : acc),
       allMonitoringPlots[0].completedTime
     );
-    return plantingSite && latestObservation?.completedTime ? (
+    return plantingSite && latestResult?.completedTime ? (
       <Link
         fontSize={'16px'}
         to={APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', plantingSite?.id.toString()).replace(
           ':observationId',
-          latestObservation.observationId.toString()
+          latestResult.observationId.toString()
         )}
       >
         {strings.formatString(
           strings.DATE_OBSERVATION,
-          DateTime.fromISO(maxCompletedTime || latestObservation.completedTime).toFormat('yyyy-MM-dd')
+          DateTime.fromISO(maxCompletedTime || latestResult.completedTime).toFormat('yyyy-MM-dd')
         )}
       </Link>
     ) : (
       ''
     );
-  }, [latestObservation]);
+  }, [latestResult]);
 
   const renderMortalityRate = useCallback(
     () =>
@@ -131,7 +129,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
                 {strings.MORTALITY_RATE}
               </Typography>
               {hasObservations && (
-                <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
+                <Typography>{strings.formatString(strings.AS_OF_X, renderLatestObservationLink())}</Typography>
               )}
             </Box>
           </Grid>
@@ -140,7 +138,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, getLatestObservationLink, hasObservations]
+    [plantingSite, renderLatestObservationLink, hasObservations]
   );
 
   const renderTotalPlantsAndSpecies = () => (
@@ -180,7 +178,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
                 {strings.PLANTING_DENSITY}
               </Typography>
               {hasObservations && (
-                <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
+                <Typography>{strings.formatString(strings.AS_OF_X, renderLatestObservationLink())}</Typography>
               )}
             </Box>
           </Grid>
@@ -189,7 +187,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, sitePlantingComplete, hasObservations, getLatestObservationLink]
+    [plantingSite, sitePlantingComplete, hasObservations, renderLatestObservationLink]
   );
 
   const renderPlantingSiteTrends = useCallback(
@@ -229,7 +227,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
                 {strings.SITE_MAP}
               </Typography>
               {hasObservations && (
-                <Typography>{strings.formatString(strings.AS_OF_X, getLatestObservationLink())}</Typography>
+                <Typography>{strings.formatString(strings.AS_OF_X, renderLatestObservationLink())}</Typography>
               )}
             </Box>
           </Grid>
@@ -238,7 +236,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, getLatestObservationLink, hasObservations]
+    [plantingSite, renderLatestObservationLink, hasObservations]
   );
 
   const renderSimpleSiteMap = useCallback(
@@ -286,14 +284,14 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
 
   const observationHectares = useMemo(() => {
     const totalSquareMeters =
-      latestObservation?.plantingZones
+      latestResult?.plantingZones
         .flatMap((pz) =>
           pz.plantingSubzones.flatMap((psz) => psz.monitoringPlots.map((mp) => mp.sizeMeters * mp.sizeMeters))
         )
         .reduce((acc, area) => acc + area, 0) ?? 0;
 
     return totalSquareMeters * SQ_M_TO_HECTARES;
-  }, [latestObservation]);
+  }, [latestResult]);
 
   const getDashboardSubhead = useCallback(() => {
     if (!plantingSite) {
@@ -310,7 +308,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
       ? (strings.formatString(
           strings.DASHBOARD_HEADER_TEXT_SINGLE_OBSERVATION,
           <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={observationHectares} />)}</b>,
-          <b>{getLatestObservationLink()}</b>
+          <b>{renderLatestObservationLink()}</b>
         ) as string)
       : (strings.formatString(
           strings.DASHBOARD_HEADER_TEXT_V2,
@@ -338,7 +336,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
   return (
     <PlantsPrimaryPage
       title={strings.DASHBOARD}
-      text={latestObservationId ? getDashboardSubhead() : undefined}
+      text={latestResultId ? getDashboardSubhead() : undefined}
       pagePath={
         projectId
           ? APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', projectId.toString())
@@ -350,7 +348,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
       setPlantsSitePreferences={onPreferences}
       newHeader={true}
       showGeometryNote={geometryChangedNote}
-      latestObservationId={latestObservationId}
+      latestObservationId={latestResultId}
       projectId={projectId}
       organizationId={organizationId}
       isEmptyState={plantingSite === undefined}

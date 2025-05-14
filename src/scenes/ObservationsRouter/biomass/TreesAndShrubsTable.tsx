@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
-import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import DescriptionModal from 'src/scenes/ObservationsRouter/biomass/DescriptionModal';
 import TreesAndShrubsRenderer from 'src/scenes/ObservationsRouter/biomass/TreesAndShrubsRenderer';
 import strings from 'src/strings';
@@ -15,7 +15,7 @@ type TreesAndShrubsTableProps = {
 };
 
 export default function TreesAndShrubsTable({ trees }: TreesAndShrubsTableProps): JSX.Element {
-  const { availableSpecies } = useSpecies();
+  const { species: availableSpecies } = useSpeciesData();
   const [selectedRows, setSelectedRows] = useState<ExistingTreePayload[]>([]);
   const [selectedTree, setSelectedTree] = useState<ExistingTreePayload | undefined>();
 
@@ -71,7 +71,7 @@ export default function TreesAndShrubsTable({ trees }: TreesAndShrubsTableProps)
 
   const treesWithData = useMemo(() => {
     return trees?.map((tree) => {
-      const foundSpecies = availableSpecies?.find((avSpecies) => avSpecies.id === tree.speciesId);
+      const foundSpecies = availableSpecies.find((avSpecies) => avSpecies.id === tree.speciesId);
       return {
         ...tree,
         speciesName: tree.speciesName || foundSpecies?.scientificName,

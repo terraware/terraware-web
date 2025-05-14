@@ -64,7 +64,7 @@ export default function DeliverableDisplayVariableValue({
           })}
         </>
       );
-    case 'Select':
+    case 'Select': {
       const selectedValues = (variable.values[0] as VariableValueSelectValue)?.optionValues;
       return (
         <span style={variableStyles}>
@@ -76,6 +76,7 @@ export default function DeliverableDisplayVariableValue({
           }`}
         </span>
       );
+    }
     case 'Table':
       return (
         <Box

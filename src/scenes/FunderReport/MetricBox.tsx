@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 
 import { Box, Tooltip, Typography, useTheme } from '@mui/material';
-import { Icon } from '@terraware/web-components';
+import { Icon, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { isReportSystemMetric } from 'src/components/AcceleratorReports/MetricBox';
@@ -48,7 +48,7 @@ const MetricBox = ({ metric, index, year, quarter, lastIndex }: MetricBoxProps) 
         {metric.description && (
           <Tooltip title={metric.description}>
             <Box display='flex'>
-              <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='medium' style={{ marginRight: '10px' }} />
+              <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' style={{ marginRight: '10px' }} />
             </Box>
           </Tooltip>
         )}
@@ -78,7 +78,20 @@ const MetricBox = ({ metric, index, year, quarter, lastIndex }: MetricBoxProps) 
           <Typography fontWeight={600} fontSize='16px' marginTop={1}>
             {strings.PROGRESS_NOTES}
           </Typography>
-          <Typography fontWeight={400}>{metric.progressNotes}</Typography>
+          <Textfield
+            display
+            preserveNewlines
+            id='progressNotes'
+            type='textarea'
+            value={metric.progressNotes}
+            truncateConfig={{
+              maxHeight: 240,
+              showMoreText: strings.SEE_MORE,
+              showLessText: strings.SEE_LESS,
+              alignment: 'right',
+            }}
+            label={''}
+          />
         </Box>
       )}
     </Box>

@@ -3,16 +3,15 @@ import React from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import strings from 'src/strings';
 import { ObservationSpeciesResultsPayload } from 'src/types/Observations';
 
 export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element {
   const theme = useTheme();
   const { observationSummaries } = usePlantingSiteData();
-
-  const { availableSpecies } = useSpecies();
+  const { species: availableSpecies } = useSpeciesData();
 
   let highestMortalityRate: number | undefined;
   let highestSpecies = '';
@@ -28,15 +27,14 @@ export default function HighestAndLowestMortalityRateSpeciesCard(): JSX.Element 
     ) {
       highestMortalityRate = sp.mortalityRate;
       highestSpecies =
-        availableSpecies?.find((spec) => spec.id === sp.speciesId)?.scientificName || sp.speciesName || '';
+        availableSpecies.find((spec) => spec.id === sp.speciesId)?.scientificName || sp.speciesName || '';
     }
   });
 
   observationSummaries?.[0]?.species.forEach((sp: ObservationSpeciesResultsPayload) => {
     if (sp.mortalityRate !== undefined && sp.mortalityRate !== null && sp.mortalityRate < lowestMortalityRate) {
       lowestMortalityRate = sp.mortalityRate;
-      lowestSpecies =
-        availableSpecies?.find((spec) => spec.id === sp.speciesId)?.scientificName || sp.speciesName || '';
+      lowestSpecies = availableSpecies.find((spec) => spec.id === sp.speciesId)?.scientificName || sp.speciesName || '';
     }
   });
 

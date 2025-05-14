@@ -7,6 +7,7 @@ import {
 } from 'src/types/documentProducer/VariableValue';
 
 export const hasMarkdownTableHeaderSeparatorRow = (input: string | undefined): boolean =>
+  /* eslint-disable-next-line no-useless-escape */
   !!/\|\s*\-\-\-+\s*\|/g.exec(input || '');
 
 const MarkdownTableRowRegex = () => /\|\s*([^|]*?)\s*(?=\|)/g;

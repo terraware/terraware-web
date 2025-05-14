@@ -19,6 +19,21 @@ export const requestGetOneSpecies = createAsyncThunk(
   }
 );
 
+export const requestListSpecies = createAsyncThunk(
+  'species/list',
+  async (request: { organizationId: number; inUse?: boolean }, { rejectWithValue }) => {
+    const { organizationId, inUse } = request;
+
+    const response = await SpeciesService.getAllSpecies(organizationId, inUse);
+
+    if (response && response.requestSucceeded && response.data) {
+      return response.data.species;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
 export const requestUpdateSpecies = createAsyncThunk(
   'species/update',
   async (request: { organizationId: number; species: Species }, { rejectWithValue }) => {

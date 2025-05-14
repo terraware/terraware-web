@@ -4,7 +4,6 @@ import { setCohortAction, setCohortsAction } from 'src/redux/features/cohorts/co
 import CohortService, {
   CreateCohortResponsePayload,
   DeleteCohortResponsePayload,
-  ListCohortsRequestDepth,
   UpdateCohortResponsePayload,
 } from 'src/services/CohortService';
 import { Response2 } from 'src/services/HttpService';
@@ -17,15 +16,14 @@ export const requestCohorts = createAsyncThunk(
   async (
     request: {
       locale: string | null;
-      depth?: ListCohortsRequestDepth;
       search?: SearchNodePayload;
       searchSortOrder?: SearchSortOrder;
     },
     { dispatch, rejectWithValue }
   ) => {
-    const { depth, locale, search, searchSortOrder } = request;
+    const { locale, search, searchSortOrder } = request;
 
-    const response = await CohortService.listCohorts(locale, search, searchSortOrder, depth);
+    const response = await CohortService.listCohorts(locale, search, searchSortOrder);
 
     if (response !== null && response.requestSucceeded && response?.cohorts !== undefined) {
       dispatch(setCohortsAction({ error: response.error, cohorts: response.cohorts }));
@@ -38,9 +36,8 @@ export const requestCohorts = createAsyncThunk(
 
 export const requestCohort = createAsyncThunk(
   'cohorts/get',
-  async (request: { cohortId: number; depth?: ListCohortsRequestDepth }, { dispatch, rejectWithValue }) => {
-    const { depth } = request;
-    const response: Response2<Cohort> = await CohortService.getCohort(request.cohortId, depth);
+  async (request: { cohortId: number }, { dispatch, rejectWithValue }) => {
+    const response: Response2<Cohort> = await CohortService.getCohort(request.cohortId);
 
     if (response !== null && response.requestSucceeded && response.data !== undefined) {
       dispatch(setCohortAction({ error: response.error, cohorts: [response.data] }));

@@ -13,7 +13,7 @@ import LiveDeadPlantsPerSpeciesCard from './LiveDeadPlantsPerSpeciesCard';
 
 export default function MortalityRateCard(): JSX.Element {
   const theme = useTheme();
-  const { latestObservation } = usePlantingSiteData();
+  const { latestResult } = usePlantingSiteData();
   const { isDesktop } = useDeviceInfo();
 
   const separatorStyles = {
@@ -42,19 +42,15 @@ export default function MortalityRateCard(): JSX.Element {
         </Box>
         <Box display='flex' sx={{ flexFlow: 'row wrap' }} marginTop={1}>
           <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
-            {latestObservation?.mortalityRate !== undefined ? (
-              <FormattedNumber value={latestObservation.mortalityRate} />
-            ) : (
-              '-'
-            )}
+            {latestResult?.mortalityRate !== undefined ? <FormattedNumber value={latestResult.mortalityRate} /> : '-'}
           </Typography>
-          {latestObservation?.mortalityRate !== undefined && (
+          {latestResult?.mortalityRate !== undefined && (
             <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
               %
             </Typography>
           )}
         </Box>
-        {latestObservation?.mortalityRate === undefined && (
+        {latestResult?.mortalityRate === undefined && (
           <Box display={'flex'}>
             <Box paddingRight={0.5}>
               <Icon name='warning' fillColor={theme.palette.TwClrIcnWarning} size='medium' />
