@@ -16,13 +16,13 @@ import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import CTACard from 'src/scenes/Home/CTACard';
 import MobileAppCard from 'src/scenes/Home/MobileAppCard';
-import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
 import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
 import { isAdmin, isManagerOrHigher, selectedOrgHasFacilityType } from 'src/utils/organization';
@@ -41,7 +41,7 @@ const TerrawareHomeView = () => {
   const dispatch = useAppDispatch();
   const { goToNewAccession } = useNavigateTo();
   const plantingSites = useAppSelector(selectPlantingSites);
-  const { availableSpecies } = useSpecies();
+  const { species } = useSpeciesData();
   const seedBankSummary = useSeedBankSummary();
   const orgNurserySummary = useOrgNurserySummary();
   const [showAcceleratorCard, setShowAcceleratorCard] = useState(true);
@@ -64,29 +64,23 @@ const TerrawareHomeView = () => {
   }, [dispatch, selectedOrganization.id]);
 
   const isLoadingInitialData = useMemo(
-    () =>
-      availableSpecies === undefined ||
-      orgNurserySummary?.requestSucceeded === undefined ||
-      seedBankSummary?.requestSucceeded === undefined,
-    [availableSpecies, orgNurserySummary, seedBankSummary]
+    () => orgNurserySummary?.requestSucceeded === undefined || seedBankSummary?.requestSucceeded === undefined,
+    [orgNurserySummary, seedBankSummary]
   );
 
-  const showHomePageOnboardingImprovements = useMemo(
-    () => typeof availableSpecies?.length === 'number' && availableSpecies?.length > 0,
-    [availableSpecies]
-  );
+  const showHomePageOnboardingImprovements = useMemo(() => species.length > 0, [species]);
 
   const speciesLastModifiedDate = useMemo(() => {
-    if (!availableSpecies?.length) {
+    if (!species?.length) {
       return undefined;
     }
 
-    const lastModifiedTime = availableSpecies.sort(
+    const lastModifiedTime = [...species].sort(
       (a, b) => new Date(b.modifiedTime).getTime() - new Date(a.modifiedTime).getTime()
     )[0].modifiedTime;
 
     return getDateDisplayValue(lastModifiedTime);
-  }, [availableSpecies]);
+  }, [species]);
 
   const primaryGridSize = useMemo(() => (isMobile ? 12 : 6), [isMobile]);
 
@@ -129,7 +123,7 @@ const TerrawareHomeView = () => {
             },
         icon: 'species' as IconName,
         statsCardItems: [
-          { label: strings.TOTAL_SPECIES, value: numericFormatter.format(availableSpecies?.length ?? 0) },
+          { label: strings.TOTAL_SPECIES, value: numericFormatter.format(species.length ?? 0) },
           {
             label: strings.SPECIES_LAST_UPDATED,
             value: speciesLastModifiedDate,
@@ -226,7 +220,7 @@ const TerrawareHomeView = () => {
     return rows;
   }, [
     activeLocale,
-    availableSpecies,
+    species,
     orgNurserySummary,
     plantingSites,
     seedBankSummary,

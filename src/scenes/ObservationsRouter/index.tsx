@@ -7,6 +7,7 @@ import { Option } from '@terraware/web-components/components/table/types';
 import { FilterField } from 'src/components/common/FilterGroup';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import { useLocalization, useOrganization } from 'src/providers';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import {
   selectObservationsResults,
   selectObservationsResultsError,
@@ -16,8 +17,6 @@ import {
   requestObservations,
   requestObservationsResults,
 } from 'src/redux/features/observations/observationsThunks';
-import { selectSpecies, selectSpeciesError } from 'src/redux/features/species/speciesSelectors';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { selectPlantingSites, selectPlantingSitesError } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import BiomassMeasurementsDetails from 'src/scenes/ObservationsRouter/biomass/BiomassMeasurementsDetails';
@@ -45,48 +44,39 @@ export default function ObservationsRouter(): JSX.Element {
   const [dispatched, setDispatched] = useState<boolean>(false);
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
+
+  const { reload: reloadSpecies } = useSpeciesData();
+
   // listen for error
   const observationsResultsError = useAppSelector(selectObservationsResultsError);
-  const speciesError = useAppSelector(selectSpeciesError);
   const plantingSitesError = useAppSelector(selectPlantingSitesError);
   // listen for data
   const observationsResults = useAppSelector(selectObservationsResults);
-  const speciesResponse = useAppSelector(selectSpecies(selectedOrganization.id));
   const plantingSites = useAppSelector(selectPlantingSites);
 
   useEffect(() => {
-    if (selectedOrganization.id !== -1 && !['pending', 'success'].includes(speciesResponse?.status || '')) {
-      void dispatch(requestSpecies(selectedOrganization.id));
-    }
-  }, [dispatch, selectedOrganization.id]);
-
-  useEffect(() => {
-    if (
-      speciesResponse?.data?.species !== undefined &&
-      plantingSites !== undefined &&
-      !dispatched &&
-      selectedOrganization.id !== -1
-    ) {
+    if (plantingSites !== undefined && !dispatched && selectedOrganization.id !== -1) {
       setDispatched(true);
       void dispatch(requestObservationsResults(selectedOrganization.id));
       void dispatch(requestAdHocObservationResults(selectedOrganization.id));
       void dispatch(requestObservations(selectedOrganization.id));
       void dispatch(requestObservations(selectedOrganization.id, true));
     }
-  }, [dispatch, selectedOrganization.id, speciesResponse?.data?.species, plantingSites, dispatched]);
+  }, [dispatch, selectedOrganization.id, plantingSites, dispatched]);
 
   useEffect(() => {
-    if (observationsResultsError || speciesError || plantingSitesError) {
+    if (observationsResultsError || plantingSitesError) {
       snackbar.toastError();
     }
-  }, [snackbar, observationsResultsError, speciesError, plantingSitesError]);
+  }, [snackbar, observationsResultsError, plantingSitesError]);
 
-  const reload = () => {
+  const reload = useCallback(() => {
+    reloadSpecies();
     setDispatched(false);
-  };
+  }, [reloadSpecies]);
 
   // show spinner while initializing data
-  if (observationsResults === undefined && !(observationsResultsError || speciesError || plantingSitesError)) {
+  if (observationsResults === undefined && !(observationsResultsError || plantingSitesError)) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
 

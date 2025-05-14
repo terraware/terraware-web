@@ -6,10 +6,8 @@ import { Button } from '@terraware/web-components';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
-import { useOrganization } from 'src/providers';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 
 type PlantingProgressMapDialogProps = {
@@ -32,9 +30,8 @@ export default function PlantingProgressMapDialog({
   busy,
 }: PlantingProgressMapDialogProps): JSX.Element {
   const theme = useTheme();
-  const { selectedOrganization } = useOrganization();
   const { plantingSiteReportedPlants } = usePlantingSiteData();
-  const species = useAppSelector(selectSpecies(selectedOrganization.id));
+  const { species } = useSpeciesData();
 
   const subzoneReportedPlants = useMemo(() => {
     if (!plantingSiteReportedPlants) {
@@ -54,11 +51,7 @@ export default function PlantingProgressMapDialog({
 
   const getSpeciesName = useCallback(
     (speciesId: number) => {
-      if (!species.data?.species) {
-        return '';
-      }
-
-      return species.data.species.find((s) => s.id === speciesId)?.scientificName ?? '';
+      return species.find((s) => s.id === speciesId)?.scientificName ?? '';
     },
     [species]
   );

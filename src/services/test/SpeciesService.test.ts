@@ -98,17 +98,19 @@ describe('Species service test', () => {
 
   test('get all species should return a list of species', async () => {
     setHttpServiceMocks({
-      get: () =>
+      get2: () =>
         Promise.resolve({
-          species: SPECIES_LIST,
+          data: {
+            species: SPECIES_LIST
+          },
           requestSucceeded: true,
           statusCode: 200,
         }),
     });
 
-    const { species } = await SpeciesService.getAllSpecies(1);
+    const response = await SpeciesService.getAllSpecies(1);
 
-    expect(species).toHaveLength(1);
+    expect(response.data?.species).toHaveLength(1);
   });
 
   test('get species details should contain details', async () => {

@@ -10,12 +10,11 @@ import PlantingSiteSpeciesCellRenderer from 'src/components/SeedFundReports/Loca
 import { transformNumericValue } from 'src/components/SeedFundReports/LocationSelection/util';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import Table from 'src/components/common/table';
-import { useOrganization } from 'src/providers';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
 import { ReportPlantingSite } from 'src/types/Report';
-import { GrowthForm, Species } from 'src/types/Species';
+import { GrowthForm } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type PlantingSiteSpecies = {
@@ -51,8 +50,6 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
 
   const { isMobile } = useDeviceInfo();
 
-  const { selectedOrganization } = useOrganization();
-
   const {
     plantingSite,
     setSelectedPlantingSite,
@@ -66,7 +63,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
     setSelectedPlantingSite(location.id);
   }, [location]);
 
-  const [allSpecies, setAllSpecies] = useState<Species[]>();
+  const { species: allSpecies } = useSpeciesData();
   const [plantingSiteSpecies, setPlantingSiteSpecies] = useState<PlantingSiteSpecies[]>([]);
   const [plantingDensity, setPlantingDensity] = useState<Record<string, number | string>>();
 
@@ -84,19 +81,6 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
       setPlantingDensity(zoneDensities);
     }
   }, [plantingSite, latestResult]);
-
-  useEffect(() => {
-    if (selectedOrganization.id !== -1) {
-      const populateSpecies = async () => {
-        const response = await SpeciesService.getAllSpecies(selectedOrganization.id);
-        if (response.requestSucceeded) {
-          setAllSpecies(response.species);
-        }
-      };
-
-      void populateSpecies();
-    }
-  }, [selectedOrganization.id, location]);
 
   useEffect(() => {
     if (allSpecies) {

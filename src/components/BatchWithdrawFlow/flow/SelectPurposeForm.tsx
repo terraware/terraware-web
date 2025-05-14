@@ -21,11 +21,11 @@ import Divisor from 'src/components/common/Divisor';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
 import { useUser } from 'src/providers';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { useOrganization } from 'src/providers/hooks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
-import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
 import { BatchWithdrawalPayload, NurseryWithdrawalPurposes, NurseryWithdrawalRequest } from 'src/types/Batch';
 import { Facility } from 'src/types/Facility';
@@ -59,7 +59,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  const plantingSites = useAppSelector(selectPlantingSites);
+  const { allPlantingSites } = usePlantingSiteData();
+  const { species } = useSpeciesData();
   const projects = useAppSelector(selectProjects);
 
   const [isNurseryTransfer, setIsNurseryTransfer] = useState(contributor ? true : false);
@@ -78,8 +79,17 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [noReadySeedlings, setNoReadySeedlings] = useState<boolean>(false);
   const [selectedSubzone, setSelectedSubzone] = useState<SubzoneInfo>();
   const [selectedZone, setSelectedZone] = useState<ZoneInfo>();
-  const [speciesMap, setSpeciesMap] = useState<{ [key: string]: string }>({});
   const [projectRecord, setProjectRecord] = useState<{ projectId?: number }>({});
+
+  const speciesMap = useMemo((): Record<string, string> => {
+    return species.reduce((acc, sp) => {
+      const { scientificName, commonName } = sp;
+      return {
+        ...acc,
+        [sp.id]: commonName ? `${scientificName} (${commonName})` : scientificName,
+      };
+    }, {});
+  }, [species]);
 
   const tz = useLocationTimeZone().get(selectedNursery);
   const [timeZone, setTimeZone] = useState(tz.id);
@@ -143,7 +153,9 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     updateField('plantingSiteId', value);
     setSelectedZone(undefined);
     setSelectedSubzone(undefined);
-    const plantingSite = plantingSites ? plantingSites.find((site) => site.id.toString() === value.toString()) : null;
+    const plantingSite = allPlantingSites
+      ? allPlantingSites.find((site) => site.id.toString() === value.toString())
+      : null;
     setZones(plantingSite?.plantingZones || []);
     setZoneId(undefined);
   };
@@ -408,10 +420,10 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   }, [batches, isOutplant, selectedNursery, selectedOrganization]);
 
   const getPlantingSitesOptions = () => {
-    if (!plantingSites) {
+    if (!allPlantingSites) {
       return [];
     }
-    return plantingSites.map((plantingSite) => ({
+    return allPlantingSites.map((plantingSite) => ({
       label: plantingSite.name,
       value: plantingSite.id.toString(),
     }));
@@ -456,24 +468,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     }
   }, [localRecord.purpose, noReadySeedlings, snackbar, selectedNursery, batches, updatePurpose]);
 
-  useEffect(() => {
-    if (selectedOrganization.id !== -1) {
-      const fetchSpecies = async () => {
-        const result = await SpeciesService.getAllSpecies(selectedOrganization.id);
-        const speciesNamesMap = (result.species || []).reduce((acc, sp) => {
-          const { scientificName, commonName } = sp;
-          return {
-            ...acc,
-            [sp.id.toString()]: commonName ? `${scientificName} (${commonName})` : scientificName,
-          };
-        }, {});
-        setSpeciesMap(speciesNamesMap);
-      };
-
-      void fetchSpecies();
-    }
-  }, [selectedOrganization.id]);
-
   const batchesFromNursery = useMemo(() => {
     return batches.filter(
       (batch) => !selectedNursery || `${batch.facility_id as string}` === selectedNursery.id.toString()
@@ -514,12 +508,12 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const outplantDisabled = useMemo(() => {
-    if (!plantingSites?.length || noReadySeedlings) {
+    if (!allPlantingSites?.length || noReadySeedlings) {
       return true;
     }
 
     return false;
-  }, [plantingSites, noReadySeedlings]);
+  }, [allPlantingSites, noReadySeedlings]);
 
   const nurseryTransferDisabled = useMemo(() => {
     if (!destinationNurseriesOptions) {

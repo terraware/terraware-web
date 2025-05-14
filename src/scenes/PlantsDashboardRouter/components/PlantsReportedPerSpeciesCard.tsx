@@ -6,9 +6,9 @@ import { Icon, Tooltip } from '@terraware/web-components';
 import BarChart from 'src/components/common/Chart/BarChart';
 import PieChart from 'src/components/common/Chart/PieChart';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { truncate } from 'src/utils/text';
@@ -121,13 +121,12 @@ const SiteWithZonesCard = ({
   plantingSiteId: number;
   newVersion?: boolean;
 }): JSX.Element => {
-  const { plantingSite, plantingSiteReportedPlants } = usePlantingSiteData();
-  const speciesSelector = useAppSelector(selectSpecies(plantingSite?.organizationId ?? -1));
+  const { plantingSiteReportedPlants } = usePlantingSiteData();
+  const { species: orgSpecies } = useSpeciesData();
+
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
   const [tooltipTitles, setTooltipTitles] = useState<string[]>();
-
-  const orgSpecies = useMemo(() => speciesSelector?.data?.species, [speciesSelector]);
 
   const speciesQuantities = useMemo(() => {
     if (plantingSiteReportedPlants && orgSpecies) {

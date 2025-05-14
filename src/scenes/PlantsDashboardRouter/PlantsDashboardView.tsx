@@ -11,7 +11,6 @@ import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { useAppDispatch } from 'src/redux/store';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
@@ -77,7 +76,6 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
 
   useEffect(() => {
     const orgId = organizationId ?? selectedOrganization.id;
-    void dispatch(requestSpecies(orgId));
     setAcceleratorOrganizationId(orgId);
   }, [dispatch, organizationId, selectedOrganization, setAcceleratorOrganizationId]);
 

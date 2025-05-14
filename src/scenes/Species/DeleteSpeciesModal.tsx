@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Typography } from '@mui/material';
 import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
 
-import { useOrganization } from 'src/providers';
-import { SpeciesService } from 'src/services';
+import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
-import useSnackbar from 'src/utils/useSnackbar';
 
 export interface DeleteSpeciesDialogProps {
   open: boolean;
@@ -18,37 +16,13 @@ export interface DeleteSpeciesDialogProps {
 
 export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JSX.Element | null {
   const { onClose, open, onSubmit, speciesToDelete } = props;
-  const snackbar = useSnackbar();
-  const { selectedOrganization } = useOrganization();
-  const [inUseSpecies, setInUseSpecies] = useState<Record<string, string>>();
   const [cannotDelete, setCannotDelete] = useState<boolean>();
 
-  useEffect(() => {
-    if (selectedOrganization.id !== -1) {
-      const fetchInUseSpecies = async () => {
-        const response = await SpeciesService.getAllSpecies(selectedOrganization.id, true);
-        if (response.requestSucceeded && response.species) {
-          setInUseSpecies(
-            response.species.reduce(
-              (acc, species) => ({ ...acc, [species.id.toString()]: species.scientificName }),
-              {} as Record<string, string>
-            )
-          );
-        } else {
-          snackbar.toastError(strings.GENERIC_ERROR);
-          onClose();
-        }
-      };
-
-      if (open) {
-        void fetchInUseSpecies();
-      }
-    }
-  }, [selectedOrganization.id, open, onClose, snackbar]);
+  const { inUseSpecies } = useSpeciesData();
 
   useEffect(() => {
     if (inUseSpecies) {
-      if (inUseSpecies[speciesToDelete.id.toString()]) {
+      if (inUseSpecies.find((_species) => _species.id === speciesToDelete.id)) {
         setCannotDelete(true);
       } else {
         setCannotDelete(false);
@@ -56,9 +30,9 @@ export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JS
     }
   }, [inUseSpecies, speciesToDelete]);
 
-  const deleteSpecies = () => {
+  const deleteSpecies = useCallback(() => {
     onSubmit(speciesToDelete.id);
-  };
+  }, [onSubmit, speciesToDelete]);
 
   const getMessage = (): string | JSX.Element => {
     if (cannotDelete) {
