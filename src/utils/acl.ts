@@ -23,6 +23,7 @@ import { isAdmin, isManagerOrHigher, isMember } from './organization';
  */
 type PermissionAcceleratorReports =
   | 'EDIT_REPORTS'
+  | 'PUBLISH_REPORTS'
   | 'READ_REPORTS'
   | 'REVIEW_REPORTS_TARGETS'
   | 'UPDATE_REPORTS_SETTINGS'
@@ -190,6 +191,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   EXPORT_PARTICIPANT_PROJECT: ReadOnlyPlus,
   INVITE_FUNDER: AcceleratorAdminPlus,
   MANAGE_FUNDING_ENTITIES: AcceleratorAdminPlus,
+  PUBLISH_REPORTS: AcceleratorAdminPlus,
   READ_ALL_APPLICATIONS: ReadOnlyPlus,
   READ_COHORTS: TFExpertPlus,
   READ_DELIVERABLE: isAllowedReadDeliverable,
