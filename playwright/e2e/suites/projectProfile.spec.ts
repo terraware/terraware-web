@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import type { Page } from 'playwright-core';
 
+import { navigateToProjectProfile } from '../utils/navigation';
 import { addCookies, exactOptions, waitFor } from '../utils/utils';
 
 test.setTimeout(20000);
@@ -60,7 +61,7 @@ export default function ProjectProfileTests() {
       minProjectArea: 'N/A',
       expansionPotential: 'N/A',
       nativeSpecies: '15',
-      projectLinksVisible: ['Application', 'Scoring', 'Reports', 'GDrive'],
+      projectLinksVisible: ['Application', 'Documents', 'Deliverables', 'Scoring', 'Reports', 'GDrive'],
       projectLinksHidden: ['HubSpot', 'GIS Report', 'Verra', 'Risk Tracker', 'ClickUp', 'Slack'],
       additionalPageText: ['Passed Pre-screen', 'Viewing: Application Site Boundary', 'None selected'],
     };
@@ -88,6 +89,8 @@ export default function ProjectProfileTests() {
       accumulationRate: '150',
       sdgList: [1, 2, 3],
       projectLinksVisible: [
+        'Documents',
+        'Deliverables',
         'Scoring',
         'Reports',
         'GDrive',
@@ -128,6 +131,8 @@ export default function ProjectProfileTests() {
       standard: 'VCS & CCB',
       methodology: 'VM0047',
       projectLinksVisible: [
+        'Documents',
+        'Deliverables',
         'Scoring',
         'Reports',
         'GDrive',
@@ -172,6 +177,8 @@ export default function ProjectProfileTests() {
       standard: 'Gold Standard',
       methodology: 'Other',
       projectLinksVisible: [
+        'Documents',
+        'Deliverables',
         'Scoring',
         'Reports',
         'GDrive',
@@ -235,13 +242,6 @@ export default function ProjectProfileTests() {
 
     await validateProjectProfilePage(updatedProjectDetails, page);
   });
-}
-
-async function navigateToProjectProfile(projectDealName: string, page: Page) {
-  await page.goto('http://127.0.0.1:3000');
-  await waitFor(page, '#home');
-  await page.getByRole('link', { name: 'Accelerator Console' }).click();
-  await page.getByRole('link', { name: projectDealName }).click();
 }
 
 async function validateProjectProfilePage(projectDetails: ProjectDetails, page: Page) {

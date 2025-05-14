@@ -495,7 +495,19 @@ const ProjectProfileView = ({
                   label={strings.APPLICATION}
                 />
               )}
-              {project && isAllowedViewScoreAndVoting && (
+              {participantProject?.dealName && (
+            <ProjectFieldLink
+              value={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}?dealName=${participantProject.dealName}`}
+              label={strings.DOCUMENTS}
+            />
+          )}
+          {project && (
+            <ProjectFieldLink
+              value={`${APP_PATHS.ACCELERATOR_DELIVERABLES}?projectId=${project.id}`}
+              label={strings.DELIVERABLES}
+            />
+          )}
+          {project && isAllowedViewScoreAndVoting && (
             <ProjectFieldLink
               value={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
                   label={strings.SCORING}
