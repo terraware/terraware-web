@@ -37,7 +37,7 @@ export default function LiveTreesPerSpecies({ trees }: LiveTreesPerSpeciesProps)
         },
       ],
     }),
-    [availableSpecies]
+    [availableSpecies, treeSpecies]
   );
 
   return <BarChart chartId='observationsMortalityRateBySpecies' chartData={chartData} barWidth={0} minHeight='360px' />;
