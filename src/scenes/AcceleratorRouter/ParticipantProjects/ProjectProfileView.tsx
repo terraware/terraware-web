@@ -496,20 +496,20 @@ const ProjectProfileView = ({
                 />
               )}
               {participantProject?.dealName && (
-            <ProjectFieldLink
-              value={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}?dealName=${participantProject.dealName}`}
-              label={strings.DOCUMENTS}
-            />
-          )}
-          {project && (
-            <ProjectFieldLink
-              value={`${APP_PATHS.ACCELERATOR_DELIVERABLES}?projectId=${project.id}`}
-              label={strings.DELIVERABLES}
-            />
-          )}
-          {project && isAllowedViewScoreAndVoting && (
-            <ProjectFieldLink
-              value={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
+                <ProjectFieldLink
+                  value={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}?dealName=${participantProject.dealName}`}
+                  label={strings.DOCUMENTS}
+                />
+              )}
+              {project && (
+                <ProjectFieldLink
+                  value={`${APP_PATHS.ACCELERATOR_DELIVERABLES}?projectId=${project.id}`}
+                  label={strings.DELIVERABLES}
+                />
+              )}
+              {project && isAllowedViewScoreAndVoting && (
+                <ProjectFieldLink
+                  value={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
                   label={strings.SCORING}
                 />
               )}
@@ -538,7 +538,8 @@ const ProjectProfileView = ({
               <>
                 <ProjectFieldLink value={participantProject?.riskTrackerLink} label={strings.RISK_TRACKER} />
                 <ProjectFieldLink value={participantProject?.clickUpLink} label={strings.CLICK_UP} />
-            <ProjectFieldLink value={participantProject?.slackLink} label={strings.SLACK} /></>
+                <ProjectFieldLink value={participantProject?.slackLink} label={strings.SLACK} />
+              </>
             )}
           </Box>
         </Box>
