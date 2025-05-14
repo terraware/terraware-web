@@ -28,7 +28,7 @@ export default function FunderHome() {
   const [projectDetails, setProjectDetails] = useState<FunderProjectDetails>();
   const getFunderProjectResult = useAppSelector(selectFunderProjectRequest(selectedProjectId || -1));
   const reportsResponse = useAppSelector(selectListFunderReports(selectedProjectId?.toString() ?? ''));
-  const [reports, setReports] = useState<PublishedReport[]>();
+  const [publishedReports, setPublishedReports] = useState<PublishedReport[]>();
 
   useEffect(() => {
     if (!getFunderProjectResult) {
@@ -57,7 +57,7 @@ export default function FunderHome() {
 
   useEffect(() => {
     if (reportsResponse?.status === 'success') {
-      setReports(reportsResponse.data);
+      setPublishedReports(reportsResponse.data);
     }
   }, [reportsResponse]);
 
@@ -69,7 +69,9 @@ export default function FunderHome() {
       {
         id: 'projectProfile',
         label: strings.PROJECT_PROFILE,
-        children: <ProjectProfileView funderView={true} projectDetails={projectDetails} />,
+        children: (
+          <ProjectProfileView funderView={true} projectDetails={projectDetails} publishedReports={publishedReports} />
+        ),
       },
       {
         id: 'report',
@@ -77,13 +79,13 @@ export default function FunderHome() {
         children: (
           <FunderReportView
             selectedProjectId={selectedProjectId}
-            reports={reports}
+            reports={publishedReports}
             userFundingEntity={userFundingEntity}
           />
         ),
       },
     ];
-  }, [activeLocale, userFundingEntity, projectDetails, selectedProjectId, reports]);
+  }, [activeLocale, userFundingEntity, projectDetails, selectedProjectId, publishedReports]);
 
   const { activeTab, onTabChange } = useStickyTabs({
     defaultTab: 'projectProfile',

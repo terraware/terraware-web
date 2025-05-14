@@ -28,6 +28,7 @@ import useProjectReports from 'src/hooks/useProjectReports';
 import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
+import { PublishedReport } from 'src/types/AcceleratorReport';
 import { Application } from 'src/types/Application';
 import { FunderProjectDetails } from 'src/types/FunderProject';
 import { ParticipantProject } from 'src/types/ParticipantProject';
@@ -48,6 +49,7 @@ type ProjectProfileViewProps = {
   projectScore?: Score | undefined;
   phaseVotes?: PhaseVotes | undefined;
   funderView?: boolean;
+  publishedReports?: PublishedReport[];
 };
 
 const ProjectProfileView = ({
@@ -60,12 +62,13 @@ const ProjectProfileView = ({
   projectScore,
   phaseVotes,
   funderView,
+  publishedReports = [],
 }: ProjectProfileViewProps) => {
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
   const { isAllowed } = useUser();
   const { activeLocale, countries } = useLocalization();
-  const { acceleratorReports: projectReports } = useProjectReports(projectDetails?.projectId);
+  const { acceleratorReports } = useProjectReports(projectDetails?.projectId);
   const { fundingEntities } = useProjectFundingEntities(funderView ? undefined : projectDetails?.projectId);
 
   const numericFormatter = useMemo(() => numberFormatter(activeLocale), [activeLocale, numberFormatter]);
@@ -110,8 +113,8 @@ const ProjectProfileView = ({
   ]);
 
   const lastSubmittedReport = useMemo(() => {
-    if (projectReports?.length > 0) {
-      const submittedReports = projectReports
+    if (acceleratorReports?.length > 0) {
+      const submittedReports = acceleratorReports
         .filter((r) => ['Submitted', 'Approved'].includes(r.status) && !!r.submittedTime)
         .toSorted((a, b) => {
           const timeA = a.submittedTime ? new Date(a.submittedTime).getTime() : 0;
@@ -122,7 +125,25 @@ const ProjectProfileView = ({
         return submittedReports[0];
       }
     }
-  }, [projectReports]);
+  }, [acceleratorReports]);
+
+  const lastPublishedReport = useMemo(() => {
+    if (publishedReports?.length > 0) {
+      const sortedReports = publishedReports.toSorted((a, b) => {
+        const timeA = a.publishedTime ? new Date(a.publishedTime).getTime() : 0;
+        const timeB = b.publishedTime ? new Date(b.publishedTime).getTime() : 0;
+        return timeB - timeA;
+      });
+      if (sortedReports.length > 0) {
+        return sortedReports[0];
+      }
+    }
+  }, [publishedReports]);
+
+  const lastReportTime = useMemo(
+    () => (funderView ? lastPublishedReport?.publishedTime : lastSubmittedReport?.submittedTime),
+    [funderView, lastPublishedReport, lastSubmittedReport]
+  );
 
   return (
     <Card
@@ -290,15 +311,40 @@ const ProjectProfileView = ({
           </Grid>
         </>
       )}
+      {lastPublishedReport && (
+        <>
+          <Grid container>
+            <ReportMetricCard
+              label={strings.TOTAL_PLANTED}
+              publishedMetrics={lastPublishedReport.systemMetrics}
+              metricName={'Hectares Planted'}
+              units={'ha'}
+            />
+            <ReportMetricCard
+              label={strings.TOTAL_PLANTED}
+              publishedMetrics={lastPublishedReport.systemMetrics}
+              metricName={'Trees Planted'}
+              units={strings.PLANTS}
+              formatter={(value) => formatNumberScale(value, 1)}
+            />
+            <ReportMetricCard
+              label={strings.TOTAL_PLANTED}
+              publishedMetrics={lastPublishedReport.systemMetrics}
+              metricName={'Species Planted'}
+              units={strings.SPECIES}
+            />
+          </Grid>
+        </>
+      )}
       <Grid container marginY={theme.spacing(2)} marginLeft={theme.spacing(1)}>
-        {projectReports?.length > 0 && (
+        {((funderView && publishedReports?.length > 0) || (!funderView && acceleratorReports?.length > 0)) && (
           <>
-            {lastSubmittedReport && lastSubmittedReport.submittedTime && (
+            {lastReportTime && (
               <Grid item marginRight={theme.spacing(3)} marginLeft={theme.spacing(1)}>
                 <Typography fontWeight={500}>
                   {strings.formatString(
-                    strings.LAST_REPORT_SUBMITTED,
-                    getDateDisplayValue(lastSubmittedReport.submittedTime)
+                    funderView ? strings.LAST_REPORT_PUBLISHED : strings.LAST_REPORT_SUBMITTED,
+                    getDateDisplayValue(lastReportTime)
                   )}
                 </Typography>
               </Grid>
@@ -306,10 +352,14 @@ const ProjectProfileView = ({
 
             <Grid item>
               <Link
-                to={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(
-                  ':projectId',
-                  (projectDetails?.projectId || '').toString()
-                )}
+                to={
+                  funderView
+                    ? `${APP_PATHS.FUNDER_HOME}?tab=report`
+                    : APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(
+                        ':projectId',
+                        (projectDetails?.projectId || '').toString()
+                      )
+                }
               >
                 {strings.VIEW_REPORTS}
               </Link>
