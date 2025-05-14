@@ -48,7 +48,7 @@ const MetricBox = ({ metric, index, year, quarter, lastIndex }: MetricBoxProps) 
         {metric.description && (
           <Tooltip title={metric.description}>
             <Box display='flex'>
-              <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='medium' style={{ marginRight: '10px' }} />
+              <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' style={{ marginRight: '10px' }} />
             </Box>
           </Tooltip>
         )}
