@@ -120,22 +120,10 @@ const InviteView = () => {
               />
             </Grid>
             <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
-              <Textfield
-                id='firstName'
-                label={strings.FIRST_NAME}
-                type='text'
-                value={'--'}
-                disabled
-              />
+              <Textfield id='firstName' label={strings.FIRST_NAME} type='text' value={'--'} disabled />
             </Grid>
             <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
-              <Textfield
-                id='lastName'
-                label={strings.LAST_NAME}
-                type='text'
-                value={'--'}
-                disabled
-              />
+              <Textfield id='lastName' label={strings.LAST_NAME} type='text' value={'--'} disabled />
             </Grid>
           </Card>
         </Container>
