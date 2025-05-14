@@ -77,7 +77,6 @@ const createCohort = (cohort: CreateCohortRequestPayload): Promise<Response> =>
 const getCohort = (cohortId: number): Promise<Response2<Cohort>> =>
   httpCohort.get<GetCohortResponsePayload, { data: Cohort | undefined }>(
     {
-      params: {},
       url: COHORT_ENDPOINT,
       urlReplacements: { '{cohortId}': `${cohortId}` },
     },
