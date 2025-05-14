@@ -26,7 +26,7 @@ export default function LiveTreesPerSpecies({ trees }: LiveTreesPerSpeciesProps)
     () => ({
       labels: Object.keys(species).map((idOrName) => {
         if (typeof idOrName === 'number') {
-          return availableSpecies.find((_speices) => _speices.id === idOrName)?.scientificName ?? '';
+          return availableSpecies.find((_species) => _species.id === idOrName)?.scientificName ?? '';
         } else {
           return idOrName;
         }
