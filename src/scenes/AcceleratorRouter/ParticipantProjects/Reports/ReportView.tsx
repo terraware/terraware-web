@@ -222,12 +222,14 @@ const ReportView = () => {
             onClick={() => void setShowApproveDialog(true)}
             size='medium'
           />
-          <OptionsMenu
-            onOptionItemClick={onOptionItemClick}
-            optionItems={optionItems}
-            size='medium'
-            sx={{ '& .button': { margin: '4px' }, marginLeft: 0 }}
-          />
+          {isAllowed('PUBLISH_REPORTS') && (
+            <OptionsMenu
+              onOptionItemClick={onOptionItemClick}
+              optionItems={optionItems}
+              size='medium'
+              sx={{ '& .button': { margin: '4px' }, marginLeft: 0 }}
+            />
+          )}
         </>
       )
     );
