@@ -161,6 +161,7 @@ const ProjectProfileView = ({
 
   return (
     <Card
+      flushMobile
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -235,14 +236,14 @@ const ProjectProfileView = ({
       </Grid>
 
       <Grid container paddingTop={theme.spacing(2)}>
-        {projectDetails && projectDetails?.projectHighlightPhotoValueId && (
+        {projectDetails?.projectHighlightPhotoValueId && (
           <ProjectProfileImage
             projectId={projectDetails.projectId}
             imageValueId={projectDetails.projectHighlightPhotoValueId}
             alt={strings.PROJECT_HIGHLIGHT_IMAGE}
           />
         )}
-        {projectDetails && projectDetails?.projectZoneFigureValueId && (
+        {projectDetails?.projectZoneFigureValueId && (
           <ProjectProfileImage
             projectId={projectDetails.projectId}
             imageValueId={projectDetails.projectZoneFigureValueId}
@@ -254,7 +255,7 @@ const ProjectProfileView = ({
           <ProjectMap
             application={projectApplication}
             countryCode={projectDetails?.countryCode}
-            md={projectDetails?.projectHighlightPhotoValueId ? 6 : 12}
+            md={isMobile || isTablet ? 12 : projectDetails?.projectHighlightPhotoValueId ? 6 : 12}
           />
         )}
       </Grid>
