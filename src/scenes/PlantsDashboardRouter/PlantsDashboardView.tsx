@@ -77,7 +77,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
   useEffect(() => {
     const orgId = organizationId ?? selectedOrganization.id;
     setAcceleratorOrganizationId(orgId);
-  }, [dispatch, organizationId, selectedOrganization, setAcceleratorOrganizationId]);
+  }, [dispatch, organizationId, selectedOrganization]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>
@@ -157,7 +157,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
         </Box>
       </Grid>
       <Grid item xs={12}>
-        <PlantsAndSpeciesCard />
+        <PlantsAndSpeciesCard plantingSiteId={plantingSite?.id} organizationId={organizationId} projectId={projectId} />
       </Grid>
     </>
   );
