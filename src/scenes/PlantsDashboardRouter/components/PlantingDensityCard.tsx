@@ -1,69 +1,24 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
-import ProgressChart from 'src/components/common/Chart/ProgressChart';
-import FormattedNumber from 'src/components/common/FormattedNumber';
-import Link from 'src/components/common/Link';
-import { APP_PATHS } from 'src/constants';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
-import { PlantingSite } from 'src/types/Tracking';
 
 import PlantingDensityPerZoneCard from './PlantingDensityPerZoneCard';
 import PlantingSiteDensityCard from './PlantingSiteDensityCard';
 
 type PlantingDensityCardProps = {
   hasObservations: boolean;
-  projectId?: number;
 };
 
-export default function PlantingDensityCard({ hasObservations, projectId }: PlantingDensityCardProps): JSX.Element {
+export default function PlantingDensityCard({ hasObservations }: PlantingDensityCardProps): JSX.Element {
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
-  const { plantingSite, allPlantingSites } = usePlantingSiteData();
-  const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
-
-  useEffect(() => {
-    setPlantingSites(allPlantingSites?.filter((ps) => ps.projectId === projectId));
-  }, [allPlantingSites, projectId]);
-
-  const totalAreaRolledUp = useMemo(() => {
-    return plantingSites?.reduce((sum, site) => sum + (site?.areaHa ?? 0), 0) || 0;
-  }, [plantingSites]);
-
-  const totalArea = useMemo(() => {
-    return plantingSite && plantingSite?.id === -1 ? totalAreaRolledUp : plantingSite?.areaHa ?? 0;
-  }, [plantingSite, totalAreaRolledUp]);
-
-  const calculatePlantingSitePlantedArea = (iPlantingSite: PlantingSite) => {
-    return (
-      iPlantingSite?.plantingZones
-        ?.flatMap((zone) => zone.plantingSubzones)
-        ?.reduce((prev, curr) => (curr.plantingCompleted ? +curr.areaHa + prev : prev), 0) ?? 0
-    );
-  };
-
-  const projectTotalPlanted = plantingSites?.reduce((total, pPlantingSite) => {
-    return total + calculatePlantingSitePlantedArea(pPlantingSite);
-  }, 0);
-
-  const totalPlantedArea = useMemo(() => {
-    if (plantingSite && plantingSite.id !== -1) {
-      return calculatePlantingSitePlantedArea(plantingSite);
-    }
-    if (plantingSite?.id === -1) {
-      return projectTotalPlanted;
-    }
-    return 0;
-  }, [plantingSite, plantingSites]);
-
-  const percentagePlanted = useMemo(() => {
-    return totalArea > 0 ? Math.round(((totalPlantedArea || 0) / totalArea) * 100) : 0;
-  }, [totalPlantedArea, totalArea]);
+  const { plantingSite } = usePlantingSiteData();
 
   const separatorStyles = {
     width: '1px',
@@ -78,48 +33,8 @@ export default function PlantingDensityCard({ hasObservations, projectId }: Plan
       radius='8px'
       style={{ display: 'flex', 'justify-content': 'space-between', flexDirection: isDesktop ? 'row' : 'column' }}
     >
-      <Box flexBasis='100%'>
-        <Box display={'flex'} alignItems={'center'}>
-          <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-            {strings.PLANTING_COMPLETE_DASHBOARD}
-          </Typography>
-          <Tooltip title={strings.PLANTING_COMPLETE_DASHBOARD_TOOLTIP}>
-            <Box display='flex'>
-              <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
-            </Box>
-          </Tooltip>
-        </Box>
-        <Box marginTop={2}>
-          <Typography fontSize='48px' fontWeight={600} lineHeight={1} marginBottom={2}>
-            <FormattedNumber value={Math.round(totalPlantedArea || 0)} />
-          </Typography>
-          <Typography fontSize='16px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)}>
-            {strings.HECTARES}
-          </Typography>
-          <Typography fontSize='20px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)} textAlign='right'>
-            {strings.formatString(strings.PERCENTAGE_OF_SITE_PLANTED, percentagePlanted)}
-          </Typography>
-          <ProgressChart value={totalPlantedArea || 0} target={totalArea} />
-          <Typography
-            fontSize='16px'
-            fontWeight={600}
-            lineHeight={1}
-            marginTop={theme.spacing(2)}
-            marginBottom={theme.spacing(2)}
-            textAlign='right'
-          >
-            {strings.formatString(strings.TARGET_HECTARES_PLANTED, <FormattedNumber value={totalArea || 0} />)}
-          </Typography>
-          <Link to={APP_PATHS.NURSERY_WITHDRAWALS}>
-            <Typography fontSize='16px' fontWeight={500}>
-              {strings.formatString(strings.GO_TO, strings.PLANTING_PROGRESS)}
-            </Typography>
-          </Link>
-        </Box>
-      </Box>
       {plantingSite && plantingSite.id !== -1 && (
         <>
-          <div style={separatorStyles} />
           {hasObservations && (
             <>
               <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>

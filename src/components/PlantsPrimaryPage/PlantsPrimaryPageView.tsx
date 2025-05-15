@@ -135,7 +135,7 @@ export default function PlantsPrimaryPageView({
                   {strings.formatString(
                     strings.X_HA,
                     isRolledUpView
-                      ? totalArea
+                      ? Math.round(totalArea * 100) / 100
                       : plantingSites.find((ps) => ps.id === selectedPlantingSiteId)?.areaHa?.toString() || ''
                   )}
                 </Typography>

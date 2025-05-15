@@ -153,7 +153,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
           }}
         >
           <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
-            {strings.PLANTS_AND_SPECIES_STATISTICS}
+            {plantingSite?.id === -1 ? strings.PROJECT_AREA_TOTALS : strings.PLANTING_SITE_TOTALS}
           </Typography>
         </Box>
       </Grid>
@@ -184,7 +184,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <PlantingDensityCard hasObservations={hasObservations} projectId={projectId} />
+            <PlantingDensityCard hasObservations={hasObservations} />
           </Grid>
         </>
       ) : undefined,
@@ -386,9 +386,9 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     >
       <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
         {renderTotalPlantsAndSpecies()}
-        {hasObservations && plantingSite?.id !== -1 && renderMortalityRate()}
-        {renderPlantingProgressAndDensity()}
         {hasObservations && plantingSite?.id !== -1 && renderPlantingSiteTrends()}
+        {plantingSite?.id !== -1 && hasObservations && renderPlantingProgressAndDensity()}
+        {hasObservations && plantingSite?.id !== -1 && renderMortalityRate()}
         {plantingSite?.id !== -1 && hasPlantingZones && renderZoneLevelData()}
         {plantingSite?.id !== -1 && hasPolygons && !hasPlantingZones && renderSimpleSiteMap()}
         {plantingSite?.id === -1 && projectId && renderMapWithSites()}
