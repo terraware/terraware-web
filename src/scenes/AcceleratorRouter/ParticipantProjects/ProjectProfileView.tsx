@@ -531,12 +531,12 @@ const ProjectProfileView = ({
                   />
                 )}
                 {project && isAllowedViewScoreAndVoting && (
-                <ProjectFieldLink
-                  value={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
-                  label={strings.SCORING}
-                />
-              )}
-              {project && (
+                  <ProjectFieldLink
+                    value={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
+                    label={strings.SCORING}
+                  />
+                )}
+                {project && (
                   <ProjectFieldLink
                     value={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', project.id.toString())}
                     label={strings.REPORTS}
