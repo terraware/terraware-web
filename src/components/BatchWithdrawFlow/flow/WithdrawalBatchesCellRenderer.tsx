@@ -12,7 +12,7 @@ import { useNumberFormatter } from 'src/utils/useNumber';
 
 export default function WithdrawalBatchesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { user } = useUser();
-  const numberFormatter = useNumberFormatter()(user?.locale);
+  const numberFormatter = useNumberFormatter(user?.locale);
   const { column, row, value, index, onRowClick } = props;
 
   const inputStyles = {

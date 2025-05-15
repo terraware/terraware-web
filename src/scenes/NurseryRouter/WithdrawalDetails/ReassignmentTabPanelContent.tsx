@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
@@ -28,8 +28,7 @@ export default function ReassignmentTabPanelContent({
   delivery,
 }: ReassignmentTabPanelContentProps): JSX.Element {
   const { user } = useUser();
-  const numberFormatter = useNumberFormatter();
-  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
+  const numberFormatter = useNumberFormatter(user?.locale);
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
@@ -48,7 +47,7 @@ export default function ReassignmentTabPanelContent({
     },
     {
       title: strings.QUANTITY,
-      data: typeof quantity === 'number' ? numericFormatter.format(quantity) : quantity,
+      data: typeof quantity === 'number' ? numberFormatter.format(quantity) : quantity,
     },
   ];
 

@@ -3,18 +3,18 @@ import React from 'react';
 import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
-import { NumericFormatter } from 'src/types/Number';
+import { NumberFormatter } from 'src/types/Number';
 
 export type SubLocationsCellRendererProps = {
   facilityId?: number;
-  numericFormatter: NumericFormatter;
+  numberFormatter: NumberFormatter;
   editMode: boolean;
   renderLink?: (facilityId: number, subLocationName: string) => string;
 };
 
 export default function SubLocationsCellRenderer({
   facilityId,
-  numericFormatter,
+  numberFormatter,
   editMode,
   renderLink,
 }: SubLocationsCellRendererProps) {
@@ -49,7 +49,7 @@ export default function SubLocationsCellRenderer({
     };
 
     if (column.key === 'activeAccessions' || column.key === 'activeBatches') {
-      const activeDataStr = value ? numericFormatter.format(value as number) : undefined;
+      const activeDataStr = value ? numberFormatter.format(value as number) : undefined;
       let data: string | JSX.Element = '0';
       if (activeDataStr) {
         data = editMode ? activeDataStr : createLinkToData(row.name, activeDataStr);

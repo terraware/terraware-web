@@ -51,9 +51,8 @@ type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 
 export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Element {
   const { doValidateBatch, onBatchValidated, originId, origin } = props;
-
-  const numberFormatter = useNumberFormatter();
   const { user } = useUser();
+  const numberFormatter = useNumberFormatter(user?.locale);
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const snackBar = useSnackbar();
@@ -73,7 +72,6 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [timeZone, setTimeZone] = useState('');
-  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
   const [invalidFields, setInvalidFields] = useState<Record<'germinating' | 'notReady' | 'ready', string>>({
     germinating: '',
@@ -451,7 +449,7 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
             <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
               <Textfield
                 id='totalQuantity'
-                value={numericFormatter.format(totalQuantity)}
+                value={numberFormatter.format(totalQuantity)}
                 type='text'
                 label={strings.TOTAL_QUANTITY}
                 display={true}

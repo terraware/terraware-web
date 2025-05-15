@@ -1,28 +1,27 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { findLocaleDetails, supportedLocales } from 'src/strings/locales';
+import { NumberFormatter } from 'src/types/Number';
 
 const getLocaleToUse = (locale?: string) => (locale === 'gx' ? 'fr' : locale || 'en');
-
-type NumberFormatter = (locale?: string | null) => {
-  format: (num: number) => string;
-};
 
 /**
  * formatter
  */
-export const useNumberFormatter = (): NumberFormatter => {
-  const formatter = (locale?: string | null): { format: (num: number) => string } => {
+export const useNumberFormatter = (locale?: string | null): NumberFormatter => {
+  const intlFormat = useMemo(() => {
     let localeToUse = getLocaleToUse(locale ?? undefined);
     if (locale && supportedLocales) {
       const localeDetails = findLocaleDetails(supportedLocales, locale);
       localeToUse = localeDetails.id;
     }
-    const intlFormat = new Intl.NumberFormat(localeToUse);
-    const format = (num: number) => intlFormat.format(num);
+    return new Intl.NumberFormat(localeToUse);
+  }, [locale]);
+  const format = useCallback((num: number) => intlFormat.format(num), [intlFormat]);
 
-    return { format };
-  };
-
-  return useMemo(() => formatter, [formatter]);
+  return useMemo(() => {
+    return {
+      format,
+    };
+  }, [format]);
 };

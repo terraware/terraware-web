@@ -40,7 +40,7 @@ const columns = (): TableColumnType[] => [
 export default function NurseryReassignmentView(): JSX.Element {
   const query = useQuery();
   const { user } = useUser();
-  const numberFormatter = useNumberFormatter();
+  const numberFormatter = useNumberFormatter(user?.locale);
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
@@ -54,7 +54,6 @@ export default function NurseryReassignmentView(): JSX.Element {
   const contentRef = useRef(null);
 
   const { species } = useSpeciesData();
-  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
   // populate delivery
   useEffect(() => {
@@ -185,7 +184,7 @@ export default function NurseryReassignmentView(): JSX.Element {
   const reassignmentRenderer = useMemo(
     () =>
       ReassignmentRenderer({
-        numericFormatter,
+        numberFormatter,
         zones: zones || [],
         setReassignment: (reassignment: Reassignment) =>
           setReassignments((current) => {
@@ -194,7 +193,7 @@ export default function NurseryReassignmentView(): JSX.Element {
             return newReassignments;
           }),
       }),
-    [zones, numericFormatter]
+    [zones, numberFormatter]
   );
 
   return (
