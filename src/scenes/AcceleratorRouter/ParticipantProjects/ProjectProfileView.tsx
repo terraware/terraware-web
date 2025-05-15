@@ -38,7 +38,7 @@ import { PhaseVotes } from 'src/types/Votes';
 import { getCountryByCode } from 'src/utils/country';
 import { formatNumberScale } from 'src/utils/numbers';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 const DEAL_NAME_COUNTRY_CODE_REGEX = /^[A-Z]{3}_/;
 
@@ -68,14 +68,12 @@ const ProjectProfileView = ({
   publishedReports = [],
 }: ProjectProfileViewProps) => {
   const theme = useTheme();
-  const numberFormatter = useNumberFormatter();
   const { isAllowed } = useUser();
   const { activeLocale, countries } = useLocalization();
+  const numberFormatter = useNumberFormatter(activeLocale);
   const { acceleratorReports } = useProjectReports(projectDetails?.projectId);
   const { fundingEntities } = useProjectFundingEntities(funderView ? undefined : projectDetails?.projectId);
   const { isMobile, isTablet } = useDeviceInfo();
-
-  const numericFormatter = useMemo(() => numberFormatter(activeLocale), [activeLocale, numberFormatter]);
   const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
 
   const isProjectInPhase = useMemo(
@@ -94,7 +92,7 @@ const ProjectProfileView = ({
         md={isTablet ? 6 : 12}
         backgroundColor={theme.palette.TwClrBaseGray100}
         label={label}
-        value={value && strings.formatString(strings.X_HA, numericFormatter.format(value))?.toString()}
+        value={value && strings.formatString(strings.X_HA, numberFormatter.format(value))?.toString()}
       />
     );
     switch (participantProject?.cohortPhase) {
@@ -115,7 +113,7 @@ const ProjectProfileView = ({
     projectDetails?.minProjectArea,
     projectDetails?.confirmedReforestableLand,
     isTablet,
-    numericFormatter,
+    numberFormatter,
   ]);
 
   const lastSubmittedReport = useMemo(() => {
@@ -264,7 +262,7 @@ const ProjectProfileView = ({
         <LandUseModelTypeCard
           selectedTypes={projectDetails?.landUseModelTypes}
           modelHectares={projectDetails?.landUseModelHectares}
-          numericFormatter={numericFormatter}
+          numberFormatter={numberFormatter}
         />
       </Grid>
 
@@ -294,7 +292,7 @@ const ProjectProfileView = ({
         <InvertedCard
           md={4}
           label={strings.TOTAL_VCU_40YRS}
-          value={projectDetails?.totalVCU && numericFormatter.format(projectDetails.totalVCU)}
+          value={projectDetails?.totalVCU && numberFormatter.format(projectDetails.totalVCU)}
           units={'t'}
           backgroundColor={theme.palette.TwClrBaseGray050}
         />
@@ -304,7 +302,7 @@ const ProjectProfileView = ({
           value={
             projectDetails?.perHectareBudget &&
             strings
-              .formatString(strings.USD_PER_HECTARE, numericFormatter.format(projectDetails.perHectareBudget))
+              .formatString(strings.USD_PER_HECTARE, numberFormatter.format(projectDetails.perHectareBudget))
               ?.toString()
           }
           backgroundColor={theme.palette.TwClrBaseGray050}
@@ -415,7 +413,7 @@ const ProjectProfileView = ({
               value={
                 projectDetails?.confirmedReforestableLand &&
                 strings
-                  .formatString(strings.X_HA, numericFormatter.format(projectDetails.confirmedReforestableLand))
+                  .formatString(strings.X_HA, numberFormatter.format(projectDetails.confirmedReforestableLand))
                   ?.toString()
               }
               tooltip={strings.ELIGIBLE_AREA_DESCRIPTION}
@@ -426,7 +424,7 @@ const ProjectProfileView = ({
               md={12}
               value={
                 projectDetails?.minProjectArea &&
-                strings.formatString(strings.X_HA, numericFormatter.format(projectDetails.minProjectArea))?.toString()
+                strings.formatString(strings.X_HA, numberFormatter.format(projectDetails.minProjectArea))?.toString()
               }
               tooltip={strings.MIN_PROJECT_AREA_DESCRIPTION}
             />
@@ -440,7 +438,7 @@ const ProjectProfileView = ({
               md={12}
               value={
                 projectDetails?.projectArea &&
-                strings.formatString(strings.X_HA, numericFormatter.format(projectDetails.projectArea))?.toString()
+                strings.formatString(strings.X_HA, numberFormatter.format(projectDetails.projectArea))?.toString()
               }
               tooltip={strings.PROJECT_AREA_DESCRIPTION}
             />
@@ -451,7 +449,7 @@ const ProjectProfileView = ({
               value={
                 projectDetails?.totalExpansionPotential &&
                 strings
-                  .formatString(strings.X_HA, numericFormatter.format(projectDetails.totalExpansionPotential))
+                  .formatString(strings.X_HA, numberFormatter.format(projectDetails.totalExpansionPotential))
                   ?.toString()
               }
               tooltip={strings.EXPANSION_POTENTIAL_DESCRIPTION}

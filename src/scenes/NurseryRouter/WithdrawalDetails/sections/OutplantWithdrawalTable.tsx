@@ -9,7 +9,7 @@ import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Species } from 'src/types/Species';
 import { Delivery } from 'src/types/Tracking';
 import { batchToSpecies } from 'src/utils/batch';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import WithdrawalRenderer from './WithdrawalRenderer';
 
@@ -36,8 +36,7 @@ export default function OutplantWithdrawalTable({
   withdrawal,
 }: OutplantWithdrawalTableProps): JSX.Element {
   const { user } = useUser();
-  const numberFormatter = useNumberFormatter();
-  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
+  const numberFormatter = useNumberFormatter(user?.locale);
 
   type BatchesRow = {
     name?: string;
@@ -79,7 +78,7 @@ export default function OutplantWithdrawalTable({
           rows.push({
             species: species?.find((x) => x?.id === sp)?.scientificName ?? '',
             to_subzone: subzone > -1 ? subzoneNames[subzone] ?? subzone?.toString() : '',
-            quantity: numericFormatter.format(speciesSubzoneMap[sp][subzone]),
+            quantity: numberFormatter.format(speciesSubzoneMap[sp][subzone]),
           });
         }
       }
@@ -110,7 +109,7 @@ export default function OutplantWithdrawalTable({
     } else {
       return [];
     }
-  }, [delivery, species, subzoneNames, numericFormatter, batches, withdrawal?.batchWithdrawals]);
+  }, [delivery, species, subzoneNames, numberFormatter, batches, withdrawal?.batchWithdrawals]);
 
   return (
     <Table

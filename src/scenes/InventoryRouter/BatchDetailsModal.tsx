@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Box, Container, Divider, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, Dropdown, Textfield } from '@terraware/web-components';
@@ -23,7 +23,7 @@ import { Facility } from 'src/types/Facility';
 import { isNumber } from 'src/types/utils';
 import { getNurseryById } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -36,8 +36,8 @@ export interface BatchDetailsModalProps {
 type BatchPhotoWithUrl = BatchPhoto & { url: string };
 
 export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.Element | null {
-  const numberFormatter = useNumberFormatter();
   const { user } = useUser();
+  const numberFormatter = useNumberFormatter(user?.locale);
   const { selectedOrganization } = useOrganization();
   const { onClose, batch, reload } = props;
 
@@ -52,8 +52,6 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
   const tz = useLocationTimeZone().get(facility);
   const [timeZone, setTimeZone] = useState(tz.id);
-
-  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
   const [photos, setPhotos] = useState<BatchPhotoWithUrl[]>([]);
   const [newPhotos, setNewPhotos] = useState<File[]>([]);
@@ -267,7 +265,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
         <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
           <Textfield
             id='totalQuantity'
-            value={numericFormatter.format(totalQuantity)}
+            value={numberFormatter.format(totalQuantity)}
             type='text'
             label={strings.TOTAL_QUANTITY}
             display={true}

@@ -8,7 +8,7 @@ import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { ZoneAggregation } from 'src/types/Observations';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 /**
  * Props include an optional search component for the top left.
@@ -37,7 +37,7 @@ export default function ListMapView({
   const [view, setView] = useState<View>(initialView);
   const theme = useTheme();
   const { activeLocale } = useLocalization();
-  const numberFormatter = useNumberFormatter();
+  const numberFormatter = useNumberFormatter(activeLocale);
   const { isMobile } = useDeviceInfo();
 
   const updateView = (nextView: View) => {
@@ -46,7 +46,6 @@ export default function ListMapView({
       onView(nextView);
     }
   };
-  const numericFormatter = useMemo(() => numberFormatter(activeLocale), [activeLocale, numberFormatter]);
 
   const siteAreaHa = useMemo(() => {
     return data ? data.reduce((total, currentValue) => total + currentValue.areaHa, 0) : 0;
@@ -90,11 +89,11 @@ export default function ListMapView({
             >
               <Typography fontSize={'16px'} fontWeight={'600'} marginRight={theme.spacing(3)}>
                 {strings.PLANTING_SITE_AREA}:{' '}
-                {strings.formatString(strings.X_HA, numericFormatter.format(siteAreaHa))?.toString()}
+                {strings.formatString(strings.X_HA, numberFormatter.format(siteAreaHa))?.toString()}
               </Typography>
               <Typography fontSize={'16px'} fontWeight={'600'} marginRight={theme.spacing(3)}>
                 {strings.PLANTING_COMPLETE_AREA}:{' '}
-                {strings.formatString(strings.X_HA, numericFormatter.format(plantingCompleteArea))?.toString()}
+                {strings.formatString(strings.X_HA, numberFormatter.format(plantingCompleteArea))?.toString()}
               </Typography>
             </Box>
           )}

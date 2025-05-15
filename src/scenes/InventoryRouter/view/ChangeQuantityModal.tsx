@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Box, Grid } from '@mui/material';
 import { BusySpinner, Icon, Textfield } from '@terraware/web-components';
@@ -9,7 +9,7 @@ import { useUser } from 'src/providers';
 import { NurseryBatchService } from 'src/services';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { ModalValuesType } from './BatchesCellRenderer';
@@ -35,8 +35,7 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
   });
   const snackbar = useSnackbar();
   const { user } = useUser();
-  const numberFormatter = useNumberFormatter();
-  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [user?.locale, numberFormatter]);
+  const numberFormatter = useNumberFormatter(user?.locale);
 
   const onSubmit = async () => {
     if (movedValue === undefined || movedValue === 0) {
@@ -124,7 +123,7 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
         {saving && <BusySpinner withSkrim={true} />}
         <Grid item xs={11} textAlign='left' display='flex'>
           <Textfield
-            value={numericFormatter.format(
+            value={numberFormatter.format(
               type === 'germinating' ? record.germinatingQuantity : record.notReadyQuantity
             )}
             display={true}
@@ -147,7 +146,7 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
             <Icon name='iconArrowRight' />
           </Box>
           <Textfield
-            value={numericFormatter.format(type === 'germinating' ? record.notReadyQuantity : record.readyQuantity)}
+            value={numberFormatter.format(type === 'germinating' ? record.notReadyQuantity : record.readyQuantity)}
             display={true}
             label={type === 'germinating' ? strings.NOT_READY : strings.READY}
             id={'changedValue'}
