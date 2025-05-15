@@ -123,7 +123,7 @@ const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.E
     setVariables(
       (allVariables || [])
         .filter((d: VariableWithValues) => {
-          return d.type !== 'Section' && d.type !== 'Image' && d.type !== 'Table';
+          return d.type !== 'Section';
         })
         .filter(filterSearch(searchValue))
     );
