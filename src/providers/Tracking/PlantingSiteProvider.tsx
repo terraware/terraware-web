@@ -102,12 +102,19 @@ const PlantingSiteProvider = ({ children }: Props) => {
     (plantingSiteId: number) => {
       const foundSite = allPlantingSites.find((site) => site.id === plantingSiteId);
       _setSelectedPlantingSite(foundSite);
+      setObservations(undefined);
+      setObservationResults(undefined);
+      setObservationSummaries(undefined);
+      setAdHocObservations(undefined);
+      setAdHocObservationResults(undefined);
+      setHistories(undefined);
+      setReportedPlants(undefined);
     },
     [allPlantingSites]
   );
 
   useEffect(() => {
-    if (plantingSite) {
+    if (plantingSite && plantingSite.id !== -1) {
       const observationsRequest = dispatch(requestPlantingSiteObservations({ plantingSiteId: plantingSite.id }));
       const resultsRequest = dispatch(requestPlantingSiteObservationResults({ plantingSiteId: plantingSite.id }));
       const adHocObservationsRequest = dispatch(
