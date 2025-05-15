@@ -357,7 +357,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
   return (
     <PlantsPrimaryPage
       title={strings.DASHBOARD}
-      text={latestResultId ? getDashboardSubhead() : undefined}
+      text={latestResultId && plantingSite?.id !== -1 ? getDashboardSubhead() : undefined}
       pagePath={
         projectId
           ? APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', projectId.toString())

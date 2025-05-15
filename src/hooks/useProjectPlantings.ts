@@ -30,12 +30,14 @@ export const useProjectPlantings = (projectId?: number) => {
         ) ?? []
       );
     }
-  }, [reportedPlantsResponse]);
+  }, [reportedPlantsResponse, projectPlantingSitesIds]);
 
   useEffect(() => {
     if (acceleratorOrganizationId) {
       const reportedPlantsRequest = dispatch(requestOrganizationReportedPlants(acceleratorOrganizationId));
       setReportedPlantsRequestId(reportedPlantsRequest.requestId);
+    } else {
+      setReportedPlantsRequestId('');
     }
   }, [acceleratorOrganizationId]);
 
