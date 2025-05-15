@@ -1,11 +1,14 @@
 import React, { CSSProperties, useEffect, useMemo, useState } from 'react';
 
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, useTheme } from '@mui/material';
 
 import { PlantingSiteMap } from 'src/components/Map';
+import MapLegend, { MapLegendGroup } from 'src/components/common/MapLegend';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { MapService } from 'src/services';
+import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
+import { getRgbaFromHex } from 'src/utils/color';
 
 type MultiplePlantingSiteMapProps = {
   projectId: number;
@@ -22,6 +25,8 @@ export default function MultiplePlantingSiteMap({
 }: MultiplePlantingSiteMapProps): JSX.Element {
   const { allPlantingSites } = usePlantingSiteData();
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
+  const [legends, setLegends] = useState<MapLegendGroup[]>([]);
+  const theme = useTheme();
 
   useEffect(() => {
     if (allPlantingSites) {
@@ -37,14 +42,56 @@ export default function MultiplePlantingSiteMap({
     }
   }, [plantingSites]);
 
+  const boundariesLegendItems = [
+    {
+      label: strings.PLANTING_SITE,
+      borderColor: theme.palette.TwClrBaseGreen300 as string,
+      fillColor: getRgbaFromHex(theme.palette.TwClrBaseGreen300 as string, 0.2),
+    },
+    {
+      label: strings.ZONES,
+      borderColor: theme.palette.TwClrBaseLightGreen300 as string,
+      fillColor: 'transparent',
+    },
+  ];
+  const result: MapLegendGroup[] = [
+    {
+      title: strings.BOUNDARIES,
+      items: [
+        ...boundariesLegendItems,
+        {
+          label: strings.SUBZONES,
+          borderColor: theme.palette.TwClrBaseBlue300 as string,
+          fillColor: getRgbaFromHex(theme.palette.TwClrBaseBlue300 as string, 0.2),
+        },
+      ],
+    },
+  ];
+
+  useEffect(() => {
+    setLegends(result);
+  }, [plantingSites]);
+
   if (plantingSites) {
     return (
-      <PlantingSiteMap
-        mapData={mapData!}
-        style={{ width: '100%', borderRadius: '24px', ...style }}
-        layers={['Planting Site']}
-        hideAllControls={hideAllControls}
-      />
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          background: theme.palette.TwClrBg,
+          borderRadius: '8px',
+          padding: theme.spacing(3),
+          gap: theme.spacing(3),
+        }}
+      >
+        <MapLegend legends={legends} setLegends={setLegends} />
+        <PlantingSiteMap
+          mapData={mapData!}
+          style={{ width: '100%', borderRadius: '24px', ...style }}
+          layers={['Planting Site']}
+          hideAllControls={hideAllControls}
+        />
+      </Box>
     );
   } else {
     return (
