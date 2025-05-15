@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/65</span>
+                <span class='fraction'>0/63</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/55</span>
+                <span class='fraction'>0/54</span>
             </div>
         
             
@@ -262,8 +262,7 @@
 <a name='L197'></a><a href='#L197'>197</a>
 <a name='L198'></a><a href='#L198'>198</a>
 <a name='L199'></a><a href='#L199'>199</a>
-<a name='L200'></a><a href='#L200'>200</a>
-<a name='L201'></a><a href='#L201'>201</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L200'></a><a href='#L200'>200</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -319,7 +318,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -463,7 +461,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useState } from 'react';
 &nbsp;
 import { Box, Grid, Typography } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -477,7 +475,7 @@ import { SubLocationService } from 'src/services';
 import strings from 'src/strings';
 import { DEFAULT_SUB_LOCATIONS, PartialSubLocation } from 'src/types/Facility';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 &nbsp;
 import AddEditSubLocationModal from './AddEditSubLocationModal';
 import SubLocationsCellRenderer from './SubLocationsCellRenderer';
@@ -522,12 +520,11 @@ export default function <span class="fstat-no" title="function not covered" >Sub
   const isSeedbank = <span class="cstat-no" title="statement not covered" >facilityType === 'seedbank';</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter();</span>
+  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter(activeLocale);</span>
   const [selectedRows, setSelectedRows] = <span class="cstat-no" title="statement not covered" >useState&lt;PartialSubLocation[]&gt;([]);</span>
   const [selectedSubLocation, setSelectedSubLocation] = <span class="cstat-no" title="statement not covered" >useState&lt;PartialSubLocation | undefined&gt;();</span>
   const [subLocations, setSubLocations] = <span class="cstat-no" title="statement not covered" >useState&lt;PartialSubLocation[]&gt;([]);</span>
   const [openSubLocationModal, setOpenSubLocationModal] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
-  const numericFormatter = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >numberFormatter(activeLocale),</span> [numberFormatter, activeLocale]);</span>
 &nbsp;
   const columns = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!activeLocale) {</span>
@@ -641,7 +638,7 @@ export default function <span class="fstat-no" title="function not covered" >Sub
             columns={columns}
             rows={subLocations}
             orderBy='name'
-            Renderer={SubLocationsCellRenderer({ facilityId, numericFormatter, editMode, renderLink })}
+            Renderer={SubLocationsCellRenderer({ facilityId, numberFormatter, editMode, renderLink })}
             selectedRows={selectedRows}
             setSelectedRows={setSelectedRows}
             showCheckbox={editMode}
@@ -670,7 +667,7 @@ export default function <span class="fstat-no" title="function not covered" >Sub
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-15T17:58:10.368Z
+                at 2025-05-15T21:07:27.257Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/50</span>
+                <span class='fraction'>0/48</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/49</span>
+                <span class='fraction'>0/48</span>
             </div>
         
             
@@ -690,9 +690,7 @@
 <a name='L625'></a><a href='#L625'>625</a>
 <a name='L626'></a><a href='#L626'>626</a>
 <a name='L627'></a><a href='#L627'>627</a>
-<a name='L628'></a><a href='#L628'>628</a>
-<a name='L629'></a><a href='#L629'>629</a>
-<a name='L630'></a><a href='#L630'>630</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L628'></a><a href='#L628'>628</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -767,8 +765,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1361,7 +1357,7 @@ import { PhaseVotes } from 'src/types/Votes';
 import { getCountryByCode } from 'src/utils/country';
 import { formatNumberScale } from 'src/utils/numbers';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 &nbsp;
 const DEAL_NAME_COUNTRY_CODE_REGEX = <span class="cstat-no" title="statement not covered" >/^[A-Z]{3}_/;</span>
 &nbsp;
@@ -1391,14 +1387,12 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
   publishedReports = <span class="branch-0 cbranch-no" title="branch not covered" >[],</span>
 }: ProjectProfileViewProps) =&gt; {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter();</span>
   const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const { activeLocale, countries } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
+  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter(activeLocale);</span>
   const { acceleratorReports } = <span class="cstat-no" title="statement not covered" >useProjectReports(projectDetails?.projectId);</span>
   const { fundingEntities } = <span class="cstat-no" title="statement not covered" >useProjectFundingEntities(funderView ? undefined : projectDetails?.projectId);</span>
   const { isMobile, isTablet } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-&nbsp;
-  const numericFormatter = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >numberFormatter(activeLocale),</span> [activeLocale, numberFormatter]);</span>
   const isAllowedViewScoreAndVoting = <span class="cstat-no" title="statement not covered" >isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');</span>
 &nbsp;
   const isProjectInPhase = <span class="cstat-no" title="statement not covered" >useMemo(</span>
@@ -1417,7 +1411,7 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
         md={isTablet ? 6 : 12}
         backgroundColor={theme.palette.TwClrBaseGray100}
         label={label}
-        value={value &amp;&amp; strings.formatString(strings.X_HA, numericFormatter.format(value))?.toString()}
+        value={value &amp;&amp; strings.formatString(strings.X_HA, numberFormatter.format(value))?.toString()}
       /&gt;
     );
 <span class="cstat-no" title="statement not covered" >    switch (participantProject?.cohortPhase) {</span>
@@ -1438,7 +1432,7 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
     projectDetails?.minProjectArea,
     projectDetails?.confirmedReforestableLand,
     isTablet,
-    numericFormatter,
+    numberFormatter,
   ]);
 &nbsp;
   const lastSubmittedReport = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -1587,7 +1581,7 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
         &lt;LandUseModelTypeCard
           selectedTypes={projectDetails?.landUseModelTypes}
           modelHectares={projectDetails?.landUseModelHectares}
-          numericFormatter={numericFormatter}
+          numberFormatter={numberFormatter}
         /&gt;
       &lt;/Grid&gt;
 &nbsp;
@@ -1617,7 +1611,7 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
         &lt;InvertedCard
           md={4}
           label={strings.TOTAL_VCU_40YRS}
-          value={projectDetails?.totalVCU &amp;&amp; numericFormatter.format(projectDetails.totalVCU)}
+          value={projectDetails?.totalVCU &amp;&amp; numberFormatter.format(projectDetails.totalVCU)}
           units={'t'}
           backgroundColor={theme.palette.TwClrBaseGray050}
         /&gt;
@@ -1627,7 +1621,7 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
           value={
             projectDetails?.perHectareBudget &amp;&amp;
             strings
-              .formatString(strings.USD_PER_HECTARE, numericFormatter.format(projectDetails.perHectareBudget))
+              .formatString(strings.USD_PER_HECTARE, numberFormatter.format(projectDetails.perHectareBudget))
               ?.toString()
           }
           backgroundColor={theme.palette.TwClrBaseGray050}
@@ -1738,7 +1732,7 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
               value={
                 projectDetails?.confirmedReforestableLand &amp;&amp;
                 strings
-                  .formatString(strings.X_HA, numericFormatter.format(projectDetails.confirmedReforestableLand))
+                  .formatString(strings.X_HA, numberFormatter.format(projectDetails.confirmedReforestableLand))
                   ?.toString()
               }
               tooltip={strings.ELIGIBLE_AREA_DESCRIPTION}
@@ -1749,7 +1743,7 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
               md={12}
               value={
                 projectDetails?.minProjectArea &amp;&amp;
-                strings.formatString(strings.X_HA, numericFormatter.format(projectDetails.minProjectArea))?.toString()
+                strings.formatString(strings.X_HA, numberFormatter.format(projectDetails.minProjectArea))?.toString()
               }
               tooltip={strings.MIN_PROJECT_AREA_DESCRIPTION}
             /&gt;
@@ -1763,7 +1757,7 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
               md={12}
               value={
                 projectDetails?.projectArea &amp;&amp;
-                strings.formatString(strings.X_HA, numericFormatter.format(projectDetails.projectArea))?.toString()
+                strings.formatString(strings.X_HA, numberFormatter.format(projectDetails.projectArea))?.toString()
               }
               tooltip={strings.PROJECT_AREA_DESCRIPTION}
             /&gt;
@@ -1774,7 +1768,7 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
               value={
                 projectDetails?.totalExpansionPotential &amp;&amp;
                 strings
-                  .formatString(strings.X_HA, numericFormatter.format(projectDetails.totalExpansionPotential))
+                  .formatString(strings.X_HA, numberFormatter.format(projectDetails.totalExpansionPotential))
                   ?.toString()
               }
               tooltip={strings.EXPANSION_POTENTIAL_DESCRIPTION}
@@ -1957,7 +1951,7 @@ export default ProjectProfileView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-15T17:58:10.368Z
+                at 2025-05-15T21:07:27.257Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

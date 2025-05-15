@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/73</span>
+                <span class='fraction'>0/71</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/70</span>
+                <span class='fraction'>0/69</span>
             </div>
         
             
@@ -474,9 +474,7 @@
 <a name='L409'></a><a href='#L409'>409</a>
 <a name='L410'></a><a href='#L410'>410</a>
 <a name='L411'></a><a href='#L411'>411</a>
-<a name='L412'></a><a href='#L412'>412</a>
-<a name='L413'></a><a href='#L413'>413</a>
-<a name='L414'></a><a href='#L414'>414</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L412'></a><a href='#L412'>412</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -522,8 +520,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -917,13 +913,13 @@ import MobileAppCard from 'src/scenes/Home/MobileAppCard';
 import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
 import { isAdmin, isManagerOrHigher, selectedOrgHasFacilityType } from 'src/utils/organization';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 &nbsp;
 import OrganizationStatsCard, { OrganizationStatsCardRow } from './OrganizationStatsCard';
 &nbsp;
 const TerrawareHomeView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter();</span>
+  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter(activeLocale);</span>
   const { user } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const { isTablet, isMobile, isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
@@ -938,8 +934,6 @@ const TerrawareHomeView = <span class="cstat-no" title="statement not covered" >
   const [showAcceleratorCard, setShowAcceleratorCard] = <span class="cstat-no" title="statement not covered" >useState(true);</span>
 &nbsp;
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
-&nbsp;
-  const numericFormatter = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >numberFormatter(activeLocale),</span> [activeLocale, numberFormatter]);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (orgPreferences.showAcceleratorCard === false &amp;&amp; showAcceleratorCard) {</span>
@@ -1014,7 +1008,7 @@ const TerrawareHomeView = <span class="cstat-no" title="statement not covered" >
             },
         icon: 'species' as IconName,
         statsCardItems: [
-          { label: strings.TOTAL_SPECIES, value: numericFormatter.format(species.length ?? 0) },
+          { label: strings.TOTAL_SPECIES, value: numberFormatter.format(species.length ?? 0) },
           {
             label: strings.SPECIES_LAST_UPDATED,
             value: speciesLastModifiedDate,
@@ -1044,7 +1038,7 @@ const TerrawareHomeView = <span class="cstat-no" title="statement not covered" >
         statsCardItems: [
           {
             label: strings.TOTAL_SEED_COUNT,
-            value: numericFormatter.format(seedBankSummary?.value?.seedsRemaining.total ?? 0),
+            value: numberFormatter.format(seedBankSummary?.value?.seedsRemaining.total ?? 0),
           },
           {
             label: strings.TOTAL_ACTIVE_ACCESSIONS,
@@ -1052,7 +1046,7 @@ const TerrawareHomeView = <span class="cstat-no" title="statement not covered" >
 <span class="cstat-no" title="statement not covered" >              navigate(APP_PATHS.SEEDS_DASHBOARD);</span>
             },
             linkText: strings.VIEW_FULL_DASHBOARD,
-            value: numericFormatter.format(seedBankSummary?.value?.activeAccessions ?? 0),
+            value: numberFormatter.format(seedBankSummary?.value?.activeAccessions ?? 0),
           },
         ],
         title: strings.SEEDS,
@@ -1079,11 +1073,11 @@ const TerrawareHomeView = <span class="cstat-no" title="statement not covered" >
         statsCardItems: [
           {
             label: strings.TOTAL_SEEDLINGS_COUNT,
-            value: numericFormatter.format(orgNurserySummary?.totalQuantity ?? 0),
+            value: numberFormatter.format(orgNurserySummary?.totalQuantity ?? 0),
           },
           {
             label: strings.TOTAL_WITHDRAWN_FOR_PLANTING,
-            value: numericFormatter.format(orgNurserySummary?.totalWithdrawn ?? 0),
+            value: numberFormatter.format(orgNurserySummary?.totalWithdrawn ?? 0),
             linkOnClick: <span class="fstat-no" title="function not covered" >()</span> =&gt; {
 <span class="cstat-no" title="statement not covered" >              navigate(APP_PATHS.NURSERY_WITHDRAWALS);</span>
             },
@@ -1309,7 +1303,7 @@ export default TerrawareHomeView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-15T17:58:10.368Z
+                at 2025-05-15T21:07:27.257Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

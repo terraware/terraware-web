@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/92</span>
+                <span class='fraction'>0/90</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/87</span>
+                <span class='fraction'>0/86</span>
             </div>
         
             
@@ -322,8 +322,7 @@
 <a name='L257'></a><a href='#L257'>257</a>
 <a name='L258'></a><a href='#L258'>258</a>
 <a name='L259'></a><a href='#L259'>259</a>
-<a name='L260'></a><a href='#L260'>260</a>
-<a name='L261'></a><a href='#L261'>261</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L260'></a><a href='#L260'>260</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -378,7 +377,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -605,7 +603,7 @@ import { TrackingService } from 'src/services';
 import strings from 'src/strings';
 import { Delivery } from 'src/types/Tracking';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
@@ -625,7 +623,7 @@ const columns = <span class="cstat-no" title="statement not covered" ><span clas
 export default function <span class="fstat-no" title="function not covered" >NurseryReassignmentView(</span>): JSX.Element {
   const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
   const { user } = <span class="cstat-no" title="statement not covered" >useUser();</span>
-  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter();</span>
+  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter(user?.locale);</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useSyncNavigate();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
@@ -639,7 +637,6 @@ export default function <span class="fstat-no" title="function not covered" >Nur
   const contentRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
 &nbsp;
   const { species } = <span class="cstat-no" title="statement not covered" >useSpeciesData();</span>
-  const numericFormatter = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >numberFormatter(user?.locale),</span> [numberFormatter, user?.locale]);</span>
 &nbsp;
   // populate delivery
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -770,7 +767,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
   const reassignmentRenderer = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
 <span class="cstat-no" title="statement not covered" >      ReassignmentRenderer({</span>
-        numericFormatter,
+        numberFormatter,
         zones: zones || [],
         setReassignment: <span class="fstat-no" title="function not covered" >(r</span>eassignment: Reassignment) =&gt;
 <span class="cstat-no" title="statement not covered" >          setReassignments(<span class="fstat-no" title="function not covered" >(c</span>urrent) =&gt; {</span>
@@ -779,7 +776,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
 <span class="cstat-no" title="statement not covered" >            return newReassignments;</span>
           }),
       }),
-    [zones, numericFormatter]
+    [zones, numberFormatter]
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
@@ -850,7 +847,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-15T17:58:10.368Z
+                at 2025-05-15T21:07:27.257Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

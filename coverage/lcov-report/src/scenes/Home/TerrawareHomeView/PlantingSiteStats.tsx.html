@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/37</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/33</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
@@ -322,9 +322,7 @@
 <a name='L257'></a><a href='#L257'>257</a>
 <a name='L258'></a><a href='#L258'>258</a>
 <a name='L259'></a><a href='#L259'>259</a>
-<a name='L260'></a><a href='#L260'>260</a>
-<a name='L261'></a><a href='#L261'>261</a>
-<a name='L262'></a><a href='#L262'>262</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L260'></a><a href='#L260'>260</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -356,8 +354,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -602,13 +598,13 @@ import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/S
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
 import useMapboxToken from 'src/utils/useMapboxToken';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 &nbsp;
 import StatsCardItem from './StatsCardItem';
 &nbsp;
 export const PlantingSiteStats = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter();</span>
+  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter(activeLocale);</span>
   const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useSyncNavigate();</span>
@@ -618,8 +614,6 @@ export const PlantingSiteStats = <span class="cstat-no" title="statement not cov
   const { allPlantingSites, plantingSite, setSelectedPlantingSite, latestResult, plantingSiteReportedPlants } =
 <span class="cstat-no" title="statement not covered" >    usePlantingSiteData();</span>
   const { countries } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-&nbsp;
-  const numericFormatter = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >numberFormatter(activeLocale),</span> [activeLocale, numberFormatter]);</span>
 &nbsp;
   const primaryGridSize = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >isDesktop ? 6 : 12)</span>, [isDesktop]);</span>
 &nbsp;
@@ -738,7 +732,7 @@ export const PlantingSiteStats = <span class="cstat-no" title="statement not cov
               showBorder={!isDesktop}
               value={
                 plantingSite?.areaHa
-                  ? strings.formatString(strings.X_HA, numericFormatter.format(plantingSite.areaHa))?.toString()
+                  ? strings.formatString(strings.X_HA, numberFormatter.format(plantingSite.areaHa))?.toString()
                   : undefined
               }
             /&gt;
@@ -765,7 +759,7 @@ export const PlantingSiteStats = <span class="cstat-no" title="statement not cov
             &lt;StatsCardItem
               label={strings.TOTAL_PLANTS_PLANTED}
               showLink={false}
-              value={numericFormatter.format(totalPlants)}
+              value={numberFormatter.format(totalPlants)}
             /&gt;
           &lt;/Grid&gt;
 &nbsp;
@@ -774,7 +768,7 @@ export const PlantingSiteStats = <span class="cstat-no" title="statement not cov
               label={strings.TOTAL_SPECIES_PLANTED}
               showBorder={!isDesktop}
               showLink={false}
-              value={numericFormatter.format(totalSpecies ?? 0)}
+              value={numberFormatter.format(totalSpecies ?? 0)}
             /&gt;
           &lt;/Grid&gt;
 &nbsp;
@@ -784,7 +778,7 @@ export const PlantingSiteStats = <span class="cstat-no" title="statement not cov
               showLink={false}
               showTooltip={true}
               tooltipText={strings.TOTAL_HECTARES_PLANTED_TOOLTIP}
-              value={numericFormatter.format(plantingCompleteArea)}
+              value={numberFormatter.format(plantingCompleteArea)}
             /&gt;
           &lt;/Grid&gt;
 &nbsp;
@@ -853,7 +847,7 @@ export default PlantingSiteStats;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-15T17:58:10.368Z
+                at 2025-05-15T21:07:27.257Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

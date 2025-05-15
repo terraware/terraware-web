@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/105</span>
+                <span class='fraction'>0/103</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/33</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/101</span>
+                <span class='fraction'>0/100</span>
             </div>
         
             
@@ -447,9 +447,7 @@
 <a name='L382'></a><a href='#L382'>382</a>
 <a name='L383'></a><a href='#L383'>383</a>
 <a name='L384'></a><a href='#L384'>384</a>
-<a name='L385'></a><a href='#L385'>385</a>
-<a name='L386'></a><a href='#L386'>386</a>
-<a name='L387'></a><a href='#L387'>387</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L385'></a><a href='#L385'>385</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -505,8 +503,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -835,7 +831,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useMemo, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState } from 'react';
 &nbsp;
 import { Box, Container, Divider, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, Dropdown, Textfield } from '@terraware/web-components';
@@ -860,7 +856,7 @@ import { Facility } from 'src/types/Facility';
 import { isNumber } from 'src/types/utils';
 import { getNurseryById } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 &nbsp;
@@ -873,8 +869,8 @@ export interface BatchDetailsModalProps {
 type BatchPhotoWithUrl = BatchPhoto &amp; { url: string };
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >BatchDetailsModal(</span>props: BatchDetailsModalProps): JSX.Element | null {
-  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter();</span>
   const { user } = <span class="cstat-no" title="statement not covered" >useUser();</span>
+  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter(user?.locale);</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const { onClose, batch, reload } = <span class="cstat-no" title="statement not covered" >props;</span>
 &nbsp;
@@ -889,8 +885,6 @@ export default function <span class="fstat-no" title="function not covered" >Bat
 &nbsp;
   const tz = <span class="cstat-no" title="statement not covered" >useLocationTimeZone().get(facility);</span>
   const [timeZone, setTimeZone] = <span class="cstat-no" title="statement not covered" >useState(tz.id);</span>
-&nbsp;
-  const numericFormatter = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >numberFormatter(user?.locale),</span> [numberFormatter, user?.locale]);</span>
 &nbsp;
   const [photos, setPhotos] = <span class="cstat-no" title="statement not covered" >useState&lt;BatchPhotoWithUrl[]&gt;([]);</span>
   const [newPhotos, setNewPhotos] = <span class="cstat-no" title="statement not covered" >useState&lt;File[]&gt;([]);</span>
@@ -1104,7 +1098,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
         &lt;Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}&gt;
           &lt;Textfield
             id='totalQuantity'
-            value={numericFormatter.format(totalQuantity)}
+            value={numberFormatter.format(totalQuantity)}
             type='text'
             label={strings.TOTAL_QUANTITY}
             display={true}
@@ -1228,7 +1222,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-15T17:58:10.368Z
+                at 2025-05-15T21:07:27.257Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

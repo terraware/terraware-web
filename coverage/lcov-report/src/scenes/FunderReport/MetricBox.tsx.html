@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -161,10 +161,7 @@
 <a name='L96'></a><a href='#L96'>96</a>
 <a name='L97'></a><a href='#L97'>97</a>
 <a name='L98'></a><a href='#L98'>98</a>
-<a name='L99'></a><a href='#L99'>99</a>
-<a name='L100'></a><a href='#L100'>100</a>
-<a name='L101'></a><a href='#L101'>101</a>
-<a name='L102'></a><a href='#L102'>102</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L99'></a><a href='#L99'>99</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -191,13 +188,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -276,7 +270,7 @@ import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBad
 import { useUser } from 'src/providers';
 import strings from 'src/strings';
 import { PublishedReportMetric } from 'src/types/AcceleratorReport';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 &nbsp;
 type MetricBoxProps = {
   metric: PublishedReportMetric;
@@ -290,9 +284,7 @@ const MetricBox = <span class="cstat-no" title="statement not covered" ><span cl
   const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { user } = <span class="cstat-no" title="statement not covered" >useUser();</span>
-  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter();</span>
-  const numericFormatter = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >numberFormatter(user?.locale),</span> [numberFormatter, user?.locale]);</span>
-&nbsp;
+  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter(user?.locale);</span>
   const addPercentSign = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return metric.name === 'Mortality Rate' ? '%' : '';</span>
   }, [metric]);
@@ -327,8 +319,7 @@ const MetricBox = <span class="cstat-no" title="statement not covered" ><span cl
             {year} {strings.TARGET}
           &lt;/Typography&gt;
           &lt;Typography fontSize={'24px'} fontWeight={600}&gt;
-            {metric.target !== undefined &amp;&amp; numericFormatter.format(metric.target)}{' '}
-            {metric.target ? addPercentSign : ''}
+            {metric.target !== undefined &amp;&amp; numberFormatter.format(metric.target)} {metric.target ? addPercentSign : ''}
           &lt;/Typography&gt;
         &lt;/Box&gt;
         &lt;Box flex='0 0 50%'&gt;
@@ -336,7 +327,7 @@ const MetricBox = <span class="cstat-no" title="statement not covered" ><span cl
             {quarter} {strings.PROGRESS}
           &lt;/Typography&gt;
           &lt;Typography fontSize={'24px'} fontWeight={600}&gt;
-            {metric.value !== undefined &amp;&amp; numericFormatter.format(metric.value)} {metric.value ? addPercentSign : ''}
+            {metric.value !== undefined &amp;&amp; numberFormatter.format(metric.value)} {metric.value ? addPercentSign : ''}
           &lt;/Typography&gt;
         &lt;/Box&gt;
       &lt;/Box&gt;
@@ -373,7 +364,7 @@ export default MetricBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-15T17:58:10.368Z
+                at 2025-05-15T21:07:27.257Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

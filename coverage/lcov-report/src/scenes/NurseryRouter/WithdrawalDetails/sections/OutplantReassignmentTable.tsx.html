@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -142,8 +142,7 @@
 <a name='L77'></a><a href='#L77'>77</a>
 <a name='L78'></a><a href='#L78'>78</a>
 <a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L80'></a><a href='#L80'>80</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -176,7 +175,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -232,7 +230,7 @@ import { useUser } from 'src/providers';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { Delivery } from 'src/types/Tracking';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 &nbsp;
 type OutplantReassignmentTableProps = {
   species: Species[];
@@ -257,8 +255,7 @@ export default function <span class="fstat-no" title="function not covered" >Out
   withdrawalNotes,
 }: OutplantReassignmentTableProps): JSX.Element {
   const { user } = <span class="cstat-no" title="statement not covered" >useUser();</span>
-  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter();</span>
-  const numericFormatter = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >numberFormatter(user?.locale),</span> [numberFormatter, user?.locale]);</span>
+  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter(user?.locale);</span>
 &nbsp;
   const rowData = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     // get list of distinct species
@@ -281,8 +278,8 @@ export default function <span class="fstat-no" title="function not covered" >Out
           species: speciesName,
           from_subzone: '',
           to_subzone: deliveryPlanting.plantingSubzoneId ? subzoneNames[deliveryPlanting.plantingSubzoneId] : '',
-          original_qty: numericFormatter.format(deliveryPlanting.numPlants),
-          final_qty: numericFormatter.format(deliveryPlanting.numPlants + reassignmentFromPlanting.numPlants),
+          original_qty: numberFormatter.format(deliveryPlanting.numPlants),
+          final_qty: numberFormatter.format(deliveryPlanting.numPlants + reassignmentFromPlanting.numPlants),
           notes: withdrawalNotes ?? '',
         });
 <span class="cstat-no" title="statement not covered" >        rows.push({</span>
@@ -292,14 +289,14 @@ export default function <span class="fstat-no" title="function not covered" >Out
             ? subzoneNames[reassignmentToPlanting.plantingSubzoneId]
             : '',
           original_qty: '0',
-          final_qty: numericFormatter.format(reassignmentToPlanting.numPlants),
+          final_qty: numberFormatter.format(reassignmentToPlanting.numPlants),
           notes: reassignmentToPlanting.notes ?? '',
         });
       }
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return rows;</span>
-  }, [delivery, species, subzoneNames, withdrawalNotes, numericFormatter]);
+  }, [delivery, species, subzoneNames, withdrawalNotes, numberFormatter]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return &lt;Table id='outplant-reassignment-table' columns={columns} rows={rowData} orderBy={'name'} /&gt;;</span>
 }
@@ -310,7 +307,7 @@ export default function <span class="fstat-no" title="function not covered" >Out
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-15T17:58:10.368Z
+                at 2025-05-15T21:07:27.257Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

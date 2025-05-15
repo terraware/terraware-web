@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/46</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/45</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
@@ -222,8 +222,7 @@
 <a name='L157'></a><a href='#L157'>157</a>
 <a name='L158'></a><a href='#L158'>158</a>
 <a name='L159'></a><a href='#L159'>159</a>
-<a name='L160'></a><a href='#L160'>160</a>
-<a name='L161'></a><a href='#L161'>161</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L160'></a><a href='#L160'>160</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -258,7 +257,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -383,7 +381,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useState } from 'react';
 &nbsp;
 import { Box, Grid } from '@mui/material';
 import { BusySpinner, Icon, Textfield } from '@terraware/web-components';
@@ -394,7 +392,7 @@ import { useUser } from 'src/providers';
 import { NurseryBatchService } from 'src/services';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
 import { ModalValuesType } from './BatchesCellRenderer';
@@ -420,8 +418,7 @@ export default function <span class="fstat-no" title="function not covered" >Cha
   });
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const { user } = <span class="cstat-no" title="statement not covered" >useUser();</span>
-  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter();</span>
-  const numericFormatter = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >numberFormatter(user?.locale),</span> [user?.locale, numberFormatter]);</span>
+  const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter(user?.locale);</span>
 &nbsp;
   const onSubmit = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (movedValue === undefined || movedValue === 0) {</span>
@@ -509,7 +506,7 @@ export default function <span class="fstat-no" title="function not covered" >Cha
         {saving &amp;&amp; &lt;BusySpinner withSkrim={true} /&gt;}
         &lt;Grid item xs={11} textAlign='left' display='flex'&gt;
           &lt;Textfield
-            value={numericFormatter.format(
+            value={numberFormatter.format(
               type === 'germinating' ? record.germinatingQuantity : record.notReadyQuantity
             )}
             display={true}
@@ -532,7 +529,7 @@ export default function <span class="fstat-no" title="function not covered" >Cha
             &lt;Icon name='iconArrowRight' /&gt;
           &lt;/Box&gt;
           &lt;Textfield
-            value={numericFormatter.format(type === 'germinating' ? record.notReadyQuantity : record.readyQuantity)}
+            value={numberFormatter.format(type === 'germinating' ? record.notReadyQuantity : record.readyQuantity)}
             display={true}
             label={type === 'germinating' ? strings.NOT_READY : strings.READY}
             id={'changedValue'}
@@ -550,7 +547,7 @@ export default function <span class="fstat-no" title="function not covered" >Cha
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-15T17:58:10.368Z
+                at 2025-05-15T21:07:27.257Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
