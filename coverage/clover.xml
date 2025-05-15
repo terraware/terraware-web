@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1747265356661" clover="3.2.0">
-  <project timestamp="1747265356661" name="All files">
-    <metrics statements="30442" coveredstatements="1287" conditionals="20751" coveredconditionals="387" methods="9423" coveredmethods="210" elements="60616" coveredelements="1884" complexity="0" loc="30442" ncloc="30442" packages="262" files="1265" classes="1265"/>
+<coverage generated="1747273417222" clover="3.2.0">
+  <project timestamp="1747273417222" name="All files">
+    <metrics statements="30444" coveredstatements="1287" conditionals="20753" coveredconditionals="387" methods="9423" coveredmethods="210" elements="60620" coveredelements="1884" complexity="0" loc="30444" ncloc="30444" packages="262" files="1265" classes="1265"/>
     <package name="src">
       <metrics statements="177" coveredstatements="8" conditionals="126" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -975,7 +975,7 @@
       </file>
     </package>
     <package name="src.components.AcceleratorReports">
-      <metrics statements="588" coveredstatements="0" conditionals="474" coveredconditionals="0" methods="184" coveredmethods="0"/>
+      <metrics statements="590" coveredstatements="0" conditionals="476" coveredconditionals="0" methods="184" coveredmethods="0"/>
       <file name="AcceleratorReportCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/AcceleratorReports/AcceleratorReportCellRenderer.tsx">
         <metrics statements="25" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="22" count="0" type="stmt"/>
@@ -1344,7 +1344,7 @@
         <line num="243" count="0" type="stmt"/>
       </file>
       <file name="EditAcceleratorReportTargetsModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/AcceleratorReports/EditAcceleratorReportTargetsModal.tsx">
-        <metrics statements="96" coveredstatements="0" conditionals="52" coveredconditionals="0" methods="20" coveredmethods="0"/>
+        <metrics statements="98" coveredstatements="0" conditionals="54" coveredconditionals="0" methods="20" coveredmethods="0"/>
         <line num="50" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
@@ -1417,30 +1417,32 @@
         <line num="171" count="0" type="stmt"/>
         <line num="172" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="173" count="0" type="stmt"/>
-        <line num="176" count="0" type="stmt"/>
-        <line num="180" count="0" type="stmt"/>
-        <line num="184" count="0" type="stmt"/>
-        <line num="191" count="0" type="stmt"/>
-        <line num="193" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="194" count="0" type="stmt"/>
+        <line num="177" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="178" count="0" type="stmt"/>
+        <line num="181" count="0" type="stmt"/>
+        <line num="185" count="0" type="stmt"/>
+        <line num="189" count="0" type="stmt"/>
         <line num="196" count="0" type="stmt"/>
-        <line num="199" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="200" count="0" type="stmt"/>
-        <line num="202" count="0" type="stmt"/>
-        <line num="203" count="0" type="stmt"/>
+        <line num="198" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="199" count="0" type="stmt"/>
+        <line num="201" count="0" type="stmt"/>
+        <line num="204" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="205" count="0" type="stmt"/>
+        <line num="207" count="0" type="stmt"/>
         <line num="208" count="0" type="stmt"/>
-        <line num="210" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="211" count="0" type="stmt"/>
-        <line num="214" count="0" type="stmt"/>
+        <line num="213" count="0" type="stmt"/>
         <line num="215" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="216" count="0" type="stmt"/>
-        <line num="219" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="224" count="0" type="stmt"/>
-        <line num="256" count="0" type="stmt"/>
-        <line num="266" count="0" type="stmt"/>
-        <line num="276" count="0" type="stmt"/>
-        <line num="286" count="0" type="stmt"/>
-        <line num="296" count="0" type="stmt"/>
+        <line num="219" count="0" type="stmt"/>
+        <line num="220" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="221" count="0" type="stmt"/>
+        <line num="224" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="229" count="0" type="stmt"/>
+        <line num="261" count="0" type="stmt"/>
+        <line num="271" count="0" type="stmt"/>
+        <line num="281" count="0" type="stmt"/>
+        <line num="291" count="0" type="stmt"/>
+        <line num="301" count="0" type="stmt"/>
       </file>
       <file name="EditProgressModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/AcceleratorReports/EditProgressModal.tsx">
         <metrics statements="11" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
