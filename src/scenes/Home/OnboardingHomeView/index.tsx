@@ -13,8 +13,6 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
-import { useAppDispatch } from 'src/redux/store';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import CTACard from 'src/scenes/Home/CTACard';
 import OnboardingCard, { OnboardingCardRow } from 'src/scenes/Home/OnboardingHomeView/OnboardingCard';
@@ -31,7 +29,6 @@ const OnboardingHomeView = () => {
   const { isMobile, isDesktop } = useDeviceInfo();
   const mixpanel = useMixpanel();
   const navigate = useSyncNavigate();
-  const dispatch = useAppDispatch();
   const [people, setPeople] = useState<OrganizationUser[]>();
   const [showAcceleratorCard, setShowAcceleratorCard] = useState(true);
   const snackbar = useSnackbar();
@@ -67,11 +64,6 @@ const OnboardingHomeView = () => {
   }, [selectedOrganization]);
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
-
-  useEffect(() => {
-    void dispatch(requestObservations(selectedOrganization.id));
-    void dispatch(requestObservationsResults(selectedOrganization.id));
-  }, [dispatch, selectedOrganization.id]);
 
   const isLoadingInitialData = useMemo(
     () => allSpecies === undefined || (isOwner(selectedOrganization) && people === undefined),

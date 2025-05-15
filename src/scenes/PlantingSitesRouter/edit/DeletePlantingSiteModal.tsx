@@ -6,8 +6,6 @@ import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
 import TextWithLink from 'src/components/common/TextWithLink';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
-import { useAppSelector } from 'src/redux/store';
 import { TrackingService } from 'src/services';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
@@ -15,15 +13,15 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 export type DeletePlantingSiteModalProps = {
   plantingSite: PlantingSite;
+  hasPlantings: boolean;
   onClose: () => void;
 };
 
 export default function DeletePlantingSiteModal(props: DeletePlantingSiteModalProps): JSX.Element {
-  const { onClose, plantingSite } = props;
+  const { onClose, plantingSite, hasPlantings } = props;
   const [busy, setBusy] = useState<boolean>(false);
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
-  const hasPlantings = useAppSelector((state) => selectPlantingsForSite(state, plantingSite.id)).length > 0;
 
   const deleteHandler = async () => {
     setBusy(true);

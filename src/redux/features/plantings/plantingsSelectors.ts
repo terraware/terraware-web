@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { createSelector } from '@reduxjs/toolkit';
 
-import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { PlantingSearchData } from 'src/redux/features/plantings/plantingsSlice';
 import { selectPlantingSites, selectPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingSelectors';
 import { RootState } from 'src/redux/rootReducer';
@@ -161,29 +160,3 @@ export const selectUpdatePlantingCompleted = (state: RootState, requestId: strin
 
 export const selectUpdatePlantingsCompleted = (state: RootState, requestId: string) =>
   state.updatePlantingsCompleted[requestId];
-
-export const selectZonesHaveStatistics = createSelector(
-  [
-    (state: RootState, zoneIdsBySiteId?: Record<number, Set<number>>, defaultTimeZoneId?: string) => state,
-    (state: RootState, zoneIdsBySiteId?: Record<number, Set<number>>, defaultTimeZoneId?: string) => zoneIdsBySiteId,
-    (state: RootState, zoneIdsBySiteId?: Record<number, Set<number>>, defaultTimeZoneId?: string) => defaultTimeZoneId,
-  ],
-  (state, zoneIdsBySiteId, defaultTimeZoneId) => {
-    if (zoneIdsBySiteId && defaultTimeZoneId) {
-      const zonesHaveStatistics = Object.keys(zoneIdsBySiteId).some((siteId) => {
-        const siteIdSelected = Number(siteId);
-        const latestObservations = selectLatestObservation(state, siteIdSelected, defaultTimeZoneId);
-        return Array.from(zoneIdsBySiteId[siteIdSelected]).some((zoneId) => {
-          return latestObservations?.plantingZones.some(
-            (plantingZone) =>
-              plantingZone.plantingZoneId === zoneId &&
-              plantingZone.estimatedPlants !== null &&
-              plantingZone.estimatedPlants !== undefined
-          );
-        });
-      });
-
-      return zonesHaveStatistics;
-    }
-  }
-);

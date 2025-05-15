@@ -7,11 +7,6 @@ import LocationSection from 'src/components/SeedFundReports/LocationSelection';
 import ViewPhotos from 'src/components/SeedFundReports/ViewPhotos';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
-import { useOrganization } from 'src/providers';
-import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
-import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
-import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
-import { useAppDispatch } from 'src/redux/store';
 import SeedFundReportService from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
 import { Report, ReportNursery, ReportPlantingSite } from 'src/types/Report';
@@ -60,10 +55,8 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
     validate,
   } = props;
 
-  const dispatch = useAppDispatch();
   const theme = useTheme();
   const { isMobile, isTablet } = useDeviceInfo();
-  const { selectedOrganization } = useOrganization();
 
   const [summaryOfProgress, setSummaryOfProgress] = useState(draftReport.summaryOfProgress ?? '');
   const [projectNotes, setProjectNotes] = useState(draftReport.notes ?? '');
@@ -103,15 +96,6 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
     },
     [onUpdateLocation]
   );
-
-  useEffect(() => {
-    if (selectedOrganization && selectedOrganization.id !== -1) {
-      void dispatch(requestObservations(selectedOrganization.id));
-      void dispatch(requestObservationsResults(selectedOrganization.id));
-      void dispatch(requestPlantings(selectedOrganization.id));
-      void dispatch(requestPlantingSitesSearchResults(selectedOrganization.id));
-    }
-  }, [dispatch, selectedOrganization]);
 
   const smallItemGridWidth = () => (isMobile ? 12 : 4);
   const mediumItemGridWidth = () => (isMobile || isTablet ? 12 : 8);

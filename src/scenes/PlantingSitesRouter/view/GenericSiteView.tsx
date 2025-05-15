@@ -30,7 +30,7 @@ export type GenericSiteViewProps<T extends MinimalPlantingSite> = {
   editUrl: string;
   onDelete: () => void;
   plantingSite: T;
-  selector: (state: RootState, plantingSiteId: number, query: string) => ZoneAggregation[];
+  zoneData: ZoneAggregation[];
   zoneViewUrl: string;
 };
 
@@ -39,7 +39,7 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
   editUrl,
   onDelete,
   plantingSite,
-  selector,
+  zoneData,
   zoneViewUrl,
 }: GenericSiteViewProps<T>): JSX.Element {
   const { isMobile } = useDeviceInfo();
@@ -50,7 +50,6 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
   const [search, setSearch] = useState<string>('');
   const [view, setView] = useState<View>('map');
   const { selectedProject } = useProjects(plantingSite);
-  const data = useAppSelector((state) => selector(state, plantingSite.id, view === 'map' ? '' : search.trim()));
 
   const gridSize = () => {
     if (isMobile) {
@@ -189,7 +188,7 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
         </Grid>
         {plantingSite.boundary && plantingSite.plantingZones && (
           <BoundariesAndZones
-            data={data}
+            data={zoneData}
             plantingSite={plantingSite}
             search={search}
             setSearch={setSearch}

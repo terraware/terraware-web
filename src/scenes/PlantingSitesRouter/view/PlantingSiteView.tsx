@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { BusySpinner } from '@terraware/web-components';
@@ -6,7 +6,6 @@ import { BusySpinner } from '@terraware/web-components';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { searchPlantingSiteZones } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
 import DeletePlantingSiteModal from 'src/scenes/PlantingSitesRouter/edit/DeletePlantingSiteModal';
 import { PlantingSite } from 'src/types/Tracking';
 
@@ -16,17 +15,30 @@ export default function PlantingSiteView(): JSX.Element {
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
-  const { plantingSite, setSelectedPlantingSite } = usePlantingSiteData();
+  const { plantingSite, setSelectedPlantingSite, observationSummaries, plantingSiteReportedPlants } =
+    usePlantingSiteData();
 
   useEffect(() => {
     const siteId = Number(plantingSiteId);
     setSelectedPlantingSite(siteId);
   }, [plantingSiteId, setSelectedPlantingSite]);
 
+  const hasPlantings = useMemo(() => {
+    if (plantingSiteReportedPlants) {
+      return plantingSiteReportedPlants.totalPlants > 0;
+    } else {
+      return false;
+    }
+  }, [plantingSiteReportedPlants]);
+
   return (
     <TfMain>
       {deleteModalOpen && plantingSite && (
-        <DeletePlantingSiteModal plantingSite={plantingSite} onClose={() => setDeleteModalOpen(false)} />
+        <DeletePlantingSiteModal
+          plantingSite={plantingSite}
+          hasPlantings={hasPlantings}
+          onClose={() => setDeleteModalOpen(false)}
+        />
       )}
       {plantingSite === undefined && <BusySpinner withSkrim={true} />}
       {plantingSite !== undefined && (

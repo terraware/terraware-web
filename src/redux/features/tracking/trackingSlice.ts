@@ -151,6 +151,7 @@ const monitoringPlotsSlice = createSlice({
 });
 
 const initialStatePlantingSiteList: { [key: string]: StatusT<PlantingSite[]> } = {};
+
 export const plantingSiteListSlice = createSlice({
   name: 'plantingSiteListSlice',
   initialState: initialStatePlantingSiteList,
@@ -194,6 +195,7 @@ export const plantingSiteReportedPlantsSlice = createSlice({
 });
 
 const initialStateOrganizationReportedPlants: { [key: string]: StatusT<PlantingSiteReportedPlants[]> } = {};
+
 export const organizationReportedPlantsSlice = createSlice({
   name: 'organizationReportedPlantsSlice',
   initialState: initialStateOrganizationReportedPlants,

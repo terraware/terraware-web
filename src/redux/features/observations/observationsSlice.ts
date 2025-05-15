@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 import { AsyncRequest, StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import {
@@ -26,98 +26,7 @@ import {
   requestPlantingSiteObservations,
 } from './observationsThunks';
 
-// Define a type for the slice state
-type ResultsData = {
-  error?: string;
-  observations?: ObservationResultsPayload[];
-  organizationId?: number;
-};
-
-// Define the initial state
-const initialResultsState: { [organizationId: string]: StatusT<ResultsData> } & ResultsData = {};
-
-export const observationsResultsSlice = createSlice({
-  name: 'observationsResultsSlice',
-  initialState: initialResultsState,
-  reducers: {
-    setObservationsResultsAction: (state, action: PayloadAction<ResultsData>) => {
-      const data: ResultsData = action.payload;
-      state.error = data.error;
-      state.observations = data.observations;
-      state.organizationId = data.organizationId;
-      if (data.organizationId) {
-        state[data.organizationId.toString()] = {
-          status: 'success',
-          data,
-        };
-      }
-    },
-  },
-});
-
-export const { setObservationsResultsAction } = observationsResultsSlice.actions;
-
-// Define a type for the slice state
-type Data = {
-  error?: string;
-  observations?: Observation[];
-};
-
-// Define the initial state
-const initialState: Data = {};
-
-export const observationsSlice = createSlice({
-  name: 'observationsSlice',
-  initialState,
-  reducers: {
-    setObservationsAction: (state, action: PayloadAction<Data>) => {
-      const data: Data = action.payload;
-      state.error = data.error;
-      state.observations = data.observations;
-    },
-  },
-});
-
-export const { setObservationsAction } = observationsSlice.actions;
-
-export const adHocObservationsSlice = createSlice({
-  name: 'adHocObservationsSlice',
-  initialState,
-  reducers: {
-    setAdHocObservationsAction: (state, action: PayloadAction<Data>) => {
-      const data: Data = action.payload;
-      state.error = data.error;
-      state.observations = data.observations;
-    },
-  },
-});
-
-export const { setAdHocObservationsAction } = adHocObservationsSlice.actions;
-
-type PlantingSitePayload = {
-  plantingSiteId: number;
-  data: ResultsData;
-};
-
-type PlantingSiteData = Record<number, ResultsData>;
-
-const plantingSiteInitialResultsState: PlantingSiteData = {};
-
-const plantingSiteObservationsResultsSlice = createSlice({
-  name: 'plantingSiteObservationsResultsSlice',
-  initialState: plantingSiteInitialResultsState,
-  reducers: {
-    setPlantingSiteObservationsResultsAction: (state, action: PayloadAction<PlantingSitePayload>) => {
-      const data: ResultsData = action.payload.data;
-      state[action.payload.plantingSiteId] = data;
-    },
-  },
-});
-
-export const { setPlantingSiteObservationsResultsAction } = plantingSiteObservationsResultsSlice.actions;
-
 // Schedule/Reschedule observation
-
 type SchedulingState = Record<string, AsyncRequest>;
 
 const initialSchedulingState: SchedulingState = {};
@@ -162,28 +71,6 @@ const abandonObservationSlice = createSlice({
   extraReducers: buildReducers(requestAbandonObservation),
 });
 
-// Define a type for the slice state
-type AdHocResultsData = {
-  error?: string;
-  observations?: ObservationResultsPayload[];
-};
-
-// Define the initial state
-const initialAdHocResultsState: AdHocResultsData = {};
-
-export const adHocObservationResultsSlice = createSlice({
-  name: 'adHocobservationResultsSlice',
-  initialState: initialAdHocResultsState,
-  reducers: {
-    setAdHocObservationResultsAction: (state, action: PayloadAction<AdHocResultsData>) => {
-      const data: AdHocResultsData = action.payload;
-      state.error = data.error;
-      state.observations = data.observations;
-    },
-  },
-});
-
-export const { setAdHocObservationResultsAction } = adHocObservationResultsSlice.actions;
 
 const initialStateObservations: { [key: string]: StatusT<Observation[]> } = {};
 const initialStateObservationResults: { [key: string]: StatusT<ObservationResultsPayload[]> } = {};
@@ -272,15 +159,10 @@ export const plantingSiteObservationsSummariesSlice = createSlice({
 });
 
 const observationsReducers = {
-  observationsResults: observationsResultsSlice.reducer,
-  observations: observationsSlice.reducer,
-  adHocObservations: adHocObservationsSlice.reducer,
-  plantingSiteObservationsResults: plantingSiteObservationsResultsSlice.reducer,
   scheduleObservation: scheduleObservationSlice.reducer,
   rescheduleObservation: rescheduleObservationSlice.reducer,
   replaceObservationPlot: replaceObservationPlotSlice.reducer,
   abandonObservation: abandonObservationSlice.reducer,
-  adHocObservationResults: adHocObservationResultsSlice.reducer,
   organizationObservationResults: organizationObservationResultsSlice.reducer,
   organizationObservations: organizationObservationsSlice.reducer,
   organizationAdHocObservationResults: organizationAdHocObservationResultsSlice.reducer,
