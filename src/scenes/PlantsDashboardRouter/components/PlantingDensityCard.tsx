@@ -58,6 +58,7 @@ export default function PlantingDensityCard({ hasObservations, projectId }: Plan
     if (plantingSite?.id === -1) {
       return projectTotalPlanted;
     }
+    return 0;
   }, [plantingSite, plantingSites]);
 
   const percentagePlanted = useMemo(() => {

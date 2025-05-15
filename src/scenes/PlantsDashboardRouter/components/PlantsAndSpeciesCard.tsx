@@ -53,7 +53,7 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
             </Tooltip>
           </Box>
           <Typography fontSize={'48px'} fontWeight={600} marginTop={1}>
-            {plantingSite?.id !== -1 ? (
+            {plantingSite && plantingSite?.id !== -1 ? (
               plantingSiteReportedPlants ? (
                 <FormattedNumber value={plantingSiteReportedPlants.totalPlants} />
               ) : (
@@ -76,7 +76,7 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
             </Tooltip>
           </Box>
           <Typography fontSize={'48px'} fontWeight={600} marginTop={1}>
-            {plantingSite?.id !== -1 ? (
+            {plantingSite && plantingSite?.id !== -1 ? (
               <FormattedNumber value={plantingSiteReportedPlants?.species?.length ?? 0} />
             ) : (
               projectTotalSpecies
