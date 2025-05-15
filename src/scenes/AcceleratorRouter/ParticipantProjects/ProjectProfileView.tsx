@@ -507,6 +507,12 @@ const ProjectProfileView = ({
                   label={strings.DELIVERABLES}
                 />
               )}
+              {project && isAllowedViewScoreAndVoting && (
+                <ProjectFieldLink
+                  value={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
+                  label={strings.SCORING}
+                />
+              )}
               {project && (
                 <ProjectFieldLink
                   value={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', project.id.toString())}
@@ -531,12 +537,6 @@ const ProjectProfileView = ({
             {!funderView && (
               <>
                 <ProjectFieldLink value={participantProject?.riskTrackerLink} label={strings.RISK_TRACKER} />
-                {project && isAllowedViewScoreAndVoting && (
-                  <ProjectFieldLink
-                    value={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
-                    label={strings.SCORING}
-                  />
-                )}
                 <ProjectFieldLink value={participantProject?.clickUpLink} label={strings.CLICK_UP} />
                 <ProjectFieldLink value={participantProject?.slackLink} label={strings.SLACK} />
               </>
