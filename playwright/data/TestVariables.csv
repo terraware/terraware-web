@@ -1,0 +1,288 @@
+Name,"ID (can be anything, but has to be unique; don't change it when you make other changes to a variable)",Description (optional),Data Type,List?,Parent (for table columns),"Options (for Select; put each value on a separate line, optionally prefixed with a hyphen; if the value should result in different text in the rendered document, put the text in double square brackets after the option)","Minimum value, if any (for Number)","Maximum value, if any (for Number)",Decimal places (for Number),Table Style (for Table),Header? (for table columns),Notes,Deliverable Question (how should we ask the participant this question),Dependency Variable ID,Dependency Condition,Dependency Value,Internal Only,Required?
+Country,1,Country where the project described in this application will occur.,Select (single),,,"Afghanistan
+Albania
+Algeria
+Andorra
+Angola
+Antigua and Barbuda
+Argentina
+Armenia
+Australia
+Austria
+Azerbaijan
+Bahamas
+Bahrain
+Bangladesh
+Barbados
+Belarus
+Belgium
+Belize
+Benin
+Bhutan
+Bolivia
+Bosnia and Herzegovina
+Botswana
+Brazil
+Brunei
+Bulgaria
+Burkina Faso
+Burundi
+Cabo Verde
+Cambodia
+Cameroon
+Canada
+Central African Republic
+Chad
+Chile
+China
+Colombia
+Comoros
+Congo, Democratic Republic of the
+Congo, Republic of the
+Costa Rica
+Côte d'Ivoire
+Croatia
+Cuba
+Cyprus
+Czech Republic
+Denmark
+Djibouti
+Dominica
+Dominican Republic
+Ecuador
+Egypt
+El Salvador
+Equatorial Guinea
+Eritrea
+Estonia
+Eswatini
+Ethiopia
+Fiji
+Finland
+France
+Gabon
+Gambia
+Georgia
+Germany
+Ghana
+Greece
+Grenada
+Guatemala
+Guinea
+Guinea-Bissau
+Guyana
+Haiti
+Honduras
+Hungary
+Iceland
+India
+Indonesia
+Iran
+Iraq
+Ireland
+Israel
+Italy
+Jamaica
+Japan
+Jordan
+Kazakhstan
+Kenya
+Kiribati
+Korea, North
+Korea, South
+Kosovo
+Kuwait
+Kyrgyzstan
+Laos
+Latvia
+Lebanon
+Lesotho
+Liberia
+Libya
+Liechtenstein
+Lithuania
+Luxembourg
+Madagascar
+Malawi
+Malaysia
+Maldives
+Mali
+Malta
+Marshall Islands
+Mauritania
+Mauritius
+Mexico
+Micronesia
+Moldova
+Monaco
+Mongolia
+Montenegro
+Morocco
+Mozambique
+Myanmar (Burma)
+Namibia
+Nauru
+Nepal
+Netherlands
+New Zealand
+Nicaragua
+Niger
+Nigeria
+North Macedonia
+Norway
+Oman
+Pakistan
+Palau
+Panama
+Papua New Guinea
+Paraguay
+Peru
+Philippines
+Poland
+Portugal
+Qatar
+Romania
+Russia
+Rwanda
+Saint Kitts and Nevis
+Saint Lucia
+Saint Vincent and the Grenadines
+Samoa
+San Marino
+Sao Tome and Principe
+Saudi Arabia
+Senegal
+Serbia
+Seychelles
+Sierra Leone
+Singapore
+Slovakia
+Slovenia
+Solomon Islands
+Somalia
+South Africa
+South Sudan
+Spain
+Sri Lanka
+Sudan
+Suriname
+Sweden
+Switzerland
+Syria
+Taiwan
+Tajikistan
+Tanzania
+Thailand
+Timor-Leste
+Togo
+Tonga
+Trinidad and Tobago
+Tunisia
+Turkey
+Turkmenistan
+Tuvalu
+Uganda
+Ukraine
+United Arab Emirates
+United Kingdom
+United States
+Uruguay
+Uzbekistan
+Vanuatu
+Vatican City
+Venezuela
+Vietnam
+Yemen
+Zambia
+Zimbabwe",,,,,,,In what country is your proposed reforestation project?,,,,,TRUE
+Application Reforestable Land,2,,Number,,,,,,,,,,,,,,,
+"Terrestrial, Mangrove, or Mixed",3,,Select (single),,,"Terrestrial
+Mangrove
+Mixed",,,,,,,Is your project a terrestrial project or mangrove project?,,,,,TRUE
+Percentage of project mangrove,34,Please ensure the percentages for mangrove and terrestrial add up to 100%. ,Number,,,,,,,,,,What percentage of the project will be mangrove?,3,=,Mixed,,TRUE
+Percentage of project terrestrial,35,Please ensure the percentages for mangrove and terrestrial add up to 100%. ,Number,,,,,,,,,,What percentage of the project will be terrestrial?,3,=,Mixed,,TRUE
+Land Use Types,4,,Select (multiple),,,"Native Forest
+Monoculture
+Sustainable Timber
+Other Timber
+Mangroves
+Agroforestry
+Silvopasture
+Other Land-Use Model",,,,,,,"For your proposed project, what are the anticipated land-use models?",,,,,
+Land Use Model: Native Forest (ha),5,Native biodiverse forest planted or regenerated towards the goal of restoring something closer to the original natural forest.,Number,,,,,,,,,,How many hectares do you plan to use for Native Forest?,,,,,
+Planting Density: Native Forest (trees per ha),6,,Number,,,,,,,,,,What is your target tree planting density for Native Forest? (trees per hectare),5,>,0,,TRUE
+Land Use Model: Monoculture (ha),7,"Stands of any one species (native or not) planted with the goal of providing a commodity or service (e.g. wood, fruit, carbon credits, soil retention, shade). Note that projects planning to use more than 10% of their reforestable area for ""Monoculture"" are not eligible for the Accelerator.",Number,,,,,,,,,,How many hectares do you plan to use for Monoculture?,,,,,
+Planting Density: Monoculture (trees per ha),8,,Number,,,,,,,,,,What is your target tree planting density for Monoculture? (trees per hectare),7,>,0,,TRUE
+Land Use Model: Sustainable Timber (ha),9,"Stands of native trees planted or regenerated for potential use as timber after 30 years or more. Note that areas to be harvested for timber in less than 30 years should be counted under the ""Other Timber"" category. Note that projects planning to use more than 10% of their reforestable area for ""Sustainable Timber"" must also have a robust management plan for this section. Please submit this at the end of the application, under ""Supplemental Files.""",Number,,,,,,,,,,How many hectares do you plan to use for Sustainable Timber?,,,,,
+Planting Density: Sustainable Timber (trees per ha),10,,Number,,,,,,,,,,What is your target tree planting density for Sustainable Timber? (trees per hectare),9,>,0,,TRUE
+Land Use Model: Other Timber (ha),11,"Any stands planted or regenerated for eventual use as timber that will be harvested in less than 30 years. Note that projects planning to use more than 10% of their reforestable area for ""Other TImber"" are not eligible for the Accelerator.",Number,,,,,,,,,,How many hectares do you plan to use for Other Timber?,,,,,
+Planting Density: Other Timber (trees per ha),12,,Number,,,,,,,,,,What is your target tree planting density for Other Timber? (trees per hectare),11,>,0,,TRUE
+Land Use Model: Mangroves (ha),13,Planted or regenerated forest dominated by mangrove species.,Number,,,,,,,,,,How many hectares do you plan to use for Mangroves?,,,,,
+Planting Density: Mangroves (trees per ha),14,,Number,,,,,,,,,,What is your target tree planting density for Mangroves? (trees per hectare),13,>,0,,TRUE
+Land Use Model: Agroforestry (ha),15,"Planted or regenerated forest supplemented with plantings primarily to produce agricultural crops and other non-timber forest products (e.g. medicinal plants, honey, etc.). ",Number,,,,,,,,,,How many hectares do you plan to use for Agroforestry?,,,,,
+Planting Density: Agroforestry (trees per ha),16,,Number,,,,,,,,,,What is your target tree planting density for Agroforestry? (trees per hectare),15,>,0,,TRUE
+Land Use Model: Silvopasture (ha),17,"Sparse planted or regenerated forests that serve as pasture for domestic animals (e.g. cattle, goats, sheep, etc.).",Number,,,,,,,,,,How many hectares do you plan to use for Silvopasture?,,,,,
+Planting Density: Silvopasture (trees per ha),18,,Number,,,,,,,,,,What is your target tree planting density for Silvopasture? (trees per hectare),17,>,0,,TRUE
+Land Use Model: Other Land-Use Model (ha),19,,Number,,,,,,,,,,How many hectares do you plan to use for other land-use models?,,,,,
+Other Land-Use Model: Explained,21,,Text (single-line),,,,,,,,,,Please provide more information on what other land-use models you plan to use. ,19,>,0,,TRUE
+Planting Density: Other Land-Use Model (trees per ha),20,,Number,,,,,,,,,,What is your target tree planting density for other land-use models? (trees per hectare),19,>,0,,TRUE
+Number of Native Species To Be Planted,22,"Native species are those that exist in the project area naturally as opposed to having been brought there at some point by humans. Note that project's must plant at least 10 native tree species in terrestrial forests, or at least 3 in mangrove forests, to be considered eligible for the Accelerator.",Number,,,,,,,,,,How many native tree species do you intend to use in your restoration?,,,,,TRUE
+Has Expansion Potential,23,,Select (single),,,"Yes [[do]]
+No [[do not]]",,,,,,,"If this project is successful, is there potential to expand your reforestation efforts to other nearby land parcels?",,,,,TRUE
+Total Expansion Potential (ha),24,"Number value only. If not sure, add approximate amount.",Number,,,,,,,,,,"If so, how much more land could be added? (ha)",23,=,Yes,,TRUE
+Name of main contact,25,Name of the person of your organization responsible for a potential partnership with us.,Text (single-line),,,,,,,,,,Full name of main contact,,,,,TRUE
+Email of main contact,26,Email of the person of your organization responsible for a potential partnership with us.,Email,,,,,,,,,,Email of main contact,,,,,TRUE
+Website,27,"Paste the link to your website - if you don't have a website, please mark ""N/A.""",Text (single-line),,,,,,,,,,Website,,,,,TRUE
+Project Zone area (ha),205,,Number,,, ,,,,,,,Project Zone area (ha),,,,TRUE,
+Standard Name,350,,Select (single),,,"VCS
+VCS & CCB
+Gold Standard
+Plan Vivo
+Other",,,,,,,Standard Name,,,,TRUE,
+Methodology Number,351,,Select (single),,,"VM0033
+VM0047
+Other",,,,,,,Methodology Number,,,,TRUE,
+Total VCUs (40 yrs),283,,Number,,,,,,,,,,What percentage of the carbon is accumulated in the first 40 years?,,,,TRUE,
+TF Restorable Land (ha),429,,Number,,,,,,,,,,TF Restorable Land (ha),,,,,
+Per Hectare Estimated Budget (USD),430,,Number,,,,,,,,,,Per Hectare Estimated Budget (USD),,,,,
+Min Carbon Accumulation (CO2/ha/yr),431,,Number,,,,,,,,,,Min Carbon Accumulation (CO2/ha/yr),,,,,
+Max Carbon Accumulation (CO2/ha/yr),432,,Number,,,,,,,,,,Max Carbon Accumulation (CO2/ha/yr),,,,,
+Carbon Capacity (tCO2/ha),433,,Number,,,,,,,,,,Carbon Capacity (tCO2/ha),,,,,
+Annual VCUs (t),434,,Number,,,,,,,,,,Annual Carbon (t),,,,,
+Total Carbon (t),435,,Number,,,,,,,,,,Total Carbon (t),,,,,
+Project Description,436,,Text (multi-line),,,,,,,,,,Deal Description,,,,,
+Investment Thesis,437,,Text (multi-line),,,,,,,,,,Investment Thesis,,,,,
+Failure Risk,438,,Text (multi-line),,,,,,,,,,Failure Risk,,,,,
+What Needs To Be True,439,,Text (multi-line),,,,,,,,,,What Needs To Be True,,,,,
+Carbon Accumulation Rate,369,,Number,,,,,,,,,,Current Carbon Accumulation Rate (CO2/ha/yr),,,,,
+Verra Link,471,,Link,,,,,,,,,,Verra Link,,,,,
+Deal Name,472,,Text (single-line),,,,,,,,,,Deal Name,,,,,
+Project Zone Figure,525,"Provide a map of the project zone including:
+- Boundaries of the project zone, which is defined as the area encompassing the project area(s) in which project activities that directly affect land and associated resources, including activities such as those related to provision of alternate livelihoods and community development, are implemented. 
+- Location of communities  
+- Boundaries of the project area(s), which is defined as the area(s) where project activities aim to generate net climate benefits.
+- Any spatially identifiable high conservation value (HCV) areas already known
+- For grouped projects, specify potential project areas and communities that may be included in the project at a future verification.",Image,Yes,,,,,,,,,Provide a map of the project zone,,,,,
+Minimum Project Area,545,,Number,,,,,,,,,,Minimum Project Area,,,,,
+SDGs,546,,Select (multiple),,,"1: No Poverty
+2: Zero Hunger
+3: Good Health and Well-Being
+4: Quality Education
+5: Gender Equality
+6: Clean Water and Sanitation
+7: Affordable and Clean Energy
+8: Decent Work and Economic Growth
+9: Industry, Innovation and Infrastructure
+10: Reduced Inequalities
+11: Sustainable Cities and Economies
+12: Responsible Consumption and Production
+13: Climate Action
+14: Life Below Water
+15: Life on Land
+16: Peace, Justice, and Strong Institutions
+17: Partnerships for the Goals",,,,,,,Please select SDGs ,,,,,
+GIS Reports Link,547,,Link,,,,,,,,,,GIS Reports Link,,,,,
+Risk Tracker Link,548,,Link,,,,,,,,,,Risk Tracker Link,,,,,
+ClickUp Link,549,,Link,,,,,,,,,,ClickUp Link,,,,,
+Slack Link,550,,Link,,,,,,,,,,Slack Link,,,,,
+Project Highlight Photo,551,,Image,,,,,,,,,,Project Highlight Photo,,,,,
