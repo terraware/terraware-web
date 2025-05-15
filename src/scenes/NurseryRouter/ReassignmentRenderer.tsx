@@ -7,7 +7,7 @@ import { Autocomplete, DropdownItem, Textfield } from '@terraware/web-components
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import strings from 'src/strings';
-import { NumericFormatter } from 'src/types/Number';
+import { NumberFormatter } from 'src/types/Number';
 
 export type SubzoneInfo = {
   id: number;
@@ -41,11 +41,12 @@ export type ReassignmentRowType = {
 export type ReassignmentRendererProps = {
   zones: ZoneInfo[];
   setReassignment: (reassignment: Reassignment) => void;
-  numericFormatter: NumericFormatter;
+  numberFormatter: NumberFormatter;
 };
 
-export default function ReassignmentRenderer({ zones, setReassignment, numericFormatter }: ReassignmentRendererProps) {
-  return function ReassignmentlCellRenderer(props: RendererProps<ReassignmentRowType>): JSX.Element {
+export default function ReassignmentRenderer({ zones, setReassignment, numberFormatter }: ReassignmentRendererProps) {
+  // eslint-disable-next-line react/display-name
+  return (props: RendererProps<ReassignmentRowType>): JSX.Element => {
     const { column, row } = props;
     const { numPlants, originalZone, originalSubzone, reassignment } = row;
     const { plantingId, newSubzoneId, newZoneId, error, quantity, notes } = reassignment;
@@ -152,7 +153,7 @@ export default function ReassignmentRenderer({ zones, setReassignment, numericFo
             sx={{ maxWidth: '88px' }}
           />
           <Typography paddingLeft={1} paddingTop={error ? '10px' : 0}>
-            / {numericFormatter.format(numPlants)}
+            / {numberFormatter.format(numPlants)}
           </Typography>
         </Box>
       );
