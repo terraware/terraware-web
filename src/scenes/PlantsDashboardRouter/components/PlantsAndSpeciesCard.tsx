@@ -82,11 +82,11 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
   return (
     <Grid container spacing={3}>
       <Grid item xs={4}>
-        <Card>
+        <Card radius='8px'>
           <Box flexBasis='100%'>
             <Box display={'flex'} alignItems={'center'}>
-              <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-                {strings.PLANTING_COMPLETE_DASHBOARD}
+              <Typography fontSize='24px' fontWeight={600} paddingRight={1}>
+                {strings.formatString(strings.X_HA, <FormattedNumber value={Math.round(totalPlantedArea || 0)} />)}
               </Typography>
               <Tooltip title={strings.PLANTING_COMPLETE_DASHBOARD_TOOLTIP}>
                 <Box display='flex'>
@@ -94,30 +94,24 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
                 </Box>
               </Tooltip>
             </Box>
+            <Typography fontSize={'16px'} fontWeight={600} marginRight={1}>
+              {strings.TOTAL_PLANTED_COMPLETE}
+            </Typography>
             <Box marginTop={2}>
-              <Typography fontSize='48px' fontWeight={600} lineHeight={1} marginBottom={2}>
-                <FormattedNumber value={Math.round(totalPlantedArea || 0)} />
-              </Typography>
-              <Typography fontSize='16px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)}>
-                {strings.HECTARES}
-              </Typography>
+              <Box>
+                <Typography fontSize='14px' fontWeight={500}>
+                  {strings.PLANTING_COMPLETE_CHART}: {percentagePlanted}%
+                </Typography>
+                <Box>
+                  <ProgressChart value={totalPlantedArea || 0} target={totalArea} />
+                </Box>
+              </Box>
               <Typography
-                fontSize='20px'
-                fontWeight={600}
-                lineHeight={1}
-                marginBottom={theme.spacing(2)}
+                fontSize='14px'
+                fontWeight={400}
+                marginTop={1}
                 textAlign='right'
-              >
-                {strings.formatString(strings.PERCENTAGE_OF_SITE_PLANTED, percentagePlanted)}
-              </Typography>
-              <ProgressChart value={totalPlantedArea || 0} target={totalArea} />
-              <Typography
-                fontSize='16px'
-                fontWeight={600}
-                lineHeight={1}
-                marginTop={theme.spacing(2)}
-                marginBottom={theme.spacing(2)}
-                textAlign='right'
+                color={theme.palette.TwClrTxtSecondary}
               >
                 {strings.formatString(strings.TARGET_HECTARES_PLANTED, <FormattedNumber value={totalArea || 0} />)}
               </Typography>
@@ -126,11 +120,20 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
         </Card>
       </Grid>
       <Grid item xs={4}>
-        <Card>
+        <Card radius='8px' style={{ height: '100%' }}>
           <Box flexBasis='100%'>
             <Box display={'flex'} alignItems={'center'}>
-              <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-                {strings.TOTAL_PLANTS_PLANTED}
+              <Typography fontSize={'24px'} fontWeight={600} paddingRight={1}>
+                {plantingSite && plantingSite?.id !== -1 ? (
+                  plantingSiteReportedPlants ? (
+                    <FormattedNumber value={plantingSiteReportedPlants.totalPlants} />
+                  ) : (
+                    ''
+                  )
+                ) : (
+                  reportedPlants.reduce((sum, sitePlants) => sum + sitePlants.totalPlants, 0)
+                )}{' '}
+                {strings.PLANTS}
               </Typography>
               <Tooltip title={strings.TOTAL_PLANTS_PLANTED_TOOLTIP}>
                 <Box display='flex'>
@@ -138,26 +141,23 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
                 </Box>
               </Tooltip>
             </Box>
-            <Typography fontSize={'48px'} fontWeight={600} marginTop={1}>
-              {plantingSite && plantingSite?.id !== -1 ? (
-                plantingSiteReportedPlants ? (
-                  <FormattedNumber value={plantingSiteReportedPlants.totalPlants} />
-                ) : (
-                  ''
-                )
-              ) : (
-                reportedPlants.reduce((sum, sitePlants) => sum + sitePlants.totalPlants, 0)
-              )}
+            <Typography fontSize={'16px'} fontWeight={600} marginRight={1}>
+              {strings.TOTAL_PLANTED}
             </Typography>
           </Box>
         </Card>
       </Grid>
       <Grid item xs={4}>
-        <Card>
-          <Box marginTop={3}>
+        <Card radius='8px' style={{ height: '100%' }}>
+          <Box>
             <Box display={'flex'} alignItems={'center'}>
-              <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-                {strings.TOTAL_SPECIES_PLANTED}
+              <Typography fontSize={'24px'} fontWeight={600} paddingRight={1}>
+                {plantingSite && plantingSite?.id !== -1 ? (
+                  <FormattedNumber value={plantingSiteReportedPlants?.species?.length ?? 0} />
+                ) : (
+                  projectTotalSpecies
+                )}{' '}
+                {strings.SPECIES}
               </Typography>
               <Tooltip title={strings.TOTAL_SPECIES_PLANTED_TOOLTIP}>
                 <Box display='flex'>
@@ -165,12 +165,9 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
                 </Box>
               </Tooltip>
             </Box>
-            <Typography fontSize={'48px'} fontWeight={600} marginTop={1}>
-              {plantingSite && plantingSite?.id !== -1 ? (
-                <FormattedNumber value={plantingSiteReportedPlants?.species?.length ?? 0} />
-              ) : (
-                projectTotalSpecies
-              )}
+
+            <Typography fontSize={'16px'} fontWeight={600} marginRight={1}>
+              {strings.TOTAL_PLANTED}
             </Typography>
           </Box>
         </Card>
