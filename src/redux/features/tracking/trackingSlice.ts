@@ -13,6 +13,8 @@ import { MonitoringPlotsResponse, requestMonitoringPlots } from './trackingAsync
 import {
   requestGetPlantingSiteHistory,
   requestListPlantingSiteHistories,
+  requestListPlantingSites,
+  requestOrganizationReportedPlants,
   requestPlantingSiteReportedPlants,
 } from './trackingThunks';
 
@@ -148,6 +150,16 @@ const monitoringPlotsSlice = createSlice({
   extraReducers: buildReducers<MonitoringPlotsResponse>(requestMonitoringPlots),
 });
 
+const initialStatePlantingSiteList: { [key: string]: StatusT<PlantingSite[]> } = {};
+export const plantingSiteListSlice = createSlice({
+  name: 'plantingSiteListSlice',
+  initialState: initialStatePlantingSiteList,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestListPlantingSites)(builder);
+  },
+});
+
 const initialStatePlantingSiteHistory: { [key: string]: StatusT<PlantingSiteHistory> } = {};
 
 export const plantingSiteHistorySlice = createSlice({
@@ -181,15 +193,27 @@ export const plantingSiteReportedPlantsSlice = createSlice({
   },
 });
 
+const initialStateOrganizationReportedPlants: { [key: string]: StatusT<PlantingSiteReportedPlants[]> } = {};
+export const organizationReportedPlantsSlice = createSlice({
+  name: 'organizationReportedPlantsSlice',
+  initialState: initialStateOrganizationReportedPlants,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestOrganizationReportedPlants)(builder);
+  },
+});
+
 const trackingReducers = {
   tracking: trackingSlice.reducer,
   plantingSitesSearchResults: plantingSitesSearchResultsSlice.reducer,
   sitePopulation: sitePopulationSlice.reducer,
   siteReportedPlantsResults: siteReportedPlantsSlice.reducer,
   monitoringPlots: monitoringPlotsSlice.reducer,
+  plantingSiteList: plantingSiteListSlice.reducer,
   plantingSiteHistory: plantingSiteHistorySlice.reducer,
   plantingSiteHistories: plantingSiteHistoriesSlice.reducer,
   plantingSiteReportedPlants: plantingSiteReportedPlantsSlice.reducer,
+  organizationReportedPlants: organizationReportedPlantsSlice.reducer,
 };
 
 export default trackingReducers;

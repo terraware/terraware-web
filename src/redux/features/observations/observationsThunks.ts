@@ -145,6 +145,47 @@ export const requestPlantingSiteAdHocObservationResults = createAsyncThunk(
   }
 );
 
+export const requestOrganizationObservations = createAsyncThunk(
+  'observations/org',
+  async (request: { organizationId: number }, { rejectWithValue }) => {
+    const response = await ObservationsService.listOrganizationAdHocObservations(request.organizationId);
+    if (response !== null && response.requestSucceeded && response?.data?.observations !== undefined) {
+      return response.data.observations;
+    }
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+export const requestOrganizationObservationResults = createAsyncThunk(
+  'observations/orgResults',
+  async (request: { organizationId: number }, { rejectWithValue }) => {
+    const response = await ObservationsService.listOrganizationObservationResults(request.organizationId);
+    if (response !== null && response.requestSucceeded && response?.data?.observations !== undefined) {
+      return response.data.observations;
+    }
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+export const requestOrganizationAdHocObservations = createAsyncThunk(
+  'observations/orgAdHoc',
+  async (request: { organizationId: number }, { rejectWithValue }) => {
+    const response = await ObservationsService.listOrganizationAdHocObservationResults(request.organizationId);
+    if (response !== null && response.requestSucceeded && response?.data?.observations !== undefined) {
+      return response.data.observations;
+    }
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+export const requestOrganizationAdHocObservationResults = createAsyncThunk(
+  'observations/orgAdHocResults',
+  async (request: { organizationId: number }, { rejectWithValue }) => {
+    const response = await ObservationsService.listOrganizationObservationResults(request.organizationId);
+    if (response !== null && response.requestSucceeded && response?.data?.observations !== undefined) {
+      return response.data.observations;
+    }
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
 /**
  * Fetch observation results
  */

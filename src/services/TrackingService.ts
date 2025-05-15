@@ -22,9 +22,10 @@ const PLANTING_SITES_VALIDATE_ENDPOINT = '/api/v1/tracking/sites/validate';
 const PLANTING_SITE_ENDPOINT = '/api/v1/tracking/sites/{id}';
 const DELIVERY_ENDPOINT = '/api/v1/tracking/deliveries/{id}';
 const REASSIGN_ENDPOINT = '/api/v1/tracking/deliveries/{id}/reassign';
-const REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/{id}/reportedPlants';
+const PLANTING_SITE_REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/{id}/reportedPlants';
 const PLANTING_SITE_HISTORY_ENDPOINT = '/api/v1/tracking/sites/{id}/history/{historyId}';
 const PLANTING_SITE_HISTORIES_ENDPOINT = '/api/v1/tracking/sites/{id}/history';
+const ALL_REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/reportedPlants';
 
 type ListPlantingSitesResponsePayload =
   paths[typeof PLANTING_SITES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -35,8 +36,11 @@ type GetPlantingSiteResponsePayload =
 type GetDeliveryResponsePayload =
   paths[typeof DELIVERY_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
-type PlantingSiteReportedPlantsPayload =
-  paths[typeof REPORTED_PLANTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+type GetPlantingSiteReportedPlantsPayload =
+  paths[typeof PLANTING_SITE_REPORTED_PLANTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+type ListOrganizationReportedPlantsPayload =
+  paths[typeof ALL_REPORTED_PLANTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 type CreatePlantingSiteResponse =
   paths[typeof PLANTING_SITES_ENDPOINT]['post']['responses'][200]['content']['application/json'];
@@ -248,10 +252,27 @@ const getTotalPlantsInSite = async (organizationId: number, siteId: number): Pro
 /**
  * Get Reported Plants by Planting Site
  */
-const getReportedPlants = async (plantingSiteId: number): Promise<Response2<PlantingSiteReportedPlantsPayload>> => {
-  const response = await HttpService.root(REPORTED_PLANTS_ENDPOINT).get2<PlantingSiteReportedPlantsPayload>({
+const getReportedPlants = async (plantingSiteId: number): Promise<Response2<GetPlantingSiteReportedPlantsPayload>> => {
+  const response = await HttpService.root(
+    PLANTING_SITE_REPORTED_PLANTS_ENDPOINT
+  ).get2<GetPlantingSiteReportedPlantsPayload>({
     urlReplacements: {
       '{id}': plantingSiteId.toString(),
+    },
+  });
+
+  return response;
+};
+
+/**
+ * List Reported Plants for every Planting Site for an organization
+ */
+const listOrganizationReportedPlants = async (
+  organizationId: number
+): Promise<Response2<ListOrganizationReportedPlantsPayload>> => {
+  const response = await HttpService.root(ALL_REPORTED_PLANTS_ENDPOINT).get2<ListOrganizationReportedPlantsPayload>({
+    params: {
+      organizationId: organizationId.toString(),
     },
   });
 
@@ -393,6 +414,7 @@ const TrackingService = {
   updatePlantingSite,
   getPlantingSiteHistory,
   listPlantingSiteHistories,
+  listOrganizationReportedPlants,
 };
 
 export default TrackingService;
