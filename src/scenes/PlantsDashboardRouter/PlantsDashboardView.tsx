@@ -17,6 +17,7 @@ import strings from 'src/strings';
 import { isAfter } from 'src/utils/dateUtils';
 
 import MortalityRateCard from './components/MortalityRateCard';
+import MultiplePlantingSiteMap from './components/MultiplePlantingSiteMap';
 import PlantingDensityCard from './components/PlantingDensityCard';
 import PlantingSiteTrendsCard from './components/PlantingSiteTrendsCard';
 import PlantsAndSpeciesCard from './components/PlantsAndSpeciesCard';
@@ -333,6 +334,26 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     [setSelectedPlantingSite]
   );
 
+  const renderMapWithSites = useCallback(() => {
+    return (
+      <>
+        {sectionHeader(strings.PROJECT_AREA_MAP)}
+        <Grid item xs={12}>
+          <Box
+            sx={{
+              background: theme.palette.TwClrBg,
+              borderRadius: '24px',
+              padding: theme.spacing(3),
+              gap: theme.spacing(3),
+            }}
+          >
+            {organizationId && <MultiplePlantingSiteMap projectId={projectId!} organizationId={organizationId} />}
+          </Box>
+        </Grid>
+      </>
+    );
+  }, [projectId, organizationId]);
+
   return (
     <PlantsPrimaryPage
       title={strings.DASHBOARD}
@@ -360,8 +381,9 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
         {hasObservations && plantingSite?.id !== -1 && renderMortalityRate()}
         {plantingSite?.id !== -1 && renderPlantingProgressAndDensity()}
         {hasObservations && plantingSite?.id !== -1 && renderPlantingSiteTrends()}
-        {hasPlantingZones && renderZoneLevelData()}
-        {hasPolygons && !hasPlantingZones && renderSimpleSiteMap()}
+        {plantingSite?.id !== -1 && hasPlantingZones && renderZoneLevelData()}
+        {plantingSite?.id !== -1 && hasPolygons && !hasPlantingZones && renderSimpleSiteMap()}
+        {plantingSite?.id === -1 && projectId && renderMapWithSites()}
       </Grid>
     </PlantsPrimaryPage>
   );
