@@ -37,6 +37,7 @@ import { Score } from 'src/types/Score';
 import { PhaseVotes } from 'src/types/Votes';
 import { getCountryByCode } from 'src/utils/country';
 import { formatNumberScale } from 'src/utils/numbers';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumber';
 
 const DEAL_NAME_COUNTRY_CODE_REGEX = /^[A-Z]{3}_/;
@@ -72,6 +73,7 @@ const ProjectProfileView = ({
   const { activeLocale, countries } = useLocalization();
   const { acceleratorReports } = useProjectReports(projectDetails?.projectId);
   const { fundingEntities } = useProjectFundingEntities(funderView ? undefined : projectDetails?.projectId);
+  const { isMobile, isTablet } = useDeviceInfo();
 
   const numericFormatter = useMemo(() => numberFormatter(activeLocale), [activeLocale, numberFormatter]);
   const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
@@ -89,7 +91,7 @@ const ProjectProfileView = ({
   const projectSize = useMemo(() => {
     const getCard = (label: string, value: number | undefined) => (
       <InvertedCard
-        md={12}
+        md={isTablet ? 6 : 12}
         backgroundColor={theme.palette.TwClrBaseGray100}
         label={label}
         value={value && strings.formatString(strings.X_HA, numericFormatter.format(value))?.toString()}
@@ -112,6 +114,8 @@ const ProjectProfileView = ({
     projectDetails?.projectArea,
     projectDetails?.minProjectArea,
     projectDetails?.confirmedReforestableLand,
+    isTablet,
+    numericFormatter,
   ]);
 
   const lastSubmittedReport = useMemo(() => {
@@ -157,6 +161,7 @@ const ProjectProfileView = ({
 
   return (
     <Card
+      flushMobile
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -208,11 +213,15 @@ const ProjectProfileView = ({
       )}
 
       <Grid container>
-        <ProjectOverviewCard md={9} dealDescription={projectDetails?.dealDescription} projectName={project?.name} />
-        <Grid item md={3}>
-          <Box>
+        <ProjectOverviewCard
+          md={isMobile || isTablet ? 12 : 9}
+          dealDescription={projectDetails?.dealDescription}
+          projectName={project?.name}
+        />
+        <Grid item md={isMobile || isTablet ? 12 : 3} xs={12}>
+          <Grid container>
             <InvertedCard
-              md={12}
+              md={isTablet ? 6 : 12}
               backgroundColor={theme.palette.TwClrBaseGray100}
               label={strings.COUNTRY}
               value={
@@ -222,19 +231,19 @@ const ProjectProfileView = ({
               }
             />
             {projectSize}
-          </Box>
+          </Grid>
         </Grid>
       </Grid>
 
       <Grid container paddingTop={theme.spacing(2)}>
-        {projectDetails && projectDetails?.projectHighlightPhotoValueId && (
+        {projectDetails?.projectHighlightPhotoValueId && (
           <ProjectProfileImage
             projectId={projectDetails.projectId}
             imageValueId={projectDetails.projectHighlightPhotoValueId}
             alt={strings.PROJECT_HIGHLIGHT_IMAGE}
           />
         )}
-        {projectDetails && projectDetails?.projectZoneFigureValueId && (
+        {projectDetails?.projectZoneFigureValueId && (
           <ProjectProfileImage
             projectId={projectDetails.projectId}
             imageValueId={projectDetails.projectZoneFigureValueId}
@@ -246,7 +255,7 @@ const ProjectProfileView = ({
           <ProjectMap
             application={projectApplication}
             countryCode={projectDetails?.countryCode}
-            md={projectDetails?.projectHighlightPhotoValueId ? 6 : 12}
+            md={isMobile || isTablet ? 12 : projectDetails?.projectHighlightPhotoValueId ? 6 : 12}
           />
         )}
       </Grid>
@@ -397,55 +406,63 @@ const ProjectProfileView = ({
             </Typography>
           </Grid>
         </Box>
-        <ProjectFieldDisplay
-          label={strings.ELIGIBLE_AREA}
-          height={'64px'}
-          md={4}
-          value={
-            projectDetails?.confirmedReforestableLand &&
-            strings
-              .formatString(strings.X_HA, numericFormatter.format(projectDetails.confirmedReforestableLand))
-              ?.toString()
-          }
-          tooltip={strings.ELIGIBLE_AREA_DESCRIPTION}
-        />
-        <ProjectFieldDisplay
-          label={strings.PROJECT_AREA}
-          height={'64px'}
-          md={4}
-          value={
-            projectDetails?.projectArea &&
-            strings.formatString(strings.X_HA, numericFormatter.format(projectDetails.projectArea))?.toString()
-          }
-          tooltip={strings.PROJECT_AREA_DESCRIPTION}
-        />
+        <Grid item md={isMobile ? 12 : 4}>
+          <Grid container>
+            <ProjectFieldDisplay
+              label={strings.ELIGIBLE_AREA}
+              height={'64px'}
+              md={12}
+              value={
+                projectDetails?.confirmedReforestableLand &&
+                strings
+                  .formatString(strings.X_HA, numericFormatter.format(projectDetails.confirmedReforestableLand))
+                  ?.toString()
+              }
+              tooltip={strings.ELIGIBLE_AREA_DESCRIPTION}
+            />
+            <ProjectFieldDisplay
+              label={strings.MIN_PROJECT_AREA}
+              height={'64px'}
+              md={12}
+              value={
+                projectDetails?.minProjectArea &&
+                strings.formatString(strings.X_HA, numericFormatter.format(projectDetails.minProjectArea))?.toString()
+              }
+              tooltip={strings.MIN_PROJECT_AREA_DESCRIPTION}
+            />
+          </Grid>
+        </Grid>
+        <Grid item md={isMobile ? 12 : 4}>
+          <Grid container>
+            <ProjectFieldDisplay
+              label={strings.PROJECT_AREA}
+              height={'64px'}
+              md={12}
+              value={
+                projectDetails?.projectArea &&
+                strings.formatString(strings.X_HA, numericFormatter.format(projectDetails.projectArea))?.toString()
+              }
+              tooltip={strings.PROJECT_AREA_DESCRIPTION}
+            />
+            <ProjectFieldDisplay
+              label={strings.EXPANSION_POTENTIAL}
+              height={'64px'}
+              md={12}
+              value={
+                projectDetails?.totalExpansionPotential &&
+                strings
+                  .formatString(strings.X_HA, numericFormatter.format(projectDetails.totalExpansionPotential))
+                  ?.toString()
+              }
+              tooltip={strings.EXPANSION_POTENTIAL_DESCRIPTION}
+            />
+          </Grid>
+        </Grid>
         <ProjectFieldDisplay
           label={strings.NATIVE_SPECIES_TO_BE_PLANTED}
           height={'64px'}
           md={4}
           value={projectDetails?.numNativeSpecies}
-        />
-        <ProjectFieldDisplay
-          label={strings.MIN_PROJECT_AREA}
-          height={'64px'}
-          md={4}
-          value={
-            projectDetails?.minProjectArea &&
-            strings.formatString(strings.X_HA, numericFormatter.format(projectDetails.minProjectArea))?.toString()
-          }
-          tooltip={strings.MIN_PROJECT_AREA_DESCRIPTION}
-        />
-        <ProjectFieldDisplay
-          label={strings.EXPANSION_POTENTIAL}
-          height={'64px'}
-          md={4}
-          value={
-            projectDetails?.totalExpansionPotential &&
-            strings
-              .formatString(strings.X_HA, numericFormatter.format(projectDetails.totalExpansionPotential))
-              ?.toString()
-          }
-          tooltip={strings.EXPANSION_POTENTIAL_DESCRIPTION}
         />
       </Grid>
 

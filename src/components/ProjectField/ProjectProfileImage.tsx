@@ -3,6 +3,7 @@ import React from 'react';
 import { Box, Grid, useTheme } from '@mui/material';
 
 import { getImagePath } from 'src/utils/images';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type ProjectProfileImageProps = {
   projectId: number;
@@ -13,15 +14,17 @@ type ProjectProfileImageProps = {
 
 const ProjectProfileImage = ({ projectId, imageValueId, alt, label }: ProjectProfileImageProps) => {
   const theme = useTheme();
+  const { isMobile, isTablet } = useDeviceInfo();
+
   return (
-    <Grid item md={6} sx={{ paddingX: theme.spacing(1) }}>
+    <Grid item md={isMobile || isTablet ? 12 : 6} sx={{ padding: theme.spacing(isMobile || isTablet ? 1 : 0, 1) }}>
       <Box
         sx={{
           overflow: 'hidden',
           borderRadius: theme.spacing(1),
           position: 'relative',
           width: '100%',
-          paddingTop: '66.67%', // 3:2 ratio
+          aspectRatio: '3/2',
         }}
       >
         <Box
@@ -29,10 +32,6 @@ const ProjectProfileImage = ({ projectId, imageValueId, alt, label }: ProjectPro
           src={getImagePath(projectId, imageValueId)}
           alt={alt}
           sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
             width: '100%',
             height: '100%',
             objectFit: 'cover',
