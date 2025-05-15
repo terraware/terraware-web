@@ -9,7 +9,7 @@ import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Species } from 'src/types/Species';
 import { Delivery } from 'src/types/Tracking';
 import { batchToSpecies } from 'src/utils/batch';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import WithdrawalRenderer from './WithdrawalRenderer';
 

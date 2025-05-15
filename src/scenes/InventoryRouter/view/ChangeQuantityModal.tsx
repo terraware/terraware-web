@@ -9,7 +9,7 @@ import { useUser } from 'src/providers';
 import { NurseryBatchService } from 'src/services';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { ModalValuesType } from './BatchesCellRenderer';

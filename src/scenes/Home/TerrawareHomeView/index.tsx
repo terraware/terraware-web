@@ -26,7 +26,7 @@ import MobileAppCard from 'src/scenes/Home/MobileAppCard';
 import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
 import { isAdmin, isManagerOrHigher, selectedOrgHasFacilityType } from 'src/utils/organization';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import OrganizationStatsCard, { OrganizationStatsCardRow } from './OrganizationStatsCard';
 

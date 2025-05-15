@@ -1,5 +1,5 @@
 import { useUser } from 'src/providers';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 interface FormattedNumberProps {
   value: number;

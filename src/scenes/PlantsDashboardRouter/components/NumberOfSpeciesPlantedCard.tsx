@@ -12,7 +12,7 @@ import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext'
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type NumberOfSpeciesPlantedCardProps = {
   newVersion?: boolean;

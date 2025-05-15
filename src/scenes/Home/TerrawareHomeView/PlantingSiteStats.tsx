@@ -15,7 +15,7 @@ import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/S
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
 import useMapboxToken from 'src/utils/useMapboxToken';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import StatsCardItem from './StatsCardItem';
 

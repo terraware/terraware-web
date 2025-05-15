@@ -33,7 +33,7 @@ import { Project } from 'src/types/Project';
 import { SearchResponseElement } from 'src/types/Search';
 import { getAllNurseries, getNurseryById, isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 

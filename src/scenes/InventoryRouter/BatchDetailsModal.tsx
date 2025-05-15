@@ -23,7 +23,7 @@ import { Facility } from 'src/types/Facility';
 import { isNumber } from 'src/types/utils';
 import { getNurseryById } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 

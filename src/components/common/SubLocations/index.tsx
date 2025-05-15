@@ -12,7 +12,7 @@ import { SubLocationService } from 'src/services';
 import strings from 'src/strings';
 import { DEFAULT_SUB_LOCATIONS, PartialSubLocation } from 'src/types/Facility';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import AddEditSubLocationModal from './AddEditSubLocationModal';
 import SubLocationsCellRenderer from './SubLocationsCellRenderer';

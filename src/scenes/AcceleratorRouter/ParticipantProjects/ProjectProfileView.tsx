@@ -38,7 +38,7 @@ import { PhaseVotes } from 'src/types/Votes';
 import { getCountryByCode } from 'src/utils/country';
 import { formatNumberScale } from 'src/utils/numbers';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 const DEAL_NAME_COUNTRY_CODE_REGEX = /^[A-Z]{3}_/;
 

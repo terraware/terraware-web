@@ -20,7 +20,7 @@ import { TrackingService } from 'src/services';
 import strings from 'src/strings';
 import { Delivery } from 'src/types/Tracking';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 

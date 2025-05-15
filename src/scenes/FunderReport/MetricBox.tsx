@@ -9,7 +9,7 @@ import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBad
 import { useUser } from 'src/providers';
 import strings from 'src/strings';
 import { PublishedReportMetric } from 'src/types/AcceleratorReport';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type MetricBoxProps = {
   metric: PublishedReportMetric;

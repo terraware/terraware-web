@@ -8,7 +8,7 @@ import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { ZoneAggregation } from 'src/types/Observations';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 /**
  * Props include an optional search component for the top left.

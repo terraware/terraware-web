@@ -25,7 +25,7 @@ import strings from 'src/strings';
 import { stateName } from 'src/types/Accession';
 import { CreateBatchRequestPayload } from 'src/types/Batch';
 import useForm from 'src/utils/useForm';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
