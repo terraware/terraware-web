@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
@@ -11,28 +11,58 @@ import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import strings from 'src/strings';
+import { PlantingSite } from 'src/types/Tracking';
 
 import PlantingDensityPerZoneCard from './PlantingDensityPerZoneCard';
 import PlantingSiteDensityCard from './PlantingSiteDensityCard';
 
 type PlantingDensityCardProps = {
   hasObservations: boolean;
+  projectId?: number;
 };
 
-export default function PlantingDensityCard({ hasObservations }: PlantingDensityCardProps): JSX.Element {
+export default function PlantingDensityCard({ hasObservations, projectId }: PlantingDensityCardProps): JSX.Element {
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
-  const { plantingSite } = usePlantingSiteData();
+  const { plantingSite, allPlantingSites } = usePlantingSiteData();
+  const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
 
-  const totalArea = plantingSite?.areaHa ?? 0;
-  const totalPlantedArea = useMemo(() => {
+  useEffect(() => {
+    setPlantingSites(allPlantingSites?.filter((ps) => ps.projectId === projectId));
+  }, [allPlantingSites]);
+
+  const totalAreaRolledUp = useMemo(() => {
+    return plantingSites?.reduce((sum, site) => sum + (site?.areaHa ?? 0), 0) || 0;
+  }, [plantingSites]);
+
+  const totalArea = useMemo(() => {
+    return plantingSite && plantingSite?.id === -1 ? totalAreaRolledUp : plantingSite?.areaHa ?? 0;
+  }, [plantingSite, totalAreaRolledUp]);
+
+  const calculatePlantingSitePlantedArea = (iPlantingSite: PlantingSite) => {
     return (
-      plantingSite?.plantingZones
+      iPlantingSite?.plantingZones
         ?.flatMap((zone) => zone.plantingSubzones)
         ?.reduce((prev, curr) => (curr.plantingCompleted ? +curr.areaHa + prev : prev), 0) ?? 0
     );
-  }, [plantingSite]);
-  const percentagePlanted = totalArea > 0 ? Math.round((totalPlantedArea / totalArea) * 100) : 0;
+  };
+
+  const projectTotalPlanted = plantingSites?.reduce((total, pPlantingSite) => {
+    return total + calculatePlantingSitePlantedArea(pPlantingSite);
+  }, 0);
+
+  const totalPlantedArea = useMemo(() => {
+    if (plantingSite && plantingSite.id !== -1) {
+      return calculatePlantingSitePlantedArea(plantingSite);
+    }
+    if (plantingSite?.id === -1) {
+      return projectTotalPlanted;
+    }
+  }, [plantingSite, plantingSites]);
+
+  const percentagePlanted = useMemo(() => {
+    return totalArea > 0 ? Math.round(((totalPlantedArea || 0) / totalArea) * 100) : 0;
+  }, [totalPlantedArea, totalArea]);
 
   const separatorStyles = {
     width: '1px',
@@ -60,7 +90,7 @@ export default function PlantingDensityCard({ hasObservations }: PlantingDensity
         </Box>
         <Box marginTop={2}>
           <Typography fontSize='48px' fontWeight={600} lineHeight={1} marginBottom={2}>
-            <FormattedNumber value={Math.round(totalPlantedArea) || 0} />
+            <FormattedNumber value={Math.round(totalPlantedArea || 0)} />
           </Typography>
           <Typography fontSize='16px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)}>
             {strings.HECTARES}
@@ -68,7 +98,7 @@ export default function PlantingDensityCard({ hasObservations }: PlantingDensity
           <Typography fontSize='20px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)} textAlign='right'>
             {strings.formatString(strings.PERCENTAGE_OF_SITE_PLANTED, percentagePlanted)}
           </Typography>
-          <ProgressChart value={totalPlantedArea} target={totalArea} />
+          <ProgressChart value={totalPlantedArea || 0} target={totalArea} />
           <Typography
             fontSize='16px'
             fontWeight={600}
@@ -86,13 +116,33 @@ export default function PlantingDensityCard({ hasObservations }: PlantingDensity
           </Link>
         </Box>
       </Box>
-      <div style={separatorStyles} />
-      {hasObservations && (
+      {plantingSite && plantingSite.id !== -1 && (
         <>
+          <div style={separatorStyles} />
+          {hasObservations && (
+            <>
+              <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
+                <Box display={'flex'} alignItems={'center'}>
+                  <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
+                    {strings.OBSERVED_DENSITY}
+                  </Typography>
+                  <Tooltip title={strings.OBSERVED_DENSITY_TOOLTIP}>
+                    <Box display='flex'>
+                      <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+                    </Box>
+                  </Tooltip>
+                </Box>
+                <Box paddingTop={2}>
+                  <PlantingSiteDensityCard />
+                </Box>
+              </Box>
+              <div style={separatorStyles} />
+            </>
+          )}
           <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
             <Box display={'flex'} alignItems={'center'}>
               <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-                {strings.OBSERVED_DENSITY}
+                {strings.OBSERVED_DENSITY_PER_ZONE}
               </Typography>
               <Tooltip title={strings.OBSERVED_DENSITY_TOOLTIP}>
                 <Box display='flex'>
@@ -100,28 +150,12 @@ export default function PlantingDensityCard({ hasObservations }: PlantingDensity
                 </Box>
               </Tooltip>
             </Box>
-            <Box paddingTop={2}>
-              <PlantingSiteDensityCard />
+            <Box paddingTop={1}>
+              <PlantingDensityPerZoneCard />
             </Box>
           </Box>
-          <div style={separatorStyles} />
         </>
       )}
-      <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
-        <Box display={'flex'} alignItems={'center'}>
-          <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-            {strings.OBSERVED_DENSITY_PER_ZONE}
-          </Typography>
-          <Tooltip title={strings.OBSERVED_DENSITY_TOOLTIP}>
-            <Box display='flex'>
-              <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
-            </Box>
-          </Tooltip>
-        </Box>
-        <Box paddingTop={1}>
-          <PlantingDensityPerZoneCard />
-        </Box>
-      </Box>
     </Card>
   );
 }
