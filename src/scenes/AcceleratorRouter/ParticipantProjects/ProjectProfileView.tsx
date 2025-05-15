@@ -37,7 +37,10 @@ import { Score } from 'src/types/Score';
 import { PhaseVotes } from 'src/types/Votes';
 import { getCountryByCode } from 'src/utils/country';
 import { formatNumberScale } from 'src/utils/numbers';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumber';
+
+const DEAL_NAME_COUNTRY_CODE_REGEX = /^[A-Z]{3}_/;
 
 type ProjectProfileViewProps = {
   participantProject?: ParticipantProject;
@@ -70,6 +73,7 @@ const ProjectProfileView = ({
   const { activeLocale, countries } = useLocalization();
   const { acceleratorReports } = useProjectReports(projectDetails?.projectId);
   const { fundingEntities } = useProjectFundingEntities(funderView ? undefined : projectDetails?.projectId);
+  const { isMobile, isTablet } = useDeviceInfo();
 
   const numericFormatter = useMemo(() => numberFormatter(activeLocale), [activeLocale, numberFormatter]);
   const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
@@ -87,7 +91,7 @@ const ProjectProfileView = ({
   const projectSize = useMemo(() => {
     const getCard = (label: string, value: number | undefined) => (
       <InvertedCard
-        md={12}
+        md={isTablet ? 6 : 12}
         backgroundColor={theme.palette.TwClrBaseGray100}
         label={label}
         value={value && strings.formatString(strings.X_HA, numericFormatter.format(value))?.toString()}
@@ -110,6 +114,8 @@ const ProjectProfileView = ({
     projectDetails?.projectArea,
     projectDetails?.minProjectArea,
     projectDetails?.confirmedReforestableLand,
+    isTablet,
+    numericFormatter,
   ]);
 
   const lastSubmittedReport = useMemo(() => {
@@ -145,8 +151,17 @@ const ProjectProfileView = ({
     [funderView, lastPublishedReport, lastSubmittedReport]
   );
 
+  const strippedDealName = useMemo(() => {
+    if (projectDetails?.dealName?.match(DEAL_NAME_COUNTRY_CODE_REGEX)) {
+      return projectDetails?.dealName?.replace(DEAL_NAME_COUNTRY_CODE_REGEX, '');
+    } else {
+      return projectDetails?.dealName;
+    }
+  }, [projectDetails?.dealName]);
+
   return (
     <Card
+      flushMobile
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -156,25 +171,25 @@ const ProjectProfileView = ({
         borderRadius: theme.spacing(1),
       }}
     >
-      <Grid container justifyContent={'space-between'}>
-        <Box display={'flex'} alignItems={'center'}>
-          {isProjectInPhase && (
-            <>
-              <CohortBadge label={participantProject?.cohortName} />
-              <CohortBadge label={participantProject?.cohortPhase} />
-            </>
-          )}
-          {!isProjectInPhase && projectApplication && (
-            <ApplicationStatusLink applicationId={projectApplication.id} status={projectApplication.status} />
-          )}
-          {isAllowedViewScoreAndVoting && (
-            <>
-              <ProjectScoreLink projectId={projectDetails?.projectId} projectScore={projectScore?.overallScore} />
-              <VotingDecisionLink projectId={projectDetails?.projectId} phaseVotes={phaseVotes} />
-            </>
-          )}
-        </Box>
-        {!funderView && (
+      {!funderView && (
+        <Grid container justifyContent={'space-between'}>
+          <Box display={'flex'} alignItems={'center'}>
+            {isProjectInPhase && (
+              <>
+                <CohortBadge label={participantProject?.cohortName} />
+                <CohortBadge label={participantProject?.cohortPhase} />
+              </>
+            )}
+            {!isProjectInPhase && projectApplication && (
+              <ApplicationStatusLink applicationId={projectApplication.id} status={projectApplication.status} />
+            )}
+            {isAllowedViewScoreAndVoting && (
+              <>
+                <ProjectScoreLink projectId={projectDetails?.projectId} projectScore={projectScore?.overallScore} />
+                <VotingDecisionLink projectId={projectDetails?.projectId} phaseVotes={phaseVotes} />
+              </>
+            )}
+          </Box>
           <Box justifySelf={'flex-end'}>
             <ProjectFieldInlineMeta
               userLabel={strings.PROJECT_LEAD}
@@ -188,15 +203,25 @@ const ProjectProfileView = ({
               fontWeight={500}
             />
           </Box>
-        )}
-      </Grid>
+        </Grid>
+      )}
+
+      {funderView && (
+        <Grid container>
+          <InvertedCard md={12} backgroundColor={theme.palette.TwClrBaseGray050} value={strippedDealName} />
+        </Grid>
+      )}
 
       <Grid container>
-        <ProjectOverviewCard md={9} dealDescription={projectDetails?.dealDescription} projectName={project?.name} />
-        <Grid item md={3}>
-          <Box>
+        <ProjectOverviewCard
+          md={isMobile || isTablet ? 12 : 9}
+          dealDescription={projectDetails?.dealDescription}
+          projectName={project?.name}
+        />
+        <Grid item md={isMobile || isTablet ? 12 : 3} xs={12}>
+          <Grid container>
             <InvertedCard
-              md={12}
+              md={isTablet ? 6 : 12}
               backgroundColor={theme.palette.TwClrBaseGray100}
               label={strings.COUNTRY}
               value={
@@ -206,19 +231,19 @@ const ProjectProfileView = ({
               }
             />
             {projectSize}
-          </Box>
+          </Grid>
         </Grid>
       </Grid>
 
       <Grid container paddingTop={theme.spacing(2)}>
-        {projectDetails && projectDetails?.projectHighlightPhotoValueId && (
+        {projectDetails?.projectHighlightPhotoValueId && (
           <ProjectProfileImage
             projectId={projectDetails.projectId}
             imageValueId={projectDetails.projectHighlightPhotoValueId}
             alt={strings.PROJECT_HIGHLIGHT_IMAGE}
           />
         )}
-        {projectDetails && projectDetails?.projectZoneFigureValueId && (
+        {projectDetails?.projectZoneFigureValueId && (
           <ProjectProfileImage
             projectId={projectDetails.projectId}
             imageValueId={projectDetails.projectZoneFigureValueId}
@@ -230,7 +255,7 @@ const ProjectProfileView = ({
           <ProjectMap
             application={projectApplication}
             countryCode={projectDetails?.countryCode}
-            md={projectDetails?.projectHighlightPhotoValueId ? 6 : 12}
+            md={isMobile || isTablet ? 12 : projectDetails?.projectHighlightPhotoValueId ? 6 : 12}
           />
         )}
       </Grid>
@@ -381,66 +406,77 @@ const ProjectProfileView = ({
             </Typography>
           </Grid>
         </Box>
-        <ProjectFieldDisplay
-          label={strings.ELIGIBLE_AREA}
-          height={'64px'}
-          md={4}
-          value={
-            projectDetails?.confirmedReforestableLand &&
-            strings
-              .formatString(strings.X_HA, numericFormatter.format(projectDetails.confirmedReforestableLand))
-              ?.toString()
-          }
-          tooltip={strings.ELIGIBLE_AREA_DESCRIPTION}
-        />
-        <ProjectFieldDisplay
-          label={strings.PROJECT_AREA}
-          height={'64px'}
-          md={4}
-          value={
-            projectDetails?.projectArea &&
-            strings.formatString(strings.X_HA, numericFormatter.format(projectDetails.projectArea))?.toString()
-          }
-          tooltip={strings.PROJECT_AREA_DESCRIPTION}
-        />
+        <Grid item md={isMobile ? 12 : 4}>
+          <Grid container>
+            <ProjectFieldDisplay
+              label={strings.ELIGIBLE_AREA}
+              height={'64px'}
+              md={12}
+              value={
+                projectDetails?.confirmedReforestableLand &&
+                strings
+                  .formatString(strings.X_HA, numericFormatter.format(projectDetails.confirmedReforestableLand))
+                  ?.toString()
+              }
+              tooltip={strings.ELIGIBLE_AREA_DESCRIPTION}
+            />
+            <ProjectFieldDisplay
+              label={strings.MIN_PROJECT_AREA}
+              height={'64px'}
+              md={12}
+              value={
+                projectDetails?.minProjectArea &&
+                strings.formatString(strings.X_HA, numericFormatter.format(projectDetails.minProjectArea))?.toString()
+              }
+              tooltip={strings.MIN_PROJECT_AREA_DESCRIPTION}
+            />
+          </Grid>
+        </Grid>
+        <Grid item md={isMobile ? 12 : 4}>
+          <Grid container>
+            <ProjectFieldDisplay
+              label={strings.PROJECT_AREA}
+              height={'64px'}
+              md={12}
+              value={
+                projectDetails?.projectArea &&
+                strings.formatString(strings.X_HA, numericFormatter.format(projectDetails.projectArea))?.toString()
+              }
+              tooltip={strings.PROJECT_AREA_DESCRIPTION}
+            />
+            <ProjectFieldDisplay
+              label={strings.EXPANSION_POTENTIAL}
+              height={'64px'}
+              md={12}
+              value={
+                projectDetails?.totalExpansionPotential &&
+                strings
+                  .formatString(strings.X_HA, numericFormatter.format(projectDetails.totalExpansionPotential))
+                  ?.toString()
+              }
+              tooltip={strings.EXPANSION_POTENTIAL_DESCRIPTION}
+            />
+          </Grid>
+        </Grid>
         <ProjectFieldDisplay
           label={strings.NATIVE_SPECIES_TO_BE_PLANTED}
           height={'64px'}
           md={4}
           value={projectDetails?.numNativeSpecies}
         />
-        <ProjectFieldDisplay
-          label={strings.MIN_PROJECT_AREA}
-          height={'64px'}
-          md={4}
-          value={
-            projectDetails?.minProjectArea &&
-            strings.formatString(strings.X_HA, numericFormatter.format(projectDetails.minProjectArea))?.toString()
-          }
-          tooltip={strings.MIN_PROJECT_AREA_DESCRIPTION}
-        />
-        <ProjectFieldDisplay
-          label={strings.EXPANSION_POTENTIAL}
-          height={'64px'}
-          md={4}
-          value={
-            projectDetails?.totalExpansionPotential &&
-            strings
-              .formatString(strings.X_HA, numericFormatter.format(projectDetails.totalExpansionPotential))
-              ?.toString()
-          }
-          tooltip={strings.EXPANSION_POTENTIAL_DESCRIPTION}
-        />
       </Grid>
 
       <Grid container>
-        <Box marginX={theme.spacing(2)} width={'100%'}>
-          <Grid item xs={12} marginTop={theme.spacing(2)}>
-            <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
-              {strings.CARBON_DATA}
-            </Typography>
-          </Grid>
-        </Box>
+        {((!funderView && isPhaseZeroOrApplication) ||
+          (!isPhaseZeroOrApplication && (projectDetails?.standard || projectDetails?.methodologyNumber))) && (
+          <Box marginX={theme.spacing(2)} width={'100%'}>
+            <Grid item xs={12} marginTop={theme.spacing(2)}>
+              <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
+                {strings.CARBON_DATA}
+              </Typography>
+            </Grid>
+          </Box>
+        )}
         {!funderView && isPhaseZeroOrApplication && (
           <ProjectFieldDisplay
             label={strings.ACCUMULATION_RATE}
@@ -476,74 +512,80 @@ const ProjectProfileView = ({
         )}
       </Grid>
 
-      <Grid container>
-        <Box
-          marginX={theme.spacing(2)}
-          border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
-          borderRadius={theme.spacing(1)}
-          width={'100%'}
-          padding={theme.spacing(2)}
-        >
-          {!funderView && (
-            <>
-              <Typography fontSize='16px' fontWeight={600} lineHeight='24px' component={'span'}>
-                {strings.PROJECT_LINKS}
-              </Typography>
-              {projectApplication && (
-                <ProjectFieldLink
-                  value={APP_PATHS.ACCELERATOR_APPLICATION.replace(':applicationId', projectApplication.id.toString())}
-                  label={strings.APPLICATION}
-                />
-              )}
-              {participantProject?.dealName && (
-                <ProjectFieldLink
-                  value={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}?dealName=${participantProject.dealName}`}
-                  label={strings.DOCUMENTS}
-                />
-              )}
-              {project && (
-                <ProjectFieldLink
-                  value={`${APP_PATHS.ACCELERATOR_DELIVERABLES}?projectId=${project.id}`}
-                  label={strings.DELIVERABLES}
-                />
-              )}
-              {project && (
-                <ProjectFieldLink
-                  value={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', project.id.toString())}
-                  label={strings.REPORTS}
-                />
-              )}
-            </>
-          )}
-
-          <Box paddingTop={theme.spacing(1)}>
-            <Typography fontSize='16px' fontWeight={600} lineHeight='24px' component={'span'}>
-              {strings.EXTERNAL_PROJECT_LINKS}
-            </Typography>
+      {((funderView && projectDetails?.verraLink) || !funderView) && (
+        <Grid container>
+          <Box
+            marginX={theme.spacing(2)}
+            border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+            borderRadius={theme.spacing(1)}
+            width={'100%'}
+            padding={theme.spacing(2)}
+          >
             {!funderView && (
               <>
-                <ProjectFieldLink value={participantProject?.googleFolderUrl} label={strings.GDRIVE} />
-                <ProjectFieldLink value={participantProject?.hubSpotUrl} label={strings.HUBSPOT} />
-                <ProjectFieldLink value={participantProject?.gisReportsLink} label={strings.GIS_REPORT} />
-              </>
-            )}
-            <ProjectFieldLink value={projectDetails?.verraLink} label={strings.VERRA} />
-            {!funderView && (
-              <>
-                <ProjectFieldLink value={participantProject?.riskTrackerLink} label={strings.RISK_TRACKER} />
+                <Typography fontSize='16px' fontWeight={600} lineHeight='24px' component={'span'}>
+                  {strings.PROJECT_LINKS}
+                </Typography>
+                {projectApplication && (
+                  <ProjectFieldLink
+                    value={APP_PATHS.ACCELERATOR_APPLICATION.replace(
+                      ':applicationId',
+                      projectApplication.id.toString()
+                    )}
+                    label={strings.APPLICATION}
+                  />
+                )}
+                {participantProject?.dealName && (
+                  <ProjectFieldLink
+                    value={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}?dealName=${participantProject.dealName}`}
+                    label={strings.DOCUMENTS}
+                  />
+                )}
+                {project && (
+                  <ProjectFieldLink
+                    value={`${APP_PATHS.ACCELERATOR_DELIVERABLES}?projectId=${project.id}`}
+                    label={strings.DELIVERABLES}
+                  />
+                )}
                 {project && isAllowedViewScoreAndVoting && (
                   <ProjectFieldLink
                     value={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
                     label={strings.SCORING}
                   />
                 )}
-                <ProjectFieldLink value={participantProject?.clickUpLink} label={strings.CLICK_UP} />
-                <ProjectFieldLink value={participantProject?.slackLink} label={strings.SLACK} />
+                {project && (
+                  <ProjectFieldLink
+                    value={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', project.id.toString())}
+                    label={strings.REPORTS}
+                  />
+                )}
               </>
             )}
+
+            <Box paddingTop={theme.spacing(1)}>
+              <Typography fontSize='16px' fontWeight={600} lineHeight='24px' component={'span'}>
+                {strings.EXTERNAL_PROJECT_LINKS}
+              </Typography>
+              {!funderView && (
+                <>
+                  <ProjectFieldLink value={participantProject?.googleFolderUrl} label={strings.GDRIVE} />
+                  <ProjectFieldLink value={participantProject?.hubSpotUrl} label={strings.HUBSPOT} />
+                  <ProjectFieldLink value={participantProject?.gisReportsLink} label={strings.GIS_REPORT} />
+                </>
+              )}
+              <ProjectFieldLink value={projectDetails?.verraLink} label={strings.VERRA} />
+              {!funderView && (
+                <>
+                  <ProjectFieldLink value={participantProject?.riskTrackerLink} label={strings.RISK_TRACKER} />
+
+                  <ProjectFieldLink value={participantProject?.clickUpLink} label={strings.CLICK_UP} />
+                  <ProjectFieldLink value={participantProject?.slackLink} label={strings.SLACK} />
+                </>
+              )}
+            </Box>
           </Box>
-        </Box>
-      </Grid>
+        </Grid>
+      )}
 
       <Grid container>
         <Box marginX={theme.spacing(2)} width={'100%'}>

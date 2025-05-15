@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import type { Page } from 'playwright-core';
 
+import { navigateToProjectProfile } from '../utils/navigation';
 import { addCookies, exactOptions, waitFor } from '../utils/utils';
 
 test.setTimeout(20000);
@@ -60,7 +61,7 @@ export default function ProjectProfileTests() {
       minProjectArea: 'N/A',
       expansionPotential: 'N/A',
       nativeSpecies: '15',
-      projectLinksVisible: ['Application', 'Documents', 'Deliverables', 'Reports', 'GDrive', 'Scoring'],
+      projectLinksVisible: ['Application', 'Documents', 'Deliverables', 'Scoring', 'Reports', 'GDrive'],
       projectLinksHidden: ['HubSpot', 'GIS Report', 'Verra', 'Risk Tracker', 'ClickUp', 'Slack'],
       additionalPageText: ['Passed Pre-screen', 'Viewing: Application Site Boundary', 'None selected'],
     };
@@ -90,13 +91,13 @@ export default function ProjectProfileTests() {
       projectLinksVisible: [
         'Documents',
         'Deliverables',
+        'Scoring',
         'Reports',
         'GDrive',
         'HubSpot',
         'GIS Report',
         'Verra',
         'Risk Tracker',
-        'Scoring',
         'ClickUp',
         'Slack',
       ],
@@ -132,13 +133,13 @@ export default function ProjectProfileTests() {
       projectLinksVisible: [
         'Documents',
         'Deliverables',
+        'Scoring',
         'Reports',
         'GDrive',
         'HubSpot',
         'GIS Report',
         'Verra',
         'Risk Tracker',
-        'Scoring',
         'ClickUp',
         'Slack',
       ],
@@ -178,13 +179,13 @@ export default function ProjectProfileTests() {
       projectLinksVisible: [
         'Documents',
         'Deliverables',
+        'Scoring',
         'Reports',
         'GDrive',
         'HubSpot',
         'GIS Report',
         'Verra',
         'Risk Tracker',
-        'Scoring',
         'ClickUp',
         'Slack',
       ],
@@ -241,13 +242,6 @@ export default function ProjectProfileTests() {
 
     await validateProjectProfilePage(updatedProjectDetails, page);
   });
-}
-
-async function navigateToProjectProfile(projectDealName: string, page: Page) {
-  await page.goto('http://127.0.0.1:3000');
-  await waitFor(page, '#home');
-  await page.getByRole('link', { name: 'Accelerator Console' }).click();
-  await page.getByRole('link', { name: projectDealName }).click();
 }
 
 async function validateProjectProfilePage(projectDetails: ProjectDetails, page: Page) {

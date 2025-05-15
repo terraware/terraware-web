@@ -26,6 +26,8 @@ export const selectPlantingSite = (state: RootState, plantingSiteId: number) =>
 
 export const selectMonitoringPlots = (state: RootState, requestId: string) => state.monitoringPlots[requestId];
 
+export const selectPlantingSiteList = (requestId: string) => (state: RootState) => state.plantingSiteList[requestId];
+
 export const selectPlantingSiteHistory = (state: RootState, requestId: string) => state.plantingSiteHistory[requestId];
 
 export const selectPlantingSiteHistories = (requestId: string) => (state: RootState) =>
@@ -33,3 +35,6 @@ export const selectPlantingSiteHistories = (requestId: string) => (state: RootSt
 
 export const selectPlantingSiteReportedPlants = (requestId: string) => (state: RootState) =>
   state.plantingSiteReportedPlants[requestId];
+
+export const selectOrganizationReportedPlants = (requestId: string) => (state: RootState) =>
+  state.organizationReportedPlants[requestId];
