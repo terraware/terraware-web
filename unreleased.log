@@ -1,3 +1,4 @@
+81f39a67a13 Fixed dispatches in useOrganization hook (#4007)
 2cab6ddf29e Fixed memoization of use numbers (#4006)
 f0907d19757 SW-6894 Update funder portal for mobile/tablet (#4000)
 d3eb1be01c5 SW-6893 Cleanup Funder Project Profile, strip country from deal name (#3997)
