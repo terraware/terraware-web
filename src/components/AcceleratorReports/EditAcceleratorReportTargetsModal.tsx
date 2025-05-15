@@ -173,6 +173,11 @@ export default function EditAcceleratorReportTargetsModal({
                 return;
               }
 
+              // if target value is unchanged, we don't need to update
+              if (metric.target === reportMetric.target) {
+                return;
+              }
+
               const reportMetricUpdate = {
                 ...reportMetric,
                 ...metric,
