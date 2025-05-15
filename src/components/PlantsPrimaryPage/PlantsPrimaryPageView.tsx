@@ -125,6 +125,7 @@ export default function PlantsPrimaryPageView({
                 options={options}
                 selectedValue={selectedPlantingSiteId}
                 fullWidth
+                disabled={isAcceleratorRoute && options.length === 1}
               />
             </Grid>
             <Grid item xs={isDesktop ? 3 : 12}>

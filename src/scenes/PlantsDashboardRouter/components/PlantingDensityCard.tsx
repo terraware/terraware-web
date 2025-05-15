@@ -29,7 +29,7 @@ export default function PlantingDensityCard({ hasObservations, projectId }: Plan
 
   useEffect(() => {
     setPlantingSites(allPlantingSites?.filter((ps) => ps.projectId === projectId));
-  }, [allPlantingSites]);
+  }, [allPlantingSites, projectId]);
 
   const totalAreaRolledUp = useMemo(() => {
     return plantingSites?.reduce((sum, site) => sum + (site?.areaHa ?? 0), 0) || 0;
