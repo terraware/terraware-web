@@ -18,18 +18,16 @@ import { useNumberFormatter } from 'src/utils/useNumber';
 type NumberOfSpeciesPlantedCardProps = {
   newVersion?: boolean;
   projectId?: number;
-  organizationId?: number;
 };
 
 export default function NumberOfSpeciesPlantedCard({
   newVersion,
   projectId,
-  organizationId,
 }: NumberOfSpeciesPlantedCardProps): JSX.Element | undefined {
   const { plantingSite } = usePlantingSiteData();
 
   if (projectId && plantingSite?.id === -1) {
-    return <RolledUpCard projectId={projectId} organizationId={organizationId} />;
+    return <RolledUpCard projectId={projectId} />;
   }
 
   if (!plantingSite) {
@@ -40,8 +38,8 @@ export default function NumberOfSpeciesPlantedCard({
     return <SiteWithZonesCard newVersion={newVersion} />;
   }
 }
-const RolledUpCard = ({ projectId, organizationId }: { projectId?: number; organizationId?: number }): JSX.Element => {
-  const { reportedPlants } = useProjectPlantings(projectId, organizationId);
+const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
+  const { reportedPlants } = useProjectPlantings(projectId);
   const { species: orgSpecies } = useSpeciesData();
 
   const projectTotalSpecies = useMemo(() => {

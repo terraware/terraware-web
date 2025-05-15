@@ -13,20 +13,13 @@ import strings from 'src/strings';
 import NumberOfSpeciesPlantedCard from './NumberOfSpeciesPlantedCard';
 import PlantsReportedPerSpeciesCard from './PlantsReportedPerSpeciesCard';
 
-export default function PlantsAndSpeciesCard({
-  plantingSiteId,
-  organizationId,
-  projectId,
-}: {
-  plantingSiteId?: number;
-  organizationId?: number;
-  projectId?: number;
-}): JSX.Element {
+export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number }): JSX.Element {
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
 
   const { plantingSiteReportedPlants } = usePlantingSiteData();
-  const { reportedPlants } = useProjectPlantings(projectId, organizationId);
+  const { plantingSite } = usePlantingSiteData();
+  const { reportedPlants } = useProjectPlantings(projectId);
   const separatorStyles = {
     width: '1px',
     height: 'auto',
@@ -60,7 +53,7 @@ export default function PlantsAndSpeciesCard({
             </Tooltip>
           </Box>
           <Typography fontSize={'48px'} fontWeight={600} marginTop={1}>
-            {plantingSiteId && plantingSiteId !== -1 ? (
+            {plantingSite?.id !== -1 ? (
               plantingSiteReportedPlants ? (
                 <FormattedNumber value={plantingSiteReportedPlants.totalPlants} />
               ) : (
@@ -83,7 +76,7 @@ export default function PlantsAndSpeciesCard({
             </Tooltip>
           </Box>
           <Typography fontSize={'48px'} fontWeight={600} marginTop={1}>
-            {plantingSiteId && plantingSiteId !== -1 ? (
+            {plantingSite?.id !== -1 ? (
               <FormattedNumber value={plantingSiteReportedPlants?.species?.length ?? 0} />
             ) : (
               projectTotalSpecies
@@ -95,13 +88,13 @@ export default function PlantsAndSpeciesCard({
       {(plantingSiteReportedPlants?.totalPlants || projectTotalSpecies) > 0 && (
         <>
           <Box flexBasis='100%'>
-            <PlantsReportedPerSpeciesCard newVersion projectId={projectId} organizationId={organizationId} />
+            <PlantsReportedPerSpeciesCard newVersion projectId={projectId} />
           </Box>
           <div style={separatorStyles} />
         </>
       )}
       <Box flexBasis='100%'>
-        <NumberOfSpeciesPlantedCard newVersion projectId={projectId} organizationId={organizationId} />
+        <NumberOfSpeciesPlantedCard newVersion projectId={projectId} />
       </Box>
     </Card>
   );

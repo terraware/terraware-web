@@ -6,12 +6,12 @@ import { requestOrganizationReportedPlants } from 'src/redux/features/tracking/t
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { PlantingSiteReportedPlants } from 'src/types/PlantingSite';
 
-export const useProjectPlantings = (projectId?: number, organizationId?: number) => {
+export const useProjectPlantings = (projectId?: number) => {
   const dispatch = useAppDispatch();
   const [reportedPlantsRequestId, setReportedPlantsRequestId] = useState<string>('');
   const [reportedPlants, setReportedPlants] = useState<PlantingSiteReportedPlants[]>([]);
   const reportedPlantsResponse = useAppSelector(selectOrganizationReportedPlants(reportedPlantsRequestId));
-  const { allPlantingSites, setAcceleratorOrganizationId } = usePlantingSiteData();
+  const { allPlantingSites, acceleratorOrganizationId } = usePlantingSiteData();
   const [projectPlantingSitesIds, setProjectPlantingSitesIds] = useState<string[]>();
 
   useEffect(() => {
@@ -33,12 +33,11 @@ export const useProjectPlantings = (projectId?: number, organizationId?: number)
   }, [reportedPlantsResponse]);
 
   useEffect(() => {
-    if (organizationId) {
-      setAcceleratorOrganizationId(organizationId);
-      const reportedPlantsRequest = dispatch(requestOrganizationReportedPlants(organizationId));
+    if (acceleratorOrganizationId) {
+      const reportedPlantsRequest = dispatch(requestOrganizationReportedPlants(acceleratorOrganizationId));
       setReportedPlantsRequestId(reportedPlantsRequest.requestId);
     }
-  }, [organizationId]);
+  }, [acceleratorOrganizationId]);
 
   return useMemo(
     () => ({

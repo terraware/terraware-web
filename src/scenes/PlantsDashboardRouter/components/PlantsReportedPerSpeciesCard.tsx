@@ -19,18 +19,16 @@ const MAX_SPECIES_NAME_LENGTH = 20;
 type PlantsReportedPerSpeciesCardProps = {
   newVersion?: boolean;
   projectId?: number;
-  organizationId?: number;
 };
 
 export default function PlantsReportedPerSpeciesCard({
   newVersion,
   projectId,
-  organizationId,
 }: PlantsReportedPerSpeciesCardProps): JSX.Element | undefined {
   const { plantingSite } = usePlantingSiteData();
 
   if (projectId && plantingSite?.id === -1) {
-    return <RolledUpCard projectId={projectId} organizationId={organizationId} />;
+    return <RolledUpCard projectId={projectId} />;
   }
 
   if (!plantingSite) {
@@ -85,12 +83,12 @@ const calculateSpeciesQuantities = (plantings: { plants: number; scientificName:
   return speciesQuantities;
 };
 
-const RolledUpCard = ({ projectId, organizationId }: { projectId?: number; organizationId?: number }): JSX.Element => {
+const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
   const [labels, setLabels] = useState<string[]>();
   const [values, setValues] = useState<number[]>();
   const [tooltipTitles, setTooltipTitles] = useState<string[]>();
 
-  const { reportedPlants } = useProjectPlantings(projectId, organizationId);
+  const { reportedPlants } = useProjectPlantings(projectId);
   const { species: orgSpecies } = useSpeciesData();
 
   const speciesQuantities = useMemo(() => {

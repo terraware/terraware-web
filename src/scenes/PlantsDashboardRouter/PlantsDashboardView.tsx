@@ -158,7 +158,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
         </Box>
       </Grid>
       <Grid item xs={12}>
-        <PlantsAndSpeciesCard plantingSiteId={plantingSite?.id} organizationId={organizationId} projectId={projectId} />
+        <PlantsAndSpeciesCard projectId={projectId} />
       </Grid>
     </>
   );
