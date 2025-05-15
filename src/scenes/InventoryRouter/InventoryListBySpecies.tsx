@@ -79,7 +79,7 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
 
   const { user } = useUser();
   const numberFormatter = useNumberFormatter();
-  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [user?.locale, numberFormatter]);
+  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [user?.locale]);
   const theme = useTheme();
 
   const onSearchSortOrder = (order: SearchSortOrder) => {
