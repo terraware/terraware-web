@@ -1,43 +1,15 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 import { Species } from 'src/types/Species';
 
 import { StatusT, buildReducers } from '../asyncUtils';
-import { requestGetOneSpecies, requestListSpecies, requestUpdateSpecies } from './speciesAsyncThunks';
+import {
+  requestGetOneSpecies,
+  requestListInUseSpecies,
+  requestListSpecies,
+  requestUpdateSpecies,
+} from './speciesAsyncThunks';
 import { MergeOtherSpeciesRequestData, requestMergeOtherSpecies } from './speciesThunks';
-
-// Define a type for the slice state
-export type SpeciesSliceData = {
-  error?: string;
-  species?: Species[];
-  organizationId?: number;
-};
-
-// Define the initial state
-const initialState: { [key: string]: StatusT<SpeciesSliceData> } & SpeciesSliceData = {};
-
-export const speciesSlice = createSlice({
-  name: 'speciesSlice',
-  initialState,
-  reducers: {
-    setSpeciesAction: (state, action: PayloadAction<SpeciesSliceData>) => {
-      const data: SpeciesSliceData = action.payload;
-      state.error = data.error;
-      state.species = data.species;
-      state.organizationId = data.organizationId;
-      if (data.organizationId) {
-        state[data.organizationId.toString()] = {
-          status: 'success',
-          data,
-        };
-      }
-    },
-  },
-});
-
-export const { setSpeciesAction } = speciesSlice.actions;
-
-export const speciesReducer = speciesSlice.reducer;
 
 /**
  * Get Single Species
@@ -63,7 +35,16 @@ export const speciesListSlice = createSlice({
   initialState: initialStateSpeciesList,
   reducers: {},
   extraReducers: (builder) => {
-    buildReducers(requestListSpecies)(builder);
+    buildReducers(requestListSpecies, true)(builder);
+  },
+});
+
+export const speciesInUseListSlice = createSlice({
+  name: 'speciesInUseListSlice',
+  initialState: initialStateSpeciesList,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestListInUseSpecies, true)(builder);
   },
 });
 
@@ -98,6 +79,7 @@ export const mergeOtherSpeciesSlice = createSlice({
 const speciesAsyncThunkReducers = {
   speciesGetOne: speciesGetOneSlice.reducer,
   speciesList: speciesListSlice.reducer,
+  speciesInUseList: speciesInUseListSlice.reducer,
   speciesUpdate: speciesUpdateSlice.reducer,
   mergeOtherSpecies: mergeOtherSpeciesSlice.reducer,
 };
