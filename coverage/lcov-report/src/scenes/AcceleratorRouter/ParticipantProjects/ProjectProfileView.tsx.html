@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/159</span>
+                <span class='fraction'>0/160</span>
             </div>
         
             
@@ -677,20 +677,7 @@
 <a name='L612'></a><a href='#L612'>612</a>
 <a name='L613'></a><a href='#L613'>613</a>
 <a name='L614'></a><a href='#L614'>614</a>
-<a name='L615'></a><a href='#L615'>615</a>
-<a name='L616'></a><a href='#L616'>616</a>
-<a name='L617'></a><a href='#L617'>617</a>
-<a name='L618'></a><a href='#L618'>618</a>
-<a name='L619'></a><a href='#L619'>619</a>
-<a name='L620'></a><a href='#L620'>620</a>
-<a name='L621'></a><a href='#L621'>621</a>
-<a name='L622'></a><a href='#L622'>622</a>
-<a name='L623'></a><a href='#L623'>623</a>
-<a name='L624'></a><a href='#L624'>624</a>
-<a name='L625'></a><a href='#L625'>625</a>
-<a name='L626'></a><a href='#L626'>626</a>
-<a name='L627'></a><a href='#L627'>627</a>
-<a name='L628'></a><a href='#L628'>628</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L615'></a><a href='#L615'>615</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1041,19 +1028,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1324,12 +1298,12 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 &nbsp;
 import ApplicationStatusLink from 'src/components/ProjectField/ApplicationStatusLink';
 import CohortBadge from 'src/components/ProjectField/CohortBadge';
-import ProjectFieldDisplay from 'src/components/ProjectField/Display';
 import ProjectProfileFooter from 'src/components/ProjectField/Footer';
 import ProjectFieldInlineMeta from 'src/components/ProjectField/InlineMeta';
 import InvertedCard from 'src/components/ProjectField/InvertedCard';
 import LandUseModelTypeCard from 'src/components/ProjectField/LandUseModelTypeCard';
 import ProjectFieldLink from 'src/components/ProjectField/Link';
+import ProjectDataDisplay from 'src/components/ProjectField/ProjectDataDisplay';
 import ProjectFigureLabel from 'src/components/ProjectField/ProjectFigureLabel';
 import ProjectMap from 'src/components/ProjectField/ProjectMap';
 import ProjectOverviewCard from 'src/components/ProjectField/ProjectOverviewCard';
@@ -1599,7 +1573,7 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
             units={&lt;Co2HectareYear /&gt;}
           /&gt;
         )}
-        {!isPhaseZeroOrApplication &amp;&amp; (
+        {(funderView || !isPhaseZeroOrApplication) &amp;&amp; (
           &lt;InvertedCard
             md={4}
             label={strings.ACCUMULATION_RATE}
@@ -1725,9 +1699,8 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
         &lt;/Box&gt;
         &lt;Grid item md={isMobile ? 12 : 4}&gt;
           &lt;Grid container&gt;
-            &lt;ProjectFieldDisplay
+            &lt;ProjectDataDisplay
               label={strings.ELIGIBLE_AREA}
-              height={'64px'}
               md={12}
               value={
                 projectDetails?.confirmedReforestableLand &amp;&amp;
@@ -1737,9 +1710,8 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
               }
               tooltip={strings.ELIGIBLE_AREA_DESCRIPTION}
             /&gt;
-            &lt;ProjectFieldDisplay
+            &lt;ProjectDataDisplay
               label={strings.MIN_PROJECT_AREA}
-              height={'64px'}
               md={12}
               value={
                 projectDetails?.minProjectArea &amp;&amp;
@@ -1751,9 +1723,8 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
         &lt;/Grid&gt;
         &lt;Grid item md={isMobile ? 12 : 4}&gt;
           &lt;Grid container&gt;
-            &lt;ProjectFieldDisplay
+            &lt;ProjectDataDisplay
               label={strings.PROJECT_AREA}
-              height={'64px'}
               md={12}
               value={
                 projectDetails?.projectArea &amp;&amp;
@@ -1761,9 +1732,8 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
               }
               tooltip={strings.PROJECT_AREA_DESCRIPTION}
             /&gt;
-            &lt;ProjectFieldDisplay
+            &lt;ProjectDataDisplay
               label={strings.EXPANSION_POTENTIAL}
-              height={'64px'}
               md={12}
               value={
                 projectDetails?.totalExpansionPotential &amp;&amp;
@@ -1775,17 +1745,15 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
             /&gt;
           &lt;/Grid&gt;
         &lt;/Grid&gt;
-        &lt;ProjectFieldDisplay
+        &lt;ProjectDataDisplay
           label={strings.NATIVE_SPECIES_TO_BE_PLANTED}
-          height={'64px'}
           md={4}
           value={projectDetails?.numNativeSpecies}
         /&gt;
       &lt;/Grid&gt;
 &nbsp;
       &lt;Grid container&gt;
-        {((!funderView &amp;&amp; isPhaseZeroOrApplication) ||
-          (!isPhaseZeroOrApplication &amp;&amp; (projectDetails?.standard || projectDetails?.methodologyNumber))) &amp;&amp; (
+        {(!funderView || (funderView &amp;&amp; (projectDetails?.standard || projectDetails?.methodologyNumber))) &amp;&amp; (
           &lt;Box marginX={theme.spacing(2)} width={'100%'}&gt;
             &lt;Grid item xs={12} marginTop={theme.spacing(2)}&gt;
               &lt;Typography fontSize='20px' fontWeight={600} lineHeight='28px'&gt;
@@ -1795,20 +1763,18 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
           &lt;/Box&gt;
         )}
         {!funderView &amp;&amp; isPhaseZeroOrApplication &amp;&amp; (
-          &lt;ProjectFieldDisplay
+          &lt;ProjectDataDisplay
             label={strings.ACCUMULATION_RATE}
-            height={'64px'}
             md={4}
             value={projectDetails?.accumulationRate}
             units={&lt;Co2HectareYear /&gt;}
           /&gt;
         )}
-        {!isPhaseZeroOrApplication &amp;&amp; (
+        {(funderView || !isPhaseZeroOrApplication) &amp;&amp; (
           &lt;&gt;
             {!funderView &amp;&amp; (
-              &lt;ProjectFieldDisplay
+              &lt;ProjectDataDisplay
                 label={strings.MIN_MAX_CARBON_ACCUMULATION}
-                height={'64px'}
                 md={4}
                 value={
                   participantProject?.minCarbonAccumulation &amp;&amp;
@@ -1818,13 +1784,8 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
                 units={&lt;Co2HectareYear /&gt;}
               /&gt;
             )}
-            &lt;ProjectFieldDisplay label={strings.STANDARD} height={'64px'} md={4} value={projectDetails?.standard} /&gt;
-            &lt;ProjectFieldDisplay
-              label={strings.METHODOLOGY_NUMBER}
-              height={'64px'}
-              md={4}
-              value={projectDetails?.methodologyNumber}
-            /&gt;
+            &lt;ProjectDataDisplay label={strings.STANDARD} md={4} value={projectDetails?.standard} /&gt;
+            &lt;ProjectDataDisplay label={strings.METHODOLOGY_NUMBER} md={4} value={projectDetails?.methodologyNumber} /&gt;
           &lt;/&gt;
         )}
       &lt;/Grid&gt;
@@ -1832,7 +1793,7 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
       {((funderView &amp;&amp; projectDetails?.verraLink) || !funderView) &amp;&amp; (
         &lt;Grid container&gt;
           &lt;Box
-            marginX={theme.spacing(2)}
+            margin={theme.spacing(2, 1, 3)}
             border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
             borderRadius={theme.spacing(1)}
             width={'100%'}
@@ -1905,8 +1866,8 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
       )}
 &nbsp;
       &lt;Grid container&gt;
-        &lt;Box marginX={theme.spacing(2)} width={'100%'}&gt;
-          &lt;Grid item xs={12} marginY={theme.spacing(2)}&gt;
+        &lt;Box margin={theme.spacing(0, 2, 1)} width={'100%'}&gt;
+          &lt;Grid item xs={12} marginBottom={theme.spacing(2)}&gt;
             &lt;Typography fontSize='20px' fontWeight={600} lineHeight='28px'&gt;
               {strings.UN_SDG}
             &lt;/Typography&gt;
@@ -1919,14 +1880,14 @@ const ProjectProfileView = <span class="cstat-no" title="statement not covered" 
         &lt;Grid container&gt;
           &lt;Box marginX={theme.spacing(2)} width={'100%'}&gt;
             &lt;Grid item xs={12} marginY={theme.spacing(2)}&gt;
-              &lt;Typography fontSize='16px' fontWeight={600} lineHeight='24px'&gt;
+              &lt;Typography fontSize='20px' fontWeight={600} lineHeight='24px'&gt;
                 {strings.FUNDING_ENTITIES}
               &lt;/Typography&gt;
             &lt;/Grid&gt;
             {fundingEntities.map(<span class="fstat-no" title="function not covered" >(e</span>, i) =&gt; (
 <span class="cstat-no" title="statement not covered" >              &lt;Typography</span>
                 key={`entity-${i}`}
-                fontSize='20px'
+                fontSize='24px'
                 fontWeight={600}
                 lineHeight='28px'
                 paddingBottom={theme.spacing(1)}
@@ -1951,7 +1912,7 @@ export default ProjectProfileView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-16T18:40:22.672Z
+                at 2025-05-16T19:12:35.425Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
