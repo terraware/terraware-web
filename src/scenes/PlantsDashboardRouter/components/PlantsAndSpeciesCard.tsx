@@ -61,9 +61,10 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
     );
   };
 
-  const projectTotalPlanted = plantingSites?.reduce((total, pPlantingSite) => {
-    return total + calculatePlantingSitePlantedArea(pPlantingSite);
-  }, 0);
+  const projectTotalPlanted =
+    plantingSites?.reduce((total, pPlantingSite) => {
+      return total + calculatePlantingSitePlantedArea(pPlantingSite);
+    }, 0) || 0;
 
   const totalPlantedArea = useMemo(() => {
     if (plantingSite && plantingSite.id !== -1) {
