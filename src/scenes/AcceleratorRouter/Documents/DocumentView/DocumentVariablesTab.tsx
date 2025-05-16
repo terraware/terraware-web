@@ -85,8 +85,7 @@ const filterSearch =
       return true;
     }
 
-    // Check if the search value is present in the variable name or deliverable question
-    // Use fuzzy matching for better user experience
+    // check if search value is present in the variable name or deliverable question
     return (
       fuzzyMatch(searchValue, variable.name) ||
       (variable.deliverableQuestion ? fuzzyMatch(searchValue, variable.deliverableQuestion) : false)
