@@ -5,7 +5,7 @@ import { Icon, Tooltip } from '@terraware/web-components';
 
 type DataValue = string | number | null | undefined | JSX.Element;
 
-const renderDataValue = (value: DataValue, units?: DataValue): JSX.Element => {
+const DataValueElement = (value: DataValue, units?: DataValue) => {
   if (isValidElement(value)) {
     return value;
   }
@@ -62,7 +62,7 @@ const ProjectDataDisplay = ({ label, value, md, tooltip, units }: ProjectDataDis
             </Tooltip>
           )}
         </Typography>
-        {renderDataValue(value, units)}
+        <DataValueElement value={value} units={units} />
       </Box>
     </Grid>
   );
