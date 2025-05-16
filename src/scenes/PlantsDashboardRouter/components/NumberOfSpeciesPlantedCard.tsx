@@ -13,7 +13,7 @@ import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext'
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type NumberOfSpeciesPlantedCardProps = {
   newVersion?: boolean;
@@ -210,8 +210,7 @@ type ChartDataProps = {
 const ChartData = ({ labels, values, totalSpecies, newVersion }: ChartDataProps): JSX.Element | undefined => {
   const theme = useTheme();
   const user = useUser().user;
-  const numberFormatter = useNumberFormatter();
-  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [user?.locale, numberFormatter]);
+  const numberFormatter = useNumberFormatter(user?.locale);
 
   const chartData = useMemo(() => {
     if (!labels?.length || !values?.length) {
@@ -237,7 +236,7 @@ const ChartData = ({ labels, values, totalSpecies, newVersion }: ChartDataProps)
     values?.forEach((v, index) => {
       annotations.push({
         type: 'label',
-        content: [`${numericFormatter.format(v)}%`],
+        content: [`${numberFormatter.format(v)}%`],
         position: {
           x: 'center',
           y: v > 75 ? 'center' : 'end',
@@ -248,7 +247,7 @@ const ChartData = ({ labels, values, totalSpecies, newVersion }: ChartDataProps)
     });
 
     return { annotations };
-  }, [values, labels, numericFormatter]);
+  }, [values, labels, numberFormatter]);
 
   if (!chartData) {
     return undefined;

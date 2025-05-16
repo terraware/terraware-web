@@ -296,7 +296,7 @@ export default function InventoryTests() {
     await page.getByRole('button', { name: 'Dashboard' }).click();
     await expect(page.getByText('60')).toBeVisible();
     await expect(page.getByText('1', { exact: true })).toBeVisible();
-    await page.mouse.wheel(0, 2000);
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
     await page.waitForTimeout(6000); //Wait for map to load
     await expect(page.locator('.mapboxgl-canvas')).toBeVisible();
     await page.locator('.mapboxgl-map').click({

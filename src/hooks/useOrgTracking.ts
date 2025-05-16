@@ -10,6 +10,7 @@ import {
 import {
   requestOrganizationAdHocObservationResults,
   requestOrganizationAdHocObservations,
+  requestOrganizationObservationResults,
   requestOrganizationObservations,
 } from 'src/redux/features/observations/observationsThunks';
 import {
@@ -55,14 +56,12 @@ export const useOrgTracking = () => {
   const reload = useCallback(() => {
     const plantingSitesRequest = dispatch(requestListPlantingSites(selectedOrganization.id));
     const observationsRequest = dispatch(requestOrganizationObservations({ organizationId: selectedOrganization.id }));
-    const resultsRequest = dispatch(
-      requestOrganizationAdHocObservationResults({ organizationId: selectedOrganization.id })
-    );
+    const resultsRequest = dispatch(requestOrganizationObservationResults({ organizationId: selectedOrganization.id }));
     const adHocObservationsRequest = dispatch(
       requestOrganizationAdHocObservations({ organizationId: selectedOrganization.id })
     );
     const adHocResultsRequest = dispatch(
-      requestOrganizationAdHocObservations({ organizationId: selectedOrganization.id })
+      requestOrganizationAdHocObservationResults({ organizationId: selectedOrganization.id })
     );
     const reportedPlantsRequest = dispatch(requestOrganizationReportedPlants(selectedOrganization.id));
 

@@ -15,13 +15,13 @@ import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/S
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
 import useMapboxToken from 'src/utils/useMapboxToken';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import StatsCardItem from './StatsCardItem';
 
 export const PlantingSiteStats = () => {
   const { activeLocale } = useLocalization();
-  const numberFormatter = useNumberFormatter();
+  const numberFormatter = useNumberFormatter(activeLocale);
   const { isDesktop } = useDeviceInfo();
   const theme = useTheme();
   const navigate = useSyncNavigate();
@@ -31,8 +31,6 @@ export const PlantingSiteStats = () => {
   const { allPlantingSites, plantingSite, setSelectedPlantingSite, latestResult, plantingSiteReportedPlants } =
     usePlantingSiteData();
   const { countries } = useLocalization();
-
-  const numericFormatter = useMemo(() => numberFormatter(activeLocale), [activeLocale, numberFormatter]);
 
   const primaryGridSize = useMemo(() => (isDesktop ? 6 : 12), [isDesktop]);
 
@@ -151,7 +149,7 @@ export const PlantingSiteStats = () => {
               showBorder={!isDesktop}
               value={
                 plantingSite?.areaHa
-                  ? strings.formatString(strings.X_HA, numericFormatter.format(plantingSite.areaHa))?.toString()
+                  ? strings.formatString(strings.X_HA, numberFormatter.format(plantingSite.areaHa))?.toString()
                   : undefined
               }
             />
@@ -178,7 +176,7 @@ export const PlantingSiteStats = () => {
             <StatsCardItem
               label={strings.TOTAL_PLANTS_PLANTED}
               showLink={false}
-              value={numericFormatter.format(totalPlants)}
+              value={numberFormatter.format(totalPlants)}
             />
           </Grid>
 
@@ -187,7 +185,7 @@ export const PlantingSiteStats = () => {
               label={strings.TOTAL_SPECIES_PLANTED}
               showBorder={!isDesktop}
               showLink={false}
-              value={numericFormatter.format(totalSpecies ?? 0)}
+              value={numberFormatter.format(totalSpecies ?? 0)}
             />
           </Grid>
 
@@ -197,7 +195,7 @@ export const PlantingSiteStats = () => {
               showLink={false}
               showTooltip={true}
               tooltipText={strings.TOTAL_HECTARES_PLANTED_TOOLTIP}
-              value={numericFormatter.format(plantingCompleteArea)}
+              value={numberFormatter.format(plantingCompleteArea)}
             />
           </Grid>
 

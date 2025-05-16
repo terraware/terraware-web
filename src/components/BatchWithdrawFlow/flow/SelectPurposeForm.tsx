@@ -33,7 +33,7 @@ import { Project } from 'src/types/Project';
 import { SearchResponseElement } from 'src/types/Search';
 import { getAllNurseries, getNurseryById, isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -53,7 +53,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
 
   const { selectedOrganization } = useOrganization();
   const { user } = useUser();
-  const numberFormatter = useNumberFormatter();
+  const numberFormatter = useNumberFormatter(user?.locale);
   const contributor = isContributor(selectedOrganization);
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
@@ -93,8 +93,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
 
   const tz = useLocationTimeZone().get(selectedNursery);
   const [timeZone, setTimeZone] = useState(tz.id);
-
-  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
 
   const availableProjects = useMemo(
     () =>
@@ -712,7 +710,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                       label={strings.TOTAL_READY_QUANTITY}
                       id='totalReadyQuantity'
                       type='number'
-                      value={numericFormatter.format(totalReadyQuantity)}
+                      value={numberFormatter.format(totalReadyQuantity)}
                       display={true}
                     />
                   </Grid>
@@ -801,7 +799,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         id='withdrawQuantity'
                         onChange={(value: unknown) => setWithdrawnQuantity(value as number)}
                         type='text'
-                        value={numericFormatter.format(withdrawnQuantity)}
+                        value={numberFormatter.format(withdrawnQuantity)}
                         errorText={fieldsErrors.totalQuantityWithdrawn}
                         display={true}
                       />

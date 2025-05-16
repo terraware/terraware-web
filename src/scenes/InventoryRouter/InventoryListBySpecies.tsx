@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, CircularProgress, Container, Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -19,7 +19,7 @@ import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 const columns = (): TableColumnType[] => [
   {
@@ -78,8 +78,7 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
   const [filters, setFilters] = useForm<InventoryFiltersType>({});
 
   const { user } = useUser();
-  const numberFormatter = useNumberFormatter();
-  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [user?.locale, numberFormatter]);
+  const numberFormatter = useNumberFormatter(user?.locale);
   const theme = useTheme();
 
   const onSearchSortOrder = (order: SearchSortOrder) => {
@@ -150,10 +149,10 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
         updatedResult = nextResults?.map((uR) => {
           return {
             ...uR,
-            germinatingQuantity: numericFormatter.format(Number(uR.germinatingQuantity)),
-            notReadyQuantity: numericFormatter.format(Number(uR.notReadyQuantity)),
-            readyQuantity: numericFormatter.format(Number(uR.readyQuantity)),
-            totalQuantity: numericFormatter.format(Number(uR.totalQuantity)),
+            germinatingQuantity: numberFormatter.format(Number(uR.germinatingQuantity)),
+            notReadyQuantity: numberFormatter.format(Number(uR.notReadyQuantity)),
+            readyQuantity: numberFormatter.format(Number(uR.readyQuantity)),
+            totalQuantity: numberFormatter.format(Number(uR.totalQuantity)),
           };
         });
       } else {
@@ -172,7 +171,7 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
         }
       }
     }
-  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, numericFormatter, setReportData]);
+  }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder, numberFormatter, setReportData]);
 
   useEffect(() => {
     void onApplyFilters();

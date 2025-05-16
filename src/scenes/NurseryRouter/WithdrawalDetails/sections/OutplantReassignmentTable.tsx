@@ -7,7 +7,7 @@ import { useUser } from 'src/providers';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { Delivery } from 'src/types/Tracking';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type OutplantReassignmentTableProps = {
   species: Species[];
@@ -32,8 +32,7 @@ export default function OutplantReassignmentTable({
   withdrawalNotes,
 }: OutplantReassignmentTableProps): JSX.Element {
   const { user } = useUser();
-  const numberFormatter = useNumberFormatter();
-  const numericFormatter = useMemo(() => numberFormatter(user?.locale), [numberFormatter, user?.locale]);
+  const numberFormatter = useNumberFormatter(user?.locale);
 
   const rowData = useMemo(() => {
     // get list of distinct species
@@ -56,8 +55,8 @@ export default function OutplantReassignmentTable({
           species: speciesName,
           from_subzone: '',
           to_subzone: deliveryPlanting.plantingSubzoneId ? subzoneNames[deliveryPlanting.plantingSubzoneId] : '',
-          original_qty: numericFormatter.format(deliveryPlanting.numPlants),
-          final_qty: numericFormatter.format(deliveryPlanting.numPlants + reassignmentFromPlanting.numPlants),
+          original_qty: numberFormatter.format(deliveryPlanting.numPlants),
+          final_qty: numberFormatter.format(deliveryPlanting.numPlants + reassignmentFromPlanting.numPlants),
           notes: withdrawalNotes ?? '',
         });
         rows.push({
@@ -67,14 +66,14 @@ export default function OutplantReassignmentTable({
             ? subzoneNames[reassignmentToPlanting.plantingSubzoneId]
             : '',
           original_qty: '0',
-          final_qty: numericFormatter.format(reassignmentToPlanting.numPlants),
+          final_qty: numberFormatter.format(reassignmentToPlanting.numPlants),
           notes: reassignmentToPlanting.notes ?? '',
         });
       }
     }
 
     return rows;
-  }, [delivery, species, subzoneNames, withdrawalNotes, numericFormatter]);
+  }, [delivery, species, subzoneNames, withdrawalNotes, numberFormatter]);
 
   return <Table id='outplant-reassignment-table' columns={columns} rows={rowData} orderBy={'name'} />;
 }

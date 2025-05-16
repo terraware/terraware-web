@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, Grid, Typography } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -12,7 +12,7 @@ import { SubLocationService } from 'src/services';
 import strings from 'src/strings';
 import { DEFAULT_SUB_LOCATIONS, PartialSubLocation } from 'src/types/Facility';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import AddEditSubLocationModal from './AddEditSubLocationModal';
 import SubLocationsCellRenderer from './SubLocationsCellRenderer';
@@ -57,12 +57,11 @@ export default function SubLocations({
   const isSeedbank = facilityType === 'seedbank';
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
-  const numberFormatter = useNumberFormatter();
+  const numberFormatter = useNumberFormatter(activeLocale);
   const [selectedRows, setSelectedRows] = useState<PartialSubLocation[]>([]);
   const [selectedSubLocation, setSelectedSubLocation] = useState<PartialSubLocation | undefined>();
   const [subLocations, setSubLocations] = useState<PartialSubLocation[]>([]);
   const [openSubLocationModal, setOpenSubLocationModal] = useState<boolean>(false);
-  const numericFormatter = useMemo(() => numberFormatter(activeLocale), [numberFormatter, activeLocale]);
 
   const columns = useCallback(() => {
     if (!activeLocale) {
@@ -176,7 +175,7 @@ export default function SubLocations({
             columns={columns}
             rows={subLocations}
             orderBy='name'
-            Renderer={SubLocationsCellRenderer({ facilityId, numericFormatter, editMode, renderLink })}
+            Renderer={SubLocationsCellRenderer({ facilityId, numberFormatter, editMode, renderLink })}
             selectedRows={selectedRows}
             setSelectedRows={setSelectedRows}
             showCheckbox={editMode}

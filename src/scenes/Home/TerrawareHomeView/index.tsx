@@ -26,13 +26,13 @@ import MobileAppCard from 'src/scenes/Home/MobileAppCard';
 import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
 import { isAdmin, isManagerOrHigher, selectedOrgHasFacilityType } from 'src/utils/organization';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import OrganizationStatsCard, { OrganizationStatsCardRow } from './OrganizationStatsCard';
 
 const TerrawareHomeView = () => {
   const { activeLocale } = useLocalization();
-  const numberFormatter = useNumberFormatter();
+  const numberFormatter = useNumberFormatter(activeLocale);
   const { user } = useUser();
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
   const { isTablet, isMobile, isDesktop } = useDeviceInfo();
@@ -47,8 +47,6 @@ const TerrawareHomeView = () => {
   const [showAcceleratorCard, setShowAcceleratorCard] = useState(true);
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
-
-  const numericFormatter = useMemo(() => numberFormatter(activeLocale), [activeLocale, numberFormatter]);
 
   useEffect(() => {
     if (orgPreferences.showAcceleratorCard === false && showAcceleratorCard) {
@@ -123,7 +121,7 @@ const TerrawareHomeView = () => {
             },
         icon: 'species' as IconName,
         statsCardItems: [
-          { label: strings.TOTAL_SPECIES, value: numericFormatter.format(species.length ?? 0) },
+          { label: strings.TOTAL_SPECIES, value: numberFormatter.format(species.length ?? 0) },
           {
             label: strings.SPECIES_LAST_UPDATED,
             value: speciesLastModifiedDate,
@@ -153,7 +151,7 @@ const TerrawareHomeView = () => {
         statsCardItems: [
           {
             label: strings.TOTAL_SEED_COUNT,
-            value: numericFormatter.format(seedBankSummary?.value?.seedsRemaining.total ?? 0),
+            value: numberFormatter.format(seedBankSummary?.value?.seedsRemaining.total ?? 0),
           },
           {
             label: strings.TOTAL_ACTIVE_ACCESSIONS,
@@ -161,7 +159,7 @@ const TerrawareHomeView = () => {
               navigate(APP_PATHS.SEEDS_DASHBOARD);
             },
             linkText: strings.VIEW_FULL_DASHBOARD,
-            value: numericFormatter.format(seedBankSummary?.value?.activeAccessions ?? 0),
+            value: numberFormatter.format(seedBankSummary?.value?.activeAccessions ?? 0),
           },
         ],
         title: strings.SEEDS,
@@ -188,11 +186,11 @@ const TerrawareHomeView = () => {
         statsCardItems: [
           {
             label: strings.TOTAL_SEEDLINGS_COUNT,
-            value: numericFormatter.format(orgNurserySummary?.totalQuantity ?? 0),
+            value: numberFormatter.format(orgNurserySummary?.totalQuantity ?? 0),
           },
           {
             label: strings.TOTAL_WITHDRAWN_FOR_PLANTING,
-            value: numericFormatter.format(orgNurserySummary?.totalWithdrawn ?? 0),
+            value: numberFormatter.format(orgNurserySummary?.totalWithdrawn ?? 0),
             linkOnClick: () => {
               navigate(APP_PATHS.NURSERY_WITHDRAWALS);
             },

@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import { useTheme } from '@mui/material';
 
 import strings from 'src/strings';
+import { NumberFormatter } from 'src/types/Number';
 import { LAND_USE_MODEL_TYPES, LandUseModelType } from 'src/types/ParticipantProject';
 
 import InvertedCard from './InvertedCard';
@@ -10,10 +11,10 @@ import InvertedCard from './InvertedCard';
 type LandUseModelTypeCardProps = {
   selectedTypes?: LandUseModelType[];
   modelHectares?: { [key: string]: number };
-  numericFormatter?: any;
+  numberFormatter: NumberFormatter;
 };
 
-const LandUseModelTypeCard = ({ selectedTypes, modelHectares, numericFormatter }: LandUseModelTypeCardProps) => {
+const LandUseModelTypeCard = ({ selectedTypes, modelHectares, numberFormatter }: LandUseModelTypeCardProps) => {
   const theme = useTheme();
 
   const value = useMemo(() => {
@@ -27,7 +28,7 @@ const LandUseModelTypeCard = ({ selectedTypes, modelHectares, numericFormatter }
       }
       let hectaresString = '--';
       if (modelHectares[type] >= 0) {
-        hectaresString = strings.formatString(strings.X_HA, numericFormatter.format(modelHectares[type]))?.toString();
+        hectaresString = strings.formatString(strings.X_HA, numberFormatter.format(modelHectares[type]))?.toString();
       }
       output.push(`${type} (${hectaresString})`);
     }
