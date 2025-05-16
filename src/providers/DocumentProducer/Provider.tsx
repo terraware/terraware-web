@@ -39,12 +39,12 @@ export type Props = {
 
 const DocumentProducerProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
-  const pathParams = useParams<{ documentId: string }>();
+  const pathParams = useParams<{ documentId: string; projectId: string }>();
   const documentId = Number(pathParams.documentId || -1);
 
   const [document, setDocument] = useState<DocumentType>();
 
-  const projectId = document?.projectId ?? -1;
+  const projectId = (pathParams.projectId ? Number(pathParams.projectId) : document?.projectId) ?? -1;
   const documentTemplateId = document?.documentTemplateId ?? -1;
   const documentTemplate = useAppSelector((state) => selectDocumentTemplate(state, documentTemplateId));
 

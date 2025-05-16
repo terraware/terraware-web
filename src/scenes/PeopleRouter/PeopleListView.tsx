@@ -12,6 +12,7 @@ import Table from 'src/components/common/table';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import AssignNewOwnerDialog from 'src/scenes/MyAccountRouter/AssignNewOwnerModal';
@@ -55,7 +56,7 @@ export default function PeopleListView(): JSX.Element {
   const [deleteOrgModalOpened, setDeleteOrgModalOpened] = useState(false);
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
-  const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
+  const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
   const [results, setResults] = useState<OrganizationUser[]>();
   const [totalUsers, setTotalUsers] = useState<number>(0);
   const snackbar = useSnackbar();
