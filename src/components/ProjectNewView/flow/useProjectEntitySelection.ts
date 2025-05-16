@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { FlowStates } from 'src/components/ProjectNewView';
+import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import { AccessionState } from 'src/types/Accession';
 import { FieldNodePayload, SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
@@ -47,7 +48,7 @@ export const useProjectEntitySelection = <T extends SearchResponseElement>({
   const [filters, setFilters] = useForm<ProjectEntityFilters>({});
   const [isSearchDirty, setIsSearchDirty] = useForm<boolean>(false);
 
-  const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
+  const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
 
   useEffect(() => {
     if (selectedOrganization.id !== -1) {

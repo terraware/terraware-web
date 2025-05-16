@@ -24,6 +24,7 @@ import { OrderPreserveableTable as Table } from 'src/components/common/table';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
@@ -73,7 +74,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const [importSpeciesModalOpen, setImportSpeciesModalOpen] = useState(false);
   const [checkDataModalOpen, setCheckDataModalOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const debouncedSearchTerm = useDebounce(searchValue, 250);
+  const debouncedSearchTerm = useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
   const [results, setResults] = useState<SpeciesSearchResultRow[]>();
   const query = useQuery();
   const navigate = useSyncNavigate();
