@@ -14,7 +14,8 @@ import {
   selectObservationSchedulableSites,
   selectUpcomingObservations,
 } from 'src/redux/features/observations/observationsUtilsSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import BiomassMeasurement from 'src/scenes/ObservationsRouter/biomass/BiomassMeasurement';
 import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
@@ -36,6 +37,7 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
   const [plantsSitePreferences, setPlantsSitePreferences] = useState<Record<string, unknown>>();
 
   const { allPlantingSites, plantingSite, setSelectedPlantingSite } = usePlantingSiteData();
+  const dispatch = useAppDispatch();
 
   const tabs = useMemo(() => {
     if (!activeLocale) {
@@ -78,6 +80,12 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
       navigate(APP_PATHS.HOME);
     }
   }, [navigate, allPlantingSites?.length]);
+
+  useEffect(() => {
+    if (selectedOrganization.id !== -1) {
+      void dispatch(requestPlantings(selectedOrganization.id));
+    }
+  }, [dispatch, selectedOrganization.id]);
 
   const actionButton = useMemo<ButtonProps | undefined>(() => {
     if (!activeLocale || !newObservationsSchedulable || !scheduleObservationsEnabled) {
