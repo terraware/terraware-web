@@ -5,7 +5,6 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import ApplicationStatusLink from 'src/components/ProjectField/ApplicationStatusLink';
 import CohortBadge from 'src/components/ProjectField/CohortBadge';
-import ProjectFieldDisplay from 'src/components/ProjectField/Display';
 import ProjectProfileFooter from 'src/components/ProjectField/Footer';
 import ProjectFieldInlineMeta from 'src/components/ProjectField/InlineMeta';
 import InvertedCard from 'src/components/ProjectField/InvertedCard';
@@ -39,6 +38,8 @@ import { getCountryByCode } from 'src/utils/country';
 import { formatNumberScale } from 'src/utils/numbers';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
+
+import ProjectDataDisplay from '../../../components/ProjectField/ProjectDataDisplay';
 
 const DEAL_NAME_COUNTRY_CODE_REGEX = /^[A-Z]{3}_/;
 
@@ -280,7 +281,7 @@ const ProjectProfileView = ({
             units={<Co2HectareYear />}
           />
         )}
-        {!isPhaseZeroOrApplication && (
+        {(funderView || !isPhaseZeroOrApplication) && (
           <InvertedCard
             md={4}
             label={strings.ACCUMULATION_RATE}
@@ -406,9 +407,8 @@ const ProjectProfileView = ({
         </Box>
         <Grid item md={isMobile ? 12 : 4}>
           <Grid container>
-            <ProjectFieldDisplay
+            <ProjectDataDisplay
               label={strings.ELIGIBLE_AREA}
-              height={'64px'}
               md={12}
               value={
                 projectDetails?.confirmedReforestableLand &&
@@ -418,9 +418,8 @@ const ProjectProfileView = ({
               }
               tooltip={strings.ELIGIBLE_AREA_DESCRIPTION}
             />
-            <ProjectFieldDisplay
+            <ProjectDataDisplay
               label={strings.MIN_PROJECT_AREA}
-              height={'64px'}
               md={12}
               value={
                 projectDetails?.minProjectArea &&
@@ -432,9 +431,8 @@ const ProjectProfileView = ({
         </Grid>
         <Grid item md={isMobile ? 12 : 4}>
           <Grid container>
-            <ProjectFieldDisplay
+            <ProjectDataDisplay
               label={strings.PROJECT_AREA}
-              height={'64px'}
               md={12}
               value={
                 projectDetails?.projectArea &&
@@ -442,9 +440,8 @@ const ProjectProfileView = ({
               }
               tooltip={strings.PROJECT_AREA_DESCRIPTION}
             />
-            <ProjectFieldDisplay
+            <ProjectDataDisplay
               label={strings.EXPANSION_POTENTIAL}
-              height={'64px'}
               md={12}
               value={
                 projectDetails?.totalExpansionPotential &&
@@ -456,17 +453,15 @@ const ProjectProfileView = ({
             />
           </Grid>
         </Grid>
-        <ProjectFieldDisplay
+        <ProjectDataDisplay
           label={strings.NATIVE_SPECIES_TO_BE_PLANTED}
-          height={'64px'}
           md={4}
           value={projectDetails?.numNativeSpecies}
         />
       </Grid>
 
       <Grid container>
-        {((!funderView && isPhaseZeroOrApplication) ||
-          (!isPhaseZeroOrApplication && (projectDetails?.standard || projectDetails?.methodologyNumber))) && (
+        {(!funderView || (funderView && (projectDetails?.standard || projectDetails?.methodologyNumber))) && (
           <Box marginX={theme.spacing(2)} width={'100%'}>
             <Grid item xs={12} marginTop={theme.spacing(2)}>
               <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
@@ -476,20 +471,18 @@ const ProjectProfileView = ({
           </Box>
         )}
         {!funderView && isPhaseZeroOrApplication && (
-          <ProjectFieldDisplay
+          <ProjectDataDisplay
             label={strings.ACCUMULATION_RATE}
-            height={'64px'}
             md={4}
             value={projectDetails?.accumulationRate}
             units={<Co2HectareYear />}
           />
         )}
-        {!isPhaseZeroOrApplication && (
+        {(funderView || !isPhaseZeroOrApplication) && (
           <>
             {!funderView && (
-              <ProjectFieldDisplay
+              <ProjectDataDisplay
                 label={strings.MIN_MAX_CARBON_ACCUMULATION}
-                height={'64px'}
                 md={4}
                 value={
                   participantProject?.minCarbonAccumulation &&
@@ -499,13 +492,8 @@ const ProjectProfileView = ({
                 units={<Co2HectareYear />}
               />
             )}
-            <ProjectFieldDisplay label={strings.STANDARD} height={'64px'} md={4} value={projectDetails?.standard} />
-            <ProjectFieldDisplay
-              label={strings.METHODOLOGY_NUMBER}
-              height={'64px'}
-              md={4}
-              value={projectDetails?.methodologyNumber}
-            />
+            <ProjectDataDisplay label={strings.STANDARD} md={4} value={projectDetails?.standard} />
+            <ProjectDataDisplay label={strings.METHODOLOGY_NUMBER} md={4} value={projectDetails?.methodologyNumber} />
           </>
         )}
       </Grid>
@@ -513,7 +501,7 @@ const ProjectProfileView = ({
       {((funderView && projectDetails?.verraLink) || !funderView) && (
         <Grid container>
           <Box
-            marginX={theme.spacing(2)}
+            margin={theme.spacing(2, 1, 3)}
             border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
             borderRadius={theme.spacing(1)}
             width={'100%'}
@@ -586,8 +574,8 @@ const ProjectProfileView = ({
       )}
 
       <Grid container>
-        <Box marginX={theme.spacing(2)} width={'100%'}>
-          <Grid item xs={12} marginY={theme.spacing(2)}>
+        <Box margin={theme.spacing(0, 2, 1)} width={'100%'}>
+          <Grid item xs={12} marginBottom={theme.spacing(2)}>
             <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
               {strings.UN_SDG}
             </Typography>
@@ -600,14 +588,14 @@ const ProjectProfileView = ({
         <Grid container>
           <Box marginX={theme.spacing(2)} width={'100%'}>
             <Grid item xs={12} marginY={theme.spacing(2)}>
-              <Typography fontSize='16px' fontWeight={600} lineHeight='24px'>
+              <Typography fontSize='20px' fontWeight={600} lineHeight='24px'>
                 {strings.FUNDING_ENTITIES}
               </Typography>
             </Grid>
             {fundingEntities.map((e, i) => (
               <Typography
                 key={`entity-${i}`}
-                fontSize='20px'
+                fontSize='24px'
                 fontWeight={600}
                 lineHeight='28px'
                 paddingBottom={theme.spacing(1)}
