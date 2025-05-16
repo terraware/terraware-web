@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
@@ -113,7 +113,18 @@
 <a name='L48'></a><a href='#L48'>48</a>
 <a name='L49'></a><a href='#L49'>49</a>
 <a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -138,6 +149,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -186,10 +208,21 @@ export const requestGetOneSpecies = <span class="cstat-no" title="statement not 
 &nbsp;
 export const requestListSpecies = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
   'species/list',
-<span class="fstat-no" title="function not covered" >  as</span>ync (request: { organizationId: number; inUse?: boolean }, { rejectWithValue }) =&gt; {
-    const { organizationId, inUse } = <span class="cstat-no" title="statement not covered" >request;</span>
+<span class="fstat-no" title="function not covered" >  as</span>ync (organizationId: number, { rejectWithValue }) =&gt; {
+    const response = <span class="cstat-no" title="statement not covered" >await SpeciesService.getAllSpecies(organizationId, false);</span>
 &nbsp;
-    const response = <span class="cstat-no" title="statement not covered" >await SpeciesService.getAllSpecies(organizationId, inUse);</span>
+<span class="cstat-no" title="statement not covered" >    if (response &amp;&amp; response.requestSucceeded &amp;&amp; response.data) {</span>
+<span class="cstat-no" title="statement not covered" >      return response.data.species;</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
+  }
+);
+&nbsp;
+export const requestListInUseSpecies = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
+  'species/listInUse',
+<span class="fstat-no" title="function not covered" >  as</span>ync (organizationId: number, { rejectWithValue }) =&gt; {
+    const response = <span class="cstat-no" title="statement not covered" >await SpeciesService.getAllSpecies(organizationId, true);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (response &amp;&amp; response.requestSucceeded &amp;&amp; response.data) {</span>
 <span class="cstat-no" title="statement not covered" >      return response.data.species;</span>
@@ -220,7 +253,7 @@ export const requestUpdateSpecies = <span class="cstat-no" title="statement not 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-16T17:42:20.337Z
+                at 2025-05-16T18:35:45.812Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

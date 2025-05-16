@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/56</span>
+                <span class='fraction'>0/50</span>
             </div>
         
             
@@ -354,8 +354,7 @@
 <a name='L289'></a><a href='#L289'>289</a>
 <a name='L290'></a><a href='#L290'>290</a>
 <a name='L291'></a><a href='#L291'>291</a>
-<a name='L292'></a><a href='#L292'>292</a>
-<a name='L293'></a><a href='#L293'>293</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L292'></a><a href='#L292'>292</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -438,7 +437,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -650,8 +648,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createCachedSelector } from 're-reselect';
 &nbsp;
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import { selectOrgPlantingSites, selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { selectSpeciesList } from 'src/redux/features/species/speciesSelectors';
+import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { RootState } from 'src/redux/rootReducer';
 import {
   Observation,
@@ -726,14 +724,13 @@ export const selectPlantingSiteAdHocObservationResults = <span class="cstat-no" 
  * Preserves order of results.
  */
 export const selectMergedPlantingSiteObservations = <span class="cstat-no" title="statement not covered" >createCachedSelector(</span>
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[], orgId?: number) =&gt;
+<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, plantingSiteId: number, orgId: number, defaultTimeZone: string, status?: ObservationState[]) =&gt;
 <span class="cstat-no" title="statement not covered" >    selectPlantingSiteObservationsResults(state, plantingSiteId, status, orgId),</span>
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[], orgId?: number) =&gt; {
-<span class="cstat-no" title="statement not covered" >    return orgId &amp;&amp; orgId !== -1 ? selectOrgPlantingSites(orgId)(state) : selectPlantingSites(state);</span>
-  },
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[], orgId?: number) =&gt;
-<span class="cstat-no" title="statement not covered" >    selectSpecies(orgId ?? -1)(state),</span>
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[], orgId?: number) =&gt;
+<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, plantingSiteId: number, orgId: number, defaultTimeZone: string, status?: ObservationState[]) =&gt;
+<span class="cstat-no" title="statement not covered" >    selectPlantingSites(state),</span>
+<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, plantingSiteId: number, orgId: number, defaultTimeZone: string, status?: ObservationState[]) =&gt;
+<span class="cstat-no" title="statement not covered" >    selectSpeciesList(orgId)(state),</span>
+<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, plantingSiteId: number, orgId: number, defaultTimeZone: string, status?: ObservationState[]) =&gt;
 <span class="cstat-no" title="statement not covered" >    defaultTimeZone,</span>
 &nbsp;
   // here we have the responses from first three selectors
@@ -743,11 +740,11 @@ export const selectMergedPlantingSiteObservations = <span class="cstat-no" title
 <span class="cstat-no" title="statement not covered" >      return observations;</span>
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return mergeObservations(observations, defaultTimeZone, plantingSites, species?.data?.species ?? []);</span>
+<span class="cstat-no" title="statement not covered" >    return mergeObservations(observations, defaultTimeZone, plantingSites, species?.data ?? []);</span>
   }
 )(
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, plantingSiteId: number, defaultTimeZone: string, status?: ObservationState[]) =&gt;
-<span class="cstat-no" title="statement not covered" >    `${plantingSiteId}_${defaultTimeZone}_${status?.join(',')}`</span>
+<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, plantingSiteId: number, orgId: number, defaultTimeZone: string, status?: ObservationState[]) =&gt;
+<span class="cstat-no" title="statement not covered" >    `${plantingSiteId}_${orgId}_${defaultTimeZone}_${status?.join(',')}`</span>
 );
 &nbsp;
 export const selectMergedPlantingSiteAdHocObservations = <span class="cstat-no" title="statement not covered" >createCachedSelector(</span>
@@ -775,30 +772,30 @@ export const searchObservations = <span class="cstat-no" title="statement not co
 <span class="fstat-no" title="function not covered" >  (</span>
     state: RootState,
     plantingSiteId: number,
+    orgId: number,
     defaultTimeZone: string,
     search: string,
     zoneNames: string[],
-    status?: ObservationState[],
-    orgId?: number
+    status?: ObservationState[]
   ) =&gt; <span class="cstat-no" title="statement not covered" >search,</span>
 <span class="fstat-no" title="function not covered" >  (</span>
     state: RootState,
     plantingSiteId: number,
+    orgId: number,
     defaultTimeZone: string,
     search: string,
     zoneNames: string[],
-    status?: ObservationState[],
-    orgId?: number
+    status?: ObservationState[]
   ) =&gt; <span class="cstat-no" title="statement not covered" >zoneNames,</span>
 <span class="fstat-no" title="function not covered" >  (</span>
     state: RootState,
     plantingSiteId: number,
+    orgId: number,
     defaultTimeZone: string,
     search: string,
     zoneNames: string[],
-    status?: ObservationState[],
-    orgId?: number
-  ) =&gt; <span class="cstat-no" title="statement not covered" >selectMergedPlantingSiteObservations(state, plantingSiteId, defaultTimeZone, status, orgId),</span>
+    status?: ObservationState[]
+  ) =&gt; <span class="cstat-no" title="statement not covered" >selectMergedPlantingSiteObservations(state, plantingSiteId, orgId, defaultTimeZone, status),</span>
   searchZones
 )(
 <span class="fstat-no" title="function not covered" >  (</span>
@@ -815,8 +812,8 @@ export const searchObservations = <span class="cstat-no" title="statement not co
 &nbsp;
 // get zone names in observations
 export const selectObservationsZoneNames = <span class="cstat-no" title="statement not covered" >createCachedSelector(</span>
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, plantingSiteId: number, status?: ObservationState[]) =&gt;
-<span class="cstat-no" title="statement not covered" >    selectMergedPlantingSiteObservations(state, plantingSiteId, '', status),</span>
+<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, plantingSiteId: number, orgId: number, status?: ObservationState[]) =&gt;
+<span class="cstat-no" title="statement not covered" >    selectMergedPlantingSiteObservations(state, plantingSiteId, orgId, '', status),</span>
 <span class="fstat-no" title="function not covered" >  (o</span>bservations) =&gt;
 <span class="cstat-no" title="statement not covered" >    Array.from(</span>
       new Set(
@@ -878,8 +875,8 @@ export const selectPlantingSiteAdHocObservations = <span class="cstat-no" title=
 &nbsp;
 // get the latest observation for a planting site
 export const selectLatestObservation = <span class="cstat-no" title="statement not covered" >createCachedSelector(</span>
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, plantingSiteId: number, defaultTimeZoneId: string, orgId?: number) =&gt;
-<span class="cstat-no" title="statement not covered" >    searchObservations(state, plantingSiteId, defaultTimeZoneId, '', [], [], orgId),</span>
+<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, plantingSiteId: number, orgId: number, defaultTimeZoneId: string) =&gt;
+<span class="cstat-no" title="statement not covered" >    searchObservations(state, plantingSiteId, orgId, defaultTimeZoneId, '', [], []),</span>
 <span class="fstat-no" title="function not covered" >  (o</span>bservationsResults: ObservationResults[] | undefined) =&gt;
     // the order of results (as returned by the server) are in reverse completed-time order, most recent completed will show up first
 <span class="cstat-no" title="statement not covered" >    observationsResults?.filter(<span class="fstat-no" title="function not covered" >(r</span>esult: ObservationResults) =&gt; <span class="cstat-no" title="statement not covered" >result.completedTime)</span>?.[0]</span>
@@ -946,7 +943,7 @@ export const searchAdHocObservations = <span class="cstat-no" title="statement n
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-05-16T17:42:20.337Z
+                at 2025-05-16T18:35:45.812Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
