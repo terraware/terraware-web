@@ -9,6 +9,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import { APP_PATHS } from 'src/constants';
+import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
 import { isBatchEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
@@ -90,7 +91,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   const [openNewBatchModal, setOpenNewBatchModal] = useState<boolean>(false);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>();
 
-  const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
+  const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
 
   const filterEmptyBatches = useCallback(
     (unfiltered: SearchResponseElement[]) => {

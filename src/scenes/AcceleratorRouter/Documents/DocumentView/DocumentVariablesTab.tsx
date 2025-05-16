@@ -1,13 +1,14 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { CellRenderer, RendererProps, TableColumnType } from '@terraware/web-components';
 
-import EditVariable from 'src/components/DocumentProducer/EditVariable';
+import EditVariableModal from 'src/components/DocumentProducer/EditableSection/EditVariableModal';
 import PageContent from 'src/components/DocumentProducer/PageContent';
 import TableContent from 'src/components/DocumentProducer/TableContent';
 import VariableHistoryModal from 'src/components/Variables/VariableHistoryModal';
 import Link from 'src/components/common/Link';
-import { useUser } from 'src/providers';
+import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
+import { useLocalization, useUser } from 'src/providers';
 import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
 import strings from 'src/strings';
 import { SelectOptionPayload, VariableWithValues } from 'src/types/documentProducer/Variable';
@@ -20,13 +21,7 @@ import {
   VariableValueTextValue,
 } from 'src/types/documentProducer/VariableValue';
 import { fuzzyMatch } from 'src/utils/searchAndSort';
-
-const tableColumns: TableColumnType[] = [
-  { key: 'name', name: strings.NAME, type: 'string' },
-  { key: 'type', name: strings.TYPE, type: 'string' },
-  { key: 'values', name: strings.VALUE, type: 'string' },
-  { key: 'instances', name: strings.INSTANCES, type: 'string' },
-];
+import useDebounce from 'src/utils/useDebounce';
 
 type TableRow = VariableWithValues & { instances: number };
 
@@ -81,35 +76,61 @@ const tableCellRenderer = (props: RendererProps<any>): JSX.Element => {
 };
 
 export type DocumentVariablesProps = {
+  projectId?: number;
   setSelectedTab?: (tab: string) => void;
 };
 
 const filterSearch =
   (searchValue: string) =>
-  (variable: VariableWithValues): boolean =>
-    searchValue ? fuzzyMatch(searchValue, variable.name.toLowerCase()) : true;
+  (variable: VariableWithValues): boolean => {
+    if (!searchValue) {
+      return true;
+    }
 
-const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.Element => {
+    // check if search value is present in the variable name or deliverable question
+    return (
+      fuzzyMatch(searchValue, variable.name) ||
+      (variable.deliverableQuestion ? fuzzyMatch(searchValue, variable.deliverableQuestion) : false)
+    );
+  };
+
+const DocumentVariablesTab = ({ projectId: projectIdProp, setSelectedTab }: DocumentVariablesProps): JSX.Element => {
+  const activeLocale = useLocalization();
+  const { isAllowed } = useUser();
   const { allVariables, documentSectionVariables, getUsedSections, projectId, reload } = useDocumentProducerData();
 
   const [tableRows, setTableRows] = useState<TableRow[]>([]);
   const [variables, setVariables] = useState<VariableWithValues[]>([]);
-  const [searchValue, setSearchValue] = useState<string>('');
   const [openVariableHistoryModal, setOpenVariableHistoryModal] = useState<boolean>(false);
   const [openEditVariableModal, setOpenEditVariableModal] = useState<boolean>(false);
   const [selectedVariable, setSelectedVariable] = useState<VariableWithValues>();
-  const [sectionsUsed, setSectionsUsed] = useState<string[]>([]);
-  const { isAllowed } = useUser();
+  const [searchValue, setSearchValue] = useState<string>('');
+
+  const debouncedSearchTerm = useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
+
+  const tableColumns = useMemo((): TableColumnType[] => {
+    if (!activeLocale) {
+      return [];
+    }
+
+    return [
+      { key: 'name', name: strings.NAME, type: 'string' },
+      { key: 'deliverableQuestion', name: strings.QUESTION, type: 'string' },
+      { key: 'type', name: strings.TYPE, type: 'string' },
+      { key: 'values', name: strings.VALUE, type: 'string' },
+      { key: 'instances', name: strings.INSTANCES, type: 'string' },
+    ];
+  }, [activeLocale]);
+
+  const supportedVariables = useMemo(() => {
+    return (allVariables || []).filter((d: VariableWithValues) => {
+      return d.type !== 'Section';
+    });
+  }, [allVariables]);
 
   useEffect(() => {
-    setVariables(
-      (allVariables || [])
-        .filter((d: VariableWithValues) => {
-          return d.type !== 'Section' && d.type !== 'Image' && d.type !== 'Table';
-        })
-        .filter(filterSearch(searchValue))
-    );
-  }, [allVariables, searchValue]);
+    setVariables(supportedVariables.filter(filterSearch(debouncedSearchTerm)));
+  }, [debouncedSearchTerm, supportedVariables]);
 
   useEffect(() => {
     setTableRows(
@@ -119,13 +140,6 @@ const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.E
       }))
     );
   }, [documentSectionVariables, getUsedSections, variables]);
-
-  useEffect(() => {
-    if (selectedVariable) {
-      const sectionNumbers = getUsedSections(selectedVariable.id);
-      setSectionsUsed(sectionNumbers);
-    }
-  }, [documentSectionVariables, getUsedSections, selectedVariable]);
 
   const onSectionClicked = useCallback(
     (sectionNumber: string) => {
@@ -182,21 +196,21 @@ const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.E
         <VariableHistoryModal
           open={openVariableHistoryModal}
           setOpen={setOpenVariableHistoryModal}
-          projectId={projectId}
+          projectId={projectIdProp || projectId}
           variableId={selectedVariable.id}
         />
       )}
       {openEditVariableModal && selectedVariable && (
-        <EditVariable
+        <EditVariableModal
+          onCancel={() => setOpenEditVariableModal(false)}
           onFinish={(updated: boolean) => {
             setOpenEditVariableModal(false);
             onFinish(updated);
           }}
-          projectId={projectId}
-          variable={selectedVariable}
-          sectionsUsed={sectionsUsed}
-          showVariableHistory={() => setOpenVariableHistoryModal(true)}
           onSectionClicked={onSectionClicked}
+          projectId={projectIdProp || projectId}
+          showVariableHistory={() => setOpenVariableHistoryModal(true)}
+          variable={selectedVariable}
         />
       )}
       <PageContent styles={{ marginTop: 0 }}>
