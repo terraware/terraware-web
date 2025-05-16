@@ -384,7 +384,6 @@ DATE,Date,
 DATE_ADDED,Date Added,
 DATE_ADDED_REQUIRED,Date Added *,
 DATE_MUST_BE_FUTURE,Date must be in the future,
-DATE_OBSERVED,Date Observed,The date on which an observation was conducted.
 DATE_OBSERVATION,{0} Observation,
 DATE_OBSERVED,Date Observed,The date on which an observation was conducted.
 DATE_OF_LAST_OBSERVATION,Date of Last Observation,
