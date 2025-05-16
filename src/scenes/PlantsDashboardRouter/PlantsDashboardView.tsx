@@ -388,7 +388,7 @@ export default function PlantsDashboardView({
       showGeometryNote={geometryChangedNote}
       latestObservationId={latestResultId}
       projectId={projectId}
-      onSelectProjectId={(newProjectId: number) => setProjectId(newProjectId)}
+      onSelectProjectId={(newProjectId: number) => setProjectId(newProjectId === -1 ? undefined : newProjectId)}
       organizationId={organizationId}
       isEmptyState={plantingSite === undefined}
       onSelect={onSelect}

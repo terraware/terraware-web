@@ -11,6 +11,7 @@ import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization, useOrganization } from 'src/providers';
+import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -63,6 +64,7 @@ export default function PlantsPrimaryPageView({
   const { activeLocale } = useLocalization();
   const projects = useAppSelector(selectProjects);
   const dispatch = useAppDispatch();
+  const { allPlantingSites } = usePlantingSiteData();
 
   useEffect(() => {
     if (selectedOrganization.id !== -1) {
@@ -70,9 +72,24 @@ export default function PlantsPrimaryPageView({
     }
   }, [activeLocale, dispatch, selectedOrganization.id]);
 
+  const projectsWithPlantingSites = useMemo(() => {
+    if (!allPlantingSites) {
+      return [];
+    }
+
+    const projectIds = allPlantingSites.map((ps) => ps.projectId);
+    const uniqueProjectIds = Array.from(new Set(projectIds));
+
+    return uniqueProjectIds;
+  }, [allPlantingSites]);
+
   const projectsOptions = useMemo(() => {
-    return projects?.map((proj) => ({ label: proj.name, value: proj.id }));
-  }, [projects]);
+    const iOptions = projects
+      ?.filter((p) => projectsWithPlantingSites.includes(p.id))
+      .map((proj) => ({ label: proj.name, value: proj.id }));
+    iOptions?.unshift({ label: strings.NO_PROJECT, value: -1 });
+    return iOptions;
+  }, [projects, projectsWithPlantingSites]);
 
   const isRolledUpView = useMemo(() => {
     return projectId !== undefined && selectedPlantingSiteId === -1;
@@ -138,7 +155,7 @@ export default function PlantsPrimaryPageView({
         <Card radius={'8px'} style={{ 'margin-bottom': '32px' }}>
           <Grid container alignItems={'center'} spacing={4}>
             <Grid item xs={isDesktop ? 3 : 12}>
-              {!isAcceleratorRoute && (projects?.length ?? 0) > 0 && onSelectProjectId && (
+              {!isAcceleratorRoute && (projectsOptions?.length ?? 0) > 0 && onSelectProjectId && (
                 <Box marginBottom={1}>
                   <Dropdown
                     placeholder={strings.SELECT}
