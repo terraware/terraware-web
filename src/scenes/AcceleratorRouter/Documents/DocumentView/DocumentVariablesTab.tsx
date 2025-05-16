@@ -118,15 +118,15 @@ const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.E
     ];
   }, [activeLocale]);
 
+  const supportedVariables = useMemo(() => {
+    return (allVariables || []).filter((d: VariableWithValues) => {
+      return d.type !== 'Section';
+    });
+  }, [allVariables]);
+
   useEffect(() => {
-    setVariables(
-      (allVariables || [])
-        .filter((d: VariableWithValues) => {
-          return d.type !== 'Section';
-        })
-        .filter(filterSearch(searchValue))
-    );
-  }, [allVariables, searchValue]);
+    setVariables(supportedVariables.filter(filterSearch(searchValue)));
+  }, [searchValue, supportedVariables]);
 
   useEffect(() => {
     setTableRows(
