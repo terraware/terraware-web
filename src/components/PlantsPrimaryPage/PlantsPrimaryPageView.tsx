@@ -163,7 +163,7 @@ export default function PlantsPrimaryPageView({
                 {actionButton && isMobile && (
                   <Box marginLeft='auto' display='flex'>
                     <Button
-                      id={`${actionButton.title}_id}`}
+                      id={`${actionButton.title}_id`}
                       icon={actionButton.icon}
                       onClick={actionButton.onClick}
                       size='medium'
@@ -200,7 +200,7 @@ export default function PlantsPrimaryPageView({
               {actionButton && !isMobile && (
                 <Box marginLeft='auto' display='flex'>
                   <Button
-                    id={`${actionButton.title}_id}`}
+                    id={`${actionButton.title}_id`}
                     label={actionButton.title}
                     onClick={actionButton.onClick}
                     size='medium'
