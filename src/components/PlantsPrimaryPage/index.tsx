@@ -29,6 +29,7 @@ export type PlantsPrimaryPageProps = {
   projectId?: number;
   organizationId?: number;
   onSelect: (plantingSiteId: number) => void;
+  onSelectProjectId?: (projectId: number) => void;
 };
 
 export default function PlantsPrimaryPage({
@@ -50,6 +51,7 @@ export default function PlantsPrimaryPage({
   projectId,
   organizationId,
   onSelect,
+  onSelectProjectId,
 }: PlantsPrimaryPageProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
@@ -159,6 +161,7 @@ export default function PlantsPrimaryPage({
       showGeometryNote={showGeometryNote}
       latestObservationId={latestObservationId}
       projectId={projectId}
+      onSelectProjectId={onSelectProjectId}
     />
   );
 }

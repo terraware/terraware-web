@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { Box, CircularProgress, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, IconName, Message } from '@terraware/web-components';
@@ -10,6 +10,10 @@ import Link from 'src/components/common/Link';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useLocalization, useOrganization } from 'src/providers';
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import { requestProjects } from 'src/redux/features/projects/projectsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
@@ -35,6 +39,7 @@ export type PlantsPrimaryPageViewProps = {
   showGeometryNote?: boolean;
   latestObservationId?: number;
   projectId?: number;
+  onSelectProjectId?: (projectId: number) => void;
 };
 
 export default function PlantsPrimaryPageView({
@@ -48,11 +53,26 @@ export default function PlantsPrimaryPageView({
   latestObservationId,
   projectId,
   isEmptyState,
+  onSelectProjectId,
 }: PlantsPrimaryPageViewProps): JSX.Element {
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
   const contentRef = useRef(null);
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { selectedOrganization } = useOrganization();
+  const { activeLocale } = useLocalization();
+  const projects = useAppSelector(selectProjects);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (selectedOrganization.id !== -1) {
+      void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
+    }
+  }, [activeLocale, dispatch, selectedOrganization.id]);
+
+  const projectsOptions = useMemo(() => {
+    return projects?.map((proj) => ({ label: proj.name, value: proj.id }));
+  }, [projects]);
 
   const isRolledUpView = useMemo(() => {
     return projectId !== undefined && selectedPlantingSiteId === -1;
@@ -118,6 +138,18 @@ export default function PlantsPrimaryPageView({
         <Card radius={'8px'} style={{ 'margin-bottom': '32px' }}>
           <Grid container alignItems={'center'} spacing={4}>
             <Grid item xs={isDesktop ? 3 : 12}>
+              {!isAcceleratorRoute && (projects?.length ?? 0) > 0 && onSelectProjectId && (
+                <Box marginBottom={1}>
+                  <Dropdown
+                    placeholder={strings.SELECT}
+                    id='project-selector'
+                    onChange={(newValue) => onSelectProjectId(Number(newValue))}
+                    options={projectsOptions}
+                    selectedValue={projectId}
+                    fullWidth
+                  />
+                </Box>
+              )}
               <Dropdown
                 placeholder={strings.SELECT}
                 id='planting-site-selector'
