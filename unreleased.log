@@ -1,3 +1,4 @@
+13e38450105 Added localization to inventory list tables (#4008)
 81f39a67a13 Fixed dispatches in useOrganization hook (#4007)
 2cab6ddf29e Fixed memoization of use numbers (#4006)
 f0907d19757 SW-6894 Update funder portal for mobile/tablet (#4000)
