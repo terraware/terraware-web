@@ -32,7 +32,7 @@ export default function PlantsReportedPerSpeciesCard({
   }
 
   if (!plantingSite) {
-    return undefined;
+    return <RolledUpCard projectId={projectId} />;
   } else if (!plantingSite.plantingZones?.length) {
     return <SiteWithoutZonesCard plantingSiteId={plantingSite.id} newVersion={newVersion} />;
   } else {
@@ -217,10 +217,6 @@ const ChartData = ({
   const theme = useTheme();
 
   const chartData = useMemo(() => {
-    if (!labels?.length || !values?.length) {
-      return undefined;
-    }
-
     return {
       labels: labels ?? [],
       datasets: [
@@ -253,6 +249,13 @@ const ChartData = ({
           chartId='plantsBySpecies'
           chartData={chartData}
           maxWidth='100%'
+          pluginsOptions={{
+            emptyDoughnut: {
+              color: theme.palette.TwClrBaseGray050,
+              width: 100,
+              radiusDecrease: 70,
+            },
+          }}
         />
       </Box>
     </Box>

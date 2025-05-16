@@ -5,6 +5,7 @@ import {
   CartesianScaleTypeRegistry,
   Chart as ChartJS,
   ChartTypeRegistry,
+  PluginOptionsByType,
   ScaleOptionsByType,
   ScaleType,
   TimeScaleTickOptions,
@@ -22,6 +23,7 @@ import { WithRequired } from 'src/types/utils';
 import { generateTerrawareRandomColors } from 'src/utils/generateRandomColor';
 
 import { newChart } from '.';
+import { emptyDoughnutPlugin } from './emptyDoughnutPlugin';
 
 ChartJS.register(annotationPlugin);
 
@@ -74,6 +76,13 @@ export type BaseChartProps = {
   ) => string | void | string[];
   customLegend?: boolean;
   customLegendContainerId?: string;
+  pluginsOptions?: _DeepPartialObject<PluginOptionsByType<keyof ChartTypeRegistry>> & {
+    emptyDoughnut?: {
+      color?: string;
+      radiusDecrease?: number;
+      width?: number;
+    };
+  };
 };
 
 export type ChartProps = BaseChartProps & {
@@ -122,6 +131,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     customTooltipLabel,
     customLegendContainerId,
     pointRadius,
+    pluginsOptions,
   } = props;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [chart, setChart] = useState<ChartJS | null>(null);
@@ -131,6 +141,17 @@ function ChartContent(props: ChartContentProps): JSX.Element {
   const barThickness: number | 'flex' | undefined = barWidth === undefined ? 50 : barWidth === 0 ? 'flex' : barWidth;
 
   type TimeScaleTickOptionsSource = TimeScaleTickOptions['source'];
+
+  const getPlugins = () => {
+    const plugins = [];
+    if (type === 'pie') {
+      plugins.push(emptyDoughnutPlugin);
+    }
+    if (customLegend) {
+      plugins.push(htmlLegendPlugin);
+    }
+    return plugins;
+  };
 
   useEffect(() => {
     // used to prevent double render on dev scope (react 18)
@@ -204,8 +225,9 @@ function ChartContent(props: ChartContentProps): JSX.Element {
                     display: type === 'pie' ? false : undefined,
                   },
                 },
+                plugins: pluginsOptions,
               },
-              plugins: customLegend ? [htmlLegendPlugin] : undefined,
+              plugins: getPlugins() ?? undefined,
             })
           );
           // when component unmounts
@@ -234,6 +256,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
       xAxisID: ds.xAxisID,
     }));
     const newPlugins = {
+      ...pluginsOptions,
       annotation: barAnnotations,
       legend: {
         display: customLegend ? false : !!showLegend,

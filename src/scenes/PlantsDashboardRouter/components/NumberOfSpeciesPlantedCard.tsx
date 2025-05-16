@@ -31,7 +31,7 @@ export default function NumberOfSpeciesPlantedCard({
   }
 
   if (!plantingSite) {
-    return undefined;
+    return <RolledUpCard projectId={projectId} />;
   } else if (!plantingSite.plantingZones?.length) {
     return <SiteWithoutZonesCard plantingSiteId={plantingSite.id} newVersion={newVersion} />;
   } else {

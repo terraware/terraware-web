@@ -347,7 +347,12 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
               gap: theme.spacing(3),
             }}
           >
-            {organizationId && <MultiplePlantingSiteMap projectId={projectId!} organizationId={organizationId} />}
+            {(organizationId || selectedOrganization.id) && (
+              <MultiplePlantingSiteMap
+                projectId={projectId!}
+                organizationId={organizationId ?? selectedOrganization.id}
+              />
+            )}
           </Box>
         </Grid>
       </>
@@ -391,7 +396,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
         {hasObservations && plantingSite?.id !== -1 && renderMortalityRate()}
         {plantingSite?.id !== -1 && hasPlantingZones && renderZoneLevelData()}
         {plantingSite?.id !== -1 && hasPolygons && !hasPlantingZones && renderSimpleSiteMap()}
-        {plantingSite?.id === -1 && projectId && renderMapWithSites()}
+        {(plantingSite?.id === -1 || !plantingSite) && renderMapWithSites()}
       </Grid>
     </PlantsPrimaryPage>
   );

@@ -176,14 +176,10 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
 
       <Grid item xs={12}>
         <Card radius='8px' style={{ display: 'flex', flexDirection: isDesktop ? 'row' : 'column' }}>
-          {(plantingSiteReportedPlants?.totalPlants || projectTotalSpecies) > 0 && (
-            <>
-              <Box flexBasis='100%'>
-                <PlantsReportedPerSpeciesCard newVersion projectId={projectId} />
-              </Box>
-              <div style={separatorStyles} />
-            </>
-          )}
+          <Box flexBasis='100%'>
+            <PlantsReportedPerSpeciesCard newVersion projectId={projectId} />
+          </Box>
+          <div style={separatorStyles} />
           <Box flexBasis='100%'>
             <NumberOfSpeciesPlantedCard newVersion projectId={projectId} />
           </Box>
