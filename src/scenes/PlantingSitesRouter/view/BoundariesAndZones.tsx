@@ -12,6 +12,7 @@ import MapDateSelect from 'src/components/common/MapDateSelect';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
+import { useOrganization } from 'src/providers';
 import {
   searchAdHocObservations,
   searchObservations,
@@ -159,6 +160,7 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site', 'Zones', 'Monitoring Plots']);
   const [selectedObservationDate, setSelectedObservationDate] = useState<string | undefined>();
   const defaultTimeZone = useDefaultTimeZone();
+  const { selectedOrganization } = useOrganization();
   const timeZone = plantingSite.timeZone ?? defaultTimeZone.get().id;
   const dispatch = useAppDispatch();
   const [selectedObservation, setSelectedObservation] = useState<ObservationResults>();
@@ -189,7 +191,7 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
   }, [observationHistory]);
 
   const observationsResults = useAppSelector((state) =>
-    searchObservations(state, plantingSite.id, timeZone, '', [], status)
+    searchObservations(state, plantingSite.id, selectedOrganization.id, timeZone, '', [], status)
   );
 
   const adHocObservationResults = useAppSelector((state) =>
