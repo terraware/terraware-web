@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { CellRenderer, RendererProps, TableColumnType } from '@terraware/web-components';
 
-import EditVariable from 'src/components/DocumentProducer/EditVariable';
+import EditVariableModal from 'src/components/DocumentProducer/EditableSection/EditVariableModal';
 import PageContent from 'src/components/DocumentProducer/PageContent';
 import TableContent from 'src/components/DocumentProducer/TableContent';
 import VariableHistoryModal from 'src/components/Variables/VariableHistoryModal';
@@ -102,7 +102,6 @@ const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.E
   const [openVariableHistoryModal, setOpenVariableHistoryModal] = useState<boolean>(false);
   const [openEditVariableModal, setOpenEditVariableModal] = useState<boolean>(false);
   const [selectedVariable, setSelectedVariable] = useState<VariableWithValues>();
-  const [sectionsUsed, setSectionsUsed] = useState<string[]>([]);
   const { isAllowed } = useUser();
 
   const tableColumns = useMemo((): TableColumnType[] => {
@@ -137,13 +136,6 @@ const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.E
       }))
     );
   }, [documentSectionVariables, getUsedSections, variables]);
-
-  useEffect(() => {
-    if (selectedVariable) {
-      const sectionNumbers = getUsedSections(selectedVariable.id);
-      setSectionsUsed(sectionNumbers);
-    }
-  }, [documentSectionVariables, getUsedSections, selectedVariable]);
 
   const onSectionClicked = useCallback(
     (sectionNumber: string) => {
@@ -205,16 +197,16 @@ const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.E
         />
       )}
       {openEditVariableModal && selectedVariable && (
-        <EditVariable
+        <EditVariableModal
+          onCancel={() => setOpenEditVariableModal(false)}
           onFinish={(updated: boolean) => {
             setOpenEditVariableModal(false);
             onFinish(updated);
           }}
-          projectId={projectId}
-          variable={selectedVariable}
-          sectionsUsed={sectionsUsed}
-          showVariableHistory={() => setOpenVariableHistoryModal(true)}
           onSectionClicked={onSectionClicked}
+          projectId={projectId}
+          showVariableHistory={() => setOpenVariableHistoryModal(true)}
+          variable={selectedVariable}
         />
       )}
       <PageContent styles={{ marginTop: 0 }}>
