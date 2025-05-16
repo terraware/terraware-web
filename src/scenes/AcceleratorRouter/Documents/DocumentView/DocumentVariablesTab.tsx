@@ -74,6 +74,7 @@ const tableCellRenderer = (props: RendererProps<any>): JSX.Element => {
 };
 
 export type DocumentVariablesProps = {
+  projectId?: number;
   setSelectedTab?: (tab: string) => void;
 };
 
@@ -92,7 +93,7 @@ const filterSearch =
     );
   };
 
-const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.Element => {
+const DocumentVariablesTab = ({ projectId: projectIdProp, setSelectedTab }: DocumentVariablesProps): JSX.Element => {
   const activeLocale = useLocalization();
   const { allVariables, documentSectionVariables, getUsedSections, projectId, reload } = useDocumentProducerData();
 
@@ -192,7 +193,7 @@ const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.E
         <VariableHistoryModal
           open={openVariableHistoryModal}
           setOpen={setOpenVariableHistoryModal}
-          projectId={projectId}
+          projectId={projectIdProp || projectId}
           variableId={selectedVariable.id}
         />
       )}
@@ -204,7 +205,7 @@ const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.E
             onFinish(updated);
           }}
           onSectionClicked={onSectionClicked}
-          projectId={projectId}
+          projectId={projectIdProp || projectId}
           showVariableHistory={() => setOpenVariableHistoryModal(true)}
           variable={selectedVariable}
         />

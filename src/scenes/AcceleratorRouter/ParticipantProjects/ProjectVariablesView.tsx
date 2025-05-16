@@ -13,7 +13,6 @@ type ProjectVariablesViewProps = {
 
 const ProjectVariablesView = ({ projectId }: ProjectVariablesViewProps) => {
   const theme = useTheme();
-  console.log('ProjectVariablesView - projectId:', projectId);
 
   return (
     <Card
@@ -33,7 +32,7 @@ const ProjectVariablesView = ({ projectId }: ProjectVariablesViewProps) => {
       >
         {strings.VARIABLES}
       </Typography>
-      <DocumentVariablesTab />
+      <DocumentVariablesTab projectId={projectId} />
     </Card>
   );
 };
