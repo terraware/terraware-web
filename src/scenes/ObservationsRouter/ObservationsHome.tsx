@@ -10,7 +10,6 @@ import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
-import { selectObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import {
   selectObservationSchedulableSites,
   selectUpcomingObservations,
@@ -62,18 +61,6 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
     viewIdentifier: 'accelerator-overview',
     keepQuery: false,
   });
-  const allObservationsResults = useAppSelector(selectObservationsResults);
-  const observationsResults = useMemo(() => {
-    if (!allObservationsResults || !plantingSite?.id) {
-      return [];
-    }
-
-    return allObservationsResults?.filter((observationResult) => {
-      const matchesSite = plantingSite.id !== -1 ? observationResult.plantingSiteId === plantingSite.id : true;
-      const matchesState = ['Abandoned', 'Completed', 'Overdue', 'InProgress'].indexOf(observationResult.state) !== -1;
-      return matchesSite && matchesState;
-    });
-  }, [allObservationsResults, plantingSite]);
 
   // get upcoming observations for notifications
   const upcomingObservations = useAppSelector(selectUpcomingObservations);
