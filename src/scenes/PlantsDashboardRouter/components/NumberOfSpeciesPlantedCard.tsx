@@ -54,9 +54,8 @@ const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
 
   const labels = [strings.RARE, strings.ENDANGERED, strings.OTHER];
 
-  const speciesMap = new Map();
-
   const projectSpecies = useMemo(() => {
+    const speciesMap = new Map();
     for (const site of reportedPlants) {
       for (const species of site.species) {
         if (!speciesMap.has(species.id)) {
