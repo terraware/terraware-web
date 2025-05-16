@@ -122,7 +122,7 @@ const getPlantingSiteBoundingBox = (mapData: MapData): MapBoundingBox => {
   const adHocPlots: MapSourceBaseData = mapData.adHocPlot ?? { id: 'adHocPlot', entities: [] };
 
   const geometries: MapGeometry[] = [
-    site.entities[0]?.boundary,
+    ...(site?.entities.map((s) => s.boundary) || []),
     ...(zones?.entities.map((s) => s.boundary) || []),
     ...(subzones?.entities.map((s) => s.boundary) || []),
     ...(permanentPlots?.entities.map((s) => s.boundary) || []),
@@ -181,6 +181,52 @@ const extractPlantingSiteFromHistory = (site: MinimalPlantingSite, history: Plan
 };
 
 /**
+ * Transform planting sites geometry data into UI model
+ */
+const extractPlantingSites = (sites: MinimalPlantingSite[]): MapSourceBaseData => {
+  const sitesEntities: MapEntity[] = [];
+  sites.forEach((ps) => {
+    const { id, name, description, boundary } = ps;
+    sitesEntities.push({
+      properties: { id, name, description, type: 'site' },
+      boundary: getPolygons(boundary),
+      id,
+    });
+  });
+
+  return {
+    entities: sitesEntities,
+    id: 'sites',
+  };
+};
+
+/**
+ * Transform multiple sites zones geometry data into UI model
+ */
+const extractPlantingZonesFromSites = (sites: MinimalPlantingSite[]): MapSourceBaseData => {
+  const zonesEntities: MapEntity[] = [];
+
+  sites.forEach((ps) => {
+    const zonesData = ps.plantingZones?.map((zone) => {
+      const { id, name, boundary } = zone;
+      return {
+        properties: { id, name, type: 'zone', recency: 0 },
+        boundary: getPolygons(boundary),
+        id,
+      };
+    });
+    if (zonesData) {
+      zonesEntities.push(...zonesData);
+    }
+  });
+
+  return {
+    entities: zonesEntities,
+    id: 'zones',
+  };
+};
+
+/**
  * Transform zones geometry data into UI model
  */
 const extractPlantingZones = (site: MinimalPlantingSite): MapSourceBaseData => {
@@ -217,6 +263,35 @@ const extractPlantingZonesFromHistory = (site: PlantingSiteHistory): MapSourceBa
   return {
     entities: zonesData,
     id: 'zones',
+  };
+};
+
+/**
+ * Transform multiple sites subzones geometry data into UI model
+ */
+const extractSubzonesFromSites = (sites: MinimalPlantingSite[]): MapSourceBaseData => {
+  const subzoneEntities: MapEntity[] = [];
+
+  sites.forEach((ps) => {
+    const allPlantingSubzonesData = ps.plantingZones?.flatMap((zone) => {
+      const { plantingSubzones } = zone;
+      return plantingSubzones.map((subzone) => {
+        const { id, name, fullName, boundary } = subzone;
+        return {
+          properties: { id, name, fullName, type: 'subzone', zoneId: zone.id },
+          boundary: getPolygons(boundary),
+          id,
+        };
+      });
+    });
+    if (allPlantingSubzonesData) {
+      subzoneEntities.push(...allPlantingSubzonesData);
+    }
+  });
+
+  return {
+    entities: subzoneEntities,
+    id: 'subzones',
   };
 };
 
@@ -281,6 +356,20 @@ const getMapEntityGeometry = (entity: MapEntity): MapGeometry => {
     .filter((geom) => !!geom) as number[][][][];
 
   return multiPolygons;
+};
+
+/**
+ * Extract Planting Sites, Zones, Subzones from planting sites data
+ */
+const getMapDataFromPlantingSites = (plantingSites: PlantingSite[]): MapData => {
+  return {
+    site: extractPlantingSites(plantingSites),
+    zone: extractPlantingZonesFromSites(plantingSites),
+    subzone: extractSubzonesFromSites(plantingSites),
+    permanentPlot: undefined,
+    temporaryPlot: undefined,
+    adHocPlot: undefined,
+  };
 };
 
 /**
@@ -485,6 +574,7 @@ const MapService = {
   getMapboxToken,
   getBoundingBox,
   getMapDataFromPlantingSite,
+  getMapDataFromPlantingSites,
   getMapDataFromPlantingSiteFromHistory,
   getMapDataFromObservation,
   getMapDataFromAggregation,

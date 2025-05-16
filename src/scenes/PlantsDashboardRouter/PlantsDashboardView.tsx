@@ -17,6 +17,7 @@ import strings from 'src/strings';
 import { isAfter } from 'src/utils/dateUtils';
 
 import MortalityRateCard from './components/MortalityRateCard';
+import MultiplePlantingSiteMap from './components/MultiplePlantingSiteMap';
 import PlantingDensityCard from './components/PlantingDensityCard';
 import PlantingSiteTrendsCard from './components/PlantingSiteTrendsCard';
 import PlantsAndSpeciesCard from './components/PlantsAndSpeciesCard';
@@ -77,7 +78,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
   useEffect(() => {
     const orgId = organizationId ?? selectedOrganization.id;
     setAcceleratorOrganizationId(orgId);
-  }, [dispatch, organizationId, selectedOrganization, setAcceleratorOrganizationId]);
+  }, [dispatch, organizationId, selectedOrganization]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>
@@ -152,12 +153,12 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
           }}
         >
           <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
-            {strings.PLANTS_AND_SPECIES_STATISTICS}
+            {plantingSite?.id === -1 ? strings.PROJECT_AREA_TOTALS : strings.PLANTING_SITE_TOTALS}
           </Typography>
         </Box>
       </Grid>
       <Grid item xs={12}>
-        <PlantsAndSpeciesCard />
+        <PlantsAndSpeciesCard projectId={projectId} />
       </Grid>
     </>
   );
@@ -333,10 +334,43 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     [setSelectedPlantingSite]
   );
 
+  const renderMapWithSites = useCallback(() => {
+    return (
+      <>
+        {sectionHeader(strings.PROJECT_AREA_MAP)}
+        <Grid item xs={12}>
+          <Box
+            sx={{
+              background: theme.palette.TwClrBg,
+              borderRadius: '24px',
+              padding: theme.spacing(3),
+              gap: theme.spacing(3),
+            }}
+          >
+            {(organizationId || selectedOrganization.id) && (
+              <MultiplePlantingSiteMap
+                projectId={projectId!}
+                organizationId={organizationId ?? selectedOrganization.id}
+              />
+            )}
+          </Box>
+        </Grid>
+      </>
+    );
+  }, [projectId, organizationId]);
+
   return (
     <PlantsPrimaryPage
       title={strings.DASHBOARD}
-      text={latestResultId ? getDashboardSubhead() : undefined}
+      text={
+        plantingSite?.id !== -1
+          ? plantingSite
+            ? latestResultId
+              ? getDashboardSubhead()
+              : undefined
+            : getDashboardSubhead()
+          : undefined
+      }
       pagePath={
         projectId
           ? APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', projectId.toString())
@@ -357,11 +391,12 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     >
       <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
         {renderTotalPlantsAndSpecies()}
-        {hasObservations && plantingSite?.id !== -1 && renderMortalityRate()}
-        {plantingSite?.id !== -1 && renderPlantingProgressAndDensity()}
         {hasObservations && plantingSite?.id !== -1 && renderPlantingSiteTrends()}
-        {hasPlantingZones && renderZoneLevelData()}
-        {hasPolygons && !hasPlantingZones && renderSimpleSiteMap()}
+        {plantingSite?.id !== -1 && hasObservations && renderPlantingProgressAndDensity()}
+        {hasObservations && plantingSite?.id !== -1 && renderMortalityRate()}
+        {plantingSite?.id !== -1 && hasPlantingZones && renderZoneLevelData()}
+        {plantingSite?.id !== -1 && hasPolygons && !hasPlantingZones && renderSimpleSiteMap()}
+        {(plantingSite?.id === -1 || !plantingSite) && renderMapWithSites()}
       </Grid>
     </PlantsPrimaryPage>
   );

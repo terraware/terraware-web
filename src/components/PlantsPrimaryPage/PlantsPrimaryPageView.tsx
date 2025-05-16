@@ -125,6 +125,7 @@ export default function PlantsPrimaryPageView({
                 options={options}
                 selectedValue={selectedPlantingSiteId}
                 fullWidth
+                disabled={isAcceleratorRoute && options.length === 1}
               />
             </Grid>
             <Grid item xs={isDesktop ? 3 : 12}>
@@ -134,7 +135,7 @@ export default function PlantsPrimaryPageView({
                   {strings.formatString(
                     strings.X_HA,
                     isRolledUpView
-                      ? totalArea
+                      ? Math.round(totalArea * 100) / 100
                       : plantingSites.find((ps) => ps.id === selectedPlantingSiteId)?.areaHa?.toString() || ''
                   )}
                 </Typography>

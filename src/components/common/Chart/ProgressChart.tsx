@@ -18,7 +18,7 @@ export default function ProgressChart({ value, target }: ProgressChartProps): JS
       value={percentage < 100 ? percentage : 100}
       valueBuffer={100}
       sx={{
-        height: '32px',
+        height: '12px',
         borderRadius: '4px',
         backgroundColor: theme.palette.TwClrBaseGray100,
         '& span': { backgroundColor: theme.palette.TwClrBgBrand },
