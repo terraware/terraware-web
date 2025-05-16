@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Typography, useTheme } from '@mui/material';
 
 import { PlantingSiteMap } from 'src/components/Map';
+import { useOrganization } from 'src/providers';
 import { usePlantingSiteData } from 'src/providers/Tracking/PlantingSiteContext';
 import { requestUpdatePlantingCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
 import {
@@ -29,6 +30,8 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const defaultTimeZone = useDefaultTimeZone();
+  const { selectedOrganization } = useOrganization();
+
   const [mapData, setMapData] = useState<MapData | undefined>();
   const [requestId, setRequestId] = useState<string>('');
   const updateStatus = useAppSelector((state) => selectUpdatePlantingCompleted(state, requestId));
@@ -39,7 +42,12 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
   const [statsWarningDialogProps, setStatsWarningDialogProps] = useState<{ id: number; val: boolean } | undefined>();
 
   const selectedZoneHasStats = useAppSelector((state) =>
-    selectZonesHaveStatistics(state, { [plantingSiteId]: new Set([zoneIdSelected]) }, defaultTimeZone.get().id)
+    selectZonesHaveStatistics(
+      state,
+      selectedOrganization.id,
+      { [plantingSiteId]: new Set([zoneIdSelected]) },
+      defaultTimeZone.get().id
+    )
   );
 
   useEffect(() => {

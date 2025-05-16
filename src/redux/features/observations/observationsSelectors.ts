@@ -228,8 +228,8 @@ export const selectPlantingSiteAdHocObservations = createCachedSelector(
 
 // get the latest observation for a planting site
 export const selectLatestObservation = createCachedSelector(
-  (state: RootState, plantingSiteId: number, defaultTimeZoneId: string, orgId?: number) =>
-    searchObservations(state, plantingSiteId, defaultTimeZoneId, '', [], [], orgId),
+  (state: RootState, plantingSiteId: number, orgId: number, defaultTimeZoneId: string) =>
+    searchObservations(state, plantingSiteId, orgId, defaultTimeZoneId, '', [], []),
   (observationsResults: ObservationResults[] | undefined) =>
     // the order of results (as returned by the server) are in reverse completed-time order, most recent completed will show up first
     observationsResults?.filter((result: ObservationResults) => result.completedTime)?.[0]
