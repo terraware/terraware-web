@@ -5,7 +5,7 @@ import { Icon, Tooltip } from '@terraware/web-components';
 
 type DataValue = string | number | null | undefined | JSX.Element;
 
-const DataValueElement = (value: DataValue, units?: DataValue) => {
+const DataValueElement = ({ value, units }: { value: DataValue; units?: DataValue }) => {
   if (isValidElement(value)) {
     return value;
   }
