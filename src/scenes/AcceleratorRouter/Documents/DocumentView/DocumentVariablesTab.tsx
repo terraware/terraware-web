@@ -7,6 +7,7 @@ import PageContent from 'src/components/DocumentProducer/PageContent';
 import TableContent from 'src/components/DocumentProducer/TableContent';
 import VariableHistoryModal from 'src/components/Variables/VariableHistoryModal';
 import Link from 'src/components/common/Link';
+import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useLocalization, useUser } from 'src/providers';
 import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
 import strings from 'src/strings';
@@ -20,6 +21,7 @@ import {
   VariableValueTextValue,
 } from 'src/types/documentProducer/VariableValue';
 import { fuzzyMatch } from 'src/utils/searchAndSort';
+import useDebounce from 'src/utils/useDebounce';
 
 type TableRow = VariableWithValues & { instances: number };
 
@@ -94,15 +96,17 @@ const filterSearch =
 
 const DocumentVariablesTab = ({ projectId: projectIdProp, setSelectedTab }: DocumentVariablesProps): JSX.Element => {
   const activeLocale = useLocalization();
+  const { isAllowed } = useUser();
   const { allVariables, documentSectionVariables, getUsedSections, projectId, reload } = useDocumentProducerData();
 
   const [tableRows, setTableRows] = useState<TableRow[]>([]);
   const [variables, setVariables] = useState<VariableWithValues[]>([]);
-  const [searchValue, setSearchValue] = useState<string>('');
   const [openVariableHistoryModal, setOpenVariableHistoryModal] = useState<boolean>(false);
   const [openEditVariableModal, setOpenEditVariableModal] = useState<boolean>(false);
   const [selectedVariable, setSelectedVariable] = useState<VariableWithValues>();
-  const { isAllowed } = useUser();
+  const [searchValue, setSearchValue] = useState<string>('');
+
+  const debouncedSearchTerm = useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
 
   const tableColumns = useMemo((): TableColumnType[] => {
     if (!activeLocale) {
@@ -125,8 +129,8 @@ const DocumentVariablesTab = ({ projectId: projectIdProp, setSelectedTab }: Docu
   }, [allVariables]);
 
   useEffect(() => {
-    setVariables(supportedVariables.filter(filterSearch(searchValue)));
-  }, [searchValue, supportedVariables]);
+    setVariables(supportedVariables.filter(filterSearch(debouncedSearchTerm)));
+  }, [debouncedSearchTerm, supportedVariables]);
 
   useEffect(() => {
     setTableRows(

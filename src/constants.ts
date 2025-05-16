@@ -1,6 +1,7 @@
 export const API_PULL_INTERVAL = 60000;
 export const ONE_MINUTE_INTERVAL_MS = 60 * 1000;
 export const FIFTEEN_MINUTE_INTERVAL_MS = 15 * 60 * 1000;
+export const DEFAULT_SEARCH_DEBOUNCE_MS = 250;
 
 export const SQ_M_TO_HECTARES = 1 / 10000;
 
