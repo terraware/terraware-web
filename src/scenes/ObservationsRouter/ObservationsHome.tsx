@@ -107,7 +107,6 @@ export default function ObservationsHome(props: ObservationsHomeProps): JSX.Elem
     <PlantsPrimaryPage
       actionButton={actionButton}
       allowAllAsSiteSelection={true}
-      isEmptyState={!allPlantingSites?.length || !observationsResults?.length}
       lastVisitedPreferenceName='plants.observations.lastVisitedPlantingSite'
       pagePath={APP_PATHS.OBSERVATIONS_SITE}
       plantingSitesData={allPlantingSites ?? []}
