@@ -39,10 +39,12 @@ function InternalComment({ entity, update, disabled }: InternalCommentProps) {
     setStatus(entity.status);
   }, [entity.status]);
 
-  const dropdownOptions: DropdownItem[] = AcceleratorReportStatuses.map((_status) => ({
-    label: _status,
-    value: _status,
-  }));
+  const dropdownOptions: DropdownItem[] = AcceleratorReportStatuses.filter((_status) => _status !== 'Not Needed').map(
+    (_status) => ({
+      label: _status,
+      value: _status,
+    })
+  );
 
   return (
     <>
