@@ -82,7 +82,7 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={4}>
+      <Grid item xs={isDesktop ? 4 : 12}>
         <Card radius='8px'>
           <Box flexBasis='100%'>
             <Box display={'flex'} alignItems={'center'}>
@@ -99,11 +99,11 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
               {strings.TOTAL_PLANTED_COMPLETE}
             </Typography>
             <Box marginTop={2}>
-              <Box>
-                <Typography fontSize='14px' fontWeight={500}>
+              <Box display='flex' alignItems={'center'}>
+                <Typography fontSize='14px' fontWeight={500} maxWidth={'190px'}>
                   {strings.PLANTING_COMPLETE_CHART}: {percentagePlanted}%
                 </Typography>
-                <Box>
+                <Box width={'280px'} marginLeft={1}>
                   <ProgressChart value={totalPlantedArea || 0} target={totalArea} />
                 </Box>
               </Box>
@@ -120,7 +120,7 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
           </Box>
         </Card>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={isDesktop ? 4 : 12}>
         <Card radius='8px' style={{ height: '100%' }}>
           <Box flexBasis='100%'>
             <Box display={'flex'} alignItems={'center'}>
@@ -148,7 +148,7 @@ export default function PlantsAndSpeciesCard({ projectId }: { projectId?: number
           </Box>
         </Card>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={isDesktop ? 4 : 12}>
         <Card radius='8px' style={{ height: '100%' }}>
           <Box>
             <Box display={'flex'} alignItems={'center'}>

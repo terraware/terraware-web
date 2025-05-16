@@ -28,7 +28,7 @@ export const emptyDoughnutPlugin = {
       ctx.beginPath();
       ctx.lineWidth = width || 2;
       ctx.strokeStyle = color || 'rgba(255, 128, 0, 0.5)';
-      ctx.arc(centerX, centerY, r - radiusDecrease || 0, 0, 2 * Math.PI);
+      ctx.arc(centerX, centerY, r - (radiusDecrease || 0), 0, 2 * Math.PI);
       ctx.stroke();
     }
   },
