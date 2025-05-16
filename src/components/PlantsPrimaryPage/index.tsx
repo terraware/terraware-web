@@ -70,13 +70,12 @@ export default function PlantsPrimaryPage({
   }, [plantsSitePreferences, lastVisitedPreferenceName, selectedOrganization.id]);
 
   const plantingSitesList = useMemo((): PlantingSite[] => {
-    const sitesWithAll = allowAllAsSiteSelection
-      ? plantingSitesData
-      : plantingSitesData.filter((site) => site.id !== -1);
     const projectSites = projectId
-      ? sitesWithAll.filter((site) => site.projectId === projectId || site.id === -1)
-      : sitesWithAll;
-    return projectSites.toSorted((a, b) => a.id - b.id);
+      ? plantingSitesData.filter((site) => site.projectId === projectId || site.id === -1)
+      : plantingSitesData;
+    const projectSitesWithAll =
+      allowAllAsSiteSelection && projectSites.length > 2 ? projectSites : projectSites.filter((site) => site.id !== -1);
+    return projectSitesWithAll.toSorted((a, b) => a.id - b.id);
   }, [plantingSitesData, allowAllAsSiteSelection, selectedOrganization, projectId]);
 
   const setActivePlantingSite = useCallback(
