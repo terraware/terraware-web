@@ -15,9 +15,11 @@ import { SelectOptionPayload, VariableWithValues } from 'src/types/documentProdu
 import {
   VariableValueDateValue,
   VariableValueEmailValue,
+  VariableValueImageValue,
   VariableValueLinkValue,
   VariableValueNumberValue,
   VariableValueSelectValue,
+  VariableValueTableValue,
   VariableValueTextValue,
 } from 'src/types/documentProducer/VariableValue';
 import { fuzzyMatch } from 'src/utils/searchAndSort';
@@ -72,6 +74,16 @@ const tableCellRenderer = (props: RendererProps<any>): JSX.Element => {
       if (row.type === 'Link') {
         const variableLinkValue = props.value[0] as VariableValueLinkValue;
         return <CellRenderer {...props} value={variableLinkValue.url} />;
+      }
+      if (row.type === 'Image') {
+        const variableImageValues = props.value as VariableValueImageValue[];
+        const imageCount = variableImageValues.length;
+        return <CellRenderer {...props} value={`${imageCount} image${imageCount > 1 ? 's' : ''}`} />;
+      }
+      if (row.type === 'Table') {
+        const variableTableValues = props.value as VariableValueTableValue[];
+        const rowCount = variableTableValues.length;
+        return <CellRenderer {...props} value={`${rowCount} row${rowCount > 1 ? 's' : ''}`} />;
       }
     }
     // Default (type not found): Render an empty cell
