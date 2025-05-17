@@ -30,7 +30,13 @@ const tableCellRenderer = (props: RendererProps<any>): JSX.Element => {
 
   if (column.key === 'name') {
     if (props.value) {
-      return <CellRenderer {...props} value={<Link>{value?.toString()}</Link>} />;
+      return <CellRenderer {...props} title={value?.toString()} value={<Link>{value?.toString()}</Link>} />;
+    }
+  }
+
+  if (column.key === 'deliverableQuestion') {
+    if (props.value) {
+      return <CellRenderer {...props} title={value?.toString()} />;
     }
   }
 
