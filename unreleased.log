@@ -1,3 +1,8 @@
+aee35817c4d SW-6917 Mobile View: Non-wrapping status bar (#4025)
+3a061594ea2 Remove links to observations on console dashboard (#4024)
+a5ad7123e6e SW-6934 Update text under "Current Timeline" on Modules page to add DD Phase specific text (#4023)
+4d924b50e22 SW-6933 If Accelerator project does not have any species, accelerator home page does not show (#4020)
+433c976d134 SW-6935 Participant - Add Project selector dropdown on Plants Dashboard (#4018)
 84a2a1d61af SW-6813: Add Variables tab to Project Profile in Console (Follow-up #1) (#4016)
 c1c7e696cab Updated translations from Phrase (#4019)
 6fc40e64f4d SW-6932 Add loading spinner to plants dashboard (#4021)
