@@ -43,6 +43,7 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
     plantingSite,
     latestResult,
     observationSummaries,
+    isLoading,
   } = usePlantingSiteData();
 
   const hasObservations = useMemo(() => !!latestResult, [latestResult]);
@@ -385,7 +386,8 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
       latestObservationId={latestResultId}
       projectId={projectId}
       organizationId={organizationId}
-      isEmptyState={plantingSite === undefined}
+      isEmptyState={isLoading ? false : plantingSite === undefined}
+      isLoading={isLoading}
       onSelect={onSelect}
       allowAllAsSiteSelection={isAcceleratorRoute}
     >
