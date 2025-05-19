@@ -36,6 +36,7 @@ export type PlantsPrimaryPageViewProps = {
   showGeometryNote?: boolean;
   latestObservationId?: number;
   projectId?: number;
+  isLoading?: boolean;
 };
 
 export default function PlantsPrimaryPageView({
@@ -52,6 +53,7 @@ export default function PlantsPrimaryPageView({
   newHeader,
   title,
   actionButton,
+  isLoading,
 }: PlantsPrimaryPageViewProps): JSX.Element {
   const theme = useTheme();
   const { isDesktop, isMobile } = useDeviceInfo();
@@ -81,7 +83,7 @@ export default function PlantsPrimaryPageView({
     return plantingSites?.reduce((sum, site) => sum + (site?.areaHa ?? 0), 0) || 0;
   }, [plantingSites]);
 
-  if (!plantingSites || (plantingSites.length && !selectedPlantingSiteId)) {
+  if (!plantingSites || (plantingSites.length && !selectedPlantingSiteId) || isLoading) {
     return (
       <TfMain>
         <CircularProgress sx={{ margin: 'auto' }} />
