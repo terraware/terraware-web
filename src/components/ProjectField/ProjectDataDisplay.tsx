@@ -6,11 +6,11 @@ import { Icon, Tooltip } from '@terraware/web-components';
 type DataValue = string | number | null | undefined | JSX.Element;
 
 const DataValueElement = ({ value, units }: { value: DataValue; units?: DataValue }) => {
+  const hasValue = useMemo(() => !([undefined, null] as DataValue[]).includes(value), [value]);
+
   if (isValidElement(value)) {
     return value;
   }
-
-  const hasValue = useMemo(() => !([undefined, null] as DataValue[]).includes(value), [value]);
 
   return (
     <Typography

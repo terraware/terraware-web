@@ -6,7 +6,7 @@ import { Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
 
 import GridEntryWrapper from './GridEntryWrapper';
-import { renderFieldValue } from './index';
+import { ProjectFieldValue } from './index';
 
 type ProjectOverviewCardProps = {
   dealDescription: string | undefined;
@@ -30,27 +30,29 @@ const ProjectOverviewCard = ({ dealDescription, projectName, md }: ProjectOvervi
             <Typography fontSize={'20px'} lineHeight={'28px'} fontWeight={600} marginBottom={theme.spacing(1)}>
               {strings.PROJECT_OVERVIEW}
             </Typography>
-            {renderFieldValue(
-              <>
-                <Box marginBottom={theme.spacing(2)}>
-                  <Textfield
-                    type={'textarea'}
-                    id={'deal-description'}
-                    label={''}
-                    display={true}
-                    value={dealDescription}
-                    preserveNewlines
-                  />
-                </Box>
-                {projectName && (
-                  <Box>
-                    <div>
-                      <strong>{strings.NAME_USED_BY_PROJECT}:</strong>&nbsp;{projectName}
-                    </div>
+            <ProjectFieldValue
+              value={
+                <>
+                  <Box marginBottom={theme.spacing(2)}>
+                    <Textfield
+                      type={'textarea'}
+                      id={'deal-description'}
+                      label={''}
+                      display={true}
+                      value={dealDescription}
+                      preserveNewlines
+                    />
                   </Box>
-                )}
-              </>
-            )}
+                  {projectName && (
+                    <Box>
+                      <div>
+                        <strong>{strings.NAME_USED_BY_PROJECT}:</strong>&nbsp;{projectName}
+                      </div>
+                    </Box>
+                  )}
+                </>
+              }
+            />
           </Grid>
         </Grid>
       </Box>

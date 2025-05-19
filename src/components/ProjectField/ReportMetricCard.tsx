@@ -25,9 +25,6 @@ const ReportMetricCard = ({
   formatter,
 }: ReportMetricCardProps) => {
   const theme = useTheme();
-  if (metrics === undefined && publishedMetrics === undefined) {
-    return <></>;
-  }
 
   const value = useMemo(() => {
     if (metrics) {
@@ -37,6 +34,10 @@ const ReportMetricCard = ({
       return publishedMetrics.find((m) => m.name === metricName)?.value;
     }
   }, [metrics, publishedMetrics]);
+
+  if (metrics === undefined && publishedMetrics === undefined) {
+    return <></>;
+  }
 
   return (
     <InvertedCard

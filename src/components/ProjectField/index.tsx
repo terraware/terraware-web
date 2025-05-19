@@ -36,12 +36,12 @@ export interface ProjectFieldEditProps {
   value?: EditFieldValue;
 }
 
-export const renderFieldValue = (value: DisplayFieldValue, units?: DisplayFieldValue): JSX.Element => {
+export const ProjectFieldValue = ({ value, units }: { value: DisplayFieldValue; units?: DisplayFieldValue }) => {
+  const hasValue = useMemo(() => !([undefined, null] as DisplayFieldValue[]).includes(value), [value]);
+
   if (isValidElement(value)) {
     return value;
   }
-
-  const hasValue = useMemo(() => !([undefined, null] as DisplayFieldValue[]).includes(value), [value]);
 
   return (
     <Typography fontSize='24px' fontWeight={600} lineHeight='32px' overflow='hidden' textOverflow='ellipsis'>
