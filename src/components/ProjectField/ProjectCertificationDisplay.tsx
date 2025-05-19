@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import strings from 'src/strings';
 import { CarbonCertifications } from 'src/types/ParticipantProject';
@@ -23,10 +23,12 @@ const ProjectCertificationDisplay = ({ certifications }: { certifications?: Carb
   return (
     <>
       {certifications.map((certification) => (
-        <Grid item md={4} key={certification} paddingX={theme.spacing(2)}>
-          <Typography fontSize='16px' fontWeight={400} lineHeight='24px' component={'span'}>
-            {strings.CERTIFICATION}
-          </Typography>
+        <Grid item md={4} key={certification} paddingX={theme.spacing(2)} marginY={theme.spacing(1)}>
+          <Box marginBottom={theme.spacing(1)}>
+            <Typography fontSize='16px' fontWeight={400} lineHeight='24px' component={'span'}>
+              {strings.CERTIFICATION}
+            </Typography>
+          </Box>
           <div>
             <img src={getImageSource(certification)} alt={certification} width='200px' />
           </div>

@@ -399,7 +399,7 @@ const ProjectProfileView = ({
           borderTop={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
           width={'100%'}
         >
-          <Grid item xs={12} marginTop={theme.spacing(2)}>
+          <Grid item xs={12} margin={theme.spacing(2, 0, 1)}>
             <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
               {strings.LAND_DATA}
             </Typography>
@@ -463,7 +463,7 @@ const ProjectProfileView = ({
       <Grid container marginBottom={theme.spacing(2)}>
         {(!funderView || (funderView && (projectDetails?.standard || projectDetails?.methodologyNumber))) && (
           <Box marginX={theme.spacing(2)} width={'100%'}>
-            <Grid item xs={12} marginTop={theme.spacing(2)}>
+            <Grid item xs={12} margin={theme.spacing(2, 0, 1)}>
               <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
                 {strings.CARBON_DATA}
               </Typography>
