@@ -111,7 +111,7 @@ function makeObservationCsv(observationResults: ObservationResults): Blob {
           totalDead,
           totalExisting,
           totalLive,
-          totalPlants: monitoringPlot.totalPlants,
+          totalPlants: totalDead + totalExisting + totalLive,
           totalSpecies: monitoringPlot.totalSpecies,
           zoneName: plantingZone.name,
         };
@@ -172,7 +172,7 @@ function makePlotSpeciesCsv(observationResults: ObservationResults): Blob {
           return {
             monitoringPlot: monitoringPlot.monitoringPlotNumber,
             scientificName: speciesName,
-            totalPlants: species.totalPlants,
+            totalPlants: species.totalDead + species.totalExisting + species.totalLive,
             preExistingPlants: species.totalExisting,
             livePlants: species.totalLive,
             deadPlants: species.totalDead,
