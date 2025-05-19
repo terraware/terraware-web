@@ -172,15 +172,21 @@ export default function PlantsPrimaryPageView({
                     />
                   </Box>
                 )}
-                <Dropdown
-                  placeholder={strings.SELECT}
-                  id='planting-site-selector'
-                  onChange={(newValue) => onChangePlantingSiteId(Number(newValue))}
-                  options={options}
-                  selectedValue={selectedPlantingSiteId}
-                  fullWidth
-                  disabled={isAcceleratorRoute && options.length === 1}
-                />
+                {isAcceleratorRoute && options.length === 1 ? (
+                  <Typography fontSize={'20px'} fontWeight={600}>
+                    {options[0].label}
+                  </Typography>
+                ) : (
+                  <Dropdown
+                    placeholder={strings.SELECT}
+                    id='planting-site-selector'
+                    onChange={(newValue) => onChangePlantingSiteId(Number(newValue))}
+                    options={options}
+                    selectedValue={selectedPlantingSiteId}
+                    fullWidth
+                    disabled={isAcceleratorRoute && options.length === 0}
+                  />
+                )}
               </Grid>
               <Grid item xs={isDesktop ? 3 : 12}>
                 <Box>
