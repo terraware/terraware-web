@@ -98,22 +98,28 @@ export default function PlantsDashboardView({ projectId, organizationId }: Plant
       allMonitoringPlots[0].completedTime
     );
     return plantingSite && latestResult?.completedTime ? (
-      <Link
-        fontSize={'16px'}
-        to={APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', plantingSite?.id.toString()).replace(
-          ':observationId',
-          latestResult.observationId.toString()
-        )}
-      >
-        {strings.formatString(
-          strings.DATE_OBSERVATION,
-          DateTime.fromISO(maxCompletedTime || latestResult.completedTime).toFormat('yyyy-MM-dd')
-        )}
-      </Link>
+      isAcceleratorRoute ? (
+        <Typography fontSize={'16px'} display={'inline'}>
+          {DateTime.fromISO(maxCompletedTime || latestResult.completedTime).toFormat('yyyy-MM-dd')}
+        </Typography>
+      ) : (
+        <Link
+          fontSize={'16px'}
+          to={APP_PATHS.OBSERVATION_DETAILS.replace(':plantingSiteId', plantingSite?.id.toString()).replace(
+            ':observationId',
+            latestResult.observationId.toString()
+          )}
+        >
+          {strings.formatString(
+            strings.DATE_OBSERVATION,
+            DateTime.fromISO(maxCompletedTime || latestResult.completedTime).toFormat('yyyy-MM-dd')
+          )}
+        </Link>
+      )
     ) : (
       ''
     );
-  }, [latestResult]);
+  }, [latestResult, isAcceleratorRoute]);
 
   const renderMortalityRate = useCallback(
     () =>
