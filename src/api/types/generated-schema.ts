@@ -5905,6 +5905,7 @@ export interface components {
         FunderProjectDetailsPayload: {
             accumulationRate?: number;
             annualCarbon?: number;
+            carbonCertifications: "CCB Standard"[];
             confirmedReforestableLand?: number;
             countryAlpha3?: string;
             countryCode?: string;
@@ -8078,6 +8079,7 @@ export interface components {
             annualCarbon?: number;
             applicationReforestableLand?: number;
             carbonCapacity?: number;
+            carbonCertifications?: "CCB Standard"[];
             /** Format: uri */
             clickUpLink?: string;
             /** Format: int64 */
@@ -9348,6 +9350,7 @@ export interface components {
             annualCarbon?: number;
             applicationReforestableLand?: number;
             carbonCapacity?: number;
+            carbonCertifications?: "CCB Standard"[];
             /** Format: uri */
             clickUpLink?: string;
             confirmedReforestableLand?: number;

@@ -272,6 +272,7 @@ const EditView = () => {
             <CountrySelect
               id={'countryCode'}
               label={strings.COUNTRY}
+              height={'100px'}
               onChange={onChangeCountry}
               region={participantProjectRecord?.region}
               value={participantProjectRecord?.countryCode}
@@ -279,7 +280,6 @@ const EditView = () => {
             <RegionDisplay label={strings.REGION} value={participantProjectRecord?.region} />
             <LandUseMultiSelect
               id={'landUseModelTypes'}
-              height={'100px'}
               label={strings.LAND_USE_MODEL_TYPE}
               onChange={onChangeParticipantProject}
               value={participantProjectRecord?.landUseModelTypes}

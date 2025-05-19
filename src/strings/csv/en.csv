@@ -246,6 +246,7 @@ CANNOT_REMOVE_TF_CONTACT,Terraformation contacts cannot be removed from an organ
 CAPTION,Caption,
 CARBON,Carbon,
 CARBON_CAPACITY_TC02_HA,Carbon Capacity (tCO2/ha),
+CARBON_CERTIFICATIONS,Carbon Certifications,
 CARBON_DATA,Carbon Data,
 CARBON_ELIGIBILITY,Carbon Eligibility,
 CATALYTIC_CHECKBOX,Terraformation’s support has been catalytic in securing additional funding or partnerships for our work.,
