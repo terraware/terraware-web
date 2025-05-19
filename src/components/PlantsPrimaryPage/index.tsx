@@ -30,6 +30,7 @@ export type PlantsPrimaryPageProps = {
   organizationId?: number;
   onSelect: (plantingSiteId: number) => void;
   onSelectProjectId?: (projectId: number) => void;
+  isLoading?: boolean;
 };
 
 export default function PlantsPrimaryPage({
@@ -52,6 +53,7 @@ export default function PlantsPrimaryPage({
   organizationId,
   onSelect,
   onSelectProjectId,
+  isLoading,
 }: PlantsPrimaryPageProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
@@ -161,6 +163,7 @@ export default function PlantsPrimaryPage({
       latestObservationId={latestObservationId}
       projectId={projectId}
       onSelectProjectId={onSelectProjectId}
+      isLoading={isLoading}
     />
   );
 }

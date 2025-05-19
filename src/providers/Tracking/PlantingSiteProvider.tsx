@@ -228,6 +228,15 @@ const PlantingSiteProvider = ({ children }: Props) => {
       latestObservation,
       nextObservation,
       latestResult,
+      isLoading:
+        plantingSitesResults === undefined ||
+        observationsResponse?.status === 'pending' ||
+        resultsResponse?.status === 'pending' ||
+        adHocObservationsResponse?.status === 'pending' ||
+        adHocResultsResponse?.status === 'pending' ||
+        summariesResponse?.status === 'pending' ||
+        historiesResponse?.status === 'pending' ||
+        reportedPlantsResponse?.status === 'pending',
     }),
     [
       acceleratorOrganizationId,

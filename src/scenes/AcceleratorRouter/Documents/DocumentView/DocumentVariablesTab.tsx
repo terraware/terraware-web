@@ -15,9 +15,11 @@ import { SelectOptionPayload, VariableWithValues } from 'src/types/documentProdu
 import {
   VariableValueDateValue,
   VariableValueEmailValue,
+  VariableValueImageValue,
   VariableValueLinkValue,
   VariableValueNumberValue,
   VariableValueSelectValue,
+  VariableValueTableValue,
   VariableValueTextValue,
 } from 'src/types/documentProducer/VariableValue';
 import { fuzzyMatch } from 'src/utils/searchAndSort';
@@ -30,7 +32,13 @@ const tableCellRenderer = (props: RendererProps<any>): JSX.Element => {
 
   if (column.key === 'name') {
     if (props.value) {
-      return <CellRenderer {...props} value={<Link>{value?.toString()}</Link>} />;
+      return <CellRenderer {...props} title={value?.toString()} value={<Link>{value?.toString()}</Link>} />;
+    }
+  }
+
+  if (column.key === 'deliverableQuestion') {
+    if (props.value) {
+      return <CellRenderer {...props} title={value?.toString()} />;
     }
   }
 
@@ -66,6 +74,16 @@ const tableCellRenderer = (props: RendererProps<any>): JSX.Element => {
       if (row.type === 'Link') {
         const variableLinkValue = props.value[0] as VariableValueLinkValue;
         return <CellRenderer {...props} value={variableLinkValue.url} />;
+      }
+      if (row.type === 'Image') {
+        const variableImageValues = props.value as VariableValueImageValue[];
+        const imageCount = variableImageValues.length;
+        return <CellRenderer {...props} value={`${strings.formatString(strings.N_IMAGES, imageCount)?.toString()}`} />;
+      }
+      if (row.type === 'Table') {
+        const variableTableValues = props.value as VariableValueTableValue[];
+        const rowCount = variableTableValues.length;
+        return <CellRenderer {...props} value={`${strings.formatString(strings.N_ROWS, rowCount)?.toString()}`} />;
       }
     }
     // Default (type not found): Render an empty cell
