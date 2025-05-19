@@ -78,12 +78,12 @@ const tableCellRenderer = (props: RendererProps<any>): JSX.Element => {
       if (row.type === 'Image') {
         const variableImageValues = props.value as VariableValueImageValue[];
         const imageCount = variableImageValues.length;
-        return <CellRenderer {...props} value={`${imageCount} image${imageCount > 1 ? 's' : ''}`} />;
+        return <CellRenderer {...props} value={`${strings.formatString(strings.N_IMAGES, imageCount)?.toString()}`} />;
       }
       if (row.type === 'Table') {
         const variableTableValues = props.value as VariableValueTableValue[];
         const rowCount = variableTableValues.length;
-        return <CellRenderer {...props} value={`${rowCount} row${rowCount > 1 ? 's' : ''}`} />;
+        return <CellRenderer {...props} value={`${strings.formatString(strings.N_ROWS, rowCount)?.toString()}`} />;
       }
     }
     // Default (type not found): Render an empty cell
